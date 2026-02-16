@@ -1,14 +1,20 @@
+// File: lib/pseo.ts
+export type RunbookBlock =
+  | { kind: "h2"; text: string }
+  | { kind: "p"; text: string }
+  | { kind: "ul"; items: string[] }
+  | { kind: "code"; lang: string; code: string }
+  | { kind: "callout"; tone: "warn" | "tip"; title: string; text: string }
+
 export type Runbook = {
   slug: string
   title: string
   summary: string
   tags: string[]
-  lastmod: string // YYYY-MM-DD
-  howto: {
-    steps: string[]
-  }
+  lastmod: string
+  howto: { steps: string[] }
+  blocks: RunbookBlock[]   // 👈 neu
 }
-
 const LASTMOD = "2026-02-08"
 
 // Providers / Platforms (SEO seeds)

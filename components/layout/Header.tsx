@@ -23,6 +23,7 @@ export default function Header() {
           </a>
 
           <nav className="hidden lg:flex items-center gap-1">
+            <NavLink href="/pricing">Pricing</a>
             <NavLink href="/live" label="Live" />
             <NavLink href="/check" label="Security-Check" />
             <NavLink href="/copilot" label="Copilot" />

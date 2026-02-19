@@ -18,7 +18,10 @@ export const metadata: Metadata = {
     description: "Konversation → Runbooks. Tools, Intel, Academy, Vault.",
     images: ["/og-image.png"]
   },
-  twitter: { card: "summary_large_image", creator: "@clawguru" }
+  twitter: { card: "summary_large_image", creator: "@clawguru" },
+  verification: {
+    google: "AAou6LVBaguyeiK3sTmWQUFzuOnov63BjPldJfP13_Q"
+  }
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

@@ -10,6 +10,10 @@ export default function PortalButton() {
     try {
       const res = await fetch("/api/stripe/portal", { method: "POST" })
       const data = await res.json()
+      if (data?.error) {
+        alert("Fehler beim Öffnen des Portals: " + data.error)
+        return
+      }
       if (data?.url) window.location.href = data.url
     } finally {
       setLoading(false)

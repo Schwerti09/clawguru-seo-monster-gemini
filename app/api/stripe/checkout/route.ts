@@ -21,7 +21,12 @@ function getMode(product: Product): "payment" | "subscription" {
 
 function getStripe() {
   const key = process.env.STRIPE_SECRET_KEY
-  if (!key) throw new Error("STRIPE_SECRET_KEY fehlt")
+  if (!key) {
+    console.error("STRIPE_SECRET_KEY fehlt!")
+    const available = Object.keys(process.env).filter((k) => k.startsWith("STRIPE_"))
+    console.error("Verfügbare Stripe-Env-Vars:", available)
+    throw new Error("STRIPE_SECRET_KEY fehlt")
+  }
   return new Stripe(key, { apiVersion: "2024-06-20" })
 }
 

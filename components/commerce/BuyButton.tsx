@@ -22,6 +22,10 @@ export default function BuyButton({
         body: JSON.stringify({ product })
       })
       const data = await res.json()
+      if (data?.error) {
+        alert("Fehler beim Checkout: " + data.error)
+        return
+      }
       if (data?.url) window.location.href = data.url
     } finally {
       setLoading(false)

@@ -88,7 +88,7 @@ async function sendAccessEmail(session: Stripe.Checkout.Session) {
   const base = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
   const url = `${base}/api/auth/recover?token=${encodeURIComponent(token)}`
   const dash = `${base}/dashboard`
-  const support = process.env.SUPPORT_EMAIL || process.env.EMAIL_REPLY_TO || process.env.EMAIL_FROM || "support@clawguru.com"
+  const support = process.env.SUPPORT_EMAIL || process.env.EMAIL_REPLY_TO || process.env.EMAIL_FROM || "support@clawguru.org"
 
   await sendEmail({
     to: email,

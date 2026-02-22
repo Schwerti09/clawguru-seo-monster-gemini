@@ -9,7 +9,7 @@ function isoDate(d = new Date()) {
 }
 
 export async function GET() {
-  const base = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.com"
+  const base = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
   const lastmod = isoDate()
 
   const rb = bucketsAF()

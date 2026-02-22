@@ -6,14 +6,14 @@ import Footer from "@/components/layout/Footer"
 import ActionDock from "@/components/layout/ActionDock"
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://clawguru.com'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://clawguru.org'),
   title: "ClawGuru | Institutional OpenClaw Security & Ops 2026",
   description:
     "ClawGuru: Copilot, Intel Feed, Academy, Vault und ein lebender Lagebericht für OpenClaw/Moltbot Security & Betrieb.",
   openGraph: {
     type: "website",
     locale: "de_DE",
-    url: "https://clawguru.com",
+    url: "https://clawguru.org",
     title: "ClawGuru | Institutional Ops Intelligence",
     description: "Konversation → Runbooks. Tools, Intel, Academy, Vault.",
     images: ["/og-image.png"]

@@ -1,4 +1,4 @@
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import "./globals.css"
 import TrustBadge from "@/components/layout/TrustBadge"
 import Header from "@/components/layout/Header"
@@ -23,13 +23,18 @@ export const metadata: Metadata = {
   verification: { google: "b629ac432cdf0f21" }
 }
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+}
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="de">
       <body className="min-h-screen">
         <TrustBadge />
         <Header />
-        <main className="pt-28">{children}</main>
+        <main className="pt-28 pb-20 lg:pb-0">{children}</main>
         <Footer />
         <ActionDock />
       </body>

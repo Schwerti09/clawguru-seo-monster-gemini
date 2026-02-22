@@ -95,7 +95,7 @@ export default function HeroSecurityCheck() {
     <div className="bg-gradient-to-br from-gray-900/60 to-blue-950/30 border border-gray-800 rounded-3xl p-6 md:p-8 backdrop-blur-sm">
       <div className="flex flex-col md:flex-row md:items-end gap-4">
         <div className="flex-grow">
-          <h2 className="text-2xl md:text-3xl font-black mb-2">
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-black mb-2">
             LIVE Security-Check (Heuristik) — 30 Sekunden
           </h2>
           <p className="text-gray-300 mb-4">

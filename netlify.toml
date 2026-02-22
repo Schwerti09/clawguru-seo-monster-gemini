@@ -9,3 +9,7 @@
   NODE_VERSION = "20"
   NETLIFY_LOG_LEVEL = "debug"
 
+# Daily self-health cron – runs at 06:00 UTC every day
+[functions."health-cron"]
+  schedule = "0 6 * * *"
+

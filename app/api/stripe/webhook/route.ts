@@ -30,16 +30,19 @@ function emailHtml({
   plan,
   support,
   dashboardUrl,
-  base
+  base,
+  sessionId
 }: {
   url: string
   plan: string
   support: string
   dashboardUrl: string
   base: string
+  sessionId?: string
 }) {
-  const sprintUrl = `${base}/api/download?key=sprint-pack`
-  const incidentUrl = `${base}/api/download?key=incident-kit`
+  const sessionParam = sessionId ? `&session_id=${encodeURIComponent(sessionId)}` : ""
+  const sprintUrl = `${base}/api/download?key=sprint-pack${sessionParam}`
+  const incidentUrl = `${base}/api/download?key=incident-kit${sessionParam}`
   return `
   <div style="font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial; line-height: 1.5; color:#111;">
     <h2 style="margin:0 0 10px 0;">ClawGuru Zugriff: <span style="color:#0ea5e9;">aktivieren</span></h2>
@@ -109,7 +112,7 @@ async function sendAccessEmail(session: Stripe.Checkout.Session) {
   await sendEmail({
     to: email,
     subject: "Dein ClawGuru Zugang (Magic Link)",
-    html: emailHtml({ url, plan, support, dashboardUrl: dash, base })
+    html: emailHtml({ url, plan, support, dashboardUrl: dash, base, sessionId: session.id })
   })
 }
 

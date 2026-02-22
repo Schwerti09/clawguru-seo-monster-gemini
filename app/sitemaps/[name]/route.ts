@@ -65,24 +65,24 @@ export async function GET(
     })
   }
 
-  
-if (name === "providers") {
-  const urls = allProviders().map((p) => ({
-    loc: `${base}/provider/${p.slug}`,
-    lastmod,
-    changefreq: "weekly",
-    priority: "0.7"
-  }))
-  return new NextResponse(urlset(urls), {
-    status: 200,
-    headers: {
-      "Content-Type": "application/xml; charset=utf-8",
-      "Cache-Control": "public, max-age=3600"
-    }
-  })
-}
 
-const rb = bucketsAF()
+  if (name === "providers") {
+    const urls = allProviders().map((p) => ({
+      loc: `${base}/provider/${p.slug}`,
+      lastmod,
+      changefreq: "weekly",
+      priority: "0.7"
+    }))
+    return new NextResponse(urlset(urls), {
+      status: 200,
+      headers: {
+        "Content-Type": "application/xml; charset=utf-8",
+        "Cache-Control": "public, max-age=3600"
+      }
+    })
+  }
+
+  const rb = bucketsAF()
   const tg = bucketsTagsAF()
 
   const rbMap: Record<string, keyof typeof rb> = {

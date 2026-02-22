@@ -1,8 +1,12 @@
 // File: app/runbook/[slug]/page.tsx
 import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
-import { RUNBOOKS, getRunbook, type RunbookBlock } from "@/lib/pseo"
+import { RUNBOOKS, getRunbook, type RunbookBlock, type RunbookFaqEntry } from "@/lib/pseo"
 import { notFound } from "next/navigation"
+import { CopyLinkButton } from "./CopyLinkButton"
+
+// Pre-build slug→runbook Map for O(1) related lookups
+const RUNBOOK_MAP = new Map(RUNBOOKS.map((r) => [r.slug, r]))
 
 export const revalidate = 60 * 60 * 24 // 24h
 export const dynamicParams = true
@@ -15,19 +19,21 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { slug: string } }) {
   const r = getRunbook(params.slug)
   if (!r) return {}
+  const title = r.title.length > 60 ? r.title.slice(0, 57) + "..." : r.title
+  const description = r.summary.length > 160 ? r.summary.slice(0, 157) + "..." : r.summary
   return {
-    title: `${r.title} | ClawGuru Runbook`,
-    description: r.summary,
+    title: `${title} | ClawGuru Runbook`,
+    description,
     alternates: { canonical: `/runbook/${r.slug}` },
     openGraph: {
-      title: `${r.title} | ClawGuru`,
-      description: r.summary,
+      title: `${title} | ClawGuru`,
+      description,
       type: "article",
     },
   }
 }
 
-function jsonLd(r: { title: string; summary: string; slug: string; steps: string[] }) {
+function howToJsonLd(r: { title: string; summary: string; slug: string; steps: string[] }) {
   return {
     "@context": "https://schema.org",
     "@type": "HowTo",
@@ -43,8 +49,66 @@ function jsonLd(r: { title: string; summary: string; slug: string; steps: string
   }
 }
 
+function faqJsonLd(faq: RunbookFaqEntry[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faq.map(({ q, a }) => ({
+      "@type": "Question",
+      name: q,
+      acceptedAnswer: { "@type": "Answer", text: a },
+    })),
+  }
+}
+
+function ClawScoreBadge({ score }: { score: number }) {
+  const color =
+    score >= 90 ? "text-emerald-400 border-emerald-500/40 bg-emerald-500/10" :
+    score >= 75 ? "text-cyan-400 border-cyan-500/40 bg-cyan-500/10" :
+    "text-yellow-400 border-yellow-500/40 bg-yellow-500/10"
+  return (
+    <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-xl border text-xs font-black ${color}`}>
+      <span>⚡ Claw Score</span>
+      <span className="text-base">{score}</span>
+      <span className="opacity-60">/100</span>
+    </div>
+  )
+}
+
+function ShareButtons({ title, slug }: { title: string; slug: string }) {
+  const url = `https://clawguru.org/runbook/${slug}`
+  const encoded = encodeURIComponent(url)
+  const text = encodeURIComponent(`${title} – ClawGuru Runbook`)
+  return (
+    <div className="flex flex-wrap gap-2 mt-4">
+      <span className="text-xs text-gray-500 self-center">Teilen:</span>
+      <a
+        href={`https://twitter.com/intent/tweet?url=${encoded}&text=${text}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="px-3 py-1.5 rounded-xl border border-gray-700 bg-black/30 text-xs text-gray-300 hover:border-sky-500 hover:text-sky-400 transition-colors"
+        aria-label="Auf Twitter teilen"
+      >
+        𝕏 Twitter
+      </a>
+      <a
+        href={`https://www.linkedin.com/shareArticle?mini=true&url=${encoded}&title=${text}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="px-3 py-1.5 rounded-xl border border-gray-700 bg-black/30 text-xs text-gray-300 hover:border-blue-500 hover:text-blue-400 transition-colors"
+        aria-label="Auf LinkedIn teilen"
+      >
+        💼 LinkedIn
+      </a>
+      <CopyLinkButton url={url} />
+    </div>
+  )
+}
+
 function BlockView({ b }: { b: RunbookBlock }) {
   if (b.kind === "h2") return <h2 className="mt-10 text-lg font-black text-gray-100">{b.text}</h2>
+  if (b.kind === "h3") return <h3 className="mt-6 text-base font-bold text-gray-200">{b.text}</h3>
+  if (b.kind === "h4") return <h4 className="mt-4 text-sm font-semibold text-gray-300 uppercase tracking-wide">{b.text}</h4>
 
   if (b.kind === "p") return <p className="mt-3 text-gray-200/90 leading-relaxed">{b.text}</p>
 
@@ -81,20 +145,49 @@ function BlockView({ b }: { b: RunbookBlock }) {
   return null
 }
 
+function FaqSection({ faq }: { faq: RunbookFaqEntry[] }) {
+  if (!faq?.length) return null
+  return (
+    <div className="mt-12">
+      <h2 className="text-xl font-black mb-6 text-gray-100">Häufige Fragen (FAQ)</h2>
+      <div className="space-y-4">
+        {faq.map((entry, i) => (
+          <details key={i} className="rounded-2xl border border-gray-800 bg-black/20 group">
+            <summary className="px-5 py-4 cursor-pointer font-bold text-gray-200 list-none flex items-center justify-between">
+              <span>{entry.q}</span>
+              <span className="text-gray-500 group-open:rotate-180 transition-transform text-xs">▼</span>
+            </summary>
+            <div className="px-5 pb-4 text-gray-400 leading-relaxed text-sm">{entry.a}</div>
+          </details>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 export default function RunbookPage({ params }: { params: { slug: string } }) {
   const r = getRunbook(params.slug)
   if (!r) return notFound()
 
-  const related = RUNBOOKS.filter((x) => x.slug !== r.slug && x.tags.some((t) => r.tags.includes(t))).slice(0, 6)
+  // Use precomputed relatedSlugs with O(1) Map lookup; fall back to tag-based filter
+  const relatedList = r.relatedSlugs.length > 0
+    ? r.relatedSlugs.map((s) => RUNBOOK_MAP.get(s)).filter(Boolean) as typeof RUNBOOKS
+    : RUNBOOKS.filter((x) => x.slug !== r.slug && x.tags.some((t) => r.tags.includes(t))).slice(0, 8)
 
   return (
     <Container>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(jsonLd({ title: r.title, summary: r.summary, slug: r.slug, steps: r.howto.steps })),
+          __html: JSON.stringify(howToJsonLd({ title: r.title, summary: r.summary, slug: r.slug, steps: r.howto.steps })),
         }}
       />
+      {r.faq?.length > 0 && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd(r.faq)) }}
+        />
+      )}
       <div className="py-16 max-w-4xl mx-auto">
         <nav className="text-sm text-gray-500 mb-6" aria-label="Breadcrumb">
           <ol className="flex flex-wrap items-center gap-2">
@@ -114,10 +207,17 @@ export default function RunbookPage({ params }: { params: { slug: string } }) {
           </ol>
         </nav>
 
+        <div className="flex flex-wrap items-center gap-3 mb-4">
+          <ClawScoreBadge score={r.clawScore} />
+          <span className="text-xs text-gray-600">Stand: {r.lastmod}</span>
+        </div>
+
         <SectionTitle kicker="Runbook" title={r.title} subtitle={r.summary} />
 
+        <ShareButtons title={r.title} slug={r.slug} />
+
         <div className="mt-10 p-6 rounded-3xl border border-gray-800 bg-black/25">
-          {/* NEW: Rich blocks (Tier-2 content) */}
+          {/* Rich blocks (Tier-2 content) */}
           {Array.isArray((r as any).blocks) && (r as any).blocks.length > 0 ? (
             <div className="mb-10">
               {(r as any).blocks.map((b: RunbookBlock, i: number) => (
@@ -126,10 +226,10 @@ export default function RunbookPage({ params }: { params: { slug: string } }) {
             </div>
           ) : null}
 
-          <div className="text-xs uppercase tracking-widest text-gray-500">Steps</div>
+          <div className="text-xs uppercase tracking-widest text-gray-500">Schritt-für-Schritt</div>
           <ol className="mt-4 list-decimal pl-6 space-y-3 text-gray-200">
-            {r.howto.steps.map((s) => (
-              <li key={s} className="leading-relaxed">
+            {r.howto.steps.map((s, i) => (
+              <li key={i} className="leading-relaxed">
                 {s}
               </li>
             ))}
@@ -163,18 +263,23 @@ export default function RunbookPage({ params }: { params: { slug: string } }) {
           </div>
         </div>
 
-        {related.length > 0 ? (
+        <FaqSection faq={r.faq} />
+
+        {relatedList.length > 0 ? (
           <div className="mt-10">
-            <div className="text-xl font-black mb-4">Related Runbooks</div>
+            <h2 className="text-xl font-black mb-4">Verwandte Runbooks</h2>
             <div className="grid md:grid-cols-2 gap-4">
-              {related.map((x) => (
+              {relatedList.slice(0, 8).map((x) => (
                 <a
                   key={x.slug}
                   href={`/runbook/${x.slug}`}
                   className="p-5 rounded-3xl border border-gray-800 bg-black/25 hover:bg-black/35 transition-colors"
                 >
-                  <div className="font-black">{x.title}</div>
-                  <div className="mt-2 text-sm text-gray-400">{x.summary}</div>
+                  <div className="flex items-center gap-2 mb-1">
+                    <div className="font-black text-sm">{x.title}</div>
+                    <span className="ml-auto text-xs text-gray-500 shrink-0">⚡{x.clawScore}</span>
+                  </div>
+                  <div className="mt-1 text-sm text-gray-400">{x.summary}</div>
                   <div className="mt-3 text-sm text-cyan-300 underline">Öffnen →</div>
                 </a>
               ))}

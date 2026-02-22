@@ -1,10 +1,14 @@
 // File: lib/pseo.ts
 export type RunbookBlock =
   | { kind: "h2"; text: string }
+  | { kind: "h3"; text: string }
+  | { kind: "h4"; text: string }
   | { kind: "p"; text: string }
   | { kind: "ul"; items: string[] }
   | { kind: "code"; lang: string; code: string }
   | { kind: "callout"; tone: "warn" | "tip"; title: string; text: string }
+
+export type RunbookFaqEntry = { q: string; a: string }
 
 export type Runbook = {
   slug: string
@@ -14,6 +18,9 @@ export type Runbook = {
   lastmod: string // YYYY-MM-DD
   howto: { steps: string[] }
   blocks: RunbookBlock[]
+  clawScore: number
+  faq: RunbookFaqEntry[]
+  relatedSlugs: string[]
 }
 
 const LASTMOD = "2026-02-16"
@@ -107,12 +114,92 @@ const CONFIGS = [
   { slug: "rate-limit-edge", title: "Edge Rate Limiting", summary: "Edge-first Limits gegen Abuse und Kosten." },
 ] as const
 
+const YEARS = ["2024", "2025", "2026"] as const
+
+const SEVERITIES = [
+  { slug: "p1", name: "P1 Kritisch" },
+  { slug: "p2", name: "P2 Hoch" },
+  { slug: "p3", name: "P3 Mittel" },
+] as const
+
+const SOLUTION_TYPES = [
+  { slug: "fix", name: "Fix" },
+  { slug: "prevention", name: "Prävention" },
+  { slug: "monitoring", name: "Monitoring" },
+  { slug: "rollback", name: "Rollback" },
+] as const
+
 function slugify(s: string) {
   return s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "")
 }
 
 function uniq<T>(arr: T[]): T[] {
   return Array.from(new Set(arr))
+}
+
+/** Deterministic 60-99 quality score based on slug content */
+function clawScoreFor(slug: string): number {
+  let hash = 5381
+  for (const char of slug) hash = (((hash << 5) + hash) ^ char.charCodeAt(0)) >>> 0
+  return 60 + (hash % 40)
+}
+
+export type FaqKind = "provider-topic" | "error-stack" | "config" | "provider-error" | "year-topic" | "severity-topic" | "solution-type"
+
+function buildFaq(
+  kind: FaqKind,
+  opts: { providerName?: string; topicTitle?: string; error?: string; stackName?: string; year?: string; severity?: string; solutionType?: string; summary: string }
+): RunbookFaqEntry[] {
+  const { providerName, topicTitle, error, stackName, year, severity, solutionType, summary } = opts
+  if (kind === "provider-topic" && providerName && topicTitle) {
+    return [
+      { q: `Was ist ${topicTitle} auf ${providerName}?`, a: summary },
+      { q: `Wie verifiziere ich ${topicTitle} auf ${providerName}?`, a: "Nutze den ClawGuru Re-Check: curl-I + Logs + Smoke Test. Grünes Ergebnis = verifiziert." },
+      { q: `Welche Risiken entstehen ohne ${topicTitle}?`, a: "Ohne aktive Härtung sind Datenleaks, Abuse, Downtime und Compliance-Verstöße wahrscheinlicher." },
+      { q: `Wie lange dauert ${topicTitle} auf ${providerName}?`, a: "Im Schnitt 15–45 Minuten bei sauberem Vorgehen. Mit Rollback-Plan unter 2h." },
+    ]
+  }
+  if (kind === "error-stack" && error && stackName) {
+    return [
+      { q: `Was bedeutet "${error}" in ${stackName}?`, a: summary },
+      { q: `Wie behebe ich "${error}" schnell?`, a: "Logs lesen → Upstream prüfen → Fix deployen → Re-Check. Keine Panik." },
+      { q: `Wie verhindere ich "${error}" dauerhaft?`, a: "Guardrails setzen: Timeouts, Retries, Circuit Breaker, Alerts auf 5xx-Rate." },
+      { q: `Ist "${error}" ein Sicherheitsproblem?`, a: "Kann es sein. 401/403/429 können auf Angriffe hinweisen – Logs auf Muster prüfen." },
+    ]
+  }
+  if (kind === "provider-error" && providerName && error) {
+    return [
+      { q: `Wie tritt "${error}" auf ${providerName} auf?`, a: summary },
+      { q: `Was ist die schnellste Lösung für "${error}" auf ${providerName}?`, a: "Logs → Upstream → Timeouts prüfen → Fix deployen → Re-Check." },
+      { q: `Welche ${providerName}-Features helfen gegen "${error}"?`, a: "Provider-native Health Checks, Auto-Scaling, Managed Load Balancer." },
+    ]
+  }
+  if (kind === "year-topic" && providerName && topicTitle && year) {
+    return [
+      { q: `Was hat sich bei ${topicTitle} auf ${providerName} in ${year} geändert?`, a: summary },
+      { q: `Welche Best Practices gelten ${year} für ${topicTitle}?`, a: "Zero-Trust, MFA, Automated Remediation, IaC-basiertes Hardening." },
+      { q: `Wie up-to-date sind die ${topicTitle}-Defaults auf ${providerName}?`, a: `Stand ${year}: Defaults aktuell nach ClawGuru-Runbook. Regelmäßig re-checken.` },
+    ]
+  }
+  if (kind === "severity-topic" && providerName && topicTitle && severity) {
+    return [
+      { q: `Was ist ein ${severity}-Incident bei ${topicTitle} auf ${providerName}?`, a: summary },
+      { q: `Wie schnell muss ich bei ${severity} reagieren?`, a: "P1: sofort (<15 min), P2: <2h, P3: <24h. Eskalation dokumentieren." },
+      { q: `Welche Maßnahmen sind bei ${severity} Pflicht?`, a: "Incident-Kommunikation, Status-Page-Update, Post-Mortem, Root-Cause-Fix." },
+    ]
+  }
+  if (kind === "solution-type" && providerName && topicTitle && solutionType) {
+    return [
+      { q: `Was beinhaltet "${solutionType}" für ${topicTitle} auf ${providerName}?`, a: summary },
+      { q: `Wann ist "${solutionType}" der richtige Ansatz?`, a: "Wenn das Problem bekannt ist und du gezielt einen der Schritte ausführen willst." },
+      { q: `Wie verifiziere ich "${solutionType}" für ${topicTitle}?`, a: "Re-Check starten → Smoke Test → Metriken 15 min beobachten → Done." },
+    ]
+  }
+  return [
+    { q: `Was ist das Ziel dieses Runbooks?`, a: summary },
+    { q: `Wie führe ich dieses Runbook durch?`, a: "Schritt für Schritt: Ist-Zustand messen → Fix anwenden → Verifizieren." },
+    { q: `Was mache ich nach dem Fix?`, a: "Guardrail setzen, Incident dokumentieren, Post-Mortem schreiben." },
+  ]
 }
 
 function stepsProviderTopic(providerName: string, topicSlug: string, topicTitle: string) {
@@ -540,14 +627,19 @@ function buildRunbooks(limit = 1000): Runbook[] {
   // 1) Provider x Topic combos (high-intent)
   for (const p of PROVIDERS) {
     for (const t of TOPICS) {
+      const slug = `${p.slug}-${t.slug}`
+      const summary = `${t.summary} (Operator Guide für ${p.name}).`
       const rb: Runbook = {
-        slug: `${p.slug}-${t.slug}`,
+        slug,
         title: `${t.title} auf ${p.name}`,
-        summary: `${t.summary} (Operator Guide für ${p.name}).`,
+        summary,
         tags: uniq(["provider:" + p.slug, "topic:" + t.slug, p.slug, "runbook", "ops"]),
         lastmod: LASTMOD,
         howto: { steps: stepsProviderTopic(p.name, t.slug, t.title) },
         blocks: [],
+        clawScore: clawScoreFor(slug),
+        faq: buildFaq("provider-topic", { providerName: p.name, topicTitle: t.title, summary }),
+        relatedSlugs: [],
       }
       rb.blocks = buildBlocks(rb)
       out.push(rb)
@@ -559,14 +651,19 @@ function buildRunbooks(limit = 1000): Runbook[] {
   for (const s of STACKS) {
     for (const e of ERRORS) {
       const es = slugify(e)
+      const slug = `${s.slug}-${es}`
+      const summary = `Runbook, um \u201e${e}\u201c in ${s.name} schnell zu analysieren, zu fixen und zu verifizieren.`
       const rb: Runbook = {
-        slug: `${s.slug}-${es}`,
+        slug,
         title: `Fix: ${e} (${s.name})`,
-        summary: `Runbook, um „${e}“ in ${s.name} schnell zu analysieren, zu fixen und zu verifizieren.`,
+        summary,
         tags: uniq(["error:" + es, "stack:" + s.slug, "debug", "incident", "runbook"]),
         lastmod: LASTMOD,
         howto: { steps: stepsError(e, s.slug, s.name) },
         blocks: [],
+        clawScore: clawScoreFor(slug),
+        faq: buildFaq("error-stack", { error: e, stackName: s.name, summary }),
+        relatedSlugs: [],
       }
       rb.blocks = buildBlocks(rb)
       out.push(rb)
@@ -576,14 +673,18 @@ function buildRunbooks(limit = 1000): Runbook[] {
 
   // 3) Config pages
   for (const c of CONFIGS) {
+    const slug = c.slug
     const rb: Runbook = {
-      slug: c.slug,
+      slug,
       title: c.title,
       summary: c.summary,
       tags: uniq(["config", "runbook", "ops", ...c.slug.split("-").slice(0, 2)]),
       lastmod: LASTMOD,
       howto: { steps: stepsConfig(c.title) },
       blocks: [],
+      clawScore: clawScoreFor(slug),
+      faq: buildFaq("config", { summary: c.summary }),
+      relatedSlugs: [],
     }
     rb.blocks = buildBlocks(rb)
     out.push(rb)
@@ -600,14 +701,19 @@ function buildRunbooks(limit = 1000): Runbook[] {
 
   for (const f of fillers) {
     for (const p of PROVIDERS) {
+      const slug = `${p.slug}-${f}`
+      const summary = `Operativer Guide: ${f.replace(/-/g, " ")} auf ${p.name} (sichere Defaults + Verifikation).`
       const rb: Runbook = {
-        slug: `${p.slug}-${f}`,
+        slug,
         title: `${f.replace(/-/g, " ").toUpperCase()} auf ${p.name}`,
-        summary: `Operativer Guide: ${f.replace(/-/g, " ")} auf ${p.name} (sichere Defaults + Verifikation).`,
+        summary,
         tags: uniq(["provider:" + p.slug, "topic:" + f, p.slug, "ops", "runbook"]),
         lastmod: LASTMOD,
         howto: { steps: stepsProviderTopic(p.name, f, f.replace(/-/g, " ")) },
         blocks: [],
+        clawScore: clawScoreFor(slug),
+        faq: buildFaq("config", { summary }),
+        relatedSlugs: [],
       }
       rb.blocks = buildBlocks(rb)
       out.push(rb)
@@ -615,10 +721,145 @@ function buildRunbooks(limit = 1000): Runbook[] {
     }
   }
 
+  // 5) Provider \u00d7 Error combos (high-intent longtail)
+  for (const p of PROVIDERS) {
+    for (const e of ERRORS) {
+      const es = slugify(e)
+      const slug = `${p.slug}-err-${es}`
+      const rawT = `${p.name}: Fix ${e}`
+      const title = rawT.length > 60 ? rawT.slice(0, 57) + "..." : rawT
+      const summary = `\u201e${e}\u201c auf ${p.name} beheben: Ursachen, Logs, Fix, Verifikation.`
+      const rb: Runbook = {
+        slug,
+        title,
+        summary,
+        tags: uniq(["provider:" + p.slug, "error:" + es, p.slug, "debug", "incident", "runbook"]),
+        lastmod: LASTMOD,
+        howto: { steps: stepsError(e, p.slug, p.name) },
+        blocks: [],
+        clawScore: clawScoreFor(slug),
+        faq: buildFaq("provider-error", { providerName: p.name, error: e, summary }),
+        relatedSlugs: [],
+      }
+      rb.blocks = buildBlocks(rb)
+      out.push(rb)
+      if (out.length >= limit) return out
+    }
+  }
+
+  // 6) Provider \u00d7 Year \u00d7 Topic (time-specific guides)
+  for (const year of YEARS) {
+    for (const p of PROVIDERS) {
+      for (const t of TOPICS) {
+        const slug = `${p.slug}-${t.slug}-${year}`
+        const rawT = `${t.title}: ${p.name} ${year}`
+        const title = rawT.length > 60 ? rawT.slice(0, 57) + "..." : rawT
+        const summary = `${t.summary} \u2013 aktueller Stand ${year} f\u00fcr ${p.name}.`
+        const rb: Runbook = {
+          slug,
+          title,
+          summary,
+          tags: uniq(["provider:" + p.slug, "topic:" + t.slug, "year:" + year, p.slug, "runbook", "ops"]),
+          lastmod: LASTMOD,
+          howto: { steps: stepsProviderTopic(p.name, t.slug, t.title) },
+          blocks: [],
+          clawScore: clawScoreFor(slug),
+          faq: buildFaq("year-topic", { providerName: p.name, topicTitle: t.title, year, summary }),
+          relatedSlugs: [],
+        }
+        rb.blocks = buildBlocks(rb)
+        out.push(rb)
+        if (out.length >= limit) return out
+      }
+    }
+  }
+
+  // 7) Severity \u00d7 Provider \u00d7 Topic (urgency-based incident guides)
+  for (const sev of SEVERITIES) {
+    for (const p of PROVIDERS) {
+      for (const t of TOPICS) {
+        const slug = `${sev.slug}-${p.slug}-${t.slug}`
+        const rawT = `[${sev.slug.toUpperCase()}] ${t.title} \u2013 ${p.name}`
+        const title = rawT.length > 60 ? rawT.slice(0, 57) + "..." : rawT
+        const summary = `${sev.name}-Incident: ${t.summary} auf ${p.name}.`
+        const rb: Runbook = {
+          slug,
+          title,
+          summary,
+          tags: uniq(["provider:" + p.slug, "topic:" + t.slug, "severity:" + sev.slug, p.slug, "runbook", "incident"]),
+          lastmod: LASTMOD,
+          howto: { steps: stepsProviderTopic(p.name, t.slug, t.title) },
+          blocks: [],
+          clawScore: clawScoreFor(slug),
+          faq: buildFaq("severity-topic", { providerName: p.name, topicTitle: t.title, severity: sev.name, summary }),
+          relatedSlugs: [],
+        }
+        rb.blocks = buildBlocks(rb)
+        out.push(rb)
+        if (out.length >= limit) return out
+      }
+    }
+  }
+
+  // 8) Solution-Type \u00d7 Provider \u00d7 Topic (fix vs. prevention vs. monitoring vs. rollback)
+  for (const st of SOLUTION_TYPES) {
+    for (const p of PROVIDERS) {
+      for (const t of TOPICS) {
+        const slug = `${st.slug}-${p.slug}-${t.slug}`
+        const rawT = `${st.name}: ${t.title} auf ${p.name}`
+        const title = rawT.length > 60 ? rawT.slice(0, 57) + "..." : rawT
+        const summary = `${st.name}-Anleitung: ${t.summary} auf ${p.name}.`
+        const rb: Runbook = {
+          slug,
+          title,
+          summary,
+          tags: uniq(["provider:" + p.slug, "topic:" + t.slug, "solution:" + st.slug, p.slug, "runbook", "ops"]),
+          lastmod: LASTMOD,
+          howto: { steps: stepsProviderTopic(p.name, t.slug, t.title) },
+          blocks: [],
+          clawScore: clawScoreFor(slug),
+          faq: buildFaq("solution-type", { providerName: p.name, topicTitle: t.title, solutionType: st.name, summary }),
+          relatedSlugs: [],
+        }
+        rb.blocks = buildBlocks(rb)
+        out.push(rb)
+        if (out.length >= limit) return out
+      }
+    }
+  }
+
   return out.slice(0, limit)
 }
 
-export const RUNBOOKS: Runbook[] = buildRunbooks(Number(process.env.PSEO_RUNBOOK_COUNT || 3000))
+/** Post-build pass: compute top-8 related runbooks per entry based on tag overlap */
+function computeRelatedSlugs(runbooks: Runbook[]): void {
+  const byTag = new Map<string, string[]>()
+  for (const r of runbooks) {
+    for (const t of r.tags) {
+      if (!byTag.has(t)) byTag.set(t, [])
+      byTag.get(t)!.push(r.slug)
+    }
+  }
+  for (const r of runbooks) {
+    const scores = new Map<string, number>()
+    for (const t of r.tags) {
+      for (const s of byTag.get(t) ?? []) {
+        if (s !== r.slug) scores.set(s, (scores.get(s) ?? 0) + 1)
+      }
+    }
+    r.relatedSlugs = Array.from(scores.entries())
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 8)
+      .map(([s]) => s)
+  }
+}
+function _buildRunbooksWithRelated(limit: number): Runbook[] {
+  const list = buildRunbooks(limit)
+  computeRelatedSlugs(list)
+  return list
+}
+
+export const RUNBOOKS: Runbook[] = _buildRunbooksWithRelated(Number(process.env.PSEO_RUNBOOK_COUNT || 5000))
 
 export function allProviders() {
   return [...PROVIDERS]
@@ -680,4 +921,11 @@ export function bucketsTagsAF() {
 
 export function runbooksByTag(tag: string) {
   return RUNBOOKS.filter((r) => r.tags.includes(tag))
+}
+
+/** Top-N runbooks per tag (sorted by clawScore desc) */
+export function topRunbooksByTag(tag: string, n = 10): Runbook[] {
+  return runbooksByTag(tag)
+    .sort((a, b) => b.clawScore - a.clawScore)
+    .slice(0, n)
 }

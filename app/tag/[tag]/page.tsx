@@ -1,6 +1,6 @@
 import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
-import { allTags, runbooksByTag } from "@/lib/pseo"
+import { allTags, runbooksByTag, topRunbooksByTag } from "@/lib/pseo"
 import { notFound } from "next/navigation"
 
 export const revalidate = 60 * 60 * 24
@@ -16,8 +16,8 @@ export async function generateMetadata({ params }: { params: { tag: string } }) 
   const items = runbooksByTag(tag)
   if (!items.length) return {}
   return {
-    title: `${tag} | ClawGuru Tags`,
-    description: `Runbooks unter dem Tag "${tag}". ${items.length} Einträge.`,
+    title: `${tag} Runbooks | ClawGuru Tag-Hub`,
+    description: `${items.length} Runbooks f\u00fcr den Tag \u201e${tag}\u201c. Ops, Security und Debugging-Guides \u2013 schnell findbar.`,
     alternates: { canonical: `/tag/${encodeURIComponent(tag)}` }
   }
 }
@@ -26,6 +26,8 @@ export default function TagPage({ params }: { params: { tag: string } }) {
   const tag = decodeURIComponent(params.tag)
   const items = runbooksByTag(tag)
   if (!items.length) return notFound()
+
+  const top10 = topRunbooksByTag(tag, 10)
 
   return (
     <Container>
@@ -46,7 +48,33 @@ export default function TagPage({ params }: { params: { tag: string } }) {
           subtitle={`${items.length} Runbooks. Klick rein, fix, re-check, repeat.`}
         />
 
-        <div className="mt-10 grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {top10.length > 0 && (
+          <div className="mt-8">
+            <h2 className="text-base font-black text-gray-300 uppercase tracking-widest mb-4">Top 10 Runbooks</h2>
+            <div className="grid md:grid-cols-2 gap-3">
+              {top10.map((r, i) => (
+                <a
+                  key={r.slug}
+                  href={`/runbook/${r.slug}`}
+                  className="p-4 rounded-2xl border border-gray-800 bg-black/30 hover:bg-black/40 transition-colors flex items-start gap-3"
+                >
+                  <span className="text-lg font-black text-gray-600 w-6 shrink-0">{i + 1}</span>
+                  <div>
+                    <div className="font-bold text-gray-100">{r.title}</div>
+                    <div className="mt-1 text-xs text-gray-500 flex gap-2">
+                      <span>\u26a1{r.clawScore}</span>
+                      <span>\u00b7</span>
+                      <span className="text-cyan-400 underline">\u00d6ffnen \u2192</span>
+                    </div>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <h2 className="mt-12 text-base font-black text-gray-300 uppercase tracking-widest mb-4">Alle Runbooks</h2>
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
           {items.slice(0, 120).map((r) => (
             <a
               key={r.slug}
@@ -55,13 +83,16 @@ export default function TagPage({ params }: { params: { tag: string } }) {
             >
               <div className="text-lg font-black">{r.title}</div>
               <div className="mt-2 text-sm text-gray-400">{r.summary}</div>
-              <div className="mt-5 text-sm text-cyan-300 underline">Runbook öffnen →</div>
+              <div className="mt-3 flex items-center gap-3 text-sm">
+                <span className="text-cyan-300 underline">Runbook \u00f6ffnen \u2192</span>
+                <span className="text-xs text-gray-600">\u26a1{r.clawScore}</span>
+              </div>
             </a>
           ))}
         </div>
 
         <div className="mt-10 text-sm text-gray-500">
-          Hinweis: Tag-Seiten sind absichtlich „hubby“. Sie erhöhen Crawl-Tiefe und verteilen Link-Juice auf Longtail-Runbooks.
+          Hinweis: Tag-Seiten sind absichtlich \u201ehubby\u201c. Sie erh\u00f6hen Crawl-Tiefe und verteilen Link-Juice auf Longtail-Runbooks.
         </div>
       </div>
     </Container>

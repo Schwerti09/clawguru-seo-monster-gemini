@@ -6,7 +6,8 @@ export const revalidate = 60 * 60 * 24
 
 export const metadata = {
   title: "Providers | ClawGuru",
-  description: "Provider Hubs: AWS, Hetzner, Cloudflare & Co — Runbooks, Fixes und Baselines nach Plattform sortiert."
+  description: "Provider Hubs: AWS, Hetzner, Cloudflare & Co — Runbooks, Fixes und Baselines nach Plattform sortiert.",
+  alternates: { canonical: "/providers" }
 }
 
 export default function ProvidersPage() {

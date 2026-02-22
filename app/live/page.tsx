@@ -5,7 +5,8 @@ import OpsWall from "@/components/live/OpsWall"
 export const metadata = {
   title: "Live Ops Wall | ClawGuru",
   description:
-    "Live-Signale (synthetisch) + Trends aus der Runbook-Library. Für schnelle Entscheidungen: Incident → Fix → Verify."
+    "Live-Signale (synthetisch) + Trends aus der Runbook-Library. Für schnelle Entscheidungen: Incident → Fix → Verify.",
+  alternates: { canonical: "/live" }
 }
 
 export default function LivePage() {

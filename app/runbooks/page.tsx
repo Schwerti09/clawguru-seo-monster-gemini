@@ -5,7 +5,8 @@ import { RUNBOOKS } from "@/lib/pseo"
 export const metadata = {
   title: "Runbooks | ClawGuru",
   description:
-    "Runbooks für OpenClaw/Moltbot Ops: Security, Setup, Fixes, Incident Response. Score → Runbook → Fix → Re-Check."
+    "Runbooks für OpenClaw/Moltbot Ops: Security, Setup, Fixes, Incident Response. Score → Runbook → Fix → Re-Check.",
+  alternates: { canonical: "/runbooks" }
 }
 
 function Tag({ t }: { t: string }) {

@@ -5,7 +5,8 @@ import BuyButton from "@/components/commerce/BuyButton"
 export const metadata = {
   title: "Day Pass | ClawGuru",
   description:
-    "24h Vollzugriff auf ClawGuru (OpsWall, Vault, Copilot, Badge Generator). Einmal zahlen, sofort loslegen."
+    "24h Vollzugriff auf ClawGuru (OpsWall, Vault, Copilot, Badge Generator). Einmal zahlen, sofort loslegen.",
+  alternates: { canonical: "/pricing" }
 }
 
 function Card({

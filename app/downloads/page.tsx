@@ -6,7 +6,8 @@ import { PRODUCTS } from "@/lib/constants"
 export const metadata = {
   title: "Downloads | ClawGuru",
   description:
-    "Kostenlose Runbooks & Templates + Day Pass (24h) für Vollzugriff auf Tools, Vault und OpsWall."
+    "Kostenlose Runbooks & Templates + Day Pass (24h) für Vollzugriff auf Tools, Vault und OpsWall.",
+  alternates: { canonical: "/downloads" }
 }
 
 export default function DownloadsPage() {

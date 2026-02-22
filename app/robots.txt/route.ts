@@ -4,7 +4,7 @@ export const dynamic = "force-dynamic"
 export const runtime = "nodejs"
 
 export async function GET() {
-  const base = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.com"
+  const base = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
   const body = [
     "User-agent: *",
     "Allow: /",

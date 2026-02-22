@@ -1,6 +1,6 @@
 export const BRAND = {
   name: "ClawGuru",
-  domain: "clawguru.com",
+  domain: "clawguru.org",
   twitter: "@clawguru"
 }
 

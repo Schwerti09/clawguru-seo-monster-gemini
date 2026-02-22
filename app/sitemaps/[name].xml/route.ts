@@ -35,7 +35,7 @@ export async function GET(
   _req: NextRequest,
   context?: { params?: { name?: string } }
 ) {
-  const base = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.com"
+  const base = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
   const lastmod = isoDate()
   const name = context?.params?.name
 

@@ -53,7 +53,7 @@ export async function GET(req: NextRequest) {
   </text>
 
   <text x="90" y="545" fill="#cbd5e1" font-family="Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial" font-size="22" font-weight="700">
-    geprüft via clawguru.com
+    geprüft via clawguru.org
   </text>
 
   <text x="990" y="545" text-anchor="end" fill="rgba(255,255,255,0.55)" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="18" font-weight="600">

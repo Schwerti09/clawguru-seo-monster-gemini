@@ -72,7 +72,7 @@ export default function ShareScore({ target, score, vulnerable }: { target: stri
   }, [score, vulnerable])
 
   const tweet = useMemo(() => {
-    const origin = typeof window !== "undefined" ? window.location.origin : "https://clawguru.com"
+    const origin = typeof window !== "undefined" ? window.location.origin : "https://clawguru.org"
     const full = `${origin}${shareUrl}`
     const txt = `${shareText} @clawguru`
     return `https://twitter.com/intent/tweet?text=${encodeURIComponent(txt)}&url=${encodeURIComponent(full)}`

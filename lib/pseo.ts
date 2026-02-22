@@ -462,7 +462,7 @@ add_header Referrer-Policy "no-referrer" always;
       { kind: "ul", items: r.howto.steps },
 
       { kind: "h2", text: "Verifikation" },
-      ...hints.verify.map((v) => ({ kind: "code", lang: v.lang, code: v.code })),
+      ...hints.verify.map((v): RunbookBlock => ({ kind: "code", lang: v.lang, code: v.code })),
 
       { kind: "h2", text: "Prävention / Guardrails" },
       { kind: "ul", items: hints.guardrail },

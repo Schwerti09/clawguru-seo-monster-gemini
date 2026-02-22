@@ -8,7 +8,7 @@ export default async function handler() {
   const base = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
   const secret = process.env.CRON_SECRET
 
-  const url = `${base}/api/health/cron`
+  const url = `${base}/api/selfhealth/cron`
   const headers: Record<string, string> = { "Content-Type": "application/json" }
   if (secret) {
     headers["Authorization"] = `Bearer ${secret}`

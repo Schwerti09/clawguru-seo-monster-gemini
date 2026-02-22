@@ -117,7 +117,7 @@ export default async function DashboardPage() {
               </a>
             </div>
             <div className="mt-4 text-xs text-gray-500">
-              Hinweis: Ersetze die Placeholder-Dateien in <code className="text-gray-300">/private_downloads</code>.
+              Downloads sind nach Aktivierung deines Zugangs verfügbar.
             </div>
           </div>
         </div>

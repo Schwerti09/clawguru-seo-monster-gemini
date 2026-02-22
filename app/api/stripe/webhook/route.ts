@@ -29,13 +29,17 @@ function emailHtml({
   url,
   plan,
   support,
-  dashboardUrl
+  dashboardUrl,
+  base
 }: {
   url: string
   plan: string
   support: string
   dashboardUrl: string
+  base: string
 }) {
+  const sprintUrl = `${base}/api/download?key=sprint-pack`
+  const incidentUrl = `${base}/api/download?key=incident-kit`
   return `
   <div style="font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial; line-height: 1.5; color:#111;">
     <h2 style="margin:0 0 10px 0;">ClawGuru Zugriff: <span style="color:#0ea5e9;">aktivieren</span></h2>
@@ -45,13 +49,25 @@ function emailHtml({
     </p>
     <p style="margin:18px 0;">
       <a href="${url}" style="display:inline-block; padding:12px 18px; background:#111827; color:#fff; text-decoration:none; border-radius:12px; font-weight:800;">
-        Zugriff aktivieren → Dashboard
+        Zugriff aktivieren &#8594; Dashboard
       </a>
     </p>
     <p style="margin:0 0 10px 0; font-size:12px; color:#555;">
       Direktlink (falls Button nicht klickbar):<br/>
       <a href="${url}">${url}</a>
     </p>
+    <hr style="border:none; border-top:1px solid #e5e7eb; margin:18px 0;" />
+    <p style="margin:0 0 8px 0; font-weight:700;">Deine Downloads (nach Aktivierung verfügbar):</p>
+    <ul style="margin:0 0 14px 0; padding-left:18px; font-size:13px; color:#333;">
+      <li style="margin-bottom:6px;">
+        <a href="${sprintUrl}" style="color:#0ea5e9; font-weight:700;">Hardening Sprint Pack (PDF)</a>
+        &ndash; 30&ndash;60 Min. Hardening, Copy/Paste Templates, Checkliste
+      </li>
+      <li>
+        <a href="${incidentUrl}" style="color:#0ea5e9; font-weight:700;">Incident Kit Pro (ZIP)</a>
+        &ndash; Key-Rotation, Firewall-Baselines, Cloudflare-WAF, Runbook
+      </li>
+    </ul>
     <hr style="border:none; border-top:1px solid #e5e7eb; margin:18px 0;" />
     <p style="margin:0; font-size:12px; color:#555;">
       Support: ${support}<br/>
@@ -93,7 +109,7 @@ async function sendAccessEmail(session: Stripe.Checkout.Session) {
   await sendEmail({
     to: email,
     subject: "Dein ClawGuru Zugang (Magic Link)",
-    html: emailHtml({ url, plan, support, dashboardUrl: dash })
+    html: emailHtml({ url, plan, support, dashboardUrl: dash, base })
   })
 }
 

@@ -14,10 +14,25 @@ npm run dev
 
 ## Deploy
 
+### Automatisches Deployment via GitHub Actions
+
+Nach dem Merge eines PRs in `main` passiert **nichts manuell** – der Deploy läuft automatisch:
+
+1. **CI** (`.github/workflows/ci.yml`) – prüft Build bei jedem PR-Push → Task wird grün.
+2. **Deploy** (`.github/workflows/deploy.yml`) – sobald der PR gemergt ist (Push auf `main`), wird automatisch nach Netlify deployed.
+
+**Einmalig in GitHub einrichten (Repository → Settings → Secrets and variables → Actions):**
+- `NETLIFY_AUTH_TOKEN` – dein persönlicher Netlify API Token (Netlify → User Settings → Applications → Personal access tokens)
+- `NETLIFY_SITE_ID` – deine Site-ID (Netlify → Site → Site configuration → Site ID)
+
+Danach: PR erstellen → warten bis CI grün → mergen → fertig. Kein manuelles Drücken nötig.
+
+---
+
 ### Vercel
 Repo importieren → Environment Variables setzen → Deploy.
 
-### Netlify
+### Netlify (manuell / ohne GitHub Actions)
 - Build: `npm run build`
 - Publish: `.next`
 - Plugin: `@netlify/plugin-nextjs` (in `netlify.toml`)

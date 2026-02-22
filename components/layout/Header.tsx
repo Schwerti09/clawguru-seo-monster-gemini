@@ -18,7 +18,7 @@ export default function Header() {
             <div className="w-9 h-9 rounded-2xl bg-gradient-to-br from-brand-cyan to-brand-violet shadow-glow2" />
             <div className="leading-tight">
               <div className="font-black">ClawGuru</div>
-              <div className="text-xs text-gray-400">Institutional Ops Intelligence</div>
+              <div className="text-xs text-gray-400 hidden sm:block">Institutional Ops Intelligence</div>
             </div>
           </a>
 

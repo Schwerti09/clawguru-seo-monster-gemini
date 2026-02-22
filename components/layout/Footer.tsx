@@ -3,7 +3,7 @@ import { COMMUNITY } from "@/lib/constants"
 
 export default function Footer() {
   return (
-    <footer className="mt-20 border-t border-gray-800 py-10">
+    <footer className="mt-20 border-t border-gray-800 py-10 pb-24 lg:pb-10">
       <Container>
         <div className="grid md:grid-cols-3 gap-6 text-sm text-gray-400">
           <div>

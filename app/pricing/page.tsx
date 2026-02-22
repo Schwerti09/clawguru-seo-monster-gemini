@@ -61,7 +61,7 @@ function Card({
         ))}
       </ul>
 
-      <div className="mt-6">{children}</div>
+      <div className="mt-6 [&>button]:w-full [&>button]:justify-center">{children}</div>
 
       <div className="mt-4 text-xs text-gray-500">
         Du bekommst sofort nach Zahlung deinen Zugang. Wenn etwas hakt: /recover.

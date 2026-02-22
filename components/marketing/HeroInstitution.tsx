@@ -14,7 +14,7 @@ export default function HeroInstitution() {
             Institutional Ops Intelligence · 2026
           </div>
 
-          <h1 className="mt-4 text-5xl md:text-6xl font-black leading-tight">
+          <h1 className="mt-4 text-4xl sm:text-5xl lg:text-6xl font-black leading-tight">
             Die <span className="bg-gradient-to-r from-brand-cyan to-brand-violet bg-clip-text text-transparent">Institution</span> für
             OpenClaw Security & Ops
           </h1>

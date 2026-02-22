@@ -64,7 +64,7 @@ export default function Home() {
               subtitle="ClawGuru ist eine operative Security-Schicht: Score → Runbook → Fix → Re-Check → Share."
             />
 
-            <div className="mt-10 grid md:grid-cols-4 gap-4">
+            <div className="mt-10 grid sm:grid-cols-2 md:grid-cols-4 gap-4">
               {[
                 ["Live Score", "30 Sekunden. Kein Gelaber. Deine Top 3 Risiken."],
                 ["Copilot Runbooks", "Du beschreibst den Stack. Wir geben ein Runbook zum Abarbeiten."],

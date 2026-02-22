@@ -1,5 +1,13 @@
+import type { Metadata } from "next"
 import Container from "@/components/shared/Container"
 import HardeningSprint from "@/components/academy/HardeningSprint"
+
+export const metadata: Metadata = {
+  title: "Academy | ClawGuru",
+  description:
+    "OpenClaw Hardening Sprint: Baseline-Hardening in 30 Minuten. Secrets rotieren, Exposition schließen, Origin-Disziplin, Monitoring aktivieren.",
+  alternates: { canonical: "/academy" }
+}
 
 export default function Academy() {
   const howtoJsonLd = {

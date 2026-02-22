@@ -5,7 +5,8 @@ import { allTags } from "@/lib/pseo"
 export const metadata = {
   title: "Tags | ClawGuru",
   description:
-    "Tag Index für Runbooks: Provider, Fehler, Topics, Configs. Interne Linkpower für Longtail-Dominanz."
+    "Tag Index für Runbooks: Provider, Fehler, Topics, Configs. Interne Linkpower für Longtail-Dominanz.",
+  alternates: { canonical: "/tags" }
 }
 
 export default function TagsPage() {

@@ -1,5 +1,13 @@
+import type { Metadata } from "next"
 import Container from "@/components/shared/Container"
 import IntelFeed from "@/components/intel/IntelFeed"
+
+export const metadata: Metadata = {
+  title: "Intel Feed | ClawGuru",
+  description:
+    "Kuratierte Security-Patterns für OpenClaw/Moltbot: wiederkehrende Risiken, aktuelle Angriffsvektoren, Handlungswissen. Kein Clickbait.",
+  alternates: { canonical: "/intel" }
+}
 
 export default function IntelPage() {
   return (

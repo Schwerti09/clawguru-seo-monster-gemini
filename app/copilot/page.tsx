@@ -1,5 +1,13 @@
+import type { Metadata } from "next"
 import Container from "@/components/shared/Container"
 import CopilotChat from "@/components/copilot/CopilotChat"
+
+export const metadata: Metadata = {
+  title: "Copilot | ClawGuru",
+  description:
+    "OpenClaw/Moltbot Security Copilot: Problem beschreiben, Schritt-für-Schritt Runbook bekommen. Konversation → Prioritäten → Fix.",
+  alternates: { canonical: "/copilot" }
+}
 
 export default function CopilotPage({ searchParams }: { searchParams?: Record<string, string | string[] | undefined> }) {
   const q = typeof searchParams?.q === "string" ? searchParams?.q : ""

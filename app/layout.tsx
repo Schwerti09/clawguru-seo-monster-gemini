@@ -10,6 +10,7 @@ export const metadata: Metadata = {
   title: "ClawGuru | Institutional OpenClaw Security & Ops 2026",
   description:
     "ClawGuru: Copilot, Intel Feed, Academy, Vault und ein lebender Lagebericht für OpenClaw/Moltbot Security & Betrieb.",
+  alternates: { canonical: "/" },
   openGraph: {
     type: "website",
     locale: "de_DE",

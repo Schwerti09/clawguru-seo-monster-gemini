@@ -4,6 +4,7 @@
 
 import { RUNBOOKS, totalSitemapUrls } from "./pseo"
 import { sendEmail } from "./email"
+import { BASE_URL } from "./config"
 
 // ---------------------------------------------------------------------------
 // Types
@@ -74,7 +75,7 @@ const FETCH_TIMEOUT_MS = 10_000
 // ---------------------------------------------------------------------------
 
 function base(): string {
-  return (process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org").replace(/\/$/, "")
+  return BASE_URL.replace(/\/$/, "")
 }
 
 async function fetchWithTimeout(url: string): Promise<{ ok: boolean; status: number; body: string }> {
@@ -379,8 +380,8 @@ export async function autoHeal(): Promise<AutoHealResult> {
   }
 
   // --- 2. Generate new runbooks ---
-  // FULL PASSIVE WELTMACHT: ask Gemini for 5-10 new runbook ideas based on current year trends
-  const newCount = Math.floor(Math.random() * 6) + 5 // 5–10
+  // FULL PASSIVE WELTMACHT: ask Gemini for 50-100 new runbook ideas based on current year trends
+  const newCount = Math.floor(Math.random() * 51) + 50 // 50–100
   const generatePrompt = [
     "You are the ClawGuru Runbook Factory for 2026.",
     `Generate exactly ${newCount} new runbook ideas for cloud security and DevOps operators.`,

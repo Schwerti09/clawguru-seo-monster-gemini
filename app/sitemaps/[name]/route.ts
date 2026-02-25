@@ -2,6 +2,7 @@ import type { NextRequest } from "next/server"
 import { NextResponse } from "next/server"
 import { bucketsAF, bucketsTagsAF, allProviders } from "@/lib/pseo"
 import { BASE_URL } from "@/lib/config"
+import { SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
 
 // IMPORTANT: This route must stay dynamic (Netlify prerender can call it without params)
 export const dynamic = "force-dynamic"
@@ -128,6 +129,32 @@ export async function GET(
       return new NextResponse(urlset(urls), {
         status: 200,
         headers: SITEMAP_HEADERS
+      })
+    }
+
+    // NEXT-LEVEL UPGRADE 2026: Language-specific sitemaps for i18n runbook pages
+    if (name.startsWith("i18n-")) {
+      const locale = name.slice(5) as Locale
+      if (!SUPPORTED_LOCALES.includes(locale)) {
+        return new NextResponse("Not Found", { status: 404 })
+      }
+      // Top 200 runbooks in localized URLs for crawlability
+      const allRunbooks = [
+        ...rb["a-f"],
+        ...rb["g-l"],
+        ...rb["m-r"],
+        ...rb["s-z"],
+        ...rb["0-9"],
+      ].slice(0, 200)
+      const i18nUrls = allRunbooks.map((r) => ({
+        loc: `${base}/${locale}/runbook/${r.slug}`,
+        lastmod: r.lastmod || lastmod,
+        changefreq: "weekly",
+        priority: "0.7",
+      }))
+      return new NextResponse(urlset(i18nUrls), {
+        status: 200,
+        headers: SITEMAP_HEADERS,
       })
     }
 

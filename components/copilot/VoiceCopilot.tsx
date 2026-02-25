@@ -32,7 +32,8 @@ const LANG_SPEECH: Record<string, string> = {
 }
 
 // NEXT-LEVEL UPGRADE 2026: Safe accessor for vendor-prefixed Speech API
-function getSpeechRecognition(): (new () => SpeechRecognition) | undefined {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function getSpeechRecognition(): (new () => any) | undefined {
   if (typeof window === "undefined") return undefined
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const w = window as any
@@ -47,7 +48,8 @@ export default function VoiceCopilot({ lang = "de", onTranscript, onReply }: Voi
   const [isMuted, setIsMuted] = useState(false)
   const [supported, setSupported] = useState(true)
 
-  const recognitionRef = useRef<SpeechRecognition | null>(null)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const recognitionRef = useRef<any>(null)
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null)
   // NEXT-LEVEL UPGRADE 2026: Use ref to avoid stale closure in onend callback
   const transcriptRef = useRef("")
@@ -112,7 +114,8 @@ export default function VoiceCopilot({ lang = "de", onTranscript, onReply }: Voi
     recognition.interimResults = true
     recognition.lang = LANG_SPEECH[lang] || "de-DE"
 
-    recognition.onresult = (event: SpeechRecognitionEvent) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    recognition.onresult = (event: any) => {
       let interim = ""
       let final = ""
       for (let i = 0; i < event.results.length; i++) {

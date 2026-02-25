@@ -420,7 +420,65 @@ export async function autoHeal(): Promise<AutoHealResult> {
     result.errors.push("sitemap:ping failed")
   }
 
+  // WORLD BEAST: Auto-submit sitemap to Google and Bing after every heal cycle
+  await submitSitemapToSearchEngines(b).catch((err) =>
+    result.errors.push(`sitemap:submit failed: ${err instanceof Error ? err.message : String(err)}`)
+  )
+
   return result
+}
+
+// ---------------------------------------------------------------------------
+// WORLD BEAST: Auto-submit sitemap to search engines after every heal cycle
+// ---------------------------------------------------------------------------
+
+/**
+ * WORLD BEAST: Pings Google and Bing with the sitemap URL so they re-crawl
+ * updated content immediately after each auto-heal cycle.
+ * Uses the IndexNow protocol for Bing (requires INDEXNOW_KEY env var).
+ */
+export async function submitSitemapToSearchEngines(siteBase?: string): Promise<{
+  google: boolean
+  bing: boolean
+  errors: string[]
+}> {
+  const b = siteBase ?? base()
+  const sitemapUrl = encodeURIComponent(`${b}/sitemap.xml`)
+  const errors: string[] = []
+
+  // --- Google ping (deprecated but still works for sitemap notification) ---
+  let googleOk = false
+  try {
+    const googlePingUrl = `https://www.google.com/ping?sitemap=${sitemapUrl}`
+    const res = await fetchWithTimeout(googlePingUrl)
+    googleOk = res.ok
+    if (!res.ok) errors.push(`google:ping HTTP ${res.status}`)
+  } catch (err) {
+    errors.push(`google:ping error: ${err instanceof Error ? err.message : String(err)}`)
+  }
+
+  // --- Bing / IndexNow ---
+  let bingOk = false
+  const indexNowKey = process.env.INDEXNOW_KEY
+  try {
+    if (indexNowKey) {
+      // IndexNow: submit the sitemap URL directly
+      const indexNowUrl = `https://api.indexnow.org/indexnow?url=${encodeURIComponent(`${b}/sitemap.xml`)}&key=${encodeURIComponent(indexNowKey)}`
+      const res = await fetchWithTimeout(indexNowUrl)
+      bingOk = res.ok
+      if (!res.ok) errors.push(`bing:indexnow HTTP ${res.status}`)
+    } else {
+      // Fallback: classic Bing sitemap ping
+      const bingPingUrl = `https://www.bing.com/ping?sitemap=${sitemapUrl}`
+      const res = await fetchWithTimeout(bingPingUrl)
+      bingOk = res.ok
+      if (!res.ok) errors.push(`bing:ping HTTP ${res.status}`)
+    }
+  } catch (err) {
+    errors.push(`bing:ping error: ${err instanceof Error ? err.message : String(err)}`)
+  }
+
+  return { google: googleOk, bing: bingOk, errors }
 }
 
 // ---------------------------------------------------------------------------

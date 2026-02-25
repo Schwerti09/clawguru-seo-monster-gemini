@@ -3,6 +3,7 @@ import SectionTitle from "@/components/shared/SectionTitle"
 import { stripe } from "@/lib/stripe"
 
 export const runtime = "nodejs"
+export const dynamic = "force-dynamic"
 
 export default async function SuccessPage({
   searchParams

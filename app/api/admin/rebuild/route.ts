@@ -11,6 +11,7 @@ import { totalSitemapUrls } from "@/lib/pseo"
 
 export const runtime = "nodejs"
 export const dynamic = "force-dynamic"
+export const revalidate = 0
 
 function unauthorized() {
   return NextResponse.json({ error: "unauthorized" }, { status: 401 })

@@ -4,6 +4,8 @@ import { sendEmail } from "@/lib/email"
 import { signAccessToken, AccessPlan } from "@/lib/access-token"
 
 export const runtime = "nodejs"
+export const dynamic = "force-dynamic"
+export const revalidate = 0
 
 // naive in-memory rate limit (best-effort)
 const memory: { [k: string]: { count: number; ts: number } } = {}

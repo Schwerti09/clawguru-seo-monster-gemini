@@ -8,6 +8,8 @@ import { runPredictiveAgent } from "@/lib/agents/predictive-agent"
 import { getAccess } from "@/lib/access"
 
 export const runtime = "nodejs"
+export const dynamic = "force-dynamic"
+export const revalidate = 0
 
 export async function POST() {
   // WORLD BEAST FINAL LAUNCH: require pro access for global launch

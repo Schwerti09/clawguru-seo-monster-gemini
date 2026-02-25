@@ -3,6 +3,9 @@ import CTAButton from "@/components/marketing/CTAButton"
 import BuyButton from "@/components/commerce/BuyButton"
 import { PRODUCTS } from "@/lib/constants"
 
+export const dynamic = "force-dynamic"
+export const revalidate = 0
+
 export const metadata = {
   title: "Downloads | ClawGuru",
   description:

@@ -3,7 +3,8 @@ import SectionTitle from "@/components/shared/SectionTitle"
 import { allTags, runbooksByTag, topRunbooksByTag } from "@/lib/pseo"
 import { notFound } from "next/navigation"
 
-export const revalidate = 60 * 60 * 24
+export const dynamic = "force-dynamic"
+export const revalidate = 0
 export const dynamicParams = true
 
 export async function generateStaticParams() {

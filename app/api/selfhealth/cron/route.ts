@@ -3,4 +3,8 @@
 // Called daily by Netlify Scheduled Function and Vercel Cron.
 // Secured by CRON_SECRET – no unauthorised triggering possible.
 
-export { GET, dynamic, runtime } from "@/app/api/health/cron/route"
+export const dynamic = "force-dynamic"
+export const revalidate = 0
+export const runtime = "nodejs"
+
+export { GET } from "@/app/api/health/cron/route"

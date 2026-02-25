@@ -20,8 +20,9 @@ export const metadata: Metadata = {
   },
 }
 
-// WORLD BEAST UPGRADE: 5-minute ISR revalidation
-export const revalidate = 300
+// WORLD BEAST UPGRADE: 5-minute ISR revalidation → force-dynamic to prevent build timeout
+export const dynamic = "force-dynamic"
+export const revalidate = 0
 
 export default function ThreatMapPage() {
   const totalThreats = THREAT_REGIONS.reduce((sum, r) => sum + r.threats, 0)

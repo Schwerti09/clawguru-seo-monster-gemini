@@ -1,6 +1,5 @@
-// WORLD BEAST: app/share/[slug]/page.tsx
-// One-click share page – pre-built social threads + ClawGuru watermark.
-// GET /share/[slug] → shows Twitter, LinkedIn, Reddit threads ready to copy.
+// WORLD BEAST + VISUAL BEAST 2026: app/share/[slug]/page.tsx
+// Dark-mode share page with glassmorphism share card + OG-Image preview.
 
 import Container from "@/components/shared/Container"
 import { getRunbook } from "@/lib/pseo"
@@ -68,26 +67,27 @@ export default function SharePage({ params }: { params: { slug: string } }) {
 
   return (
     <Container>
+      {/* VISUAL BEAST 2026: Dark share card with glassmorphism */}
       <div className="py-16 max-w-3xl mx-auto">
         {/* Header */}
-        <div className="mb-2 text-xs text-gray-500 uppercase tracking-widest">
-          One-Click Share
+        <div className="mb-2 text-xs neon-text-green uppercase tracking-widest font-mono">
+          {`// One-Click Share`}
         </div>
-        <h1 className="text-3xl font-black mb-2">{r.title}</h1>
+        <h1 className="text-3xl font-black font-headline mb-2">{r.title}</h1>
         <p className="text-gray-400 mb-8">{r.summary}</p>
 
-        {/* ClawGuru Watermark Banner */}
-        <div className="mb-8 p-4 rounded-2xl border border-brand-cyan/30 bg-brand-cyan/5 flex items-center gap-3">
+        {/* VISUAL BEAST 2026: ClawGuru Watermark Banner with neon glow */}
+        <div className="mb-8 p-4 rounded-2xl glass-card border-[#00ff9d]/30 flex items-center gap-3">
           <span className="text-2xl">⚡</span>
           <div>
-            <div className="font-black text-brand-cyan text-sm">ClawGuru WorldBeast 2026</div>
-            <div className="text-xs text-gray-400">
+            <div className="font-black neon-text-green text-sm">ClawGuru WorldBeast 2026</div>
+            <div className="text-xs text-gray-400 font-mono">
               clawguru.org · The #1 Ops Intelligence Platform
             </div>
           </div>
           <a
             href={runbookUrl}
-            className="ml-auto px-4 py-2 rounded-xl bg-brand-cyan/15 border border-brand-cyan/30 hover:bg-brand-cyan/25 text-sm font-bold text-brand-cyan"
+            className="ml-auto px-4 py-2 rounded-xl glass-card border-[#00ff9d]/30 hover:shadow-neon-green text-sm font-bold neon-text-green transition-all"
           >
             Original →
           </a>

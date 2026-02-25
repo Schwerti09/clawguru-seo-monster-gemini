@@ -14,17 +14,18 @@ function clampArray<T>(arr: T[] | undefined | null, max: number): T[] {
   return arr.slice(0, max);
 }
 
-function coerceCopilot(payload: any, fallback: CopilotResponse): CopilotResponse {
-  const reply = typeof payload?.reply === "string" ? payload.reply : fallback.reply;
+function coerceCopilot(payload: unknown, fallback: CopilotResponse): CopilotResponse {
+  const p = payload as Record<string, unknown>;
+  const reply = typeof p?.reply === "string" ? p.reply : fallback.reply;
 
-  const followups = clampArray(payload?.followups, 6).filter((x: any) => typeof x === "string");
-  const actions = clampArray(payload?.actions, 6)
-    .map((a: any) => ({ label: String(a?.label || ""), href: String(a?.href || "") }))
-    .filter((a: any) => a.label && a.href);
+  const followups = clampArray(p?.followups as string[] | undefined, 6).filter((x) => typeof x === "string");
+  const actions = clampArray(p?.actions as { label?: unknown; href?: unknown }[] | undefined, 6)
+    .map((a) => ({ label: String(a?.label || ""), href: String(a?.href || "") }))
+    .filter((a) => a.label && a.href);
 
   const confidence: CopilotResponse["confidence"] =
-    payload?.confidence === "high" || payload?.confidence === "med" || payload?.confidence === "low"
-      ? payload.confidence
+    p?.confidence === "high" || p?.confidence === "med" || p?.confidence === "low"
+      ? p.confidence as CopilotResponse["confidence"]
       : fallback.confidence;
 
   return {
@@ -35,7 +36,7 @@ function coerceCopilot(payload: any, fallback: CopilotResponse): CopilotResponse
   };
 }
 
-function extractJson(text: string): any | null {
+function extractJson(text: string): unknown {
   // Strip code-fences if present
   const cleaned = text
     .replace(/```json/gi, "```")
@@ -74,10 +75,10 @@ async function geminiGenerate(prompt: string): Promise<string | null> {
   });
 
   if (!res.ok) return null;
-  const data = (await res.json()) as any;
+  const data = await res.json();
   const parts = data?.candidates?.[0]?.content?.parts;
   if (!Array.isArray(parts)) return null;
-  const text = parts.map((p: any) => p?.text).filter(Boolean).join("");
+  const text = parts.map((p: { text?: string }) => p?.text).filter(Boolean).join("");
   return typeof text === "string" && text.trim() ? text.trim() : null;
 }
 

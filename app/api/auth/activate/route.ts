@@ -43,7 +43,7 @@ export async function GET(req: NextRequest) {
     const customerId =
       typeof session.customer === "string"
         ? session.customer
-        : (session.customer as any)?.id
+        : (session.customer as { id: string } | null)?.id
 
     if (!customerId) {
       return NextResponse.redirect(new URL("/pricing?no_customer=1", origin))
@@ -59,7 +59,7 @@ export async function GET(req: NextRequest) {
       subscriptionId =
         typeof session.subscription === "string"
           ? session.subscription
-          : (session.subscription as any)?.id
+          : (session.subscription as { id: string } | null)?.id
       if (!subscriptionId) {
         return NextResponse.redirect(new URL("/pricing?no_subscription=1", origin))
       }

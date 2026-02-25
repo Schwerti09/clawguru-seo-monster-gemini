@@ -218,9 +218,9 @@ export default function RunbookPage({ params }: { params: { slug: string } }) {
 
         <div className="mt-10 p-6 rounded-3xl border border-gray-800 bg-black/25">
           {/* Rich blocks (Tier-2 content) */}
-          {Array.isArray((r as any).blocks) && (r as any).blocks.length > 0 ? (
+          {Array.isArray(r.blocks) && r.blocks.length > 0 ? (
             <div className="mb-10">
-              {(r as any).blocks.map((b: RunbookBlock, i: number) => (
+              {r.blocks.map((b: RunbookBlock, i: number) => (
                 <BlockView key={i} b={b} />
               ))}
             </div>
@@ -288,7 +288,7 @@ export default function RunbookPage({ params }: { params: { slug: string } }) {
         ) : null}
 
         <div className="mt-12 p-6 rounded-3xl border border-gray-800 bg-black/20 text-sm text-gray-400">
-          Hinweis: Diese Inhalte sind für Ops/Security gedacht. Keine „Namen-Datenbank", keine Anschuldigungen – nur Runbooks,
+          Hinweis: Diese Inhalte sind für Ops/Security gedacht. Keine „Namen-Datenbank&quot;, keine Anschuldigungen – nur Runbooks,
           Tools und verifizierbare Checks.
         </div>
       </div>

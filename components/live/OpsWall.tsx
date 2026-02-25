@@ -34,8 +34,8 @@ export default function OpsWall() {
       const json = (await res.json()) as LivePayload
       setData(json)
       setErr(null)
-    } catch (e: any) {
-      setErr(e?.message || "Live Feed Fehler")
+    } catch (e: unknown) {
+      setErr(e instanceof Error ? e.message : "Live Feed Fehler")
     }
   }
 

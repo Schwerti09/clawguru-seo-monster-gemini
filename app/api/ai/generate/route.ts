@@ -4,13 +4,14 @@ type ReqBody = {
   prompt?: string;
 };
 
-function extractGeminiText(data: any): string {
+function extractGeminiText(data: unknown): string {
+  const d = data as { candidates?: Array<{ content?: { parts?: Array<{ text?: string }>; text?: string } }> };
   // Gemini: candidates[0].content.parts[].text
-  const cand = data?.candidates?.[0];
+  const cand = d?.candidates?.[0];
   const parts = cand?.content?.parts;
   if (Array.isArray(parts)) {
     const txt = parts
-      .map((p: any) => (typeof p?.text === "string" ? p.text : ""))
+      .map((p) => (typeof p?.text === "string" ? p.text : ""))
       .join("")
       .trim();
     if (txt) return txt;
@@ -21,9 +22,10 @@ function extractGeminiText(data: any): string {
   return "";
 }
 
-function extractOutputText(data: any): string {
+function extractOutputText(data: unknown): string {
+  const d = data as { output?: Array<{ content?: Array<{ type?: string; text?: string }> }>; choices?: Array<{ message?: { content?: string } }> };
   // Responses API: data.output[...].content[...].text
-  const out = data?.output;
+  const out = d?.output;
   if (Array.isArray(out)) {
     let buf = "";
     for (const item of out) {
@@ -38,7 +40,7 @@ function extractOutputText(data: any): string {
     if (buf.trim()) return buf.trim();
   }
   // Chat Completions fallback shape
-  const cc = data?.choices?.[0]?.message?.content;
+  const cc = d?.choices?.[0]?.message?.content;
   if (typeof cc === "string" && cc.trim()) return cc.trim();
   return "";
 }
@@ -139,7 +141,7 @@ export async function POST(req: NextRequest) {
       }),
     });
 
-    let data: any = null;
+    let data: unknown = null;
     if (res.ok) {
       data = await res.json();
     } else {
@@ -175,7 +177,7 @@ export async function POST(req: NextRequest) {
     if (!text) return NextResponse.json({ error: "No output" }, { status: 502 });
 
     return NextResponse.json({ text });
-  } catch (e: any) {
+  } catch {
     return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 }

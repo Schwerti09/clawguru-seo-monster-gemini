@@ -69,9 +69,9 @@ export async function POST(req: NextRequest) {
     })
 
     return NextResponse.json({ url: session.url })
-  } catch (e: any) {
+  } catch (e: unknown) {
     return NextResponse.json(
-      { error: e?.message || "Checkout failed" },
+      { error: e instanceof Error ? e.message : "Checkout failed" },
       { status: 500 }
     )
   }

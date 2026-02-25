@@ -3,7 +3,7 @@ import { stripe } from "@/lib/stripe"
 
 export const runtime = "nodejs"
 
-function allowedDownloadsFromLineItems(lineItems: any[]): string[] {
+function allowedDownloadsFromLineItems(lineItems: { price?: { id: string } | null }[]): string[] {
   const sprint = process.env.STRIPE_PRICE_SPRINT
   const incident = process.env.STRIPE_PRICE_INCIDENT
   const ids = new Set(lineItems.map((li) => li?.price?.id).filter(Boolean))
@@ -22,7 +22,7 @@ export async function GET(req: NextRequest) {
     const lineItems = await stripe.checkout.sessions.listLineItems(session_id, { expand: ["data.price"] })
 
     const paid = session.payment_status === "paid"
-    const allowed = paid ? allowedDownloadsFromLineItems(lineItems.data as any[]) : []
+    const allowed = paid ? allowedDownloadsFromLineItems(lineItems.data as { price?: { id: string } | null }[]) : []
 
     return NextResponse.json({
       paid,

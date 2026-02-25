@@ -60,7 +60,7 @@ export default function IntelFeed() {
           />
           <select
             value={cat}
-            onChange={(e) => setCat(e.target.value as any)}
+            onChange={(e) => setCat(e.target.value as (typeof CATS)[number])}
             className="px-4 py-3 rounded-xl bg-black/40 border border-gray-700"
           >
             {CATS.map((c) => (
@@ -71,7 +71,7 @@ export default function IntelFeed() {
           </select>
           <select
             value={sev}
-            onChange={(e) => setSev(e.target.value as any)}
+            onChange={(e) => setSev(e.target.value as Incident["severity"] | "all")}
             className="px-4 py-3 rounded-xl bg-black/40 border border-gray-700"
           >
             <option value="all">Severity: all</option>

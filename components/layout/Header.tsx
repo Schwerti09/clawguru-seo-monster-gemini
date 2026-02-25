@@ -1,8 +1,12 @@
 "use client"
 // VISUAL & PERFORMANCE POLISH 2026: Responsive header – max 6 desktop links + "More" dropdown + mobile hamburger
+// NEXT-LEVEL UPGRADE 2026: Language switcher added for 10-language support
 
 import { useState, useRef, useEffect } from "react"
 import Container from "@/components/shared/Container"
+import LanguageSwitcher from "@/components/layout/LanguageSwitcher"
+import { usePathname } from "next/navigation"
+import { SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
 
 type NavItem = { href: string; label: string }
 
@@ -34,6 +38,11 @@ export default function Header() {
   const [moreOpen, setMoreOpen] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const moreRef = useRef<HTMLDivElement>(null)
+  const pathname = usePathname()
+
+  // NEXT-LEVEL UPGRADE 2026: Detect current locale from URL
+  const firstSegment = pathname.split("/").filter(Boolean)[0] as Locale
+  const currentLocale: Locale = SUPPORTED_LOCALES.includes(firstSegment) ? firstSegment : "de"
 
   // Close "More" dropdown on outside click
   useEffect(() => {
@@ -107,8 +116,12 @@ export default function Header() {
               </div>
             </nav>
 
-            {/* CTA buttons + mobile hamburger */}
+            {/* CTA buttons + language switcher + mobile hamburger */}
             <div className="flex items-center gap-2">
+              {/* NEXT-LEVEL UPGRADE 2026: Language switcher */}
+              <div className="hidden sm:block">
+                <LanguageSwitcher currentLocale={currentLocale} variant="compact" />
+              </div>
               <a
                 href="/security/notfall-leitfaden"
                 className="hidden sm:block px-3 py-2 rounded-xl bg-brand-red/90 hover:bg-brand-red font-black text-sm"

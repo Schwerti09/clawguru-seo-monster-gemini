@@ -104,10 +104,8 @@ export default function ShareScore({ target, score, vulnerable }: { target: stri
   async function nativeShare() {
     const origin = typeof window !== "undefined" ? window.location.origin : ""
     const url = `${origin}${shareUrl}`
-    // @ts-expect-error -- navigator.share not in all TypeScript DOM typings
     if (navigator.share) {
       try {
-        // @ts-expect-error -- navigator.share not in all TypeScript DOM typings
         await navigator.share({ title: "Claw Security Score", text: shareText, url })
       } catch {}
     } else {
@@ -143,9 +141,7 @@ export default function ShareScore({ target, score, vulnerable }: { target: stri
       const origin = typeof window !== "undefined" ? window.location.origin : ""
       const url = `${origin}${shareUrl}`
 
-      // @ts-expect-error -- navigator.canShare/share not in all TypeScript DOM typings
       if (navigator.canShare && navigator.canShare({ files: [file] }) && navigator.share) {
-        // @ts-expect-error -- navigator.share not in all TypeScript DOM typings
         await navigator.share({ title: "Claw Security Score", text: shareText, url, files: [file] })
       } else {
         downloadBlob(blob, `clawguru-score-${score}.png`)

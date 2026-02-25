@@ -72,10 +72,8 @@ export default function HeroSecurityCheck() {
     if (!shareUrl) return
     const url = `${window.location.origin}${shareUrl}`
     const text = `Mein Claw Security Score: ${result?.score}/100 — geprüft via ClawGuru`
-    // @ts-expect-error -- navigator.share not in all TypeScript DOM typings
     if (navigator.share) {
       try {
-        // @ts-expect-error -- navigator.share not in all TypeScript DOM typings
         await navigator.share({ title: "Claw Security Score", text, url })
       } catch {}
     } else {

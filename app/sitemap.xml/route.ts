@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import { bucketsAF, bucketsTagsAF } from "@/lib/pseo"
+import { BASE_URL } from "@/lib/config"
 
 export const dynamic = "force-dynamic"
 export const runtime = "nodejs"
@@ -10,7 +11,7 @@ function isoDate(d = new Date()) {
 
 export async function GET() {
   try {
-    const base = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
+    const base = BASE_URL
     const lastmod = isoDate()
 
     const rb = bucketsAF()
@@ -65,7 +66,7 @@ export async function GET() {
     })
   } catch {
     // Always return a valid sitemap index even on error to avoid "cannot be retrieved" errors
-    const base = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
+    const base = BASE_URL
     const lastmod = isoDate()
     const fallback =
       `<?xml version="1.0" encoding="UTF-8"?>\n` +

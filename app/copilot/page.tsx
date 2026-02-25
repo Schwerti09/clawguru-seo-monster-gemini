@@ -1,6 +1,9 @@
 import type { Metadata } from "next"
 import Container from "@/components/shared/Container"
 import CopilotChat from "@/components/copilot/CopilotChat"
+// NEXT-LEVEL UPGRADE 2026: Voice Copilot + Live Fix Sandbox
+import VoiceCopilot from "@/components/copilot/VoiceCopilot"
+import LiveFixSandbox from "@/components/copilot/LiveFixSandbox"
 
 export const metadata: Metadata = {
   title: "Copilot | ClawGuru",
@@ -25,6 +28,22 @@ export default function CopilotPage({ searchParams }: { searchParams?: Record<st
           </div>
         ) : null}
         <CopilotChat />
+        {/* NEXT-LEVEL UPGRADE 2026: Voice Copilot – speak your issue */}
+        <div className="mt-8">
+          <h2 className="text-xl font-black mb-3 text-[#00ff9d]">🎤 Voice Copilot</h2>
+          <p className="text-gray-400 text-sm mb-4">
+            Sprich dein Problem ein – Web Speech API erkennt es, Gemini analysiert es und liest die Antwort vor.
+          </p>
+          <VoiceCopilot lang="de" />
+        </div>
+        {/* NEXT-LEVEL UPGRADE 2026: Live Fix Sandbox – test configs in-browser */}
+        <div className="mt-8">
+          <h2 className="text-xl font-black mb-3 text-[#00b8ff]">🧪 Live Fix Sandbox</h2>
+          <p className="text-gray-400 text-sm mb-4">
+            Config hier einfügen und sofort auf Sicherheitsprobleme analysieren lassen – nginx, Docker, Terraform, K8s.
+          </p>
+          <LiveFixSandbox />
+        </div>
       </div>
     </Container>
   )

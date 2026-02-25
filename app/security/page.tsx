@@ -28,6 +28,14 @@ export default function Security() {
             <div className="text-green-400 font-black">Copilot</div>
             <div className="text-gray-400">Konversation → Prioritäten → Runbook.</div>
           </a>
+          {/* NEXT-LEVEL UPGRADE 2026: Zero-Knowledge Check link */}
+          <a className="p-6 rounded-2xl border border-[#00ff9d]/20 bg-[#00ff9d]/5 hover:bg-[#00ff9d]/10 md:col-span-2" href="/security/zero-knowledge">
+            <div className="flex items-center gap-2 mb-1">
+              <span className="text-[#00ff9d] font-black">🔒 Zero-Knowledge Check</span>
+              <span className="text-xs px-2 py-0.5 rounded-full border border-[#00ff9d]/40 text-[#00ff9d] font-bold">NEU 2026</span>
+            </div>
+            <div className="text-gray-400">Config, Log oder Code lokal analysieren – kein Byte verlässt den Browser.</div>
+          </a>
         </div>
       </div>
     </Container>

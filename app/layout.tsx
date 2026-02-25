@@ -9,6 +9,8 @@ import UmamiAnalytics from "@/components/analytics/UmamiAnalytics"
 // VISUAL UPGRADE 2026: Neon cursor + page transition wrapper
 import NeonCursor from "@/components/visual/NeonCursor"
 import PageTransition from "@/components/visual/PageTransition"
+// NEXT-LEVEL UPGRADE 2026: RTL direction support for Arabic + other RTL locales
+import RTLProvider from "@/components/layout/RTLProvider"
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://clawguru.org'),
@@ -51,18 +53,25 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="prefetch" href="/dashboard" as="document" />
         {/* Preload critical font display */}
         <meta name="theme-color" content="#050608" />
+        {/* NEXT-LEVEL UPGRADE 2026: PWA manifest */}
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
       </head>
       {/* VISUAL UPGRADE 2026: scanline + noise overlays on body */}
       <body className="min-h-screen scanline-overlay noise-overlay">
-        <TrustBadge />
-        <Header />
-        <main className="pt-28 pb-20 lg:pb-0">
-          <PageTransition>{children}</PageTransition>
-        </main>
-        <Footer />
-        <ActionDock />
-        {/* VISUAL UPGRADE 2026: Custom neon cursor for desktop */}
-        <NeonCursor />
+        {/* NEXT-LEVEL UPGRADE 2026: RTL direction support – updates html[dir] based on locale URL */}
+        <RTLProvider>
+          <TrustBadge />
+          <Header />
+          <main className="pt-28 pb-20 lg:pb-0">
+            <PageTransition>{children}</PageTransition>
+          </main>
+          <Footer />
+          <ActionDock />
+          {/* VISUAL UPGRADE 2026: Custom neon cursor for desktop */}
+          <NeonCursor />
+        </RTLProvider>
       </body>
     </html>
   )

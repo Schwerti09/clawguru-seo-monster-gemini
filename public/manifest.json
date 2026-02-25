@@ -1,0 +1,51 @@
+{
+  "name": "ClawGuru – Ops Intelligence Platform 2026",
+  "short_name": "ClawGuru",
+  "description": "The #1 Global Ops Intelligence Platform – Security Copilot, Runbooks, Intel Feed, Threatmap",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#00ff9d",
+  "orientation": "any",
+  "scope": "/",
+  "lang": "de",
+  "dir": "ltr",
+  "categories": ["security", "productivity", "utilities"],
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "48x48",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/og-image.png",
+      "sizes": "1200x630",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Copilot",
+      "short_name": "Copilot",
+      "description": "AI Security Copilot öffnen",
+      "url": "/copilot",
+      "icons": [{ "src": "/favicon.ico", "sizes": "48x48" }]
+    },
+    {
+      "name": "Runbooks",
+      "short_name": "Runbooks",
+      "description": "Security Runbooks durchsuchen",
+      "url": "/runbooks",
+      "icons": [{ "src": "/favicon.ico", "sizes": "48x48" }]
+    },
+    {
+      "name": "Intel Feed",
+      "short_name": "Intel",
+      "description": "Live Threat Intelligence",
+      "url": "/intel",
+      "icons": [{ "src": "/favicon.ico", "sizes": "48x48" }]
+    }
+  ]
+}

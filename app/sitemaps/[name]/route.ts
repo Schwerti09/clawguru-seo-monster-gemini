@@ -1,6 +1,7 @@
 import type { NextRequest } from "next/server"
 import { NextResponse } from "next/server"
 import { bucketsAF, bucketsTagsAF, allProviders } from "@/lib/pseo"
+import { BASE_URL } from "@/lib/config"
 
 // IMPORTANT: This route must stay dynamic (Netlify prerender can call it without params)
 export const dynamic = "force-dynamic"
@@ -41,7 +42,7 @@ export async function GET(
   _req: NextRequest,
   context?: { params?: { name?: string } }
 ) {
-  const base = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
+  const base = BASE_URL
   const lastmod = isoDate()
   const name = context?.params?.name
 

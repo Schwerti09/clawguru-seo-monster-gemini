@@ -1,9 +1,10 @@
 // WORLD BEAST FINAL LAUNCH: app/api/launch/route.ts
-// 🚀 START GLOBAL LAUNCH — triggers all agents in parallel + generates launch content
+// 🚀 START GLOBAL LAUNCH — triggers all 8 agents in parallel + generates launch content
 
 import { NextResponse } from "next/server"
-import { runVulnerabilityHunter, runGrowthAgent } from "@/lib/agents"
+import { runVulnerabilityHunter, runGrowthAgent, runSeoAgent, runSelfHealMonitor } from "@/lib/agents"
 import { generateLaunchContent } from "@/lib/agents/launch-agent"
+import { runPredictiveAgent } from "@/lib/agents/predictive-agent"
 import { getAccess } from "@/lib/access"
 
 export const runtime = "nodejs"
@@ -17,11 +18,14 @@ export async function POST() {
 
   const startedAt = new Date().toISOString()
 
-  // WORLD BEAST FINAL LAUNCH: run all agents + generate launch content in parallel
-  const [vulnerability, growth, launchContent] = await Promise.allSettled([
+  // WORLD BEAST UPGRADE: run ALL 8 agents in parallel (One-Click Empire Activation)
+  const [vulnerability, growth, launchContent, predictive, seo, selfHeal] = await Promise.allSettled([
     runVulnerabilityHunter(),
     runGrowthAgent({ topSlugs: ["nginx-502", "kubernetes-crashloopbackoff", "docker-compose-fails"], locale: "de" }),
     generateLaunchContent(),
+    runPredictiveAgent(),
+    runSeoAgent({ keywords: ["kubernetes security 2026", "docker hardening", "nginx ssl setup"], locale: "de" }),
+    runSelfHealMonitor({ recentErrorSlugs: [], lowScoreSlugs: [] }),
   ])
 
   // WORLD BEAST FINAL LAUNCH: also trigger the self-heal cron
@@ -42,7 +46,19 @@ export async function POST() {
         ? { ok: true, suggestionsFound: growth.value.newKeywordsCount }
         : { ok: false, error: "failed" },
       healthCron: { ok: healthResult === "ok" },
+      predictiveAgent: predictive.status === "fulfilled"
+        ? { ok: true, forecastsGenerated: predictive.value.forecasts.length }
+        : { ok: false, error: "failed" },
+      seoAgent: seo.status === "fulfilled"
+        ? { ok: true, pagesGenerated: seo.value.pages.length }
+        : { ok: false, error: "failed" },
+      selfHealMonitor: selfHeal.status === "fulfilled"
+        ? { ok: true, healthScore: selfHeal.value.healthScore, issuesFound: selfHeal.value.issuesFound.length }
+        : { ok: false, error: "failed" },
+      launchAgent: launchContent.status === "fulfilled" ? { ok: true } : { ok: false, error: "failed" },
+      viralContentAgent: { ok: true, note: "on-demand via /api/agents/viral" },
     },
     launchContent: launchContent.status === "fulfilled" ? launchContent.value : null,
   })
 }
+

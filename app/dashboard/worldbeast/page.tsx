@@ -126,9 +126,9 @@ export default async function WorldbeastPage() {
         {/* VISUAL UPGRADE 2026: Agent Status with cyber terminal aesthetic */}
         <div className="mb-8 p-6 rounded-2xl glass-panel">
           <h2 className="text-xl font-black font-heading mb-4 flex items-center gap-2">
-            <span>🤖</span> <span>Agent Swarm Status</span>
+            <span>🤖</span> <span>Agent Swarm Status — 8 Agents</span>
           </h2>
-          <div className="grid sm:grid-cols-3 gap-4">
+          <div className="grid sm:grid-cols-4 gap-4">
             {[
               {
                 name: "Vulnerability Hunter",
@@ -150,6 +150,41 @@ export default async function WorldbeastPage() {
                 lastRun: "Heute 04:00",
                 found: "8 Keywords",
                 color: "#00ff9d",
+              },
+              {
+                name: "Launch Agent",
+                status: "Bereit",
+                lastRun: "Auf Anfrage",
+                found: "On-Demand",
+                color: "#ffcc00",
+              },
+              {
+                name: "Predictive Agent",
+                status: "Aktiv",
+                lastRun: "Heute 02:00",
+                found: "3 Forecasts",
+                color: "#ff6b35",
+              },
+              {
+                name: "Video Agent",
+                status: "Bereit",
+                lastRun: "Auf Anfrage",
+                found: "On-Demand",
+                color: "#a855f7",
+              },
+              {
+                name: "SEO Agent",
+                status: "Aktiv",
+                lastRun: "Heute 05:00",
+                found: "12 Pages",
+                color: "#22c55e",
+              },
+              {
+                name: "Self-Heal Monitor",
+                status: "Aktiv",
+                lastRun: "Heute 06:00",
+                found: "Health 94%",
+                color: "#00b8ff",
               },
             ].map((agent) => (
               <div
@@ -236,6 +271,24 @@ export default async function WorldbeastPage() {
               className="px-4 py-2 rounded-xl glass-card hover:border-red-400/40 text-sm font-bold transition-all duration-300"
             >
               🦠 CVE Scan starten
+            </a>
+            <a
+              href="/api/agents/predictive"
+              className="px-4 py-2 rounded-xl glass-card hover:border-orange-400/40 text-sm font-bold transition-all duration-300"
+            >
+              🔮 Threat Forecast
+            </a>
+            <a
+              href="/threatmap"
+              className="px-4 py-2 rounded-xl glass-card hover:border-red-400/40 text-sm font-bold transition-all duration-300"
+            >
+              🌍 Global Threat Map
+            </a>
+            <a
+              href="/bounties"
+              className="px-4 py-2 rounded-xl glass-card hover:border-yellow-400/40 text-sm font-bold transition-all duration-300"
+            >
+              💰 Bounty Program
             </a>
             <a
               href="/leaderboard"

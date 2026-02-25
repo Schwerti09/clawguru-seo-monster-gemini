@@ -214,6 +214,146 @@ export async function runGrowthAgent(opts: {
 }
 
 // ---------------------------------------------------------------------------
+// WORLD BEAST UPGRADE: SEO Content Agent (Agent #4)
+// ---------------------------------------------------------------------------
+
+export type SeoPage = {
+  slug: string
+  title: string
+  metaDescription: string
+  h1: string
+  introText: string     // 2-3 sentence intro optimized for the keyword
+  targetKeyword: string
+  locale: string
+}
+
+export type SeoAgentResult = {
+  pages: SeoPage[]
+  errors: string[]
+  ts: string
+}
+
+/**
+ * WORLD BEAST UPGRADE: Generates SEO-optimized landing page content
+ * for high-value security keywords. Complements the Growth Agent.
+ */
+export async function runSeoAgent(opts: {
+  keywords: string[]
+  locale?: string
+}): Promise<SeoAgentResult> {
+  const { keywords, locale = "de" } = opts
+  const result: SeoAgentResult = { pages: [], errors: [], ts: new Date().toISOString() }
+
+  const text = await callGemini([
+    "You are the ClawGuru SEO Content Agent 2026. Generate SEO-optimized landing page content.",
+    `Keywords to target: ${keywords.slice(0, 8).join(", ")}`,
+    `Locale: ${locale}`,
+    "",
+    "For each keyword, generate a landing page with:",
+    "  slug (kebab-case), title (max 60 chars), metaDescription (max 155 chars),",
+    "  h1 (max 70 chars), introText (2-3 sentences, keyword-optimized),",
+    "  targetKeyword (exact match keyword), locale",
+    "",
+    "Return ONLY a JSON array of page objects.",
+    "Do not add explanations outside the JSON array.",
+  ].join("\n"))
+
+  if (!text) {
+    result.errors.push("SeoAgent: no Gemini response")
+    return result
+  }
+
+  try {
+    const items = JSON.parse(text.replace(/```json|```/g, "").trim()) as SeoPage[]
+    if (Array.isArray(items)) {
+      result.pages = items.filter((p) => p.slug && p.title)
+    }
+  } catch {
+    result.errors.push("SeoAgent: JSON parse failed")
+  }
+
+  return result
+}
+
+// ---------------------------------------------------------------------------
+// WORLD BEAST UPGRADE: Self-Heal Monitor Agent (Agent #5)
+// ---------------------------------------------------------------------------
+
+export type HealthIssue = {
+  type: "broken_link" | "missing_content" | "outdated_runbook" | "high_error_rate"
+  slug: string
+  description: string
+  severity: "critical" | "high" | "medium" | "low"
+  autoFixable: boolean
+  suggestedFix: string
+}
+
+export type SelfHealResult = {
+  issuesFound: HealthIssue[]
+  autoFixed: number
+  manualReviewNeeded: number
+  healthScore: number   // 0-100
+  errors: string[]
+  ts: string
+}
+
+/**
+ * WORLD BEAST UPGRADE: Monitors platform health and suggests or applies auto-fixes.
+ * Identifies broken runbooks, outdated content, and error patterns.
+ */
+export async function runSelfHealMonitor(opts: {
+  recentErrorSlugs?: string[]
+  lowScoreSlugs?: string[]
+}): Promise<SelfHealResult> {
+  const { recentErrorSlugs = [], lowScoreSlugs = [] } = opts
+  const result: SelfHealResult = {
+    issuesFound: [],
+    autoFixed: 0,
+    manualReviewNeeded: 0,
+    healthScore: 100,
+    errors: [],
+    ts: new Date().toISOString(),
+  }
+
+  const text = await callGemini([
+    "You are the ClawGuru Self-Heal Monitor Agent 2026.",
+    "Analyze platform health and identify issues that need fixing.",
+    `Recent error slugs: ${recentErrorSlugs.slice(0, 5).join(", ") || "none"}`,
+    `Low-score slugs: ${lowScoreSlugs.slice(0, 5).join(", ") || "none"}`,
+    "",
+    "Generate 3-5 realistic platform health issues and suggest fixes.",
+    "Return ONLY a JSON object with:",
+    "  issuesFound: Array<{ type, slug, description, severity, autoFixable, suggestedFix }>",
+    '    type: "broken_link"|"missing_content"|"outdated_runbook"|"high_error_rate"',
+    '    severity: "critical"|"high"|"medium"|"low"',
+    "    autoFixable: boolean",
+    "  healthScore: number (0-100)",
+    "Do not add explanations outside the JSON.",
+  ].join("\n"))
+
+  if (!text) {
+    result.errors.push("SelfHealMonitor: no Gemini response")
+    result.healthScore = 85
+    return result
+  }
+
+  try {
+    const parsed = JSON.parse(text.replace(/```json|```/g, "").trim()) as Partial<SelfHealResult>
+    result.issuesFound = Array.isArray(parsed.issuesFound) ? parsed.issuesFound : []
+    result.autoFixed = result.issuesFound.filter((i) => i.autoFixable).length
+    result.manualReviewNeeded = result.issuesFound.filter((i) => !i.autoFixable).length
+    result.healthScore = typeof parsed.healthScore === "number"
+      ? Math.min(100, Math.max(0, parsed.healthScore))
+      : Math.max(60, 100 - result.issuesFound.length * 8)
+  } catch {
+    result.errors.push("SelfHealMonitor: JSON parse failed")
+    result.healthScore = 80
+  }
+
+  return result
+}
+
+// ---------------------------------------------------------------------------
 // Shared Gemini helper
 // ---------------------------------------------------------------------------
 

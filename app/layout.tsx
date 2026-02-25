@@ -39,6 +39,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         {/* WORLD BEAST FINAL LAUNCH: Umami analytics */}
         <UmamiAnalytics />
+        {/* WORLD BEAST UPGRADE: Feature 11 – Performance & Visual Polish */}
+        {/* DNS prefetch for external resources */}
+        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+        <link rel="dns-prefetch" href="https://generativelanguage.googleapis.com" />
+        {/* Preconnect to critical origins */}
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        {/* Prefetch key pages for instant navigation */}
+        <link rel="prefetch" href="/check" as="document" />
+        <link rel="prefetch" href="/runbooks" as="document" />
+        <link rel="prefetch" href="/dashboard" as="document" />
+        {/* Preload critical font display */}
+        <meta name="theme-color" content="#050608" />
       </head>
       {/* VISUAL UPGRADE 2026: scanline + noise overlays on body */}
       <body className="min-h-screen scanline-overlay noise-overlay neon-cursor">

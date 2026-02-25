@@ -49,85 +49,98 @@ export async function GET(
     return new NextResponse("Not Found", { status: 404 })
   }
 
-  if (name === "main") {
-    const urls = [
-      { loc: `${base}/`, lastmod, changefreq: "daily", priority: "1.0" },
-      { loc: `${base}/live`, lastmod, changefreq: "daily", priority: "0.95" },
-      { loc: `${base}/check`, lastmod, changefreq: "daily", priority: "0.9" },
-      { loc: `${base}/copilot`, lastmod, changefreq: "weekly", priority: "0.9" },
-      { loc: `${base}/runbooks`, lastmod, changefreq: "daily", priority: "0.9" },
-      { loc: `${base}/tags`, lastmod, changefreq: "weekly", priority: "0.8" },
-      { loc: `${base}/intel`, lastmod, changefreq: "daily", priority: "0.8" },
-      { loc: `${base}/academy`, lastmod, changefreq: "weekly", priority: "0.8" },
-      { loc: `${base}/pricing`, lastmod, changefreq: "weekly", priority: "0.7" },
-      { loc: `${base}/downloads`, lastmod, changefreq: "weekly", priority: "0.7" }
-    ]
-    return new NextResponse(urlset(urls), {
+  try {
+    if (name === "main") {
+      const urls = [
+        { loc: `${base}/`, lastmod, changefreq: "daily", priority: "1.0" },
+        { loc: `${base}/live`, lastmod, changefreq: "daily", priority: "0.95" },
+        { loc: `${base}/check`, lastmod, changefreq: "daily", priority: "0.9" },
+        { loc: `${base}/copilot`, lastmod, changefreq: "weekly", priority: "0.9" },
+        { loc: `${base}/runbooks`, lastmod, changefreq: "daily", priority: "0.9" },
+        { loc: `${base}/tags`, lastmod, changefreq: "weekly", priority: "0.8" },
+        { loc: `${base}/intel`, lastmod, changefreq: "daily", priority: "0.8" },
+        { loc: `${base}/academy`, lastmod, changefreq: "weekly", priority: "0.8" },
+        { loc: `${base}/pricing`, lastmod, changefreq: "weekly", priority: "0.7" },
+        { loc: `${base}/downloads`, lastmod, changefreq: "weekly", priority: "0.7" }
+      ]
+      return new NextResponse(urlset(urls), {
+        status: 200,
+        headers: SITEMAP_HEADERS
+      })
+    }
+
+
+    if (name === "providers") {
+      const urls = allProviders().map((p) => ({
+        loc: `${base}/provider/${p.slug}`,
+        lastmod,
+        changefreq: "weekly",
+        priority: "0.7"
+      }))
+      return new NextResponse(urlset(urls), {
+        status: 200,
+        headers: SITEMAP_HEADERS
+      })
+    }
+
+    const rb = bucketsAF()
+    const tg = bucketsTagsAF()
+
+    const rbMap: Record<string, keyof typeof rb> = {
+      "runbooks-a-f": "a-f",
+      "runbooks-g-l": "g-l",
+      "runbooks-m-r": "m-r",
+      "runbooks-s-z": "s-z",
+      "runbooks-0-9": "0-9"
+    }
+
+    const tgMap: Record<string, keyof typeof tg> = {
+      "tags-a-f": "a-f",
+      "tags-g-l": "g-l",
+      "tags-m-r": "m-r",
+      "tags-s-z": "s-z",
+      "tags-0-9": "0-9"
+    }
+
+    if (rbMap[name]) {
+      const key = rbMap[name]
+      const urls = rb[key].map((r) => ({
+        loc: `${base}/runbook/${r.slug}`,
+        lastmod: r.lastmod || lastmod,
+        changefreq: "weekly",
+        priority: "0.8"
+      }))
+      return new NextResponse(urlset(urls), {
+        status: 200,
+        headers: SITEMAP_HEADERS
+      })
+    }
+
+    if (tgMap[name]) {
+      const key = tgMap[name]
+      const urls = tg[key].map((t) => ({
+        loc: `${base}/tag/${encodeURIComponent(t)}`,
+        lastmod,
+        changefreq: "weekly",
+        priority: "0.6"
+      }))
+      return new NextResponse(urlset(urls), {
+        status: 200,
+        headers: SITEMAP_HEADERS
+      })
+    }
+
+    return new NextResponse("Not Found", { status: 404 })
+  } catch {
+    // Return a minimal valid urlset on error so crawlers always get a 200
+    const empty = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>\n`
+    return new NextResponse(empty, {
       status: 200,
-      headers: SITEMAP_HEADERS
+      headers: {
+        "Content-Type": "application/xml; charset=utf-8",
+        "Cache-Control": "public, max-age=300, s-maxage=300",
+        "X-Robots-Tag": "noindex",
+      }
     })
   }
-
-
-  if (name === "providers") {
-    const urls = allProviders().map((p) => ({
-      loc: `${base}/provider/${p.slug}`,
-      lastmod,
-      changefreq: "weekly",
-      priority: "0.7"
-    }))
-    return new NextResponse(urlset(urls), {
-      status: 200,
-      headers: SITEMAP_HEADERS
-    })
-  }
-
-  const rb = bucketsAF()
-  const tg = bucketsTagsAF()
-
-  const rbMap: Record<string, keyof typeof rb> = {
-    "runbooks-a-f": "a-f",
-    "runbooks-g-l": "g-l",
-    "runbooks-m-r": "m-r",
-    "runbooks-s-z": "s-z",
-    "runbooks-0-9": "0-9"
-  }
-
-  const tgMap: Record<string, keyof typeof tg> = {
-    "tags-a-f": "a-f",
-    "tags-g-l": "g-l",
-    "tags-m-r": "m-r",
-    "tags-s-z": "s-z",
-    "tags-0-9": "0-9"
-  }
-
-  if (rbMap[name]) {
-    const key = rbMap[name]
-    const urls = rb[key].map((r) => ({
-      loc: `${base}/runbook/${r.slug}`,
-      lastmod: r.lastmod || lastmod,
-      changefreq: "weekly",
-      priority: "0.8"
-    }))
-    return new NextResponse(urlset(urls), {
-      status: 200,
-      headers: SITEMAP_HEADERS
-    })
-  }
-
-  if (tgMap[name]) {
-    const key = tgMap[name]
-    const urls = tg[key].map((t) => ({
-      loc: `${base}/tag/${encodeURIComponent(t)}`,
-      lastmod,
-      changefreq: "weekly",
-      priority: "0.6"
-    }))
-    return new NextResponse(urlset(urls), {
-      status: 200,
-      headers: SITEMAP_HEADERS
-    })
-  }
-
-  return new NextResponse("Not Found", { status: 404 })
 }

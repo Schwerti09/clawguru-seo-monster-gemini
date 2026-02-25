@@ -53,7 +53,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="theme-color" content="#050608" />
       </head>
       {/* VISUAL UPGRADE 2026: scanline + noise overlays on body */}
-      <body className="min-h-screen scanline-overlay noise-overlay neon-cursor">
+      <body className="min-h-screen scanline-overlay noise-overlay">
         <TrustBadge />
         <Header />
         <main className="pt-28 pb-20 lg:pb-0">

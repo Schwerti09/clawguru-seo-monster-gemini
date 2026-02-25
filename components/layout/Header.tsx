@@ -3,6 +3,7 @@
 // NEXT-LEVEL UPGRADE 2026: Language switcher added for 10-language support
 
 import { useState, useRef, useEffect } from "react"
+import Link from "next/link"
 import Container from "@/components/shared/Container"
 import LanguageSwitcher from "@/components/layout/LanguageSwitcher"
 import { usePathname } from "next/navigation"
@@ -66,24 +67,24 @@ export default function Header() {
         <Container>
           <div className="flex items-center justify-between border border-gray-800 bg-gray-950/70 backdrop-blur rounded-2xl px-4 py-3 shadow-glow">
             {/* Logo */}
-            <a href="/" className="flex items-center gap-3 shrink-0">
+            <Link href="/" className="flex items-center gap-3 shrink-0">
               <div className="w-9 h-9 rounded-2xl bg-gradient-to-br from-brand-cyan to-brand-violet shadow-glow2" />
               <div className="leading-tight">
                 <div className="font-black">ClawGuru</div>
                 <div className="text-xs text-gray-400 hidden sm:block">Institutional Ops Intelligence</div>
               </div>
-            </a>
+            </Link>
 
             {/* Desktop nav */}
             <nav className="hidden lg:flex items-center gap-1">
               {PRIMARY_NAV.map((item) => (
-                <a
+                <Link
                   key={item.href}
                   href={item.href}
                   className="px-3 py-2 rounded-xl hover:bg-gray-900/60 transition-colors text-sm"
                 >
                   {item.label}
-                </a>
+                </Link>
               ))}
 
               {/* "More" dropdown */}
@@ -102,14 +103,14 @@ export default function Header() {
                 {moreOpen && (
                   <div className="absolute right-0 top-full mt-2 w-48 rounded-2xl border border-gray-800 bg-gray-950/95 backdrop-blur-xl shadow-xl py-2 z-50">
                     {MORE_NAV.map((item) => (
-                      <a
+                      <Link
                         key={item.href}
                         href={item.href}
                         onClick={() => setMoreOpen(false)}
                         className="block px-4 py-2 text-sm hover:bg-gray-900/60 transition-colors"
                       >
                         {item.label}
-                      </a>
+                      </Link>
                     ))}
                   </div>
                 )}
@@ -122,18 +123,18 @@ export default function Header() {
               <div className="hidden sm:block">
                 <LanguageSwitcher currentLocale={currentLocale} variant="compact" />
               </div>
-              <a
+              <Link
                 href="/security/notfall-leitfaden"
                 className="hidden sm:block px-3 py-2 rounded-xl bg-brand-red/90 hover:bg-brand-red font-black text-sm"
               >
                 Notfall
-              </a>
-              <a
+              </Link>
+              <Link
                 href="/pricing"
                 className="hidden sm:block px-3 py-2 rounded-xl bg-brand-cyan/15 hover:bg-brand-cyan/25 border border-brand-cyan/30 font-bold text-sm"
               >
                 Pro Kits
-              </a>
+              </Link>
 
               {/* Hamburger button (mobile only) */}
               <button
@@ -171,30 +172,30 @@ export default function Header() {
       >
         <nav className="px-4 space-y-1">
           {ALL_NAV.map((item) => (
-            <a
+            <Link
               key={item.href}
               href={item.href}
               onClick={() => setMobileOpen(false)}
               className="block px-4 py-3 rounded-xl hover:bg-gray-900/60 transition-colors text-sm font-medium"
             >
               {item.label}
-            </a>
+            </Link>
           ))}
           <div className="pt-4 flex flex-col gap-2">
-            <a
+            <Link
               href="/security/notfall-leitfaden"
               className="block px-4 py-3 rounded-xl bg-brand-red/90 hover:bg-brand-red font-black text-sm text-center"
               onClick={() => setMobileOpen(false)}
             >
               Notfall
-            </a>
-            <a
+            </Link>
+            <Link
               href="/pricing"
               className="block px-4 py-3 rounded-xl bg-brand-cyan/15 hover:bg-brand-cyan/25 border border-brand-cyan/30 font-bold text-sm text-center"
               onClick={() => setMobileOpen(false)}
             >
               Pro Kits
-            </a>
+            </Link>
           </div>
         </nav>
       </div>

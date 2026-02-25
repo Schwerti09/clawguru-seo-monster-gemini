@@ -1,6 +1,5 @@
-// WORLD BEAST: app/share/[slug]/page.tsx
-// One-click share page – pre-built social threads + ClawGuru watermark.
-// GET /share/[slug] → shows Twitter, LinkedIn, Reddit threads ready to copy.
+// WORLD BEAST + VISUAL UPGRADE 2026: app/share/[slug]/page.tsx
+// Premium dark share card with live OG-image preview and neon accents.
 
 import Container from "@/components/shared/Container"
 import { getRunbook } from "@/lib/pseo"
@@ -69,28 +68,50 @@ export default function SharePage({ params }: { params: { slug: string } }) {
   return (
     <Container>
       <div className="py-16 max-w-3xl mx-auto">
-        {/* Header */}
-        <div className="mb-2 text-xs text-gray-500 uppercase tracking-widest">
-          One-Click Share
+        {/* VISUAL UPGRADE 2026: Header with neon accent */}
+        <div className="mb-2 text-xs uppercase tracking-widest" style={{ color: "#00ff9d" }}>
+          ▸ One-Click Share
         </div>
-        <h1 className="text-3xl font-black mb-2">{r.title}</h1>
+        <h1 className="text-3xl font-black font-heading mb-2">{r.title}</h1>
         <p className="text-gray-400 mb-8">{r.summary}</p>
 
-        {/* ClawGuru Watermark Banner */}
-        <div className="mb-8 p-4 rounded-2xl border border-brand-cyan/30 bg-brand-cyan/5 flex items-center gap-3">
-          <span className="text-2xl">⚡</span>
-          <div>
-            <div className="font-black text-brand-cyan text-sm">ClawGuru WorldBeast 2026</div>
-            <div className="text-xs text-gray-400">
-              clawguru.org · The #1 Ops Intelligence Platform
+        {/* VISUAL UPGRADE 2026: Premium dark share card with OG-image preview */}
+        <div className="mb-8 rounded-2xl glass-panel overflow-hidden">
+          {/* OG Image Preview */}
+          <div className="relative aspect-[2/1] bg-gradient-to-br from-[#0a0a0a] to-[#001a2e] flex items-center justify-center p-8">
+            <div className="text-center">
+              <div className="text-xs uppercase tracking-widest text-gray-500 mb-2">OG Preview</div>
+              <div className="text-xl font-black font-heading" style={{ color: "#00ff9d" }}>
+                {r.title}
+              </div>
+              <div className="text-sm text-gray-400 mt-2 max-w-md">{r.summary}</div>
             </div>
+            {/* VISUAL UPGRADE 2026: Decorative corner glows */}
+            <div className="absolute top-0 left-0 w-32 h-32 rounded-full blur-3xl" style={{ background: "rgba(0, 255, 157, 0.06)" }} />
+            <div className="absolute bottom-0 right-0 w-32 h-32 rounded-full blur-3xl" style={{ background: "rgba(0, 184, 255, 0.06)" }} />
           </div>
-          <a
-            href={runbookUrl}
-            className="ml-auto px-4 py-2 rounded-xl bg-brand-cyan/15 border border-brand-cyan/30 hover:bg-brand-cyan/25 text-sm font-bold text-brand-cyan"
-          >
-            Original →
-          </a>
+
+          {/* VISUAL UPGRADE 2026: Watermark banner with neon glow */}
+          <div className="p-4 flex items-center gap-3 border-t border-white/10">
+            <span className="text-2xl">⚡</span>
+            <div>
+              <div className="font-black text-sm" style={{ color: "#00ff9d" }}>ClawGuru WorldBeast 2026</div>
+              <div className="text-xs text-gray-400">
+                clawguru.org · The #1 Ops Intelligence Platform
+              </div>
+            </div>
+            <a
+              href={runbookUrl}
+              className="ml-auto px-4 py-2 rounded-xl text-sm font-bold transition-all duration-300"
+              style={{
+                background: "rgba(0, 255, 157, 0.08)",
+                border: "1px solid rgba(0, 255, 157, 0.2)",
+                color: "#00ff9d",
+              }}
+            >
+              Original →
+            </a>
+          </div>
         </div>
 
         {/* Share Buttons (client component for clipboard) */}

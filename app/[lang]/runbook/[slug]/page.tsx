@@ -4,16 +4,16 @@
 import Container from "@/components/shared/Container"
 import { getRunbook, RUNBOOKS } from "@/lib/pseo"
 import { notFound } from "next/navigation"
-import { type Locale, SUPPORTED_LOCALES, translateRunbook, t } from "@/lib/i18n"
+import { type Locale, SUPPORTED_LOCALES, translateRunbook, t, localeDir, LOCALE_HREFLANG } from "@/lib/i18n"
 import Link from "next/link"
 
 export const revalidate = 60 * 60 * 24 // 24h
 export const dynamicParams = true
 
 export async function generateStaticParams() {
-  // WORLD BEAST: pre-render top runbooks in de + en (most traffic)
+  // NEXT-LEVEL UPGRADE 2026: pre-render top runbooks in de + en (most traffic) + es/fr/pt/it
   const topRunbooks = RUNBOOKS.slice(0, 50)
-  const primaryLocales: Locale[] = ["de", "en"]
+  const primaryLocales: Locale[] = ["de", "en", "es", "fr", "pt", "it"]
   return primaryLocales.flatMap((lang) =>
     topRunbooks.map((r) => ({ lang, slug: r.slug }))
   )
@@ -40,8 +40,9 @@ export async function generateMetadata({
     description: translated.summary,
     alternates: {
       canonical: `/${locale}/runbook/${r.slug}`,
+      // NEXT-LEVEL UPGRADE 2026: Proper BCP-47 hreflang for all 10 locales
       languages: Object.fromEntries(
-        SUPPORTED_LOCALES.map((l) => [l, `/${l}/runbook/${r.slug}`])
+        SUPPORTED_LOCALES.map((l) => [LOCALE_HREFLANG[l], `/${l}/runbook/${r.slug}`])
       ),
     },
   }
@@ -67,8 +68,9 @@ export default async function LocalizedRunbookPage({
   })
 
   return (
+    // NEXT-LEVEL UPGRADE 2026: RTL support for Arabic (dir attribute)
     <Container>
-      <div className="py-16 max-w-4xl mx-auto">
+      <div className="py-16 max-w-4xl mx-auto" dir={localeDir(locale)}>
         {/* Locale switcher */}
         <div className="flex gap-2 mb-6 flex-wrap">
           {SUPPORTED_LOCALES.map((l) => (

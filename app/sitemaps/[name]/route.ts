@@ -6,6 +6,12 @@ import { bucketsAF, bucketsTagsAF, allProviders } from "@/lib/pseo"
 export const dynamic = "force-dynamic"
 export const runtime = "nodejs"
 
+const SITEMAP_HEADERS = {
+  "Content-Type": "application/xml; charset=utf-8",
+  "Cache-Control": "public, max-age=3600, s-maxage=3600",
+  "X-Robots-Tag": "noindex",
+} as const
+
 function isoDate(d = new Date()) {
   return d.toISOString().slice(0, 10)
 }
@@ -58,10 +64,7 @@ export async function GET(
     ]
     return new NextResponse(urlset(urls), {
       status: 200,
-      headers: {
-        "Content-Type": "application/xml; charset=utf-8",
-        "Cache-Control": "public, max-age=3600"
-      }
+      headers: SITEMAP_HEADERS
     })
   }
 
@@ -75,10 +78,7 @@ export async function GET(
     }))
     return new NextResponse(urlset(urls), {
       status: 200,
-      headers: {
-        "Content-Type": "application/xml; charset=utf-8",
-        "Cache-Control": "public, max-age=3600"
-      }
+      headers: SITEMAP_HEADERS
     })
   }
 
@@ -111,10 +111,7 @@ export async function GET(
     }))
     return new NextResponse(urlset(urls), {
       status: 200,
-      headers: {
-        "Content-Type": "application/xml; charset=utf-8",
-        "Cache-Control": "public, max-age=3600"
-      }
+      headers: SITEMAP_HEADERS
     })
   }
 
@@ -128,10 +125,7 @@ export async function GET(
     }))
     return new NextResponse(urlset(urls), {
       status: 200,
-      headers: {
-        "Content-Type": "application/xml; charset=utf-8",
-        "Cache-Control": "public, max-age=3600"
-      }
+      headers: SITEMAP_HEADERS
     })
   }
 

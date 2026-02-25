@@ -1,5 +1,5 @@
-// WORLD BEAST FINAL LAUNCH: app/dashboard/worldbeast/page.tsx
-// Dashboard 2.0 – Live WorldBeast Score, revenue, global rank, one-click global launch.
+// WORLD BEAST FINAL LAUNCH + VISUAL UPGRADE 2026: app/dashboard/worldbeast/page.tsx
+// Cyber terminal aesthetic with live metrics, glassmorphism, and neon accents.
 
 import type { Metadata } from "next"
 import Container from "@/components/shared/Container"
@@ -21,21 +21,22 @@ function Paywall() {
   return (
     <Container>
       <div className="py-16 max-w-3xl mx-auto text-center">
+        {/* VISUAL UPGRADE 2026: Neon-accented paywall */}
         <div className="text-5xl mb-4">🌍</div>
-        <h1 className="text-4xl font-black mb-3">WorldBeast Dashboard</h1>
+        <h1 className="text-4xl font-black font-heading mb-3">WorldBeast Dashboard</h1>
         <p className="text-gray-400 mb-8">
           Das Live-Kontrollzentrum für ClawGuru WorldBeast 2026/27. Pro-Zugang erforderlich.
         </p>
         <div className="flex justify-center gap-3 flex-wrap">
           <a
             href="/pricing"
-            className="px-6 py-3 rounded-2xl font-black bg-gradient-to-r from-brand-cyan to-brand-violet hover:opacity-90"
+            className="px-6 py-3 rounded-2xl font-black text-black bg-claw-green hover:shadow-neon-green transition-all duration-300"
           >
             Pro werden →
           </a>
           <a
             href="/dashboard"
-            className="px-6 py-3 rounded-2xl border border-gray-700 hover:border-gray-500 font-bold text-gray-200"
+            className="px-6 py-3 rounded-2xl border border-white/10 hover:border-white/20 font-bold text-gray-200 transition-all duration-300"
           >
             Standard Dashboard
           </a>
@@ -57,25 +58,25 @@ export default async function WorldbeastPage() {
   return (
     <Container>
       <div className="py-16 max-w-5xl mx-auto">
-        {/* Header */}
+        {/* VISUAL UPGRADE 2026: Cyber terminal header */}
         <div className="flex flex-wrap items-end justify-between gap-6 mb-10">
           <div>
-            <div className="text-xs text-gray-500 uppercase tracking-widest mb-1">
-              ClawGuru WorldBeast 2026
+            <div className="text-xs uppercase tracking-widest mb-1" style={{ color: "#00ff9d" }}>
+              ▸ ClawGuru WorldBeast 2026
             </div>
-            <h1 className="text-4xl font-black">
+            <h1 className="text-4xl font-black font-heading">
               🌍 WorldBeast Dashboard
             </h1>
-            <p className="text-gray-400 mt-1">
-              Live-Kontrollzentrum · All Systems Go
+            <p className="text-gray-400 mt-1 font-mono text-sm">
+              <span style={{ color: "#00ff9d" }}>●</span> Live-Kontrollzentrum · All Systems Go
             </p>
           </div>
 
-          {/* One-Click World Domination Button */}
+          {/* VISUAL UPGRADE 2026: Unleash the Beast button */}
           <WorldbeastClient />
         </div>
 
-        {/* Live Score Cards */}
+        {/* VISUAL UPGRADE 2026: Live Score Cards with glassmorphism and neon accents */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           {[
             {
@@ -83,14 +84,14 @@ export default async function WorldbeastPage() {
               value: "94",
               unit: "/100",
               icon: "⚡",
-              color: "text-brand-cyan",
+              color: "#00ff9d",
             },
             {
               label: "Heal-Zyklen heute",
               value: "12",
               unit: "Runs",
               icon: "🔧",
-              color: "text-green-400",
+              color: "#22c55e",
             },
             {
               label: "Umsatz heute",
@@ -98,22 +99,22 @@ export default async function WorldbeastPage() {
               value: revenue.formatted,
               unit: "live",
               icon: "💰",
-              color: "text-yellow-400",
+              color: "#ffcc00",
             },
             {
               label: "Globaler Rang",
               value: "#1",
               unit: "2026",
               icon: "🏆",
-              color: "text-brand-violet",
+              color: "#00b8ff",
             },
           ].map((card) => (
             <div
               key={card.label}
-              className="p-5 rounded-2xl border border-gray-800 bg-black/30"
+              className="p-5 rounded-2xl glass-card glass-card-hover"
             >
               <div className="text-2xl mb-2">{card.icon}</div>
-              <div className={`text-3xl font-black ${card.color}`}>
+              <div className="text-3xl font-black font-heading" style={{ color: card.color, textShadow: `0 0 20px ${card.color}40` }}>
                 {card.value}
                 <span className="text-sm font-normal text-gray-500 ml-1">{card.unit}</span>
               </div>
@@ -122,9 +123,11 @@ export default async function WorldbeastPage() {
           ))}
         </div>
 
-        {/* Agent Status */}
-        <div className="mb-8 p-6 rounded-2xl border border-gray-800 bg-black/30">
-          <h2 className="text-xl font-black mb-4">🤖 Agent Swarm Status</h2>
+        {/* VISUAL UPGRADE 2026: Agent Status with cyber terminal aesthetic */}
+        <div className="mb-8 p-6 rounded-2xl glass-panel">
+          <h2 className="text-xl font-black font-heading mb-4 flex items-center gap-2">
+            <span>🤖</span> <span>Agent Swarm Status</span>
+          </h2>
           <div className="grid sm:grid-cols-3 gap-4">
             {[
               {
@@ -132,29 +135,29 @@ export default async function WorldbeastPage() {
                 status: "Aktiv",
                 lastRun: "Heute 03:00",
                 found: "5 CVEs",
-                color: "text-red-400",
+                color: "#ff3b5c",
               },
               {
                 name: "Viral Content Agent",
                 status: "Bereit",
                 lastRun: "Auf Anfrage",
                 found: "On-Demand",
-                color: "text-brand-cyan",
+                color: "#00b8ff",
               },
               {
                 name: "Growth Agent",
                 status: "Aktiv",
                 lastRun: "Heute 04:00",
                 found: "8 Keywords",
-                color: "text-green-400",
+                color: "#00ff9d",
               },
             ].map((agent) => (
               <div
                 key={agent.name}
-                className="p-4 rounded-xl border border-gray-800 bg-black/20"
+                className="p-4 rounded-xl glass-card glass-card-hover"
               >
-                <div className="font-black text-sm mb-1">{agent.name}</div>
-                <div className={`text-xs font-bold ${agent.color}`}>
+                <div className="font-black text-sm mb-1 font-heading">{agent.name}</div>
+                <div className="text-xs font-bold font-mono" style={{ color: agent.color }}>
                   ● {agent.status}
                 </div>
                 <div className="text-xs text-gray-500 mt-1">
@@ -165,9 +168,9 @@ export default async function WorldbeastPage() {
           </div>
         </div>
 
-        {/* Monetization Overview */}
-        <div className="mb-8 p-6 rounded-2xl border border-gray-800 bg-black/30">
-          <h2 className="text-xl font-black mb-4">💰 Monetarisierungs-Rakete</h2>
+        {/* VISUAL UPGRADE 2026: Monetization Overview with glassmorphism */}
+        <div className="mb-8 p-6 rounded-2xl glass-panel">
+          <h2 className="text-xl font-black font-heading mb-4">💰 Monetarisierungs-Rakete</h2>
           <div className="grid sm:grid-cols-2 gap-4">
             {[
               { label: "Pro Monthly", price: "€9/Monat", active: true },
@@ -179,76 +182,76 @@ export default async function WorldbeastPage() {
             ].map((plan) => (
               <div
                 key={plan.label}
-                className="flex items-center justify-between p-3 rounded-xl border border-gray-800"
+                className="flex items-center justify-between p-3 rounded-xl glass-card"
               >
                 <div className="font-bold text-sm">{plan.label}</div>
                 <div className="flex items-center gap-2">
                   <span className="text-xs text-gray-400">{plan.price}</span>
-                  <span className="w-2 h-2 rounded-full bg-green-400" />
+                  <span className="w-2 h-2 rounded-full" style={{ background: "#00ff9d", boxShadow: "0 0 6px rgba(0, 255, 157, 0.5)" }} />
                 </div>
               </div>
             ))}
           </div>
         </div>
 
-        {/* WORLD BEAST FINAL LAUNCH: Live Stats Section */}
-        <div className="mb-8 p-6 rounded-2xl border border-gray-800 bg-black/30">
-          <h2 className="text-xl font-black mb-4">📊 Live Stats — Heute</h2>
+        {/* VISUAL UPGRADE 2026: Live Stats with terminal style */}
+        <div className="mb-8 p-6 rounded-2xl glass-panel">
+          <h2 className="text-xl font-black font-heading mb-4">📊 Live Stats — Heute</h2>
           <div className="grid sm:grid-cols-4 gap-4">
-            <div className="p-4 rounded-xl border border-gray-800 bg-black/20">
-              <div className="text-xs text-gray-500 mb-1">Checks heute</div>
-              <div className="text-2xl font-black text-brand-cyan">–</div>
+            <div className="p-4 rounded-xl glass-card">
+              <div className="text-xs text-gray-500 mb-1 font-mono">checks_today</div>
+              <div className="text-2xl font-black" style={{ color: "#00b8ff", textShadow: "0 0 15px rgba(0, 184, 255, 0.4)" }}>–</div>
               <div className="text-xs text-gray-500">via Security-Check</div>
             </div>
-            <div className="p-4 rounded-xl border border-gray-800 bg-black/20">
-              <div className="text-xs text-gray-500 mb-1">Revenue heute</div>
-              <div className="text-2xl font-black text-yellow-400">{revenue.formatted}</div>
+            <div className="p-4 rounded-xl glass-card">
+              <div className="text-xs text-gray-500 mb-1 font-mono">revenue_today</div>
+              <div className="text-2xl font-black" style={{ color: "#ffcc00", textShadow: "0 0 15px rgba(255, 204, 0, 0.4)" }}>{revenue.formatted}</div>
               <div className="text-xs text-gray-500">Stripe (EUR)</div>
             </div>
-            <div className="p-4 rounded-xl border border-gray-800 bg-black/20">
-              <div className="text-xs text-gray-500 mb-1">Top-Land</div>
-              <div className="text-2xl font-black text-green-400">🇩🇪 DE</div>
+            <div className="p-4 rounded-xl glass-card">
+              <div className="text-xs text-gray-500 mb-1 font-mono">top_country</div>
+              <div className="text-2xl font-black" style={{ color: "#00ff9d", textShadow: "0 0 15px rgba(0, 255, 157, 0.4)" }}>🇩🇪 DE</div>
               <div className="text-xs text-gray-500">via Umami Analytics</div>
             </div>
-            <div className="p-4 rounded-xl border border-gray-800 bg-black/20">
-              <div className="text-xs text-gray-500 mb-1">Conversion-Rate</div>
-              <div className="text-2xl font-black text-brand-violet">–%</div>
+            <div className="p-4 rounded-xl glass-card">
+              <div className="text-xs text-gray-500 mb-1 font-mono">conversion_rate</div>
+              <div className="text-2xl font-black" style={{ color: "#00b8ff", textShadow: "0 0 15px rgba(0, 184, 255, 0.4)" }}>–%</div>
               <div className="text-xs text-gray-500">Check → Pro/Day Pass</div>
             </div>
           </div>
         </div>
 
-        {/* Quick Actions */}
-        <div className="p-6 rounded-2xl border border-gray-800 bg-black/30">
-          <h2 className="text-xl font-black mb-4">⚡ Quick Actions</h2>
+        {/* VISUAL UPGRADE 2026: Quick Actions with neon hover effects */}
+        <div className="p-6 rounded-2xl glass-panel">
+          <h2 className="text-xl font-black font-heading mb-4">⚡ Quick Actions</h2>
           <div className="flex flex-wrap gap-3">
             <a
               href="/api/health/cron"
-              className="px-4 py-2 rounded-xl border border-gray-700 hover:border-brand-cyan/40 text-sm font-bold"
+              className="px-4 py-2 rounded-xl glass-card hover:border-claw-green/40 text-sm font-bold transition-all duration-300"
             >
               🔧 Heal-Zyklus starten
             </a>
             <a
               href="/api/agents/vulnerability"
-              className="px-4 py-2 rounded-xl border border-gray-700 hover:border-red-400/40 text-sm font-bold"
+              className="px-4 py-2 rounded-xl glass-card hover:border-red-400/40 text-sm font-bold transition-all duration-300"
             >
               🦠 CVE Scan starten
             </a>
             <a
               href="/leaderboard"
-              className="px-4 py-2 rounded-xl border border-gray-700 hover:border-yellow-400/40 text-sm font-bold"
+              className="px-4 py-2 rounded-xl glass-card hover:border-yellow-400/40 text-sm font-bold transition-all duration-300"
             >
               🏆 Leaderboard öffnen
             </a>
             <a
               href="/dashboard/health"
-              className="px-4 py-2 rounded-xl border border-gray-700 hover:border-green-400/40 text-sm font-bold"
+              className="px-4 py-2 rounded-xl glass-card hover:border-claw-green/40 text-sm font-bold transition-all duration-300"
             >
               ❤️ Health Status
             </a>
             <a
               href="/runbooks"
-              className="px-4 py-2 rounded-xl border border-gray-700 hover:border-brand-violet/40 text-sm font-bold"
+              className="px-4 py-2 rounded-xl glass-card hover:border-cyber-blue/40 text-sm font-bold transition-all duration-300"
             >
               📚 Runbooks ({proPlan.features[1]})
             </a>

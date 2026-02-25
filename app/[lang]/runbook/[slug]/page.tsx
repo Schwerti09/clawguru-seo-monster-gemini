@@ -4,7 +4,7 @@
 import Container from "@/components/shared/Container"
 import { getRunbook, RUNBOOKS } from "@/lib/pseo"
 import { notFound } from "next/navigation"
-import { type Locale, SUPPORTED_LOCALES, translateRunbook, t } from "@/lib/i18n"
+import { type Locale, SUPPORTED_LOCALES, translateRunbook, t, isRTL } from "@/lib/i18n"
 import Link from "next/link"
 
 export const revalidate = 60 * 60 * 24 // 24h
@@ -68,7 +68,8 @@ export default async function LocalizedRunbookPage({
 
   return (
     <Container>
-      <div className="py-16 max-w-4xl mx-auto">
+      {/* NEXT-LEVEL UPGRADE 2026: RTL layout support for Arabic */}
+      <div className="py-16 max-w-4xl mx-auto" dir={isRTL(locale) ? "rtl" : "ltr"}>
         {/* Locale switcher */}
         <div className="flex gap-2 mb-6 flex-wrap">
           {SUPPORTED_LOCALES.map((l) => (

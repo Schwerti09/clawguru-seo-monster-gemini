@@ -1,11 +1,20 @@
 // WORLD BEAST: lib/i18n.ts
-// Multilingual system: de/en (primary) + es/fr (bonus)
+// Multilingual system: de/en (primary) + es/fr/pt/it/ru/zh/ja/ar (extended)
 // Auto-detects language from URL prefix; Gemini auto-translates runbook metadata.
+// NEXT-LEVEL UPGRADE 2026: Expanded to 10 languages with full RTL support for Arabic.
 
-export type Locale = "de" | "en" | "es" | "fr"
+export type Locale = "de" | "en" | "es" | "fr" | "pt" | "it" | "ru" | "zh" | "ja" | "ar"
 
-export const SUPPORTED_LOCALES: Locale[] = ["de", "en", "es", "fr"]
+export const SUPPORTED_LOCALES: Locale[] = ["de", "en", "es", "fr", "pt", "it", "ru", "zh", "ja", "ar"]
 export const DEFAULT_LOCALE: Locale = "de"
+
+// NEXT-LEVEL UPGRADE 2026: RTL locale list for proper layout flipping
+export const RTL_LOCALES: Locale[] = ["ar"]
+
+/** Returns true if the given locale uses right-to-left text direction */
+export function isRTL(locale: Locale): boolean {
+  return RTL_LOCALES.includes(locale)
+}
 
 // ---------------------------------------------------------------------------
 // Locale UI strings
@@ -108,6 +117,156 @@ export const UI_STRINGS: Record<Locale, Record<string, string>> = {
     globalRank: "Rang Mondial",
     activateAll: "Domination Mondiale en Un Clic",
   },
+  // NEXT-LEVEL UPGRADE 2026: Portuguese (Brazil/Portugal)
+  pt: {
+    runbooks: "Runbooks",
+    providers: "Provedores",
+    dashboard: "Painel",
+    share: "Compartilhar",
+    leaderboard: "Classificação",
+    pricing: "Preços",
+    check: "Verificar Score",
+    tagline: "A Plataforma de Inteligência Ops #1 Global 2026",
+    runbookFor: "Runbook para",
+    steps: "Etapas",
+    related: "Runbooks Relacionados",
+    copyLink: "Copiar link",
+    shareTwitter: "Thread no Twitter",
+    shareLinkedin: "Post no LinkedIn",
+    shareReddit: "Thread no Reddit",
+    freeBadge: "Grátis",
+    proBadge: "Pro",
+    worldbeastScore: "Pontuação WorldBeast",
+    healCycles: "Ciclos de recuperação hoje",
+    revenueToday: "Receita hoje",
+    globalRank: "Rank Global",
+    activateAll: "Dominação Mundial com Um Clique",
+  },
+  // NEXT-LEVEL UPGRADE 2026: Italian
+  it: {
+    runbooks: "Runbook",
+    providers: "Provider",
+    dashboard: "Dashboard",
+    share: "Condividi",
+    leaderboard: "Classifica",
+    pricing: "Prezzi",
+    check: "Controlla Score",
+    tagline: "La Piattaforma Ops Intelligence #1 Globale 2026",
+    runbookFor: "Runbook per",
+    steps: "Passaggi",
+    related: "Runbook Correlati",
+    copyLink: "Copia link",
+    shareTwitter: "Thread Twitter",
+    shareLinkedin: "Post LinkedIn",
+    shareReddit: "Thread Reddit",
+    freeBadge: "Gratis",
+    proBadge: "Pro",
+    worldbeastScore: "Punteggio WorldBeast",
+    healCycles: "Cicli di guarigione oggi",
+    revenueToday: "Entrate oggi",
+    globalRank: "Rank Globale",
+    activateAll: "Dominio Mondiale con Un Clic",
+  },
+  // NEXT-LEVEL UPGRADE 2026: Russian
+  ru: {
+    runbooks: "Runbook",
+    providers: "Провайдеры",
+    dashboard: "Панель",
+    share: "Поделиться",
+    leaderboard: "Рейтинг",
+    pricing: "Цены",
+    check: "Проверить Score",
+    tagline: "Платформа Ops Intelligence #1 в мире 2026",
+    runbookFor: "Runbook для",
+    steps: "Шаги",
+    related: "Связанные Runbook",
+    copyLink: "Копировать ссылку",
+    shareTwitter: "Тред в Twitter",
+    shareLinkedin: "Пост в LinkedIn",
+    shareReddit: "Тред в Reddit",
+    freeBadge: "Бесплатно",
+    proBadge: "Pro",
+    worldbeastScore: "Оценка WorldBeast",
+    healCycles: "Циклов восстановления сегодня",
+    revenueToday: "Доход сегодня",
+    globalRank: "Глобальный рейтинг",
+    activateAll: "Мировое господство одним кликом",
+  },
+  // NEXT-LEVEL UPGRADE 2026: Chinese Simplified (URL: /zh/)
+  zh: {
+    runbooks: "运行手册",
+    providers: "提供商",
+    dashboard: "仪表板",
+    share: "分享",
+    leaderboard: "排行榜",
+    pricing: "定价",
+    check: "检查分数",
+    tagline: "2026年全球第一运维智能平台",
+    runbookFor: "运行手册",
+    steps: "步骤",
+    related: "相关运行手册",
+    copyLink: "复制链接",
+    shareTwitter: "Twitter话题",
+    shareLinkedin: "LinkedIn帖子",
+    shareReddit: "Reddit话题",
+    freeBadge: "免费",
+    proBadge: "专业版",
+    worldbeastScore: "WorldBeast评分",
+    healCycles: "今日修复周期",
+    revenueToday: "今日收入",
+    globalRank: "全球排名",
+    activateAll: "一键全球主导",
+  },
+  // NEXT-LEVEL UPGRADE 2026: Japanese
+  ja: {
+    runbooks: "ランブック",
+    providers: "プロバイダー",
+    dashboard: "ダッシュボード",
+    share: "共有",
+    leaderboard: "ランキング",
+    pricing: "料金",
+    check: "スコア確認",
+    tagline: "2026年グローバルNo.1 Opsインテリジェンスプラットフォーム",
+    runbookFor: "ランブック：",
+    steps: "手順",
+    related: "関連ランブック",
+    copyLink: "リンクをコピー",
+    shareTwitter: "Twitterスレッド",
+    shareLinkedin: "LinkedInに投稿",
+    shareReddit: "Redditスレッド",
+    freeBadge: "無料",
+    proBadge: "プロ",
+    worldbeastScore: "WorldBeastスコア",
+    healCycles: "本日のヒールサイクル",
+    revenueToday: "本日の収益",
+    globalRank: "グローバルランク",
+    activateAll: "ワンクリック世界制覇",
+  },
+  // NEXT-LEVEL UPGRADE 2026: Arabic (RTL)
+  ar: {
+    runbooks: "دليل التشغيل",
+    providers: "المزودون",
+    dashboard: "لوحة التحكم",
+    share: "مشاركة",
+    leaderboard: "لوحة المتصدرين",
+    pricing: "الأسعار",
+    check: "التحقق من النتيجة",
+    tagline: "منصة Ops Intelligence الأولى عالمياً 2026",
+    runbookFor: "دليل التشغيل لـ",
+    steps: "الخطوات",
+    related: "أدلة التشغيل ذات الصلة",
+    copyLink: "نسخ الرابط",
+    shareTwitter: "موضوع تويتر",
+    shareLinkedin: "منشور لينكدإن",
+    shareReddit: "موضوع ريديت",
+    freeBadge: "مجاني",
+    proBadge: "احترافي",
+    worldbeastScore: "نقاط WorldBeast",
+    healCycles: "دورات الإصلاح اليوم",
+    revenueToday: "الإيرادات اليوم",
+    globalRank: "الترتيب العالمي",
+    activateAll: "الهيمنة العالمية بنقرة واحدة",
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -132,8 +291,21 @@ export function localePrefix(locale: Locale): string {
 /** Return alternate hreflang links for SEO */
 export function hreflangAlternates(path: string): { hreflang: string; href: string }[] {
   const base = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
+  // NEXT-LEVEL UPGRADE 2026: Map URL locale codes to BCP-47 hreflang values
+  const hreflangMap: Record<Locale, string> = {
+    de: "de",
+    en: "en",
+    es: "es",
+    fr: "fr",
+    pt: "pt",
+    it: "it",
+    ru: "ru",
+    zh: "zh-CN",
+    ja: "ja",
+    ar: "ar",
+  }
   return SUPPORTED_LOCALES.map((locale) => ({
-    hreflang: locale,
+    hreflang: hreflangMap[locale],
     href: `${base}/${locale}${path.startsWith("/") ? path : "/" + path}`,
   }))
 }
@@ -164,11 +336,18 @@ export async function translateRunbook(opts: {
     return { title, summary, locale: "de" }
   }
 
+  // NEXT-LEVEL UPGRADE 2026: Full locale name map for all 10 supported languages
   const localeNames: Record<Locale, string> = {
     de: "German",
     en: "English",
     es: "Spanish",
     fr: "French",
+    pt: "Portuguese",
+    it: "Italian",
+    ru: "Russian",
+    zh: "Simplified Chinese",
+    ja: "Japanese",
+    ar: "Arabic",
   }
 
   const geminiKey = process.env.GEMINI_API_KEY

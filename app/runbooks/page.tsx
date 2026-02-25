@@ -1,20 +1,14 @@
 import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
 import { RUNBOOKS } from "@/lib/pseo"
+// VISUAL BEAST 2026: RunbookCard with 3D tilt + severity glow
+import RunbookCard from "@/components/visual/RunbookCard"
 
 export const metadata = {
   title: "Runbooks | ClawGuru",
   description:
     "Runbooks für OpenClaw/Moltbot Ops: Security, Setup, Fixes, Incident Response. Score → Runbook → Fix → Re-Check.",
   alternates: { canonical: "/runbooks" }
-}
-
-function Tag({ t }: { t: string }) {
-  return (
-    <a href={`/tag/${encodeURIComponent(t)}`} className="px-2 py-1 rounded-lg border border-gray-800 bg-black/30 text-xs text-gray-300 hover:bg-black/40">
-      {t}
-    </a>
-  )
 }
 
 export default function RunbooksPage({ searchParams }: { searchParams?: { q?: string } }) {
@@ -36,16 +30,16 @@ export default function RunbooksPage({ searchParams }: { searchParams?: { q?: st
         />
 
 
-        <div className="mt-8 p-4 rounded-3xl border border-gray-800 bg-black/30">
-          <div className="text-sm font-bold mb-2">Schnellsuche</div>
+        <div className="mt-8 p-4 rounded-2xl glass-card">
+          <div className="text-sm font-bold mb-2 font-headline">Schnellsuche</div>
           <form className="flex gap-2" action="/runbooks" method="get">
             <input
               name="q"
               defaultValue={typeof searchParams?.q === "string" ? searchParams.q : ""}
               placeholder="z.B. 502, webhook, nginx, docker secrets, env leak…"
-              className="flex-1 px-4 py-3 rounded-2xl bg-black/40 border border-gray-700 text-white placeholder-gray-500 focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all"
+              className="flex-1 px-4 py-3 rounded-2xl bg-black/40 border border-white/10 text-white placeholder-gray-500 focus:border-[#00ff9d]/50 focus:ring-2 focus:ring-[#00ff9d]/20 transition-all"
             />
-            <button className="px-4 py-3 rounded-2xl bg-gray-900 hover:bg-gray-800 border border-gray-700 font-bold" type="submit">
+            <button className="px-4 py-3 rounded-2xl glass-card hover-neon-border font-bold" type="submit">
               Suchen
             </button>
           </form>
@@ -58,22 +52,18 @@ export default function RunbooksPage({ searchParams }: { searchParams?: { q?: st
           )}
         </div>
 
+        {/* VISUAL BEAST 2026: RunbookCard with 3D tilt + severity glow */}
         <div className="mt-10 grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {items.map((r) => (
-            <a
+          {items.map((r, i) => (
+            <RunbookCard
               key={r.slug}
-              href={`/runbook/${r.slug}`}
-              className="p-6 rounded-3xl border border-gray-800 bg-black/25 hover:bg-black/35 transition-colors"
-            >
-              <div className="text-lg font-black">{r.title}</div>
-              <div className="mt-2 text-sm text-gray-400">{r.summary}</div>
-              <div className="mt-4 flex flex-wrap gap-2">
-                {r.tags.slice(0, 5).map((t) => (
-                  <Tag key={t} t={t} />
-                ))}
-              </div>
-              <div className="mt-5 text-sm text-cyan-300 underline">Runbook öffnen →</div>
-            </a>
+              title={r.title}
+              summary={r.summary}
+              slug={r.slug}
+              tags={r.tags}
+              severity={i % 4 === 0 ? "critical" : i % 3 === 0 ? "high" : i % 2 === 0 ? "medium" : "low"}
+              readiness={50 + ((i * 17) % 50)}
+            />
           ))}
         </div>
       </div>

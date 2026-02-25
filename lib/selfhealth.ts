@@ -54,6 +54,9 @@ const CRITICAL_PAGES = [
   "/tags",
   "/intel",
   "/pricing",
+  "/threatmap",
+  "/academy",
+  "/tools",
 ] as const
 
 const REQUIRED_ENV_VARS = [

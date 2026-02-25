@@ -987,7 +987,7 @@ export function topRunbooksByTag(tag: string, n = 10): Runbook[] {
 }
 
 /** Number of static main pages included in the main sitemap */
-const MAIN_SITEMAP_PAGE_COUNT = 10
+const MAIN_SITEMAP_PAGE_COUNT = 33
 
 /**
  * Compute the actual total number of URLs across all sitemaps.

@@ -104,10 +104,10 @@ export default function ShareScore({ target, score, vulnerable }: { target: stri
   async function nativeShare() {
     const origin = typeof window !== "undefined" ? window.location.origin : ""
     const url = `${origin}${shareUrl}`
-    // @ts-ignore
+    // @ts-expect-error -- navigator.share not in all TypeScript DOM typings
     if (navigator.share) {
       try {
-        // @ts-ignore
+        // @ts-expect-error -- navigator.share not in all TypeScript DOM typings
         await navigator.share({ title: "Claw Security Score", text: shareText, url })
       } catch {}
     } else {
@@ -125,8 +125,8 @@ export default function ShareScore({ target, score, vulnerable }: { target: stri
       downloadBlob(blob, `clawguru-score-${score}-${safe}.png`)
       setHint("PNG gespeichert ✅")
       setTimeout(() => setHint(null), 1400)
-    } catch (e: any) {
-      setHint(e?.message || "PNG Export fehlgeschlagen.")
+    } catch (e: unknown) {
+      setHint(e instanceof Error ? e.message : "PNG Export fehlgeschlagen.")
       setTimeout(() => setHint(null), 2000)
     } finally {
       setBusy(false)
@@ -143,16 +143,16 @@ export default function ShareScore({ target, score, vulnerable }: { target: stri
       const origin = typeof window !== "undefined" ? window.location.origin : ""
       const url = `${origin}${shareUrl}`
 
-      // @ts-ignore
+      // @ts-expect-error -- navigator.canShare/share not in all TypeScript DOM typings
       if (navigator.canShare && navigator.canShare({ files: [file] }) && navigator.share) {
-        // @ts-ignore
+        // @ts-expect-error -- navigator.share not in all TypeScript DOM typings
         await navigator.share({ title: "Claw Security Score", text: shareText, url, files: [file] })
       } else {
         downloadBlob(blob, `clawguru-score-${score}.png`)
         await copyLink()
       }
-    } catch (e: any) {
-      setHint(e?.message || "Badge Share fehlgeschlagen.")
+    } catch (e: unknown) {
+      setHint(e instanceof Error ? e.message : "Badge Share fehlgeschlagen.")
       setTimeout(() => setHint(null), 2000)
     } finally {
       setBusy(false)

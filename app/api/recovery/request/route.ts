@@ -73,7 +73,7 @@ async function issueTokenForCustomer(customerId: string): Promise<string | null>
   // 2) Fallback daypass: look for a succeeded payment intent with metadata.product=daypass within 24h
   const pis = await stripe.paymentIntents.list({ customer: customerId, limit: 20 })
   const day = pis.data.find((pi) => {
-    const md = (pi.metadata || {}) as any
+    const md = pi.metadata || {}
     const prod = String(md.product || "").toLowerCase()
     const created = pi.created || 0
     const okAge = created >= now - 60 * 60 * 24
@@ -110,7 +110,7 @@ export async function POST(req: NextRequest) {
       email = String(form.get("email") || "")
     } else {
       const body = await req.json().catch(() => ({}))
-      email = String((body as any).email || "")
+      email = String((body as { email?: string }).email || "")
     }
   } catch {
     email = ""

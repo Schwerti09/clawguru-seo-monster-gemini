@@ -3,7 +3,7 @@ import { adminCookieName, issueAdminToken } from "@/lib/admin-auth"
 
 export const runtime = "nodejs"
 
-function json(status: number, body: any) {
+function json(status: number, body: unknown) {
   return NextResponse.json(body, { status })
 }
 

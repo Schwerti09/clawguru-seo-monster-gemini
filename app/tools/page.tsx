@@ -92,7 +92,7 @@ export default function Tools() {
         return
       }
       setRbOut(String(data?.text || "").trim())
-    } catch (e: any) {
+    } catch {
       setRbErr("Network error")
     } finally {
       setRbLoading(false)

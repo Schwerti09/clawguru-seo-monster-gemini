@@ -160,7 +160,7 @@ export default function PricingPage() {
               </div>
 
               <div className="mt-7 rounded-2xl border border-white/10 bg-black/40 p-5">
-                <div className="font-semibold text-white">Abo-Logik ist "hart"</div>
+                <div className="font-semibold text-white">Abo-Logik ist &quot;hart&quot;</div>
                 <p className="mt-2 text-sm text-gray-300">
                   Pro/Teams prüfen bei jedem Zugriff den Stripe-Status. Kündigung = Zugriff weg. Day Pass läuft nur per Ablaufzeit.
                 </p>

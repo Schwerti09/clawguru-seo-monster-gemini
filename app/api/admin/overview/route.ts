@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server"
+import { NextResponse } from "next/server"
 import { cookies } from "next/headers"
 import { adminCookieName, verifyAdminToken } from "@/lib/admin-auth"
 import { stripe } from "@/lib/stripe"
@@ -21,7 +21,7 @@ async function stripeSummary() {
     stripe.charges.list({ limit: 100, created: { gte: since7d } })
   ])
 
-  const sum = (arr: any[]) =>
+  const sum = (arr: { paid: boolean | null; status: string | null; amount: number | null }[]) =>
     arr.reduce((acc, ch) => (ch.paid && ch.status === "succeeded" ? acc + (ch.amount || 0) : acc), 0)
 
   const charges24h = sum(c24.data)
@@ -54,7 +54,7 @@ async function stripeSummary() {
   }
 }
 
-export async function GET(_req: NextRequest) {
+export async function GET() {
   const token = cookies().get(adminCookieName())?.value || ""
   const session = token ? verifyAdminToken(token) : null
   if (!session) return unauthorized()
@@ -67,7 +67,7 @@ export async function GET(_req: NextRequest) {
   const hasWebhook = Boolean(process.env.STRIPE_WEBHOOK_SECRET)
   const hasEmail = Boolean(process.env.RESEND_API_KEY && process.env.EMAIL_FROM)
 
-  let stripeData: any = undefined
+  let stripeData: Awaited<ReturnType<typeof stripeSummary>> | undefined = undefined
   if (hasStripe) {
     try {
       stripeData = await stripeSummary()

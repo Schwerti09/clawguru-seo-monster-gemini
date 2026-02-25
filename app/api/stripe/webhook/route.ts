@@ -86,12 +86,12 @@ async function sendAccessEmail(session: Stripe.Checkout.Session) {
   const plan = planFromSession(session)
   const now = Math.floor(Date.now() / 1000)
 
-  const customerId = typeof session.customer === "string" ? session.customer : (session.customer as any)?.id
+  const customerId = typeof session.customer === "string" ? session.customer : (session.customer as { id: string } | null)?.id
   if (!customerId) return
 
   let subscriptionId: string | undefined = undefined
   if (plan === "pro" || plan === "team") {
-    subscriptionId = typeof session.subscription === "string" ? session.subscription : (session.subscription as any)?.id
+    subscriptionId = typeof session.subscription === "string" ? session.subscription : (session.subscription as { id: string } | null)?.id
     if (!subscriptionId) return
   }
 
@@ -150,7 +150,7 @@ export async function POST(req: NextRequest) {
 
     // optional: you can add cancellation/failed payment mails later
     return NextResponse.json({ received: true })
-  } catch (e) {
+  } catch {
     return NextResponse.json({ received: true })
   }
 }

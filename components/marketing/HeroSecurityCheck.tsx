@@ -54,8 +54,8 @@ export default function HeroSecurityCheck() {
     try {
       const res = await performSecurityCheck(input.trim())
       setResult(res)
-    } catch (e: any) {
-      setError(e?.message || "Prüfung fehlgeschlagen. Bitte versuche es erneut.")
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : "Prüfung fehlgeschlagen. Bitte versuche es erneut.")
     } finally {
       setLoading(false)
     }
@@ -72,10 +72,10 @@ export default function HeroSecurityCheck() {
     if (!shareUrl) return
     const url = `${window.location.origin}${shareUrl}`
     const text = `Mein Claw Security Score: ${result?.score}/100 — geprüft via ClawGuru`
-    // @ts-ignore
+    // @ts-expect-error -- navigator.share not in all TypeScript DOM typings
     if (navigator.share) {
       try {
-        // @ts-ignore
+        // @ts-expect-error -- navigator.share not in all TypeScript DOM typings
         await navigator.share({ title: "Claw Security Score", text, url })
       } catch {}
     } else {

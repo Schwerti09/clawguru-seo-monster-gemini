@@ -41,7 +41,7 @@ export default function ProvidersPage() {
 
         <div className="mt-12 p-6 rounded-3xl border border-gray-800 bg-black/20 text-sm text-gray-400">
           Tipp: Diese Hubs ranken oft schneller als generische Landingpages, weil sie klare Suchintention abholen
-          ("ssh hardening hetzner", "stripe webhook netlify", "postgres backups aws" etc.).
+          (&quot;ssh hardening hetzner&quot;, &quot;stripe webhook netlify&quot;, &quot;postgres backups aws&quot; etc.).
         </div>
       </div>
     </Container>

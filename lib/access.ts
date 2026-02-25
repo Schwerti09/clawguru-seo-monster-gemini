@@ -1,6 +1,6 @@
 import { cookies } from "next/headers"
 import { stripe } from "@/lib/stripe"
-import { verifyAccessToken, AccessTokenPayload, AccessPlan } from "@/lib/access-token"
+import { verifyAccessToken, AccessPlan } from "@/lib/access-token"
 
 export type AccessInfo = {
   ok: boolean

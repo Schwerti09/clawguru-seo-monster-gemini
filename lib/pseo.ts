@@ -54,6 +54,26 @@ export const PROVIDERS = [
   { slug: "telegram", name: "Telegram" },
   { slug: "openai", name: "OpenAI" },
   { slug: "anthropic", name: "Anthropic" },
+  // WORLD BEAST: additional providers for 10,000+ pages
+  { slug: "linode", name: "Linode (Akamai)" },
+  { slug: "scaleway", name: "Scaleway" },
+  { slug: "ovhcloud", name: "OVHcloud" },
+  { slug: "vultr", name: "Vultr" },
+  { slug: "contabo", name: "Contabo" },
+  { slug: "supabase", name: "Supabase" },
+  { slug: "planetscale", name: "PlanetScale" },
+  { slug: "neon", name: "Neon Postgres" },
+  { slug: "upstash", name: "Upstash Redis" },
+  { slug: "firebase", name: "Firebase" },
+  { slug: "minio", name: "MinIO" },
+  { slug: "resend", name: "Resend" },
+  { slug: "rabbitmq", name: "RabbitMQ" },
+  { slug: "elasticsearch", name: "Elasticsearch" },
+  { slug: "clickhouse", name: "ClickHouse" },
+  { slug: "vault-hashicorp", name: "HashiCorp Vault" },
+  { slug: "terraform", name: "Terraform" },
+  { slug: "github-actions", name: "GitHub Actions" },
+  { slug: "gitlab-ci", name: "GitLab CI" },
 ] as const
 
 // Topic templates (high-intent)
@@ -70,6 +90,17 @@ const TOPICS = [
   { slug: "backup-restore-drill", title: "Backup/Restore Drill", summary: "Backups ohne Restore sind Fantasy. So testest du’s." },
   { slug: "observability-baseline", title: "Observability Baseline", summary: "Logs, Metrics, Traces – minimal sinnvoll." },
   { slug: "incident-communication", title: "Incident Kommunikation", summary: "Status, Updates, intern/extern – sauberer Ablauf." },
+  // WORLD BEAST: additional topics
+  { slug: "zero-trust-network", title: "Zero Trust Network Access", summary: "Never trust, always verify – modernes Netzwerkmodell." },
+  { slug: "container-hardening", title: "Container Hardening", summary: "Rootless, read-only, capabilities minimieren." },
+  { slug: "supply-chain-security", title: "Supply Chain Security", summary: "Dependency audits, SBOM, Sigstore – sichere Lieferkette." },
+  { slug: "incident-postmortem", title: "Incident Postmortem", summary: "Blameless, strukturiert, mit Action Items." },
+  { slug: "ci-cd-security", title: "CI/CD Security Hardening", summary: "OIDC, secrets in CI, signed artifacts, least privilege runners." },
+  { slug: "database-backup", title: "Database Backup Strategy", summary: "3-2-1 Regel, WAL archiving, PITR, regelmäßige Tests." },
+  { slug: "tls-certificate-management", title: "TLS Certificate Management", summary: "ACME/Let's Encrypt, auto-renewal, wildcard certs." },
+  { slug: "kubernetes-rbac", title: "Kubernetes RBAC", summary: "Least privilege, service accounts, audit logs." },
+  { slug: "alerting-slo", title: "Alerting & SLO Baseline", summary: "Error budget, burn rate alerts, paging die Sinn macht." },
+  { slug: "multi-region-ha", title: "Multi-Region High Availability", summary: "Active-active, failover, global load balancing." },
 ] as const
 
 // Error strings (Longtail magnet)
@@ -85,6 +116,15 @@ const ERRORS = [
   "redis connection error","mongo authentication failed","invalid api key","unauthorized: invalid token","request aborted",
   "socket hang up","chunk load error","edge function failed","cors preflight failed","blocked by cloudflare","waf rule triggered",
   "too many open files",
+  // WORLD BEAST: additional errors
+  "oom killed","evicted pod","crashloopbackoff","imagepullbackoff","pending forever","node not ready",
+  "certificate signed by unknown authority","ssl handshake timeout","http2 protocol error",
+  "upstream connect error","circuit breaker open","retry budget exhausted",
+  "kafka consumer lag too high","producer send timeout","partition offline",
+  "elasticsearch shard unavailable","query timed out","max virtual memory exceeded",
+  "terraform state locked","plan drift detected","resource already exists",
+  "github actions rate limit","workflow timeout","deployment quota exceeded"
+
 ] as const
 
 const STACKS = [
@@ -96,6 +136,15 @@ const STACKS = [
   { slug: "kubernetes", name: "Kubernetes" },
   { slug: "stripe", name: "Stripe" },
   { slug: "postgres", name: "Postgres" },
+  // WORLD BEAST: additional stacks
+  { slug: "python", name: "Python" },
+  { slug: "go", name: "Go" },
+  { slug: "bun", name: "Bun" },
+  { slug: "fastapi", name: "FastAPI" },
+  { slug: "django", name: "Django" },
+  { slug: "express", name: "Express.js" },
+  { slug: "nestjs", name: "NestJS" },
+  { slug: "remix", name: "Remix" },
 ] as const
 
 // Config pages (operators google these)
@@ -112,9 +161,16 @@ const CONFIGS = [
   { slug: "log-rotation", title: "Log Rotation", summary: "Logs nicht explodieren lassen – rotation + retention." },
   { slug: "healthchecks-uptime", title: "Healthchecks & Uptime", summary: "Checks, Alerting, minimale SLOs." },
   { slug: "rate-limit-edge", title: "Edge Rate Limiting", summary: "Edge-first Limits gegen Abuse und Kosten." },
+  // WORLD BEAST: additional config pages
+  { slug: "k8s-network-policy-default-deny", title: "K8s NetworkPolicy: Default Deny", summary: "Kein East-West Traffic ohne explizite Policy." },
+  { slug: "github-actions-oidc", title: "GitHub Actions OIDC Auth", summary: "Keine long-lived Secrets in CI – OIDC mit AWS/GCP/Azure." },
+  { slug: "terraform-remote-state", title: "Terraform Remote State", summary: "S3/GCS Backend + State Locking + Encryption." },
+  { slug: "prometheus-alertmanager", title: "Prometheus Alertmanager", summary: "Routing, inhibition, silences – kein Alert-Storm." },
+  { slug: "cors-headers-config", title: "CORS Headers korrekt setzen", summary: "Nur erlaubte Origins, keine Wildcard in Prod." },
+  { slug: "fail2ban-baseline", title: "Fail2ban Baseline", summary: "SSH, HTTP Auth, Rate-Limits – automatisches Blocking." },
 ] as const
 
-const YEARS = ["2024", "2025", "2026"] as const
+const YEARS = ["2024", "2025", "2026", "2027"] as const
 
 const SEVERITIES = [
   { slug: "p1", name: "P1 Kritisch" },
@@ -859,7 +915,7 @@ function _buildRunbooksWithRelated(limit: number): Runbook[] {
   return list
 }
 
-export const RUNBOOKS: Runbook[] = _buildRunbooksWithRelated(Number(process.env.PSEO_RUNBOOK_COUNT || 5000))
+export const RUNBOOKS: Runbook[] = _buildRunbooksWithRelated(Number(process.env.PSEO_RUNBOOK_COUNT || 10000))
 
 export function allProviders() {
   return [...PROVIDERS]

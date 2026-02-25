@@ -420,6 +420,13 @@ export async function autoHeal(): Promise<AutoHealResult> {
     result.errors.push("sitemap:ping failed")
   }
 
+  // WORLD BEAST: notify Google + Bing of updated sitemap after every heal cycle
+  const sitemapUrl = encodeURIComponent(`${b}/sitemap.xml`)
+  await Promise.allSettled([
+    fetchWithTimeout(`https://www.google.com/ping?sitemap=${sitemapUrl}`),
+    fetchWithTimeout(`https://www.bing.com/ping?sitemap=${sitemapUrl}`),
+  ])
+
   return result
 }
 

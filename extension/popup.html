@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ClawGuru Security Score</title>
+  <style>
+    /* WORLD BEAST UPGRADE: ClawBrowser Extension Popup UI */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      width: 340px;
+      min-height: 200px;
+      background: #050608;
+      color: #e5e5e5;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      background: linear-gradient(135deg, rgba(0,255,157,0.08), rgba(0,184,255,0.08));
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 900;
+      font-size: 13px;
+      letter-spacing: -0.02em;
+    }
+
+    .logo-icon {
+      font-size: 18px;
+    }
+
+    .badge {
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 100px;
+      background: rgba(0,255,157,0.1);
+      color: #00ff9d;
+      border: 1px solid rgba(0,255,157,0.2);
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+
+    .body { padding: 16px; }
+
+    /* Score card */
+    .score-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+
+    .domain-label {
+      font-size: 10px;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 4px;
+    }
+
+    .domain-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: #ccc;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .score-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .score-circle {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .score-number {
+      font-size: 22px;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .score-label {
+      font-size: 9px;
+      color: rgba(255,255,255,0.5);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .score-details {
+      flex: 1;
+    }
+
+    .score-grade {
+      font-size: 14px;
+      font-weight: 900;
+      margin-bottom: 4px;
+    }
+
+    .score-summary {
+      font-size: 11px;
+      color: #888;
+      line-height: 1.4;
+    }
+
+    /* Risk bar */
+    .risk-bar-wrap {
+      margin-top: 10px;
+    }
+
+    .risk-bar-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      color: #555;
+      margin-bottom: 4px;
+    }
+
+    .risk-bar-track {
+      height: 4px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .risk-bar-fill {
+      height: 100%;
+      border-radius: 2px;
+      transition: width 0.6s ease;
+    }
+
+    /* Action buttons */
+    .actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .btn {
+      padding: 9px 12px;
+      border-radius: 9px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      text-align: center;
+      text-decoration: none;
+      display: block;
+      transition: opacity 0.15s;
+    }
+
+    .btn:hover { opacity: 0.85; }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #00ff9d, #00b8ff);
+      color: #000;
+    }
+
+    .btn-secondary {
+      background: rgba(255,255,255,0.05);
+      color: #ccc;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    /* Loading state */
+    .loading {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 16px;
+      gap: 10px;
+    }
+
+    .spinner {
+      width: 28px;
+      height: 28px;
+      border: 2px solid rgba(0,255,157,0.2);
+      border-top-color: #00ff9d;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .loading-text {
+      font-size: 11px;
+      color: #555;
+    }
+
+    /* Footer */
+    .footer {
+      font-size: 9px;
+      color: #444;
+      text-align: center;
+      padding: 8px 16px;
+      border-top: 1px solid rgba(255,255,255,0.04);
+    }
+
+    .footer a { color: #555; text-decoration: none; }
+    .footer a:hover { color: #888; }
+
+    /* Analytics opt-out note */
+    .analytics-note {
+      font-size: 9px;
+      color: #333;
+      text-align: center;
+      padding: 6px 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo">
+      <span class="logo-icon">🦞</span>
+      <span>ClawGuru</span>
+    </div>
+    <span class="badge">WorldBeast 2026</span>
+  </div>
+
+  <div class="body">
+    <!-- Loading state (shown initially) -->
+    <div class="loading" id="loadingState">
+      <div class="spinner"></div>
+      <div class="loading-text">Checking security score...</div>
+    </div>
+
+    <!-- Score state (hidden until loaded) -->
+    <div id="scoreState" style="display:none">
+      <div class="score-card">
+        <div class="domain-label">Current site</div>
+        <div class="domain-name" id="domainName">—</div>
+
+        <div class="score-row">
+          <div class="score-circle" id="scoreCircle">
+            <span class="score-number" id="scoreNumber">—</span>
+            <span class="score-label">Score</span>
+          </div>
+          <div class="score-details">
+            <div class="score-grade" id="scoreGrade">—</div>
+            <div class="score-summary" id="scoreSummary">Analyzing security posture...</div>
+          </div>
+        </div>
+
+        <div class="risk-bar-wrap">
+          <div class="risk-bar-label">
+            <span>Risk Level</span>
+            <span id="riskLabel">—</span>
+          </div>
+          <div class="risk-bar-track">
+            <div class="risk-bar-fill" id="riskBar" style="width: 0%"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <a class="btn btn-primary" id="checkLink" href="#" target="_blank">
+          🔍 Full Scan
+        </a>
+        <a class="btn btn-secondary" id="runbookLink" href="#" target="_blank">
+          📚 Runbooks
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="analytics-note" id="analyticsNote">
+    🔒 Anonymous analytics · No personal data stored
+  </div>
+
+  <div class="footer">
+    <a href="https://clawguru.org" target="_blank">clawguru.org</a>
+    &nbsp;·&nbsp;
+    <a href="https://clawguru.org/datenschutz" target="_blank">Privacy</a>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

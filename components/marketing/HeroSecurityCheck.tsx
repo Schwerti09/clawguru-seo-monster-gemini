@@ -5,6 +5,12 @@ import { performSecurityCheck, type SecurityCheckResult } from "@/lib/security-c
 import CTAButton from "@/components/marketing/CTAButton"
 import BuyButton from "@/components/commerce/BuyButton"
 import { SERVICE } from "@/lib/constants"
+// WORLD BEAST FINAL LAUNCH: analytics + upsell
+import { trackEvent, incrementCheckCount } from "@/lib/analytics"
+import dynamic from "next/dynamic"
+
+// WORLD BEAST FINAL LAUNCH: lazy-load upsell modal
+const UpsellModal = dynamic(() => import("@/components/onboarding/UpsellModal"), { ssr: false })
 
 function scoreLabel(score: number) {
   if (score >= 90) return "EXZELLENT"
@@ -25,6 +31,8 @@ export default function HeroSecurityCheck() {
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState<SecurityCheckResult | null>(null)
   const [error, setError] = useState<string | null>(null)
+  // WORLD BEAST FINAL LAUNCH: upsell modal state
+  const [showUpsell, setShowUpsell] = useState(false)
 
   const shareUrl = useMemo(() => {
     if (!result) return ""
@@ -51,9 +59,14 @@ export default function HeroSecurityCheck() {
     setLoading(true)
     setError(null)
     setResult(null)
+    // WORLD BEAST FINAL LAUNCH: track security check start
+    trackEvent("security_check_started", { target: input.trim() })
     try {
       const res = await performSecurityCheck(input.trim())
       setResult(res)
+      // WORLD BEAST FINAL LAUNCH: increment check counter + maybe show upsell
+      const count = incrementCheckCount()
+      if (count >= 3) setShowUpsell(true)
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : "Prüfung fehlgeschlagen. Bitte versuche es erneut.")
     } finally {
@@ -240,6 +253,11 @@ export default function HeroSecurityCheck() {
           Für echte Aussagen: Config/Logs checken
         </div>
       </div>
+
+      {/* WORLD BEAST FINAL LAUNCH: Upsell modal after 3 checks */}
+      {showUpsell && (
+        <UpsellModal score={result?.score} />
+      )}
     </div>
   )
 }

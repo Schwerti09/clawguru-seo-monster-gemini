@@ -4,6 +4,8 @@ import TrustBadge from "@/components/layout/TrustBadge"
 import Header from "@/components/layout/Header"
 import Footer from "@/components/layout/Footer"
 import ActionDock from "@/components/layout/ActionDock"
+// WORLD BEAST FINAL LAUNCH: Umami privacy-first analytics
+import UmamiAnalytics from "@/components/analytics/UmamiAnalytics"
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://clawguru.org'),
@@ -31,6 +33,10 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="de">
+      <head>
+        {/* WORLD BEAST FINAL LAUNCH: Umami analytics */}
+        <UmamiAnalytics />
+      </head>
       <body className="min-h-screen">
         <TrustBadge />
         <Header />

@@ -1,8 +1,9 @@
 'use client'
-// WORLD BEAST: app/share/[slug]/ShareButtons.tsx
-// Client component for clipboard + native share buttons.
+// WORLD BEAST FINAL LAUNCH: app/share/[slug]/ShareButtons.tsx
+// Client component for clipboard + native share buttons. Mobile-first.
 
 import { useState } from "react"
+import { trackEvent } from "@/lib/analytics"
 
 type Props = {
   twitterThread: string
@@ -18,11 +19,13 @@ function CopyCard({
   icon,
   content,
   shareUrl,
+  slug,
 }: {
   label: string
   icon: string
   content: string
   shareUrl?: string
+  slug: string
 }) {
   const [copied, setCopied] = useState(false)
 
@@ -31,6 +34,8 @@ function CopyCard({
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
     })
+    // WORLD BEAST FINAL LAUNCH: track share button click
+    trackEvent("share_button_clicked", { platform: label, slug })
   }
 
   return (
@@ -77,25 +82,46 @@ export function ShareButtons({
   const linkedinUrl = `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(runbookUrl)}&title=${encodeURIComponent(title)}`
   const redditUrl = `https://www.reddit.com/submit?url=${encodeURIComponent(runbookUrl)}&title=${encodeURIComponent(title)}`
 
+  // WORLD BEAST FINAL LAUNCH: native share for mobile
+  function nativeShare() {
+    if (navigator.share) {
+      navigator.share({ title, url: runbookUrl }).catch(() => {})
+      trackEvent("share_button_clicked", { platform: "native", slug })
+    }
+  }
+
   return (
     <div className="space-y-4">
+      {/* WORLD BEAST FINAL LAUNCH: mobile-first native share button */}
+      {typeof navigator !== "undefined" && (
+        <button
+          onClick={nativeShare}
+          className="w-full sm:hidden px-5 py-3 rounded-2xl font-black bg-gradient-to-r from-brand-cyan to-brand-violet hover:opacity-90 text-white"
+        >
+          📱 Teilen (Native Share)
+        </button>
+      )}
+
       <CopyCard
         label="Twitter / X Thread"
         icon="🐦"
         content={twitterThread}
         shareUrl={twitterUrl}
+        slug={slug}
       />
       <CopyCard
         label="LinkedIn Post"
         icon="💼"
         content={linkedinPost}
         shareUrl={linkedinUrl}
+        slug={slug}
       />
       <CopyCard
         label="Reddit Thread"
         icon="🤖"
         content={redditPost}
         shareUrl={redditUrl}
+        slug={slug}
       />
 
       {/* AI-Generated Thread option */}

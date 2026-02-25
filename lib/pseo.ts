@@ -74,6 +74,36 @@ export const PROVIDERS = [
   { slug: "terraform", name: "Terraform" },
   { slug: "github-actions", name: "GitHub Actions" },
   { slug: "gitlab-ci", name: "GitLab CI" },
+  // Additional providers & regional endpoints for higher page count
+  { slug: "oracle-cloud", name: "Oracle Cloud" },
+  { slug: "hetzner-nbg1", name: "Hetzner NBG1" },
+  { slug: "hetzner-fsn1", name: "Hetzner FSN1" },
+  { slug: "hetzner-hel1", name: "Hetzner HEL1" },
+  { slug: "digitalocean-nyc3", name: "DigitalOcean NYC3" },
+  { slug: "digitalocean-fra1", name: "DigitalOcean FRA1" },
+  { slug: "digitalocean-sgp1", name: "DigitalOcean SGP1" },
+  { slug: "azure-vm", name: "Azure VM" },
+  { slug: "gcp-compute", name: "GCP Compute Engine" },
+  { slug: "aws-eu-west-1", name: "AWS EU West 1" },
+  { slug: "aws-us-east-1", name: "AWS US East 1" },
+  { slug: "aws-ap-southeast-1", name: "AWS AP Southeast 1" },
+  { slug: "cloudflare-workers", name: "Cloudflare Workers" },
+  { slug: "cloudflare-pages", name: "Cloudflare Pages" },
+  { slug: "cloudflare-r2", name: "Cloudflare R2" },
+  { slug: "ovhcloud-de", name: "OVHcloud DE" },
+  { slug: "ovhcloud-fr", name: "OVHcloud FR" },
+  { slug: "vultr-fra", name: "Vultr Frankfurt" },
+  { slug: "vultr-sjc", name: "Vultr Silicon Valley" },
+  { slug: "fly-iad", name: "Fly.io IAD" },
+  { slug: "fly-ams", name: "Fly.io AMS" },
+  { slug: "render-oregon", name: "Render Oregon" },
+  { slug: "render-frankfurt", name: "Render Frankfurt" },
+  { slug: "railway-us", name: "Railway US" },
+  { slug: "railway-eu", name: "Railway EU" },
+  { slug: "vercel-edge", name: "Vercel Edge Network" },
+  { slug: "netlify-edge", name: "Netlify Edge Functions" },
+  { slug: "bunnynet", name: "Bunny.net CDN" },
+  { slug: "fastly", name: "Fastly CDN" },
 ] as const
 
 // Topic templates (high-intent)
@@ -123,7 +153,22 @@ const ERRORS = [
   "kafka consumer lag too high","producer send timeout","partition offline",
   "elasticsearch shard unavailable","query timed out","max virtual memory exceeded",
   "terraform state locked","plan drift detected","resource already exists",
-  "github actions rate limit","workflow timeout","deployment quota exceeded"
+  "github actions rate limit","workflow timeout","deployment quota exceeded",
+  // CVEs and emerging attack patterns 2025-2026
+  "cve-2025-29927 next.js middleware bypass","cve-2024-56374 django sql injection",
+  "cve-2024-45337 golang ssh key misuse","cve-2024-21626 runc container escape",
+  "cve-2024-6387 openssh regreSSHion","cve-2023-44487 http2 rapid reset",
+  "cve-2024-3094 xz utils backdoor","cve-2024-27198 teamcity auth bypass",
+  "log4shell exploit attempt","spring4shell rce","polkit pkexec privilege escalation",
+  "dirty pipe kernel exploit","sudo heap overflow","glibc ghost vulnerability",
+  "openssl heartbleed legacy","nginx integer overflow","curl cookie injection",
+  "redis rce via replication","postgres privilege escalation","mongodb nosql injection",
+  "kubernetes privilege escalation via serviceaccount","etcd unauthenticated access",
+  "docker daemon exposed tcp","containerd cni bypass","helm chart injection",
+  "supply chain poisoned package","typosquatting npm attack","malicious github action",
+  "stripe api key leaked in logs","jwt none algorithm exploit","oauth state csrf",
+  "ssrf via metadata endpoint","xxe injection","ssti server-side template injection",
+  "prototype pollution nodejs","deserialization rce java","path traversal exploit",
 
 ] as const
 
@@ -915,7 +960,7 @@ function _buildRunbooksWithRelated(limit: number): Runbook[] {
   return list
 }
 
-export const RUNBOOKS: Runbook[] = _buildRunbooksWithRelated(Number(process.env.PSEO_RUNBOOK_COUNT || 10000))
+export const RUNBOOKS: Runbook[] = _buildRunbooksWithRelated(Number(process.env.PSEO_RUNBOOK_COUNT || 50000))
 
 export function allProviders() {
   return [...PROVIDERS]

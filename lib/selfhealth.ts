@@ -2,7 +2,7 @@
 // Self-Health System – automated site health, SEO watchdog, content freshness monitor.
 // FULL PASSIVE WELTMACHT: autoHeal() makes the site self-improving with zero manual work.
 
-import { RUNBOOKS } from "./pseo"
+import { RUNBOOKS, totalSitemapUrls } from "./pseo"
 import { sendEmail } from "./email"
 
 // ---------------------------------------------------------------------------
@@ -206,7 +206,7 @@ export function checkContentFreshness(): HealthCheck[] {
       name: "content:freshness",
       status,
       message,
-      detail: `${runbooks.length} runbooks total. Most recent lastmod: ${mostRecent}.`,
+      detail: `${runbooks.length} runbooks, ${totalSitemapUrls()} total sitemap URLs. Most recent lastmod: ${mostRecent}.`,
     },
   ]
 }

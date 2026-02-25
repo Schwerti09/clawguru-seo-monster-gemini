@@ -985,3 +985,14 @@ export function topRunbooksByTag(tag: string, n = 10): Runbook[] {
     .sort((a, b) => b.clawScore - a.clawScore)
     .slice(0, n)
 }
+
+/** Number of static main pages included in the main sitemap */
+const MAIN_SITEMAP_PAGE_COUNT = 10
+
+/**
+ * Compute the actual total number of URLs across all sitemaps.
+ * Covers: main pages + provider pages + runbook pages + tag pages.
+ */
+export function totalSitemapUrls(): number {
+  return MAIN_SITEMAP_PAGE_COUNT + PROVIDERS.length + RUNBOOKS.length + allTags().length
+}

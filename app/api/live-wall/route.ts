@@ -3,6 +3,7 @@ import { RUNBOOKS, allTags } from "@/lib/pseo"
 
 export const runtime = "nodejs"
 export const dynamic = "force-dynamic"
+export const revalidate = 0
 
 function isoDate(d = new Date()) {
   return d.toISOString().slice(0, 10)

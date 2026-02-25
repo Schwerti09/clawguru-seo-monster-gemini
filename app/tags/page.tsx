@@ -2,6 +2,9 @@ import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
 import { allTags } from "@/lib/pseo"
 
+export const dynamic = "force-dynamic"
+export const revalidate = 0
+
 export const metadata = {
   title: "Tags | ClawGuru",
   description:

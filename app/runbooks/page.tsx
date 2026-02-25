@@ -4,6 +4,9 @@ import RunbookCard from "@/components/shared/RunbookCard"
 import { RUNBOOKS } from "@/lib/pseo"
 import type { SeverityLevel } from "@/lib/design-system"
 
+export const dynamic = "force-dynamic"
+export const revalidate = 0
+
 export const metadata = {
   title: "Runbooks | ClawGuru",
   description:

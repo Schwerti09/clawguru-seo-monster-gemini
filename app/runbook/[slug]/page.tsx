@@ -8,7 +8,8 @@ import { CopyLinkButton } from "./CopyLinkButton"
 // Pre-build slug→runbook Map for O(1) related lookups
 const RUNBOOK_MAP = new Map(RUNBOOKS.map((r) => [r.slug, r]))
 
-export const revalidate = 60 * 60 * 24 // 24h
+export const dynamic = "force-dynamic"
+export const revalidate = 0
 export const dynamicParams = true
 
 export async function generateStaticParams() {

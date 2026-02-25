@@ -1,6 +1,9 @@
 import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
 
+export const dynamic = "force-dynamic"
+export const revalidate = 0
+
 export const metadata = {
   title: "Zugang wiederherstellen | ClawGuru",
   description: "Magic Link öffnen oder Recovery anfordern."

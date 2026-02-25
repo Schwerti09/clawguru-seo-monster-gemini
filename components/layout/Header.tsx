@@ -1,61 +1,191 @@
+"use client"
+// VISUAL & PERFORMANCE POLISH 2026: Responsive header – max 6 desktop links + "More" dropdown + mobile hamburger
+
+import { useState, useRef, useEffect } from "react"
 import Container from "@/components/shared/Container"
 
-const NavLink = ({ href, label }: { href: string; label: string }) => (
-  <a
-    href={href}
-    className="px-3 py-2 rounded-xl hover:bg-gray-900/60 transition-colors text-sm"
-  >
-    {label}
-  </a>
-)
+type NavItem = { href: string; label: string }
+
+// Primary nav items shown on desktop (max 6)
+const PRIMARY_NAV: NavItem[] = [
+  { href: "/live", label: "Live" },
+  { href: "/check", label: "Security-Check" },
+  { href: "/copilot", label: "Copilot" },
+  { href: "/runbooks", label: "Runbooks" },
+  { href: "/intel", label: "Intel Feed" },
+  { href: "/pricing", label: "Pricing" },
+]
+
+// Overflow items – visible in "More" dropdown on desktop and in mobile menu
+const MORE_NAV: NavItem[] = [
+  { href: "/tags", label: "Tags" },
+  { href: "/academy", label: "Academy" },
+  { href: "/vault", label: "Vault" },
+  { href: "/openclaw-security-2026", label: "Lagebericht" },
+  { href: "/downloads", label: "Downloads" },
+  { href: "/case-studies", label: "Cases" },
+  { href: "/hosting-kosten", label: "Kosten" },
+  { href: "/ueber-uns", label: "Über uns" },
+]
+
+const ALL_NAV = [...PRIMARY_NAV, ...MORE_NAV]
 
 export default function Header() {
+  const [moreOpen, setMoreOpen] = useState(false)
+  const [mobileOpen, setMobileOpen] = useState(false)
+  const moreRef = useRef<HTMLDivElement>(null)
+
+  // Close "More" dropdown on outside click
+  useEffect(() => {
+    function handler(e: MouseEvent) {
+      if (moreRef.current && !moreRef.current.contains(e.target as Node)) {
+        setMoreOpen(false)
+      }
+    }
+    document.addEventListener("mousedown", handler)
+    return () => document.removeEventListener("mousedown", handler)
+  }, [])
+
+  // Close mobile menu on route change (simple approach)
+  useEffect(() => {
+    setMobileOpen(false)
+  }, [])
+
   return (
-    <div className="fixed top-10 left-0 right-0 z-40">
-      <Container>
-        <div className="flex items-center justify-between border border-gray-800 bg-gray-950/70 backdrop-blur rounded-2xl px-4 py-3 shadow-glow">
-          <a href="/" className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-2xl bg-gradient-to-br from-brand-cyan to-brand-violet shadow-glow2" />
-            <div className="leading-tight">
-              <div className="font-black">ClawGuru</div>
-              <div className="text-xs text-gray-400 hidden sm:block">Institutional Ops Intelligence</div>
+    <>
+      <div className="fixed top-10 left-0 right-0 z-40">
+        <Container>
+          <div className="flex items-center justify-between border border-gray-800 bg-gray-950/70 backdrop-blur rounded-2xl px-4 py-3 shadow-glow">
+            {/* Logo */}
+            <a href="/" className="flex items-center gap-3 shrink-0">
+              <div className="w-9 h-9 rounded-2xl bg-gradient-to-br from-brand-cyan to-brand-violet shadow-glow2" />
+              <div className="leading-tight">
+                <div className="font-black">ClawGuru</div>
+                <div className="text-xs text-gray-400 hidden sm:block">Institutional Ops Intelligence</div>
+              </div>
+            </a>
+
+            {/* Desktop nav */}
+            <nav className="hidden lg:flex items-center gap-1">
+              {PRIMARY_NAV.map((item) => (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  className="px-3 py-2 rounded-xl hover:bg-gray-900/60 transition-colors text-sm"
+                >
+                  {item.label}
+                </a>
+              ))}
+
+              {/* "More" dropdown */}
+              <div ref={moreRef} className="relative">
+                <button
+                  onClick={() => setMoreOpen((v) => !v)}
+                  className="px-3 py-2 rounded-xl hover:bg-gray-900/60 transition-colors text-sm flex items-center gap-1"
+                  aria-expanded={moreOpen}
+                  aria-haspopup="true"
+                >
+                  More
+                  <svg className={`w-3 h-3 transition-transform ${moreOpen ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                {moreOpen && (
+                  <div className="absolute right-0 top-full mt-2 w-48 rounded-2xl border border-gray-800 bg-gray-950/95 backdrop-blur-xl shadow-xl py-2 z-50">
+                    {MORE_NAV.map((item) => (
+                      <a
+                        key={item.href}
+                        href={item.href}
+                        onClick={() => setMoreOpen(false)}
+                        className="block px-4 py-2 text-sm hover:bg-gray-900/60 transition-colors"
+                      >
+                        {item.label}
+                      </a>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </nav>
+
+            {/* CTA buttons + mobile hamburger */}
+            <div className="flex items-center gap-2">
+              <a
+                href="/security/notfall-leitfaden"
+                className="hidden sm:block px-3 py-2 rounded-xl bg-brand-red/90 hover:bg-brand-red font-black text-sm"
+              >
+                Notfall
+              </a>
+              <a
+                href="/pricing"
+                className="hidden sm:block px-3 py-2 rounded-xl bg-brand-cyan/15 hover:bg-brand-cyan/25 border border-brand-cyan/30 font-bold text-sm"
+              >
+                Pro Kits
+              </a>
+
+              {/* Hamburger button (mobile only) */}
+              <button
+                onClick={() => setMobileOpen((v) => !v)}
+                className="lg:hidden p-2 rounded-xl hover:bg-gray-900/60 transition-colors"
+                aria-label="Navigation öffnen"
+                aria-expanded={mobileOpen}
+              >
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  {mobileOpen ? (
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  ) : (
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                  )}
+                </svg>
+              </button>
             </div>
-          </a>
+          </div>
+        </Container>
+      </div>
 
-          <nav className="hidden lg:flex items-center gap-1">
-            <NavLink href="/pricing" label="Pricing" />
-            <NavLink href="/live" label="Live" />
-            <NavLink href="/check" label="Security-Check" />
-            <NavLink href="/copilot" label="Copilot" />
-            <NavLink href="/runbooks" label="Runbooks" />
-            <NavLink href="/tags" label="Tags" />
-            <NavLink href="/intel" label="Intel Feed" />
-            <NavLink href="/academy" label="Academy" />
-            <NavLink href="/openclaw-security-2026" label="Lagebericht" />
-            <NavLink href="/vault" label="Vault" />
-            <NavLink href="/hosting-kosten" label="Kosten" />
-            <NavLink href="/pricing" label="Pricing" />
-            <NavLink href="/downloads" label="Downloads" />
-            <NavLink href="/case-studies" label="Cases" />
-            <NavLink href="/ueber-uns" label="Über uns" />
-          </nav>
-
-          <div className="flex items-center gap-2">
+      {/* Mobile slide-in menu */}
+      {mobileOpen && (
+        <div
+          className="fixed inset-0 z-30 lg:hidden"
+          onClick={() => setMobileOpen(false)}
+          aria-hidden="true"
+        />
+      )}
+      <div
+        className={`fixed top-0 right-0 h-full w-72 z-50 lg:hidden transform transition-transform duration-300 ease-in-out ${
+          mobileOpen ? "translate-x-0" : "translate-x-full"
+        } border-l border-gray-800 bg-gray-950/95 backdrop-blur-xl shadow-2xl pt-24 pb-8 overflow-y-auto`}
+        aria-hidden={!mobileOpen}
+      >
+        <nav className="px-4 space-y-1">
+          {ALL_NAV.map((item) => (
+            <a
+              key={item.href}
+              href={item.href}
+              onClick={() => setMobileOpen(false)}
+              className="block px-4 py-3 rounded-xl hover:bg-gray-900/60 transition-colors text-sm font-medium"
+            >
+              {item.label}
+            </a>
+          ))}
+          <div className="pt-4 flex flex-col gap-2">
             <a
               href="/security/notfall-leitfaden"
-              className="px-3 py-2 rounded-xl bg-brand-red/90 hover:bg-brand-red font-black text-sm"
+              className="block px-4 py-3 rounded-xl bg-brand-red/90 hover:bg-brand-red font-black text-sm text-center"
+              onClick={() => setMobileOpen(false)}
             >
               Notfall
             </a>
             <a
               href="/pricing"
-              className="px-3 py-2 rounded-xl bg-brand-cyan/15 hover:bg-brand-cyan/25 border border-brand-cyan/30 font-bold text-sm"
+              className="block px-4 py-3 rounded-xl bg-brand-cyan/15 hover:bg-brand-cyan/25 border border-brand-cyan/30 font-bold text-sm text-center"
+              onClick={() => setMobileOpen(false)}
             >
               Pro Kits
             </a>
           </div>
-        </div>
-      </Container>
-    </div>
+        </nav>
+      </div>
+    </>
   )
 }
+

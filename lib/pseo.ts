@@ -23,7 +23,7 @@ export type Runbook = {
   relatedSlugs: string[]
 }
 
-const LASTMOD = "2026-02-16"
+const LASTMOD = "2026-02-25"
 
 // Providers / Platforms (SEO seeds)
 export const PROVIDERS = [

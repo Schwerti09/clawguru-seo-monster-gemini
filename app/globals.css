@@ -89,18 +89,7 @@ a { @apply hover:text-[#00ff9d] transition-colors; }
   }
 }
 
-/* VISUAL UPGRADE 2026: Custom neon cursor for desktop */
-@media (hover: hover) and (pointer: fine) {
-  .neon-cursor {
-    cursor: none;
-  }
-  .neon-cursor * {
-    cursor: none;
-  }
-  .neon-cursor a, .neon-cursor button, .neon-cursor [role="button"] {
-    cursor: none;
-  }
-}
+/* VISUAL & PERFORMANCE POLISH 2026: Neon cursor removed – native cursor restored for all devices */
 
 /* VISUAL UPGRADE 2026: Skeleton loader with scanline effect */
 .skeleton-scan {

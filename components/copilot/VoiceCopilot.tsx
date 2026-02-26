@@ -59,6 +59,16 @@ export default function VoiceCopilot({ lang = "de", onTranscript, onReply }: Voi
     }
   }, [])
 
+  // Cleanup: stop recognition & synthesis when component unmounts
+  useEffect(() => {
+    return () => {
+      recognitionRef.current?.abort()
+      if (typeof window !== "undefined" && "speechSynthesis" in window) {
+        window.speechSynthesis.cancel()
+      }
+    }
+  }, [])
+
   // NEXT-LEVEL UPGRADE 2026: Send transcript to Gemini via /api/copilot
   const sendToGemini = useCallback(
     async (text: string) => {

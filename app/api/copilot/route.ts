@@ -6,7 +6,7 @@ type CopilotResponse = {
   reply: string;
   followups: string[];
   actions: CopilotAction[];
-  confidence: "low" | "med" | "high";
+  confidence: "low" | "medium" | "high";
 };
 
 function clampArray<T>(arr: T[] | undefined | null, max: number): T[] {
@@ -24,7 +24,7 @@ function coerceCopilot(payload: unknown, fallback: CopilotResponse): CopilotResp
     .filter((a) => a.label && a.href);
 
   const confidence: CopilotResponse["confidence"] =
-    p?.confidence === "high" || p?.confidence === "med" || p?.confidence === "low"
+    p?.confidence === "high" || p?.confidence === "medium" || p?.confidence === "low"
       ? p.confidence as CopilotResponse["confidence"]
       : fallback.confidence;
 
@@ -87,7 +87,7 @@ function buildCopilotPrompt(userMessage: string): string {
     "Du bist ClawGuru Copilot, ein ultra-praktischer Ops/Security-Advisor.",
     "Antworte IMMER als JSON (ohne Markdown).",
     "Schema:",
-    '{"reply":"string","followups":["string"],"actions":[{"label":"string","href":"/path"}],"confidence":"low|med|high"}',
+    '{"reply":"string","followups":["string"],"actions":[{"label":"string","href":"/path"}],"confidence":"low|medium|high"}',
     "Regeln:",
     "- reply: kurz, konkret, schrittweise, mit Checkliste.",
     "- followups: 3-5 kurze Rückfragen/Next-steps.",

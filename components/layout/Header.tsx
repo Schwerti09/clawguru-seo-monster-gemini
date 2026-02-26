@@ -63,20 +63,20 @@ export default function Header() {
 
   return (
     <>
-      <div className="fixed top-10 left-0 right-0 z-40">
+      <header role="banner" className="fixed top-10 left-0 right-0 z-40">
         <Container>
           <div className="flex items-center justify-between border border-gray-800 bg-gray-950/70 backdrop-blur rounded-2xl px-4 py-3 shadow-glow">
             {/* Logo */}
-            <Link href="/" className="flex items-center gap-3 shrink-0">
-              <div className="w-9 h-9 rounded-2xl bg-gradient-to-br from-brand-cyan to-brand-violet shadow-glow2" />
+            <Link href="/" className="flex items-center gap-3 shrink-0" aria-label="ClawGuru – Startseite">
+              <div className="w-9 h-9 rounded-2xl bg-gradient-to-br from-brand-cyan to-brand-violet shadow-glow2" aria-hidden="true" />
               <div className="leading-tight">
                 <div className="font-black">ClawGuru</div>
                 <div className="text-xs text-gray-400 hidden sm:block">Institutional Ops Intelligence</div>
               </div>
             </Link>
 
-            {/* Desktop nav */}
-            <nav className="hidden lg:flex items-center gap-1">
+      {/* Desktop nav */}
+              <nav aria-label="Hauptnavigation" className="hidden lg:flex items-center gap-1">
               {PRIMARY_NAV.map((item) => (
                 <Link
                   key={item.href}
@@ -154,7 +154,7 @@ export default function Header() {
             </div>
           </div>
         </Container>
-      </div>
+      </header>
 
       {/* Mobile slide-in menu */}
       {mobileOpen && (
@@ -169,8 +169,11 @@ export default function Header() {
           mobileOpen ? "translate-x-0" : "translate-x-full"
         } border-l border-gray-800 bg-gray-950/95 backdrop-blur-xl shadow-2xl pt-24 pb-8 overflow-y-auto`}
         aria-hidden={!mobileOpen}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Mobile Menü"
       >
-        <nav className="px-4 space-y-1">
+        <nav aria-label="Mobilnavigation" className="px-4 space-y-1">
           {ALL_NAV.map((item) => (
             <Link
               key={item.href}

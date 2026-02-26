@@ -2,8 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-/* VISUAL UPGRADE 2026: Google Fonts – Space Grotesk for headings, Inter for body */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=Space+Grotesk:wght@500;600;700&display=swap');
+/* 100/100 OPTIMIZATION 2026: Fonts are loaded via next/font/google in layout.tsx
+   (self-hosted, non-render-blocking, font-display:swap) – no @import needed here */
 
 :root {
   color-scheme: dark;
@@ -14,7 +14,8 @@
   --glass-border: rgba(255, 255, 255, 0.10);
 }
 
-/* VISUAL UPGRADE 2026: Deep space black base with Inter body font */
+/* 100/100 OPTIMIZATION 2026: Fonts are loaded non-render-blocking via async <link> in layout.tsx;
+   fallback to system-ui ensures content is visible immediately (no FOIT) */
 body {
   @apply bg-[#0a0a0a] text-gray-100 antialiased;
   font-family: 'Inter', system-ui, sans-serif;
@@ -113,4 +114,39 @@ a { @apply hover:text-[#00ff9d] transition-colors; }
 @keyframes skeletonScan {
   0% { transform: translateX(-100%); }
   100% { transform: translateX(100%); }
+}
+
+/* 100/100 OPTIMIZATION 2026: Respect prefers-reduced-motion for Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* 100/100 OPTIMIZATION 2026: Skip-to-content link for keyboard users */
+.skip-to-content {
+  position: absolute;
+  left: -9999px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+.skip-to-content:focus {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 99999;
+  width: auto;
+  height: auto;
+  padding: 0.75rem 1.5rem;
+  background: #00ff9d;
+  color: #000;
+  font-weight: 700;
+  border-radius: 0.5rem;
+  outline: 3px solid #000;
+  outline-offset: 2px;
 }

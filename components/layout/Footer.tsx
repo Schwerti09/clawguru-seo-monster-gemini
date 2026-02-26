@@ -3,7 +3,7 @@ import { COMMUNITY } from "@/lib/constants"
 
 export default function Footer() {
   return (
-    <footer className="mt-20 border-t border-gray-800 py-10 pb-24 lg:pb-10">
+    <footer role="contentinfo" className="mt-20 border-t border-gray-800 py-10 pb-24 lg:pb-10">
       <Container>
         <div className="grid md:grid-cols-3 gap-6 text-sm text-gray-400">
           <div>
@@ -15,7 +15,7 @@ export default function Footer() {
               Hinweis: Tools liefern heuristische Orientierung, keine Garantie. Für harte Audits: professionelle Prüfung.
             </div>
           </div>
-          <div>
+          <nav aria-label="Seiten-Navigation">
             <div className="font-black text-gray-200 mb-2">Hubs</div>
             <ul className="space-y-1">
               <li><a href="/check">Security-Check</a></li>
@@ -28,8 +28,8 @@ export default function Footer() {
               <li><a href="/case-studies">Case Studies</a></li>
               <li><a href="/ueber-uns">Über uns</a></li>
             </ul>
-          </div>
-          <div>
+          </nav>
+          <nav aria-label="Rechtliche Links">
             <div className="font-black text-gray-200 mb-2">Rechtliches</div>
             <ul className="space-y-1">
               <li><a href="/impressum">Impressum</a></li>
@@ -37,14 +37,14 @@ export default function Footer() {
               <li><a href="/agb">AGB</a></li>
             </ul>
             <div className="mt-4">
-              <a className="inline-flex px-4 py-2 rounded-xl border border-gray-700 hover:border-gray-500 text-gray-200" href={COMMUNITY.discordInvite} target="_blank" rel="noreferrer">
+              <a className="inline-flex px-4 py-2 rounded-xl border border-gray-700 hover:border-gray-500 text-gray-200" href={COMMUNITY.discordInvite} target="_blank" rel="noreferrer noopener">
                 Discord Community →
               </a>
             </div>
             <div className="mt-4 text-xs text-gray-500">
               Affiliate-Hinweis: Einige Links können Provisionen enthalten. Transparenz bleibt Pflicht.
             </div>
-          </div>
+          </nav>
         </div>
       </Container>
     </footer>

@@ -114,6 +114,10 @@ export default function VoiceCopilot({ lang = "de", onTranscript, onReply }: Voi
     const SpeechAPI = getSpeechRecognition()
     if (!SpeechAPI) return
 
+    // Reset abort flag so a fresh session always processes onend correctly,
+    // even when React Strict Mode ran the cleanup (abortedRef.current = true)
+    // and then remounted the component without creating a new ref instance.
+    abortedRef.current = false
     setState("listening")
     setTranscript("")
     transcriptRef.current = ""
@@ -143,7 +147,13 @@ export default function VoiceCopilot({ lang = "de", onTranscript, onReply }: Voi
 
     recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
       if (event.error === "aborted") return
-      setError("Spracherkennung fehlgeschlagen. Bitte erneut versuchen.")
+      if (event.error === "not-allowed") {
+        setError("Mikrofonzugriff verweigert – bitte in den Browser-Einstellungen erlauben.")
+      } else if (event.error === "audio-capture") {
+        setError("Kein Mikrofon gefunden – bitte Mikrofon anschließen.")
+      } else {
+        setError("Spracherkennung fehlgeschlagen. Bitte erneut versuchen.")
+      }
       setState("idle")
     }
 
@@ -159,7 +169,14 @@ export default function VoiceCopilot({ lang = "de", onTranscript, onReply }: Voi
     }
 
     recognitionRef.current = recognition
-    recognition.start()
+    try {
+      recognition.start()
+    } catch (err) {
+      console.error("Failed to start speech recognition:", err)
+      setError("Mikrofon konnte nicht gestartet werden. Bitte erneut versuchen.")
+      setState("idle")
+      recognitionRef.current = null
+    }
   }, [lang, onTranscript, sendToGemini])
 
   const stopListening = useCallback(() => {

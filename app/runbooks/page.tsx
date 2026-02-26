@@ -4,6 +4,7 @@ import RunbooksSearch from "@/components/shared/RunbooksSearch"
 import { RUNBOOKS } from "@/lib/pseo"
 import type { SeverityLevel } from "@/lib/design-system"
 import type { RunbookSummary } from "@/components/shared/RunbooksSearch"
+import { BASE_URL } from "@/lib/config"
 
 export const dynamic = "force-static"
 
@@ -42,8 +43,24 @@ export default function RunbooksPage() {
       fixReadiness: deriveReadiness(r),
     }))
 
+  const top20 = [...RUNBOOKS].sort((a, b) => b.clawScore - a.clawScore).slice(0, 20)
+  const itemListLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "ClawGuru Runbook Library",
+    description: "Security- und Ops-Runbooks für DevOps-Teams: SSH-Hardening, Firewall, Incident Response und mehr.",
+    numberOfItems: RUNBOOKS.length,
+    itemListElement: top20.map((r, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      url: `${BASE_URL}/runbook/${r.slug}`,
+      name: r.title,
+    })),
+  }
+
   return (
     <Container>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }} />
       <div className="py-16 max-w-6xl mx-auto">
         <SectionTitle
           kicker="Programmatic SEO"

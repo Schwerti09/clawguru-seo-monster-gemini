@@ -2,6 +2,7 @@ import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
 import { allTags, runbooksByTag, topRunbooksByTag } from "@/lib/pseo"
 import { notFound } from "next/navigation"
+import { BASE_URL } from "@/lib/config"
 
 export const revalidate = 60 * 60 * 24
 export const dynamicParams = true
@@ -29,8 +30,34 @@ export default function TagPage({ params }: { params: { tag: string } }) {
 
   const top10 = topRunbooksByTag(tag, 10)
 
+  const breadcrumbLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "ClawGuru", item: BASE_URL },
+      { "@type": "ListItem", position: 2, name: "Tags", item: `${BASE_URL}/tags` },
+      { "@type": "ListItem", position: 3, name: tag, item: `${BASE_URL}/tag/${encodeURIComponent(tag)}` },
+    ],
+  }
+
+  const itemListLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: `${tag} Runbooks`,
+    description: `${items.length} Runbooks für den Tag „${tag}".`,
+    numberOfItems: Math.min(items.length, 10),
+    itemListElement: top10.map((r, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      url: `${BASE_URL}/runbook/${r.slug}`,
+      name: r.title,
+    })),
+  }
+
   return (
     <Container>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }} />
       <div className="py-16 max-w-6xl mx-auto">
         <nav className="text-sm text-gray-500 mb-6" aria-label="Breadcrumb">
           <ol className="flex flex-wrap items-center gap-2">

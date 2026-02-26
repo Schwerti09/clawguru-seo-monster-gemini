@@ -4,6 +4,7 @@ import SectionTitle from "@/components/shared/SectionTitle"
 import { RUNBOOKS, getRunbook, type RunbookBlock, type RunbookFaqEntry } from "@/lib/pseo"
 import { notFound } from "next/navigation"
 import { CopyLinkButton } from "./CopyLinkButton"
+import { BASE_URL } from "@/lib/config"
 
 // Pre-build slug→runbook Map for O(1) related lookups
 const RUNBOOK_MAP = new Map(RUNBOOKS.map((r) => [r.slug, r]))
@@ -39,13 +40,38 @@ function howToJsonLd(r: { title: string; summary: string; slug: string; steps: s
     "@type": "HowTo",
     name: r.title,
     description: r.summary,
-    url: `/runbook/${r.slug}`,
+    url: `${BASE_URL}/runbook/${r.slug}`,
     step: r.steps.map((s, i) => ({
       "@type": "HowToStep",
       position: i + 1,
       name: s,
       text: s,
     })),
+  }
+}
+
+function breadcrumbJsonLd(title: string, slug: string) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "ClawGuru", item: BASE_URL },
+      { "@type": "ListItem", position: 2, name: "Runbooks", item: `${BASE_URL}/runbooks` },
+      { "@type": "ListItem", position: 3, name: title, item: `${BASE_URL}/runbook/${slug}` },
+    ],
+  }
+}
+
+function techArticleJsonLd(r: { title: string; summary: string; slug: string; lastmod: string }) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    headline: r.title,
+    description: r.summary,
+    url: `${BASE_URL}/runbook/${r.slug}`,
+    dateModified: r.lastmod,
+    author: { "@type": "Organization", name: "ClawGuru", url: BASE_URL },
+    publisher: { "@type": "Organization", name: "ClawGuru", url: BASE_URL, logo: { "@type": "ImageObject", url: `${BASE_URL}/og-image.png` } },
   }
 }
 
@@ -181,6 +207,14 @@ export default function RunbookPage({ params }: { params: { slug: string } }) {
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(howToJsonLd({ title: r.title, summary: r.summary, slug: r.slug, steps: r.howto.steps })),
         }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd(r.title, r.slug)) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(techArticleJsonLd({ title: r.title, summary: r.summary, slug: r.slug, lastmod: r.lastmod })) }}
       />
       {r.faq?.length > 0 && (
         <script

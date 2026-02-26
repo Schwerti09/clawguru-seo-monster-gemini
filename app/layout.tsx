@@ -63,6 +63,22 @@ const organizationJsonLd = {
     "ClawGuru ist die #1 Ops-Intelligence-Plattform für OpenClaw/Moltbot Security & Betrieb.",
 }
 
+// WebSite schema with SearchAction for Sitelinks Searchbox & AI discovery
+const websiteJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "ClawGuru",
+  url: SITE_URL,
+  potentialAction: {
+    "@type": "SearchAction",
+    target: {
+      "@type": "EntryPoint",
+      urlTemplate: `${SITE_URL}/runbooks?q={search_term_string}`,
+    },
+    "query-input": "required name=search_term_string",
+  },
+}
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="de">
@@ -91,6 +107,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+        />
+        {/* WebSite schema with SearchAction for Sitelinks Searchbox */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
         />
       </head>
       {/* VISUAL UPGRADE 2026: scanline + noise overlays on body */}

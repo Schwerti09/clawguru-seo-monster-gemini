@@ -51,6 +51,8 @@ export default function VoiceCopilot({ lang = "de", onTranscript, onReply }: Voi
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null)
   // NEXT-LEVEL UPGRADE 2026: Use ref to avoid stale closure in onend callback
   const transcriptRef = useRef("")
+  // Track intentional abort (cleanup on unmount) to suppress spurious callbacks
+  const abortedRef = useRef(false)
 
   // NEXT-LEVEL UPGRADE 2026: Check for API support on mount
   useEffect(() => {
@@ -62,6 +64,7 @@ export default function VoiceCopilot({ lang = "de", onTranscript, onReply }: Voi
   // Cleanup: stop recognition & synthesis when component unmounts
   useEffect(() => {
     return () => {
+      abortedRef.current = true
       recognitionRef.current?.abort()
       if (typeof window !== "undefined" && "speechSynthesis" in window) {
         window.speechSynthesis.cancel()
@@ -138,12 +141,14 @@ export default function VoiceCopilot({ lang = "de", onTranscript, onReply }: Voi
       transcriptRef.current = text
     }
 
-    recognition.onerror = () => {
+    recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
+      if (event.error === "aborted") return
       setError("Spracherkennung fehlgeschlagen. Bitte erneut versuchen.")
       setState("idle")
     }
 
     recognition.onend = () => {
+      if (abortedRef.current) return
       const text = transcriptRef.current
       if (text) {
         onTranscript?.(text)

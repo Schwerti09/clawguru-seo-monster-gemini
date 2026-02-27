@@ -68,6 +68,22 @@ export function middleware(request: NextRequest) {
     return response
   }
 
+  // 301 redirect: legacy non-language-prefixed content paths → /de/...
+  // e.g. /runbook/contabo-xyz → /de/runbook/contabo-xyz
+  const LOCALIZED_PATHS = [
+    "/runbook/",
+    "/runbooks/",
+    "/provider/",
+    "/tag/",
+    "/tags/",
+  ]
+  const isLocalizedContent = LOCALIZED_PATHS.some((p) => pathname.startsWith(p))
+  if (isLocalizedContent) {
+    const url = request.nextUrl.clone()
+    url.pathname = `/de${pathname}`
+    return NextResponse.redirect(url, { status: 301 })
+  }
+
   // Only redirect on the root path to avoid disrupting existing non-localized routes
   if (pathname !== "/") {
     return NextResponse.next()

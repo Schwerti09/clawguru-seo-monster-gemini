@@ -53,6 +53,15 @@ export async function GET(
 
   try {
     if (name === "main") {
+      const HUB_SLUGS = ["cloud", "docker", "kubernetes", "security"]
+      const hubUrls = SUPPORTED_LOCALES.flatMap((locale) =>
+        HUB_SLUGS.map((hub) => ({
+          loc: `${base}/${locale}/runbooks/${hub}`,
+          lastmod,
+          changefreq: "weekly",
+          priority: "0.85",
+        }))
+      )
       const urls = [
         { loc: `${base}/`, lastmod, changefreq: "daily", priority: "1.0" },
         { loc: `${base}/live`, lastmod, changefreq: "daily", priority: "0.95" },
@@ -63,7 +72,8 @@ export async function GET(
         { loc: `${base}/intel`, lastmod, changefreq: "daily", priority: "0.8" },
         { loc: `${base}/academy`, lastmod, changefreq: "weekly", priority: "0.8" },
         { loc: `${base}/pricing`, lastmod, changefreq: "weekly", priority: "0.7" },
-        { loc: `${base}/downloads`, lastmod, changefreq: "weekly", priority: "0.7" }
+        { loc: `${base}/downloads`, lastmod, changefreq: "weekly", priority: "0.7" },
+        ...hubUrls,
       ]
       return new NextResponse(urlset(urls), {
         status: 200,

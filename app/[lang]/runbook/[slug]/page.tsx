@@ -67,9 +67,67 @@ export default async function LocalizedRunbookPage({
     targetLocale: locale,
   })
 
+  // JSON-LD: HowTo + FAQPage + Speakable schema
+  const howToSchema = {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: translated.title,
+    description: translated.summary,
+    dateModified: r.lastmod,
+    author: {
+      "@type": "Person",
+      name: r.author.name,
+      jobTitle: r.author.role,
+    },
+    step: r.howto.steps.map((step, i) => ({
+      "@type": "HowToStep",
+      position: i + 1,
+      text: step,
+    })),
+  }
+
+  const faqSchema = r.faq.length > 0 ? {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: r.faq.map((entry) => ({
+      "@type": "Question",
+      name: entry.q,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: entry.a,
+      },
+    })),
+  } : null
+
+  const speakableSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    speakable: {
+      "@type": "SpeakableSpecification",
+      cssSelector: ["#direct-answer", "h1"],
+    },
+    url: `/${locale}/runbook/${r.slug}`,
+  }
+
   return (
     // NEXT-LEVEL UPGRADE 2026: RTL support for Arabic (dir attribute)
     <Container>
+      {/* JSON-LD Structured Data: HowTo + FAQPage + Speakable */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }}
+      />
+      {faqSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        />
+      )}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(speakableSchema) }}
+      />
+
       <div className="py-16 max-w-4xl mx-auto" dir={localeDir(locale)}>
         {/* Locale switcher */}
         <div className="flex gap-2 mb-6 flex-wrap">
@@ -92,7 +150,16 @@ export default async function LocalizedRunbookPage({
           {t(locale, "runbookFor")} · {r.tags.slice(0, 3).join(" · ")}
         </div>
         <h1 className="text-3xl md:text-4xl font-black mb-3">{translated.title}</h1>
-        <p className="text-gray-300 text-lg mb-8">{translated.summary}</p>
+
+        {/* AEO: Direct answer in first 100 words */}
+        <p id="direct-answer" className="text-gray-300 text-lg mb-4 font-medium border-l-4 border-brand-cyan pl-4">
+          {translated.summary}
+        </p>
+
+        {/* E-E-A-T: Last updated signal */}
+        <div className="mb-8 text-xs text-gray-500">
+          Zuletzt aktualisiert: <time dateTime={r.lastmod}>{r.lastmod}</time> · ClawScore: {r.clawScore}/100
+        </div>
 
         {/* Steps */}
         {r.howto.steps.length > 0 && (
@@ -106,12 +173,27 @@ export default async function LocalizedRunbookPage({
           </div>
         )}
 
-        {/* Related */}
+        {/* FAQ */}
+        {r.faq.length > 0 && (
+          <div className="mb-8 p-6 rounded-2xl border border-gray-800 bg-black/20">
+            <h2 className="text-xl font-black mb-4">Häufige Fragen</h2>
+            <div className="space-y-4">
+              {r.faq.map((entry, i) => (
+                <div key={i}>
+                  <h3 className="font-bold text-brand-cyan mb-1">{entry.q}</h3>
+                  <p className="text-gray-300 text-sm">{entry.a}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Related – up to 12 contextual links */}
         {r.relatedSlugs.length > 0 && (
           <div className="mt-8">
             <h2 className="text-lg font-black mb-3">{t(locale, "related")}</h2>
             <div className="grid sm:grid-cols-2 gap-3">
-              {r.relatedSlugs.slice(0, 4).map((slug) => (
+              {r.relatedSlugs.slice(0, 12).map((slug) => (
                 <Link
                   key={slug}
                   href={`/${locale}/runbook/${slug}`}
@@ -124,6 +206,24 @@ export default async function LocalizedRunbookPage({
           </div>
         )}
 
+        {/* Author box – E-E-A-T signals */}
+        <div className="mt-10 p-6 rounded-2xl border border-gray-700 bg-gray-900/50">
+          <div className="flex items-start gap-4">
+            <div className="flex-shrink-0 w-12 h-12 rounded-full bg-brand-cyan/20 border border-brand-cyan/40 flex items-center justify-center text-xl font-black text-brand-cyan">
+              RS
+            </div>
+            <div>
+              <div className="font-black text-white">{r.author.name}</div>
+              <div className="text-xs text-brand-cyan mb-2">{r.author.role}</div>
+              <p className="text-sm text-gray-300 mb-3">{r.author.experience}</p>
+              <div className="text-xs text-gray-500">
+                <span className="font-bold text-gray-400">Quellen & Standards: </span>
+                {r.author.sources.join(" · ")}
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Share CTA */}
         <div className="mt-10 p-5 rounded-2xl border border-brand-cyan/20 bg-brand-cyan/5 flex flex-wrap gap-3 items-center">
           <span className="font-bold text-brand-cyan">🔗 {t(locale, "share")}</span>
@@ -134,7 +234,7 @@ export default async function LocalizedRunbookPage({
             One-Click Share →
           </Link>
           <Link
-            href={`/runbook/${r.slug}`}
+            href={`/de/runbook/${r.slug}`}
             className="px-4 py-2 rounded-xl border border-gray-700 hover:border-gray-500 text-sm text-gray-400"
           >
             🌍 Original (DE)

@@ -7,6 +7,7 @@ import { getTemporalHistory } from "@/lib/temporal-mycelium"
 import TemporalTimeline from "@/components/visual/TemporalTimeline"
 import { notFound } from "next/navigation"
 import { CopyLinkButton } from "./CopyLinkButton"
+import { ActivateSwarmButton } from "@/components/shared/ActivateSwarmButton"
 import { BASE_URL } from "@/lib/config"
 
 // Pre-build slug→runbook Map for O(1) related lookups on static RUNBOOKS
@@ -337,6 +338,8 @@ export default function RunbookPage({ params }: { params: { slug: string } }) {
             >
               Copilot Runbook Builder →
             </a>
+            {/* SWARM DEPLOYMENT v3.2 – Overlord AI: One-click swarm activation for Pro users */}
+            <ActivateSwarmButton slug={r.slug} />
           </div>
 
           <div className="mt-6 flex flex-wrap gap-2">

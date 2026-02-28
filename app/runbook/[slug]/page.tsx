@@ -3,6 +3,8 @@ import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
 import { RUNBOOKS, getRunbook, type Runbook, type RunbookBlock, type RunbookFaqEntry } from "@/lib/pseo"
 import { validateRunbook, type ClawCertifiedTier } from "@/lib/quality-gate"
+import { getTemporalHistory } from "@/lib/temporal-mycelium"
+import TemporalTimeline from "@/components/visual/TemporalTimeline"
 import { notFound } from "next/navigation"
 import { CopyLinkButton } from "./CopyLinkButton"
 import { BASE_URL } from "@/lib/config"
@@ -238,6 +240,9 @@ export default function RunbookPage({ params }: { params: { slug: string } }) {
   const quality = validateRunbook(r)
   if (!quality.pass) return notFound()
 
+  // TEMPORAL MYCELIUM v3.1 – Overlord AI: compute deterministic evolution history
+  const temporalHistory = getTemporalHistory(r)
+
   // Use precomputed relatedSlugs with O(1) Map lookup + 100k on-demand fallback
   const relatedList = r.relatedSlugs.length > 0
     ? r.relatedSlugs.map((s) => RUNBOOK_MAP.get(s) ?? getRunbook(s)).filter(Boolean) as Runbook[]
@@ -348,6 +353,9 @@ export default function RunbookPage({ params }: { params: { slug: string } }) {
         </div>
 
         <FaqSection faq={r.faq} />
+
+        {/* TEMPORAL MYCELIUM v3.1 – Overlord AI: Temporal Evolution Timeline */}
+        <TemporalTimeline history={temporalHistory} slug={r.slug} />
 
         {relatedList.length > 0 ? (
           <div className="mt-10">

@@ -94,6 +94,15 @@ export function inferEdgeKind(source: Runbook, target: Runbook): EdgeKind {
   return "depends-on"
 }
 
+// MYCELIAL SINGULARITY v3.0 – Autopoietic repair threshold:
+// nodes below this fitness are "fed" by stronger neighbours
+const WEAK_NODE_FITNESS_THRESHOLD = 75
+
+// MYCELIAL SINGULARITY v3.0 – Primes for deterministic pseudo-random index selection
+// (avoids clustering when cycling through the node array)
+const EVENT_TYPE_SEED_PRIME = 7919
+const NODE_INDEX_SEED_PRIME = 6271
+
 // ─── Graph Builder ─────────────────────────────────────────────────────────────
 
 // MYCELIAL SINGULARITY v3.0 – Build the living mycelium graph from runbook library
@@ -109,7 +118,8 @@ export function buildMyceliumGraph(runbooks: Runbook[], maxNodes = 250): Myceliu
 
   // MYCELIAL SINGULARITY v3.0 – Initialize node positions on a golden-angle spiral
   // (produces visually balanced starting layout before force simulation takes over)
-  const goldenAngle = 2.399963
+  // Golden angle in radians: 2π / φ² ≈ 137.508°, prevents radial clustering
+  const goldenAngle = Math.PI * (3 - Math.sqrt(5))
   const nodes: MycelNode[] = scored.map((r, i) => {
     const angle = i * goldenAngle
     const radius = 30 * Math.sqrt(i + 1)
@@ -162,7 +172,7 @@ export function buildMyceliumGraph(runbooks: Runbook[], maxNodes = 250): Myceliu
     // MYCELIAL SINGULARITY v3.0 – High-fitness to low-fitness → "prevents" edge
     // (strong runbooks feed/stabilise weak neighbours → autopoietic self-maintenance)
     if (r.fitness >= 85) {
-      const weak = scored.find((s) => s.slug !== r.slug && s.fitness < 75 && !edgeSet.has(`${r.slug}||${s.slug}`))
+      const weak = scored.find((s) => s.slug !== r.slug && s.fitness < WEAK_NODE_FITNESS_THRESHOLD && !edgeSet.has(`${r.slug}||${s.slug}`))
       if (weak) addEdge(r.slug, weak.slug, "prevents", 0.25)
     }
   }
@@ -257,8 +267,8 @@ export function generateEvolutionEvents(graph: MyceliumGraph, count = 12): Evolu
   const events: EvolutionEvent[] = []
 
   for (let i = 0; i < count; i++) {
-    const type = types[Math.floor(((i * 7919) % types.length + types.length) % types.length)]
-    const nodeIdx = (i * 6271) % graph.nodes.length
+    const type = types[Math.floor(((i * EVENT_TYPE_SEED_PRIME) % types.length + types.length) % types.length)]
+    const nodeIdx = (i * NODE_INDEX_SEED_PRIME) % graph.nodes.length
     const node = graph.nodes[nodeIdx]
     const node2 = graph.nodes[(nodeIdx + 37) % graph.nodes.length]
     const message = EVENT_TEMPLATES[type](node.title, node2.title, node.fitness)

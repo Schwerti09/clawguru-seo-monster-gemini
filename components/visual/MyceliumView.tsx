@@ -18,6 +18,17 @@ import {
   geneticCrossover,
 } from "@/lib/mycelium"
 
+// MYCELIAL SINGULARITY v3.0 – Force simulation tuning constants
+const COULOMB_REPULSION_STRENGTH = 6400  // charge repulsion (higher = more spread)
+const REPULSION_EPSILON = 4              // prevents force singularity when nodes overlap
+const MIN_EDGE_LENGTH = 60               // shortest edge at weight=1
+const EDGE_LENGTH_RANGE = 80            // added to min for weight=0 edges → max 140
+const GRID_BASE_SIZE = 44               // background grid cell size in pixels
+
+// MYCELIAL SINGULARITY v3.0 – Genetic algorithm timing
+const CROSSOVER_FREQUENCY = 4           // inject crossover every N evolution ticks
+const MIN_NODES_FOR_CROSSOVER = 10      // minimum graph size before crossover starts
+
 // MYCELIAL SINGULARITY v3.0 – Edge glow colors mapped to semantic relationship kind
 const EDGE_COLORS: Record<string, string> = {
   "prevents":    "rgba(0, 255, 157, 0.45)",
@@ -119,7 +130,7 @@ export default function MyceliumView({ graph, summaries, totalRunbooks }: Props)
 
       // MYCELIAL SINGULARITY v3.0 – Periodically perform genetic crossover
       // and inject evolved child node into simulation
-      if (seed % 4 === 0 && simRef.current.nodes.length > 10) {
+      if (seed % CROSSOVER_FREQUENCY === 0 && simRef.current.nodes.length > MIN_NODES_FOR_CROSSOVER) {
         const s = simRef.current
         const i1 = seed % s.nodes.length
         const i2 = (seed * 37) % s.nodes.length
@@ -173,9 +184,9 @@ export default function MyceliumView({ graph, summaries, totalRunbooks }: Props)
         for (let j = i + 1; j < nodes.length; j++) {
           const dx = nodes[j].x - nodes[i].x
           const dy = nodes[j].y - nodes[i].y
-          const d2 = dx * dx + dy * dy + 4
+          const d2 = dx * dx + dy * dy + REPULSION_EPSILON
           const d = Math.sqrt(d2)
-          const repulse = (6400 / d2) * alpha
+          const repulse = (COULOMB_REPULSION_STRENGTH / d2) * alpha
           const fx = (dx / d) * repulse
           const fy = (dy / d) * repulse
           nodes[i].vx -= fx
@@ -196,7 +207,7 @@ export default function MyceliumView({ graph, summaries, totalRunbooks }: Props)
         const dx = tgt.x - src.x
         const dy = tgt.y - src.y
         const d = Math.sqrt(dx * dx + dy * dy) + 0.01
-        const ideal = 60 + (1 - edge.weight) * 80
+        const ideal = MIN_EDGE_LENGTH + (1 - edge.weight) * EDGE_LENGTH_RANGE
         const spring = ((d - ideal) / d) * 0.25 * alpha
         src.vx += dx * spring
         src.vy += dy * spring
@@ -244,7 +255,7 @@ export default function MyceliumView({ graph, summaries, totalRunbooks }: Props)
 
       // MYCELIAL SINGULARITY v3.0 – Subtle animated grid
       ctx.save()
-      const gridSize = 44 * z
+      const gridSize = GRID_BASE_SIZE * z
       const offsetX = ((cx % gridSize) + gridSize) % gridSize
       const offsetY = ((cy % gridSize) + gridSize) % gridSize
       ctx.strokeStyle = "rgba(0,255,157,0.03)"

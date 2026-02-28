@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { bucketsAF, bucketsTagsAF } from "@/lib/pseo"
+import { bucketsAF, bucketsTagsAF, count100kSitemapPages } from "@/lib/pseo"
 import { BASE_URL } from "@/lib/config"
 import { SUPPORTED_LOCALES } from "@/lib/i18n"
 
@@ -34,6 +34,9 @@ export async function GET() {
       `${base}/sitemaps/tags-s-z.xml`,
       `${base}/sitemaps/tags-0-9.xml`,
 
+      // 100K CONTENT EMPIRE: paginated sitemaps (50k URLs each)
+      ...Array.from({ length: count100kSitemapPages() }, (_, i) => `${base}/sitemaps/runbook100k-${i}.xml`),
+
       // NEXT-LEVEL UPGRADE 2026: Language-specific sitemaps for all 10 locales
       ...SUPPORTED_LOCALES.map((locale) => `${base}/sitemaps/i18n-${locale}.xml`),
     ]
@@ -51,7 +54,7 @@ export async function GET() {
       if (u.includes("tags-s-z")) return tg["s-z"].length > 0
       if (u.includes("tags-0-9")) return tg["0-9"].length > 0
 
-      // NEXT-LEVEL UPGRADE 2026: Always include i18n sitemaps
+      // 100K CONTENT EMPIRE and i18n sitemaps: always include
       return true
     })
 

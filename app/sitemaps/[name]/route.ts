@@ -1,6 +1,6 @@
 import type { NextRequest } from "next/server"
 import { NextResponse } from "next/server"
-import { bucketsAF, bucketsTagsAF, allProviders } from "@/lib/pseo"
+import { bucketsAF, bucketsTagsAF, allProviders, get100kSlugsPage } from "@/lib/pseo"
 import { BASE_URL } from "@/lib/config"
 import { SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
 
@@ -140,6 +140,20 @@ export async function GET(
         status: 200,
         headers: SITEMAP_HEADERS
       })
+    }
+
+    // 100K CONTENT EMPIRE: paginated runbook sitemaps (runbook100k-0, runbook100k-1, …)
+    const pageMatch100k = name.match(/^runbook100k-(\d+)$/)
+    if (pageMatch100k) {
+      const page = parseInt(pageMatch100k[1], 10)
+      const slugs = get100kSlugsPage(page)
+      const urls = slugs.map((slug) => ({
+        loc: `${base}/runbook/${slug}`,
+        lastmod: "2026-02-25",
+        changefreq: "monthly",
+        priority: "0.8",
+      }))
+      return new NextResponse(urlset(urls), { status: 200, headers: SITEMAP_HEADERS })
     }
 
     // NEXT-LEVEL UPGRADE 2026: Language-specific sitemaps for i18n runbook pages

@@ -2,7 +2,7 @@
 import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
 import { RUNBOOKS, getRunbook, type Runbook, type RunbookBlock, type RunbookFaqEntry } from "@/lib/pseo"
-import { validateRunbook } from "@/lib/quality-gate"
+import { validateRunbook, type ClawCertifiedTier } from "@/lib/quality-gate"
 import { notFound } from "next/navigation"
 import { CopyLinkButton } from "./CopyLinkButton"
 import { BASE_URL } from "@/lib/config"
@@ -116,6 +116,26 @@ function ClawScoreBadge({ score }: { score: number }) {
       <span>⚡ Claw Score</span>
       <span className="text-base">{score}</span>
       <span className="opacity-60">/100</span>
+    </div>
+  )
+}
+
+/** GENESIS QUALITY GATE 2.0 – Claw Certified badge with Gold/Silver tier colors */
+function ClawCertifiedBadge({ score, tier }: { score: number; tier: ClawCertifiedTier }) {
+  if (tier === "hidden") return null
+  const isGold = tier === "gold"
+  const colorStyle = isGold
+    ? { color: "#FFD700", borderColor: "rgba(255,215,0,0.4)", backgroundColor: "rgba(255,215,0,0.08)" }
+    : { color: "#C0C0C0", borderColor: "rgba(192,192,192,0.4)", backgroundColor: "rgba(192,192,192,0.08)" }
+  const label = isGold ? "🏅 Claw Certified Gold" : "🥈 Claw Certified Silver"
+  return (
+    <div
+      className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl border text-xs font-black"
+      style={colorStyle}
+    >
+      <span>{label}</span>
+      <span className="text-base">{score}</span>
+      <span style={{ opacity: 0.6 }}>/100</span>
     </div>
   )
 }
@@ -269,7 +289,7 @@ export default function RunbookPage({ params }: { params: { slug: string } }) {
           <span className="text-xs text-gray-600">Stand: {r.lastmod}</span>
           <span className="text-xs text-gray-600">·</span>
           <span className="text-xs text-gray-500">Author: ClawGuru Institutional Ops</span>
-          <span className="text-xs text-emerald-500/80 font-mono">QG:{quality.score}/100</span>
+          <ClawCertifiedBadge score={quality.score} tier={quality.clawCertifiedTier} />
         </div>
 
         <p className="text-xs font-mono text-cyan-500/80 mb-1 tracking-wide">

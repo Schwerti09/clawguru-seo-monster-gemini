@@ -5,6 +5,8 @@ import Container from "@/components/shared/Container"
 import { getRunbook, RUNBOOKS } from "@/lib/pseo"
 import { notFound } from "next/navigation"
 import { type Locale, SUPPORTED_LOCALES, translateRunbook, t, localeDir, LOCALE_HREFLANG } from "@/lib/i18n"
+import { getTemporalHistory } from "@/lib/temporal-mycelium"
+import TemporalTimeline from "@/components/visual/TemporalTimeline"
 import Link from "next/link"
 
 export const revalidate = 60 * 60 * 24 // 24h
@@ -66,6 +68,9 @@ export default async function LocalizedRunbookPage({
     summary: r.summary,
     targetLocale: locale,
   })
+
+  // TEMPORAL MYCELIUM v3.1 – Overlord AI: deterministic evolution history
+  const temporalHistory = getTemporalHistory(r!)
 
   // JSON-LD: HowTo + FAQPage + Speakable schema
   const howToSchema = {
@@ -228,18 +233,21 @@ export default async function LocalizedRunbookPage({
         <div className="mt-10 p-5 rounded-2xl border border-brand-cyan/20 bg-brand-cyan/5 flex flex-wrap gap-3 items-center">
           <span className="font-bold text-brand-cyan">🔗 {t(locale, "share")}</span>
           <Link
-            href={`/share/${r.slug}`}
+            href={`/share/${r!.slug}`}
             className="px-4 py-2 rounded-xl bg-brand-cyan/15 border border-brand-cyan/30 hover:bg-brand-cyan/25 text-sm font-bold"
           >
             One-Click Share →
           </Link>
           <Link
-            href={`/de/runbook/${r.slug}`}
+            href={`/de/runbook/${r!.slug}`}
             className="px-4 py-2 rounded-xl border border-gray-700 hover:border-gray-500 text-sm text-gray-400"
           >
             🌍 Original (DE)
           </Link>
         </div>
+
+        {/* TEMPORAL MYCELIUM v3.1 – Overlord AI: Temporal Evolution Timeline */}
+        <TemporalTimeline history={temporalHistory} slug={r.slug} lang={locale} />
       </div>
     </Container>
   )

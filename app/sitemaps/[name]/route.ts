@@ -11,7 +11,6 @@ export const runtime = "nodejs"
 const SITEMAP_HEADERS = {
   "Content-Type": "application/xml; charset=utf-8",
   "Cache-Control": "public, max-age=3600, s-maxage=3600",
-  "X-Robots-Tag": "noindex",
 } as const
 
 function isoDate(d = new Date()) {
@@ -45,7 +44,7 @@ export async function GET(
 ) {
   const base = BASE_URL
   const lastmod = isoDate()
-  const name = context?.params?.name
+  const name = (context?.params?.name ?? "").replace(/\.xml$/, "")
 
   if (!name) {
     return new NextResponse("Not Found", { status: 404 })
@@ -191,7 +190,6 @@ export async function GET(
       headers: {
         "Content-Type": "application/xml; charset=utf-8",
         "Cache-Control": "public, max-age=300, s-maxage=300",
-        "X-Robots-Tag": "noindex",
       }
     })
   }

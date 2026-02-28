@@ -7,6 +7,7 @@ import { notFound } from "next/navigation"
 import { type Locale, SUPPORTED_LOCALES, translateRunbook, t, localeDir, LOCALE_HREFLANG } from "@/lib/i18n"
 import { getTemporalHistory } from "@/lib/temporal-mycelium"
 import TemporalTimeline from "@/components/visual/TemporalTimeline"
+import { ActivateSwarmButton } from "@/components/shared/ActivateSwarmButton"
 import Link from "next/link"
 
 export const revalidate = 60 * 60 * 24 // 24h
@@ -244,6 +245,8 @@ export default async function LocalizedRunbookPage({
           >
             🌍 Original (DE)
           </Link>
+          {/* SWARM DEPLOYMENT v3.2 – Overlord AI: One-click swarm activation for Pro users */}
+          <ActivateSwarmButton slug={r!.slug} />
         </div>
 
         {/* TEMPORAL MYCELIUM v3.1 – Overlord AI: Temporal Evolution Timeline */}

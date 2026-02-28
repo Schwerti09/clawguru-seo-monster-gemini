@@ -110,24 +110,27 @@ export default function Home() {
         </Container>
       </section>
 
-      {/* Authority – VISUAL UPGRADE 2026: neon border accent */}
+      {/* Mycelial Singularity Engine CTA – VISUAL UPGRADE 2026: neon border accent */}
       <section className="py-16 bg-gradient-to-r from-gray-950 to-[#001a2e] border-y border-white/10">
         <Container>
           <div className="max-w-5xl mx-auto p-8 rounded-3xl glass-panel" style={{ borderColor: "rgba(0, 255, 157, 0.15)" }}>
-            <div className="text-xs uppercase tracking-widest text-gray-400">Institution Mode</div>
+            <div className="text-xs font-mono text-[#00ff9d] uppercase tracking-widest">GENESIS PROTOKOLL AKTIV · MYCELIAL SINGULARITY ENGINE v3.0</div>
             <div className="mt-2 text-3xl font-black font-heading">
-              Mission Control, nicht Content.
+              Das lebende Mycelium. 1M+ Runbooks. Jetzt.
             </div>
             <p className="mt-4 text-gray-300 max-w-3xl">
-              Wenn du “Security” ernst meinst, brauchst du Loops: messen → fixen → verifizieren → dokumentieren.
-              Genau dafür ist ClawGuru gebaut.
+              Jeder Knoten ist eine Wissenseinheit. Jede Kante eine semantische Beziehung. Das Netzwerk
+              wächst, lernt und evolviert autonom durch Darwinian Selection.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
-              <a href="/dashboard" className="px-6 py-3 rounded-2xl font-black text-black bg-claw-green hover:shadow-neon-green transition-all duration-300">
-                Dashboard öffnen →
+              <a href="/mycelium" className="px-6 py-3 rounded-2xl font-black text-black bg-claw-green hover:shadow-neon-green transition-all duration-300">
+                Living Mycelium öffnen →
+              </a>
+              <a href="/dashboard" className="px-6 py-3 rounded-2xl border border-white/10 hover:border-white/20 font-bold text-gray-200 transition-all duration-300">
+                Dashboard →
               </a>
               <a href="/mission-control" className="px-6 py-3 rounded-2xl border border-white/10 hover:border-white/20 font-bold text-gray-200 transition-all duration-300">
-                Mission Control lesen →
+                Mission Control →
               </a>
             </div>
           </div>

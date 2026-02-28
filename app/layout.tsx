@@ -18,9 +18,9 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: "ClawGuru | Institutional OpenClaw Security & Ops 2026",
+  title: "ClawGuru | Mycelial Singularity Engine v3.0",
   description:
-    "ClawGuru: Copilot, Intel Feed, Academy, Vault und ein lebender Lagebericht für OpenClaw/Moltbot Security & Betrieb.",
+    "ClawGuru Mycelial Singularity Engine v3.0: Das lebende Wissensgraph von 1M+ Runbooks. Copilot, Intel Feed, Academy, Vault – evolutionäre Ops-Intelligence für OpenClaw/Moltbot Security & Betrieb.",
   alternates: {
     canonical: "/",
     // 100/100 OPTIMIZATION 2026: hreflang for all 10 supported locales
@@ -35,8 +35,8 @@ export const metadata: Metadata = {
     type: "website",
     locale: "de_DE",
     url: SITE_URL,
-    title: "ClawGuru | Institutional Ops Intelligence",
-    description: "Konversation → Runbooks. Tools, Intel, Academy, Vault.",
+    title: "ClawGuru | Mycelial Singularity Engine v3.0",
+    description: "Das lebende Mycelium von 1M+ Runbooks. Force-directed Graph, Darwinian Evolution, Oracle Mode.",
     images: ["/og-image.png"]
   },
   twitter: { card: "summary_large_image", creator: "@clawguru" },

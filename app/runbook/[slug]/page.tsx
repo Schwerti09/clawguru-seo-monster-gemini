@@ -360,6 +360,21 @@ export default function RunbookPage({ params }: { params: { slug: string } }) {
         {/* TEMPORAL MYCELIUM v3.1 – Overlord AI: Temporal Evolution Timeline */}
         <TemporalTimeline history={temporalHistory} slug={r.slug} />
 
+        {/* PROVENANCE SINGULARITY v3.4 – Overlord AI: Provenance chain link */}
+        <div className="mt-6 px-4 py-3 rounded-2xl border border-cyan-500/20 bg-cyan-500/5 flex items-center gap-3">
+          <span className="text-cyan-400 text-lg shrink-0">🔗</span>
+          <p className="text-xs text-cyan-300/80">
+            <span className="font-black text-cyan-300">Provenance Singularity.</span>{" "}
+            This runbook is cryptographically signed and immutably recorded.
+          </p>
+          <a
+            href={`/provenance/${r.slug}`}
+            className="ml-auto shrink-0 text-xs text-cyan-400 hover:text-cyan-200 underline underline-offset-2 transition-colors"
+          >
+            View Provenance Chain →
+          </a>
+        </div>
+
         {relatedList.length > 0 ? (
           <div className="mt-10">
             <h2 className="text-xl font-black mb-4">Verwandte Runbooks</h2>

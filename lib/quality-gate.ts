@@ -57,7 +57,7 @@ export const DEFAULT_THRESHOLDS: QualityThresholds = {
   minTagCount: 2,
   minTitleLength: 8,
   maxTitleLength: 110,
-  minPassScore: 85,
+  minPassScore: 92, // 1M LIVE LAUNCH v2.0 – Overlord AI: raised to 92 for launch quality standard
   minContentWords: 200,
   minStepQuality: 8,
   minAuthorSources: 2,

@@ -11,7 +11,6 @@ export const runtime = "nodejs"
 const SITEMAP_HEADERS = {
   "Content-Type": "application/xml; charset=utf-8",
   "Cache-Control": "public, max-age=3600, s-maxage=3600",
-  "X-Robots-Tag": "noindex",
 } as const
 
 function isoDate(d = new Date()) {
@@ -148,14 +147,14 @@ export async function GET(
       if (!SUPPORTED_LOCALES.includes(locale)) {
         return new NextResponse("Not Found", { status: 404 })
       }
-      // Top 200 runbooks in localized URLs for crawlability
+      // All runbooks in localized URLs for crawlability
       const allRunbooks = [
         ...rb["a-f"],
         ...rb["g-l"],
         ...rb["m-r"],
         ...rb["s-z"],
         ...rb["0-9"],
-      ].slice(0, 200)
+      ]
       const i18nUrls = allRunbooks.map((r) => ({
         loc: `${base}/${locale}/runbook/${r.slug}`,
         lastmod: r.lastmod || lastmod,
@@ -177,7 +176,6 @@ export async function GET(
       headers: {
         "Content-Type": "application/xml; charset=utf-8",
         "Cache-Control": "public, max-age=300, s-maxage=300",
-        "X-Robots-Tag": "noindex",
       }
     })
   }

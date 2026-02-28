@@ -1020,7 +1020,7 @@ function _buildRunbooksWithRelated(limit: number): Runbook[] {
   return list
 }
 
-export const RUNBOOKS: Runbook[] = _buildRunbooksWithRelated(Number(process.env.PSEO_RUNBOOK_COUNT || 500))
+export const RUNBOOKS: Runbook[] = _buildRunbooksWithRelated(Number(process.env.PSEO_RUNBOOK_COUNT || 10000))
 
 export function allProviders() {
   return [...PROVIDERS]

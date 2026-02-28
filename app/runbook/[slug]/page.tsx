@@ -2,6 +2,7 @@
 import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
 import { RUNBOOKS, getRunbook, type Runbook, type RunbookBlock, type RunbookFaqEntry } from "@/lib/pseo"
+import { validateRunbook } from "@/lib/quality-gate"
 import { notFound } from "next/navigation"
 import { CopyLinkButton } from "./CopyLinkButton"
 import { BASE_URL } from "@/lib/config"
@@ -9,7 +10,7 @@ import { BASE_URL } from "@/lib/config"
 // Pre-build slug→runbook Map for O(1) related lookups on static RUNBOOKS
 const RUNBOOK_MAP = new Map(RUNBOOKS.map((r) => [r.slug, r]))
 
-export const revalidate = 60 * 60 * 24 // 24h
+export const revalidate = 60 * 60 * 24 // 24h ISR; use revalidateSeconds() from quality-gate for finer-grained tooling
 export const dynamicParams = true
 
 export async function generateStaticParams() {
@@ -213,6 +214,10 @@ export default function RunbookPage({ params }: { params: { slug: string } }) {
   const r = getRunbook(params.slug)
   if (!r) return notFound()
 
+  // Quality Gate: reject thin content before serving (ClawGuru 2026 Standard)
+  const quality = validateRunbook(r)
+  if (!quality.pass) return notFound()
+
   // Use precomputed relatedSlugs with O(1) Map lookup + 100k on-demand fallback
   const relatedList = r.relatedSlugs.length > 0
     ? r.relatedSlugs.map((s) => RUNBOOK_MAP.get(s) ?? getRunbook(s)).filter(Boolean) as Runbook[]
@@ -264,6 +269,7 @@ export default function RunbookPage({ params }: { params: { slug: string } }) {
           <span className="text-xs text-gray-600">Stand: {r.lastmod}</span>
           <span className="text-xs text-gray-600">·</span>
           <span className="text-xs text-gray-500">Author: ClawGuru Institutional Ops</span>
+          <span className="text-xs text-emerald-500/80 font-mono">QG:{quality.score}/100</span>
         </div>
 
         <p className="text-xs font-mono text-cyan-500/80 mb-1 tracking-wide">

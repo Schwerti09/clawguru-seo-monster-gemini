@@ -1,20 +1,38 @@
 // File: app/runbook/[slug]/page.tsx
 import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
-import { RUNBOOKS, getRunbook, type RunbookBlock, type RunbookFaqEntry } from "@/lib/pseo"
+import { RUNBOOKS, getRunbook, type Runbook, type RunbookBlock, type RunbookFaqEntry } from "@/lib/pseo"
 import { notFound } from "next/navigation"
 import { CopyLinkButton } from "./CopyLinkButton"
 import { BASE_URL } from "@/lib/config"
 
-// Pre-build slug→runbook Map for O(1) related lookups
+// Pre-build slug→runbook Map for O(1) related lookups on static RUNBOOKS
 const RUNBOOK_MAP = new Map(RUNBOOKS.map((r) => [r.slug, r]))
 
 export const revalidate = 60 * 60 * 24 // 24h
 export const dynamicParams = true
 
 export async function generateStaticParams() {
-  // pre-render top N (fast + SEO), rest via ISR
-  return RUNBOOKS.slice(0, 200).map((r) => ({ slug: r.slug }))
+  // Pre-render top 200 static RUNBOOKS + key 100k slugs for fast initial crawl
+  const staticParams = RUNBOOKS.slice(0, 200).map((r) => ({ slug: r.slug }))
+  const key100kSlugs = [
+    "aws-ssh-hardening-2026",
+    "aws-nginx-csp-2026",
+    "aws-kubernetes-zero-trust-2026",
+    "cloudflare-nginx-waf-2026",
+    "hetzner-ssh-hardening-2026",
+    "gcp-kubernetes-rbac-misconfig-2026",
+    "azure-docker-hardening-2026",
+    "digitalocean-nginx-rate-limiting-2026",
+    "kubernetes-docker-supply-chain-attack-2026",
+    "aws-github-actions-secrets-management-2026",
+    "cloudflare-nginx-hsts-2026",
+    "aws-kubernetes-sbom-2026",
+    "hetzner-nginx-firewall-rules-2026",
+    "gcp-docker-image-signing-2026",
+    "azure-kubernetes-mfa-enforcement-2026",
+  ]
+  return [...staticParams, ...key100kSlugs.map((slug) => ({ slug }))]
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }) {
@@ -195,9 +213,9 @@ export default function RunbookPage({ params }: { params: { slug: string } }) {
   const r = getRunbook(params.slug)
   if (!r) return notFound()
 
-  // Use precomputed relatedSlugs with O(1) Map lookup; fall back to tag-based filter
+  // Use precomputed relatedSlugs with O(1) Map lookup + 100k on-demand fallback
   const relatedList = r.relatedSlugs.length > 0
-    ? r.relatedSlugs.map((s) => RUNBOOK_MAP.get(s)).filter(Boolean) as typeof RUNBOOKS
+    ? r.relatedSlugs.map((s) => RUNBOOK_MAP.get(s) ?? getRunbook(s)).filter(Boolean) as Runbook[]
     : RUNBOOKS.filter((x) => x.slug !== r.slug && x.tags.some((t) => r.tags.includes(t))).slice(0, 8)
 
   return (
@@ -244,7 +262,13 @@ export default function RunbookPage({ params }: { params: { slug: string } }) {
         <div className="flex flex-wrap items-center gap-3 mb-4">
           <ClawScoreBadge score={r.clawScore} />
           <span className="text-xs text-gray-600">Stand: {r.lastmod}</span>
+          <span className="text-xs text-gray-600">·</span>
+          <span className="text-xs text-gray-500">Author: ClawGuru Institutional Ops</span>
         </div>
+
+        <p className="text-xs font-mono text-cyan-500/80 mb-1 tracking-wide">
+          Claw Security Score: {r.clawScore}/100 – {r.title}
+        </p>
 
         <SectionTitle kicker="Runbook" title={r.title} subtitle={r.summary} />
 

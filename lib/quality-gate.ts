@@ -1,6 +1,7 @@
 // File: lib/quality-gate.ts
 // ClawGuru 2026 Quality Gate – Kein Thin Content, kein Duplicate, kein Schrott.
 // Every runbook must pass this gate before it is served or indexed.
+// GENESIS QUALITY GATE 2.0
 
 import type { Runbook } from "./pseo"
 
@@ -14,11 +15,16 @@ export interface QualityViolation {
   severity: "error" | "warning"
 }
 
+/** GENESIS QUALITY GATE 2.0 – Claw Certified badge tier */
+export type ClawCertifiedTier = "gold" | "silver" | "hidden"
+
 export interface QualityReport {
   slug: string
   pass: boolean
   score: number // 0–100
   violations: QualityViolation[]
+  /** GENESIS QUALITY GATE 2.0 – badge tier derived from score */
+  clawCertifiedTier: ClawCertifiedTier
 }
 
 export interface QualityThresholds {
@@ -31,6 +37,12 @@ export interface QualityThresholds {
   maxTitleLength: number
   /** Minimum overall score (0–100) required to pass */
   minPassScore: number
+  /** GENESIS QUALITY GATE 2.0 – minimum word count across summary + steps */
+  minContentWords: number
+  /** GENESIS QUALITY GATE 2.0 – minimum step count for full depth score */
+  minStepQuality: number
+  /** GENESIS QUALITY GATE 2.0 – minimum author source citations */
+  minAuthorSources: number
 }
 
 // ---------------------------------------------------------------------------
@@ -45,7 +57,34 @@ export const DEFAULT_THRESHOLDS: QualityThresholds = {
   minTagCount: 2,
   minTitleLength: 8,
   maxTitleLength: 110,
-  minPassScore: 60,
+  minPassScore: 85,
+  minContentWords: 200,
+  minStepQuality: 8,
+  minAuthorSources: 2,
+}
+
+// ---------------------------------------------------------------------------
+// GENESIS QUALITY GATE 2.0 – Security term vocabulary for language strength check
+// ---------------------------------------------------------------------------
+
+const SECURITY_TERMS = [
+  "cve", "firewall", "hardening", "rbac", "tls", "ssl", "mfa", "2fa", "jwt", "oauth",
+  "zero-trust", "zero trust", "pentest", "vulnerability", "exploit", "xss", "csrf", "sqli",
+  "injection", "encryption", "certificate", "auth", "privilege", "least privilege",
+  "audit", "compliance", "cis", "owasp", "nist", "sbom", "supply chain", "intrusion",
+  "detection", "waf", "ddos", "rate limit", "cors", "csp", "hsts", "iptables",
+  "seccomp", "apparmor", "selinux", "secret", "rotation", "patch", "update",
+]
+
+// ---------------------------------------------------------------------------
+// GENESIS QUALITY GATE 2.0 – Badge tier helper
+// ---------------------------------------------------------------------------
+
+/** Derive the Claw Certified badge tier from a quality score. */
+export function getClawCertifiedTier(score: number): ClawCertifiedTier {
+  if (score >= 95) return "gold"
+  if (score >= 85) return "silver"
+  return "hidden"
 }
 
 // ---------------------------------------------------------------------------
@@ -54,7 +93,8 @@ export const DEFAULT_THRESHOLDS: QualityThresholds = {
 
 /**
  * Validate a single runbook against quality thresholds.
- * Returns a structured QualityReport. A runbook passes if:
+ * GENESIS QUALITY GATE 2.0 – 16 checks for institutional-grade content.
+ * A runbook passes if:
  *  - No "error" severity violations exist, AND
  *  - Computed score >= thresholds.minPassScore
  */
@@ -132,6 +172,50 @@ export function validateRunbook(
     score -= 5
   }
 
+  // GENESIS QUALITY GATE 2.0 – checks 11–16
+
+  // 11. Content Depth Score – total word count across summary + all steps
+  const allContentText = [runbook.summary ?? "", ...(runbook.howto?.steps ?? [])].join(" ")
+  const totalWords = allContentText.trim().split(/\s+/).filter(Boolean).length
+  if (totalWords < thresholds.minContentWords) {
+    violations.push({ field: "content.depth", severity: "warning", message: `Content depth too low (${totalWords} words < ${thresholds.minContentWords})` })
+    score -= 5
+  }
+
+  // 12. Step-by-Step Quality – 8+ real steps for authoritative runbooks
+  if (stepCount < thresholds.minStepQuality) {
+    violations.push({ field: "howto.stepQuality", severity: "warning", message: `Step depth below recommended (${stepCount} < ${thresholds.minStepQuality} steps)` })
+    score -= 5
+  }
+
+  // 13. E-E-A-T Depth – author must have listed source citations
+  const sourcesCount = runbook.author?.sources?.length ?? 0
+  if (sourcesCount < thresholds.minAuthorSources) {
+    violations.push({ field: "author.sources", severity: "warning", message: `Insufficient E-E-A-T sources (${sourcesCount} < ${thresholds.minAuthorSources})` })
+    score -= 5
+  }
+
+  // 14. E-E-A-T Depth – author experience field must be present
+  if (!runbook.author?.experience) {
+    violations.push({ field: "author.experience", severity: "warning", message: "Missing author experience statement (E-E-A-T signal)" })
+    score -= 3
+  }
+
+  // 15. Copy-Paste Readiness – at least one code block must be present
+  const hasCodeBlock = (runbook.blocks ?? []).some((b) => b.kind === "code")
+  if (!hasCodeBlock) {
+    violations.push({ field: "blocks.code", severity: "warning", message: "No code block found – copy-paste readiness requires at least one code example" })
+    score -= 4
+  }
+
+  // 16. Security Language Strength – title or summary must contain recognised security terminology
+  const lowerText = `${runbook.title} ${runbook.summary ?? ""}`.toLowerCase()
+  const hasSecurityLanguage = SECURITY_TERMS.some((term) => lowerText.includes(term))
+  if (!hasSecurityLanguage) {
+    violations.push({ field: "security.language", severity: "warning", message: "No recognised security terminology found in title/summary" })
+    score -= 3
+  }
+
   const finalScore = Math.max(0, score)
   const hasErrors = violations.some((v) => v.severity === "error")
 
@@ -140,6 +224,7 @@ export function validateRunbook(
     pass: !hasErrors && finalScore >= thresholds.minPassScore,
     score: finalScore,
     violations,
+    clawCertifiedTier: getClawCertifiedTier(finalScore),
   }
 }
 
@@ -162,6 +247,10 @@ export interface QualityStats {
   avgScore: number
   passRate: number
   topViolations: Array<{ field: string; count: number }>
+  /** GENESIS QUALITY GATE 2.0 – Gold badge count (score ≥ 95) */
+  goldCount: number
+  /** GENESIS QUALITY GATE 2.0 – Silver badge count (score 85–94) */
+  silverCount: number
 }
 
 /** Compute aggregate quality statistics for a batch of runbooks. */
@@ -170,12 +259,14 @@ export function computeQualityStats(
   thresholds: QualityThresholds = DEFAULT_THRESHOLDS
 ): QualityStats {
   if (runbooks.length === 0) {
-    return { total: 0, passed: 0, failed: 0, avgScore: 0, passRate: 0, topViolations: [] }
+    return { total: 0, passed: 0, failed: 0, avgScore: 0, passRate: 0, topViolations: [], goldCount: 0, silverCount: 0 }
   }
 
   const reports = runbooks.map((r) => validateRunbook(r, thresholds))
   const passed = reports.filter((r) => r.pass).length
   const totalScore = reports.reduce((sum, r) => sum + r.score, 0)
+  const goldCount = reports.filter((r) => r.clawCertifiedTier === "gold").length
+  const silverCount = reports.filter((r) => r.clawCertifiedTier === "silver").length
 
   // Aggregate violation field frequency
   const fieldCount = new Map<string, number>()
@@ -196,7 +287,53 @@ export function computeQualityStats(
     avgScore: Math.round(totalScore / runbooks.length),
     passRate: Math.round((passed / runbooks.length) * 100),
     topViolations,
+    goldCount,
+    silverCount,
   }
+}
+
+// ---------------------------------------------------------------------------
+// GENESIS QUALITY GATE 2.0 – Provider heatmap helper
+// ---------------------------------------------------------------------------
+
+export interface ProviderHeatmapEntry {
+  provider: string
+  total: number
+  passed: number
+  passRate: number
+  avgScore: number
+}
+
+/**
+ * Compute per-provider quality statistics for the dashboard heatmap.
+ * Provider is inferred from the first segment of the runbook slug.
+ */
+export function computeProviderHeatmap(
+  runbooks: Runbook[],
+  thresholds: QualityThresholds = DEFAULT_THRESHOLDS
+): ProviderHeatmapEntry[] {
+  const byProvider = new Map<string, Runbook[]>()
+  for (const r of runbooks) {
+    const provider = r.slug.split("-")[0] || "unknown"
+    const list = byProvider.get(provider) ?? []
+    list.push(r)
+    byProvider.set(provider, list)
+  }
+
+  return Array.from(byProvider.entries())
+    .map(([provider, list]) => {
+      const reports = list.map((r) => validateRunbook(r, thresholds))
+      const passed = reports.filter((rp) => rp.pass).length
+      const avgScore = Math.round(reports.reduce((s, rp) => s + rp.score, 0) / reports.length)
+      return {
+        provider,
+        total: list.length,
+        passed,
+        passRate: Math.round((passed / list.length) * 100),
+        avgScore,
+      }
+    })
+    .sort((a, b) => b.total - a.total)
 }
 
 // ---------------------------------------------------------------------------

@@ -22,43 +22,44 @@ export default function HeroInstitution() {
           <motion.div variants={item}>
             <div className="inline-flex items-center gap-2 px-3 py-2 rounded-full glass-card text-xs text-gray-300">
               <span className="w-2 h-2 rounded-full bg-claw-green animate-pulse-neon" />
-              Institutional Ops Intelligence · 2026
+              Mycelial Singularity Engine v3.0 · GENESIS PROTOKOLL AKTIV
             </div>
           </motion.div>
 
           {/* VISUAL UPGRADE 2026: Heading with neon gradient text */}
           <motion.h1 variants={item} className="mt-4 text-4xl sm:text-5xl lg:text-6xl font-black leading-tight font-heading">
-            Die <span className="bg-gradient-to-r from-claw-green to-cyber-blue bg-clip-text text-transparent">Institution</span> für
-            OpenClaw Security & Ops
+            <span className="bg-gradient-to-r from-claw-green to-cyber-blue bg-clip-text text-transparent">ClawGuru</span>{" "}
+            Mycelial Singularity Engine v3.0
           </motion.h1>
 
           <motion.p variants={item} className="mt-5 text-lg text-gray-300 max-w-xl">
-            Tools, Lageberichte, Incident-Runbooks und ein Copilot, der Prioritäten setzt.
-            Ziel: weniger Panik, mehr Betriebssicherheit.
+            Das lebende Mycelium von 1M+ Runbooks. Jeder Knoten eine Wissenseinheit,
+            jede Kante eine semantische Beziehung. Force-directed Graph, Darwinian Evolution
+            Engine, und Oracle Mode – die fortschrittlichste Ops-Wissensdatenbank der Welt.
           </motion.p>
 
           {/* VISUAL UPGRADE 2026: CTA buttons with magnetic hover effect */}
           <motion.div variants={item} className="mt-8 flex flex-wrap gap-3">
             <a
               className="group relative px-5 py-3 rounded-xl font-black text-black bg-claw-green hover:shadow-neon-green transition-all duration-300 hover:scale-105"
-              href="/copilot"
+              href="/mycelium"
             >
               {/* VISUAL UPGRADE 2026: Scan animation on primary CTA */}
               <span className="relative z-10 flex items-center gap-2">
-                <Zap className="w-4 h-4" /> Ask Copilot
+                <Zap className="w-4 h-4" /> Living Mycelium →
               </span>
               <div className="absolute inset-0 rounded-xl overflow-hidden opacity-0 group-hover:opacity-100 transition-opacity">
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-border-scan" />
               </div>
+            </a>
+            <a className="px-5 py-3 rounded-xl border border-white/10 bg-white/[0.03] backdrop-blur-xl hover:bg-white/[0.06] hover:border-white/20 font-bold transition-all duration-300" href="/copilot">
+              Ask Copilot
             </a>
             <a className="px-5 py-3 rounded-xl font-black bg-gradient-to-r from-orange-500 to-red-600 hover:opacity-90 shadow-glow2" href="/pricing">
               Pro Kits (Stripe)
             </a>
             <a className="px-5 py-3 rounded-xl border border-white/10 bg-white/[0.03] backdrop-blur-xl hover:bg-white/[0.06] hover:border-white/20 font-bold transition-all duration-300" href="/intel">
               Intel Feed
-            </a>
-            <a className="px-5 py-3 rounded-xl border border-white/10 bg-white/[0.03] backdrop-blur-xl hover:bg-white/[0.06] hover:border-white/20 font-bold transition-all duration-300" href="/academy">
-              Hardening Sprint
             </a>
           </motion.div>
 

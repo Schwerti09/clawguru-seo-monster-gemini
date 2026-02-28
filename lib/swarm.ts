@@ -165,3 +165,206 @@ export function makeDeploymentId(slug: string): string {
   const h = hashStr(slug)
   return `sw-${slug.slice(0, 12).replace(/[^a-z0-9]/g, "")}-${h.toString(36).slice(0, 8)}`
 }
+
+// APPROVED REMEDIATION SWARM v3.2 SAFE – Overlord AI: Supported remediation scopes
+export type RemediationScope = "cluster" | "account" | "namespace" | "region" | "workload"
+
+// APPROVED REMEDIATION SWARM v3.2 SAFE – Overlord AI: Approval status for a proposed action
+export type ActionApprovalStatus = "pending" | "approved" | "rejected" | "modified"
+
+// APPROVED REMEDIATION SWARM v3.2 SAFE – Overlord AI: A single proposed remediation action
+export interface ProposedAction {
+  id: string
+  title: string
+  description: string
+  severity: "critical" | "high" | "medium" | "low"
+  scope: RemediationScope
+  zone: string
+  agentId: string
+  /** GitOps PR URL or Terraform Plan reference (simulated) */
+  artifactRef: string
+  status: ActionApprovalStatus
+  /** ISO timestamp when action was proposed */
+  proposedAt: string
+  /** ISO timestamp when action was last actioned (approved/rejected/modified) */
+  actionedAt: string | null
+  /** Identity that actioned the approval */
+  actionedBy: string | null
+  /** Optional modifier note */
+  modificationNote: string | null
+}
+
+// APPROVED REMEDIATION SWARM v3.2 SAFE – Overlord AI: A single entry in the full audit log
+export interface AuditLogEntry {
+  id: string
+  timestampMs: number
+  actor: string
+  action: "plan_created" | "action_approved" | "action_rejected" | "action_modified" | "kill_switch_activated" | "swarm_recalled" | "compliance_report_exported"
+  targetActionId: string | null
+  detail: string
+}
+
+// APPROVED REMEDIATION SWARM v3.2 SAFE – Overlord AI: Full approved remediation plan
+export interface ApprovedSwarmPlan {
+  planId: string
+  deploymentId: string
+  runbookSlug: string
+  scope: RemediationScope
+  scopeLabel: string
+  target: TargetEnvironment
+  createdAt: string
+  proposedActions: ProposedAction[]
+  auditLog: AuditLogEntry[]
+  totalActions: number
+  approvedActions: number
+  rejectedActions: number
+  pendingActions: number
+}
+
+// APPROVED REMEDIATION SWARM v3.2 SAFE – Overlord AI: Scope label map
+export const SCOPE_LABELS: Record<RemediationScope, string> = {
+  cluster:   "Kubernetes Cluster",
+  account:   "Cloud Account",
+  namespace: "Namespace",
+  region:    "Cloud Region",
+  workload:  "Workload / Service",
+}
+
+// APPROVED REMEDIATION SWARM v3.2 SAFE – Overlord AI: Remediation action templates
+const REMEDIATION_ACTIONS = [
+  {
+    title: "Enforce Pod Security Standards",
+    description: "Apply PodSecurity admission controller to restrict privileged containers. GitOps PR generated.",
+    severity: "critical" as const,
+  },
+  {
+    title: "Rotate Exposed Service Account Tokens",
+    description: "Revoke and reissue compromised service account tokens across affected namespaces.",
+    severity: "critical" as const,
+  },
+  {
+    title: "Apply Network Policy: Default-Deny Ingress",
+    description: "Deploy a default-deny NetworkPolicy to isolate workloads. Terraform plan attached.",
+    severity: "high" as const,
+  },
+  {
+    title: "Patch nginx to 1.27.x (CVE-2024-7347)",
+    description: "Rolling update to patched nginx image. Zero-downtime deployment strategy selected.",
+    severity: "high" as const,
+  },
+  {
+    title: "Enable RBAC Audit Logging",
+    description: "Configure kube-apiserver audit policy to log all RBAC decisions to immutable storage.",
+    severity: "high" as const,
+  },
+  {
+    title: "Harden SSH: Disable root login + enforce key-only auth",
+    description: "Apply sshd_config hardening via Ansible playbook. Drift detection enabled post-apply.",
+    severity: "medium" as const,
+  },
+  {
+    title: "Enable at-rest encryption for etcd",
+    description: "Configure EncryptionConfiguration and rotate DEKs. EncryptionConfig manifest generated.",
+    severity: "medium" as const,
+  },
+  {
+    title: "Set resource limits on all Deployments",
+    description: "Patch all Deployments without CPU/memory limits. LimitRange object deployed as guard.",
+    severity: "medium" as const,
+  },
+  {
+    title: "Enable S3 Bucket Versioning + Block Public Access",
+    description: "Apply bucket policies and versioning config across flagged S3 buckets. Terraform plan.",
+    severity: "high" as const,
+  },
+  {
+    title: "Enable MFA enforcement for IAM users",
+    description: "Attach IAM policy requiring MFA for console access. SCPs applied at OU level.",
+    severity: "critical" as const,
+  },
+  {
+    title: "Rotate TLS certificates expiring within 30 days",
+    description: "Auto-renew via cert-manager ACME. Affected Ingress/Services re-annotated.",
+    severity: "low" as const,
+  },
+  {
+    title: "Remove unused ClusterRoleBindings",
+    description: "Prune stale CRBs identified by last-used-at analysis. PR created for review.",
+    severity: "medium" as const,
+  },
+]
+
+// APPROVED REMEDIATION SWARM v3.2 SAFE – Overlord AI: Generate a deterministic approved remediation plan.
+// Simulation only – no real infrastructure access occurs.
+export function generateApprovedSwarmPlan(
+  deploymentId: string,
+  runbookSlug: string,
+  scope: RemediationScope,
+): ApprovedSwarmPlan {
+  const h = hashStr(deploymentId + runbookSlug + scope)
+  const target = deriveTarget(deploymentId)
+  const zones = ZONES[target]
+  const planId = `plan-${deploymentId.slice(-8)}-${h.toString(36).slice(0, 6)}`
+
+  // APPROVED REMEDIATION SWARM v3.2 SAFE – Overlord AI: Pick 4-7 actions deterministically
+  const actionCount = 4 + (h % 4)
+  const proposedActions: ProposedAction[] = Array.from({ length: actionCount }, (_, i) => {
+    const ah = hashStr(`${planId}-action-${i}`)
+    const template = REMEDIATION_ACTIONS[ah % REMEDIATION_ACTIONS.length]
+    const zoneVal = zones[ah % zones.length]
+    const agentId = `agent-${deploymentId.slice(-6)}-${String(ah % 20).padStart(3, "0")}`
+    const artifact = template.title.toLowerCase().includes("terraform") || template.title.includes("S3") || template.title.includes("IAM") || template.title.includes("MFA")
+      ? `terraform-plan-${planId}-${i}.tfplan`
+      : `gitops-pr-${planId}-${i}.yaml`
+    const proposedAt = new Date(Date.now() - (actionCount - i) * 5 * 60_000).toISOString()
+    return {
+      id: `action-${planId}-${i}`,
+      title: template.title,
+      description: template.description,
+      severity: template.severity,
+      scope,
+      zone: zoneVal,
+      agentId,
+      artifactRef: artifact,
+      status: "pending" as ActionApprovalStatus,
+      proposedAt,
+      actionedAt: null,
+      actionedBy: null,
+      modificationNote: null,
+    }
+  })
+
+  // APPROVED REMEDIATION SWARM v3.2 SAFE – Overlord AI: Seed audit log with plan-creation entry
+  const auditLog: AuditLogEntry[] = [
+    {
+      id: `audit-${planId}-0`,
+      timestampMs: Date.now() - actionCount * 5 * 60_000,
+      actor: "ClawGuru Overlord AI",
+      action: "plan_created",
+      targetActionId: null,
+      detail: `Approved Remediation Plan ${planId} created for ${runbookSlug} (scope: ${scope}, target: ${target}, ${actionCount} proposed actions)`,
+    },
+  ]
+
+  return {
+    planId,
+    deploymentId,
+    runbookSlug,
+    scope,
+    scopeLabel: SCOPE_LABELS[scope],
+    target,
+    createdAt: new Date(Date.now() - actionCount * 5 * 60_000).toISOString(),
+    proposedActions,
+    auditLog,
+    totalActions: actionCount,
+    approvedActions: 0,
+    rejectedActions: 0,
+    pendingActions: actionCount,
+  }
+}
+
+// APPROVED REMEDIATION SWARM v3.2 SAFE – Overlord AI: Make a stable approved swarm ID from slug + scope.
+export function makeApprovedSwarmId(slug: string, scope: RemediationScope): string {
+  const h = hashStr(slug + scope)
+  return `arsw-${slug.slice(0, 10).replace(/[^a-z0-9]/g, "")}-${h.toString(36).slice(0, 8)}`
+}

@@ -35,6 +35,7 @@ export default function Footer() {
               <li><a href="/impressum">Impressum</a></li>
               <li><a href="/datenschutz">Datenschutz</a></li>
               <li><a href="/agb">AGB</a></li>
+              <li><a href="/trust-security">ClawGuru Institutional Trust Center</a></li>
             </ul>
             <div className="mt-4">
               <a className="inline-flex px-4 py-2 rounded-xl border border-gray-700 hover:border-gray-500 text-gray-200" href={COMMUNITY.discordInvite} target="_blank" rel="noreferrer noopener">

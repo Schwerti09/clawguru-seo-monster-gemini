@@ -2,6 +2,7 @@ import Container from "@/components/shared/Container"
 import NeuralGrid from "@/components/visual/NeuralGrid"
 import HeroInstitution from "@/components/marketing/HeroInstitution"
 import HeroSecurityCheck from "@/components/marketing/HeroSecurityCheck"
+import TrustSecurity from "@/components/marketing/TrustSecurity"
 import SectionTitle from "@/components/shared/SectionTitle"
 import IntelPreview from "@/components/pages/IntelPreview"
 import CopilotPreview from "@/components/pages/CopilotPreview"
@@ -54,6 +55,9 @@ export default function Home() {
           <HeroSecurityCheck />
         </Container>
       </section>
+
+      {/* TRUST & SECURITY FORTRESS 2026: Institutional trust section directly after hero */}
+      <TrustSecurity />
 
       {/* Jackpot CTA – VISUAL UPGRADE 2026: glassmorphism cards */}
       <section className="py-14 bg-gradient-to-b from-[#0a0a0a] to-gray-950">

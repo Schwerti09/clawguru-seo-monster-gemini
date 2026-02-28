@@ -86,7 +86,7 @@ export function ActivateSwarmButton({ slug, isPro = false }: Props) {
           title="Enterprise only – upgrade to activate"
         >
           <span>🛡</span>
-          <span>APPROVED SWARM</span>
+          <span>GENEHMIGTEN SCHWARM</span>
           <span className="text-[10px] font-mono border border-emerald-500/40 rounded px-1 py-0.5">ENTERPRISE</span>
         </a>
       </div>
@@ -114,7 +114,7 @@ export function ActivateSwarmButton({ slug, isPro = false }: Props) {
           className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl border border-emerald-500/60 bg-gradient-to-r from-emerald-500/15 to-cyan-500/15 text-emerald-300 text-xs font-black hover:from-emerald-500/25 hover:to-cyan-500/25 transition-all"
         >
           <span>🛡</span>
-          <span>ACTIVATE APPROVED SWARM</span>
+          <span>GENEHMIGTEN SCHWARM AKTIVIEREN</span>
         </button>
       </div>
 

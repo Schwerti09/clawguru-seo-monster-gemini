@@ -175,11 +175,84 @@ function DwellRing({ progress, color = "#b464ff" }: { progress: number; color?: 
   )
 }
 
+// NEURO-MYCELIUM INTERFACE v3.5 – Overlord AI: Shared label for eye-tracking activate button
+const EYE_TRACKING_ACTIVATE_LABEL = "👁️ Eye-Tracking aktivieren (Kamera)"
+
+// NEURO-MYCELIUM INTERFACE v3.5 – Overlord AI: Camera permission request overlay
+function CameraPermissionBox({ onAccept, onDismiss }: { onAccept: () => void; onDismiss: () => void }) {
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center px-4"
+      style={{ background: "rgba(2,2,5,0.88)", backdropFilter: "blur(20px)" }}
+    >
+      <div
+        className="w-full max-w-sm rounded-3xl border p-8"
+        style={{
+          background: "rgba(4,4,8,0.96)",
+          borderColor: "rgba(180,100,255,0.45)",
+          boxShadow: "0 0 80px rgba(180,100,255,0.15), 0 0 30px rgba(0,184,255,0.05)",
+          backdropFilter: "blur(24px)",
+        }}
+      >
+        <div className="text-center mb-6">
+          <div
+            className="inline-flex items-center justify-center w-16 h-16 rounded-full mb-4"
+            style={{ background: "rgba(180,100,255,0.08)", border: "1px solid rgba(180,100,255,0.3)" }}
+          >
+            <span style={{ fontSize: "28px", lineHeight: 1 }}>👁️</span>
+          </div>
+          <div className="text-xs font-mono tracking-widest uppercase mb-2" style={{ color: "rgba(180,100,255,0.6)" }}>
+            Neuro-Mycelium · Eye-Tracking
+          </div>
+          <h2 className="text-xl font-black mb-3" style={{ color: "#fff" }}>
+            Kamera aktivieren?
+          </h2>
+          <p className="text-sm font-mono leading-relaxed" style={{ color: "rgba(255,255,255,0.45)" }}>
+            Eye-Tracking ermöglicht intuitive Gedanken-Navigation — du schaust auf einen Block und das Mycelium erkennt deine Intention.
+          </p>
+        </div>
+
+        <div
+          className="rounded-xl border p-3 mb-5 text-xs font-mono"
+          style={{ borderColor: "rgba(0,255,157,0.15)", background: "rgba(0,255,157,0.03)", color: "rgba(0,255,157,0.6)" }}
+        >
+          ⬡ Kameradaten bleiben lokal — nichts wird gespeichert oder übertragen.
+        </div>
+
+        <div className="space-y-3">
+          <button
+            onClick={onAccept}
+            className="w-full py-3 rounded-2xl font-bold text-sm font-mono tracking-wide transition-all duration-300"
+            style={{
+              background: "linear-gradient(90deg, rgba(180,100,255,0.12), rgba(0,184,255,0.08))",
+              border: "1px solid #b464ff",
+              color: "#b464ff",
+              boxShadow: "0 0 24px rgba(180,100,255,0.18)",
+            }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 0 40px rgba(180,100,255,0.35)" }}
+            onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 0 24px rgba(180,100,255,0.18)" }}
+          >
+            {EYE_TRACKING_ACTIVATE_LABEL}
+          </button>
+          <button
+            onClick={onDismiss}
+            className="w-full py-3 rounded-2xl text-sm font-mono transition-all duration-200"
+            style={{ border: "1px solid rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.35)", background: "transparent" }}
+          >
+            Ohne Kamera fortfahren
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 // NEURO-MYCELIUM INTERFACE v3.5 – Overlord AI: Main Neuro Oracle page
 export default function NeuroPage() {
   // NEURO-MYCELIUM INTERFACE v3.5 – Overlord AI: Consent state – required on each visit (session-scoped only)
   const [consented, setConsented] = useState(false)
   const [eyeTrackingEnabled, setEyeTrackingEnabled] = useState(false)
+  const [showCameraPermissionBox, setShowCameraPermissionBox] = useState(false)
   const [eegConnected, setEegConnected] = useState(false)
   const [gazeActive, setGazeActive] = useState(false)
   const [gazeError, setGazeError] = useState<string | null>(null)
@@ -222,9 +295,9 @@ export default function NeuroPage() {
           ?.setGazeListener(handleGaze)
           ?.begin()
           ?.then(() => setGazeActive(true))
-          ?.catch(() => setGazeError("Camera permission denied. Using text input fallback."))
+          ?.catch(() => setGazeError("Kamera nicht verfügbar – Text-Eingabe verwendet"))
       } catch {
-        setGazeError("Eye-tracking initialisation failed. Using text input fallback.")
+        setGazeError("Kamera nicht verfügbar – Text-Eingabe verwendet")
       }
     }
 
@@ -243,7 +316,7 @@ export default function NeuroPage() {
       })
       startWebgazer()
     } catch {
-      setGazeError("Eye-tracking library could not be loaded. Using text input fallback.")
+      setGazeError("Kamera nicht verfügbar – Text-Eingabe verwendet")
     }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -385,6 +458,27 @@ export default function NeuroPage() {
     }
   }, [eyeTrackingEnabled, consented, loadWebgazer, gazeActive])
 
+  // NEURO-MYCELIUM INTERFACE v3.5 – Overlord AI: Auto-detect camera after consent and show permission box
+  useEffect(() => {
+    if (!consented) return
+    if (typeof navigator === "undefined" || !navigator.mediaDevices?.enumerateDevices) return
+
+    const showBoxIfCameraPresent = async () => {
+      // Skip if camera permission already denied
+      if (navigator.permissions?.query) {
+        try {
+          const status = await navigator.permissions.query({ name: "camera" as PermissionName })
+          if (status.state === "denied") return
+        } catch { /* permissions API may not support 'camera' in all browsers */ }
+      }
+      const devices = await navigator.mediaDevices.enumerateDevices()
+      const hasCamera = devices.some((d) => d.kind === "videoinput")
+      if (hasCamera) setShowCameraPermissionBox(true)
+    }
+
+    showBoxIfCameraPresent().catch(() => {})
+  }, [consented])
+
   // ──────────────────────────────────────────────────────────────────────────────
   // NEURO-MYCELIUM INTERFACE v3.5 – Overlord AI: CONSENT SCREEN (shown first)
   // ──────────────────────────────────────────────────────────────────────────────
@@ -470,6 +564,14 @@ export default function NeuroPage() {
     <>
       <NeuroMyceliumBackground />
 
+      {/* Camera permission box – shown automatically when camera is detected */}
+      {showCameraPermissionBox && !eyeTrackingEnabled && !gazeActive && (
+        <CameraPermissionBox
+          onAccept={() => { setShowCameraPermissionBox(false); setEyeTrackingEnabled(true) }}
+          onDismiss={() => setShowCameraPermissionBox(false)}
+        />
+      )}
+
       <div className="relative min-h-screen flex flex-col" style={{ zIndex: 1 }}>
         {/* ── Header ───────────────────────────────────────────────────────── */}
         <div className="pt-16 pb-6 text-center px-4">
@@ -503,7 +605,7 @@ export default function NeuroPage() {
             <span>👁️</span>
             {eyeTrackingEnabled
               ? (gazeActive ? "Eye-Tracking AKTIV" : "Eye-Tracking lädt…")
-              : "Eye-Tracking aktivieren"}
+              : EYE_TRACKING_ACTIVATE_LABEL}
           </button>
 
           {/* BLE EEG toggle */}

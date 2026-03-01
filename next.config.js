@@ -42,6 +42,15 @@ const nextConfig = {
       },
     ]
   },
+  async redirects() {
+    return [
+      {
+        source: "/clawverse",
+        destination: "/universe",
+        permanent: true,
+      },
+    ]
+  },
   async rewrites() {
     return [
       {

@@ -82,7 +82,7 @@ export default function CopilotChat() {
       <div className="rounded-2xl border border-gray-800 bg-black/30 overflow-hidden">
         <div className="px-5 py-4 border-b border-gray-800 flex items-center justify-between">
           <div>
-            <div className="font-black">Copilot</div>
+            <div className="font-black text-brand-cyan">Copilot</div>
             <div className="text-xs text-gray-400">Konversationsmodus · Prioritäten · Runbooks</div>
           </div>
           <a className="text-xs text-gray-400 hover:text-brand-cyan" href="/security/notfall-leitfaden">

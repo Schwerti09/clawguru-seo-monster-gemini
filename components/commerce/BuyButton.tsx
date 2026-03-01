@@ -5,11 +5,13 @@ import { useState } from "react"
 export default function BuyButton({
   product,
   label,
-  className
+  className,
+  style
 }: {
   product: "daypass" | "pro" | "team"
   label: string
   className?: string
+  style?: React.CSSProperties
 }) {
   const [loading, setLoading] = useState(false)
 
@@ -36,6 +38,7 @@ export default function BuyButton({
         className ||
         "px-6 py-3 rounded-2xl font-black bg-gradient-to-r from-brand-cyan to-brand-violet hover:opacity-90 disabled:opacity-60"
       }
+      style={style}
     >
       {loading ? "Weiter…" : label}
     </button>

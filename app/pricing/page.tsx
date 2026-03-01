@@ -1,5 +1,4 @@
 import Container from "@/components/shared/Container"
-import SectionTitle from "@/components/shared/SectionTitle"
 import BuyButton from "@/components/commerce/BuyButton"
 
 export const metadata = {
@@ -9,194 +8,357 @@ export const metadata = {
   alternates: { canonical: "/pricing" }
 }
 
-function Card({
-  title,
-  price,
-  cadence,
-  desc,
-  bullets,
-  children,
-  accent,
-  badge
-}: {
-  title: string
-  price: string
-  cadence: string
-  desc: string
-  bullets: string[]
-  children: React.ReactNode
-  accent?: "cyan" | "violet"
-  badge?: string
-}) {
-  const ring =
-    accent === "cyan"
-      ? "ring-1 ring-cyan-500/40"
-      : accent === "violet"
-        ? "ring-1 ring-violet-500/40"
-        : "ring-1 ring-white/10"
+type Feature = { label: string; isNew?: boolean }
+type FeatureGroup = { heading: string; items: Feature[] }
 
+function FeatureList({ groups }: { groups: FeatureGroup[] }) {
   return (
-    <div className={`rounded-3xl bg-black/40 border border-white/10 ${ring} p-7`}>
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <div className="text-lg font-semibold text-white">{title}</div>
-          <div className="mt-2 flex items-end gap-2">
-            <div className="text-4xl font-bold text-white">{price}</div>
-            <div className="text-sm text-gray-400 pb-1">{cadence}</div>
+    <div className="mt-5 space-y-4">
+      {groups.map((g) => (
+        <div key={g.heading}>
+          <div className="text-[10px] font-mono uppercase tracking-[0.2em] text-gray-500 mb-2">
+            {g.heading}
           </div>
+          <ul className="space-y-[7px]">
+            {g.items.map((item) => (
+              <li key={item.label} className="flex items-start gap-2 text-sm text-gray-200">
+                <span className="mt-[2px] shrink-0 size-[18px] rounded-full flex items-center justify-center text-[9px] font-bold"
+                  style={{ background: "rgba(0,255,157,0.12)", color: "#00ff9d" }} aria-hidden="true">✓</span>
+                <span className="leading-snug">
+                  {item.label}
+                  {item.isNew && (
+                    <span className="ml-2 text-[9px] font-black uppercase tracking-widest px-[6px] py-[2px] rounded-full align-middle"
+                      style={{ background: "rgba(0,184,255,0.18)", color: "#00b8ff" }}>
+                      NEU
+                    </span>
+                  )}
+                </span>
+              </li>
+            ))}
+          </ul>
         </div>
-        <div className="text-[11px] uppercase tracking-widest text-gray-400 border border-white/10 rounded-full px-3 py-1">
-          {badge || cadence}
-        </div>
-      </div>
-
-      <p className="mt-4 text-gray-300 leading-relaxed">{desc}</p>
-
-      <ul className="mt-5 space-y-2 text-sm text-gray-200">
-        {bullets.map((b) => (
-          <li key={b} className="flex gap-2">
-            <span className="mt-[3px] size-4 rounded-full bg-white/10 flex items-center justify-center text-[10px]">✓</span>
-            <span>{b}</span>
-          </li>
-        ))}
-      </ul>
-
-      <div className="mt-6 [&>button]:w-full [&>button]:justify-center">{children}</div>
-
-      <div className="mt-4 text-xs text-gray-500">
-        Du bekommst sofort nach Zahlung deinen Zugang. Wenn etwas hakt: /recover.
-      </div>
+      ))}
     </div>
   )
 }
 
+const DAY_PASS_GROUPS: FeatureGroup[] = [
+  {
+    heading: "Security & Analyse",
+    items: [
+      { label: "Live Security Score – Top-3-Risiken in 30 Sekunden" },
+      { label: "Zero-Knowledge Check (privacy-first)", isNew: true },
+      { label: "Config Validator: Docker, Nginx, YAML", isNew: true },
+      { label: "Security Badge Generator (shareable)" },
+    ]
+  },
+  {
+    heading: "Ops & Monitoring",
+    items: [
+      { label: "OpsWall Live – Trends & Hot Fixes in Echtzeit" },
+      { label: "ThreatMap – Real-Time Threat Visualisierung", isNew: true },
+      { label: "Mission Control Dashboard", isNew: true },
+      { label: "Incident Playbooks (sofort einsetzbar)" },
+    ]
+  },
+  {
+    heading: "Wissen & Runbooks",
+    items: [
+      { label: "Vault: 500+ Runbooks & Blueprints" },
+      { label: "Hardening, Recovery, Stripe/Webhooks & mehr" },
+      { label: "Copilot Chat – KI-Assistent für Debug & Ops" },
+    ]
+  },
+]
+
+const PRO_GROUPS: FeatureGroup[] = [
+  {
+    heading: "Alles aus Day Pass",
+    items: [
+      { label: "Dauerhafter Vollzugriff (kein Ablauf)" },
+      { label: "Alle Security- & Ops-Tools ohne Zeitlimit" },
+    ]
+  },
+  {
+    heading: "Intelligence Layer",
+    items: [
+      { label: "Temporal Intelligence – zeitbasierte Threats", isNew: true },
+      { label: "Neuro Intelligence – KI-getriebene Insights", isNew: true },
+      { label: "ClawVerse – semantischer Wissensgraph", isNew: true },
+      { label: "Living Mycelium – 1M+ Knowledge Nodes", isNew: true },
+    ]
+  },
+  {
+    heading: "Deployment & Tracking",
+    items: [
+      { label: "SWARM Deployment Simulator", isNew: true },
+      { label: "Provenance Chain – Source-Tracking", isNew: true },
+      { label: "Issue Tracker + Fix Repository", isNew: true },
+    ]
+  },
+  {
+    heading: "Pro-Extras",
+    items: [
+      { label: "Pro Runbooks – laufende Updates" },
+      { label: "Copilot: höhere Limits (fair-use)" },
+      { label: "Priority: neue Features & Topics zuerst" },
+    ]
+  },
+]
+
+const TEAM_GROUPS: FeatureGroup[] = [
+  {
+    heading: "Alles aus Pro",
+    items: [
+      { label: "Vollzugriff auf alle Intelligence- & Ops-Layer" },
+      { label: "Alle SWARM-, Neuro- & Provenance-Features" },
+    ]
+  },
+  {
+    heading: "Team-Collaboration",
+    items: [
+      { label: "Gemeinsame Runbook-Links & Playbooks", isNew: true },
+      { label: "Shared Mission Control (Team-Dashboard)", isNew: true },
+      { label: "Höhere Limits für alle Mitglieder (fair-use)" },
+    ]
+  },
+  {
+    heading: "Roadmap & Einfluss",
+    items: [
+      { label: "Roadmap Votes – bestimmt was als nächstes gebaut wird" },
+      { label: "Early Access auf neue Features" },
+    ]
+  },
+]
+
 export default function PricingPage() {
   return (
     <main className="min-h-screen bg-[#05060A]">
+      {/* Hero */}
+      <section className="relative overflow-hidden pt-20 pb-10 text-center px-4">
+        <div className="pointer-events-none absolute inset-0" aria-hidden="true"
+          style={{ background: "radial-gradient(ellipse 70% 40% at 50% 0%, rgba(0,184,255,0.08) 0%, transparent 70%)" }} />
+        <div className="relative z-10 max-w-2xl mx-auto">
+          <div className="inline-block text-[11px] font-mono uppercase tracking-[0.25em] px-4 py-1 rounded-full border mb-5"
+            style={{ borderColor: "rgba(0,184,255,0.3)", color: "#00b8ff", background: "rgba(0,184,255,0.06)" }}>
+            Zugang · Pricing
+          </div>
+          <h1 className="text-4xl sm:text-5xl font-black font-heading text-white leading-tight">
+            Wähle deinen Zugang
+          </h1>
+          <p className="mt-4 text-gray-400 text-lg">
+            Day Pass für akute Probleme. Pro für dauerhaften Zugriff.<br className="hidden sm:block" />
+            Teams für Zusammenarbeit & höhere Limits.
+          </p>
+        </div>
+      </section>
+
       <Container>
-        <div className="py-16">
-          <SectionTitle
-            kicker="Zugang"
-            title="Pricing"
-            subtitle="Day Pass für akute Probleme. Pro für dauerhaften Zugriff. Teams für Zusammenarbeit & höhere Limits."
-          />
+        <div className="pb-20">
 
-          <div className="mt-10 grid lg:grid-cols-3 gap-6 items-start">
-            <div className="lg:col-span-2 grid md:grid-cols-2 gap-6">
-              <Card
-                title="ClawGuru Day Pass"
-                price="7€"
-                cadence="einmalig · 24h"
-                badge="24h Access"
-                desc="Du bekommst 24 Stunden Vollzugriff auf die Tools, Runbooks und den Live OpsWall. Perfekt, wenn du gerade brennst und sofort Antworten brauchst."
-                bullets={[
-                  "OpsWall (Live) + Incident-Playbooks",
-                  "Copilot (Konversations-Mutant) für Debug/Runbooks",
-                  "Security Score + Badge Generator (shareable)",
-                  "Vault: Setup, Hardening, Recovery, Stripe/Webhooks, etc."
-                ]}
-                accent="cyan"
-              >
-                <BuyButton product="daypass" label="Day Pass kaufen (7€) → Stripe" />
-              </Card>
+          {/* Cards */}
+          <div className="grid lg:grid-cols-3 gap-6 items-stretch">
 
-              <Card
-                title="ClawGuru Pro"
-                price="14,99€"
-                cadence="pro Monat"
-                badge="Abo · monatlich"
-                desc="Dauerzugriff auf Vault & Copilot – für alle, die nicht nur löschen, sondern verhindern wollen. Kündbar jederzeit."
-                bullets={[
-                  "Alles aus Day Pass (dauerhaft)",
-                  "Pro Runbooks + Updates (laufend)",
-                  "Copilot: höhere Limits (fair-use)",
-                  "Priority: neue Topics zuerst"
-                ]}
-                accent="violet"
-              >
-                <BuyButton product="pro" label="Pro starten (14,99€/Monat) → Stripe" />
-              </Card>
-
-              <Card
-                title="ClawGuru Teams"
-                price="29,99€"
-                cadence="pro Monat"
-                badge="Abo · Teams"
-                desc="Für kleine Teams, die gemeinsam deployen, recovern und keine Lust auf Chaos-Docs haben. Kündbar jederzeit."
-                bullets={[
-                  "Alles aus Pro",
-                  "Team-Workflow: gemeinsame Runbook-Links",
-                  "Höhere Limits (fair-use)",
-                  "Roadmap Votes (was als nächstes gebaut wird)"
-                ]}
-              >
-                <BuyButton product="team" label="Teams starten (29,99€/Monat) → Stripe" />
-              </Card>
-
-              <div className="md:col-span-2 grid md:grid-cols-2 gap-6">
-                <div className="rounded-2xl border border-white/10 bg-black/30 p-6">
-                  <div className="font-semibold text-white">Was passiert nach dem Kauf?</div>
-                  <p className="mt-2 text-sm text-gray-300">
-                    Stripe Checkout → Redirect zu /success → Aktivierung → du landest in deinem Dashboard mit Download- & Tool-Zugang.
-                  </p>
+            {/* ── Day Pass ── */}
+            <div className="relative rounded-3xl p-[1px] overflow-hidden"
+              style={{ background: "linear-gradient(135deg, rgba(0,184,255,0.5) 0%, rgba(0,184,255,0.05) 100%)" }}>
+              <div className="h-full rounded-3xl p-7 flex flex-col" style={{ background: "#0a0f18" }}>
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <div className="text-[11px] font-mono uppercase tracking-[0.2em] mb-2" style={{ color: "#00b8ff" }}>
+                      Einmalig · 24h
+                    </div>
+                    <div className="text-xl font-black text-white font-heading">ClawGuru Day Pass</div>
+                  </div>
+                  <div className="shrink-0 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full border"
+                    style={{ borderColor: "rgba(0,184,255,0.3)", color: "#00b8ff", background: "rgba(0,184,255,0.08)" }}>
+                    24h Access
+                  </div>
                 </div>
-                <div className="rounded-2xl border border-white/10 bg-black/30 p-6">
-                  <div className="font-semibold text-white">Brauche ich E-Mail?</div>
-                  <p className="mt-2 text-sm text-gray-300">
-                    Nein. Dein Zugang wird direkt im Browser freigeschaltet (Token). Optional können wir später E-Mail-Delivery ergänzen.
-                  </p>
+
+                <div className="mt-5 flex items-end gap-2">
+                  <span className="text-5xl font-black text-white">7€</span>
+                  <span className="text-sm text-gray-400 pb-2">einmalig</span>
+                </div>
+
+                <p className="mt-4 text-sm text-gray-300 leading-relaxed">
+                  Brennt gerade was? 24 Stunden Vollzugriff – sofort aktiv nach Zahlung.
+                  Score, Copilot, OpsWall, Vault, ThreatMap, Mission Control – alles drin.
+                </p>
+
+                <FeatureList groups={DAY_PASS_GROUPS} />
+
+                <div className="mt-auto pt-6">
+                  <BuyButton
+                    product="daypass"
+                    label="Day Pass kaufen (7€) → Stripe"
+                    className="w-full py-3 px-6 rounded-2xl font-black text-sm text-black transition-all duration-300 hover:opacity-90 disabled:opacity-60"
+                    style={{ background: "linear-gradient(135deg, #00b8ff 0%, #0077ff 100%)", boxShadow: "0 0 30px rgba(0,184,255,0.3)" }}
+                  />
+                  <div className="mt-3 text-xs text-gray-500 text-center">
+                    Sofortzugang · kein Abo · Zugang via /recover wiederherstellbar
+                  </div>
                 </div>
               </div>
             </div>
 
-            <div className="rounded-3xl border border-white/10 bg-black/30 p-7">
-              <div className="text-sm uppercase tracking-widest text-gray-400">Quick Links</div>
-              <div className="mt-4 space-y-3 text-sm">
-                <a href="/check" className="block text-white hover:underline">Security Check</a>
-                <a href="/score" className="block text-white hover:underline">Security Score + Badge</a>
-                <a href="/runbooks" className="block text-white hover:underline">Runbooks (1000 Topics)</a>
-                <a href="/live" className="block text-white hover:underline">OpsWall Live</a>
-                <a href="/recover" className="block text-white hover:underline">Zugang wiederherstellen</a>
+            {/* ── Pro ── (most popular) */}
+            <div className="relative rounded-3xl p-[1px] overflow-hidden"
+              style={{ background: "linear-gradient(135deg, rgba(139,92,246,0.8) 0%, rgba(0,255,157,0.3) 100%)" }}>
+              {/* Popular badge */}
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10
+                text-[10px] font-black uppercase tracking-widest px-4 py-1 rounded-full text-black"
+                style={{ background: "linear-gradient(90deg, #00ff9d, #00b8ff)" }}>
+                Beliebtester Plan
               </div>
+              <div className="h-full rounded-3xl p-7 flex flex-col" style={{ background: "#0d0a18" }}>
+                <div className="flex items-start justify-between gap-3 mt-3">
+                  <div>
+                    <div className="text-[11px] font-mono uppercase tracking-[0.2em] mb-2" style={{ color: "#a78bfa" }}>
+                      Abo · monatlich
+                    </div>
+                    <div className="text-xl font-black text-white font-heading">ClawGuru Pro</div>
+                  </div>
+                  <div className="shrink-0 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full border"
+                    style={{ borderColor: "rgba(139,92,246,0.4)", color: "#a78bfa", background: "rgba(139,92,246,0.1)" }}>
+                    Pro
+                  </div>
+                </div>
 
-              <div className="mt-7 rounded-2xl border border-white/10 bg-black/40 p-5">
-                <div className="font-semibold text-white">Abo-Logik ist &quot;hart&quot;</div>
-                <p className="mt-2 text-sm text-gray-300">
-                  Pro/Teams prüfen bei jedem Zugriff den Stripe-Status. Kündigung = Zugriff weg. Day Pass läuft nur per Ablaufzeit.
+                <div className="mt-5 flex items-end gap-2">
+                  <span className="text-5xl font-black text-white">14,99€</span>
+                  <span className="text-sm text-gray-400 pb-2">/ Monat</span>
+                </div>
+
+                <p className="mt-4 text-sm text-gray-300 leading-relaxed">
+                  Dauerhafter Vollzugriff auf alle Tools – plus Intelligence Layer, SWARM, Temporal &amp;
+                  den kompletten ClawVerse-Wissensgraph. Kündbar jederzeit.
                 </p>
+
+                <FeatureList groups={PRO_GROUPS} />
+
+                <div className="mt-auto pt-6">
+                  <BuyButton
+                    product="pro"
+                    label="Pro starten (14,99€/Monat) → Stripe"
+                    className="w-full py-3 px-6 rounded-2xl font-black text-sm text-black transition-all duration-300 hover:opacity-90 disabled:opacity-60"
+                    style={{ background: "linear-gradient(135deg, #a78bfa 0%, #00ff9d 100%)", boxShadow: "0 0 30px rgba(139,92,246,0.35)" }}
+                  />
+                  <div className="mt-3 text-xs text-gray-500 text-center">
+                    Kündbar jederzeit · Abo-Status via Stripe geprüft
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* ── Teams ── */}
+            <div className="relative rounded-3xl p-[1px] overflow-hidden"
+              style={{ background: "linear-gradient(135deg, rgba(0,255,157,0.4) 0%, rgba(0,255,157,0.05) 100%)" }}>
+              <div className="h-full rounded-3xl p-7 flex flex-col" style={{ background: "#080f0c" }}>
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <div className="text-[11px] font-mono uppercase tracking-[0.2em] mb-2" style={{ color: "#00ff9d" }}>
+                      Abo · Teams
+                    </div>
+                    <div className="text-xl font-black text-white font-heading">ClawGuru Teams</div>
+                  </div>
+                  <div className="shrink-0 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full border"
+                    style={{ borderColor: "rgba(0,255,157,0.3)", color: "#00ff9d", background: "rgba(0,255,157,0.06)" }}>
+                    Teams
+                  </div>
+                </div>
+
+                <div className="mt-5 flex items-end gap-2">
+                  <span className="text-5xl font-black text-white">29,99€</span>
+                  <span className="text-sm text-gray-400 pb-2">/ Monat</span>
+                </div>
+
+                <p className="mt-4 text-sm text-gray-300 leading-relaxed">
+                  Für kleine Teams, die gemeinsam deployen, recovern und keine Lust auf Chaos-Docs haben.
+                  Shared Mission Control, Team-Playbooks, alle Pro-Features. Kündbar jederzeit.
+                </p>
+
+                <FeatureList groups={TEAM_GROUPS} />
+
+                <div className="mt-auto pt-6">
+                  <BuyButton
+                    product="team"
+                    label="Teams starten (29,99€/Monat) → Stripe"
+                    className="w-full py-3 px-6 rounded-2xl font-black text-sm text-white border transition-all duration-300 hover:bg-white/5 disabled:opacity-60"
+                    style={{ borderColor: "rgba(0,255,157,0.4)", boxShadow: "0 0 20px rgba(0,255,157,0.1)" }}
+                  />
+                  <div className="mt-3 text-xs text-gray-500 text-center">
+                    Kündbar jederzeit · Abo-Status via Stripe geprüft
+                  </div>
+                </div>
               </div>
             </div>
           </div>
 
-          <div className="mt-16 rounded-3xl border border-white/10 bg-black/20 p-8">
-            <div className="text-lg font-semibold text-white">FAQ</div>
-            <div className="mt-6 grid md:grid-cols-2 gap-6 text-sm text-gray-300">
+          {/* Info strip */}
+          <div className="mt-8 grid md:grid-cols-3 gap-4">
+            {[
+              ["⚡ Sofortzugang", "Stripe Checkout → /success → Aktivierung → Dashboard. Dauert unter 60 Sekunden."],
+              ["🔑 Kein Account nötig", "Dein Zugang wird direkt im Browser freigeschaltet (Token). Kein Passwort, kein Onboarding."],
+              ["🔄 Zahlung hakt?", "Geh auf /recover und gib deine Stripe Session-ID ein. Zugang sofort aktiv."],
+            ].map(([title, text]) => (
+              <div key={title} className="rounded-2xl border border-white/8 p-5"
+                style={{ background: "rgba(255,255,255,0.02)" }}>
+                <div className="font-semibold text-white text-sm">{title}</div>
+                <p className="mt-1 text-xs text-gray-400 leading-relaxed">{text}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* FAQ */}
+          <div className="mt-12 rounded-3xl border border-white/10 p-8" style={{ background: "rgba(255,255,255,0.02)" }}>
+            <div className="text-xs font-mono uppercase tracking-[0.25em] text-gray-500 mb-6">FAQ</div>
+            <div className="grid md:grid-cols-2 gap-x-10 gap-y-6 text-sm text-gray-300">
               <div>
                 <div className="font-semibold text-white">Wie lange gilt der Zugriff?</div>
-                <p className="mt-2">
-                  Day Pass: 24 Stunden ab Aktivierung. Pro/Teams: solange das Abo aktiv ist.
-                </p>
+                <p className="mt-1 text-gray-400">Day Pass: 24 Stunden ab Aktivierung. Pro/Teams: solange das Abo aktiv ist.</p>
               </div>
               <div>
                 <div className="font-semibold text-white">Kann ich den Zugang übertragen?</div>
-                <p className="mt-2">
-                  Der Day Pass ist an deinen Browser-Token gebunden. Für Teams bauen wir später echte Accounts.
-                </p>
+                <p className="mt-1 text-gray-400">Der Day Pass ist an deinen Browser-Token gebunden. Für Teams kommen später echte Accounts.</p>
               </div>
               <div>
-                <div className="font-semibold text-white">Was, wenn Stripe sagt bezahlt, aber ich sehe nichts?</div>
-                <p className="mt-2">
-                  Geh auf /recover und gib die Checkout Session ID oder deine Payment Intent ID ein (steht in Stripe). Das aktiviert den Zugang erneut.
-                </p>
+                <div className="font-semibold text-white">Was, wenn Stripe bezahlt, aber ich sehe nichts?</div>
+                <p className="mt-1 text-gray-400">Geh auf /recover und gib die Checkout Session-ID oder Payment Intent-ID ein. Das aktiviert den Zugang erneut.</p>
               </div>
               <div>
                 <div className="font-semibold text-white">Kann ich kündigen?</div>
-                <p className="mt-2">
-                  Day Pass ist einmalig. Pro/Teams sind Abos und können jederzeit in Stripe gekündigt werden.
-                </p>
+                <p className="mt-1 text-gray-400">Day Pass ist einmalig. Pro/Teams sind Abos und können jederzeit in Stripe gekündigt werden.</p>
+              </div>
+              <div>
+                <div className="font-semibold text-white">Was ist neu im Pro-Plan?</div>
+                <p className="mt-1 text-gray-400">Temporal Intelligence, Neuro Intelligence, ClawVerse, Living Mycelium, SWARM Deployment Simulator, Provenance Chain und Issue Tracker sind neu hinzugekommen.</p>
+              </div>
+              <div>
+                <div className="font-semibold text-white">Was versteht ClawGuru unter &quot;Intelligence Layer&quot;?</div>
+                <p className="mt-1 text-gray-400">Zeitbasierte Threats (Temporal), KI-Insights (Neuro), semantischer Wissensgraph (ClawVerse) – echte operative Intelligenz statt statischer Docs.</p>
               </div>
             </div>
           </div>
+
+          {/* Quick links */}
+          <div className="mt-8 flex flex-wrap gap-3 justify-center text-sm">
+            {[
+              ["/check", "Security Check"],
+              ["/score", "Score + Badge"],
+              ["/runbooks", "Runbooks"],
+              ["/live", "OpsWall Live"],
+              ["/mission-control", "Mission Control"],
+              ["/threatmap", "ThreatMap"],
+              ["/recover", "Zugang recover"],
+            ].map(([href, label]) => (
+              <a key={href} href={href}
+                className="px-4 py-2 rounded-xl border border-white/10 text-gray-400 hover:text-white hover:border-white/20 transition-all duration-200">
+                {label}
+              </a>
+            ))}
+          </div>
+
         </div>
       </Container>
     </main>

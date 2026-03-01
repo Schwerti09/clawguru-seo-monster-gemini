@@ -1,5 +1,10 @@
 import { NextRequest, NextResponse } from "next/server"
 
+// Ensure this route always runs in the Node.js runtime so the in-memory Map
+// persists across requests within the same server process (consistent with all
+// other stateful API routes in this project, e.g. app/api/recovery/request/route.ts).
+export const runtime = "nodejs"
+
 // Test mode key — always returns a successful demo response without registration
 const TEST_MODE_KEY = "test_clawguru_demo_key_2024"
 
@@ -8,8 +13,26 @@ const rateLimitMap = new Map<string, { count: number; resetAt: number }>()
 const RATE_LIMIT = 60 // requests per window
 const RATE_WINDOW_MS = 60_000 // 1 minute
 
+/** Evict expired entries to prevent unbounded Map growth (memory leak). */
+function pruneExpired(now: number) {
+  for (const [k, v] of rateLimitMap) {
+    if (now >= v.resetAt) rateLimitMap.delete(k)
+  }
+}
+
+// Track when we last pruned so we run the sweep at most once per window,
+// not on every request (avoids redundant iteration on the hot path).
+let lastPruneAt = 0
+
 function getRateLimit(key: string): { allowed: boolean; remaining: number; resetAt: number } {
   const now = Date.now()
+
+  // Prune stale entries once per rate-limit window (time-based, deterministic).
+  if (now - lastPruneAt >= RATE_WINDOW_MS) {
+    pruneExpired(now)
+    lastPruneAt = now
+  }
+
   const entry = rateLimitMap.get(key)
 
   if (!entry || now >= entry.resetAt) {

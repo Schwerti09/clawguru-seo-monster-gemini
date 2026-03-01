@@ -14,10 +14,9 @@ export const revalidate = 60 * 60 * 24 // 24h
 export const dynamicParams = true
 
 export async function generateStaticParams() {
-  // NEXT-LEVEL UPGRADE 2026: pre-render top runbooks in de + en (most traffic) + es/fr/pt/it
+  // All 10 supported locales × top runbooks for full language coverage
   const topRunbooks = RUNBOOKS.slice(0, 50)
-  const primaryLocales: Locale[] = ["de", "en", "es", "fr", "pt", "it"]
-  return primaryLocales.flatMap((lang) =>
+  return SUPPORTED_LOCALES.flatMap((lang) =>
     topRunbooks.map((r) => ({ lang, slug: r.slug }))
   )
 }

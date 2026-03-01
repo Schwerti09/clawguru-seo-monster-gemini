@@ -10,6 +10,8 @@ import UmamiAnalytics from "@/components/analytics/UmamiAnalytics"
 // VISUAL UPGRADE 2026: Neon cursor + page transition wrapper
 import NeonCursor from "@/components/visual/NeonCursor"
 import PageTransition from "@/components/visual/PageTransition"
+// AFFILIATE SYSTEM: Track ?aff= URL params and store in cookie
+import AffiliateTracker from "@/components/affiliate/AffiliateTracker"
 // NEXT-LEVEL UPGRADE 2026: RTL direction support for Arabic + other RTL locales
 import RTLProvider from "@/components/layout/RTLProvider"
 import { SUPPORTED_LOCALES, LOCALE_HREFLANG } from "@/lib/i18n"
@@ -130,6 +132,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </main>
           <Footer />
           <ActionDock />
+          {/* AFFILIATE SYSTEM: Reads ?aff= param and stores in 60-day cookie */}
+          <AffiliateTracker />
           {/* VISUAL UPGRADE 2026: Custom neon cursor for desktop */}
           <NeonCursor />
         </RTLProvider>

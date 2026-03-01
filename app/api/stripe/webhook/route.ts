@@ -3,6 +3,13 @@ import Stripe from "stripe"
 import { stripe } from "@/lib/stripe"
 import { signAccessToken, AccessPlan } from "@/lib/access-token"
 import { sendEmail } from "@/lib/email"
+import {
+  META_AFF_CODE,
+  META_AFF_CONNECT_ID,
+  META_AFF_HOLD_UNTIL,
+  calcCommission,
+  holdUntilTimestamp,
+} from "@/lib/affiliate"
 
 export const runtime = "nodejs"
 
@@ -116,6 +123,93 @@ async function sendAccessEmail(session: Stripe.Checkout.Session) {
   })
 }
 
+/**
+ * Handle invoice.paid – calculate and record affiliate commission.
+ *
+ * Flow:
+ *  1. Retrieve the Stripe Customer to find the stored affiliate code.
+ *  2. Look up the affiliate's Stripe Connect account ID (stored in their
+ *     customer metadata under META_AFF_CONNECT_ID or via env fallback).
+ *  3. Calculate commission (20% recurring / 30% day-pass).
+ *  4. Create a Stripe Transfer to the affiliate's Connect account with a
+ *     30-day hold timestamp stored in metadata.
+ *
+ * Note: Stripe Connect must be enabled.  Set STRIPE_AFFILIATE_CONNECT_ACCOUNT
+ * as a fallback for testing (single-affiliate mode).
+ */
+async function handleInvoicePaid(invoice: Stripe.Invoice) {
+  const amountPaid = invoice.amount_paid
+  if (!amountPaid || amountPaid <= 0) return
+
+  // Determine customer
+  const customerId =
+    typeof invoice.customer === "string"
+      ? invoice.customer
+      : (invoice.customer as { id: string } | null)?.id
+  if (!customerId) return
+
+  const customer = await stripe.customers.retrieve(customerId)
+  if (customer.deleted) return
+
+  const affCode = customer.metadata?.[META_AFF_CODE]
+  if (!affCode) return // No affiliate attached – nothing to do
+
+  // Look up the affiliate's Stripe Connect account.
+  // In a full multi-affiliate setup this comes from your affiliates DB/table.
+  // Here we use a per-code env var (STRIPE_AFF_<CODE>_CONNECT) or the global
+  // fallback STRIPE_AFFILIATE_CONNECT_ACCOUNT.
+  const connectAccountId =
+    customer.metadata?.[META_AFF_CONNECT_ID] ||
+    process.env[`STRIPE_AFF_${affCode.toUpperCase()}_CONNECT`] ||
+    process.env.STRIPE_AFFILIATE_CONNECT_ACCOUNT
+
+  if (!connectAccountId) {
+    // Affiliate code exists but no Connect account registered – skip transfer.
+    console.warn(`[affiliate] No Connect account for code "${affCode}". Transfer skipped.`)
+    return
+  }
+
+  // Determine product type for commission rate.
+  // Prefer checking the subscription presence (reliable) over billing_reason
+  // which can have values like "manual" or "subscription_update" that don't
+  // clearly indicate the product type.
+  const subscriptionId =
+    typeof invoice.subscription === "string"
+      ? invoice.subscription
+      : (invoice.subscription as { id: string } | null)?.id
+  const subscriptionPriceId = invoice.lines?.data?.[0]?.price?.id
+  const dayPassPriceId = process.env.STRIPE_PRICE_DAYPASS
+  const isRecurring = !!subscriptionId ||
+    (!!subscriptionPriceId && subscriptionPriceId !== dayPassPriceId)
+  const productType = isRecurring ? "recurring" : "daypass"
+  const commissionAmount = calcCommission(amountPaid, productType)
+  if (commissionAmount <= 0) return
+
+  // Create the Stripe Transfer (held 30 days for chargebacks/refunds)
+  const holdUntil = holdUntilTimestamp(30)
+  try {
+    await stripe.transfers.create({
+      amount: commissionAmount,
+      currency: invoice.currency || "eur",
+      destination: connectAccountId,
+      // Link to the invoice so it's auditable
+      source_transaction: typeof invoice.charge === "string" ? invoice.charge : undefined,
+      metadata: {
+        [META_AFF_CODE]: affCode,
+        [META_AFF_HOLD_UNTIL]: String(holdUntil),
+        invoice_id: invoice.id,
+        customer_id: customerId,
+        product_type: productType,
+      },
+      description: `Affiliate commission – ${affCode} – ${productType} (hold until ${new Date(holdUntil * 1000).toISOString().split("T")[0]})`,
+    })
+    console.info(`[affiliate] Commission of ${commissionAmount} ${invoice.currency} created for ${affCode}`)
+  } catch (err) {
+    // Log but don't fail the webhook – Stripe will retry on 5xx only
+    console.error("[affiliate] Transfer failed:", err)
+  }
+}
+
 export async function POST(req: NextRequest) {
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET
   if (!webhookSecret) {
@@ -145,7 +239,25 @@ export async function POST(req: NextRequest) {
           expand: ["customer", "subscription"]
         })
         await sendAccessEmail(full)
+
+        // Propagate the affiliate code from the session onto the Stripe Customer
+        // so it is available when future invoice.paid events fire.
+        const affCode = full.metadata?.[META_AFF_CODE] || full.client_reference_id
+        const customerId =
+          typeof full.customer === "string"
+            ? full.customer
+            : (full.customer as { id: string } | null)?.id
+        if (affCode && customerId) {
+          await stripe.customers.update(customerId, {
+            metadata: { [META_AFF_CODE]: affCode }
+          })
+        }
       }
+    }
+
+    // ── Affiliate commission on every successful invoice payment ──────────
+    if (event.type === "invoice.paid") {
+      await handleInvoicePaid(event.data.object as Stripe.Invoice)
     }
 
     // optional: you can add cancellation/failed payment mails later

@@ -1,4 +1,4 @@
-// UNIVERSE 2050 – Quantum Void Elegance – ClawGuru GENESIS PROTOKOLL
+// UNIVERSE 2050 – FINAL – Quantum Void Elegance – ClawGuru GENESIS PROTOKOLL
 // ClawVerse Core: The central universe interface. Orbital navigation, living
 // mycelium graph, pulse stats, neuro indicator, inter-AI summon.
 
@@ -530,7 +530,7 @@ export default function UniversePage() {
                 className="text-[10px] font-mono tracking-[0.3em] uppercase mb-6"
                 style={{ color: `${QV.gold}88` }}
               >
-                Genesis Protokoll · Quantum Void Elegance · v∞
+                Genesis Protokoll · Quantum Void Elegance · v2050-final
               </div>
 
               <h1 className="text-5xl sm:text-6xl md:text-8xl font-black font-heading mb-6 leading-none tracking-tighter">
@@ -567,7 +567,7 @@ export default function UniversePage() {
                 className="text-[9px] font-mono tracking-[0.3em] uppercase"
                 style={{ color: "rgba(255,255,255,0.07)" }}
               >
-                One Mycelium to rule them all · Universe v∞ · ClawGuru.org
+                One Mycelium to rule them all · Universe 2050 Final · ClawGuru.org
               </div>
             </div>
           </div>

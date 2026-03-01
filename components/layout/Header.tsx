@@ -23,6 +23,7 @@ const PRIMARY_NAV: NavItem[] = [
 
 // Overflow items – visible in "More" dropdown on desktop and in mobile menu
 const MORE_NAV: NavItem[] = [
+  { href: "/summon", label: "🔴 Summon" },
   { href: "/oracle", label: "Oracle" },
   { href: "/neuro", label: "Neuro" },
   { href: "/mycelium", label: "Mycelium" },

@@ -40,7 +40,7 @@ const TAB_CONTENT: Record<
     title: "Temporal Mycelium",
     desc: "Traverse security events across all epochs. Temporal pattern analysis reveals hidden threat vectors through the living memory of the mycelium.",
     accent: QV.gold,
-    href: "/runbooks",
+    href: "/temporal",
   },
   "Approved Swarm": {
     title: "Approved Swarm",
@@ -70,7 +70,7 @@ const TAB_CONTENT: Record<
     title: "ClawLink Connector",
     desc: "Bridge universes. Connect your infrastructure to the living Mycelium and let collective intelligence amplify your security posture.",
     accent: QV.gold,
-    href: "/summon",
+    href: "/clawlink",
   },
 }
 

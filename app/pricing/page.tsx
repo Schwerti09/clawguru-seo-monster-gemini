@@ -2,9 +2,11 @@ import Container from "@/components/shared/Container"
 import BuyButton from "@/components/commerce/BuyButton"
 
 export const metadata = {
-  title: "Day Pass | ClawGuru",
+  title: "Day Pass | ClawGuru – Sofortzugang für Security Incidents",
   description:
-    "24h Vollzugriff auf ClawGuru (OpsWall, Vault, Copilot, Badge Generator). Einmal zahlen, sofort loslegen.",
+    "Security Incident? Day Pass: 24h Vollzugriff auf alle Runbooks, Log4j-Check, Ransomware Playbooks, Copilot & mehr. Einmal zahlen, sofort loslegen – kein Abo-Approval nötig.",
+  keywords:
+    "Day Pass Security, Log4j quick check, Ransomware runbook download, incident response sofort, Security Notfall Zugang, CVE check, emergency runbook",
   alternates: { canonical: "/pricing" }
 }
 
@@ -147,9 +149,14 @@ export default function PricingPage() {
             Wähle deinen Zugang
           </h1>
           <p className="mt-4 text-gray-400 text-lg">
-            Day Pass für akute Probleme. Pro für dauerhaften Zugriff.<br className="hidden sm:block" />
-            Teams für Zusammenarbeit & höhere Limits.
+            Day Pass für akute Incidents – sofort, ohne Abo-Approval.<br className="hidden sm:block" />
+            Pro für dauerhaften Zugriff. Teams für Zusammenarbeit.
           </p>
+          {/* Emergency nudge */}
+          <div className="mt-5 inline-flex items-center gap-2 text-sm px-4 py-2 rounded-full border"
+            style={{ borderColor: "rgba(220,38,38,0.35)", color: "#f87171", background: "rgba(220,38,38,0.06)" }}>
+            🔥 Security Incident? <a href="/emergency" className="underline underline-offset-2 font-bold hover:opacity-80 transition-opacity">→ Sofort-Zugang für Notfälle</a>
+          </div>
         </div>
       </section>
 
@@ -182,8 +189,9 @@ export default function PricingPage() {
                 </div>
 
                 <p className="mt-4 text-sm text-gray-300 leading-relaxed">
-                  Brennt gerade was? 24 Stunden Vollzugriff – sofort aktiv nach Zahlung.
-                  Score, Copilot, OpsWall, Vault, ThreatMap, Mission Control – alles drin.
+                  Brennt gerade was? Log4j, Ransomware, exposed Keys – 24 Stunden Vollzugriff
+                  auf alle Runbooks, Copilot, OpsWall, Vault, ThreatMap & Mission Control.
+                  Sofort aktiv nach Zahlung, kein Abo-Approval nötig.
                 </p>
 
                 <FeatureList groups={DAY_PASS_GROUPS} />

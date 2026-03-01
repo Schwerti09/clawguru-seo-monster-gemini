@@ -65,6 +65,7 @@ export async function GET(
         { loc: `${base}/`, lastmod, changefreq: "daily", priority: "1.0" },
         { loc: `${base}/live`, lastmod, changefreq: "daily", priority: "0.95" },
         { loc: `${base}/check`, lastmod, changefreq: "daily", priority: "0.9" },
+        { loc: `${base}/emergency`, lastmod, changefreq: "weekly", priority: "0.9" },
         { loc: `${base}/copilot`, lastmod, changefreq: "weekly", priority: "0.9" },
         { loc: `${base}/runbooks`, lastmod, changefreq: "daily", priority: "0.9" },
         { loc: `${base}/tags`, lastmod, changefreq: "weekly", priority: "0.8" },

@@ -46,17 +46,18 @@ function MyceliumGraph() {
     const ctx = canvas.getContext("2d")
     if (!ctx) return
 
+    const dpr = typeof devicePixelRatio !== "undefined" ? Math.min(devicePixelRatio, 2) : 1
+
     function resize() {
       if (!canvas) return
-      canvas.width = canvas.offsetWidth * (typeof devicePixelRatio !== "undefined" ? Math.min(devicePixelRatio, 2) : 1)
-      canvas.height = canvas.offsetHeight * (typeof devicePixelRatio !== "undefined" ? Math.min(devicePixelRatio, 2) : 1)
+      canvas.width = canvas.offsetWidth * dpr
+      canvas.height = canvas.offsetHeight * dpr
     }
     resize()
     window.addEventListener("resize", resize)
 
     const onPointer = (e: PointerEvent) => {
       const rect = canvas.getBoundingClientRect()
-      const dpr = typeof devicePixelRatio !== "undefined" ? Math.min(devicePixelRatio, 2) : 1
       mouseRef.current = { x: (e.clientX - rect.left) * dpr, y: (e.clientY - rect.top) * dpr }
     }
     canvas.addEventListener("pointermove", onPointer)

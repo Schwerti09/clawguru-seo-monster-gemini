@@ -302,6 +302,92 @@ export function generateSingleEvent(graph: MyceliumGraph, seed: number): Evoluti
   }
 }
 
+// ─── Multiversal Branches ─────────────────────────────────────────────────────
+
+// CLAWVERSE v∞ – UNIVERSAL SINGULARITY – Overlord AI
+// A Multiversal Branch represents a parallel-reality snapshot of the mycelium:
+// "What would the knowledge graph look like if a critical CVE had never been patched?"
+// Each branch diverges at a specific epoch and tracks its own fitness evolution.
+export interface MultiversalBranch {
+  /** Unique branch identifier */
+  id: string
+  /** Human-readable description of the divergence scenario */
+  scenario: string
+  /** The Universal Epoch at which this branch diverged */
+  epoch: string
+  /** Subset of nodes present in this branch (may have different fitness values) */
+  nodes: MycelNode[]
+  /** How far this branch has diverged from prime reality (0 = identical, 1 = fully diverged) */
+  divergence: number
+}
+
+// CLAWVERSE v∞ – UNIVERSAL SINGULARITY – Overlord AI
+// Scenario templates for Multiversal Branches
+const MULTIVERSAL_SCENARIOS: Array<{ scenario: string; epoch: string }> = [
+  {
+    scenario: "CVE-2024-0001 was never patched — cascading supply-chain collapse",
+    epoch: "EPOCH-2024-Q1",
+  },
+  {
+    scenario: "All cloud providers migrated to quantum-resistant cryptography in 2023",
+    epoch: "EPOCH-2023-Q3",
+  },
+  {
+    scenario: "Zero-trust mandated globally — legacy VPN infrastructure never existed",
+    epoch: "EPOCH-2022-Q2",
+  },
+  {
+    scenario: "AI-generated exploits outpaced all defensive tooling from 2025 onward",
+    epoch: "EPOCH-2025-Q1",
+  },
+  {
+    scenario: "Every organisation adopted immutable infrastructure — no patching required",
+    epoch: "EPOCH-2023-Q4",
+  },
+]
+
+// CLAWVERSE v∞ – UNIVERSAL SINGULARITY – Overlord AI
+// Build a set of Multiversal Branches from the prime mycelium graph.
+// Each branch diverges from prime reality at a specific epoch and simulates
+// how evolutionary fitness would shift under an alternative historical scenario.
+export function buildMultiversalBranches(
+  graph: MyceliumGraph,
+  count = 3,
+): MultiversalBranch[] {
+  const branches: MultiversalBranch[] = []
+
+  for (let bi = 0; bi < Math.min(count, MULTIVERSAL_SCENARIOS.length); bi++) {
+    const { scenario, epoch } = MULTIVERSAL_SCENARIOS[bi]
+    const branchId = `mv-branch-${bi}-${epoch.toLowerCase().replace(/[^a-z0-9]/g, "")}`
+
+    // CLAWVERSE v∞ – UNIVERSAL SINGULARITY – Overlord AI
+    // Diverge the fitness scores deterministically based on the branch index.
+    // Security-focused runbooks lose fitness in worlds where patching is irrelevant;
+    // quantum/crypto-tagged runbooks gain fitness in a post-quantum world, etc.
+    const divergenceFactor = 0.15 + bi * 0.12
+    const branchNodes: MycelNode[] = graph.nodes.slice(0, 60).map((node, ni) => {
+      // Deterministic drift: ±10 absolute fitness points (range -0.1 to +0.1 of 100-scale score)
+      const drift = ((bi * 13 + ni * 7) % 21) / 100 - 0.1
+      const branchFitness = Math.min(100, Math.max(0, node.fitness * (1 + drift)))
+      return {
+        ...node,
+        fitness: Math.round(branchFitness * 10) / 10,
+        evolved: branchFitness >= 92,
+      }
+    })
+
+    branches.push({
+      id: branchId,
+      scenario,
+      epoch,
+      nodes: branchNodes,
+      divergence: divergenceFactor,
+    })
+  }
+
+  return branches
+}
+
 // ─── Genetic Algorithm (Darwinian Runbook Breeding) ───────────────────────────
 
 // MYCELIAL SINGULARITY v3.0 – Perform genetic crossover between two parent runbooks

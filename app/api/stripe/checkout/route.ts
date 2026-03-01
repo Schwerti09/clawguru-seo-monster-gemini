@@ -25,6 +25,18 @@ function getStripe() {
   return new Stripe(key, { apiVersion: "2024-06-20" })
 }
 
+/**
+ * Returns the preferred payment currency for a customer based on their country code.
+ * US customers pay in USD; all other countries use EUR by default to minimise
+ * foreign-exchange conversion losses.
+ *
+ * @param country - ISO 3166-1 alpha-2 country code (e.g. "US", "DE"), case-insensitive
+ */
+function getCurrency(country?: string): string {
+  if (!country) return "eur"
+  return country.toUpperCase() === "US" ? "usd" : "eur"
+}
+
 export async function POST(req: NextRequest) {
   try {
     const stripe = getStripe()
@@ -35,6 +47,9 @@ export async function POST(req: NextRequest) {
         : "daypass"
     const email: string | undefined =
       typeof body?.email === "string" ? body.email : undefined
+    // Optional country hint passed by the frontend (e.g. from geolocation or a form field)
+    const country: string | undefined =
+      typeof body?.country === "string" ? body.country : undefined
 
     const price = getPriceId(product)
     if (!price) {
@@ -62,9 +77,19 @@ export async function POST(req: NextRequest) {
       success_url,
       cancel_url,
       customer_email: email,
+      // Automatically calculate and collect VAT / Sales Tax
+      automatic_tax: { enabled: true },
+      // Collect billing address so Stripe Tax can determine the correct rate
+      billing_address_collection: "required",
+      // Allow B2B customers to enter their Tax ID (USt-IdNr.) so that the
+      // Reverse Charge mechanism applies automatically ($0 tax for EU companies)
+      tax_id_collection: { enabled: true },
+      // Set currency based on customer location to minimise FX losses
+      currency: getCurrency(country),
       metadata: {
         product,
-        ...(email ? { email } : {})
+        ...(email ? { email } : {}),
+        ...(country ? { country } : {})
       }
     })
 

@@ -12,12 +12,15 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@react-three/drei": "^9.122.0",
+    "@react-three/fiber": "^8.18.0",
     "framer-motion": "^12.34.3",
     "lucide-react": "^0.575.0",
     "next": "14.2.21",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "stripe": "^16.0.0"
+    "stripe": "^16.0.0",
+    "three": "^0.179.1"
   },
   "devDependencies": {
     "@netlify/plugin-nextjs": "^5.8.1",
@@ -25,6 +28,7 @@
     "@types/node": "^20.0.0",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
+    "@types/three": "^0.183.1",
     "autoprefixer": "^10.4.0",
     "eslint": "^8.57.0",
     "eslint-config-next": "14.2.21",

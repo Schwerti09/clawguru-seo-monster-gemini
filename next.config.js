@@ -73,6 +73,12 @@ const nextConfig = {
   },
   async rewrites() {
     return [
+      // Serve sitemap index without .xml in the internal route name to avoid
+      // Next.js metadata-route conflicts with a folder named "sitemap.xml"
+      {
+        source: "/sitemap.xml",
+        destination: "/sitemap-index",
+      },
       {
         source: "/sitemaps/:name.xml",
         destination: "/sitemaps/:name",

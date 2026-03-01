@@ -103,7 +103,37 @@ Ohne Key bleibt er rule-based (kein Crash).
 
 
 ## Programmatic SEO
-- Sitemap Index: `/sitemap.xml`
+
+### Sitemap structure
+
+| URL | Content | Source route |
+|-----|---------|-------------|
+| `/sitemap.xml` | `<sitemapindex>` listing all child sitemaps | `app/sitemap-index/route.ts` (served via rewrite) |
+| `/sitemaps/main.xml` | `<urlset>` – core pages | `app/sitemaps/[name]/route.ts` |
+| `/sitemaps/providers.xml` | `<urlset>` – provider pages | same |
+| `/sitemaps/runbooks-a-f.xml` … `runbooks-0-9.xml` | `<urlset>` – runbook alphabetical buckets | same |
+| `/sitemaps/tags-a-f.xml` … `tags-0-9.xml` | `<urlset>` – tag pages | same |
+| `/sitemaps/runbook100k-N.xml` | `<urlset>` – paginated 50k runbooks | same |
+| `/sitemaps/i18n-{locale}.xml` | `<urlset>` – localised runbook URLs | same |
+| `/sitemaps/issues.xml` | `<urlset>` – issue hub | same |
+| `/sitemaps/services.xml` | `<urlset>` – service hub | same |
+| `/sitemaps/years.xml` | `<urlset>` – year hub | same |
+
+**Why `sitemap-index` instead of `sitemap.xml` as a folder?**
+Next.js 14 App Router reserves the name `sitemap.xml` for its built-in metadata route system.
+A folder called `app/sitemap.xml/` causes a routing conflict that makes the custom route handler
+invisible to the framework. The fix is to serve the sitemap index from `app/sitemap-index/route.ts`
+and add a rewrite rule in `next.config.js` that maps `/sitemap.xml` → `/sitemap-index`.
+
+### Sitemap health check
+
+A runtime verification endpoint is available at `/api/sitemap-health`. It checks that:
+- `/sitemap.xml` returns HTTP 200 and contains `<sitemapindex`
+- `/sitemaps/main.xml` returns HTTP 200 and contains `<urlset`
+- The index lists at least one `/sitemaps/` child URL
+
+Returns `200 { ok: true, checks: … }` on success, `500 { ok: false, checks: … }` on failure.
+
 - Child sitemaps: `/sitemaps/main.xml` + `/sitemaps/runbooks-*.xml`
 - Runbook pages: `/runbook/[slug]` (ISR)
 

@@ -76,7 +76,8 @@ export async function GET() {
         "Cache-Control": "public, max-age=3600, s-maxage=3600",
       }
     })
-  } catch {
+  } catch (err) {
+    console.error("Sitemap index generation failed:", err)
     // Always return a valid sitemap index even on error to avoid "cannot be retrieved" errors
     const base = BASE_URL
     const lastmod = isoDate()

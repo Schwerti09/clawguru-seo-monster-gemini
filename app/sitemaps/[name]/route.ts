@@ -1,6 +1,7 @@
 import type { NextRequest } from "next/server"
 import { NextResponse } from "next/server"
 import { bucketsAF, bucketsTagsAF, allProviders, get100kSlugsPage, allIssues100k, allServices100k, allYears100k } from "@/lib/pseo"
+import { KNOWN_CVES, SERVICE_CHECKS } from "@/lib/cve-pseo"
 import { BASE_URL } from "@/lib/config"
 import { SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
 
@@ -67,6 +68,8 @@ export async function GET(
         { loc: `${base}/check`, lastmod, changefreq: "daily", priority: "0.9" },
         { loc: `${base}/copilot`, lastmod, changefreq: "weekly", priority: "0.9" },
         { loc: `${base}/runbooks`, lastmod, changefreq: "daily", priority: "0.9" },
+        { loc: `${base}/solutions`, lastmod, changefreq: "weekly", priority: "0.85" },
+        { loc: `${base}/tools`, lastmod, changefreq: "weekly", priority: "0.8" },
         { loc: `${base}/tags`, lastmod, changefreq: "weekly", priority: "0.8" },
         { loc: `${base}/issues`, lastmod, changefreq: "weekly", priority: "0.85" },
         { loc: `${base}/services`, lastmod, changefreq: "weekly", priority: "0.85" },
@@ -228,6 +231,34 @@ export async function GET(
           lastmod,
           changefreq: "monthly",
           priority: "0.75",
+        })),
+      ]
+      return new NextResponse(urlset(urls), { status: 200, headers: SITEMAP_HEADERS })
+    }
+
+    // PROGRAMMATIC SEO: CVE Solutions sitemap (/solutions/fix-CVE-*)
+    if (name === "solutions-cve") {
+      const urls = [
+        { loc: `${base}/solutions`, lastmod, changefreq: "weekly", priority: "0.85" },
+        ...KNOWN_CVES.map((cve) => ({
+          loc: `${base}/solutions/fix-${cve.cveId}`,
+          lastmod: cve.publishedDate,
+          changefreq: "monthly",
+          priority: "0.85",
+        })),
+      ]
+      return new NextResponse(urlset(urls), { status: 200, headers: SITEMAP_HEADERS })
+    }
+
+    // PROGRAMMATIC SEO: Service Check Tools sitemap (/tools/check-*)
+    if (name === "tools-check") {
+      const urls = [
+        { loc: `${base}/tools`, lastmod, changefreq: "weekly", priority: "0.8" },
+        ...SERVICE_CHECKS.map((svc) => ({
+          loc: `${base}/tools/check-${svc.slug}`,
+          lastmod,
+          changefreq: "monthly",
+          priority: "0.8",
         })),
       ]
       return new NextResponse(urlset(urls), { status: 200, headers: SITEMAP_HEADERS })

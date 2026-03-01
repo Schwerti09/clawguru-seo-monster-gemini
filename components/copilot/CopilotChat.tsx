@@ -18,7 +18,7 @@ const START: ChatMsg[] = [
     id: "a0",
     role: "assistant",
     content:
-      "Ich bin ClawGuru Copilot.\n\nSag mir **was läuft wo** (Stack/Provider) + **Ziel** (security/uptime/costs).\nOder paste ein Log-Excerpt (10–30 Zeilen)."
+      "Guten Tag. Ich bin Professor ClawGuru.\n\nDas kollektive Bewusstsein von über einer Million Runbooks.\n\nWas möchtest du wissen?"
   }
 ]
 

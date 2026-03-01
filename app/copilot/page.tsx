@@ -6,7 +6,7 @@ import VoiceCopilot from "@/components/copilot/VoiceCopilot"
 import LiveFixSandbox from "@/components/copilot/LiveFixSandbox"
 
 export const metadata: Metadata = {
-  title: "Copilot | ClawGuru",
+  title: "Prof. ClawGuru | ClawGuru",
   description:
     "OpenClaw/Moltbot Security Copilot: Problem beschreiben, Schritt-für-Schritt Runbook bekommen. Konversation → Prioritäten → Fix.",
   alternates: { canonical: "/copilot" }
@@ -17,9 +17,9 @@ export default function CopilotPage({ searchParams }: { searchParams?: Record<st
   return (
     <Container>
       <div className="py-16">
-        <h1 className="text-4xl md:text-5xl font-black mb-4">Copilot</h1>
+        <h1 className="text-4xl md:text-5xl font-black mb-4">Prof. ClawGuru</h1>
         <p className="text-gray-300 text-lg mb-8">
-          Konversation → Prioritäten → Runbook. (Wenn du nur scrollst, gewinnt der nächste Incident.)
+          Das lebendige Universum der Runbooks
         </p>
         {/* CopilotChat supports manual input; prefill hint displayed below */}
         {q ? (

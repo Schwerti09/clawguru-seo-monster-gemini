@@ -4,25 +4,13 @@
 
 "use client"
 
-import { useState, useEffect, useRef, useCallback, Suspense, useMemo } from "react"
-import { Canvas, useFrame } from "@react-three/fiber"
-import { OrbitControls } from "@react-three/drei"
-import * as THREE from "three"
+import { useState, useEffect, useCallback } from "react"
+import dynamic from "next/dynamic"
+import { QV } from "./qv"
 
-/* ── Quantum Void colour tokens ── */
-const QV = {
-  void: "#050505",
-  gold: "#c9a84c",
-  goldGlow: "rgba(201,168,76,0.25)",
-  violet: "#8b6cdf",
-  violetGlow: "rgba(139,108,223,0.2)",
-  coldWhite: "#d4dce8",
-  coldWhiteGlow: "rgba(212,220,232,0.15)",
-  green: "#00ff9d",
-  blue: "#00b8ff",
-  glass: "rgba(255,255,255,0.03)",
-  glassBorder: "rgba(255,255,255,0.08)",
-} as const
+// Dynamic import with SSR disabled prevents WebGL/Canvas from running on the server,
+// which would crash Next.js SSR even inside "use client" components.
+const MyceliumGraph = dynamic(() => import("./MyceliumGraph"), { ssr: false })
 
 /* ── Tab definitions (full names per spec) ── */
 const TABS = [
@@ -75,130 +63,6 @@ const TAB_CONTENT: Record<
     accent: QV.gold,
     href: "/clawlink",
   },
-}
-
-/* ── R3F: 3D Mycelium Node ── */
-function MyceliumNode({
-  position,
-  color,
-  speed,
-  phase,
-}: {
-  position: [number, number, number]
-  color: string
-  speed: number
-  phase: number
-}) {
-  const meshRef = useRef<THREE.Mesh>(null)
-  useFrame(({ clock }) => {
-    if (!meshRef.current) return
-    const t = clock.getElapsedTime()
-    meshRef.current.position.y = position[1] + Math.sin(t * speed + phase) * 0.15
-    meshRef.current.position.x = position[0] + Math.cos(t * speed * 0.7 + phase) * 0.1
-    const s = 0.8 + Math.sin(t * speed * 1.3 + phase) * 0.2
-    meshRef.current.scale.setScalar(s)
-  })
-  return (
-    <mesh ref={meshRef} position={position}>
-      <sphereGeometry args={[0.04, 8, 8]} />
-      <meshBasicMaterial color={color} transparent opacity={0.75} />
-    </mesh>
-  )
-}
-
-/* ── R3F: 3D Mycelium Edges ── */
-function MyceliumEdges({ positions }: { positions: [number, number, number][] }) {
-  const lineSegments = useMemo(() => {
-    const pts: THREE.Vector3[] = []
-    const connectionDist = 1.6
-    for (let i = 0; i < positions.length; i++) {
-      for (let j = i + 1; j < positions.length; j++) {
-        const dx = positions[j][0] - positions[i][0]
-        const dy = positions[j][1] - positions[i][1]
-        const dz = positions[j][2] - positions[i][2]
-        const dist = Math.sqrt(dx * dx + dy * dy + dz * dz)
-        if (dist < connectionDist) {
-          pts.push(new THREE.Vector3(...positions[i]))
-          pts.push(new THREE.Vector3(...positions[j]))
-        }
-      }
-    }
-    return pts
-  }, [positions])
-
-  const geometry = useMemo(() => {
-    const geo = new THREE.BufferGeometry().setFromPoints(lineSegments)
-    return geo
-  }, [lineSegments])
-
-  return (
-    <lineSegments geometry={geometry}>
-      <lineBasicMaterial color={QV.gold} transparent opacity={0.08} />
-    </lineSegments>
-  )
-}
-
-/* ── R3F: Full 3D Mycelium Scene ── */
-function MyceliumScene() {
-  const groupRef = useRef<THREE.Group>(null)
-
-  const nodes = useMemo(() => {
-    const colors = [QV.gold, QV.violet, QV.coldWhite, QV.green, QV.blue]
-    return Array.from({ length: 60 }, (_, i) => ({
-      position: [
-        (Math.random() - 0.5) * 7,
-        (Math.random() - 0.5) * 5,
-        (Math.random() - 0.5) * 4,
-      ] as [number, number, number],
-      color: colors[i % colors.length],
-      speed: 0.3 + Math.random() * 0.5,
-      phase: Math.random() * Math.PI * 2,
-    }))
-  }, [])
-
-  useFrame(({ clock }) => {
-    if (groupRef.current) {
-      groupRef.current.rotation.y = clock.getElapsedTime() * 0.04
-    }
-  })
-
-  return (
-    <group ref={groupRef}>
-      <MyceliumEdges positions={nodes.map((n) => n.position)} />
-      {nodes.map((n, i) => (
-        <MyceliumNode key={i} {...n} />
-      ))}
-    </group>
-  )
-}
-
-/* ── React Three Fiber: Interactive 3D Mycelium Graph ── */
-function MyceliumGraph() {
-  return (
-    <div
-      className="absolute inset-0 w-full h-full"
-      style={{ zIndex: 0 }}
-      role="img"
-      aria-label="Interactive 3D mycelium network graph"
-    >
-      <Canvas
-        camera={{ position: [0, 0, 6], fov: 60 }}
-        gl={{ antialias: true, alpha: false }}
-        style={{ background: QV.void }}
-      >
-        <Suspense fallback={null}>
-          <MyceliumScene />
-          <OrbitControls
-            enableZoom={false}
-            enablePan={false}
-            autoRotate={false}
-            maxPolarAngle={Math.PI}
-            minPolarAngle={0}
-          />
-        </Suspense>
-      </Canvas>
-    </div>
-  )
 }
 
 /* ── Cosmic Inter-AI Summon Button (top-right, subtly pulsing) ── */

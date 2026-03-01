@@ -9,7 +9,7 @@ import { stripe } from "@/lib/stripe"
 
 // FULL PASSIVE WELTMACHT: affiliate revenue estimated as a percentage of Stripe revenue
 // Replace with real affiliate API (Awin, ShareASale, etc.) when available.
-const AFFILIATE_ESTIMATE_PERCENTAGE = 0.15
+const AFFILIATE_ESTIMATE_PERCENTAGE = 0.40
 
 // ---------------------------------------------------------------------------
 // Types
@@ -253,10 +253,10 @@ export function affiliateTier(conversions: number): AffiliateEntry["tier"] {
 
 /** WORLD BEAST: Commission rate by tier (percentage of sale) */
 export const AFFILIATE_COMMISSION_RATES: Record<AffiliateEntry["tier"], number> = {
-  bronze: 0.10,
-  silver: 0.15,
-  gold: 0.20,
-  platinum: 0.25,
+  bronze: 0.40,
+  silver: 0.45,
+  gold: 0.50,
+  platinum: 0.55,
 }
 
 // ---------------------------------------------------------------------------

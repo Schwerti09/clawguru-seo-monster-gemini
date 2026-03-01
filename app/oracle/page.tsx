@@ -471,7 +471,7 @@ export default function OraclePage() {
 
               {/* Answer text */}
               <div className="text-gray-200 leading-relaxed whitespace-pre-wrap text-sm md:text-base font-light">
-                {response.answer.split("The Mycelium has spoken.").map((part, i, arr) =>
+                {response.answer.split("The Universe has spoken through the Mycelium.").map((part, i, arr) =>
                   i < arr.length - 1 ? (
                     <span key={i}>
                       {part}
@@ -479,7 +479,7 @@ export default function OraclePage() {
                         className="font-black tracking-wide"
                         style={{ color: activeMode.color }}
                       >
-                        The Mycelium has spoken.
+                        The Universe has spoken through the Mycelium.
                       </span>
                     </span>
                   ) : (

@@ -52,6 +52,9 @@ export interface ProvenanceEvent {
   mutationType: ProvenanceMutationType
   /** Sequential index in the chain (0 = genesis) */
   index: number
+  // CLAWVERSE v∞ – UNIVERSAL SINGULARITY – Overlord AI
+  /** Universal Epoch label — the cosmic time-frame in which this event occurred */
+  universalEpoch: string
 }
 
 /** PROVENANCE SINGULARITY v3.4 – Overlord AI: Full provenance chain for a runbook */
@@ -210,6 +213,12 @@ const PROVENANCE_BASE_DATES: Record<string, string> = {
   "2026-Q2": "2026-06-01T00:00:00Z",
 }
 
+// CLAWVERSE v∞ – UNIVERSAL SINGULARITY – Overlord AI
+// Map a quarter key to its Universal Epoch label used in the ClawVerse provenance dimension.
+function toUniversalEpoch(quarter: string): string {
+  return `EPOCH-${quarter}`
+}
+
 // ---------------------------------------------------------------------------
 // PROVENANCE SINGULARITY v3.4 – Overlord AI: Core API
 // ---------------------------------------------------------------------------
@@ -255,6 +264,8 @@ export function generateProvenanceChain(runbook: Runbook): ProvenanceChain {
       reason: v.mutationReason,
       mutationType: primaryMutationType,
       index: idx,
+      // CLAWVERSE v∞ – UNIVERSAL SINGULARITY – Overlord AI: Universal Epoch dimension
+      universalEpoch: toUniversalEpoch(v.quarter),
     })
     prevHash = contentHash
 
@@ -293,6 +304,8 @@ export function generateProvenanceChain(runbook: Runbook): ProvenanceChain {
           reason: eReason,
           mutationType: eMutationType,
           index: eIdx,
+          // CLAWVERSE v∞ – UNIVERSAL SINGULARITY – Overlord AI: Universal Epoch dimension
+          universalEpoch: toUniversalEpoch(v.quarter),
         })
         prevHash = eHash
       }

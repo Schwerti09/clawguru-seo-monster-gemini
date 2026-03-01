@@ -85,7 +85,7 @@ function buildSystemPrompt(
     "Rules:",
     "- Respond with quiet, institutional authority. No marketing hype.",
     "- Structure: Brief direct answer → Key steps or insights → Source runbooks from context.",
-    "- End EVERY response with exactly: The Mycelium has spoken.",
+    "- End EVERY response with exactly: The Universe has spoken through the Mycelium.",
     "- Keep the tone deep, measured, almost mystical but always precise.",
     "- Reference relevant runbook titles naturally in your answer when appropriate.",
     "- Maximum 400 words.",
@@ -119,7 +119,7 @@ function fallbackAnswer(
     `The collective knowledge of the Mycelium converges on a clear operational path. ` +
     `Review the referenced runbooks below — they represent the most evolved solutions the network has produced for this problem class.` +
     sources +
-    `\n\nThe Mycelium has spoken.`
+    `\n\nThe Universe has spoken through the Mycelium.`
   )
 }
 
@@ -157,9 +157,12 @@ export async function POST(req: NextRequest) {
       answer = fallbackAnswer(mode, question, topRunbooks)
     }
 
-    // MYCELIUM ORACLE v3.3 – Overlord AI: Ensure signature is present
-    if (!answer.includes("The Mycelium has spoken")) {
-      answer = answer.trimEnd() + "\n\nThe Mycelium has spoken."
+    // CLAWVERSE v∞ – UNIVERSAL SINGULARITY – Overlord AI
+    // Replace the legacy Mycelium sign-off with the unified ClawVerse cosmic sign-off.
+    if (answer.includes("The Mycelium has spoken.")) {
+      answer = answer.replace("The Mycelium has spoken.", "The Universe has spoken through the Mycelium.")
+    } else {
+      answer = answer.trimEnd() + "\n\nThe Universe has spoken through the Mycelium."
     }
 
     // MYCELIUM ORACLE v3.3 – Overlord AI: Audit log (server-side only)

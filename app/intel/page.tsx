@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import Container from "@/components/shared/Container"
 import IntelFeed from "@/components/intel/IntelFeed"
+import IntelApiDocs from "@/components/intel/IntelApiDocs"
 
 export const metadata: Metadata = {
   title: "Intel Feed | ClawGuru",
@@ -18,6 +19,7 @@ export default function IntelPage() {
           Wiederkehrende Muster, kuratiert. Kein Clickbait. Du willst Handlungswissen.
         </p>
         <IntelFeed />
+        <IntelApiDocs />
       </div>
     </Container>
   )

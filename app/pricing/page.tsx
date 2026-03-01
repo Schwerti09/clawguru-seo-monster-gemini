@@ -1,5 +1,6 @@
 import Container from "@/components/shared/Container"
 import BuyButton from "@/components/commerce/BuyButton"
+import EnterpriseContact from "@/components/marketing/EnterpriseContact"
 
 export const metadata = {
   title: "Day Pass | ClawGuru",
@@ -148,7 +149,7 @@ export default function PricingPage() {
           </h1>
           <p className="mt-4 text-gray-400 text-lg">
             Day Pass für akute Probleme. Pro für dauerhaften Zugriff.<br className="hidden sm:block" />
-            Teams für Zusammenarbeit & höhere Limits.
+            Teams für Zusammenarbeit – Enterprise für individuelle Anforderungen.
           </p>
         </div>
       </section>
@@ -290,6 +291,60 @@ export default function PricingPage() {
                   <div className="mt-3 text-xs text-gray-500 text-center">
                     Kündbar jederzeit · Abo-Status via Stripe geprüft
                   </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* ── Enterprise ── */}
+          <div className="mt-6 relative rounded-3xl p-[1px] overflow-hidden"
+            style={{ background: "linear-gradient(135deg, rgba(255,165,0,0.5) 0%, rgba(255,107,0,0.1) 100%)" }}>
+            <div className="rounded-3xl p-7 md:p-10" style={{ background: "#0f0a04" }}>
+              <div className="grid md:grid-cols-2 gap-10 items-start">
+
+                {/* Left: plan info */}
+                <div>
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="text-[11px] font-mono uppercase tracking-[0.2em]" style={{ color: "#ffa500" }}>
+                      Enterprise
+                    </div>
+                    <div className="text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full border"
+                      style={{ borderColor: "rgba(255,165,0,0.35)", color: "#ffa500", background: "rgba(255,165,0,0.08)" }}>
+                      Custom Pricing
+                    </div>
+                  </div>
+                  <div className="text-2xl font-black text-white font-heading mb-3">
+                    ClawGuru Enterprise
+                  </div>
+                  <p className="text-gray-300 text-sm leading-relaxed mb-6">
+                    Für Organisationen mit mehr als 10 Mitarbeitern, individuellen Compliance-Anforderungen
+                    oder eigenem Deployment. Preise, SLAs und Feature-Sets werden individuell vereinbart.
+                  </p>
+                  <ul className="space-y-[7px]">
+                    {[
+                      "Unbegrenzte Sitze & individuelle Nutzerlimits",
+                      "Dedizierter Support & SLA-Garantie",
+                      "Custom Onboarding & Integration",
+                      "On-Premise / Private Deployment möglich",
+                      "Audit-Logs & Compliance-Reports (SOC 2, ISO 27001)",
+                      "Roadmap-Einfluss & exklusive Early Access",
+                      "Rechnungsstellung & flexible Zahlungsmodalitäten",
+                    ].map((feat) => (
+                      <li key={feat} className="flex items-start gap-2 text-sm text-gray-200">
+                        <span className="mt-[2px] shrink-0 size-[18px] rounded-full flex items-center justify-center text-[9px] font-bold"
+                          style={{ background: "rgba(255,165,0,0.12)", color: "#ffa500" }} aria-hidden="true">✓</span>
+                        <span className="leading-snug">{feat}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Right: contact form */}
+                <div>
+                  <div className="text-xs font-mono uppercase tracking-[0.2em] text-gray-500 mb-5">
+                    Sales kontaktieren
+                  </div>
+                  <EnterpriseContact />
                 </div>
               </div>
             </div>

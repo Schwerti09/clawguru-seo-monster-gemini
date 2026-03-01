@@ -39,6 +39,11 @@ export async function GET() {
 
       // NEXT-LEVEL UPGRADE 2026: Language-specific sitemaps for all 10 locales
       ...SUPPORTED_LOCALES.map((locale) => `${base}/sitemaps/i18n-${locale}.xml`),
+
+      // GENESIS PROTOKOLL: Issue / Service / Year hub sitemaps
+      `${base}/sitemaps/issues.xml`,
+      `${base}/sitemaps/services.xml`,
+      `${base}/sitemaps/years.xml`,
     ]
 
     const active = sitemapUrls.filter((u) => {

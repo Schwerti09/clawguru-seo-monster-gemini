@@ -1631,13 +1631,123 @@ export function topRunbooksByTag(tag: string, n = 10): Runbook[] {
     .slice(0, n)
 }
 
+/** All unique issue types from the 100k matrix */
+export function allIssues100k(): Array<{ slug: string; name: string }> {
+  return [...(ISSUES_100K as unknown as Array<{ slug: string; name: string }>)]
+}
+
+/** All unique service types from the 100k matrix */
+export function allServices100k(): Array<{ slug: string; name: string }> {
+  return [...(SERVICES_100K as unknown as Array<{ slug: string; name: string }>)]
+}
+
+/** All unique years from the 100k matrix */
+export function allYears100k(): string[] {
+  return [...(YEARS_100K as unknown as string[])]
+}
+
+/** All cloud providers from the 100k matrix */
+export function allProviders100k(): Array<{ slug: string; name: string }> {
+  return [...(CLOUD_PROVIDERS_100K as unknown as Array<{ slug: string; name: string }>)]
+}
+
+/**
+ * Shared helper: collect slugs by iterating arrays, stopping when `limit` is reached.
+ * @param arrays - ordered list of slug-arrays to iterate (nested loops)
+ * @param build  - callback that receives the current slug from each array and returns the full slug
+ */
+function _collectSlugs(
+  arrays: Array<Array<{ slug: string }>>,
+  build: (...slugs: string[]) => string,
+  limit: number
+): string[] {
+  const result: string[] = []
+  function iterate(depth: number, current: string[]): void {
+    if (result.length >= limit) return
+    if (depth === arrays.length) {
+      result.push(build(...current))
+      return
+    }
+    for (const item of arrays[depth]) {
+      if (result.length >= limit) break
+      iterate(depth + 1, [...current, item.slug])
+    }
+  }
+  iterate(0, [])
+  return result
+}
+
+/**
+ * Get a sample of on-demand runbook slugs for a given issue (for hub pages).
+ * Uses 2026 as the canonical year for the hub sample.
+ */
+export function getSampleSlugsByIssue(issueSlug: string, limit = 48): string[] {
+  return _collectSlugs(
+    [
+      CLOUD_PROVIDERS_100K as unknown as Array<{ slug: string }>,
+      SERVICES_100K as unknown as Array<{ slug: string }>,
+    ],
+    (p, s) => `${p}-${s}-${issueSlug}-2026`,
+    limit
+  )
+}
+
+/**
+ * Get a sample of on-demand runbook slugs for a given service (for hub pages).
+ * Uses 2026 as the canonical year for the hub sample.
+ */
+export function getSampleSlugsByService(serviceSlug: string, limit = 48): string[] {
+  return _collectSlugs(
+    [
+      CLOUD_PROVIDERS_100K as unknown as Array<{ slug: string }>,
+      ISSUES_100K as unknown as Array<{ slug: string }>,
+    ],
+    (p, i) => `${p}-${serviceSlug}-${i}-2026`,
+    limit
+  )
+}
+
+/**
+ * Get a sample of on-demand runbook slugs for a given year (for hub pages).
+ */
+export function getSampleSlugsByYear(year: string, limit = 48): string[] {
+  return _collectSlugs(
+    [
+      CLOUD_PROVIDERS_100K as unknown as Array<{ slug: string }>,
+      SERVICES_100K as unknown as Array<{ slug: string }>,
+      ISSUES_100K as unknown as Array<{ slug: string }>,
+    ],
+    (p, s, i) => `${p}-${s}-${i}-${year}`,
+    limit
+  )
+}
+
+/** Total count of issue hub pages */
+export function countIssueHubPages(): number {
+  return ISSUES_100K.length
+}
+
+/** Total count of service hub pages */
+export function countServiceHubPages(): number {
+  return SERVICES_100K.length
+}
+
 /** Number of static main pages included in the main sitemap */
 const MAIN_SITEMAP_PAGE_COUNT = 10
 
 /**
  * Compute the actual total number of URLs across all sitemaps.
- * Covers: main pages + provider pages + runbook pages + tag pages.
+ * Covers: main pages + provider pages + runbook pages + tag pages + issue/service/year hubs.
  */
 export function totalSitemapUrls(): number {
-  return MAIN_SITEMAP_PAGE_COUNT + PROVIDERS.length + RUNBOOKS.length + allTags().length + count100kSlugs()
+  return (
+    MAIN_SITEMAP_PAGE_COUNT +
+    PROVIDERS.length +
+    RUNBOOKS.length +
+    allTags().length +
+    count100kSlugs() +
+    ISSUES_100K.length +
+    SERVICES_100K.length +
+    YEARS_100K.length
+  )
 }

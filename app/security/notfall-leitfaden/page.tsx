@@ -1,4 +1,15 @@
+import type { Metadata } from "next"
 import Container from "@/components/shared/Container"
+import BuyButton from "@/components/commerce/BuyButton"
+
+export const metadata: Metadata = {
+  title: "Notfall-Leitfaden | ClawGuru – Security Incident Response",
+  description:
+    "Security Incident? 0–60 Minuten Notfall-Protokoll: Instanz offline, Key Rotation, Logs sichern, Hardening. Sofort einsetzbar. Day Pass für alle Runbooks.",
+  keywords:
+    "Security Notfall, Incident Response Leitfaden, Security Breach Protokoll, API Key leak, Server Intrusion Response",
+  alternates: { canonical: "/security/notfall-leitfaden" },
+}
 
 export default function Emergency() {
   return (
@@ -26,6 +37,37 @@ export default function Emergency() {
               </ul>
             </div>
           ))}
+        </div>
+
+        {/* Day Pass CTA – sofort Runbooks & Copilot für den Notfall */}
+        <div className="mt-10 p-7 rounded-2xl border"
+          style={{ borderColor: "rgba(220,38,38,0.3)", background: "rgba(220,38,38,0.06)" }}>
+          <div className="text-[10px] font-mono uppercase tracking-[0.2em] mb-2" style={{ color: "#f87171" }}>
+            Sofortzugang · Day Pass
+          </div>
+          <div className="font-black text-xl text-white">Runbooks & Copilot für deinen Incident</div>
+          <p className="mt-2 text-gray-300 text-sm leading-relaxed">
+            Log4j-Check, Ransomware Playbook, Key Rotation, SSH-Hardening – 500+ Runbooks sofort
+            verfügbar. Kein Abo, kein Account-Approval. 7€ einmalig, aktiv in 60 Sekunden.
+          </p>
+          <div className="mt-5 flex flex-wrap gap-3 items-center">
+            <BuyButton
+              product="daypass"
+              label="🔥 Day Pass kaufen (7€) – Sofortzugang"
+              className="py-3 px-6 rounded-xl font-black text-sm text-black transition-all duration-300 hover:opacity-90 disabled:opacity-60"
+              style={{
+                background: "linear-gradient(135deg, #f87171 0%, #dc2626 100%)",
+                boxShadow: "0 0 25px rgba(220,38,38,0.3)",
+              }}
+            />
+            <a href="/emergency"
+              className="py-3 px-6 rounded-xl font-black text-sm border border-white/10 text-gray-300 hover:border-white/20 hover:text-white transition-all duration-200">
+              Alle Incident-Szenarien →
+            </a>
+          </div>
+          <div className="mt-3 text-xs text-gray-500">
+            Sofortzugang · kein Abo · Zugang via /recover wiederherstellbar
+          </div>
         </div>
 
         <div className="mt-10 p-7 rounded-2xl border border-gray-800 bg-gradient-to-br from-gray-900/60 to-black">

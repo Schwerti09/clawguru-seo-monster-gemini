@@ -18,6 +18,7 @@ export default function Footer() {
           <nav aria-label="Seiten-Navigation">
             <div className="font-black text-gray-200 mb-2">Hubs</div>
             <ul className="space-y-1">
+              <li><a href="/clawverse">ClawVerse</a></li>
               <li><a href="/check">Security-Check</a></li>
               <li><a href="/copilot">Copilot</a></li>
               <li><a href="/intel">Intel Feed</a></li>

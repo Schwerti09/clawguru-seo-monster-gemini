@@ -80,8 +80,8 @@ export default function Header() {
               </div>
             </Link>
 
-      {/* Desktop nav */}
-              <nav aria-label="Hauptnavigation" className="hidden lg:flex items-center gap-1">
+            {/* Desktop nav */}
+            <nav aria-label="Hauptnavigation" className="hidden lg:flex items-center gap-1">
               {PRIMARY_NAV.map((item) => (
                 <Link
                   key={item.href}

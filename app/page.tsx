@@ -127,7 +127,10 @@ export default function Home() {
               wächst, lernt und evolviert autonom durch Darwinian Selection.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
-              <a href="/mycelium" className="px-6 py-3 rounded-2xl font-black text-black bg-claw-green hover:shadow-neon-green transition-all duration-300">
+              <a href="/clawverse" className="px-6 py-3 rounded-2xl font-black text-black bg-claw-green hover:shadow-neon-green transition-all duration-300">
+                ClawVerse →
+              </a>
+              <a href="/mycelium" className="px-6 py-3 rounded-2xl border border-white/10 hover:border-white/20 font-bold text-gray-200 transition-all duration-300">
                 Living Mycelium öffnen →
               </a>
               <a href="/dashboard" className="px-6 py-3 rounded-2xl border border-white/10 hover:border-white/20 font-bold text-gray-200 transition-all duration-300">

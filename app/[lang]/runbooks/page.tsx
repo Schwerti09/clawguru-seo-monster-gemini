@@ -20,6 +20,7 @@ export async function generateMetadata({ params }: { params: { lang: string } })
   }
 }
 
-export default function LocaleRunbooksPage() {
-  return <RunbooksPage />
+export default function LocaleRunbooksPage({ params }: { params: { lang: string } }) {
+  const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
+  return <RunbooksPage locale={locale} />
 }

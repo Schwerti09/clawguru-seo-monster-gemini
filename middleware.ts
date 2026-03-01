@@ -90,14 +90,20 @@ export function middleware(request: NextRequest) {
   }
 
   // Check for persisted user cookie first
+  // If the cookie is set (even to the default locale), always respect it and
+  // do NOT let the Accept-Language header override the user's explicit choice.
   const cookieLocale = request.cookies.get(LOCALE_COOKIE)?.value as Locale | undefined
-  if (cookieLocale && SUPPORTED_LOCALES.includes(cookieLocale) && cookieLocale !== DEFAULT_LOCALE) {
-    const url = request.nextUrl.clone()
-    url.pathname = `/${cookieLocale}`
-    return NextResponse.redirect(url, { status: 302 })
+  if (cookieLocale && SUPPORTED_LOCALES.includes(cookieLocale)) {
+    if (cookieLocale !== DEFAULT_LOCALE) {
+      const url = request.nextUrl.clone()
+      url.pathname = `/${cookieLocale}`
+      return NextResponse.redirect(url, { status: 302 })
+    }
+    // Cookie explicitly set to default locale (de) – stay on root, skip header detection
+    return NextResponse.next()
   }
 
-  // Detect from Accept-Language header
+  // No cookie – detect from Accept-Language header
   const acceptLanguage = request.headers.get("accept-language")
   const detected = detectLocaleFromHeader(acceptLanguage)
 

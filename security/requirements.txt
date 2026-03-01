@@ -1,0 +1,10 @@
+# Self-Defending API – Python dependencies
+# Install with: pip install -r security/requirements.txt
+
+redis>=5.0.0
+requests>=2.31.0
+
+# FastAPI middleware (only needed when using fastapi_middleware.py)
+fastapi>=0.111.0
+starlette>=0.37.0
+uvicorn[standard]>=0.29.0

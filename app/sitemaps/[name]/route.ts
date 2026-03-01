@@ -1,6 +1,6 @@
 import type { NextRequest } from "next/server"
 import { NextResponse } from "next/server"
-import { bucketsAF, bucketsTagsAF, allProviders, get100kSlugsPage } from "@/lib/pseo"
+import { bucketsAF, bucketsTagsAF, allProviders, get100kSlugsPage, allIssues100k, allServices100k, allYears100k } from "@/lib/pseo"
 import { BASE_URL } from "@/lib/config"
 import { SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
 
@@ -68,6 +68,9 @@ export async function GET(
         { loc: `${base}/copilot`, lastmod, changefreq: "weekly", priority: "0.9" },
         { loc: `${base}/runbooks`, lastmod, changefreq: "daily", priority: "0.9" },
         { loc: `${base}/tags`, lastmod, changefreq: "weekly", priority: "0.8" },
+        { loc: `${base}/issues`, lastmod, changefreq: "weekly", priority: "0.85" },
+        { loc: `${base}/services`, lastmod, changefreq: "weekly", priority: "0.85" },
+        { loc: `${base}/years`, lastmod, changefreq: "monthly", priority: "0.8" },
         { loc: `${base}/intel`, lastmod, changefreq: "daily", priority: "0.8" },
         { loc: `${base}/academy`, lastmod, changefreq: "weekly", priority: "0.8" },
         { loc: `${base}/pricing`, lastmod, changefreq: "weekly", priority: "0.7" },
@@ -179,6 +182,51 @@ export async function GET(
         status: 200,
         headers: SITEMAP_HEADERS,
       })
+    }
+
+    // GENESIS PROTOKOLL: Issue hub sitemap
+    if (name === "issues") {
+      const issues = allIssues100k()
+      const urls = [
+        { loc: `${base}/issues`, lastmod, changefreq: "weekly", priority: "0.85" },
+        ...issues.map((issue) => ({
+          loc: `${base}/issue/${issue.slug}`,
+          lastmod,
+          changefreq: "weekly",
+          priority: "0.8",
+        })),
+      ]
+      return new NextResponse(urlset(urls), { status: 200, headers: SITEMAP_HEADERS })
+    }
+
+    // GENESIS PROTOKOLL: Service hub sitemap
+    if (name === "services") {
+      const services = allServices100k()
+      const urls = [
+        { loc: `${base}/services`, lastmod, changefreq: "weekly", priority: "0.85" },
+        ...services.map((service) => ({
+          loc: `${base}/service/${service.slug}`,
+          lastmod,
+          changefreq: "weekly",
+          priority: "0.8",
+        })),
+      ]
+      return new NextResponse(urlset(urls), { status: 200, headers: SITEMAP_HEADERS })
+    }
+
+    // GENESIS PROTOKOLL: Year hub sitemap
+    if (name === "years") {
+      const years = allYears100k()
+      const urls = [
+        { loc: `${base}/years`, lastmod, changefreq: "monthly", priority: "0.8" },
+        ...years.map((year) => ({
+          loc: `${base}/year/${year}`,
+          lastmod,
+          changefreq: "monthly",
+          priority: "0.75",
+        })),
+      ]
+      return new NextResponse(urlset(urls), { status: 200, headers: SITEMAP_HEADERS })
     }
 
     return new NextResponse("Not Found", { status: 404 })

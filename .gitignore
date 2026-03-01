@@ -14,3 +14,9 @@ out/
 .DS_Store
 *.pem
 tsconfig.tsbuildinfo
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/

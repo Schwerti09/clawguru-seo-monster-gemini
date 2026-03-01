@@ -75,6 +75,7 @@ export async function GET(
         { loc: `${base}/academy`, lastmod, changefreq: "weekly", priority: "0.8" },
         { loc: `${base}/pricing`, lastmod, changefreq: "weekly", priority: "0.7" },
         { loc: `${base}/downloads`, lastmod, changefreq: "weekly", priority: "0.7" },
+        { loc: `${base}/clawverse`, lastmod, changefreq: "weekly", priority: "0.85" },
         ...hubUrls,
       ]
       return new NextResponse(urlset(urls), {

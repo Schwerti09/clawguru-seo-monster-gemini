@@ -56,6 +56,35 @@ export default function Home() {
         </Container>
       </section>
 
+      {/* UNIVERSE MODULE – QUANTUM VOID ELEGANCE 2050: Directly after Hero */}
+      <section className="relative py-28 overflow-hidden" style={{ background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,184,255,0.08) 0%, rgba(0,255,157,0.04) 40%, transparent 70%), #060608" }}>
+        {/* Glow orb */}
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-center" aria-hidden="true">
+          <div style={{ width: "600px", height: "300px", background: "radial-gradient(ellipse, rgba(0,184,255,0.12) 0%, transparent 70%)", filter: "blur(40px)" }} />
+        </div>
+        <div className="relative z-10 flex flex-col items-center text-center px-4 max-w-4xl mx-auto">
+          <div className="mb-4 text-xs font-mono tracking-[0.3em] uppercase" style={{ color: "rgba(0,184,255,0.7)" }}>
+            CLAWVERSE · UNIVERSE CORE · OPERATIONAL KNOWLEDGE NETWORK
+          </div>
+          <h2 className="text-5xl sm:text-6xl md:text-7xl font-black font-heading leading-[1.05] tracking-tight text-white">
+            Enter the ClawVerse
+          </h2>
+          <p className="mt-6 text-lg sm:text-xl text-gray-400 max-w-2xl leading-relaxed">
+            One living mycelium connecting all operational security knowledge across tools, time&nbsp;&amp;&nbsp;intelligence layers. The Universe is live.
+          </p>
+          <a
+            href="/universe"
+            className="mt-10 inline-block px-10 py-4 rounded-2xl font-black text-base tracking-wide text-black transition-all duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#00b8ff]"
+            style={{
+              background: "linear-gradient(135deg, #00b8ff 0%, #00ff9d 100%)",
+              boxShadow: "0 0 40px rgba(0,184,255,0.35), 0 0 80px rgba(0,255,157,0.15)"
+            }}
+          >
+            Enter the Universe →
+          </a>
+        </div>
+      </section>
+
       {/* TRUST & SECURITY FORTRESS 2026: Institutional trust section directly after hero */}
       <TrustSecurity />
 

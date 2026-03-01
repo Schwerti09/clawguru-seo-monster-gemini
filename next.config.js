@@ -40,6 +40,26 @@ const nextConfig = {
         source: "/(.*)",
         headers: SECURITY_HEADERS,
       },
+      // Immutable caching for content-hashed static assets
+      {
+        source: "/_next/static/(.*)",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
+      // Force revalidation for HTML pages so users always see the latest version
+      {
+        source: "/((?!_next/static|_next/image|favicon.ico).*)",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=0, must-revalidate",
+          },
+        ],
+      },
     ]
   },
   async redirects() {

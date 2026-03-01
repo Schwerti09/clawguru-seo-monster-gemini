@@ -9,6 +9,18 @@
   NODE_VERSION = "20"
   NETLIFY_LOG_LEVEL = "debug"
 
+# Force revalidation for HTML pages so users always see the latest version
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# Immutable caching for content-hashed static assets
+[[headers]]
+  for = "/_next/static/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
 # Daily self-health cron – runs at 06:00 UTC every day
 [functions."health-cron"]
   schedule = "0 6 * * *"

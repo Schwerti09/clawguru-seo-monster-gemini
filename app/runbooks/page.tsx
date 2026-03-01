@@ -5,6 +5,7 @@ import { RUNBOOKS } from "@/lib/pseo"
 import type { SeverityLevel } from "@/lib/design-system"
 import type { RunbookSummary } from "@/components/shared/RunbooksSearch"
 import { BASE_URL } from "@/lib/config"
+import { type Locale, t, DEFAULT_LOCALE } from "@/lib/i18n"
 
 export const dynamic = "force-static"
 
@@ -31,7 +32,7 @@ function deriveReadiness(r: typeof RUNBOOKS[number]): number {
   return Math.min(95, 50 + steps * 8)
 }
 
-export default function RunbooksPage() {
+export default function RunbooksPage({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
   const items: RunbookSummary[] = [...RUNBOOKS]
     .sort((a, b) => a.title.localeCompare(b.title))
     .map((r) => ({
@@ -65,7 +66,7 @@ export default function RunbooksPage() {
         <SectionTitle
           kicker="Programmatic SEO"
           title="Runbook Library"
-          subtitle="Jede Seite ist ein Einstiegspunkt: Problem → Fix → Verifikation."
+          subtitle={t(locale, "runbooksSubtitle")}
         />
         <RunbooksSearch items={items} />
       </div>

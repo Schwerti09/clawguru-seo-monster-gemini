@@ -163,7 +163,7 @@ export default async function LocalizedRunbookPage({
 
         {/* E-E-A-T: Last updated signal */}
         <div className="mb-8 text-xs text-gray-500">
-          Zuletzt aktualisiert: <time dateTime={r.lastmod}>{r.lastmod}</time> · ClawScore: {r.clawScore}/100
+          {t(locale, "lastUpdated")}: <time dateTime={r.lastmod}>{r.lastmod}</time> · ClawScore: {r.clawScore}/100
         </div>
 
         {/* Steps */}
@@ -181,7 +181,7 @@ export default async function LocalizedRunbookPage({
         {/* FAQ */}
         {r.faq.length > 0 && (
           <div className="mb-8 p-6 rounded-2xl border border-gray-800 bg-black/20">
-            <h2 className="text-xl font-black mb-4">Häufige Fragen</h2>
+            <h2 className="text-xl font-black mb-4">{t(locale, "faq")}</h2>
             <div className="space-y-4">
               {r.faq.map((entry, i) => (
                 <div key={i}>
@@ -222,7 +222,7 @@ export default async function LocalizedRunbookPage({
               <div className="text-xs text-brand-cyan mb-2">{r.author.role}</div>
               <p className="text-sm text-gray-300 mb-3">{r.author.experience}</p>
               <div className="text-xs text-gray-500">
-                <span className="font-bold text-gray-400">Quellen & Standards: </span>
+                <span className="font-bold text-gray-400">{t(locale, "sourcesStandards")}: </span>
                 {r.author.sources.join(" · ")}
               </div>
             </div>

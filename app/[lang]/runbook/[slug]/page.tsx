@@ -2,15 +2,17 @@
 // Localized runbook pages: /de/runbook/[slug], /en/runbook/[slug], etc.
 
 import Container from "@/components/shared/Container"
-import { getRunbook, RUNBOOKS } from "@/lib/pseo"
+import { getRunbook, RUNBOOKS, type RunbookBlock } from "@/lib/pseo"
 import { notFound } from "next/navigation"
 import { type Locale, SUPPORTED_LOCALES, translateRunbook, t, localeDir, LOCALE_HREFLANG } from "@/lib/i18n"
 import { getTemporalHistory } from "@/lib/temporal-mycelium"
+import { validateRunbook } from "@/lib/quality-gate"
 import TemporalTimeline from "@/components/visual/TemporalTimeline"
 import { ActivateSwarmButton } from "@/components/shared/ActivateSwarmButton"
 import Link from "next/link"
 import ShareUnlockPanel from "@/components/shared/ShareUnlockPanel"
 import { mutateSeoTitle } from "@/app/lib/seo-optimizer"
+import { BASE_URL } from "@/lib/config"
 
 export const revalidate = 60 * 60 * 24 // 24h
 export const dynamicParams = true
@@ -51,7 +53,77 @@ export async function generateMetadata({
         SUPPORTED_LOCALES.map((l) => [LOCALE_HREFLANG[l], `/${l}/runbook/${r.slug}`])
       ),
     },
+    openGraph: {
+      title: `${mutatedTitle} | ClawGuru`,
+      description: translated.summary,
+      type: "article",
+    },
   }
+}
+
+function breadcrumbJsonLd(title: string, slug: string, locale: Locale) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "ClawGuru", item: BASE_URL },
+      { "@type": "ListItem", position: 2, name: "Runbooks", item: `${BASE_URL}/${locale}/runbooks` },
+      { "@type": "ListItem", position: 3, name: title, item: `${BASE_URL}/${locale}/runbook/${slug}` },
+    ],
+  }
+}
+
+function techArticleJsonLd(r: { title: string; summary: string; slug: string; lastmod: string }, locale: Locale) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    headline: r.title,
+    description: r.summary,
+    url: `${BASE_URL}/${locale}/runbook/${r.slug}`,
+    dateModified: r.lastmod,
+    author: { "@type": "Organization", name: "ClawGuru", url: BASE_URL },
+    publisher: { "@type": "Organization", name: "ClawGuru", url: BASE_URL, logo: { "@type": "ImageObject", url: `${BASE_URL}/og-image.png` } },
+  }
+}
+
+function BlockView({ b }: { b: RunbookBlock }) {
+  if (b.kind === "h2") return <h2 className="mt-10 text-lg font-black text-gray-100">{b.text}</h2>
+  if (b.kind === "h3") return <h3 className="mt-6 text-base font-bold text-gray-200">{b.text}</h3>
+  if (b.kind === "h4") return <h4 className="mt-4 text-sm font-semibold text-gray-300 uppercase tracking-wide">{b.text}</h4>
+
+  if (b.kind === "p") return <p className="mt-3 text-gray-200/90 leading-relaxed">{b.text}</p>
+
+  if (b.kind === "ul")
+    return (
+      <ul className="mt-3 list-disc pl-6 space-y-2 text-gray-200/90">
+        {b.items.map((it, i) => (
+          <li key={i} className="leading-relaxed">
+            {it}
+          </li>
+        ))}
+      </ul>
+    )
+
+  if (b.kind === "code")
+    return (
+      <pre className="mt-4 rounded-2xl border border-gray-800 bg-black/40 p-4 overflow-x-auto text-sm">
+        <code>{b.code}</code>
+      </pre>
+    )
+
+  if (b.kind === "callout")
+    return (
+      <div
+        className={`mt-5 rounded-3xl border p-5 ${
+          b.tone === "warn" ? "border-red-500/30 bg-red-500/10" : "border-emerald-500/30 bg-emerald-500/10"
+        }`}
+      >
+        <div className="text-sm font-black tracking-wide text-gray-100">{b.title}</div>
+        <div className="mt-2 text-gray-200/90 leading-relaxed">{b.text}</div>
+      </div>
+    )
+
+  return null
 }
 
 export default async function LocalizedRunbookPage({
@@ -65,6 +137,8 @@ export default async function LocalizedRunbookPage({
 
   const r = getRunbook(params.slug)
   if (!r) notFound()
+  const quality = validateRunbook(r)
+  if (!quality.pass) notFound()
 
   const translated = await translateRunbook({
     slug: r.slug,
@@ -115,7 +189,7 @@ export default async function LocalizedRunbookPage({
       "@type": "SpeakableSpecification",
       cssSelector: ["#direct-answer", "h1"],
     },
-    url: `/${locale}/runbook/${r.slug}`,
+    url: `${BASE_URL}/${locale}/runbook/${r.slug}`,
   }
 
   return (
@@ -135,6 +209,16 @@ export default async function LocalizedRunbookPage({
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(speakableSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd(translated.title, r.slug, locale)) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(techArticleJsonLd({ title: translated.title, summary: translated.summary, slug: r.slug, lastmod: r.lastmod }, locale)),
+        }}
       />
 
       <div className="py-16 max-w-4xl mx-auto" dir={localeDir(locale)}>
@@ -169,6 +253,14 @@ export default async function LocalizedRunbookPage({
         <div className="mb-8 text-xs text-gray-500">
           {t(locale, "lastUpdated")}: <time dateTime={r.lastmod}>{r.lastmod}</time> · ClawScore: {r.clawScore}/100
         </div>
+
+        {Array.isArray(r.blocks) && r.blocks.length > 0 && (
+          <div className="mb-8">
+            {r.blocks.map((b: RunbookBlock, i: number) => (
+              <BlockView key={i} b={b} />
+            ))}
+          </div>
+        )}
 
         {/* Steps */}
         {r.howto.steps.length > 0 && (

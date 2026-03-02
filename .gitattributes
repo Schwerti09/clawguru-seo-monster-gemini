@@ -1,0 +1,3 @@
+# Auto-generated lock file: always prefer this branch's version during merges
+# to avoid conflicts caused by different package versions across branches.
+package-lock.json merge=ours

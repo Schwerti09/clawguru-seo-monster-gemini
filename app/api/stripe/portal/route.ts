@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { stripe } from "@/lib/stripe"
 import { verifyAccessToken } from "@/lib/access-token"
 import { cookies } from "next/headers"
+import { isStripeActive, apiUnavailableResponse } from "@/lib/api-guard"
 
 export const runtime = "nodejs"
 
@@ -14,7 +15,8 @@ function getOrigin(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  const token = (await cookies()).get("claw_access")?.value || ""
+  if (!isStripeActive()) return apiUnavailableResponse()
+  const token = cookies().get("claw_access")?.value || ""
   const payload = token ? verifyAccessToken(token) : null
   if (!payload) return NextResponse.json({ error: "Not authorized" }, { status: 401 })
 

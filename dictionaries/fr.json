@@ -55,6 +55,24 @@
   "faq": {
     "kicker": "FAQ",
     "title": "Court. Net. Utile.",
-    "subtitle": "Certaines questions reviennent toujours. Voici les réponses."
+    "subtitle": "Certaines questions reviennent toujours. Voici les réponses.",
+    "q1": "ClawGuru stocke-t-il mes saisies ?",
+    "a1": "Non. Aucun stockage persistant de vos vérifications. Certains journaux serveur peuvent contenir des métadonnées techniquement nécessaires.",
+    "q2": "Est-ce officiel ?",
+    "a2": "Non. ClawGuru est indépendant. C'est précisément pourquoi la perspective est opérationnelle plutôt que PR.",
+    "q3": "Quelle est l'erreur la plus courante ?",
+    "a3": "Exposition publique + pas de discipline origin/token. C'est le combo classique.",
+    "q4": "Pourquoi autant de « Ops » ?",
+    "a4": "Parce que 90 % des dégâts viennent de l'exploitation/discipline, pas des fonctionnalités sophistiquées."
+  },
+  "home": {
+    "clawVerseKicker": "CLAWVERSE · NOYAU DE L'UNIVERS · RÉSEAU DE CONNAISSANCES OPÉRATIONNELLES",
+    "clawVerseTitle": "Enter the ClawVerse",
+    "clawVerseDesc": "Un mycélium vivant reliant toutes les connaissances en sécurité opérationnelle à travers outils, temps et couches d'intelligence. L'Univers est en direct.",
+    "clawVerseCta": "Enter the Universe →",
+    "genesisProtocol": "PROTOCOLE GENESIS ACTIF · MYCELIAL SINGULARITY ENGINE v3.0",
+    "myceliumTitle": "Le mycélium vivant. 1M+ runbooks. Maintenant.",
+    "myceliumDesc": "Chaque nœud est une unité de connaissance. Chaque arête une relation sémantique. Le réseau grandit, apprend et évolue de manière autonome par sélection darwinienne.",
+    "openMycelium": "Ouvrir Living Mycelium →"
   }
 }

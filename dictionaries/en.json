@@ -55,6 +55,24 @@
   "faq": {
     "kicker": "FAQ",
     "title": "Short. Sharp. Helpful.",
-    "subtitle": "Some questions always come up. Here are the answers."
+    "subtitle": "Some questions always come up. Here are the answers.",
+    "q1": "Does ClawGuru store my inputs?",
+    "a1": "No. No persistent storage of your checks. Some server logs may contain technically necessary metadata.",
+    "q2": "Is this official?",
+    "a2": "No. ClawGuru is independent. That's exactly why the perspective is operational rather than PR.",
+    "q3": "What's the most common mistake?",
+    "a3": "Public exposure + no origin/token discipline. That's the classic combo.",
+    "q4": "Why so much 'Ops'?",
+    "a4": "Because 90% of damage comes from operations/discipline, not from fancy features."
+  },
+  "home": {
+    "clawVerseKicker": "CLAWVERSE · UNIVERSE CORE · OPERATIONAL KNOWLEDGE NETWORK",
+    "clawVerseTitle": "Enter the ClawVerse",
+    "clawVerseDesc": "One living mycelium connecting all operational security knowledge across tools, time & intelligence layers. The Universe is live.",
+    "clawVerseCta": "Enter the Universe →",
+    "genesisProtocol": "GENESIS PROTOCOL ACTIVE · MYCELIAL SINGULARITY ENGINE v3.0",
+    "myceliumTitle": "The living mycelium. 1M+ runbooks. Now.",
+    "myceliumDesc": "Every node is a unit of knowledge. Every edge a semantic relationship. The network grows, learns and evolves autonomously through Darwinian Selection.",
+    "openMycelium": "Open Living Mycelium →"
   }
 }

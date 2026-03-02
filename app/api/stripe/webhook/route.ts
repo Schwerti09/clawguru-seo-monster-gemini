@@ -129,6 +129,97 @@ async function handleChargeRefunded(charge: Stripe.Charge) {
 }
 
 
+// ---------------------------------------------------------------------------
+// affiliate transfer – pay commission to referring affiliate via Stripe Connect
+// ---------------------------------------------------------------------------
+// AFFILIATE_CONNECT_ACCOUNTS must be a JSON object mapping affiliate_ref → Stripe
+// connected account ID, e.g. {"hetzner":"acct_xxx","do":"acct_yyy"}.
+// AFFILIATE_COMMISSION_RATE sets the fraction of the sale paid as commission
+// (default 0.40 = 40 %). The transfer is fire-and-forget so failures never
+// block or break the checkout confirmation flow.
+async function handleAffiliateTransfer(session: Stripe.Checkout.Session) {
+  const affiliateRef = session.metadata?.affiliate_ref
+  if (!affiliateRef) return
+
+  const accountsJson = process.env.AFFILIATE_CONNECT_ACCOUNTS || "{}"
+  let accounts: Record<string, string>
+  try {
+    accounts = JSON.parse(accountsJson)
+  } catch {
+    return
+  }
+
+  const destination = accounts[affiliateRef]
+  if (!destination) return
+
+  const amountTotal = session.amount_total
+  if (!amountTotal || amountTotal <= 0) return
+
+  const rawRate = parseFloat(process.env.AFFILIATE_COMMISSION_RATE || "0.40")
+  // Validate: must be a finite number in the range (0, 1]
+  const rate = Number.isFinite(rawRate) && rawRate > 0 && rawRate <= 1 ? rawRate : 0.40
+  const commissionAmount = Math.round(amountTotal * rate)
+  if (commissionAmount <= 0) return
+
+  await stripe.transfers.create({
+    amount: commissionAmount,
+    currency: session.currency || "eur",
+    destination,
+    description: `Affiliate commission – ref:${affiliateRef} session:${session.id}`,
+    metadata: {
+      affiliate_ref: affiliateRef,
+      session_id: session.id,
+      commission_rate: String(rate)
+    }
+  })
+}
+
+// ---------------------------------------------------------------------------
+// customer.subscription.deleted – notify customer on cancellation
+// ---------------------------------------------------------------------------
+async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
+  const customerId =
+    typeof subscription.customer === "string"
+      ? subscription.customer
+      : (subscription.customer as { id: string } | null)?.id
+  if (!customerId) return
+
+  // Retrieve customer to get their email
+  const customer = await stripe.customers.retrieve(customerId)
+  if (customer.deleted) return
+  const email = (customer as Stripe.Customer).email
+  if (!email) return
+
+  const support =
+    process.env.SUPPORT_EMAIL || process.env.EMAIL_REPLY_TO || process.env.EMAIL_FROM || "support@clawguru.org"
+  const base = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
+
+  // Create a billing portal session so the customer can reactivate from their account
+  const portalSession = await stripe.billingPortal.sessions.create({
+    customer: customerId,
+    return_url: `${base}/dashboard`
+  })
+
+  const html = `
+  <div style="font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial; line-height: 1.5; color:#111;">
+    <h2 style="margin:0 0 10px 0;">Dein ClawGuru Abo wurde gekündigt</h2>
+    <p style="margin:0 0 14px 0;">Dein Abonnement läuft bis zum Ende des aktuellen Abrechnungszeitraums weiter.</p>
+    <p style="margin:0 0 14px 0;">Du kannst deinen Zugang jederzeit reaktivieren:</p>
+    <p style="margin:0 0 18px 0;">
+      <a href="${portalSession.url}" style="display:inline-block; padding:12px 18px; background:#0ea5e9; color:#fff; text-decoration:none; border-radius:12px; font-weight:800;">
+        Abo reaktivieren &#8594;
+      </a>
+    </p>
+    <p style="margin:0; font-size:12px; color:#555;">Support: ${support}</p>
+  </div>`
+
+  await sendEmail({
+    to: email,
+    subject: "ClawGuru – Abo gekündigt",
+    html
+  })
+}
+
 function planFromSession(session: Stripe.Checkout.Session): AccessPlan {
   const product = (session.metadata?.product || "").toLowerCase()
   if (product === "team") return "team"
@@ -261,6 +352,8 @@ export async function POST(req: NextRequest) {
           expand: ["customer", "subscription"]
         })
         await sendAccessEmail(full)
+        // Fire-and-forget affiliate commission transfer (does not block response)
+        handleAffiliateTransfer(full).catch((err) => console.error("[affiliate-transfer]", err))
       }
     }
 
@@ -274,6 +367,12 @@ export async function POST(req: NextRequest) {
     if (event.type === "charge.refunded") {
       const charge = event.data.object as Stripe.Charge
       await handleChargeRefunded(charge)
+    }
+
+    // Notify customer when their subscription is cancelled
+    if (event.type === "customer.subscription.deleted") {
+      const subscription = event.data.object as Stripe.Subscription
+      await handleSubscriptionDeleted(subscription)
     }
 
     return NextResponse.json({ received: true })

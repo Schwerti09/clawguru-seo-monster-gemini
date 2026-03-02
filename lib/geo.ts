@@ -26,14 +26,16 @@ export function getCountryFromRequest(req: NextRequest): string | undefined {
   return undefined
 }
 
+const CURRENCY_BY_COUNTRY: Record<string, string> = {
+  US: "usd",
+  GB: "gbp",
+  CH: "chf",
+  CA: "cad",
+  AU: "aud",
+  JP: "jpy",
+}
+
 export function getCurrencyForCountry(country?: string) {
   const code = normalizeCountry(country)
-  if (!code) return "eur"
-  if (code === "US") return "usd"
-  if (code === "GB") return "gbp"
-  if (code === "CH") return "chf"
-  if (code === "CA") return "cad"
-  if (code === "AU") return "aud"
-  if (code === "JP") return "jpy"
-  return "eur"
+  return (code && CURRENCY_BY_COUNTRY[code]) || "eur"
 }

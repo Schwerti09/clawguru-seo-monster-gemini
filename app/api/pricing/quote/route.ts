@@ -55,13 +55,9 @@ export async function GET(req: NextRequest) {
   }
 
   const url = new URL(req.url)
+  const productParam = url.searchParams.get("product")
   const product =
-    url.searchParams.get("product") === "pro" ||
-    url.searchParams.get("product") === "team" ||
-    url.searchParams.get("product") === "daypass" ||
-    url.searchParams.get("product") === "msp"
-      ? (url.searchParams.get("product") as Product)
-      : "daypass"
+    productParam && productParam in PRICE_IDS ? (productParam as Product) : "daypass"
 
   const priceId = getPriceId(product)
   if (!priceId || !/^price_[A-Za-z0-9]+$/.test(priceId)) {

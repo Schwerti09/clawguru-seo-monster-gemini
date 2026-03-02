@@ -2,8 +2,6 @@ import Container from "@/components/shared/Container"
 import { generateAffiliateLeaderboard } from "@/lib/affiliates"
 import { type Locale, SUPPORTED_LOCALES, t, localeDir, LOCALE_HREFLANG } from "@/lib/i18n"
 
-const LEADERBOARD = generateAffiliateLeaderboard(60)
-
 function rankTone(rank: number) {
   if (rank === 1) return "text-yellow-400"
   if (rank <= 3) return "text-emerald-300"
@@ -22,6 +20,7 @@ function formatPayout(value: number, locale: Locale) {
 
 export default function AffiliateLeaderboard({ locale = "de" }: { locale?: Locale }) {
   const resolvedLocale: Locale = SUPPORTED_LOCALES.includes(locale) ? locale : "de"
+  const leaderboard = generateAffiliateLeaderboard(60)
 
   return (
     <Container>
@@ -44,7 +43,7 @@ export default function AffiliateLeaderboard({ locale = "de" }: { locale?: Local
             <span className="text-right pr-6">{t(resolvedLocale, "affiliateRegion")}</span>
             <span className="text-right">{t(resolvedLocale, "affiliatePayout")}</span>
           </div>
-          {LEADERBOARD.map((entry) => (
+          {leaderboard.map((entry) => (
             <div
               key={entry.rank}
               className="grid grid-cols-[3rem_1fr_auto_auto_auto] gap-0 px-4 py-3 border-t border-gray-800/50 hover:bg-white/2 text-sm"

@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { DEFAULT_LOCALE, SUPPORTED_LOCALES, t, type Locale } from "@/lib/i18n"
 
 type PricingQuote = {
@@ -27,6 +27,12 @@ function formatCurrency(amount: number, currency: string, locale: string) {
   }).format(amount / 100)
 }
 
+function detectLocale(): Locale {
+  if (typeof navigator === "undefined") return DEFAULT_LOCALE
+  const lang = (navigator.language || DEFAULT_LOCALE).toLowerCase().slice(0, 2) as Locale
+  return SUPPORTED_LOCALES.includes(lang) ? lang : DEFAULT_LOCALE
+}
+
 export default function LocalizedPrice({
   product,
   fallback,
@@ -36,11 +42,7 @@ export default function LocalizedPrice({
   noteClassName,
 }: LocalizedPriceProps) {
   const [quote, setQuote] = useState<PricingQuote | null>(null)
-  const [locale] = useState<Locale>(() => {
-    if (typeof navigator === "undefined") return DEFAULT_LOCALE
-    const lang = (navigator.language || DEFAULT_LOCALE).toLowerCase().slice(0, 2) as Locale
-    return SUPPORTED_LOCALES.includes(lang) ? lang : DEFAULT_LOCALE
-  })
+  const locale = useMemo(() => detectLocale(), [])
 
   useEffect(() => {
     let active = true

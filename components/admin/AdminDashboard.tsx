@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react"
 import { motion } from "framer-motion"
-import { Activity, DollarSign, Shield, RefreshCw, LogOut, ExternalLink, CheckCircle, XCircle, AlertCircle } from "lucide-react"
+import { Activity, DollarSign, Shield, RefreshCw, LogOut, ExternalLink, CheckCircle, XCircle, AlertCircle, BarChart3 } from "lucide-react"
 
 type Overview = {
   now: string
@@ -16,6 +16,12 @@ type Overview = {
     activeSubs: number
     trialingSubs: number
     lastPayments: Array<{ created: number; amount: number; currency: string; description?: string | null }>
+  }
+  indexStatus?: {
+    indexedPages: number
+    targetPages: number
+    progressPct: number
+    lastDailyIndexRun: string | null
   }
 }
 
@@ -201,8 +207,40 @@ export default function AdminDashboard() {
             </motion.div>
           </div>
 
+          {data.indexStatus && (
+            <motion.div custom={2} initial="hidden" animate="visible" variants={cardVariants} className="p-6 rounded-3xl border border-cyan-900/50 bg-black/30">
+              <div className="flex items-center gap-2 text-xs uppercase tracking-widest text-gray-400">
+                <BarChart3 className="w-3.5 h-3.5" />
+                Index Status v2
+              </div>
+              <div className="mt-2 text-2xl font-black">
+                {data.indexStatus.indexedPages.toLocaleString("de-DE")} / {data.indexStatus.targetPages.toLocaleString("de-DE")}
+              </div>
+              <div className="mt-3">
+                <div className="w-full h-3 rounded-full bg-gray-800 overflow-hidden">
+                  <div
+                    className="h-full rounded-full bg-gradient-to-r from-brand-cyan to-brand-violet transition-all duration-700"
+                    style={{ width: `${data.indexStatus.progressPct}%` }}
+                  />
+                </div>
+                <div className="mt-1 flex justify-between text-xs text-gray-400">
+                  <span>{data.indexStatus.progressPct}% indexed</span>
+                  <span>{(data.indexStatus.targetPages - data.indexStatus.indexedPages).toLocaleString("de-DE")} remaining</span>
+                </div>
+              </div>
+              {data.indexStatus.lastDailyIndexRun && (
+                <div className="mt-3 text-xs text-gray-500">
+                  Last index run: {new Date(data.indexStatus.lastDailyIndexRun).toLocaleString("de-DE")}
+                </div>
+              )}
+              <div className="mt-3 text-xs font-bold text-cyan-400">
+                CLAWGURU INDEXING: {data.indexStatus.progressPct}% COMPLETE. MONETIZATION ACTIVE.
+              </div>
+            </motion.div>
+          )}
+
           <div className="grid lg:grid-cols-3 gap-6">
-            <motion.div custom={2} initial="hidden" animate="visible" variants={cardVariants} className="p-6 rounded-3xl border border-gray-800 bg-black/30">
+            <motion.div custom={3} initial="hidden" animate="visible" variants={cardVariants} className="p-6 rounded-3xl border border-gray-800 bg-black/30">
               <div className="text-xs uppercase tracking-widest text-gray-400">Growth</div>
               <div className="mt-2 text-2xl font-black">Loop Controls</div>
               <div className="mt-4 flex flex-col gap-3">

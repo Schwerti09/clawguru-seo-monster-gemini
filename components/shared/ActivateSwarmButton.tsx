@@ -1,5 +1,4 @@
 "use client"
-import Link from "next/link"
 // SWARM DEPLOYMENT v3.2 – Overlord AI
 // ActivateSwarmButton – One-click "Deploy Swarm on my infrastructure" for Pro/Enterprise users.
 // Visible on every runbook page. Free users see a "Pro only" upgrade prompt.
@@ -70,7 +69,7 @@ export function ActivateSwarmButton({ slug, isPro = false }: Props) {
   if (!isPro) {
     return (
       <div className="flex flex-wrap gap-2">
-        <Link
+        <a
           href="/pricing"
           className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl border border-orange-500/40 bg-orange-500/10 text-orange-300 text-xs font-black hover:bg-orange-500/15 transition-colors"
           title="Pro/Enterprise only – upgrade to activate"
@@ -79,9 +78,9 @@ export function ActivateSwarmButton({ slug, isPro = false }: Props) {
           <span>🐝</span>
           <span>ACTIVATE SWARM</span>
           <span className="text-[10px] font-mono border border-orange-500/40 rounded px-1 py-0.5">PRO</span>
-        </Link>
+        </a>
         {/* APPROVED REMEDIATION SWARM v3.2 SAFE – Overlord AI: Approved swarm upgrade CTA */}
-        <Link
+        <a
           href="/pricing"
           className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl border border-emerald-500/40 bg-emerald-500/10 text-emerald-300 text-xs font-black hover:bg-emerald-500/15 transition-colors"
           title="Enterprise only – upgrade to activate"
@@ -89,7 +88,7 @@ export function ActivateSwarmButton({ slug, isPro = false }: Props) {
           <span>🛡</span>
           <span>GENEHMIGTEN SCHWARM</span>
           <span className="text-[10px] font-mono border border-emerald-500/40 rounded px-1 py-0.5">ENTERPRISE</span>
-        </Link>
+        </a>
       </div>
     )
   }

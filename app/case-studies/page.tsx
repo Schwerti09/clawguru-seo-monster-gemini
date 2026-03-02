@@ -1,4 +1,3 @@
-import Link from "next/link"
 import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
 
@@ -69,12 +68,12 @@ export default function CaseStudiesPage() {
               </ul>
 
               <div className="mt-6 flex flex-wrap gap-3">
-                <Link className="px-4 py-2 rounded-xl border border-gray-700 hover:border-gray-500 font-bold text-gray-200 transition-colors" href="/copilot">
+                <a className="px-4 py-2 rounded-xl border border-gray-700 hover:border-gray-500 font-bold text-gray-200 transition-colors" href="/copilot">
                   Copilot anwenden →
-                </Link>
-                <Link className="px-4 py-2 rounded-xl border border-gray-700 hover:border-gray-500 font-bold text-gray-200 transition-colors" href="/vault">
+                </a>
+                <a className="px-4 py-2 rounded-xl border border-gray-700 hover:border-gray-500 font-bold text-gray-200 transition-colors" href="/vault">
                   Vault Referenzen →
-                </Link>
+                </a>
               </div>
             </div>
           ))}

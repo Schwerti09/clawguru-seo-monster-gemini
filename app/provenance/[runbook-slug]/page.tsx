@@ -3,7 +3,6 @@
 // Full cryptographic chain of custody for every runbook version.
 // Audit-ready export: SOC2 / ISO 27001 / CIS Benchmark v8.
 
-import Link from "next/link"
 import { notFound } from "next/navigation"
 import Container from "@/components/shared/Container"
 import { getRunbook, RUNBOOKS } from "@/lib/pseo"
@@ -12,19 +11,18 @@ import { generateProvenanceChain } from "@/lib/provenance"
 import ProvenanceChainView from "@/components/visual/ProvenanceChainView"
 import { BASE_URL } from "@/lib/config"
 
-export const revalidate = 86400
+export const revalidate = 60
 
 export async function generateStaticParams() {
   // Pre-render top 200 runbooks for fast initial crawl
   return RUNBOOKS.slice(0, 200).map((r) => ({ "runbook-slug": r.slug }))
 }
 
-export async function generateMetadata(
-  props: {
-    params: Promise<{ "runbook-slug": string }>
-  }
-) {
-  const params = await props.params;
+export async function generateMetadata({
+  params,
+}: {
+  params: { "runbook-slug": string }
+}) {
   const r = getRunbook(params["runbook-slug"])
   if (!r) return {}
   return {
@@ -44,12 +42,11 @@ function SignatureCountBadge({ count }: { count: number }) {
   )
 }
 
-export default async function ProvenancePage(
-  props: {
-    params: Promise<{ "runbook-slug": string }>
-  }
-) {
-  const params = await props.params;
+export default function ProvenancePage({
+  params,
+}: {
+  params: { "runbook-slug": string }
+}) {
   const r = getRunbook(params["runbook-slug"])
   if (!r) return notFound()
 
@@ -83,11 +80,11 @@ export default async function ProvenancePage(
         <nav className="text-sm text-gray-500 mb-6" aria-label="Breadcrumb">
           <ol className="flex flex-wrap items-center gap-2">
             <li>
-              <Link href="/" className="hover:text-cyan-400">ClawGuru</Link>
+              <a href="/" className="hover:text-cyan-400">ClawGuru</a>
             </li>
             <li>/</li>
             <li>
-              <Link href="/runbooks" className="hover:text-cyan-400">Runbooks</Link>
+              <a href="/runbooks" className="hover:text-cyan-400">Runbooks</a>
             </li>
             <li>/</li>
             <li>

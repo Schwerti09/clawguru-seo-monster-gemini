@@ -1,4 +1,3 @@
-import Link from "next/link"
 import Container from "@/components/shared/Container"
 import { COMMUNITY } from "@/lib/constants"
 
@@ -19,25 +18,25 @@ export default function Footer() {
           <nav aria-label="Seiten-Navigation">
             <div className="font-black text-gray-200 mb-2">Hubs</div>
             <ul className="space-y-1">
-              <li><Link href="/clawverse">ClawVerse</Link></li>
-              <li><Link href="/check">Security-Check</Link></li>
-              <li><Link href="/copilot">Copilot</Link></li>
-              <li><Link href="/intel">Intel Feed</Link></li>
-              <li><Link href="/academy">Academy</Link></li>
-              <li><Link href="/vault">Vault</Link></li>
-              <li><Link href="/pricing">Pricing</Link></li>
-              <li><Link href="/downloads">Downloads</Link></li>
-              <li><Link href="/case-studies">Case Studies</Link></li>
-              <li><Link href="/ueber-uns">Über uns</Link></li>
+              <li><a href="/clawverse">ClawVerse</a></li>
+              <li><a href="/check">Security-Check</a></li>
+              <li><a href="/copilot">Copilot</a></li>
+              <li><a href="/intel">Intel Feed</a></li>
+              <li><a href="/academy">Academy</a></li>
+              <li><a href="/vault">Vault</a></li>
+              <li><a href="/pricing">Pricing</a></li>
+              <li><a href="/downloads">Downloads</a></li>
+              <li><a href="/case-studies">Case Studies</a></li>
+              <li><a href="/ueber-uns">Über uns</a></li>
             </ul>
           </nav>
           <nav aria-label="Rechtliche Links">
             <div className="font-black text-gray-200 mb-2">Rechtliches</div>
             <ul className="space-y-1">
-              <li><Link href="/impressum">Impressum</Link></li>
-              <li><Link href="/datenschutz">Datenschutz</Link></li>
-              <li><Link href="/agb">AGB</Link></li>
-              <li><Link href="/trust-security">ClawGuru Institutional Trust Center</Link></li>
+              <li><a href="/impressum">Impressum</a></li>
+              <li><a href="/datenschutz">Datenschutz</a></li>
+              <li><a href="/agb">AGB</a></li>
+              <li><a href="/trust-security">ClawGuru Institutional Trust Center</a></li>
             </ul>
             <div className="mt-4">
               <a className="inline-flex px-4 py-2 rounded-xl border border-gray-700 hover:border-gray-500 text-gray-200" href={COMMUNITY.discordInvite} target="_blank" rel="noreferrer noopener">

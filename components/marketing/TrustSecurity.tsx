@@ -1,4 +1,3 @@
-import Link from "next/link"
 // TRUST & SECURITY FORTRESS 2026: Institutional trust section for CISOs and security teams
 import Container from "@/components/shared/Container"
 
@@ -169,18 +168,18 @@ export default function TrustSecurity({ fullPage = false }: { fullPage?: boolean
               hardening baseline. Over 1.2 million runbook executions in production environments in 2026.
             </p>
             <div className="mt-6 flex flex-wrap justify-center gap-3">
-              <Link
+              <a
                 href="/trust-security"
                 className="px-5 py-2.5 rounded-xl border border-[#b8975a]/30 hover:border-[#b8975a]/60 text-[#b8975a] text-sm font-semibold transition-colors duration-300"
               >
                 Full Trust Center →
-              </Link>
-              <Link
+              </a>
+              <a
                 href="/check"
                 className="px-5 py-2.5 rounded-xl border border-white/10 hover:border-white/20 text-gray-300 text-sm font-semibold transition-colors duration-300"
               >
                 Run Security Check →
-              </Link>
+              </a>
             </div>
           </div>
 

@@ -6,7 +6,7 @@ import { RUNBOOKS } from "@/lib/pseo"
 import { type Locale, SUPPORTED_LOCALES } from "@/lib/i18n"
 import Link from "next/link"
 
-export const revalidate = 86400
+export const revalidate = 60
 
 const CLOUD_PROVIDERS = [
   "hetzner", "digitalocean", "aws", "lightsail", "gcp", "azure",
@@ -21,8 +21,7 @@ export async function generateStaticParams() {
   return SUPPORTED_LOCALES.map((lang) => ({ lang }))
 }
 
-export async function generateMetadata(props: { params: Promise<{ lang: string }> }) {
-  const params = await props.params;
+export async function generateMetadata({ params }: { params: { lang: string } }) {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   return {
     title: `Cloud Runbooks – Hetzner, AWS, GCP, Azure & mehr | ClawGuru`,
@@ -31,8 +30,7 @@ export async function generateMetadata(props: { params: Promise<{ lang: string }
   }
 }
 
-export default async function CloudHubPage(props: { params: Promise<{ lang: string }> }) {
-  const params = await props.params;
+export default function CloudHubPage({ params }: { params: { lang: string } }) {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
 
   const cloudRunbooks = RUNBOOKS.filter((r) =>

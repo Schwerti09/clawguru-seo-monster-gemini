@@ -34,10 +34,13 @@ const SECURITY_HEADERS = [
 const nextConfig = {
   reactStrictMode: true,
   trailingSlash: false,
-  typescript: {
-    // Next.js 15 made cookies() async; until main merges that upgrade, suppress
-    // the resulting type errors so builds on this PR branch remain green.
-    ignoreBuildErrors: true,
+  poweredByHeader: false,
+  compress: true,
+  compiler: {
+    removeConsole: process.env.NODE_ENV === "production",
+  },
+  experimental: {
+    optimizePackageImports: ["lucide-react", "framer-motion"],
   },
   eslint: {
     // ESLint is run separately (npm run lint); disable it during `next build`

@@ -1,5 +1,4 @@
 "use client"
-import Link from "next/link"
 
 import { useEffect, useMemo, useState } from "react"
 
@@ -103,12 +102,12 @@ export default function OpsWall() {
                   placeholder="z.B. 502, webhook, nginx map, docker secrets…"
                   className="flex-1 px-4 py-3 rounded-2xl bg-black/40 border border-gray-700 text-white placeholder-gray-500 focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all"
                 />
-                <Link
+                <a
                   href={`/runbooks?q=${encodeURIComponent(q.trim())}`}
                   className="px-4 py-3 rounded-2xl bg-gray-900 hover:bg-gray-800 border border-gray-700 font-bold"
                 >
                   Go
-                </Link>
+                </a>
               </div>
             </div>
 
@@ -121,18 +120,18 @@ export default function OpsWall() {
                 className="w-full px-4 py-3 rounded-2xl bg-black/40 border border-gray-700 text-white placeholder-gray-500 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all"
               />
               <div className="mt-2 flex flex-wrap gap-2">
-                <Link
+                <a
                   href={incidentLink}
                   className="px-4 py-2 rounded-xl bg-gradient-to-r from-orange-500 to-red-600 hover:opacity-90 font-bold text-white"
                 >
                   Copilot öffnen →
-                </Link>
-                <Link
+                </a>
+                <a
                   href="/check"
                   className="px-4 py-2 rounded-xl border border-gray-700 hover:border-gray-500 font-bold text-gray-200 transition-colors"
                 >
                   Score prüfen
-                </Link>
+                </a>
               </div>
             </div>
           </div>
@@ -145,14 +144,14 @@ export default function OpsWall() {
         <div className="p-6 rounded-3xl border border-gray-800 bg-black/30">
           <div className="flex items-center justify-between mb-4">
             <div className="text-lg font-black">Trending Fixes</div>
-            <Link href="/runbooks" className="text-sm text-cyan-300 hover:text-cyan-200 underline">
+            <a href="/runbooks" className="text-sm text-cyan-300 hover:text-cyan-200 underline">
               alle Runbooks →
-            </Link>
+            </a>
           </div>
 
           <div className="space-y-3">
             {(data?.trending || []).map((t) => (
-              <Link
+              <a
                 key={t.slug}
                 href={`/runbook/${t.slug}`}
                 className="block p-4 rounded-2xl border border-gray-800 bg-black/20 hover:bg-black/30 transition-colors"
@@ -166,7 +165,7 @@ export default function OpsWall() {
                     </span>
                   ))}
                 </div>
-              </Link>
+              </a>
             ))}
           </div>
         </div>
@@ -176,14 +175,14 @@ export default function OpsWall() {
             <div className="text-lg font-black mb-4">Top Tags</div>
             <div className="grid grid-cols-2 gap-2">
               {(data?.topTags || []).slice(0, 12).map((t) => (
-                <Link
+                <a
                   key={t.name}
                   href={`/tag/${encodeURIComponent(t.name)}`}
                   className="px-3 py-2 rounded-2xl border border-gray-800 bg-black/20 hover:bg-black/30 transition-colors flex items-center justify-between"
                 >
                   <span className="text-sm font-bold">{t.name}</span>
                   <span className="text-xs text-gray-400">{t.count}</span>
-                </Link>
+                </a>
               ))}
             </div>
             <div className="mt-4 text-xs text-gray-500">
@@ -220,15 +219,15 @@ export default function OpsWall() {
           Das Ziel ist nicht “Content”. Das Ziel ist Rückkehr: Score → Runbook → Fix → Re-Check → Share → Team-Workflow.
         </p>
         <div className="mt-4 flex flex-wrap gap-3">
-          <Link href="/check" className="px-5 py-3 rounded-2xl bg-cyan-600 hover:bg-cyan-700 font-bold text-white">
+          <a href="/check" className="px-5 py-3 rounded-2xl bg-cyan-600 hover:bg-cyan-700 font-bold text-white">
             Security-Check
-          </Link>
-          <Link href="/copilot" className="px-5 py-3 rounded-2xl border border-gray-700 hover:border-gray-500 font-bold text-gray-200">
+          </a>
+          <a href="/copilot" className="px-5 py-3 rounded-2xl border border-gray-700 hover:border-gray-500 font-bold text-gray-200">
             Copilot
-          </Link>
-          <Link href="/pricing" className="px-5 py-3 rounded-2xl border border-gray-700 hover:border-gray-500 font-bold text-gray-200">
+          </a>
+          <a href="/pricing" className="px-5 py-3 rounded-2xl border border-gray-700 hover:border-gray-500 font-bold text-gray-200">
             Pro / Team
-          </Link>
+          </a>
         </div>
       </div>
     </div>

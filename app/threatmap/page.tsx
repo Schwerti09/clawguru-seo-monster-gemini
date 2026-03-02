@@ -1,4 +1,3 @@
-import Link from "next/link"
 // WORLD BEAST UPGRADE: app/threatmap/page.tsx
 // Real-time Global Threat Map – Canvas-based interactive world map showing live exposed instances.
 // Clicking a region filters runbooks by that geographic area.
@@ -80,7 +79,7 @@ export default function ThreatMapPage() {
                       : region.severity === "medium" ? "#ffcc00"
                         : "#00ff9d"
                 return (
-                  <Link
+                  <a
                     key={region.id}
                     href={`/runbooks?region=${region.id}`}
                     className="flex items-center justify-between p-4 rounded-xl glass-card glass-card-hover"
@@ -104,7 +103,7 @@ export default function ThreatMapPage() {
                       </span>
                       <span className="text-xs text-gray-600">→ Runbooks</span>
                     </div>
-                  </Link>
+                  </a>
                 )
               })}
           </div>
@@ -119,19 +118,19 @@ export default function ThreatMapPage() {
             </p>
           </div>
           <div className="flex gap-3 flex-wrap">
-            <Link
+            <a
               href="/check"
               className="px-6 py-3 rounded-2xl font-black text-black transition-all duration-300"
               style={{ background: "linear-gradient(135deg, #00ff9d, #00b8ff)" }}
             >
               Jetzt prüfen →
-            </Link>
-            <Link
+            </a>
+            <a
               href="/runbooks"
               className="px-6 py-3 rounded-2xl border border-white/10 hover:border-white/20 font-bold text-gray-200 transition-all duration-300"
             >
               Runbooks →
-            </Link>
+            </a>
           </div>
         </div>
       </div>

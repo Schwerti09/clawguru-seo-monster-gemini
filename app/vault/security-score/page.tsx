@@ -1,4 +1,3 @@
-import Link from "next/link"
 import Container from "@/components/shared/Container"
 
 export default function SecurityScoreVault() {
@@ -33,15 +32,15 @@ export default function SecurityScoreVault() {
         </div>
 
         <div className="mt-10 flex flex-wrap gap-3">
-          <Link href="/check" className="px-6 py-3 rounded-2xl font-black bg-gradient-to-r from-orange-500 to-red-600 hover:opacity-90">
+          <a href="/check" className="px-6 py-3 rounded-2xl font-black bg-gradient-to-r from-orange-500 to-red-600 hover:opacity-90">
             Score checken →
-          </Link>
-          <Link href="/academy" className="px-6 py-3 rounded-2xl border border-gray-700 hover:border-gray-500 font-bold text-gray-200">
+          </a>
+          <a href="/academy" className="px-6 py-3 rounded-2xl border border-gray-700 hover:border-gray-500 font-bold text-gray-200">
             30-Min Sprint →
-          </Link>
-          <Link href="/copilot" className="px-6 py-3 rounded-2xl border border-gray-700 hover:border-gray-500 font-bold text-gray-200">
+          </a>
+          <a href="/copilot" className="px-6 py-3 rounded-2xl border border-gray-700 hover:border-gray-500 font-bold text-gray-200">
             Copilot →
-          </Link>
+          </a>
         </div>
       </div>
     </Container>

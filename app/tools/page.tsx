@@ -1,5 +1,4 @@
 'use client'
-import Link from "next/link"
 
 import Container from "@/components/shared/Container"
 import { useMemo, useState } from "react"
@@ -127,12 +126,12 @@ export default function Tools() {
               >
                 Report downloaden
               </button>
-              <Link
+              <a
                 href="/copilot"
                 className="px-5 py-3 rounded-xl bg-black/30 border border-gray-700 hover:bg-black/40 font-black"
               >
                 Mit Copilot diskutieren
-              </Link>
+              </a>
             </div>
 
             <div className="mt-4 text-xs text-gray-500">
@@ -165,9 +164,9 @@ export default function Tools() {
                 <li>Vault</li>
               </ol>
               <div className="mt-4 flex flex-wrap gap-2">
-                <Link className="px-4 py-2 rounded-xl bg-black/30 border border-gray-700 hover:bg-black/40" href="/security/notfall-leitfaden">Runbook</Link>
-                <Link className="px-4 py-2 rounded-xl bg-black/30 border border-gray-700 hover:bg-black/40" href="/academy">Sprint</Link>
-                <Link className="px-4 py-2 rounded-xl bg-black/30 border border-gray-700 hover:bg-black/40" href="/vault">Vault</Link>
+                <a className="px-4 py-2 rounded-xl bg-black/30 border border-gray-700 hover:bg-black/40" href="/security/notfall-leitfaden">Runbook</a>
+                <a className="px-4 py-2 rounded-xl bg-black/30 border border-gray-700 hover:bg-black/40" href="/academy">Sprint</a>
+                <a className="px-4 py-2 rounded-xl bg-black/30 border border-gray-700 hover:bg-black/40" href="/vault">Vault</a>
               </div>
             </div>
           </div>

@@ -1,4 +1,3 @@
-import Link from "next/link"
 import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
 import { stripe } from "@/lib/stripe"
@@ -6,12 +5,11 @@ import { stripe } from "@/lib/stripe"
 export const runtime = "nodejs"
 export const dynamic = "force-dynamic"
 
-export default async function SuccessPage(
-  props: {
-    searchParams?: Promise<Record<string, string | string[] | undefined>>
-  }
-) {
-  const searchParams = await props.searchParams;
+export default async function SuccessPage({
+  searchParams
+}: {
+  searchParams?: Record<string, string | string[] | undefined>
+}) {
   const session_id = typeof searchParams?.session_id === "string" ? searchParams?.session_id : ""
   if (!session_id) {
     return (
@@ -90,19 +88,19 @@ export default async function SuccessPage(
                 </a>
               </div>
 
-              <Link
+              <a
                 className="px-6 py-4 rounded-2xl border border-gray-700 hover:border-gray-500 font-bold text-gray-200 text-center"
                 href="/check"
               >
                 Direkt Score prüfen →
-              </Link>
+              </a>
 
-              <Link
+              <a
                 className="px-6 py-4 rounded-2xl border border-gray-700 hover:border-gray-500 font-bold text-gray-200 text-center"
                 href="/copilot"
               >
                 Copilot starten → Runbook bauen
-              </Link>
+              </a>
             </div>
 
             <div className="mt-8 p-6 rounded-3xl border border-gray-800 bg-black/25 text-gray-300">

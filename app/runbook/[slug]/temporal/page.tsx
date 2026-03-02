@@ -2,7 +2,6 @@
 // Temporal search page: /runbook/[slug]/temporal?version=2025-Q3
 // Shows the runbook as it existed at a specific point in time.
 
-import Link from "next/link"
 import { notFound } from "next/navigation"
 import Container from "@/components/shared/Container"
 import { getRunbook } from "@/lib/pseo"
@@ -11,16 +10,15 @@ import { getTemporalHistory, findVersionByQuarter } from "@/lib/temporal-myceliu
 import TemporalTimeline from "@/components/visual/TemporalTimeline"
 import { BASE_URL } from "@/lib/config"
 
-export const revalidate = 86400
+export const revalidate = 60
 
-export async function generateMetadata(
-  props: {
-    params: Promise<{ slug: string }>
-    searchParams: Promise<{ version?: string }>
-  }
-) {
-  const searchParams = await props.searchParams;
-  const params = await props.params;
+export async function generateMetadata({
+  params,
+  searchParams,
+}: {
+  params: { slug: string }
+  searchParams: { version?: string }
+}) {
   const r = getRunbook(params.slug)
   if (!r) return {}
   const version = searchParams.version ?? "aktuell"
@@ -31,14 +29,13 @@ export async function generateMetadata(
   }
 }
 
-export default async function TemporalPage(
-  props: {
-    params: Promise<{ slug: string }>
-    searchParams: Promise<{ version?: string }>
-  }
-) {
-  const searchParams = await props.searchParams;
-  const params = await props.params;
+export default function TemporalPage({
+  params,
+  searchParams,
+}: {
+  params: { slug: string }
+  searchParams: { version?: string }
+}) {
   const r = getRunbook(params.slug)
   if (!r) return notFound()
 
@@ -58,11 +55,11 @@ export default async function TemporalPage(
         <nav className="text-sm text-gray-500 mb-6" aria-label="Breadcrumb">
           <ol className="flex flex-wrap items-center gap-2">
             <li>
-              <Link href="/" className="hover:text-cyan-400">ClawGuru</Link>
+              <a href="/" className="hover:text-cyan-400">ClawGuru</a>
             </li>
             <li>/</li>
             <li>
-              <Link href="/runbooks" className="hover:text-cyan-400">Runbooks</Link>
+              <a href="/runbooks" className="hover:text-cyan-400">Runbooks</a>
             </li>
             <li>/</li>
             <li>

@@ -1,4 +1,3 @@
-import Link from "next/link"
 // FULL PASSIVE WELTMACHT: app/dashboard/health/page.tsx
 // Health dashboard: shows site health + activates Full Passive Mode.
 // "ACTIVATE FULL PASSIVE MODE" button only visible for Pro/Team subscribers.
@@ -20,12 +19,12 @@ function Paywall() {
           title="Pro oder Team nötig"
           subtitle="Upgrade auf Pro oder Team, um den Full Passive Mode zu aktivieren."
         />
-        <Link
+        <a
           href="/pricing"
           className="mt-8 inline-flex px-8 py-4 rounded-2xl font-black bg-gradient-to-r from-brand-cyan to-brand-violet hover:opacity-90"
         >
           Jetzt upgraden →
-        </Link>
+        </a>
       </div>
     </Container>
   )
@@ -53,12 +52,12 @@ export default async function DashboardHealthPage() {
 
         {/* Back link */}
         <div className="mt-8">
-          <Link
+          <a
             href="/dashboard"
             className="text-gray-400 hover:text-gray-200 text-sm"
           >
             ← Zurück zum Dashboard
-          </Link>
+          </a>
         </div>
       </div>
     </Container>

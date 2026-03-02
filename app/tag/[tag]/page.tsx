@@ -1,11 +1,10 @@
-import Link from "next/link"
 import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
 import { allTags, runbooksByTag, topRunbooksByTag } from "@/lib/pseo"
 import { notFound } from "next/navigation"
 import { BASE_URL } from "@/lib/config"
 
-export const revalidate = 86400
+export const revalidate = 60
 export const dynamicParams = true
 
 export async function generateStaticParams() {
@@ -13,8 +12,7 @@ export async function generateStaticParams() {
   return allTags().slice(0, 200).map((t) => ({ tag: t }))
 }
 
-export async function generateMetadata(props: { params: Promise<{ tag: string }> }) {
-  const params = await props.params;
+export async function generateMetadata({ params }: { params: { tag: string } }) {
   const tag = decodeURIComponent(params.tag)
   const items = runbooksByTag(tag)
   if (!items.length) return {}
@@ -25,8 +23,7 @@ export async function generateMetadata(props: { params: Promise<{ tag: string }>
   }
 }
 
-export default async function TagPage(props: { params: Promise<{ tag: string }> }) {
-  const params = await props.params;
+export default function TagPage({ params }: { params: { tag: string } }) {
   const tag = decodeURIComponent(params.tag)
   const items = runbooksByTag(tag)
   if (!items.length) return notFound()
@@ -64,9 +61,9 @@ export default async function TagPage(props: { params: Promise<{ tag: string }> 
       <div className="py-16 max-w-6xl mx-auto">
         <nav className="text-sm text-gray-500 mb-6" aria-label="Breadcrumb">
           <ol className="flex flex-wrap items-center gap-2">
-            <li><Link href="/" className="hover:text-cyan-400">ClawGuru</Link></li>
+            <li><a href="/" className="hover:text-cyan-400">ClawGuru</a></li>
             <li>/</li>
-            <li><Link href="/tags" className="hover:text-cyan-400">Tags</Link></li>
+            <li><a href="/tags" className="hover:text-cyan-400">Tags</a></li>
             <li>/</li>
             <li className="text-gray-300">{tag}</li>
           </ol>

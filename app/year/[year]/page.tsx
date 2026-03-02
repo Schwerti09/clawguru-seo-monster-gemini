@@ -1,4 +1,3 @@
-import Link from "next/link"
 import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
 import {
@@ -12,15 +11,14 @@ import {
 import { notFound } from "next/navigation"
 import { BASE_URL } from "@/lib/config"
 
-export const revalidate = 86400
+export const revalidate = 60
 export const dynamicParams = true
 
 export async function generateStaticParams() {
   return allYears100k().map((year) => ({ year }))
 }
 
-export async function generateMetadata(props: { params: Promise<{ year: string }> }) {
-  const params = await props.params;
+export async function generateMetadata({ params }: { params: { year: string } }) {
   const years = allYears100k()
   if (!years.includes(params.year)) return {}
   const totalPerYear =
@@ -39,8 +37,7 @@ export async function generateMetadata(props: { params: Promise<{ year: string }
   }
 }
 
-export default async function YearHubPage(props: { params: Promise<{ year: string }> }) {
-  const params = await props.params;
+export default function YearHubPage({ params }: { params: { year: string } }) {
   const years = allYears100k()
   if (!years.includes(params.year)) return notFound()
 
@@ -84,9 +81,9 @@ export default async function YearHubPage(props: { params: Promise<{ year: strin
       <div className="py-16 max-w-6xl mx-auto">
         <nav className="text-sm text-gray-500 mb-6" aria-label="Breadcrumb">
           <ol className="flex flex-wrap items-center gap-2">
-            <li><Link href="/" className="hover:text-cyan-400">ClawGuru</Link></li>
+            <li><a href="/" className="hover:text-cyan-400">ClawGuru</a></li>
             <li>/</li>
-            <li><Link href="/years" className="hover:text-cyan-400">Years</Link></li>
+            <li><a href="/years" className="hover:text-cyan-400">Years</a></li>
             <li>/</li>
             <li className="text-gray-300">{year}</li>
           </ol>
@@ -124,9 +121,9 @@ export default async function YearHubPage(props: { params: Promise<{ year: strin
         </div>
 
         <div className="mt-12 text-sm text-gray-500">
-          <Link href="/years" className="hover:text-cyan-400">← Alle Years</Link> ·{" "}
-          <Link href="/issues" className="hover:text-cyan-400">Issue Hubs</Link> ·{" "}
-          <Link href="/runbooks" className="hover:text-cyan-400">Runbook Library</Link>
+          <a href="/years" className="hover:text-cyan-400">← Alle Years</a> ·{" "}
+          <a href="/issues" className="hover:text-cyan-400">Issue Hubs</a> ·{" "}
+          <a href="/runbooks" className="hover:text-cyan-400">Runbook Library</a>
         </div>
       </div>
     </Container>

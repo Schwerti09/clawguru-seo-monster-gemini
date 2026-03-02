@@ -1,18 +1,16 @@
-import Link from "next/link"
 import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
 import { allProviders, runbooksByProvider } from "@/lib/pseo"
 import { notFound } from "next/navigation"
 
-export const revalidate = 86400
+export const revalidate = 60
 export const dynamicParams = true
 
 export async function generateStaticParams() {
   return allProviders().slice(0, 30).map((p) => ({ slug: p.slug }))
 }
 
-export async function generateMetadata(props: { params: Promise<{ slug: string }> }) {
-  const params = await props.params;
+export async function generateMetadata({ params }: { params: { slug: string } }) {
   const slug = params.slug.toLowerCase()
   const p = allProviders().find((x) => x.slug === slug)
   if (!p) return {}
@@ -24,8 +22,7 @@ export async function generateMetadata(props: { params: Promise<{ slug: string }
   }
 }
 
-export default async function ProviderPage(props: { params: Promise<{ slug: string }> }) {
-  const params = await props.params;
+export default function ProviderPage({ params }: { params: { slug: string } }) {
   const slug = params.slug.toLowerCase()
   const p = allProviders().find((x) => x.slug === slug)
   if (!p) return notFound()
@@ -37,9 +34,9 @@ export default async function ProviderPage(props: { params: Promise<{ slug: stri
       <div className="py-16 max-w-6xl mx-auto">
         <nav className="text-sm text-gray-500 mb-6" aria-label="Breadcrumb">
           <ol className="flex flex-wrap items-center gap-2">
-            <li><Link href="/" className="hover:text-cyan-400">ClawGuru</Link></li>
+            <li><a href="/" className="hover:text-cyan-400">ClawGuru</a></li>
             <li>/</li>
-            <li><Link href="/providers" className="hover:text-cyan-400">Providers</Link></li>
+            <li><a href="/providers" className="hover:text-cyan-400">Providers</a></li>
             <li>/</li>
             <li className="text-gray-300">{p.name}</li>
           </ol>
@@ -73,8 +70,8 @@ export default async function ProviderPage(props: { params: Promise<{ slug: stri
         </div>
 
         <div className="mt-12 text-sm text-gray-500">
-          Mehr: <Link className="hover:text-cyan-400" href="/tags">Tag-Cluster</Link> •{" "}
-          <Link className="hover:text-cyan-400" href="/runbooks">Runbook Library</Link>
+          Mehr: <a className="hover:text-cyan-400" href="/tags">Tag-Cluster</a> •{" "}
+          <a className="hover:text-cyan-400" href="/runbooks">Runbook Library</a>
         </div>
       </div>
     </Container>

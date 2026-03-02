@@ -1,4 +1,3 @@
-import Link from "next/link"
 // APPROVED REMEDIATION SWARM v3.2 – INDEX PAGE – Overlord AI
 // Swarm index: hub for the Approved Remediation Swarm. Quantum Void Elegance 2050.
 
@@ -72,13 +71,13 @@ export default function SwarmIndexPage() {
     >
       {/* ── Header ── */}
       <div className="pt-16 pb-10 px-4 text-center">
-        <Link
+        <a
           href="/universe"
           className="inline-flex items-center gap-2 text-[10px] font-mono tracking-widest uppercase mb-6 transition-opacity opacity-40 hover:opacity-80"
           style={{ color: QV.gold }}
         >
           ← Universe
-        </Link>
+        </a>
         <div
           className="text-[10px] font-mono tracking-[0.3em] uppercase mb-4"
           style={{ color: `${QV.violet}88` }}
@@ -166,7 +165,7 @@ export default function SwarmIndexPage() {
             will generate a human-gated remediation plan for your scope.
           </p>
           <div className="flex flex-wrap gap-3">
-            <Link
+            <a
               href="/runbooks"
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-mono text-xs font-bold uppercase tracking-widest transition-all duration-300"
               style={{
@@ -176,8 +175,8 @@ export default function SwarmIndexPage() {
               }}
             >
               Browse Runbooks →
-            </Link>
-            <Link
+            </a>
+            <a
               href="/universe"
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-mono text-xs font-bold uppercase tracking-widest transition-all duration-300"
               style={{
@@ -187,7 +186,7 @@ export default function SwarmIndexPage() {
               }}
             >
               ← Universe
-            </Link>
+            </a>
           </div>
         </div>
       </div>

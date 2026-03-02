@@ -1,4 +1,3 @@
-import Link from "next/link"
 import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
 import {
@@ -12,15 +11,14 @@ import {
 import { notFound } from "next/navigation"
 import { BASE_URL } from "@/lib/config"
 
-export const revalidate = 86400
+export const revalidate = 60
 export const dynamicParams = true
 
 export async function generateStaticParams() {
   return allServices100k().map((s) => ({ slug: s.slug }))
 }
 
-export async function generateMetadata(props: { params: Promise<{ slug: string }> }) {
-  const params = await props.params;
+export async function generateMetadata({ params }: { params: { slug: string } }) {
   const service = allServices100k().find((s) => s.slug === params.slug)
   if (!service) return {}
   const totalPerService =
@@ -39,8 +37,7 @@ export async function generateMetadata(props: { params: Promise<{ slug: string }
   }
 }
 
-export default async function ServiceHubPage(props: { params: Promise<{ slug: string }> }) {
-  const params = await props.params;
+export default function ServiceHubPage({ params }: { params: { slug: string } }) {
   const service = allServices100k().find((s) => s.slug === params.slug)
   if (!service) return notFound()
 
@@ -83,9 +80,9 @@ export default async function ServiceHubPage(props: { params: Promise<{ slug: st
       <div className="py-16 max-w-6xl mx-auto">
         <nav className="text-sm text-gray-500 mb-6" aria-label="Breadcrumb">
           <ol className="flex flex-wrap items-center gap-2">
-            <li><Link href="/" className="hover:text-cyan-400">ClawGuru</Link></li>
+            <li><a href="/" className="hover:text-cyan-400">ClawGuru</a></li>
             <li>/</li>
-            <li><Link href="/services" className="hover:text-cyan-400">Services</Link></li>
+            <li><a href="/services" className="hover:text-cyan-400">Services</a></li>
             <li>/</li>
             <li className="text-gray-300">{service.name}</li>
           </ol>
@@ -123,9 +120,9 @@ export default async function ServiceHubPage(props: { params: Promise<{ slug: st
         </div>
 
         <div className="mt-12 text-sm text-gray-500">
-          <Link href="/services" className="hover:text-cyan-400">← Alle Services</Link> ·{" "}
-          <Link href="/issues" className="hover:text-cyan-400">Issue Hubs</Link> ·{" "}
-          <Link href="/runbooks" className="hover:text-cyan-400">Runbook Library</Link>
+          <a href="/services" className="hover:text-cyan-400">← Alle Services</a> ·{" "}
+          <a href="/issues" className="hover:text-cyan-400">Issue Hubs</a> ·{" "}
+          <a href="/runbooks" className="hover:text-cyan-400">Runbook Library</a>
         </div>
       </div>
     </Container>

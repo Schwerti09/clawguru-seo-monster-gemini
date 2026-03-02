@@ -1,5 +1,4 @@
 // File: app/runbook/[slug]/page.tsx
-import Link from "next/link"
 import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
 import { RUNBOOKS, getRunbook, type Runbook, type RunbookBlock, type RunbookFaqEntry } from "@/lib/pseo"
@@ -10,11 +9,17 @@ import { notFound } from "next/navigation"
 import { CopyLinkButton } from "./CopyLinkButton"
 import { ActivateSwarmButton } from "@/components/shared/ActivateSwarmButton"
 import { BASE_URL } from "@/lib/config"
+import { buildLinkEngine } from "@/lib/seo/link-engine"
 
 // Pre-build slug→runbook Map for O(1) related lookups on static RUNBOOKS
 const RUNBOOK_MAP = new Map(RUNBOOKS.map((r) => [r.slug, r]))
+const LINK_ENGINE = buildLinkEngine(RUNBOOKS, {
+  maxLinks: 10,
+  urlForPage: (page) => `/runbook/${page.slug}`,
+  authorityForPage: (page) => page.clawScore,
+})
 
-export const revalidate = 86400 // 24h ISR; use revalidateSeconds() from quality-gate for finer-grained tooling
+export const revalidate = 60 // 60s ISR; use revalidateSeconds() from quality-gate for finer-grained tooling
 export const dynamicParams = true
 
 export async function generateStaticParams() {
@@ -40,8 +45,7 @@ export async function generateStaticParams() {
   return [...staticParams, ...key100kSlugs.map((slug) => ({ slug }))]
 }
 
-export async function generateMetadata(props: { params: Promise<{ slug: string }> }) {
-  const params = await props.params;
+export async function generateMetadata({ params }: { params: { slug: string } }) {
   const r = getRunbook(params.slug)
   if (!r) return {}
   const title = r.title.length > 60 ? r.title.slice(0, 57) + "..." : r.title
@@ -235,8 +239,7 @@ function FaqSection({ faq }: { faq: RunbookFaqEntry[] }) {
   )
 }
 
-export default async function RunbookPage(props: { params: Promise<{ slug: string }> }) {
-  const params = await props.params;
+export default function RunbookPage({ params }: { params: { slug: string } }) {
   const r = getRunbook(params.slug)
   if (!r) return notFound()
 
@@ -247,10 +250,16 @@ export default async function RunbookPage(props: { params: Promise<{ slug: strin
   // TEMPORAL MYCELIUM v3.1 – Overlord AI: compute deterministic evolution history
   const temporalHistory = getTemporalHistory(r)
 
-  // Use precomputed relatedSlugs with O(1) Map lookup + 100k on-demand fallback
-  const relatedList = r.relatedSlugs.length > 0
-    ? r.relatedSlugs.map((s) => RUNBOOK_MAP.get(s) ?? getRunbook(s)).filter(Boolean) as Runbook[]
-    : RUNBOOKS.filter((x) => x.slug !== r.slug && x.tags.some((t) => r.tags.includes(t))).slice(0, 8)
+  // Embedding-driven internal links (Spider-Web) with relatedSlugs as seed hints
+  const relatedSlugs = Array.from(
+    new Set([
+      ...r.relatedSlugs,
+      ...LINK_ENGINE.linksForSlug(r.slug).map((link) => link.slug),
+    ])
+  ).slice(0, 10)
+  const relatedList = relatedSlugs.length > 0
+    ? relatedSlugs.map((s) => RUNBOOK_MAP.get(s) ?? getRunbook(s)).filter(Boolean) as Runbook[]
+    : RUNBOOKS.filter((x) => x.slug !== r.slug && x.tags.some((t) => r.tags.includes(t))).slice(0, 10)
 
   return (
     <Container>
@@ -278,15 +287,15 @@ export default async function RunbookPage(props: { params: Promise<{ slug: strin
         <nav className="text-sm text-gray-500 mb-6" aria-label="Breadcrumb">
           <ol className="flex flex-wrap items-center gap-2">
             <li>
-              <Link href="/" className="hover:text-cyan-400">
+              <a href="/" className="hover:text-cyan-400">
                 ClawGuru
-              </Link>
+              </a>
             </li>
             <li>/</li>
             <li>
-              <Link href="/runbooks" className="hover:text-cyan-400">
+              <a href="/runbooks" className="hover:text-cyan-400">
                 Runbooks
-              </Link>
+              </a>
             </li>
             <li>/</li>
             <li className="text-gray-300">{r.title}</li>
@@ -329,18 +338,18 @@ export default async function RunbookPage(props: { params: Promise<{ slug: strin
           </ol>
 
           <div className="mt-6 flex flex-wrap gap-3">
-            <Link
+            <a
               href="/check"
               className="px-6 py-3 rounded-2xl font-black bg-gradient-to-r from-orange-500 to-red-600 hover:opacity-90"
             >
               Re-Check starten →
-            </Link>
-            <Link
+            </a>
+            <a
               href="/copilot"
               className="px-6 py-3 rounded-2xl border border-gray-700 hover:border-gray-500 font-bold text-gray-200"
             >
               Copilot Runbook Builder →
-            </Link>
+            </a>
             {/* SWARM DEPLOYMENT v3.2 – Overlord AI: One-click swarm activation for Pro users */}
             <ActivateSwarmButton slug={r.slug} />
           </div>
@@ -382,7 +391,7 @@ export default async function RunbookPage(props: { params: Promise<{ slug: strin
           <div className="mt-10">
             <h2 className="text-xl font-black mb-4">Verwandte Runbooks</h2>
             <div className="grid md:grid-cols-2 gap-4">
-              {relatedList.slice(0, 8).map((x) => (
+              {relatedList.slice(0, 10).map((x) => (
                 <a
                   key={x.slug}
                   href={`/runbook/${x.slug}`}

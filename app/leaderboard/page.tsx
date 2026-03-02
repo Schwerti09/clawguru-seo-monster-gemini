@@ -2,7 +2,6 @@
 // Top 100 Ops Heroes – anonymous public leaderboard.
 
 import type { Metadata } from "next"
-import Link from "next/link"
 import Container from "@/components/shared/Container"
 
 export const metadata: Metadata = {
@@ -12,7 +11,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/leaderboard" },
 }
 
-export const revalidate = 3600 // 1h cache
+export const revalidate = 60 * 60 // 1h cache
 
 // WORLD BEAST: deterministic fake leaderboard (no DB needed)
 // Replace with real DB query when user tracking is implemented.
@@ -133,18 +132,18 @@ export default function LeaderboardPage() {
             desto höher dein Score.
           </p>
           <div className="flex justify-center gap-3 flex-wrap">
-            <Link
+            <a
               href="/check"
               className="px-6 py-3 rounded-2xl font-black bg-gradient-to-r from-brand-cyan to-brand-violet hover:opacity-90"
             >
               Score prüfen →
-            </Link>
-            <Link
+            </a>
+            <a
               href="/dashboard"
               className="px-6 py-3 rounded-2xl border border-gray-700 hover:border-gray-500 font-bold text-gray-200"
             >
               Dashboard öffnen
-            </Link>
+            </a>
           </div>
         </div>
       </div>

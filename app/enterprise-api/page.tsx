@@ -1,4 +1,3 @@
-import Link from "next/link"
 import Container from "@/components/shared/Container"
 import type { Metadata } from "next"
 
@@ -141,7 +140,7 @@ export default function EnterpriseApiPage() {
             </p>
 
             <div className="flex flex-wrap justify-center gap-4">
-              <Link
+              <a
                 href="/api-docs"
                 className="inline-block px-8 py-4 rounded-2xl font-black text-sm text-black transition-all duration-200 hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4"
                 style={{
@@ -149,14 +148,14 @@ export default function EnterpriseApiPage() {
                 }}
               >
                 View API Reference →
-              </Link>
-              <Link
+              </a>
+              <a
                 href="/pricing"
                 className="inline-block px-8 py-4 rounded-2xl font-black text-sm text-white border transition-all duration-200 hover:bg-white/5"
                 style={{ borderColor: C.border }}
               >
                 See Pricing
-              </Link>
+              </a>
             </div>
           </div>
         </Container>
@@ -421,13 +420,13 @@ await jira.createComment(ticketId, \`
               First 500 calls are on us.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
-              <Link
+              <a
                 href="/api-docs"
                 className="inline-block px-8 py-4 rounded-2xl font-black text-sm text-black transition-all duration-200 hover:opacity-90"
                 style={{ background: `linear-gradient(135deg, ${C.cyan}, ${C.green})` }}
               >
                 API Reference →
-              </Link>
+              </a>
               <a
                 href="mailto:enterprise@clawguru.org"
                 className="inline-block px-8 py-4 rounded-2xl font-black text-sm text-white border transition-all duration-200 hover:bg-white/5"

@@ -1,4 +1,3 @@
-import Link from "next/link"
 import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
 import {
@@ -12,15 +11,14 @@ import {
 import { notFound } from "next/navigation"
 import { BASE_URL } from "@/lib/config"
 
-export const revalidate = 86400
+export const revalidate = 60
 export const dynamicParams = true
 
 export async function generateStaticParams() {
   return allIssues100k().map((i) => ({ slug: i.slug }))
 }
 
-export async function generateMetadata(props: { params: Promise<{ slug: string }> }) {
-  const params = await props.params;
+export async function generateMetadata({ params }: { params: { slug: string } }) {
   const issue = allIssues100k().find((i) => i.slug === params.slug)
   if (!issue) return {}
   const totalPerIssue =
@@ -39,8 +37,7 @@ export async function generateMetadata(props: { params: Promise<{ slug: string }
   }
 }
 
-export default async function IssueHubPage(props: { params: Promise<{ slug: string }> }) {
-  const params = await props.params;
+export default function IssueHubPage({ params }: { params: { slug: string } }) {
   const issue = allIssues100k().find((i) => i.slug === params.slug)
   if (!issue) return notFound()
 
@@ -83,9 +80,9 @@ export default async function IssueHubPage(props: { params: Promise<{ slug: stri
       <div className="py-16 max-w-6xl mx-auto">
         <nav className="text-sm text-gray-500 mb-6" aria-label="Breadcrumb">
           <ol className="flex flex-wrap items-center gap-2">
-            <li><Link href="/" className="hover:text-cyan-400">ClawGuru</Link></li>
+            <li><a href="/" className="hover:text-cyan-400">ClawGuru</a></li>
             <li>/</li>
-            <li><Link href="/issues" className="hover:text-cyan-400">Issues</Link></li>
+            <li><a href="/issues" className="hover:text-cyan-400">Issues</a></li>
             <li>/</li>
             <li className="text-gray-300">{issue.name}</li>
           </ol>
@@ -123,9 +120,9 @@ export default async function IssueHubPage(props: { params: Promise<{ slug: stri
         </div>
 
         <div className="mt-12 text-sm text-gray-500">
-          <Link href="/issues" className="hover:text-cyan-400">← Alle Issues</Link> ·{" "}
-          <Link href="/services" className="hover:text-cyan-400">Service Hubs</Link> ·{" "}
-          <Link href="/runbooks" className="hover:text-cyan-400">Runbook Library</Link>
+          <a href="/issues" className="hover:text-cyan-400">← Alle Issues</a> ·{" "}
+          <a href="/services" className="hover:text-cyan-400">Service Hubs</a> ·{" "}
+          <a href="/runbooks" className="hover:text-cyan-400">Runbook Library</a>
         </div>
       </div>
     </Container>

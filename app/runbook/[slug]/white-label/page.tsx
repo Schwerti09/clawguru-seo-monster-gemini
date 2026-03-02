@@ -17,7 +17,7 @@ export async function generateStaticParams() {
 function sanitizeHex(value: string | undefined): string | undefined {
   if (!value) return undefined
   const clean = value.startsWith("#") ? value : `#${value}`
-  return /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(clean) ? clean : undefined;
+  return /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(clean) ? clean : undefined
 }
 
 function hexToRgba(hex: string, alpha: number): string {
@@ -94,14 +94,13 @@ function FaqSection({ faq }: { faq: RunbookFaqEntry[] }) {
   )
 }
 
-export default async function WhiteLabelRunbookPage(
-  props: {
-    params: Promise<{ slug: string }>
-    searchParams: Promise<{ logo?: string; company?: string; accent?: string }>
-  }
-) {
-  const searchParams = await props.searchParams;
-  const params = await props.params;
+export default function WhiteLabelRunbookPage({
+  params,
+  searchParams,
+}: {
+  params: { slug: string }
+  searchParams: { logo?: string; company?: string; accent?: string }
+}) {
   const r = getRunbook(params.slug)
   if (!r) return notFound()
 
@@ -120,7 +119,7 @@ export default async function WhiteLabelRunbookPage(
       <header className="border-b border-gray-800 bg-black/40 px-6 py-4 flex items-center gap-4">
         {logoUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
-          (<img src={logoUrl} alt={`${company} Logo`} className="h-8 w-auto object-contain" />)
+          <img src={logoUrl} alt={`${company} Logo`} className="h-8 w-auto object-contain" />
         ) : (
           <div
             className="text-lg font-black"
@@ -134,6 +133,7 @@ export default async function WhiteLabelRunbookPage(
         )}
         <span className="ml-auto text-xs text-gray-600">Powered by ClawGuru</span>
       </header>
+
       <div className="max-w-4xl mx-auto px-4 py-12">
         {/* Kicker + title */}
         <div className="mb-2">

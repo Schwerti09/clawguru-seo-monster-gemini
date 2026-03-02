@@ -1,4 +1,3 @@
-import Link from "next/link"
 export default function CopilotPreview() {
   return (
     <div className="p-8 rounded-2xl border border-gray-800 bg-gradient-to-br from-gray-900/60 to-black shadow-glow2">
@@ -17,21 +16,21 @@ export default function CopilotPreview() {
           <div className="p-4 rounded-2xl border border-gray-800 bg-black/30">
             <div className="text-xs text-gray-500 mb-1">Links</div>
             <div className="flex flex-wrap gap-2">
-              <Link className="px-3 py-2 rounded-xl border border-gray-800 bg-black/20 hover:bg-black/30 text-sm" href="/security/notfall-leitfaden">Runbook</Link>
-              <Link className="px-3 py-2 rounded-xl border border-gray-800 bg-black/20 hover:bg-black/30 text-sm" href="/tools">Validator</Link>
-              <Link className="px-3 py-2 rounded-xl border border-gray-800 bg-black/20 hover:bg-black/30 text-sm" href="/academy">Sprint</Link>
+              <a className="px-3 py-2 rounded-xl border border-gray-800 bg-black/20 hover:bg-black/30 text-sm" href="/security/notfall-leitfaden">Runbook</a>
+              <a className="px-3 py-2 rounded-xl border border-gray-800 bg-black/20 hover:bg-black/30 text-sm" href="/tools">Validator</a>
+              <a className="px-3 py-2 rounded-xl border border-gray-800 bg-black/20 hover:bg-black/30 text-sm" href="/academy">Sprint</a>
             </div>
           </div>
         </div>
       </div>
 
       <div className="mt-6 flex flex-wrap gap-3">
-        <Link className="px-6 py-3 rounded-xl font-black bg-gradient-to-r from-brand-cyan to-brand-violet hover:opacity-90 shadow-glow2" href="/copilot">
+        <a className="px-6 py-3 rounded-xl font-black bg-gradient-to-r from-brand-cyan to-brand-violet hover:opacity-90 shadow-glow2" href="/copilot">
           Copilot öffnen
-        </Link>
-        <Link className="px-6 py-3 rounded-xl border border-gray-700 bg-gray-900/40 hover:bg-gray-900 rounded-xl font-bold" href="/tools">
+        </a>
+        <a className="px-6 py-3 rounded-xl border border-gray-700 bg-gray-900/40 hover:bg-gray-900 rounded-xl font-bold" href="/tools">
           Tools
-        </Link>
+        </a>
       </div>
     </div>
   )

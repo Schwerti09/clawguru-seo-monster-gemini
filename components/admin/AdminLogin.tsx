@@ -1,5 +1,4 @@
 "use client"
-import Link from "next/link"
 
 import { useMemo, useState } from "react"
 
@@ -76,9 +75,9 @@ export default function AdminLogin() {
           {busy ? "Login…" : "Einloggen"}
         </button>
 
-        <Link className="text-sm text-gray-400 underline hover:text-gray-300" href="/">
+        <a className="text-sm text-gray-400 underline hover:text-gray-300" href="/">
           Zurück zur Seite
-        </Link>
+        </a>
       </div>
     </div>
   )

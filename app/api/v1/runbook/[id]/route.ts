@@ -33,8 +33,10 @@ import { RUNBOOKS } from "@/lib/pseo"
 
 export const dynamic = "force-dynamic"
 
-export async function GET(req: NextRequest, props: { params: Promise<{ id: string }> }) {
-  const params = await props.params;
+export async function GET(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
   const auth = authenticateApiRequest(req)
   if (!auth.ok) {
     return NextResponse.json({ error: auth.error }, { status: auth.status })

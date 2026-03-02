@@ -1,4 +1,3 @@
-import Link from "next/link"
 // WORLD BEAST FINAL LAUNCH + VISUAL UPGRADE 2026: app/dashboard/worldbeast/page.tsx
 // Cyber terminal aesthetic with live metrics, glassmorphism, and neon accents.
 
@@ -29,18 +28,18 @@ function Paywall() {
           Das Live-Kontrollzentrum für ClawGuru WorldBeast 2026/27. Pro-Zugang erforderlich.
         </p>
         <div className="flex justify-center gap-3 flex-wrap">
-          <Link
+          <a
             href="/pricing"
             className="px-6 py-3 rounded-2xl font-black text-black bg-claw-green hover:shadow-neon-green transition-all duration-300"
           >
             Pro werden →
-          </Link>
-          <Link
+          </a>
+          <a
             href="/dashboard"
             className="px-6 py-3 rounded-2xl border border-white/10 hover:border-white/20 font-bold text-gray-200 transition-all duration-300"
           >
             Standard Dashboard
-          </Link>
+          </a>
         </div>
       </div>
     </Container>
@@ -261,54 +260,54 @@ export default async function WorldbeastPage() {
         <div className="p-6 rounded-2xl glass-panel">
           <h2 className="text-xl font-black font-heading mb-4">⚡ Quick Actions</h2>
           <div className="flex flex-wrap gap-3">
-            <Link
+            <a
               href="/api/health/cron"
               className="px-4 py-2 rounded-xl glass-card hover:border-claw-green/40 text-sm font-bold transition-all duration-300"
             >
               🔧 Heal-Zyklus starten
-            </Link>
-            <Link
+            </a>
+            <a
               href="/api/agents/vulnerability"
               className="px-4 py-2 rounded-xl glass-card hover:border-red-400/40 text-sm font-bold transition-all duration-300"
             >
               🦠 CVE Scan starten
-            </Link>
-            <Link
+            </a>
+            <a
               href="/api/agents/predictive"
               className="px-4 py-2 rounded-xl glass-card hover:border-orange-400/40 text-sm font-bold transition-all duration-300"
             >
               🔮 Threat Forecast
-            </Link>
-            <Link
+            </a>
+            <a
               href="/threatmap"
               className="px-4 py-2 rounded-xl glass-card hover:border-red-400/40 text-sm font-bold transition-all duration-300"
             >
               🌍 Global Threat Map
-            </Link>
-            <Link
+            </a>
+            <a
               href="/bounties"
               className="px-4 py-2 rounded-xl glass-card hover:border-yellow-400/40 text-sm font-bold transition-all duration-300"
             >
               💰 Bounty Program
-            </Link>
-            <Link
+            </a>
+            <a
               href="/leaderboard"
               className="px-4 py-2 rounded-xl glass-card hover:border-yellow-400/40 text-sm font-bold transition-all duration-300"
             >
               🏆 Leaderboard öffnen
-            </Link>
-            <Link
+            </a>
+            <a
               href="/dashboard/health"
               className="px-4 py-2 rounded-xl glass-card hover:border-claw-green/40 text-sm font-bold transition-all duration-300"
             >
               ❤️ Health Status
-            </Link>
-            <Link
+            </a>
+            <a
               href="/runbooks"
               className="px-4 py-2 rounded-xl glass-card hover:border-cyber-blue/40 text-sm font-bold transition-all duration-300"
             >
               📚 Runbooks ({proPlan.features[1]})
-            </Link>
+            </a>
           </div>
         </div>
       </div>

@@ -4,7 +4,6 @@
 
 "use client"
 
-import Link from "next/link"
 import { useState, useEffect, useRef, useCallback } from "react"
 
 /* ── Quantum Void colour system ── */
@@ -163,7 +162,7 @@ function MyceliumGraph() {
 function SummonButton() {
   const [hovered, setHovered] = useState(false)
   return (
-    <Link
+    <a
       href="/summon"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
@@ -179,7 +178,7 @@ function SummonButton() {
     >
       <span style={{ fontSize: "10px", lineHeight: 1 }}>◆</span>
       Summon AI
-    </Link>
+    </a>
   )
 }
 
@@ -367,7 +366,7 @@ function VoidPanel({ tab, onClose }: { tab: TabId; onClose: () => void }) {
           {content.desc}
         </p>
 
-        <Link
+        <a
           href={content.href}
           className="inline-block px-6 py-3 rounded-full font-mono text-xs font-bold
                      uppercase tracking-widest transition-all duration-300"
@@ -378,7 +377,7 @@ function VoidPanel({ tab, onClose }: { tab: TabId; onClose: () => void }) {
           }}
         >
           Enter {tab} →
-        </Link>
+        </a>
       </div>
     </div>
   )
@@ -388,7 +387,7 @@ function VoidPanel({ tab, onClose }: { tab: TabId; onClose: () => void }) {
 function ClawLinkConnector() {
   const [hovered, setHovered] = useState(false)
   return (
-    <Link
+    <a
       href="/summon"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
@@ -403,7 +402,7 @@ function ClawLinkConnector() {
     >
       <span style={{ fontSize: "8px" }}>⬡</span>
       Connect Universe
-    </Link>
+    </a>
   )
 }
 

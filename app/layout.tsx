@@ -5,6 +5,7 @@ import TrustBadge from "@/components/layout/TrustBadge"
 import Header from "@/components/layout/Header"
 import Footer from "@/components/layout/Footer"
 import ActionDock from "@/components/layout/ActionDock"
+import SocialProofOverlay from "@/components/social/SocialProofOverlay"
 // WORLD BEAST FINAL LAUNCH: Umami privacy-first analytics
 import UmamiAnalytics from "@/components/analytics/UmamiAnalytics"
 // VISUAL UPGRADE 2026: Neon cursor + page transition wrapper
@@ -13,6 +14,7 @@ import PageTransition from "@/components/visual/PageTransition"
 // NEXT-LEVEL UPGRADE 2026: RTL direction support for Arabic + other RTL locales
 import RTLProvider from "@/components/layout/RTLProvider"
 import { SUPPORTED_LOCALES, LOCALE_HREFLANG } from "@/lib/i18n"
+import { SEO_TARGET_KEYWORDS_2026 } from "@/lib/seo/targets"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 
@@ -21,6 +23,7 @@ export const metadata: Metadata = {
   title: "ClawGuru | Mycelial Singularity Engine v3.0",
   description:
     "ClawGuru Mycelial Singularity Engine v3.0: Das lebende Wissensgraph von 1M+ Runbooks. Copilot, Intel Feed, Academy, Vault – evolutionäre Ops-Intelligence für OpenClaw/Moltbot Security & Betrieb.",
+  keywords: SEO_TARGET_KEYWORDS_2026,
   alternates: {
     canonical: "/",
     // 100/100 OPTIMIZATION 2026: hreflang for all 10 supported locales
@@ -130,6 +133,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </main>
           <Footer />
           <ActionDock />
+          <SocialProofOverlay />
           {/* VISUAL UPGRADE 2026: Custom neon cursor for desktop */}
           <NeonCursor />
         </RTLProvider>

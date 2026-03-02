@@ -1,4 +1,3 @@
-import Link from "next/link"
 import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
 import { BRAND, COMMUNITY } from "@/lib/constants"
@@ -50,7 +49,7 @@ export default function AboutPage() {
             <h3 className="mt-8 text-xl font-black mb-3">Kontakt</h3>
             <p className="text-gray-300">
               Partnerships, Listings, Responsible Disclosure:{" "}
-              <Link className="text-cyan-300 underline hover:text-cyan-200" href="/impressum">Impressum</Link>
+              <a className="text-cyan-300 underline hover:text-cyan-200" href="/impressum">Impressum</a>
             </p>
             <p className="text-gray-400 text-sm mt-2">
               Community:{" "}

@@ -26,7 +26,7 @@ export async function GET(req: NextRequest) {
   if (!f) return NextResponse.json({ error: "Invalid key" }, { status: 400 })
 
   // New primary auth: access cookie
-  const token = (await cookies()).get("claw_access")?.value || ""
+  const token = cookies().get("claw_access")?.value || ""
   const payload = token ? verifyAccessToken(token) : null
 
   let ok = Boolean(payload)

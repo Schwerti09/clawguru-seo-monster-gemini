@@ -1,5 +1,4 @@
 'use client'
-import Link from "next/link"
 
 import { useEffect, useState } from "react"
 
@@ -31,9 +30,9 @@ export default function IntelPreview() {
           <div className="mt-2 text-sm text-gray-300">{i.summary}</div>
         </div>
       ))}
-      <Link className="inline-flex items-center justify-center px-5 py-3 rounded-xl bg-black/30 border border-gray-700 hover:bg-black/40 font-bold" href="/intel">
+      <a className="inline-flex items-center justify-center px-5 py-3 rounded-xl bg-black/30 border border-gray-700 hover:bg-black/40 font-bold" href="/intel">
         Alle Intel sehen →
-      </Link>
+      </a>
     </div>
   )
 }

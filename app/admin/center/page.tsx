@@ -12,8 +12,8 @@ export const metadata = {
   description: "Admin Metrics & Control Center."
 }
 
-export default async function AdminCenterPage() {
-  const token = (await cookies()).get(adminCookieName())?.value || ""
+export default function AdminCenterPage() {
+  const token = cookies().get(adminCookieName())?.value || ""
   const session = token ? verifyAdminToken(token) : null
   if (!session) redirect("/admin")
 

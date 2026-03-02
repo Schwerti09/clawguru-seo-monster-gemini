@@ -1,4 +1,3 @@
-import Link from "next/link"
 import type { Metadata } from "next"
 import Container from "@/components/shared/Container"
 import BuyButton from "@/components/commerce/BuyButton"
@@ -61,10 +60,10 @@ export default function Emergency() {
                 boxShadow: "0 0 25px rgba(220,38,38,0.3)",
               }}
             />
-            <Link href="/emergency"
+            <a href="/emergency"
               className="py-3 px-6 rounded-xl font-black text-sm border border-white/10 text-gray-300 hover:border-white/20 hover:text-white transition-all duration-200">
               Alle Incident-Szenarien →
-            </Link>
+            </a>
           </div>
           <div className="mt-3 text-xs text-gray-500">
             Sofortzugang · kein Abo · Zugang via /recover wiederherstellbar
@@ -77,15 +76,15 @@ export default function Emergency() {
             Nutze Sprint + Tools + Vault, damit du nicht nächste Woche wieder hier landest.
           </p>
           <div className="mt-5 flex flex-wrap gap-3">
-            <Link className="px-5 py-3 rounded-xl bg-brand-cyan/15 border border-brand-cyan/30 hover:bg-brand-cyan/25 font-black" href="/academy">
+            <a className="px-5 py-3 rounded-xl bg-brand-cyan/15 border border-brand-cyan/30 hover:bg-brand-cyan/25 font-black" href="/academy">
               Hardening Sprint
-            </Link>
-            <Link className="px-5 py-3 rounded-xl bg-black/30 border border-gray-700 hover:bg-black/40 font-black" href="/tools">
+            </a>
+            <a className="px-5 py-3 rounded-xl bg-black/30 border border-gray-700 hover:bg-black/40 font-black" href="/tools">
               Validator
-            </Link>
-            <Link className="px-5 py-3 rounded-xl bg-black/30 border border-gray-700 hover:bg-black/40 font-black" href="/copilot">
+            </a>
+            <a className="px-5 py-3 rounded-xl bg-black/30 border border-gray-700 hover:bg-black/40 font-black" href="/copilot">
               Copilot
-            </Link>
+            </a>
           </div>
         </div>
       </div>

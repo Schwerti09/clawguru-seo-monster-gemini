@@ -1,4 +1,3 @@
-import Link from "next/link"
 import Container from "@/components/shared/Container"
 import BuyButton from "@/components/commerce/BuyButton"
 
@@ -209,12 +208,12 @@ export default function MspPage() {
               <code className="text-gray-200">?logo=</code> und{" "}
               <code className="text-gray-200">?company=</code> als URL-Parameter:
             </p>
-            <Link
+            <a
               href="/runbook/aws-ssh-hardening-2026/white-label?company=Mein+MSP&logo=https%3A%2F%2Fclawguru.org%2Fog-image.png"
               className="text-cyan-400 underline underline-offset-2 hover:text-cyan-200 break-all"
             >
               /runbook/aws-ssh-hardening-2026/white-label?company=Mein+MSP&logo=...
-            </Link>
+            </a>
           </div>
 
           {/* FAQ */}

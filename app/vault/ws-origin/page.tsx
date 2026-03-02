@@ -1,4 +1,3 @@
-import Link from "next/link"
 import Container from "@/components/shared/Container"
 
 export default function WSOrigin() {
@@ -32,12 +31,12 @@ export default function WSOrigin() {
           </div>
 
           <div className="flex flex-wrap gap-3">
-            <Link className="px-5 py-3 rounded-xl bg-brand-cyan/15 border border-brand-cyan/30 hover:bg-brand-cyan/25 font-bold" href="/copilot">
+            <a className="px-5 py-3 rounded-xl bg-brand-cyan/15 border border-brand-cyan/30 hover:bg-brand-cyan/25 font-bold" href="/copilot">
               Frag Copilot (mit deinem Stack)
-            </Link>
-            <Link className="px-5 py-3 rounded-xl bg-black/30 border border-gray-700 hover:bg-black/40 font-bold" href="/tools">
+            </a>
+            <a className="px-5 py-3 rounded-xl bg-black/30 border border-gray-700 hover:bg-black/40 font-bold" href="/tools">
               Validator
-            </Link>
+            </a>
           </div>
         </div>
       </div>

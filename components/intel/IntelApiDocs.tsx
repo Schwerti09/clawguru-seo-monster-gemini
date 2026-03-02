@@ -1,4 +1,3 @@
-import Link from "next/link"
 export default function IntelApiDocs() {
   return (
     <div className="mt-16 rounded-3xl border border-orange-900/40 bg-gradient-to-br from-orange-950/20 to-black p-8">
@@ -36,13 +35,13 @@ export default function IntelApiDocs() {
               <span>Kein Polling-Overhead: <code className="text-orange-400">?limit=</code> unterstützt</span>
             </div>
           </div>
-          <Link
+          <a
             href="/pricing#enterprise"
             className="mt-6 inline-block w-full text-center py-3 px-6 rounded-2xl font-black text-sm text-black transition-all duration-300 hover:opacity-90"
             style={{ background: "linear-gradient(135deg, #ffaa00 0%, #ff5000 100%)" }}
           >
             Enterprise-Plan ansehen →
-          </Link>
+          </a>
         </div>
 
         {/* Code examples */}
@@ -95,7 +94,7 @@ X-API-Key: YOUR_API_KEY`}
           <div className="rounded-xl border border-orange-900/30 bg-orange-950/20 p-4 text-sm text-gray-300">
             <span className="font-bold text-orange-300">API Key erhalten: </span>
             Enterprise-Zugang inkl. dedizierten API Key buchen unter{" "}
-            <Link href="/pricing" className="text-orange-400 hover:underline">/pricing</Link>
+            <a href="/pricing" className="text-orange-400 hover:underline">/pricing</a>
             {" "}oder per Mail an{" "}
             <a href="mailto:enterprise@clawguru.org" className="text-orange-400 hover:underline">
               enterprise@clawguru.org

@@ -1,22 +1,21 @@
 "use client"
-import Link from "next/link"
 
 export default function ActionDock() {
   return (
     <div className="fixed bottom-3 left-0 right-0 z-40 lg:hidden px-3">
       <div className="mx-auto max-w-2xl rounded-2xl border border-gray-800 bg-gray-950/80 backdrop-blur shadow-glow flex items-center justify-between px-2 py-2">
-        <Link href="/check" className="flex-1 text-center px-3 py-2 rounded-xl hover:bg-black/30 text-sm font-bold whitespace-nowrap">
+        <a href="/check" className="flex-1 text-center px-3 py-2 rounded-xl hover:bg-black/30 text-sm font-bold whitespace-nowrap">
           Check
-        </Link>
-        <Link href="/copilot" className="flex-1 text-center px-3 py-2 rounded-xl hover:bg-black/30 text-sm font-bold whitespace-nowrap">
+        </a>
+        <a href="/copilot" className="flex-1 text-center px-3 py-2 rounded-xl hover:bg-black/30 text-sm font-bold whitespace-nowrap">
           Copilot
-        </Link>
-        <Link href="/pricing" className="flex-1 text-center px-3 py-2 rounded-xl hover:bg-black/30 text-sm font-bold whitespace-nowrap">
+        </a>
+        <a href="/pricing" className="flex-1 text-center px-3 py-2 rounded-xl hover:bg-black/30 text-sm font-bold whitespace-nowrap">
           Pro Kits
-        </Link>
-        <Link href="/vault" className="flex-1 text-center px-3 py-2 rounded-xl hover:bg-black/30 text-sm font-bold whitespace-nowrap">
+        </a>
+        <a href="/vault" className="flex-1 text-center px-3 py-2 rounded-xl hover:bg-black/30 text-sm font-bold whitespace-nowrap">
           Vault
-        </Link>
+        </a>
       </div>
     </div>
   )

@@ -3,6 +3,7 @@ import Stripe from "stripe"
 import { stripe } from "@/lib/stripe"
 import { signAccessToken, AccessPlan } from "@/lib/access-token"
 import { sendEmail } from "@/lib/email"
+import { buildSocialProofEventFromStripe, recordSocialProofEvent } from "@/lib/social-proof"
 
 export const runtime = "nodejs"
 
@@ -352,6 +353,14 @@ export async function POST(req: NextRequest) {
           expand: ["customer", "subscription"]
         })
         await sendAccessEmail(full)
+        recordSocialProofEvent(
+          buildSocialProofEventFromStripe({
+            id: full.id,
+            country: full.customer_details?.address?.country ?? undefined,
+            cveId: full.metadata?.cve_id ?? undefined,
+            runbookSlug: full.metadata?.runbook_slug ?? undefined,
+          })
+        )
         // Fire-and-forget affiliate commission transfer (does not block response)
         handleAffiliateTransfer(full).catch((err) => console.error("[affiliate-transfer]", err))
       }

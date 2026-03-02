@@ -1,4 +1,3 @@
-import Link from "next/link"
 import Container from "@/components/shared/Container"
 
 export default function FirewallBaselineVault() {
@@ -32,12 +31,12 @@ export default function FirewallBaselineVault() {
         </div>
 
         <div className="mt-10 flex gap-3 flex-wrap">
-          <Link href="/tools" className="px-6 py-3 rounded-2xl font-black bg-gradient-to-r from-brand-cyan to-brand-violet hover:opacity-90">
+          <a href="/tools" className="px-6 py-3 rounded-2xl font-black bg-gradient-to-r from-brand-cyan to-brand-violet hover:opacity-90">
             Config Validator →
-          </Link>
-          <Link href="/check" className="px-6 py-3 rounded-2xl border border-gray-700 hover:border-gray-500 font-bold text-gray-200">
+          </a>
+          <a href="/check" className="px-6 py-3 rounded-2xl border border-gray-700 hover:border-gray-500 font-bold text-gray-200">
             Score checken →
-          </Link>
+          </a>
         </div>
       </div>
     </Container>

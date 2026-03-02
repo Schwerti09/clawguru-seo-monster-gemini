@@ -1,5 +1,4 @@
 'use client'
-import Link from "next/link"
 
 import { useEffect, useRef, useState } from "react"
 import BuyButton from "@/components/commerce/BuyButton"
@@ -86,9 +85,9 @@ export default function CopilotChat() {
             <div className="font-black text-brand-cyan">Copilot</div>
             <div className="text-xs text-gray-400">Konversationsmodus · Prioritäten · Runbooks</div>
           </div>
-          <Link className="text-xs text-gray-400 hover:text-brand-cyan" href="/security/notfall-leitfaden">
+          <a className="text-xs text-gray-400 hover:text-brand-cyan" href="/security/notfall-leitfaden">
             Notfall?
-          </Link>
+          </a>
         </div>
 
         {/* Launchpad */}
@@ -179,9 +178,9 @@ export default function CopilotChat() {
               </div>
             </div>
 
-            <Link href="/pricing" className="text-sm text-cyan-300 underline hover:text-cyan-200 text-center">
+            <a href="/pricing" className="text-sm text-cyan-300 underline hover:text-cyan-200 text-center">
               Alle Pläne →
-            </Link>
+            </a>
           </div>
         </div>
 
@@ -190,13 +189,13 @@ export default function CopilotChat() {
             <div className="font-black mb-3">Links</div>
             <div className="grid gap-2">
               {actions.map((a) => (
-                <Link
+                <a
                   key={a.label}
                   href={a.href || "#"}
                   className="px-4 py-2 rounded-xl bg-black/30 border border-gray-700 hover:bg-black/40"
                 >
                   {a.label}
-                </Link>
+                </a>
               ))}
             </div>
           </div>

@@ -1,5 +1,4 @@
 "use client"
-import Link from "next/link"
 // FULL PASSIVE WELTMACHT: app/dashboard/health/PassiveModePanel.tsx
 // Client component: activates full passive mode + shows live revenue stats.
 
@@ -105,12 +104,12 @@ export default function PassiveModePanel({ canActivate, plan }: Props) {
               Day-Pass-Inhaber können den Status einsehen, aber den automatischen Modus nicht
               aktivieren. Upgrade auf Pro oder Team.
             </div>
-            <Link
+            <a
               href="/pricing"
               className="inline-flex px-6 py-3 rounded-2xl font-black bg-gradient-to-r from-brand-cyan to-brand-violet hover:opacity-90"
             >
               Auf Pro upgraden →
-            </Link>
+            </a>
           </div>
         )}
 

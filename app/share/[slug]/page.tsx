@@ -6,10 +6,9 @@ import { getRunbook } from "@/lib/pseo"
 import { notFound } from "next/navigation"
 import { ShareButtons } from "./ShareButtons"
 
-export const revalidate = 86400
+export const revalidate = 60
 
-export async function generateMetadata(props: { params: Promise<{ slug: string }> }) {
-  const params = await props.params;
+export async function generateMetadata({ params }: { params: { slug: string } }) {
   const r = getRunbook(params.slug)
   if (!r) return {}
   return {
@@ -22,8 +21,7 @@ export async function generateMetadata(props: { params: Promise<{ slug: string }
   }
 }
 
-export default async function SharePage(props: { params: Promise<{ slug: string }> }) {
-  const params = await props.params;
+export default function SharePage({ params }: { params: { slug: string } }) {
   const r = getRunbook(params.slug)
   if (!r) notFound()
 

@@ -1,4 +1,3 @@
-import Link from "next/link"
 import type { Metadata } from "next"
 import Container from "@/components/shared/Container"
 import BuyButton from "@/components/commerce/BuyButton"
@@ -165,12 +164,12 @@ export default function EmergencyPage() {
                 boxShadow: "0 0 40px rgba(220,38,38,0.4)",
               }}
             />
-            <Link
+            <a
               href="/security/notfall-leitfaden"
               className="py-4 px-8 rounded-2xl font-black text-sm border border-white/10 text-gray-300 hover:border-white/20 hover:text-white transition-all duration-200"
             >
               Notfall-Leitfaden (kostenlos) →
-            </Link>
+            </a>
           </div>
           <p className="mt-3 text-xs text-gray-500">
             Sofortzugang · kein Abo · kein Account · Zugang via /recover wiederherstellbar
@@ -310,13 +309,13 @@ export default function EmergencyPage() {
               ["/recover", "Zugang recover"],
               ["/pricing", "Alle Pläne"],
             ].map(([href, label]) => (
-              <Link
+              <a
                 key={href}
                 href={href}
                 className="px-4 py-2 rounded-xl border border-white/10 text-gray-400 hover:text-white hover:border-white/20 transition-all duration-200"
               >
                 {label}
-              </Link>
+              </a>
             ))}
           </div>
 

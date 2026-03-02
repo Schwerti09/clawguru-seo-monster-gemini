@@ -18,6 +18,9 @@ export default function AffiliateAssetsPage() {
         <p className="text-gray-400 mb-10">
           Lade Banner oder Zertifikate mit deinem Affiliate-Namen. Perfekt für Websites, Newsletter oder Social Posts.
         </p>
+        <p className="text-xs text-gray-500 mb-8">
+          Tipp: Halte den Namen möglichst kurz (≤ 48 Zeichen), damit breite Buchstaben nicht abgeschnitten werden.
+        </p>
 
         <div className="space-y-10">
           <section className="rounded-3xl border border-gray-800 bg-black/30 p-6">

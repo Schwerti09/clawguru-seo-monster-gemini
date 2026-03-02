@@ -7,6 +7,7 @@ import { isStripeActive, apiUnavailableResponse } from "@/lib/api-guard"
 
 export const runtime = "nodejs"
 export const dynamic = "force-dynamic"
+const DEFAULT_AFFILIATE_REF = "direct"
 
 function unauthorized() {
   return NextResponse.json({ error: "unauthorized" }, { status: 401 })
@@ -26,7 +27,7 @@ export async function POST(req: NextRequest) {
     const body = await req.json().catch(() => ({}))
     const affiliateRef = typeof body?.affiliate_ref === "string" && body.affiliate_ref.trim()
       ? body.affiliate_ref.trim().slice(0, 64)
-      : "affiliate"
+      : DEFAULT_AFFILIATE_REF
     const email = typeof body?.email === "string" ? body.email : undefined
     const origin = getOrigin(req)
     const returnUrl = typeof body?.return_url === "string" && body.return_url.length > 0

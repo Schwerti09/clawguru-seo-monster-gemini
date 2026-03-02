@@ -32,8 +32,11 @@ export async function indexUrls(urls: string[]) {
   }
 
   const configuredQuota = Number(process.env.GOOGLE_INDEXER_DAILY_QUOTA ?? DEFAULT_DAILY_QUOTA)
+  // Google Indexing API limits are typically 200/day; we cap at most
+  // DEFAULT_DAILY_QUOTA while still allowing lower configured limits. Raise
+  // the constant if higher quotas are officially granted for this project.
   const dailyQuota = Number.isFinite(configuredQuota) && configuredQuota > 0
-    ? Math.min(DEFAULT_DAILY_QUOTA, configuredQuota)
+    ? Math.min(configuredQuota, DEFAULT_DAILY_QUOTA)
     : DEFAULT_DAILY_QUOTA
   const available = remainingQuota(dailyQuota)
   const limitedUrls = urls.slice(0, available)

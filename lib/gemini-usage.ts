@@ -1,10 +1,17 @@
 import { getCircuitBreaker } from "@/lib/circuit-breaker"
 
 const DEFAULT_DAILY_TOKEN_LIMIT = 200_000
+
+function numberEnv(name: string, fallback: number) {
+  const value = Number(process.env[name])
+  if (!Number.isFinite(value) || value <= 0) return fallback
+  return value
+}
+
 const breaker = getCircuitBreaker("gemini-api", {
-  failureThreshold: 4,
-  recoveryTimeoutMs: 60_000,
-  successThreshold: 2,
+  failureThreshold: numberEnv("GEMINI_CB_FAILURE_THRESHOLD", 4),
+  recoveryTimeoutMs: numberEnv("GEMINI_CB_RECOVERY_MS", 60_000),
+  successThreshold: numberEnv("GEMINI_CB_SUCCESS_THRESHOLD", 2),
 })
 
 const usage = {
@@ -37,7 +44,6 @@ export function reserveGeminiTokens(estimatedTokens: number): boolean {
 
   const limit = getDailyLimit()
   if (usage.tokens + estimatedTokens > limit) {
-    breaker.trip()
     return false
   }
 

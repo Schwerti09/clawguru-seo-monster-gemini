@@ -120,6 +120,8 @@ async function sendDailySummaryEmail(
 }
 
 function isWeeklyWindow(now = new Date()) {
+  // Weekly alert cadence: daily cron triggers; we send on UTC Mondays to align with weekly reporting.
+  // Monday was chosen to match start-of-week ops reporting; adjust the cron schedule if another day is preferred.
   return now.getUTCDay() === 1
 }
 

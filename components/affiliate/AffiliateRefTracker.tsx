@@ -6,6 +6,7 @@ const STORAGE_KEY = "affiliate_ref"
 const COOKIE_NAME = "affiliate_ref"
 const MAX_AGE = 60 * 60 * 24 * 30
 const MAX_LENGTH = 64
+let storageErrorLogged = false
 
 function readCookie(name: string) {
   if (typeof document === "undefined") return null
@@ -31,6 +32,8 @@ function normalizeRef(value: string | null) {
 export default function AffiliateRefTracker() {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
+    // Priority order: URL params override stored values; localStorage/cookie is used only
+    // when no URL param is present. URL param order: affiliate_ref → ref → utm_campaign.
     const fromParams = normalizeRef(
       params.get("affiliate_ref") || params.get("ref") || params.get("utm_campaign")
     )
@@ -41,8 +44,11 @@ export default function AffiliateRefTracker() {
     if (nextValue) {
       try {
         localStorage.setItem(STORAGE_KEY, nextValue)
-      } catch {
-        // ignore storage errors (private mode, etc.)
+      } catch (error) {
+        if (!storageErrorLogged) {
+          storageErrorLogged = true
+          console.warn("[affiliate-ref] localStorage unavailable", error)
+        }
       }
       if (!fromCookie || fromCookie !== nextValue) {
         writeCookie(nextValue)

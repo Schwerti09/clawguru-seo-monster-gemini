@@ -9,10 +9,16 @@ import { notFound } from "next/navigation"
 import { CopyLinkButton } from "./CopyLinkButton"
 import { ActivateSwarmButton } from "@/components/shared/ActivateSwarmButton"
 import { BASE_URL } from "@/lib/config"
+import { buildLinkEngine } from "@/lib/seo/link-engine"
 import { buildSocialSnippet, buildSocialTitle } from "@/lib/social-snippet"
 
 // Pre-build slug→runbook Map for O(1) related lookups on static RUNBOOKS
 const RUNBOOK_MAP = new Map(RUNBOOKS.map((r) => [r.slug, r]))
+const LINK_ENGINE = buildLinkEngine(RUNBOOKS, {
+  maxLinks: 8,
+  urlForPage: (page) => `/runbook/${page.slug}`,
+  authorityForPage: (page) => page.clawScore,
+})
 
 export const revalidate = 60 * 60 * 24 // 24h ISR; use revalidateSeconds() from quality-gate for finer-grained tooling
 export const dynamicParams = true
@@ -254,9 +260,15 @@ export default function RunbookPage({ params }: { params: { slug: string } }) {
   // TEMPORAL MYCELIUM v3.1 – Overlord AI: compute deterministic evolution history
   const temporalHistory = getTemporalHistory(r)
 
-  // Use precomputed relatedSlugs with O(1) Map lookup + 100k on-demand fallback
-  const relatedList = r.relatedSlugs.length > 0
-    ? r.relatedSlugs.map((s) => RUNBOOK_MAP.get(s) ?? getRunbook(s)).filter(Boolean) as Runbook[]
+  // Embedding-driven internal links (Spider-Web) with relatedSlugs as seed hints
+  const relatedSlugs = Array.from(
+    new Set([
+      ...r.relatedSlugs,
+      ...LINK_ENGINE.linksForSlug(r.slug).map((link) => link.slug),
+    ])
+  ).slice(0, 8)
+  const relatedList = relatedSlugs.length > 0
+    ? relatedSlugs.map((s) => RUNBOOK_MAP.get(s) ?? getRunbook(s)).filter(Boolean) as Runbook[]
     : RUNBOOKS.filter((x) => x.slug !== r.slug && x.tags.some((t) => r.tags.includes(t))).slice(0, 8)
 
   return (

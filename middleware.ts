@@ -8,6 +8,49 @@ import { SUPPORTED_LOCALES, DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
 
 const LOCALE_COOKIE = "cg_locale"
 
+// ---------------------------------------------------------------------------
+// Maintenance Mode / Kill-Switch
+// ---------------------------------------------------------------------------
+const BYPASS_HEADER = "x-clawguru-bypass"
+const BYPASS_COOKIE = "cg_bypass"
+
+/**
+ * Returns true when the request should bypass maintenance mode.
+ * Bypass conditions (checked in order):
+ *  1. Path starts with /admin or /maintenance (always pass-through)
+ *  2. Secret bypass header X-ClawGuru-Bypass matches BYPASS_SECRET env var
+ *  3. Secret bypass cookie `cg_bypass` matches BYPASS_SECRET env var
+ *  4. Requester IP matches ADMIN_IP env var
+ */
+function shouldBypassMaintenance(request: NextRequest): boolean {
+  const { pathname } = request.nextUrl
+
+  // Always allow the maintenance page itself and admin routes through
+  if (pathname.startsWith("/admin") || pathname.startsWith("/maintenance")) {
+    return true
+  }
+
+  const secret = process.env.BYPASS_SECRET
+  if (secret) {
+    // Check bypass header
+    if (request.headers.get(BYPASS_HEADER) === secret) return true
+    // Check bypass cookie
+    if (request.cookies.get(BYPASS_COOKIE)?.value === secret) return true
+  }
+
+  // Check admin IP
+  const adminIp = process.env.ADMIN_IP
+  if (adminIp) {
+    const requestIp =
+      request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
+      request.headers.get("x-real-ip") ??
+      ""
+    if (requestIp && requestIp === adminIp) return true
+  }
+
+  return false
+}
+
 /**
  * Detect the best matching locale from the Accept-Language header.
  * Returns the first supported locale that matches any browser preference.
@@ -49,6 +92,17 @@ function isStaticOrApi(pathname: string): boolean {
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
+
+  // ---------------------------------------------------------------------------
+  // Maintenance Mode check – redirect everyone except bypass users
+  // ---------------------------------------------------------------------------
+  if (process.env.MAINTENANCE_MODE === "true" && !isStaticOrApi(pathname)) {
+    if (!shouldBypassMaintenance(request)) {
+      const url = request.nextUrl.clone()
+      url.pathname = "/maintenance"
+      return NextResponse.redirect(url, { status: 307 })
+    }
+  }
 
   // Skip static assets, API routes and special paths
   if (isStaticOrApi(pathname)) {

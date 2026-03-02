@@ -38,6 +38,11 @@ const nextConfig = {
     // the resulting type errors so builds on this PR branch remain green.
     ignoreBuildErrors: true,
   },
+  eslint: {
+    // ESLint is run separately (npm run lint); disable it during `next build`
+    // to prevent the Node.js heap from running out of memory on Netlify.
+    ignoreDuringBuilds: true,
+  },
   // 100/100 OPTIMIZATION 2026: Security & performance headers
   async headers() {
     return [

@@ -1,38 +1,28 @@
-// File: app/admin/dashboard/page.tsx
-// Admin Management Cockpit – high-performance admin dashboard.
-// Shows: Revenue, SEO Index Tracker, Affiliate Performance, System Sentinel & Kill-Switch.
+// app/admin/dashboard/page.tsx
+// ClawGuru Universe – interactive admin cockpit.
 
-import { cookies } from "next/headers"
-import { redirect } from "next/navigation"
-import { adminCookieName, verifyAdminToken } from "@/lib/admin-auth"
 import Container from "@/components/shared/Container"
-import SectionTitle from "@/components/shared/SectionTitle"
-import ManagementCockpit from "@/components/admin/ManagementCockpit"
+import UniverseDashboard from "@/components/admin/UniverseDashboard"
+import { cookies } from "next/headers"
+import { adminCookieName, verifyAdminToken } from "@/lib/admin-auth"
+import { redirect } from "next/navigation"
 
 export const runtime = "nodejs"
 
 export const metadata = {
-  title: "Management Cockpit | ClawGuru Admin",
-  description: "Admin Management Cockpit: Revenue, SEO Index, Affiliates, System Sentinel.",
-  robots: "noindex, nofollow",
+  title: "ClawGuru Universe | Admin",
+  description: "Interaktives Admin-Cockpit – SEO, Revenue, Affiliate, Health & Kill-Switch.",
 }
 
-export default function AdminDashboardPage() {
-  const token = cookies().get(adminCookieName())?.value ?? ""
+export default function UniverseDashboardPage() {
+  const token = cookies().get(adminCookieName())?.value || ""
   const session = token ? verifyAdminToken(token) : null
   if (!session) redirect("/admin")
 
   return (
     <Container>
-      <div className="py-16 max-w-6xl mx-auto">
-        <SectionTitle
-          kicker="Admin"
-          title="Management Cockpit"
-          subtitle="Revenue · SEO-Index · Affiliate-Performance · System-Sentinel & Kill-Switch"
-        />
-        <div className="mt-10">
-          <ManagementCockpit />
-        </div>
+      <div className="py-10 max-w-6xl mx-auto">
+        <UniverseDashboard />
       </div>
     </Container>
   )

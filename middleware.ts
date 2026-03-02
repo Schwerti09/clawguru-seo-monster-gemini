@@ -116,6 +116,9 @@ function applyGeoHeaders(response: NextResponse, country: string | null) {
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
   const geoCountry = detectGeoCountry(request)
+  if (request.method !== "GET" && request.method !== "HEAD") {
+    return applyGeoHeaders(NextResponse.next(), geoCountry)
+  }
 
   // ---------------------------------------------------------------------------
   // Maintenance Mode check – redirect everyone except bypass users
@@ -203,6 +206,6 @@ export const config = {
      * - _next/image (image optimization)
      * - favicon.ico, robots.txt, etc.
      */
-    "/((?!_next/static|_next/image|favicon.ico).*)",
+    "/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|sitemaps|api|manifest.json|og-image.png).*)",
   ],
 }

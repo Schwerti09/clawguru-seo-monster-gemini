@@ -6,46 +6,27 @@
 import { NextResponse } from "next/server"
 import { RUNBOOKS } from "@/lib/pseo"
 import { computeQualityStats, validateRunbook, DEFAULT_THRESHOLDS } from "@/lib/quality-gate"
+import { callGeminiWithBackoff } from "@/lib/gemini-api"
 
 export const dynamic = "force-dynamic"
 export const runtime = "nodejs"
 
 // GENESIS QUALITY GATE 2.0 – Gemini auto-improve helper
 async function callGeminiImprove(runbookJson: string): Promise<string | null> {
-  const geminiKey = process.env.GEMINI_API_KEY
   const geminiModel = process.env.GEMINI_MODEL || "gemini-2.0-flash"
-  const geminiBase = (
-    process.env.GEMINI_BASE_URL || "https://generativelanguage.googleapis.com/v1beta"
-  ).replace(/\/$/, "")
   const geminiTimeoutMs = parseInt(process.env.GEMINI_TIMEOUT_MS ?? "60000", 10)
-
-  if (!geminiKey) return null
 
   // Truncate runbook JSON to prevent token exhaustion; internal data only
   const safeJson = runbookJson.slice(0, 8000)
   const prompt = `Improve this runbook to 98+ without changing facts. Return only valid JSON matching the original schema.\n\n${safeJson}`
 
-  try {
-    const url = `${geminiBase}/models/${encodeURIComponent(geminiModel)}:generateContent?key=${encodeURIComponent(geminiKey)}`
-    const res = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        contents: [{ role: "user", parts: [{ text: prompt }] }],
-        generationConfig: { temperature: 0.3, maxOutputTokens: 2048 },
-      }),
-      signal: AbortSignal.timeout(geminiTimeoutMs),
-    })
-    if (!res.ok) return null
-    const data = await res.json()
-    const parts = data?.candidates?.[0]?.content?.parts
-    if (Array.isArray(parts)) {
-      return parts.map((p: { text?: string }) => p?.text ?? "").join("").trim() || null
-    }
-    return null
-  } catch {
-    return null
-  }
+  return callGeminiWithBackoff({
+    prompt,
+    temperature: 0.3,
+    maxOutputTokens: 2048,
+    timeoutMs: geminiTimeoutMs,
+    model: geminiModel,
+  })
 }
 
 export async function GET(req: Request) {

@@ -13,6 +13,38 @@ export type UmamiEventName =
   | "launch_button_clicked"
   | "email_onboarding_triggered"
 
+const SHADOW_STORAGE_KEY = "cg_shadow_id"
+
+function hashString(input: string): string {
+  let hash = 2166136261
+  for (let i = 0; i < input.length; i += 1) {
+    hash ^= input.charCodeAt(i)
+    hash = Math.imul(hash, 16777619)
+  }
+  return (hash >>> 0).toString(16)
+}
+
+export function getShadowId(): string | null {
+  if (typeof window === "undefined") return null
+  const cached = localStorage.getItem(SHADOW_STORAGE_KEY)
+  if (cached) return cached
+  const fingerprint = [
+    navigator.userAgent,
+    navigator.language,
+    navigator.platform,
+    String(screen.width),
+    String(screen.height),
+    String(screen.colorDepth),
+    String(navigator.hardwareConcurrency || ""),
+    Intl.DateTimeFormat().resolvedOptions().timeZone || "",
+  ]
+    .filter(Boolean)
+    .join("|")
+  const shadowId = hashString(fingerprint)
+  localStorage.setItem(SHADOW_STORAGE_KEY, shadowId)
+  return shadowId
+}
+
 /**
  * WORLD BEAST FINAL LAUNCH: Track an event via Umami.
  * Safe to call on the client — no-ops if umami is not available.
@@ -26,7 +58,8 @@ export function trackEvent(
   const u = (window as unknown as { umami?: { track: (n: string, d?: unknown) => void } }).umami
   if (!u?.track) return
   try {
-    u.track(eventName, data)
+    const shadowId = getShadowId()
+    u.track(eventName, shadowId ? { ...data, shadow_id: shadowId } : data)
   } catch {
     // WORLD BEAST FINAL LAUNCH: tracking is non-critical — swallow errors
   }

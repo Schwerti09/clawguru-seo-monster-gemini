@@ -1,6 +1,7 @@
 import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
 import { stripe } from "@/lib/stripe"
+import { getAffiliatePixelUrls } from "@/lib/affiliate-tracking"
 
 export const runtime = "nodejs"
 export const dynamic = "force-dynamic"
@@ -32,6 +33,9 @@ export default async function SuccessPage({
   let email: string | null = null
   let product: string | null = null
   let mode: string | null = null
+  let affiliateRef: string | null = null
+  let amount: number | null = null
+  let currency: string | null = null
 
   try {
     const session = await stripe.checkout.sessions.retrieve(session_id)
@@ -39,11 +43,24 @@ export default async function SuccessPage({
     email = session.customer_details?.email || null
     product = (session.metadata?.product as string) || null
     mode = session.mode || null
+    affiliateRef = (session.metadata?.affiliate_ref as string) || null
+    amount = session.amount_total ?? null
+    currency = session.currency || null
   } catch {
     ok = false
   }
 
   const activateHref = `/api/auth/activate?session_id=${encodeURIComponent(session_id)}`
+
+  const pixelUrls = affiliateRef
+    ? getAffiliatePixelUrls(affiliateRef, {
+      sessionId: session_id,
+      amount,
+      currency,
+      product,
+      customerEmail: email,
+    })
+    : []
 
   return (
     <Container>
@@ -112,6 +129,14 @@ export default async function SuccessPage({
                 <li>Re-Check + Badge teilen</li>
               </ol>
             </div>
+            {pixelUrls.length > 0 ? (
+              <div className="sr-only" aria-hidden="true">
+                {pixelUrls.map((url) => (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img key={url} src={url} alt="" width={1} height={1} />
+                ))}
+              </div>
+            ) : null}
           </>
         ) : (
           <div className="mt-8 p-6 rounded-3xl border border-gray-800 bg-black/30 text-gray-300">

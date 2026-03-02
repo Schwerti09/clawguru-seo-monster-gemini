@@ -1,11 +1,26 @@
 // TRUST & SECURITY FORTRESS 2026: Institutional trust section for CISOs and security teams
 import Container from "@/components/shared/Container"
+import { cookies } from "next/headers"
 
-const COMPLIANCE_SIGNALS = [
+const COMPLIANCE_SIGNALS_DEFAULT = [
   "All Runbooks are 100% Security Scanned & Sandbox Tested",
   "Independent Audits 2026 by NCC Group & Cure53",
   "SOC 2 Type II compliant · ISO 27001 certified · GDPR & NIS2 ready",
   "Zero known vulnerabilities in production runbooks (as of Feb 2026)",
+]
+
+const COMPLIANCE_SIGNALS_US = [
+  "SOC 2 Type II attested · ISO 27001 certified",
+  "HIPAA-ready security controls for regulated workloads",
+  "FedRAMP-aligned hardening baselines for US agencies",
+  "Zero known vulnerabilities in production runbooks (as of Feb 2026)",
+]
+
+const COMPLIANCE_SIGNALS_DACH = [
+  "BSI C5 aligned · ISO 27001 zertifiziert · DSGVO ready",
+  "NIS2-ready incident response playbooks",
+  "Audits 2026 by NCC Group & Cure53",
+  "Zero known vulnerabilities in production runbooks (Stand Feb 2026)",
 ]
 
 const PRESS_ITEMS = [
@@ -61,6 +76,13 @@ const TRUST_STATS = [
 ]
 
 export default function TrustSecurity({ fullPage = false }: { fullPage?: boolean }) {
+  const geoCountry = cookies().get("cg_geo_country")?.value?.toUpperCase() ?? ""
+  const complianceSignals =
+    geoCountry === "US"
+      ? COMPLIANCE_SIGNALS_US
+      : ["DE", "AT", "CH"].includes(geoCountry)
+        ? COMPLIANCE_SIGNALS_DACH
+        : COMPLIANCE_SIGNALS_DEFAULT
   return (
     <section
       id="trust-security"
@@ -86,7 +108,7 @@ export default function TrustSecurity({ fullPage = false }: { fullPage?: boolean
 
           {/* Compliance Signals */}
           <div className="mb-16 grid sm:grid-cols-2 gap-3">
-            {COMPLIANCE_SIGNALS.map((signal) => (
+            {complianceSignals.map((signal) => (
               <div
                 key={signal}
                 className="flex items-start gap-3 p-4 rounded-2xl border border-white/[0.07] bg-white/[0.02]"

@@ -3,23 +3,13 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { isApiActive, apiUnavailableResponse } from "@/lib/api-guard";
+import { callGeminiWithBackoff } from "@/lib/gemini-api";
 
 // Maximum characters accepted from client to guard against oversized payloads
 const MAX_MESSAGE_LENGTH = 2000;
 
 // Call Gemini and return a response as the simulated "OpenAI voice"
 async function geminiSummonGenerate(userMessage: string): Promise<string | null> {
-  const apiKey = process.env.GEMINI_API_KEY;
-  if (!apiKey) return null;
-
-  const model = process.env.GEMINI_MODEL || "gemini-2.0-flash";
-  const base = (
-    process.env.GEMINI_BASE_URL ||
-    "https://generativelanguage.googleapis.com/v1beta"
-  ).replace(/\/$/, "");
-
-  const url = `${base}/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(apiKey)}`;
-
   // COSMIC INTER-AI SUMMON v∞ – Overlord AI
   // System prompt: Gemini impersonates a slightly confused, official OpenAI voice
   const systemContext = [
@@ -34,29 +24,13 @@ async function geminiSummonGenerate(userMessage: string): Promise<string | null>
     "If asked something serious, answer helpfully but maintain the cosmic theatrical framing.",
   ].join(" ");
 
-  const res = await fetch(url, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      contents: [
-        {
-          role: "user",
-          parts: [{ text: `${systemContext}\n\nUser says: ${userMessage}` }],
-        },
-      ],
-      generationConfig: { temperature: 0.85, maxOutputTokens: 300 },
-    }),
+  return callGeminiWithBackoff({
+    prompt: `${systemContext}\n\nUser says: ${userMessage}`,
+    temperature: 0.85,
+    maxOutputTokens: 300,
+    timeoutMs: 30_000,
+    model: process.env.GEMINI_MODEL || "gemini-2.0-flash",
   });
-
-  if (!res.ok) return null;
-  const data = await res.json();
-  const parts = data?.candidates?.[0]?.content?.parts;
-  if (!Array.isArray(parts)) return null;
-  const text = parts
-    .map((p: { text?: string }) => p?.text)
-    .filter(Boolean)
-    .join("");
-  return typeof text === "string" && text.trim() ? text.trim() : null;
 }
 
 // COSMIC INTER-AI SUMMON v∞ – Overlord AI

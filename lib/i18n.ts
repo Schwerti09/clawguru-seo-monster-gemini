@@ -3,6 +3,8 @@
 // de/en (primary) + es/fr/pt/it/ru/zh-CN/ja/ar
 // Auto-detects language from URL prefix; Gemini auto-translates runbook metadata.
 
+import { callGeminiWithBackoff } from "@/lib/gemini-api"
+
 export type Locale = "de" | "en" | "es" | "fr" | "pt" | "it" | "ru" | "zh" | "ja" | "ar"
 
 export const SUPPORTED_LOCALES: Locale[] = ["de", "en", "es", "fr", "pt", "it", "ru", "zh", "ja", "ar"]
@@ -398,16 +400,6 @@ export async function translateRunbook(opts: {
     ar: "Arabic",
   }
 
-  const geminiKey = process.env.GEMINI_API_KEY
-  const geminiModel = process.env.GEMINI_MODEL || "gemini-1.5-flash"
-  const geminiBase = (
-    process.env.GEMINI_BASE_URL || "https://generativelanguage.googleapis.com/v1beta"
-  ).replace(/\/$/, "")
-
-  if (!geminiKey) {
-    return { title, summary, locale: targetLocale }
-  }
-
   const prompt = [
     `Translate the following runbook title and summary from German to ${localeNames[targetLocale]}.`,
     "Keep technical terms (e.g. SSH, TLS, CORS, CVE, runbook) as-is.",
@@ -419,22 +411,13 @@ export async function translateRunbook(opts: {
   ].join("\n")
 
   try {
-    const url = `${geminiBase}/models/${encodeURIComponent(geminiModel)}:generateContent?key=${encodeURIComponent(geminiKey)}`
-    const res = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        contents: [{ role: "user", parts: [{ text: prompt }] }],
-        generationConfig: { temperature: 0.2, maxOutputTokens: 300 },
-      }),
-      signal: AbortSignal.timeout(15_000),
+    const text = await callGeminiWithBackoff({
+      prompt,
+      temperature: 0.2,
+      maxOutputTokens: 300,
+      timeoutMs: 15_000,
     })
-    if (!res.ok) return { title, summary, locale: targetLocale }
-    const data = await res.json()
-    const text: string =
-      data?.candidates?.[0]?.content?.parts
-        ?.map((p: { text?: string }) => p?.text ?? "")
-        .join("") ?? ""
+    if (!text) return { title, summary, locale: targetLocale }
     const jsonStr = text.replace(/```json|```/g, "").trim()
     const parsed = JSON.parse(jsonStr) as { title?: string; summary?: string }
     if (parsed.title && parsed.summary) {

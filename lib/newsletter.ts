@@ -12,6 +12,7 @@
 import crypto from "crypto"
 import type Stripe from "stripe"
 import { stripe } from "@/lib/stripe"
+import { callGeminiWithBackoff } from "@/lib/gemini-api"
 
 // ---------------------------------------------------------------------------
 // Types
@@ -177,31 +178,14 @@ export async function summarizeThreats(cves: CveItem[]): Promise<SummarizedThrea
   const provider = (process.env.AI_PROVIDER || "openai").toLowerCase()
 
   if (provider === "gemini") {
-    const geminiKey = process.env.GEMINI_API_KEY
-    if (!geminiKey) throw new Error("GEMINI_API_KEY missing")
-
-    const model = process.env.GEMINI_MODEL || "gemini-1.5-flash"
-    const base = (
-      process.env.GEMINI_BASE_URL || "https://generativelanguage.googleapis.com/v1beta"
-    ).replace(/\/$/, "")
-    const url = `${base}/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(geminiKey)}`
-
-    const res = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        contents: [{ role: "user", parts: [{ text: prompt }] }],
-        generationConfig: { temperature: 0.2, maxOutputTokens: 1800 },
-      }),
-      signal: AbortSignal.timeout(30_000),
+    const text = await callGeminiWithBackoff({
+      prompt,
+      temperature: 0.2,
+      maxOutputTokens: 1800,
+      timeoutMs: 30_000,
     })
-
-    if (!res.ok) throw new Error(`Gemini error ${res.status}`)
-    const data = (await res.json()) as {
-      candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }>
-    }
-    rawText =
-      data.candidates?.[0]?.content?.parts?.map((p) => p.text ?? "").join("") ?? ""
+    if (!text) throw new Error("Gemini error")
+    rawText = text
   } else {
     // OpenAI (default)
     const apiKey = process.env.OPENAI_API_KEY

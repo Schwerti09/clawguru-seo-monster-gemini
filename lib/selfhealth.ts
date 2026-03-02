@@ -5,6 +5,7 @@
 import { RUNBOOKS, totalSitemapUrls } from "./pseo"
 import { sendEmail } from "./email"
 import { BASE_URL } from "./config"
+import { callGeminiWithBackoff } from "./gemini-api"
 
 // ---------------------------------------------------------------------------
 // Types
@@ -310,36 +311,14 @@ export async function autoHeal(): Promise<AutoHealResult> {
     errors: [],
   }
 
-  const geminiKey = process.env.GEMINI_API_KEY
-  const geminiModel = process.env.GEMINI_MODEL || "gemini-1.5-flash"
-  const geminiBase = (
-    process.env.GEMINI_BASE_URL || "https://generativelanguage.googleapis.com/v1beta"
-  ).replace(/\/$/, "")
-
   // FULL PASSIVE WELTMACHT: call Gemini with a prompt, return text or null
   async function callGemini(prompt: string): Promise<string | null> {
-    if (!geminiKey) return null
-    try {
-      const url = `${geminiBase}/models/${encodeURIComponent(geminiModel)}:generateContent?key=${encodeURIComponent(geminiKey)}`
-      const res = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          contents: [{ role: "user", parts: [{ text: prompt }] }],
-          generationConfig: { temperature: 0.4, maxOutputTokens: 600 },
-        }),
-        signal: AbortSignal.timeout(20_000),
-      })
-      if (!res.ok) return null
-      const data = await res.json()
-      const parts = data?.candidates?.[0]?.content?.parts
-      if (Array.isArray(parts)) {
-        return parts.map((p: { text?: string }) => p?.text ?? "").join("").trim() || null
-      }
-      return null
-    } catch {
-      return null
-    }
+    return callGeminiWithBackoff({
+      prompt,
+      temperature: 0.4,
+      maxOutputTokens: 600,
+      timeoutMs: 20_000,
+    })
   }
 
   // --- 1. Heal stale runbooks ---

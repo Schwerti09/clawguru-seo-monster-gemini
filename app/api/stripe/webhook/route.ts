@@ -3,6 +3,7 @@ import Stripe from "stripe"
 import { stripe } from "@/lib/stripe"
 import { signAccessToken, AccessPlan } from "@/lib/access-token"
 import { sendEmail } from "@/lib/email"
+import { fireAffiliatePostbacks } from "@/lib/affiliate-tracking"
 
 export const runtime = "nodejs"
 
@@ -354,6 +355,16 @@ export async function POST(req: NextRequest) {
         await sendAccessEmail(full)
         // Fire-and-forget affiliate commission transfer (does not block response)
         handleAffiliateTransfer(full).catch((err) => console.error("[affiliate-transfer]", err))
+        const affiliateRef = full.metadata?.affiliate_ref
+        if (affiliateRef) {
+          fireAffiliatePostbacks(affiliateRef, {
+            sessionId: full.id,
+            amount: full.amount_total,
+            currency: full.currency,
+            product: (full.metadata?.product as string) || null,
+            customerEmail: full.customer_details?.email || full.customer_email || null,
+          }).catch((err) => console.error("[affiliate-postback]", err))
+        }
       }
     }
 

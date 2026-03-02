@@ -44,6 +44,10 @@ export async function GET() {
       `${base}/sitemaps/issues.xml`,
       `${base}/sitemaps/services.xml`,
       `${base}/sitemaps/years.xml`,
+
+      // PROGRAMMATIC SEO: CVE Solutions + Service Check Tools
+      `${base}/sitemaps/solutions-cve.xml`,
+      `${base}/sitemaps/tools-check.xml`,
     ]
 
     const active = sitemapUrls.filter((u) => {

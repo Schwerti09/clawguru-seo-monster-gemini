@@ -8,7 +8,7 @@ export default function BuyButton({
   className,
   style
 }: {
-  product: "daypass" | "pro" | "team"
+  product: "daypass" | "pro" | "team" | "msp"
   label: string
   className?: string
   style?: React.CSSProperties

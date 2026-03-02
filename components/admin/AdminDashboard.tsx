@@ -175,6 +175,9 @@ export default function AdminDashboard() {
                 <a className="px-4 py-3 rounded-2xl font-black bg-gradient-to-r from-orange-500 to-red-600 hover:opacity-90 text-center" href="/check">
                   Score → Badge → Share
                 </a>
+                <a className="px-4 py-3 rounded-2xl font-black bg-gradient-to-r from-green-600 to-cyan-600 hover:opacity-90 text-center" href="/admin/profit-dashboard">
+                  💰 Profit Dashboard
+                </a>
                 <a className="px-4 py-3 rounded-2xl border border-gray-700 hover:border-gray-500 font-bold text-gray-200 text-center" href="/copilot">
                   Copilot Runbooks
                 </a>

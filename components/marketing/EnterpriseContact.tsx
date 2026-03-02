@@ -1,16 +1,17 @@
 'use client'
-import { useState, FormEvent } from "react"
+import { useState } from "react"
 
-type FormState = "idle" | "loading" | "success" | "error"
+type Status = "idle" | "sending" | "success" | "error"
 
 export default function EnterpriseContact() {
-  const [state, setState] = useState<FormState>("idle")
-  const [error, setError] = useState("")
+  const [status, setStatus] = useState<Status>("idle")
+  const [errorMsg, setErrorMsg] = useState("")
 
-  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
-    setState("loading")
-    setError("")
+    setStatus("sending")
+    setErrorMsg("")
+
     const form = e.currentTarget
     const data = {
       name: (form.elements.namedItem("name") as HTMLInputElement).value.trim(),
@@ -18,114 +19,107 @@ export default function EnterpriseContact() {
       company: (form.elements.namedItem("company") as HTMLInputElement).value.trim(),
       message: (form.elements.namedItem("message") as HTMLTextAreaElement).value.trim(),
     }
+
     try {
       const res = await fetch("/api/enterprise-contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       })
-      if (!res.ok) throw new Error("Request failed")
-      setState("success")
-      form.reset()
+      if (res.ok) {
+        setStatus("success")
+        form.reset()
+      } else {
+        const json = await res.json().catch(() => ({}))
+        setErrorMsg((json as { error?: string }).error || "Unbekannter Fehler")
+        setStatus("error")
+      }
     } catch {
-      setState("error")
-      setError("Beim Senden ist ein Fehler aufgetreten. Bitte versuche es erneut.")
+      setErrorMsg("Netzwerkfehler – bitte erneut versuchen.")
+      setStatus("error")
     }
   }
 
-  if (state === "success") {
+  if (status === "success") {
     return (
-      <div className="text-center py-10">
-        <div className="text-4xl mb-4">✅</div>
-        <div className="text-xl font-black text-white mb-2">Anfrage erhalten!</div>
-        <p className="text-gray-400 text-sm">Wir melden uns innerhalb von 24 Stunden bei dir.</p>
+      <div className="rounded-2xl border border-orange-900/40 bg-black/40 p-6 text-center">
+        <div className="text-2xl mb-2">✅</div>
+        <div className="font-black text-white text-lg">Anfrage gesendet!</div>
+        <p className="mt-2 text-sm text-gray-400">
+          Wir melden uns innerhalb von 1–2 Werktagen bei dir.
+        </p>
       </div>
     )
   }
 
-  const inputClass =
-    "w-full rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 outline-none transition-colors focus:ring-1"
-  const inputStyle = {
-    background: "rgba(255,255,255,0.05)",
-    border: "1px solid rgba(255,165,0,0.2)",
-  }
-  const focusRingStyle = { "--tw-ring-color": "rgba(255,165,0,0.4)" } as React.CSSProperties
-
   return (
-    <form onSubmit={handleSubmit} className="grid md:grid-cols-2 gap-4">
-      <div>
-        <label className="block text-xs font-mono uppercase tracking-widest text-gray-500 mb-1" htmlFor="ent-name">
-          Name *
-        </label>
-        <input
-          id="ent-name"
-          name="name"
-          type="text"
-          required
-          autoComplete="name"
-          placeholder="Max Mustermann"
-          className={inputClass}
-          style={{ ...inputStyle, ...focusRingStyle }}
-        />
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="grid sm:grid-cols-2 gap-4">
+        <div>
+          <label htmlFor="ec-name" className="block text-xs font-mono uppercase tracking-[0.15em] text-orange-400 mb-1">
+            Name *
+          </label>
+          <input
+            id="ec-name"
+            name="name"
+            type="text"
+            required
+            autoComplete="name"
+            className="w-full rounded-xl border border-orange-900/40 bg-black/40 px-4 py-2 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-orange-500/60"
+            placeholder="Max Mustermann"
+          />
+        </div>
+        <div>
+          <label htmlFor="ec-email" className="block text-xs font-mono uppercase tracking-[0.15em] text-orange-400 mb-1">
+            E-Mail *
+          </label>
+          <input
+            id="ec-email"
+            name="email"
+            type="email"
+            required
+            autoComplete="email"
+            className="w-full rounded-xl border border-orange-900/40 bg-black/40 px-4 py-2 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-orange-500/60"
+            placeholder="max@firma.de"
+          />
+        </div>
       </div>
       <div>
-        <label className="block text-xs font-mono uppercase tracking-widest text-gray-500 mb-1" htmlFor="ent-email">
-          E-Mail *
-        </label>
-        <input
-          id="ent-email"
-          name="email"
-          type="email"
-          required
-          autoComplete="email"
-          placeholder="max@unternehmen.de"
-          className={inputClass}
-          style={{ ...inputStyle, ...focusRingStyle }}
-        />
-      </div>
-      <div className="md:col-span-2">
-        <label className="block text-xs font-mono uppercase tracking-widest text-gray-500 mb-1" htmlFor="ent-company">
+        <label htmlFor="ec-company" className="block text-xs font-mono uppercase tracking-[0.15em] text-orange-400 mb-1">
           Unternehmen
         </label>
         <input
-          id="ent-company"
+          id="ec-company"
           name="company"
           type="text"
           autoComplete="organization"
+          className="w-full rounded-xl border border-orange-900/40 bg-black/40 px-4 py-2 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-orange-500/60"
           placeholder="Acme GmbH"
-          className={inputClass}
-          style={{ ...inputStyle, ...focusRingStyle }}
         />
       </div>
-      <div className="md:col-span-2">
-        <label className="block text-xs font-mono uppercase tracking-widest text-gray-500 mb-1" htmlFor="ent-message">
+      <div>
+        <label htmlFor="ec-message" className="block text-xs font-mono uppercase tracking-[0.15em] text-orange-400 mb-1">
           Nachricht
         </label>
         <textarea
-          id="ent-message"
+          id="ec-message"
           name="message"
           rows={4}
-          placeholder="Kurz beschreiben: Teamgröße, Use Case, was ihr braucht …"
-          className={`${inputClass} resize-none`}
-          style={{ ...inputStyle, ...focusRingStyle }}
+          className="w-full rounded-xl border border-orange-900/40 bg-black/40 px-4 py-2 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-orange-500/60 resize-none"
+          placeholder="Wie kann ClawGuru Enterprise euch helfen?"
         />
       </div>
-      {state === "error" && (
-        <div className="md:col-span-2 text-sm text-red-400">{error}</div>
+      {status === "error" && (
+        <p className="text-sm text-red-400">{errorMsg || "Fehler beim Senden – bitte erneut versuchen."}</p>
       )}
-      <div className="md:col-span-2">
-        <button
-          type="submit"
-          disabled={state === "loading"}
-          className="w-full py-3 px-6 rounded-2xl font-black text-sm text-black transition-all duration-300 hover:opacity-90 disabled:opacity-60"
-          style={{ background: "linear-gradient(135deg, #ffa500 0%, #ff6b00 100%)", boxShadow: "0 0 30px rgba(255,165,0,0.3)" }}
-        >
-          {state === "loading" ? "Wird gesendet …" : "Sales kontaktieren →"}
-        </button>
-        <p className="mt-2 text-center text-xs text-gray-500">
-          Kein Spam · Wir antworten innerhalb von 24 Stunden
-        </p>
-      </div>
+      <button
+        type="submit"
+        disabled={status === "sending"}
+        className="w-full py-3 px-6 rounded-2xl font-black text-sm text-black transition-all duration-300 hover:opacity-90 disabled:opacity-60"
+        style={{ background: "linear-gradient(135deg, #ffaa00 0%, #ff5000 100%)", boxShadow: "0 0 30px rgba(255,165,0,0.3)" }}
+      >
+        {status === "sending" ? "Wird gesendet…" : "Anfrage senden →"}
+      </button>
     </form>
   )
 }

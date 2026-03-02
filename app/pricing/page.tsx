@@ -401,39 +401,20 @@ curl https://clawguru.com/api/intel/feeds \\
           </div>
 
           {/* ── Contact Sales ── */}
-          <div className="mt-6 relative rounded-3xl p-[1px] overflow-hidden"
-            style={{ background: "linear-gradient(135deg, rgba(255,165,0,0.3) 0%, rgba(255,107,0,0.05) 100%)" }}>
-            <div className="rounded-3xl p-7 md:p-10" style={{ background: "#0a0804" }}>
-              <div className="grid md:grid-cols-2 gap-10 items-start">
-                <div>
-                  <div className="text-[11px] font-mono uppercase tracking-[0.2em] mb-2" style={{ color: "#ffa500" }}>
-                    Enterprise · Contact Sales
-                  </div>
-                  <div className="text-xl font-black text-white font-heading mb-3">
-                    Individuelle Anfrage stellen
-                  </div>
-                  <p className="text-gray-300 text-sm leading-relaxed">
-                    Größere Teams, Compliance-Anforderungen oder individuelle SLAs?
-                    Füllt das Formular aus – wir melden uns innerhalb von 24 Stunden.
-                  </p>
-                  <ul className="mt-4 space-y-[7px]">
-                    {[
-                      "Custom Pricing für größere Teams",
-                      "Individuelle SLAs & Compliance-Reports",
-                      "Rechnungsstellung & SEPA-Lastschrift",
-                      "Persönliches Onboarding & Integration Support",
-                    ].map((feat) => (
-                      <li key={feat} className="flex items-start gap-2 text-sm text-gray-200">
-                        <span className="mt-[2px] shrink-0 size-[18px] rounded-full flex items-center justify-center text-[9px] font-bold"
-                          style={{ background: "rgba(255,165,0,0.12)", color: "#ffa500" }} aria-hidden="true">✓</span>
-                        <span className="leading-snug">{feat}</span>
-                      </li>
-                    ))}
-                  </ul>
+          <div className="mt-10 relative rounded-3xl p-[1px] overflow-hidden"
+            style={{ background: "linear-gradient(135deg, rgba(255,165,0,0.4) 0%, rgba(255,80,0,0.1) 100%)" }}>
+            <div className="rounded-3xl p-8" style={{ background: "#0f0a05" }}>
+              <div className="max-w-xl mx-auto">
+                <div className="text-[11px] font-mono uppercase tracking-[0.2em] mb-2 text-center" style={{ color: "#ffaa00" }}>
+                  Enterprise · Contact Sales
                 </div>
-                <div>
-                  <EnterpriseContact />
-                </div>
+                <h2 className="text-2xl font-black text-white font-heading text-center mb-2">
+                  Direkt anfragen
+                </h2>
+                <p className="text-sm text-gray-400 text-center mb-6">
+                  Fragen zur API, zum Onboarding oder zu individuellen Konditionen? Schreib uns direkt – wir melden uns innerhalb von 1–2 Werktagen.
+                </p>
+                <EnterpriseContact />
               </div>
             </div>
           </div>

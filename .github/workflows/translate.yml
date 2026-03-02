@@ -1,0 +1,87 @@
+name: Translate Website
+
+on:
+  # Allow manual trigger from the GitHub Actions UI
+  workflow_dispatch:
+    inputs:
+      target_langs:
+        description: "Comma-separated target language codes (e.g. en,fr,es). Leave empty to use config file."
+        required: false
+        default: ""
+      api_provider:
+        description: "Translation API provider: deepl or google"
+        required: false
+        default: "deepl"
+
+  # Optional nightly run (disabled by default – remove the leading '#' to enable)
+  # schedule:
+  #   - cron: "0 2 * * *"
+
+jobs:
+  translate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Python dependencies
+        run: pip install requests beautifulsoup4 lxml
+
+      - name: Override config from workflow inputs
+        if: ${{ github.event.inputs.target_langs != '' || github.event.inputs.api_provider != '' }}
+        run: |
+          python - <<'EOF'
+          import json, os
+
+          config_path = "config/translate_config.json"
+          with open(config_path) as f:
+              cfg = json.load(f)
+
+          target_langs = os.environ.get("INPUT_TARGET_LANGS", "").strip()
+          api_provider = os.environ.get("INPUT_API_PROVIDER", "").strip()
+
+          if target_langs:
+              cfg["target_langs"] = [l.strip() for l in target_langs.split(",") if l.strip()]
+          if api_provider:
+              cfg["api_provider"] = api_provider
+
+          with open(config_path, "w") as f:
+              json.dump(cfg, f, indent=2)
+          print("Updated config:", cfg)
+          EOF
+        env:
+          INPUT_TARGET_LANGS: ${{ github.event.inputs.target_langs }}
+          INPUT_API_PROVIDER: ${{ github.event.inputs.api_provider }}
+
+      - name: Run translation script
+        run: python scripts/translate_site.py --config config/translate_config.json
+        env:
+          DEEPL_API_KEY: ${{ secrets.DEEPL_API_KEY }}
+          GOOGLE_TRANSLATE_API_KEY: ${{ secrets.GOOGLE_TRANSLATE_API_KEY }}
+
+      - name: Commit translated files
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          BRANCH="translations/$(date -u +%Y-%m-%d)"
+          git checkout -B "$BRANCH"
+
+          git add i18n/ || true
+          git add public/translations/ || true
+
+          if git diff --cached --quiet; then
+            echo "No translation changes to commit."
+          else
+            git commit -m "chore(i18n): auto-translate site [skip ci]"
+            git push --force-with-lease origin "$BRANCH"
+            echo "Translations pushed to branch: $BRANCH"
+          fi

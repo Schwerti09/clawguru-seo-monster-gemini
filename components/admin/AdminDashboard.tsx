@@ -1,6 +1,8 @@
 "use client"
 
 import { useEffect, useMemo, useState } from "react"
+import { motion } from "framer-motion"
+import { Activity, DollarSign, Shield, RefreshCw, LogOut, ExternalLink, CheckCircle, XCircle, AlertCircle } from "lucide-react"
 
 type Overview = {
   now: string
@@ -58,70 +60,102 @@ export default function AdminDashboard() {
   const stripe = data?.stripe
   const last = useMemo(() => stripe?.lastPayments || [], [stripe])
 
+  const cardVariants = {
+    hidden: { opacity: 0, y: 16 },
+    visible: (i: number) => ({ opacity: 1, y: 0, transition: { delay: i * 0.07, duration: 0.35 } }),
+  }
+
+  function EnvBadge({ ok, label, onText = "ON", offText = "OFF", offColorClass = "text-red-300" }: { ok: boolean; label: string; onText?: string; offText?: string; offColorClass?: string }) {
+    return (
+      <div className="flex items-center gap-2">
+        {ok ? <CheckCircle className="w-3.5 h-3.5 text-green-400 shrink-0" /> : <XCircle className="w-3.5 h-3.5 text-red-400 shrink-0" />}
+        <span className="text-gray-400">{label}:</span>
+        <span className={ok ? "text-green-300 font-bold" : `${offColorClass} font-bold`}>{ok ? onText : offText}</span>
+      </div>
+    )
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="text-sm text-gray-400">
+        <div className="flex items-center gap-2 text-sm text-gray-400">
+          <Activity className="w-4 h-4 text-cyan-400" />
           Live · auto-refresh 30s · {data?.now || "—"}
         </div>
         <div className="flex gap-3">
           <a
             href="/api/admin/logout"
-            className="px-4 py-2 rounded-2xl border border-gray-700 hover:border-gray-500 font-bold text-gray-200"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl border border-gray-700 hover:border-gray-500 font-bold text-gray-200"
           >
+            <LogOut className="w-4 h-4" />
             Logout
           </a>
           <button
             onClick={load}
-            className="px-4 py-2 rounded-2xl font-black bg-gradient-to-r from-brand-cyan to-brand-violet hover:opacity-90"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl font-black bg-gradient-to-r from-brand-cyan to-brand-violet hover:opacity-90"
           >
+            <RefreshCw className="w-4 h-4" />
             Refresh
           </button>
         </div>
       </div>
 
       {busy && (
-        <div className="p-6 rounded-3xl border border-gray-800 bg-black/30 text-gray-300">
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-6 rounded-3xl border border-gray-800 bg-black/30 text-gray-300">
           Lädt Control Center…
-        </div>
+        </motion.div>
       )}
       {err && (
-        <div className="p-6 rounded-3xl border border-red-900/50 bg-red-950/30 text-red-200">
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-center gap-3 p-6 rounded-3xl border border-red-900/50 bg-red-950/30 text-red-200">
+          <AlertCircle className="w-5 h-5 shrink-0" />
           {err}
-        </div>
+        </motion.div>
       )}
 
       {data && (
         <>
           <div className="grid lg:grid-cols-3 gap-6">
-            <div className="p-6 rounded-3xl border border-gray-800 bg-black/30">
-              <div className="text-xs uppercase tracking-widest text-gray-400">Health</div>
-              <div className="mt-2 text-2xl font-black">OK</div>
-              <div className="mt-3 text-sm text-gray-300 space-y-1">
+            <motion.div custom={0} initial="hidden" animate="visible" variants={cardVariants} className="p-6 rounded-3xl border border-gray-800 bg-black/30">
+              <div className="flex items-center gap-2 text-xs uppercase tracking-widest text-gray-400">
+                <Shield className="w-3.5 h-3.5" />
+                Health
+              </div>
+              <div className="mt-2 text-2xl font-black flex items-center gap-2">
+                <CheckCircle className="w-6 h-6 text-green-400" />
+                OK
+              </div>
+              <div className="mt-3 text-sm text-gray-300 space-y-1.5">
                 <div>
                   Site: <span className="text-gray-100 font-bold">{data.siteUrl}</span>
                 </div>
-                <div>
-                  Stripe: <span className={data.env.hasStripe ? "text-green-300 font-bold" : "text-red-300 font-bold"}>{data.env.hasStripe ? "ON" : "OFF"}</span>
+                <EnvBadge ok={data.env.hasStripe} label="Stripe" />
+                <div className="flex items-center gap-2">
+                  {data.env.hasOpenAI ? <CheckCircle className="w-3.5 h-3.5 text-green-400 shrink-0" /> : <AlertCircle className="w-3.5 h-3.5 text-orange-400 shrink-0" />}
+                  <span className="text-gray-400">OpenAI:</span>
+                  <span className={data.env.hasOpenAI ? "text-green-300 font-bold" : "text-orange-300 font-bold"}>{data.env.hasOpenAI ? "ON" : "OFF"}</span>
                 </div>
-                <div>
-                  OpenAI: <span className={data.env.hasOpenAI ? "text-green-300 font-bold" : "text-orange-300 font-bold"}>{data.env.hasOpenAI ? "ON" : "OFF"}</span>
+                <EnvBadge ok={data.env.hasAdmin} label="Admin ENV" onText="OK" offText="MISSING" />
+                <div className="flex items-center gap-2">
+                  {data.env.hasWebhook ? <CheckCircle className="w-3.5 h-3.5 text-green-400 shrink-0" /> : <AlertCircle className="w-3.5 h-3.5 text-orange-400 shrink-0" />}
+                  <span className="text-gray-400">Webhooks:</span>
+                  <span className={data.env.hasWebhook ? "text-green-300 font-bold" : "text-orange-300 font-bold"}>{data.env.hasWebhook ? "ON" : "OFF"}</span>
                 </div>
-                <div>
-                  Admin ENV: <span className={data.env.hasAdmin ? "text-green-300 font-bold" : "text-red-300 font-bold"}>{data.env.hasAdmin ? "OK" : "MISSING"}</span>
-                </div>
-                <div>
-                  Webhooks: <span className={data.env.hasWebhook ? "text-green-300 font-bold" : "text-orange-300 font-bold"}>{data.env.hasWebhook ? "ON" : "OFF"}</span>
-                </div>
-                <div>
-                  Email: <span className={data.env.hasEmail ? "text-green-300 font-bold" : "text-orange-300 font-bold"}>{data.env.hasEmail ? "ON" : "OFF"}</span>
+                <div className="flex items-center gap-2">
+                  {data.env.hasEmail ? <CheckCircle className="w-3.5 h-3.5 text-green-400 shrink-0" /> : <AlertCircle className="w-3.5 h-3.5 text-orange-400 shrink-0" />}
+                  <span className="text-gray-400">Email:</span>
+                  <span className={data.env.hasEmail ? "text-green-300 font-bold" : "text-orange-300 font-bold"}>{data.env.hasEmail ? "ON" : "OFF"}</span>
                 </div>
               </div>
-              <a href="/live" className="mt-4 inline-flex text-cyan-300 underline hover:text-cyan-200">Ops Wall öffnen →</a>
-            </div>
+              <a href="/live" className="mt-4 inline-flex items-center gap-1 text-cyan-300 underline hover:text-cyan-200">
+                Ops Wall öffnen <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+            </motion.div>
 
-            <div className="p-6 rounded-3xl border border-gray-800 bg-black/30 lg:col-span-2">
-              <div className="text-xs uppercase tracking-widest text-gray-400">Stripe</div>
+            <motion.div custom={1} initial="hidden" animate="visible" variants={cardVariants} className="p-6 rounded-3xl border border-gray-800 bg-black/30 lg:col-span-2">
+              <div className="flex items-center gap-2 text-xs uppercase tracking-widest text-gray-400">
+                <DollarSign className="w-3.5 h-3.5" />
+                Stripe
+              </div>
               <div className="mt-2 text-2xl font-black">Revenue Snapshot</div>
               {stripe ? (
                 <div className="mt-4 grid md:grid-cols-4 gap-4">
@@ -164,11 +198,11 @@ export default function AdminDashboard() {
                   </div>
                 </div>
               )}
-            </div>
+            </motion.div>
           </div>
 
           <div className="grid lg:grid-cols-3 gap-6">
-            <div className="p-6 rounded-3xl border border-gray-800 bg-black/30">
+            <motion.div custom={2} initial="hidden" animate="visible" variants={cardVariants} className="p-6 rounded-3xl border border-gray-800 bg-black/30">
               <div className="text-xs uppercase tracking-widest text-gray-400">Growth</div>
               <div className="mt-2 text-2xl font-black">Loop Controls</div>
               <div className="mt-4 flex flex-col gap-3">
@@ -191,9 +225,9 @@ export default function AdminDashboard() {
               <div className="mt-4 text-xs text-gray-500">
                 Tipp: UTM-Links überall. Share-Badges erzeugen „free distribution“.
               </div>
-            </div>
+            </motion.div>
 
-            <div className="p-6 rounded-3xl border border-gray-800 bg-black/30 lg:col-span-2">
+            <motion.div custom={3} initial="hidden" animate="visible" variants={cardVariants} className="p-6 rounded-3xl border border-gray-800 bg-black/30 lg:col-span-2">
               <div className="text-xs uppercase tracking-widest text-gray-400">Quick Checks</div>
               <div className="mt-2 text-2xl font-black">Website Health</div>
               <div className="mt-4 grid md:grid-cols-3 gap-4">
@@ -209,7 +243,7 @@ export default function AdminDashboard() {
                   </a>
                 ))}
               </div>
-            </div>
+            </motion.div>
           </div>
         </>
       )}

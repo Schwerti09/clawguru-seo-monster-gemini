@@ -26,12 +26,13 @@ export async function getSubscribers(
   let startingAfter: string | undefined = undefined
 
   while (hasMore) {
-    const page: Stripe.ApiList<Stripe.Subscription> = await stripe.subscriptions.list({
+    const listParams: Stripe.SubscriptionListParams = {
       limit: 100,
       status,
       expand: ["data.customer"],
-      ...(startingAfter ? { starting_after: startingAfter } : {})
-    })
+    }
+    if (startingAfter) listParams.starting_after = startingAfter
+    const page = await stripe.subscriptions.list(listParams)
 
     for (const sub of page.data) {
       const customer = sub.customer as Stripe.Customer | Stripe.DeletedCustomer

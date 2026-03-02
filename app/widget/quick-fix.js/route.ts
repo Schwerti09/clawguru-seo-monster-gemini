@@ -16,9 +16,67 @@ export async function GET() {
     ])
   )
 
-  const script = `(function(){var script=document.currentScript;var dataLang=(script&&script.getAttribute("data-lang"))||"";var lang=(dataLang||navigator.language||"${DEFAULT_LOCALE}").toLowerCase().slice(0,2);var translations=${JSON.stringify(
-    translations
-  )};var locale=translations[lang]?lang:"${DEFAULT_LOCALE}";var copy=translations[locale];var slug=(script&&script.getAttribute("data-slug"))||"security-check";var base=(script&&script.getAttribute("data-base"))||"https://clawguru.org";var target=base.replace(/\\/$/,"")+"/fix/"+encodeURIComponent(slug);var container=document.createElement("div");container.style.position="fixed";container.style.bottom="24px";container.style.right="24px";container.style.zIndex="2147483647";container.style.fontFamily="Inter,system-ui,sans-serif";container.innerHTML='<div style="background:rgba(6,10,18,0.95);border:1px solid rgba(0,184,255,0.3);box-shadow:0 10px 40px rgba(0,0,0,0.35);border-radius:16px;padding:16px 18px;max-width:260px;color:#e5e7eb"><div style="font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:#00b8ff;margin-bottom:6px">'+copy.title+'</div><div style="font-weight:800;font-size:14px;margin-bottom:6px">Quick Fix</div><div style="font-size:12px;color:#9ca3af;margin-bottom:12px">'+copy.subtitle+'</div><a href="'+target+'" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:8px 12px;border-radius:12px;background:linear-gradient(135deg,#00b8ff,#0077ff);color:#021019;font-weight:800;font-size:12px;text-decoration:none">'+copy.cta+'</a></div>';document.body.appendChild(container);})();`
+  const script = `(function(){
+var script=document.currentScript;
+var dataLang=(script&&script.getAttribute("data-lang"))||"";
+var lang=(dataLang||navigator.language||"${DEFAULT_LOCALE}").toLowerCase().slice(0,2);
+var translations=${JSON.stringify(translations)};
+var locale=translations[lang]?lang:"${DEFAULT_LOCALE}";
+var copy=translations[locale];
+var slug=(script&&script.getAttribute("data-slug"))||"security-check";
+var base=(script&&script.getAttribute("data-base"))||"https://clawguru.org";
+var target=base.replace(/\\/$/,"")+"/fix/"+encodeURIComponent(slug);
+var container=document.createElement("div");
+container.style.position="fixed";
+container.style.bottom="24px";
+container.style.right="24px";
+container.style.zIndex="2147483647";
+container.style.fontFamily="Inter,system-ui,sans-serif";
+var card=document.createElement("div");
+card.style.background="rgba(6,10,18,0.95)";
+card.style.border="1px solid rgba(0,184,255,0.3)";
+card.style.boxShadow="0 10px 40px rgba(0,0,0,0.35)";
+card.style.borderRadius="16px";
+card.style.padding="16px 18px";
+card.style.maxWidth="260px";
+card.style.color="#e5e7eb";
+var kicker=document.createElement("div");
+kicker.textContent=copy.title;
+kicker.style.fontSize="11px";
+kicker.style.letterSpacing="0.15em";
+kicker.style.textTransform="uppercase";
+kicker.style.color="#00b8ff";
+kicker.style.marginBottom="6px";
+var heading=document.createElement("div");
+heading.textContent="Quick Fix";
+heading.style.fontWeight="800";
+heading.style.fontSize="14px";
+heading.style.marginBottom="6px";
+var subtitle=document.createElement("div");
+subtitle.textContent=copy.subtitle;
+subtitle.style.fontSize="12px";
+subtitle.style.color="#9ca3af";
+subtitle.style.marginBottom="12px";
+var cta=document.createElement("a");
+cta.href=target;
+cta.target="_blank";
+cta.rel="noopener noreferrer";
+cta.textContent=copy.cta;
+cta.style.display="inline-block";
+cta.style.padding="8px 12px";
+cta.style.borderRadius="12px";
+cta.style.background="linear-gradient(135deg,#00b8ff,#0077ff)";
+cta.style.color="#021019";
+cta.style.fontWeight="800";
+cta.style.fontSize="12px";
+cta.style.textDecoration="none";
+card.appendChild(kicker);
+card.appendChild(heading);
+card.appendChild(subtitle);
+card.appendChild(cta);
+container.appendChild(card);
+document.body.appendChild(container);
+})();`
 
   return new NextResponse(script, {
     headers: { "content-type": "application/javascript; charset=utf-8" },

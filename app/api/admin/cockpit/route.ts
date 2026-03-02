@@ -72,13 +72,6 @@ async function fetchRevenue() {
 // ---------------------------------------------------------------------------
 // SEO index tracker
 // ---------------------------------------------------------------------------
-// Module-level in-memory store for last successful daily-index cron run.
-let _lastDailyIndexRun: string | null = null
-
-export function recordDailyIndexRun() {
-  _lastDailyIndexRun = new Date().toISOString()
-}
-
 function seoIndexData() {
   const total = totalSitemapUrls()
   const target = 100_000
@@ -86,7 +79,8 @@ function seoIndexData() {
     indexedPages: total,
     targetPages: target,
     progressPct: Math.min(100, Math.round((total / target) * 100)),
-    lastDailyIndexRun: _lastDailyIndexRun,
+    // lastDailyIndexRun is read from env var (set by daily-index cron via Netlify API)
+    lastDailyIndexRun: process.env.LAST_DAILY_INDEX_RUN ?? null,
   }
 }
 

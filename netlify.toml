@@ -8,6 +8,7 @@
 [build.environment]
   NODE_VERSION = "20"
   NETLIFY_LOG_LEVEL = "debug"
+  NODE_OPTIONS = "--max-old-space-size=4096"
 
 # Immutable caching for content-hashed static assets (must be before the catch-all)
 [[headers]]

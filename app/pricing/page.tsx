@@ -335,21 +335,28 @@ export default function PricingPage() {
             style={{ background: "linear-gradient(135deg, rgba(255,165,0,0.6) 0%, rgba(255,80,0,0.2) 100%)" }}>
             <div className="rounded-3xl p-8" style={{ background: "#0f0a05" }}>
               <div className="flex flex-col lg:flex-row lg:items-start gap-8">
-                {/* Left: features + API snippet */}
-                <div className="flex-1">
+                {/* Left: header + price */}
+                <div className="lg:w-64 shrink-0">
                   <div className="text-[11px] font-mono uppercase tracking-[0.2em] mb-2" style={{ color: "#ffaa00" }}>
                     Enterprise · API
                   </div>
                   <div className="text-2xl font-black text-white font-heading">ClawGuru Enterprise</div>
-                  <div className="mt-3 flex items-end gap-2">
-                    <span className="text-4xl font-black text-white">299€</span>
-                    <span className="text-sm text-gray-400 pb-1">/ Monat</span>
+                  <div className="mt-4 flex items-end gap-2">
+                    <span className="text-5xl font-black text-white">299€</span>
+                    <span className="text-sm text-gray-400 pb-2">/ Monat</span>
                   </div>
-                  <p className="mt-3 text-sm text-gray-300 leading-relaxed">
+                  <p className="mt-4 text-sm text-gray-300 leading-relaxed">
                     Direkter REST/JSON-Feed für euer SIEM, SOC oder eigenes Monitoring-Backend.
                     API-Key-Auth, maschinenlesbare Events – kein manuelles Klicken mehr.
                   </p>
+                  <EnterpriseContact />
+                  <div className="mt-3 text-xs text-gray-500 text-center">
+                    Kontakt: enterprise@clawguru.org
+                  </div>
+                </div>
 
+                {/* Right: features */}
+                <div className="flex-1">
                   <FeatureList groups={ENTERPRISE_GROUPS} />
 
                   {/* API quick-start snippet */}
@@ -382,14 +389,6 @@ curl https://clawguru.com/api/intel/feeds \\
 }`}
                     </pre>
                   </div>
-                </div>
-
-                {/* Right: contact form */}
-                <div className="lg:w-96 shrink-0">
-                  <div className="text-xs font-mono uppercase tracking-[0.2em] text-gray-500 mb-5">
-                    Sales kontaktieren
-                  </div>
-                  <EnterpriseContact />
                 </div>
               </div>
             </div>

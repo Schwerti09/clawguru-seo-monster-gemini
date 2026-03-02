@@ -5,6 +5,8 @@ import { createAffiliateAccountLink } from "@/lib/stripe/affiliate-onboarding"
 export const dynamic = "force-dynamic"
 export const runtime = "nodejs"
 
+const onboardingSecret = process.env.AFFILIATE_ONBOARDING_SECRET
+
 function unauthorized() {
   return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
 }
@@ -16,11 +18,14 @@ function normalizeString(input: unknown, max = 120) {
 export async function POST(req: NextRequest) {
   if (!isStripeActive()) return apiUnavailableResponse()
 
-  const secret = process.env.AFFILIATE_ONBOARDING_SECRET
-  if (secret) {
-    const auth = req.headers.get("authorization") ?? ""
-    if (auth !== `Bearer ${secret}`) return unauthorized()
+  if (!onboardingSecret) {
+    return NextResponse.json(
+      { error: "AFFILIATE_ONBOARDING_SECRET missing" },
+      { status: 500 }
+    )
   }
+  const auth = req.headers.get("authorization") ?? ""
+  if (auth !== `Bearer ${onboardingSecret}`) return unauthorized()
 
   const body = await req.json().catch(() => ({}))
   const affiliateId = normalizeString(body?.affiliateId, 64)

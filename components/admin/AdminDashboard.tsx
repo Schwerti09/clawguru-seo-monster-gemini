@@ -35,8 +35,10 @@ function money(v: number, currency = "eur") {
   return new Intl.NumberFormat("de-DE", { style: "currency", currency: currency.toUpperCase() }).format(amt)
 }
 
+const eurFormatter = new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" })
+
 function eur(v: number) {
-  return new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" }).format(v)
+  return eurFormatter.format(v)
 }
 
 export default function AdminDashboard() {

@@ -7,6 +7,7 @@ import type { NextRequest } from "next/server"
 import { SUPPORTED_LOCALES, DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
 
 const LOCALE_COOKIE = "cg_locale"
+// Legacy routes that require automatic locale prefixing.
 const LOCALIZED_PATHS = ["/runbook/", "/runbooks/", "/provider/", "/tag/", "/tags/"] as const
 
 // ---------------------------------------------------------------------------

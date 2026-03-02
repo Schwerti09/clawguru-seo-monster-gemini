@@ -8,10 +8,17 @@ type GeminiUsage = {
   updatedAt: string
 }
 
+// In-memory snapshot (resets on cold start). Daily usage uses UTC date boundaries.
 const usageByDay = new Map<string, GeminiUsage>()
 
 function todayKey(date = new Date()) {
+  // UTC day key to keep billing windows consistent across deployments.
   return date.toISOString().slice(0, 10)
+}
+
+function yesterdayKey(date = new Date()) {
+  const utc = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate() - 1))
+  return utc.toISOString().slice(0, 10)
 }
 
 function parseNumber(value: string | undefined, fallback: number) {
@@ -30,7 +37,10 @@ export function geminiDailyHardLimitEur(): number {
 
 function getUsage(date = todayKey()): GeminiUsage {
   if (!usageByDay.has(date)) {
-    usageByDay.clear()
+    const keep = new Set([date, yesterdayKey()])
+    for (const key of usageByDay.keys()) {
+      if (!keep.has(key)) usageByDay.delete(key)
+    }
     usageByDay.set(date, {
       date,
       promptTokens: 0,

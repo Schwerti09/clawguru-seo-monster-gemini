@@ -15,20 +15,26 @@ export type AffiliateOnboardingResult = {
   expiresAt: number
 }
 
-const DEFAULT_COUNTRY = (process.env.AFFILIATE_DEFAULT_COUNTRY || "DE").toUpperCase()
+function defaultCountry() {
+  return (process.env.AFFILIATE_DEFAULT_COUNTRY || "DE").toUpperCase()
+}
+// Cached per runtime instance (resets on cold start).
+let cachedAffiliateAccounts: Record<string, string> | null = null
 
 function normalizeCountry(country?: string) {
   const value = (country || "").trim().toUpperCase()
-  return value.length === 2 ? value : DEFAULT_COUNTRY
+  return value.length === 2 ? value : defaultCountry()
 }
 
 function parseAffiliateAccounts(): Record<string, string> {
+  if (cachedAffiliateAccounts) return cachedAffiliateAccounts
   const raw = process.env.AFFILIATE_CONNECT_ACCOUNTS || "{}"
   try {
-    return JSON.parse(raw) as Record<string, string>
+    cachedAffiliateAccounts = JSON.parse(raw) as Record<string, string>
   } catch {
-    return {}
+    cachedAffiliateAccounts = {}
   }
+  return cachedAffiliateAccounts
 }
 
 function resolveAccountId(affiliateId?: string, accountId?: string) {

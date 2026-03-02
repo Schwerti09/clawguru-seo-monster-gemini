@@ -23,7 +23,11 @@ export async function postToDiscord(message: string): Promise<boolean> {
 }
 
 function isSlackWebhook(url: string) {
-  return url.includes("hooks.slack.com")
+  try {
+    return new URL(url).hostname === "hooks.slack.com"
+  } catch {
+    return false
+  }
 }
 
 /**

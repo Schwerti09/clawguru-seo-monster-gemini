@@ -6,6 +6,7 @@ import { SUPPORTED_LOCALES } from "@/lib/i18n"
 export const dynamic = "force-dynamic"
 export const runtime = "nodejs"
 
+// Compute once to avoid repeated work; count100kSitemapPages is O(1) (static array lengths).
 const SITEMAP_PAGE_COUNT = count100kSitemapPages()
 
 function isoDate(d = new Date()) {

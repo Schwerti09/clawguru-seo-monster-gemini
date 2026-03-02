@@ -1,9 +1,23 @@
 // lib/netlify-api.ts
 // Netlify API helpers for admin operations.
-// Uses NETLIFY_API_KEY (personal access token) and NETLIFY_SITE_ID to
-// toggle the MAINTENANCE_MODE environment variable and trigger a rebuild.
+// Uses NETLIFY_API_KEY (personal access token), NETLIFY_SITE_ID, and
+// NETLIFY_ACCOUNT_ID ('rolf-schwertfechter') to toggle the MAINTENANCE_MODE
+// environment variable and trigger a rebuild.
 
 const NETLIFY_API = "https://api.netlify.com/api/v1"
+
+/** The Netlify account slug / team ID – scopes all account-level API calls. */
+function accountId() {
+  const id = process.env.NETLIFY_ACCOUNT_ID
+  if (!id) {
+    console.warn(
+      "[netlify-api] NETLIFY_ACCOUNT_ID is not set – falling back to 'rolf-schwertfechter'. " +
+        "Set this env var in Netlify to avoid misconfiguration."
+    )
+    return "rolf-schwertfechter"
+  }
+  return id
+}
 
 function headers() {
   const token = process.env.NETLIFY_API_KEY
@@ -67,12 +81,15 @@ export async function setMaintenanceMode(enabled: boolean): Promise<void> {
     }
   }
 
-  // Trigger a new build
-  const buildRes = await fetch(`${NETLIFY_API}/sites/${site}/builds`, {
-    method: "POST",
-    headers: h,
-    body: JSON.stringify({}),
-  })
+  // Trigger a new build (scoped to account for team plans)
+  const buildRes = await fetch(
+    `${NETLIFY_API}/sites/${site}/builds?account_id=${encodeURIComponent(accountId())}`,
+    {
+      method: "POST",
+      headers: h,
+      body: JSON.stringify({}),
+    }
+  )
   if (!buildRes.ok) {
     throw new Error(`Netlify build trigger failed ${buildRes.status}: ${await buildRes.text()}`)
   }

@@ -51,7 +51,7 @@ export default function CopilotChat() {
   useEffect(() => {
     setMsgs(startMsgs)
     setFollowups(initialFollowups)
-  }, [locale]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [locale, startMsgs, initialFollowups])
 
   async function send(text: string) {
     const txt = text.trim()

@@ -40,9 +40,9 @@ export default function IntelFeed() {
   }, [])
 
   const filtered = useMemo(() => {
-    const term = q.toLowerCase().trim()
+    const searchTerm = q.toLowerCase().trim()
     return items.filter((i) => {
-      const okQ = !term || (i.title + " " + i.summary).toLowerCase().includes(term)
+      const okQ = !searchTerm || (i.title + " " + i.summary).toLowerCase().includes(searchTerm)
       const okCat = cat === "all" || i.category === cat
       const okSev = sev === "all" || i.severity === sev
       return okQ && okCat && okSev

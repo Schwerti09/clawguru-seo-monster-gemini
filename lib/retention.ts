@@ -7,6 +7,13 @@ export type ActiveDefenderContact = {
   name?: string
 }
 
+export type DefenderThreat = {
+  id: string
+  severity: string
+  cvssScore: number | null
+  summary: string
+}
+
 type ResendContact = {
   email?: string
   first_name?: string | null
@@ -17,6 +24,12 @@ type ResendContact = {
 type ResendListResponse = {
   data?: ResendContact[]
   next?: string | null
+}
+
+const CVE_ID_PATTERN = /^CVE-\d{4}-\d{4,}$/i
+
+function isDefenderThreat(value: DefenderThreat | null): value is DefenderThreat {
+  return value !== null
 }
 
 function getResendConfig() {
@@ -92,15 +105,34 @@ export async function fetchDefenderThreats() {
   if (cves.length === 0) return []
   try {
     const summarized = await summarizeThreats(cves)
-    return summarized.slice(0, 3)
+    return summarized
+      .map((t) => {
+        const safeId = sanitizeCveId(t.id)
+        if (!safeId) return null
+        return { ...t, id: safeId }
+      })
+      .filter(isDefenderThreat)
+      .slice(0, 3)
   } catch {
-    return cves.slice(0, 3).map((c) => ({
-      id: c.id,
-      severity: c.severity,
-      cvssScore: c.cvssScore,
-      summary: c.description.slice(0, 280),
-    }))
+    return cves
+      .map((c) => {
+        const safeId = sanitizeCveId(c.id)
+        if (!safeId) return null
+        return {
+          id: safeId,
+          severity: c.severity,
+          cvssScore: c.cvssScore,
+          summary: c.description.slice(0, 280),
+        }
+      })
+      .filter(isDefenderThreat)
+      .slice(0, 3)
   }
+}
+
+function sanitizeCveId(id: string): string | null {
+  const cleaned = id.trim().toUpperCase()
+  return CVE_ID_PATTERN.test(cleaned) ? cleaned : null
 }
 
 function escapeHtml(str: string) {

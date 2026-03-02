@@ -42,15 +42,27 @@ export async function GET(req: NextRequest) {
   const subject = `🛡️ Security Alert – ${weekLabel}: ${threats.length} kritische Lücken`
   let sent = 0
   let failed = 0
+  const batchSize = 10
 
-  for (const contact of contacts) {
-    try {
-      const html = buildDefenderEmailHtml({ contact, threats, siteUrl, weekLabel })
-      await sendEmail({ to: contact.email, subject, html })
-      sent++
-    } catch (err) {
-      console.error(`[retention/weekly] Failed for ${contact.email}:`, err)
-      failed++
+  for (let i = 0; i < contacts.length; i += batchSize) {
+    const batch = contacts.slice(i, i + batchSize)
+    const results = await Promise.allSettled(
+      batch.map(async (contact) => {
+        const html = buildDefenderEmailHtml({ contact, threats, siteUrl, weekLabel })
+        await sendEmail({ to: contact.email, subject, html })
+        return contact.email
+      })
+    )
+
+    for (let j = 0; j < results.length; j++) {
+      const result = results[j]
+      if (result.status === "fulfilled") {
+        sent++
+      } else {
+        const email = batch[j]?.email || "unknown"
+        console.error(`[retention/weekly] Failed for ${email}:`, result.reason)
+        failed++
+      }
     }
   }
 

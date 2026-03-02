@@ -25,8 +25,13 @@ export function readAffiliateRef(): string | null {
   const raw = window.localStorage.getItem(AFFILIATE_STORAGE_KEY)
   if (!raw) return null
   try {
-    const parsed = JSON.parse(raw) as StoredAffiliate
-    if (!parsed.value || !parsed.expiresAt || parsed.expiresAt < now()) {
+    const parsed = JSON.parse(raw) as Partial<StoredAffiliate>
+    if (
+      !parsed ||
+      typeof parsed.value !== "string" ||
+      typeof parsed.expiresAt !== "number" ||
+      parsed.expiresAt < now()
+    ) {
       window.localStorage.removeItem(AFFILIATE_STORAGE_KEY)
       return null
     }

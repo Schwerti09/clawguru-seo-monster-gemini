@@ -109,6 +109,7 @@ function extractAffiliateRef(request: NextRequest): string | null {
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
   const affiliateRef = extractAffiliateRef(request)
+  const secureCookie = request.nextUrl.protocol === "https:"
 
   const withAffiliateCookie = (response: NextResponse) => {
     if (affiliateRef) {
@@ -117,6 +118,7 @@ export function middleware(request: NextRequest) {
         maxAge: AFFILIATE_COOKIE_MAX_AGE,
         path: "/",
         sameSite: "lax",
+        secure: secureCookie,
       })
     }
     return response

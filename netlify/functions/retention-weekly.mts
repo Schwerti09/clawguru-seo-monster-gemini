@@ -14,7 +14,12 @@ export default async function handler() {
   }
 
   const res = await fetch(url, { headers })
-  const body = await res.json().catch(() => ({}))
+  let body: unknown = {}
+  try {
+    body = await res.json()
+  } catch (err) {
+    console.warn("[retention-weekly] Failed to parse JSON response:", err)
+  }
 
   console.log(
     `[retention-weekly] status=${res.status} sent=${(body as { sent?: number }).sent ?? "?"} failed=${(body as { failed?: number }).failed ?? "?"}`,

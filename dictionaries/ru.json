@@ -1,0 +1,60 @@
+{
+  "hero": {
+    "badge": "Mycelial Singularity Engine v3.0 · ПРОТОКОЛ ГЕНЕЗИС АКТИВЕН",
+    "subtitle": "Живая мицелиальная сеть из 1M+ руководств по эксплуатации. Каждый узел — единица знаний, каждое ребро — семантическая связь. Граф на основе силы, эволюционный движок и режим Oracle — самая передовая операционная база знаний в мире.",
+    "ctaMycelium": "Живой мицелий →",
+    "ctaCopilot": "Спросить Copilot",
+    "ctaProKits": "Pro Kits (Stripe)",
+    "ctaIntel": "Лента Intel",
+    "miniCopilotTitle": "Мини-Copilot",
+    "miniCopilotSubtitle": "Опишите проблему в 1 предложении. Мы направим вас в нужный хаб.",
+    "miniCopilotPlaceholder": "напр. 'кажется, мой шлюз открыт'",
+    "miniCopilotSubmit": "Вперёд",
+    "popularPromptsTitle": "Популярные запросы",
+    "noLoginNote": "Без входа. Без тёмных паттернов. Только страница, которая реально вытащит вас из огня.",
+    "featureCopilot": "Copilot",
+    "featureCopilotDesc": "Диалог → Runbook",
+    "featureVault": "Vault",
+    "featureVaultDesc": "Справочники и паттерны",
+    "featureAcademy": "Academy",
+    "featureAcademyDesc": "Спринты, а не курсы",
+    "titleSuffix": "Mycelial Singularity Engine v3.0"
+  },
+  "nav": {
+    "live": "Прямой эфир",
+    "securityCheck": "Проверка безопасности",
+    "copilot": "Copilot",
+    "runbooks": "Runbooks",
+    "intelFeed": "Лента Intel",
+    "pricing": "Тарифы",
+    "emergency": "Экстренная помощь",
+    "proKits": "Pro Kits"
+  },
+  "dayPass": {
+    "label": "Дневной пропуск (24ч)"
+  },
+  "jackpot": {
+    "kicker": "Джекпот",
+    "title": "Вы не хотите «читать». Вы хотите решать.",
+    "subtitle": "ClawGuru — операционный уровень безопасности: Score → Runbook → Fix → Re-Check → Share.",
+    "liveScore": "Live Score",
+    "liveScoreDesc": "30 секунд. Без воды. Ваши топ-3 риска.",
+    "copilotRunbooks": "Runbooks Copilot",
+    "copilotRunbooksDesc": "Вы описываете стек. Мы даём runbook для выполнения.",
+    "kitsTemplates": "Киты + Шаблоны",
+    "kitsTemplatesDesc": "Ресурсы для копирования/вставки, которые можно сразу развернуть в продакшн.",
+    "liveOpsWall": "Живая стена Ops",
+    "liveOpsWallDesc": "Тренды + горячие патчи. Решайте быстрее, исправляйте быстрее.",
+    "runbooksLink": "Runbooks →",
+    "allPlans": "Все планы →",
+    "discordOpsRoom": "Комната Discord Ops →",
+    "proTip": "Совет Pro: после оплаты нажмите",
+    "activateAccess": "«Активировать доступ»",
+    "then": "→ Dashboard."
+  },
+  "faq": {
+    "kicker": "FAQ",
+    "title": "Коротко. Чётко. Полезно.",
+    "subtitle": "Некоторые вопросы возникают снова и снова. Вот ответы."
+  }
+}

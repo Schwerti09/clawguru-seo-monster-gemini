@@ -69,14 +69,20 @@ export type Dictionary = {
 }
 
 // Supported dictionary locales (JSON files that exist in /dictionaries)
-const DICTIONARY_LOCALES = ["de", "en", "fr", "zh"] as const
+const DICTIONARY_LOCALES = ["de", "en", "es", "fr", "pt", "it", "ru", "zh", "ja", "ar"] as const
 type DictionaryLocale = (typeof DICTIONARY_LOCALES)[number]
 
 const loaders: Record<DictionaryLocale, () => Promise<Dictionary>> = {
   de: () => import("@/dictionaries/de.json").then((m) => m.default as unknown as Dictionary),
   en: () => import("@/dictionaries/en.json").then((m) => m.default as unknown as Dictionary),
+  es: () => import("@/dictionaries/es.json").then((m) => m.default as unknown as Dictionary),
   fr: () => import("@/dictionaries/fr.json").then((m) => m.default as unknown as Dictionary),
+  pt: () => import("@/dictionaries/pt.json").then((m) => m.default as unknown as Dictionary),
+  it: () => import("@/dictionaries/it.json").then((m) => m.default as unknown as Dictionary),
+  ru: () => import("@/dictionaries/ru.json").then((m) => m.default as unknown as Dictionary),
   zh: () => import("@/dictionaries/zh.json").then((m) => m.default as unknown as Dictionary),
+  ja: () => import("@/dictionaries/ja.json").then((m) => m.default as unknown as Dictionary),
+  ar: () => import("@/dictionaries/ar.json").then((m) => m.default as unknown as Dictionary),
 }
 
 /** Returns the best available dictionary locale for the given locale. */

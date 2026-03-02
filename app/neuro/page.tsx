@@ -273,6 +273,8 @@ export default function NeuroPage() {
   const responseRef = useRef<HTMLDivElement>(null)
   // NEURO-MYCELIUM INTERFACE v3.5 – Overlord AI: Stable ref so dwell timer always calls latest triggerOracle
   const triggerOracleRef = useRef<(q: string, fromGaze?: boolean) => void>(() => {})
+  // NEURO-MYCELIUM INTERFACE v3.5 – Overlord AI: Ref for fallback text input – focused when camera unavailable
+  const textInputRef = useRef<HTMLTextAreaElement>(null)
 
   // NEURO-MYCELIUM INTERFACE v3.5 – Overlord AI: Load webgazer.js from CDN after consent+opt-in
   const loadWebgazer = useCallback(async () => {
@@ -457,6 +459,13 @@ export default function NeuroPage() {
       } catch { /* ignore */ }
     }
   }, [eyeTrackingEnabled, consented, loadWebgazer, gazeActive])
+
+  // NEURO-MYCELIUM INTERFACE v3.5 – Overlord AI: Auto-focus text input when camera is unavailable
+  useEffect(() => {
+    if (gazeError) {
+      textInputRef.current?.focus()
+    }
+  }, [gazeError])
 
   // NEURO-MYCELIUM INTERFACE v3.5 – Overlord AI: Auto-detect camera after consent and show permission box
   useEffect(() => {
@@ -718,6 +727,7 @@ export default function NeuroPage() {
               }}
             >
               <textarea
+                ref={textInputRef}
                 value={selectedQuestion}
                 onChange={(e) => setSelectedQuestion(e.target.value)}
                 onKeyDown={(e) => {

@@ -6,11 +6,15 @@ export const dynamic = "force-dynamic"
 
 type Product = "daypass" | "pro" | "team" | "msp"
 
+const PRICE_IDS: Record<Product, string | undefined> = {
+  daypass: process.env.STRIPE_PRICE_DAYPASS,
+  pro: process.env.STRIPE_PRICE_PRO,
+  team: process.env.STRIPE_PRICE_TEAM,
+  msp: process.env.STRIPE_PRICE_MSP,
+}
+
 function getPriceId(product: Product) {
-  if (product === "daypass") return process.env.STRIPE_PRICE_DAYPASS
-  if (product === "pro") return process.env.STRIPE_PRICE_PRO
-  if (product === "msp") return process.env.STRIPE_PRICE_MSP
-  return process.env.STRIPE_PRICE_TEAM
+  return PRICE_IDS[product]
 }
 
 type StripePrice = {
@@ -29,7 +33,14 @@ const STRIPE_BASE = "https://api.stripe.com/v1"
 
 async function stripeRequest<T>(path: string, options: RequestInit): Promise<T> {
   const response = await fetch(`${STRIPE_BASE}${path}`, options)
-  const data = await response.json().catch(() => ({}))
+  let data: { error?: { message?: string } } = {}
+  try {
+    data = await response.json()
+  } catch {
+    if (!response.ok) {
+      throw new Error("Stripe response parse failed.")
+    }
+  }
   if (!response.ok) {
     const message = typeof data?.error?.message === "string" ? data.error.message : "Stripe request failed."
     throw new Error(message)

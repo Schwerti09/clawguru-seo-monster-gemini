@@ -19,7 +19,7 @@ export function buildSocialTitle(title: string, maxLength = 70) {
 export function buildSocialSnippet({ title, summary, maxLength = 200 }: SocialSnippetInput) {
   const combined = `${title.trim()}: ${summary.trim()}`.trim()
   const base = combined.length <= maxLength ? combined : summary.trim()
-  const suffix = " – ClawGuru Runbook"
+  const suffix = " - ClawGuru Runbook"
   const withSuffix = base.length + suffix.length <= maxLength ? `${base}${suffix}` : base
   return clampText(withSuffix, maxLength)
 }

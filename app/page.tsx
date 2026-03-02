@@ -69,13 +69,13 @@ export default function Home({ dict }: HomeProps) {
         </div>
         <div className="relative z-10 flex flex-col items-center text-center px-4 max-w-4xl mx-auto">
           <div className="mb-4 text-xs font-mono tracking-[0.3em] uppercase" style={{ color: "rgba(0,184,255,0.7)" }}>
-            CLAWVERSE · UNIVERSE CORE · OPERATIONAL KNOWLEDGE NETWORK
+            {dict?.home.clawVerseKicker ?? "CLAWVERSE · UNIVERSE CORE · OPERATIONAL KNOWLEDGE NETWORK"}
           </div>
           <h2 className="text-5xl sm:text-6xl md:text-7xl font-black font-heading leading-[1.05] tracking-tight text-white">
-            Enter the ClawVerse
+            {dict?.home.clawVerseTitle ?? "Enter the ClawVerse"}
           </h2>
           <p className="mt-6 text-lg sm:text-xl text-gray-400 max-w-2xl leading-relaxed">
-            One living mycelium connecting all operational security knowledge across tools, time&nbsp;&amp;&nbsp;intelligence layers. The Universe is live.
+            {dict?.home.clawVerseDesc ?? "One living mycelium connecting all operational security knowledge across tools, time & intelligence layers. The Universe is live."}
           </p>
           <a
             href="/universe"
@@ -85,7 +85,7 @@ export default function Home({ dict }: HomeProps) {
               boxShadow: "0 0 40px rgba(0,184,255,0.35), 0 0 80px rgba(0,255,157,0.15)"
             }}
           >
-            Enter the Universe →
+            {dict?.home.clawVerseCta ?? "Enter the Universe →"}
           </a>
         </div>
       </section>
@@ -154,20 +154,19 @@ export default function Home({ dict }: HomeProps) {
       <section className="py-16 bg-gradient-to-r from-gray-950 to-[#001a2e] border-y border-white/10">
         <Container>
           <div className="max-w-5xl mx-auto p-8 rounded-3xl glass-panel" style={{ borderColor: "rgba(0, 255, 157, 0.15)" }}>
-            <div className="text-xs font-mono text-[#00ff9d] uppercase tracking-widest">GENESIS PROTOKOLL AKTIV · MYCELIAL SINGULARITY ENGINE v3.0</div>
+            <div className="text-xs font-mono text-[#00ff9d] uppercase tracking-widest">{dict?.home.genesisProtocol ?? "GENESIS PROTOKOLL AKTIV · MYCELIAL SINGULARITY ENGINE v3.0"}</div>
             <div className="mt-2 text-3xl font-black font-heading">
-              Das lebende Mycelium. 1M+ Runbooks. Jetzt.
+              {dict?.home.myceliumTitle ?? "Das lebende Mycelium. 1M+ Runbooks. Jetzt."}
             </div>
             <p className="mt-4 text-gray-300 max-w-3xl">
-              Jeder Knoten ist eine Wissenseinheit. Jede Kante eine semantische Beziehung. Das Netzwerk
-              wächst, lernt und evolviert autonom durch Darwinian Selection.
+              {dict?.home.myceliumDesc ?? "Jeder Knoten ist eine Wissenseinheit. Jede Kante eine semantische Beziehung. Das Netzwerk wächst, lernt und evolviert autonom durch Darwinian Selection."}
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               <a href="/clawverse" className="px-6 py-3 rounded-2xl font-black text-black bg-claw-green hover:shadow-neon-green transition-all duration-300">
                 ClawVerse →
               </a>
               <a href="/mycelium" className="px-6 py-3 rounded-2xl border border-white/10 hover:border-white/20 font-bold text-gray-200 transition-all duration-300">
-                Living Mycelium öffnen →
+                {dict?.home.openMycelium ?? "Living Mycelium öffnen →"}
               </a>
               <a href="/dashboard" className="px-6 py-3 rounded-2xl border border-white/10 hover:border-white/20 font-bold text-gray-200 transition-all duration-300">
                 Dashboard →
@@ -189,7 +188,7 @@ export default function Home({ dict }: HomeProps) {
                 title={dict?.faq.title ?? "Kurz. Hart. Hilfreich."}
                 subtitle={dict?.faq.subtitle ?? "Einige Fragen kommen immer. Hier sind die Antworten."}
               />
-              <FAQ />
+              <FAQ dict={dict?.faq} />
             </div>
             <div>
               <TransparencyWidget />

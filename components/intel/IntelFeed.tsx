@@ -1,6 +1,8 @@
 'use client'
 
 import { useEffect, useMemo, useState } from "react"
+import { usePathname } from "next/navigation"
+import { SUPPORTED_LOCALES, type Locale, t as i18nT } from "@/lib/i18n"
 
 type Incident = {
   id: string
@@ -21,6 +23,10 @@ function pill(sev: Incident["severity"]) {
 const CATS: Array<Incident["category"] | "all"> = ["all", "exposure", "websocket", "secrets", "supply-chain", "ops"]
 
 export default function IntelFeed() {
+  const pathname = usePathname()
+  const firstSegment = pathname.split("/").filter(Boolean)[0] as Locale
+  const locale: Locale = SUPPORTED_LOCALES.includes(firstSegment) ? firstSegment : "de"
+
   const [items, setItems] = useState<Incident[]>([])
   const [q, setQ] = useState("")
   const [cat, setCat] = useState<(typeof CATS)[number]>("all")
@@ -34,9 +40,9 @@ export default function IntelFeed() {
   }, [])
 
   const filtered = useMemo(() => {
-    const t = q.toLowerCase().trim()
+    const term = q.toLowerCase().trim()
     return items.filter((i) => {
-      const okQ = !t || (i.title + " " + i.summary).toLowerCase().includes(t)
+      const okQ = !term || (i.title + " " + i.summary).toLowerCase().includes(term)
       const okCat = cat === "all" || i.category === cat
       const okSev = sev === "all" || i.severity === sev
       return okQ && okCat && okSev
@@ -46,9 +52,9 @@ export default function IntelFeed() {
   return (
     <div className="space-y-4">
       <div className="p-5 rounded-2xl border border-gray-800 bg-black/30">
-        <div className="font-black text-lg">Intel Feed</div>
+        <div className="font-black text-lg">{i18nT(locale, 'intelTitle')}</div>
         <div className="text-sm text-gray-400 mt-1">
-          Kuratierte Muster, nicht „News“. Fokus: wiederkehrende Fehlerklassen + Gegenmaßnahmen.
+          {i18nT(locale, 'intelSubtitle')}
         </div>
 
         <div className="mt-4 grid md:grid-cols-3 gap-3">
@@ -56,7 +62,7 @@ export default function IntelFeed() {
             value={q}
             onChange={(e) => setQ(e.target.value)}
             className="px-4 py-3 rounded-xl bg-black/40 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-brand-cyan/30 focus:border-brand-cyan"
-            placeholder="Suche… (z.B. websocket, keys, firewall)"
+            placeholder={i18nT(locale, 'intelSearchPlaceholder')}
           />
           <select
             value={cat}
@@ -65,7 +71,7 @@ export default function IntelFeed() {
           >
             {CATS.map((c) => (
               <option key={c} value={c}>
-                Kategorie: {c}
+                {i18nT(locale, 'intelCategory')}: {c}
               </option>
             ))}
           </select>
@@ -74,7 +80,7 @@ export default function IntelFeed() {
             onChange={(e) => setSev(e.target.value as Incident["severity"] | "all")}
             className="px-4 py-3 rounded-xl bg-black/40 border border-gray-700"
           >
-            <option value="all">Severity: all</option>
+            <option value="all">{i18nT(locale, 'intelSeverity')}: all</option>
             <option value="high">high</option>
             <option value="medium">medium</option>
             <option value="low">low</option>
@@ -98,16 +104,16 @@ export default function IntelFeed() {
             <p className="mt-3 text-gray-300">{i.summary}</p>
 
             <div className="mt-4">
-              <div className="text-sm font-bold text-gray-200 mb-2">Recommended actions</div>
+              <div className="text-sm font-bold text-gray-200 mb-2">{i18nT(locale, 'intelRecommended')}</div>
               <ul className="list-disc pl-5 space-y-1 text-sm text-gray-300">
                 {i.actions.map((a) => <li key={a}>{a}</li>)}
               </ul>
             </div>
 
             <div className="mt-5 flex flex-wrap gap-2">
-              <a className="px-4 py-2 rounded-xl bg-black/30 border border-gray-700 hover:bg-black/40 text-sm" href="/tools">Validator</a>
-              <a className="px-4 py-2 rounded-xl bg-black/30 border border-gray-700 hover:bg-black/40 text-sm" href="/security/notfall-leitfaden">Runbook</a>
-              <a className="px-4 py-2 rounded-xl bg-black/30 border border-gray-700 hover:bg-black/40 text-sm" href="/openclaw-security-2026">Lagebericht</a>
+              <a className="px-4 py-2 rounded-xl bg-black/30 border border-gray-700 hover:bg-black/40 text-sm" href="/tools">{i18nT(locale, 'intelValidator')}</a>
+              <a className="px-4 py-2 rounded-xl bg-black/30 border border-gray-700 hover:bg-black/40 text-sm" href="/security/notfall-leitfaden">{i18nT(locale, 'intelRunbook')}</a>
+              <a className="px-4 py-2 rounded-xl bg-black/30 border border-gray-700 hover:bg-black/40 text-sm" href="/openclaw-security-2026">{i18nT(locale, 'intelReport')}</a>
             </div>
           </div>
         ))}
@@ -115,7 +121,7 @@ export default function IntelFeed() {
 
       {filtered.length === 0 && (
         <div className="p-8 rounded-2xl border border-gray-800 bg-black/30 text-gray-400">
-          Keine Treffer. (Oder dein Browser hat beschlossen, heute nicht zu kooperieren.)
+          {i18nT(locale, 'intelNoResults')}
         </div>
       )}
     </div>

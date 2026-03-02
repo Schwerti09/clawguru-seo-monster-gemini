@@ -26,7 +26,7 @@ type ResendListResponse = {
   next?: string | null
 }
 
-const CVE_ID_PATTERN = /^CVE-\d{4}-\d{4,}$/i
+const CVE_ID_PATTERN = /^CVE-\d{4}-\d{4,}$/
 
 function isDefenderThreat(value: DefenderThreat | null): value is DefenderThreat {
   return value !== null
@@ -152,9 +152,7 @@ export function buildDefenderEmailHtml(opts: {
 }) {
   const { contact, threats, siteUrl, weekLabel } = opts
   const safeSiteUrl = siteUrl.replace(/["'<>]/g, "")
-  const emailLocal = contact.email.split("@")[0] || ""
-  const emailAlias = emailLocal.replace(/[^a-zA-Z0-9-_.]/g, "")
-  const name = contact.firstName || contact.name || (emailAlias ? emailAlias : "Defender")
+  const name = contact.firstName || contact.name || "Defender"
 
   const items = threats
     .map((t) => {

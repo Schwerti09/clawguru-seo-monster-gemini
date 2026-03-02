@@ -42,7 +42,10 @@ export async function GET(req: NextRequest) {
   const subject = `🛡️ Security Alert – ${weekLabel}: ${threats.length} kritische Lücken`
   let sent = 0
   let failed = 0
-  const batchSize = 10
+  const batchSize = Math.min(
+    Math.max(parseInt(process.env.RETENTION_BATCH_SIZE || "10", 10) || 10, 1),
+    50
+  )
 
   for (let i = 0; i < contacts.length; i += batchSize) {
     const batch = contacts.slice(i, i + batchSize)

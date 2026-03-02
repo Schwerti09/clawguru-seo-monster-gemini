@@ -360,12 +360,11 @@ export async function POST(req: NextRequest) {
           full.customer_details?.name ||
           (typeof full.customer === "object" ? (full.customer as Stripe.Customer).name || undefined : undefined)
         if (defenderEmail) {
-          const [firstName, ...lastParts] = (defenderName || "").split(" ").filter(Boolean)
+          const trimmedName = defenderName?.trim()
           upsertActiveDefender({
             email: defenderEmail,
-            firstName: firstName || undefined,
-            lastName: lastParts.length > 0 ? lastParts.join(" ") : undefined,
-            name: defenderName || undefined,
+            firstName: trimmedName || undefined,
+            name: trimmedName || undefined,
           }).catch((err) => console.error("[active-defender]", err))
         }
       }

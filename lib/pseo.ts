@@ -1498,7 +1498,7 @@ export function count100kSlugs(): number {
   return CLOUD_PROVIDERS_100K.length * SERVICES_100K.length * ISSUES_100K.length * YEARS_100K.length
 }
 
-/** Page size for sitemap pagination (Google max: 50,000 per sitemap file, we cap at 45k) */
+/** Page size for sitemap pagination (Google max: 50,000 per sitemap file; cap at 45k for safety buffer + perf) */
 export const SITEMAP_PAGE_SIZE_100K = 45000
 
 /** Number of paginated sitemap pages needed for all 100k runbooks */

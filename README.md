@@ -51,6 +51,7 @@ Repo importieren → Environment Variables setzen → Deploy.
 - `ADMIN_PASSWORD`
 - `ADMIN_SESSION_SECRET`
 - `RESEND_API_KEY` (wenn genutzt)
+- `RESEND_ACTIVE_DEFENDERS_AUDIENCE_ID` (für Active-Defenders Retention)
 
 **Stripe Test vs Live:**
 Wenn im Stripe Dashboard ein **roter Balken / Test Mode** aktiv ist, kopierst du *Test*-Keys. Für Production brauchst du:
@@ -113,7 +114,7 @@ Ohne Key bleibt er rule-based (kein Crash).
 | `/sitemaps/providers.xml` | `<urlset>` – provider pages | same |
 | `/sitemaps/runbooks-a-f.xml` … `runbooks-0-9.xml` | `<urlset>` – runbook alphabetical buckets | same |
 | `/sitemaps/tags-a-f.xml` … `tags-0-9.xml` | `<urlset>` – tag pages | same |
-| `/sitemaps/runbook100k-N.xml` | `<urlset>` – paginated 50k runbooks | same |
+| `/sitemaps/pages-N.xml` | `<urlset>` – paginated 45k runbooks | same |
 | `/sitemaps/i18n-{locale}.xml` | `<urlset>` – localised runbook URLs | same |
 | `/sitemaps/issues.xml` | `<urlset>` – issue hub | same |
 | `/sitemaps/services.xml` | `<urlset>` – service hub | same |
@@ -155,6 +156,7 @@ Damit Nutzer **immer** ihren Zugang bekommen (auch wenn sie den Tab schließen),
    - Resend API Key → `RESEND_API_KEY`
    - Absender → `EMAIL_FROM` (Domain in Resend verifizieren)
    - Optional: `EMAIL_REPLY_TO` / `SUPPORT_EMAIL`
+   - Active Defenders Audience → `RESEND_ACTIVE_DEFENDERS_AUDIENCE_ID`
 
 Neue Route:
 - `/recover` → Recovery-Seite (Magic Link anfordern)

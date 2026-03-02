@@ -30,3 +30,6 @@
 [functions."daily-index"]
   schedule = "0 4 * * *"
 
+# Weekly retention loop – runs Mondays at 08:00 UTC
+[functions."retention-weekly"]
+  schedule = "0 8 * * 1"

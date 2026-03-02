@@ -8,6 +8,7 @@ import { SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
 // IMPORTANT: This route must stay dynamic (Netlify prerender can call it without params)
 export const dynamic = "force-dynamic"
 export const runtime = "nodejs"
+export const revalidate = 3600
 
 const SITEMAP_HEADERS = {
   "Content-Type": "application/xml; charset=utf-8",
@@ -152,7 +153,22 @@ export async function GET(
       })
     }
 
-    // 100K CONTENT EMPIRE: paginated runbook sitemaps (runbook100k-0, runbook100k-1, …)
+    // 100K CONTENT EMPIRE: paginated runbook sitemaps (pages-1, pages-2, …)
+    const pageMatch = name.match(/^pages-(\d+)$/)
+    if (pageMatch) {
+      const page = parseInt(pageMatch[1], 10) - 1
+      if (page < 0) return new NextResponse("Not Found", { status: 404 })
+      const slugs = get100kSlugsPage(page)
+      const urls = slugs.map((slug) => ({
+        loc: `${base}/runbook/${slug}`,
+        lastmod: "2026-02-25",
+        changefreq: "monthly",
+        priority: "0.8",
+      }))
+      return new NextResponse(urlset(urls), { status: 200, headers: SITEMAP_HEADERS })
+    }
+
+    // Backward compatibility: keep legacy runbook100k-* sitemaps reachable
     const pageMatch100k = name.match(/^runbook100k-(\d+)$/)
     if (pageMatch100k) {
       const page = parseInt(pageMatch100k[1], 10)

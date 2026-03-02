@@ -86,10 +86,25 @@ export default function ServiceCheckPage({ params }: Props) {
     ],
   }
 
+  const softwareCheckLd = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: `${entry.name} Security Check`,
+    applicationCategory: "SecurityApplication",
+    operatingSystem: "Linux",
+    url: `${BASE_URL}/tools/check-${entry.slug}`,
+    offers: {
+      "@type": "Offer",
+      price: "0.00",
+      priceCurrency: "EUR",
+    },
+  }
+
   return (
     <Container>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(howToLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareCheckLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
 
       <div className="py-16 max-w-4xl mx-auto">

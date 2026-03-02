@@ -5,6 +5,7 @@ import { SUPPORTED_LOCALES } from "@/lib/i18n"
 
 export const dynamic = "force-dynamic"
 export const runtime = "nodejs"
+export const revalidate = 3600
 
 function isoDate(d = new Date()) {
   return d.toISOString().slice(0, 10)
@@ -34,8 +35,8 @@ export async function GET() {
       `${base}/sitemaps/tags-s-z.xml`,
       `${base}/sitemaps/tags-0-9.xml`,
 
-      // 100K CONTENT EMPIRE: paginated sitemaps (50k URLs each)
-      ...Array.from({ length: count100kSitemapPages() }, (_, i) => `${base}/sitemaps/runbook100k-${i}.xml`),
+      // 100K CONTENT EMPIRE: paginated sitemaps (45k URLs each)
+      ...Array.from({ length: count100kSitemapPages() }, (_, i) => `${base}/sitemaps/pages-${i + 1}.xml`),
 
       // NEXT-LEVEL UPGRADE 2026: Language-specific sitemaps for all 10 locales
       ...SUPPORTED_LOCALES.map((locale) => `${base}/sitemaps/i18n-${locale}.xml`),

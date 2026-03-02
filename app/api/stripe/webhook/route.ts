@@ -3,6 +3,7 @@ import Stripe from "stripe"
 import { stripe } from "@/lib/stripe"
 import { signAccessToken, AccessPlan } from "@/lib/access-token"
 import { sendEmail } from "@/lib/email"
+import { upsertActiveDefender } from "@/lib/retention"
 
 export const runtime = "nodejs"
 
@@ -354,6 +355,19 @@ export async function POST(req: NextRequest) {
         await sendAccessEmail(full)
         // Fire-and-forget affiliate commission transfer (does not block response)
         handleAffiliateTransfer(full).catch((err) => console.error("[affiliate-transfer]", err))
+        const defenderEmail = full.customer_details?.email || full.customer_email || undefined
+        const defenderName =
+          full.customer_details?.name ||
+          (typeof full.customer === "object" ? (full.customer as Stripe.Customer).name || undefined : undefined)
+        if (defenderEmail) {
+          const [firstName, ...lastParts] = (defenderName || "").split(" ").filter(Boolean)
+          upsertActiveDefender({
+            email: defenderEmail,
+            firstName: firstName || undefined,
+            lastName: lastParts.length > 0 ? lastParts.join(" ") : undefined,
+            name: defenderName || undefined,
+          }).catch((err) => console.error("[active-defender]", err))
+        }
       }
     }
 

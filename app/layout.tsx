@@ -1,5 +1,6 @@
 // 100/100 OPTIMIZATION 2026: Self-hosted fonts via next/font (non-render-blocking, font-display:swap)
 import type { Metadata, Viewport } from "next"
+import { Suspense } from "react"
 import "./globals.css"
 import TrustBadge from "@/components/layout/TrustBadge"
 import Header from "@/components/layout/Header"
@@ -7,6 +8,7 @@ import Footer from "@/components/layout/Footer"
 import ActionDock from "@/components/layout/ActionDock"
 // WORLD BEAST FINAL LAUNCH: Umami privacy-first analytics
 import UmamiAnalytics from "@/components/analytics/UmamiAnalytics"
+import AffiliateTracker from "@/components/affiliate/AffiliateTracker"
 // VISUAL UPGRADE 2026: Neon cursor + page transition wrapper
 import NeonCursor from "@/components/visual/NeonCursor"
 import PageTransition from "@/components/visual/PageTransition"
@@ -122,6 +124,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </a>
         {/* NEXT-LEVEL UPGRADE 2026: RTL direction support – updates html[dir] based on locale URL */}
         <RTLProvider>
+          <Suspense fallback={null}>
+            <AffiliateTracker />
+          </Suspense>
           <TrustBadge />
           <Header />
           {/* 100/100 OPTIMIZATION 2026: id="main-content" for skip link target; role implicit from <main> */}

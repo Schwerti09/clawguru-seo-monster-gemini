@@ -7,6 +7,9 @@ import type { NextRequest } from "next/server"
 import { SUPPORTED_LOCALES, DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
 
 const LOCALE_COOKIE = "cg_locale"
+const AFFILIATE_COOKIE = "affiliate_ref"
+const AFFILIATE_COOKIE_MAX_AGE = 60 * 60 * 24 * 30
+const AFFILIATE_QUERY_KEYS = ["affiliate_ref", "ref", "aff"]
 
 // ---------------------------------------------------------------------------
 // Maintenance Mode / Kill-Switch
@@ -90,8 +93,31 @@ function isStaticOrApi(pathname: string): boolean {
   )
 }
 
+function extractAffiliateRef(request: NextRequest): string | null {
+  for (const key of AFFILIATE_QUERY_KEYS) {
+    const value = request.nextUrl.searchParams.get(key)
+    if (!value) continue
+    const cleaned = value.trim().slice(0, 64)
+    if (cleaned.length > 0) return cleaned
+  }
+  return null
+}
+
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
+  const affiliateRef = extractAffiliateRef(request)
+
+  const withAffiliateCookie = (response: NextResponse) => {
+    if (affiliateRef) {
+      response.cookies.set(AFFILIATE_COOKIE, affiliateRef, {
+        httpOnly: true,
+        maxAge: AFFILIATE_COOKIE_MAX_AGE,
+        path: "/",
+        sameSite: "lax",
+      })
+    }
+    return response
+  }
 
   // ---------------------------------------------------------------------------
   // Maintenance Mode check – redirect everyone except bypass users
@@ -100,13 +126,13 @@ export function middleware(request: NextRequest) {
     if (!shouldBypassMaintenance(request)) {
       const url = request.nextUrl.clone()
       url.pathname = "/maintenance"
-      return NextResponse.redirect(url, { status: 307 })
+      return withAffiliateCookie(NextResponse.redirect(url, { status: 307 }))
     }
   }
 
   // Skip static assets, API routes and special paths
   if (isStaticOrApi(pathname)) {
-    return NextResponse.next()
+    return withAffiliateCookie(NextResponse.next())
   }
 
   // Check if the URL already contains a supported locale prefix
@@ -119,7 +145,7 @@ export function middleware(request: NextRequest) {
       path: "/",
       sameSite: "lax",
     })
-    return response
+    return withAffiliateCookie(response)
   }
 
   // 301 redirect: legacy non-language-prefixed content paths → /de/...
@@ -135,12 +161,12 @@ export function middleware(request: NextRequest) {
   if (isLocalizedContent) {
     const url = request.nextUrl.clone()
     url.pathname = `/de${pathname}`
-    return NextResponse.redirect(url, { status: 301 })
+    return withAffiliateCookie(NextResponse.redirect(url, { status: 301 }))
   }
 
   // Only redirect on the root path to avoid disrupting existing non-localized routes
   if (pathname !== "/") {
-    return NextResponse.next()
+    return withAffiliateCookie(NextResponse.next())
   }
 
   // Check for persisted user cookie first
@@ -151,10 +177,10 @@ export function middleware(request: NextRequest) {
     if (cookieLocale !== DEFAULT_LOCALE) {
       const url = request.nextUrl.clone()
       url.pathname = `/${cookieLocale}`
-      return NextResponse.redirect(url, { status: 302 })
+      return withAffiliateCookie(NextResponse.redirect(url, { status: 302 }))
     }
     // Cookie explicitly set to default locale (de) – stay on root, skip header detection
-    return NextResponse.next()
+    return withAffiliateCookie(NextResponse.next())
   }
 
   // No cookie – detect from Accept-Language header
@@ -165,10 +191,10 @@ export function middleware(request: NextRequest) {
   if (detected !== DEFAULT_LOCALE) {
     const url = request.nextUrl.clone()
     url.pathname = `/${detected}`
-    return NextResponse.redirect(url, { status: 302 })
+    return withAffiliateCookie(NextResponse.redirect(url, { status: 302 }))
   }
 
-  return NextResponse.next()
+  return withAffiliateCookie(NextResponse.next())
 }
 
 export const config = {

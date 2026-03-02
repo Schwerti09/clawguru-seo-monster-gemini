@@ -1,0 +1,64 @@
+// File: app/api/retention/weekly/route.ts
+// Weekly retention loop for Active Defenders – sends personalized security alerts.
+
+import { NextRequest, NextResponse } from "next/server"
+import { sendEmail } from "@/lib/email"
+import { currentWeekLabel } from "@/lib/newsletter"
+import { listActiveDefenders, fetchDefenderThreats, buildDefenderEmailHtml } from "@/lib/retention"
+
+export const dynamic = "force-dynamic"
+export const runtime = "nodejs"
+export const maxDuration = 300
+
+export async function GET(req: NextRequest) {
+  const secret = process.env.CRON_SECRET
+  if (secret) {
+    const auth = req.headers.get("authorization") ?? ""
+    const param = req.nextUrl.searchParams.get("secret") ?? ""
+    if (auth !== `Bearer ${secret}` && param !== secret) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    }
+  }
+
+  const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org").replace(/\/$/, "")
+  const weekLabel = currentWeekLabel()
+
+  let contacts
+  try {
+    contacts = await listActiveDefenders()
+  } catch (err) {
+    return NextResponse.json({ error: "Active defender list failed", detail: String(err) }, { status: 502 })
+  }
+
+  if (contacts.length === 0) {
+    return NextResponse.json({ ok: true, sent: 0, message: "No active defenders registered." })
+  }
+
+  const threats = await fetchDefenderThreats()
+  if (threats.length === 0) {
+    return NextResponse.json({ ok: true, sent: 0, message: "No critical threats this week." })
+  }
+
+  const subject = `🛡️ Security Alert – ${weekLabel}: ${threats.length} kritische Lücken`
+  let sent = 0
+  let failed = 0
+
+  for (const contact of contacts) {
+    try {
+      const html = buildDefenderEmailHtml({ contact, threats, siteUrl, weekLabel })
+      await sendEmail({ to: contact.email, subject, html })
+      sent++
+    } catch (err) {
+      console.error(`[retention/weekly] Failed for ${contact.email}:`, err)
+      failed++
+    }
+  }
+
+  return NextResponse.json({
+    ok: true,
+    sent,
+    failed,
+    recipients: contacts.length,
+    threats: threats.map((t) => t.id),
+  })
+}

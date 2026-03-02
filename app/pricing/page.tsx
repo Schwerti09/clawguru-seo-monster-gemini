@@ -1,5 +1,6 @@
 import Container from "@/components/shared/Container"
 import BuyButton from "@/components/commerce/BuyButton"
+import LocalizedPrice from "@/components/commerce/LocalizedPrice"
 import EnterpriseContact from "@/components/marketing/EnterpriseContact"
 
 export const metadata = {
@@ -210,9 +211,15 @@ export default function PricingPage() {
                   </div>
                 </div>
 
-                <div className="mt-5 flex items-end gap-2">
-                  <span className="text-5xl font-black text-white">7€</span>
-                  <span className="text-sm text-gray-400 pb-2">einmalig</span>
+                <div className="mt-5">
+                  <LocalizedPrice
+                    product="daypass"
+                    fallback="7€"
+                    intervalLabel="einmalig"
+                    priceClassName="text-5xl font-black text-white"
+                    intervalClassName="text-sm text-gray-400 pb-2"
+                    noteClassName="mt-2 text-xs text-gray-500"
+                  />
                 </div>
 
                 <p className="mt-4 text-sm text-gray-300 leading-relaxed">
@@ -260,9 +267,15 @@ export default function PricingPage() {
                   </div>
                 </div>
 
-                <div className="mt-5 flex items-end gap-2">
-                  <span className="text-5xl font-black text-white">14,99€</span>
-                  <span className="text-sm text-gray-400 pb-2">/ Monat</span>
+                <div className="mt-5">
+                  <LocalizedPrice
+                    product="pro"
+                    fallback="14,99€"
+                    intervalLabel="/ Monat"
+                    priceClassName="text-5xl font-black text-white"
+                    intervalClassName="text-sm text-gray-400 pb-2"
+                    noteClassName="mt-2 text-xs text-gray-500"
+                  />
                 </div>
 
                 <p className="mt-4 text-sm text-gray-300 leading-relaxed">
@@ -303,9 +316,15 @@ export default function PricingPage() {
                   </div>
                 </div>
 
-                <div className="mt-5 flex items-end gap-2">
-                  <span className="text-5xl font-black text-white">29,99€</span>
-                  <span className="text-sm text-gray-400 pb-2">/ Monat</span>
+                <div className="mt-5">
+                  <LocalizedPrice
+                    product="team"
+                    fallback="29,99€"
+                    intervalLabel="/ Monat"
+                    priceClassName="text-5xl font-black text-white"
+                    intervalClassName="text-sm text-gray-400 pb-2"
+                    noteClassName="mt-2 text-xs text-gray-500"
+                  />
                 </div>
 
                 <p className="mt-4 text-sm text-gray-300 leading-relaxed">

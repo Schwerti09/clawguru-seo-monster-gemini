@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import Stripe from "stripe"
 import { getOrigin } from "@/lib/origin"
 import { isStripeActive, apiUnavailableResponse } from "@/lib/api-guard"
+import { getCountryFromRequest, getCurrencyForCountry } from "@/lib/geo"
 
 export const dynamic = "force-dynamic"
 
@@ -28,18 +29,6 @@ function getStripe() {
   return new Stripe(key, { apiVersion: "2024-06-20" })
 }
 
-/**
- * Returns the preferred payment currency for a customer based on their country code.
- * US customers pay in USD; all other countries use EUR by default to minimise
- * foreign-exchange conversion losses.
- *
- * @param country - ISO 3166-1 alpha-2 country code (e.g. "US", "DE"), case-insensitive
- */
-function getCurrency(country?: string): string {
-  if (!country) return "eur"
-  return country.toUpperCase() === "US" ? "usd" : "eur"
-}
-
 export async function POST(req: NextRequest) {
   if (!isStripeActive()) return apiUnavailableResponse()
   try {
@@ -52,8 +41,9 @@ export async function POST(req: NextRequest) {
     const email: string | undefined =
       typeof body?.email === "string" ? body.email : undefined
     // Optional country hint passed by the frontend (e.g. from geolocation or a form field)
+    const requestCountry = getCountryFromRequest(req)
     const country: string | undefined =
-      typeof body?.country === "string" ? body.country : undefined
+      typeof body?.country === "string" ? body.country : requestCountry
     // Optional affiliate reference (e.g. set via /go/:slug cookie or query param)
     const affiliateRef: string | undefined =
       typeof body?.affiliate_ref === "string" && body.affiliate_ref.length > 0
@@ -96,7 +86,7 @@ export async function POST(req: NextRequest) {
       // Reverse Charge mechanism applies automatically ($0 tax for EU companies)
       tax_id_collection: { enabled: true },
       // Set currency based on customer location to minimise FX losses
-      currency: getCurrency(country),
+      currency: getCurrencyForCountry(country),
       metadata: {
         product,
         ...(email ? { email } : {}),

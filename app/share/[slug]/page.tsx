@@ -3,6 +3,8 @@
 
 import Container from "@/components/shared/Container"
 import { getRunbook } from "@/lib/pseo"
+import { BASE_URL } from "@/lib/config"
+import { buildSocialSnippet, buildSocialTitle } from "@/lib/social-snippet"
 import { notFound } from "next/navigation"
 import { ShareButtons } from "./ShareButtons"
 
@@ -11,12 +13,22 @@ export const revalidate = 60 * 60 * 24
 export async function generateMetadata({ params }: { params: { slug: string } }) {
   const r = getRunbook(params.slug)
   if (!r) return {}
+  const socialTitle = buildSocialTitle(r.title, 70)
+  const description = buildSocialSnippet({ title: r.title, summary: r.summary })
   return {
-    title: `Share: ${r.title} | ClawGuru`,
-    description: `Share this ClawGuru runbook: ${r.summary}`,
+    title: `Share: ${buildSocialTitle(r.title, 60)} | ClawGuru`,
+    description,
     openGraph: {
-      title: `ClawGuru Runbook: ${r.title}`,
-      description: r.summary,
+      title: `ClawGuru Runbook: ${socialTitle}`,
+      description,
+      url: `${BASE_URL}/share/${r.slug}`,
+      images: [`${BASE_URL}/og-image.png`],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `ClawGuru Runbook: ${socialTitle}`,
+      description,
+      images: [`${BASE_URL}/og-image.png`],
     },
   }
 }

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import Stripe from "stripe"
 import { getOrigin } from "@/lib/origin"
+import { isStripeActive, apiUnavailableResponse } from "@/lib/api-guard"
 
 export const dynamic = "force-dynamic"
 
@@ -40,6 +41,7 @@ function getCurrency(country?: string): string {
 }
 
 export async function POST(req: NextRequest) {
+  if (!isStripeActive()) return apiUnavailableResponse()
   try {
     const stripe = getStripe()
     const body = await req.json().catch(() => ({}))

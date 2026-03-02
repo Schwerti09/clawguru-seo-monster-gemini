@@ -2,6 +2,7 @@
 // API route: Gemini-powered "OpenAI voice" for the /summon page
 
 import { NextRequest, NextResponse } from "next/server";
+import { isApiActive, apiUnavailableResponse } from "@/lib/api-guard";
 
 // Maximum characters accepted from client to guard against oversized payloads
 const MAX_MESSAGE_LENGTH = 2000;
@@ -69,6 +70,7 @@ const FALLBACK_RESPONSES = [
 ];
 
 export async function POST(req: NextRequest) {
+  if (!isApiActive()) return apiUnavailableResponse();
   try {
     const { message } = (await req.json().catch(() => ({}))) as {
       message?: string;

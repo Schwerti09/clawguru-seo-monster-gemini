@@ -19,4 +19,4 @@ export const SEO_TARGET_KEYWORDS_2026 = [
   "Endpoint Hardening Guides",
   "Security Score & Risk Rating",
   "Executive Security Reporting",
-]
+];

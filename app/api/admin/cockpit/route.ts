@@ -9,7 +9,7 @@ import { stripe } from "@/lib/stripe"
 import { totalSitemapUrls } from "@/lib/pseo"
 import { AFFILIATE_REDIRECTS } from "@/lib/constants"
 
-export const runtime = "nodejs"
+export const runtime = "edge"
 export const dynamic = "force-dynamic"
 
 function unauthorized() {
@@ -118,7 +118,7 @@ async function checkGeminiStatus(): Promise<"online" | "offline"> {
 // ---------------------------------------------------------------------------
 export async function GET() {
   const token = cookies().get(adminCookieName())?.value ?? ""
-  const session = token ? verifyAdminToken(token) : null
+  const session = token ? await verifyAdminToken(token) : null
   if (!session) return unauthorized()
 
   const hasStripe = Boolean(process.env.STRIPE_SECRET_KEY)

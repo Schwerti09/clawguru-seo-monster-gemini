@@ -5,6 +5,8 @@
 import { NextRequest, NextResponse } from "next/server"
 import { RUNBOOKS } from "@/lib/pseo"
 import { buildMyceliumGraph, oracleSearch } from "@/lib/mycelium"
+export const runtime = "edge"
+
 
 // MYCELIUM ORACLE v3.3 – Overlord AI: Oracle query modes
 export type OracleMode = "pure" | "temporal" | "swarm" | "prophetic"

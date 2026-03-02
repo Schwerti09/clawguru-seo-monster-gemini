@@ -4,7 +4,7 @@ import { stripe } from "@/lib/stripe"
 import { signAccessToken, AccessPlan } from "@/lib/access-token"
 import { sendEmail } from "@/lib/email"
 
-export const runtime = "nodejs"
+export const runtime = "edge"
 
 async function readRawBody(req: NextRequest) {
   // NextRequest supports arrayBuffer()
@@ -302,7 +302,7 @@ async function sendAccessEmail(session: Stripe.Checkout.Session) {
     if (!subscriptionId) return
   }
 
-  const token = signAccessToken({
+  const token = await signAccessToken({
     v: 1,
     plan,
     customerId,

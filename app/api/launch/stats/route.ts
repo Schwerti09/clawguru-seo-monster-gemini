@@ -14,7 +14,7 @@ import {
 import { computeQualityStats, DEFAULT_THRESHOLDS } from "@/lib/quality-gate"
 
 export const dynamic = "force-dynamic"
-export const runtime = "nodejs"
+export const runtime = "edge"
 
 /** Batch size for quality sampling shown on the dashboard. */
 const SAMPLE_BATCH = 200

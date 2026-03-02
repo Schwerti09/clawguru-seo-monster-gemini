@@ -6,7 +6,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { runGrowthAgent } from "@/lib/agents"
 
 export const dynamic = "force-dynamic"
-export const runtime = "nodejs"
+export const runtime = "edge"
 
 export async function POST(req: NextRequest) {
   try {

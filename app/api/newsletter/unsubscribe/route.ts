@@ -18,12 +18,12 @@
 import { NextRequest, NextResponse } from "next/server"
 import { verifyUnsubscribeToken } from "@/lib/newsletter"
 
-export const runtime = "nodejs"
+export const runtime = "edge"
 
 export async function GET(req: NextRequest) {
   const token = req.nextUrl.searchParams.get("token") ?? ""
 
-  const email = token ? verifyUnsubscribeToken(token) : null
+  const email = token ? await verifyUnsubscribeToken(token) : null
 
   if (!email) {
     return new NextResponse(

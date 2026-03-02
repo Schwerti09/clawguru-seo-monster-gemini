@@ -20,21 +20,21 @@ import {
   replayFailedStripeWebhook,
 } from "@/lib/sentinel"
 
-export const runtime = "nodejs"
+export const runtime = "edge"
 export const dynamic = "force-dynamic"
 
 function unauthorized() {
   return NextResponse.json({ error: "unauthorized" }, { status: 401 })
 }
 
-function isAuthorized(): boolean {
+async function isAuthorized(): Promise<boolean> {
   const token = cookies().get(adminCookieName())?.value || ""
-  return Boolean(token && verifyAdminToken(token))
+  return Boolean(token && await verifyAdminToken(token))
 }
 
 /** GET – run all Sentinel checks and return the report. */
 export async function GET() {
-  if (!isAuthorized()) return unauthorized()
+  if (!await isAuthorized()) return unauthorized()
 
   const report = await runSentinelChecks()
 
@@ -50,7 +50,7 @@ export async function GET() {
 
 /** POST – optionally replay a failed Stripe webhook event. */
 export async function POST(req: NextRequest) {
-  if (!isAuthorized()) return unauthorized()
+  if (!await isAuthorized()) return unauthorized()
 
   const rawBody = await req.json().catch(() => ({}))
   const body = rawBody && typeof rawBody === "object" ? rawBody as { replayWebhookEventId?: unknown } : {}

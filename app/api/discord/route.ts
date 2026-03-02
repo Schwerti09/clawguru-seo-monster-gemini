@@ -6,7 +6,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { postRunbookToDiscord } from "@/lib/discord"
 
 export const dynamic = "force-dynamic"
-export const runtime = "nodejs"
+export const runtime = "edge"
 
 export async function POST(req: NextRequest) {
   const secret = process.env.CRON_SECRET

@@ -59,6 +59,31 @@ export default function AdminDashboard() {
 
   const stripe = data?.stripe
   const last = useMemo(() => stripe?.lastPayments || [], [stripe])
+  const mrrEstimate = stripe ? Math.round((stripe.charges7d / 7) * 30) : 0
+  const mrrTarget = 5_000_000
+  const mrrProgress = stripe ? Math.min(100, Math.round((mrrEstimate / mrrTarget) * 100)) : 0
+
+  const salePulses = useMemo(() => {
+    const points = [
+      { x: 90, y: 90, label: "North America" },
+      { x: 210, y: 70, label: "Europe" },
+      { x: 270, y: 110, label: "Middle East" },
+      { x: 330, y: 120, label: "Asia" },
+      { x: 400, y: 180, label: "Australia" },
+      { x: 180, y: 160, label: "South America" },
+    ]
+    const activeCount = Math.max(1, Math.min(points.length, last.length))
+    return points.map((point, index) => ({ ...point, active: index < activeCount }))
+  }, [last.length])
+
+  const botPulses = useMemo(
+    () => [
+      { x: 140, y: 60 },
+      { x: 250, y: 140 },
+      { x: 360, y: 80 },
+    ],
+    []
+  )
 
   const cardVariants = {
     hidden: { opacity: 0, y: 16 },
@@ -182,6 +207,22 @@ export default function AdminDashboard() {
               )}
 
               {stripe && (
+                <div className="mt-6 rounded-2xl border border-gray-800 bg-black/35 p-4">
+                  <div className="text-xs uppercase tracking-widest text-gray-400">Profit-O-Meter (MRR)</div>
+                  <div className="mt-2 flex items-center gap-3">
+                    <div className="h-3 flex-1 rounded-full bg-gray-900 overflow-hidden">
+                      <div
+                        className="h-full rounded-full bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-500"
+                        style={{ width: `${mrrProgress}%` }}
+                      />
+                    </div>
+                    <div className="text-sm font-black">{money(mrrEstimate, stripe.currency)}</div>
+                  </div>
+                  <div className="mt-2 text-xs text-gray-500">Target: {money(mrrTarget, stripe.currency)} MRR</div>
+                </div>
+              )}
+
+              {stripe && (
                 <div className="mt-6">
                   <div className="text-sm font-bold text-gray-200 mb-2">Last Payments</div>
                   <div className="grid gap-2">
@@ -245,6 +286,46 @@ export default function AdminDashboard() {
               </div>
             </motion.div>
           </div>
+
+          <motion.div custom={4} initial="hidden" animate="visible" variants={cardVariants} className="p-6 rounded-3xl border border-gray-800 bg-black/30">
+            <div className="text-xs uppercase tracking-widest text-gray-400">Global Pulse Map</div>
+            <div className="mt-2 text-2xl font-black">Live Crawl & Sales Activity</div>
+            <div className="mt-4 rounded-2xl border border-gray-800 bg-black/40 p-4">
+              <svg viewBox="0 0 480 240" className="w-full h-56 text-cyan-200">
+                <rect x="20" y="60" width="120" height="60" rx="30" fill="rgba(255,255,255,0.05)" />
+                <rect x="140" y="50" width="140" height="70" rx="28" fill="rgba(255,255,255,0.05)" />
+                <rect x="260" y="80" width="150" height="70" rx="32" fill="rgba(255,255,255,0.05)" />
+                <rect x="150" y="140" width="80" height="60" rx="24" fill="rgba(255,255,255,0.05)" />
+                <rect x="350" y="150" width="80" height="50" rx="24" fill="rgba(255,255,255,0.05)" />
+                {salePulses.map((pulse) => (
+                  <circle
+                    key={pulse.label}
+                    cx={pulse.x}
+                    cy={pulse.y}
+                    r={pulse.active ? 6 : 4}
+                    className={pulse.active ? "fill-emerald-400 animate-pulse" : "fill-emerald-400/50"}
+                  />
+                ))}
+                {botPulses.map((pulse, index) => (
+                  <circle
+                    key={`bot-${index}`}
+                    cx={pulse.x}
+                    cy={pulse.y}
+                    r={3}
+                    className="fill-cyan-400/70 animate-pulse"
+                  />
+                ))}
+              </svg>
+              <div className="mt-3 flex flex-wrap gap-4 text-xs text-gray-400">
+                <span className="flex items-center gap-2">
+                  <span className="h-2 w-2 rounded-full bg-emerald-400" /> Sales pulse
+                </span>
+                <span className="flex items-center gap-2">
+                  <span className="h-2 w-2 rounded-full bg-cyan-400" /> Crawler pulse
+                </span>
+              </div>
+            </div>
+          </motion.div>
         </>
       )}
     </div>

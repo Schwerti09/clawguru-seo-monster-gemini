@@ -7,7 +7,7 @@ import { NextResponse } from "next/server"
 import { cookies } from "next/headers"
 import { adminCookieName, verifyAdminToken } from "@/lib/admin-auth"
 
-export const runtime = "nodejs"
+export const runtime = "edge"
 export const dynamic = "force-dynamic"
 
 function unauthorized() {
@@ -16,7 +16,7 @@ function unauthorized() {
 
 export async function POST() {
   const token = cookies().get(adminCookieName())?.value ?? ""
-  const session = token ? verifyAdminToken(token) : null
+  const session = token ? await verifyAdminToken(token) : null
   if (!session) return unauthorized()
 
   const netlifyToken = process.env.NETLIFY_AUTH_TOKEN

@@ -4,7 +4,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { sendEmail } from "@/lib/email"
 
-export const runtime = "nodejs"
+export const runtime = "edge"
 
 type SequenceStep = "welcome" | "value" | "offer"
 

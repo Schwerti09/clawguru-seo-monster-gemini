@@ -9,7 +9,7 @@ import { adminCookieName, verifyAdminToken } from "@/lib/admin-auth"
 import { stripe } from "@/lib/stripe"
 import { getEndpointCounts, getTopIps, getActiveBlocks } from "@/lib/api-usage"
 
-export const runtime = "nodejs"
+export const runtime = "edge"
 
 // ---------------------------------------------------------------------------
 // Cost / pricing constants (adjust to your actual provider costs & prices)
@@ -165,7 +165,7 @@ function conversionFunnel() {
 // ---------------------------------------------------------------------------
 export async function GET() {
   const token = cookies().get(adminCookieName())?.value ?? ""
-  const session = token ? verifyAdminToken(token) : null
+  const session = token ? await verifyAdminToken(token) : null
   if (!session) return unauthorized()
 
   const hasStripe = Boolean(process.env.STRIPE_SECRET_KEY)

@@ -7,7 +7,7 @@ import { cookies } from "next/headers"
 import { adminCookieName, verifyAdminToken } from "@/lib/admin-auth"
 import { getMaintenanceMode, setMaintenanceMode } from "@/lib/netlify-api"
 
-export const runtime = "nodejs"
+export const runtime = "edge"
 export const dynamic = "force-dynamic"
 
 function unauthorized() {
@@ -17,7 +17,7 @@ function unauthorized() {
 /** GET – return current MAINTENANCE_MODE status */
 export async function GET() {
   const token = cookies().get(adminCookieName())?.value || ""
-  const session = token ? verifyAdminToken(token) : null
+  const session = token ? await verifyAdminToken(token) : null
   if (!session) return unauthorized()
 
   try {
@@ -32,7 +32,7 @@ export async function GET() {
 /** POST – toggle MAINTENANCE_MODE; body: { enabled: boolean } */
 export async function POST(req: Request) {
   const token = cookies().get(adminCookieName())?.value || ""
-  const session = token ? verifyAdminToken(token) : null
+  const session = token ? await verifyAdminToken(token) : null
   if (!session) return unauthorized()
 
   let body: { enabled?: boolean }

@@ -2,7 +2,7 @@ import { NextResponse } from "next/server"
 import { BASE_URL } from "@/lib/config"
 
 export const dynamic = "force-dynamic"
-export const runtime = "nodejs"
+export const runtime = "edge"
 
 export async function GET() {
   const base = BASE_URL

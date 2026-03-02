@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { verifyAccessToken } from "@/lib/access-token"
 import { stripe } from "@/lib/stripe"
 
-export const runtime = "nodejs"
+export const runtime = "edge"
 
 function getOrigin(req: NextRequest) {
   return (
@@ -17,7 +17,7 @@ export async function GET(req: NextRequest) {
   const origin = getOrigin(req)
   if (!token) return NextResponse.redirect(new URL("/recover", origin))
 
-  const payload = verifyAccessToken(token)
+  const payload = await verifyAccessToken(token)
   if (!payload) return NextResponse.redirect(new URL("/recover?invalid=1", origin))
 
   // extra safety: for subscription plans verify Stripe status now

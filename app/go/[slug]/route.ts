@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { AFFILIATE_REDIRECTS } from "@/lib/constants"
+export const runtime = "edge"
+
 
 export const dynamic = "force-dynamic"
 

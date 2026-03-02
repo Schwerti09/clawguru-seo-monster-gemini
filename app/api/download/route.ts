@@ -1,11 +1,9 @@
 import { NextRequest, NextResponse } from "next/server"
-import path from "path"
-import fs from "fs/promises"
 import { cookies } from "next/headers"
 import { verifyAccessToken } from "@/lib/access-token"
 import { stripe } from "@/lib/stripe"
 
-export const runtime = "nodejs"
+export const runtime = "edge"
 
 function fileForKey(key: string) {
   if (key === "sprint-pack") return { filename: "sprint-pack.pdf", type: "application/pdf" }
@@ -27,7 +25,7 @@ export async function GET(req: NextRequest) {
 
   // New primary auth: access cookie
   const token = cookies().get("claw_access")?.value || ""
-  const payload = token ? verifyAccessToken(token) : null
+  const payload = token ? await verifyAccessToken(token) : null
 
   let ok = Boolean(payload)
 
@@ -42,18 +40,6 @@ export async function GET(req: NextRequest) {
 
   if (!ok) return NextResponse.json({ error: "Not authorized" }, { status: 403 })
 
-  try {
-    const full = path.join(process.cwd(), "private_downloads", f.filename)
-    const data = await fs.readFile(full)
-    return new NextResponse(data, {
-      status: 200,
-      headers: {
-        "Content-Type": f.type,
-        "Content-Disposition": `attachment; filename="${f.filename}"`,
-        "Cache-Control": "private, no-store"
-      }
-    })
-  } catch {
-    return NextResponse.json({ error: "Download failed" }, { status: 500 })
-  }
+  const origin = req.headers.get("origin") || process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
+  return NextResponse.redirect(new URL(`/downloads/${f.filename}`, origin))
 }

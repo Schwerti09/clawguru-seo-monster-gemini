@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
 import { RUNBOOKS, allTags } from "@/lib/pseo"
 
-export const runtime = "nodejs"
+export const runtime = "edge"
 export const dynamic = "force-dynamic"
 
 function isoDate(d = new Date()) {

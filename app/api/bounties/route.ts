@@ -4,7 +4,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { postToDiscord } from "@/lib/discord"
 
-export const runtime = "nodejs"
+export const runtime = "edge"
 
 interface BountySubmission {
   bountyId: string

@@ -9,7 +9,7 @@ import { calculateDailyRevenue, generateDailyReport } from "@/lib/passive"
 import { sendEmail } from "@/lib/email"
 
 export const dynamic = "force-dynamic"
-export const runtime = "nodejs"
+export const runtime = "edge"
 
 export async function GET(req: NextRequest) {
   const secret = process.env.CRON_SECRET

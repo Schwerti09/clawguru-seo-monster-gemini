@@ -16,9 +16,9 @@ export const metadata = {
   robots: "noindex, nofollow"
 }
 
-export default function ProfitDashboardPage() {
+export default async function ProfitDashboardPage() {
   const token = cookies().get(adminCookieName())?.value ?? ""
-  const session = token ? verifyAdminToken(token) : null
+  const session = token ? await verifyAdminToken(token) : null
   if (!session) redirect("/admin")
 
   return (

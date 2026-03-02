@@ -9,12 +9,16 @@ import { notFound } from "next/navigation"
 import { CopyLinkButton } from "./CopyLinkButton"
 import { ActivateSwarmButton } from "@/components/shared/ActivateSwarmButton"
 import { BASE_URL } from "@/lib/config"
+import ShareUnlockPanel from "@/components/shared/ShareUnlockPanel"
+import { mutateSeoTitle } from "@/app/lib/seo-optimizer"
+import { LOCALE_HREFLANG, SUPPORTED_LOCALES } from "@/lib/i18n"
 
 // Pre-build slug→runbook Map for O(1) related lookups on static RUNBOOKS
 const RUNBOOK_MAP = new Map(RUNBOOKS.map((r) => [r.slug, r]))
 
 export const revalidate = 60 * 60 * 24 // 24h ISR; use revalidateSeconds() from quality-gate for finer-grained tooling
 export const dynamicParams = true
+export const fetchCache = "force-cache"
 
 export async function generateStaticParams() {
   // Pre-render top 200 static RUNBOOKS + key 100k slugs for fast initial crawl
@@ -42,12 +46,18 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { slug: string } }) {
   const r = getRunbook(params.slug)
   if (!r) return {}
-  const title = r.title.length > 60 ? r.title.slice(0, 57) + "..." : r.title
+  const rawTitle = mutateSeoTitle({ title: r.title })
+  const title = rawTitle.length > 60 ? rawTitle.slice(0, 57) + "..." : rawTitle
   const description = r.summary.length > 160 ? r.summary.slice(0, 157) + "..." : r.summary
   return {
     title: `${title} | ClawGuru Runbook`,
     description,
-    alternates: { canonical: `/runbook/${r.slug}` },
+    alternates: {
+      canonical: `/runbook/${r.slug}`,
+      languages: Object.fromEntries(
+        SUPPORTED_LOCALES.map((locale) => [LOCALE_HREFLANG[locale], `/${locale}/runbook/${r.slug}`])
+      ),
+    },
     openGraph: {
       title: `${title} | ClawGuru`,
       description,
@@ -317,13 +327,7 @@ export default function RunbookPage({ params }: { params: { slug: string } }) {
           ) : null}
 
           <div className="text-xs uppercase tracking-widest text-gray-500">Schritt-für-Schritt</div>
-          <ol className="mt-4 list-decimal pl-6 space-y-3 text-gray-200">
-            {r.howto.steps.map((s, i) => (
-              <li key={i} className="leading-relaxed">
-                {s}
-              </li>
-            ))}
-          </ol>
+          <ShareUnlockPanel title={r.title} slug={r.slug} items={r.howto.steps} />
 
           <div className="mt-6 flex flex-wrap gap-3">
             <a

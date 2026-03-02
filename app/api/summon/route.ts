@@ -3,6 +3,8 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { isApiActive, apiUnavailableResponse } from "@/lib/api-guard";
+export const runtime = "edge"
+
 
 // Maximum characters accepted from client to guard against oversized payloads
 const MAX_MESSAGE_LENGTH = 2000;

@@ -6,6 +6,8 @@ import { validatePayload } from "@/lib/payload-validator"
 import { isTokenDenied } from "@/lib/token-deny-list"
 import { verifyAccessToken } from "@/lib/access-token"
 import { cookies } from "next/headers"
+export const runtime = "edge"
+
 
 // Circuit breaker for the (expensive) heuristics pipeline.
 // Opens after 5 consecutive failures; recovers after 30 s.
@@ -50,7 +52,7 @@ export async function POST(request: NextRequest) {
   // ── 2. Rate limiting (hard per-IP + soft per-user) ──────────────────────────
   const ip = getClientIp(request.headers)
   const tokenCookie = cookies().get("claw_access")?.value || ""
-  const tokenPayload = tokenCookie ? verifyAccessToken(tokenCookie) : null
+  const tokenPayload = tokenCookie ? await verifyAccessToken(tokenCookie) : null
 
   // Check token deny-list before using its identity for rate-limiting
   if (tokenCookie && isTokenDenied(tokenCookie)) {

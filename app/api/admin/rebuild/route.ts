@@ -9,7 +9,7 @@ import { autoHeal } from "@/lib/selfhealth"
 import { BASE_URL } from "@/lib/config"
 import { totalSitemapUrls } from "@/lib/pseo"
 
-export const runtime = "nodejs"
+export const runtime = "edge"
 export const dynamic = "force-dynamic"
 
 function unauthorized() {
@@ -18,7 +18,7 @@ function unauthorized() {
 
 export async function POST() {
   const token = cookies().get(adminCookieName())?.value || ""
-  const session = token ? verifyAdminToken(token) : null
+  const session = token ? await verifyAdminToken(token) : null
   if (!session) return unauthorized()
 
   try {

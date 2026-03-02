@@ -30,7 +30,7 @@ import { authenticateApiRequest, extractApiKey, reportUsage } from "@/lib/api-au
 // Ensure this route always runs in the Node.js runtime so the module-level
 // rateLimitMap persists across requests within the same server process
 // (consistent with other stateful API routes, e.g. app/api/recovery/request/route.ts).
-export const runtime = "nodejs"
+export const runtime = "edge"
 
 // Test mode key — always returns a static demo response; bypasses all auth and billing.
 const TEST_MODE_KEY = "test_clawguru_demo_key_2024"

@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { runPredictiveAgent } from "@/lib/agents/predictive-agent"
 
 export const dynamic = "force-dynamic"
-export const runtime = "nodejs"
+export const runtime = "edge"
 
 export async function GET(req: NextRequest) {
   // WORLD BEAST UPGRADE: optional CRON_SECRET auth

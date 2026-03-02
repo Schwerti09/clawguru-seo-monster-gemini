@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { ruleBasedCopilot } from "@/lib/copilot";
+export const runtime = "edge"
+
 
 type CopilotAction = { label: string; href: string };
 type CopilotResponse = {

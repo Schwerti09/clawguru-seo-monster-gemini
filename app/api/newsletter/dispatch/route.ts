@@ -27,7 +27,7 @@ import {
   type NewsletterSendResult,
 } from "@/lib/newsletter"
 
-export const runtime = "nodejs"
+export const runtime = "edge"
 // Long-running: CVE fetch + AI + bulk email → max 5 min
 export const maxDuration = 300
 
@@ -38,7 +38,7 @@ function unauthorized() {
 export async function POST(req: NextRequest) {
   // --- Auth ---
   const token = cookies().get(adminCookieName())?.value || ""
-  const session = token ? verifyAdminToken(token) : null
+  const session = token ? await verifyAdminToken(token) : null
   if (!session) return unauthorized()
 
   let dryRun = false
@@ -117,7 +117,7 @@ export async function POST(req: NextRequest) {
   for (const recipient of recipients) {
     try {
       const unsubscribeUrl = `${siteUrl}/api/newsletter/unsubscribe?token=${encodeURIComponent(
-        signUnsubscribeToken(recipient.email)
+        await signUnsubscribeToken(recipient.email)
       )}`
 
       const html = buildNewsletterHtml({

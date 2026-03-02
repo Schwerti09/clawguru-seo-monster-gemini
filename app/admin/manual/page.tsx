@@ -15,9 +15,9 @@ export const metadata = {
   description: "Das Handbuch des ClawGuru-Universums – alle technischen Module auf einen Blick.",
 }
 
-export default function UniverseManualPage() {
+export default async function UniverseManualPage() {
   const token = cookies().get(adminCookieName())?.value || ""
-  const session = token ? verifyAdminToken(token) : null
+  const session = token ? await verifyAdminToken(token) : null
   if (!session) redirect("/admin")
 
   return (

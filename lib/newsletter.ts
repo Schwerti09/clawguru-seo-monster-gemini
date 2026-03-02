@@ -9,7 +9,7 @@
  *  5. Unsubscribe tokens – HMAC-signed, GDPR-compliant
  */
 
-import crypto from "crypto"
+import { base64UrlDecode, base64UrlEncode, decodeUtf8, hmacSha256, timingSafeEqual } from "@/lib/edge-crypto"
 import type Stripe from "stripe"
 import { stripe } from "@/lib/stripe"
 
@@ -537,35 +537,27 @@ function unsubscribeSecret() {
  * Create a signed, time-limited unsubscribe token for a given email.
  * The token is safe to include in an email link – it cannot be forged.
  */
-export function signUnsubscribeToken(email: string): string {
+export async function signUnsubscribeToken(email: string): Promise<string> {
   const payload = { email: email.toLowerCase().trim(), iat: Math.floor(Date.now() / 1000) }
-  const body = Buffer.from(JSON.stringify(payload)).toString("base64url")
-  const sig = crypto
-    .createHmac("sha256", unsubscribeSecret())
-    .update(body)
-    .digest("base64url")
-  return `${body}.${sig}`
+  const body = base64UrlEncode(JSON.stringify(payload))
+  const sig = await hmacSha256(unsubscribeSecret(), body)
+  return `${body}.${base64UrlEncode(sig)}`
 }
 
 /**
  * Verify a signed unsubscribe token. Returns the email if valid, null otherwise.
  * Tokens are valid for 90 days.
  */
-export function verifyUnsubscribeToken(token: string): string | null {
+export async function verifyUnsubscribeToken(token: string): Promise<string | null> {
   try {
     const [body, sig] = token.split(".")
     if (!body || !sig) return null
 
-    const expected = crypto
-      .createHmac("sha256", unsubscribeSecret())
-      .update(body)
-      .digest("base64url")
+    const expected = await hmacSha256(unsubscribeSecret(), body)
+    const a = base64UrlDecode(sig)
+    if (!timingSafeEqual(a, expected)) return null
 
-    const a = Buffer.from(sig)
-    const b = Buffer.from(expected)
-    if (a.length !== b.length || !crypto.timingSafeEqual(a, b)) return null
-
-    const payload = JSON.parse(Buffer.from(body, "base64url").toString("utf-8")) as {
+    const payload = JSON.parse(decodeUtf8(base64UrlDecode(body))) as {
       email?: string
       iat?: number
     }

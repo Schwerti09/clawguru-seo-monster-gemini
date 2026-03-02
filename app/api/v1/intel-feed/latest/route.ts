@@ -22,6 +22,8 @@
 
 import { NextRequest, NextResponse } from "next/server"
 import { authenticateApiRequest, reportUsage } from "@/lib/api-auth"
+export const runtime = "edge"
+
 
 export const dynamic = "force-dynamic"
 

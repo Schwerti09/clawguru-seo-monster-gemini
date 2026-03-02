@@ -16,7 +16,7 @@ import { NextRequest, NextResponse } from "next/server"
 import Stripe from "stripe"
 import { stripe } from "@/lib/stripe"
 
-export const runtime = "nodejs"
+export const runtime = "edge"
 
 // CSV column headers – compatible with DATEV and QuickBooks import formats
 const CSV_HEADERS = [

@@ -8,7 +8,7 @@ import { get100kSlugsPage } from "@/lib/pseo"
 import { indexUrls } from "@/lib/google-indexer"
 
 export const dynamic = "force-dynamic"
-export const runtime = "nodejs"
+export const runtime = "edge"
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const BATCH_SIZE = 200

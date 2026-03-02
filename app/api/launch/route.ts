@@ -7,7 +7,7 @@ import { generateLaunchContent } from "@/lib/agents/launch-agent"
 import { runPredictiveAgent } from "@/lib/agents/predictive-agent"
 import { getAccess } from "@/lib/access"
 
-export const runtime = "nodejs"
+export const runtime = "edge"
 export const dynamic = "force-dynamic"
 
 export async function POST() {

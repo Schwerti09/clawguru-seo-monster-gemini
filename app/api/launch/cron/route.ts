@@ -13,7 +13,7 @@ import {
 import { computeQualityStats, DEFAULT_THRESHOLDS } from "@/lib/quality-gate"
 
 export const dynamic = "force-dynamic"
-export const runtime = "nodejs"
+export const runtime = "edge"
 
 /** Number of slugs validated per cron run (20k as specified). */
 const CRON_BATCH_SIZE = 20_000

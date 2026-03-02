@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
+export const runtime = "edge"
+
 
 function esc(s: string) {
   return s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" } as Record<string, string>)[c] || c)

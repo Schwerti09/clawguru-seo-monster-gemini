@@ -9,9 +9,12 @@ import { getTemporalHistory } from "@/lib/temporal-mycelium"
 import TemporalTimeline from "@/components/visual/TemporalTimeline"
 import { ActivateSwarmButton } from "@/components/shared/ActivateSwarmButton"
 import Link from "next/link"
+import ShareUnlockPanel from "@/components/shared/ShareUnlockPanel"
+import { mutateSeoTitle } from "@/app/lib/seo-optimizer"
 
 export const revalidate = 60 * 60 * 24 // 24h
 export const dynamicParams = true
+export const fetchCache = "force-cache"
 
 export async function generateStaticParams() {
   // All 10 supported locales × top runbooks for full language coverage
@@ -37,8 +40,9 @@ export async function generateMetadata({
     summary: r.summary,
     targetLocale: locale,
   })
+  const mutatedTitle = mutateSeoTitle({ title: translated.title })
   return {
-    title: `${translated.title} | ClawGuru Runbook`,
+    title: `${mutatedTitle} | ClawGuru Runbook`,
     description: translated.summary,
     alternates: {
       canonical: `/${locale}/runbook/${r.slug}`,
@@ -170,11 +174,7 @@ export default async function LocalizedRunbookPage({
         {r.howto.steps.length > 0 && (
           <div className="mb-8 p-6 rounded-2xl border border-gray-800 bg-black/30">
             <h2 className="text-xl font-black mb-4">{t(locale, "steps")}</h2>
-            <ol className="space-y-3 list-decimal pl-5 text-gray-200">
-              {r.howto.steps.map((step, i) => (
-                <li key={i}>{step}</li>
-              ))}
-            </ol>
+            <ShareUnlockPanel title={translated.title} slug={r.slug} items={r.howto.steps} />
           </div>
         )}
 

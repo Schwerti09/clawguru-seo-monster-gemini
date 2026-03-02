@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { isApiActive, apiUnavailableResponse } from "@/lib/api-guard";
+export const runtime = "edge"
+
 
 type ReqBody = {
   prompt?: string;

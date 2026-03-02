@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { stripe } from "@/lib/stripe"
 import { signAccessToken, AccessPlan } from "@/lib/access-token"
 
-export const runtime = "nodejs"
+export const runtime = "edge"
 
 function getOrigin(req: NextRequest) {
   return (
@@ -65,7 +65,7 @@ export async function GET(req: NextRequest) {
       }
     }
 
-    const token = signAccessToken({
+    const token = await signAccessToken({
       v: 1,
       plan,
       customerId,

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
 import { adminCookieName } from "@/lib/admin-auth"
 
-export const runtime = "nodejs"
+export const runtime = "edge"
 
 export async function GET() {
   const res = NextResponse.redirect(new URL("/admin", process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"))

@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { validateApiKey } from "@/lib/api-key-auth"
+export const runtime = "edge"
+
 
 export const dynamic = "force-dynamic"
 

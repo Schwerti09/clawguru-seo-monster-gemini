@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server"
 import { adminCookieName, issueAdminToken } from "@/lib/admin-auth"
+import { encodeUtf8, timingSafeEqual } from "@/lib/edge-crypto"
 
-export const runtime = "nodejs"
+export const runtime = "edge"
 
 function json(status: number, body: unknown) {
   return NextResponse.json(body, { status })
@@ -23,16 +24,15 @@ export async function POST(req: NextRequest) {
 
   // timing-safe compare
   const okUser = user === ADMIN_USERNAME
-  const a = Buffer.from(pass)
-  const b = Buffer.from(ADMIN_PASSWORD)
-  const crypto = await import("crypto")
-  const okPass = a.length === b.length && (a.length > 0) && crypto.timingSafeEqual(a, b)
+  const a = encodeUtf8(pass)
+  const b = encodeUtf8(ADMIN_PASSWORD)
+  const okPass = a.length === b.length && a.length > 0 && timingSafeEqual(a, b)
 
   if (!(okUser && okPass)) {
     return json(401, { error: "Wrong credentials" })
   }
 
-  const token = issueAdminToken(ADMIN_USERNAME)
+  const token = await issueAdminToken(ADMIN_USERNAME)
 
   const res = json(200, { ok: true })
   res.cookies.set({

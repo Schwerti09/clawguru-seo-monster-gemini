@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { stripe } from "@/lib/stripe"
 import { isStripeActive, apiUnavailableResponse } from "@/lib/api-guard"
 
-export const runtime = "nodejs"
+export const runtime = "edge"
 
 function allowedDownloadsFromLineItems(lineItems: { price?: { id: string } | null }[]): string[] {
   const sprint = process.env.STRIPE_PRICE_SPRINT

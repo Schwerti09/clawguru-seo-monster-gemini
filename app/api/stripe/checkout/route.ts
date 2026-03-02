@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server"
 import Stripe from "stripe"
 import { getOrigin } from "@/lib/origin"
 import { isStripeActive, apiUnavailableResponse } from "@/lib/api-guard"
+export const runtime = "edge"
+
 
 export const dynamic = "force-dynamic"
 

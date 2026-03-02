@@ -3,7 +3,7 @@ import { stripe } from "@/lib/stripe"
 import { sendEmail } from "@/lib/email"
 import { signAccessToken, AccessPlan } from "@/lib/access-token"
 
-export const runtime = "nodejs"
+export const runtime = "edge"
 
 // naive in-memory rate limit (best-effort)
 const memory: { [k: string]: { count: number; ts: number } } = {}
@@ -60,7 +60,7 @@ async function issueTokenForCustomer(customerId: string): Promise<string | null>
   if (activeSub) {
     const product = (activeSub.metadata?.product || "").toLowerCase()
     const plan: AccessPlan = product === "team" ? "team" : "pro"
-    return signAccessToken({
+    return await signAccessToken({
       v: 1,
       plan,
       customerId,
@@ -80,7 +80,7 @@ async function issueTokenForCustomer(customerId: string): Promise<string | null>
     return pi.status === "succeeded" && prod === "daypass" && okAge
   })
   if (day) {
-    return signAccessToken({
+    return await signAccessToken({
       v: 1,
       plan: "daypass",
       customerId,

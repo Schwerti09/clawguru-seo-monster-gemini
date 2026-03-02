@@ -14,9 +14,9 @@ export const metadata = {
   description: "Interaktives Admin-Cockpit – SEO, Revenue, Affiliate, Health & Kill-Switch.",
 }
 
-export default function UniverseDashboardPage() {
+export default async function UniverseDashboardPage() {
   const token = cookies().get(adminCookieName())?.value || ""
-  const session = token ? verifyAdminToken(token) : null
+  const session = token ? await verifyAdminToken(token) : null
   if (!session) redirect("/admin")
 
   return (

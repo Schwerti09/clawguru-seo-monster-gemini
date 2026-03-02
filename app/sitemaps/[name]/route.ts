@@ -3,25 +3,36 @@ import { NextResponse } from "next/server"
 import { bucketsAF, bucketsTagsAF, allProviders, get100kSlugsPage, allIssues100k, allServices100k, allYears100k } from "@/lib/pseo"
 import { KNOWN_CVES, SERVICE_CHECKS } from "@/lib/cve-pseo"
 import { BASE_URL } from "@/lib/config"
-import { SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
+import { SUPPORTED_LOCALES, type Locale, LOCALE_HREFLANG } from "@/lib/i18n"
 
 // IMPORTANT: This route must stay dynamic (Netlify prerender can call it without params)
 export const dynamic = "force-dynamic"
-export const runtime = "nodejs"
+export const runtime = "edge"
 
 const SITEMAP_HEADERS = {
   "Content-Type": "application/xml; charset=utf-8",
-  "Cache-Control": "public, max-age=3600, s-maxage=3600",
+  "Cache-Control": "public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400",
 } as const
 
 function isoDate(d = new Date()) {
   return d.toISOString().slice(0, 10)
 }
 
-function urlset(urls: Array<{ loc: string; lastmod?: string; changefreq?: string; priority?: string }>) {
+type SitemapUrl = {
+  loc: string
+  lastmod?: string
+  changefreq?: string
+  priority?: string
+  alternates?: Array<{ hreflang: string; href: string }>
+}
+
+function urlset(urls: SitemapUrl[]) {
+  const hasAlternates = urls.some((u) => u.alternates && u.alternates.length > 0)
   const xml =
     `<?xml version="1.0" encoding="UTF-8"?>\n` +
-    `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
+    `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"${
+      hasAlternates ? ` xmlns:xhtml="http://www.w3.org/1999/xhtml"` : ""
+    }>\n` +
     urls
       .map((u) => {
         const parts = [
@@ -30,6 +41,10 @@ function urlset(urls: Array<{ loc: string; lastmod?: string; changefreq?: string
           u.lastmod ? `    <lastmod>${u.lastmod}</lastmod>` : "",
           u.changefreq ? `    <changefreq>${u.changefreq}</changefreq>` : "",
           u.priority ? `    <priority>${u.priority}</priority>` : "",
+          ...(u.alternates || []).map(
+            (alt) =>
+              `    <xhtml:link rel="alternate" hreflang="${alt.hreflang}" href="${alt.href}" />`
+          ),
           `  </url>`
         ].filter(Boolean)
         return parts.join("\n")
@@ -37,6 +52,16 @@ function urlset(urls: Array<{ loc: string; lastmod?: string; changefreq?: string
       .join("\n") +
     `\n</urlset>\n`
   return xml
+}
+
+function runbookAlternates(base: string, slug: string) {
+  return [
+    { hreflang: "x-default", href: `${base}/runbook/${slug}` },
+    ...SUPPORTED_LOCALES.map((locale) => ({
+      hreflang: LOCALE_HREFLANG[locale],
+      href: `${base}/${locale}/runbook/${slug}`,
+    })),
+  ]
 }
 
 export async function GET(
@@ -130,7 +155,8 @@ export async function GET(
         loc: `${base}/runbook/${r.slug}`,
         lastmod: r.lastmod || lastmod,
         changefreq: "weekly",
-        priority: "0.8"
+        priority: "0.8",
+        alternates: runbookAlternates(base, r.slug),
       }))
       return new NextResponse(urlset(urls), {
         status: 200,
@@ -162,6 +188,7 @@ export async function GET(
         lastmod: "2026-02-25",
         changefreq: "monthly",
         priority: "0.8",
+        alternates: runbookAlternates(base, slug),
       }))
       return new NextResponse(urlset(urls), { status: 200, headers: SITEMAP_HEADERS })
     }
@@ -172,19 +199,19 @@ export async function GET(
       if (!SUPPORTED_LOCALES.includes(locale)) {
         return new NextResponse("Not Found", { status: 404 })
       }
-      // Top 200 runbooks in localized URLs for crawlability
       const allRunbooks = [
         ...rb["a-f"],
         ...rb["g-l"],
         ...rb["m-r"],
         ...rb["s-z"],
         ...rb["0-9"],
-      ].slice(0, 200)
+      ]
       const i18nUrls = allRunbooks.map((r) => ({
         loc: `${base}/${locale}/runbook/${r.slug}`,
         lastmod: r.lastmod || lastmod,
         changefreq: "weekly",
         priority: "0.7",
+        alternates: runbookAlternates(base, r.slug),
       }))
       return new NextResponse(urlset(i18nUrls), {
         status: 200,

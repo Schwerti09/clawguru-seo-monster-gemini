@@ -29,7 +29,9 @@
 
 import { NextRequest, NextResponse } from "next/server"
 import { authenticateApiRequest, reportUsage } from "@/lib/api-auth"
-import { RUNBOOKS } from "@/lib/pseo"
+import { getRunbook } from "@/lib/pseo"
+export const runtime = "edge"
+
 
 export const dynamic = "force-dynamic"
 
@@ -47,7 +49,7 @@ export async function GET(
     return NextResponse.json({ error: "Missing runbook id" }, { status: 400 })
   }
 
-  const runbook = RUNBOOKS.find((r) => r.slug === id)
+  const runbook = getRunbook(id)
   if (!runbook) {
     return NextResponse.json({ error: "Runbook not found" }, { status: 404 })
   }
@@ -55,15 +57,22 @@ export async function GET(
   // Report usage to Stripe (fire-and-forget)
   await reportUsage(auth.info)
 
-  return NextResponse.json({
-    id: runbook.slug,
-    title: runbook.title,
-    summary: runbook.summary,
-    tags: runbook.tags,
-    clawScore: runbook.clawScore,
-    steps: runbook.howto?.steps ?? [],
-    faq: runbook.faq ?? [],
-    relatedIds: runbook.relatedSlugs ?? [],
-    updatedAt: runbook.lastmod,
-  })
+  return NextResponse.json(
+    {
+      id: runbook.slug,
+      title: runbook.title,
+      summary: runbook.summary,
+      tags: runbook.tags,
+      clawScore: runbook.clawScore,
+      steps: runbook.howto?.steps ?? [],
+      faq: runbook.faq ?? [],
+      relatedIds: runbook.relatedSlugs ?? [],
+      updatedAt: runbook.lastmod,
+    },
+    {
+      headers: {
+        "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400",
+      },
+    }
+  )
 }

@@ -8,7 +8,7 @@ import { RUNBOOKS } from "@/lib/pseo"
 import { computeQualityStats, validateRunbook, DEFAULT_THRESHOLDS } from "@/lib/quality-gate"
 
 export const dynamic = "force-dynamic"
-export const runtime = "nodejs"
+export const runtime = "edge"
 
 // GENESIS QUALITY GATE 2.0 – Gemini auto-improve helper
 async function callGeminiImprove(runbookJson: string): Promise<string | null> {

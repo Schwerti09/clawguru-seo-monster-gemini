@@ -4,7 +4,7 @@ import { BASE_URL } from "@/lib/config"
 import { SUPPORTED_LOCALES } from "@/lib/i18n"
 
 export const dynamic = "force-dynamic"
-export const runtime = "nodejs"
+export const runtime = "edge"
 
 function isoDate(d = new Date()) {
   return d.toISOString().slice(0, 10)
@@ -77,7 +77,7 @@ export async function GET() {
       status: 200,
       headers: {
         "Content-Type": "application/xml; charset=utf-8",
-        "Cache-Control": "public, max-age=3600, s-maxage=3600",
+        "Cache-Control": "public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400",
       }
     })
   } catch (err) {
@@ -94,7 +94,7 @@ export async function GET() {
       status: 200,
       headers: {
         "Content-Type": "application/xml; charset=utf-8",
-        "Cache-Control": "public, max-age=300, s-maxage=300",
+        "Cache-Control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
       }
     })
   }

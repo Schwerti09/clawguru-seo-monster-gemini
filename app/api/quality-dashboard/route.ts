@@ -11,7 +11,7 @@ import {
 } from "@/lib/quality-gate"
 
 export const dynamic = "force-dynamic"
-export const runtime = "nodejs"
+export const runtime = "edge"
 
 export async function GET() {
   // Validate all runbooks once; derive all stats from the single pass

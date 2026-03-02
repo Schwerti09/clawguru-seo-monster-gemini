@@ -13,7 +13,7 @@ export type AccessInfo = {
 
 export async function getAccess(): Promise<AccessInfo> {
   const token = cookies().get("claw_access")?.value || ""
-  const payload = token ? verifyAccessToken(token) : null
+  const payload = token ? await verifyAccessToken(token) : null
   if (!payload) return { ok: false, reason: "no_token" }
 
   // daypass = only expiry check (already verified in token)

@@ -1,5 +1,13 @@
 import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
+import { SEO_TARGET_KEYWORDS_2026 } from "@/lib/seo/targets"
+
+export const metadata = {
+  title: "Security Hub | ClawGuru",
+  description: "Security Hub: CVE-Klassen, Misconfigs und Runbooks für schnelle Incident-Response.",
+  keywords: SEO_TARGET_KEYWORDS_2026,
+  alternates: { canonical: "/security" },
+}
 
 export default function Security() {
   return (

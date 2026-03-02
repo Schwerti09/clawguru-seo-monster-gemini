@@ -1,13 +1,24 @@
 import Container from "@/components/shared/Container"
 import BuyButton from "@/components/commerce/BuyButton"
 import EnterpriseContact from "@/components/marketing/EnterpriseContact"
+import { SEO_TARGET_KEYWORDS_2026 } from "@/lib/seo/targets"
+
+const PRICING_KEYWORDS = [
+  ...SEO_TARGET_KEYWORDS_2026,
+  "Day Pass Security",
+  "Log4j quick check",
+  "Ransomware runbook download",
+  "incident response sofort",
+  "Security Notfall Zugang",
+  "CVE check",
+  "emergency runbook",
+]
 
 export const metadata = {
   title: "Day Pass | ClawGuru – Sofortzugang für Security Incidents",
   description:
     "Security Incident? Day Pass: 24h Vollzugriff auf alle Runbooks, Log4j-Check, Ransomware Playbooks, Copilot & mehr. Einmal zahlen, sofort loslegen – kein Abo-Approval nötig.",
-  keywords:
-    "Day Pass Security, Log4j quick check, Ransomware runbook download, incident response sofort, Security Notfall Zugang, CVE check, emergency runbook",
+  keywords: PRICING_KEYWORDS,
   alternates: { canonical: "/pricing" }
 }
 

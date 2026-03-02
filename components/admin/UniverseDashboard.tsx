@@ -787,6 +787,7 @@ export default function UniverseDashboard() {
         {[
           { label: "💰 Profit Dashboard", href: "/admin/profit-dashboard" },
           { label: "🚀 Launch Dashboard", href: "/admin/launch-dashboard" },
+          { label: "🛰️ Outreach Invasion", href: "/admin/outreach" },
           { label: "⚙️ Control Center", href: "/admin/center" },
           { label: "📖 Universe Manual", href: "/admin/manual" },
         ].map(({ label, href }) => (

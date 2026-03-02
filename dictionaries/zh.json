@@ -1,0 +1,60 @@
+{
+  "hero": {
+    "badge": "菌丝奇点引擎 v3.0 · 创世协议激活",
+    "subtitle": "100万+ 运维手册的活体菌丝网络。每个节点是一个知识单元，每条边是语义关系。力导向图、达尔文进化引擎和神谕模式——全球最先进的运维知识库。",
+    "ctaMycelium": "活体菌丝 →",
+    "ctaCopilot": "询问 Copilot",
+    "ctaProKits": "专业套件（Stripe）",
+    "ctaIntel": "情报推送",
+    "miniCopilotTitle": "迷你 Copilot",
+    "miniCopilotSubtitle": "用一句话描述您的问题，我们将引导您找到正确的中心。",
+    "miniCopilotPlaceholder": "例如：'我认为我的网关已暴露'",
+    "miniCopilotSubmit": "提交",
+    "popularPromptsTitle": "热门提示",
+    "noLoginNote": "无需登录。无暗黑模式。只有一个真正能帮您解决问题的页面。",
+    "featureCopilot": "Copilot",
+    "featureCopilotDesc": "对话 → 运维手册",
+    "featureVault": "知识库",
+    "featureVaultDesc": "参考资料与模式",
+    "featureAcademy": "学院",
+    "featureAcademyDesc": "冲刺，而非课程",
+    "titleSuffix": "菌丝奇点引擎 v3.0"
+  },
+  "nav": {
+    "live": "实时",
+    "securityCheck": "安全检查",
+    "copilot": "Copilot",
+    "runbooks": "运维手册",
+    "intelFeed": "情报推送",
+    "pricing": "价格",
+    "emergency": "紧急",
+    "proKits": "专业套件"
+  },
+  "dayPass": {
+    "label": "日通行证（24小时）"
+  },
+  "jackpot": {
+    "kicker": "大奖",
+    "title": "您不想「阅读」。您想解决问题。",
+    "subtitle": "ClawGuru 是一个运营安全层：评分 → 运维手册 → 修复 → 复查 → 分享。",
+    "liveScore": "实时评分",
+    "liveScoreDesc": "30秒。不废话。您的前三大风险。",
+    "copilotRunbooks": "Copilot 运维手册",
+    "copilotRunbooksDesc": "您描述技术栈，我们提供可执行的运维手册。",
+    "kitsTemplates": "套件 + 模板",
+    "kitsTemplatesDesc": "可直接部署到生产环境的复制粘贴资产。",
+    "liveOpsWall": "实时运营墙",
+    "liveOpsWallDesc": "趋势 + 热修复。更快决策，更快修复。",
+    "runbooksLink": "运维手册 →",
+    "allPlans": "所有方案 →",
+    "discordOpsRoom": "Discord 运营间 →",
+    "proTip": "专业提示：结账后点击",
+    "activateAccess": "「激活访问」",
+    "then": "→ 仪表板。"
+  },
+  "faq": {
+    "kicker": "常见问题",
+    "title": "简短。犀利。实用。",
+    "subtitle": "一些问题总是反复出现。以下是答案。"
+  }
+}

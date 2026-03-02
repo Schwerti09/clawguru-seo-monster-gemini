@@ -1,0 +1,60 @@
+{
+  "hero": {
+    "badge": "Mycelial Singularity Engine v3.0 · بروتوكول GENESIS نشط",
+    "subtitle": "شبكة الميسيليوم الحية لأكثر من مليون كتيب تشغيلي. كل عقدة وحدة معرفة، وكل حافة علاقة دلالية. رسم بياني موجه بالقوة، ومحرك التطور الداروي، ووضع Oracle — أكثر قاعدة معرفة تشغيلية تقدماً في العالم.",
+    "ctaMycelium": "الميسيليوم الحي →",
+    "ctaCopilot": "اسأل Copilot",
+    "ctaProKits": "Pro Kits (Stripe)",
+    "ctaIntel": "تغذية Intel",
+    "miniCopilotTitle": "Mini-Copilot",
+    "miniCopilotSubtitle": "اشرح مشكلتك في جملة واحدة. سنوجهك إلى المركز المناسب.",
+    "miniCopilotPlaceholder": "مثال: 'أعتقد أن بوابتي مكشوفة'",
+    "miniCopilotSubmit": "إرسال",
+    "popularPromptsTitle": "المطالبات الشائعة",
+    "noLoginNote": "لا تسجيل دخول. لا أنماط مظلمة. فقط صفحة تنقذك حقاً من الأزمة.",
+    "featureCopilot": "Copilot",
+    "featureCopilotDesc": "محادثة → كتيب تشغيلي",
+    "featureVault": "Vault",
+    "featureVaultDesc": "مراجع وأنماط",
+    "featureAcademy": "Academy",
+    "featureAcademyDesc": "سباقات، لا دورات",
+    "titleSuffix": "Mycelial Singularity Engine v3.0"
+  },
+  "nav": {
+    "live": "مباشر",
+    "securityCheck": "فحص الأمان",
+    "copilot": "Copilot",
+    "runbooks": "كتيبات التشغيل",
+    "intelFeed": "تغذية Intel",
+    "pricing": "الأسعار",
+    "emergency": "طوارئ",
+    "proKits": "Pro Kits"
+  },
+  "dayPass": {
+    "label": "تصريح يومي (24 ساعة)"
+  },
+  "jackpot": {
+    "kicker": "الجائزة الكبرى",
+    "title": "لا تريد «القراءة». تريد الحل.",
+    "subtitle": "ClawGuru طبقة أمنية تشغيلية: Score → Runbook → Fix → Re-Check → Share.",
+    "liveScore": "النقاط المباشرة",
+    "liveScoreDesc": "30 ثانية. بدون ثرثرة. أفضل 3 مخاطر لديك.",
+    "copilotRunbooks": "كتيبات Copilot",
+    "copilotRunbooksDesc": "تصف المكدس. نحن نوفر كتيب تشغيل للتنفيذ.",
+    "kitsTemplates": "أدوات + قوالب",
+    "kitsTemplatesDesc": "أصول للنسخ/اللصق يمكن نشرها مباشرة في الإنتاج.",
+    "liveOpsWall": "جدار Ops المباشر",
+    "liveOpsWallDesc": "الاتجاهات + الإصلاحات العاجلة. قرر أسرع، أصلح أسرع.",
+    "runbooksLink": "كتيبات التشغيل →",
+    "allPlans": "جميع الخطط →",
+    "discordOpsRoom": "غرفة Discord Ops →",
+    "proTip": "نصيحة Pro: بعد الدفع، انقر على",
+    "activateAccess": "«تفعيل الوصول»",
+    "then": "→ لوحة التحكم."
+  },
+  "faq": {
+    "kicker": "الأسئلة الشائعة",
+    "title": "قصير. حاد. مفيد.",
+    "subtitle": "بعض الأسئلة تأتي دائماً. إليك الإجابات."
+  }
+}

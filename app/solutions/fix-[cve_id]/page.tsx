@@ -5,6 +5,7 @@
 // H2: "What is [Vulnerability Name]?"
 // H3: "Impact and Risks for your Infrastructure"
 
+import Link from "next/link"
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import Container from "@/components/shared/Container"
@@ -13,7 +14,7 @@ import { generateCveContent } from "@/lib/agents/cve-agent"
 import { BASE_URL } from "@/lib/config"
 
 interface Props {
-  params: { cve_id: string }
+  params: Promise<{ cve_id: string }>
 }
 
 export const revalidate = 60 * 60 * 24 // 24h ISR
@@ -23,7 +24,8 @@ export async function generateStaticParams() {
   return KNOWN_CVES.map((c) => ({ cve_id: c.cveId }))
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   const cveId = parseCveId(decodeURIComponent(params.cve_id))
   if (!cveId) return {}
   const entry = getCveEntry(cveId)
@@ -47,7 +49,8 @@ function severityColor(severity: string) {
   return { text: "#00ff9d", bg: "rgba(0,255,157,0.1)", border: "rgba(0,255,157,0.3)" }
 }
 
-export default async function CveFixPage({ params }: Props) {
+export default async function CveFixPage(props: Props) {
+  const params = await props.params;
   const cveId = parseCveId(decodeURIComponent(params.cve_id))
   if (!cveId) return notFound()
 
@@ -142,9 +145,9 @@ export default async function CveFixPage({ params }: Props) {
         {/* Breadcrumb */}
         <nav className="text-sm text-gray-500 mb-6" aria-label="Breadcrumb">
           <ol className="flex flex-wrap items-center gap-2">
-            <li><a href="/" className="hover:text-cyan-400">ClawGuru</a></li>
+            <li><Link href="/" className="hover:text-cyan-400">ClawGuru</Link></li>
             <li>/</li>
-            <li><a href="/solutions" className="hover:text-cyan-400">Solutions</a></li>
+            <li><Link href="/solutions" className="hover:text-cyan-400">Solutions</Link></li>
             <li>/</li>
             <li className="text-gray-300">{entry.cveId}</li>
           </ol>
@@ -321,25 +324,25 @@ export default async function CveFixPage({ params }: Props) {
 
         {/* CTA row */}
         <div className="mt-12 flex flex-wrap gap-3">
-          <a
+          <Link
             href="/check"
             className="px-6 py-3 rounded-2xl font-black text-black transition-all duration-300 hover:opacity-90"
             style={{ background: "linear-gradient(135deg, #00ff9d, #00b8ff)" }}
           >
             Run Security Check →
-          </a>
-          <a
+          </Link>
+          <Link
             href="/runbooks"
             className="px-6 py-3 rounded-2xl border border-gray-700 hover:border-gray-500 font-bold text-gray-200 transition-colors"
           >
             Browse Runbooks →
-          </a>
-          <a
+          </Link>
+          <Link
             href="/solutions"
             className="px-6 py-3 rounded-2xl border border-gray-700 hover:border-gray-500 font-bold text-gray-200 transition-colors"
           >
             ← All CVE Solutions
-          </a>
+          </Link>
         </div>
 
         {/* Disclaimer */}

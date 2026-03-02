@@ -1,3 +1,4 @@
+import Link from "next/link"
 import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
 import { allTags, runbooksByTag, topRunbooksByTag } from "@/lib/pseo"
@@ -12,7 +13,8 @@ export async function generateStaticParams() {
   return allTags().slice(0, 200).map((t) => ({ tag: t }))
 }
 
-export async function generateMetadata({ params }: { params: { tag: string } }) {
+export async function generateMetadata(props: { params: Promise<{ tag: string }> }) {
+  const params = await props.params;
   const tag = decodeURIComponent(params.tag)
   const items = runbooksByTag(tag)
   if (!items.length) return {}
@@ -23,7 +25,8 @@ export async function generateMetadata({ params }: { params: { tag: string } }) 
   }
 }
 
-export default function TagPage({ params }: { params: { tag: string } }) {
+export default async function TagPage(props: { params: Promise<{ tag: string }> }) {
+  const params = await props.params;
   const tag = decodeURIComponent(params.tag)
   const items = runbooksByTag(tag)
   if (!items.length) return notFound()
@@ -61,9 +64,9 @@ export default function TagPage({ params }: { params: { tag: string } }) {
       <div className="py-16 max-w-6xl mx-auto">
         <nav className="text-sm text-gray-500 mb-6" aria-label="Breadcrumb">
           <ol className="flex flex-wrap items-center gap-2">
-            <li><a href="/" className="hover:text-cyan-400">ClawGuru</a></li>
+            <li><Link href="/" className="hover:text-cyan-400">ClawGuru</Link></li>
             <li>/</li>
-            <li><a href="/tags" className="hover:text-cyan-400">Tags</a></li>
+            <li><Link href="/tags" className="hover:text-cyan-400">Tags</Link></li>
             <li>/</li>
             <li className="text-gray-300">{tag}</li>
           </ol>

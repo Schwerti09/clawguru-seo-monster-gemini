@@ -1,3 +1,4 @@
+import Link from "next/link"
 import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
 import {
@@ -18,7 +19,8 @@ export async function generateStaticParams() {
   return allServices100k().map((s) => ({ slug: s.slug }))
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }) {
+export async function generateMetadata(props: { params: Promise<{ slug: string }> }) {
+  const params = await props.params;
   const service = allServices100k().find((s) => s.slug === params.slug)
   if (!service) return {}
   const totalPerService =
@@ -37,7 +39,8 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   }
 }
 
-export default function ServiceHubPage({ params }: { params: { slug: string } }) {
+export default async function ServiceHubPage(props: { params: Promise<{ slug: string }> }) {
+  const params = await props.params;
   const service = allServices100k().find((s) => s.slug === params.slug)
   if (!service) return notFound()
 
@@ -80,9 +83,9 @@ export default function ServiceHubPage({ params }: { params: { slug: string } })
       <div className="py-16 max-w-6xl mx-auto">
         <nav className="text-sm text-gray-500 mb-6" aria-label="Breadcrumb">
           <ol className="flex flex-wrap items-center gap-2">
-            <li><a href="/" className="hover:text-cyan-400">ClawGuru</a></li>
+            <li><Link href="/" className="hover:text-cyan-400">ClawGuru</Link></li>
             <li>/</li>
-            <li><a href="/services" className="hover:text-cyan-400">Services</a></li>
+            <li><Link href="/services" className="hover:text-cyan-400">Services</Link></li>
             <li>/</li>
             <li className="text-gray-300">{service.name}</li>
           </ol>
@@ -120,9 +123,9 @@ export default function ServiceHubPage({ params }: { params: { slug: string } })
         </div>
 
         <div className="mt-12 text-sm text-gray-500">
-          <a href="/services" className="hover:text-cyan-400">← Alle Services</a> ·{" "}
-          <a href="/issues" className="hover:text-cyan-400">Issue Hubs</a> ·{" "}
-          <a href="/runbooks" className="hover:text-cyan-400">Runbook Library</a>
+          <Link href="/services" className="hover:text-cyan-400">← Alle Services</Link> ·{" "}
+          <Link href="/issues" className="hover:text-cyan-400">Issue Hubs</Link> ·{" "}
+          <Link href="/runbooks" className="hover:text-cyan-400">Runbook Library</Link>
         </div>
       </div>
     </Container>

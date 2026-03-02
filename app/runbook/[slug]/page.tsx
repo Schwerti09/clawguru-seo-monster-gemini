@@ -1,4 +1,5 @@
 // File: app/runbook/[slug]/page.tsx
+import Link from "next/link"
 import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
 import { RUNBOOKS, getRunbook, type Runbook, type RunbookBlock, type RunbookFaqEntry } from "@/lib/pseo"
@@ -39,7 +40,8 @@ export async function generateStaticParams() {
   return [...staticParams, ...key100kSlugs.map((slug) => ({ slug }))]
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }) {
+export async function generateMetadata(props: { params: Promise<{ slug: string }> }) {
+  const params = await props.params;
   const r = getRunbook(params.slug)
   if (!r) return {}
   const title = r.title.length > 60 ? r.title.slice(0, 57) + "..." : r.title
@@ -233,7 +235,8 @@ function FaqSection({ faq }: { faq: RunbookFaqEntry[] }) {
   )
 }
 
-export default function RunbookPage({ params }: { params: { slug: string } }) {
+export default async function RunbookPage(props: { params: Promise<{ slug: string }> }) {
+  const params = await props.params;
   const r = getRunbook(params.slug)
   if (!r) return notFound()
 
@@ -275,15 +278,15 @@ export default function RunbookPage({ params }: { params: { slug: string } }) {
         <nav className="text-sm text-gray-500 mb-6" aria-label="Breadcrumb">
           <ol className="flex flex-wrap items-center gap-2">
             <li>
-              <a href="/" className="hover:text-cyan-400">
+              <Link href="/" className="hover:text-cyan-400">
                 ClawGuru
-              </a>
+              </Link>
             </li>
             <li>/</li>
             <li>
-              <a href="/runbooks" className="hover:text-cyan-400">
+              <Link href="/runbooks" className="hover:text-cyan-400">
                 Runbooks
-              </a>
+              </Link>
             </li>
             <li>/</li>
             <li className="text-gray-300">{r.title}</li>
@@ -326,18 +329,18 @@ export default function RunbookPage({ params }: { params: { slug: string } }) {
           </ol>
 
           <div className="mt-6 flex flex-wrap gap-3">
-            <a
+            <Link
               href="/check"
               className="px-6 py-3 rounded-2xl font-black bg-gradient-to-r from-orange-500 to-red-600 hover:opacity-90"
             >
               Re-Check starten →
-            </a>
-            <a
+            </Link>
+            <Link
               href="/copilot"
               className="px-6 py-3 rounded-2xl border border-gray-700 hover:border-gray-500 font-bold text-gray-200"
             >
               Copilot Runbook Builder →
-            </a>
+            </Link>
             {/* SWARM DEPLOYMENT v3.2 – Overlord AI: One-click swarm activation for Pro users */}
             <ActivateSwarmButton slug={r.slug} />
           </div>

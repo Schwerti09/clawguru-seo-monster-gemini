@@ -2,6 +2,7 @@
 // Localized temporal search page: /[lang]/runbook/[slug]/temporal?version=2025-Q3
 // Shows the runbook as it existed at a specific point in time.
 
+import Link from "next/link"
 import { notFound } from "next/navigation"
 import Container from "@/components/shared/Container"
 import { getRunbook } from "@/lib/pseo"
@@ -14,13 +15,14 @@ import { BASE_URL } from "@/lib/config"
 export const revalidate = 60 * 60 * 24
 export const dynamicParams = true
 
-export async function generateMetadata({
-  params,
-  searchParams,
-}: {
-  params: { lang: string; slug: string }
-  searchParams: { version?: string }
-}) {
+export async function generateMetadata(
+  props: {
+    params: Promise<{ lang: string; slug: string }>
+    searchParams: Promise<{ version?: string }>
+  }
+) {
+  const searchParams = await props.searchParams;
+  const params = await props.params;
   const r = getRunbook(params.slug)
   if (!r) return {}
   const version = searchParams.version ?? "aktuell"
@@ -31,13 +33,14 @@ export async function generateMetadata({
   }
 }
 
-export default function LocalizedTemporalPage({
-  params,
-  searchParams,
-}: {
-  params: { lang: string; slug: string }
-  searchParams: { version?: string }
-}) {
+export default async function LocalizedTemporalPage(
+  props: {
+    params: Promise<{ lang: string; slug: string }>
+    searchParams: Promise<{ version?: string }>
+  }
+) {
+  const searchParams = await props.searchParams;
+  const params = await props.params;
   const locale: Locale = SUPPORTED_LOCALES.includes(params.lang as Locale)
     ? (params.lang as Locale)
     : "de"
@@ -61,11 +64,11 @@ export default function LocalizedTemporalPage({
         <nav className="text-sm text-gray-500 mb-6" aria-label="Breadcrumb">
           <ol className="flex flex-wrap items-center gap-2">
             <li>
-              <a href="/" className="hover:text-cyan-400">ClawGuru</a>
+              <Link href="/" className="hover:text-cyan-400">ClawGuru</Link>
             </li>
             <li>/</li>
             <li>
-              <a href="/runbooks" className="hover:text-cyan-400">Runbooks</a>
+              <Link href="/runbooks" className="hover:text-cyan-400">Runbooks</Link>
             </li>
             <li>/</li>
             <li>

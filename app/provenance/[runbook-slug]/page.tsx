@@ -3,6 +3,7 @@
 // Full cryptographic chain of custody for every runbook version.
 // Audit-ready export: SOC2 / ISO 27001 / CIS Benchmark v8.
 
+import Link from "next/link"
 import { notFound } from "next/navigation"
 import Container from "@/components/shared/Container"
 import { getRunbook, RUNBOOKS } from "@/lib/pseo"
@@ -18,11 +19,12 @@ export async function generateStaticParams() {
   return RUNBOOKS.slice(0, 200).map((r) => ({ "runbook-slug": r.slug }))
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { "runbook-slug": string }
-}) {
+export async function generateMetadata(
+  props: {
+    params: Promise<{ "runbook-slug": string }>
+  }
+) {
+  const params = await props.params;
   const r = getRunbook(params["runbook-slug"])
   if (!r) return {}
   return {
@@ -42,11 +44,12 @@ function SignatureCountBadge({ count }: { count: number }) {
   )
 }
 
-export default function ProvenancePage({
-  params,
-}: {
-  params: { "runbook-slug": string }
-}) {
+export default async function ProvenancePage(
+  props: {
+    params: Promise<{ "runbook-slug": string }>
+  }
+) {
+  const params = await props.params;
   const r = getRunbook(params["runbook-slug"])
   if (!r) return notFound()
 
@@ -80,11 +83,11 @@ export default function ProvenancePage({
         <nav className="text-sm text-gray-500 mb-6" aria-label="Breadcrumb">
           <ol className="flex flex-wrap items-center gap-2">
             <li>
-              <a href="/" className="hover:text-cyan-400">ClawGuru</a>
+              <Link href="/" className="hover:text-cyan-400">ClawGuru</Link>
             </li>
             <li>/</li>
             <li>
-              <a href="/runbooks" className="hover:text-cyan-400">Runbooks</a>
+              <Link href="/runbooks" className="hover:text-cyan-400">Runbooks</Link>
             </li>
             <li>/</li>
             <li>

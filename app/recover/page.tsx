@@ -1,3 +1,4 @@
+import Link from "next/link"
 import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
 
@@ -6,11 +7,12 @@ export const metadata = {
   description: "Magic Link öffnen oder Recovery anfordern."
 }
 
-export default function RecoverPage({
-  searchParams
-}: {
-  searchParams?: Record<string, string | string[] | undefined>
-}) {
+export default async function RecoverPage(
+  props: {
+    searchParams?: Promise<Record<string, string | string[] | undefined>>
+  }
+) {
+  const searchParams = await props.searchParams;
   const token = typeof searchParams?.token === "string" ? searchParams?.token : ""
   return (
     <Container>
@@ -71,12 +73,12 @@ export default function RecoverPage({
         </div>
 
         <div className="mt-8 flex gap-3">
-          <a href="/pricing" className="px-5 py-3 rounded-2xl border border-gray-700 hover:border-gray-500 font-bold text-gray-200">
+          <Link href="/pricing" className="px-5 py-3 rounded-2xl border border-gray-700 hover:border-gray-500 font-bold text-gray-200">
             Zurück zu Pricing
-          </a>
-          <a href="/check" className="px-5 py-3 rounded-2xl border border-gray-700 hover:border-gray-500 font-bold text-gray-200">
+          </Link>
+          <Link href="/check" className="px-5 py-3 rounded-2xl border border-gray-700 hover:border-gray-500 font-bold text-gray-200">
             Erst Score prüfen
-          </a>
+          </Link>
         </div>
       </div>
     </Container>

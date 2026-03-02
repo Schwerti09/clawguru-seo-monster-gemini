@@ -2,6 +2,7 @@
 // Programmatic SEO landing pages for service security check tools.
 // Route: /tools/check-nginx, /tools/check-ssh, /tools/check-docker, etc.
 
+import Link from "next/link"
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import Container from "@/components/shared/Container"
@@ -9,7 +10,7 @@ import { getServiceCheck, SERVICE_CHECKS } from "@/lib/cve-pseo"
 import { BASE_URL } from "@/lib/config"
 
 interface Props {
-  params: { service_name: string }
+  params: Promise<{ service_name: string }>
 }
 
 export const revalidate = 60 * 60 * 24 // 24h ISR
@@ -19,7 +20,8 @@ export async function generateStaticParams() {
   return SERVICE_CHECKS.map((s) => ({ service_name: s.slug }))
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   const slug = decodeURIComponent(params.service_name).toLowerCase()
   const entry = getServiceCheck(slug)
   if (!entry) return {}
@@ -35,7 +37,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-export default function ServiceCheckPage({ params }: Props) {
+export default async function ServiceCheckPage(props: Props) {
+  const params = await props.params;
   const slug = decodeURIComponent(params.service_name).toLowerCase()
   const entry = getServiceCheck(slug)
   if (!entry) return notFound()
@@ -96,9 +99,9 @@ export default function ServiceCheckPage({ params }: Props) {
         {/* Breadcrumb */}
         <nav className="text-sm text-gray-500 mb-6" aria-label="Breadcrumb">
           <ol className="flex flex-wrap items-center gap-2">
-            <li><a href="/" className="hover:text-cyan-400">ClawGuru</a></li>
+            <li><Link href="/" className="hover:text-cyan-400">ClawGuru</Link></li>
             <li>/</li>
-            <li><a href="/tools" className="hover:text-cyan-400">Tools</a></li>
+            <li><Link href="/tools" className="hover:text-cyan-400">Tools</Link></li>
             <li>/</li>
             <li className="text-gray-300">check-{entry.slug}</li>
           </ol>
@@ -214,25 +217,25 @@ export default function ServiceCheckPage({ params }: Props) {
 
         {/* CTA row */}
         <div className="mt-10 flex flex-wrap gap-3">
-          <a
+          <Link
             href="/check"
             className="px-6 py-3 rounded-2xl font-black text-black transition-all duration-300 hover:opacity-90"
             style={{ background: "linear-gradient(135deg, #00ff9d, #00b8ff)" }}
           >
             Run Full Security Check →
-          </a>
-          <a
+          </Link>
+          <Link
             href="/runbooks"
             className="px-6 py-3 rounded-2xl border border-gray-700 hover:border-gray-500 font-bold text-gray-200 transition-colors"
           >
             View Runbooks →
-          </a>
-          <a
+          </Link>
+          <Link
             href="/solutions"
             className="px-6 py-3 rounded-2xl border border-gray-700 hover:border-gray-500 font-bold text-gray-200 transition-colors"
           >
             CVE Solutions →
-          </a>
+          </Link>
         </div>
 
         {/* Other services */}

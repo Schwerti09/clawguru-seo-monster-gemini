@@ -1,3 +1,4 @@
+import Link from "next/link"
 import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
 import {
@@ -18,7 +19,8 @@ export async function generateStaticParams() {
   return allYears100k().map((year) => ({ year }))
 }
 
-export async function generateMetadata({ params }: { params: { year: string } }) {
+export async function generateMetadata(props: { params: Promise<{ year: string }> }) {
+  const params = await props.params;
   const years = allYears100k()
   if (!years.includes(params.year)) return {}
   const totalPerYear =
@@ -37,7 +39,8 @@ export async function generateMetadata({ params }: { params: { year: string } })
   }
 }
 
-export default function YearHubPage({ params }: { params: { year: string } }) {
+export default async function YearHubPage(props: { params: Promise<{ year: string }> }) {
+  const params = await props.params;
   const years = allYears100k()
   if (!years.includes(params.year)) return notFound()
 
@@ -81,9 +84,9 @@ export default function YearHubPage({ params }: { params: { year: string } }) {
       <div className="py-16 max-w-6xl mx-auto">
         <nav className="text-sm text-gray-500 mb-6" aria-label="Breadcrumb">
           <ol className="flex flex-wrap items-center gap-2">
-            <li><a href="/" className="hover:text-cyan-400">ClawGuru</a></li>
+            <li><Link href="/" className="hover:text-cyan-400">ClawGuru</Link></li>
             <li>/</li>
-            <li><a href="/years" className="hover:text-cyan-400">Years</a></li>
+            <li><Link href="/years" className="hover:text-cyan-400">Years</Link></li>
             <li>/</li>
             <li className="text-gray-300">{year}</li>
           </ol>
@@ -121,9 +124,9 @@ export default function YearHubPage({ params }: { params: { year: string } }) {
         </div>
 
         <div className="mt-12 text-sm text-gray-500">
-          <a href="/years" className="hover:text-cyan-400">← Alle Years</a> ·{" "}
-          <a href="/issues" className="hover:text-cyan-400">Issue Hubs</a> ·{" "}
-          <a href="/runbooks" className="hover:text-cyan-400">Runbook Library</a>
+          <Link href="/years" className="hover:text-cyan-400">← Alle Years</Link> ·{" "}
+          <Link href="/issues" className="hover:text-cyan-400">Issue Hubs</Link> ·{" "}
+          <Link href="/runbooks" className="hover:text-cyan-400">Runbook Library</Link>
         </div>
       </div>
     </Container>

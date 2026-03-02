@@ -2,6 +2,26 @@
 
 import { useState, type FormEvent } from "react"
 
+const INVALID_URL_PREVIEW_LIMIT = 3
+
+function filterSafeUrls(lines: string[]) {
+  const safe: string[] = []
+  const invalid: string[] = []
+  for (const line of lines) {
+    try {
+      const url = new URL(line)
+      if (url.protocol === "http:" || url.protocol === "https:") {
+        safe.push(line)
+      } else {
+        invalid.push(line)
+      }
+    } catch {
+      invalid.push(line)
+    }
+  }
+  return { safe, invalid }
+}
+
 export default function AffiliateTrackingForm() {
   const [affiliateRef, setAffiliateRef] = useState("")
   const [pixelUrls, setPixelUrls] = useState("")
@@ -15,6 +35,10 @@ export default function AffiliateTrackingForm() {
     setLoading(true)
     setStatus(null)
     try {
+      const pixelLines = pixelUrls.split("\n").map((l) => l.trim()).filter(Boolean)
+      const postbackLines = postbackUrls.split("\n").map((l) => l.trim()).filter(Boolean)
+      const safePixels = filterSafeUrls(pixelLines)
+      const safePostbacks = filterSafeUrls(postbackLines)
       const res = await fetch("/api/affiliate/tracking", {
         method: "POST",
         headers: {
@@ -23,15 +47,20 @@ export default function AffiliateTrackingForm() {
         },
         body: JSON.stringify({
           affiliate_ref: affiliateRef.trim(),
-          pixels: pixelUrls.split("\n").map((l) => l.trim()).filter(Boolean),
-          postbacks: postbackUrls.split("\n").map((l) => l.trim()).filter(Boolean),
+          pixels: safePixels.safe,
+          postbacks: safePostbacks.safe,
         }),
       })
       const data = await res.json().catch(() => ({}))
       if (!res.ok) {
         setStatus(data?.error || "Tracking konnte nicht gespeichert werden.")
       } else {
-        setStatus(`Gespeichert: ${data?.pixels ?? 0} Pixel · ${data?.postbacks ?? 0} Postbacks`)
+        const invalidList = [...safePixels.invalid, ...safePostbacks.invalid]
+        const invalidCount = invalidList.length
+        const invalidPreview =
+          invalidCount > 0 ? ` (${invalidList.slice(0, INVALID_URL_PREVIEW_LIMIT).join(", ")})` : ""
+        const suffix = invalidCount > 0 ? ` · ${invalidCount} ungültige URLs entfernt${invalidPreview}` : ""
+        setStatus(`Gespeichert: ${data?.pixels ?? 0} Pixel · ${data?.postbacks ?? 0} Postbacks${suffix}`)
       }
     } catch {
       setStatus("Tracking konnte nicht gespeichert werden.")

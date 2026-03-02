@@ -1,14 +1,15 @@
 import { NextRequest, NextResponse } from "next/server"
-import { setAffiliateTracking } from "@/lib/affiliate-tracking"
+import crypto from "crypto"
+import { normalizeTrackingUrls, setAffiliateTracking } from "@/lib/affiliate-tracking"
 
 export const runtime = "nodejs"
 export const dynamic = "force-dynamic"
 
-function normalizeList(value: unknown): string[] {
-  if (!value) return []
-  if (Array.isArray(value)) return value.filter((v): v is string => typeof v === "string" && v.length > 0)
-  if (typeof value === "string") return value.length > 0 ? [value] : []
-  return []
+function safeEqual(a: string, b: string) {
+  const bufA = Buffer.from(a)
+  const bufB = Buffer.from(b)
+  if (bufA.length !== bufB.length) return false
+  return crypto.timingSafeEqual(bufA, bufB)
 }
 
 export async function POST(req: NextRequest) {
@@ -16,7 +17,7 @@ export async function POST(req: NextRequest) {
   const secret = process.env.AFFILIATE_DASH_SECRET
   const headerSecret = req.headers.get("x-affiliate-secret") ?? ""
   const bodySecret = typeof body?.secret === "string" ? body.secret : ""
-  if (secret && headerSecret !== secret && bodySecret !== secret) {
+  if (secret && !safeEqual(headerSecret, secret) && !safeEqual(bodySecret, secret)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 
@@ -28,8 +29,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "affiliate_ref missing" }, { status: 400 })
   }
 
-  const pixels = normalizeList(body?.pixels)
-  const postbacks = normalizeList(body?.postbacks)
+  const pixels = normalizeTrackingUrls(body?.pixels)
+  const postbacks = normalizeTrackingUrls(body?.postbacks)
 
   setAffiliateTracking(affiliateRef, { pixels, postbacks })
 

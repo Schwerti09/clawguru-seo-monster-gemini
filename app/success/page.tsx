@@ -133,7 +133,15 @@ export default async function SuccessPage({
               <div className="sr-only" aria-hidden="true">
                 {pixelUrls.map((url) => (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img key={url} src={url} alt="" width={1} height={1} />
+                  <img
+                    key={url}
+                    src={url}
+                    alt=""
+                    width={1}
+                    height={1}
+                    aria-hidden="true"
+                    style={{ display: "none" }}
+                  />
                 ))}
               </div>
             ) : null}

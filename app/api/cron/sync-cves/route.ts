@@ -9,8 +9,8 @@ import { BASE_URL } from "@/lib/config"
 export const dynamic = "force-dynamic"
 export const runtime = "nodejs"
 
-const BATCH_SIZE = 200
-const MAX_NEW_CVES = 20
+const BATCH_SIZE = Number.parseInt(process.env.CVE_INDEX_BATCH_SIZE ?? "200", 10) || 200
+const MAX_NEW_CVES = Number.parseInt(process.env.CVE_SYNC_MAX_NEW ?? "20", 10) || 20
 
 export async function GET(req: NextRequest) {
   const secret = process.env.CRON_SECRET
@@ -38,23 +38,46 @@ export async function GET(req: NextRequest) {
 
   const urls: string[] = []
 
-  for (const cveId of fresh) {
-    const entry = getCveEntry(cveId)
-    if (!entry) continue
-    const ai = await generateCveContent(entry).catch(() => null)
-    const translations = await Promise.all(
-      SUPPORTED_LOCALES.map((locale) =>
-        translateRunbook({ slug: entry.slug, title: entry.name, summary: entry.description, targetLocale: locale })
-      )
+  const processed: Array<{
+    entry: NonNullable<ReturnType<typeof getCveEntry>>
+    aiGenerated: boolean
+    locales: string[]
+  } | null> = []
+  const concurrentCveProcessing = 3
+  for (let i = 0; i < fresh.length; i += concurrentCveProcessing) {
+    const batch = fresh.slice(i, i + concurrentCveProcessing)
+    const batchResults = await Promise.all(
+      batch.map(async (cveId) => {
+        const entry = getCveEntry(cveId)
+        if (!entry) return null
+        const ai = await generateCveContent(entry).catch((err) => {
+          console.error("[sync-cves] generateCveContent", entry.cveId, err instanceof Error ? err.message : err)
+          return null
+        })
+        const translations = await Promise.all(
+          SUPPORTED_LOCALES.map((locale) =>
+            translateRunbook({ slug: entry.slug, title: entry.name, summary: entry.description, targetLocale: locale })
+          )
+        )
+        return {
+          entry,
+          aiGenerated: Boolean(ai?.aiGenerated),
+          locales: translations.map((t) => t.locale),
+        }
+      })
     )
+    processed.push(...batchResults)
+  }
+
+  for (const item of processed.filter((x): x is NonNullable<typeof x> => Boolean(x))) {
     generated.push({
-      cveId,
-      aiGenerated: Boolean(ai?.aiGenerated),
-      locales: translations.map((t) => t.locale),
+      cveId: item.entry.cveId,
+      aiGenerated: item.aiGenerated,
+      locales: item.locales,
     })
     for (const locale of SUPPORTED_LOCALES) {
       if (urls.length >= BATCH_SIZE) break
-      urls.push(`${BASE_URL}${localePrefix(locale)}/solutions/fix-${entry.cveId}`)
+      urls.push(`${BASE_URL}${localePrefix(locale)}/solutions/fix-${item.entry.cveId}`)
     }
   }
 

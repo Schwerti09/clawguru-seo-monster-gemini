@@ -76,6 +76,7 @@ const TRUST_STATS = [
 ]
 
 export default function TrustSecurity({ fullPage = false }: { fullPage?: boolean }) {
+  // Dynamic render to personalize trust signals by geo cookie.
   const geoCountry = cookies().get("cg_geo_country")?.value?.toUpperCase() ?? ""
   const complianceSignals =
     geoCountry === "US"

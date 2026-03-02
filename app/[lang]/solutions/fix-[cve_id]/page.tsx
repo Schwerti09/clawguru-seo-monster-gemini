@@ -12,6 +12,7 @@ export async function generateMetadata({
 }: {
   params: { lang: string; cve_id: string }
 }) {
+  // Metadata is language-agnostic; CVE content is identical across locales.
   return baseGenerateMetadata({ params: { cve_id: params.cve_id } })
 }
 

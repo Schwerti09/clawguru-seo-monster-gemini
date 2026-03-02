@@ -15,10 +15,13 @@ type GeminiQueueTask = {
   model: string
   temperature: number
   maxOutputTokens: number
-  queuedAt: string
+  enqueuedAt: string
 }
 
 const LOCAL_QUEUE: GeminiQueueTask[] = []
+const LOCAL_QUEUE_LIMIT = 100
+// URL path length guard for Upstash REST payloads.
+const MAX_QUEUE_PAYLOAD_BYTES = 2000
 
 function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms))
@@ -27,12 +30,22 @@ function sleep(ms: number) {
 async function queueGeminiTask(task: GeminiQueueTask): Promise<void> {
   const url = process.env.UPSTASH_REDIS_REST_URL
   const token = process.env.UPSTASH_REDIS_REST_TOKEN
+  const encoded = encodeURIComponent(JSON.stringify(task))
   if (!url || !token) {
+    if (LOCAL_QUEUE.length >= LOCAL_QUEUE_LIMIT) {
+      LOCAL_QUEUE.shift()
+    }
+    LOCAL_QUEUE.push(task)
+    return
+  }
+  if (encoded.length > MAX_QUEUE_PAYLOAD_BYTES) {
+    if (LOCAL_QUEUE.length >= LOCAL_QUEUE_LIMIT) {
+      LOCAL_QUEUE.shift()
+    }
     LOCAL_QUEUE.push(task)
     return
   }
   const key = process.env.GEMINI_QUEUE_KEY || "gemini:queue"
-  const encoded = encodeURIComponent(JSON.stringify(task))
   await fetch(`${url}/rpush/${key}/${encoded}`, {
     method: "POST",
     headers: { Authorization: `Bearer ${token}` },
@@ -58,7 +71,7 @@ export async function callGeminiWithBackoff(opts: GeminiRequest): Promise<string
 
   const breaker = getCircuitBreaker("gemini-api")
   if (!breaker.isCallAllowed()) {
-    await queueGeminiTask({ prompt: opts.prompt, model, temperature, maxOutputTokens, queuedAt: new Date().toISOString() })
+    await queueGeminiTask({ prompt: opts.prompt, model, temperature, maxOutputTokens, enqueuedAt: new Date().toISOString() })
     return null
   }
 
@@ -68,8 +81,14 @@ export async function callGeminiWithBackoff(opts: GeminiRequest): Promise<string
     generationConfig: { temperature, maxOutputTokens },
   }
 
-  const backoff = [500, 1000, 2000]
-  for (let attempt = 0; attempt <= backoff.length; attempt += 1) {
+  const defaultBackoff = [500, 1000, 2000]
+  const backoff = (process.env.GEMINI_BACKOFF_MS ?? "")
+    .split(",")
+    .map((value) => parseInt(value.trim(), 10))
+    .filter((value) => Number.isFinite(value) && value > 0)
+  const retrySchedule = backoff.length > 0 ? backoff : defaultBackoff
+  const maxAttempts = retrySchedule.length + 1
+  for (let attempt = 0; attempt < maxAttempts; attempt += 1) {
     try {
       const res = await fetch(url, {
         method: "POST",
@@ -79,12 +98,12 @@ export async function callGeminiWithBackoff(opts: GeminiRequest): Promise<string
       })
 
       if (res.status === 429 || res.status === 503) {
-        breaker.recordFailure()
-        if (attempt < backoff.length) {
-          await sleep(backoff[attempt])
+        if (attempt < maxAttempts - 1) {
+          await sleep(retrySchedule[attempt] ?? retrySchedule[retrySchedule.length - 1])
           continue
         }
-        await queueGeminiTask({ prompt: opts.prompt, model, temperature, maxOutputTokens, queuedAt: new Date().toISOString() })
+        breaker.recordFailure()
+        await queueGeminiTask({ prompt: opts.prompt, model, temperature, maxOutputTokens, enqueuedAt: new Date().toISOString() })
         return null
       }
 
@@ -103,12 +122,12 @@ export async function callGeminiWithBackoff(opts: GeminiRequest): Promise<string
       breaker.recordFailure()
       return null
     } catch {
-      breaker.recordFailure()
-      if (attempt < backoff.length) {
-        await sleep(backoff[attempt])
+      if (attempt < maxAttempts - 1) {
+        await sleep(retrySchedule[attempt] ?? retrySchedule[retrySchedule.length - 1])
         continue
       }
-      await queueGeminiTask({ prompt: opts.prompt, model, temperature, maxOutputTokens, queuedAt: new Date().toISOString() })
+      breaker.recordFailure()
+      await queueGeminiTask({ prompt: opts.prompt, model, temperature, maxOutputTokens, enqueuedAt: new Date().toISOString() })
       return null
     }
   }

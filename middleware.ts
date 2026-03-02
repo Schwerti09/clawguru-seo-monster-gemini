@@ -7,7 +7,7 @@ import type { NextRequest } from "next/server"
 import { SUPPORTED_LOCALES, DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
 
 const LOCALE_COOKIE = "cg_locale"
-const GEO_COOKIE = "cg_geo_country"
+const GEO_COOKIE_NAME = "cg_geo_country"
 
 // ---------------------------------------------------------------------------
 // Maintenance Mode / Kill-Switch
@@ -105,7 +105,7 @@ function detectGeoCountry(request: NextRequest): string | null {
 function applyGeoHeaders(response: NextResponse, country: string | null) {
   if (!country) return response
   response.headers.set("x-clawguru-geo", country)
-  response.cookies.set(GEO_COOKIE, country, {
+  response.cookies.set(GEO_COOKIE_NAME, country, {
     maxAge: 60 * 60 * 24 * 7, // 7 days
     path: "/",
     sameSite: "lax",

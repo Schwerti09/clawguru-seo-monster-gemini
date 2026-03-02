@@ -15,6 +15,7 @@ export type UmamiEventName =
 
 const SHADOW_STORAGE_KEY = "cg_shadow_id"
 
+// Lightweight FNV-1a hash for best-effort fingerprinting (non-cryptographic).
 function hashString(input: string): string {
   let hash = 2166136261
   for (let i = 0; i < input.length; i += 1) {
@@ -28,21 +29,26 @@ export function getShadowId(): string | null {
   if (typeof window === "undefined") return null
   const cached = localStorage.getItem(SHADOW_STORAGE_KEY)
   if (cached) return cached
-  const fingerprint = [
-    navigator.userAgent,
-    navigator.language,
-    navigator.platform,
-    String(screen.width),
-    String(screen.height),
-    String(screen.colorDepth),
-    String(navigator.hardwareConcurrency || ""),
-    Intl.DateTimeFormat().resolvedOptions().timeZone || "",
-  ]
-    .filter(Boolean)
-    .join("|")
-  const shadowId = hashString(fingerprint)
-  localStorage.setItem(SHADOW_STORAGE_KEY, shadowId)
-  return shadowId
+  // Best-effort client fingerprint; collisions are acceptable for anonymous analytics.
+  try {
+    const fingerprint = [
+      navigator.userAgent,
+      navigator.language,
+      navigator.platform,
+      String(screen.width),
+      String(screen.height),
+      String(screen.colorDepth),
+      String(navigator.hardwareConcurrency || ""),
+      Intl.DateTimeFormat().resolvedOptions().timeZone || "",
+    ]
+      .filter(Boolean)
+      .join("|")
+    const shadowId = hashString(fingerprint)
+    localStorage.setItem(SHADOW_STORAGE_KEY, shadowId)
+    return shadowId
+  } catch {
+    return null
+  }
 }
 
 /**

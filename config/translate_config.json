@@ -1,0 +1,20 @@
+{
+  "_comment": "Translation configuration for the automated site-translation workflow. Copy this file and adjust values before running scripts/translate_site.py.",
+  "sitemap_url": "https://www.clawguru.com/sitemap.xml",
+  "local_html_dir": "",
+  "source_lang": "de",
+  "target_langs": ["en", "fr", "es"],
+  "api_provider": "deepl",
+  "output_dir": "i18n",
+  "domain_mapping": {},
+  "preserve_urls": true,
+  "hreflang_options": {
+    "inject_hreflang_tags": true,
+    "x_default_lang": "de"
+  },
+  "batch_size": 50,
+  "rate_limit_backoff_seconds": 60,
+  "max_retries": 3,
+  "log_level": "INFO",
+  "resume": true
+}

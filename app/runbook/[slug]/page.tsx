@@ -14,8 +14,9 @@ import { buildSocialSnippet, buildSocialTitle } from "@/lib/social-snippet"
 
 // Pre-build slug→runbook Map for O(1) related lookups on static RUNBOOKS
 const RUNBOOK_MAP = new Map(RUNBOOKS.map((r) => [r.slug, r]))
+const MAX_RELATED_RUNBOOKS = 8
 const LINK_ENGINE = buildLinkEngine(RUNBOOKS, {
-  maxLinks: 8,
+  maxLinks: MAX_RELATED_RUNBOOKS,
   urlForPage: (page) => `/runbook/${page.slug}`,
   authorityForPage: (page) => page.clawScore,
 })
@@ -266,10 +267,10 @@ export default function RunbookPage({ params }: { params: { slug: string } }) {
       ...r.relatedSlugs,
       ...LINK_ENGINE.linksForSlug(r.slug).map((link) => link.slug),
     ])
-  ).slice(0, 8)
+  ).slice(0, MAX_RELATED_RUNBOOKS)
   const relatedList = relatedSlugs.length > 0
     ? relatedSlugs.map((s) => RUNBOOK_MAP.get(s) ?? getRunbook(s)).filter(Boolean) as Runbook[]
-    : RUNBOOKS.filter((x) => x.slug !== r.slug && x.tags.some((t) => r.tags.includes(t))).slice(0, 8)
+    : RUNBOOKS.filter((x) => x.slug !== r.slug && x.tags.some((t) => r.tags.includes(t))).slice(0, MAX_RELATED_RUNBOOKS)
 
   return (
     <Container>
@@ -401,7 +402,7 @@ export default function RunbookPage({ params }: { params: { slug: string } }) {
           <div className="mt-10">
             <h2 className="text-xl font-black mb-4">Verwandte Runbooks</h2>
             <div className="grid md:grid-cols-2 gap-4">
-              {relatedList.slice(0, 8).map((x) => (
+              {relatedList.slice(0, MAX_RELATED_RUNBOOKS).map((x) => (
                 <a
                   key={x.slug}
                   href={`/runbook/${x.slug}`}

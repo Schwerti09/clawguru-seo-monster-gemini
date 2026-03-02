@@ -3,9 +3,11 @@ import BuyButton from "@/components/commerce/BuyButton"
 import EnterpriseContact from "@/components/marketing/EnterpriseContact"
 
 export const metadata = {
-  title: "Day Pass | ClawGuru",
+  title: "Day Pass | ClawGuru – Sofortzugang für Security Incidents",
   description:
-    "24h Vollzugriff auf ClawGuru (OpsWall, Vault, Copilot, Badge Generator). Einmal zahlen, sofort loslegen.",
+    "Security Incident? Day Pass: 24h Vollzugriff auf alle Runbooks, Log4j-Check, Ransomware Playbooks, Copilot & mehr. Einmal zahlen, sofort loslegen – kein Abo-Approval nötig.",
+  keywords:
+    "Day Pass Security, Log4j quick check, Ransomware runbook download, incident response sofort, Security Notfall Zugang, CVE check, emergency runbook",
   alternates: { canonical: "/pricing" }
 }
 
@@ -132,6 +134,32 @@ const TEAM_GROUPS: FeatureGroup[] = [
   },
 ]
 
+const ENTERPRISE_GROUPS: FeatureGroup[] = [
+  {
+    heading: "Alles aus Teams",
+    items: [
+      { label: "Vollzugriff auf alle Pro- & Teams-Features" },
+    ]
+  },
+  {
+    heading: "Intel Feed API",
+    items: [
+      { label: "REST/JSON API – direkt in SIEM integrierbar", isNew: true },
+      { label: "API Key Authentifizierung (Bearer / X-API-Key)", isNew: true },
+      { label: "Filter nach Severity & Kategorie", isNew: true },
+      { label: "Maschinenlesbare Timestamps & Tags (STIX-kompatibel)", isNew: true },
+    ]
+  },
+  {
+    heading: "Enterprise Support",
+    items: [
+      { label: "Dedizierter API-Schlüssel (revocable)", isNew: true },
+      { label: "SLA-Garantie & Priority Support" },
+      { label: "Custom Onboarding & Integration Calls" },
+    ]
+  },
+]
+
 export default function PricingPage() {
   return (
     <main className="min-h-screen bg-[#05060A]">
@@ -148,9 +176,14 @@ export default function PricingPage() {
             Wähle deinen Zugang
           </h1>
           <p className="mt-4 text-gray-400 text-lg">
-            Day Pass für akute Probleme. Pro für dauerhaften Zugriff.<br className="hidden sm:block" />
-            Teams für Zusammenarbeit – Enterprise für individuelle Anforderungen.
+            Day Pass für akute Incidents – sofort, ohne Abo-Approval.<br className="hidden sm:block" />
+            Pro für dauerhaften Zugriff. Teams für Zusammenarbeit.
           </p>
+          {/* Emergency nudge */}
+          <div className="mt-5 inline-flex items-center gap-2 text-sm px-4 py-2 rounded-full border"
+            style={{ borderColor: "rgba(220,38,38,0.35)", color: "#f87171", background: "rgba(220,38,38,0.06)" }}>
+            🔥 Security Incident? <a href="/emergency" className="underline underline-offset-2 font-bold hover:opacity-80 transition-opacity">→ Sofort-Zugang für Notfälle</a>
+          </div>
         </div>
       </section>
 
@@ -183,8 +216,9 @@ export default function PricingPage() {
                 </div>
 
                 <p className="mt-4 text-sm text-gray-300 leading-relaxed">
-                  Brennt gerade was? 24 Stunden Vollzugriff – sofort aktiv nach Zahlung.
-                  Score, Copilot, OpsWall, Vault, ThreatMap, Mission Control – alles drin.
+                  Brennt gerade was? Log4j, Ransomware, exposed Keys – 24 Stunden Vollzugriff
+                  auf alle Runbooks, Copilot, OpsWall, Vault, ThreatMap & Mission Control.
+                  Sofort aktiv nach Zahlung, kein Abo-Approval nötig.
                 </p>
 
                 <FeatureList groups={DAY_PASS_GROUPS} />
@@ -296,51 +330,62 @@ export default function PricingPage() {
             </div>
           </div>
 
-          {/* ── Enterprise ── */}
-          <div className="mt-6 relative rounded-3xl p-[1px] overflow-hidden"
-            style={{ background: "linear-gradient(135deg, rgba(255,165,0,0.5) 0%, rgba(255,107,0,0.1) 100%)" }}>
-            <div className="rounded-3xl p-7 md:p-10" style={{ background: "#0f0a04" }}>
-              <div className="grid md:grid-cols-2 gap-10 items-start">
-
-                {/* Left: plan info */}
-                <div>
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="text-[11px] font-mono uppercase tracking-[0.2em]" style={{ color: "#ffa500" }}>
-                      Enterprise
-                    </div>
-                    <div className="text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full border"
-                      style={{ borderColor: "rgba(255,165,0,0.35)", color: "#ffa500", background: "rgba(255,165,0,0.08)" }}>
-                      Custom Pricing
-                    </div>
+          {/* ── Enterprise API ── */}
+          <div id="enterprise" className="mt-10 relative rounded-3xl p-[1px] overflow-hidden"
+            style={{ background: "linear-gradient(135deg, rgba(255,165,0,0.6) 0%, rgba(255,80,0,0.2) 100%)" }}>
+            <div className="rounded-3xl p-8" style={{ background: "#0f0a05" }}>
+              <div className="flex flex-col lg:flex-row lg:items-start gap-8">
+                {/* Left: features + API snippet */}
+                <div className="flex-1">
+                  <div className="text-[11px] font-mono uppercase tracking-[0.2em] mb-2" style={{ color: "#ffaa00" }}>
+                    Enterprise · API
                   </div>
-                  <div className="text-2xl font-black text-white font-heading mb-3">
-                    ClawGuru Enterprise
+                  <div className="text-2xl font-black text-white font-heading">ClawGuru Enterprise</div>
+                  <div className="mt-3 flex items-end gap-2">
+                    <span className="text-4xl font-black text-white">299€</span>
+                    <span className="text-sm text-gray-400 pb-1">/ Monat</span>
                   </div>
-                  <p className="text-gray-300 text-sm leading-relaxed mb-6">
-                    Für Organisationen mit mehr als 10 Mitarbeitern, individuellen Compliance-Anforderungen
-                    oder eigenem Deployment. Preise, SLAs und Feature-Sets werden individuell vereinbart.
+                  <p className="mt-3 text-sm text-gray-300 leading-relaxed">
+                    Direkter REST/JSON-Feed für euer SIEM, SOC oder eigenes Monitoring-Backend.
+                    API-Key-Auth, maschinenlesbare Events – kein manuelles Klicken mehr.
                   </p>
-                  <ul className="space-y-[7px]">
-                    {[
-                      "Unbegrenzte Sitze & individuelle Nutzerlimits",
-                      "Dedizierter Support & SLA-Garantie",
-                      "Custom Onboarding & Integration",
-                      "On-Premise / Private Deployment möglich",
-                      "Audit-Logs & Compliance-Reports (SOC 2, ISO 27001)",
-                      "Roadmap-Einfluss & exklusive Early Access",
-                      "Rechnungsstellung & flexible Zahlungsmodalitäten",
-                    ].map((feat) => (
-                      <li key={feat} className="flex items-start gap-2 text-sm text-gray-200">
-                        <span className="mt-[2px] shrink-0 size-[18px] rounded-full flex items-center justify-center text-[9px] font-bold"
-                          style={{ background: "rgba(255,165,0,0.12)", color: "#ffa500" }} aria-hidden="true">✓</span>
-                        <span className="leading-snug">{feat}</span>
-                      </li>
-                    ))}
-                  </ul>
+
+                  <FeatureList groups={ENTERPRISE_GROUPS} />
+
+                  {/* API quick-start snippet */}
+                  <div className="mt-6 rounded-2xl border border-orange-900/40 bg-black/40 p-4">
+                    <div className="text-xs font-mono uppercase tracking-[0.15em] text-orange-400 mb-3">
+                      API Quick-Start
+                    </div>
+                    <pre className="text-xs text-gray-300 overflow-x-auto whitespace-pre-wrap leading-relaxed">
+{`# Alle High-Severity Events abrufen
+curl https://clawguru.com/api/intel/feeds \\
+  -H "Authorization: Bearer YOUR_API_KEY" \\
+  -G --data-urlencode "severity=high"
+
+# Response (JSON – direkt in SIEM importierbar)
+{
+  "object": "list",
+  "total": 3,
+  "updatedAt": "2026-02-20T12:00:00Z",
+  "items": [
+    {
+      "id": "inc-001",
+      "title": "Exposed Gateway → Token Leakage",
+      "severity": "high",
+      "category": "exposure",
+      "when": "2026-02-20T00:00:00Z",
+      "actions": [...],
+      "tags": ["gateway", "token", "firewall"]
+    }
+  ]
+}`}
+                    </pre>
+                  </div>
                 </div>
 
                 {/* Right: contact form */}
-                <div>
+                <div className="lg:w-96 shrink-0">
                   <div className="text-xs font-mono uppercase tracking-[0.2em] text-gray-500 mb-5">
                     Sales kontaktieren
                   </div>

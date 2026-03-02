@@ -398,12 +398,13 @@ export async function getStripeCustomerEmails(): Promise<StripeCustomerRecord[]>
     let startingAfter: string | undefined = undefined
 
     while (hasMore) {
-      const page = await stripe.subscriptions.list({
+      const listParams: Parameters<typeof stripe.subscriptions.list>[0] = {
         limit: 100,
         status,
         expand: ["data.customer"],
-        ...(startingAfter ? { starting_after: startingAfter } : {}),
-      })
+      }
+      if (startingAfter) listParams.starting_after = startingAfter
+      const page = await stripe.subscriptions.list(listParams)
 
       for (const sub of page.data) {
         const customer = sub.customer

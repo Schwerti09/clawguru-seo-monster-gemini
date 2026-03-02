@@ -1,6 +1,6 @@
 import Container from "@/components/shared/Container"
 import { generateAffiliateLeaderboard } from "@/lib/affiliates"
-import { type Locale, SUPPORTED_LOCALES, t, localeDir } from "@/lib/i18n"
+import { type Locale, SUPPORTED_LOCALES, t, localeDir, LOCALE_HREFLANG } from "@/lib/i18n"
 
 const LEADERBOARD = generateAffiliateLeaderboard(60)
 
@@ -9,6 +9,15 @@ function rankTone(rank: number) {
   if (rank <= 3) return "text-emerald-300"
   if (rank <= 10) return "text-brand-cyan"
   return "text-gray-400"
+}
+
+function formatPayout(value: number, locale: Locale) {
+  const tag = LOCALE_HREFLANG[locale] ?? "de"
+  return new Intl.NumberFormat(tag, {
+    style: "currency",
+    currency: "EUR",
+    maximumFractionDigits: 0,
+  }).format(value)
 }
 
 export default function AffiliateLeaderboard({ locale = "de" }: { locale?: Locale }) {
@@ -45,7 +54,7 @@ export default function AffiliateLeaderboard({ locale = "de" }: { locale?: Local
               <span className="text-right pr-6 text-gray-400">{entry.referrals}</span>
               <span className="text-right pr-6 text-gray-500">{entry.region}</span>
               <span className="text-right font-black text-emerald-300">
-                €{entry.payouts.toLocaleString("de-DE")}
+                {formatPayout(entry.payouts, resolvedLocale)}
               </span>
             </div>
           ))}

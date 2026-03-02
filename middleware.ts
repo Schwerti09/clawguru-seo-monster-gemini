@@ -124,6 +124,10 @@ export function middleware(request: NextRequest) {
     return response
   }
 
+  if (request.method !== "GET" && request.method !== "HEAD") {
+    return NextResponse.next()
+  }
+
   // ---------------------------------------------------------------------------
   // Maintenance Mode check – redirect everyone except bypass users
   // ---------------------------------------------------------------------------
@@ -208,8 +212,8 @@ export const config = {
      * Match all paths except:
      * - _next/static (static files)
      * - _next/image (image optimization)
-     * - favicon.ico
+     * - favicon.ico, robots.txt, sitemap.xml, api, etc.
      */
-    "/((?!_next/static|_next/image|favicon.ico).*)",
+    "/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|sitemaps|api|manifest.json|og-image.png).*)",
   ],
 }

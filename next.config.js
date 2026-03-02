@@ -33,10 +33,16 @@ const SECURITY_HEADERS = [
 
 const nextConfig = {
   reactStrictMode: true,
+  trailingSlash: false,
   eslint: {
     // ESLint is run separately (npm run lint); disable it during `next build`
     // to prevent the Node.js heap from running out of memory on Netlify.
     ignoreDuringBuilds: true,
+  },
+  images: {
+    remotePatterns: [
+      { protocol: "https", hostname: "**" },
+    ],
   },
   // 100/100 OPTIMIZATION 2026: Security & performance headers
   async headers() {

@@ -1,23 +1,33 @@
 // netlify/functions/daily-index.mts
 // Netlify Scheduled Function – runs daily at 04:00 UTC.
-// Triggers the Google Indexing API batch submission via lib/google-indexer.ts.
+// Delegates to the Next.js API route /api/google-indexing/cron which runs the
+// actual Google Indexing API submission (keeps this function bundle lightweight).
 
 import type { Config } from "@netlify/functions"
-import { runDailyIndexing } from "../../lib/google-indexer"
 
 export default async function handler() {
-  console.log("[daily-index] Starting Google Indexing API batch submission…")
+  const base = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
+  const secret = process.env.CRON_SECRET
+
+  const url = `${base}/api/google-indexing/cron`
+  const headers: Record<string, string> = { "Content-Type": "application/json" }
+  if (secret) {
+    headers["Authorization"] = `Bearer ${secret}`
+  }
 
   try {
-    const result = await runDailyIndexing()
+    const res = await fetch(url, { headers })
+    const body = await res.json().catch((e: unknown) => {
+      console.warn("[daily-index] Could not parse response JSON:", e)
+      return {}
+    })
 
     console.log(
-      `[daily-index] Done. submitted=${result.submitted.length}` +
-        ` skipped=${result.skipped.length}` +
-        ` errors=${result.errors.length}`
+      `[daily-index] status=${res.status} ok=${(body as { ok?: boolean }).ok ?? "?"}`,
+      JSON.stringify(body)
     )
   } catch (err) {
-    console.error("[daily-index] Indexing run failed:", err)
+    console.error("[daily-index] Request failed:", err)
   }
 }
 

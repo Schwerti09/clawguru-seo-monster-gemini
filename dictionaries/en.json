@@ -1,0 +1,60 @@
+{
+  "hero": {
+    "badge": "Mycelial Singularity Engine v3.0 · GENESIS PROTOCOL ACTIVE",
+    "subtitle": "The living mycelium of 1M+ runbooks. Every node a unit of knowledge, every edge a semantic relationship. Force-directed graph, Darwinian Evolution Engine, and Oracle Mode – the world's most advanced ops knowledge base.",
+    "ctaMycelium": "Living Mycelium →",
+    "ctaCopilot": "Ask Copilot",
+    "ctaProKits": "Pro Kits (Stripe)",
+    "ctaIntel": "Intel Feed",
+    "miniCopilotTitle": "Mini-Copilot",
+    "miniCopilotSubtitle": "Describe your problem in 1 sentence. We'll guide you to the right hub.",
+    "miniCopilotPlaceholder": "e.g. 'I think my gateway is exposed'",
+    "miniCopilotSubmit": "Go",
+    "popularPromptsTitle": "Popular Prompts",
+    "noLoginNote": "No login. No dark patterns. Just a page that truly pulls you out of the fire.",
+    "featureCopilot": "Copilot",
+    "featureCopilotDesc": "Conversation → Runbook",
+    "featureVault": "Vault",
+    "featureVaultDesc": "References & Patterns",
+    "featureAcademy": "Academy",
+    "featureAcademyDesc": "Sprints, not courses",
+    "titleSuffix": "Mycelial Singularity Engine v3.0"
+  },
+  "nav": {
+    "live": "Live",
+    "securityCheck": "Security Check",
+    "copilot": "Copilot",
+    "runbooks": "Runbooks",
+    "intelFeed": "Intel Feed",
+    "pricing": "Pricing",
+    "emergency": "Emergency",
+    "proKits": "Pro Kits"
+  },
+  "dayPass": {
+    "label": "Day Pass (24h)"
+  },
+  "jackpot": {
+    "kicker": "Jackpot",
+    "title": "You don't want to \"read\". You want to solve.",
+    "subtitle": "ClawGuru is an operational security layer: Score → Runbook → Fix → Re-Check → Share.",
+    "liveScore": "Live Score",
+    "liveScoreDesc": "30 seconds. No fluff. Your top 3 risks.",
+    "copilotRunbooks": "Copilot Runbooks",
+    "copilotRunbooksDesc": "You describe the stack. We provide a runbook to work through.",
+    "kitsTemplates": "Kits + Templates",
+    "kitsTemplatesDesc": "Copy/paste assets you can deploy directly to production.",
+    "liveOpsWall": "Live Ops Wall",
+    "liveOpsWallDesc": "Trends + hot fixes. Decide faster, fix faster.",
+    "runbooksLink": "Runbooks →",
+    "allPlans": "All Plans →",
+    "discordOpsRoom": "Discord Ops Room →",
+    "proTip": "Pro tip: After checkout, click",
+    "activateAccess": "\"Activate Access\"",
+    "then": "→ Dashboard."
+  },
+  "faq": {
+    "kicker": "FAQ",
+    "title": "Short. Sharp. Helpful.",
+    "subtitle": "Some questions always come up. Here are the answers."
+  }
+}

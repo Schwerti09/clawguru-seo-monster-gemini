@@ -1,4 +1,18 @@
 import { NextRequest, NextResponse } from "next/server"
+import { checkRateLimit, getClientIp } from "@/lib/rate-limit"
+import { apiCacheGet, apiCacheSet, buildCacheKey } from "@/lib/api-cache"
+import { getCircuitBreaker } from "@/lib/circuit-breaker"
+import { validatePayload } from "@/lib/payload-validator"
+import { isTokenDenied } from "@/lib/token-deny-list"
+import { verifyAccessToken } from "@/lib/access-token"
+import { cookies } from "next/headers"
+
+// Circuit breaker for the (expensive) heuristics pipeline.
+// Opens after 5 consecutive failures; recovers after 30 s.
+const breaker = getCircuitBreaker("security-check", {
+  failureThreshold: 5,
+  recoveryTimeoutMs: 30_000,
+})
 
 function fnv1a(str: string) {
   let h = 2166136261
@@ -19,14 +33,83 @@ function looksLocal(target: string) {
 }
 
 export async function POST(request: NextRequest) {
+  // ── 1. Payload validation (size + injection guard) ──────────────────────────
+  const rawBody = await request.text()
+  const validation = validatePayload(rawBody, {
+    maxBytes: 8_192,
+    requiredFields: [{ name: "target", type: "string", maxLength: 253 }],
+  })
+  if (!validation.ok) {
+    return NextResponse.json({ error: validation.error }, { status: validation.status })
+  }
+  const target = String((validation.data as { target: string }).target).trim()
+  if (!target) {
+    return NextResponse.json({ error: "Bitte gib eine IP oder Domain ein" }, { status: 400 })
+  }
+
+  // ── 2. Rate limiting (hard per-IP + soft per-user) ──────────────────────────
+  const ip = getClientIp(request.headers)
+  const tokenCookie = cookies().get("claw_access")?.value || ""
+  const tokenPayload = tokenCookie ? verifyAccessToken(tokenCookie) : null
+
+  // Check token deny-list before using its identity for rate-limiting
+  if (tokenCookie && isTokenDenied(tokenCookie)) {
+    return NextResponse.json({ error: "Token revoked" }, { status: 401 })
+  }
+
+  const userId = tokenPayload?.customerId
+  const rl = checkRateLimit(ip, userId, {
+    softLimitPerMinute: 30,
+    hardLimitPerMinute: 100,
+  })
+
+  if (!rl.allowed) {
+    return NextResponse.json(
+      {
+        error:
+          rl.limitedBy === "hard"
+            ? "Too many requests from your IP. Please try again later."
+            : "Rate limit exceeded. Please slow down.",
+        retryAfter: Math.ceil((rl.resetAt - Date.now()) / 1000),
+      },
+      {
+        status: 429,
+        headers: {
+          "Retry-After": String(Math.ceil((rl.resetAt - Date.now()) / 1000)),
+          "X-RateLimit-Remaining": "0",
+          "X-RateLimit-Reset": String(Math.ceil(rl.resetAt / 1000)),
+        },
+      }
+    )
+  }
+
+  // ── 3. Cache lookup (1 h TTL – identical targets served instantly) ──────────
+  const cacheKey = buildCacheKey("security-check", { target })
+  const cached = apiCacheGet<object>(cacheKey)
+  if (cached !== null) {
+    return NextResponse.json({ ...cached, fromCache: true }, {
+      status: 200,
+      headers: {
+        "X-RateLimit-Remaining": String(rl.remaining),
+        "X-RateLimit-Reset": String(Math.ceil(rl.resetAt / 1000)),
+      },
+    })
+  }
+
+  // ── 4. Circuit breaker – graceful degradation ───────────────────────────────
+  if (!breaker.isCallAllowed()) {
+    return NextResponse.json(
+      {
+        error: "Service temporarily limited. Please try again in a moment.",
+        degraded: true,
+        circuitState: breaker.getState(),
+      },
+      { status: 503 }
+    )
+  }
+
   try {
-    const body = await request.json().catch(() => ({}))
-    const target = String(body?.target || "").trim()
-
-    if (!target) {
-      return NextResponse.json({ error: "Bitte gib eine IP oder Domain ein" }, { status: 400 })
-    }
-
+    // ── 5. Core heuristics pipeline ───────────────────────────────────────────
     // Heuristisch: wir machen KEINEN echten Portscan. Wir geben eine Risiko-Einschätzung
     // basierend auf typischen Mustern und einem stabilen Hash (damit das Ergebnis nicht bei jedem Refresh flippt).
     const seed = fnv1a(target)
@@ -78,8 +161,16 @@ export async function POST(request: NextRequest) {
         "Hinweis: Dies ist ein heuristischer Risiko-Check (kein Portscan/kein Audit). Für belastbare Aussagen: Logs/Config prüfen oder professionellen Audit durchführen."
     }
 
-    return NextResponse.json(response, { status: 200 })
+    // Cache the result for 1 hour to avoid re-running the pipeline
+    apiCacheSet(cacheKey, response, 3_600)
+    breaker.recordSuccess()
+
+    return NextResponse.json({ ...response, fromCache: false }, {
+      status: 200,
+      headers: { "X-RateLimit-Remaining": String(rl.remaining) },
+    })
   } catch (error) {
+    breaker.recordFailure()
     console.error("Security Check Error:", error)
     return NextResponse.json({ error: "Interner Serverfehler" }, { status: 500 })
   }

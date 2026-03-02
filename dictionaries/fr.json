@@ -1,0 +1,60 @@
+{
+  "hero": {
+    "badge": "Mycelial Singularity Engine v3.0 · PROTOCOLE GENESIS ACTIF",
+    "subtitle": "Le mycélium vivant de plus d'un million de runbooks. Chaque nœud est une unité de connaissance, chaque arête une relation sémantique. Graphe force-dirigé, moteur d'évolution darwinienne et mode Oracle – la base de connaissances ops la plus avancée au monde.",
+    "ctaMycelium": "Mycélium vivant →",
+    "ctaCopilot": "Demander au Copilot",
+    "ctaProKits": "Pro Kits (Stripe)",
+    "ctaIntel": "Fil Intel",
+    "miniCopilotTitle": "Mini-Copilot",
+    "miniCopilotSubtitle": "Décrivez votre problème en 1 phrase. Nous vous guidons vers le bon hub.",
+    "miniCopilotPlaceholder": "ex. 'je crois que ma passerelle est exposée'",
+    "miniCopilotSubmit": "Go",
+    "popularPromptsTitle": "Requêtes populaires",
+    "noLoginNote": "Aucun login. Aucun dark pattern. Juste une page qui vous tire vraiment du pétrin.",
+    "featureCopilot": "Copilot",
+    "featureCopilotDesc": "Conversation → Runbook",
+    "featureVault": "Vault",
+    "featureVaultDesc": "Références & modèles",
+    "featureAcademy": "Academy",
+    "featureAcademyDesc": "Sprints, pas des cours",
+    "titleSuffix": "Mycelial Singularity Engine v3.0"
+  },
+  "nav": {
+    "live": "Live",
+    "securityCheck": "Vérification sécurité",
+    "copilot": "Copilot",
+    "runbooks": "Runbooks",
+    "intelFeed": "Fil Intel",
+    "pricing": "Tarifs",
+    "emergency": "Urgence",
+    "proKits": "Pro Kits"
+  },
+  "dayPass": {
+    "label": "Pass journalier (24h)"
+  },
+  "jackpot": {
+    "kicker": "Jackpot",
+    "title": "Vous ne voulez pas « lire ». Vous voulez résoudre.",
+    "subtitle": "ClawGuru est une couche de sécurité opérationnelle : Score → Runbook → Fix → Re-Check → Share.",
+    "liveScore": "Score en direct",
+    "liveScoreDesc": "30 secondes. Pas de bla-bla. Vos 3 principaux risques.",
+    "copilotRunbooks": "Runbooks Copilot",
+    "copilotRunbooksDesc": "Vous décrivez la stack. Nous fournissons un runbook à exécuter.",
+    "kitsTemplates": "Kits + Modèles",
+    "kitsTemplatesDesc": "Ressources copiables directement déployables en production.",
+    "liveOpsWall": "Mur Ops en direct",
+    "liveOpsWallDesc": "Tendances + correctifs chauds. Décidez plus vite, corrigez plus vite.",
+    "runbooksLink": "Runbooks →",
+    "allPlans": "Tous les plans →",
+    "discordOpsRoom": "Salon Discord Ops →",
+    "proTip": "Astuce Pro : après le paiement, cliquez sur",
+    "activateAccess": "« Activer l'accès »",
+    "then": "→ Dashboard."
+  },
+  "faq": {
+    "kicker": "FAQ",
+    "title": "Court. Net. Utile.",
+    "subtitle": "Certaines questions reviennent toujours. Voici les réponses."
+  }
+}

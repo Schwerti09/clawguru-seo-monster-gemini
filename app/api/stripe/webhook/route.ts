@@ -12,6 +12,213 @@ async function readRawBody(req: NextRequest) {
   return Buffer.from(ab)
 }
 
+// ---------------------------------------------------------------------------
+// invoice.paid – send finalized PDF invoice + self-service billing-portal link
+// ---------------------------------------------------------------------------
+async function handleInvoicePaid(invoice: Stripe.Invoice) {
+  const email = invoice.customer_email
+  if (!email) return
+
+  const customerId =
+    typeof invoice.customer === "string" ? invoice.customer : (invoice.customer as { id: string } | null)?.id
+  if (!customerId) return
+
+  const base = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
+
+  // Create a Stripe Billing Portal session for self-service invoice downloads
+  const portalSession = await stripe.billingPortal.sessions.create({
+    customer: customerId,
+    return_url: `${base}/dashboard`
+  })
+
+  const invoiceNumber = invoice.number || invoice.id
+  const pdfUrl = invoice.invoice_pdf || ""
+  const hostedUrl = invoice.hosted_invoice_url || portalSession.url
+  const support =
+    process.env.SUPPORT_EMAIL || process.env.EMAIL_REPLY_TO || process.env.EMAIL_FROM || "support@clawguru.org"
+
+  const html = `
+  <div style="font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial; line-height: 1.5; color:#111;">
+    <h2 style="margin:0 0 10px 0;">Deine ClawGuru Rechnung <span style="color:#0ea5e9;">#${invoiceNumber}</span></h2>
+    <p style="margin:0 0 14px 0;">Vielen Dank für deine Zahlung! Anbei deine steuerlich konforme Rechnung.</p>
+    ${
+      pdfUrl
+        ? `<p style="margin:0 0 18px 0;">
+        <a href="${pdfUrl}" style="display:inline-block; padding:12px 18px; background:#111827; color:#fff; text-decoration:none; border-radius:12px; font-weight:800;">
+          PDF-Rechnung herunterladen &#8594;
+        </a>
+      </p>`
+        : ""
+    }
+    <p style="margin:0 0 18px 0;">
+      <a href="${hostedUrl}" style="display:inline-block; padding:12px 18px; background:#0ea5e9; color:#fff; text-decoration:none; border-radius:12px; font-weight:800;">
+        Self-Service Portal – alle Rechnungen (12 Monate) &#8594;
+      </a>
+    </p>
+    <p style="margin:0; font-size:12px; color:#555;">
+      Fragen? ${support}
+    </p>
+  </div>`
+
+  await sendEmail({
+    to: email,
+    subject: `ClawGuru Rechnung #${invoiceNumber}`,
+    html
+  })
+}
+
+// ---------------------------------------------------------------------------
+// charge.refunded – log / mark the related invoice as a credit note
+// ---------------------------------------------------------------------------
+async function handleChargeRefunded(charge: Stripe.Charge) {
+  const invoiceId =
+    typeof charge.invoice === "string" ? charge.invoice : (charge.invoice as { id: string } | null)?.id
+  if (!invoiceId) return
+
+  // Retrieve the original invoice so we can reference it in the credit note
+  const invoice = await stripe.invoices.retrieve(invoiceId)
+
+  const refundedAmount = charge.amount_refunded // in smallest currency unit
+  const currency = charge.currency.toUpperCase()
+
+  // Create a Stripe Credit Note for the refunded amount so that the
+  // accounting ledger stays balanced (e.g. DATEV / QuickBooks month-end).
+  // Stripe only supports credit notes for invoices in "paid" or "open" state.
+  if (invoice.status === "paid") {
+    // Derive reason from charge metadata when available, fall back to a general value
+    type CreditNoteReason = "duplicate" | "fraudulent" | "order_change" | "product_unsatisfactory"
+    const validReasons: CreditNoteReason[] = [
+      "duplicate",
+      "fraudulent",
+      "order_change",
+      "product_unsatisfactory"
+    ]
+    const metaReason = charge.metadata?.refund_reason as CreditNoteReason | undefined
+    const reason: CreditNoteReason =
+      metaReason && validReasons.includes(metaReason) ? metaReason : "product_unsatisfactory"
+
+    await stripe.creditNotes.create({
+      invoice: invoiceId,
+      memo: `Rückerstattung / Refund – Charge ${charge.id} (${refundedAmount / 100} ${currency})`,
+      reason,
+      amount: refundedAmount
+    })
+  }
+
+  // Optionally notify the customer about the refund
+  const email =
+    typeof charge.billing_details?.email === "string" ? charge.billing_details.email : undefined
+  if (!email) return
+
+  const support =
+    process.env.SUPPORT_EMAIL || process.env.EMAIL_REPLY_TO || process.env.EMAIL_FROM || "support@clawguru.org"
+
+  const html = `
+  <div style="font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial; line-height: 1.5; color:#111;">
+    <h2 style="margin:0 0 10px 0;">Rückerstattung bestätigt</h2>
+    <p style="margin:0 0 14px 0;">Deine Rückerstattung von <b>${(refundedAmount / 100).toFixed(2)} ${currency}</b> wurde verarbeitet.</p>
+    <p style="margin:0 0 14px 0;">Eine Gutschrift wurde ausgestellt. Die Buchführung wurde entsprechend aktualisiert.</p>
+    <p style="margin:0; font-size:12px; color:#555;">Support: ${support}</p>
+  </div>`
+
+  await sendEmail({
+    to: email,
+    subject: "ClawGuru – Rückerstattung bestätigt",
+    html
+  })
+}
+
+
+// ---------------------------------------------------------------------------
+// affiliate transfer – pay commission to referring affiliate via Stripe Connect
+// ---------------------------------------------------------------------------
+// AFFILIATE_CONNECT_ACCOUNTS must be a JSON object mapping affiliate_ref → Stripe
+// connected account ID, e.g. {"hetzner":"acct_xxx","do":"acct_yyy"}.
+// AFFILIATE_COMMISSION_RATE sets the fraction of the sale paid as commission
+// (default 0.40 = 40 %). The transfer is fire-and-forget so failures never
+// block or break the checkout confirmation flow.
+async function handleAffiliateTransfer(session: Stripe.Checkout.Session) {
+  const affiliateRef = session.metadata?.affiliate_ref
+  if (!affiliateRef) return
+
+  const accountsJson = process.env.AFFILIATE_CONNECT_ACCOUNTS || "{}"
+  let accounts: Record<string, string>
+  try {
+    accounts = JSON.parse(accountsJson)
+  } catch {
+    return
+  }
+
+  const destination = accounts[affiliateRef]
+  if (!destination) return
+
+  const amountTotal = session.amount_total
+  if (!amountTotal || amountTotal <= 0) return
+
+  const rawRate = parseFloat(process.env.AFFILIATE_COMMISSION_RATE || "0.40")
+  // Validate: must be a finite number in the range (0, 1]
+  const rate = Number.isFinite(rawRate) && rawRate > 0 && rawRate <= 1 ? rawRate : 0.40
+  const commissionAmount = Math.round(amountTotal * rate)
+  if (commissionAmount <= 0) return
+
+  await stripe.transfers.create({
+    amount: commissionAmount,
+    currency: session.currency || "eur",
+    destination,
+    description: `Affiliate commission – ref:${affiliateRef} session:${session.id}`,
+    metadata: {
+      affiliate_ref: affiliateRef,
+      session_id: session.id,
+      commission_rate: String(rate)
+    }
+  })
+}
+
+// ---------------------------------------------------------------------------
+// customer.subscription.deleted – notify customer on cancellation
+// ---------------------------------------------------------------------------
+async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
+  const customerId =
+    typeof subscription.customer === "string"
+      ? subscription.customer
+      : (subscription.customer as { id: string } | null)?.id
+  if (!customerId) return
+
+  // Retrieve customer to get their email
+  const customer = await stripe.customers.retrieve(customerId)
+  if (customer.deleted) return
+  const email = (customer as Stripe.Customer).email
+  if (!email) return
+
+  const support =
+    process.env.SUPPORT_EMAIL || process.env.EMAIL_REPLY_TO || process.env.EMAIL_FROM || "support@clawguru.org"
+  const base = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
+
+  // Create a billing portal session so the customer can reactivate from their account
+  const portalSession = await stripe.billingPortal.sessions.create({
+    customer: customerId,
+    return_url: `${base}/dashboard`
+  })
+
+  const html = `
+  <div style="font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial; line-height: 1.5; color:#111;">
+    <h2 style="margin:0 0 10px 0;">Dein ClawGuru Abo wurde gekündigt</h2>
+    <p style="margin:0 0 14px 0;">Dein Abonnement läuft bis zum Ende des aktuellen Abrechnungszeitraums weiter.</p>
+    <p style="margin:0 0 14px 0;">Du kannst deinen Zugang jederzeit reaktivieren:</p>
+    <p style="margin:0 0 18px 0;">
+      <a href="${portalSession.url}" style="display:inline-block; padding:12px 18px; background:#0ea5e9; color:#fff; text-decoration:none; border-radius:12px; font-weight:800;">
+        Abo reaktivieren &#8594;
+      </a>
+    </p>
+    <p style="margin:0; font-size:12px; color:#555;">Support: ${support}</p>
+  </div>`
+
+  await sendEmail({
+    to: email,
+    subject: "ClawGuru – Abo gekündigt",
+    html
+  })
+}
 
 function planFromSession(session: Stripe.Checkout.Session): AccessPlan {
   const product = (session.metadata?.product || "").toLowerCase()
@@ -145,10 +352,29 @@ export async function POST(req: NextRequest) {
           expand: ["customer", "subscription"]
         })
         await sendAccessEmail(full)
+        // Fire-and-forget affiliate commission transfer (does not block response)
+        handleAffiliateTransfer(full).catch((err) => console.error("[affiliate-transfer]", err))
       }
     }
 
-    // optional: you can add cancellation/failed payment mails later
+    // Send finalized PDF invoice + self-service billing-portal link
+    if (event.type === "invoice.paid") {
+      const invoice = event.data.object as Stripe.Invoice
+      await handleInvoicePaid(invoice)
+    }
+
+    // Create a Stripe Credit Note for refunded charges so accounting stays balanced
+    if (event.type === "charge.refunded") {
+      const charge = event.data.object as Stripe.Charge
+      await handleChargeRefunded(charge)
+    }
+
+    // Notify customer when their subscription is cancelled
+    if (event.type === "customer.subscription.deleted") {
+      const subscription = event.data.object as Stripe.Subscription
+      await handleSubscriptionDeleted(subscription)
+    }
+
     return NextResponse.json({ received: true })
   } catch {
     return NextResponse.json({ received: true })

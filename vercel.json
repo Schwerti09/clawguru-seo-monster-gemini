@@ -30,6 +30,10 @@
     {
       "path": "/api/launch/cron",
       "schedule": "0 */6 * * *"
+    },
+    {
+      "path": "/api/agents/vulnerability",
+      "schedule": "0 3 * * *"
     }
   ]
 }

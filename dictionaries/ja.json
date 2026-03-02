@@ -1,0 +1,60 @@
+{
+  "hero": {
+    "badge": "Mycelial Singularity Engine v3.0 · ジェネシスプロトコル起動中",
+    "subtitle": "100万件以上のランブックからなる生きた菌糸ネットワーク。各ノードは知識の単位、各エッジは意味的な関係。フォースダイレクトグラフ、ダーウィン進化エンジン、Oracleモード — 世界最先端のOps知識ベース。",
+    "ctaMycelium": "生きた菌糸 →",
+    "ctaCopilot": "Copilotに聞く",
+    "ctaProKits": "Pro Kits (Stripe)",
+    "ctaIntel": "Intelフィード",
+    "miniCopilotTitle": "ミニ Copilot",
+    "miniCopilotSubtitle": "問題を1文で説明してください。適切なハブへご案内します。",
+    "miniCopilotPlaceholder": "例：'ゲートウェイが露出していると思う'",
+    "miniCopilotSubmit": "送信",
+    "popularPromptsTitle": "人気のプロンプト",
+    "noLoginNote": "ログイン不要。ダークパターンなし。本当に火の中から救い出すページ。",
+    "featureCopilot": "Copilot",
+    "featureCopilotDesc": "会話 → ランブック",
+    "featureVault": "Vault",
+    "featureVaultDesc": "リファレンス & パターン",
+    "featureAcademy": "Academy",
+    "featureAcademyDesc": "スプリント、コースではなく",
+    "titleSuffix": "Mycelial Singularity Engine v3.0"
+  },
+  "nav": {
+    "live": "ライブ",
+    "securityCheck": "セキュリティチェック",
+    "copilot": "Copilot",
+    "runbooks": "ランブック",
+    "intelFeed": "Intelフィード",
+    "pricing": "料金",
+    "emergency": "緊急",
+    "proKits": "Pro Kits"
+  },
+  "dayPass": {
+    "label": "デイパス（24時間）"
+  },
+  "jackpot": {
+    "kicker": "ジャックポット",
+    "title": "「読む」のではなく、解決したい。",
+    "subtitle": "ClawGuruは運用セキュリティ層です: Score → Runbook → Fix → Re-Check → Share。",
+    "liveScore": "ライブスコア",
+    "liveScoreDesc": "30秒。無駄なし。トップ3のリスク。",
+    "copilotRunbooks": "Copilot ランブック",
+    "copilotRunbooksDesc": "スタックを説明してください。実行するランブックを提供します。",
+    "kitsTemplates": "キット + テンプレート",
+    "kitsTemplatesDesc": "本番環境に直接デプロイできるコピー＆ペーストアセット。",
+    "liveOpsWall": "ライブ Ops ウォール",
+    "liveOpsWallDesc": "トレンド + ホットフィックス。より速く決断し、より速く修正。",
+    "runbooksLink": "ランブック →",
+    "allPlans": "すべてのプラン →",
+    "discordOpsRoom": "Discord Ops ルーム →",
+    "proTip": "Proのヒント: チェックアウト後にクリック",
+    "activateAccess": "「アクセスを有効化」",
+    "then": "→ ダッシュボード。"
+  },
+  "faq": {
+    "kicker": "FAQ",
+    "title": "短い。鋭い。役に立つ。",
+    "subtitle": "よく出る質問があります。以下が回答です。"
+  }
+}

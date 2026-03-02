@@ -2,6 +2,8 @@
 // AI Agent Swarm – 3 autonomous agents that run daily via cron.
 // Each agent uses Gemini to generate intelligence and content.
 
+import { fetchUpstreamCVEs, type UpstreamCVE } from "@/lib/upstream-cve"
+
 // ---------------------------------------------------------------------------
 // Vulnerability Hunter Agent
 // ---------------------------------------------------------------------------
@@ -19,25 +21,48 @@ export type CVERunbook = {
 
 export type VulnerabilityHunterResult = {
   runbooksCreated: CVERunbook[]
+  upstreamFetched: number
   errors: string[]
   ts: string
 }
 
 /**
  * WORLD BEAST: Scans for new CVEs daily and generates Runbooks.
- * Uses Gemini to synthesize CVE data into actionable ops runbooks.
+ * Fetches real CVE data from NVD and GitHub Advisory Database, then uses
+ * Gemini to synthesize that upstream data into actionable ops runbooks.
  */
 export async function runVulnerabilityHunter(): Promise<VulnerabilityHunterResult> {
   const result: VulnerabilityHunterResult = {
     runbooksCreated: [],
+    upstreamFetched: 0,
     errors: [],
     ts: new Date().toISOString(),
   }
 
+  // Fetch real upstream CVEs to ground the Gemini prompt in actual data
+  const upstream: UpstreamCVE[] = await fetchUpstreamCVEs()
+  result.upstreamFetched = upstream.length
+
+  let upstreamContext = ""
+  if (upstream.length > 0) {
+    // Use only the 10 most recent CVEs to keep the Gemini prompt concise
+    const lines = upstream.slice(0, 10).map((c) =>
+      `- ${c.id} [${c.severity}] (${c.publishedDate}): ${c.description}` +
+      (c.affectedProducts.length ? ` | Affects: ${c.affectedProducts.join(", ")}` : "")
+    )
+    upstreamContext = [
+      "",
+      "Use the following REAL upstream CVEs as your primary source material:",
+      ...lines,
+      "",
+    ].join("\n")
+  }
+
   const text = await callGemini([
     "You are the ClawGuru Vulnerability Hunter Agent 2026.",
-    "Generate 5 realistic CVE-based security runbooks for cloud operators.",
-    "Focus on CVEs from late 2025 or early 2026 affecting: Docker, Kubernetes, Nginx, Next.js, Redis, Postgres, or Cloudflare.",
+    "Generate security runbooks for cloud operators based on recent CVEs.",
+    upstreamContext ||
+      "Focus on CVEs from late 2025 or early 2026 affecting: Docker, Kubernetes, Nginx, Next.js, Redis, Postgres, or Cloudflare.",
     "Return ONLY a JSON array of objects with these keys:",
     '  cveId (string, e.g. "CVE-2026-XXXX"),',
     '  title (string, max 80 chars),',

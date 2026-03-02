@@ -10,8 +10,13 @@ import FAQ from "@/components/marketing/FAQ"
 import TransparencyWidget from "@/components/marketing/TransparencyWidget"
 import BuyButton from "@/components/commerce/BuyButton"
 import { COMMUNITY } from "@/lib/constants"
+import type { Dictionary } from "@/lib/getDictionary"
 
-export default function Home() {
+interface HomeProps {
+  dict?: Dictionary
+}
+
+export default function Home({ dict }: HomeProps) {
   const faqJsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -51,7 +56,7 @@ export default function Home() {
       <section className="min-h-screen border-b border-white/10 relative overflow-hidden">
         <NeuralGrid />
         <Container>
-          <HeroInstitution />
+          <HeroInstitution dict={dict?.hero} />
           <HeroSecurityCheck />
         </Container>
       </section>
@@ -93,17 +98,17 @@ export default function Home() {
         <Container>
           <div className="max-w-5xl mx-auto">
             <SectionTitle
-              kicker="Jackpot"
-              title="Du willst nicht „lesen“. Du willst lösen."
-              subtitle="ClawGuru ist eine operative Security-Schicht: Score → Runbook → Fix → Re-Check → Share."
+              kicker={dict?.jackpot.kicker ?? "Jackpot"}
+              title={dict?.jackpot.title ?? "Du willst nicht „lesen“. Du willst lösen."}
+              subtitle={dict?.jackpot.subtitle ?? "ClawGuru ist eine operative Security-Schicht: Score → Runbook → Fix → Re-Check → Share."}
             />
 
             <div className="mt-10 grid sm:grid-cols-2 md:grid-cols-4 gap-4">
               {[
-                ["Live Score", "30 Sekunden. Kein Gelaber. Deine Top 3 Risiken."],
-                ["Copilot Runbooks", "Du beschreibst den Stack. Wir geben ein Runbook zum Abarbeiten."],
-                ["Kits + Templates", "Copy/Paste Assets, die du direkt in Produktion ziehen kannst."],
-                ["Live Ops Wall", "Trends + Hot Fixes. Schneller entscheiden, schneller fixen."]
+                [dict?.jackpot.liveScore ?? "Live Score", dict?.jackpot.liveScoreDesc ?? "30 Sekunden. Kein Gelaber. Deine Top 3 Risiken."],
+                [dict?.jackpot.copilotRunbooks ?? "Copilot Runbooks", dict?.jackpot.copilotRunbooksDesc ?? "Du beschreibst den Stack. Wir geben ein Runbook zum Abarbeiten."],
+                [dict?.jackpot.kitsTemplates ?? "Kits + Templates", dict?.jackpot.kitsTemplatesDesc ?? "Copy/Paste Assets, die du direkt in Produktion ziehen kannst."],
+                [dict?.jackpot.liveOpsWall ?? "Live Ops Wall", dict?.jackpot.liveOpsWallDesc ?? "Trends + Hot Fixes. Schneller entscheiden, schneller fixen."]
               ].map(([t, d]) => (
                 <div key={t} className="p-6 rounded-3xl glass-card glass-card-hover">
                   <div className="text-xl font-black font-heading">{t}</div>
@@ -114,20 +119,22 @@ export default function Home() {
 
             <div className="mt-8 flex flex-wrap gap-3">
               
-              <BuyButton product="daypass" label="Day Pass (24h)" />
+              <BuyButton product="daypass" label={dict?.dayPass.label ?? "Day Pass (24h)"} />
               <a href="/runbooks" className="px-6 py-3 rounded-2xl border border-white/10 hover:border-white/20 font-bold text-gray-200 transition-all duration-300">
-                Runbooks →
+                {dict?.jackpot.runbooksLink ?? "Runbooks →"}
               </a>
               <a href="/pricing" className="px-6 py-3 rounded-2xl border border-white/10 hover:border-white/20 font-bold text-gray-200 transition-all duration-300">
-                Alle Pläne →
+                {dict?.jackpot.allPlans ?? "Alle Pläne →"}
               </a>
               <a href={COMMUNITY.discordInvite} className="px-6 py-3 rounded-2xl border border-white/10 hover:border-white/20 font-bold text-gray-200 transition-all duration-300">
-                Discord Ops-Room →
+                {dict?.jackpot.discordOpsRoom ?? "Discord Ops-Room →"}
               </a>
             </div>
 
             <div className="mt-6 p-5 rounded-3xl glass-card text-sm text-gray-400">
-              Pro-Tipp: Nach dem Checkout klickst du auf <span className="text-gray-200 font-bold">„Zugriff aktivieren“</span> → Dashboard.
+              {dict?.jackpot.proTip ?? "Pro-Tipp: Nach dem Checkout klickst du auf"}{" "}
+              <span className="text-gray-200 font-bold">{dict?.jackpot.activateAccess ?? "„Zugriff aktivieren“"}</span>{" "}
+              {dict?.jackpot.then ?? "→ Dashboard."}
             </div>
           </div>
         </Container>
@@ -178,9 +185,9 @@ export default function Home() {
           <div className="grid lg:grid-cols-2 gap-10 items-start">
             <div>
               <SectionTitle
-                kicker="FAQ"
-                title="Kurz. Hart. Hilfreich."
-                subtitle="Einige Fragen kommen immer. Hier sind die Antworten."
+                kicker={dict?.faq.kicker ?? "FAQ"}
+                title={dict?.faq.title ?? "Kurz. Hart. Hilfreich."}
+                subtitle={dict?.faq.subtitle ?? "Einige Fragen kommen immer. Hier sind die Antworten."}
               />
               <FAQ />
             </div>

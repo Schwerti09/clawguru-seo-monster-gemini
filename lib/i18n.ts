@@ -64,6 +64,10 @@ export const UI_STRINGS: Record<Locale, Record<string, string>> = {
     revenueToday: "Umsatz heute",
     globalRank: "Globaler Rang",
     activateAll: "One-Click World Domination",
+    faq: "Häufige Fragen",
+    lastUpdated: "Zuletzt aktualisiert",
+    sourcesStandards: "Quellen & Standards",
+    runbooksSubtitle: "Jede Seite ist ein Einstiegspunkt: Problem → Fix → Verifikation.",
   },
   en: {
     runbooks: "Runbooks",
@@ -88,6 +92,10 @@ export const UI_STRINGS: Record<Locale, Record<string, string>> = {
     revenueToday: "Revenue today",
     globalRank: "Global Rank",
     activateAll: "One-Click World Domination",
+    faq: "Frequently Asked Questions",
+    lastUpdated: "Last updated",
+    sourcesStandards: "Sources & Standards",
+    runbooksSubtitle: "Every page is an entry point: Problem → Fix → Verification.",
   },
   es: {
     runbooks: "Runbooks",
@@ -112,6 +120,10 @@ export const UI_STRINGS: Record<Locale, Record<string, string>> = {
     revenueToday: "Ingresos hoy",
     globalRank: "Rango Global",
     activateAll: "Dominación Mundial con Un Clic",
+    faq: "Preguntas Frecuentes",
+    lastUpdated: "Última actualización",
+    sourcesStandards: "Fuentes y Estándares",
+    runbooksSubtitle: "Cada página es un punto de entrada: Problema → Solución → Verificación.",
   },
   fr: {
     runbooks: "Runbooks",
@@ -136,6 +148,10 @@ export const UI_STRINGS: Record<Locale, Record<string, string>> = {
     revenueToday: "Revenus aujourd'hui",
     globalRank: "Rang Mondial",
     activateAll: "Domination Mondiale en Un Clic",
+    faq: "Foire Aux Questions",
+    lastUpdated: "Dernière mise à jour",
+    sourcesStandards: "Sources & Normes",
+    runbooksSubtitle: "Chaque page est un point d'entrée : Problème → Correction → Vérification.",
   },
   // NEXT-LEVEL UPGRADE 2026: Portuguese
   pt: {
@@ -161,6 +177,10 @@ export const UI_STRINGS: Record<Locale, Record<string, string>> = {
     revenueToday: "Receita hoje",
     globalRank: "Classificação Global",
     activateAll: "Dominação Mundial com Um Clique",
+    faq: "Perguntas Frequentes",
+    lastUpdated: "Última atualização",
+    sourcesStandards: "Fontes & Padrões",
+    runbooksSubtitle: "Cada página é um ponto de entrada: Problema → Correção → Verificação.",
   },
   // NEXT-LEVEL UPGRADE 2026: Italian
   it: {
@@ -186,6 +206,10 @@ export const UI_STRINGS: Record<Locale, Record<string, string>> = {
     revenueToday: "Entrate oggi",
     globalRank: "Classifica Globale",
     activateAll: "Dominazione Mondiale in Un Click",
+    faq: "Domande Frequenti",
+    lastUpdated: "Ultimo aggiornamento",
+    sourcesStandards: "Fonti & Standard",
+    runbooksSubtitle: "Ogni pagina è un punto di ingresso: Problema → Soluzione → Verifica.",
   },
   // NEXT-LEVEL UPGRADE 2026: Russian
   ru: {
@@ -211,6 +235,10 @@ export const UI_STRINGS: Record<Locale, Record<string, string>> = {
     revenueToday: "Доход сегодня",
     globalRank: "Глобальный рейтинг",
     activateAll: "Мировое господство в один клик",
+    faq: "Часто задаваемые вопросы",
+    lastUpdated: "Последнее обновление",
+    sourcesStandards: "Источники & Стандарты",
+    runbooksSubtitle: "Каждая страница — точка входа: Проблема → Исправление → Верификация.",
   },
   // NEXT-LEVEL UPGRADE 2026: Chinese (Simplified)
   zh: {
@@ -236,6 +264,10 @@ export const UI_STRINGS: Record<Locale, Record<string, string>> = {
     revenueToday: "今日收益",
     globalRank: "全球排名",
     activateAll: "一键全球主导",
+    faq: "常见问题",
+    lastUpdated: "最后更新",
+    sourcesStandards: "来源与标准",
+    runbooksSubtitle: "每个页面都是入口点：问题 → 修复 → 验证。",
   },
   // NEXT-LEVEL UPGRADE 2026: Japanese
   ja: {
@@ -261,6 +293,10 @@ export const UI_STRINGS: Record<Locale, Record<string, string>> = {
     revenueToday: "本日の収益",
     globalRank: "グローバルランキング",
     activateAll: "ワンクリック世界制覇",
+    faq: "よくある質問",
+    lastUpdated: "最終更新",
+    sourcesStandards: "ソース & 標準",
+    runbooksSubtitle: "すべてのページがエントリーポイント：問題 → 修正 → 検証。",
   },
   // NEXT-LEVEL UPGRADE 2026: Arabic (RTL)
   ar: {
@@ -286,6 +322,10 @@ export const UI_STRINGS: Record<Locale, Record<string, string>> = {
     revenueToday: "الإيرادات اليوم",
     globalRank: "الترتيب العالمي",
     activateAll: "الهيمنة العالمية بنقرة واحدة",
+    faq: "الأسئلة الشائعة",
+    lastUpdated: "آخر تحديث",
+    sourcesStandards: "المصادر والمعايير",
+    runbooksSubtitle: "كل صفحة هي نقطة دخول: المشكلة → الإصلاح → التحقق.",
   },
 }
 

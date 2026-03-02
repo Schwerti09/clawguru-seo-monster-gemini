@@ -9,9 +9,16 @@ import { getTemporalHistory } from "@/lib/temporal-mycelium"
 import TemporalTimeline from "@/components/visual/TemporalTimeline"
 import { ActivateSwarmButton } from "@/components/shared/ActivateSwarmButton"
 import Link from "next/link"
+import { buildLinkEngine } from "@/lib/seo/link-engine"
 
-export const revalidate = 60 * 60 * 24 // 24h
+export const revalidate = 60 // 60s
 export const dynamicParams = true
+
+const LINK_ENGINE = buildLinkEngine(RUNBOOKS, {
+  maxLinks: 10,
+  urlForPage: (page) => `/runbook/${page.slug}`,
+  authorityForPage: (page) => page.clawScore,
+})
 
 export async function generateStaticParams() {
   // All 10 supported locales × top runbooks for full language coverage
@@ -193,23 +200,32 @@ export default async function LocalizedRunbookPage({
           </div>
         )}
 
-        {/* Related – up to 12 contextual links */}
-        {r.relatedSlugs.length > 0 && (
-          <div className="mt-8">
-            <h2 className="text-lg font-black mb-3">{t(locale, "related")}</h2>
-            <div className="grid sm:grid-cols-2 gap-3">
-              {r.relatedSlugs.slice(0, 12).map((slug) => (
-                <Link
-                  key={slug}
-                  href={`/${locale}/runbook/${slug}`}
-                  className="p-3 rounded-xl border border-gray-800 hover:border-brand-cyan/40 text-sm text-gray-300 hover:text-white"
-                >
-                  {slug.replace(/-/g, " ")}
-                </Link>
-              ))}
+        {/* Related – embedding-driven contextual links */}
+        {(() => {
+          const relatedSlugs = Array.from(
+            new Set([
+              ...r.relatedSlugs,
+              ...LINK_ENGINE.linksForSlug(r.slug).map((link) => link.slug),
+            ])
+          ).slice(0, 10)
+          if (relatedSlugs.length === 0) return null
+          return (
+            <div className="mt-8">
+              <h2 className="text-lg font-black mb-3">{t(locale, "related")}</h2>
+              <div className="grid sm:grid-cols-2 gap-3">
+                {relatedSlugs.map((slug) => (
+                  <Link
+                    key={slug}
+                    href={`/${locale}/runbook/${slug}`}
+                    className="p-3 rounded-xl border border-gray-800 hover:border-brand-cyan/40 text-sm text-gray-300 hover:text-white"
+                  >
+                    {slug.replace(/-/g, " ")}
+                  </Link>
+                ))}
+              </div>
             </div>
-          </div>
-        )}
+          )
+        })()}
 
         {/* Author box – E-E-A-T signals */}
         <div className="mt-10 p-6 rounded-2xl border border-gray-700 bg-gray-900/50">

@@ -3,6 +3,7 @@ import Stripe from "stripe"
 import { stripe } from "@/lib/stripe"
 import { signAccessToken, AccessPlan } from "@/lib/access-token"
 import { sendEmail } from "@/lib/email"
+import { buildSocialProofEventFromStripe, recordSocialProofEvent } from "@/lib/social-proof"
 
 export const runtime = "nodejs"
 
@@ -346,15 +347,23 @@ export async function POST(req: NextRequest) {
 
       // Ensure paid/complete
       const paid = session.payment_status === "paid" || session.status === "complete"
-      if (paid) {
-        // If we need subscription/customer ids reliably, retrieve expanded session
-        const full = await stripe.checkout.sessions.retrieve(session.id, {
-          expand: ["customer", "subscription"]
-        })
-        await sendAccessEmail(full)
-        // Fire-and-forget affiliate commission transfer (does not block response)
-        handleAffiliateTransfer(full).catch((err) => console.error("[affiliate-transfer]", err))
-      }
+        if (paid) {
+          // If we need subscription/customer ids reliably, retrieve expanded session
+          const full = await stripe.checkout.sessions.retrieve(session.id, {
+            expand: ["customer", "subscription"]
+          })
+          await sendAccessEmail(full)
+          recordSocialProofEvent(
+            buildSocialProofEventFromStripe({
+              id: full.id,
+              country: full.customer_details?.address?.country ?? undefined,
+              cveId: full.metadata?.cve_id ?? undefined,
+              runbookSlug: full.metadata?.runbook_slug ?? undefined,
+            })
+          )
+          // Fire-and-forget affiliate commission transfer (does not block response)
+          handleAffiliateTransfer(full).catch((err) => console.error("[affiliate-transfer]", err))
+        }
     }
 
     // Send finalized PDF invoice + self-service billing-portal link

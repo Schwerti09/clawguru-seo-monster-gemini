@@ -11,7 +11,7 @@ import {
 import { notFound } from "next/navigation"
 import { BASE_URL } from "@/lib/config"
 
-export const revalidate = 60 * 60 * 24
+export const revalidate = 60
 export const dynamicParams = true
 
 export async function generateStaticParams() {

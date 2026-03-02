@@ -34,6 +34,14 @@ const SECURITY_HEADERS = [
 const nextConfig = {
   reactStrictMode: true,
   trailingSlash: false,
+  poweredByHeader: false,
+  compress: true,
+  compiler: {
+    removeConsole: process.env.NODE_ENV === "production",
+  },
+  experimental: {
+    optimizePackageImports: ["lucide-react", "framer-motion"],
+  },
   eslint: {
     // ESLint is run separately (npm run lint); disable it during `next build`
     // to prevent the Node.js heap from running out of memory on Netlify.

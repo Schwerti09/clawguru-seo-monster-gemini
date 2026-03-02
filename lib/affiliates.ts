@@ -16,13 +16,29 @@ export function generateAffiliateLeaderboard(count = 60): AffiliateEntry[] {
     "Hawk", "Fox", "Cobra", "Panther", "Orca", "Puma", "Eagle",
   ]
   const regions = ["EU", "US", "APAC", "LATAM", "MEA"]
+  const referralBase = 140
+  const referralDecay = 2
+  const referralModulo = 4
+  const referralModuloDecay = 3
+  const referralFloor = 6
+  const payoutBase = 18500
+  const payoutDecay = 260
+  const payoutModulo = 5
+  const payoutModuloDecay = 110
+  const payoutFloor = 980
 
   return Array.from({ length: count }, (_, i) => {
     const seed = (i * 11 + 7) % (adjectives.length * nouns.length)
     const adj = adjectives[seed % adjectives.length]
     const noun = nouns[Math.floor(seed / adjectives.length) % nouns.length]
-    const referrals = Math.max(6, 140 - i * 2 - (i % 4) * 3)
-    const payouts = Math.max(980, Math.round(18500 - i * 260 - (i % 5) * 110))
+    const referrals = Math.max(
+      referralFloor,
+      referralBase - i * referralDecay - (i % referralModulo) * referralModuloDecay
+    )
+    const payouts = Math.max(
+      payoutFloor,
+      Math.round(payoutBase - i * payoutDecay - (i % payoutModulo) * payoutModuloDecay)
+    )
     return {
       rank: i + 1,
       handle: `${adj}${noun}${(i % 97) + 3}`,

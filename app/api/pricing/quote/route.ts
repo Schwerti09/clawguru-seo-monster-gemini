@@ -53,7 +53,7 @@ export async function GET(req: NextRequest) {
       : "daypass"
 
   const priceId = getPriceId(product)
-  if (!priceId) {
+  if (!priceId || !/^price_[A-Za-z0-9]+$/.test(priceId)) {
     return NextResponse.json({ error: "Missing Stripe price." }, { status: 500 })
   }
 

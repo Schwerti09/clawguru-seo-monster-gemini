@@ -10,6 +10,12 @@ export const dynamic = "force-dynamic"
 export const runtime = "nodejs"
 export const maxDuration = 300
 
+function resolveBatchSize() {
+  const parsed = parseInt(process.env.RETENTION_BATCH_SIZE || "10", 10)
+  if (!Number.isFinite(parsed) || parsed <= 0) return 10
+  return Math.min(parsed, 50)
+}
+
 export async function GET(req: NextRequest) {
   const secret = process.env.CRON_SECRET
   if (secret) {
@@ -42,10 +48,7 @@ export async function GET(req: NextRequest) {
   const subject = `🛡️ Security Alert – ${weekLabel}: ${threats.length} kritische Lücken`
   let sent = 0
   let failed = 0
-  const batchSize = Math.min(
-    Math.max(parseInt(process.env.RETENTION_BATCH_SIZE || "10", 10) || 10, 1),
-    50
-  )
+  const batchSize = resolveBatchSize()
 
   for (let i = 0; i < contacts.length; i += batchSize) {
     const batch = contacts.slice(i, i + batchSize)

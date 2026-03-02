@@ -4,7 +4,6 @@ export type ActiveDefenderContact = {
   email: string
   firstName?: string
   lastName?: string
-  name?: string
 }
 
 export type DefenderThreat = {
@@ -89,7 +88,6 @@ export async function listActiveDefenders(): Promise<ActiveDefenderContact[]> {
         email: row.email,
         firstName: row.first_name ?? undefined,
         lastName: row.last_name ?? undefined,
-        name: [row.first_name, row.last_name].filter(Boolean).join(" ") || undefined,
       })
     }
 
@@ -152,7 +150,7 @@ export function buildDefenderEmailHtml(opts: {
 }) {
   const { contact, threats, siteUrl, weekLabel } = opts
   const safeSiteUrl = siteUrl.replace(/["'<>]/g, "")
-  const name = contact.firstName || contact.name || "Defender"
+  const name = contact.firstName || contact.lastName || "Defender"
 
   const items = threats
     .map((t) => {
@@ -162,7 +160,7 @@ export function buildDefenderEmailHtml(opts: {
           <strong style="color:#f97316">${t.id}</strong>
           <span style="color:#9ca3af">(${t.severity}${t.cvssScore ? ` · CVSS ${t.cvssScore}` : ""})</span>
           <div style="color:#d1d5db;margin-top:4px;font-size:13px;line-height:1.6">${escapeHtml(t.summary)}</div>
-      <a href="${runbookUrl}" style="color:#22d3ee;font-weight:700;text-decoration:none">Fix-Runbook öffnen →</a>
+          <a href="${runbookUrl}" style="color:#22d3ee;font-weight:700;text-decoration:none">Fix-Runbook für ${t.id} öffnen →</a>
         </li>
       `
     })

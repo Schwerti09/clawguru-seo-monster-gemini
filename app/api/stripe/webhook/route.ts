@@ -364,7 +364,6 @@ export async function POST(req: NextRequest) {
           upsertActiveDefender({
             email: defenderEmail,
             firstName: trimmedName || undefined,
-            name: trimmedName || undefined,
           }).catch((err) => console.error("[active-defender]", err))
         }
       }

@@ -208,7 +208,7 @@ export const config = {
      * Match all paths except:
      * - _next/static (static files)
      * - _next/image (image optimization)
-     * - favicon.ico, robots.txt, etc.
+     * - favicon.ico
      */
     "/((?!_next/static|_next/image|favicon.ico).*)",
   ],

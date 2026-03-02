@@ -5,6 +5,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { RUNBOOKS } from "@/lib/pseo"
 import { buildMyceliumGraph, oracleSearch } from "@/lib/mycelium"
+import { isGeminiHardLimitReached, recordGeminiUsageFromResponse } from "@/lib/gemini-api"
 
 // MYCELIUM ORACLE v3.3 – Overlord AI: Oracle query modes
 export type OracleMode = "pure" | "temporal" | "swarm" | "prophetic"
@@ -36,6 +37,7 @@ const MODE_PROMPTS: Record<OracleMode, string> = {
 
 // MYCELIUM ORACLE v3.3 – Overlord AI: Call Gemini with streaming support
 async function callGemini(systemPrompt: string, question: string): Promise<string | null> {
+  if (isGeminiHardLimitReached()) return null
   const apiKey = process.env.GEMINI_API_KEY
   if (!apiKey) return null
 
@@ -57,6 +59,7 @@ async function callGemini(systemPrompt: string, question: string): Promise<strin
 
   if (!res.ok) return null
   const data = await res.json()
+  recordGeminiUsageFromResponse(data)
   const parts = data?.candidates?.[0]?.content?.parts
   if (!Array.isArray(parts)) return null
   const text = parts

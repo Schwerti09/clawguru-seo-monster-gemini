@@ -6,12 +6,14 @@
 import { NextResponse } from "next/server"
 import { RUNBOOKS } from "@/lib/pseo"
 import { computeQualityStats, validateRunbook, DEFAULT_THRESHOLDS } from "@/lib/quality-gate"
+import { isGeminiHardLimitReached, recordGeminiUsageFromResponse } from "@/lib/gemini-api"
 
 export const dynamic = "force-dynamic"
 export const runtime = "nodejs"
 
 // GENESIS QUALITY GATE 2.0 – Gemini auto-improve helper
 async function callGeminiImprove(runbookJson: string): Promise<string | null> {
+  if (isGeminiHardLimitReached()) return null
   const geminiKey = process.env.GEMINI_API_KEY
   const geminiModel = process.env.GEMINI_MODEL || "gemini-2.0-flash"
   const geminiBase = (
@@ -38,6 +40,7 @@ async function callGeminiImprove(runbookJson: string): Promise<string | null> {
     })
     if (!res.ok) return null
     const data = await res.json()
+    recordGeminiUsageFromResponse(data)
     const parts = data?.candidates?.[0]?.content?.parts
     if (Array.isArray(parts)) {
       return parts.map((p: { text?: string }) => p?.text ?? "").join("").trim() || null

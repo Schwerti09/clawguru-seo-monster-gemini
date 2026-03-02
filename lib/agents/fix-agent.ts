@@ -2,8 +2,11 @@
 // Automated Fix Code Generator – produces ready-to-use Docker, nginx, Terraform etc. code
 // for any runbook slug, using Gemini AI.
 
+import { isGeminiHardLimitReached, recordGeminiUsageFromResponse } from "@/lib/gemini-api"
+
 // WORLD BEAST UPGRADE: Gemini helper (self-contained)
 async function callGeminiFix(prompt: string): Promise<string | null> {
+  if (isGeminiHardLimitReached()) return null
   const geminiKey = process.env.GEMINI_API_KEY
   const geminiModel = process.env.GEMINI_MODEL || "gemini-1.5-flash"
   const geminiBase = (
@@ -25,6 +28,7 @@ async function callGeminiFix(prompt: string): Promise<string | null> {
     })
     if (!res.ok) return null
     const data = await res.json()
+    recordGeminiUsageFromResponse(data)
     const parts = data?.candidates?.[0]?.content?.parts
     if (Array.isArray(parts)) {
       return parts.map((p: { text?: string }) => p?.text ?? "").join("").trim() || null

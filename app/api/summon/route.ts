@@ -3,12 +3,14 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { isApiActive, apiUnavailableResponse } from "@/lib/api-guard";
+import { isGeminiHardLimitReached, recordGeminiUsageFromResponse } from "@/lib/gemini-api";
 
 // Maximum characters accepted from client to guard against oversized payloads
 const MAX_MESSAGE_LENGTH = 2000;
 
 // Call Gemini and return a response as the simulated "OpenAI voice"
 async function geminiSummonGenerate(userMessage: string): Promise<string | null> {
+  if (isGeminiHardLimitReached()) return null;
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) return null;
 
@@ -50,6 +52,7 @@ async function geminiSummonGenerate(userMessage: string): Promise<string | null>
 
   if (!res.ok) return null;
   const data = await res.json();
+  recordGeminiUsageFromResponse(data);
   const parts = data?.candidates?.[0]?.content?.parts;
   if (!Array.isArray(parts)) return null;
   const text = parts

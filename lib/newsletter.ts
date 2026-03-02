@@ -12,6 +12,7 @@
 import crypto from "crypto"
 import type Stripe from "stripe"
 import { stripe } from "@/lib/stripe"
+import { isGeminiHardLimitReached, recordGeminiUsageFromResponse } from "@/lib/gemini-api"
 
 // ---------------------------------------------------------------------------
 // Types
@@ -177,6 +178,14 @@ export async function summarizeThreats(cves: CveItem[]): Promise<SummarizedThrea
   const provider = (process.env.AI_PROVIDER || "openai").toLowerCase()
 
   if (provider === "gemini") {
+    if (isGeminiHardLimitReached()) {
+      return top5.map((c) => ({
+        id: c.id,
+        severity: c.severity,
+        cvssScore: c.cvssScore,
+        summary: c.description.slice(0, 300)
+      }))
+    }
     const geminiKey = process.env.GEMINI_API_KEY
     if (!geminiKey) throw new Error("GEMINI_API_KEY missing")
 
@@ -200,6 +209,7 @@ export async function summarizeThreats(cves: CveItem[]): Promise<SummarizedThrea
     const data = (await res.json()) as {
       candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }>
     }
+    recordGeminiUsageFromResponse(data)
     rawText =
       data.candidates?.[0]?.content?.parts?.map((p) => p.text ?? "").join("") ?? ""
   } else {

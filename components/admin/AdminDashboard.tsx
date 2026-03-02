@@ -17,11 +17,26 @@ type Overview = {
     trialingSubs: number
     lastPayments: Array<{ created: number; amount: number; currency: string; description?: string | null }>
   }
+  geminiUsage?: {
+    date: string
+    promptTokens: number
+    completionTokens: number
+    totalTokens: number
+    totalCostEur: number
+    requestCount: number
+    hardLimitEur: number
+    hardLimitReached: boolean
+    updatedAt: string
+  }
 }
 
 function money(v: number, currency = "eur") {
   const amt = v / 100
   return new Intl.NumberFormat("de-DE", { style: "currency", currency: currency.toUpperCase() }).format(amt)
+}
+
+function eur(v: number) {
+  return new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" }).format(v)
 }
 
 export default function AdminDashboard() {
@@ -59,6 +74,7 @@ export default function AdminDashboard() {
 
   const stripe = data?.stripe
   const last = useMemo(() => stripe?.lastPayments || [], [stripe])
+  const gemini = data?.geminiUsage
 
   const cardVariants = {
     hidden: { opacity: 0, y: 16 },
@@ -200,6 +216,49 @@ export default function AdminDashboard() {
               )}
             </motion.div>
           </div>
+
+          {gemini && (
+            <motion.div custom={2} initial="hidden" animate="visible" variants={cardVariants} className="p-6 rounded-3xl border border-gray-800 bg-black/30">
+              <div className="flex items-center gap-2 text-xs uppercase tracking-widest text-gray-400">
+                <Activity className="w-3.5 h-3.5" />
+                Gemini Token-Burn
+              </div>
+              <div className="mt-2 text-2xl font-black flex items-center gap-2">
+                <span className={gemini.hardLimitReached ? "text-red-300" : "text-cyan-300"}>
+                  {eur(gemini.totalCostEur)}
+                </span>
+                <span className="text-sm text-gray-500">heute</span>
+              </div>
+              <div className="mt-4 grid md:grid-cols-4 gap-4">
+                <div className="p-4 rounded-2xl border border-gray-800 bg-black/35">
+                  <div className="text-xs text-gray-400">Tokens</div>
+                  <div className="mt-1 text-xl font-black">{gemini.totalTokens.toLocaleString("de-DE")}</div>
+                </div>
+                <div className="p-4 rounded-2xl border border-gray-800 bg-black/35">
+                  <div className="text-xs text-gray-400">Prompt</div>
+                  <div className="mt-1 text-xl font-black">{gemini.promptTokens.toLocaleString("de-DE")}</div>
+                </div>
+                <div className="p-4 rounded-2xl border border-gray-800 bg-black/35">
+                  <div className="text-xs text-gray-400">Output</div>
+                  <div className="mt-1 text-xl font-black">{gemini.completionTokens.toLocaleString("de-DE")}</div>
+                </div>
+                <div className="p-4 rounded-2xl border border-gray-800 bg-black/35">
+                  <div className="text-xs text-gray-400">Requests</div>
+                  <div className="mt-1 text-xl font-black">{gemini.requestCount}</div>
+                </div>
+              </div>
+              <div className="mt-4 text-xs text-gray-500 flex flex-wrap items-center gap-2">
+                <span>Hard-Limit: {eur(gemini.hardLimitEur)}</span>
+                <span>·</span>
+                <span>Letztes Update: {new Date(gemini.updatedAt).toLocaleTimeString("de-DE")}</span>
+                {gemini.hardLimitReached && (
+                  <span className="px-2 py-0.5 rounded-full bg-red-950/40 text-red-300 border border-red-800">
+                    Limit erreicht – Runbooks pausiert
+                  </span>
+                )}
+              </div>
+            </motion.div>
+          )}
 
           <div className="grid lg:grid-cols-3 gap-6">
             <motion.div custom={2} initial="hidden" animate="visible" variants={cardVariants} className="p-6 rounded-3xl border border-gray-800 bg-black/30">

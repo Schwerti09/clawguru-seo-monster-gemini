@@ -65,6 +65,12 @@ Wenn Preview funktioniert, Production aber nicht: in Netlify fehlen fast immer d
 - `STRIPE_SECRET_KEY`
 - `ACCESS_TOKEN_SECRET` (signiert den Access-Cookie)
 
+**Affiliate Payouts (optional):**
+- `AFFILIATE_CONNECT_ACCOUNTS` (JSON map `affiliate_ref` → `acct_xxx`)
+- `AFFILIATE_DISPLAY_NAMES` (JSON map `affiliate_ref` → Anzeigename)
+- `AFFILIATE_ONBOARDING_SECRET` (optional, schützt `/api/stripe/affiliate-onboarding`)
+- `AFFILIATE_DEFAULT_COUNTRY` (Default `DE`, wenn kein Land gesendet wird)
+
 **Prices (bereits vorkonfiguriert):**
 - Pro: `price_1SyY02INFtiy8u5xA9v6IeVA`
 - Team: `price_1SyY1FINFtiy8u5xGhxFTkEe`
@@ -98,6 +104,8 @@ Wenn `GEMINI_API_KEY` gesetzt ist, antwortet Copilot mit Google Gemini.
 
 Optional:
 - `GEMINI_MODEL` (Default: `gemini-2.0-flash`)
+- `GEMINI_DAILY_HARD_LIMIT_EUR` (Default: `25`)
+- `GEMINI_COST_EUR_PER_1K_TOKENS` (Default: `0.002`)
 - `OPENAI_API_KEY` als Fallback, falls du später wieder GPT aktivieren willst.
 Ohne Key bleibt er rule-based (kein Crash).
 
@@ -152,9 +160,13 @@ Damit Nutzer **immer** ihren Zugang bekommen (auch wenn sie den Tab schließen),
    - Signing secret → als `STRIPE_WEBHOOK_SECRET` in ENV setzen
 
 2) **Email Versand (Resend)**
-   - Resend API Key → `RESEND_API_KEY`
-   - Absender → `EMAIL_FROM` (Domain in Resend verifizieren)
-   - Optional: `EMAIL_REPLY_TO` / `SUPPORT_EMAIL`
+    - Resend API Key → `RESEND_API_KEY`
+    - Absender → `EMAIL_FROM` (Domain in Resend verifizieren)
+    - Optional: `EMAIL_REPLY_TO` / `SUPPORT_EMAIL`
+
+3) **Success-Pulse (Sales Feed)**
+   - `SUCCESS_PULSE_WEBHOOK_URL` (Discord/Slack Incoming Webhook)
+   - Alternativ: `SLACK_WEBHOOK_URL` oder `DISCORD_WEBHOOK_URL`
 
 Neue Route:
 - `/recover` → Recovery-Seite (Magic Link anfordern)

@@ -3,6 +3,8 @@
 // de/en (primary) + es/fr/pt/it/ru/zh-CN/ja/ar
 // Auto-detects language from URL prefix; Gemini auto-translates runbook metadata.
 
+import { isGeminiHardLimitReached, recordGeminiUsageFromResponse } from "@/lib/gemini-api"
+
 export type Locale = "de" | "en" | "es" | "fr" | "pt" | "it" | "ru" | "zh" | "ja" | "ar"
 
 export const SUPPORTED_LOCALES: Locale[] = ["de", "en", "es", "fr", "pt", "it", "ru", "zh", "ja", "ar"]
@@ -398,6 +400,10 @@ export async function translateRunbook(opts: {
     ar: "Arabic",
   }
 
+  if (isGeminiHardLimitReached()) {
+    return { title, summary, locale: targetLocale }
+  }
+
   const geminiKey = process.env.GEMINI_API_KEY
   const geminiModel = process.env.GEMINI_MODEL || "gemini-1.5-flash"
   const geminiBase = (
@@ -431,6 +437,7 @@ export async function translateRunbook(opts: {
     })
     if (!res.ok) return { title, summary, locale: targetLocale }
     const data = await res.json()
+    recordGeminiUsageFromResponse(data)
     const text: string =
       data?.candidates?.[0]?.content?.parts
         ?.map((p: { text?: string }) => p?.text ?? "")

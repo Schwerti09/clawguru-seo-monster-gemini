@@ -7,6 +7,7 @@ import type { NextRequest } from "next/server"
 import { SUPPORTED_LOCALES, DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
 
 const LOCALE_COOKIE = "cg_locale"
+const LOCALIZED_PATHS = ["/runbook/", "/runbooks/", "/provider/", "/tag/", "/tags/"] as const
 
 // ---------------------------------------------------------------------------
 // Maintenance Mode / Kill-Switch
@@ -124,13 +125,6 @@ export function middleware(request: NextRequest) {
 
   // 301 redirect: legacy non-language-prefixed content paths → /de/...
   // e.g. /runbook/contabo-xyz → /de/runbook/contabo-xyz
-  const LOCALIZED_PATHS = [
-    "/runbook/",
-    "/runbooks/",
-    "/provider/",
-    "/tag/",
-    "/tags/",
-  ]
   const isLocalizedContent = LOCALIZED_PATHS.some((p) => pathname.startsWith(p))
   if (isLocalizedContent) {
     const url = request.nextUrl.clone()

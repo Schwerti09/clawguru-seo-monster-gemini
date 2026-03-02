@@ -3,6 +3,7 @@
 // Each agent uses Gemini to generate intelligence and content.
 
 import { fetchUpstreamCVEs, type UpstreamCVE } from "@/lib/upstream-cve"
+import { isGeminiHardLimitReached, recordGeminiUsageFromResponse } from "@/lib/gemini-api"
 
 // ---------------------------------------------------------------------------
 // Vulnerability Hunter Agent
@@ -383,6 +384,7 @@ export async function runSelfHealMonitor(opts: {
 // ---------------------------------------------------------------------------
 
 async function callGemini(prompt: string): Promise<string | null> {
+  if (isGeminiHardLimitReached()) return null
   const geminiKey = process.env.GEMINI_API_KEY
   const geminiModel = process.env.GEMINI_MODEL || "gemini-1.5-flash"
   const geminiBase = (
@@ -404,6 +406,7 @@ async function callGemini(prompt: string): Promise<string | null> {
     })
     if (!res.ok) return null
     const data = await res.json()
+    recordGeminiUsageFromResponse(data)
     const parts = data?.candidates?.[0]?.content?.parts
     if (Array.isArray(parts)) {
       return parts.map((p: { text?: string }) => p?.text ?? "").join("").trim() || null

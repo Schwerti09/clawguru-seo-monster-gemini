@@ -5,6 +5,7 @@
 import { RUNBOOKS, totalSitemapUrls } from "./pseo"
 import { sendEmail } from "./email"
 import { BASE_URL } from "./config"
+import { isGeminiHardLimitReached, recordGeminiUsageFromResponse } from "./gemini-api"
 
 // ---------------------------------------------------------------------------
 // Types
@@ -318,6 +319,7 @@ export async function autoHeal(): Promise<AutoHealResult> {
 
   // FULL PASSIVE WELTMACHT: call Gemini with a prompt, return text or null
   async function callGemini(prompt: string): Promise<string | null> {
+    if (isGeminiHardLimitReached()) return null
     if (!geminiKey) return null
     try {
       const url = `${geminiBase}/models/${encodeURIComponent(geminiModel)}:generateContent?key=${encodeURIComponent(geminiKey)}`
@@ -332,6 +334,7 @@ export async function autoHeal(): Promise<AutoHealResult> {
       })
       if (!res.ok) return null
       const data = await res.json()
+      recordGeminiUsageFromResponse(data)
       const parts = data?.candidates?.[0]?.content?.parts
       if (Array.isArray(parts)) {
         return parts.map((p: { text?: string }) => p?.text ?? "").join("").trim() || null

@@ -3,6 +3,7 @@ import Stripe from "stripe"
 import { stripe } from "@/lib/stripe"
 import { signAccessToken, AccessPlan } from "@/lib/access-token"
 import { sendEmail } from "@/lib/email"
+import { postSuccessPulse } from "@/lib/discord"
 
 export const runtime = "nodejs"
 
@@ -128,6 +129,70 @@ async function handleChargeRefunded(charge: Stripe.Charge) {
   })
 }
 
+const affiliateNameMap = (() => {
+  const raw = process.env.AFFILIATE_DISPLAY_NAMES || "{}"
+  try {
+    return JSON.parse(raw) as Record<string, string>
+  } catch {
+    return {}
+  }
+})()
+
+const regionNames =
+  typeof Intl !== "undefined" && typeof Intl.DisplayNames === "function"
+    ? new Intl.DisplayNames("de-DE", { type: "region" })
+    : null
+
+function displayCountry(code?: string | null) {
+  const value = (code || "").toUpperCase()
+  if (!value) return "Unbekannt"
+  return regionNames?.of(value) || value
+}
+
+function affiliateDisplayName(ref?: string | null) {
+  if (!ref) return "ClawGuru"
+  const mapped = affiliateNameMap[ref]
+  if (mapped) return mapped
+  return ref.replace(/[_-]+/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())
+}
+
+function affiliateCommissionRate() {
+  const rawRate = parseFloat(process.env.AFFILIATE_COMMISSION_RATE || "0.40")
+  return Number.isFinite(rawRate) && rawRate > 0 && rawRate <= 1 ? rawRate : 0.4
+}
+
+function commissionFromTotal(amountTotal: number) {
+  const rate = affiliateCommissionRate()
+  return { rate, amount: Math.round(amountTotal * rate) }
+}
+
+function formatMoney(amount: number, currency: string) {
+  return new Intl.NumberFormat("de-DE", {
+    style: "currency",
+    currency: currency.toUpperCase(),
+  }).format(amount / 100)
+}
+
+async function sendSuccessPulse(session: Stripe.Checkout.Session) {
+  const amountTotal = session.amount_total ?? 0
+  const currency = session.currency || "eur"
+  if (!amountTotal) return
+
+  const affiliateRef = session.metadata?.affiliate_ref
+  const country =
+    session.customer_details?.address?.country ?? session.metadata?.country ?? null
+  const affiliateName = affiliateDisplayName(affiliateRef)
+
+  const { amount: commissionAmount } = commissionFromTotal(amountTotal)
+  const earnedAmount = affiliateRef ? commissionAmount : amountTotal
+  const message = `💰 BOOM! Sale aus ${displayCountry(country)}! Affiliate ${affiliateName} hat gerade ${formatMoney(
+    earnedAmount,
+    currency
+  )} verdient.`
+
+  await postSuccessPulse(message)
+}
+
 
 // ---------------------------------------------------------------------------
 // affiliate transfer – pay commission to referring affiliate via Stripe Connect
@@ -155,10 +220,7 @@ async function handleAffiliateTransfer(session: Stripe.Checkout.Session) {
   const amountTotal = session.amount_total
   if (!amountTotal || amountTotal <= 0) return
 
-  const rawRate = parseFloat(process.env.AFFILIATE_COMMISSION_RATE || "0.40")
-  // Validate: must be a finite number in the range (0, 1]
-  const rate = Number.isFinite(rawRate) && rawRate > 0 && rawRate <= 1 ? rawRate : 0.40
-  const commissionAmount = Math.round(amountTotal * rate)
+  const { rate, amount: commissionAmount } = commissionFromTotal(amountTotal)
   if (commissionAmount <= 0) return
 
   await stripe.transfers.create({
@@ -354,6 +416,8 @@ export async function POST(req: NextRequest) {
         await sendAccessEmail(full)
         // Fire-and-forget affiliate commission transfer (does not block response)
         handleAffiliateTransfer(full).catch((err) => console.error("[affiliate-transfer]", err))
+        // Fire-and-forget success pulse notification (Discord/Slack)
+        sendSuccessPulse(full).catch((err) => console.error("[success-pulse]", err))
       }
     }
 

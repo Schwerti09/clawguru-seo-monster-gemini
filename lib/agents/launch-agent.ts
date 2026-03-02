@@ -1,6 +1,8 @@
 // WORLD BEAST FINAL LAUNCH: lib/agents/launch-agent.ts
 // Launch Content Agent – generates ready-to-post launch content for all major platforms.
 
+import { isGeminiHardLimitReached, recordGeminiUsageFromResponse } from "@/lib/gemini-api"
+
 export type LaunchContent = {
   xThread: string[]          // 10 tweets, max 280 chars each
   linkedinPost: string       // professional post
@@ -14,6 +16,7 @@ export type LaunchContent = {
 
 // WORLD BEAST FINAL LAUNCH: Gemini helper (self-contained to avoid circular deps)
 async function callGeminiLaunch(prompt: string): Promise<string | null> {
+  if (isGeminiHardLimitReached()) return null
   const geminiKey = process.env.GEMINI_API_KEY
   const geminiModel = process.env.GEMINI_MODEL || "gemini-1.5-flash"
   const geminiBase = (
@@ -35,6 +38,7 @@ async function callGeminiLaunch(prompt: string): Promise<string | null> {
     })
     if (!res.ok) return null
     const data = await res.json()
+    recordGeminiUsageFromResponse(data)
     const parts = data?.candidates?.[0]?.content?.parts
     if (Array.isArray(parts)) {
       return parts.map((p: { text?: string }) => p?.text ?? "").join("").trim() || null

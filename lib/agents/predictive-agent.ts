@@ -2,8 +2,11 @@
 // Predictive Threat Intelligence Agent – forecasts upcoming CVEs and attack trends 48h in advance.
 // Uses Gemini to analyze patterns and generate forward-looking threat intelligence.
 
+import { isGeminiHardLimitReached, recordGeminiUsageFromResponse } from "@/lib/gemini-api"
+
 // WORLD BEAST UPGRADE: Gemini helper (self-contained to avoid circular deps)
 async function callGeminiPredictive(prompt: string): Promise<string | null> {
+  if (isGeminiHardLimitReached()) return null
   const geminiKey = process.env.GEMINI_API_KEY
   const geminiModel = process.env.GEMINI_MODEL || "gemini-1.5-flash"
   const geminiBase = (
@@ -25,6 +28,7 @@ async function callGeminiPredictive(prompt: string): Promise<string | null> {
     })
     if (!res.ok) return null
     const data = await res.json()
+    recordGeminiUsageFromResponse(data)
     const parts = data?.candidates?.[0]?.content?.parts
     if (Array.isArray(parts)) {
       return parts.map((p: { text?: string }) => p?.text ?? "").join("").trim() || null

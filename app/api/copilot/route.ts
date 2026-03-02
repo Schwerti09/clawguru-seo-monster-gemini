@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { ruleBasedCopilot } from "@/lib/copilot";
+import { isGeminiHardLimitReached, recordGeminiUsageFromResponse } from "@/lib/gemini-api";
 
 type CopilotAction = { label: string; href: string };
 type CopilotResponse = {
@@ -54,6 +55,7 @@ function extractJson(text: string): unknown {
 }
 
 async function geminiGenerate(prompt: string): Promise<string | null> {
+  if (isGeminiHardLimitReached()) return null;
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) return null;
 
@@ -76,6 +78,7 @@ async function geminiGenerate(prompt: string): Promise<string | null> {
 
   if (!res.ok) return null;
   const data = await res.json();
+  recordGeminiUsageFromResponse(data);
   const parts = data?.candidates?.[0]?.content?.parts;
   if (!Array.isArray(parts)) return null;
   const text = parts.map((p: { text?: string }) => p?.text).filter(Boolean).join("");

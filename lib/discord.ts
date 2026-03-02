@@ -22,6 +22,36 @@ export async function postToDiscord(message: string): Promise<boolean> {
   }
 }
 
+function isSlackWebhook(url: string) {
+  return url.includes("hooks.slack.com")
+}
+
+/**
+ * Success-Pulse: posts a sale notification to Discord or Slack.
+ * Configure SUCCESS_PULSE_WEBHOOK_URL (preferred) or SLACK_WEBHOOK_URL/DISCORD_WEBHOOK_URL.
+ */
+export async function postSuccessPulse(message: string): Promise<boolean> {
+  const webhookUrl =
+    process.env.SUCCESS_PULSE_WEBHOOK_URL ||
+    process.env.SLACK_WEBHOOK_URL ||
+    process.env.DISCORD_WEBHOOK_URL
+  if (!webhookUrl) return false
+
+  const payload = isSlackWebhook(webhookUrl) ? { text: message } : { content: message }
+
+  try {
+    const res = await fetch(webhookUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+      signal: AbortSignal.timeout(10_000),
+    })
+    return res.ok
+  } catch {
+    return false
+  }
+}
+
 /**
  * WORLD BEAST: Posts a rich embed to Discord for a new runbook.
  */

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { isApiActive, apiUnavailableResponse } from "@/lib/api-guard";
+import { isGeminiHardLimitReached, recordGeminiUsageFromResponse } from "@/lib/gemini-api";
 
 type ReqBody = {
   prompt?: string;
@@ -63,6 +64,12 @@ export async function POST(req: NextRequest) {
     ].join("\n");
 
     if (provider === "gemini") {
+      if (isGeminiHardLimitReached()) {
+        return NextResponse.json(
+          { error: "Gemini daily budget limit reached" },
+          { status: 429 },
+        );
+      }
       const geminiKey = process.env.GEMINI_API_KEY;
       if (!geminiKey) {
         return NextResponse.json(
@@ -106,6 +113,7 @@ export async function POST(req: NextRequest) {
       }
 
       const data = await res.json();
+      recordGeminiUsageFromResponse(data);
       const text = extractGeminiText(data);
       if (!text) return NextResponse.json({ error: "No output" }, { status: 502 });
       return NextResponse.json({ text });

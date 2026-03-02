@@ -3,8 +3,11 @@
 // HeyGen/Runway API payloads for each runbook. Produces structured video briefs
 // when video API keys are not configured.
 
+import { isGeminiHardLimitReached, recordGeminiUsageFromResponse } from "@/lib/gemini-api"
+
 // WORLD BEAST UPGRADE: Gemini helper (self-contained)
 async function callGeminiVideo(prompt: string): Promise<string | null> {
+  if (isGeminiHardLimitReached()) return null
   const geminiKey = process.env.GEMINI_API_KEY
   const geminiModel = process.env.GEMINI_MODEL || "gemini-1.5-flash"
   const geminiBase = (
@@ -26,6 +29,7 @@ async function callGeminiVideo(prompt: string): Promise<string | null> {
     })
     if (!res.ok) return null
     const data = await res.json()
+    recordGeminiUsageFromResponse(data)
     const parts = data?.candidates?.[0]?.content?.parts
     if (Array.isArray(parts)) {
       return parts.map((p: { text?: string }) => p?.text ?? "").join("").trim() || null

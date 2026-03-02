@@ -2,7 +2,6 @@
 // VISUAL UPGRADE 2026: Premium hero section with animated score counter,
 // magnetic CTA buttons, and Framer Motion staggered animations.
 
-import Link from "next/link"
 import { useState } from "react"
 import { motion } from "framer-motion"
 import SecurityScoreCounter from "@/components/visual/SecurityScoreCounter"
@@ -44,7 +43,7 @@ export default function HeroInstitution({ dict }: HeroInstitutionProps) {
 
           {/* VISUAL UPGRADE 2026: CTA buttons with magnetic hover effect */}
           <motion.div variants={item} className="mt-8 flex flex-wrap gap-3">
-            <Link
+            <a
               className="group relative px-5 py-3 rounded-xl font-black text-black bg-claw-green hover:shadow-neon-green transition-all duration-300 hover:scale-105"
               href="/mycelium"
             >
@@ -55,16 +54,16 @@ export default function HeroInstitution({ dict }: HeroInstitutionProps) {
               <div className="absolute inset-0 rounded-xl overflow-hidden opacity-0 group-hover:opacity-100 transition-opacity">
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-border-scan" />
               </div>
-            </Link>
-            <Link className="px-5 py-3 rounded-xl border border-white/10 bg-white/[0.03] backdrop-blur-xl hover:bg-white/[0.06] hover:border-white/20 font-bold transition-all duration-300" href="/copilot">
+            </a>
+            <a className="px-5 py-3 rounded-xl border border-white/10 bg-white/[0.03] backdrop-blur-xl hover:bg-white/[0.06] hover:border-white/20 font-bold transition-all duration-300" href="/copilot">
               {dict?.ctaCopilot ?? "Ask Copilot"}
-            </Link>
-            <Link className="px-5 py-3 rounded-xl font-black bg-gradient-to-r from-orange-500 to-red-600 hover:opacity-90 shadow-glow2" href="/pricing">
+            </a>
+            <a className="px-5 py-3 rounded-xl font-black bg-gradient-to-r from-orange-500 to-red-600 hover:opacity-90 shadow-glow2" href="/pricing">
               {dict?.ctaProKits ?? "Pro Kits (Stripe)"}
-            </Link>
-            <Link className="px-5 py-3 rounded-xl border border-white/10 bg-white/[0.03] backdrop-blur-xl hover:bg-white/[0.06] hover:border-white/20 font-bold transition-all duration-300" href="/intel">
+            </a>
+            <a className="px-5 py-3 rounded-xl border border-white/10 bg-white/[0.03] backdrop-blur-xl hover:bg-white/[0.06] hover:border-white/20 font-bold transition-all duration-300" href="/intel">
               {dict?.ctaIntel ?? "Intel Feed"}
-            </Link>
+            </a>
           </motion.div>
 
           {/* VISUAL UPGRADE 2026: Feature cards with glassmorphism and lucide icons */}

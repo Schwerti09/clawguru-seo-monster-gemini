@@ -349,7 +349,13 @@ export default function PricingPage() {
                     Direkter REST/JSON-Feed für euer SIEM, SOC oder eigenes Monitoring-Backend.
                     API-Key-Auth, maschinenlesbare Events – kein manuelles Klicken mehr.
                   </p>
-                  <EnterpriseContact />
+                  <a
+                    href="mailto:enterprise@clawguru.org?subject=Enterprise%20Intel%20Feed%20API"
+                    className="mt-6 inline-block w-full text-center py-3 px-6 rounded-2xl font-black text-sm text-black transition-all duration-300 hover:opacity-90"
+                    style={{ background: "linear-gradient(135deg, #ffaa00 0%, #ff5000 100%)", boxShadow: "0 0 30px rgba(255,165,0,0.3)" }}
+                  >
+                    Enterprise anfragen →
+                  </a>
                   <div className="mt-3 text-xs text-gray-500 text-center">
                     Kontakt: enterprise@clawguru.org
                   </div>
@@ -389,6 +395,44 @@ curl https://clawguru.com/api/intel/feeds \\
 }`}
                     </pre>
                   </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* ── Contact Sales ── */}
+          <div className="mt-6 relative rounded-3xl p-[1px] overflow-hidden"
+            style={{ background: "linear-gradient(135deg, rgba(255,165,0,0.3) 0%, rgba(255,107,0,0.05) 100%)" }}>
+            <div className="rounded-3xl p-7 md:p-10" style={{ background: "#0a0804" }}>
+              <div className="grid md:grid-cols-2 gap-10 items-start">
+                <div>
+                  <div className="text-[11px] font-mono uppercase tracking-[0.2em] mb-2" style={{ color: "#ffa500" }}>
+                    Enterprise · Contact Sales
+                  </div>
+                  <div className="text-xl font-black text-white font-heading mb-3">
+                    Individuelle Anfrage stellen
+                  </div>
+                  <p className="text-gray-300 text-sm leading-relaxed">
+                    Größere Teams, Compliance-Anforderungen oder individuelle SLAs?
+                    Füllt das Formular aus – wir melden uns innerhalb von 24 Stunden.
+                  </p>
+                  <ul className="mt-4 space-y-[7px]">
+                    {[
+                      "Custom Pricing für größere Teams",
+                      "Individuelle SLAs & Compliance-Reports",
+                      "Rechnungsstellung & SEPA-Lastschrift",
+                      "Persönliches Onboarding & Integration Support",
+                    ].map((feat) => (
+                      <li key={feat} className="flex items-start gap-2 text-sm text-gray-200">
+                        <span className="mt-[2px] shrink-0 size-[18px] rounded-full flex items-center justify-center text-[9px] font-bold"
+                          style={{ background: "rgba(255,165,0,0.12)", color: "#ffa500" }} aria-hidden="true">✓</span>
+                        <span className="leading-snug">{feat}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  <EnterpriseContact />
                 </div>
               </div>
             </div>

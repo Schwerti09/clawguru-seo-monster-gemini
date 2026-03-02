@@ -16,10 +16,9 @@ jobs:
           node-version: "20"
           cache: "npm"
       - run: npm install --legacy-peer-deps --no-audit --no-fund
-      - run: npm run build
       - name: Deploy to Netlify
         if: ${{ secrets.NETLIFY_AUTH_TOKEN != '' && secrets.NETLIFY_SITE_ID != '' }}
-        run: npx netlify-cli deploy --prod --dir=.next
+        run: npx netlify-cli deploy --build --prod
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}

@@ -2,6 +2,7 @@ import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
 import { getAccess } from "@/lib/access"
 import PortalButton from "@/components/commerce/PortalButton"
+import AffiliateTrackingForm from "@/components/affiliate/AffiliateTrackingForm"
 
 export const runtime = "nodejs"
 
@@ -139,6 +140,17 @@ export default async function DashboardPage() {
             <a href="/badge" className="mt-4 inline-flex text-cyan-300 underline hover:text-cyan-200">
               Badge Studio öffnen →
             </a>
+          </div>
+        </div>
+
+        <div className="mt-10">
+          <div className="p-7 rounded-3xl border border-gray-800 bg-black/30">
+            <div className="text-xs uppercase tracking-widest text-gray-400">Affiliate Tracking</div>
+            <div className="mt-2 text-2xl font-black">Postbacks & Pixels</div>
+            <p className="mt-3 text-gray-300 text-sm">
+              Hinterlege deine Tracking-Pixel und S2S-Postbacks für Checkout-Conversions.
+            </p>
+            <AffiliateTrackingForm />
           </div>
         </div>
       </div>

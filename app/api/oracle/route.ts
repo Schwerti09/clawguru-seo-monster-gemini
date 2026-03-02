@@ -5,6 +5,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { RUNBOOKS } from "@/lib/pseo"
 import { buildMyceliumGraph, oracleSearch } from "@/lib/mycelium"
+import { callGeminiWithBackoff } from "@/lib/gemini-api"
 
 // MYCELIUM ORACLE v3.3 – Overlord AI: Oracle query modes
 export type OracleMode = "pure" | "temporal" | "swarm" | "prophetic"
@@ -36,34 +37,13 @@ const MODE_PROMPTS: Record<OracleMode, string> = {
 
 // MYCELIUM ORACLE v3.3 – Overlord AI: Call Gemini with streaming support
 async function callGemini(systemPrompt: string, question: string): Promise<string | null> {
-  const apiKey = process.env.GEMINI_API_KEY
-  if (!apiKey) return null
-
-  const model = process.env.GEMINI_MODEL || "gemini-2.0-flash"
-  const base = (
-    process.env.GEMINI_BASE_URL || "https://generativelanguage.googleapis.com/v1beta"
-  ).replace(/\/$/, "")
-
-  const url = `${base}/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(apiKey)}`
-
-  const res = await fetch(url, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      contents: [{ role: "user", parts: [{ text: `${systemPrompt}\n\nQUESTION:\n${question}` }] }],
-      generationConfig: { temperature: 0.6, maxOutputTokens: 1200 },
-    }),
+  return callGeminiWithBackoff({
+    prompt: `${systemPrompt}\n\nQUESTION:\n${question}`,
+    temperature: 0.6,
+    maxOutputTokens: 1200,
+    timeoutMs: 30_000,
+    model: process.env.GEMINI_MODEL || "gemini-2.0-flash",
   })
-
-  if (!res.ok) return null
-  const data = await res.json()
-  const parts = data?.candidates?.[0]?.content?.parts
-  if (!Array.isArray(parts)) return null
-  const text = parts
-    .map((p: { text?: string }) => p?.text ?? "")
-    .join("")
-    .trim()
-  return text || null
 }
 
 // MYCELIUM ORACLE v3.3 – Overlord AI: Build full system prompt with RAG context

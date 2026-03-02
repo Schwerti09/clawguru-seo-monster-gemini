@@ -31,6 +31,21 @@ const SECURITY_HEADERS = [
   },
 ]
 
+const IMGIX_BASE_URL = process.env.IMGIX_BASE_URL
+const CLOUDINARY_CLOUD_NAME = process.env.CLOUDINARY_CLOUD_NAME
+
+const imageLoaderConfig = IMGIX_BASE_URL
+  ? {
+    loader: "imgix",
+    path: IMGIX_BASE_URL.endsWith("/") ? IMGIX_BASE_URL : `${IMGIX_BASE_URL}/`,
+  }
+  : CLOUDINARY_CLOUD_NAME
+    ? {
+      loader: "cloudinary",
+      path: `https://res.cloudinary.com/${CLOUDINARY_CLOUD_NAME}/image/upload/`,
+    }
+    : {}
+
 const nextConfig = {
   reactStrictMode: true,
   trailingSlash: false,
@@ -43,6 +58,7 @@ const nextConfig = {
     remotePatterns: [
       { protocol: "https", hostname: "**" },
     ],
+    ...imageLoaderConfig,
   },
   // 100/100 OPTIMIZATION 2026: Security & performance headers
   async headers() {

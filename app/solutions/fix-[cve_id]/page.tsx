@@ -11,6 +11,7 @@ import Container from "@/components/shared/Container"
 import { getCveEntry, KNOWN_CVES, parseCveId } from "@/lib/cve-pseo"
 import { generateCveContent } from "@/lib/agents/cve-agent"
 import { BASE_URL } from "@/lib/config"
+import { buildCveOgImageUrl } from "@/lib/seo-images"
 
 interface Props {
   params: { cve_id: string }
@@ -36,6 +37,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: `How to fix ${entry.cveId} – ${entry.name} | ClawGuru`,
       description: entry.description,
       type: "article",
+      images: [buildCveOgImageUrl(entry.cveId)],
     },
   }
 }

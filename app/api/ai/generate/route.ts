@@ -1,27 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { isApiActive, apiUnavailableResponse } from "@/lib/api-guard";
+import { callGeminiWithBackoff } from "@/lib/gemini-api";
 
 type ReqBody = {
   prompt?: string;
 };
-
-function extractGeminiText(data: unknown): string {
-  const d = data as { candidates?: Array<{ content?: { parts?: Array<{ text?: string }>; text?: string } }> };
-  // Gemini: candidates[0].content.parts[].text
-  const cand = d?.candidates?.[0];
-  const parts = cand?.content?.parts;
-  if (Array.isArray(parts)) {
-    const txt = parts
-      .map((p) => (typeof p?.text === "string" ? p.text : ""))
-      .join("")
-      .trim();
-    if (txt) return txt;
-  }
-  // Some responses use: candidates[0].content.text
-  const t = cand?.content?.text;
-  if (typeof t === "string" && t.trim()) return t.trim();
-  return "";
-}
 
 function extractOutputText(data: unknown): string {
   const d = data as { output?: Array<{ content?: Array<{ type?: string; text?: string }> }>; choices?: Array<{ message?: { content?: string } }> };
@@ -63,51 +46,13 @@ export async function POST(req: NextRequest) {
     ].join("\n");
 
     if (provider === "gemini") {
-      const geminiKey = process.env.GEMINI_API_KEY;
-      if (!geminiKey) {
-        return NextResponse.json(
-          { error: "GEMINI_API_KEY missing on server (Netlify env vars)" },
-          { status: 500 },
-        );
-      }
-
-      const model = process.env.GEMINI_MODEL || "gemini-1.5-flash";
-      const base = (
-        process.env.GEMINI_BASE_URL || "https://generativelanguage.googleapis.com/v1beta"
-      ).replace(/\/$/, "");
-
-      const url = `${base}/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(
-        geminiKey,
-      )}`;
-
-      const res = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          contents: [
-            {
-              role: "user",
-              parts: [{ text: `${system}\n\nUSER REQUEST:\n${p}` }],
-            },
-          ],
-          generationConfig: {
-            temperature: 0.35,
-            maxOutputTokens: 900,
-          },
-        }),
+      const text = await callGeminiWithBackoff({
+        prompt: `${system}\n\nUSER REQUEST:\n${p}`,
+        temperature: 0.35,
+        maxOutputTokens: 900,
+        timeoutMs: 30_000,
       });
-
-      if (!res.ok) {
-        const t = await res.text().catch(() => "");
-        return NextResponse.json(
-          { error: "Gemini request failed", status: res.status, detail: t.slice(0, 2000) },
-          { status: 502 },
-        );
-      }
-
-      const data = await res.json();
-      const text = extractGeminiText(data);
-      if (!text) return NextResponse.json({ error: "No output" }, { status: 502 });
+      if (!text) return NextResponse.json({ error: "Gemini request queued or failed" }, { status: 502 });
       return NextResponse.json({ text });
     }
 

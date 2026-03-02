@@ -7,6 +7,7 @@ import type { NextRequest } from "next/server"
 import { SUPPORTED_LOCALES, DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
 
 const LOCALE_COOKIE = "cg_locale"
+const GEO_COOKIE = "cg_geo_country"
 
 // ---------------------------------------------------------------------------
 // Maintenance Mode / Kill-Switch
@@ -90,8 +91,31 @@ function isStaticOrApi(pathname: string): boolean {
   )
 }
 
+function detectGeoCountry(request: NextRequest): string | null {
+  const country =
+    request.headers.get("x-vercel-ip-country") ||
+    request.headers.get("x-nf-country") ||
+    request.headers.get("cf-ipcountry") ||
+    request.headers.get("x-country")
+  if (!country) return null
+  const cleaned = country.trim().toUpperCase()
+  return cleaned.length === 2 ? cleaned : null
+}
+
+function applyGeoHeaders(response: NextResponse, country: string | null) {
+  if (!country) return response
+  response.headers.set("x-clawguru-geo", country)
+  response.cookies.set(GEO_COOKIE, country, {
+    maxAge: 60 * 60 * 24 * 7, // 7 days
+    path: "/",
+    sameSite: "lax",
+  })
+  return response
+}
+
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
+  const geoCountry = detectGeoCountry(request)
 
   // ---------------------------------------------------------------------------
   // Maintenance Mode check – redirect everyone except bypass users
@@ -100,13 +124,13 @@ export function middleware(request: NextRequest) {
     if (!shouldBypassMaintenance(request)) {
       const url = request.nextUrl.clone()
       url.pathname = "/maintenance"
-      return NextResponse.redirect(url, { status: 307 })
+      return applyGeoHeaders(NextResponse.redirect(url, { status: 307 }), geoCountry)
     }
   }
 
   // Skip static assets, API routes and special paths
   if (isStaticOrApi(pathname)) {
-    return NextResponse.next()
+    return applyGeoHeaders(NextResponse.next(), geoCountry)
   }
 
   // Check if the URL already contains a supported locale prefix
@@ -119,7 +143,7 @@ export function middleware(request: NextRequest) {
       path: "/",
       sameSite: "lax",
     })
-    return response
+    return applyGeoHeaders(response, geoCountry)
   }
 
   // 301 redirect: legacy non-language-prefixed content paths → /de/...
@@ -135,12 +159,12 @@ export function middleware(request: NextRequest) {
   if (isLocalizedContent) {
     const url = request.nextUrl.clone()
     url.pathname = `/de${pathname}`
-    return NextResponse.redirect(url, { status: 301 })
+    return applyGeoHeaders(NextResponse.redirect(url, { status: 301 }), geoCountry)
   }
 
   // Only redirect on the root path to avoid disrupting existing non-localized routes
   if (pathname !== "/") {
-    return NextResponse.next()
+    return applyGeoHeaders(NextResponse.next(), geoCountry)
   }
 
   // Check for persisted user cookie first
@@ -151,10 +175,10 @@ export function middleware(request: NextRequest) {
     if (cookieLocale !== DEFAULT_LOCALE) {
       const url = request.nextUrl.clone()
       url.pathname = `/${cookieLocale}`
-      return NextResponse.redirect(url, { status: 302 })
+      return applyGeoHeaders(NextResponse.redirect(url, { status: 302 }), geoCountry)
     }
     // Cookie explicitly set to default locale (de) – stay on root, skip header detection
-    return NextResponse.next()
+    return applyGeoHeaders(NextResponse.next(), geoCountry)
   }
 
   // No cookie – detect from Accept-Language header
@@ -165,10 +189,10 @@ export function middleware(request: NextRequest) {
   if (detected !== DEFAULT_LOCALE) {
     const url = request.nextUrl.clone()
     url.pathname = `/${detected}`
-    return NextResponse.redirect(url, { status: 302 })
+    return applyGeoHeaders(NextResponse.redirect(url, { status: 302 }), geoCountry)
   }
 
-  return NextResponse.next()
+  return applyGeoHeaders(NextResponse.next(), geoCountry)
 }
 
 export const config = {

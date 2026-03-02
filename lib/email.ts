@@ -40,6 +40,36 @@ export async function sendEmail(args: SendArgs) {
     return
   }
 
+  if (provider === "sendgrid") {
+    const apiKey = requiredEnv("SENDGRID_API_KEY")
+    const from = requiredEnv("EMAIL_FROM")
+
+    const res = await fetch("https://api.sendgrid.com/v3/mail/send", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        personalizations: [
+          {
+            to: [{ email: args.to }],
+            subject: args.subject,
+          },
+        ],
+        from: { email: from },
+        reply_to: args.replyTo ? { email: args.replyTo } : undefined,
+        content: [{ type: "text/html", value: args.html }],
+      }),
+    })
+
+    if (!res.ok) {
+      const t = await res.text().catch(() => "")
+      throw new Error(`Email send failed (${res.status}): ${t}`)
+    }
+    return
+  }
+
   // Default: Resend only (keep deps minimal & deploy-safe)
   throw new Error(`Unsupported EMAIL_PROVIDER: ${provider}`)
 }

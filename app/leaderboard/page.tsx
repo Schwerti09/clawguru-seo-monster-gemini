@@ -144,6 +144,12 @@ export default function LeaderboardPage() {
             >
               Dashboard öffnen
             </a>
+            <a
+              href="/affiliate/assets"
+              className="px-6 py-3 rounded-2xl border border-brand-cyan/40 hover:border-brand-cyan font-bold text-brand-cyan"
+            >
+              Affiliate Assets →
+            </a>
           </div>
         </div>
       </div>

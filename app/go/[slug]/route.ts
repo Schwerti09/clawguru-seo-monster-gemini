@@ -17,5 +17,12 @@ export async function GET(_req: NextRequest, { params }: { params: { slug: strin
   if (!url.searchParams.get("utm_medium")) url.searchParams.set("utm_medium", "referral")
   if (!url.searchParams.get("utm_campaign")) url.searchParams.set("utm_campaign", slug)
 
-  return NextResponse.redirect(url.toString())
+  const response = NextResponse.redirect(url.toString())
+  response.cookies.set("affiliate_ref", slug, {
+    maxAge: 60 * 60 * 24 * 30,
+    path: "/",
+    sameSite: "lax",
+    secure: true,
+  })
+  return response
 }

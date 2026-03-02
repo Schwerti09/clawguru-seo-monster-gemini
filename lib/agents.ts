@@ -3,6 +3,7 @@
 // Each agent uses Gemini to generate intelligence and content.
 
 import { fetchUpstreamCVEs, type UpstreamCVE } from "@/lib/upstream-cve"
+import { estimateGeminiTokens, recordGeminiFailure, recordGeminiSuccess, reserveGeminiTokens } from "@/lib/gemini-usage"
 
 // ---------------------------------------------------------------------------
 // Vulnerability Hunter Agent
@@ -390,6 +391,8 @@ async function callGemini(prompt: string): Promise<string | null> {
   ).replace(/\/$/, "")
 
   if (!geminiKey) return null
+  const estimatedTokens = estimateGeminiTokens(prompt)
+  if (!reserveGeminiTokens(estimatedTokens)) return null
 
   try {
     const url = `${geminiBase}/models/${encodeURIComponent(geminiModel)}:generateContent?key=${encodeURIComponent(geminiKey)}`
@@ -402,14 +405,20 @@ async function callGemini(prompt: string): Promise<string | null> {
       }),
       signal: AbortSignal.timeout(30_000),
     })
-    if (!res.ok) return null
+    if (!res.ok) {
+      recordGeminiFailure()
+      return null
+    }
     const data = await res.json()
     const parts = data?.candidates?.[0]?.content?.parts
     if (Array.isArray(parts)) {
+      recordGeminiSuccess()
       return parts.map((p: { text?: string }) => p?.text ?? "").join("").trim() || null
     }
+    recordGeminiFailure()
     return null
   } catch {
+    recordGeminiFailure()
     return null
   }
 }

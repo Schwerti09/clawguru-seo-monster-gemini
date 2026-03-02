@@ -1,0 +1,46 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Runbook {
+  id        Int      @id @default(autoincrement())
+  slug      String   @unique
+  title     String
+  summary   String
+  locale    String   @default("de")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([locale, slug])
+  @@index([createdAt])
+}
+
+model Affiliate {
+  id              Int      @id @default(autoincrement())
+  ref             String   @unique
+  stripeAccountId String?
+  email           String?
+  conversions     Int      @default(0)
+  createdAt       DateTime @default(now())
+
+  @@index([conversions])
+  @@index([createdAt])
+}
+
+model LeaderboardEntry {
+  id        Int      @id @default(autoincrement())
+  handle    String
+  score     Int
+  checks    Int
+  fixes     Int
+  provider  String?
+  weekStart DateTime
+
+  @@index([score])
+  @@index([weekStart, score])
+}

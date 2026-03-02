@@ -3,6 +3,8 @@
 // de/en (primary) + es/fr/pt/it/ru/zh-CN/ja/ar
 // Auto-detects language from URL prefix; Gemini auto-translates runbook metadata.
 
+import { estimateGeminiTokens, recordGeminiFailure, recordGeminiSuccess, reserveGeminiTokens } from "@/lib/gemini-usage"
+
 export type Locale = "de" | "en" | "es" | "fr" | "pt" | "it" | "ru" | "zh" | "ja" | "ar"
 
 export const SUPPORTED_LOCALES: Locale[] = ["de", "en", "es", "fr", "pt", "it", "ru", "zh", "ja", "ar"]
@@ -418,6 +420,11 @@ export async function translateRunbook(opts: {
     `Summary: ${summary}`,
   ].join("\n")
 
+  const estimatedTokens = estimateGeminiTokens(prompt)
+  if (!reserveGeminiTokens(estimatedTokens)) {
+    return { title, summary, locale: targetLocale }
+  }
+
   try {
     const url = `${geminiBase}/models/${encodeURIComponent(geminiModel)}:generateContent?key=${encodeURIComponent(geminiKey)}`
     const res = await fetch(url, {
@@ -429,7 +436,10 @@ export async function translateRunbook(opts: {
       }),
       signal: AbortSignal.timeout(15_000),
     })
-    if (!res.ok) return { title, summary, locale: targetLocale }
+    if (!res.ok) {
+      recordGeminiFailure()
+      return { title, summary, locale: targetLocale }
+    }
     const data = await res.json()
     const text: string =
       data?.candidates?.[0]?.content?.parts
@@ -438,10 +448,12 @@ export async function translateRunbook(opts: {
     const jsonStr = text.replace(/```json|```/g, "").trim()
     const parsed = JSON.parse(jsonStr) as { title?: string; summary?: string }
     if (parsed.title && parsed.summary) {
+      recordGeminiSuccess()
       return { title: parsed.title, summary: parsed.summary, locale: targetLocale }
     }
+    recordGeminiFailure()
   } catch {
-    // fall through to default
+    recordGeminiFailure()
   }
 
   return { title, summary, locale: targetLocale }

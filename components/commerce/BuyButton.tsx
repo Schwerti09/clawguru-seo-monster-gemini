@@ -15,13 +15,30 @@ export default function BuyButton({
 }) {
   const [loading, setLoading] = useState(false)
 
+  function readCookie(name: string) {
+    return document.cookie
+      .split(";")
+      .map((part) => part.trim())
+      .find((part) => part.startsWith(`${name}=`))
+      ?.split("=")[1]
+  }
+
+  function getAffiliateRef() {
+    if (typeof window === "undefined") return undefined
+    const stored = localStorage.getItem("affiliate_ref")
+    if (stored) return stored
+    const cookieValue = readCookie("affiliate_ref")
+    return cookieValue ? decodeURIComponent(cookieValue) : undefined
+  }
+
   async function go() {
     setLoading(true)
     try {
+      const affiliateRef = getAffiliateRef()
       const res = await fetch("/api/stripe/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ product })
+        body: JSON.stringify({ product, affiliate_ref: affiliateRef })
       })
       const data = await res.json()
       if (data?.url) window.location.href = data.url

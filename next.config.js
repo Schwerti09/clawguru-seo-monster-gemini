@@ -31,6 +31,13 @@ const SECURITY_HEADERS = [
   },
 ]
 
+const I18N_CONFIG = {
+  locales: ["de", "en", "es", "fr", "pt", "it", "ru", "zh", "ja", "ar"],
+  defaultLocale: "de",
+}
+
+const enableBuiltInI18n = process.env.NEXT_I18N_MODE === "builtin"
+
 const nextConfig = {
   reactStrictMode: true,
   trailingSlash: false,
@@ -44,6 +51,7 @@ const nextConfig = {
       { protocol: "https", hostname: "**" },
     ],
   },
+  ...(enableBuiltInI18n ? { i18n: I18N_CONFIG } : {}),
   // 100/100 OPTIMIZATION 2026: Security & performance headers
   async headers() {
     return [

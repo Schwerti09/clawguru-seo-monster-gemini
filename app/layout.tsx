@@ -7,6 +7,7 @@ import Footer from "@/components/layout/Footer"
 import ActionDock from "@/components/layout/ActionDock"
 // WORLD BEAST FINAL LAUNCH: Umami privacy-first analytics
 import UmamiAnalytics from "@/components/analytics/UmamiAnalytics"
+import AffiliateRefTracker from "@/components/affiliate/AffiliateRefTracker"
 // VISUAL UPGRADE 2026: Neon cursor + page transition wrapper
 import NeonCursor from "@/components/visual/NeonCursor"
 import PageTransition from "@/components/visual/PageTransition"
@@ -124,6 +125,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <RTLProvider>
           <TrustBadge />
           <Header />
+          <AffiliateRefTracker />
           {/* 100/100 OPTIMIZATION 2026: id="main-content" for skip link target; role implicit from <main> */}
           <main id="main-content" className="pt-28 pb-20 lg:pb-0">
             <PageTransition>{children}</PageTransition>

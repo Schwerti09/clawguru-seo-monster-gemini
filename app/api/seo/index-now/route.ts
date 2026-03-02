@@ -11,7 +11,12 @@ export const dynamic = "force-dynamic"
 export const runtime = "nodejs"
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
-const BATCH_SIZE = 200
+const DEFAULT_DAILY_QUOTA = 200
+const configuredQuota = Number(process.env.GOOGLE_INDEXER_DAILY_QUOTA ?? DEFAULT_DAILY_QUOTA)
+const BATCH_SIZE =
+  Number.isFinite(configuredQuota) && configuredQuota > 0
+    ? Math.min(DEFAULT_DAILY_QUOTA, configuredQuota)
+    : DEFAULT_DAILY_QUOTA
 
 export async function GET(req: NextRequest) {
   // Security: require CRON_SECRET

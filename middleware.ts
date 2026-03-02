@@ -7,6 +7,31 @@ import type { NextRequest } from "next/server"
 import { SUPPORTED_LOCALES, DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
 
 const LOCALE_COOKIE = "cg_locale"
+const NO_COOKIE_HEADERS = ["dnt", "sec-gpc"]
+const GEO_LOCALE_MAP: Record<string, Locale> = {
+  DE: "de",
+  AT: "de",
+  CH: "de",
+  US: "en",
+  GB: "en",
+  CA: "en",
+  AU: "en",
+  NZ: "en",
+  ES: "es",
+  MX: "es",
+  AR: "es",
+  FR: "fr",
+  BE: "fr",
+  PT: "pt",
+  BR: "pt",
+  IT: "it",
+  RU: "ru",
+  CN: "zh",
+  JP: "ja",
+  AE: "ar",
+  SA: "ar",
+  EG: "ar",
+}
 
 // ---------------------------------------------------------------------------
 // Maintenance Mode / Kill-Switch
@@ -77,6 +102,16 @@ function detectLocaleFromHeader(acceptLanguage: string | null): Locale {
   return DEFAULT_LOCALE
 }
 
+function detectLocaleFromGeo(request: NextRequest): Locale | null {
+  const country =
+    request.geo?.country ||
+    request.headers.get("x-vercel-ip-country") ||
+    request.headers.get("cf-ipcountry") ||
+    request.headers.get("x-geo-country")
+  if (!country) return null
+  return GEO_LOCALE_MAP[country.toUpperCase()] ?? null
+}
+
 /** Paths that should never be redirected */
 function isStaticOrApi(pathname: string): boolean {
   return (
@@ -92,6 +127,7 @@ function isStaticOrApi(pathname: string): boolean {
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
+  const disableCookies = NO_COOKIE_HEADERS.some((header) => request.headers.get(header) === "1")
 
   // ---------------------------------------------------------------------------
   // Maintenance Mode check – redirect everyone except bypass users
@@ -114,11 +150,13 @@ export function middleware(request: NextRequest) {
   if (SUPPORTED_LOCALES.includes(firstSegment)) {
     // Persist the chosen locale in a cookie for future visits
     const response = NextResponse.next()
-    response.cookies.set(LOCALE_COOKIE, firstSegment, {
-      maxAge: 60 * 60 * 24 * 365, // 1 year
-      path: "/",
-      sameSite: "lax",
-    })
+    if (!disableCookies) {
+      response.cookies.set(LOCALE_COOKIE, firstSegment, {
+        maxAge: 60 * 60 * 24 * 365, // 1 year
+        path: "/",
+        sameSite: "lax",
+      })
+    }
     return response
   }
 
@@ -159,7 +197,11 @@ export function middleware(request: NextRequest) {
 
   // No cookie – detect from Accept-Language header
   const acceptLanguage = request.headers.get("accept-language")
-  const detected = detectLocaleFromHeader(acceptLanguage)
+  const detectedFromHeader = acceptLanguage ? detectLocaleFromHeader(acceptLanguage) : DEFAULT_LOCALE
+  const detectedFromGeo = detectLocaleFromGeo(request)
+  const detected = detectedFromHeader !== DEFAULT_LOCALE
+    ? detectedFromHeader
+    : detectedFromGeo ?? DEFAULT_LOCALE
 
   // Only redirect if detected locale differs from default
   if (detected !== DEFAULT_LOCALE) {
@@ -170,6 +212,8 @@ export function middleware(request: NextRequest) {
 
   return NextResponse.next()
 }
+
+export const runtime = "experimental-edge"
 
 export const config = {
   matcher: [

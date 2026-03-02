@@ -1,0 +1,60 @@
+{
+  "hero": {
+    "badge": "Mycelial Singularity Engine v3.0 · PROTOCOLO GENESIS ATIVO",
+    "subtitle": "O micélio vivo de mais de 1M de runbooks. Cada nó é uma unidade de conhecimento, cada aresta uma relação semântica. Grafo de força dirigida, motor de evolução darwiniana e modo Oracle – a base de conhecimento ops mais avançada do mundo.",
+    "ctaMycelium": "Micélio vivo →",
+    "ctaCopilot": "Perguntar ao Copilot",
+    "ctaProKits": "Pro Kits (Stripe)",
+    "ctaIntel": "Feed Intel",
+    "miniCopilotTitle": "Mini-Copilot",
+    "miniCopilotSubtitle": "Descreva seu problema em 1 frase. Vamos guiá-lo ao hub certo.",
+    "miniCopilotPlaceholder": "ex. 'acho que meu gateway está exposto'",
+    "miniCopilotSubmit": "Ir",
+    "popularPromptsTitle": "Prompts populares",
+    "noLoginNote": "Sem login. Sem padrões obscuros. Apenas uma página que realmente te tira do aperto.",
+    "featureCopilot": "Copilot",
+    "featureCopilotDesc": "Conversa → Runbook",
+    "featureVault": "Vault",
+    "featureVaultDesc": "Referências e padrões",
+    "featureAcademy": "Academy",
+    "featureAcademyDesc": "Sprints, não cursos",
+    "titleSuffix": "Mycelial Singularity Engine v3.0"
+  },
+  "nav": {
+    "live": "Ao vivo",
+    "securityCheck": "Verificação de segurança",
+    "copilot": "Copilot",
+    "runbooks": "Runbooks",
+    "intelFeed": "Feed Intel",
+    "pricing": "Preços",
+    "emergency": "Emergência",
+    "proKits": "Pro Kits"
+  },
+  "dayPass": {
+    "label": "Passe diário (24h)"
+  },
+  "jackpot": {
+    "kicker": "Jackpot",
+    "title": "Você não quer «ler». Você quer resolver.",
+    "subtitle": "ClawGuru é uma camada de segurança operacional: Score → Runbook → Fix → Re-Check → Share.",
+    "liveScore": "Score ao vivo",
+    "liveScoreDesc": "30 segundos. Sem enrolação. Seus 3 principais riscos.",
+    "copilotRunbooks": "Runbooks do Copilot",
+    "copilotRunbooksDesc": "Você descreve o stack. Nós fornecemos um runbook para executar.",
+    "kitsTemplates": "Kits + Modelos",
+    "kitsTemplatesDesc": "Recursos de copiar e colar que você pode implantar diretamente na produção.",
+    "liveOpsWall": "Mural Ops ao vivo",
+    "liveOpsWallDesc": "Tendências + correções urgentes. Decida mais rápido, corrija mais rápido.",
+    "runbooksLink": "Runbooks →",
+    "allPlans": "Todos os planos →",
+    "discordOpsRoom": "Sala Discord Ops →",
+    "proTip": "Dica Pro: após o checkout, clique em",
+    "activateAccess": "«Ativar acesso»",
+    "then": "→ Dashboard."
+  },
+  "faq": {
+    "kicker": "FAQ",
+    "title": "Breve. Direto. Útil.",
+    "subtitle": "Algumas perguntas sempre surgem. Aqui estão as respostas."
+  }
+}

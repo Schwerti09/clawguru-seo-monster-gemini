@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { stripe } from "@/lib/stripe"
+import { isStripeActive, apiUnavailableResponse } from "@/lib/api-guard"
 
 export const runtime = "nodejs"
 
@@ -14,6 +15,7 @@ function allowedDownloadsFromLineItems(lineItems: { price?: { id: string } | nul
 }
 
 export async function GET(req: NextRequest) {
+  if (!isStripeActive()) return apiUnavailableResponse()
   const session_id = req.nextUrl.searchParams.get("session_id") || ""
   if (!session_id) return NextResponse.json({ paid: false, error: "Missing session_id" }, { status: 400 })
 

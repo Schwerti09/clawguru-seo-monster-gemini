@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { isApiActive, apiUnavailableResponse } from "@/lib/api-guard";
 
 type ReqBody = {
   prompt?: string;
@@ -46,6 +47,7 @@ function extractOutputText(data: unknown): string {
 }
 
 export async function POST(req: NextRequest) {
+  if (!isApiActive()) return apiUnavailableResponse();
   try {
     const { prompt } = (await req.json().catch(() => ({}))) as ReqBody;
     const p = (prompt || "").toString().slice(0, 12000);

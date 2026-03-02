@@ -13,7 +13,7 @@ interface Props {
   params: Promise<{ service_name: string }>
 }
 
-export const revalidate = 60 * 60 * 24 // 24h ISR
+export const revalidate = 86400 // 24h ISR
 export const dynamicParams = true
 
 export async function generateStaticParams() {

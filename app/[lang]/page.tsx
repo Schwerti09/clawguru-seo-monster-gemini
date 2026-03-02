@@ -4,13 +4,14 @@
 import { SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
 import Home from "@/app/page"
 
-export const revalidate = 60 * 60 * 24
+export const revalidate = 86400
 
 export async function generateStaticParams() {
   return SUPPORTED_LOCALES.map((lang) => ({ lang }))
 }
 
-export async function generateMetadata({ params }: { params: { lang: string } }) {
+export async function generateMetadata(props: { params: Promise<{ lang: string }> }) {
+  const params = await props.params;
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   return {
     alternates: { canonical: `/${locale}` },

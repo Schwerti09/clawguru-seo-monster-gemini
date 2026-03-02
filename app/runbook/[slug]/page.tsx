@@ -14,7 +14,7 @@ import { BASE_URL } from "@/lib/config"
 // Pre-build slug→runbook Map for O(1) related lookups on static RUNBOOKS
 const RUNBOOK_MAP = new Map(RUNBOOKS.map((r) => [r.slug, r]))
 
-export const revalidate = 60 * 60 * 24 // 24h ISR; use revalidateSeconds() from quality-gate for finer-grained tooling
+export const revalidate = 86400 // 24h ISR; use revalidateSeconds() from quality-gate for finer-grained tooling
 export const dynamicParams = true
 
 export async function generateStaticParams() {

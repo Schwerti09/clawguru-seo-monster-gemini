@@ -11,7 +11,7 @@ import { getTemporalHistory, findVersionByQuarter } from "@/lib/temporal-myceliu
 import TemporalTimeline from "@/components/visual/TemporalTimeline"
 import { BASE_URL } from "@/lib/config"
 
-export const revalidate = 60 * 60 * 24
+export const revalidate = 86400
 
 export async function generateMetadata(
   props: {

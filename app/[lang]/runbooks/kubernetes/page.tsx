@@ -6,13 +6,14 @@ import { RUNBOOKS } from "@/lib/pseo"
 import { type Locale, SUPPORTED_LOCALES } from "@/lib/i18n"
 import Link from "next/link"
 
-export const revalidate = 60 * 60 * 24
+export const revalidate = 86400
 
 export async function generateStaticParams() {
   return SUPPORTED_LOCALES.map((lang) => ({ lang }))
 }
 
-export async function generateMetadata({ params }: { params: { lang: string } }) {
+export async function generateMetadata(props: { params: Promise<{ lang: string }> }) {
+  const params = await props.params;
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   return {
     title: `Kubernetes Runbooks – RBAC, Networking, Security 2026 | ClawGuru`,
@@ -21,7 +22,8 @@ export async function generateMetadata({ params }: { params: { lang: string } })
   }
 }
 
-export default function KubernetesHubPage({ params }: { params: { lang: string } }) {
+export default async function KubernetesHubPage(props: { params: Promise<{ lang: string }> }) {
+  const params = await props.params;
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
 
   const k8sRunbooks = RUNBOOKS.filter(

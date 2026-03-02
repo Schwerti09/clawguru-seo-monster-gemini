@@ -4,7 +4,7 @@ import SectionTitle from "@/components/shared/SectionTitle"
 import { allProviders, runbooksByProvider } from "@/lib/pseo"
 import { notFound } from "next/navigation"
 
-export const revalidate = 60 * 60 * 24
+export const revalidate = 86400
 export const dynamicParams = true
 
 export async function generateStaticParams() {

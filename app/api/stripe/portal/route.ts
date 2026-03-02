@@ -14,7 +14,7 @@ function getOrigin(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  const token = cookies().get("claw_access")?.value || ""
+  const token = (await cookies()).get("claw_access")?.value || ""
   const payload = token ? verifyAccessToken(token) : null
   if (!payload) return NextResponse.json({ error: "Not authorized" }, { status: 401 })
 

@@ -10,7 +10,7 @@ import TemporalTimeline from "@/components/visual/TemporalTimeline"
 import { ActivateSwarmButton } from "@/components/shared/ActivateSwarmButton"
 import Link from "next/link"
 
-export const revalidate = 60 * 60 * 24 // 24h
+export const revalidate = 86400 // 24h
 export const dynamicParams = true
 
 export async function generateStaticParams() {
@@ -21,11 +21,12 @@ export async function generateStaticParams() {
   )
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { lang: string; slug: string }
-}) {
+export async function generateMetadata(
+  props: {
+    params: Promise<{ lang: string; slug: string }>
+  }
+) {
+  const params = await props.params;
   const locale = SUPPORTED_LOCALES.includes(params.lang as Locale)
     ? (params.lang as Locale)
     : "de"
@@ -50,11 +51,12 @@ export async function generateMetadata({
   }
 }
 
-export default async function LocalizedRunbookPage({
-  params,
-}: {
-  params: { lang: string; slug: string }
-}) {
+export default async function LocalizedRunbookPage(
+  props: {
+    params: Promise<{ lang: string; slug: string }>
+  }
+) {
+  const params = await props.params;
   const locale: Locale = SUPPORTED_LOCALES.includes(params.lang as Locale)
     ? (params.lang as Locale)
     : "de"
@@ -132,7 +134,6 @@ export default async function LocalizedRunbookPage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(speakableSchema) }}
       />
-
       <div className="py-16 max-w-4xl mx-auto" dir={localeDir(locale)}>
         {/* Locale switcher */}
         <div className="flex gap-2 mb-6 flex-wrap">

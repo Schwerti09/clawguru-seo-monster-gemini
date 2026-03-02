@@ -61,6 +61,7 @@ type ModuleInfo = {
   description: string
   envVars: string[]
   tip: string
+  deepLink: { label: string; href: string }
 }
 
 // ---------------------------------------------------------------------------
@@ -80,6 +81,7 @@ const MODULES: ModuleInfo[] = [
       "Dieses Modul schickt jeden Morgen bis zu 200 URLs direkt zu Google. Es nutzt die Google Indexing API, um neue Seiten sofort in den Index zu pushen – ohne auf den regulären Crawl zu warten.",
     envVars: ["GOOGLE_INDEXER_KEY"],
     tip: "Priorisiere High-Value-Seiten (Runbooks, /check) täglich – das erhöht den organischen Traffic um bis zu 40 %.",
+    deepLink: { label: "Google Search Console →", href: "https://search.google.com/search-console" },
   },
   {
     id: "cash",
@@ -93,6 +95,7 @@ const MODULES: ModuleInfo[] = [
       "Zeigt alle Stripe-Einnahmen in Echtzeit: 24-Stunden-Umsatz, 7-Tage-Revenue und aktive Abonnements. Trialing-Subscriptions werden separat angezeigt, damit du Conversion-Drops sofort siehst.",
     envVars: ["STRIPE_SECRET_KEY", "STRIPE_WEBHOOK_SECRET"],
     tip: "Aktiviere Annual-Billing (12 × Monatspreis mit 2 Gratis-Monaten) – das erhöht den LTV pro Kunde um ~80 %.",
+    deepLink: { label: "Stripe Dashboard →", href: "https://dashboard.stripe.com" },
   },
   {
     id: "affiliate",
@@ -106,6 +109,7 @@ const MODULES: ModuleInfo[] = [
       "Übersicht deines Affiliate-Netzwerks: Anzahl der aktiven Partner und ausstehende Provisionen. Das Modul trackt Referral-Links und berechnet automatisch die monatliche Auszahlung.",
     envVars: ["AFFILIATE_SECRET", "NEXT_PUBLIC_AFFILIATE_PROGRAM_URL"],
     tip: "Biete deinen Top-5-Affiliates 30 % recurring statt einmalig – sie werden zu deinem Sales-Team.",
+    deepLink: { label: "Partner Config →", href: "/admin/center" },
   },
   {
     id: "sentinel",
@@ -119,6 +123,7 @@ const MODULES: ModuleInfo[] = [
       "Überwacht den Health-Status der Gemini/OpenAI-API und die Systemverfügbarkeit. Zeigt Response-Zeiten, API-Fehlerquoten und System-Uptime auf einen Blick.",
     envVars: ["GEMINI_API_KEY", "OPENAI_API_KEY"],
     tip: "Baue eine Fallback-Chain: Gemini → OpenAI → lokales Modell. So hast du 99,9 % Verfügbarkeit ohne Single-Point-of-Failure.",
+    deepLink: { label: "Sentinel Logs →", href: "/api/admin/sentinel-check" },
   },
   {
     id: "defense",
@@ -132,6 +137,7 @@ const MODULES: ModuleInfo[] = [
       "Der Emergency Kill-Switch: Aktiviert den MAINTENANCE_MODE über die Netlify-API und triggert sofort einen neuen Build. Ideal vor großen Deployments oder bei kritischen Sicherheitsvorfällen.",
     envVars: ["NETLIFY_API_KEY", "NETLIFY_SITE_ID", "MAINTENANCE_MODE"],
     tip: "Nutze den Kill-Switch immer vor DB-Migrationen – das verhindert inkonsistente Zustände für aktive User.",
+    deepLink: { label: "Netlify Config →", href: "https://app.netlify.com" },
   },
 ]
 
@@ -144,6 +150,17 @@ function money(v: number, currency = "eur") {
     style: "currency",
     currency: currency.toUpperCase(),
   }).format(v / 100)
+}
+
+function isModuleOk(moduleId: ModuleId, overview: Overview | null): boolean {
+  if (!overview) return false
+  const env = overview.env
+  if (moduleId === "seo") return true // SEO module is always configured when the dashboard loads
+  if (moduleId === "cash") return !!env.hasStripe
+  if (moduleId === "affiliate") return !!env.hasWebhook
+  if (moduleId === "sentinel") return !!env.hasOpenAI
+  if (moduleId === "defense") return !!env.hasAdmin
+  return false
 }
 
 // ---------------------------------------------------------------------------
@@ -266,7 +283,18 @@ function Drawer({
             </div>
 
             {/* Footer */}
-            <div className="p-6 border-t border-white/8">
+            <div className="p-6 border-t border-white/8 space-y-3">
+              <motion.a
+                href={module.deepLink.href}
+                target={module.deepLink.href.startsWith("http") ? "_blank" : undefined}
+                rel={module.deepLink.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                className={`w-full flex items-center justify-center gap-2 py-3 rounded-2xl font-bold text-sm border ${module.borderColor} bg-white/5 hover:bg-white/10 ${module.color} transition-colors`}
+              >
+                <Zap className="w-4 h-4" />
+                {module.deepLink.label}
+              </motion.a>
               <button
                 onClick={onClose}
                 className="w-full py-3 rounded-2xl font-bold text-sm bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white transition-colors border border-white/8"
@@ -300,6 +328,7 @@ function ModuleCard({
   onToggleMaintenance: () => void
   maintenanceBusy: boolean
 }) {
+  const ok = isModuleOk(module.id, overview)
   const stripe = overview?.stripe
   const env = overview?.env
 
@@ -488,23 +517,39 @@ function ModuleCard({
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      whileHover={{ scale: 1.01 }}
+      whileHover={{ scale: 1.02 }}
       transition={{ type: "spring", stiffness: 300, damping: 25 }}
       className={`relative rounded-3xl border ${module.borderColor} overflow-hidden cursor-pointer group`}
       style={{
         background: `linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%)`,
         backdropFilter: "blur(12px)",
-        boxShadow: `0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05)`,
+        boxShadow: ok
+          ? `0 8px 32px rgba(0,0,0,0.3), 0 0 0 1px ${module.glowColor}, inset 0 1px 0 rgba(255,255,255,0.05)`
+          : `0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05)`,
       }}
       onClick={() => onOpenDrawer(module)}
     >
-      {/* Glow background */}
-      <div
-        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-        style={{
-          background: `radial-gradient(ellipse at top left, ${module.glowColor} 0%, transparent 60%)`,
-        }}
-      />
+      {/* Pulsing glow for OK modules */}
+      {ok && (
+        <motion.div
+          className="absolute inset-0 pointer-events-none"
+          animate={{ opacity: [0.4, 0.8, 0.4] }}
+          transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+          style={{
+            background: `radial-gradient(ellipse at top left, ${module.glowColor} 0%, transparent 55%)`,
+          }}
+        />
+      )}
+
+      {/* Hover glow (non-OK modules) */}
+      {!ok && (
+        <div
+          className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+          style={{
+            background: `radial-gradient(ellipse at top left, ${module.glowColor} 0%, transparent 60%)`,
+          }}
+        />
+      )}
 
       <div className="relative p-5">
         {/* Header */}
@@ -639,20 +684,24 @@ export default function UniverseDashboard() {
             </p>
           </div>
           <div className="flex gap-3">
-            <a
+            <motion.a
               href="/api/admin/logout"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.97 }}
               className="px-4 py-2 rounded-2xl border border-gray-700 hover:border-gray-500 font-bold text-gray-300 text-sm transition-colors"
             >
               Logout
-            </a>
-            <button
+            </motion.a>
+            <motion.button
               onClick={() => { void loadOverview(); void loadMaintenance() }}
               disabled={overviewBusy}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.97 }}
               className="px-4 py-2 rounded-2xl font-black text-sm bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border border-cyan-500/30 hover:border-cyan-500/60 text-cyan-300 transition-all disabled:opacity-50 flex items-center gap-2"
             >
               {overviewBusy && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
               Refresh
-            </button>
+            </motion.button>
           </div>
         </div>
 
@@ -733,20 +782,23 @@ export default function UniverseDashboard() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.5 }}
-        className="mt-8 grid sm:grid-cols-3 gap-3"
+        className="mt-8 grid sm:grid-cols-2 lg:grid-cols-4 gap-3"
       >
         {[
           { label: "💰 Profit Dashboard", href: "/admin/profit-dashboard" },
           { label: "🚀 Launch Dashboard", href: "/admin/launch-dashboard" },
           { label: "⚙️ Control Center", href: "/admin/center" },
+          { label: "📖 Universe Manual", href: "/admin/manual" },
         ].map(({ label, href }) => (
-          <a
+          <motion.a
             key={href}
             href={href}
-            className="flex items-center justify-center px-4 py-3 rounded-2xl border border-gray-800 bg-black/20 hover:bg-black/40 hover:border-gray-600 text-sm font-bold text-gray-300 transition-all"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.97 }}
+            className="flex items-center justify-center px-4 py-3 rounded-2xl border border-gray-800 bg-black/20 hover:bg-black/40 hover:border-gray-600 text-sm font-bold text-gray-300 transition-colors"
           >
             {label}
-          </a>
+          </motion.a>
         ))}
       </motion.div>
 

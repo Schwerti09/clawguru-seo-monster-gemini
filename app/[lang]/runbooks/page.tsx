@@ -2,7 +2,7 @@
 // Renders the same runbooks listing so locale navigation doesn't 404.
 
 import { SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
-import RunbooksPage from "@/app/runbooks/page"
+import RunbooksPageContent from "@/components/pages/RunbooksPageContent"
 
 export const revalidate = 60 * 60 * 24
 
@@ -22,5 +22,5 @@ export async function generateMetadata({ params }: { params: { lang: string } })
 
 export default function LocaleRunbooksPage({ params }: { params: { lang: string } }) {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
-  return <RunbooksPage locale={locale} />
+  return <RunbooksPageContent locale={locale} />
 }

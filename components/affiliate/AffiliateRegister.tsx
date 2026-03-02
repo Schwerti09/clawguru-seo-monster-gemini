@@ -3,7 +3,7 @@
 import { useState, type FormEvent } from "react"
 import Image from "next/image"
 import { BASE_URL } from "@/lib/config"
-import { SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
+import { DEFAULT_LOCALE, SUPPORTED_LOCALES, type Locale, t } from "@/lib/i18n"
 
 type Banner = {
   locale: Locale
@@ -37,6 +37,9 @@ const CTA_COPY: Record<Locale, string> = {
   ar: "إصلاحات أمنية خلال دقائق",
 }
 
+const BANNER_WIDTH = 600
+const BANNER_HEIGHT = 315
+
 function generateBanner({
   affiliateName,
   affiliateId,
@@ -47,8 +50,8 @@ function generateBanner({
   locale: Locale
 }) {
   const canvas = document.createElement("canvas")
-  canvas.width = 600
-  canvas.height = 315
+  canvas.width = BANNER_WIDTH
+  canvas.height = BANNER_HEIGHT
   const ctx = canvas.getContext("2d")
   if (!ctx) return ""
 
@@ -83,7 +86,11 @@ function generateBanner({
   return canvas.toDataURL("image/png")
 }
 
-export default function AffiliateRegister() {
+type Props = {
+  locale?: Locale
+}
+
+export default function AffiliateRegister({ locale = DEFAULT_LOCALE }: Props) {
   const [name, setName] = useState("")
   const [company, setCompany] = useState("")
   const [email, setEmail] = useState("")
@@ -123,32 +130,30 @@ export default function AffiliateRegister() {
   return (
     <div className="max-w-5xl mx-auto py-16 space-y-10">
       <div className="space-y-3">
-        <div className="text-xs uppercase tracking-widest text-cyan-400">Affiliate Onboarding</div>
-        <h1 className="text-4xl font-black">Partner Registrierung</h1>
-        <p className="text-gray-400 text-lg">
-          Sofort nach dem Signup erzeugen wir deine personalisierten Banner in 10 Sprachen.
-        </p>
+        <div className="text-xs uppercase tracking-widest text-cyan-400">{t(locale, "affiliateKicker")}</div>
+        <h1 className="text-4xl font-black">{t(locale, "affiliateTitle")}</h1>
+        <p className="text-gray-400 text-lg">{t(locale, "affiliateSubtitle")}</p>
       </div>
 
       <form onSubmit={handleSubmit} className="grid md:grid-cols-3 gap-4 rounded-3xl border border-gray-800 bg-black/40 p-6">
         <input
           value={name}
           onChange={(event) => setName(event.target.value)}
-          placeholder="Name"
+          placeholder={t(locale, "affiliateNamePlaceholder")}
           className="rounded-2xl border border-gray-700 bg-black/60 px-4 py-3 text-sm text-gray-200 focus:outline-none focus:border-cyan-400"
           required
         />
         <input
           value={company}
           onChange={(event) => setCompany(event.target.value)}
-          placeholder="Company"
+          placeholder={t(locale, "affiliateCompanyPlaceholder")}
           className="rounded-2xl border border-gray-700 bg-black/60 px-4 py-3 text-sm text-gray-200 focus:outline-none focus:border-cyan-400"
         />
         <input
           type="email"
           value={email}
           onChange={(event) => setEmail(event.target.value)}
-          placeholder="Email"
+          placeholder={t(locale, "affiliateEmailPlaceholder")}
           className="rounded-2xl border border-gray-700 bg-black/60 px-4 py-3 text-sm text-gray-200 focus:outline-none focus:border-cyan-400"
           required
         />
@@ -157,18 +162,18 @@ export default function AffiliateRegister() {
           className="md:col-span-3 rounded-2xl bg-gradient-to-r from-cyan-400 to-blue-500 px-6 py-3 font-black text-black hover:opacity-90"
           disabled={status === "loading"}
         >
-          {status === "loading" ? "Registriere..." : "Partner aktivieren"}
+          {status === "loading" ? t(locale, "affiliateLoading") : t(locale, "affiliateActivateButton")}
         </button>
         {status === "error" && (
-          <div className="md:col-span-3 text-sm text-red-300">Signup fehlgeschlagen. Bitte erneut versuchen.</div>
+          <div className="md:col-span-3 text-sm text-red-300">{t(locale, "affiliateError")}</div>
         )}
       </form>
 
       {status === "ready" && (
         <div className="space-y-4">
           <div className="rounded-3xl border border-cyan-500/30 bg-cyan-500/10 p-5 text-sm text-cyan-100">
-            Affiliate-ID: <span className="font-bold">{affiliateId}</span> · Affiliate-Link:{" "}
-            <span className="font-bold">{BASE_URL}/?ref={affiliateId}</span>
+            {t(locale, "affiliateIdLabel")}: <span className="font-bold">{affiliateId}</span> ·{" "}
+            {t(locale, "affiliateLinkLabel")}: <span className="font-bold">{BASE_URL}/?ref={affiliateId}</span>
           </div>
           <div className="grid md:grid-cols-2 gap-6">
             {banners.map((banner) => (
@@ -186,8 +191,8 @@ export default function AffiliateRegister() {
                 <Image
                   src={banner.dataUrl}
                   alt={`Banner ${banner.label}`}
-                  width={600}
-                  height={315}
+                  width={BANNER_WIDTH}
+                  height={BANNER_HEIGHT}
                   unoptimized
                   className="rounded-2xl border border-gray-800"
                 />

@@ -12,7 +12,7 @@ function bytesToBase64(bytes: Uint8Array) {
   return btoa(binary)
 }
 
-function base64ToBytes(base64: string) {
+export function base64ToBytes(base64: string) {
   if (typeof Buffer !== "undefined") {
     return new Uint8Array(Buffer.from(base64, "base64"))
   }

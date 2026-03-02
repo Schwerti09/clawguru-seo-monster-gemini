@@ -11,7 +11,7 @@ import { ActivateSwarmButton } from "@/components/shared/ActivateSwarmButton"
 import { BASE_URL } from "@/lib/config"
 import ShareUnlockPanel from "@/components/shared/ShareUnlockPanel"
 import { mutateSeoTitle } from "@/app/lib/seo-optimizer"
-import { LOCALE_HREFLANG, SUPPORTED_LOCALES } from "@/lib/i18n"
+import { DEFAULT_LOCALE, LOCALE_HREFLANG, SUPPORTED_LOCALES } from "@/lib/i18n"
 
 // Pre-build slug→runbook Map for O(1) related lookups on static RUNBOOKS
 const RUNBOOK_MAP = new Map(RUNBOOKS.map((r) => [r.slug, r]))
@@ -327,7 +327,7 @@ export default function RunbookPage({ params }: { params: { slug: string } }) {
           ) : null}
 
           <div className="text-xs uppercase tracking-widest text-gray-500">Schritt-für-Schritt</div>
-          <ShareUnlockPanel title={r.title} slug={r.slug} items={r.howto.steps} />
+          <ShareUnlockPanel title={r.title} slug={r.slug} items={r.howto.steps} locale={DEFAULT_LOCALE} />
 
           <div className="mt-6 flex flex-wrap gap-3">
             <a

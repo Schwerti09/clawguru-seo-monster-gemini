@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react"
 import { motion } from "framer-motion"
 import { Activity, DollarSign, Shield, RefreshCw, LogOut, ExternalLink, CheckCircle, XCircle, AlertCircle } from "lucide-react"
+import { MRR_TARGET_CENTS } from "@/lib/config"
 
 type Overview = {
   now: string
@@ -60,7 +61,7 @@ export default function AdminDashboard() {
   const stripe = data?.stripe
   const last = useMemo(() => stripe?.lastPayments || [], [stripe])
   const mrrEstimate = stripe ? Math.round((stripe.charges7d / 7) * 30) : 0
-  const mrrTarget = 5_000_000
+  const mrrTarget = MRR_TARGET_CENTS
   const mrrProgress = stripe ? Math.min(100, Math.round((mrrEstimate / mrrTarget) * 100)) : 0
 
   const salePulses = useMemo(() => {

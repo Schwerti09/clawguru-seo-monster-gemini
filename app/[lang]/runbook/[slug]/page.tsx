@@ -174,7 +174,7 @@ export default async function LocalizedRunbookPage({
         {r.howto.steps.length > 0 && (
           <div className="mb-8 p-6 rounded-2xl border border-gray-800 bg-black/30">
             <h2 className="text-xl font-black mb-4">{t(locale, "steps")}</h2>
-            <ShareUnlockPanel title={translated.title} slug={r.slug} items={r.howto.steps} />
+            <ShareUnlockPanel title={translated.title} slug={r.slug} items={r.howto.steps} locale={locale} />
           </div>
         )}
 

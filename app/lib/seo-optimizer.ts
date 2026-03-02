@@ -29,13 +29,14 @@ function firstTrend(trends?: string[]) {
 export function mutateSeoTitle({ title, trendKeywords, now = new Date() }: SeoMutationInput) {
   const base = title.trim()
   if (!base) return base
+  const upper = base.toUpperCase()
 
   const trend = firstTrend(trendKeywords)
   if (trend && !base.toLowerCase().includes(trend.toLowerCase())) {
     return clampTitle(`${trend}: ${base}`)
   }
 
-  if (CVE_PATTERN.test(base) && !base.toUpperCase().includes("URGENT:")) {
+  if (CVE_PATTERN.test(base) && !upper.includes("URGENT:")) {
     return clampTitle(`URGENT: ${base}`)
   }
 

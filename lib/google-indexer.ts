@@ -3,7 +3,7 @@
 // Reads the service-account key from GOOGLE_INDEXER_KEY (JSON string) and submits
 // URL_UPDATED notifications via the Indexing API.
 
-import { base64UrlEncode, encodeUtf8 } from "@/lib/edge-crypto"
+import { base64ToBytes, base64UrlEncode, encodeUtf8 } from "@/lib/edge-crypto"
 
 const SCOPES = ["https://www.googleapis.com/auth/indexing"]
 const TOKEN_URL = "https://oauth2.googleapis.com/token"
@@ -13,18 +13,6 @@ type ServiceAccountKey = {
   client_email: string
   private_key: string
   token_uri?: string
-}
-
-function base64ToBytes(base64: string) {
-  if (typeof Buffer !== "undefined") {
-    return new Uint8Array(Buffer.from(base64, "base64"))
-  }
-  const binary = atob(base64)
-  const bytes = new Uint8Array(binary.length)
-  for (let i = 0; i < binary.length; i += 1) {
-    bytes[i] = binary.charCodeAt(i)
-  }
-  return bytes
 }
 
 function pemToArrayBuffer(pem: string) {

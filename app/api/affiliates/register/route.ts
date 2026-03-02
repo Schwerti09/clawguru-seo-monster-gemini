@@ -9,9 +9,14 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid email" }, { status: 400 })
   }
 
-  const affiliateId = typeof crypto?.randomUUID === "function"
-    ? crypto.randomUUID()
-    : `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`
+  const fallbackId = () => {
+    const bytes = crypto.getRandomValues(new Uint8Array(16))
+    return Array.from(bytes)
+      .map((byte) => byte.toString(16).padStart(2, "0"))
+      .join("")
+  }
+
+  const affiliateId = typeof crypto?.randomUUID === "function" ? crypto.randomUUID() : fallbackId()
 
   return NextResponse.json({ affiliateId })
 }

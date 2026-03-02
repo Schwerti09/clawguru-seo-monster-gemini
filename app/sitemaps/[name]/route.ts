@@ -199,6 +199,7 @@ export async function GET(
       if (!SUPPORTED_LOCALES.includes(locale)) {
         return new NextResponse("Not Found", { status: 404 })
       }
+      // Include full runbook catalog for cross-language linking (no cap) to keep new pages indexed.
       const allRunbooks = [
         ...rb["a-f"],
         ...rb["g-l"],

@@ -120,22 +120,22 @@ export default function Home({ dict }: HomeProps) {
 
             <div className="mt-8 flex flex-wrap gap-3">
               
-              <BuyButton product="daypass" label={dict?.dayPass?.label ?? "Day Pass (24h)"} />
+              <BuyButton product="daypass" label={dict?.dayPass.label ?? "Day Pass (24h)"} />
               <Link href="/runbooks" className="px-6 py-3 rounded-2xl border border-white/10 hover:border-white/20 font-bold text-gray-200 transition-all duration-300">
-                {dict?.jackpot?.runbooksLink ?? "Runbooks →"}
+                {dict?.jackpot.runbooksLink ?? "Runbooks →"}
               </Link>
               <Link href="/pricing" className="px-6 py-3 rounded-2xl border border-white/10 hover:border-white/20 font-bold text-gray-200 transition-all duration-300">
-                {dict?.jackpot?.allPlans ?? "Alle Pläne →"}
+                {dict?.jackpot.allPlans ?? "Alle Pläne →"}
               </Link>
               <a href={COMMUNITY.discordInvite} className="px-6 py-3 rounded-2xl border border-white/10 hover:border-white/20 font-bold text-gray-200 transition-all duration-300">
-                {dict?.jackpot?.discordOpsRoom ?? "Discord Ops-Room →"}
+                {dict?.jackpot.discordOpsRoom ?? "Discord Ops-Room →"}
               </a>
             </div>
 
             <div className="mt-6 p-5 rounded-3xl glass-card text-sm text-gray-400">
-              {dict?.jackpot?.proTip ?? "Pro-Tipp: Nach dem Checkout klickst du auf"}{" "}
-              <span className="text-gray-200 font-bold">{dict?.jackpot?.activateAccess ?? "„Zugriff aktivieren“"}</span>{" "}
-              {dict?.jackpot?.then ?? "→ Dashboard."}
+              {dict?.jackpot.proTip ?? "Pro-Tipp: Nach dem Checkout klickst du auf"}{" "}
+              <span className="text-gray-200 font-bold">{dict?.jackpot.activateAccess ?? "„Zugriff aktivieren“"}</span>{" "}
+              {dict?.jackpot.then ?? "→ Dashboard."}
             </div>
           </div>
         </Container>
@@ -186,9 +186,9 @@ export default function Home({ dict }: HomeProps) {
           <div className="grid lg:grid-cols-2 gap-10 items-start">
             <div>
               <SectionTitle
-                kicker={dict?.faq?.kicker ?? "FAQ"}
-                title={dict?.faq?.title ?? "Kurz. Hart. Hilfreich."}
-                subtitle={dict?.faq?.subtitle ?? "Einige Fragen kommen immer. Hier sind die Antworten."}
+                kicker={dict?.faq.kicker ?? "FAQ"}
+                title={dict?.faq.title ?? "Kurz. Hart. Hilfreich."}
+                subtitle={dict?.faq.subtitle ?? "Einige Fragen kommen immer. Hier sind die Antworten."}
               />
               <FAQ />
             </div>

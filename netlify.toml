@@ -7,7 +7,7 @@
 
 [build.environment]
   NODE_VERSION = "20"
-  NODE_OPTIONS = "--max-old-space-size=1536"
+  NODE_OPTIONS = "--max-old-space-size=3072"
 
 # Immutable caching for content-hashed static assets (must be before the catch-all)
 [[headers]]

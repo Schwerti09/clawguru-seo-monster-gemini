@@ -1,0 +1,60 @@
+{
+  "hero": {
+    "badge": "Mycelial Singularity Engine v3.0 · GENESIS PROTOKOLL AKTIV",
+    "subtitle": "Das lebende Mycelium von 1M+ Runbooks. Jeder Knoten eine Wissenseinheit, jede Kante eine semantische Beziehung. Force-directed Graph, Darwinian Evolution Engine, und Oracle Mode – die fortschrittlichste Ops-Wissensdatenbank der Welt.",
+    "ctaMycelium": "Living Mycelium →",
+    "ctaCopilot": "Ask Copilot",
+    "ctaProKits": "Pro Kits (Stripe)",
+    "ctaIntel": "Intel Feed",
+    "miniCopilotTitle": "Mini-Copilot",
+    "miniCopilotSubtitle": "Schreib dein Problem in 1 Satz. Wir leiten dich in den richtigen Hub.",
+    "miniCopilotPlaceholder": "z.B. 'ich glaube mein gateway ist exposed'",
+    "miniCopilotSubmit": "Los",
+    "popularPromptsTitle": "Beliebte Prompts",
+    "noLoginNote": "Kein Login. Keine Dark-Patterns. Nur eine Seite, die dich wirklich aus dem Feuer zieht.",
+    "featureCopilot": "Copilot",
+    "featureCopilotDesc": "Konversation → Runbook",
+    "featureVault": "Vault",
+    "featureVaultDesc": "Referenzen & Patterns",
+    "featureAcademy": "Academy",
+    "featureAcademyDesc": "Sprints statt Kurse",
+    "titleSuffix": "Mycelial Singularity Engine v3.0"
+  },
+  "nav": {
+    "live": "Live",
+    "securityCheck": "Security-Check",
+    "copilot": "Copilot",
+    "runbooks": "Runbooks",
+    "intelFeed": "Intel Feed",
+    "pricing": "Pricing",
+    "emergency": "Notfall",
+    "proKits": "Pro Kits"
+  },
+  "dayPass": {
+    "label": "Day Pass (24h)"
+  },
+  "jackpot": {
+    "kicker": "Jackpot",
+    "title": "Du willst nicht lesen. Du willst lösen.",
+    "subtitle": "ClawGuru ist eine operative Security-Schicht: Score → Runbook → Fix → Re-Check → Share.",
+    "liveScore": "Live Score",
+    "liveScoreDesc": "30 Sekunden. Kein Gelaber. Deine Top 3 Risiken.",
+    "copilotRunbooks": "Copilot Runbooks",
+    "copilotRunbooksDesc": "Du beschreibst den Stack. Wir geben ein Runbook zum Abarbeiten.",
+    "kitsTemplates": "Kits + Templates",
+    "kitsTemplatesDesc": "Copy/Paste Assets, die du direkt in Produktion ziehen kannst.",
+    "liveOpsWall": "Live Ops Wall",
+    "liveOpsWallDesc": "Trends + Hot Fixes. Schneller entscheiden, schneller fixen.",
+    "runbooksLink": "Runbooks →",
+    "allPlans": "Alle Pläne →",
+    "discordOpsRoom": "Discord Ops-Room →",
+    "proTip": "Pro-Tipp: Nach dem Checkout klickst du auf",
+    "activateAccess": "Zugriff aktivieren",
+    "then": "→ Dashboard."
+  },
+  "faq": {
+    "kicker": "FAQ",
+    "title": "Kurz. Hart. Hilfreich.",
+    "subtitle": "Einige Fragen kommen immer. Hier sind die Antworten."
+  }
+}

@@ -5,11 +5,14 @@
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 import { SUPPORTED_LOCALES, DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
+import {
+  AFFILIATE_COOKIE,
+  AFFILIATE_COOKIE_MAX_AGE,
+  AFFILIATE_QUERY_KEYS,
+  sanitizeAffiliateRef,
+} from "@/lib/affiliate"
 
 const LOCALE_COOKIE = "cg_locale"
-const AFFILIATE_COOKIE = "affiliate_ref"
-const AFFILIATE_COOKIE_MAX_AGE = 60 * 60 * 24 * 30
-const AFFILIATE_QUERY_KEYS = ["affiliate_ref", "ref", "aff"]
 
 // ---------------------------------------------------------------------------
 // Maintenance Mode / Kill-Switch
@@ -97,8 +100,8 @@ function extractAffiliateRef(request: NextRequest): string | null {
   for (const key of AFFILIATE_QUERY_KEYS) {
     const value = request.nextUrl.searchParams.get(key)
     if (!value) continue
-    const cleaned = value.trim().slice(0, 64)
-    if (cleaned.length > 0) return cleaned
+    const cleaned = sanitizeAffiliateRef(value)
+    if (cleaned) return cleaned
   }
   return null
 }

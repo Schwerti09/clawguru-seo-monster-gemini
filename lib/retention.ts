@@ -119,6 +119,7 @@ export function buildDefenderEmailHtml(opts: {
   weekLabel: string
 }) {
   const { contact, threats, siteUrl, weekLabel } = opts
+  const safeSiteUrl = siteUrl.replace(/["'<>]/g, "")
   const name =
     contact.firstName ||
     contact.name ||
@@ -127,13 +128,13 @@ export function buildDefenderEmailHtml(opts: {
 
   const items = threats
     .map((t) => {
-      const runbookUrl = `${siteUrl}/runbooks?q=${encodeURIComponent(t.id)}&utm_source=retention&utm_medium=email`
+      const runbookUrl = `${safeSiteUrl}/runbooks?q=${encodeURIComponent(t.id)}&utm_source=retention&utm_medium=email`
       return `
         <li style="margin-bottom:12px">
           <strong style="color:#f97316">${t.id}</strong>
           <span style="color:#9ca3af">(${t.severity}${t.cvssScore ? ` · CVSS ${t.cvssScore}` : ""})</span>
           <div style="color:#d1d5db;margin-top:4px;font-size:13px;line-height:1.6">${escapeHtml(t.summary)}</div>
-          <a href="${runbookUrl}" style="color:#22d3ee;font-weight:700;text-decoration:none">Fix-Runbook öffnen →</a>
+      <a href="${runbookUrl}" style="color:#22d3ee;font-weight:700;text-decoration:none">Fix-Runbook öffnen →</a>
         </li>
       `
     })
@@ -154,7 +155,7 @@ export function buildDefenderEmailHtml(opts: {
       <p style="margin:0;color:#d1d5db;font-size:13px">
         Zugriff auf vollständige Mitigation-Runbooks + Live-Checks.
       </p>
-      <a href="${siteUrl}/dashboard" style="display:inline-block;margin-top:10px;background:#22d3ee;color:#0a0a0a;padding:10px 16px;border-radius:10px;font-weight:800;text-decoration:none">
+      <a href="${safeSiteUrl}/dashboard" style="display:inline-block;margin-top:10px;background:#22d3ee;color:#0a0a0a;padding:10px 16px;border-radius:10px;font-weight:800;text-decoration:none">
         Dashboard öffnen →
       </a>
     </div>

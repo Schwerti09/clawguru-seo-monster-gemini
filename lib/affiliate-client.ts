@@ -1,6 +1,7 @@
+import { AFFILIATE_QUERY_KEYS, sanitizeAffiliateRef } from "@/lib/affiliate"
+
 const AFFILIATE_STORAGE_KEY = "clawguru_affiliate_ref"
 const AFFILIATE_TTL_MS = 30 * 24 * 60 * 60 * 1000
-const AFFILIATE_QUERY_KEYS = ["affiliate_ref", "ref", "aff"]
 
 type StoredAffiliate = {
   value: string
@@ -9,11 +10,6 @@ type StoredAffiliate = {
 
 function now() {
   return Date.now()
-}
-
-function sanitizeAffiliateRef(ref: string): string | null {
-  const cleaned = ref.trim().slice(0, 64)
-  return cleaned.length > 0 ? cleaned : null
 }
 
 export function storeAffiliateRef(ref: string): void {

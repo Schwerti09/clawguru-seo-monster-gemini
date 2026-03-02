@@ -52,6 +52,11 @@ export async function POST(req: NextRequest) {
     // Optional country hint passed by the frontend (e.g. from geolocation or a form field)
     const country: string | undefined =
       typeof body?.country === "string" ? body.country : undefined
+    // Optional affiliate reference (e.g. set via /go/:slug cookie or query param)
+    const affiliateRef: string | undefined =
+      typeof body?.affiliate_ref === "string" && body.affiliate_ref.length > 0
+        ? body.affiliate_ref.slice(0, 64) // cap length for Stripe metadata
+        : undefined
 
     const price = getPriceId(product)
     if (!price) {
@@ -93,7 +98,8 @@ export async function POST(req: NextRequest) {
       metadata: {
         product,
         ...(email ? { email } : {}),
-        ...(country ? { country } : {})
+        ...(country ? { country } : {}),
+        ...(affiliateRef ? { affiliate_ref: affiliateRef } : {})
       }
     })
 

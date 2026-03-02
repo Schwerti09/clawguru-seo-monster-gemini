@@ -10,6 +10,7 @@
  */
 
 import crypto from "crypto"
+import type Stripe from "stripe"
 import { stripe } from "@/lib/stripe"
 
 // ---------------------------------------------------------------------------
@@ -398,7 +399,7 @@ export async function getStripeCustomerEmails(): Promise<StripeCustomerRecord[]>
     let startingAfter: string | undefined = undefined
 
     while (hasMore) {
-      const listParams: Parameters<typeof stripe.subscriptions.list>[0] = {
+      const listParams: Stripe.SubscriptionListParams = {
         limit: 100,
         status,
         expand: ["data.customer"],

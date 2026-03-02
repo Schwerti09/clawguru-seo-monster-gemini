@@ -7,8 +7,9 @@ import { fetchUpstreamCVEs, type UpstreamCVE } from "@/lib/upstream-cve"
 const CVE_CACHE_KEY = "affiliate:top-cve"
 const CVE_CACHE_TTL = 60 * 60
 
-function esc(s: string) {
-  return s.replace(
+function escapeXmlText(s: string) {
+  const cleaned = s.replace(/[\x00-\x1F\x7F]/g, "")
+  return cleaned.replace(
     /[&<>"']/g,
     (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" } as Record<
       string,
@@ -25,6 +26,13 @@ function formatPartnerName(partnerId: string) {
     .join(" ")
 }
 
+function truncateAtWord(text: string, max = 120): string {
+  if (text.length <= max) return text
+  const idx = text.lastIndexOf(" ", max)
+  if (idx <= 0) return text.slice(0, max).trimEnd()
+  return text.slice(0, idx).trimEnd()
+}
+
 function splitLine(text: string, max = 64): [string, string] {
   if (text.length <= max) return [text, ""]
   const idx = text.lastIndexOf(" ", max)
@@ -38,10 +46,10 @@ async function getTopCve(): Promise<UpstreamCVE> {
 
   const list = await fetchUpstreamCVEs()
   const top = list[0] ?? {
-    id: "CVE-0000-0000",
+    id: "CVE-PENDING",
     description: "No live CVE data available right now.",
     severity: "unknown",
-    publishedDate: new Date().toISOString().slice(0, 10),
+    publishedDate: "N/A",
     affectedProducts: [],
     source: "nvd",
   }
@@ -57,10 +65,29 @@ export async function GET(
   const { searchParams } = new URL(req.url)
   const partnerId = params.partnerId || "partner"
   const partnerKey = partnerId.toLowerCase()
-  const partnerName = (searchParams.get("name") || formatPartnerName(partnerId)).slice(0, 120)
+  const partnerName = truncateAtWord(searchParams.get("name") || formatPartnerName(partnerId), 120)
   const origin = getOrigin(req)
   const defaultUrl = AFFILIATE_REDIRECTS[partnerKey] || `${origin}/go/${partnerKey}`
-  const partnerUrl = (searchParams.get("url") || defaultUrl).slice(0, 300)
+  const urlParam = searchParams.get("url")
+  let partnerUrl = defaultUrl
+  if (urlParam) {
+    try {
+      const parsed = new URL(urlParam)
+      if (parsed.protocol === "http:" || parsed.protocol === "https:") {
+        partnerUrl = parsed.toString()
+      }
+    } catch {
+      // fallback to default
+    }
+  }
+  if (partnerUrl.length > 300) {
+    try {
+      const parsed = new URL(partnerUrl)
+      partnerUrl = parsed.origin
+    } catch {
+      partnerUrl = partnerUrl.slice(0, 300)
+    }
+  }
 
   const cve = await getTopCve()
   const cveLabel = `${cve.id} · ${cve.severity.toUpperCase()}`
@@ -92,31 +119,31 @@ export async function GET(
   <rect x="50" y="50" width="1100" height="530" rx="36" fill="rgba(2,6,23,0.6)" stroke="rgba(148,163,184,0.25)"/>
 
   <text x="90" y="140" fill="#e2e8f0" font-family="Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial" font-size="36" font-weight="800">
-    ${esc(BRAND.name)} Affiliate Security Briefing
+    ${escapeXmlText(BRAND.name)} Affiliate Security Briefing
   </text>
   <text x="90" y="190" fill="#94a3b8" font-family="Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial" font-size="20" font-weight="600">
-    Top CVE of the day · ${esc(cve.publishedDate)}
+    Top CVE of the day · ${escapeXmlText(cve.publishedDate)}
   </text>
 
   <text x="90" y="290" fill="#f8fafc" font-family="Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial" font-size="56" font-weight="900">
-    ${esc(cveLabel)}
+    ${escapeXmlText(cveLabel)}
   </text>
   <text x="90" y="340" fill="#cbd5f5" font-family="Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial" font-size="22">
-    ${esc(summaryLine1)}
+    ${escapeXmlText(summaryLine1)}
   </text>
   <text x="90" y="372" fill="#cbd5f5" font-family="Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial" font-size="22">
-    ${esc(summaryLine2)}
+    ${escapeXmlText(summaryLine2)}
   </text>
 
   <rect x="90" y="420" width="1020" height="120" rx="24" fill="rgba(15,23,42,0.75)" stroke="rgba(56,189,248,0.35)"/>
   <text x="120" y="470" fill="#e2e8f0" font-family="Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial" font-size="24" font-weight="700">
-    Partner: ${esc(partnerName)}
+    Partner: ${escapeXmlText(partnerName)}
   </text>
   <text x="120" y="510" fill="#7dd3fc" font-family="JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="20">
-    ${esc(displayUrl)}
+    ${escapeXmlText(displayUrl)}
   </text>
   <text x="1080" y="510" text-anchor="end" fill="#e2e8f0" font-family="Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial" font-size="18" font-weight="600">
-    ${esc(BRAND.domain)}
+    ${escapeXmlText(BRAND.domain)}
   </text>
 </svg>`
 

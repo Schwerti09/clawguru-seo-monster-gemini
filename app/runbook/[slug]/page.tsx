@@ -9,6 +9,7 @@ import { notFound } from "next/navigation"
 import { CopyLinkButton } from "./CopyLinkButton"
 import { ActivateSwarmButton } from "@/components/shared/ActivateSwarmButton"
 import { BASE_URL } from "@/lib/config"
+import { buildSocialSnippet, buildSocialTitle } from "@/lib/social-snippet"
 
 // Pre-build slug→runbook Map for O(1) related lookups on static RUNBOOKS
 const RUNBOOK_MAP = new Map(RUNBOOKS.map((r) => [r.slug, r]))
@@ -42,16 +43,25 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { slug: string } }) {
   const r = getRunbook(params.slug)
   if (!r) return {}
-  const title = r.title.length > 60 ? r.title.slice(0, 57) + "..." : r.title
-  const description = r.summary.length > 160 ? r.summary.slice(0, 157) + "..." : r.summary
+  const title = buildSocialTitle(r.title, 60)
+  const socialTitle = buildSocialTitle(r.title, 70)
+  const description = buildSocialSnippet({ title: r.title, summary: r.summary })
   return {
     title: `${title} | ClawGuru Runbook`,
     description,
     alternates: { canonical: `/runbook/${r.slug}` },
     openGraph: {
-      title: `${title} | ClawGuru`,
+      title: `${socialTitle} | ClawGuru`,
       description,
       type: "article",
+      url: `${BASE_URL}/runbook/${r.slug}`,
+      images: [`${BASE_URL}/og-image.png`],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${socialTitle} | ClawGuru`,
+      description,
+      images: [`${BASE_URL}/og-image.png`],
     },
   }
 }

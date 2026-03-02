@@ -5,6 +5,8 @@ import Container from "@/components/shared/Container"
 import { getRunbook, RUNBOOKS } from "@/lib/pseo"
 import { notFound } from "next/navigation"
 import { type Locale, SUPPORTED_LOCALES, translateRunbook, t, localeDir, LOCALE_HREFLANG } from "@/lib/i18n"
+import { BASE_URL } from "@/lib/config"
+import { buildSocialSnippet, buildSocialTitle } from "@/lib/social-snippet"
 import { getTemporalHistory } from "@/lib/temporal-mycelium"
 import TemporalTimeline from "@/components/visual/TemporalTimeline"
 import { ActivateSwarmButton } from "@/components/shared/ActivateSwarmButton"
@@ -37,15 +39,33 @@ export async function generateMetadata({
     summary: r.summary,
     targetLocale: locale,
   })
+  const socialTitle = buildSocialTitle(translated.title, 70)
+  const description = buildSocialSnippet({
+    title: translated.title,
+    summary: translated.summary,
+  })
   return {
-    title: `${translated.title} | ClawGuru Runbook`,
-    description: translated.summary,
+    title: `${buildSocialTitle(translated.title, 60)} | ClawGuru Runbook`,
+    description,
     alternates: {
       canonical: `/${locale}/runbook/${r.slug}`,
       // NEXT-LEVEL UPGRADE 2026: Proper BCP-47 hreflang for all 10 locales
       languages: Object.fromEntries(
         SUPPORTED_LOCALES.map((l) => [LOCALE_HREFLANG[l], `/${l}/runbook/${r.slug}`])
       ),
+    },
+    openGraph: {
+      title: `${socialTitle} | ClawGuru`,
+      description,
+      type: "article",
+      url: `${BASE_URL}/${locale}/runbook/${r.slug}`,
+      images: [`${BASE_URL}/og-image.png`],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${socialTitle} | ClawGuru`,
+      description,
+      images: [`${BASE_URL}/og-image.png`],
     },
   }
 }

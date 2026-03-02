@@ -152,11 +152,9 @@ export function buildDefenderEmailHtml(opts: {
 }) {
   const { contact, threats, siteUrl, weekLabel } = opts
   const safeSiteUrl = siteUrl.replace(/["'<>]/g, "")
-  const name =
-    contact.firstName ||
-    contact.name ||
-    contact.email.split("@")[0]?.replace(/[^a-zA-Z0-9-_.]/g, "") ||
-    "Defender"
+  const emailLocal = contact.email.split("@")[0] || ""
+  const emailAlias = emailLocal.replace(/[^a-zA-Z0-9-_.]/g, "")
+  const name = contact.firstName || contact.name || (emailAlias ? emailAlias : "Defender")
 
   const items = threats
     .map((t) => {

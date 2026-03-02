@@ -59,7 +59,7 @@ export async function GET(req: NextRequest) {
       if (result.status === "fulfilled") {
         sent++
       } else {
-        const email = batch[j]?.email || "unknown"
+        const email = batch[j].email
         console.error(`[retention/weekly] Failed for ${email}:`, result.reason)
         failed++
       }

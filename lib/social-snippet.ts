@@ -4,11 +4,13 @@ type SocialSnippetInput = {
   maxLength?: number
 }
 
+const SAFE_CUT_RATIO = 0.6
+
 function clampText(text: string, maxLength: number) {
   if (text.length <= maxLength) return text
   const slice = text.slice(0, maxLength).trimEnd()
   const lastSpace = slice.lastIndexOf(" ")
-  const safeCut = lastSpace > maxLength * 0.6 ? slice.slice(0, lastSpace) : slice
+  const safeCut = lastSpace > maxLength * SAFE_CUT_RATIO ? slice.slice(0, lastSpace) : slice
   return `${safeCut.trimEnd()}…`
 }
 

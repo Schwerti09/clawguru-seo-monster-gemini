@@ -57,7 +57,9 @@ export default function LocalizedPrice({
           country: typeof data.country === "string" ? data.country : undefined,
         })
       })
-      .catch(() => undefined)
+      .catch((error) => {
+        console.error("Failed to load pricing quote", error)
+      })
     return () => {
       active = false
     }

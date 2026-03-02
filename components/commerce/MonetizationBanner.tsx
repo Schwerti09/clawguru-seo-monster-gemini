@@ -33,7 +33,7 @@ export default function MonetizationBanner() {
               ⏳ Limited Time Offer
             </p>
             <p className="mt-1 text-sm font-black text-white leading-snug">
-              Unlock the Premium Security Runbook — 1 000+ automated
+              Unlock the Premium Security Runbook — 1,000+ automated
               fix-playbooks for every CVE.
             </p>
             <div className="mt-3 flex flex-wrap gap-3">

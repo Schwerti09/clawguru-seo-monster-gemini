@@ -77,15 +77,17 @@ export async function GET() {
     }
   }
 
+  const total = totalSitemapUrls()
+
   return NextResponse.json({
     now: new Date().toISOString(),
     siteUrl,
     env: { hasStripe, hasGemini, hasOpenAI, hasAdmin, hasWebhook, hasEmail },
     stripe: stripeData,
     indexStatus: {
-      indexedPages: totalSitemapUrls(),
+      indexedPages: total,
       targetPages: 100_000,
-      progressPct: Math.min(100, Math.round((totalSitemapUrls() / 100_000) * 100)),
+      progressPct: Math.min(100, Math.round((total / 100_000) * 100)),
       lastDailyIndexRun: process.env.LAST_DAILY_INDEX_RUN ?? null,
     },
   })

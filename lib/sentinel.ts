@@ -215,7 +215,7 @@ export async function checkDatabase(): Promise<SentinelCheck> {
     // For a real pg client, swap this with `await pool.query("SELECT 1")`.
     const url = new URL(dbUrl)
     const probe = `${url.protocol}//${url.host}`
-    const res = await fetch(probe, {
+    await fetch(probe, {
       method: "HEAD",
       signal: AbortSignal.timeout(5_000),
     })

@@ -3,4 +3,9 @@
 // Called daily by Netlify Scheduled Function and Vercel Cron.
 // Secured by CRON_SECRET – no unauthorised triggering possible.
 
-export { GET, dynamic, runtime } from "@/app/api/health/cron/route"
+// Declare runtime/dynamic as string literals so Next.js can statically analyse
+// them (re-exporting from another module is not recognised by the analyser).
+export const dynamic = "force-dynamic"
+export const runtime = "nodejs"
+
+export { GET } from "@/app/api/health/cron/route"

@@ -1,4 +1,5 @@
 'use client'
+import Link from "next/link"
 // WORLD BEAST FINAL LAUNCH: components/onboarding/UpsellModal.tsx
 // Shown after exactly 3 security checks. Displays personalized Claw Score + upsell CTA.
 
@@ -80,20 +81,20 @@ export default function UpsellModal({ score }: Props) {
 
         {/* CTAs */}
         <div className="flex flex-col sm:flex-row gap-3">
-          <a
+          <Link
             href="/pricing"
             onClick={handleCTA}
             className="flex-1 text-center px-6 py-3 rounded-2xl font-black bg-gradient-to-r from-brand-cyan to-brand-violet hover:opacity-90 transition-opacity"
           >
             Jetzt freischalten →
-          </a>
-          <a
+          </Link>
+          <Link
             href="/pricing?product=daypass"
             onClick={handleCTA}
             className="flex-1 text-center px-6 py-3 rounded-2xl border border-gray-700 hover:border-gray-500 font-bold text-gray-200 transition-colors"
           >
             Day Pass (€4.99)
-          </a>
+          </Link>
         </div>
 
         <p className="mt-4 text-xs text-gray-500 text-center">

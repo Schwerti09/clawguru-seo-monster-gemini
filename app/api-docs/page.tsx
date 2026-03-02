@@ -1,3 +1,4 @@
+import Link from "next/link"
 import Container from "@/components/shared/Container"
 import type { Metadata } from "next"
 
@@ -524,13 +525,13 @@ await stripe.subscriptionItems.createUsageRecord(subscriptionItemId, {
           <p className="text-gray-400 text-sm mb-6">
             Get your Enterprise API key and start querying threat intel in minutes.
           </p>
-          <a
+          <Link
             href="/enterprise-api"
             className="inline-block px-8 py-3 rounded-xl font-black text-sm text-black transition-all duration-200 hover:opacity-90"
             style={{ background: `linear-gradient(135deg, ${C.cyan}, ${C.green})` }}
           >
             Enterprise API Overview →
-          </a>
+          </Link>
         </div>
       </div>
     </Container>

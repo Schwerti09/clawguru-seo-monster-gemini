@@ -1,3 +1,4 @@
+import Link from "next/link"
 import Container from "@/components/shared/Container"
 
 export default function Secrets() {
@@ -30,12 +31,12 @@ export default function Secrets() {
           </div>
 
           <div className="flex flex-wrap gap-3">
-            <a className="px-5 py-3 rounded-xl bg-brand-red/10 border border-brand-red/30 hover:bg-brand-red/15 font-bold" href="/security/notfall-leitfaden">
+            <Link className="px-5 py-3 rounded-xl bg-brand-red/10 border border-brand-red/30 hover:bg-brand-red/15 font-bold" href="/security/notfall-leitfaden">
               Notfall: Rotation Reihenfolge
-            </a>
-            <a className="px-5 py-3 rounded-xl bg-black/30 border border-gray-700 hover:bg-black/40 font-bold" href="/academy">
+            </Link>
+            <Link className="px-5 py-3 rounded-xl bg-black/30 border border-gray-700 hover:bg-black/40 font-bold" href="/academy">
               Sprint
-            </a>
+            </Link>
           </div>
         </div>
       </div>

@@ -1,4 +1,5 @@
 "use client"
+import Link from "next/link"
 
 import { useEffect, useMemo, useState } from "react"
 
@@ -65,12 +66,12 @@ export default function AdminDashboard() {
           Live · auto-refresh 30s · {data?.now || "—"}
         </div>
         <div className="flex gap-3">
-          <a
+          <Link
             href="/api/admin/logout"
             className="px-4 py-2 rounded-2xl border border-gray-700 hover:border-gray-500 font-bold text-gray-200"
           >
             Logout
-          </a>
+          </Link>
           <button
             onClick={load}
             className="px-4 py-2 rounded-2xl font-black bg-gradient-to-r from-brand-cyan to-brand-violet hover:opacity-90"
@@ -117,7 +118,7 @@ export default function AdminDashboard() {
                   Email: <span className={data.env.hasEmail ? "text-green-300 font-bold" : "text-orange-300 font-bold"}>{data.env.hasEmail ? "ON" : "OFF"}</span>
                 </div>
               </div>
-              <a href="/live" className="mt-4 inline-flex text-cyan-300 underline hover:text-cyan-200">Ops Wall öffnen →</a>
+              <Link href="/live" className="mt-4 inline-flex text-cyan-300 underline hover:text-cyan-200">Ops Wall öffnen →</Link>
             </div>
 
             <div className="p-6 rounded-3xl border border-gray-800 bg-black/30 lg:col-span-2">
@@ -172,18 +173,18 @@ export default function AdminDashboard() {
               <div className="text-xs uppercase tracking-widest text-gray-400">Growth</div>
               <div className="mt-2 text-2xl font-black">Loop Controls</div>
               <div className="mt-4 flex flex-col gap-3">
-                <a className="px-4 py-3 rounded-2xl font-black bg-gradient-to-r from-orange-500 to-red-600 hover:opacity-90 text-center" href="/check">
+                <Link className="px-4 py-3 rounded-2xl font-black bg-gradient-to-r from-orange-500 to-red-600 hover:opacity-90 text-center" href="/check">
                   Score → Badge → Share
-                </a>
-                <a className="px-4 py-3 rounded-2xl font-black bg-gradient-to-r from-green-600 to-cyan-600 hover:opacity-90 text-center" href="/admin/profit-dashboard">
+                </Link>
+                <Link className="px-4 py-3 rounded-2xl font-black bg-gradient-to-r from-green-600 to-cyan-600 hover:opacity-90 text-center" href="/admin/profit-dashboard">
                   💰 Profit Dashboard
-                </a>
-                <a className="px-4 py-3 rounded-2xl border border-gray-700 hover:border-gray-500 font-bold text-gray-200 text-center" href="/copilot">
+                </Link>
+                <Link className="px-4 py-3 rounded-2xl border border-gray-700 hover:border-gray-500 font-bold text-gray-200 text-center" href="/copilot">
                   Copilot Runbooks
-                </a>
-                <a className="px-4 py-3 rounded-2xl border border-gray-700 hover:border-gray-500 font-bold text-gray-200 text-center" href="/runbooks">
+                </Link>
+                <Link className="px-4 py-3 rounded-2xl border border-gray-700 hover:border-gray-500 font-bold text-gray-200 text-center" href="/runbooks">
                   1000 Runbooks
-                </a>
+                </Link>
               </div>
               <div className="mt-4 text-xs text-gray-500">
                 Tipp: UTM-Links überall. Share-Badges erzeugen „free distribution“.
@@ -199,11 +200,11 @@ export default function AdminDashboard() {
                   ["Ops Feed", "/api/live-wall", "Live Data"],
                   ["Sitemaps", "/sitemaps/main.xml", "Indexing"]
                 ].map(([t, href, d]) => (
-                  <a key={href} href={href} className="p-4 rounded-2xl border border-gray-800 bg-black/35 hover:bg-black/45 transition-colors">
+                  <Link key={href} href={href} className="p-4 rounded-2xl border border-gray-800 bg-black/35 hover:bg-black/45 transition-colors">
                     <div className="font-black">{t}</div>
                     <div className="text-xs text-gray-500 mt-1">{d}</div>
                     <div className="text-sm text-cyan-300 mt-2 underline">{href}</div>
-                  </a>
+                  </Link>
                 ))}
               </div>
             </div>

@@ -1,4 +1,5 @@
 'use client'
+import Link from "next/link"
 
 import { useEffect, useMemo, useState } from "react"
 
@@ -105,9 +106,9 @@ export default function IntelFeed() {
             </div>
 
             <div className="mt-5 flex flex-wrap gap-2">
-              <a className="px-4 py-2 rounded-xl bg-black/30 border border-gray-700 hover:bg-black/40 text-sm" href="/tools">Validator</a>
-              <a className="px-4 py-2 rounded-xl bg-black/30 border border-gray-700 hover:bg-black/40 text-sm" href="/security/notfall-leitfaden">Runbook</a>
-              <a className="px-4 py-2 rounded-xl bg-black/30 border border-gray-700 hover:bg-black/40 text-sm" href="/openclaw-security-2026">Lagebericht</a>
+              <Link className="px-4 py-2 rounded-xl bg-black/30 border border-gray-700 hover:bg-black/40 text-sm" href="/tools">Validator</Link>
+              <Link className="px-4 py-2 rounded-xl bg-black/30 border border-gray-700 hover:bg-black/40 text-sm" href="/security/notfall-leitfaden">Runbook</Link>
+              <Link className="px-4 py-2 rounded-xl bg-black/30 border border-gray-700 hover:bg-black/40 text-sm" href="/openclaw-security-2026">Lagebericht</Link>
             </div>
           </div>
         ))}

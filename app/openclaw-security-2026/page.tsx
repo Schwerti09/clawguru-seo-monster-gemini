@@ -1,3 +1,4 @@
+import Link from "next/link"
 import Container from "@/components/shared/Container"
 
 const TOC = [
@@ -70,12 +71,12 @@ export default function Pillar() {
                   <li>Skill Supply Chain: Review, Signierung/Lockfiles, Secrets-Scanner.</li>
                 </ol>
                 <div className="mt-6 flex flex-wrap gap-3">
-                  <a className="px-5 py-3 rounded-xl bg-brand-cyan/15 border border-brand-cyan/30 hover:bg-brand-cyan/25 font-black" href="/tools">
+                  <Link className="px-5 py-3 rounded-xl bg-brand-cyan/15 border border-brand-cyan/30 hover:bg-brand-cyan/25 font-black" href="/tools">
                     Tools: Validator
-                  </a>
-                  <a className="px-5 py-3 rounded-xl bg-brand-red/10 border border-brand-red/30 hover:bg-brand-red/15 font-black" href="/security/notfall-leitfaden">
+                  </Link>
+                  <Link className="px-5 py-3 rounded-xl bg-brand-red/10 border border-brand-red/30 hover:bg-brand-red/15 font-black" href="/security/notfall-leitfaden">
                     Notfall-Protokoll
-                  </a>
+                  </Link>
                 </div>
               </section>
 
@@ -95,10 +96,10 @@ export default function Pillar() {
               <section id="links" className="p-7 rounded-2xl border border-gray-800 bg-black/30">
                 <h2 className="text-2xl font-black mb-2">Weiterführend</h2>
                 <ul className="list-disc pl-5 space-y-2 text-gray-300">
-                  <li><a href="/intel">Intel Feed</a></li>
-                  <li><a href="/copilot">Copilot</a></li>
-                  <li><a href="/academy">Academy Sprint</a></li>
-                  <li><a href="/vault">Vault</a></li>
+                  <li><Link href="/intel">Intel Feed</Link></li>
+                  <li><Link href="/copilot">Copilot</Link></li>
+                  <li><Link href="/academy">Academy Sprint</Link></li>
+                  <li><Link href="/vault">Vault</Link></li>
                 </ul>
               </section>
             </article>
@@ -108,7 +109,7 @@ export default function Pillar() {
               <ul className="space-y-2 text-sm">
                 {TOC.map((t) => (
                   <li key={t.id}>
-                    <a className="text-gray-200 hover:text-brand-cyan" href={`#${t.id}`}>{t.label}</a>
+                    <Link className="text-gray-200 hover:text-brand-cyan" href={`#${t.id}`}>{t.label}</Link>
                   </li>
                 ))}
               </ul>
@@ -121,15 +122,15 @@ export default function Pillar() {
                   <li>Exposition schließen</li>
                 </ol>
                 <div className="mt-4 flex flex-col gap-2">
-                  <a className="px-4 py-2 rounded-xl bg-brand-red/10 border border-brand-red/30 hover:bg-brand-red/15 font-black text-center" href="/security/notfall-leitfaden">
+                  <Link className="px-4 py-2 rounded-xl bg-brand-red/10 border border-brand-red/30 hover:bg-brand-red/15 font-black text-center" href="/security/notfall-leitfaden">
                     Notfall
-                  </a>
-                  <a className="px-4 py-2 rounded-xl bg-brand-cyan/15 border border-brand-cyan/30 hover:bg-brand-cyan/25 font-black text-center" href="/copilot">
+                  </Link>
+                  <Link className="px-4 py-2 rounded-xl bg-brand-cyan/15 border border-brand-cyan/30 hover:bg-brand-cyan/25 font-black text-center" href="/copilot">
                     Copilot
-                  </a>
-                  <a className="px-4 py-2 rounded-xl bg-black/30 border border-gray-700 hover:bg-black/40 font-black text-center" href="/academy">
+                  </Link>
+                  <Link className="px-4 py-2 rounded-xl bg-black/30 border border-gray-700 hover:bg-black/40 font-black text-center" href="/academy">
                     Sprint
-                  </a>
+                  </Link>
                 </div>
               </div>
             </aside>

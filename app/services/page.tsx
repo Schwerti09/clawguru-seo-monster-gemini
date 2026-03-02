@@ -1,3 +1,4 @@
+import Link from "next/link"
 import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
 import { allServices100k, CLOUD_PROVIDERS_100K, ISSUES_100K, YEARS_100K } from "@/lib/pseo"
@@ -40,7 +41,7 @@ export default function ServicesPage() {
       <div className="py-16 max-w-6xl mx-auto">
         <nav className="text-sm text-gray-500 mb-6" aria-label="Breadcrumb">
           <ol className="flex flex-wrap items-center gap-2">
-            <li><a href="/" className="hover:text-cyan-400">ClawGuru</a></li>
+            <li><Link href="/" className="hover:text-cyan-400">ClawGuru</Link></li>
             <li>/</li>
             <li className="text-gray-300">Services</li>
           </ol>
@@ -54,7 +55,7 @@ export default function ServicesPage() {
 
         <div className="mt-10 grid md:grid-cols-2 lg:grid-cols-3 gap-4">
           {services.map((service) => (
-            <a
+            <Link
               key={service.slug}
               href={`/service/${service.slug}`}
               className="p-6 rounded-3xl border border-gray-800 bg-black/25 hover:bg-black/35 transition-colors"
@@ -65,15 +66,15 @@ export default function ServicesPage() {
                 {totalPerService.toLocaleString()} Runbooks für alle Provider & Issues
               </div>
               <div className="mt-4 text-cyan-400 text-sm font-semibold">Runbooks ansehen →</div>
-            </a>
+            </Link>
           ))}
         </div>
 
         <div className="mt-12 text-sm text-gray-500">
           Mehr:{" "}
-          <a className="hover:text-cyan-400" href="/issues">Issue Hubs</a> ·{" "}
-          <a className="hover:text-cyan-400" href="/years">Year Hubs</a> ·{" "}
-          <a className="hover:text-cyan-400" href="/runbooks">Runbook Library</a>
+          <Link className="hover:text-cyan-400" href="/issues">Issue Hubs</Link> ·{" "}
+          <Link className="hover:text-cyan-400" href="/years">Year Hubs</Link> ·{" "}
+          <Link className="hover:text-cyan-400" href="/runbooks">Runbook Library</Link>
         </div>
       </div>
     </Container>

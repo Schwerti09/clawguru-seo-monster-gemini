@@ -1,3 +1,4 @@
+import Link from "next/link"
 import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
 
@@ -32,15 +33,15 @@ export default function Setup() {
             Erst Tools/Validator, dann Sprint, dann Vault – dann bist du auf einem Level, wo „Incidents“ seltener werden.
           </p>
           <div className="mt-5 flex flex-wrap gap-3">
-            <a className="px-5 py-3 rounded-xl bg-brand-cyan/15 border border-brand-cyan/30 hover:bg-brand-cyan/25 font-black" href="/tools">
+            <Link className="px-5 py-3 rounded-xl bg-brand-cyan/15 border border-brand-cyan/30 hover:bg-brand-cyan/25 font-black" href="/tools">
               Tools
-            </a>
-            <a className="px-5 py-3 rounded-xl bg-black/30 border border-gray-700 hover:bg-black/40 font-black" href="/academy">
+            </Link>
+            <Link className="px-5 py-3 rounded-xl bg-black/30 border border-gray-700 hover:bg-black/40 font-black" href="/academy">
               Sprint
-            </a>
-            <a className="px-5 py-3 rounded-xl bg-black/30 border border-gray-700 hover:bg-black/40 font-black" href="/vault">
+            </Link>
+            <Link className="px-5 py-3 rounded-xl bg-black/30 border border-gray-700 hover:bg-black/40 font-black" href="/vault">
               Vault
-            </a>
+            </Link>
           </div>
         </div>
       </div>

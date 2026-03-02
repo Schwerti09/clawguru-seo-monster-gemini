@@ -4,6 +4,7 @@
 
 "use client"
 
+import Link from "next/link"
 import { useState } from "react"
 
 /* ── Quantum Void colour tokens ── */
@@ -84,13 +85,13 @@ export default function ClawLinkPage() {
       >
         {/* ── Header ── */}
         <div className="pt-16 pb-10 px-4 text-center">
-          <a
+          <Link
             href="/universe"
             className="inline-flex items-center gap-2 text-[10px] font-mono tracking-widest uppercase mb-6 transition-opacity opacity-40 hover:opacity-80"
             style={{ color: QV.gold }}
           >
             ← Universe
-          </a>
+          </Link>
           <div
             className="text-[10px] font-mono tracking-[0.3em] uppercase mb-4"
             style={{ color: `${QV.gold}88` }}
@@ -264,7 +265,7 @@ export default function ClawLinkPage() {
 
         {/* ── CTA ── */}
         <div className="pb-12 text-center px-4">
-          <a
+          <Link
             href="/summon"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-mono text-xs font-bold uppercase tracking-widest transition-all duration-300"
             style={{
@@ -274,7 +275,7 @@ export default function ClawLinkPage() {
             }}
           >
             ◆ Summon AI for Setup Help →
-          </a>
+          </Link>
         </div>
 
         {/* ── Bottom inscription ── */}

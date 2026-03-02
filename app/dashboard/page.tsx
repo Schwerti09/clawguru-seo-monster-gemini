@@ -1,3 +1,4 @@
+import Link from "next/link"
 import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
 import { getAccess } from "@/lib/access"
@@ -29,12 +30,12 @@ function Paywall() {
         </div>
 
         <div className="mt-8 flex flex-wrap gap-3">
-          <a href="/pricing" className="px-6 py-3 rounded-2xl font-black bg-gradient-to-r from-brand-cyan to-brand-violet hover:opacity-90">
+          <Link href="/pricing" className="px-6 py-3 rounded-2xl font-black bg-gradient-to-r from-brand-cyan to-brand-violet hover:opacity-90">
             Pricing öffnen
-          </a>
-          <a href="/check" className="px-6 py-3 rounded-2xl border border-gray-700 hover:border-gray-500 font-bold text-gray-200">
+          </Link>
+          <Link href="/check" className="px-6 py-3 rounded-2xl border border-gray-700 hover:border-gray-500 font-bold text-gray-200">
             Erst Score prüfen →
-          </a>
+          </Link>
         </div>
       </div>
     </Container>
@@ -58,12 +59,12 @@ export default async function DashboardPage() {
           />
           <div className="flex gap-3">
             <PortalButton />
-            <a
+            <Link
               href="/api/auth/logout"
               className="px-5 py-3 rounded-2xl border border-gray-700 hover:border-gray-500 font-bold text-gray-200"
             >
               Logout
-            </a>
+            </Link>
           </div>
         </div>
 
@@ -78,24 +79,24 @@ export default async function DashboardPage() {
             </p>
 
             <div className="mt-6 flex flex-wrap gap-3">
-              <a
+              <Link
                 href="/check"
                 className="px-6 py-3 rounded-2xl font-black bg-gradient-to-r from-orange-500 to-red-600 hover:opacity-90"
               >
                 Live Security Check
-              </a>
-              <a
+              </Link>
+              <Link
                 href="/copilot"
                 className="px-6 py-3 rounded-2xl border border-gray-700 hover:border-gray-500 font-bold text-gray-200"
               >
                 Copilot Runbook
-              </a>
-              <a
+              </Link>
+              <Link
                 href="/vault"
                 className="px-6 py-3 rounded-2xl border border-gray-700 hover:border-gray-500 font-bold text-gray-200"
               >
                 Vault / Templates
-              </a>
+              </Link>
             </div>
           </div>
 
@@ -103,18 +104,18 @@ export default async function DashboardPage() {
             <div className="text-xs uppercase tracking-widest text-gray-400">Downloads</div>
             <div className="mt-2 font-black text-xl">Kits</div>
             <div className="mt-4 grid gap-3">
-              <a
+              <Link
                 className="px-5 py-3 rounded-2xl font-black bg-gradient-to-r from-brand-cyan to-brand-violet hover:opacity-90 text-center"
                 href="/api/download?key=sprint-pack"
               >
                 Sprint Pack (PDF)
-              </a>
-              <a
+              </Link>
+              <Link
                 className="px-5 py-3 rounded-2xl border border-gray-700 hover:border-gray-500 font-bold text-gray-200 text-center"
                 href="/api/download?key=incident-kit"
               >
                 Incident Kit (ZIP)
-              </a>
+              </Link>
             </div>
             <div className="mt-4 text-xs text-gray-500">
               Downloads sind nach Aktivierung deines Zugangs verfügbar.
@@ -136,9 +137,9 @@ export default async function DashboardPage() {
             <p className="mt-3 text-gray-300 text-sm">
               Score teilen → neue Nutzer → mehr Daten → bessere Autorität. Das ist der Growth-Motor.
             </p>
-            <a href="/badge" className="mt-4 inline-flex text-cyan-300 underline hover:text-cyan-200">
+            <Link href="/badge" className="mt-4 inline-flex text-cyan-300 underline hover:text-cyan-200">
               Badge Studio öffnen →
-            </a>
+            </Link>
           </div>
         </div>
       </div>

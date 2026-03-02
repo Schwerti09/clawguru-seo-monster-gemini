@@ -1,3 +1,4 @@
+import Link from "next/link"
 import Container from "@/components/shared/Container"
 import NeuralGrid from "@/components/visual/NeuralGrid"
 import HeroInstitution from "@/components/marketing/HeroInstitution"
@@ -72,7 +73,7 @@ export default function Home() {
           <p className="mt-6 text-lg sm:text-xl text-gray-400 max-w-2xl leading-relaxed">
             One living mycelium connecting all operational security knowledge across tools, time&nbsp;&amp;&nbsp;intelligence layers. The Universe is live.
           </p>
-          <a
+          <Link
             href="/universe"
             className="mt-10 inline-block px-10 py-4 rounded-2xl font-black text-base tracking-wide text-black transition-all duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#00b8ff]"
             style={{
@@ -81,7 +82,7 @@ export default function Home() {
             }}
           >
             Enter the Universe →
-          </a>
+          </Link>
         </div>
       </section>
 
@@ -115,12 +116,12 @@ export default function Home() {
             <div className="mt-8 flex flex-wrap gap-3">
               
               <BuyButton product="daypass" label="Day Pass (24h)" />
-              <a href="/runbooks" className="px-6 py-3 rounded-2xl border border-white/10 hover:border-white/20 font-bold text-gray-200 transition-all duration-300">
+              <Link href="/runbooks" className="px-6 py-3 rounded-2xl border border-white/10 hover:border-white/20 font-bold text-gray-200 transition-all duration-300">
                 Runbooks →
-              </a>
-              <a href="/pricing" className="px-6 py-3 rounded-2xl border border-white/10 hover:border-white/20 font-bold text-gray-200 transition-all duration-300">
+              </Link>
+              <Link href="/pricing" className="px-6 py-3 rounded-2xl border border-white/10 hover:border-white/20 font-bold text-gray-200 transition-all duration-300">
                 Alle Pläne →
-              </a>
+              </Link>
               <a href={COMMUNITY.discordInvite} className="px-6 py-3 rounded-2xl border border-white/10 hover:border-white/20 font-bold text-gray-200 transition-all duration-300">
                 Discord Ops-Room →
               </a>
@@ -156,18 +157,18 @@ export default function Home() {
               wächst, lernt und evolviert autonom durch Darwinian Selection.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
-              <a href="/clawverse" className="px-6 py-3 rounded-2xl font-black text-black bg-claw-green hover:shadow-neon-green transition-all duration-300">
+              <Link href="/clawverse" className="px-6 py-3 rounded-2xl font-black text-black bg-claw-green hover:shadow-neon-green transition-all duration-300">
                 ClawVerse →
-              </a>
-              <a href="/mycelium" className="px-6 py-3 rounded-2xl border border-white/10 hover:border-white/20 font-bold text-gray-200 transition-all duration-300">
+              </Link>
+              <Link href="/mycelium" className="px-6 py-3 rounded-2xl border border-white/10 hover:border-white/20 font-bold text-gray-200 transition-all duration-300">
                 Living Mycelium öffnen →
-              </a>
-              <a href="/dashboard" className="px-6 py-3 rounded-2xl border border-white/10 hover:border-white/20 font-bold text-gray-200 transition-all duration-300">
+              </Link>
+              <Link href="/dashboard" className="px-6 py-3 rounded-2xl border border-white/10 hover:border-white/20 font-bold text-gray-200 transition-all duration-300">
                 Dashboard →
-              </a>
-              <a href="/mission-control" className="px-6 py-3 rounded-2xl border border-white/10 hover:border-white/20 font-bold text-gray-200 transition-all duration-300">
+              </Link>
+              <Link href="/mission-control" className="px-6 py-3 rounded-2xl border border-white/10 hover:border-white/20 font-bold text-gray-200 transition-all duration-300">
                 Mission Control →
-              </a>
+              </Link>
             </div>
           </div>
         </Container>

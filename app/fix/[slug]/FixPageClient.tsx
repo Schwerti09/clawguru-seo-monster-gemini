@@ -1,4 +1,5 @@
 'use client'
+import Link from "next/link"
 // WORLD BEAST UPGRADE: app/fix/[slug]/FixPageClient.tsx
 // Client component: code display, copy-to-clipboard, and GitHub PR preparation.
 
@@ -60,19 +61,19 @@ export default function FixPageClient({ slug, fixData }: Props) {
           Gemini API key is not configured or the fix could not be generated for this runbook.
         </p>
         <div className="flex justify-center gap-3 flex-wrap">
-          <a
+          <Link
             href={`/runbook/${slug}`}
             className="px-6 py-3 rounded-2xl font-black text-black transition-all duration-300"
             style={{ background: "linear-gradient(135deg, #00ff9d, #00b8ff)" }}
           >
             Runbook öffnen →
-          </a>
-          <a
+          </Link>
+          <Link
             href="/check"
             className="px-6 py-3 rounded-2xl border border-white/10 font-bold text-gray-200 hover:border-white/20 transition-all duration-300"
           >
             Security Check
-          </a>
+          </Link>
         </div>
       </div>
     )

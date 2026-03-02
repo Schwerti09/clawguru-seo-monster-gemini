@@ -1,3 +1,4 @@
+import Link from "next/link"
 // app/solutions/page.tsx
 // Landing page listing all CVE solution pages.
 
@@ -50,7 +51,7 @@ export default function SolutionsPage() {
       <div className="py-16 max-w-6xl mx-auto">
         <nav className="text-sm text-gray-500 mb-6" aria-label="Breadcrumb">
           <ol className="flex flex-wrap items-center gap-2">
-            <li><a href="/" className="hover:text-cyan-400">ClawGuru</a></li>
+            <li><Link href="/" className="hover:text-cyan-400">ClawGuru</Link></li>
             <li>/</li>
             <li className="text-gray-300">Solutions</li>
           </ol>
@@ -66,7 +67,7 @@ export default function SolutionsPage() {
           {sorted.map((cve) => {
             const colors = severityColor(cve.severity)
             return (
-              <a
+              <Link
                 key={cve.cveId}
                 href={`/solutions/fix-${cve.cveId}`}
                 className="p-5 rounded-3xl border border-gray-800 bg-black/25 hover:bg-black/35 transition-colors group"
@@ -91,7 +92,7 @@ export default function SolutionsPage() {
                 <div className="mt-3 text-xs text-cyan-400 group-hover:text-cyan-300 transition-colors">
                   View fix guide →
                 </div>
-              </a>
+              </Link>
             )
           })}
         </div>
@@ -110,9 +111,9 @@ export default function SolutionsPage() {
         </div>
 
         <div className="mt-6 text-sm text-gray-500">
-          <a href="/runbooks" className="hover:text-cyan-400">Runbook Library</a> ·{" "}
-          <a href="/tools" className="hover:text-cyan-400">Security Tools</a> ·{" "}
-          <a href="/check" className="hover:text-cyan-400">Security Check</a>
+          <Link href="/runbooks" className="hover:text-cyan-400">Runbook Library</Link> ·{" "}
+          <Link href="/tools" className="hover:text-cyan-400">Security Tools</Link> ·{" "}
+          <Link href="/check" className="hover:text-cyan-400">Security Check</Link>
         </div>
       </div>
     </Container>

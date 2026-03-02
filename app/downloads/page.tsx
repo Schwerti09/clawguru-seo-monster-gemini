@@ -1,3 +1,4 @@
+import Link from "next/link"
 import Container from "@/components/shared/Container"
 import CTAButton from "@/components/marketing/CTAButton"
 import BuyButton from "@/components/commerce/BuyButton"
@@ -63,23 +64,23 @@ export default function DownloadsPage() {
             </div>
 
             <div className="mt-6">
-              <a href="/pricing" className="text-cyan-300 underline hover:text-cyan-200">
+              <Link href="/pricing" className="text-cyan-300 underline hover:text-cyan-200">
                 Details & Pläne →
-              </a>
+              </Link>
             </div>
           </div>
         </div>
 
         <div className="mt-10 grid lg:grid-cols-3 gap-4">
           {PRODUCTS.quickLinks.map((q) => (
-            <a
+            <Link
               key={q.href}
               href={q.href}
               className="p-5 rounded-3xl border border-gray-800 bg-black/25 hover:bg-black/35 transition-colors"
             >
               <div className="font-black">{q.title}</div>
               <div className="text-sm text-gray-400 mt-1">{q.desc}</div>
-            </a>
+            </Link>
           ))}
         </div>
       </div>

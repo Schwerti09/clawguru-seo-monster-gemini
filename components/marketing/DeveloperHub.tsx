@@ -1,4 +1,5 @@
 "use client"
+import Link from "next/link"
 
 import { useState } from "react"
 
@@ -259,9 +260,9 @@ export default function DeveloperHub() {
                     test_clawguru_demo_key_2024
                   </code>{" "}
                   right now — no signup required. For production, register at{" "}
-                  <a href="/dashboard" className="underline text-[#00b8ff]">
+                  <Link href="/dashboard" className="underline text-[#00b8ff]">
                     /dashboard
-                  </a>{" "}
+                  </Link>{" "}
                   to get a real key.
                 </>
               ),

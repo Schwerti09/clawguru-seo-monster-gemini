@@ -1,3 +1,4 @@
+import Link from "next/link"
 import Container from "@/components/shared/Container"
 
 export default function KeyRotationVault() {
@@ -32,9 +33,9 @@ export default function KeyRotationVault() {
         </div>
 
         <div className="mt-10">
-          <a href="/copilot?q=Ich%20will%20ein%20Key-Rotation%20Runbook%20f%C3%BCr%20mein%20Setup.%20Hier%20ist%20mein%20Stack%3A%20" className="text-cyan-300 underline hover:text-cyan-200">
+          <Link href="/copilot?q=Ich%20will%20ein%20Key-Rotation%20Runbook%20f%C3%BCr%20mein%20Setup.%20Hier%20ist%20mein%20Stack%3A%20" className="text-cyan-300 underline hover:text-cyan-200">
             Copilot: Rotation runbook →
-          </a>
+          </Link>
         </div>
       </div>
     </Container>

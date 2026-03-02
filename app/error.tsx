@@ -1,4 +1,5 @@
 'use client'
+import Link from "next/link"
 import Container from "@/components/shared/Container"
 
 export default function Error({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
@@ -11,9 +12,9 @@ export default function Error({ error, reset }: { error: Error & { digest?: stri
           <button onClick={reset} className="px-5 py-3 rounded-xl bg-brand-cyan/15 border border-brand-cyan/30 hover:bg-brand-cyan/25 font-bold">
             Nochmal
           </button>
-          <a className="px-5 py-3 rounded-xl bg-black/30 border border-gray-700 hover:bg-black/40 font-bold" href="/copilot">
+          <Link className="px-5 py-3 rounded-xl bg-black/30 border border-gray-700 hover:bg-black/40 font-bold" href="/copilot">
             Copilot
-          </a>
+          </Link>
         </div>
         <div className="mt-6 text-xs text-gray-500">{error?.message}</div>
       </div>

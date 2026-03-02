@@ -1,3 +1,4 @@
+import Link from "next/link"
 import Container from "@/components/shared/Container"
 import BuyButton from "@/components/commerce/BuyButton"
 import EnterpriseContact from "@/components/marketing/EnterpriseContact"
@@ -182,7 +183,7 @@ export default function PricingPage() {
           {/* Emergency nudge */}
           <div className="mt-5 inline-flex items-center gap-2 text-sm px-4 py-2 rounded-full border"
             style={{ borderColor: "rgba(220,38,38,0.35)", color: "#f87171", background: "rgba(220,38,38,0.06)" }}>
-            🔥 Security Incident? <a href="/emergency" className="underline underline-offset-2 font-bold hover:opacity-80 transition-opacity">→ Sofort-Zugang für Notfälle</a>
+            🔥 Security Incident? <Link href="/emergency" className="underline underline-offset-2 font-bold hover:opacity-80 transition-opacity">→ Sofort-Zugang für Notfälle</Link>
           </div>
         </div>
       </section>
@@ -349,13 +350,13 @@ export default function PricingPage() {
                     Direkter REST/JSON-Feed für euer SIEM, SOC oder eigenes Monitoring-Backend.
                     API-Key-Auth, maschinenlesbare Events – kein manuelles Klicken mehr.
                   </p>
-                  <a
+                  <Link
                     href="mailto:enterprise@clawguru.org?subject=Enterprise%20Intel%20Feed%20API"
                     className="mt-6 inline-block w-full text-center py-3 px-6 rounded-2xl font-black text-sm text-black transition-all duration-300 hover:opacity-90"
                     style={{ background: "linear-gradient(135deg, #ffaa00 0%, #ff5000 100%)", boxShadow: "0 0 30px rgba(255,165,0,0.3)" }}
                   >
                     Enterprise anfragen →
-                  </a>
+                  </Link>
                   <div className="mt-3 text-xs text-gray-500 text-center">
                     Kontakt: enterprise@clawguru.org
                   </div>
@@ -476,10 +477,10 @@ curl https://clawguru.com/api/intel/feeds \\
               ["/threatmap", "ThreatMap"],
               ["/recover", "Zugang recover"],
             ].map(([href, label]) => (
-              <a key={href} href={href}
+              <Link key={href} href={href}
                 className="px-4 py-2 rounded-xl border border-white/10 text-gray-400 hover:text-white hover:border-white/20 transition-all duration-200">
                 {label}
-              </a>
+              </Link>
             ))}
           </div>
 

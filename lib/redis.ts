@@ -45,7 +45,10 @@ async function redisRequest<T>(command: RedisValue[]): Promise<T | null> {
     if (!res.ok) return null
     const data = (await res.json()) as { result?: T }
     return data?.result ?? null
-  } catch {
+  } catch (err) {
+    if (isRedisConfigured()) {
+      console.warn("[redis] request failed", err)
+    }
     return null
   }
 }

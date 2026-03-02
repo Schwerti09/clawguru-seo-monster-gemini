@@ -44,6 +44,8 @@ export async function GET(req: NextRequest) {
   const urls = [...cveUrls, ...runbookUrls].slice(0, maxBatch)
 
   if (urls.length === 0) {
+    const now = new Date()
+    const resetAt = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1)).toISOString()
     return NextResponse.json({
       submitted: 0,
       ok: 0,
@@ -51,7 +53,7 @@ export async function GET(req: NextRequest) {
       results: [],
       quota: { used: quota.used, limit: DAILY_INDEXING_QUOTA },
       generatedAt: new Date().toISOString(),
-      message: "Daily quota exhausted",
+      message: `Daily quota exhausted. Resets at ${resetAt}`,
     })
   }
 

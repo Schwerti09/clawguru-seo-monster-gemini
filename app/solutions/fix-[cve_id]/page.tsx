@@ -19,7 +19,6 @@ interface Props {
 
 export const dynamicParams = true
 export const runtime = "edge"
-export const dynamic = "force-dynamic"
 
 const CACHE_TTL_SECONDS = 60 * 60 * 6
 const STALE_TTL_SECONDS = 60 * 60 * 24 * 7

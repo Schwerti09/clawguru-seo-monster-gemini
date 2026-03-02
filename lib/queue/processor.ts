@@ -36,7 +36,10 @@ async function releaseTurn(jobId: string) {
  * Enqueue Gemini API calls so only one runs at a time (rate-limit protection).
  */
 export async function runGeminiQueue<T>(job: () => Promise<T>): Promise<T> {
-  const jobId = typeof crypto !== "undefined" && "randomUUID" in crypto ? crypto.randomUUID() : String(Date.now())
+  const jobId =
+    typeof crypto !== "undefined" && "randomUUID" in crypto
+      ? crypto.randomUUID()
+      : `${Date.now()}-${Math.random().toString(16).slice(2)}`
   await acquireTurn(jobId)
   try {
     return await job()

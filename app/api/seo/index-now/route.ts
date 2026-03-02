@@ -5,13 +5,14 @@
 import { NextRequest, NextResponse } from "next/server"
 import { KNOWN_CVES } from "@/lib/cve-pseo"
 import { get100kSlugsPage } from "@/lib/pseo"
-import { indexUrls } from "@/lib/google-indexer"
+import { DAILY_INDEXING_QUOTA, getIndexingQuota, indexUrls } from "@/lib/google-indexer"
 
 export const dynamic = "force-dynamic"
 export const runtime = "nodejs"
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const BATCH_SIZE = 200
+const BATCH_MODE = process.env.GOOGLE_INDEXER_BATCH_MODE !== "false"
 
 export async function GET(req: NextRequest) {
   // Security: require CRON_SECRET
@@ -37,9 +38,24 @@ export async function GET(req: NextRequest) {
     (slug) => `${BASE_URL}/runbook/${slug}`
   )
 
-  const urls = [...cveUrls, ...runbookUrls].slice(0, BATCH_SIZE)
+  const quota = await getIndexingQuota()
+  const remainingQuota = Math.max(0, DAILY_INDEXING_QUOTA - quota.used)
+  const maxBatch = Math.min(BATCH_SIZE, remainingQuota)
+  const urls = [...cveUrls, ...runbookUrls].slice(0, maxBatch)
 
-  const results = await indexUrls(urls)
+  if (urls.length === 0) {
+    return NextResponse.json({
+      submitted: 0,
+      ok: 0,
+      errors: 0,
+      results: [],
+      quota: { used: quota.used, limit: DAILY_INDEXING_QUOTA },
+      generatedAt: new Date().toISOString(),
+      message: "Daily quota exhausted",
+    })
+  }
+
+  const results = await indexUrls(urls, { batchMode: BATCH_MODE })
 
   const fulfilled = results.filter((r) => r.status === "fulfilled").length
   const rejected = results.filter((r) => r.status === "rejected").length
@@ -51,6 +67,7 @@ export async function GET(req: NextRequest) {
     ok: fulfilled,
     errors: rejected,
     results,
+    quota: { used: quota.used + urls.length, limit: DAILY_INDEXING_QUOTA },
     generatedAt: new Date().toISOString(),
   })
 }

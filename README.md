@@ -101,6 +101,14 @@ Optional:
 - `OPENAI_API_KEY` als Fallback, falls du später wieder GPT aktivieren willst.
 Ohne Key bleibt er rule-based (kein Crash).
 
+## Redis / Upstash (Queue + SWR Cache + Quota)
+Für die Gemini-Queue, SWR-Cache und Indexing-Quota wird Redis/Upstash genutzt:
+- `UPSTASH_REDIS_REST_URL`
+- `UPSTASH_REDIS_REST_TOKEN`
+
+Optional:
+- `GOOGLE_INDEXER_BATCH_MODE=false` deaktiviert Batch-Requests zur Indexing API.
+
 
 ## Programmatic SEO
 

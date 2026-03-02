@@ -8,16 +8,32 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import Container from "@/components/shared/Container"
-import { getCveEntry, KNOWN_CVES, parseCveId } from "@/lib/cve-pseo"
-import { generateCveContent } from "@/lib/agents/cve-agent"
+import { getCveEntry, KNOWN_CVES, parseCveId, type CveEntry } from "@/lib/cve-pseo"
+import { generateCveContent, type CveAiContent } from "@/lib/agents/cve-agent"
 import { BASE_URL } from "@/lib/config"
+import { redisGetJson, redisSetJson } from "@/lib/redis"
 
 interface Props {
   params: { cve_id: string }
 }
 
-export const revalidate = 60 * 60 * 24 // 24h ISR
 export const dynamicParams = true
+export const runtime = "edge"
+export const dynamic = "force-dynamic"
+
+const CACHE_TTL_SECONDS = 60 * 60 * 6
+const STALE_TTL_SECONDS = 60 * 60 * 24 * 7
+
+type CachedCveContent = {
+  generatedAt: number
+  content: CveAiContent
+}
+
+async function refreshCveContent(entry: CveEntry, cacheKey: string): Promise<CveAiContent> {
+  const content = await generateCveContent(entry)
+  await redisSetJson(cacheKey, { generatedAt: Date.now(), content }, STALE_TTL_SECONDS)
+  return content
+}
 
 export async function generateStaticParams() {
   return KNOWN_CVES.map((c) => ({ cve_id: c.cveId }))
@@ -54,8 +70,19 @@ export default async function CveFixPage({ params }: Props) {
   const entry = getCveEntry(cveId)
   if (!entry) return notFound()
 
-  // AI-generated unique content via Gemini (with static fallback)
-  const aiContent = await generateCveContent(entry).catch(() => null)
+  const cacheKey = `cve:content:${entry.cveId}`
+  const cached = await redisGetJson<CachedCveContent>(cacheKey)
+  let aiContent: CveAiContent
+
+  if (cached?.content) {
+    aiContent = cached.content
+    const isStale = Date.now() - cached.generatedAt > CACHE_TTL_SECONDS * 1000
+    if (isStale) {
+      void refreshCveContent(entry, cacheKey).catch(() => null)
+    }
+  } else {
+    aiContent = await refreshCveContent(entry, cacheKey)
+  }
   const colors = severityColor(entry.severity)
 
   // Schema.org structured data

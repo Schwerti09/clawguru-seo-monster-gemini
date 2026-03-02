@@ -5,6 +5,7 @@
 import { RUNBOOKS, totalSitemapUrls } from "./pseo"
 import { sendEmail } from "./email"
 import { BASE_URL } from "./config"
+import { runGeminiQueue } from "./queue/processor"
 
 // ---------------------------------------------------------------------------
 // Types
@@ -320,23 +321,25 @@ export async function autoHeal(): Promise<AutoHealResult> {
   async function callGemini(prompt: string): Promise<string | null> {
     if (!geminiKey) return null
     try {
-      const url = `${geminiBase}/models/${encodeURIComponent(geminiModel)}:generateContent?key=${encodeURIComponent(geminiKey)}`
-      const res = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          contents: [{ role: "user", parts: [{ text: prompt }] }],
-          generationConfig: { temperature: 0.4, maxOutputTokens: 600 },
-        }),
-        signal: AbortSignal.timeout(20_000),
+      return await runGeminiQueue(async () => {
+        const url = `${geminiBase}/models/${encodeURIComponent(geminiModel)}:generateContent?key=${encodeURIComponent(geminiKey)}`
+        const res = await fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            contents: [{ role: "user", parts: [{ text: prompt }] }],
+            generationConfig: { temperature: 0.4, maxOutputTokens: 600 },
+          }),
+          signal: AbortSignal.timeout(20_000),
+        })
+        if (!res.ok) return null
+        const data = await res.json()
+        const parts = data?.candidates?.[0]?.content?.parts
+        if (Array.isArray(parts)) {
+          return parts.map((p: { text?: string }) => p?.text ?? "").join("").trim() || null
+        }
+        return null
       })
-      if (!res.ok) return null
-      const data = await res.json()
-      const parts = data?.candidates?.[0]?.content?.parts
-      if (Array.isArray(parts)) {
-        return parts.map((p: { text?: string }) => p?.text ?? "").join("").trim() || null
-      }
-      return null
     } catch {
       return null
     }

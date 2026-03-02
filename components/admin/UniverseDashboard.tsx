@@ -50,6 +50,11 @@ type Overview = {
 
 type ModuleId = "seo" | "cash" | "affiliate" | "sentinel" | "defense"
 
+type SeoQuota = {
+  used: number
+  limit: number
+}
+
 type ModuleInfo = {
   id: ModuleId
   title: string
@@ -316,6 +321,7 @@ function Drawer({
 function ModuleCard({
   module,
   overview,
+  seoQuota,
   maintenanceEnabled,
   onOpenDrawer,
   onToggleMaintenance,
@@ -323,6 +329,7 @@ function ModuleCard({
 }: {
   module: ModuleInfo
   overview: Overview | null
+  seoQuota: SeoQuota | null
   maintenanceEnabled: boolean | null
   onOpenDrawer: (m: ModuleInfo) => void
   onToggleMaintenance: () => void
@@ -331,6 +338,7 @@ function ModuleCard({
   const ok = isModuleOk(module.id, overview)
   const stripe = overview?.stripe
   const env = overview?.env
+  const quotaLabel = seoQuota ? `${seoQuota.used}/${seoQuota.limit}` : "—"
 
   function renderContent() {
     if (module.id === "seo") {
@@ -345,12 +353,12 @@ function ModuleCard({
           </div>
           <div className="grid grid-cols-2 gap-2">
             <div className="p-3 rounded-xl bg-black/30 border border-white/5">
-              <div className="text-xs text-gray-400">Sitemap URLs</div>
-              <div className="text-lg font-black text-cyan-300 mt-0.5">100k+</div>
+              <div className="text-xs text-gray-400">Indexed Today</div>
+              <div className="text-lg font-black text-cyan-300 mt-0.5">{quotaLabel}</div>
             </div>
             <div className="p-3 rounded-xl bg-black/30 border border-white/5">
               <div className="text-xs text-gray-400">Daily Quota</div>
-              <div className="text-lg font-black text-cyan-300 mt-0.5">200</div>
+              <div className="text-lg font-black text-cyan-300 mt-0.5">{seoQuota?.limit ?? 200}</div>
             </div>
           </div>
           <div className="flex items-center gap-1.5 text-xs text-gray-500">
@@ -594,6 +602,7 @@ export default function UniverseDashboard() {
   const [overview, setOverview] = useState<Overview | null>(null)
   const [overviewErr, setOverviewErr] = useState<string | null>(null)
   const [overviewBusy, setOverviewBusy] = useState(true)
+  const [seoQuota, setSeoQuota] = useState<SeoQuota | null>({ used: 0, limit: 200 })
 
   const [activeDrawer, setActiveDrawer] = useState<ModuleInfo | null>(null)
 
@@ -623,6 +632,20 @@ export default function UniverseDashboard() {
     }
   }, [])
 
+  const loadSeoQuota = useCallback(async () => {
+    try {
+      const res = await fetch("/api/seo/quota", { cache: "no-store" })
+      if (!res.ok) {
+        setSeoQuota({ used: 0, limit: 200 })
+        return
+      }
+      const d = await res.json()
+      setSeoQuota({ used: Number(d.used ?? 0), limit: Number(d.limit ?? 200) })
+    } catch {
+      setSeoQuota({ used: 0, limit: 200 })
+    }
+  }, [])
+
   // Load maintenance mode status
   const loadMaintenance = useCallback(async () => {
     try {
@@ -638,9 +661,13 @@ export default function UniverseDashboard() {
   useEffect(() => {
     loadOverview()
     loadMaintenance()
-    const id = setInterval(loadOverview, 30_000)
+    loadSeoQuota()
+    const id = setInterval(() => {
+      loadOverview()
+      loadSeoQuota()
+    }, 30_000)
     return () => clearInterval(id)
-  }, [loadOverview, loadMaintenance])
+  }, [loadOverview, loadMaintenance, loadSeoQuota])
 
   const toggleMaintenance = useCallback(async () => {
     if (maintenanceBusy || maintenanceEnabled === null) return
@@ -693,7 +720,7 @@ export default function UniverseDashboard() {
               Logout
             </motion.a>
             <motion.button
-              onClick={() => { void loadOverview(); void loadMaintenance() }}
+              onClick={() => { void loadOverview(); void loadMaintenance(); void loadSeoQuota() }}
               disabled={overviewBusy}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.97 }}
@@ -769,6 +796,7 @@ export default function UniverseDashboard() {
             key={mod.id}
             module={mod}
             overview={overview}
+            seoQuota={seoQuota}
             maintenanceEnabled={maintenanceEnabled}
             onOpenDrawer={setActiveDrawer}
             onToggleMaintenance={toggleMaintenance}

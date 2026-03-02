@@ -12,6 +12,7 @@
 import crypto from "crypto"
 import type Stripe from "stripe"
 import { stripe } from "@/lib/stripe"
+import { runGeminiQueue } from "@/lib/queue/processor"
 
 // ---------------------------------------------------------------------------
 // Types
@@ -186,22 +187,24 @@ export async function summarizeThreats(cves: CveItem[]): Promise<SummarizedThrea
     ).replace(/\/$/, "")
     const url = `${base}/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(geminiKey)}`
 
-    const res = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        contents: [{ role: "user", parts: [{ text: prompt }] }],
-        generationConfig: { temperature: 0.2, maxOutputTokens: 1800 },
-      }),
-      signal: AbortSignal.timeout(30_000),
-    })
+    const responseText = await runGeminiQueue(async () => {
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contents: [{ role: "user", parts: [{ text: prompt }] }],
+          generationConfig: { temperature: 0.2, maxOutputTokens: 1800 },
+        }),
+        signal: AbortSignal.timeout(30_000),
+      })
 
-    if (!res.ok) throw new Error(`Gemini error ${res.status}`)
-    const data = (await res.json()) as {
-      candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }>
-    }
-    rawText =
-      data.candidates?.[0]?.content?.parts?.map((p) => p.text ?? "").join("") ?? ""
+      if (!res.ok) throw new Error(`Gemini error ${res.status}`)
+      const data = (await res.json()) as {
+        candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }>
+      }
+      return data.candidates?.[0]?.content?.parts?.map((p) => p.text ?? "").join("") ?? ""
+    })
+    rawText = responseText
   } else {
     // OpenAI (default)
     const apiKey = process.env.OPENAI_API_KEY

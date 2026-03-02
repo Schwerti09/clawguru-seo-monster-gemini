@@ -12,6 +12,8 @@ export type LaunchContent = {
   generatedAt: string
 }
 
+import { runGeminiQueue } from "@/lib/queue/processor"
+
 // WORLD BEAST FINAL LAUNCH: Gemini helper (self-contained to avoid circular deps)
 async function callGeminiLaunch(prompt: string): Promise<string | null> {
   const geminiKey = process.env.GEMINI_API_KEY
@@ -23,23 +25,25 @@ async function callGeminiLaunch(prompt: string): Promise<string | null> {
   if (!geminiKey) return null
 
   try {
-    const url = `${geminiBase}/models/${encodeURIComponent(geminiModel)}:generateContent?key=${encodeURIComponent(geminiKey)}`
-    const res = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        contents: [{ role: "user", parts: [{ text: prompt }] }],
-        generationConfig: { temperature: 0.7, maxOutputTokens: 2000 },
-      }),
-      signal: AbortSignal.timeout(30_000),
+    return await runGeminiQueue(async () => {
+      const url = `${geminiBase}/models/${encodeURIComponent(geminiModel)}:generateContent?key=${encodeURIComponent(geminiKey)}`
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contents: [{ role: "user", parts: [{ text: prompt }] }],
+          generationConfig: { temperature: 0.7, maxOutputTokens: 2000 },
+        }),
+        signal: AbortSignal.timeout(30_000),
+      })
+      if (!res.ok) return null
+      const data = await res.json()
+      const parts = data?.candidates?.[0]?.content?.parts
+      if (Array.isArray(parts)) {
+        return parts.map((p: { text?: string }) => p?.text ?? "").join("").trim() || null
+      }
+      return null
     })
-    if (!res.ok) return null
-    const data = await res.json()
-    const parts = data?.candidates?.[0]?.content?.parts
-    if (Array.isArray(parts)) {
-      return parts.map((p: { text?: string }) => p?.text ?? "").join("").trim() || null
-    }
-    return null
   } catch {
     return null
   }

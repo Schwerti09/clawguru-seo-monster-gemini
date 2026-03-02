@@ -1,10 +1,13 @@
 import { NextRequest, NextResponse } from "next/server"
 import Stripe from "stripe"
 import { stripe } from "@/lib/stripe"
+import { redisSetIfNotExists } from "@/lib/redis"
 import { signAccessToken, AccessPlan } from "@/lib/access-token"
 import { sendEmail } from "@/lib/email"
 
 export const runtime = "nodejs"
+
+const STRIPE_IDEMPOTENCY_TTL = 60 * 60 * 24 * 7
 
 async function readRawBody(req: NextRequest) {
   // NextRequest supports arrayBuffer()
@@ -341,8 +344,17 @@ export async function POST(req: NextRequest) {
   }
 
   try {
+    const firstEvent = await redisSetIfNotExists(`stripe:webhook:${event.id}`, "1", STRIPE_IDEMPOTENCY_TTL)
+    if (!firstEvent) {
+      return NextResponse.json({ received: true, duplicate: true })
+    }
+
     if (event.type === "checkout.session.completed") {
       const session = event.data.object as Stripe.Checkout.Session
+      const firstSale = await redisSetIfNotExists(`stripe:sale:${session.id}`, "1", STRIPE_IDEMPOTENCY_TTL)
+      if (!firstSale) {
+        return NextResponse.json({ received: true, duplicate: true })
+      }
 
       // Ensure paid/complete
       const paid = session.payment_status === "paid" || session.status === "complete"

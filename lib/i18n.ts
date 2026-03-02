@@ -2,6 +2,7 @@
 // NEXT-LEVEL UPGRADE 2026: 10-language system with RTL support
 // de/en (primary) + es/fr/pt/it/ru/zh-CN/ja/ar
 // Auto-detects language from URL prefix; Gemini auto-translates runbook metadata.
+import { runGeminiQueue } from "@/lib/queue/processor"
 
 export type Locale = "de" | "en" | "es" | "fr" | "pt" | "it" | "ru" | "zh" | "ja" | "ar"
 
@@ -419,22 +420,26 @@ export async function translateRunbook(opts: {
   ].join("\n")
 
   try {
-    const url = `${geminiBase}/models/${encodeURIComponent(geminiModel)}:generateContent?key=${encodeURIComponent(geminiKey)}`
-    const res = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        contents: [{ role: "user", parts: [{ text: prompt }] }],
-        generationConfig: { temperature: 0.2, maxOutputTokens: 300 },
-      }),
-      signal: AbortSignal.timeout(15_000),
+    const text = await runGeminiQueue(async () => {
+      const url = `${geminiBase}/models/${encodeURIComponent(geminiModel)}:generateContent?key=${encodeURIComponent(geminiKey)}`
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contents: [{ role: "user", parts: [{ text: prompt }] }],
+          generationConfig: { temperature: 0.2, maxOutputTokens: 300 },
+        }),
+        signal: AbortSignal.timeout(15_000),
+      })
+      if (!res.ok) return null
+      const data = await res.json()
+      return (
+        data?.candidates?.[0]?.content?.parts
+          ?.map((p: { text?: string }) => p?.text ?? "")
+          .join("") ?? ""
+      )
     })
-    if (!res.ok) return { title, summary, locale: targetLocale }
-    const data = await res.json()
-    const text: string =
-      data?.candidates?.[0]?.content?.parts
-        ?.map((p: { text?: string }) => p?.text ?? "")
-        .join("") ?? ""
+    if (!text) return { title, summary, locale: targetLocale }
     const jsonStr = text.replace(/```json|```/g, "").trim()
     const parsed = JSON.parse(jsonStr) as { title?: string; summary?: string }
     if (parsed.title && parsed.summary) {

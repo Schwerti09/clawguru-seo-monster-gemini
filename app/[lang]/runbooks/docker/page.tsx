@@ -6,7 +6,7 @@ import { RUNBOOKS } from "@/lib/pseo"
 import { type Locale, SUPPORTED_LOCALES } from "@/lib/i18n"
 import Link from "next/link"
 
-export const revalidate = 60 * 60 * 24
+export const revalidate = 60
 
 export async function generateStaticParams() {
   return SUPPORTED_LOCALES.map((lang) => ({ lang }))

@@ -11,7 +11,7 @@ import { generateProvenanceChain } from "@/lib/provenance"
 import ProvenanceChainView from "@/components/visual/ProvenanceChainView"
 import { BASE_URL } from "@/lib/config"
 
-export const revalidate = 60 * 60 * 24
+export const revalidate = 60
 
 export async function generateStaticParams() {
   // Pre-render top 200 runbooks for fast initial crawl

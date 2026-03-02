@@ -5,7 +5,7 @@ import { SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
 import { getDictionary } from "@/lib/getDictionary"
 import Home from "@/app/page"
 
-export const revalidate = 60 * 60 * 24
+export const revalidate = 60
 
 export async function generateStaticParams() {
   return SUPPORTED_LOCALES.map((lang) => ({ lang }))

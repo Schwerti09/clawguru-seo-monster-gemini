@@ -5,6 +5,7 @@ import TrustBadge from "@/components/layout/TrustBadge"
 import Header from "@/components/layout/Header"
 import Footer from "@/components/layout/Footer"
 import ActionDock from "@/components/layout/ActionDock"
+import SocialProofOverlay from "@/components/social/SocialProofOverlay"
 // WORLD BEAST FINAL LAUNCH: Umami privacy-first analytics
 import UmamiAnalytics from "@/components/analytics/UmamiAnalytics"
 // VISUAL UPGRADE 2026: Neon cursor + page transition wrapper
@@ -130,6 +131,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </main>
           <Footer />
           <ActionDock />
+          <SocialProofOverlay />
           {/* VISUAL UPGRADE 2026: Custom neon cursor for desktop */}
           <NeonCursor />
         </RTLProvider>

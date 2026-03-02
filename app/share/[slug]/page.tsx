@@ -6,7 +6,7 @@ import { getRunbook } from "@/lib/pseo"
 import { notFound } from "next/navigation"
 import { ShareButtons } from "./ShareButtons"
 
-export const revalidate = 60 * 60 * 24
+export const revalidate = 60
 
 export async function generateMetadata({ params }: { params: { slug: string } }) {
   const r = getRunbook(params.slug)

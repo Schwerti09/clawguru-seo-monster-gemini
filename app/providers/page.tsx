@@ -2,7 +2,7 @@ import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
 import { allProviders, runbooksByProvider } from "@/lib/pseo"
 
-export const revalidate = 60 * 60 * 24
+export const revalidate = 60
 
 export const metadata = {
   title: "Providers | ClawGuru",

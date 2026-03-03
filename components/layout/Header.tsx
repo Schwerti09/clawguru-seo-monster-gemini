@@ -68,25 +68,46 @@ export default function Header() {
 
   return (
     <>
-      <header role="banner" className="fixed top-10 left-0 right-0 z-40">
+      <header role="banner" className="fixed top-4 left-0 right-0 z-40">
         <Container>
-          <div className="flex items-center justify-between border border-gray-800 bg-gray-950/70 backdrop-blur rounded-2xl px-4 py-3 shadow-glow">
+          <div
+            className="flex items-center justify-between px-4 py-3 rounded-2xl"
+            style={{
+              backdropFilter: "blur(24px) saturate(1.8)",
+              WebkitBackdropFilter: "blur(24px) saturate(1.8)",
+              background: "rgba(10,10,10,0.75)",
+              border: "1px solid rgba(212,175,55,0.12)",
+              boxShadow: "0 0 0 1px rgba(212,175,55,0.06), 0 24px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.04)",
+            }}
+          >
             {/* Logo */}
             <Link href="/" className="flex items-center gap-3 shrink-0" aria-label="ClawGuru – Startseite">
-              <div className="w-9 h-9 rounded-2xl bg-gradient-to-br from-brand-cyan to-brand-violet shadow-glow2" aria-hidden="true" />
+              <div
+                className="w-9 h-9 rounded-xl flex items-center justify-center"
+                aria-hidden="true"
+                style={{
+                  background: "linear-gradient(135deg, #d4af37 0%, #e8cc6a 50%, #a8872a 100%)",
+                  boxShadow: "0 0 20px rgba(212,175,55,0.35)",
+                }}
+              >
+                <span className="text-black font-black text-sm">CG</span>
+              </div>
               <div className="leading-tight">
-                <div className="font-black">ClawGuru</div>
-                <div className="text-xs text-gray-400 hidden sm:block">Mycelial Singularity Engine v3.0</div>
+                <div className="font-black text-white tracking-tight">ClawGuru</div>
+                <div className="text-xs hidden sm:block" style={{ color: "rgba(212,175,55,0.7)" }}>Mycelial Singularity Engine v3.0</div>
               </div>
             </Link>
 
             {/* Desktop nav */}
-            <nav aria-label="Hauptnavigation" className="hidden lg:flex items-center gap-1">
+            <nav aria-label="Hauptnavigation" className="hidden lg:flex items-center gap-0.5">
               {PRIMARY_NAV.map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="px-3 py-2 rounded-xl hover:bg-gray-900/60 transition-colors text-sm"
+                  className="px-3 py-2 rounded-xl text-sm text-gray-300 hover:text-white transition-colors"
+                  style={{ transition: "color 0.2s" }}
+                  onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = "#d4af37" }}
+                  onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = "" }}
                 >
                   {item.label}
                 </Link>
@@ -96,7 +117,7 @@ export default function Header() {
               <div ref={moreRef} className="relative">
                 <button
                   onClick={() => setMoreOpen((v) => !v)}
-                  className="px-3 py-2 rounded-xl hover:bg-gray-900/60 transition-colors text-sm flex items-center gap-1"
+                  className="px-3 py-2 rounded-xl text-sm text-gray-300 hover:text-white flex items-center gap-1 transition-colors"
                   aria-expanded={moreOpen}
                   aria-haspopup="true"
                 >
@@ -106,13 +127,23 @@ export default function Header() {
                   </svg>
                 </button>
                 {moreOpen && (
-                  <div className="absolute right-0 top-full mt-2 w-48 rounded-2xl border border-gray-800 bg-gray-950/95 backdrop-blur-xl shadow-xl py-2 z-50">
+                  <div
+                    className="absolute right-0 top-full mt-2 w-52 rounded-2xl py-2 z-50"
+                    style={{
+                      backdropFilter: "blur(24px)",
+                      WebkitBackdropFilter: "blur(24px)",
+                      background: "rgba(10,10,10,0.92)",
+                      border: "1px solid rgba(212,175,55,0.12)",
+                      boxShadow: "0 24px 60px rgba(0,0,0,0.6)",
+                    }}
+                  >
                     {MORE_NAV.map((item) => (
                       <Link
                         key={item.href}
                         href={item.href}
                         onClick={() => setMoreOpen(false)}
-                        className="block px-4 py-2 text-sm hover:bg-gray-900/60 transition-colors"
+                        className="block px-4 py-2 text-sm text-gray-300 hover:text-white transition-colors"
+                        style={{ transition: "color 0.15s" }}
                       >
                         {item.label}
                       </Link>
@@ -124,19 +155,25 @@ export default function Header() {
 
             {/* CTA buttons + language switcher + mobile hamburger */}
             <div className="flex items-center gap-2">
-              {/* NEXT-LEVEL UPGRADE 2026: Language switcher */}
+              {/* Language switcher */}
               <div className="hidden sm:block">
                 <LanguageSwitcher currentLocale={currentLocale} variant="compact" />
               </div>
               <Link
                 href="/security/notfall-leitfaden"
-                className="hidden sm:block px-3 py-2 rounded-xl bg-brand-red/90 hover:bg-brand-red font-black text-sm"
+                className="hidden sm:block px-3 py-2 rounded-xl font-black text-sm transition-all duration-200"
+                style={{ background: "rgba(239,68,68,0.15)", border: "1px solid rgba(239,68,68,0.25)", color: "#f87171" }}
               >
                 {t(currentLocale, "navEmergency")}
               </Link>
               <Link
                 href="/pricing"
-                className="hidden sm:block px-3 py-2 rounded-xl bg-brand-cyan/15 hover:bg-brand-cyan/25 border border-brand-cyan/30 font-bold text-sm"
+                className="hidden sm:block px-4 py-2 rounded-xl font-black text-sm transition-all duration-200"
+                style={{
+                  background: "linear-gradient(135deg, #d4af37 0%, #e8cc6a 50%, #a8872a 100%)",
+                  color: "#0a0a0a",
+                  boxShadow: "0 0 16px rgba(212,175,55,0.25)",
+                }}
               >
                 {t(currentLocale, "navProKits")}
               </Link>
@@ -144,7 +181,8 @@ export default function Header() {
               {/* Hamburger button (mobile only) */}
               <button
                 onClick={() => setMobileOpen((v) => !v)}
-                className="lg:hidden p-2 rounded-xl hover:bg-gray-900/60 transition-colors"
+                className="lg:hidden p-2 rounded-xl transition-colors text-gray-300 hover:text-white"
+                style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(212,175,55,0.1)" }}
                 aria-label="Navigation öffnen"
                 aria-expanded={mobileOpen}
               >
@@ -167,24 +205,32 @@ export default function Header() {
           className="fixed inset-0 z-30 lg:hidden"
           onClick={() => setMobileOpen(false)}
           aria-hidden="true"
+          style={{ background: "rgba(0,0,0,0.4)", backdropFilter: "blur(4px)" }}
         />
       )}
       <div
         className={`fixed top-0 right-0 h-full w-72 z-50 lg:hidden transform transition-transform duration-300 ease-in-out ${
           mobileOpen ? "translate-x-0" : "translate-x-full"
-        } border-l border-gray-800 bg-gray-950/95 backdrop-blur-xl shadow-2xl pt-24 pb-8 overflow-y-auto`}
+        } pt-20 pb-8 overflow-y-auto`}
+        style={{
+          backdropFilter: "blur(24px)",
+          WebkitBackdropFilter: "blur(24px)",
+          background: "rgba(8,8,10,0.96)",
+          borderLeft: "1px solid rgba(212,175,55,0.12)",
+          boxShadow: "-20px 0 60px rgba(0,0,0,0.6)",
+        }}
         aria-hidden={!mobileOpen}
         role="dialog"
         aria-modal="true"
         aria-label="Mobile Menü"
       >
-        <nav aria-label="Mobilnavigation" className="px-4 space-y-1">
+        <nav aria-label="Mobilnavigation" className="px-4 space-y-0.5">
           {ALL_NAV.map((item) => (
             <Link
               key={item.href}
               href={item.href}
               onClick={() => setMobileOpen(false)}
-              className="block px-4 py-3 rounded-xl hover:bg-gray-900/60 transition-colors text-sm font-medium"
+              className="block px-4 py-3 rounded-xl text-sm font-medium text-gray-300 hover:text-white transition-colors"
             >
               {item.label}
             </Link>
@@ -192,14 +238,16 @@ export default function Header() {
           <div className="pt-4 flex flex-col gap-2">
             <Link
               href="/security/notfall-leitfaden"
-              className="block px-4 py-3 rounded-xl bg-brand-red/90 hover:bg-brand-red font-black text-sm text-center"
+              className="block px-4 py-3 rounded-xl font-black text-sm text-center"
+              style={{ background: "rgba(239,68,68,0.15)", border: "1px solid rgba(239,68,68,0.25)", color: "#f87171" }}
               onClick={() => setMobileOpen(false)}
             >
               {t(currentLocale, "navEmergency")}
             </Link>
             <Link
               href="/pricing"
-              className="block px-4 py-3 rounded-xl bg-brand-cyan/15 hover:bg-brand-cyan/25 border border-brand-cyan/30 font-bold text-sm text-center"
+              className="block px-4 py-3 rounded-xl font-black text-sm text-center text-black"
+              style={{ background: "linear-gradient(135deg, #d4af37, #e8cc6a, #a8872a)" }}
               onClick={() => setMobileOpen(false)}
             >
               {t(currentLocale, "navProKits")}

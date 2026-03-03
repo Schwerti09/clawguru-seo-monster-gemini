@@ -1,6 +1,5 @@
 import Container from "@/components/shared/Container"
-import NeuralGrid from "@/components/visual/NeuralGrid"
-import HeroInstitution from "@/components/marketing/HeroInstitution"
+import MycelialSingularityHero from "@/components/visual/MycelialSingularityHero"
 import HeroSecurityCheck from "@/components/marketing/HeroSecurityCheck"
 import TrustSecurity from "@/components/marketing/TrustSecurity"
 import SectionTitle from "@/components/shared/SectionTitle"
@@ -52,26 +51,30 @@ export default function Home({ dict }: HomeProps) {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
 
-      {/* VISUAL UPGRADE 2026: Full-viewport hero section with animated grid background */}
-      <section className="min-h-screen border-b border-white/10 relative overflow-hidden">
-        <NeuralGrid />
+      {/* LUXURY DESIGN 2026: Full-viewport Mycelial Singularity Hero with interactive canvas */}
+      <MycelialSingularityHero />
+
+      {/* Security check – luxury glass card */}
+      <section className="relative py-16 border-b border-white/5 overflow-hidden" style={{ background: "var(--surface-1)" }}>
+        <div className="pointer-events-none absolute inset-0 bg-vault-gradient opacity-60" aria-hidden="true" />
         <Container>
-          <HeroInstitution dict={dict?.hero} />
           <HeroSecurityCheck />
         </Container>
       </section>
 
-      {/* UNIVERSE MODULE – QUANTUM VOID ELEGANCE 2050: Directly after Hero */}
-      <section className="relative py-28 overflow-hidden" style={{ background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,184,255,0.08) 0%, rgba(0,255,157,0.04) 40%, transparent 70%), #060608" }}>
-        {/* Glow orb */}
+      {/* UNIVERSE MODULE – LUXURY DESIGN 2026: Gold+Cyan premium section */}
+      <section className="relative py-28 overflow-hidden" style={{ background: "var(--surface-1)" }}>
+        {/* Gold orb */}
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center" aria-hidden="true">
-          <div style={{ width: "600px", height: "300px", background: "radial-gradient(ellipse, rgba(0,184,255,0.12) 0%, transparent 70%)", filter: "blur(40px)" }} />
+          <div style={{ width: "700px", height: "350px", background: "radial-gradient(ellipse, rgba(212,175,55,0.06) 0%, rgba(0,184,255,0.04) 50%, transparent 70%)", filter: "blur(50px)" }} />
         </div>
+        {/* Gold edge line */}
+        <div className="absolute top-0 left-0 right-0 h-px" style={{ background: "linear-gradient(to right, transparent, rgba(212,175,55,0.2), transparent)" }} aria-hidden="true" />
         <div className="relative z-10 flex flex-col items-center text-center px-4 max-w-4xl mx-auto">
-          <div className="mb-4 text-xs font-mono tracking-[0.3em] uppercase" style={{ color: "rgba(0,184,255,0.7)" }}>
+          <div className="mb-4 text-xs font-mono tracking-[0.3em] uppercase neon-text-gold">
             {dict?.home.clawVerseKicker ?? "CLAWVERSE · UNIVERSE CORE · OPERATIONAL KNOWLEDGE NETWORK"}
           </div>
-          <h2 className="text-5xl sm:text-6xl md:text-7xl font-black font-heading leading-[1.05] tracking-tight text-white">
+          <h2 className="text-5xl sm:text-6xl md:text-7xl font-black font-display leading-[1.05] tracking-tight text-white">
             {dict?.home.clawVerseTitle ?? "Enter the ClawVerse"}
           </h2>
           <p className="mt-6 text-lg sm:text-xl text-gray-400 max-w-2xl leading-relaxed">
@@ -79,11 +82,7 @@ export default function Home({ dict }: HomeProps) {
           </p>
           <a
             href="/universe"
-            className="mt-10 inline-block px-10 py-4 rounded-2xl font-black text-base tracking-wide text-black transition-all duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#00b8ff]"
-            style={{
-              background: "linear-gradient(135deg, #00b8ff 0%, #00ff9d 100%)",
-              boxShadow: "0 0 40px rgba(0,184,255,0.35), 0 0 80px rgba(0,255,157,0.15)"
-            }}
+            className="btn-luxury-gold mt-10 inline-block px-10 py-4 rounded-2xl font-black text-base tracking-wide focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#d4af37]"
           >
             {dict?.home.clawVerseCta ?? "Enter the Universe →"}
           </a>
@@ -93,8 +92,8 @@ export default function Home({ dict }: HomeProps) {
       {/* TRUST & SECURITY FORTRESS 2026: Institutional trust section directly after hero */}
       <TrustSecurity />
 
-      {/* Jackpot CTA – VISUAL UPGRADE 2026: glassmorphism cards */}
-      <section className="py-14 bg-gradient-to-b from-[#0a0a0a] to-gray-950">
+      {/* Jackpot CTA – LUXURY DESIGN 2026: vault glass cards */}
+      <section className="py-14" style={{ background: "var(--surface-0)" }}>
         <Container>
           <div className="max-w-5xl mx-auto">
             <SectionTitle
@@ -110,8 +109,8 @@ export default function Home({ dict }: HomeProps) {
                 [dict?.jackpot.kitsTemplates ?? "Kits + Templates", dict?.jackpot.kitsTemplatesDesc ?? "Copy/Paste Assets, die du direkt in Produktion ziehen kannst."],
                 [dict?.jackpot.liveOpsWall ?? "Live Ops Wall", dict?.jackpot.liveOpsWallDesc ?? "Trends + Hot Fixes. Schneller entscheiden, schneller fixen."]
               ].map(([t, d]) => (
-                <div key={t} className="p-6 rounded-3xl glass-card glass-card-hover">
-                  <div className="text-xl font-black font-heading">{t}</div>
+                <div key={t} className="p-6 rounded-3xl glass-vault glass-elite-hover">
+                  <div className="text-xl font-black font-display text-gold-gradient">{t}</div>
                   <div className="mt-2 text-sm text-gray-300">{d}</div>
                 </div>
               ))}
@@ -150,19 +149,19 @@ export default function Home({ dict }: HomeProps) {
         </Container>
       </section>
 
-      {/* Mycelial Singularity Engine CTA – VISUAL UPGRADE 2026: neon border accent */}
-      <section className="py-16 bg-gradient-to-r from-gray-950 to-[#001a2e] border-y border-white/10">
+      {/* Mycelial Singularity Engine CTA – LUXURY DESIGN 2026: gold border accent */}
+      <section className="py-16 border-y border-white/5" style={{ background: "var(--surface-1)" }}>
         <Container>
-          <div className="max-w-5xl mx-auto p-8 rounded-3xl glass-panel" style={{ borderColor: "rgba(0, 255, 157, 0.15)" }}>
-            <div className="text-xs font-mono text-[#00ff9d] uppercase tracking-widest">{dict?.home.genesisProtocol ?? "GENESIS PROTOKOLL AKTIV · MYCELIAL SINGULARITY ENGINE v3.0"}</div>
-            <div className="mt-2 text-3xl font-black font-heading">
+          <div className="max-w-5xl mx-auto p-8 rounded-3xl glass-vault" style={{ borderColor: "rgba(212,175,55,0.18)" }}>
+            <div className="text-xs font-mono neon-text-gold uppercase tracking-widest">{dict?.home.genesisProtocol ?? "GENESIS PROTOKOLL AKTIV · MYCELIAL SINGULARITY ENGINE v3.0"}</div>
+            <div className="mt-2 text-3xl font-black font-display">
               {dict?.home.myceliumTitle ?? "Das lebende Mycelium. 1M+ Runbooks. Jetzt."}
             </div>
             <p className="mt-4 text-gray-300 max-w-3xl">
               {dict?.home.myceliumDesc ?? "Jeder Knoten ist eine Wissenseinheit. Jede Kante eine semantische Beziehung. Das Netzwerk wächst, lernt und evolviert autonom durch Darwinian Selection."}
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
-              <a href="/clawverse" className="px-6 py-3 rounded-2xl font-black text-black bg-claw-green hover:shadow-neon-green transition-all duration-300">
+              <a href="/clawverse" className="px-6 py-3 rounded-2xl font-black text-black btn-luxury-gold shadow-neon-gold transition-all duration-300">
                 ClawVerse →
               </a>
               <a href="/mycelium" className="px-6 py-3 rounded-2xl border border-white/10 hover:border-white/20 font-bold text-gray-200 transition-all duration-300">

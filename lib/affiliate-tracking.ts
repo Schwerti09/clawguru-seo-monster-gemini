@@ -37,6 +37,7 @@ export async function fireAffiliatePostbacks(
   const config = parsePostbackConfig(process.env.AFFILIATE_POSTBACKS)
   if (!config) return
 
+  // "*" acts as a default catch-all config for affiliates without a specific entry.
   const urls = normalizeUrls(config[affiliateRef] ?? config["*"])
   if (urls.length === 0) return
 
@@ -49,7 +50,7 @@ export async function fireAffiliatePostbacks(
     customer_email: payload.customerEmail || ""
   }
 
-  const body = JSON.stringify({ affiliateRef, ...payload })
+  const body = JSON.stringify({ affiliate_ref: affiliateRef, ...payload })
 
   const results = await Promise.allSettled(
     urls.map(async (rawUrl) => {

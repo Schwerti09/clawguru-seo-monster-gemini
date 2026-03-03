@@ -1,7 +1,7 @@
 import type Stripe from "stripe"
 
 export async function sendSuccessPulse(session: Stripe.Checkout.Session): Promise<void> {
-  const webhookUrl = process.env.SUCCESS_PULSE_URL || process.env.SUCCESS_PULSE_WEBHOOK
+  const webhookUrl = process.env.SUCCESS_PULSE_URL
   if (!webhookUrl) return
 
   const createdAt = session.created ? new Date(session.created * 1000).toISOString() : new Date().toISOString()

@@ -2,9 +2,11 @@
 // The entire ClawGuru runbook library rendered as a living, breathing mycelium.
 
 import type { Metadata } from "next"
+import { cookies } from "next/headers"
 import Container from "@/components/shared/Container"
 import MyceliumView from "@/components/visual/MyceliumView"
 import { RUNBOOKS } from "@/lib/pseo"
+import { SUPPORTED_LOCALES, type Locale, t } from "@/lib/i18n"
 import {
   buildMyceliumGraph,
   type RunbookSummary,
@@ -22,7 +24,10 @@ export const metadata: Metadata = {
 // (mirrors the hourly genetic evolution cron cadence)
 export const revalidate = 3600
 
-export default function MyceliumPage() {
+export default async function MyceliumPage() {
+  const cookieStore = await cookies()
+  const localeCookie = cookieStore.get("cg_locale")?.value
+  const locale: Locale = SUPPORTED_LOCALES.includes(localeCookie as Locale) ? (localeCookie as Locale) : "de"
   // MYCELIAL SINGULARITY v3.0 – Build the living graph from the full runbook library
   // Server-side only: keeps heavy Runbook blocks out of the client bundle
   const graph = buildMyceliumGraph(RUNBOOKS, 250)
@@ -46,7 +51,7 @@ export default function MyceliumPage() {
           <div className="flex flex-col md:flex-row md:items-end gap-4 md:gap-8">
             <div className="flex-1">
               <div className="text-xs font-mono text-[#00ff9d] tracking-widest mb-2 uppercase">
-                GENESIS PROTOKOLL AKTIV · MYCELIAL SINGULARITY ENGINE v3.0
+                {t(locale, "heroGenesisBadge")}
               </div>
               <h1 className="text-4xl md:text-5xl font-black mb-3 leading-tight">
                 The{" "}

@@ -760,7 +760,7 @@ export const UI_STRINGS: Record<Locale, Record<string, string>> = {
     heroAskCopilot: "Demander au Copilot",
     heroVaultAccess: "Accès Vault →",
     heroKnowledgeEdges: "Arêtes de Connaissance",
-    heroGenesisProtocol: "Protocole Genèse",
+    heroGenesisProtocol: "Protocole Genesis",
     heroNodeTooltip: "Nœud de Connaissance",
     heroScrollLabel: "Défiler",
     // Pricing

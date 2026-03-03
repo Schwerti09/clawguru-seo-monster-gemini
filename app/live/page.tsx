@@ -1,6 +1,7 @@
 import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
 import OpsWall from "@/components/live/OpsWall"
+import LoginSaveBanner from "@/components/shared/LoginSaveBanner"
 
 export const metadata = {
   title: "Live Ops Wall | ClawGuru",
@@ -19,6 +20,7 @@ export default function LivePage() {
           subtitle="Signals, Trends, Hot Fixes — ohne Bullshit. (Der Puls ist synthetisch, keine Userdaten.)"
         />
         <div className="mt-10">
+          <LoginSaveBanner />
           <OpsWall />
         </div>
       </div>

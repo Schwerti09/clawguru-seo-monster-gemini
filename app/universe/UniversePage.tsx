@@ -6,6 +6,7 @@
 
 import { useState, useEffect, useCallback } from "react"
 import dynamic from "next/dynamic"
+import Link from "next/link"
 import { QV } from "./qv"
 
 // Dynamic import with SSR disabled prevents WebGL/Canvas from running on the server,
@@ -345,6 +346,98 @@ function ClawLinkConnector() {
   )
 }
 
+/* ── Account / Login Button (top-left) ── */
+function AccountButton() {
+  const [email, setEmail] = useState<string | null>(null)
+
+  useEffect(() => {
+    // Lightweight check: ask the session endpoint
+    fetch("/api/auth/me")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => { if (d?.email) setEmail(d.email) })
+      .catch(() => {})
+  }, [])
+
+  return (
+    <Link
+      href="/account"
+      className="fixed top-4 left-4 z-50 flex items-center gap-2 px-3 py-1.5 rounded-full
+                 font-mono text-[10px] tracking-widest uppercase transition-all duration-300"
+      style={{
+        background: QV.glass,
+        border: `1px solid ${QV.glassBorder}`,
+        color: email ? QV.gold : "rgba(255,255,255,0.35)",
+      }}
+    >
+      <span style={{ fontSize: "10px" }}>◉</span>
+      {email ? email.split("@")[0] : "Login"}
+    </Link>
+  )
+}
+
+/* ── Saved Checks Section (reads localStorage) ── */
+type SavedCheck = { url: string; score: number; savedAt: string }
+
+function SavedSection() {
+  const [checks, setChecks] = useState<SavedCheck[]>([])
+
+  useEffect(() => {
+    try {
+      setChecks(JSON.parse(localStorage.getItem("cg_saved_checks") || "[]"))
+    } catch {}
+  }, [])
+
+  if (checks.length === 0) return null
+
+  return (
+    <div
+      className="w-full max-w-xl mx-auto mt-10 px-4"
+      style={{ borderTop: `1px solid ${QV.glassBorder}`, paddingTop: "2rem" }}
+    >
+      <div
+        className="text-[10px] font-mono tracking-[0.25em] uppercase mb-4 text-center"
+        style={{ color: `${QV.gold}88` }}
+      >
+        Saved Checks
+      </div>
+      <div className="space-y-2">
+        {checks.slice(0, 5).map((c, i) => (
+          <div
+            key={i}
+            className="flex items-center justify-between px-4 py-2 rounded-xl"
+            style={{ background: QV.glass, border: `1px solid ${QV.glassBorder}` }}
+          >
+            <span
+              className="font-mono text-xs truncate"
+              style={{ color: "rgba(255,255,255,0.5)" }}
+            >
+              {c.url}
+            </span>
+            <span
+              className="font-black text-sm ml-4 shrink-0"
+              style={{
+                color:
+                  c.score >= 80 ? "#22c55e" : c.score >= 50 ? "#eab308" : "#ef4444",
+              }}
+            >
+              {c.score}
+            </span>
+          </div>
+        ))}
+      </div>
+      <div className="text-center mt-3">
+        <Link
+          href="/account"
+          className="text-[10px] font-mono tracking-widest uppercase"
+          style={{ color: `${QV.gold}88` }}
+        >
+          View all in Account →
+        </Link>
+      </div>
+    </div>
+  )
+}
+
 /* ── Main Universe Client Component ── */
 export default function UniversePage() {
   const [activeTab, setActiveTab] = useState<TabId | null>(null)
@@ -356,6 +449,7 @@ export default function UniversePage() {
   return (
     <>
       <SummonButton />
+      <AccountButton />
       <NeuroIndicator />
 
       <div className="relative min-h-screen" style={{ background: QV.void }}>
@@ -414,6 +508,9 @@ export default function UniversePage() {
 
               {/* ClawLink Connector */}
               <ClawLinkConnector />
+
+              {/* Saved Checks (visible when user has saved checks locally) */}
+              <SavedSection />
             </div>
 
             {/* Bottom Inscription */}

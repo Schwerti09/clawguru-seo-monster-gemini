@@ -12,7 +12,10 @@ export const metadata: Metadata = {
   alternates: { canonical: "/copilot" }
 }
 
-export default function CopilotPage({ searchParams }: { searchParams?: Record<string, string | string[] | undefined> }) {
+export default async function CopilotPage(
+  props: { searchParams?: Promise<Record<string, string | string[] | undefined>> }
+) {
+  const searchParams = await props.searchParams;
   const q = typeof searchParams?.q === "string" ? searchParams?.q : ""
   return (
     <Container>

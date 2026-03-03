@@ -6,11 +6,12 @@ export const metadata = {
   description: "Magic Link öffnen oder Recovery anfordern."
 }
 
-export default function RecoverPage({
-  searchParams
-}: {
-  searchParams?: Record<string, string | string[] | undefined>
-}) {
+export default async function RecoverPage(
+  props: {
+    searchParams?: Promise<Record<string, string | string[] | undefined>>
+  }
+) {
+  const searchParams = await props.searchParams;
   const token = typeof searchParams?.token === "string" ? searchParams?.token : ""
   return (
     <Container>

@@ -16,7 +16,7 @@ function unauthorized() {
 
 /** GET – return current MAINTENANCE_MODE status */
 export async function GET() {
-  const token = cookies().get(adminCookieName())?.value || ""
+  const token = (await cookies()).get(adminCookieName())?.value || ""
   const session = token ? verifyAdminToken(token) : null
   if (!session) return unauthorized()
 
@@ -31,7 +31,7 @@ export async function GET() {
 
 /** POST – toggle MAINTENANCE_MODE; body: { enabled: boolean } */
 export async function POST(req: Request) {
-  const token = cookies().get(adminCookieName())?.value || ""
+  const token = (await cookies()).get(adminCookieName())?.value || ""
   const session = token ? verifyAdminToken(token) : null
   if (!session) return unauthorized()
 

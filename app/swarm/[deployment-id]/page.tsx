@@ -13,7 +13,9 @@ import { generateSwarmDeployment, generateApprovedSwarmPlan, type RemediationSco
 // SWARM DEPLOYMENT v3.2 – Overlord AI: Always dynamic – never statically cached
 export const dynamic = "force-dynamic"
 
-export function generateMetadata({ params, searchParams }: PageProps): Metadata {
+export async function generateMetadata(props: PageProps): Promise<Metadata> {
+  const searchParams = await props.searchParams;
+  const params = await props.params;
   const runbookSlug = searchParams.runbook
   const deploymentId = params["deployment-id"]
   const isApproved = searchParams.mode === "approved"
@@ -29,11 +31,13 @@ export function generateMetadata({ params, searchParams }: PageProps): Metadata 
 }
 
 interface PageProps {
-  params: { "deployment-id": string }
-  searchParams: { runbook?: string; target?: string; mode?: string; scope?: string }
+  params: Promise<{ "deployment-id": string }>
+  searchParams: Promise<{ runbook?: string; target?: string; mode?: string; scope?: string }>
 }
 
-export default function SwarmPage({ params, searchParams }: PageProps) {
+export default async function SwarmPage(props: PageProps) {
+  const searchParams = await props.searchParams;
+  const params = await props.params;
   const deploymentId = params["deployment-id"]
   const runbookSlug = searchParams.runbook ?? "unknown-runbook"
   const isApprovedMode = searchParams.mode === "approved"

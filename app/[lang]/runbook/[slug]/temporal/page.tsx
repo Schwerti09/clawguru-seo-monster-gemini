@@ -14,13 +14,14 @@ import { BASE_URL } from "@/lib/config"
 export const revalidate = 60
 export const dynamicParams = true
 
-export async function generateMetadata({
-  params,
-  searchParams,
-}: {
-  params: { lang: string; slug: string }
-  searchParams: { version?: string }
-}) {
+export async function generateMetadata(
+  props: {
+    params: Promise<{ lang: string; slug: string }>
+    searchParams: Promise<{ version?: string }>
+  }
+) {
+  const searchParams = await props.searchParams;
+  const params = await props.params;
   const r = getRunbook(params.slug)
   if (!r) return {}
   const version = searchParams.version ?? "aktuell"
@@ -31,13 +32,14 @@ export async function generateMetadata({
   }
 }
 
-export default function LocalizedTemporalPage({
-  params,
-  searchParams,
-}: {
-  params: { lang: string; slug: string }
-  searchParams: { version?: string }
-}) {
+export default async function LocalizedTemporalPage(
+  props: {
+    params: Promise<{ lang: string; slug: string }>
+    searchParams: Promise<{ version?: string }>
+  }
+) {
+  const searchParams = await props.searchParams;
+  const params = await props.params;
   const locale: Locale = SUPPORTED_LOCALES.includes(params.lang as Locale)
     ? (params.lang as Locale)
     : "de"

@@ -10,7 +10,8 @@ export async function generateStaticParams() {
   return allProviders().slice(0, 30).map((p) => ({ slug: p.slug }))
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }) {
+export async function generateMetadata(props: { params: Promise<{ slug: string }> }) {
+  const params = await props.params;
   const slug = params.slug.toLowerCase()
   const p = allProviders().find((x) => x.slug === slug)
   if (!p) return {}
@@ -22,7 +23,8 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   }
 }
 
-export default function ProviderPage({ params }: { params: { slug: string } }) {
+export default async function ProviderPage(props: { params: Promise<{ slug: string }> }) {
+  const params = await props.params;
   const slug = params.slug.toLowerCase()
   const p = allProviders().find((x) => x.slug === slug)
   if (!p) return notFound()

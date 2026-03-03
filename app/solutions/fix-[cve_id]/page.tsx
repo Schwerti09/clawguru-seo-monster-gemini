@@ -13,7 +13,7 @@ import { generateCveContent } from "@/lib/agents/cve-agent"
 import { BASE_URL } from "@/lib/config"
 
 interface Props {
-  params: { cve_id: string }
+  params: Promise<{ cve_id: string }>
 }
 
 export const revalidate = 60 // 60s ISR
@@ -23,7 +23,8 @@ export async function generateStaticParams() {
   return KNOWN_CVES.map((c) => ({ cve_id: c.cveId }))
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   const cveId = parseCveId(decodeURIComponent(params.cve_id))
   if (!cveId) return {}
   const entry = getCveEntry(cveId)
@@ -47,7 +48,8 @@ function severityColor(severity: string) {
   return { text: "#00ff9d", bg: "rgba(0,255,157,0.1)", border: "rgba(0,255,157,0.3)" }
 }
 
-export default async function CveFixPage({ params }: Props) {
+export default async function CveFixPage(props: Props) {
+  const params = await props.params;
   const cveId = parseCveId(decodeURIComponent(params.cve_id))
   if (!cveId) return notFound()
 

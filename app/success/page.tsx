@@ -5,11 +5,12 @@ import { stripe } from "@/lib/stripe"
 export const runtime = "nodejs"
 export const dynamic = "force-dynamic"
 
-export default async function SuccessPage({
-  searchParams
-}: {
-  searchParams?: Record<string, string | string[] | undefined>
-}) {
+export default async function SuccessPage(
+  props: {
+    searchParams?: Promise<Record<string, string | string[] | undefined>>
+  }
+) {
+  const searchParams = await props.searchParams;
   const session_id = typeof searchParams?.session_id === "string" ? searchParams?.session_id : ""
   if (!session_id) {
     return (

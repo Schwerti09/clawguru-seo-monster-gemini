@@ -41,11 +41,11 @@ function urlset(urls: Array<{ loc: string; lastmod?: string; changefreq?: string
 
 export async function GET(
   _req: NextRequest,
-  context?: { params?: { name?: string } }
+  { params }: { params: Promise<{ name: string }> }
 ) {
   const base = BASE_URL
   const lastmod = isoDate()
-  const name = (context?.params?.name ?? "").replace(/\.xml$/, "")
+  const name = (await params).name.replace(/\.xml$/, "")
 
   if (!name) {
     return new NextResponse("Not Found", { status: 404 })

@@ -18,7 +18,8 @@ export async function generateStaticParams() {
   return allYears100k().map((year) => ({ year }))
 }
 
-export async function generateMetadata({ params }: { params: { year: string } }) {
+export async function generateMetadata(props: { params: Promise<{ year: string }> }) {
+  const params = await props.params;
   const years = allYears100k()
   if (!years.includes(params.year)) return {}
   const totalPerYear =
@@ -37,7 +38,8 @@ export async function generateMetadata({ params }: { params: { year: string } })
   }
 }
 
-export default function YearHubPage({ params }: { params: { year: string } }) {
+export default async function YearHubPage(props: { params: Promise<{ year: string }> }) {
+  const params = await props.params;
   const years = allYears100k()
   if (!years.includes(params.year)) return notFound()
 

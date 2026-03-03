@@ -18,7 +18,8 @@ export async function generateStaticParams() {
   return allIssues100k().map((i) => ({ slug: i.slug }))
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }) {
+export async function generateMetadata(props: { params: Promise<{ slug: string }> }) {
+  const params = await props.params;
   const issue = allIssues100k().find((i) => i.slug === params.slug)
   if (!issue) return {}
   const totalPerIssue =
@@ -37,7 +38,8 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   }
 }
 
-export default function IssueHubPage({ params }: { params: { slug: string } }) {
+export default async function IssueHubPage(props: { params: Promise<{ slug: string }> }) {
+  const params = await props.params;
   const issue = allIssues100k().find((i) => i.slug === params.slug)
   if (!issue) return notFound()
 

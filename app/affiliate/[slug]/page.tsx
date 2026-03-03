@@ -13,7 +13,8 @@ const LINK_ENGINE = buildLinkEngine(RUNBOOKS, {
   authorityForPage: (page) => page.clawScore,
 })
 
-export async function generateMetadata({ params }: { params: { slug: string } }) {
+export async function generateMetadata(props: { params: Promise<{ slug: string }> }) {
+  const params = await props.params;
   const profile = getAffiliateProfile(params.slug)
   const name = profile?.name ?? humanizeSlug(params.slug)
   const keyword = profile?.keyword ?? `${name} Security Recommendations`
@@ -24,7 +25,8 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   }
 }
 
-export default function AffiliateBridgePage({ params }: { params: { slug: string } }) {
+export default async function AffiliateBridgePage(props: { params: Promise<{ slug: string }> }) {
+  const params = await props.params;
   const profile = getAffiliateProfile(params.slug)
   const name = profile?.name ?? humanizeSlug(params.slug)
   const keyword = profile?.keyword ?? `${name} Security Recommendations`

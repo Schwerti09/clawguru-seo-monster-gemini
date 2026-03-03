@@ -15,7 +15,7 @@ function escapeXmlText(s: string) {
       string,
       string
     >)[c] || c
-  )
+  );
 }
 
 function formatPartnerName(partnerId: string) {
@@ -23,7 +23,7 @@ function formatPartnerName(partnerId: string) {
     .split(/[-_]/g)
     .filter(Boolean)
     .map((chunk) => chunk[0]?.toUpperCase() + chunk.slice(1))
-    .join(" ")
+    .join(" ");
 }
 
 function truncateAtWord(text: string, max = 120): string {
@@ -58,10 +58,8 @@ async function getTopCve(): Promise<UpstreamCVE> {
   return top
 }
 
-export async function GET(
-  req: NextRequest,
-  { params }: { params: { partnerId: string } }
-) {
+export async function GET(req: NextRequest, props: { params: Promise<{ partnerId: string }> }) {
+  const params = await props.params;
   const { searchParams } = new URL(req.url)
   const partnerId = params.partnerId || "partner"
   const partnerKey = partnerId.toLowerCase()
@@ -154,5 +152,5 @@ export async function GET(
       "Cache-Control": "public, max-age=1800",
       "X-Partner-Link": partnerUrl.replace(/[\r\n]/g, ""),
     },
-  })
+  });
 }

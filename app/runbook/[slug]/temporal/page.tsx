@@ -12,13 +12,14 @@ import { BASE_URL } from "@/lib/config"
 
 export const revalidate = 60
 
-export async function generateMetadata({
-  params,
-  searchParams,
-}: {
-  params: { slug: string }
-  searchParams: { version?: string }
-}) {
+export async function generateMetadata(
+  props: {
+    params: Promise<{ slug: string }>
+    searchParams: Promise<{ version?: string }>
+  }
+) {
+  const searchParams = await props.searchParams;
+  const params = await props.params;
   const r = getRunbook(params.slug)
   if (!r) return {}
   const version = searchParams.version ?? "aktuell"
@@ -29,13 +30,14 @@ export async function generateMetadata({
   }
 }
 
-export default function TemporalPage({
-  params,
-  searchParams,
-}: {
-  params: { slug: string }
-  searchParams: { version?: string }
-}) {
+export default async function TemporalPage(
+  props: {
+    params: Promise<{ slug: string }>
+    searchParams: Promise<{ version?: string }>
+  }
+) {
+  const searchParams = await props.searchParams;
+  const params = await props.params;
   const r = getRunbook(params.slug)
   if (!r) return notFound()
 

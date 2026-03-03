@@ -18,11 +18,12 @@ export async function generateStaticParams() {
   return RUNBOOKS.slice(0, 200).map((r) => ({ "runbook-slug": r.slug }))
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { "runbook-slug": string }
-}) {
+export async function generateMetadata(
+  props: {
+    params: Promise<{ "runbook-slug": string }>
+  }
+) {
+  const params = await props.params;
   const r = getRunbook(params["runbook-slug"])
   if (!r) return {}
   return {
@@ -42,11 +43,12 @@ function SignatureCountBadge({ count }: { count: number }) {
   )
 }
 
-export default function ProvenancePage({
-  params,
-}: {
-  params: { "runbook-slug": string }
-}) {
+export default async function ProvenancePage(
+  props: {
+    params: Promise<{ "runbook-slug": string }>
+  }
+) {
+  const params = await props.params;
   const r = getRunbook(params["runbook-slug"])
   if (!r) return notFound()
 

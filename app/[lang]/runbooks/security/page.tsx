@@ -19,7 +19,8 @@ export async function generateStaticParams() {
   return SUPPORTED_LOCALES.map((lang) => ({ lang }))
 }
 
-export async function generateMetadata({ params }: { params: { lang: string } }) {
+export async function generateMetadata(props: { params: Promise<{ lang: string }> }) {
+  const params = await props.params;
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   return {
     title: `Security Runbooks – Firewall, SSH, Secrets, Zero Trust 2026 | ClawGuru`,
@@ -28,7 +29,8 @@ export async function generateMetadata({ params }: { params: { lang: string } })
   }
 }
 
-export default function SecurityHubPage({ params }: { params: { lang: string } }) {
+export default async function SecurityHubPage(props: { params: Promise<{ lang: string }> }) {
+  const params = await props.params;
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
 
   const securityRunbooks = RUNBOOKS.filter((r) =>
@@ -92,5 +94,5 @@ export default function SecurityHubPage({ params }: { params: { lang: string } }
         ))}
       </div>
     </Container>
-  )
+  );
 }

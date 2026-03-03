@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/leaderboard" },
 }
 
-export const revalidate = 60 * 60 // 1h cache
+export const revalidate = 3600 // 1h cache
 
 // WORLD BEAST: deterministic fake leaderboard (no DB needed)
 // Replace with real DB query when user tracking is implemented.

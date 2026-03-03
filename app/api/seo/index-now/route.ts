@@ -1,9 +1,10 @@
 // app/api/seo/index-now/route.ts
 // Submits the newest 200 URLs to Google via the Indexing API.
+// Prioritises the newest, highest-severity CVEs first ("Final 15k Push").
 // Must be called with the correct CRON_SECRET to prevent abuse.
 
 import { NextRequest, NextResponse } from "next/server"
-import { KNOWN_CVES } from "@/lib/cve-pseo"
+import { KNOWN_CVES, type CveSeverity } from "@/lib/cve-pseo"
 import { get100kSlugsPage } from "@/lib/pseo"
 import { DAILY_INDEXING_QUOTA, getIndexingQuota, indexUrls } from "@/lib/google-indexer"
 
@@ -13,6 +14,22 @@ export const runtime = "nodejs"
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const BATCH_SIZE = 200
 const BATCH_MODE = process.env.GOOGLE_INDEXER_BATCH_MODE !== "false"
+const SIGNAL_MESSAGE = "Final 15k Push"
+
+const SEVERITY_PRIORITY: Record<CveSeverity, number> = {
+  critical: 4,
+  high: 3,
+  medium: 2,
+  low: 1,
+}
+
+function sortCvesByPriority() {
+  return [...KNOWN_CVES].sort((a, b) => {
+    const severityDelta = SEVERITY_PRIORITY[b.severity] - SEVERITY_PRIORITY[a.severity]
+    if (severityDelta !== 0) return severityDelta
+    return Date.parse(b.publishedDate) - Date.parse(a.publishedDate)
+  })
+}
 
 export async function GET(req: NextRequest) {
   // Security: require CRON_SECRET
@@ -27,9 +44,10 @@ export async function GET(req: NextRequest) {
   }
 
   // 1. CVE solution URLs
-  const cveUrls = KNOWN_CVES.map(
-    (cve) => `${BASE_URL}/solutions/fix-${cve.cveId}`
-  )
+  const prioritizedCves = sortCvesByPriority()
+  const cveUrls = prioritizedCves
+    .slice(0, BATCH_SIZE)
+    .map((cve) => `${BASE_URL}/solutions/fix-${cve.cveId}`)
 
   // 2. Dynamic runbook URLs (fill the remainder of the 200-URL batch)
   const remaining = Math.max(0, BATCH_SIZE - cveUrls.length)
@@ -54,6 +72,7 @@ export async function GET(req: NextRequest) {
       quota: { used: quota.used, limit: DAILY_INDEXING_QUOTA },
       generatedAt: new Date().toISOString(),
       message: `Daily quota exhausted. Resets at ${resetAt}`,
+      signal: SIGNAL_MESSAGE,
     })
   }
 
@@ -71,5 +90,6 @@ export async function GET(req: NextRequest) {
     results,
     quota: { used: quota.used + urls.length, limit: DAILY_INDEXING_QUOTA },
     generatedAt: new Date().toISOString(),
+    signal: SIGNAL_MESSAGE,
   })
 }

@@ -27,6 +27,8 @@
   --glass-elite: rgba(255, 255, 255, 0.025);
   --glass-elite-border: rgba(212, 175, 55, 0.12);
   --glass-hover: rgba(255, 255, 255, 0.05);
+  /* Vault glass backdrop */
+  --glass-vault: linear-gradient(135deg, rgba(212,175,55,0.04) 0%, rgba(0,0,0,0.6) 50%, rgba(0,184,255,0.03) 100%);
 }
 
 /* Fonts are loaded non-render-blocking via async <link> in layout.tsx */
@@ -154,14 +156,16 @@ a { @apply hover:text-[#00ff9d] transition-colors; }
     background-clip: text;
     animation: goldShimmer 4s linear infinite;
   }
-  .btn-luxury-gold {
+  .btn-luxury-gold,
+  .btn-luxury {
     background: linear-gradient(135deg, #d4af37 0%, #e8cc6a 40%, #a8872a 70%, #d4af37 100%);
     background-size: 200% auto;
     color: #0a0a0a;
     font-weight: 900;
     transition: all 0.3s ease;
   }
-  .btn-luxury-gold:hover {
+  .btn-luxury-gold:hover,
+  .btn-luxury:hover {
     background-position: right center;
     box-shadow: 0 0 30px rgba(212,175,55,0.5), 0 0 80px rgba(212,175,55,0.2);
     transform: translateY(-1px);

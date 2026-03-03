@@ -143,6 +143,18 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(url, { status: 301 })
   }
 
+  // Redirect /account → /{locale}/account so the locale-prefixed route is always used
+  if (pathname === "/account") {
+    const cookieLocaleAcc = request.cookies.get(LOCALE_COOKIE)?.value as Locale | undefined
+    const localeAcc =
+      cookieLocaleAcc && SUPPORTED_LOCALES.includes(cookieLocaleAcc)
+        ? cookieLocaleAcc
+        : detectLocaleFromHeader(request.headers.get("accept-language"))
+    const url = request.nextUrl.clone()
+    url.pathname = `/${localeAcc}/account`
+    return NextResponse.redirect(url, { status: 302 })
+  }
+
   // Only redirect on the root path to avoid disrupting existing non-localized routes
   if (pathname !== "/") {
     return NextResponse.next()

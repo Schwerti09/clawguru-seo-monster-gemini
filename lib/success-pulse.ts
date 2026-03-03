@@ -30,7 +30,7 @@ export async function sendSuccessPulse(session: Stripe.Checkout.Session): Promis
     sessionId: session.id,
     amount: session.amount_total ?? null,
     currency: session.currency ?? null,
-    product: (session.metadata?.product as string) || null,
+    product: typeof session.metadata?.product === "string" ? session.metadata.product : null,
     customerEmail: session.customer_details?.email || session.customer_email || null,
     country: session.customer_details?.address?.country ?? null,
     mode: session.mode ?? null,
@@ -45,7 +45,8 @@ export async function sendSuccessPulse(session: Stripe.Checkout.Session): Promis
       signal: AbortSignal.timeout(8_000),
     })
     return res.ok
-  } catch {
+  } catch (err) {
+    console.error("[success-pulse] failed", err)
     return false
   }
 }

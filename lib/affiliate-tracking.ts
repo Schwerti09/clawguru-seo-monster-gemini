@@ -50,7 +50,7 @@ export async function fireAffiliatePostbacks(
     customer_email: payload.customerEmail || ""
   }
 
-  const body = JSON.stringify({ affiliate_ref: affiliateRef, ...payload })
+  const body = JSON.stringify(payload)
 
   const results = await Promise.allSettled(
     urls.map(async (rawUrl) => {

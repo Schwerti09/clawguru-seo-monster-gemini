@@ -5,6 +5,7 @@ import type { Metadata } from "next"
 import { cookies } from "next/headers"
 import Container from "@/components/shared/Container"
 import MyceliumView from "@/components/visual/MyceliumView"
+import MyceliumShareCard from "@/components/share/MyceliumShareCard"
 import { RUNBOOKS } from "@/lib/pseo"
 import { SUPPORTED_LOCALES, type Locale, t } from "@/lib/i18n"
 import {
@@ -165,6 +166,18 @@ export default async function MyceliumPage() {
               </p>
             </div>
           </div>
+        </Container>
+      </div>
+
+      {/* MYCELIAL SINGULARITY v3.0 – Viral Share Card */}
+      <div className="py-8 border-t border-white/5">
+        <Container>
+          <MyceliumShareCard
+            locale={locale}
+            title="The Living Mycelium · ClawGuru"
+            pageUrl="/mycelium"
+            className="max-w-2xl"
+          />
         </Container>
       </div>
     </>

@@ -11,6 +11,7 @@ import { CopyLinkButton } from "./CopyLinkButton"
 import { ActivateSwarmButton } from "@/components/shared/ActivateSwarmButton"
 import { BASE_URL } from "@/lib/config"
 import { buildLinkEngine } from "@/lib/seo/link-engine"
+import MyceliumShareCard from "@/components/share/MyceliumShareCard"
 
 // Pre-build slug→runbook Map for O(1) related lookups on static RUNBOOKS
 const RUNBOOK_MAP = new Map(RUNBOOKS.map((r) => [r.slug, r]))
@@ -418,6 +419,15 @@ export default async function RunbookPage(props: { params: Promise<{ slug: strin
         <div className="mt-12 p-6 rounded-3xl border border-gray-800 bg-black/20 text-sm text-gray-400">
           Hinweis: Diese Inhalte sind für Ops/Security gedacht. Keine „Namen-Datenbank&quot;, keine Anschuldigungen – nur Runbooks,
           Tools und verifizierbare Checks.
+        </div>
+
+        {/* RUNBOOK VIRAL SHARE CARD */}
+        <div className="mt-8">
+          <MyceliumShareCard
+            title={r.title}
+            answer={r.summary}
+            pageUrl={`/runbook/${r.slug}`}
+          />
         </div>
       </div>
     </Container>

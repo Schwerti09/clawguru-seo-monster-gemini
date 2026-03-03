@@ -35,7 +35,17 @@ export default async function CopilotPage(
         <CopilotChat />
         {/* NEXT-LEVEL UPGRADE 2026: Voice Copilot – speak your issue */}
         <div className="mt-8">
-          <h2 className="text-xl font-black mb-3 text-[#00ff9d]">🎤 Voice Copilot</h2>
+          <div className="flex items-center justify-between gap-4 mb-3 flex-wrap">
+            <h2 className="text-xl font-black text-[#00ff9d]">🎤 Voice Copilot</h2>
+            {/* Feature gate nudge – Voice is limited on Day Pass */}
+            <a
+              href="/pricing#pro"
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl border text-xs font-bold transition-opacity hover:opacity-80"
+              style={{ borderColor: "rgba(139,92,246,0.4)", color: "#a78bfa", background: "rgba(139,92,246,0.07)" }}
+            >
+              🔒 Unlimited Voice → Upgrade to Pro
+            </a>
+          </div>
           <p className="text-gray-400 text-sm mb-4">
             Sprich dein Problem ein – Web Speech API erkennt es, Gemini analysiert es und liest die Antwort vor.
           </p>

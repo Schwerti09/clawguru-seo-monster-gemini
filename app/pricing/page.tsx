@@ -2,6 +2,7 @@ import Container from "@/components/shared/Container"
 import BuyButton from "@/components/commerce/BuyButton"
 import EnterpriseContact from "@/components/marketing/EnterpriseContact"
 import { SEO_TARGET_KEYWORDS_2026 } from "@/lib/seo/targets"
+import { TIER_LIMITS } from "@/lib/feature-gating"
 
 const PRICING_KEYWORDS = [
   ...SEO_TARGET_KEYWORDS_2026,
@@ -83,6 +84,14 @@ const DAY_PASS_GROUPS: FeatureGroup[] = [
       { label: "Copilot Chat – KI-Assistent für Debug & Ops" },
     ]
   },
+  {
+    heading: "Limits (Day Pass)",
+    items: [
+      { label: "Max. 5 Saved Security Checks" },
+      { label: "Voice Copilot: limitiert" },
+      { label: "Keine Private Nodes / Private Forks" },
+    ]
+  },
 ]
 
 const PRO_GROUPS: FeatureGroup[] = [
@@ -91,6 +100,15 @@ const PRO_GROUPS: FeatureGroup[] = [
     items: [
       { label: "Dauerhafter Vollzugriff (kein Ablauf)" },
       { label: "Alle Security- & Ops-Tools ohne Zeitlimit" },
+    ]
+  },
+  {
+    heading: "Feature Unlocks (Pro)",
+    items: [
+      { label: "Unlimited Saved Security Checks", isNew: true },
+      { label: "Private Nodes & Private Forks", isNew: true },
+      { label: "Voice Copilot – unlimited", isNew: true },
+      { label: "Darwinian Feed – personalisierter Intel-Feed", isNew: true },
     ]
   },
   {
@@ -147,9 +165,17 @@ const TEAM_GROUPS: FeatureGroup[] = [
 
 const ENTERPRISE_GROUPS: FeatureGroup[] = [
   {
-    heading: "Alles aus Teams",
+    heading: "Alles aus Pro",
     items: [
-      { label: "Vollzugriff auf alle Pro- & Teams-Features" },
+      { label: "Vollzugriff auf alle Pro-Features" },
+    ]
+  },
+  {
+    heading: "Enterprise Unlocks",
+    items: [
+      { label: "SSO / SAML Integration", isNew: true },
+      { label: "Team Sharing & Shared Dashboards", isNew: true },
+      { label: "Custom Runbooks – eigener Runbook Builder", isNew: true },
     ]
   },
   {
@@ -200,6 +226,103 @@ export default function PricingPage() {
 
       <Container>
         <div className="pb-20">
+
+          {/* ── Feature Comparison Table ── */}
+          <section id="compare" className="mb-12 overflow-x-auto">
+            <div className="text-xs font-mono uppercase tracking-[0.25em] text-gray-500 mb-5 text-center">
+              Feature Vergleich
+            </div>
+            <table className="w-full min-w-[640px] text-sm border-separate border-spacing-y-0">
+              <thead>
+                <tr>
+                  <th className="text-left py-3 px-4 text-gray-500 font-mono text-xs uppercase tracking-widest w-1/2">Feature</th>
+                  <th className="py-3 px-4 text-center font-black text-[#00b8ff] text-xs uppercase tracking-wider">Day Pass<br /><span className="font-normal text-gray-500 normal-case">7 € / 24h</span></th>
+                  <th className="py-3 px-4 text-center font-black text-[#a78bfa] text-xs uppercase tracking-wider">Pro<br /><span className="font-normal text-gray-500 normal-case">14,99 € / Mo</span></th>
+                  <th className="py-3 px-4 text-center font-black text-[#ffaa00] text-xs uppercase tracking-wider">Enterprise<br /><span className="font-normal text-gray-500 normal-case">Custom</span></th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  {
+                    label: "Saved Security Checks",
+                    daypass: `Max. ${TIER_LIMITS.daypass.maxSavedChecks}`,
+                    pro: "Unlimited",
+                    enterprise: "Unlimited",
+                  },
+                  {
+                    label: "Private Nodes / Private Fork",
+                    daypass: "✕",
+                    pro: "✓",
+                    enterprise: "✓",
+                  },
+                  {
+                    label: "Voice Copilot",
+                    daypass: "Limitiert",
+                    pro: "Unlimited",
+                    enterprise: "Unlimited",
+                  },
+                  {
+                    label: "Darwinian Feed",
+                    daypass: "✕",
+                    pro: "✓",
+                    enterprise: "✓",
+                  },
+                  {
+                    label: "SSO / SAML",
+                    daypass: "✕",
+                    pro: "✕",
+                    enterprise: "✓",
+                  },
+                  {
+                    label: "Team Sharing & Shared Dashboards",
+                    daypass: "✕",
+                    pro: "✕",
+                    enterprise: "✓",
+                  },
+                  {
+                    label: "Custom Runbooks",
+                    daypass: "✕",
+                    pro: "✕",
+                    enterprise: "✓",
+                  },
+                  {
+                    label: "Runbooks & Vault Zugang",
+                    daypass: "✓",
+                    pro: "✓",
+                    enterprise: "✓",
+                  },
+                  {
+                    label: "Security Check / OpsWall",
+                    daypass: "✓",
+                    pro: "✓",
+                    enterprise: "✓",
+                  },
+                  {
+                    label: "Copilot Chat",
+                    daypass: "✓",
+                    pro: "✓",
+                    enterprise: "✓",
+                  },
+                ].map((row, i) => (
+                  <tr key={row.label} className={i % 2 === 0 ? "bg-white/[0.02]" : ""}>
+                    <td className="py-3 px-4 text-gray-300 rounded-l-xl">{row.label}</td>
+                    <td className="py-3 px-4 text-center rounded-none"
+                      style={{ color: row.daypass === "✕" ? "#4b5563" : "#00b8ff" }}>
+                      {row.daypass}
+                    </td>
+                    <td className="py-3 px-4 text-center rounded-none"
+                      style={{ color: row.pro === "✕" ? "#4b5563" : "#a78bfa" }}>
+                      {row.pro}
+                    </td>
+                    <td className="py-3 px-4 text-center rounded-r-xl"
+                      style={{ color: row.enterprise === "✕" ? "#4b5563" : "#00ff9d" }}>
+                      {row.enterprise}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </section>
 
           {/* Cards */}
           <div className="grid lg:grid-cols-3 gap-6 items-stretch">

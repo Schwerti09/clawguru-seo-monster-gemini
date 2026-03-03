@@ -1,6 +1,6 @@
 // app/api/seo/index-now/route.ts
 // Submits the newest 200 URLs to Google via the Indexing API.
-// Prioritizes the newest, highest-severity CVEs first ("Final 15k Push").
+// Prioritizes the newest, highest-severity CVEs first (for example, "Final 15k Push").
 // Must be called with the correct CRON_SECRET to prevent abuse.
 
 import { NextRequest, NextResponse } from "next/server"
@@ -14,7 +14,7 @@ export const runtime = "nodejs"
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const BATCH_SIZE = 200
 const BATCH_MODE = process.env.GOOGLE_INDEXER_BATCH_MODE !== "false"
-const INDEXING_BATCH_LABEL = process.env.GOOGLE_INDEXER_BATCH_LABEL ?? "Final 15k Push"
+const INDEXING_BATCH_LABEL = process.env.GOOGLE_INDEXER_BATCH_LABEL ?? "CVE Priority Batch"
 
 // Higher number = higher priority in the IndexNow batch ordering.
 const SEVERITY_PRIORITY: Record<CveSeverity, number> = {
@@ -26,7 +26,7 @@ const SEVERITY_PRIORITY: Record<CveSeverity, number> = {
 
 function parsePublishedDate(date: string) {
   const parsed = Date.parse(date)
-  return Number.isNaN(parsed) ? Number.NEGATIVE_INFINITY : parsed
+  return Number.isNaN(parsed) ? 0 : parsed
 }
 
 // KNOWN_CVES is static seed data, so we sort once at module load.

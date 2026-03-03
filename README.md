@@ -108,6 +108,7 @@ Für die Gemini-Queue, SWR-Cache und Indexing-Quota wird Redis/Upstash genutzt:
 
 Optional:
 - `GOOGLE_INDEXER_BATCH_MODE=false` deaktiviert Batch-Requests zur Indexing API.
+- `INDEXING_BATCH_LABEL` setzt das Kampagnen-Label in `/api/seo/index-now`.
 
 
 ## Programmatic SEO

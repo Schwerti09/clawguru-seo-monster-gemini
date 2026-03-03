@@ -15,14 +15,14 @@ import { mutateSeoTitle } from "@/app/lib/seo-optimizer"
 import { BASE_URL } from "@/lib/config"
 import { buildLinkEngine } from "@/lib/seo/link-engine"
 
-export const revalidate = 60 * 60 * 24 // 24h
+export const revalidate = 60 // 60s
 export const dynamicParams = true
 export const fetchCache = "force-cache"
 
 const LINK_ENGINE = buildLinkEngine(RUNBOOKS, {
-  maxLinks: 12,
+  maxLinks: 10,
   urlForPage: (page) => `/runbook/${page.slug}`,
-  authorityForPage: (page) => page.clawScore ?? 0,
+  authorityForPage: (page) => page.clawScore,
 })
 
 export async function generateStaticParams() {

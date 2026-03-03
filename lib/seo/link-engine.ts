@@ -2,6 +2,7 @@ type LinkablePage = {
   slug: string
   title?: string
   tags?: string[]
+  clawScore?: number
 }
 
 type LinkEngineConfig<T extends LinkablePage> = {
@@ -25,7 +26,7 @@ export function buildLinkEngine<T extends LinkablePage>(pages: T[], config: Link
 
   return {
     getLinks(target: T): LinkEngineLink[] {
-      if (!pages.length || config.maxLinks <= 0) return []
+      if (!normalized.length || config.maxLinks <= 0) return []
       const targetTags = new Set(target.tags ?? [])
       const scored = normalized
         .filter(({ page }) => page.slug !== target.slug)

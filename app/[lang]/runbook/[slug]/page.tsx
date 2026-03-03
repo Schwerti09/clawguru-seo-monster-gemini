@@ -22,7 +22,7 @@ export const fetchCache = "force-cache"
 const LINK_ENGINE = buildLinkEngine(RUNBOOKS, {
   maxLinks: 10,
   urlForPage: (page) => `/runbook/${page.slug}`,
-  authorityForPage: (page) => page.clawScore,
+  authorityForPage: (page) => page.clawScore ?? 0,
 })
 
 export async function generateStaticParams() {
@@ -156,7 +156,7 @@ export default async function LocalizedRunbookPage({
 
   // TEMPORAL MYCELIUM v3.1 – Overlord AI: deterministic evolution history
   const temporalHistory = getTemporalHistory(r!)
-  const relatedLinks = LINK_ENGINE.getLinks(r)
+  const relatedLinks = r ? LINK_ENGINE.getLinks(r) : []
 
   // JSON-LD: HowTo + FAQPage + Speakable schema
   const howToSchema = {

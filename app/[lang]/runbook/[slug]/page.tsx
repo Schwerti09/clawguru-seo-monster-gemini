@@ -21,10 +21,9 @@ const LINK_ENGINE = buildLinkEngine(RUNBOOKS, {
 })
 
 export async function generateStaticParams() {
-  // All 10 supported locales × top runbooks for full language coverage
-  const topRunbooks = RUNBOOKS.slice(0, 50)
+  // All 10 supported locales × all runbooks for full language coverage
   return SUPPORTED_LOCALES.flatMap((lang) =>
-    topRunbooks.map((r) => ({ lang, slug: r.slug }))
+    RUNBOOKS.map((r) => ({ lang, slug: r.slug }))
   )
 }
 

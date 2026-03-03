@@ -13,10 +13,17 @@ import Link from "next/link"
 import ShareUnlockPanel from "@/components/shared/ShareUnlockPanel"
 import { mutateSeoTitle } from "@/app/lib/seo-optimizer"
 import { BASE_URL } from "@/lib/config"
+import { buildLinkEngine } from "@/lib/seo/link-engine"
 
 export const revalidate = 60 * 60 * 24 // 24h
 export const dynamicParams = true
 export const fetchCache = "force-cache"
+
+const LINK_ENGINE = buildLinkEngine(RUNBOOKS, {
+  maxLinks: 10,
+  urlForPage: (page) => `/runbook/${page.slug}`,
+  authorityForPage: (page) => page.clawScore,
+})
 
 export async function generateStaticParams() {
   // All 10 supported locales × top runbooks for full language coverage
@@ -149,6 +156,7 @@ export default async function LocalizedRunbookPage({
 
   // TEMPORAL MYCELIUM v3.1 – Overlord AI: deterministic evolution history
   const temporalHistory = getTemporalHistory(r!)
+  const relatedLinks = LINK_ENGINE.getLinks(r)
 
   // JSON-LD: HowTo + FAQPage + Speakable schema
   const howToSchema = {
@@ -286,17 +294,17 @@ export default async function LocalizedRunbookPage({
         )}
 
         {/* Related – up to 12 contextual links */}
-        {r.relatedSlugs.length > 0 && (
+        {relatedLinks.length > 0 && (
           <div className="mt-8">
             <h2 className="text-lg font-black mb-3">{t(locale, "related")}</h2>
             <div className="grid sm:grid-cols-2 gap-3">
-              {r.relatedSlugs.slice(0, 12).map((slug) => (
+              {relatedLinks.map((link) => (
                 <Link
-                  key={slug}
-                  href={`/${locale}/runbook/${slug}`}
+                  key={link.slug}
+                  href={`/${locale}${link.url}`}
                   className="p-3 rounded-xl border border-gray-800 hover:border-brand-cyan/40 text-sm text-gray-300 hover:text-white"
                 >
-                  {slug.replace(/-/g, " ")}
+                  {(link.title || link.slug).replace(/-/g, " ")}
                 </Link>
               ))}
             </div>

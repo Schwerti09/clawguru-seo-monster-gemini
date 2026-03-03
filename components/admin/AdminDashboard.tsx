@@ -7,7 +7,7 @@ import { Activity, DollarSign, Shield, RefreshCw, LogOut, ExternalLink, CheckCir
 type Overview = {
   now: string
   siteUrl: string
-  totalSitemapUrls?: number
+  totalSitemapUrls: number
   env: { hasStripe: boolean; hasGemini: boolean; hasOpenAI: boolean; hasAdmin: boolean; hasWebhook: boolean; hasEmail: boolean }
   stripe?: {
     currency: string

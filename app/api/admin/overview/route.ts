@@ -3,6 +3,7 @@ import { cookies } from "next/headers"
 import { adminCookieName, verifyAdminToken } from "@/lib/admin-auth"
 import { stripe } from "@/lib/stripe"
 import { getGeminiUsageSnapshot } from "@/lib/gemini-api"
+import { totalSitemapUrls } from "@/lib/pseo"
 
 export const runtime = "nodejs"
 
@@ -80,6 +81,7 @@ export async function GET() {
   return NextResponse.json({
     now: new Date().toISOString(),
     siteUrl,
+    totalSitemapUrls: totalSitemapUrls(),
     env: { hasStripe, hasGemini, hasOpenAI, hasAdmin, hasWebhook, hasEmail },
     stripe: stripeData,
     geminiUsage: getGeminiUsageSnapshot(),

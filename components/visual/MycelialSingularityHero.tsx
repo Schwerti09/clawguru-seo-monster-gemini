@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState, useCallback } from "react"
 import { motion, useInView } from "framer-motion"
+import { usePathname } from "next/navigation"
+import { SUPPORTED_LOCALES, type Locale, t } from "@/lib/i18n"
 
 // LUXURY DESIGN 2026: Mycelial Singularity Graph – hoverable canvas nodes
 // Pure Canvas API: no SSR issues, no extra bundle size beyond what's needed.
@@ -78,6 +80,11 @@ export default function MycelialSingularityHero() {
   const [hoveredNode, setHoveredNode] = useState<Node | null>(null)
   const sectionRef = useRef<HTMLDivElement>(null)
   const isInView = useInView(sectionRef, { once: true, amount: 0.2 })
+
+  // Detect locale from URL
+  const pathname = usePathname()
+  const firstSegment = pathname.split("/").filter(Boolean)[0] as Locale
+  const locale: Locale = SUPPORTED_LOCALES.includes(firstSegment) ? firstSegment : "de"
 
   const draw = useCallback(() => {
     const canvas = canvasRef.current
@@ -328,7 +335,7 @@ export default function MycelialSingularityHero() {
                 style={{ background: "#d4af37", boxShadow: "0 0 8px rgba(212,175,55,0.8)" }}
               />
               <span className="text-xs font-mono tracking-[0.25em] uppercase" style={{ color: "#d4af37" }}>
-                GENESIS PROTOKOLL AKTIV · MYCELIAL SINGULARITY ENGINE v3.0
+                {t(locale, "heroGenesisBadge")}
               </span>
             </div>
           </motion.div>
@@ -350,10 +357,7 @@ export default function MycelialSingularityHero() {
             className="mt-6 text-gray-300 max-w-2xl leading-relaxed"
             style={{ fontSize: "clamp(1rem, 2vw, 1.2rem)" }}
           >
-            Das lebende Wissensgraph von <span className="text-gold-gradient font-bold">1M+ Runbooks</span>.
-            Jeder Knoten eine Wissenseinheit. Jede Kante eine semantische Beziehung.
-            Force-directed Graph, Darwinian Evolution Engine, Oracle Mode —
-            die fortschrittlichste Ops-Intelligenz der Welt.
+            {t(locale, "heroMyceliumSubtitle")}
           </motion.p>
 
           {/* CTA buttons */}
@@ -362,13 +366,13 @@ export default function MycelialSingularityHero() {
               href="/mycelium"
               className="btn-luxury-gold px-8 py-4 rounded-2xl text-sm font-black tracking-wide shadow-neon-gold"
             >
-              Enter the Mycelium →
+              {t(locale, "heroEnterMycelium")}
             </a>
             <a
               href="/copilot"
               className="px-8 py-4 rounded-2xl text-sm font-bold glass-vault luxury-border-gold text-gray-100 hover:text-white transition-all duration-300"
             >
-              Ask Copilot
+              {t(locale, "heroAskCopilot")}
             </a>
             <a
               href="/pricing"
@@ -379,7 +383,7 @@ export default function MycelialSingularityHero() {
                 color: "#00b8ff",
               }}
             >
-              Vault Access →
+              {t(locale, "heroVaultAccess")}
             </a>
           </motion.div>
 
@@ -388,8 +392,8 @@ export default function MycelialSingularityHero() {
             {[
               { value: "1M+", label: "Runbooks" },
               { value: "94", label: "Security Score" },
-              { value: "∞", label: "Knowledge Edges" },
-              { value: "v3.0", label: "Genesis Protocol" },
+              { value: "∞", label: t(locale, "heroKnowledgeEdges") },
+              { value: "v3.0", label: t(locale, "heroGenesisProtocol") },
             ].map((stat) => (
               <div
                 key={stat.label}
@@ -418,7 +422,7 @@ export default function MycelialSingularityHero() {
             <span className="text-sm font-bold" style={{ color: hoveredNode.color }}>
               {hoveredNode.label}
             </span>
-            <span className="text-xs text-gray-400 ml-2">· Knowledge Node</span>
+            <span className="text-xs text-gray-400 ml-2">· {t(locale, "heroNodeTooltip")}</span>
           </motion.div>
         )}
       </div>
@@ -431,7 +435,7 @@ export default function MycelialSingularityHero() {
         className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
         aria-hidden="true"
       >
-        <span className="text-xs text-gray-500 tracking-widest uppercase">Scroll</span>
+        <span className="text-xs text-gray-500 tracking-widest uppercase">{t(locale, "heroScrollLabel")}</span>
         <motion.div
           animate={{ y: [0, 8, 0] }}
           transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}

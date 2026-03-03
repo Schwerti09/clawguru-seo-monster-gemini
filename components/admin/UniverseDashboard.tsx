@@ -63,6 +63,22 @@ type Overview = {
     progressPct: number
     lastDailyIndexRun: string | null
   }
+  runbookStats?: {
+    executedLast24h: number
+    trend7d: number[]
+    myceliumHealth: number
+  }
+}
+
+type DefenderStatus = "green" | "yellow" | "red"
+
+type DefenderNode = {
+  id: string
+  name: string
+  status: DefenderStatus
+  lastEvolution: string
+  defendedServers: number
+  icon: React.ElementType
 }
 
 type ModuleId = "seo" | "cash" | "affiliate" | "sentinel" | "defense"
@@ -159,6 +175,54 @@ const MODULES: ModuleInfo[] = [
 ]
 
 // ---------------------------------------------------------------------------
+// Active Defenders – static node registry
+// ---------------------------------------------------------------------------
+
+const DEFENDER_NODES: DefenderNode[] = [
+  {
+    id: "ssh-hardening",
+    name: "SSH Hardening",
+    status: "green",
+    lastEvolution: "vor 2h",
+    defendedServers: 14237,
+    icon: Shield,
+  },
+  {
+    id: "secret-rotation",
+    name: "Secret Rotation",
+    status: "green",
+    lastEvolution: "vor 6h",
+    defendedServers: 14237,
+    icon: Zap,
+  },
+  {
+    id: "zero-day-response",
+    name: "Zero-Day Response",
+    status: "yellow",
+    lastEvolution: "vor 12h",
+    defendedServers: 14237,
+    icon: AlertTriangle,
+  },
+  {
+    id: "websocket-guard",
+    name: "WebSocket Guard",
+    status: "green",
+    lastEvolution: "vor 1h",
+    defendedServers: 14237,
+    icon: Activity,
+  },
+]
+
+const DEFENDER_STATUS_STYLES: Record<
+  DefenderStatus,
+  { dot: string; text: string; label: string }
+> = {
+  green: { dot: "bg-green-400", text: "text-green-300", label: "Aktiv" },
+  yellow: { dot: "bg-yellow-400", text: "text-yellow-300", label: "Warnung" },
+  red: { dot: "bg-red-400", text: "text-red-300", label: "Kritisch" },
+}
+
+// ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
 
@@ -197,6 +261,31 @@ function EnvBadge({ name }: { name: string }) {
     <code className="inline-block px-2 py-0.5 rounded text-xs bg-white/5 border border-white/10 text-gray-300 font-mono">
       {name}
     </code>
+  )
+}
+
+function Sparkline({ data, color = "#22c55e" }: { data: number[]; color?: string }) {
+  if (!data || data.length < 2) return null
+  const max = Math.max(...data, 1)
+  const W = 80
+  const H = 24
+  const points = data.map((v, i) => [
+    (i / (data.length - 1)) * W,
+    H - Math.max(0, (v / max) * H),
+  ])
+  const d = points
+    .map((p, i) => `${i === 0 ? "M" : "L"} ${p[0]} ${p[1]}`)
+    .join(" ")
+  return (
+    <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} fill="none" aria-hidden="true">
+      <path
+        d={d}
+        stroke={color}
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
   )
 }
 
@@ -793,6 +882,262 @@ function GeminiTokenBurnPanel({ overview }: { overview: Overview | null }) {
 }
 
 // ---------------------------------------------------------------------------
+// Success Pulse Panel
+// ---------------------------------------------------------------------------
+
+function SuccessPulsePanel({ overview }: { overview: Overview | null }) {
+  const stats = overview?.runbookStats
+  const executed24h = stats?.executedLast24h ?? 0
+  const trend7d = stats?.trend7d ?? [0, 0, 0, 0, 0, 0, 0]
+  const health = stats?.myceliumHealth ?? 98.7
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.4 }}
+      className="relative mt-6 rounded-3xl border border-green-500/30 overflow-hidden"
+      style={{
+        background:
+          "linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%)",
+        backdropFilter: "blur(12px)",
+        boxShadow:
+          "0 8px 32px rgba(0,0,0,0.3), 0 0 0 1px rgba(34,197,94,0.15), inset 0 1px 0 rgba(255,255,255,0.05)",
+      }}
+    >
+      {/* Ambient glow */}
+      <motion.div
+        className="absolute inset-0 pointer-events-none"
+        animate={{ opacity: [0.3, 0.65, 0.3] }}
+        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+        style={{
+          background:
+            "radial-gradient(ellipse at top left, rgba(34,197,94,0.12) 0%, transparent 55%)",
+        }}
+      />
+
+      <div className="relative p-5">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-5">
+          <div className="flex items-center gap-3">
+            <div className="p-2.5 rounded-2xl bg-white/5 border border-green-500/30">
+              <Activity className="w-5 h-5 text-green-400" />
+            </div>
+            <div>
+              <div className="font-black text-white text-base leading-tight">
+                Success Pulse
+              </div>
+              <div className="text-xs text-gray-500 mt-0.5">
+                Runbook Execution Health
+              </div>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+            <span className="text-xs text-green-300 font-bold">Live</span>
+          </div>
+        </div>
+
+        {/* Content: pulse ring + stats */}
+        <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
+          {/* Animated pulse ring */}
+          <div className="relative flex-shrink-0 flex items-center justify-center w-24 h-24">
+            {[1, 2].map((i) => (
+              <motion.div
+                key={i}
+                className="absolute rounded-full border-2 border-green-400/20"
+                style={{ inset: -(i * 10) }}
+                animate={{ scale: [1, 1.2], opacity: [0.5, 0] }}
+                transition={{
+                  duration: 1.8,
+                  repeat: Infinity,
+                  delay: i * 0.6,
+                  ease: "easeOut",
+                }}
+              />
+            ))}
+            <div
+              className="w-full h-full rounded-full border-4 border-green-400/70 flex items-center justify-center"
+              style={{
+                boxShadow:
+                  "0 0 24px rgba(34,197,94,0.5), inset 0 0 12px rgba(34,197,94,0.1)",
+              }}
+            >
+              <div className="text-center">
+                <div className="text-2xl font-black text-green-300 leading-none">
+                  {executed24h}
+                </div>
+                <div className="text-xs text-green-500 mt-0.5">24h</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Stats */}
+          <div className="flex-1 space-y-3 min-w-0">
+            <p className="text-gray-300 text-sm">
+              <span className="font-black text-green-300">{executed24h}</span>{" "}
+              Runbooks erfolgreich ausgeführt
+              <br />
+              <span className="text-gray-500">in den letzten 24h</span>
+            </p>
+
+            {/* 7-day sparkline */}
+            <div className="flex items-center gap-3">
+              <span className="text-xs text-gray-500">7d Trend</span>
+              <Sparkline data={trend7d} />
+            </div>
+
+            {/* Mycelium health */}
+            <div className="flex items-center gap-2 p-3 rounded-xl bg-black/30 border border-white/5">
+              <CheckCircle className="w-4 h-4 text-green-400 flex-shrink-0" />
+              <div>
+                <div className="text-xs text-gray-400">Mycelium Health</div>
+                <div className="text-base font-black text-green-300">
+                  {health.toLocaleString("de-DE", {
+                    minimumFractionDigits: 1,
+                    maximumFractionDigits: 1,
+                  })} %
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  )
+}
+
+// ---------------------------------------------------------------------------
+// Active Defenders Panel
+// ---------------------------------------------------------------------------
+
+function ActiveDefendersPanel() {
+  const [evolving, setEvolving] = useState<string | null>(null)
+
+  async function handleEvolve(nodeId: string) {
+    setEvolving(nodeId)
+    await new Promise((r) => setTimeout(r, 1200))
+    setEvolving(null)
+  }
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.45 }}
+      className="relative mt-6 rounded-3xl border border-cyan-500/30 overflow-hidden"
+      style={{
+        background:
+          "linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%)",
+        backdropFilter: "blur(12px)",
+        boxShadow:
+          "0 8px 32px rgba(0,0,0,0.3), 0 0 0 1px rgba(34,211,238,0.15), inset 0 1px 0 rgba(255,255,255,0.05)",
+      }}
+    >
+      {/* Ambient glow */}
+      <motion.div
+        className="absolute inset-0 pointer-events-none"
+        animate={{ opacity: [0.3, 0.6, 0.3] }}
+        transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
+        style={{
+          background:
+            "radial-gradient(ellipse at top right, rgba(34,211,238,0.10) 0%, transparent 55%)",
+        }}
+      />
+
+      <div className="relative p-5">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-5">
+          <div className="flex items-center gap-3">
+            <div className="p-2.5 rounded-2xl bg-white/5 border border-cyan-500/30">
+              <Shield className="w-5 h-5 text-cyan-400" />
+            </div>
+            <div>
+              <div className="font-black text-white text-base leading-tight">
+                Active Defenders
+              </div>
+              <div className="text-xs text-gray-500 mt-0.5">
+                Darwinian Defense Nodes
+              </div>
+            </div>
+          </div>
+          <span className="text-xs text-gray-400">
+            <span className="font-bold text-cyan-300">
+              {DEFENDER_NODES.filter((n) => n.status === "green").length}
+            </span>
+            /{DEFENDER_NODES.length} Online
+          </span>
+        </div>
+
+        {/* Defender cards grid */}
+        <div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-3">
+          {DEFENDER_NODES.map((node) => {
+            const style = DEFENDER_STATUS_STYLES[node.status]
+            const busy = evolving === node.id
+            return (
+              <motion.div
+                key={node.id}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="flex flex-col gap-2 p-3 rounded-2xl bg-black/30 border border-white/5 hover:border-white/10 transition-colors"
+              >
+                {/* Node header */}
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <node.icon className="w-4 h-4 text-cyan-400 flex-shrink-0" />
+                    <span className="text-xs font-bold text-white leading-tight truncate">
+                      {node.name}
+                    </span>
+                  </div>
+                  <span
+                    className={`w-2 h-2 rounded-full flex-shrink-0 ${style.dot} animate-pulse`}
+                  />
+                </div>
+
+                {/* Status + last evolution */}
+                <div className="flex items-center justify-between">
+                  <span className={`text-xs font-bold ${style.text}`}>
+                    {style.label}
+                  </span>
+                  <span className="text-xs text-gray-500">
+                    Evol. {node.lastEvolution}
+                  </span>
+                </div>
+
+                {/* Defended servers */}
+                <div className="flex items-center gap-1 text-xs text-gray-400">
+                  <Globe className="w-3 h-3 flex-shrink-0" />
+                  <span>
+                    Defended Servers:{" "}
+                    <span className="font-bold text-cyan-300">
+                      {node.defendedServers.toLocaleString("de-DE")}
+                    </span>
+                  </span>
+                </div>
+
+                {/* Evolve now button */}
+                <button
+                  onClick={() => void handleEvolve(node.id)}
+                  disabled={!!busy}
+                  className="mt-1 w-full py-1.5 rounded-xl text-xs font-bold border border-cyan-500/30 bg-cyan-500/10 text-cyan-300 hover:bg-cyan-500/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-1"
+                >
+                  {busy ? (
+                    <Loader2 className="w-3 h-3 animate-spin" />
+                  ) : (
+                    <Zap className="w-3 h-3" />
+                  )}
+                  {busy ? "Evolving…" : "Evolve now"}
+                </button>
+              </motion.div>
+            )
+          })}
+        </div>
+      </div>
+    </motion.div>
+  )
+}
+
+// ---------------------------------------------------------------------------
 // Main Dashboard
 // ---------------------------------------------------------------------------
 
@@ -986,6 +1331,12 @@ export default function UniverseDashboard() {
 
       {/* Gemini Token-Burn Panel */}
       <GeminiTokenBurnPanel overview={overview} />
+
+      {/* Success Pulse Panel */}
+      <SuccessPulsePanel overview={overview} />
+
+      {/* Active Defenders Panel */}
+      <ActiveDefendersPanel />
 
       {/* Quick Links */}
       <motion.div

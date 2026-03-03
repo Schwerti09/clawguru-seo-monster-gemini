@@ -6,6 +6,8 @@ import Container from "@/components/shared/Container"
 type SavedCheck = { url: string; score: number; savedAt: string }
 type RunbookEntry = { title: string; slug: string; visitedAt: string }
 
+const MAX_DAYPASS_CHECKS = 5
+
 export default function AccountPage({ email }: { email: string }) {
   const [savedChecks, setSavedChecks] = useState<SavedCheck[]>([])
   const [runbookHistory, setRunbookHistory] = useState<RunbookEntry[]>([])
@@ -36,6 +38,8 @@ export default function AccountPage({ email }: { email: string }) {
     a.click()
     URL.revokeObjectURL(url)
   }
+
+  const atSavedCheckLimit = savedChecks.length >= MAX_DAYPASS_CHECKS
 
   return (
     <Container>
@@ -68,7 +72,35 @@ export default function AccountPage({ email }: { email: string }) {
 
         {/* Saved Checks */}
         <section className="mb-10">
-          <h2 className="text-xl font-black mb-4">Saved Checks</h2>
+          <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
+            <h2 className="text-xl font-black">Saved Checks</h2>
+            {/* Day-pass limit indicator */}
+            {savedChecks.length > 0 && (
+              <div className="flex items-center gap-2 text-xs text-gray-500">
+                <span>{savedChecks.length}&thinsp;/&thinsp;{MAX_DAYPASS_CHECKS}</span>
+                <span className="hidden sm:inline">gespeichert (Day Pass Limit)</span>
+              </div>
+            )}
+          </div>
+
+          {/* Upgrade nudge when at limit */}
+          {atSavedCheckLimit && (
+            <div className="mb-4 flex items-center justify-between gap-4 px-4 py-3 rounded-xl border"
+              style={{ borderColor: "rgba(139,92,246,0.4)", background: "rgba(139,92,246,0.07)" }}>
+              <div className="flex items-center gap-2 text-sm text-gray-300">
+                <span aria-hidden>🔒</span>
+                <span>Du hast das Limit von <strong className="text-white">{MAX_DAYPASS_CHECKS} Saved Checks</strong> erreicht (Day Pass).</span>
+              </div>
+              <a
+                href="/pricing#pro"
+                className="shrink-0 px-4 py-1.5 rounded-xl font-black text-xs text-black transition-opacity hover:opacity-90 whitespace-nowrap"
+                style={{ background: "linear-gradient(135deg,#a78bfa 0%,#00ff9d 100%)" }}
+              >
+                Upgrade to Pro →
+              </a>
+            </div>
+          )}
+
           {savedChecks.length === 0 ? (
             <div className="p-6 rounded-2xl border border-gray-800 bg-black/30 text-gray-500 text-sm text-center">
               Noch keine gespeicherten Checks. Führe einen Check durch und klick
@@ -104,6 +136,37 @@ export default function AccountPage({ email }: { email: string }) {
               ))}
             </div>
           )}
+        </section>
+
+        {/* Pro feature callouts */}
+        <section className="mb-10">
+          <div className="grid sm:grid-cols-2 gap-4">
+            {/* Private Nodes */}
+            <div className="p-5 rounded-2xl border flex items-start gap-3"
+              style={{ borderColor: "rgba(139,92,246,0.25)", background: "rgba(139,92,246,0.05)" }}>
+              <span className="text-xl mt-0.5" aria-hidden>🔒</span>
+              <div className="min-w-0">
+                <div className="font-black text-sm text-white mb-0.5">Private Nodes</div>
+                <div className="text-xs text-gray-400 mb-3">Erstelle private Runbook-Forks, die nur du siehst.</div>
+                <a href="/pricing#pro" className="text-xs font-bold text-[#a78bfa] hover:underline underline-offset-2">
+                  Upgrade to Pro →
+                </a>
+              </div>
+            </div>
+
+            {/* Darwinian Feed */}
+            <div className="p-5 rounded-2xl border flex items-start gap-3"
+              style={{ borderColor: "rgba(139,92,246,0.25)", background: "rgba(139,92,246,0.05)" }}>
+              <span className="text-xl mt-0.5" aria-hidden>🧬</span>
+              <div className="min-w-0">
+                <div className="font-black text-sm text-white mb-0.5">Darwinian Feed</div>
+                <div className="text-xs text-gray-400 mb-3">Dein personalisierter Security-Intelligence-Feed.</div>
+                <a href="/pricing#pro" className="text-xs font-bold text-[#a78bfa] hover:underline underline-offset-2">
+                  Upgrade to Pro →
+                </a>
+              </div>
+            </div>
+          </div>
         </section>
 
         {/* Runbook History */}

@@ -21,7 +21,7 @@ const LINK_ENGINE = buildLinkEngine(RUNBOOKS, {
   authorityForPage: (page) => page.clawScore,
 })
 
-export const revalidate = 60 * 60 * 24 // 24h ISR; use revalidateSeconds() from quality-gate for finer-grained tooling
+export const revalidate = 60 // 60s ISR; use revalidateSeconds() from quality-gate for finer-grained tooling
 export const dynamicParams = true
 
 export async function generateStaticParams() {

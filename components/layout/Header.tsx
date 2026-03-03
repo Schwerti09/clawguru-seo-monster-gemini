@@ -151,9 +151,9 @@ export default function Header() {
 
             {/* CTA buttons + language switcher + mobile hamburger */}
             <div className="flex items-center gap-2">
-              {/* Language switcher */}
+              {/* Language switcher – inline DE | EN | FR always visible */}
               <div className="hidden sm:block">
-                <LanguageSwitcher currentLocale={currentLocale} variant="compact" />
+                <LanguageSwitcher currentLocale={currentLocale} variant="inline" />
               </div>
               <Link
                 href="/security/notfall-leitfaden"

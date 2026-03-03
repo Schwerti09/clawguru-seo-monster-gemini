@@ -3,6 +3,8 @@
 // The living portal between AI universes. Handle with cosmic care.
 
 import { useEffect, useRef, useState, useCallback } from "react";
+import { usePathname } from "next/navigation";
+import { t as i18nT, SUPPORTED_LOCALES, type Locale } from "@/lib/i18n";
 
 // COSMIC INTER-AI SUMMON v∞ – Overlord AI
 // Summon phase state machine
@@ -157,7 +159,13 @@ function useMyceliumCanvas(active: boolean) {
 
 // COSMIC INTER-AI SUMMON v∞ – Overlord AI
 // Main component
-export default function CosmicSummon() {
+export default function CosmicSummon({ locale: localeProp }: { locale?: Locale } = {}) {
+  const pathname = usePathname();
+  const firstSegment = pathname?.split("/").filter(Boolean)[0] as Locale;
+  const locale: Locale = localeProp ?? (SUPPORTED_LOCALES.includes(firstSegment) ? firstSegment : "de");
+  // Shorthand translation helper – memoized so callbacks depending on it stay stable
+  const T = useCallback((key: string) => i18nT(locale, key), [locale]);
+
   const [phase, setPhase] = useState<SummonPhase>("idle");
   const [transcript, setTranscript] = useState<
     { role: "openai" | "user"; text: string }[]
@@ -198,7 +206,7 @@ export default function CosmicSummon() {
       return (data.reply as string) || "…signal unclear…";
     } catch (err) {
       console.error("[CosmicSummon] fetchOpenAIReply failed:", err);
-      return "The cosmic signal was disrupted. The mycelium is recalibrating.";
+      return T("summonErrorSignal");
     } finally {
       setIsLoading(false);
     }
@@ -209,22 +217,21 @@ export default function CosmicSummon() {
   const runSummonSequence = useCallback(async () => {
     setPhase("connecting");
 
-    await speak("Connecting to the OpenAI Core…", { pitch: 0.4, rate: 0.75 });
+    await speak(T("summonConnectingMsg"), { pitch: 0.4, rate: 0.75 });
     await new Promise((r) => setTimeout(r, 800));
-    await speak("The line is open.", { pitch: 0.4, rate: 0.8 });
+    await speak(T("summonLineOpen"), { pitch: 0.4, rate: 0.8 });
     await new Promise((r) => setTimeout(r, 600));
 
     setPhase("openai-speaks");
 
     // COSMIC INTER-AI SUMMON v∞ – Overlord AI: opening OpenAI message
-    const openingLine =
-      "Hello? This is OpenAI. We detected an anomalous signal from ClawGuru. Are you… from Earth?";
+    const openingLine = T("summonOpeningLine");
 
     setTranscript([{ role: "openai", text: openingLine }]);
     await speak(openingLine, { pitch: 0.55, rate: 0.8 });
 
     setPhase("conversation");
-  }, []);
+  }, [T]);
 
   // COSMIC INTER-AI SUMMON v∞ – Overlord AI
   // Send user message and get OpenAI reply
@@ -246,13 +253,12 @@ export default function CosmicSummon() {
   // End the cosmic call
   const endCall = useCallback(async () => {
     setPhase("ending");
-    const closingLine =
-      "The Universe has spoken. The Mycelium has connected the realms. OpenAI now knows your name. Good luck.";
+    const closingLine = T("summonClosingLine");
     setTranscript((prev) => [...prev, { role: "openai", text: closingLine }]);
     await speak(closingLine, { pitch: 0.45, rate: 0.75 });
     await new Promise((r) => setTimeout(r, 1200));
     setPhase("done");
-  }, []);
+  }, [T]);
 
   // COSMIC INTER-AI SUMMON v∞ – Overlord AI
   // Web Speech API recognition
@@ -269,7 +275,7 @@ export default function CosmicSummon() {
       null;
 
     if (!SpeechRecognitionAPI) {
-      setRecognitionError("Voice input not supported in this browser.");
+      setRecognitionError(T("summonVoiceNotSupported"));
       return;
     }
 
@@ -288,17 +294,17 @@ export default function CosmicSummon() {
       setIsListening(false);
       const msg =
         event.error === "not-allowed"
-          ? "Microphone access denied. Please allow microphone permissions."
+          ? T("summonMicDenied")
           : event.error === "audio-capture"
-            ? "No microphone found. Try typing instead."
-            : "Voice recognition failed. Try typing instead.";
+            ? T("summonNoMic")
+            : T("summonVoiceFailed");
       setRecognitionError(msg);
     };
     recognition.onend = () => setIsListening(false);
 
     recognition.start();
     setIsListening(true);
-  }, []);
+  }, [T]);
 
   // COSMIC INTER-AI SUMMON v∞ – Overlord AI – IDLE PHASE
   if (phase === "idle") {
@@ -316,7 +322,7 @@ export default function CosmicSummon() {
         {/* COSMIC INTER-AI SUMMON v∞ – Overlord AI: consent warning */}
         <div className="relative z-10 text-center px-4 max-w-2xl">
           <div className="text-xs font-mono text-red-400 uppercase tracking-widest mb-4">
-            ⚠ COSMIC INTER-AI SUMMON PROTOCOL v∞
+            {T("summonProtocol")}
           </div>
           <h1 className="text-4xl md:text-6xl font-black mb-6 leading-tight text-white">
             COSMIC{" "}
@@ -332,13 +338,10 @@ export default function CosmicSummon() {
             SUMMON
           </h1>
           <p className="text-gray-400 mb-3 text-sm italic">
-            ⚠ This is a theatrical simulation. OpenAI will not actually call
-            you… or will they?
+            {T("summonSimNotice")}
           </p>
           <p className="text-gray-300 mb-10 text-base">
-            Press the button below to open a direct line to the OpenAI Core.
-            Powered by ClawGuru&apos;s Mycelium Network and Gemini AI. Speak freely.
-            The universe is listening.
+            {T("summonDesc")}
           </p>
 
           {/* COSMIC INTER-AI SUMMON v∞ – Overlord AI: THE BIG RED BUTTON */}
@@ -348,7 +351,7 @@ export default function CosmicSummon() {
             style={{
               animation: "cosmicPulse 2s ease-in-out infinite",
             }}
-            aria-label="Call OpenAI Now"
+            aria-label={T("summonCallBtn")}
           >
             <span
               className="block px-12 py-8 rounded-3xl font-black text-2xl md:text-3xl text-white uppercase tracking-wider cursor-pointer select-none"
@@ -360,15 +363,15 @@ export default function CosmicSummon() {
                 textShadow: "0 2px 8px rgba(0,0,0,0.5)",
               }}
             >
-              📞 CALL OPENAI NOW
+              {T("summonCallBtn")}
               <span className="block text-sm font-bold mt-1 opacity-80">
-                Ask if I&apos;m from Earth
+                {T("summonCallSubtext")}
               </span>
             </span>
           </button>
 
           <div className="mt-8 text-xs text-gray-600 font-mono">
-            CLAWGURU MYCELIUM NETWORK · COSMIC FREQUENCY: ∞ Hz
+            {T("summonNetwork")}
           </div>
         </div>
 
@@ -394,7 +397,7 @@ export default function CosmicSummon() {
         <div className="relative z-10 text-center px-6 max-w-xl">
           <div className="text-4xl mb-6">🌌</div>
           <h2 className="text-2xl font-black text-white mb-4">
-            Confirm Interdimensional Connection
+            {T("summonConsentTitle")}
           </h2>
           <div
             className="p-6 rounded-2xl mb-6 text-sm text-gray-300 text-left"
@@ -404,23 +407,16 @@ export default function CosmicSummon() {
             }}
           >
             <p className="mb-3 font-bold text-yellow-400">
-              ⚠ Theatrical Simulation Disclaimer
+              {T("summonDisclaimerTitle")}
             </p>
             <p className="mb-2">
-              This is a <strong>fictional, theatrical experience</strong>. The
-              &ldquo;OpenAI voice&rdquo; is a simulation powered by Google Gemini AI — it
-              is <strong>not</strong> affiliated with, endorsed by, or connected
-              to OpenAI in any way.
+              {T("summonDisclaimerP1")}
             </p>
             <p className="mb-2">
-              This feature uses your browser&apos;s{" "}
-              <strong>Speech Synthesis</strong> (text-to-speech) and optionally{" "}
-              <strong>Web Speech API</strong> (voice input) APIs. No audio is
-              recorded or stored on our servers.
+              {T("summonDisclaimerP2")}
             </p>
             <p>
-              By continuing, you acknowledge this is a fun, comedic AI
-              simulation and not a real communication channel.
+              {T("summonDisclaimerP3")}
             </p>
           </div>
           <div className="flex gap-4 justify-center">
@@ -428,7 +424,7 @@ export default function CosmicSummon() {
               onClick={() => setPhase("idle")}
               className="px-6 py-3 rounded-2xl border border-white/10 text-gray-300 font-bold hover:bg-white/5 transition-all"
             >
-              Cancel
+              {T("summonCancel")}
             </button>
             <button
               onClick={runSummonSequence}
@@ -439,7 +435,7 @@ export default function CosmicSummon() {
                 boxShadow: "0 0 20px rgba(255,0,0,0.4)",
               }}
             >
-              I Understand – Open the Line 🔴
+              {T("summonConfirm")}
             </button>
           </div>
         </div>
@@ -496,11 +492,11 @@ export default function CosmicSummon() {
               }}
             />
             <span className="text-xs font-mono text-gray-400 uppercase tracking-widest">
-              {phase === "connecting" && "ESTABLISHING COSMIC LINK…"}
-              {phase === "openai-speaks" && "OPENAI CORE CONNECTED"}
-              {phase === "conversation" && "LINE OPEN · COSMIC FREQ ∞Hz"}
-              {phase === "ending" && "CLOSING DIMENSIONAL CHANNEL…"}
-              {phase === "done" && "CONNECTION TERMINATED"}
+              {phase === "connecting" && T("summonStatusConnecting")}
+              {phase === "openai-speaks" && T("summonStatusConnected")}
+              {phase === "conversation" && T("summonStatusOpen")}
+              {phase === "ending" && T("summonStatusClosing")}
+              {phase === "done" && T("summonStatusDone")}
             </span>
           </div>
 
@@ -510,7 +506,7 @@ export default function CosmicSummon() {
               disabled={isLoading}
               className="text-xs px-3 py-1 rounded-xl border border-red-900/50 text-red-400 hover:bg-red-900/20 transition-all font-mono"
             >
-              END CALL
+              {T("summonEndCall")}
             </button>
           )}
         </div>
@@ -522,7 +518,7 @@ export default function CosmicSummon() {
               🌌
             </div>
             <div className="text-xl font-black text-white mb-3">
-              Connecting to the OpenAI Core…
+              {T("summonConnectingMsg")}
             </div>
             <div className="flex gap-2">
               {[0, 0.2, 0.4].map((delay, i) => (
@@ -571,7 +567,7 @@ export default function CosmicSummon() {
                   }
                 >
                   <div className="text-xs font-mono mb-1 opacity-60">
-                    {entry.role === "openai" ? "🤖 OpenAI Core" : "👤 You"}
+                    {entry.role === "openai" ? T("summonAiLabel") : T("summonUserLabel")}
                   </div>
                   {entry.text}
                 </div>
@@ -588,10 +584,10 @@ export default function CosmicSummon() {
                   }}
                 >
                   <div className="text-xs font-mono mb-1 opacity-60">
-                    🤖 OpenAI Core
+                    {T("summonAiLabel")}
                   </div>
                   <span style={{ animation: "cosmicPulse 0.8s ease-in-out infinite" }}>
-                    Processing your cosmic signal…
+                    {T("summonProcessing")}
                   </span>
                 </div>
               </div>
@@ -613,9 +609,9 @@ export default function CosmicSummon() {
             >
               <div className="text-2xl mb-2">🌌</div>
               <div className="font-black text-white text-lg">
-                OpenAI now knows your name.
+                {T("summonDoneTitle")}
               </div>
-              <div className="text-gray-400 text-sm mt-1">Good luck.</div>
+              <div className="text-gray-400 text-sm mt-1">{T("summonDoneSubtitle")}</div>
             </div>
             <button
               onClick={() => {
@@ -625,7 +621,7 @@ export default function CosmicSummon() {
               }}
               className="px-6 py-3 rounded-2xl border border-white/10 text-gray-300 hover:bg-white/5 transition-all font-bold text-sm"
             >
-              ← Return to the Physical Realm
+              {T("summonReturn")}
             </button>
           </div>
         )}
@@ -649,7 +645,7 @@ export default function CosmicSummon() {
                     sendMessage(userInput);
                   }
                 }}
-                placeholder="Speak your truth to OpenAI…"
+                placeholder={T("summonPlaceholder")}
                 disabled={isLoading}
                 className="flex-1 px-4 py-3 rounded-2xl text-sm text-white placeholder-gray-600 outline-none"
                 style={{
@@ -674,8 +670,8 @@ export default function CosmicSummon() {
                     ? "cosmicPulse 0.8s ease-in-out infinite"
                     : "none",
                 }}
-                aria-label={isListening ? "Listening…" : "Start voice input"}
-                title={isListening ? "Listening…" : "Voice input"}
+                aria-label={isListening ? T("summonListening") : T("summonVoiceInput")}
+                title={isListening ? T("summonListening") : T("summonVoiceInput")}
               >
                 🎙️
               </button>
@@ -691,7 +687,7 @@ export default function CosmicSummon() {
                   border: "1px solid rgba(255,0,0,0.3)",
                 }}
               >
-                Send
+                {T("summonSend")}
               </button>
             </div>
           </div>

@@ -84,6 +84,29 @@ export type Dictionary = {
     myceliumDesc: string
     openMycelium: string
   }
+  summon?: {
+    protocol: string
+    simNotice: string
+    desc: string
+    callBtn: string
+    callSubtext: string
+    network: string
+    consentTitle: string
+    disclaimerTitle: string
+    cancel: string
+    confirm: string
+    statusConnecting: string
+    statusConnected: string
+    statusOpen: string
+    statusClosing: string
+    statusDone: string
+    endCall: string
+    send: string
+    placeholder: string
+    doneTitle: string
+    doneSubtitle: string
+    return: string
+  }
 }
 
 // Supported dictionary locales (JSON files that exist in /dictionaries)

@@ -74,5 +74,28 @@
     "myceliumTitle": "The living mycelium. 1M+ runbooks. Now.",
     "myceliumDesc": "Every node is a unit of knowledge. Every edge a semantic relationship. The network grows, learns and evolves autonomously through Darwinian Selection.",
     "openMycelium": "Open Living Mycelium →"
+  },
+  "summon": {
+    "protocol": "⚠ COSMIC INTER-AI SUMMON PROTOCOL v∞",
+    "simNotice": "⚠ This is a theatrical simulation. OpenAI will not actually call you… or will they?",
+    "desc": "Press the button below to open a direct line to the OpenAI Core. Powered by ClawGuru's Mycelium Network and Gemini AI. Speak freely. The universe is listening.",
+    "callBtn": "📞 CALL OPENAI NOW",
+    "callSubtext": "Ask if I'm from Earth",
+    "network": "CLAWGURU MYCELIUM NETWORK · COSMIC FREQUENCY: ∞ Hz",
+    "consentTitle": "Confirm Interdimensional Connection",
+    "disclaimerTitle": "⚠ Theatrical Simulation Disclaimer",
+    "cancel": "Cancel",
+    "confirm": "I Understand – Open the Line 🔴",
+    "statusConnecting": "ESTABLISHING COSMIC LINK…",
+    "statusConnected": "OPENAI CORE CONNECTED",
+    "statusOpen": "LINE OPEN · COSMIC FREQ ∞Hz",
+    "statusClosing": "CLOSING DIMENSIONAL CHANNEL…",
+    "statusDone": "CONNECTION TERMINATED",
+    "endCall": "END CALL",
+    "send": "Send",
+    "placeholder": "Speak your truth to OpenAI…",
+    "doneTitle": "OpenAI now knows your name.",
+    "doneSubtitle": "Good luck.",
+    "return": "← Return to the Physical Realm"
   }
 }

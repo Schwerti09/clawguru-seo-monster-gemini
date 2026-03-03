@@ -24,8 +24,11 @@ const LOCALE_META: Record<Locale, { flag: string; name: string; native: string }
 interface LanguageSwitcherProps {
   currentLocale?: Locale
   /** Visual variant */
-  variant?: "compact" | "full"
+  variant?: "compact" | "full" | "inline"
 }
+
+// Primary 3 locales shown in the inline quick-switcher
+const PRIMARY_LOCALES: Locale[] = ["de", "en", "fr"]
 
 export default function LanguageSwitcher({
   currentLocale = "de",
@@ -77,6 +80,36 @@ export default function LanguageSwitcher({
                 <span className="text-[10px] text-gray-500">RTL</span>
               )}
             </button>
+          )
+        })}
+      </div>
+    )
+  }
+
+  // Inline variant: always-visible DE | EN | FR quick-switch + full dropdown
+  if (variant === "inline") {
+    return (
+      <div className="flex items-center gap-1">
+        {PRIMARY_LOCALES.map((locale, idx) => {
+          const isActive = locale === currentLocale
+          return (
+            <span key={locale} className="flex items-center">
+              <button
+                onClick={() => handleChange(locale)}
+                className={`text-xs font-bold px-1.5 py-0.5 rounded transition-colors ${
+                  isActive
+                    ? "text-[#d4af37]"
+                    : "text-gray-500 hover:text-gray-300"
+                }`}
+                title={LOCALE_META[locale].name}
+                aria-pressed={isActive}
+              >
+                {locale.toUpperCase()}
+              </button>
+              {idx < PRIMARY_LOCALES.length - 1 && (
+                <span className="text-gray-700 text-xs select-none">|</span>
+              )}
+            </span>
           )
         })}
       </div>

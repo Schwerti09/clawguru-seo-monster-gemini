@@ -1,6 +1,6 @@
 // app/api/seo/index-now/route.ts
 // Submits the newest 200 URLs to Google via the Indexing API.
-// Prioritises the newest, highest-severity CVEs first ("Final 15k Push").
+// Prioritizes the newest, highest-severity CVEs first ("Final 15k Push").
 // Must be called with the correct CRON_SECRET to prevent abuse.
 
 import { NextRequest, NextResponse } from "next/server"

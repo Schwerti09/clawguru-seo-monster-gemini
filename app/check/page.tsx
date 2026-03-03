@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
 import HeroSecurityCheck from "@/components/marketing/HeroSecurityCheck"
+import MyceliumShareCard from "@/components/share/MyceliumShareCard"
 
 export const metadata: Metadata = {
   title: "Security-Check | ClawGuru",
@@ -21,6 +22,12 @@ export default function CheckPage() {
         />
         <div className="mt-8">
           <HeroSecurityCheck />
+        </div>
+        <div className="mt-8 max-w-2xl">
+          <MyceliumShareCard
+            title="Security-Check · ClawGuru"
+            pageUrl="/check"
+          />
         </div>
       </div>
     </Container>

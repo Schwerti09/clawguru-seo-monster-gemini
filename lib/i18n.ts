@@ -238,6 +238,15 @@ export const UI_STRINGS: Record<Locale, Record<string, string>> = {
     // Live page
     liveTitle: "Ops Wall",
     liveSubtitle: "Signals, Trends, Hot Fixes — ohne Bullshit. (Der Puls ist synthetisch, keine Userdaten.)",
+    // Mycelium Share Card
+    shareMyceliumBtn: "Teilen auf X / LinkedIn",
+    shareMyceliumXBtn: "Auf X teilen",
+    shareMyceliumLinkedinBtn: "Auf LinkedIn teilen",
+    shareMyceliumCta: "The Mycelium has spoken",
+    shareMyceliumPost: "Das Myzelium hat gesprochen 🍄🔮 Oracles Weisheit via @ClawGuru – dem KI-Ops-Gehirn. #ClawGuru #Mycelium #AIops",
+    shareMyceliumCount: "{count} Prophezeiungen diese Woche geteilt",
+    shareMyceliumGenerating: "Bild wird generiert…",
+    shareMyceliumCopied: "Link kopiert ✅",
   },
   en: {
     runbooks: "Runbooks",
@@ -436,6 +445,15 @@ export const UI_STRINGS: Record<Locale, Record<string, string>> = {
     // Live page
     liveTitle: "Ops Wall",
     liveSubtitle: "Signals, Trends, Hot Fixes — no fluff. (The pulse is synthetic, no user data.)",
+    // Mycelium Share Card
+    shareMyceliumBtn: "Share to X / LinkedIn",
+    shareMyceliumXBtn: "Share to X",
+    shareMyceliumLinkedinBtn: "Share to LinkedIn",
+    shareMyceliumCta: "The Mycelium has spoken",
+    shareMyceliumPost: "The Mycelium has spoken 🍄🔮 Oracle wisdom via @ClawGuru – the AI ops brain. #ClawGuru #Mycelium #AIops",
+    shareMyceliumCount: "{count} Prophecies shared this week",
+    shareMyceliumGenerating: "Generating image…",
+    shareMyceliumCopied: "Link copied ✅",
   },
   es: {
     runbooks: "Runbooks",
@@ -632,6 +650,15 @@ export const UI_STRINGS: Record<Locale, Record<string, string>> = {
     // Live page
     liveTitle: "Ops Wall",
     liveSubtitle: "Señales, Tendencias, Hotfixes — sin rodeos. (El pulso es sintético, sin datos de usuario.)",
+    // Mycelium Share Card
+    shareMyceliumBtn: "Compartir en X / LinkedIn",
+    shareMyceliumXBtn: "Compartir en X",
+    shareMyceliumLinkedinBtn: "Compartir en LinkedIn",
+    shareMyceliumCta: "The Mycelium has spoken",
+    shareMyceliumPost: "El Micelio ha hablado 🍄🔮 Sabiduría del Oráculo vía @ClawGuru. #ClawGuru #Mycelium #AIops",
+    shareMyceliumCount: "{count} profecías compartidas esta semana",
+    shareMyceliumGenerating: "Generando imagen…",
+    shareMyceliumCopied: "Enlace copiado ✅",
   },
   fr: {
     runbooks: "Runbooks",
@@ -828,6 +855,15 @@ export const UI_STRINGS: Record<Locale, Record<string, string>> = {
     // Live page
     liveTitle: "Ops Wall",
     liveSubtitle: "Signaux, Tendances, Hotfixes — sans bla-bla. (Le pouls est synthétique, pas de données utilisateur.)",
+    // Mycelium Share Card
+    shareMyceliumBtn: "Partager sur X / LinkedIn",
+    shareMyceliumXBtn: "Partager sur X",
+    shareMyceliumLinkedinBtn: "Partager sur LinkedIn",
+    shareMyceliumCta: "The Mycelium has spoken",
+    shareMyceliumPost: "Le Mycélium a parlé 🍄🔮 Sagesse de l'Oracle via @ClawGuru. #ClawGuru #Mycelium #AIops",
+    shareMyceliumCount: "{count} prophéties partagées cette semaine",
+    shareMyceliumGenerating: "Génération de l'image…",
+    shareMyceliumCopied: "Lien copié ✅",
   },
   // NEXT-LEVEL UPGRADE 2026: Portuguese
   pt: {
@@ -1023,6 +1059,15 @@ export const UI_STRINGS: Record<Locale, Record<string, string>> = {
     pricingNewBadge: "NOVO",
     liveTitle: "Ops Wall",
     liveSubtitle: "Sinais, Tendências, Hotfixes — sem enrolação. (O pulso é sintético, sem dados de usuário.)",
+    // Mycelium Share Card
+    shareMyceliumBtn: "Compartilhar no X / LinkedIn",
+    shareMyceliumXBtn: "Compartilhar no X",
+    shareMyceliumLinkedinBtn: "Compartilhar no LinkedIn",
+    shareMyceliumCta: "The Mycelium has spoken",
+    shareMyceliumPost: "O Micélio falou 🍄🔮 Sabedoria do Oráculo via @ClawGuru. #ClawGuru #Mycelium #AIops",
+    shareMyceliumCount: "{count} profecias compartilhadas esta semana",
+    shareMyceliumGenerating: "Gerando imagem…",
+    shareMyceliumCopied: "Link copiado ✅",
   },
   // NEXT-LEVEL UPGRADE 2026: Italian
   it: {
@@ -1218,6 +1263,15 @@ export const UI_STRINGS: Record<Locale, Record<string, string>> = {
     pricingNewBadge: "NUOVO",
     liveTitle: "Ops Wall",
     liveSubtitle: "Segnali, Tendenze, Hotfix — senza fronzoli. (Il pulse è sintetico, nessun dato utente.)",
+    // Mycelium Share Card
+    shareMyceliumBtn: "Condividi su X / LinkedIn",
+    shareMyceliumXBtn: "Condividi su X",
+    shareMyceliumLinkedinBtn: "Condividi su LinkedIn",
+    shareMyceliumCta: "The Mycelium has spoken",
+    shareMyceliumPost: "Il Micelio ha parlato 🍄🔮 Saggezza dell'Oracolo via @ClawGuru. #ClawGuru #Mycelium #AIops",
+    shareMyceliumCount: "{count} profezie condivise questa settimana",
+    shareMyceliumGenerating: "Generazione immagine…",
+    shareMyceliumCopied: "Link copiato ✅",
   },
   // NEXT-LEVEL UPGRADE 2026: Russian
   ru: {
@@ -1413,6 +1467,15 @@ export const UI_STRINGS: Record<Locale, Record<string, string>> = {
     pricingNewBadge: "НОВОЕ",
     liveTitle: "Ops Wall",
     liveSubtitle: "Сигналы, Тренды, Горячие Исправления — без лишних слов. (Пульс синтетический, данных пользователей нет.)",
+    // Mycelium Share Card
+    shareMyceliumBtn: "Поделиться в X / LinkedIn",
+    shareMyceliumXBtn: "Поделиться в X",
+    shareMyceliumLinkedinBtn: "Поделиться в LinkedIn",
+    shareMyceliumCta: "The Mycelium has spoken",
+    shareMyceliumPost: "Мицелий высказался 🍄🔮 Мудрость Оракула от @ClawGuru. #ClawGuru #Mycelium #AIops",
+    shareMyceliumCount: "{count} пророчеств поделено на этой неделе",
+    shareMyceliumGenerating: "Генерация изображения…",
+    shareMyceliumCopied: "Ссылка скопирована ✅",
   },
   // NEXT-LEVEL UPGRADE 2026: Chinese (Simplified)
   zh: {
@@ -1608,6 +1671,15 @@ export const UI_STRINGS: Record<Locale, Record<string, string>> = {
     pricingNewBadge: "新",
     liveTitle: "Ops Wall",
     liveSubtitle: "信号、趋势、热修复——直截了当。（脉冲是合成的，无用户数据。）",
+    // Mycelium Share Card
+    shareMyceliumBtn: "分享到 X / LinkedIn",
+    shareMyceliumXBtn: "分享到 X",
+    shareMyceliumLinkedinBtn: "分享到 LinkedIn",
+    shareMyceliumCta: "The Mycelium has spoken",
+    shareMyceliumPost: "菌丝网络已发言 🍄🔮 来自 @ClawGuru 的神谕智慧。#ClawGuru #Mycelium #AIops",
+    shareMyceliumCount: "本周已分享 {count} 条预言",
+    shareMyceliumGenerating: "正在生成图片…",
+    shareMyceliumCopied: "链接已复制 ✅",
   },
   // NEXT-LEVEL UPGRADE 2026: Japanese
   ja: {
@@ -1803,6 +1875,15 @@ export const UI_STRINGS: Record<Locale, Record<string, string>> = {
     pricingNewBadge: "新着",
     liveTitle: "Ops Wall",
     liveSubtitle: "シグナル、トレンド、ホットフィックス——無駄なし。（パルスは合成、ユーザーデータなし。）",
+    // Mycelium Share Card
+    shareMyceliumBtn: "X / LinkedIn でシェア",
+    shareMyceliumXBtn: "X でシェア",
+    shareMyceliumLinkedinBtn: "LinkedIn でシェア",
+    shareMyceliumCta: "The Mycelium has spoken",
+    shareMyceliumPost: "菌糸ネットワークが語った 🍄🔮 @ClawGuru からのオラクルの知恵。#ClawGuru #Mycelium #AIops",
+    shareMyceliumCount: "今週 {count} 件の予言がシェアされました",
+    shareMyceliumGenerating: "画像を生成中…",
+    shareMyceliumCopied: "リンクをコピーしました ✅",
   },
   // NEXT-LEVEL UPGRADE 2026: Arabic (RTL)
   ar: {
@@ -1998,6 +2079,15 @@ export const UI_STRINGS: Record<Locale, Record<string, string>> = {
     pricingNewBadge: "جديد",
     liveTitle: "Ops Wall",
     liveSubtitle: "إشارات، اتجاهات، إصلاحات ساخنة — بدون حشو. (النبض اصطناعي، لا بيانات مستخدم.)",
+    // Mycelium Share Card
+    shareMyceliumBtn: "مشاركة على X / LinkedIn",
+    shareMyceliumXBtn: "مشاركة على X",
+    shareMyceliumLinkedinBtn: "مشاركة على LinkedIn",
+    shareMyceliumCta: "The Mycelium has spoken",
+    shareMyceliumPost: "تحدّث الميسيليوم 🍄🔮 حكمة الأوراكل عبر @ClawGuru. #ClawGuru #Mycelium #AIops",
+    shareMyceliumCount: "تمت مشاركة {count} نبوءة هذا الأسبوع",
+    shareMyceliumGenerating: "جارٍ إنشاء الصورة…",
+    shareMyceliumCopied: "تم نسخ الرابط ✅",
   },
 }
 

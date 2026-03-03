@@ -3,6 +3,7 @@
 // The living portal between AI universes. Handle with cosmic care.
 
 import { useEffect, useRef, useState, useCallback } from "react";
+import MyceliumShareCard from "@/components/share/MyceliumShareCard";
 
 // COSMIC INTER-AI SUMMON v∞ – Overlord AI
 // Summon phase state machine
@@ -705,6 +706,14 @@ export default function CosmicSummon() {
           50% { transform: scale(1.06); opacity: 0.85; }
         }
       `}</style>
+
+      {/* COSMIC INTER-AI SUMMON v∞ – Viral Share Card */}
+      <div className="px-4 pb-8 max-w-2xl mx-auto w-full">
+        <MyceliumShareCard
+          title="COSMIC INTER-AI SUMMON · ClawGuru"
+          pageUrl="/summon"
+        />
+      </div>
     </div>
   );
 }

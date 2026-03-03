@@ -53,12 +53,15 @@ export const HOSTING_PROVIDERS = [
 ]
 
 export const LEGAL_INFO = {
-  company: "Wissens-Bank",
+  company: "ClawGuru Security Operations – Rolf Schwertfechter (Einzelunternehmen)",
   owner: "Rolf Schwertfechter",
   address: "Karklandsweg 1",
-  city: "26553 Dornum",
-  email: "rps-vertrieb@t-online.de",
-  taxNote: "Steuerangaben auf Anfrage"
+  city: "26553 Dornum, Deutschland",
+  email: "support@clawguru.org",
+  phone: "+49 (0) XXX XXXXXXX",
+  ustId: "DE [ausstehend]",
+  taxNote: "Umsatzsteuer-Identifikationsnummer gemäß § 27 a Umsatzsteuergesetz: DE [ausstehend]",
+  registergericht: "Finanzamt [zuständiges Finanzamt]"
 }
 export const COMMUNITY = {
   discordInvite: "https://discord.gg/your-invite",

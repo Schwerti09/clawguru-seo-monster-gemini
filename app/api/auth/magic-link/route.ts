@@ -29,6 +29,7 @@ export async function POST(req: NextRequest) {
           <p><a href="${magicLink}" style="font-weight:bold">Login to ClawGuru →</a></p>
           <p style="color:#888;font-size:12px">Falls du das nicht angefordert hast, kannst du diese E-Mail ignorieren.</p>
         `,
+        replyTo: "support@clawguru.org",
       })
     } else {
       // Dev / test: log to console

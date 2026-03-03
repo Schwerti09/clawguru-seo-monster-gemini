@@ -14,7 +14,7 @@ export const runtime = "nodejs"
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const BATCH_SIZE = 200
 const BATCH_MODE = process.env.GOOGLE_INDEXER_BATCH_MODE !== "false"
-const INDEXING_BATCH_LABEL = process.env.INDEXING_BATCH_LABEL ?? "CVE Priority Batch"
+const BATCH_LABEL = process.env.INDEXING_BATCH_LABEL ?? "CVE Priority Batch"
 
 // Higher number = higher priority in the IndexNow batch ordering.
 const SEVERITY_PRIORITY: Record<CveSeverity, number> = {
@@ -34,7 +34,7 @@ function parsePublishedDate(date: string) {
 }
 
 // KNOWN_CVES is static seed data, so we sort once at module load.
-const SORTED_CVES = [...KNOWN_CVES].sort((a, b) => {
+function compareCvesByPriority(a: typeof KNOWN_CVES[number], b: typeof KNOWN_CVES[number]) {
   const severityDelta = SEVERITY_PRIORITY[b.severity] - SEVERITY_PRIORITY[a.severity]
   if (severityDelta !== 0) return severityDelta
   const dateA = parsePublishedDate(a.publishedDate)
@@ -43,7 +43,9 @@ const SORTED_CVES = [...KNOWN_CVES].sort((a, b) => {
   if (dateA === null) return 1
   if (dateB === null) return -1
   return dateB - dateA
-})
+}
+
+const SORTED_CVES = [...KNOWN_CVES].sort(compareCvesByPriority)
 
 export async function GET(req: NextRequest) {
   // Security: require CRON_SECRET
@@ -83,7 +85,7 @@ export async function GET(req: NextRequest) {
       quota: { used: quota.used, limit: DAILY_INDEXING_QUOTA },
       generatedAt: new Date().toISOString(),
       message: `Daily quota exhausted. Resets at ${resetAt}`,
-      batchLabel: INDEXING_BATCH_LABEL,
+      batchLabel: BATCH_LABEL,
     })
   }
 
@@ -101,6 +103,6 @@ export async function GET(req: NextRequest) {
     results,
     quota: { used: quota.used + urls.length, limit: DAILY_INDEXING_QUOTA },
     generatedAt: new Date().toISOString(),
-    batchLabel: INDEXING_BATCH_LABEL,
+    batchLabel: BATCH_LABEL,
   })
 }

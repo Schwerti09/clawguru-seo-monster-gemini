@@ -14,7 +14,7 @@ export const runtime = "nodejs"
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const BATCH_SIZE = 200
 const BATCH_MODE = process.env.GOOGLE_INDEXER_BATCH_MODE !== "false"
-const INDEXING_BATCH_LABEL = process.env.GOOGLE_INDEXER_BATCH_LABEL ?? "CVE Priority Batch"
+const INDEXING_BATCH_LABEL = process.env.INDEXNOW_BATCH_LABEL ?? "CVE Priority Batch"
 
 // Higher number = higher priority in the IndexNow batch ordering.
 const SEVERITY_PRIORITY: Record<CveSeverity, number> = {
@@ -26,14 +26,19 @@ const SEVERITY_PRIORITY: Record<CveSeverity, number> = {
 
 function parsePublishedDate(date: string) {
   const parsed = Date.parse(date)
-  return Number.isNaN(parsed) ? 0 : parsed
+  return Number.isNaN(parsed) ? null : parsed
 }
 
 // KNOWN_CVES is static seed data, so we sort once at module load.
 const SORTED_CVES = [...KNOWN_CVES].sort((a, b) => {
   const severityDelta = SEVERITY_PRIORITY[b.severity] - SEVERITY_PRIORITY[a.severity]
   if (severityDelta !== 0) return severityDelta
-  return parsePublishedDate(b.publishedDate) - parsePublishedDate(a.publishedDate)
+  const dateA = parsePublishedDate(a.publishedDate)
+  const dateB = parsePublishedDate(b.publishedDate)
+  if (dateA === null && dateB === null) return 0
+  if (dateA === null) return 1
+  if (dateB === null) return -1
+  return dateB - dateA
 })
 
 export async function GET(req: NextRequest) {

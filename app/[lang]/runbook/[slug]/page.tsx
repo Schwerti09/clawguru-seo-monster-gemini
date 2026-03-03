@@ -25,6 +25,8 @@ const LINK_ENGINE = buildLinkEngine(RUNBOOKS, {
   authorityForPage: (page) => page.clawScore ?? 0,
 })
 
+const formatLinkTitle = (value: string) => value.replace(/-/g, " ")
+
 export async function generateStaticParams() {
   // All 10 supported locales × top runbooks for full language coverage
   const topRunbooks = RUNBOOKS.slice(0, 50)
@@ -304,7 +306,7 @@ export default async function LocalizedRunbookPage({
                   href={`/${locale}${link.url}`}
                   className="p-3 rounded-xl border border-gray-800 hover:border-brand-cyan/40 text-sm text-gray-300 hover:text-white"
                 >
-                  {(link.title || link.slug).replace(/-/g, " ")}
+                  {formatLinkTitle(link.title || link.slug)}
                 </Link>
               ))}
             </div>

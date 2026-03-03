@@ -15,30 +15,33 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Valid email required" }, { status: 400 })
     }
 
+    console.log(`[magic-link] Magic Link angefordert für E-Mail: ${email}`)
+
+    const apiKey = process.env.RESEND_API_KEY
+    console.log(
+      `[magic-link] RESEND_API_KEY vorhanden: ${apiKey ? `ja (Länge: ${apiKey.length})` : "nein"}`
+    )
+
     const token = signMagicToken(email)
-    const siteUrl =
-      process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
     const magicLink = `${siteUrl}/api/auth/verify?token=${encodeURIComponent(token)}`
 
-    if (process.env.RESEND_API_KEY && process.env.EMAIL_FROM) {
-      await sendEmail({
-        to: email,
-        subject: "Your ClawGuru Login Link",
-        html: `
-          <p>Klick den Link unten, um dich bei ClawGuru einzuloggen. Der Link ist 15 Minuten gültig.</p>
-          <p><a href="${magicLink}" style="font-weight:bold">Login to ClawGuru →</a></p>
-          <p style="color:#888;font-size:12px">Falls du das nicht angefordert hast, kannst du diese E-Mail ignorieren.</p>
-        `,
-        replyTo: "support@clawguru.org",
-      })
-    } else {
-      // Dev / test: log to console
-      console.log(`[magic-link] Login link for ${email}: ${magicLink}`)
-    }
+    const { id } = await sendEmail({
+      to: email,
+      subject: "Your ClawGuru Login Link",
+      html: `
+        <p>Klick den Link unten, um dich bei ClawGuru einzuloggen. Der Link ist 15 Minuten gültig.</p>
+        <p><a href="${magicLink}" style="font-weight:bold">Login to ClawGuru →</a></p>
+        <p style="color:#888;font-size:12px">Falls du das nicht angefordert hast, kannst du diese E-Mail ignorieren.</p>
+      `,
+      replyTo: "support@clawguru.org",
+    })
+
+    console.log(`[magic-link] E-Mail erfolgreich gesendet → Message ID: ${id ?? "(unknown)"}`)
 
     return NextResponse.json({ ok: true })
   } catch (err) {
-    console.error("[magic-link]", err)
+    console.error("[magic-link] Fehler beim Senden des Magic Links:", err)
     return NextResponse.json({ error: "Failed to send magic link" }, { status: 500 })
   }
 }

@@ -3,8 +3,10 @@ import Stripe from "stripe"
 import { stripe } from "@/lib/stripe"
 import { signAccessToken, AccessPlan } from "@/lib/access-token"
 import { sendEmail } from "@/lib/email"
+import { fireAffiliatePostbacks } from "@/lib/affiliate-tracking"
 import { upsertActiveDefender } from "@/lib/retention"
 import { buildSocialProofEventFromStripe, recordSocialProofEvent } from "@/lib/social-proof"
+import { sendSuccessPulse } from "@/lib/success-pulse"
 
 export const runtime = "nodejs"
 
@@ -364,6 +366,7 @@ export async function POST(req: NextRequest) {
         )
         // Fire-and-forget affiliate commission transfer (does not block response)
         handleAffiliateTransfer(full).catch((err) => console.error("[affiliate-transfer]", err))
+        sendSuccessPulse(full).catch((err) => console.error("[success-pulse]", err))
         const defenderEmail = full.customer_details?.email || full.customer_email || undefined
         const defenderName =
           full.customer_details?.name ||
@@ -374,6 +377,16 @@ export async function POST(req: NextRequest) {
             email: defenderEmail,
             firstName: trimmedName || undefined,
           }).catch((err) => console.error("[active-defender]", err))
+        }
+        const affiliateRef = full.metadata?.affiliate_ref
+        if (affiliateRef) {
+          fireAffiliatePostbacks(affiliateRef, {
+            sessionId: full.id,
+            amount: full.amount_total,
+            currency: full.currency,
+            product: (full.metadata?.product as string) || null,
+            customerEmail: full.customer_details?.email || full.customer_email || null,
+          }).catch((err) => console.error("[affiliate-postback]", err))
         }
       }
     }
@@ -397,7 +410,8 @@ export async function POST(req: NextRequest) {
     }
 
     return NextResponse.json({ received: true })
-  } catch {
+  } catch (err) {
+    console.error("[stripe-webhook] error:", err)
     return NextResponse.json({ received: true })
   }
 }

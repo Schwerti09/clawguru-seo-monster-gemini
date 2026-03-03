@@ -128,7 +128,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <TrustBadge />
           <Header />
           {/* 100/100 OPTIMIZATION 2026: id="main-content" for skip link target; role implicit from <main> */}
-          <main id="main-content" className="pt-28 pb-20 lg:pb-0">
+          <main id="main-content" className="pt-20 pb-20 lg:pb-0">
             <PageTransition>{children}</PageTransition>
           </main>
           <Footer />

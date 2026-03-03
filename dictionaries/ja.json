@@ -55,6 +55,24 @@
   "faq": {
     "kicker": "FAQ",
     "title": "短い。鋭い。役に立つ。",
-    "subtitle": "よく出る質問があります。以下が回答です。"
+    "subtitle": "よく出る質問があります。以下が回答です。",
+    "q1": "ClawGuruは入力内容を保存しますか？",
+    "a1": "いいえ。チェックデータの永続的な保存はありません。一部のサーバーログに技術的に必要なメタデータが含まれる場合があります。",
+    "q2": "これは公式ですか？",
+    "a2": "いいえ。ClawGuruは独立しています。だからこそ、視点はPRではなく運用重視です。",
+    "q3": "最も一般的なミスは何ですか？",
+    "a3": "パブリック露出 + origin/tokenの規律なし。これが典型的な組み合わせです。",
+    "q4": "なぜこれほど「Ops」が多いのですか？",
+    "a4": "ダメージの90%は派手な機能ではなく、運用/規律から発生するからです。"
+  },
+  "home": {
+    "clawVerseKicker": "CLAWVERSE · ユニバースコア · 運用知識ネットワーク",
+    "clawVerseTitle": "Enter the ClawVerse",
+    "clawVerseDesc": "ツール、時間、インテリジェンスレイヤーを横断してすべての運用セキュリティ知識をつなぐ生きた菌糸ネットワーク。ユニバースはライブです。",
+    "clawVerseCta": "Enter the Universe →",
+    "genesisProtocol": "ジェネシスプロトコル起動中 · MYCELIAL SINGULARITY ENGINE v3.0",
+    "myceliumTitle": "生きた菌糸。1M+ ランブック。今。",
+    "myceliumDesc": "各ノードは知識の単位。各エッジは意味的な関係。ネットワークはダーウィン選択により自律的に成長、学習、進化します。",
+    "openMycelium": "Living Myceliumを開く →"
   }
 }

@@ -293,7 +293,7 @@ export default async function LocalizedRunbookPage({
           </div>
         )}
 
-        {/* Related – up to 10 contextual links */}
+        {/* Related contextual links */}
         {relatedLinks.length > 0 && (
           <div className="mt-8">
             <h2 className="text-lg font-black mb-3">{t(locale, "related")}</h2>

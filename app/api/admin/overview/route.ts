@@ -79,11 +79,18 @@ export async function GET() {
 
   const total = totalSitemapUrls()
 
+  const geminiUsage = {
+    model: process.env.GEMINI_MODEL || "gemini-1.5-flash",
+    hasKey: hasGemini,
+    endpoint: "generativelanguage.googleapis.com",
+  }
+
   return NextResponse.json({
     now: new Date().toISOString(),
     siteUrl,
     env: { hasStripe, hasGemini, hasOpenAI, hasAdmin, hasWebhook, hasEmail },
     stripe: stripeData,
+    geminiUsage,
     indexStatus: {
       indexedPages: total,
       targetPages: 100_000,

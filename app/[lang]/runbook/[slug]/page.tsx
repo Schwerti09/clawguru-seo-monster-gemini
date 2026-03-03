@@ -20,7 +20,7 @@ export const dynamicParams = true
 export const fetchCache = "force-cache"
 
 const LINK_ENGINE = buildLinkEngine(RUNBOOKS, {
-  maxLinks: 10,
+  maxLinks: 12,
   urlForPage: (page) => `/runbook/${page.slug}`,
   authorityForPage: (page) => page.clawScore ?? 0,
 })

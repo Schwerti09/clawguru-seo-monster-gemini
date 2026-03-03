@@ -14,7 +14,7 @@ export const runtime = "nodejs"
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const BATCH_SIZE = 200
 const BATCH_MODE = process.env.GOOGLE_INDEXER_BATCH_MODE !== "false"
-const INDEXING_BATCH_LABEL = process.env.INDEXNOW_BATCH_LABEL ?? "CVE Priority Batch"
+const INDEXING_BATCH_LABEL = process.env.INDEXING_BATCH_LABEL ?? "CVE Priority Batch"
 
 // Higher number = higher priority in the IndexNow batch ordering.
 const SEVERITY_PRIORITY: Record<CveSeverity, number> = {
@@ -24,6 +24,7 @@ const SEVERITY_PRIORITY: Record<CveSeverity, number> = {
   low: 1,
 }
 
+// Parse an ISO date string (YYYY-MM-DD) into a timestamp, or null if invalid.
 function parsePublishedDate(date: string) {
   const parsed = Date.parse(date)
   return Number.isNaN(parsed) ? null : parsed
@@ -79,7 +80,7 @@ export async function GET(req: NextRequest) {
       quota: { used: quota.used, limit: DAILY_INDEXING_QUOTA },
       generatedAt: new Date().toISOString(),
       message: `Daily quota exhausted. Resets at ${resetAt}`,
-      signal: INDEXING_BATCH_LABEL,
+      batchLabel: INDEXING_BATCH_LABEL,
     })
   }
 
@@ -97,6 +98,6 @@ export async function GET(req: NextRequest) {
     results,
     quota: { used: quota.used + urls.length, limit: DAILY_INDEXING_QUOTA },
     generatedAt: new Date().toISOString(),
-    signal: INDEXING_BATCH_LABEL,
+    batchLabel: INDEXING_BATCH_LABEL,
   })
 }

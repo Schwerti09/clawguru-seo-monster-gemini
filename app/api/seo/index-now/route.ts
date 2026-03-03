@@ -4,7 +4,7 @@
 // Must be called with the correct CRON_SECRET to prevent abuse.
 
 import { NextRequest, NextResponse } from "next/server"
-import { KNOWN_CVES, type CveSeverity } from "@/lib/cve-pseo"
+import { KNOWN_CVES, type CveEntry, type CveSeverity } from "@/lib/cve-pseo"
 import { get100kSlugsPage } from "@/lib/pseo"
 import { DAILY_INDEXING_QUOTA, getIndexingQuota, indexUrls } from "@/lib/google-indexer"
 
@@ -28,17 +28,17 @@ const SEVERITY_PRIORITY: Record<CveSeverity, number> = {
  * Parse an ISO date string (YYYY-MM-DD) into a timestamp for sorting.
  * Returns null when the date string is invalid.
  */
-function parsePublishedDate(date: string) {
+function getPublishedDateTimestamp(date: string) {
   const parsed = Date.parse(date)
   return Number.isNaN(parsed) ? null : parsed
 }
 
 // KNOWN_CVES is static seed data, so we sort once at module load.
-function compareCvesByPriority(a: typeof KNOWN_CVES[number], b: typeof KNOWN_CVES[number]) {
+function compareCvesByPriority(a: CveEntry, b: CveEntry) {
   const severityDelta = SEVERITY_PRIORITY[b.severity] - SEVERITY_PRIORITY[a.severity]
   if (severityDelta !== 0) return severityDelta
-  const dateA = parsePublishedDate(a.publishedDate)
-  const dateB = parsePublishedDate(b.publishedDate)
+  const dateA = getPublishedDateTimestamp(a.publishedDate)
+  const dateB = getPublishedDateTimestamp(b.publishedDate)
   if (dateA === null && dateB === null) return 0
   if (dateA === null) return 1
   if (dateB === null) return -1

@@ -413,8 +413,10 @@ export async function POST(req: NextRequest) {
   } catch (err) {
     console.error("[stripe-webhook] error:", err)
     const message = err instanceof Error ? err.message : "Unknown error"
-    return NextResponse.json(
-      process.env.NODE_ENV === "production" ? { received: true } : { received: true, error: message }
-    )
+    const responseBody: { received: true; error?: string } = { received: true }
+    if (process.env.NODE_ENV !== "production") {
+      responseBody.error = message
+    }
+    return NextResponse.json(responseBody)
   }
 }

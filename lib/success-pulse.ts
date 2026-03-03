@@ -24,6 +24,8 @@ export async function sendSuccessPulse(session: Stripe.Checkout.Session): Promis
 
   if (!res.ok) {
     const detail = await res.text().catch(() => "")
-    throw new Error(`Success pulse failed (${res.status}): ${detail}`)
+    throw new Error(
+      `Success pulse failed (${res.status}) for ${session.id} → ${webhookUrl}: ${detail}`
+    )
   }
 }

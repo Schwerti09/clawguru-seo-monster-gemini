@@ -63,7 +63,9 @@ export async function fireAffiliatePostbacks(
       })
       if (!res.ok) {
         const detail = await res.text().catch(() => "")
-        throw new Error(`Affiliate postback failed (${res.status}): ${detail}`)
+        throw new Error(
+          `Affiliate postback failed (${res.status}) for ${affiliateRef}/${payload.sessionId}: ${detail}`
+        )
       }
     })
   )
@@ -73,6 +75,6 @@ export async function fireAffiliatePostbacks(
     const message = failures
       .map((failure) => (failure.reason instanceof Error ? failure.reason.message : String(failure.reason)))
       .join("; ")
-    throw new Error(message || "Affiliate postback failed")
+    throw new Error(message || `Affiliate postback failed for ${affiliateRef}/${payload.sessionId}`)
   }
 }

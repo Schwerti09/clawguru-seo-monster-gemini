@@ -91,6 +91,7 @@ export const UI_STRINGS: Record<Locale, Record<string, string>> = {
     navAbout: "Über uns",
     navEmergency: "Notfall",
     navProKits: "Pro Kits",
+    navLogin: "Anmelden",
     // Footer
     footerDescription: "Unabhängiges Lage- & Ops-Zentrum für OpenClaw/Moltbot. Fokus: Security, Betrieb, Kostenkontrolle.",
     footerDisclaimer: "Hinweis: Tools liefern heuristische Orientierung, keine Garantie. Für harte Audits: professionelle Prüfung.",
@@ -298,6 +299,7 @@ export const UI_STRINGS: Record<Locale, Record<string, string>> = {
     navAbout: "About Us",
     navEmergency: "Emergency",
     navProKits: "Pro Kits",
+    navLogin: "Login",
     // Footer
     footerDescription: "Independent situation & ops center for OpenClaw/Moltbot. Focus: Security, operations, cost control.",
     footerDisclaimer: "Note: Tools provide heuristic orientation, not guarantees. For hard audits: professional review.",
@@ -505,6 +507,7 @@ export const UI_STRINGS: Record<Locale, Record<string, string>> = {
     navAbout: "Sobre Nosotros",
     navEmergency: "Emergencia",
     navProKits: "Pro Kits",
+    navLogin: "Iniciar sesión",
     // Footer
     footerDescription: "Centro independiente de situación y operaciones para OpenClaw/Moltbot. Enfoque: Seguridad, operaciones, control de costos.",
     footerDisclaimer: "Nota: Las herramientas proporcionan orientación heurística, no garantías. Para auditorías rigurosas: revisión profesional.",
@@ -710,6 +713,7 @@ export const UI_STRINGS: Record<Locale, Record<string, string>> = {
     navAbout: "À Propos",
     navEmergency: "Urgence",
     navProKits: "Pro Kits",
+    navLogin: "Connexion",
     // Footer
     footerDescription: "Centre indépendant de situation et d'opérations pour OpenClaw/Moltbot. Focus : Sécurité, opérations, contrôle des coûts.",
     footerDisclaimer: "Note : Les outils fournissent une orientation heuristique, pas des garanties. Pour des audits rigoureux : examen professionnel.",
@@ -916,6 +920,7 @@ export const UI_STRINGS: Record<Locale, Record<string, string>> = {
     navAbout: "Sobre Nós",
     navEmergency: "Emergência",
     navProKits: "Pro Kits",
+    navLogin: "Entrar",
     // Footer
     footerDescription: "Centro independente de situação e operações para OpenClaw/Moltbot. Foco: Segurança, operações, controle de custos.",
     footerDisclaimer: "Nota: As ferramentas fornecem orientação heurística, não garantias. Para auditorias rigorosas: revisão profissional.",
@@ -1120,6 +1125,7 @@ export const UI_STRINGS: Record<Locale, Record<string, string>> = {
     navAbout: "Chi Siamo",
     navEmergency: "Emergenza",
     navProKits: "Pro Kits",
+    navLogin: "Accedi",
     // Footer
     footerDescription: "Centro indipendente di situazione e operazioni per OpenClaw/Moltbot. Focus: Sicurezza, operazioni, controllo dei costi.",
     footerDisclaimer: "Nota: Gli strumenti forniscono orientamento euristico, non garanzie. Per audit rigorosi: revisione professionale.",
@@ -1324,6 +1330,7 @@ export const UI_STRINGS: Record<Locale, Record<string, string>> = {
     navAbout: "О нас",
     navEmergency: "Экстренная помощь",
     navProKits: "Pro Kits",
+    navLogin: "Войти",
     // Footer
     footerDescription: "Независимый ситуационный и операционный центр для OpenClaw/Moltbot. Фокус: Безопасность, операции, контроль расходов.",
     footerDisclaimer: "Примечание: Инструменты дают эвристическую ориентацию, а не гарантии. Для серьёзных аудитов: профессиональная проверка.",
@@ -1528,6 +1535,7 @@ export const UI_STRINGS: Record<Locale, Record<string, string>> = {
     navAbout: "关于我们",
     navEmergency: "紧急情况",
     navProKits: "Pro Kits",
+    navLogin: "登录",
     // Footer
     footerDescription: "OpenClaw/Moltbot的独立态势和运营中心。重点：安全、运营、成本控制。",
     footerDisclaimer: "注意：工具提供启发式指导，不提供保证。严格审计请寻求专业审查。",
@@ -1732,6 +1740,7 @@ export const UI_STRINGS: Record<Locale, Record<string, string>> = {
     navAbout: "私たちについて",
     navEmergency: "緊急",
     navProKits: "Pro Kits",
+    navLogin: "ログイン",
     // Footer
     footerDescription: "OpenClaw/Moltbotのための独立した状況・運用センター。重点：セキュリティ、運用、コスト管理。",
     footerDisclaimer: "注：ツールはヒューリスティックな指針を提供するもので、保証ではありません。厳密な監査には専門家のレビューを。",
@@ -1936,6 +1945,7 @@ export const UI_STRINGS: Record<Locale, Record<string, string>> = {
     navAbout: "من نحن",
     navEmergency: "طوارئ",
     navProKits: "Pro Kits",
+    navLogin: "تسجيل الدخول",
     // Footer
     footerDescription: "مركز مستقل للوضع والعمليات لـ OpenClaw/Moltbot. التركيز: الأمان، العمليات، التحكم في التكاليف.",
     footerDisclaimer: "ملاحظة: تقدم الأدوات توجيهاً استدلالياً، وليس ضمانات. للتدقيق الصارم: مراجعة مهنية.",

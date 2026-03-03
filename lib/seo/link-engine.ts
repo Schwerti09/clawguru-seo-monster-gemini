@@ -17,8 +17,8 @@ export type LinkEngineLink = {
   url: string
 }
 
-const TAG_WEIGHT = 10
-const AUTHORITY_DIVISOR = 100
+const TAG_SIMILARITY_MULTIPLIER = 10
+const AUTHORITY_SCALE_FACTOR = 100
 
 export function buildLinkEngine<T extends LinkablePage>(pages: T[], config: LinkEngineConfig<T>) {
   const authorityForPage = config.authorityForPage ?? (() => 0)
@@ -41,7 +41,7 @@ export function buildLinkEngine<T extends LinkablePage>(pages: T[], config: Link
             }
           }
           const authority = authorityForPage(page)
-          return { page, score: shared * TAG_WEIGHT + authority / AUTHORITY_DIVISOR }
+          return { page, score: shared * TAG_SIMILARITY_MULTIPLIER + authority / AUTHORITY_SCALE_FACTOR }
         })
         .sort((a, b) => b.score - a.score)
         .slice(0, config.maxLinks)

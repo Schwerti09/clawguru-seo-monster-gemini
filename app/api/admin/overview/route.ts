@@ -95,6 +95,16 @@ export async function GET() {
     monthlyTokensLimit: parseEnvInt("GEMINI_TOKENS_MONTH_LIMIT", 1_000_000),
   }
 
+  const trend7dRaw = process.env.RUNBOOK_TREND_7D || "12,18,15,22,20,25,28"
+  const runbookStats = {
+    executedLast24h: parseEnvInt("RUNBOOK_EXECUTED_24H", 28),
+    trend7d: trend7dRaw
+      .split(",")
+      .map((v) => parseInt(v.trim(), 10) || 0)
+      .slice(0, 7),
+    myceliumHealth: parseFloat(process.env.RUNBOOK_MYCELIUM_HEALTH || "98.7"),
+  }
+
   return NextResponse.json({
     now: new Date().toISOString(),
     siteUrl,
@@ -107,5 +117,6 @@ export async function GET() {
       progressPct: Math.min(100, Math.round((total / 100_000) * 100)),
       lastDailyIndexRun: process.env.LAST_DAILY_INDEX_RUN ?? null,
     },
+    runbookStats,
   })
 }

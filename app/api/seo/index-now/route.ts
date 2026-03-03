@@ -16,6 +16,7 @@ const BATCH_SIZE = 200
 const BATCH_MODE = process.env.GOOGLE_INDEXER_BATCH_MODE !== "false"
 const INDEXING_BATCH_LABEL = "Final 15k Push"
 
+// Higher number = higher priority in the IndexNow batch ordering.
 const SEVERITY_PRIORITY: Record<CveSeverity, number> = {
   critical: 4,
   high: 3,
@@ -28,6 +29,7 @@ function parsePublishedDate(date: string) {
   return Number.isNaN(parsed) ? 0 : parsed
 }
 
+// KNOWN_CVES is static seed data, so we sort once at module load.
 const SORTED_CVES = [...KNOWN_CVES].sort((a, b) => {
   const severityDelta = SEVERITY_PRIORITY[b.severity] - SEVERITY_PRIORITY[a.severity]
   if (severityDelta !== 0) return severityDelta

@@ -5,6 +5,7 @@ import { RUNBOOKS, getRunbook, type Runbook, type RunbookBlock, type RunbookFaqE
 import { validateRunbook, type ClawCertifiedTier } from "@/lib/quality-gate"
 import { getTemporalHistory } from "@/lib/temporal-mycelium"
 import TemporalTimeline from "@/components/visual/TemporalTimeline"
+import VersionsAndForksTab from "@/components/runbook/VersionsAndForksTab"
 import { notFound } from "next/navigation"
 import { CopyLinkButton } from "./CopyLinkButton"
 import { ActivateSwarmButton } from "@/components/shared/ActivateSwarmButton"
@@ -373,6 +374,9 @@ export default async function RunbookPage(props: { params: Promise<{ slug: strin
 
         {/* TEMPORAL MYCELIUM v3.1 – Overlord AI: Temporal Evolution Timeline */}
         <TemporalTimeline history={temporalHistory} slug={r.slug} />
+
+        {/* MYCELIUM CORE: Runbook Versioning + Community Fork */}
+        <VersionsAndForksTab slug={r.slug} />
 
         {/* PROVENANCE SINGULARITY v3.4 – Overlord AI: Provenance chain link */}
         <div className="mt-6 px-4 py-3 rounded-2xl border border-cyan-500/20 bg-cyan-500/5 flex items-center gap-3">

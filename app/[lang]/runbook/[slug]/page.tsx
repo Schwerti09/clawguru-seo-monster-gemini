@@ -7,6 +7,7 @@ import { notFound } from "next/navigation"
 import { type Locale, SUPPORTED_LOCALES, translateRunbook, t, localeDir, LOCALE_HREFLANG } from "@/lib/i18n"
 import { getTemporalHistory } from "@/lib/temporal-mycelium"
 import TemporalTimeline from "@/components/visual/TemporalTimeline"
+import VersionsAndForksTab from "@/components/runbook/VersionsAndForksTab"
 import { ActivateSwarmButton } from "@/components/shared/ActivateSwarmButton"
 import Link from "next/link"
 import { buildLinkEngine } from "@/lib/seo/link-engine"
@@ -266,6 +267,9 @@ export default async function LocalizedRunbookPage(
 
         {/* TEMPORAL MYCELIUM v3.1 – Overlord AI: Temporal Evolution Timeline */}
         <TemporalTimeline history={temporalHistory} slug={r.slug} lang={locale} />
+
+        {/* MYCELIUM CORE: Runbook Versioning + Community Fork */}
+        <VersionsAndForksTab slug={r.slug} />
       </div>
     </Container>
   );

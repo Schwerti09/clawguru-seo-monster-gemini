@@ -1,6 +1,6 @@
 // app/api/seo/index-now/route.ts
 // Submits the newest 200 URLs to Google via the Indexing API.
-// Prioritizes the newest, highest-severity CVEs first (for example, "Final 15k Push").
+// Prioritizes the newest, highest-severity CVEs first (campaign label included in responses).
 // Must be called with the correct CRON_SECRET to prevent abuse.
 
 import { NextRequest, NextResponse } from "next/server"
@@ -24,7 +24,10 @@ const SEVERITY_PRIORITY: Record<CveSeverity, number> = {
   low: 1,
 }
 
-// Parse an ISO date string (YYYY-MM-DD) into a timestamp, or null if invalid.
+/**
+ * Parse an ISO date string (YYYY-MM-DD) into a timestamp for sorting.
+ * Returns null when the date string is invalid.
+ */
 function parsePublishedDate(date: string) {
   const parsed = Date.parse(date)
   return Number.isNaN(parsed) ? null : parsed

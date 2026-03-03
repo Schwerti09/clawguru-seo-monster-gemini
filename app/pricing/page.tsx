@@ -2,6 +2,7 @@ import { cookies } from "next/headers"
 import Container from "@/components/shared/Container"
 import BuyButton from "@/components/commerce/BuyButton"
 import EnterpriseContact from "@/components/marketing/EnterpriseContact"
+import MyceliumShareCard from "@/components/share/MyceliumShareCard"
 import { SEO_TARGET_KEYWORDS_2026 } from "@/lib/seo/targets"
 import { TIER_LIMITS } from "@/lib/feature-gating"
 import { SUPPORTED_LOCALES, type Locale, t } from "@/lib/i18n"
@@ -609,6 +610,16 @@ curl https://clawguru.com/api/intel/feeds \\
                 <p className="mt-1 text-gray-400">{t(locale, "pricingFaqIntelligenceA")}</p>
               </div>
             </div>
+          </div>
+
+          {/* Viral Share Card */}
+          <div className="mt-10">
+            <MyceliumShareCard
+              locale={locale}
+              title="Day Pass · ClawGuru Security Intelligence"
+              pageUrl="/pricing"
+              className="max-w-2xl"
+            />
           </div>
 
           {/* Quick links */}

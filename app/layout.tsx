@@ -13,6 +13,8 @@ import NeonCursor from "@/components/visual/NeonCursor"
 import PageTransition from "@/components/visual/PageTransition"
 // NEXT-LEVEL UPGRADE 2026: RTL direction support for Arabic + other RTL locales
 import RTLProvider from "@/components/layout/RTLProvider"
+// VIRAL SHARE 2026: Global floating Mycelium share button
+import FloatingMyceliumShareBtn from "@/components/share/FloatingMyceliumShareBtn"
 import { SUPPORTED_LOCALES, LOCALE_HREFLANG } from "@/lib/i18n"
 import { SEO_TARGET_KEYWORDS_2026 } from "@/lib/seo/targets"
 
@@ -134,6 +136,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Footer />
           <ActionDock />
           <SocialProofOverlay />
+          {/* VIRAL SHARE 2026: Global floating Mycelium share button */}
+          <FloatingMyceliumShareBtn />
           {/* VISUAL UPGRADE 2026: Custom neon cursor for desktop */}
           <NeonCursor />
         </RTLProvider>

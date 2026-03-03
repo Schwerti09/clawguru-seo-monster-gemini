@@ -49,7 +49,11 @@ const nextConfig = {
   },
   images: {
     remotePatterns: [
-      { protocol: "https", hostname: "**" },
+      { protocol: "https", hostname: "cdn.clawguru.org" },
+      { protocol: "https", hostname: "*.clawguru.org" },
+      { protocol: "https", hostname: "images.unsplash.com" },
+      { protocol: "https", hostname: "*.unsplash.com" },
+      { protocol: "https", hostname: "avatars.githubusercontent.com" },
     ],
   },
   // 100/100 OPTIMIZATION 2026: Security & performance headers

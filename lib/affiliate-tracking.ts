@@ -51,9 +51,9 @@ export async function fireAffiliatePostbacks(
 
   const body = JSON.stringify({ affiliateRef, ...payload })
 
-  for (const rawUrl of urls) {
-    const url = interpolateUrl(rawUrl, data)
-    try {
+  const results = await Promise.allSettled(
+    urls.map(async (rawUrl) => {
+      const url = interpolateUrl(rawUrl, data)
       const res = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -64,8 +64,14 @@ export async function fireAffiliatePostbacks(
         const detail = await res.text().catch(() => "")
         throw new Error(`Affiliate postback failed (${res.status}): ${detail}`)
       }
-    } catch (err) {
-      throw err
-    }
+    })
+  )
+
+  const failures = results.filter((r): r is PromiseRejectedResult => r.status === "rejected")
+  if (failures.length > 0) {
+    const message = failures
+      .map((failure) => (failure.reason instanceof Error ? failure.reason.message : String(failure.reason)))
+      .join("; ")
+    throw new Error(message || "Affiliate postback failed")
   }
 }

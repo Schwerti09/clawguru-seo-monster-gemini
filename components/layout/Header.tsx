@@ -2,7 +2,7 @@
 // VISUAL & PERFORMANCE POLISH 2026: Responsive header – max 6 desktop links + "More" dropdown + mobile hamburger
 // NEXT-LEVEL UPGRADE 2026: Language switcher added for 10-language support
 
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef, useEffect, useCallback } from "react"
 import Link from "next/link"
 import Container from "@/components/shared/Container"
 import LanguageSwitcher from "@/components/layout/LanguageSwitcher"
@@ -65,6 +65,23 @@ export default function Header() {
   useEffect(() => {
     setMobileOpen(false)
   }, [])
+
+  // Compact header share: Web Share API → X intent fallback
+  const handleHeaderShare = useCallback(() => {
+    const url = typeof window !== "undefined" ? window.location.href : "https://clawguru.org"
+    const text = t(currentLocale, "shareMyceliumPost")
+    if (typeof navigator !== "undefined" && navigator.share) {
+      navigator.share({ title: "ClawGuru · Mycelial Singularity Engine", text, url }).catch(() => {})
+    } else {
+      const xUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`
+      window.open(xUrl, "_blank", "noopener,noreferrer")
+    }
+  }, [currentLocale])
+
+  const handleMobileShare = useCallback(() => {
+    setMobileOpen(false)
+    handleHeaderShare()
+  }, [handleHeaderShare])
 
   return (
     <>
@@ -151,6 +168,21 @@ export default function Header() {
 
             {/* CTA buttons + language switcher + mobile hamburger */}
             <div className="flex items-center gap-2">
+              {/* Mycelium share button */}
+              <button
+                onClick={handleHeaderShare}
+                title={t(currentLocale, "shareMyceliumBtn")}
+                aria-label={t(currentLocale, "shareMyceliumBtn")}
+                className="hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-bold transition-all duration-200"
+                style={{
+                  background: "rgba(255,200,0,0.08)",
+                  border: "1px solid rgba(255,200,0,0.18)",
+                  color: "#ffc800",
+                }}
+              >
+                <span aria-hidden>🍄</span>
+                <span className="hidden md:inline text-xs font-mono tracking-wide">{t(currentLocale, "shareMyceliumXBtn")}</span>
+              </button>
               {/* Language switcher */}
               <div className="hidden sm:block">
                 <LanguageSwitcher currentLocale={currentLocale} variant="compact" />
@@ -232,6 +264,14 @@ export default function Header() {
             </Link>
           ))}
           <div className="pt-4 flex flex-col gap-2">
+            {/* Mycelium share button (mobile) */}
+            <button
+              onClick={handleMobileShare}
+              className="block w-full px-4 py-3 rounded-xl font-bold text-sm text-center"
+              style={{ background: "rgba(255,200,0,0.08)", border: "1px solid rgba(255,200,0,0.18)", color: "#ffc800" }}
+            >
+              🍄 {t(currentLocale, "shareMyceliumBtn")}
+            </button>
             <Link
               href="/security/notfall-leitfaden"
               className="block px-4 py-3 rounded-xl font-black text-sm text-center"

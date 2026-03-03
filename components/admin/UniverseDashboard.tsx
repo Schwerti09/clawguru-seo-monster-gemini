@@ -27,6 +27,7 @@ type Overview = {
   siteUrl: string
   env: {
     hasStripe: boolean
+    hasGemini: boolean
     hasOpenAI: boolean
     hasAdmin: boolean
     hasWebhook: boolean
@@ -45,6 +46,17 @@ type Overview = {
       currency: string
       description?: string | null
     }>
+  }
+  geminiUsage?: {
+    model: string
+    hasKey: boolean
+    endpoint: string
+  }
+  indexStatus?: {
+    indexedPages: number
+    targetPages: number
+    progressPct: number
+    lastDailyIndexRun: string | null
   }
 }
 
@@ -158,7 +170,7 @@ function isModuleOk(moduleId: ModuleId, overview: Overview | null): boolean {
   if (moduleId === "seo") return true // SEO module is always configured when the dashboard loads
   if (moduleId === "cash") return !!env.hasStripe
   if (moduleId === "affiliate") return !!env.hasWebhook
-  if (moduleId === "sentinel") return !!env.hasOpenAI
+  if (moduleId === "sentinel") return !!(env.hasGemini || env.hasOpenAI)
   if (moduleId === "defense") return !!env.hasAdmin
   return false
 }
@@ -331,6 +343,7 @@ function ModuleCard({
   const ok = isModuleOk(module.id, overview)
   const stripe = overview?.stripe
   const env = overview?.env
+  const indexStatus = overview?.indexStatus
 
   function renderContent() {
     if (module.id === "seo") {
@@ -345,17 +358,31 @@ function ModuleCard({
           </div>
           <div className="grid grid-cols-2 gap-2">
             <div className="p-3 rounded-xl bg-black/30 border border-white/5">
-              <div className="text-xs text-gray-400">Sitemap URLs</div>
-              <div className="text-lg font-black text-cyan-300 mt-0.5">100k+</div>
+              <div className="text-xs text-gray-400">Indexierte Seiten</div>
+              <div className="text-lg font-black text-cyan-300 mt-0.5">
+                {indexStatus ? indexStatus.indexedPages.toLocaleString("de-DE") : "—"}
+              </div>
             </div>
             <div className="p-3 rounded-xl bg-black/30 border border-white/5">
-              <div className="text-xs text-gray-400">Daily Quota</div>
-              <div className="text-lg font-black text-cyan-300 mt-0.5">200</div>
+              <div className="text-xs text-gray-400">Fortschritt</div>
+              <div className="text-lg font-black text-cyan-300 mt-0.5">
+                {indexStatus ? `${indexStatus.progressPct}%` : "—"}
+              </div>
             </div>
           </div>
+          {indexStatus && (
+            <div className="w-full h-1.5 rounded-full bg-white/10 overflow-hidden">
+              <div
+                className="h-full rounded-full bg-gradient-to-r from-cyan-500 to-blue-500"
+                style={{ width: `${indexStatus.progressPct}%` }}
+              />
+            </div>
+          )}
           <div className="flex items-center gap-1.5 text-xs text-gray-500">
             <CheckCircle className="w-3 h-3 text-green-400" />
-            Indexing API aktiv
+            {indexStatus?.lastDailyIndexRun
+              ? `Letzter Run: ${new Date(indexStatus.lastDailyIndexRun).toLocaleDateString("de-DE")}`
+              : "Indexing API aktiv"}
           </div>
         </div>
       )
@@ -386,15 +413,27 @@ function ModuleCard({
               </div>
             </div>
           </div>
+          <div className="p-3 rounded-xl bg-black/30 border border-white/5">
+            <div className="text-xs text-gray-400 mb-1">Active Defenders</div>
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+              <span className="text-lg font-black text-green-300">{stripe.activeSubs}</span>
+              {stripe.trialingSubs > 0 && (
+                <span className="text-xs text-yellow-300 ml-2">+{stripe.trialingSubs} Trialing</span>
+              )}
+            </div>
+          </div>
           <div className="flex items-center justify-between text-xs text-gray-400">
             <span>
-              Active Subs:{" "}
-              <span className="font-bold text-green-300">{stripe.activeSubs}</span>
+              Zahlungen (7d):{" "}
+              <span className="font-bold text-green-300">{stripe.chargeCount7d}</span>
             </span>
-            <span>
-              Trialing:{" "}
-              <span className="font-bold text-yellow-300">{stripe.trialingSubs}</span>
-            </span>
+            {stripe.charges24h > 0 && (
+              <span className="flex items-center gap-1 text-green-400 font-bold">
+                <TrendingUp className="w-3 h-3" />
+                Success Pulse
+              </span>
+            )}
           </div>
         </div>
       )
@@ -422,11 +461,14 @@ function ModuleCard({
     }
 
     if (module.id === "sentinel") {
-      const hasAI = env?.hasOpenAI
+      const hasGemini = env?.hasGemini
+      const hasOpenAI = env?.hasOpenAI
+      const hasAI = hasGemini || hasOpenAI
+      const gemini = overview?.geminiUsage
       return (
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-xs text-gray-400">Gemini/OpenAI</span>
+            <span className="text-xs text-gray-400">Gemini / OpenAI</span>
             <div className="flex items-center gap-1.5">
               <StatusDot ok={!!hasAI} />
               <span className="text-xs text-gray-300">{hasAI ? "Online" : "Nicht konfiguriert"}</span>
@@ -434,19 +476,17 @@ function ModuleCard({
           </div>
           <div className="grid grid-cols-2 gap-2">
             <div className="p-3 rounded-xl bg-black/30 border border-white/5">
-              <div className="text-xs text-gray-400">API Status</div>
+              <div className="text-xs text-gray-400">Gemini API</div>
               <div
-                className={`text-base font-black mt-0.5 ${hasAI ? "text-green-300" : "text-orange-300"}`}
+                className={`text-base font-black mt-0.5 ${hasGemini ? "text-green-300" : "text-orange-300"}`}
               >
-                {hasAI ? "OK" : "MISSING"}
+                {hasGemini ? "OK" : "MISSING"}
               </div>
             </div>
             <div className="p-3 rounded-xl bg-black/30 border border-white/5">
-              <div className="text-xs text-gray-400">Admin ENV</div>
-              <div
-                className={`text-base font-black mt-0.5 ${env?.hasAdmin ? "text-green-300" : "text-red-300"}`}
-              >
-                {env?.hasAdmin ? "OK" : "FAIL"}
+              <div className="text-xs text-gray-400">Model</div>
+              <div className="text-xs font-bold text-purple-300 mt-0.5 truncate">
+                {gemini?.model || "—"}
               </div>
             </div>
           </div>
@@ -709,7 +749,8 @@ export default function UniverseDashboard() {
         <div className="mt-4 flex flex-wrap gap-3">
           {[
             { label: "Stripe", ok: overview?.env.hasStripe },
-            { label: "AI API", ok: overview?.env.hasOpenAI },
+            { label: "Gemini", ok: overview?.env.hasGemini },
+            { label: "OpenAI", ok: overview?.env.hasOpenAI },
             { label: "Admin", ok: overview?.env.hasAdmin },
             { label: "Webhooks", ok: overview?.env.hasWebhook },
             { label: "Email", ok: overview?.env.hasEmail },

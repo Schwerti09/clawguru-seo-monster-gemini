@@ -163,8 +163,8 @@ export default function CosmicSummon({ locale: localeProp }: { locale?: Locale }
   const pathname = usePathname();
   const firstSegment = pathname?.split("/").filter(Boolean)[0] as Locale;
   const locale: Locale = localeProp ?? (SUPPORTED_LOCALES.includes(firstSegment) ? firstSegment : "de");
-  // Shorthand translation helper
-  const T = (key: string) => i18nT(locale, key);
+  // Shorthand translation helper – memoized so callbacks depending on it stay stable
+  const T = useCallback((key: string) => i18nT(locale, key), [locale]);
 
   const [phase, setPhase] = useState<SummonPhase>("idle");
   const [transcript, setTranscript] = useState<
@@ -231,8 +231,7 @@ export default function CosmicSummon({ locale: localeProp }: { locale?: Locale }
     await speak(openingLine, { pitch: 0.55, rate: 0.8 });
 
     setPhase("conversation");
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locale]);
+  }, [T]);
 
   // COSMIC INTER-AI SUMMON v∞ – Overlord AI
   // Send user message and get OpenAI reply
@@ -259,8 +258,7 @@ export default function CosmicSummon({ locale: localeProp }: { locale?: Locale }
     await speak(closingLine, { pitch: 0.45, rate: 0.75 });
     await new Promise((r) => setTimeout(r, 1200));
     setPhase("done");
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locale]);
+  }, [T]);
 
   // COSMIC INTER-AI SUMMON v∞ – Overlord AI
   // Web Speech API recognition
@@ -306,8 +304,7 @@ export default function CosmicSummon({ locale: localeProp }: { locale?: Locale }
 
     recognition.start();
     setIsListening(true);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locale]);
+  }, [T]);
 
   // COSMIC INTER-AI SUMMON v∞ – Overlord AI – IDLE PHASE
   if (phase === "idle") {

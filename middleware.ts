@@ -131,8 +131,10 @@ export function middleware(request: NextRequest) {
     "/runbook/",
     "/runbooks/",
     "/provider/",
+    "/providers/",
     "/tag/",
     "/tags/",
+    "/solutions/",
   ]
   const isLocalizedContent = LOCALIZED_PATHS.some((p) => pathname.startsWith(p))
   if (isLocalizedContent) {

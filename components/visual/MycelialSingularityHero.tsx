@@ -36,6 +36,11 @@ const NODE_DATA = [
   { label: "Temporal", color: "#d4af37", glow: "rgba(212,175,55,0.6)" },
 ]
 
+// Physics constants
+const REPULSION_RADIUS = 120
+const EDGE_FADE_DISTANCE = 280
+const MYCELIUM_NODE_INDEX = 6
+
 function initNodes(w: number, h: number): Node[] {
   return NODE_DATA.map((d, i) => ({
     id: i,
@@ -43,7 +48,7 @@ function initNodes(w: number, h: number): Node[] {
     y: h * 0.1 + Math.random() * h * 0.8,
     vx: (Math.random() - 0.5) * 0.4,
     vy: (Math.random() - 0.5) * 0.4,
-    radius: i === 6 ? 10 : 5 + Math.random() * 4,
+    radius: i === MYCELIUM_NODE_INDEX ? 10 : 5 + Math.random() * 4,
     label: d.label,
     color: d.color,
     glowColor: d.glow,
@@ -100,8 +105,8 @@ export default function MycelialSingularityHero() {
         if (m.id === n.id) return
         const dx = n.x - m.x, dy = n.y - m.y
         const dist = Math.sqrt(dx * dx + dy * dy) || 1
-        if (dist < 120) {
-          const force = (120 - dist) / 120 * 0.015
+        if (dist < REPULSION_RADIUS) {
+          const force = (REPULSION_RADIUS - dist) / REPULSION_RADIUS * 0.015
           n.vx += dx / dist * force
           n.vy += dy / dist * force
         }
@@ -126,7 +131,7 @@ export default function MycelialSingularityHero() {
         if (ci <= n.id) return
         const m = nodes[ci]
         const dist = Math.hypot(n.x - m.x, n.y - m.y)
-        const alpha = Math.max(0, 1 - dist / 280) * 0.25
+        const alpha = Math.max(0, 1 - dist / EDGE_FADE_DISTANCE) * 0.25
         if (alpha <= 0) return
         const isHighlighted = n.hovered || m.hovered
         ctx.beginPath()
@@ -184,7 +189,7 @@ export default function MycelialSingularityHero() {
       ctx.fill()
 
       // Label (on hover or central node)
-      if (n.hovered || n.id === 6) {
+      if (n.hovered || n.id === MYCELIUM_NODE_INDEX) {
         ctx.font = `${n.hovered ? 700 : 600} ${n.hovered ? 12 : 10}px 'Space Grotesk', system-ui`
         ctx.fillStyle = n.hovered ? n.color : "rgba(255,255,255,0.8)"
         ctx.textAlign = "center"

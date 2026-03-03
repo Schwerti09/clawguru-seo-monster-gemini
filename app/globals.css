@@ -59,8 +59,8 @@ a { @apply hover:text-[#00ff9d] transition-colors; }
     0deg,
     transparent,
     transparent 2px,
-    rgba(0, 255, 157, 0.008) 2px,
-    rgba(0, 255, 157, 0.008) 4px
+    rgba(212, 175, 55, 0.006) 2px,
+    rgba(212, 175, 55, 0.006) 4px
   );
   opacity: 0.4;
 }

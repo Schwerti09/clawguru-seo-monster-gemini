@@ -104,10 +104,7 @@ export default function Header() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="px-3 py-2 rounded-xl text-sm text-gray-300 hover:text-white transition-colors"
-                  style={{ transition: "color 0.2s" }}
-                  onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = "#d4af37" }}
-                  onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = "" }}
+                  className="px-3 py-2 rounded-xl text-sm text-gray-300 transition-colors hover:text-[#d4af37]"
                 >
                   {item.label}
                 </Link>
@@ -142,8 +139,7 @@ export default function Header() {
                         key={item.href}
                         href={item.href}
                         onClick={() => setMoreOpen(false)}
-                        className="block px-4 py-2 text-sm text-gray-300 hover:text-white transition-colors"
-                        style={{ transition: "color 0.15s" }}
+                        className="block px-4 py-2 text-sm text-gray-300 hover:text-[#d4af37] transition-colors"
                       >
                         {item.label}
                       </Link>

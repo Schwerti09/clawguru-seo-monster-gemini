@@ -1,6 +1,8 @@
 "use client"
 
 import { useState } from "react"
+import { usePathname } from "next/navigation"
+import { SUPPORTED_LOCALES, type Locale, t } from "@/lib/i18n"
 
 export default function BuyButton({
   product,
@@ -13,6 +15,9 @@ export default function BuyButton({
   className?: string
   style?: React.CSSProperties
 }) {
+  const pathname = usePathname()
+  const firstSegment = pathname.split("/").filter(Boolean)[0] as Locale
+  const locale: Locale = SUPPORTED_LOCALES.includes(firstSegment) ? firstSegment : "de"
   const [loading, setLoading] = useState(false)
 
   async function go() {
@@ -40,7 +45,7 @@ export default function BuyButton({
       }
       style={style}
     >
-      {loading ? "Weiter…" : label}
+      {loading ? t(locale, 'buyLoading') : label}
     </button>
   )
 }

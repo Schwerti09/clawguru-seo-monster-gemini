@@ -65,6 +65,24 @@ export type Dictionary = {
     kicker: string
     title: string
     subtitle: string
+    q1: string
+    a1: string
+    q2: string
+    a2: string
+    q3: string
+    a3: string
+    q4: string
+    a4: string
+  }
+  home: {
+    clawVerseKicker: string
+    clawVerseTitle: string
+    clawVerseDesc: string
+    clawVerseCta: string
+    genesisProtocol: string
+    myceliumTitle: string
+    myceliumDesc: string
+    openMycelium: string
   }
 }
 

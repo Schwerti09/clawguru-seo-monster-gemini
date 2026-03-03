@@ -55,6 +55,24 @@
   "faq": {
     "kicker": "FAQ",
     "title": "Breve. Directo. Útil.",
-    "subtitle": "Algunas preguntas siempre surgen. Aquí están las respuestas."
+    "subtitle": "Algunas preguntas siempre surgen. Aquí están las respuestas.",
+    "q1": "¿ClawGuru almacena mis entradas?",
+    "a1": "No. Sin almacenamiento persistente de tus verificaciones. Algunos registros del servidor pueden contener metadatos técnicamente necesarios.",
+    "q2": "¿Es oficial?",
+    "a2": "No. ClawGuru es independiente. Por eso la perspectiva es operativa, no PR.",
+    "q3": "¿Cuál es el error más común?",
+    "a3": "Exposición pública + sin disciplina de origin/token. Esa es la combinación clásica.",
+    "q4": "¿Por qué tanto 'Ops'?",
+    "a4": "Porque el 90% del daño proviene de operaciones/disciplina, no de funcionalidades sofisticadas."
+  },
+  "home": {
+    "clawVerseKicker": "CLAWVERSE · NÚCLEO DEL UNIVERSO · RED DE CONOCIMIENTO OPERATIVO",
+    "clawVerseTitle": "Enter the ClawVerse",
+    "clawVerseDesc": "Un micelio vivo que conecta todo el conocimiento de seguridad operativa a través de herramientas, tiempo y capas de inteligencia. El Universo está activo.",
+    "clawVerseCta": "Enter the Universe →",
+    "genesisProtocol": "PROTOCOLO GENESIS ACTIVO · MYCELIAL SINGULARITY ENGINE v3.0",
+    "myceliumTitle": "El micelio vivo. 1M+ runbooks. Ahora.",
+    "myceliumDesc": "Cada nodo es una unidad de conocimiento. Cada arista una relación semántica. La red crece, aprende y evoluciona autónomamente mediante selección darwiniana.",
+    "openMycelium": "Abrir Living Mycelium →"
   }
 }

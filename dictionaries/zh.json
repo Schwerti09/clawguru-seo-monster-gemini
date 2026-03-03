@@ -55,6 +55,24 @@
   "faq": {
     "kicker": "常见问题",
     "title": "简短。犀利。实用。",
-    "subtitle": "一些问题总是反复出现。以下是答案。"
+    "subtitle": "一些问题总是反复出现。以下是答案。",
+    "q1": "ClawGuru 会存储我的输入吗？",
+    "a1": "不会。不会持久存储您的检查数据。某些服务器日志可能包含技术上必要的元数据。",
+    "q2": "这是官方的吗？",
+    "a2": "不是。ClawGuru 是独立的。正因如此，视角是运营导向而非公关导向。",
+    "q3": "最常见的错误是什么？",
+    "a3": "公开暴露 + 缺乏 origin/token 纪律。这是经典组合。",
+    "q4": "为什么这么多 'Ops'？",
+    "a4": "因为 90% 的损失来自运营/纪律，而不是花哨的功能。"
+  },
+  "home": {
+    "clawVerseKicker": "CLAWVERSE · 宇宙核心 · 运营知识网络",
+    "clawVerseTitle": "Enter the ClawVerse",
+    "clawVerseDesc": "一个活体菌丝网络，连接所有跨工具、时间和智能层的运营安全知识。宇宙已上线。",
+    "clawVerseCta": "Enter the Universe →",
+    "genesisProtocol": "创世协议激活 · MYCELIAL SINGULARITY ENGINE v3.0",
+    "myceliumTitle": "活体菌丝。1M+ 运维手册。现在。",
+    "myceliumDesc": "每个节点是一个知识单元。每条边是语义关系。网络通过达尔文选择自主生长、学习和进化。",
+    "openMycelium": "打开 Living Mycelium →"
   }
 }

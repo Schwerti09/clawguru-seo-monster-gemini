@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import { cookies } from "next/headers"
 import { adminCookieName, verifyAdminToken } from "@/lib/admin-auth"
 import { stripe } from "@/lib/stripe"
+import { totalSitemapUrls } from "@/lib/pseo"
 
 export const runtime = "nodejs"
 
@@ -76,10 +77,18 @@ export async function GET() {
     }
   }
 
+  const total = totalSitemapUrls()
+
   return NextResponse.json({
     now: new Date().toISOString(),
     siteUrl,
     env: { hasStripe, hasGemini, hasOpenAI, hasAdmin, hasWebhook, hasEmail },
-    stripe: stripeData
+    stripe: stripeData,
+    indexStatus: {
+      indexedPages: total,
+      targetPages: 100_000,
+      progressPct: Math.min(100, Math.round((total / 100_000) * 100)),
+      lastDailyIndexRun: process.env.LAST_DAILY_INDEX_RUN ?? null,
+    },
   })
 }

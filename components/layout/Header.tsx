@@ -7,38 +7,9 @@ import Link from "next/link"
 import Container from "@/components/shared/Container"
 import LanguageSwitcher from "@/components/layout/LanguageSwitcher"
 import { usePathname } from "next/navigation"
-import { SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
+import { SUPPORTED_LOCALES, type Locale, t } from "@/lib/i18n"
 
 type NavItem = { href: string; label: string }
-
-// Primary nav items shown on desktop (max 6)
-const PRIMARY_NAV: NavItem[] = [
-  { href: "/live", label: "Live" },
-  { href: "/check", label: "Security-Check" },
-  { href: "/copilot", label: "Copilot" },
-  { href: "/runbooks", label: "Runbooks" },
-  { href: "/intel", label: "Intel Feed" },
-  { href: "/pricing", label: "Pricing" },
-]
-
-// Overflow items – visible in "More" dropdown on desktop and in mobile menu
-const MORE_NAV: NavItem[] = [
-  { href: "/clawverse", label: "✦ ClawVerse" },
-  { href: "/summon", label: "🔴 Summon" },
-  { href: "/oracle", label: "Oracle" },
-  { href: "/neuro", label: "Neuro" },
-  { href: "/mycelium", label: "Mycelium" },
-  { href: "/tags", label: "Tags" },
-  { href: "/academy", label: "Academy" },
-  { href: "/vault", label: "Vault" },
-  { href: "/openclaw-security-2026", label: "Lagebericht" },
-  { href: "/downloads", label: "Downloads" },
-  { href: "/case-studies", label: "Cases" },
-  { href: "/hosting-kosten", label: "Kosten" },
-  { href: "/ueber-uns", label: "Über uns" },
-]
-
-const ALL_NAV = [...PRIMARY_NAV, ...MORE_NAV]
 
 export default function Header() {
   const [moreOpen, setMoreOpen] = useState(false)
@@ -49,6 +20,35 @@ export default function Header() {
   // NEXT-LEVEL UPGRADE 2026: Detect current locale from URL
   const firstSegment = pathname.split("/").filter(Boolean)[0] as Locale
   const currentLocale: Locale = SUPPORTED_LOCALES.includes(firstSegment) ? firstSegment : "de"
+
+  // Primary nav items shown on desktop (max 6)
+  const PRIMARY_NAV: NavItem[] = [
+    { href: "/live", label: t(currentLocale, "navLive") },
+    { href: "/check", label: t(currentLocale, "navSecurityCheck") },
+    { href: "/copilot", label: t(currentLocale, "navCopilot") },
+    { href: "/runbooks", label: t(currentLocale, "navRunbooks") },
+    { href: "/intel", label: t(currentLocale, "navIntelFeed") },
+    { href: "/pricing", label: t(currentLocale, "navPricing") },
+  ]
+
+  // Overflow items – visible in "More" dropdown on desktop and in mobile menu
+  const MORE_NAV: NavItem[] = [
+    { href: "/clawverse", label: t(currentLocale, "navClawVerse") },
+    { href: "/summon", label: t(currentLocale, "navSummon") },
+    { href: "/oracle", label: t(currentLocale, "navOracle") },
+    { href: "/neuro", label: t(currentLocale, "navNeuro") },
+    { href: "/mycelium", label: t(currentLocale, "navMycelium") },
+    { href: "/tags", label: t(currentLocale, "navTags") },
+    { href: "/academy", label: t(currentLocale, "navAcademy") },
+    { href: "/vault", label: t(currentLocale, "navVault") },
+    { href: "/openclaw-security-2026", label: t(currentLocale, "navReport") },
+    { href: "/downloads", label: t(currentLocale, "navDownloads") },
+    { href: "/case-studies", label: t(currentLocale, "navCases") },
+    { href: "/hosting-kosten", label: t(currentLocale, "navCosts") },
+    { href: "/ueber-uns", label: t(currentLocale, "navAbout") },
+  ]
+
+  const ALL_NAV = [...PRIMARY_NAV, ...MORE_NAV]
 
   // Close "More" dropdown on outside click
   useEffect(() => {
@@ -100,7 +100,7 @@ export default function Header() {
                   aria-expanded={moreOpen}
                   aria-haspopup="true"
                 >
-                  More
+                  {t(currentLocale, "navMore")}
                   <svg className={`w-3 h-3 transition-transform ${moreOpen ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
                   </svg>
@@ -132,13 +132,13 @@ export default function Header() {
                 href="/security/notfall-leitfaden"
                 className="hidden sm:block px-3 py-2 rounded-xl bg-brand-red/90 hover:bg-brand-red font-black text-sm"
               >
-                Notfall
+                {t(currentLocale, "navEmergency")}
               </Link>
               <Link
                 href="/pricing"
                 className="hidden sm:block px-3 py-2 rounded-xl bg-brand-cyan/15 hover:bg-brand-cyan/25 border border-brand-cyan/30 font-bold text-sm"
               >
-                Pro Kits
+                {t(currentLocale, "navProKits")}
               </Link>
 
               {/* Hamburger button (mobile only) */}
@@ -195,14 +195,14 @@ export default function Header() {
               className="block px-4 py-3 rounded-xl bg-brand-red/90 hover:bg-brand-red font-black text-sm text-center"
               onClick={() => setMobileOpen(false)}
             >
-              Notfall
+              {t(currentLocale, "navEmergency")}
             </Link>
             <Link
               href="/pricing"
               className="block px-4 py-3 rounded-xl bg-brand-cyan/15 hover:bg-brand-cyan/25 border border-brand-cyan/30 font-bold text-sm text-center"
               onClick={() => setMobileOpen(false)}
             >
-              Pro Kits
+              {t(currentLocale, "navProKits")}
             </Link>
           </div>
         </nav>

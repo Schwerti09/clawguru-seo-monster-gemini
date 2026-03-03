@@ -5,7 +5,7 @@
 // Falls back gracefully when Speech API is unavailable.
 
 import { useState, useRef, useCallback, useEffect } from "react"
-import { Mic, MicOff, Volume2, VolumeX, Loader2, Zap } from "lucide-react"
+import { Mic, MicOff, Volume2, VolumeX, Loader2, Zap, Save, GitFork, Sparkles, BookOpen } from "lucide-react"
 
 type VoiceState = "idle" | "listening" | "processing" | "speaking"
 
@@ -31,12 +31,60 @@ const LANG_SPEECH: Record<string, string> = {
   ar: "ar-SA",
 }
 
+// NEXT-LEVEL UPGRADE 2026: Extract a runbook search keyword from user text
+function extractRunbookKeyword(text: string): string | null {
+  const lower = text.toLowerCase()
+  const KEYWORDS: Array<[RegExp, string]> = [
+    [/nginx|webserver|proxy/, "nginx"],
+    [/docker|container|dockerfile/, "docker"],
+    [/kubernetes|k8s|kubectl|pod/, "kubernetes"],
+    [/ssl|tls|zertifikat|certificate/, "ssl-tls"],
+    [/ssh|remote access|fernzugriff/, "ssh"],
+    [/firewall|iptables|ufw/, "firewall"],
+    [/sql|database|datenbank|postgres|mysql/, "database"],
+    [/backup|sicherung|restore/, "backup"],
+    [/api key|secret|credentials|zugangsdaten/, "api-security"],
+    [/dns|domain|nameserver/, "dns"],
+    [/log|monitoring|alert|überwachung/, "monitoring"],
+    [/linux|ubuntu|debian|centos/, "linux-hardening"],
+  ]
+  for (const [pattern, slug] of KEYWORDS) {
+    if (pattern.test(lower)) return slug
+  }
+  return null
+}
+
 // NEXT-LEVEL UPGRADE 2026: Safe accessor for vendor-prefixed Speech API
 function getSpeechRecognition(): (new () => SpeechRecognition) | undefined {
   if (typeof window === "undefined") return undefined
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const w = window as any
   return w.SpeechRecognition || w.webkitSpeechRecognition || undefined
+}
+
+// NEXT-LEVEL UPGRADE 2026: Animated waveform bars (5 bars, staggered animation)
+function Waveform() {
+  const bars = [0.4, 0.8, 1.0, 0.7, 0.45]
+  return (
+    <div className="flex items-end gap-[3px] h-8" aria-hidden>
+      {bars.map((scale, i) => (
+        <span
+          key={i}
+          className="w-1.5 rounded-full bg-[#00ff9d] origin-bottom"
+          style={{
+            height: `${Math.round(scale * 100)}%`,
+            animation: `voiceWave 0.9s ease-in-out ${i * 0.13}s infinite alternate`,
+          }}
+        />
+      ))}
+      <style>{`
+        @keyframes voiceWave {
+          from { transform: scaleY(0.25); opacity: 0.5; }
+          to   { transform: scaleY(1);    opacity: 1; }
+        }
+      `}</style>
+    </div>
+  )
 }
 
 export default function VoiceCopilot({ lang = "de", onTranscript, onReply }: VoiceCopilotProps) {
@@ -46,6 +94,10 @@ export default function VoiceCopilot({ lang = "de", onTranscript, onReply }: Voi
   const [error, setError] = useState<string | null>(null)
   const [isMuted, setIsMuted] = useState(false)
   const [supported, setSupported] = useState(true)
+  const [saved, setSaved] = useState(false)
+  const [forked, setForked] = useState(false)
+  const [evolving, setEvolving] = useState(false)
+  const [runbookSlug, setRunbookSlug] = useState<string | null>(null)
 
   const recognitionRef = useRef<SpeechRecognition | null>(null)
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null)
@@ -77,6 +129,8 @@ export default function VoiceCopilot({ lang = "de", onTranscript, onReply }: Voi
     async (text: string) => {
       setState("processing")
       setError(null)
+      setSaved(false)
+      setForked(false)
       try {
         const res = await fetch("/api/copilot", {
           method: "POST",
@@ -88,6 +142,10 @@ export default function VoiceCopilot({ lang = "de", onTranscript, onReply }: Voi
         const replyText = data.reply || "Keine Antwort erhalten."
         setReply(replyText)
         onReply?.(replyText)
+
+        // NEXT-LEVEL UPGRADE 2026: Detect matching runbook from transcript
+        const slug = extractRunbookKeyword(text)
+        setRunbookSlug(slug)
 
         // NEXT-LEVEL UPGRADE 2026: Speak the reply via Web Speech Synthesis
         if (!isMuted && typeof window !== "undefined" && "speechSynthesis" in window) {
@@ -110,6 +168,69 @@ export default function VoiceCopilot({ lang = "de", onTranscript, onReply }: Voi
     [lang, isMuted, onReply]
   )
 
+  // NEXT-LEVEL UPGRADE 2026: "Evolve this" – re-send to Gemini with evolution prompt
+  const handleEvolve = useCallback(async () => {
+    if (!reply || evolving) return
+    setEvolving(true)
+    setSaved(false)
+    setForked(false)
+    try {
+      const evolvePrompt = `Evolve and improve this security answer with advanced hardening steps, newer CVE mitigations, and Darwinian best-practice updates:\n\n${reply}`
+      const res = await fetch("/api/copilot", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: evolvePrompt, history: [] }),
+      })
+      if (!res.ok) throw new Error("API error")
+      const data = (await res.json()) as { reply?: string }
+      const evolved = data.reply || reply
+      setReply(evolved)
+      onReply?.(evolved)
+    } catch {
+      setError("Evolve fehlgeschlagen – bitte erneut versuchen.")
+    } finally {
+      setEvolving(false)
+    }
+  }, [reply, evolving, onReply])
+
+  // NEXT-LEVEL UPGRADE 2026: Save session to localStorage
+  const handleSave = useCallback(() => {
+    if (!reply) return
+    try {
+      const raw = JSON.parse(localStorage.getItem("cg_voice_sessions") || "[]")
+      const sessions = Array.isArray(raw) ? raw : []
+      sessions.unshift({ transcript, reply, runbookSlug, ts: new Date().toISOString() })
+      localStorage.setItem("cg_voice_sessions", JSON.stringify(sessions.slice(0, 20)))
+      setSaved(true)
+    } catch {
+      setSaved(true) // still mark saved even if storage fails
+    }
+  }, [transcript, reply, runbookSlug])
+
+  // NEXT-LEVEL UPGRADE 2026: Fork – store a named fork in localStorage
+  const handleFork = useCallback(() => {
+    if (!reply) return
+    try {
+      const raw = JSON.parse(localStorage.getItem("cg_voice_forks") || "[]")
+      const forks = Array.isArray(raw) ? raw : []
+      const forkId = typeof crypto !== "undefined" && crypto.randomUUID
+        ? crypto.randomUUID()
+        : Date.now().toString(36)
+      forks.unshift({
+        id: forkId,
+        transcript,
+        reply,
+        runbookSlug,
+        forkedAt: new Date().toISOString(),
+        label: `Voice Fork – ${new Date().toLocaleString()}`,
+      })
+      localStorage.setItem("cg_voice_forks", JSON.stringify(forks.slice(0, 20)))
+      setForked(true)
+    } catch {
+      setForked(true)
+    }
+  }, [transcript, reply, runbookSlug])
+
   const startListening = useCallback(() => {
     const SpeechAPI = getSpeechRecognition()
     if (!SpeechAPI) return
@@ -122,6 +243,9 @@ export default function VoiceCopilot({ lang = "de", onTranscript, onReply }: Voi
     setTranscript("")
     transcriptRef.current = ""
     setReply("")
+    setRunbookSlug(null)
+    setSaved(false)
+    setForked(false)
     setError(null)
 
     const recognition = new SpeechAPI()
@@ -213,7 +337,7 @@ export default function VoiceCopilot({ lang = "de", onTranscript, onReply }: Voi
         <div className="flex items-center gap-2">
           <Zap className="w-4 h-4 text-[#00ff9d]" />
           <span className="text-sm font-bold text-[#00ff9d]">Voice Copilot</span>
-          <span className="text-xs text-gray-500 font-mono">Web Speech + Gemini</span>
+          <span className="text-xs text-gray-500 font-mono">Web Speech + Gemini 2.0</span>
         </div>
         <button
           onClick={toggleMute}
@@ -228,25 +352,26 @@ export default function VoiceCopilot({ lang = "de", onTranscript, onReply }: Voi
         </button>
       </div>
 
-      {/* Mic button */}
+      {/* Mic button + Waveform */}
       <div className="flex flex-col items-center gap-3">
         <button
           onClick={state === "idle" ? startListening : stopListening}
           disabled={state === "processing" || state === "speaking"}
-          className={`relative w-16 h-16 rounded-full flex items-center justify-center transition-all duration-300 ${
+          className={`relative w-20 h-20 rounded-full flex items-center justify-center transition-all duration-300 ${
             state === "listening"
-              ? "bg-red-500/20 border-2 border-red-500 shadow-[0_0_30px_rgba(239,68,68,0.4)] animate-pulse"
+              ? "bg-red-500/20 border-2 border-red-500 shadow-[0_0_40px_rgba(239,68,68,0.5)] animate-pulse"
               : state === "processing" || state === "speaking"
               ? "bg-gray-800 border-2 border-gray-700 cursor-not-allowed"
-              : "bg-[#00ff9d]/10 border-2 border-[#00ff9d]/50 hover:bg-[#00ff9d]/20 hover:border-[#00ff9d] shadow-[0_0_20px_rgba(0,255,157,0.2)]"
+              : "bg-[#00ff9d]/10 border-2 border-[#00ff9d]/50 hover:bg-[#00ff9d]/20 hover:border-[#00ff9d] shadow-[0_0_30px_rgba(0,255,157,0.25)]"
           }`}
+          aria-label={state === "listening" ? "Aufnahme stoppen" : "Sprechen starten"}
         >
           {state === "processing" ? (
-            <Loader2 className="w-6 h-6 text-gray-400 animate-spin" />
+            <Loader2 className="w-8 h-8 text-gray-400 animate-spin" />
           ) : state === "listening" ? (
-            <MicOff className="w-6 h-6 text-red-400" />
+            <MicOff className="w-8 h-8 text-red-400" />
           ) : (
-            <Mic className="w-6 h-6 text-[#00ff9d]" />
+            <Mic className="w-8 h-8 text-[#00ff9d]" />
           )}
           {/* NEXT-LEVEL UPGRADE 2026: Pulse ring while listening */}
           {state === "listening" && (
@@ -254,11 +379,14 @@ export default function VoiceCopilot({ lang = "de", onTranscript, onReply }: Voi
           )}
         </button>
 
+        {/* NEXT-LEVEL UPGRADE 2026: Waveform animation while speaking */}
+        {state === "speaking" && <Waveform />}
+
         <p className="text-xs text-gray-500 text-center">
-          {state === "idle" && "Klick zum Sprechen"}
-          {state === "listening" && "Höre zu… Klick zum Stoppen"}
-          {state === "processing" && "Verarbeite…"}
-          {state === "speaking" && "Antwort wird vorgelesen…"}
+          {state === "idle" && "🎤 Klick zum Sprechen"}
+          {state === "listening" && "🔴 Höre zu… Klick zum Stoppen"}
+          {state === "processing" && "⚙️ Verarbeite…"}
+          {state === "speaking" && "🔊 Antwort wird vorgelesen…"}
         </p>
       </div>
 
@@ -272,9 +400,63 @@ export default function VoiceCopilot({ lang = "de", onTranscript, onReply }: Voi
 
       {/* Reply display */}
       {reply && (
-        <div className="p-3 rounded-xl border border-[#00ff9d]/20 bg-[#00ff9d]/5">
+        <div className="p-3 rounded-xl border border-[#00ff9d]/20 bg-[#00ff9d]/5 space-y-3">
           <p className="text-xs text-[#00ff9d] mb-1">Copilot Antwort:</p>
           <p className="text-sm text-gray-200 leading-relaxed line-clamp-6">{reply}</p>
+
+          {/* NEXT-LEVEL UPGRADE 2026: Runbook suggestion */}
+          {runbookSlug && (
+            <a
+              href={`/runbooks/${runbookSlug}`}
+              className="flex items-center gap-2 px-3 py-2 rounded-xl border border-[#00ff9d]/30 bg-[#00ff9d]/5 hover:bg-[#00ff9d]/10 text-xs text-[#00ff9d] transition-colors w-fit"
+            >
+              <BookOpen className="w-3.5 h-3.5" />
+              Passendes Runbook: <span className="font-mono font-bold">{runbookSlug}</span>
+            </a>
+          )}
+
+          {/* NEXT-LEVEL UPGRADE 2026: Action buttons */}
+          <div className="flex flex-wrap gap-2 pt-1">
+            {/* Evolve this */}
+            <button
+              onClick={handleEvolve}
+              disabled={evolving}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[#c9a84c]/40 bg-[#c9a84c]/10 hover:bg-[#c9a84c]/20 text-[#c9a84c] text-xs font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {evolving ? (
+                <Loader2 className="w-3 h-3 animate-spin" />
+              ) : (
+                <Sparkles className="w-3 h-3" />
+              )}
+              Evolve this
+            </button>
+
+            {/* Fork this version */}
+            <button
+              onClick={handleFork}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-bold transition-all ${
+                forked
+                  ? "border-purple-500/40 bg-purple-500/15 text-purple-400 cursor-default"
+                  : "border-purple-500/30 bg-purple-500/10 hover:bg-purple-500/20 text-purple-300"
+              }`}
+            >
+              <GitFork className="w-3 h-3" />
+              {forked ? "Geforkt ✓" : "Version forken"}
+            </button>
+
+            {/* Save to my account */}
+            <button
+              onClick={handleSave}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-bold transition-all ${
+                saved
+                  ? "border-[#00ff9d]/40 bg-[#00ff9d]/15 text-[#00ff9d] cursor-default"
+                  : "border-gray-600 bg-gray-800/50 hover:bg-gray-700/50 text-gray-300"
+              }`}
+            >
+              <Save className="w-3 h-3" />
+              {saved ? "Gespeichert ✓" : "In Account speichern"}
+            </button>
+          </div>
         </div>
       )}
 

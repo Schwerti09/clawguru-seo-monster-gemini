@@ -4,6 +4,7 @@
 
 import { useState, useRef, useEffect, useCallback } from "react"
 import Link from "next/link"
+import { LogIn } from "lucide-react"
 import Container from "@/components/shared/Container"
 import LanguageSwitcher from "@/components/layout/LanguageSwitcher"
 import { usePathname } from "next/navigation"
@@ -187,6 +188,19 @@ export default function Header() {
               <div className="hidden sm:block">
                 <LanguageSwitcher currentLocale={currentLocale} variant="compact" />
               </div>
+              {/* Login button */}
+              <Link
+                href={`/${currentLocale}/account`}
+                className="hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-xl font-bold text-sm transition-all duration-200 hover:brightness-110"
+                style={{
+                  background: "linear-gradient(135deg, #d4af37 0%, #e8cc6a 50%, #a8872a 100%)",
+                  color: "#0a0a0a",
+                  boxShadow: "0 0 16px rgba(212,175,55,0.25)",
+                }}
+              >
+                <LogIn className="w-4 h-4" aria-hidden="true" />
+                <span>{t(currentLocale, "navLogin")}</span>
+              </Link>
               <Link
                 href="/security/notfall-leitfaden"
                 className="hidden sm:block px-3 py-2 rounded-xl font-black text-sm transition-all duration-200"
@@ -279,6 +293,19 @@ export default function Header() {
               onClick={() => setMobileOpen(false)}
             >
               {t(currentLocale, "navEmergency")}
+            </Link>
+            <Link
+              href={`/${currentLocale}/account`}
+              className="block px-4 py-3 rounded-xl font-bold text-sm text-center flex items-center justify-center gap-2"
+              style={{
+                background: "linear-gradient(135deg, #d4af37 0%, #e8cc6a 50%, #a8872a 100%)",
+                color: "#0a0a0a",
+                boxShadow: "0 0 16px rgba(212,175,55,0.25)",
+              }}
+              onClick={() => setMobileOpen(false)}
+            >
+              <LogIn className="w-4 h-4" aria-hidden="true" />
+              {t(currentLocale, "navLogin")}
             </Link>
             <Link
               href="/pricing"

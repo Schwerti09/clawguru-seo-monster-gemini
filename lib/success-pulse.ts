@@ -34,7 +34,7 @@ export async function sendSuccessPulse(session: Stripe.Checkout.Session): Promis
     customerEmail: session.customer_details?.email || session.customer_email || null,
     country: session.customer_details?.address?.country ?? null,
     mode: session.mode ?? null,
-    createdAt: new Date().toISOString(),
+    createdAt: session.created ? new Date(session.created * 1000).toISOString() : new Date().toISOString(),
   }
 
   try {

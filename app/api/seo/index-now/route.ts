@@ -14,7 +14,7 @@ export const runtime = "nodejs"
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const BATCH_SIZE = 200
 const BATCH_MODE = process.env.GOOGLE_INDEXER_BATCH_MODE !== "false"
-const SIGNAL_MESSAGE = "Final 15k Push"
+const INDEXING_SIGNAL_MESSAGE = "Final 15k Push"
 
 const SEVERITY_PRIORITY: Record<CveSeverity, number> = {
   critical: 4,
@@ -23,7 +23,7 @@ const SEVERITY_PRIORITY: Record<CveSeverity, number> = {
   low: 1,
 }
 
-function sortCvesByPriority() {
+function getSortedCvesByPriority() {
   return [...KNOWN_CVES].sort((a, b) => {
     const severityDelta = SEVERITY_PRIORITY[b.severity] - SEVERITY_PRIORITY[a.severity]
     if (severityDelta !== 0) return severityDelta
@@ -44,7 +44,7 @@ export async function GET(req: NextRequest) {
   }
 
   // 1. CVE solution URLs
-  const prioritizedCves = sortCvesByPriority()
+  const prioritizedCves = getSortedCvesByPriority()
   const cveUrls = prioritizedCves
     .slice(0, BATCH_SIZE)
     .map((cve) => `${BASE_URL}/solutions/fix-${cve.cveId}`)
@@ -72,7 +72,7 @@ export async function GET(req: NextRequest) {
       quota: { used: quota.used, limit: DAILY_INDEXING_QUOTA },
       generatedAt: new Date().toISOString(),
       message: `Daily quota exhausted. Resets at ${resetAt}`,
-      signal: SIGNAL_MESSAGE,
+      signal: INDEXING_SIGNAL_MESSAGE,
     })
   }
 
@@ -90,6 +90,6 @@ export async function GET(req: NextRequest) {
     results,
     quota: { used: quota.used + urls.length, limit: DAILY_INDEXING_QUOTA },
     generatedAt: new Date().toISOString(),
-    signal: SIGNAL_MESSAGE,
+    signal: INDEXING_SIGNAL_MESSAGE,
   })
 }

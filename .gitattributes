@@ -1,3 +1,8 @@
 # Auto-generated lock file: always prefer this branch's version during merges
 # to avoid conflicts caused by different package versions across branches.
 package-lock.json merge=ours
+
+# Git LFS intentionally NOT used in this repository.
+# All binary assets (if any) are stored as normal git objects to ensure
+# Netlify deploys succeed without requiring LFS credentials.
+# DO NOT add any "filter=lfs" entries here.

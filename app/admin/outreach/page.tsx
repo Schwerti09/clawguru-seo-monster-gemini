@@ -13,8 +13,8 @@ export const metadata = {
   robots: "noindex, nofollow",
 }
 
-export default function OutreachDashboardPage() {
-  const token = cookies().get(adminCookieName())?.value || ""
+export default async function OutreachDashboardPage() {
+  const token = (await cookies()).get(adminCookieName())?.value || ""
   const session = token ? verifyAdminToken(token) : null
   if (!session) redirect("/admin")
 

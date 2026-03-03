@@ -18,7 +18,8 @@ export async function generateStaticParams() {
   return allServices100k().map((s) => ({ slug: s.slug }))
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }) {
+export async function generateMetadata(props: { params: Promise<{ slug: string }> }) {
+  const params = await props.params;
   const service = allServices100k().find((s) => s.slug === params.slug)
   if (!service) return {}
   const totalPerService =
@@ -37,7 +38,8 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   }
 }
 
-export default function ServiceHubPage({ params }: { params: { slug: string } }) {
+export default async function ServiceHubPage(props: { params: Promise<{ slug: string }> }) {
+  const params = await props.params;
   const service = allServices100k().find((s) => s.slug === params.slug)
   if (!service) return notFound()
 

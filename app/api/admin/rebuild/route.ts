@@ -17,7 +17,7 @@ function unauthorized() {
 }
 
 export async function POST() {
-  const token = cookies().get(adminCookieName())?.value || ""
+  const token = (await cookies()).get(adminCookieName())?.value || ""
   const session = token ? verifyAdminToken(token) : null
   if (!session) return unauthorized()
 

@@ -8,4 +8,5 @@
 export const dynamic = "force-dynamic"
 export const runtime = "nodejs"
 
-export { GET } from "@/app/api/health/cron/route"
+export { /* @next-codemod-error `GET` export is re-exported. Check if this component uses `params` or `searchParams`*/
+GET } from "@/app/api/health/cron/route"

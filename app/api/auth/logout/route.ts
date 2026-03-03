@@ -8,7 +8,7 @@ export const runtime = "nodejs"
 export async function GET(req: NextRequest) {
   // Revoke the current access token immediately so it cannot be reused
   // even within its remaining validity window.
-  const token = cookies().get("claw_access")?.value || ""
+  const token = (await cookies()).get("claw_access")?.value || ""
   if (token) {
     const payload = verifyAccessToken(token)
     if (payload) {

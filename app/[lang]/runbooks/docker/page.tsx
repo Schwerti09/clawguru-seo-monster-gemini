@@ -12,7 +12,8 @@ export async function generateStaticParams() {
   return SUPPORTED_LOCALES.map((lang) => ({ lang }))
 }
 
-export async function generateMetadata({ params }: { params: { lang: string } }) {
+export async function generateMetadata(props: { params: Promise<{ lang: string }> }) {
+  const params = await props.params;
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   return {
     title: `Docker Runbooks – Container Security & Ops 2026 | ClawGuru`,
@@ -21,7 +22,8 @@ export async function generateMetadata({ params }: { params: { lang: string } })
   }
 }
 
-export default function DockerHubPage({ params }: { params: { lang: string } }) {
+export default async function DockerHubPage(props: { params: Promise<{ lang: string }> }) {
+  const params = await props.params;
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
 
   const dockerRunbooks = RUNBOOKS.filter(

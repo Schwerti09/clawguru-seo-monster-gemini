@@ -12,7 +12,8 @@ export async function generateStaticParams() {
   return allTags().slice(0, 200).map((t) => ({ tag: t }))
 }
 
-export async function generateMetadata({ params }: { params: { tag: string } }) {
+export async function generateMetadata(props: { params: Promise<{ tag: string }> }) {
+  const params = await props.params;
   const tag = decodeURIComponent(params.tag)
   const items = runbooksByTag(tag)
   if (!items.length) return {}
@@ -23,7 +24,8 @@ export async function generateMetadata({ params }: { params: { tag: string } }) 
   }
 }
 
-export default function TagPage({ params }: { params: { tag: string } }) {
+export default async function TagPage(props: { params: Promise<{ tag: string }> }) {
+  const params = await props.params;
   const tag = decodeURIComponent(params.tag)
   const items = runbooksByTag(tag)
   if (!items.length) return notFound()

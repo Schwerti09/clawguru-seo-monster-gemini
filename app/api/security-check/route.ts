@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
 
   // ── 2. Rate limiting (hard per-IP + soft per-user) ──────────────────────────
   const ip = getClientIp(request.headers)
-  const tokenCookie = cookies().get("claw_access")?.value || ""
+  const tokenCookie = (await cookies()).get("claw_access")?.value || ""
   const tokenPayload = tokenCookie ? verifyAccessToken(tokenCookie) : null
 
   // Check token deny-list before using its identity for rate-limiting

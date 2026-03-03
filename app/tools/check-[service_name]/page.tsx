@@ -9,7 +9,7 @@ import { getServiceCheck, SERVICE_CHECKS } from "@/lib/cve-pseo"
 import { BASE_URL } from "@/lib/config"
 
 interface Props {
-  params: { service_name: string }
+  params: Promise<{ service_name: string }>
 }
 
 export const revalidate = 60 // 60s ISR
@@ -19,7 +19,8 @@ export async function generateStaticParams() {
   return SERVICE_CHECKS.map((s) => ({ service_name: s.slug }))
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   const slug = decodeURIComponent(params.service_name).toLowerCase()
   const entry = getServiceCheck(slug)
   if (!entry) return {}
@@ -35,7 +36,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-export default function ServiceCheckPage({ params }: Props) {
+export default async function ServiceCheckPage(props: Props) {
+  const params = await props.params;
   const slug = decodeURIComponent(params.service_name).toLowerCase()
   const entry = getServiceCheck(slug)
   if (!entry) return notFound()

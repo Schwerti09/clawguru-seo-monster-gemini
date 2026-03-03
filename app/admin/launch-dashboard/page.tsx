@@ -17,8 +17,8 @@ export const metadata = {
   robots: "noindex, nofollow",
 }
 
-export default function LaunchDashboardPage() {
-  const token = cookies().get(adminCookieName())?.value || ""
+export default async function LaunchDashboardPage() {
+  const token = (await cookies()).get(adminCookieName())?.value || ""
   const session = token ? verifyAdminToken(token) : null
   if (!session) redirect("/admin")
 

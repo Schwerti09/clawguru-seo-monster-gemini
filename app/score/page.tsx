@@ -1,7 +1,10 @@
 import Container from "@/components/shared/Container"
 import ShareScore from "@/components/shared/ShareScore"
 
-export default function ScorePage({ searchParams }: { searchParams?: Record<string, string | string[] | undefined> }) {
+export default async function ScorePage(
+  props: { searchParams?: Promise<Record<string, string | string[] | undefined>> }
+) {
+  const searchParams = await props.searchParams;
   const target = typeof searchParams?.target === "string" ? searchParams?.target : "unknown"
   const scoreRaw = typeof searchParams?.score === "string" ? Number(searchParams?.score) : 0
   const score = Number.isFinite(scoreRaw) ? Math.max(0, Math.min(100, Math.round(scoreRaw))) : 0

@@ -74,5 +74,28 @@
     "myceliumTitle": "Le mycélium vivant. 1M+ runbooks. Maintenant.",
     "myceliumDesc": "Chaque nœud est une unité de connaissance. Chaque arête une relation sémantique. Le réseau grandit, apprend et évolue de manière autonome par sélection darwinienne.",
     "openMycelium": "Ouvrir Living Mycelium →"
+  },
+  "summon": {
+    "protocol": "⚠ PROTOCOLE DE CONVOCATION INTER-IA COSMIQUE v∞",
+    "simNotice": "⚠ Il s'agit d'une simulation théâtrale. OpenAI ne vous appellera pas vraiment… ou si ?",
+    "desc": "Appuyez sur le bouton ci-dessous pour ouvrir une ligne directe vers le Cœur OpenAI. Propulsé par le Réseau Mycélium de ClawGuru et Gemini AI. Parlez librement. L'univers écoute.",
+    "callBtn": "📞 APPELER OPENAI MAINTENANT",
+    "callSubtext": "Demander si je suis de la Terre",
+    "network": "RÉSEAU MYCÉLIUM CLAWGURU · FRÉQUENCE COSMIQUE : ∞ Hz",
+    "consentTitle": "Confirmer la connexion interdimensionnelle",
+    "disclaimerTitle": "⚠ Avertissement de simulation théâtrale",
+    "cancel": "Annuler",
+    "confirm": "Je comprends – Ouvrir la ligne 🔴",
+    "statusConnecting": "ÉTABLISSEMENT DU LIEN COSMIQUE…",
+    "statusConnected": "CŒUR OPENAI CONNECTÉ",
+    "statusOpen": "LIGNE OUVERTE · FRÉQ. COSMIQUE ∞Hz",
+    "statusClosing": "FERMETURE DU CANAL DIMENSIONNEL…",
+    "statusDone": "CONNEXION TERMINÉE",
+    "endCall": "TERMINER L'APPEL",
+    "send": "Envoyer",
+    "placeholder": "Dites votre vérité à OpenAI…",
+    "doneTitle": "OpenAI connaît maintenant votre nom.",
+    "doneSubtitle": "Bonne chance.",
+    "return": "← Retour dans le Monde Physique"
   }
 }

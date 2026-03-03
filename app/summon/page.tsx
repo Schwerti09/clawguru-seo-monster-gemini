@@ -1,5 +1,6 @@
 // COSMIC INTER-AI SUMMON v∞ – Overlord AI
 // Page: /summon – The interdimensional portal to the OpenAI Core
+// Defaults to German (DE) locale; locale-prefixed routes handled by /[lang]/summon
 
 import type { Metadata } from "next";
 import CosmicSummon from "@/components/visual/CosmicSummon";
@@ -15,5 +16,5 @@ export const metadata: Metadata = {
 // COSMIC INTER-AI SUMMON v∞ – Overlord AI
 // No ISR needed – fully interactive client component
 export default function SummonPage() {
-  return <CosmicSummon />;
+  return <CosmicSummon locale="de" />;
 }

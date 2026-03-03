@@ -17,6 +17,7 @@ export type LinkEngineLink = {
   url: string
 }
 
+// Tag overlap should dominate scoring; authority is scaled to roughly 0-1.
 const TAG_SIMILARITY_MULTIPLIER = 10
 const AUTHORITY_SCALE_FACTOR = 100
 

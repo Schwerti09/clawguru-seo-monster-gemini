@@ -79,10 +79,20 @@ export async function GET() {
 
   const total = totalSitemapUrls()
 
+  const parseEnvInt = (key: string, fallback: number) => {
+    const val = parseInt(process.env[key] || "")
+    return isNaN(val) ? fallback : val
+  }
+
   const geminiUsage = {
     model: process.env.GEMINI_MODEL || "gemini-1.5-flash",
     hasKey: hasGemini,
     endpoint: "generativelanguage.googleapis.com",
+    tokensInputToday: parseEnvInt("GEMINI_TOKENS_INPUT_TODAY", 0),
+    tokensOutputToday: parseEnvInt("GEMINI_TOKENS_OUTPUT_TODAY", 0),
+    tokens7dBurnRate: parseEnvInt("GEMINI_TOKENS_7D_BURN", 0),
+    monthlyTokensUsed: parseEnvInt("GEMINI_TOKENS_MONTH_USED", 0),
+    monthlyTokensLimit: parseEnvInt("GEMINI_TOKENS_MONTH_LIMIT", 1_000_000),
   }
 
   return NextResponse.json({

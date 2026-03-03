@@ -51,6 +51,11 @@ type Overview = {
     model: string
     hasKey: boolean
     endpoint: string
+    tokensInputToday?: number
+    tokensOutputToday?: number
+    tokens7dBurnRate?: number
+    monthlyTokensUsed?: number
+    monthlyTokensLimit?: number
   }
   indexStatus?: {
     indexedPages: number
@@ -627,6 +632,167 @@ function ModuleCard({
 }
 
 // ---------------------------------------------------------------------------
+// Gemini Token-Burn Panel
+// ---------------------------------------------------------------------------
+
+function GeminiTokenBurnPanel({ overview }: { overview: Overview | null }) {
+  const gemini = overview?.geminiUsage
+  if (!gemini) return null
+
+  // Gemini 1.5 Flash pricing (USD per 1M tokens)
+  const inputCostPerMToken = 0.075
+  const outputCostPerMToken = 0.30
+  const usdToEur = 0.92
+
+  const todayInput = gemini.tokensInputToday ?? 0
+  const todayOutput = gemini.tokensOutputToday ?? 0
+  const burn7d = gemini.tokens7dBurnRate ?? 0
+  const monthUsed = gemini.monthlyTokensUsed ?? 0
+  const monthLimit = gemini.monthlyTokensLimit ?? 1_000_000
+
+  const costUsd =
+    (todayInput / 1_000_000) * inputCostPerMToken +
+    (todayOutput / 1_000_000) * outputCostPerMToken
+  const costEur = costUsd * usdToEur
+
+  const monthPct = monthLimit > 0 ? Math.min(100, Math.round((monthUsed / monthLimit) * 100)) : 0
+
+  const trafficColor =
+    monthPct < 50
+      ? {
+          bar: "from-green-500 to-emerald-400",
+          text: "text-green-400",
+          dot: "bg-green-400",
+        }
+      : monthPct < 80
+      ? {
+          bar: "from-yellow-500 to-amber-400",
+          text: "text-yellow-400",
+          dot: "bg-yellow-400",
+        }
+      : {
+          bar: "from-red-500 to-rose-400",
+          text: "text-red-400",
+          dot: "bg-red-400",
+        }
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.35 }}
+      className="relative mt-6 rounded-3xl border border-cyan-500/30 overflow-hidden"
+      style={{
+        background:
+          "linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%)",
+        backdropFilter: "blur(12px)",
+        boxShadow:
+          "0 8px 32px rgba(0,0,0,0.3), 0 0 0 1px rgba(34,211,238,0.15), inset 0 1px 0 rgba(255,255,255,0.05)",
+      }}
+    >
+      {/* Ambient glow */}
+      <motion.div
+        className="absolute inset-0 pointer-events-none"
+        animate={{ opacity: [0.3, 0.65, 0.3] }}
+        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+        style={{
+          background:
+            "radial-gradient(ellipse at top left, rgba(34,211,238,0.12) 0%, transparent 55%)",
+        }}
+      />
+
+      <div className="relative p-5">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-3">
+            <div className="p-2.5 rounded-2xl bg-white/5 border border-cyan-500/30">
+              <Zap className="w-5 h-5 text-cyan-400" />
+            </div>
+            <div>
+              <div className="font-black text-white text-base leading-tight">
+                Gemini Token-Burn &amp; Cost Guardrails
+              </div>
+              <div className="text-xs text-gray-500 mt-0.5">
+                Token-Verbrauch &amp; Kostenüberwachung
+              </div>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className={`w-2 h-2 rounded-full ${trafficColor.dot} animate-pulse`} />
+            <code className="text-xs text-cyan-300 bg-cyan-500/10 border border-cyan-500/20 px-2 py-0.5 rounded-lg font-mono">
+              {gemini.model}
+            </code>
+          </div>
+        </div>
+
+        {/* Stats grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4">
+          <div className="p-3 rounded-xl bg-black/30 border border-white/5">
+            <div className="text-xs text-gray-400">Input heute</div>
+            <div className="text-base font-black text-cyan-300 mt-0.5">
+              {todayInput.toLocaleString("de-DE")}
+            </div>
+            <div className="text-xs text-gray-500">Tokens</div>
+          </div>
+          <div className="p-3 rounded-xl bg-black/30 border border-white/5">
+            <div className="text-xs text-gray-400">Output heute</div>
+            <div className="text-base font-black text-cyan-300 mt-0.5">
+              {todayOutput.toLocaleString("de-DE")}
+            </div>
+            <div className="text-xs text-gray-500">Tokens</div>
+          </div>
+          <div className="p-3 rounded-xl bg-black/30 border border-white/5">
+            <div className="text-xs text-gray-400">7d Burn-Rate</div>
+            <div className="text-base font-black text-cyan-300 mt-0.5">
+              {burn7d.toLocaleString("de-DE")}
+            </div>
+            <div className="text-xs text-gray-500">Ø Tokens/Tag</div>
+          </div>
+          <div className="p-3 rounded-xl bg-black/30 border border-white/5">
+            <div className="text-xs text-gray-400">Gesch. Kosten</div>
+            <div className={`text-base font-black mt-0.5 ${trafficColor.text}`}>
+              {costEur.toLocaleString("de-DE", {
+                style: "currency",
+                currency: "EUR",
+                minimumFractionDigits: 4,
+                maximumFractionDigits: 4,
+              })}
+            </div>
+            <div className="text-xs text-gray-500">Heute</div>
+          </div>
+        </div>
+
+        {/* Monthly progress bar */}
+        <div className="space-y-1.5">
+          <div className="flex items-center justify-between text-xs">
+            <span className="text-gray-400">Monatslimit</span>
+            <span className={`font-bold ${trafficColor.text}`}>{monthPct}%</span>
+          </div>
+          <div className="w-full h-2 rounded-full bg-white/10 overflow-hidden">
+            <motion.div
+              className={`h-full rounded-full bg-gradient-to-r ${trafficColor.bar}`}
+              initial={{ width: 0 }}
+              animate={{ width: `${monthPct}%` }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+            />
+          </div>
+          <div className="flex items-center justify-between text-xs text-gray-500">
+            <span>{monthUsed.toLocaleString("de-DE")} Tokens genutzt</span>
+            <span>Limit: {monthLimit.toLocaleString("de-DE")}</span>
+          </div>
+        </div>
+
+        {/* Cost Guardrails badge */}
+        <div className="mt-3 flex items-center gap-1.5 text-xs text-green-400">
+          <CheckCircle className="w-3 h-3" />
+          Cost Guardrails aktiv
+        </div>
+      </div>
+    </motion.div>
+  )
+}
+
+// ---------------------------------------------------------------------------
 // Main Dashboard
 // ---------------------------------------------------------------------------
 
@@ -817,6 +983,9 @@ export default function UniverseDashboard() {
           />
         ))}
       </motion.div>
+
+      {/* Gemini Token-Burn Panel */}
+      <GeminiTokenBurnPanel overview={overview} />
 
       {/* Quick Links */}
       <motion.div

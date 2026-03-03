@@ -23,22 +23,16 @@ const SEVERITY_PRIORITY: Record<CveSeverity, number> = {
   low: 1,
 }
 
-let cachedSortedCves: typeof KNOWN_CVES | null = null
-
 function parsePublishedDate(date: string) {
   const parsed = Date.parse(date)
   return Number.isNaN(parsed) ? 0 : parsed
 }
 
-function getSortedCves() {
-  if (cachedSortedCves) return cachedSortedCves
-  cachedSortedCves = [...KNOWN_CVES].sort((a, b) => {
-    const severityDelta = SEVERITY_PRIORITY[b.severity] - SEVERITY_PRIORITY[a.severity]
-    if (severityDelta !== 0) return severityDelta
-    return parsePublishedDate(b.publishedDate) - parsePublishedDate(a.publishedDate)
-  })
-  return cachedSortedCves
-}
+const SORTED_CVES = [...KNOWN_CVES].sort((a, b) => {
+  const severityDelta = SEVERITY_PRIORITY[b.severity] - SEVERITY_PRIORITY[a.severity]
+  if (severityDelta !== 0) return severityDelta
+  return parsePublishedDate(b.publishedDate) - parsePublishedDate(a.publishedDate)
+})
 
 export async function GET(req: NextRequest) {
   // Security: require CRON_SECRET
@@ -53,7 +47,7 @@ export async function GET(req: NextRequest) {
   }
 
   // 1. CVE solution URLs
-  const cveUrls = getSortedCves().map((cve) => `${BASE_URL}/solutions/fix-${cve.cveId}`)
+  const cveUrls = SORTED_CVES.map((cve) => `${BASE_URL}/solutions/fix-${cve.cveId}`)
 
   // 2. Dynamic runbook URLs (fill the remainder of the 200-URL batch)
   const remaining = Math.max(0, BATCH_SIZE - cveUrls.length)

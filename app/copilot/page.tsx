@@ -4,6 +4,7 @@ import CopilotChat from "@/components/copilot/CopilotChat"
 // NEXT-LEVEL UPGRADE 2026: Voice Copilot + Live Fix Sandbox
 import VoiceCopilot from "@/components/copilot/VoiceCopilot"
 import LiveFixSandbox from "@/components/copilot/LiveFixSandbox"
+import LoginSaveBanner from "@/components/shared/LoginSaveBanner"
 
 export const metadata: Metadata = {
   title: "Prof. ClawGuru | ClawGuru",
@@ -30,6 +31,7 @@ export default async function CopilotPage(
             Prefill: <span className="font-mono">{q}</span> — kopier das in den Input oder klick unten einen Followup.
           </div>
         ) : null}
+        <LoginSaveBanner />
         <CopilotChat />
         {/* NEXT-LEVEL UPGRADE 2026: Voice Copilot – speak your issue */}
         <div className="mt-8">

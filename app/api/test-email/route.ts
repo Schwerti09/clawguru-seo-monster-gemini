@@ -5,10 +5,6 @@ export const runtime = "nodejs"
 
 export async function GET() {
   const TEST_RECIPIENT = process.env.TEST_EMAIL_RECIPIENT || "rolf@clawguru.org"
-  const apiKey = process.env.RESEND_API_KEY
-  console.log(
-    `[test-email] RESEND_API_KEY vorhanden: ${apiKey ? `ja (Länge: ${apiKey.length})` : "nein"}`
-  )
 
   try {
     console.log(`[test-email] Sende Test-Mail an ${TEST_RECIPIENT} …`)

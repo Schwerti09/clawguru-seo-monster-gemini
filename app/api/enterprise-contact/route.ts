@@ -45,11 +45,6 @@ export async function POST(req: NextRequest) {
 
   const to = process.env.ENTERPRISE_CONTACT_EMAIL || "enterprise@clawguru.org"
 
-  const apiKey = process.env.RESEND_API_KEY
-  console.log(
-    `[enterprise-contact] RESEND_API_KEY vorhanden: ${apiKey ? `ja (Länge: ${apiKey.length})` : "nein"}`
-  )
-
   try {
     console.log(`[enterprise-contact] Sende Enterprise-Anfrage von ${name} an ${to} …`)
 

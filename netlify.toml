@@ -8,6 +8,7 @@
 [build.environment]
   NODE_VERSION = "20"
   NODE_OPTIONS = "--max-old-space-size=3072"
+  SECRETS_SCAN_OMIT_KEYS = "ACCESS_TOKEN_SECRET,ADMIN_PASSWORT,ADMIN_PASSWORD,ADMIN_SESSION_SECRET,RESEND_API_KEY"
 
 # Immutable caching for content-hashed static assets (must be before the catch-all)
 [[headers]]

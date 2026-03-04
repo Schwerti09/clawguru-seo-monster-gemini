@@ -383,6 +383,19 @@ const INTEL_API_CIRCUIT = getCircuitBreaker("intel-api", {
 /** Last known-good response cached in memory for graceful degradation. */
 let intelApiCache: { ts: number; data: unknown } | null = null
 
+/**
+ * Health-check for the upstream Intel / threat-intelligence API.
+ *
+ * URL resolution order:
+ *   1. INTEL_API_URL   – set this when a dedicated intel server is available
+ *                        (e.g. https://intel.clawguru.org/api/v1/health).
+ *                        Currently no such server exists; leave unset.
+ *   2. CVE_API_URL     – custom NVD/CVE mirror if configured.
+ *   3. NIST NVD API    – public fallback (rate-limited without NVD_API_KEY).
+ *
+ * On failure the circuit breaker opens for 5 minutes and the last good
+ * response is served from the in-memory cache.
+ */
 export async function checkIntelApi(): Promise<SentinelCheck & { cached?: boolean }> {
   const intelUrl =
     process.env.INTEL_API_URL ||

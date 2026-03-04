@@ -102,6 +102,40 @@ Optional:
 Ohne Key bleibt er rule-based (kein Crash).
 
 
+## Intel Feed
+
+### Status: statische Daten (kein externer Server)
+
+Es gibt **keinen echten Intel-Server** (z. B. `intel.clawguru.org`). Beide Endpunkte liefern derzeit **vorkuratierte, hartcodierte Threat-Intelligence-Daten**.
+
+| Endpunkt | Auth | Daten | Billing |
+|----------|------|-------|---------|
+| `GET /api/intel/feeds` | `INTEL_API_KEYS` / `INTEL_API_KEY` | 5 statische Feed-Einträge | – |
+| `GET /api/v1/intel-feed/latest` | `ENTERPRISE_API_KEYS` (Stripe-metered) | 10 statische IOC-Einträge | Stripe metered |
+
+### Verwendete Umgebungsvariablen
+
+| Variable | Zweck | Pflicht? |
+|----------|-------|----------|
+| `INTEL_API_KEYS` | Kommaseparierte Liste gültiger API-Keys für `/api/intel/feeds` | Ja (sonst 401) |
+| `INTEL_API_KEY` | Einzelner Key (Fallback, wenn `INTEL_API_KEYS` nicht gesetzt) | Nur wenn `INTEL_API_KEYS` fehlt |
+| `INTEL_API_URL` | URL eines externen Intel-Feeds für den Health-Check (`lib/sentinel.ts`) | Nein |
+| `ENTERPRISE_API_KEYS` | Keys für `/api/v1/intel-feed/latest` (Format: `key:customerId:subItemId,...`) | Ja (sonst 401) |
+
+### Verhalten bei fehlenden Keys
+
+- **`INTEL_API_KEYS` / `INTEL_API_KEY` fehlen** → `/api/intel/feeds` gibt immer **HTTP 401** zurück.
+- **`ENTERPRISE_API_KEYS` fehlen** → `/api/v1/intel-feed/latest` gibt immer **HTTP 401** zurück.
+- **`INTEL_API_URL` fehlt** → der Health-Check fällt auf `CVE_API_URL` zurück, dann auf die öffentliche **NIST NVD API**.
+- Bei Verbindungsfehlern greift ein **5-Minuten-Circuit-Breaker** (`lib/sentinel.ts`), der die zuletzt erfolgreiche Antwort cached und als Degraded-Status zurückliefert.
+
+### Nächste Schritte (wenn ein echter Intel-Server eingerichtet wird)
+
+1. Eigenen Endpunkt deployen (z. B. `https://intel.clawguru.org/api/v1/health`).
+2. `INTEL_API_URL` in Netlify/Vercel auf diesen Endpunkt setzen.
+3. Statische `FEED`- bzw. `FEED_ITEMS`-Arrays in `app/api/intel/feeds/route.ts` und `app/api/v1/intel-feed/latest/route.ts` durch echte API-Aufrufe ersetzen.
+
+
 ## Programmatic SEO
 
 ### Sitemap structure

@@ -3,6 +3,8 @@ import type { NextRequest } from "next/server"
 /**
  * Validate an API key from an incoming request.
  *
+ * Used by: GET /api/intel/feeds (static Intel Feed – no external server yet).
+ *
  * Accepted locations (in priority order):
  *   1. Authorization: Bearer <key>
  *   2. X-API-Key: <key>
@@ -10,6 +12,7 @@ import type { NextRequest } from "next/server"
  *
  * Valid keys are taken from the INTEL_API_KEYS env var (comma-separated).
  * A single key may also be set via INTEL_API_KEY (singular).
+ * If neither env var is set every request is rejected with HTTP 401.
  */
 export function validateApiKey(req: NextRequest): boolean {
   const raw = process.env.INTEL_API_KEYS || process.env.INTEL_API_KEY || ""

@@ -26,6 +26,8 @@ export async function POST(req: NextRequest) {
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
     const magicLink = `${siteUrl}/api/auth/verify?token=${encodeURIComponent(token)}`
 
+    console.log(`[magic-link] Sende Magic Link an ${email} …`)
+
     const { id } = await sendEmail({
       to: email,
       subject: "Your ClawGuru Login Link",
@@ -41,7 +43,8 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ ok: true })
   } catch (err) {
-    console.error("[magic-link] Fehler beim Senden des Magic Links:", err)
+    const message = err instanceof Error ? err.message : String(err)
+    console.error("[magic-link] Fehler beim Senden des Magic Links:", message)
     return NextResponse.json({ error: "Failed to send magic link" }, { status: 500 })
   }
 }

@@ -33,11 +33,6 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    const apiKey = process.env.RESEND_API_KEY
-    console.log(
-      `[magic-link] RESEND_API_KEY vorhanden: ${apiKey ? `ja (Länge: ${apiKey.length})` : "nein"}`
-    )
-
     const token = signMagicToken(email)
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
     const magicLink = `${siteUrl}/api/auth/verify?token=${encodeURIComponent(token)}`

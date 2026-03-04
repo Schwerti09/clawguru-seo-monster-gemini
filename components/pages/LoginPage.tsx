@@ -4,7 +4,8 @@ import { useState } from "react"
 import Container from "@/components/shared/Container"
 
 const ERROR_MESSAGES: Record<string, string> = {
-  invalid_token: "Login-Link abgelaufen oder ungültig. Bitte neuen Link anfordern.",
+  expired_token: "Link abgelaufen? Neuen Magic Link anfordern.",
+  invalid_token: "Login-Link ungültig. Bitte neuen Link anfordern.",
   missing_token: "Login-Link fehlt. Bitte neuen Link anfordern.",
 }
 
@@ -15,6 +16,7 @@ export default function LoginPage({ error }: { error?: string | null }) {
   const [err, setErr] = useState<string | null>(
     error ? (ERROR_MESSAGES[error] ?? error) : null
   )
+  const isExpired = error === "expired_token"
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -53,12 +55,45 @@ export default function LoginPage({ error }: { error?: string | null }) {
         </p>
 
         {sent ? (
-          <div className="p-6 rounded-2xl border border-green-800 bg-green-900/20 text-green-400">
-            ✓ Magic Link gesendet! Prüfe dein Postfach und klick den Link.
+          <div className="flex flex-col gap-4">
+            <div className="p-6 rounded-2xl border border-green-800 bg-green-900/20 text-green-400">
+              ✓ Magic Link gesendet! Prüfe dein Postfach und klick den Link.
+            </div>
+            <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+              {err && (
+                <div className="p-3 rounded-xl border border-red-800 bg-red-900/20 text-red-400 text-sm">
+                  {err}
+                </div>
+              )}
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="deine@email.com"
+                required
+                className="w-full px-4 py-3 rounded-xl border border-gray-700 bg-black/50 text-white
+                           placeholder-gray-500 focus:outline-none focus:border-[#c9a84c] transition-colors"
+              />
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full px-6 py-3 rounded-xl font-mono font-bold text-sm uppercase tracking-widest
+                           bg-[#c9a84c]/10 border border-[#c9a84c]/40 text-[#c9a84c]
+                           hover:bg-[#c9a84c]/20 transition-all disabled:opacity-50"
+              >
+                {loading ? "Wird gesendet…" : "Neuen Magic Link anfordern →"}
+              </button>
+            </form>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-            {err && (
+            {isExpired && (
+              <div className="p-4 rounded-xl border border-amber-700 bg-amber-900/20 text-amber-400 text-sm">
+                <p className="font-bold mb-2">⏱ Link abgelaufen?</p>
+                <p>Kein Problem – fordere hier einen neuen Magic Link an.</p>
+              </div>
+            )}
+            {err && !isExpired && (
               <div className="p-3 rounded-xl border border-red-800 bg-red-900/20 text-red-400 text-sm">
                 {err}
               </div>
@@ -79,7 +114,11 @@ export default function LoginPage({ error }: { error?: string | null }) {
                          bg-[#c9a84c]/10 border border-[#c9a84c]/40 text-[#c9a84c]
                          hover:bg-[#c9a84c]/20 transition-all disabled:opacity-50"
             >
-              {loading ? "Wird gesendet…" : "Magic Link senden →"}
+              {(() => {
+                if (loading) return "Wird gesendet…"
+                if (isExpired) return "Neuen Magic Link anfordern →"
+                return "Magic Link senden →"
+              })()}
             </button>
           </form>
         )}

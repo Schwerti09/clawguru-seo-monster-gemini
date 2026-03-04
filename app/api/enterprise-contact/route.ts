@@ -43,12 +43,13 @@ export async function POST(req: NextRequest) {
   if (!name) return NextResponse.json({ error: "Name ist erforderlich." }, { status: 422 })
   if (!EMAIL_RE.test(email)) return NextResponse.json({ error: "Ungültige E-Mail-Adresse." }, { status: 422 })
 
-  const to = process.env.ENTERPRISE_CONTACT_EMAIL || "enterprise@clawguru.org"
+  const to = process.env.ENTERPRISE_CONTACT_EMAIL || "support@clawguru.org"
 
   const apiKey = process.env.RESEND_API_KEY
   console.log(
     `[enterprise-contact] RESEND_API_KEY vorhanden: ${apiKey ? `ja (Länge: ${apiKey.length})` : "nein"}`
   )
+  console.log(`[enterprise-contact] Enterprise Anfrage von ${email} an ${to}`)
 
   try {
     console.log(`[enterprise-contact] Sende Enterprise-Anfrage von ${name} an ${to} …`)

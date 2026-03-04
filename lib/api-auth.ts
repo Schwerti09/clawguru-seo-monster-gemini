@@ -48,7 +48,14 @@ export function extractApiKey(req: NextRequest): string | null {
 
 export function validateApiKey(key: string): ApiKeyInfo | null {
   const keys = parseApiKeys()
-  return keys.get(key) ?? null
+  console.log(`[api-auth] Validating API key against ${keys.size} registered enterprise key(s).`)
+  const info = keys.get(key) ?? null
+  if (info) {
+    console.log(`[api-auth] API key validated successfully for customer: ${info.customerId}`)
+  } else {
+    console.log(`[api-auth] API key validation failed: key not found in ENTERPRISE_API_KEYS.`)
+  }
+  return info
 }
 
 /**

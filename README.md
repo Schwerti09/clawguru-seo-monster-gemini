@@ -153,7 +153,7 @@ Damit Nutzer **immer** ihren Zugang bekommen (auch wenn sie den Tab schließen),
 
 2) **Email Versand (Resend)**
    - Resend API Key → `RESEND_API_KEY`
-   - Absender → `EMAIL_FROM` (Domain in Resend verifizieren)
+   - Absender → `RESEND_FROM` oder `EMAIL_FROM` (Domain in Resend verifizieren, z. B. `ClawGuru <noreply@clawguru.org>`)
    - Optional: `EMAIL_REPLY_TO` / `SUPPORT_EMAIL`
 
 Neue Route:

@@ -5,6 +5,12 @@ type SendArgs = {
   replyTo?: string
 }
 
+const MAX_RETRIES = 3
+
+async function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
 export async function sendEmail(args: SendArgs): Promise<{ id?: string }> {
   const apiKey = process.env.RESEND_API_KEY
   console.log(`[email] RESEND_API_KEY present: ${apiKey ? `yes (length: ${apiKey.length})` : "no"}`)
@@ -12,46 +18,63 @@ export async function sendEmail(args: SendArgs): Promise<{ id?: string }> {
     throw new Error("Missing RESEND_API_KEY")
   }
 
-  const from =
-    process.env.MAIL_FROM ||
-    process.env.RESEND_FROM ||
-    process.env.EMAIL_FROM ||
-    "ClawGuru <hello@clawguru.org>"
+  const from = process.env.MAIL_FROM
+  if (!from) {
+    throw new Error("Missing MAIL_FROM")
+  }
+
+  const replyTo = args.replyTo || process.env.MAIL_REPLY_TO
 
   console.log("[email] Resend send attempt started")
   console.log(`[email] From: ${from} → To: ${args.to} | Subject: ${args.subject}`)
 
-  const res = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      from,
-      to: args.to,
-      subject: args.subject,
-      html: args.html,
-      reply_to: args.replyTo || "support@clawguru.org",
-    }),
-  })
+  let lastError: Error | null = null
 
-  const responseText = await res.text().catch(() => "")
+  for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+    if (attempt > 1) {
+      await sleep(1_000 * Math.pow(2, attempt - 2))
+      console.log(`[email] Retry attempt ${attempt}/${MAX_RETRIES}`)
+    }
 
-  if (!res.ok) {
+    const res = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        from,
+        to: args.to,
+        subject: args.subject,
+        html: args.html,
+        ...(replyTo ? { reply_to: replyTo } : {}),
+      }),
+    })
+
+    const responseText = await res.text().catch(() => "")
+
+    if (res.ok) {
+      let data: { id?: string } = {}
+      try {
+        data = JSON.parse(responseText)
+      } catch {
+        // ignore parse errors on success response
+      }
+      console.log(`[email] E-Mail erfolgreich gesendet → Message ID: ${data.id ?? "(unknown)"}`)
+      return data
+    }
+
     console.error(`[email] Resend error ${res.status}: ${responseText}`)
-    throw new Error(`Email send failed (${res.status}): ${responseText}`)
+
+    // Do not retry on client errors (4xx)
+    if (res.status >= 400 && res.status < 500) {
+      throw new Error(`Email send failed (${res.status}): ${responseText}`)
+    }
+
+    lastError = new Error(`Email send failed (${res.status}): ${responseText}`)
   }
 
-  let data: { id?: string } = {}
-  try {
-    data = JSON.parse(responseText)
-  } catch {
-    // ignore parse errors on success response
-  }
-
-  console.log(`[email] E-Mail erfolgreich gesendet → Message ID: ${data.id ?? "(unknown)"}`)
-  return data
+  throw lastError ?? new Error("Email send failed: max retries exhausted")
 }
 
 /** Generates a polished HTML body for Magic Link emails. */

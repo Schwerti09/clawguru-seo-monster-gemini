@@ -13,10 +13,12 @@ export default function LoginPage({ error }: { error?: string | null }) {
   const [email, setEmail] = useState("")
   const [sent, setSent] = useState(false)
   const [loading, setLoading] = useState(false)
-  const [err, setErr] = useState<string | null>(
-    error ? (ERROR_MESSAGES[error] ?? error) : null
-  )
   const isExpired = error === "expired_token"
+  // For expired tokens the amber box is the primary message; initialise err only for
+  // other URL errors (invalid/missing token) so the red box appears on page load.
+  const [err, setErr] = useState<string | null>(
+    error && !isExpired ? (ERROR_MESSAGES[error] ?? error) : null
+  )
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -93,7 +95,7 @@ export default function LoginPage({ error }: { error?: string | null }) {
                 <p>Kein Problem – fordere hier einen neuen Magic Link an.</p>
               </div>
             )}
-            {err && !isExpired && (
+            {err && (
               <div className="p-3 rounded-xl border border-red-800 bg-red-900/20 text-red-400 text-sm">
                 {err}
               </div>

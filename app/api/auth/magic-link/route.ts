@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
 
     console.log(`[magic-link] Magic Link angefordert für E-Mail: ${email}`)
 
-    // Per-email rate limit: reject if last send was less than 3 minutes ago
+    // Per-email rate limit: reject if last send was less than 5 minutes ago
     const now = Date.now()
     const lastSent = emailLastSent.get(email)
     if (lastSent && now - lastSent < RATE_LIMIT_MS) {

@@ -54,3 +54,5 @@ export function getCheckCount(): number {
   if (typeof window === "undefined") return 0
   return parseInt(localStorage.getItem(STORAGE_KEY) || "0", 10)
 }
+
+export default { trackEvent, incrementCheckCount, getCheckCount }

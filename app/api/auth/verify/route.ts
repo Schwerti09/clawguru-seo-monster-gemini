@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { verifyMagicToken, signSessionToken, USER_SESSION_COOKIE } from "@/lib/auth"
+import { verifyMagicToken, isExpiredMagicToken, signSessionToken, USER_SESSION_COOKIE } from "@/lib/auth"
 
 export const runtime = "nodejs"
 
@@ -16,7 +16,8 @@ export async function GET(req: NextRequest) {
 
   const payload = verifyMagicToken(token)
   if (!payload) {
-    return NextResponse.redirect(new URL("/account?error=invalid_token", origin))
+    const errorType = isExpiredMagicToken(token) ? "expired_token" : "invalid_token"
+    return NextResponse.redirect(new URL(`/account?error=${errorType}`, origin))
   }
 
   const sessionToken = signSessionToken(payload.email)

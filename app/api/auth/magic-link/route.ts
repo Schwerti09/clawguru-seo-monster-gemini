@@ -6,8 +6,8 @@ export const runtime = "nodejs"
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
-/** Per-email rate limit: allow at most 1 request every 3 minutes. */
-const RATE_LIMIT_MS = 3 * 60 * 1000
+/** Per-email rate limit: allow at most 1 request every 5 minutes. */
+const RATE_LIMIT_MS = 5 * 60 * 1000
 const emailLastSent = new Map<string, number>()
 
 export async function POST(req: NextRequest) {
@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
       to: email,
       subject: "Your ClawGuru Login Link",
       html: `
-        <p>Klick den Link unten, um dich bei ClawGuru einzuloggen. Der Link ist 30 Minuten gültig.</p>
+        <p>Klick den Link unten, um dich bei ClawGuru einzuloggen. Der Link ist 45 Minuten gültig.</p>
         <p><a href="${magicLink}" style="font-weight:bold">Login to ClawGuru →</a></p>
         <p style="color:#888;font-size:12px">Falls du das nicht angefordert hast, kannst du diese E-Mail ignorieren.</p>
       `,

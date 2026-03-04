@@ -73,11 +73,11 @@ function verifyToken<T extends object>(token: string): T | null {
   }
 }
 
-// ── Magic Link Token (short-lived, 30 min) ───────────────────────────────────
+// ── Magic Link Token (short-lived, 45 min) ───────────────────────────────────
 
 export function signMagicToken(email: string): string {
   const now = Math.floor(Date.now() / 1000)
-  return signToken({ email, iat: now, exp: now + 60 * 30 } satisfies MagicLinkPayload)
+  return signToken({ email, iat: now, exp: now + 60 * 45 } satisfies MagicLinkPayload)
 }
 
 export function verifyMagicToken(token: string): MagicLinkPayload | null {
@@ -86,6 +86,15 @@ export function verifyMagicToken(token: string): MagicLinkPayload | null {
   const now = Math.floor(Date.now() / 1000)
   if (payload.exp <= now) return null
   return payload
+}
+
+/** Returns true if the token has a valid signature but is expired.
+ *  Returns false for tokens with an invalid signature or missing fields. */
+export function isExpiredMagicToken(token: string): boolean {
+  const payload = verifyToken<MagicLinkPayload>(token)
+  if (!payload?.email || !payload.exp) return false
+  const now = Math.floor(Date.now() / 1000)
+  return payload.exp <= now
 }
 
 // ── Session Token (long-lived, 30 days) ─────────────────────────────────────

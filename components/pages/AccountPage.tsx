@@ -91,7 +91,7 @@ export default function AccountPage({ email }: { email: string }) {
               {(() => {
                 if (linkLoading) return "Wird gesendet…"
                 if (linkSent) return "✓ Link gesendet"
-                return "Neuen Link anfordern"
+                return "Neuen Magic Link anfordern"
               })()}
             </button>
             <button

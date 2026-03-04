@@ -73,9 +73,12 @@ function verifyToken<T extends object>(token: string): T | null {
   }
 }
 
-// ── Magic Link Token (short-lived, 60 min) ───────────────────────────────────
+// ── Magic Link Token (short-lived, configurable via MAGIC_LINK_LIFETIME_MINUTES, default 60 min) ──
 
-export const MAGIC_LINK_LIFETIME_MINUTES = 60
+export const MAGIC_LINK_LIFETIME_MINUTES = (() => {
+  const parsed = parseInt(process.env.MAGIC_LINK_LIFETIME_MINUTES || "60", 10)
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : 60
+})()
 
 export function signMagicToken(email: string): string {
   const now = Math.floor(Date.now() / 1000)

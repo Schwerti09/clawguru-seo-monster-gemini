@@ -12,7 +12,7 @@ export async function sendEmail(args: SendArgs): Promise<{ id?: string }> {
     throw new Error("Missing RESEND_API_KEY")
   }
 
-  const from = "ClawGuru <noreply@clawguru.org>"
+  const from = process.env.RESEND_FROM || process.env.EMAIL_FROM || "ClawGuru <noreply@clawguru.org>"
 
   console.log("[email] Resend send attempt started")
   console.log(`[email] From: ${from} → To: ${args.to} | Subject: ${args.subject}`)

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
-import { signMagicToken } from "@/lib/auth"
-import { sendEmail } from "@/lib/email"
+import { signMagicToken, MAGIC_LINK_LIFETIME_MINUTES } from "@/lib/auth"
+import { sendEmail, buildMagicLinkHtml } from "@/lib/email"
 
 export const runtime = "nodejs"
 
@@ -46,13 +46,8 @@ export async function POST(req: NextRequest) {
 
     const { id } = await sendEmail({
       to: email,
-      subject: "Your ClawGuru Login Link",
-      html: `
-        <p>Klick den Link unten, um dich bei ClawGuru einzuloggen. Der Link ist 45 Minuten gültig.</p>
-        <p><a href="${magicLink}" style="font-weight:bold">Login to ClawGuru →</a></p>
-        <p style="color:#888;font-size:12px">Falls du das nicht angefordert hast, kannst du diese E-Mail ignorieren.</p>
-      `,
-      replyTo: "support@clawguru.org",
+      subject: "Dein ClawGuru Login-Link",
+      html: buildMagicLinkHtml(magicLink, MAGIC_LINK_LIFETIME_MINUTES),
     })
 
     emailLastSent.set(email, now)

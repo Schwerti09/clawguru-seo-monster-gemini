@@ -5,8 +5,6 @@ import { performSecurityCheck, type SecurityCheckResult } from "@/lib/security-c
 import CTAButton from "@/components/marketing/CTAButton"
 import BuyButton from "@/components/commerce/BuyButton"
 import { SERVICE } from "@/lib/constants"
-// WORLD BEAST FINAL LAUNCH: analytics + upsell
-import { trackEvent, incrementCheckCount } from "@/lib/analytics"
 import dynamic from "next/dynamic"
 
 // WORLD BEAST FINAL LAUNCH: lazy-load upsell modal
@@ -59,14 +57,15 @@ export default function HeroSecurityCheck() {
     setLoading(true)
     setError(null)
     setResult(null)
-    // WORLD BEAST FINAL LAUNCH: track security check start
-    trackEvent("security_check_started", { target: input.trim() })
     try {
       const res = await performSecurityCheck(input.trim())
       setResult(res)
-      // WORLD BEAST FINAL LAUNCH: increment check counter + maybe show upsell
-      const count = incrementCheckCount()
-      if (count >= 3) setShowUpsell(true)
+      if (typeof window !== "undefined") {
+        const current = parseInt(localStorage.getItem("cg_check_count") ?? "0", 10)
+        const next = current + 1
+        localStorage.setItem("cg_check_count", String(next))
+        if (next >= 3) setShowUpsell(true)
+      }
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : "Prüfung fehlgeschlagen. Bitte versuche es erneut.")
     } finally {

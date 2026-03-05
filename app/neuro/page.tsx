@@ -6,7 +6,6 @@
 "use client"
 
 import { useState, useEffect, useRef, useCallback } from "react"
-import MyceliumShareCard from "@/components/share/MyceliumShareCard"
 
 // NEURO-MYCELIUM INTERFACE v3.5 – Overlord AI: Thought cards – user gazes at one to select it
 const THOUGHT_CARDS = [
@@ -875,14 +874,6 @@ export default function NeuroPage() {
               </button>
             </div>
 
-            {/* NEURO-MYCELIUM – Viral Share Card */}
-            <div className="mt-6">
-              <MyceliumShareCard
-                answer={response.answer.slice(0, 200)}
-                title={`Neuro-Mycelium · ${selectedQuestion.slice(0, 60)}`}
-                pageUrl="/neuro"
-              />
-            </div>
           </div>
         )}
 

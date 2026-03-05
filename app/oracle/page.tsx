@@ -5,7 +5,6 @@
 "use client"
 
 import { useState, useEffect, useRef, useCallback } from "react"
-import MyceliumShareCard from "@/components/share/MyceliumShareCard"
 
 // MYCELIUM ORACLE v3.3 – Overlord AI: Oracle mode definitions
 type OracleMode = "pure" | "temporal" | "swarm" | "prophetic"
@@ -539,14 +538,6 @@ export default function OraclePage() {
               </div>
             )}
 
-            {/* MYCELIUM ORACLE v3.3 – Viral Share Card */}
-            <div className="mt-6">
-              <MyceliumShareCard
-                answer={response.answer.slice(0, 200)}
-                title={`Oracle · ${activeMode.label}`}
-                pageUrl="/oracle"
-              />
-            </div>
           </div>
         )}
 

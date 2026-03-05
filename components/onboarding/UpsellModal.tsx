@@ -3,7 +3,6 @@
 // Shown after exactly 3 security checks. Displays personalized Claw Score + upsell CTA.
 
 import { useEffect, useState } from "react"
-import { trackEvent, getCheckCount } from "@/lib/analytics"
 
 const UPSELL_SHOWN_KEY = "cg_upsell_shown"
 
@@ -15,14 +14,14 @@ export default function UpsellModal({ score }: Props) {
   const [open, setOpen] = useState(false)
 
   useEffect(() => {
-    const count = getCheckCount()
+    const count = typeof window !== "undefined"
+      ? parseInt(localStorage.getItem("cg_check_count") ?? "0", 10)
+      : 0
     const alreadyShown = localStorage.getItem(UPSELL_SHOWN_KEY) === "1"
 
     if (count >= 3 && !alreadyShown) {
       setOpen(true)
       localStorage.setItem(UPSELL_SHOWN_KEY, "1")
-      // WORLD BEAST FINAL LAUNCH: track modal impression
-      trackEvent("upsell_modal_shown", { score: score ?? 0, trigger_checks: count })
     }
   }, [score])
 
@@ -31,7 +30,6 @@ export default function UpsellModal({ score }: Props) {
   const displayScore = score ?? 64
 
   function handleCTA() {
-    trackEvent("upsell_modal_clicked", { score: displayScore, cta: "pricing" })
     setOpen(false)
   }
 

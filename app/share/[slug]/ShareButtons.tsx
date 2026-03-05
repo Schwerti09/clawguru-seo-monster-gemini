@@ -4,7 +4,6 @@
 
 import { useState } from "react"
 import { motion } from "framer-motion"
-import { trackEvent } from "@/lib/analytics"
 
 type Props = {
   twitterThread: string
@@ -37,8 +36,6 @@ function CopyCard({
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
     })
-    // WORLD BEAST FINAL LAUNCH: track share button click
-    trackEvent("share_button_clicked", { platform: label, slug })
   }
 
   return (
@@ -101,11 +98,9 @@ export function ShareButtons({
   const linkedinUrl = `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(runbookUrl)}&title=${encodeURIComponent(title)}`
   const redditUrl = `https://www.reddit.com/submit?url=${encodeURIComponent(runbookUrl)}&title=${encodeURIComponent(title)}`
 
-  // WORLD BEAST FINAL LAUNCH: native share for mobile
   function nativeShare() {
     if (navigator.share) {
       navigator.share({ title, url: runbookUrl }).catch(() => {})
-      trackEvent("share_button_clicked", { platform: "native", slug })
     }
   }
 

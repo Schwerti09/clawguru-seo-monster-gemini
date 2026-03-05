@@ -343,9 +343,20 @@ export default function SovereignConciergeBot({ open, onClose }: Props) {
                       animate={{ scale: [1, 1.18, 1], opacity: [0.5, 0, 0.5] }}
                       transition={{ duration: 2.5, repeat: Infinity }}
                     />
+                    {/* Online indicator */}
+                    <span
+                      className="absolute bottom-0 right-0 w-3 h-3 rounded-full border-2"
+                      style={{ background: "#00ff9d", borderColor: "rgba(8,6,14,0.92)" }}
+                    />
                   </div>
                   <div>
-                    <div className="text-sm font-black text-white tracking-wide">Sovereign</div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-black text-white tracking-wide">Sovereign</span>
+                      <span className="text-[9px] font-bold uppercase tracking-widest px-[5px] py-[2px] rounded-full"
+                        style={{ background: "rgba(0,255,157,0.12)", color: "#00ff9d" }}>
+                        Online
+                      </span>
+                    </div>
                     <div
                       className="text-[10px] font-mono uppercase tracking-[0.2em]"
                       style={{ color: "#ffaa00" }}
@@ -425,17 +436,30 @@ export default function SovereignConciergeBot({ open, onClose }: Props) {
                 style={{ borderTop: "1px solid rgba(255,170,0,0.1)" }}
               >
                 {!isTyping && currentStep.id === "summary" && (
-                  <div className="space-y-3">
+                  <motion.div
+                    className="space-y-3"
+                    initial={{ opacity: 0, y: 16, scale: 0.97 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    transition={{ duration: 0.45, ease: "easeOut" }}
+                  >
                     <motion.button
                       onClick={handleCheckout}
                       disabled={checkoutLoading}
-                      className="w-full py-4 px-6 rounded-2xl font-black text-sm text-black transition-all duration-200 disabled:opacity-60"
+                      className="relative w-full py-5 px-6 rounded-2xl font-black text-base text-black transition-all duration-200 disabled:opacity-60 overflow-hidden"
                       style={{
                         background: "linear-gradient(135deg, #ffaa00 0%, #ff5000 50%, #ff8c00 100%)",
-                        boxShadow: "0 0 40px rgba(255,170,0,0.4), 0 4px 20px rgba(255,80,0,0.3)",
+                        boxShadow: "0 0 60px rgba(255,170,0,0.5), 0 4px 24px rgba(255,80,0,0.4)",
                       }}
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
+                      animate={{
+                        boxShadow: [
+                          "0 0 60px rgba(255,170,0,0.5), 0 4px 24px rgba(255,80,0,0.4)",
+                          "0 0 90px rgba(255,170,0,0.75), 0 4px 32px rgba(255,80,0,0.6)",
+                          "0 0 60px rgba(255,170,0,0.5), 0 4px 24px rgba(255,80,0,0.4)",
+                        ],
+                      }}
+                      transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                      whileHover={{ scale: 1.03 }}
+                      whileTap={{ scale: 0.97 }}
                     >
                       {checkoutLoading
                         ? "Weiterleitung zu Stripe …"
@@ -445,9 +469,9 @@ export default function SovereignConciergeBot({ open, onClose }: Props) {
                       <p className="text-xs text-red-400 text-center">{checkoutError}</p>
                     )}
                     <p className="text-xs text-gray-500 text-center">
-                      Sicherer Checkout via Stripe · Jederzeit kündbar
+                      Sicherer Checkout via Stripe · Keine Einrichtungsgebühr · Jederzeit kündbar
                     </p>
-                  </div>
+                  </motion.div>
                 )}
 
                 {!isTyping && currentStep.inputType === "choice" && (

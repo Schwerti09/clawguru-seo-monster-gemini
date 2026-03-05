@@ -38,6 +38,13 @@ export async function POST(req: NextRequest) {
       `[magic-link] RESEND_API_KEY vorhanden: ${apiKey ? `ja (Länge: ${apiKey.length})` : "nein"}`
     )
 
+    const from =
+      process.env.MAIL_FROM ||
+      process.env.RESEND_FROM ||
+      process.env.EMAIL_FROM ||
+      "ClawGuru <hello@clawguru.org>"
+    console.log(`[magic-link] from: ${from}`)
+
     const token = signMagicToken(email)
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
     const magicLink = `${siteUrl}/api/auth/verify?token=${encodeURIComponent(token)}`
@@ -61,6 +68,7 @@ export async function POST(req: NextRequest) {
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err)
     console.error("[magic-link] Fehler beim Senden des Magic Links:", message)
+    console.error("[magic-link] Vollständiger Fehler:", err)
     return NextResponse.json({ error: "Failed to send magic link" }, { status: 500 })
   }
 }

@@ -10,16 +10,14 @@ const RESEND_TIMEOUT_MS = 10_000
 
 export async function sendEmail(args: SendArgs): Promise<{ id?: string }> {
   const apiKey = process.env.RESEND_API_KEY
-  console.log(`[email] RESEND_API_KEY present: ${apiKey ? `yes (length: ${apiKey.length})` : "no"}`)
+  console.log(`[email] RESEND_API_KEY present: ${apiKey ? `yes (length: ${apiKey.length})` : "no – missing!"}`)
   if (!apiKey) {
+    console.error("[email] RESEND_API_KEY missing – email sending not possible")
     throw new Error("Missing RESEND_API_KEY")
   }
 
-  const from =
-    process.env.MAIL_FROM ||
-    process.env.RESEND_FROM ||
-    process.env.EMAIL_FROM ||
-    "ClawGuru <noreply@clawguru.org>"
+  // Hardcoded sender – avoids any misconfigured env var issues
+  const from = "ClawGuru <noreply@clawguru.org>"
 
   // Resend REST API requires `to` to be an array of strings
   const toArray = Array.isArray(args.to) ? args.to : [args.to]
@@ -50,7 +48,11 @@ export async function sendEmail(args: SendArgs): Promise<{ id?: string }> {
   } catch (fetchErr) {
     clearTimeout(timeoutId)
     const isTimeout = fetchErr instanceof Error && fetchErr.name === "AbortError"
-    throw new Error(isTimeout ? `Resend API request timed out after ${RESEND_TIMEOUT_MS / 1000}s` : `Resend fetch error: ${String(fetchErr)}`)
+    const message = isTimeout
+      ? `Resend API request timed out after ${RESEND_TIMEOUT_MS / 1000}s`
+      : `Resend fetch error: ${String(fetchErr)}`
+    console.error(`[email] Fetch error: ${message}`, fetchErr)
+    throw new Error(message)
   }
 
   let responseText = ""
@@ -59,6 +61,8 @@ export async function sendEmail(args: SendArgs): Promise<{ id?: string }> {
   } finally {
     clearTimeout(timeoutId)
   }
+
+  console.log(`[email] Resend HTTP status: ${res.status}`)
 
   if (!res.ok) {
     console.error(`[email] Resend error ${res.status}: ${responseText}`)

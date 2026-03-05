@@ -21,11 +21,19 @@ function b64urlDecode(input: string) {
 }
 
 function getSecret(): string {
-  const secret = process.env.SESSION_SECRET || process.env.ADMIN_SESSION_SECRET
-  if (!secret) {
-    throw new Error("SESSION_SECRET or ADMIN_SESSION_SECRET environment variable is not set")
+  if (process.env.SESSION_SECRET) return process.env.SESSION_SECRET
+  if (process.env.ADMIN_SESSION_SECRET) return process.env.ADMIN_SESSION_SECRET
+  // Derive a session-specific secret from ACCESS_TOKEN_SECRET to maintain
+  // separation of concerns: the derived secret is different from the source key.
+  if (process.env.ACCESS_TOKEN_SECRET) {
+    return crypto
+      .createHmac("sha256", process.env.ACCESS_TOKEN_SECRET)
+      .update("claw_session_secret_v1")
+      .digest("hex")
   }
-  return secret
+  throw new Error(
+    "SESSION_SECRET, ADMIN_SESSION_SECRET, or ACCESS_TOKEN_SECRET environment variable is not set"
+  )
 }
 
 function sign(data: string, secret: string) {

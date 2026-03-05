@@ -64,13 +64,20 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Benutzername und Passwort erforderlich" }, { status: 400 })
     }
 
+    // In production the username must be explicitly configured.
+    // In preview / development a sensible default of "admin" is used so that
+    // setting only ADMIN_PASSWORT (the password) is enough to enable login.
+    const isProduction =
+      process.env.NODE_ENV === "production" && process.env.CONTEXT === "production"
     const expectedUsername =
-      process.env.ADMIN_USER_NAME || process.env.ADMIN_USERNAME || ""
+      process.env.ADMIN_USER_NAME ||
+      process.env.ADMIN_USERNAME ||
+      (isProduction ? "" : "admin")
     const expectedPassword =
       process.env.ADMIN_PASSWORT || process.env.ADMIN_PASSWORD || ""
 
     if (!expectedUsername || !expectedPassword) {
-      console.error("[login] ADMIN_USERNAME / ADMIN_PASSWORD nicht konfiguriert")
+      console.error("[login] ADMIN_PASSWORT / ADMIN_PASSWORD (and in production also ADMIN_USERNAME) nicht konfiguriert")
       return NextResponse.json(
         { error: "Login ist derzeit nicht verfügbar." },
         { status: 503 }

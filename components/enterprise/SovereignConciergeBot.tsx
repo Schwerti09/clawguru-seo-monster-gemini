@@ -262,7 +262,12 @@ export default function SovereignConciergeBot({ open, onClose }: Props) {
       if (data?.url) {
         window.location.href = data.url
       } else {
-        setCheckoutError(data?.error ?? "Checkout fehlgeschlagen. Bitte versuche es erneut.")
+        // Show a user-friendly message – never expose raw env-var or config details
+        setCheckoutError(
+          res.ok
+            ? (data?.error ?? "Checkout fehlgeschlagen. Bitte versuche es erneut.")
+            : "Checkout momentan nicht verfügbar. Bitte wende dich direkt an enterprise@clawguru.org"
+        )
       }
     } catch {
       setCheckoutError("Netzwerkfehler. Bitte versuche es erneut.")

@@ -13,6 +13,7 @@ import { NextResponse } from "next/server"
 // Read once at module load time to avoid repeated string comparisons on every request.
 const _disableAllApis = process.env.DISABLE_ALL_APIS === "true"
 const _disableAiFeatures = process.env.DISABLE_AI_FEATURES === "true"
+const _stripeSecretKey = process.env.STRIPE_SECRET_KEY
 
 /** Returns true when AI/API features are enabled and requests should proceed. */
 export function isApiActive(): boolean {
@@ -24,6 +25,7 @@ export function isApiActive(): boolean {
 /** Returns true when only Stripe/payment features are active (AI may be disabled). */
 export function isStripeActive(): boolean {
   if (_disableAllApis) return false
+  if (!_stripeSecretKey) return false
   return true
 }
 

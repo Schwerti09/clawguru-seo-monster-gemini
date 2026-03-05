@@ -26,7 +26,7 @@ function getMode(product: Product): "payment" | "subscription" {
 
 function getStripe() {
   const key = process.env.STRIPE_SECRET_KEY
-  if (!key) throw new Error("STRIPE_SECRET_KEY fehlt")
+  if (!key) throw new Error("STRIPE_SECRET_KEY is not configured")
   return new Stripe(key, { apiVersion: "2024-06-20" })
 }
 
@@ -65,19 +65,8 @@ export async function POST(req: NextRequest) {
     const price = getPriceId(product)
     if (!price) {
       return NextResponse.json(
-        {
-          error:
-            product === "daypass"
-              ? "STRIPE_PRICE_DAYPASS fehlt in der Umgebung."
-              : product === "pro"
-                ? "STRIPE_PRICE_PRO fehlt in der Umgebung."
-                : product === "msp"
-                  ? "STRIPE_PRICE_MSP fehlt in der Umgebung."
-                  : product === "enterprise"
-                    ? "STRIPE_PRICE_ENTERPRISE fehlt in der Umgebung."
-                    : "STRIPE_PRICE_TEAM fehlt in der Umgebung."
-        },
-        { status: 500 }
+        { error: "Checkout für dieses Produkt ist aktuell nicht verfügbar. Bitte kontaktiere enterprise@clawguru.org" },
+        { status: 503 }
       )
     }
 

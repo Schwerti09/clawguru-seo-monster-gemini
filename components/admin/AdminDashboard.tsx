@@ -2,7 +2,8 @@
 
 import { useEffect, useMemo, useState } from "react"
 import { motion } from "framer-motion"
-import { Activity, DollarSign, Shield, RefreshCw, LogOut, ExternalLink, CheckCircle, XCircle, AlertCircle, BarChart3 } from "lucide-react"
+import { Activity, DollarSign, Shield, RefreshCw, LogOut, ExternalLink, CheckCircle, XCircle, AlertCircle, BarChart3, Inbox } from "lucide-react"
+import type { EnterpriseRequest } from "@/lib/enterprise-requests"
 
 type Overview = {
   now: string
@@ -34,6 +35,7 @@ export default function AdminDashboard() {
   const [data, setData] = useState<Overview | null>(null)
   const [err, setErr] = useState<string | null>(null)
   const [busy, setBusy] = useState(true)
+  const [enterpriseRequests, setEnterpriseRequests] = useState<EnterpriseRequest[]>([])
 
   async function load() {
     setBusy(true)
@@ -57,9 +59,22 @@ export default function AdminDashboard() {
     }
   }
 
+  async function loadEnterpriseRequests() {
+    try {
+      const res = await fetch("/api/admin/enterprise-requests", { cache: "no-store" })
+      if (res.ok) {
+        const j = await res.json() as { requests: EnterpriseRequest[] }
+        setEnterpriseRequests(j.requests)
+      }
+    } catch {
+      // silent – enterprise requests panel will just be empty
+    }
+  }
+
   useEffect(() => {
     load()
-    const id = setInterval(load, 30_000)
+    loadEnterpriseRequests()
+    const id = setInterval(() => { load(); loadEnterpriseRequests() }, 30_000)
     return () => clearInterval(id)
   }, [])
 
@@ -283,6 +298,46 @@ export default function AdminDashboard() {
               </div>
             </motion.div>
           </div>
+
+          <motion.div custom={4} initial="hidden" animate="visible" variants={cardVariants} className="p-6 rounded-3xl border border-violet-900/50 bg-black/30">
+            <div className="flex items-center gap-2 text-xs uppercase tracking-widest text-gray-400">
+              <Inbox className="w-3.5 h-3.5" />
+              Enterprise Anfragen
+            </div>
+            <div className="mt-2 text-2xl font-black">Direkt-Anfragen</div>
+            {enterpriseRequests.length === 0 ? (
+              <div className="mt-4 text-sm text-gray-400">Noch keine Anfragen eingegangen.</div>
+            ) : (
+              <div className="mt-4 overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="text-left text-xs text-gray-400 border-b border-gray-800">
+                      <th className="pb-2 pr-4 font-semibold">Datum</th>
+                      <th className="pb-2 pr-4 font-semibold">Name</th>
+                      <th className="pb-2 pr-4 font-semibold">Firma</th>
+                      <th className="pb-2 pr-4 font-semibold">E-Mail</th>
+                      <th className="pb-2 font-semibold">Nachricht</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-800">
+                    {enterpriseRequests.map((r) => (
+                      <tr key={r.id} className="text-gray-300 hover:bg-white/5 transition-colors">
+                        <td className="py-2 pr-4 whitespace-nowrap text-gray-400">
+                          {new Date(r.createdAt).toLocaleString("de-DE")}
+                        </td>
+                        <td className="py-2 pr-4 font-bold whitespace-nowrap">{r.name}</td>
+                        <td className="py-2 pr-4 whitespace-nowrap">{r.company || "—"}</td>
+                        <td className="py-2 pr-4 whitespace-nowrap">
+                          <a href={`mailto:${r.email}`} className="text-cyan-300 hover:underline">{r.email}</a>
+                        </td>
+                        <td className="py-2 text-gray-400 max-w-xs truncate">{r.message || "—"}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </motion.div>
         </>
       )}
     </div>

@@ -1,45 +1,33 @@
 "use client"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 import Container from "@/components/shared/Container"
 
-const ERROR_MESSAGES: Record<string, string> = {
-  expired_token: "Link abgelaufen? Neuen Magic Link anfordern.",
-  invalid_token: "Login-Link ungültig. Bitte neuen Link anfordern.",
-  missing_token: "Login-Link fehlt. Bitte neuen Link anfordern.",
-}
-
 export default function LoginPage({ error }: { error?: string | null }) {
-  const [email, setEmail] = useState("")
-  const [sent, setSent] = useState(false)
+  const router = useRouter()
+  const [username, setUsername] = useState("")
+  const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
-  const isExpired = error === "expired_token"
-  // For expired tokens the amber box is the primary message; initialise err only for
-  // other URL errors (invalid/missing token) so the red box appears on page load.
-  const [err, setErr] = useState<string | null>(
-    error && !isExpired ? (ERROR_MESSAGES[error] ?? error) : null
-  )
+  const [err, setErr] = useState<string | null>(error ?? null)
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setLoading(true)
     setErr(null)
     try {
-      const res = await fetch("/api/auth/magic-link", {
+      const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ username, password }),
       })
       if (!res.ok) {
         const data = await res.json().catch(() => ({}))
-        throw new Error(data?.error || "Failed")
+        throw new Error(data?.error || "Login fehlgeschlagen.")
       }
-      setSent(true)
+      router.push("/")
     } catch (e) {
-      setErr(e instanceof Error && e.message !== "Failed"
-        ? e.message
-        : "Magic Link konnte nicht gesendet werden. Bitte nochmal versuchen."
-      )
+      setErr(e instanceof Error ? e.message : "Login fehlgeschlagen.")
     } finally {
       setLoading(false)
     }
@@ -53,77 +41,45 @@ export default function LoginPage({ error }: { error?: string | null }) {
         </div>
         <h1 className="text-3xl font-black mb-2">Login · ClawGuru</h1>
         <p className="text-gray-400 text-sm mb-8">
-          E-Mail eingeben – wir schicken dir einen Magic Link.
+          Benutzername und Passwort eingeben.
         </p>
 
-        {sent ? (
-          <div className="flex flex-col gap-4">
-            <div className="p-6 rounded-2xl border border-green-800 bg-green-900/20 text-green-400">
-              ✓ Magic Link gesendet! Prüfe dein Postfach und klick den Link.
+        <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+          {err && (
+            <div className="p-3 rounded-xl border border-red-800 bg-red-900/20 text-red-400 text-sm">
+              {err}
             </div>
-            <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-              {err && (
-                <div className="p-3 rounded-xl border border-red-800 bg-red-900/20 text-red-400 text-sm">
-                  {err}
-                </div>
-              )}
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="deine@email.com"
-                required
-                className="w-full px-4 py-3 rounded-xl border border-gray-700 bg-black/50 text-white
-                           placeholder-gray-500 focus:outline-none focus:border-[#c9a84c] transition-colors"
-              />
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full px-6 py-3 rounded-xl font-mono font-bold text-sm uppercase tracking-widest
-                           bg-[#c9a84c]/10 border border-[#c9a84c]/40 text-[#c9a84c]
-                           hover:bg-[#c9a84c]/20 transition-all disabled:opacity-50"
-              >
-                {loading ? "Wird gesendet…" : "Neuen Magic Link anfordern →"}
-              </button>
-            </form>
-          </div>
-        ) : (
-          <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-            {isExpired && (
-              <div className="p-4 rounded-xl border border-amber-700 bg-amber-900/20 text-amber-400 text-sm">
-                <p className="font-bold mb-2">⏱ Link abgelaufen?</p>
-                <p>Kein Problem – fordere hier einen neuen Magic Link an.</p>
-              </div>
-            )}
-            {err && (
-              <div className="p-3 rounded-xl border border-red-800 bg-red-900/20 text-red-400 text-sm">
-                {err}
-              </div>
-            )}
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="deine@email.com"
-              required
-              className="w-full px-4 py-3 rounded-xl border border-gray-700 bg-black/50 text-white
-                         placeholder-gray-500 focus:outline-none focus:border-[#c9a84c] transition-colors"
-            />
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full px-6 py-3 rounded-xl font-mono font-bold text-sm uppercase tracking-widest
-                         bg-[#c9a84c]/10 border border-[#c9a84c]/40 text-[#c9a84c]
-                         hover:bg-[#c9a84c]/20 transition-all disabled:opacity-50"
-            >
-              {(() => {
-                if (loading) return "Wird gesendet…"
-                if (isExpired) return "Neuen Magic Link anfordern →"
-                return "Magic Link senden →"
-              })()}
-            </button>
-          </form>
-        )}
+          )}
+          <input
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            placeholder="Benutzername"
+            required
+            autoComplete="username"
+            className="w-full px-4 py-3 rounded-xl border border-gray-700 bg-black/50 text-white
+                       placeholder-gray-500 focus:outline-none focus:border-[#c9a84c] transition-colors"
+          />
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Passwort"
+            required
+            autoComplete="current-password"
+            className="w-full px-4 py-3 rounded-xl border border-gray-700 bg-black/50 text-white
+                       placeholder-gray-500 focus:outline-none focus:border-[#c9a84c] transition-colors"
+          />
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full px-6 py-3 rounded-xl font-mono font-bold text-sm uppercase tracking-widest
+                       bg-[#c9a84c]/10 border border-[#c9a84c]/40 text-[#c9a84c]
+                       hover:bg-[#c9a84c]/20 transition-all disabled:opacity-50"
+          >
+            {loading ? "Wird angemeldet…" : "Einloggen →"}
+          </button>
+        </form>
       </div>
     </Container>
   )

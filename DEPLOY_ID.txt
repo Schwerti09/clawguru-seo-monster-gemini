@@ -1,2 +1,3 @@
 clawguru user-magnet build-fixed | 2026-02-06T09:09:09Z | includes clean app/page.tsx (no stray sections)
 lfs-removed | 2026-03-03 | Git LFS completely removed – no LFS pointer files, no filter=lfs in .gitattributes – Netlify deploys clean
+build-stable | 2026-03-05 | All modules fixed: lib/analytics.ts, components/shared/Container.tsx, components/share/MyceliumShareCard.tsx, tsconfig @/* alias – build passes clean

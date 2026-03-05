@@ -1,9 +1,8 @@
 'use client'
-import Container from "@/components/shared/Container"
 
 export default function Error({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
   return (
-    <Container>
+    <div className="mx-auto w-full max-w-screen-xl px-4">
       <div className="py-24 text-center">
         <div className="text-3xl font-black">Fehler</div>
         <p className="mt-3 text-gray-300">Etwas ist schiefgelaufen. (Passiert. Auch Institutionen haben Tage.)</p>
@@ -17,6 +16,6 @@ export default function Error({ error, reset }: { error: Error & { digest?: stri
         </div>
         <div className="mt-6 text-xs text-gray-500">{error?.message}</div>
       </div>
-    </Container>
+    </div>
   )
 }

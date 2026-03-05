@@ -1,8 +1,6 @@
 import { cookies } from "next/headers"
 import Container from "@/components/shared/Container"
 import BuyButton from "@/components/commerce/BuyButton"
-import EnterpriseContact from "@/components/marketing/EnterpriseContact"
-import MyceliumShareCard from "@/components/share/MyceliumShareCard"
 import { SEO_TARGET_KEYWORDS_2026 } from "@/lib/seo/targets"
 import { TIER_LIMITS } from "@/lib/feature-gating"
 import { SUPPORTED_LOCALES, type Locale, t } from "@/lib/i18n"
@@ -547,25 +545,6 @@ curl https://clawguru.com/api/intel/feeds \\
             </div>
           </div>
 
-          {/* ── Contact Sales ── */}
-          <div className="mt-10 relative rounded-3xl p-[1px] overflow-hidden"
-            style={{ background: "linear-gradient(135deg, rgba(255,165,0,0.4) 0%, rgba(255,80,0,0.1) 100%)" }}>
-            <div className="rounded-3xl p-8" style={{ background: "#0f0a05" }}>
-              <div className="max-w-xl mx-auto">
-                <div className="text-[11px] font-mono uppercase tracking-[0.2em] mb-2 text-center" style={{ color: "#ffaa00" }}>
-                  Enterprise · Contact Sales
-                </div>
-                <h2 className="text-2xl font-black text-white font-heading text-center mb-2">
-                  {t(locale, "pricingContactSectionTitle")}
-                </h2>
-                <p className="text-sm text-gray-400 text-center mb-6">
-                  {t(locale, "pricingContactSectionDesc")}
-                </p>
-                <EnterpriseContact />
-              </div>
-            </div>
-          </div>
-
           {/* Info strip */}
           <div className="mt-8 grid md:grid-cols-3 gap-4">
             {[
@@ -610,16 +589,6 @@ curl https://clawguru.com/api/intel/feeds \\
                 <p className="mt-1 text-gray-400">{t(locale, "pricingFaqIntelligenceA")}</p>
               </div>
             </div>
-          </div>
-
-          {/* Viral Share Card */}
-          <div className="mt-10">
-            <MyceliumShareCard
-              locale={locale}
-              title="Day Pass · ClawGuru Security Intelligence"
-              pageUrl="/pricing"
-              className="max-w-2xl"
-            />
           </div>
 
           {/* Quick links */}

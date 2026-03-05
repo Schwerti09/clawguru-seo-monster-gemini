@@ -4,7 +4,6 @@
 
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { trackEvent } from "@/lib/analytics"
 import type { LaunchContent } from "@/lib/agents/launch-agent"
 
 type LaunchResult = {
@@ -24,9 +23,6 @@ export function WorldbeastClient() {
 
   async function startGlobalLaunch() {
     setPhase("launching")
-    // WORLD BEAST FINAL LAUNCH: track launch button click
-    trackEvent("launch_button_clicked")
-
     try {
       const res = await fetch("/api/launch", { method: "POST" })
       if (!res.ok) {

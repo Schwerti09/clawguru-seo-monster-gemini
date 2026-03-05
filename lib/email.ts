@@ -1,9 +1,12 @@
 type SendArgs = {
-  to: string
+  to: string | string[]
   subject: string
   html: string
   replyTo?: string
 }
+
+/** Timeout for Resend API calls in milliseconds. */
+const RESEND_TIMEOUT_MS = 10_000
 
 export async function sendEmail(args: SendArgs): Promise<{ id?: string }> {
   const apiKey = process.env.RESEND_API_KEY
@@ -16,27 +19,46 @@ export async function sendEmail(args: SendArgs): Promise<{ id?: string }> {
     process.env.MAIL_FROM ||
     process.env.RESEND_FROM ||
     process.env.EMAIL_FROM ||
-    "ClawGuru <hello@clawguru.org>"
+    "ClawGuru <noreply@clawguru.org>"
+
+  // Resend REST API requires `to` to be an array of strings
+  const toArray = Array.isArray(args.to) ? args.to : [args.to]
 
   console.log("[email] Resend send attempt started")
-  console.log(`[email] From: ${from} → To: ${args.to} | Subject: ${args.subject}`)
+  console.log(`[email] From: ${from} → To: ${toArray.join(", ")} | Subject: ${args.subject}`)
 
-  const res = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      from,
-      to: args.to,
-      subject: args.subject,
-      html: args.html,
-      reply_to: args.replyTo || "support@clawguru.org",
-    }),
-  })
+  const controller = new AbortController()
+  const timeoutId = setTimeout(() => controller.abort(), RESEND_TIMEOUT_MS)
 
-  const responseText = await res.text().catch(() => "")
+  let res: Response
+  try {
+    res = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        from,
+        to: toArray,
+        subject: args.subject,
+        html: args.html,
+        reply_to: args.replyTo || "support@clawguru.org",
+      }),
+      signal: controller.signal,
+    })
+  } catch (fetchErr) {
+    clearTimeout(timeoutId)
+    const isTimeout = fetchErr instanceof Error && fetchErr.name === "AbortError"
+    throw new Error(isTimeout ? `Resend API request timed out after ${RESEND_TIMEOUT_MS / 1000}s` : `Resend fetch error: ${String(fetchErr)}`)
+  }
+
+  let responseText = ""
+  try {
+    responseText = await res.text()
+  } finally {
+    clearTimeout(timeoutId)
+  }
 
   if (!res.ok) {
     console.error(`[email] Resend error ${res.status}: ${responseText}`)

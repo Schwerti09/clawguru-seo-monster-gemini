@@ -16,6 +16,7 @@ import {
   Power,
   TrendingUp,
   Activity,
+  Briefcase,
 } from "lucide-react"
 
 // ---------------------------------------------------------------------------
@@ -1138,6 +1139,171 @@ function ActiveDefendersPanel() {
 }
 
 // ---------------------------------------------------------------------------
+// Enterprise Anfragen Panel
+// ---------------------------------------------------------------------------
+
+type EnterpriseRequest = {
+  id: string
+  createdAt: string
+  name: string
+  email: string
+  company: string
+  message: string
+}
+
+function EnterpriseRequestsPanel() {
+  const [requests, setRequests] = useState<EnterpriseRequest[]>([])
+  const [busy, setBusy] = useState(true)
+  const [err, setErr] = useState<string | null>(null)
+  const [expanded, setExpanded] = useState<string | null>(null)
+
+  const load = useCallback(async () => {
+    setBusy(true)
+    setErr(null)
+    try {
+      const res = await fetch("/api/admin/enterprise-requests", { cache: "no-store" })
+      if (!res.ok) { setErr(`Fehler beim Laden (HTTP ${res.status})`); return }
+      const d = await res.json()
+      setRequests(d.requests ?? [])
+    } catch {
+      setErr("Netzwerkfehler – bitte Seite neu laden")
+    } finally {
+      setBusy(false)
+    }
+  }, [])
+
+  useEffect(() => { load() }, [load])
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.5 }}
+      className="relative mt-6 rounded-3xl border border-amber-500/30 overflow-hidden"
+      style={{
+        background: "linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%)",
+        backdropFilter: "blur(12px)",
+        boxShadow: "0 8px 32px rgba(0,0,0,0.3), 0 0 0 1px rgba(245,158,11,0.15), inset 0 1px 0 rgba(255,255,255,0.05)",
+      }}
+    >
+      {/* Ambient glow */}
+      <motion.div
+        className="absolute inset-0 pointer-events-none"
+        animate={{ opacity: [0.3, 0.6, 0.3] }}
+        transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
+        style={{ background: "radial-gradient(ellipse at top left, rgba(245,158,11,0.10) 0%, transparent 55%)" }}
+      />
+
+      <div className="relative p-5">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-5">
+          <div className="flex items-center gap-3">
+            <div className="p-2.5 rounded-2xl bg-white/5 border border-amber-500/30">
+              <Briefcase className="w-5 h-5 text-amber-400" />
+            </div>
+            <div>
+              <div className="font-black text-white text-base leading-tight">Enterprise Anfragen</div>
+              <div className="text-xs text-gray-500 mt-0.5">Direkt-Anfragen aus dem Enterprise-Bereich</div>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-amber-300 font-bold">{requests.length} Einträge</span>
+            <motion.button
+              onClick={() => void load()}
+              disabled={busy}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.97 }}
+              className="px-3 py-1 rounded-xl text-xs font-bold border border-amber-500/30 bg-amber-500/10 text-amber-300 hover:bg-amber-500/20 transition-colors disabled:opacity-50 flex items-center gap-1"
+            >
+              {busy && <Loader2 className="w-3 h-3 animate-spin" />}
+              Refresh
+            </motion.button>
+          </div>
+        </div>
+
+        {/* Error */}
+        {err && (
+          <div className="mb-4 p-3 rounded-xl border border-red-900/50 bg-red-950/20 text-red-300 text-sm flex items-center gap-2">
+            <AlertTriangle className="w-4 h-4 flex-shrink-0" />
+            {err}
+          </div>
+        )}
+
+        {/* Empty state */}
+        {!busy && !err && requests.length === 0 && (
+          <div className="py-10 text-center text-gray-500 text-sm">
+            Noch keine Enterprise-Anfragen vorhanden.
+          </div>
+        )}
+
+        {/* Loading */}
+        {busy && requests.length === 0 && (
+          <div className="py-10 flex items-center justify-center gap-2 text-gray-500 text-sm">
+            <Loader2 className="w-4 h-4 animate-spin" />
+            Lade Anfragen…
+          </div>
+        )}
+
+        {/* Table */}
+        {requests.length > 0 && (
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm border-collapse">
+              <thead>
+                <tr className="border-b border-white/10">
+                  <th className="text-left py-2 px-3 text-xs text-gray-400 font-bold whitespace-nowrap">Datum</th>
+                  <th className="text-left py-2 px-3 text-xs text-gray-400 font-bold">Name</th>
+                  <th className="text-left py-2 px-3 text-xs text-gray-400 font-bold">Firma</th>
+                  <th className="text-left py-2 px-3 text-xs text-gray-400 font-bold">E-Mail</th>
+                  <th className="text-left py-2 px-3 text-xs text-gray-400 font-bold">Nachricht</th>
+                </tr>
+              </thead>
+              <tbody>
+                {requests.flatMap((r) => {
+                  const rows = [
+                    <tr
+                      key={r.id}
+                      className="border-b border-white/5 hover:bg-white/5 cursor-pointer transition-colors"
+                      tabIndex={0}
+                      onClick={() => setExpanded(expanded === r.id ? null : r.id)}
+                      onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setExpanded(expanded === r.id ? null : r.id) } }}
+                    >
+                      <td className="py-2 px-3 text-gray-400 whitespace-nowrap font-mono text-xs">
+                        {new Date(r.createdAt).toLocaleString("de-DE", {
+                          dateStyle: "short",
+                          timeStyle: "short",
+                        })}
+                      </td>
+                      <td className="py-2 px-3 text-white font-bold">{r.name}</td>
+                      <td className="py-2 px-3 text-gray-300">{r.company || "—"}</td>
+                      <td className="py-2 px-3 text-amber-300 text-xs">{r.email}</td>
+                      <td className="py-2 px-3 text-gray-400 text-xs max-w-xs truncate">
+                        {r.message || "—"}
+                      </td>
+                    </tr>,
+                  ]
+                  if (expanded === r.id) {
+                    rows.push(
+                      <tr key={`${r.id}-exp`} className="border-b border-white/5 bg-white/3">
+                        <td colSpan={5} className="py-3 px-3">
+                          <div className="p-3 rounded-xl bg-black/30 border border-amber-500/20 text-gray-300 text-sm whitespace-pre-wrap">
+                            {r.message || "(keine Nachricht)"}
+                          </div>
+                        </td>
+                      </tr>
+                    )
+                  }
+                  return rows
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+    </motion.div>
+  )
+}
+
+// ---------------------------------------------------------------------------
 // Main Dashboard
 // ---------------------------------------------------------------------------
 
@@ -1337,6 +1503,9 @@ export default function UniverseDashboard() {
 
       {/* Active Defenders Panel */}
       <ActiveDefendersPanel />
+
+      {/* Enterprise Anfragen Panel */}
+      <EnterpriseRequestsPanel />
 
       {/* Quick Links */}
       <motion.div

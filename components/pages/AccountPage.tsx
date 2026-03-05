@@ -11,9 +11,6 @@ const MAX_DAYPASS_CHECKS = 5
 export default function AccountPage({ email }: { email: string }) {
   const [savedChecks, setSavedChecks] = useState<SavedCheck[]>([])
   const [runbookHistory, setRunbookHistory] = useState<RunbookEntry[]>([])
-  const [linkSent, setLinkSent] = useState(false)
-  const [linkLoading, setLinkLoading] = useState(false)
-  const [linkErr, setLinkErr] = useState<string | null>(null)
 
   useEffect(() => {
     try {
@@ -23,32 +20,6 @@ export default function AccountPage({ email }: { email: string }) {
       /* ignore parse errors */
     }
   }, [])
-
-  async function requestNewLink() {
-    setLinkLoading(true)
-    setLinkErr(null)
-    setLinkSent(false)
-    try {
-      const res = await fetch("/api/auth/magic-link", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      })
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}))
-        throw new Error(data?.error || "Failed")
-      }
-      setLinkSent(true)
-    } catch (e) {
-      setLinkErr(
-        e instanceof Error && e.message !== "Failed"
-          ? e.message
-          : "Magic Link konnte nicht gesendet werden. Bitte nochmal versuchen."
-      )
-    } finally {
-      setLinkLoading(false)
-    }
-  }
 
   function exportData() {
     const data = {
@@ -83,18 +54,6 @@ export default function AccountPage({ email }: { email: string }) {
           </div>
           <div className="flex gap-3 flex-wrap">
             <button
-              onClick={requestNewLink}
-              disabled={linkLoading}
-              className="px-4 py-2 rounded-xl border border-[#c9a84c]/40 text-sm text-[#c9a84c]
-                         hover:border-[#c9a84c]/70 transition-colors disabled:opacity-50"
-            >
-              {(() => {
-                if (linkLoading) return "Wird gesendet…"
-                if (linkSent) return "✓ Link gesendet"
-                return "Neuen Magic Link anfordern"
-              })()}
-            </button>
-            <button
               onClick={exportData}
               className="px-4 py-2 rounded-xl border border-gray-700 text-sm text-gray-300
                          hover:border-gray-500 transition-colors"
@@ -110,18 +69,6 @@ export default function AccountPage({ email }: { email: string }) {
             </a>
           </div>
         </div>
-
-        {/* New-link feedback */}
-        {linkErr && (
-          <div className="mb-6 p-3 rounded-xl border border-red-800 bg-red-900/20 text-red-400 text-sm">
-            {linkErr}
-          </div>
-        )}
-        {linkSent && (
-          <div className="mb-6 p-3 rounded-xl border border-green-800 bg-green-900/20 text-green-400 text-sm">
-            ✓ Neuer Magic Link wurde an <strong>{email}</strong> gesendet.
-          </div>
-        )}
 
         {/* Saved Checks */}
         <section className="mb-10">

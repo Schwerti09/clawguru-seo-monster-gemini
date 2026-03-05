@@ -195,6 +195,12 @@ export const PLANS: Plan[] = [
     name: "Enterprise",
     priceEurCents: 0,
     billingCycle: "monthly",
+    // STRIPE_PRICE_ENTERPRISE preferred; falls back to STRIPE_PRICE_TEAM (or its
+    // legacy alias STRIPE_PRISE_TEAM) when the dedicated enterprise price is not set.
+    stripePriceId:
+      process.env.STRIPE_PRICE_ENTERPRISE ||
+      process.env.STRIPE_PRICE_TEAM ||
+      process.env.STRIPE_PRISE_TEAM,
     features: [
       "Unbegrenzte Nutzer",
       "SSO / SAML",

@@ -13,10 +13,17 @@ export const dynamic = "force-dynamic"
  * Expected env vars (Stripe Price IDs):
  *   STRIPE_PRICE_DAYPASS
  *   STRIPE_PRICE_PRO
- *   STRIPE_PRICE_TEAM (Enterprise/custom contact)
+ *   STRIPE_PRICE_TEAM     (Team plan; also used as enterprise fallback)
+ *   STRIPE_PRICE_ENTERPRISE (Enterprise API; falls back to STRIPE_PRICE_TEAM)
+ *   STRIPE_PRISE_TEAM     (legacy typo alias for STRIPE_PRICE_TEAM)
  */
 export async function GET() {
   if (!isStripeActive()) return apiUnavailableResponse()
+
+  const teamPriceId =
+    process.env.STRIPE_PRICE_TEAM ||
+    process.env.STRIPE_PRISE_TEAM ||
+    null
 
   return NextResponse.json({
     daypass: {
@@ -32,7 +39,7 @@ export async function GET() {
       interval: "month",
     },
     enterprise: {
-      priceId: null,
+      priceId: process.env.STRIPE_PRICE_ENTERPRISE || teamPriceId,
       amount: null,
       currency: null,
       interval: "custom",

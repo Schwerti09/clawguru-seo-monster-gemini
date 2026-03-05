@@ -1,6 +1,5 @@
 import Container from "@/components/shared/Container"
 import type { Metadata } from "next"
-import EnterpriseContactForm from "@/components/marketing/EnterpriseContactForm"
 
 export const metadata: Metadata = {
   title: "Enterprise API | ClawGuru – Security Intel for SIEM & SOAR",
@@ -404,34 +403,28 @@ await jira.createComment(ticketId, \`
       <section className="py-24">
         <Container>
           <div
-            className="max-w-3xl mx-auto rounded-3xl p-10 md:p-12"
+            className="max-w-3xl mx-auto rounded-3xl p-10 md:p-12 text-center"
             style={{
               background: "linear-gradient(135deg, rgba(0,184,255,0.08) 0%, rgba(0,255,157,0.06) 100%)",
               border: "1px solid rgba(0,255,157,0.2)",
             }}
           >
-            <div className="text-center mb-8">
-              <div className="text-[10px] font-mono uppercase tracking-[0.3em] mb-3" style={{ color: C.green }}>
-                Ready to integrate?
-              </div>
-              <h2 className="text-3xl md:text-4xl font-black text-white mb-4">
-                Get your Enterprise API key today.
-              </h2>
-              <p className="text-gray-400 text-base max-w-xl mx-auto">
-                Füll das Formular aus – wir melden uns innerhalb von 24 h.
-                Die ersten 500 API-Calls gehen auf uns.
-              </p>
+            <div className="text-[10px] font-mono uppercase tracking-[0.3em] mb-3" style={{ color: C.green }}>
+              Ready to integrate?
             </div>
-            <div className="mb-6 flex justify-center">
-              <a
-                href="/api-docs"
-                className="inline-block px-8 py-4 rounded-2xl font-black text-sm text-black transition-all duration-200 hover:opacity-90"
-                style={{ background: `linear-gradient(135deg, ${C.cyan}, ${C.green})` }}
-              >
-                API Reference →
-              </a>
-            </div>
-            <EnterpriseContactForm />
+            <h2 className="text-3xl md:text-4xl font-black text-white mb-4">
+              Get your Enterprise API key today.
+            </h2>
+            <p className="text-gray-400 text-base max-w-xl mx-auto mb-8">
+              Start with the API Reference and get your first 500 calls on us.
+            </p>
+            <a
+              href="/api-docs"
+              className="inline-block px-8 py-4 rounded-2xl font-black text-sm text-black transition-all duration-200 hover:opacity-90"
+              style={{ background: `linear-gradient(135deg, ${C.cyan}, ${C.green})` }}
+            >
+              API Reference →
+            </a>
           </div>
         </Container>
       </section>

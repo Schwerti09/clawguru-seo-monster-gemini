@@ -5,16 +5,18 @@ import { isStripeActive, apiUnavailableResponse } from "@/lib/api-guard"
 
 export const dynamic = "force-dynamic"
 
-type Product = "daypass" | "pro" | "team" | "msp"
+type Product = "daypass" | "pro" | "team" | "msp" | "enterprise"
 
 function getPriceId(product: Product) {
   // We keep env names short on purpose. These are Stripe *Price* IDs.
   // - daypass: one-time payment
   // - pro/team: recurring monthly subscriptions
   // - msp: recurring annual subscription (White Label MSP license)
+  // - enterprise: recurring monthly subscription (Enterprise API)
   if (product === "daypass") return process.env.STRIPE_PRICE_DAYPASS
   if (product === "pro") return process.env.STRIPE_PRICE_PRO
   if (product === "msp") return process.env.STRIPE_PRICE_MSP
+  if (product === "enterprise") return process.env.STRIPE_PRICE_ENTERPRISE
   return process.env.STRIPE_PRICE_TEAM
 }
 
@@ -46,7 +48,7 @@ export async function POST(req: NextRequest) {
     const stripe = getStripe()
     const body = await req.json().catch(() => ({}))
     const product: Product =
-      body?.product === "pro" || body?.product === "team" || body?.product === "daypass" || body?.product === "msp"
+      (["pro", "team", "daypass", "msp", "enterprise"] as const).includes(body?.product)
         ? body.product
         : "daypass"
     const email: string | undefined =
@@ -71,7 +73,9 @@ export async function POST(req: NextRequest) {
                 ? "STRIPE_PRICE_PRO fehlt in der Umgebung."
                 : product === "msp"
                   ? "STRIPE_PRICE_MSP fehlt in der Umgebung."
-                  : "STRIPE_PRICE_TEAM fehlt in der Umgebung."
+                  : product === "enterprise"
+                    ? "STRIPE_PRICE_ENTERPRISE fehlt in der Umgebung."
+                    : "STRIPE_PRICE_TEAM fehlt in der Umgebung."
         },
         { status: 500 }
       )

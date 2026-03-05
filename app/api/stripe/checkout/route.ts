@@ -13,11 +13,18 @@ function getPriceId(product: Product) {
   // - pro/team: recurring monthly subscriptions
   // - msp: recurring annual subscription (White Label MSP license)
   // - enterprise: recurring monthly subscription (Enterprise API)
+  //
+  // STRIPE_PRISE_TEAM is accepted as a legacy alias for STRIPE_PRICE_TEAM
+  // to handle a common mis-spelling of the env var name.
+  const teamPriceId =
+    process.env.STRIPE_PRICE_TEAM ||
+    process.env.STRIPE_PRISE_TEAM // legacy typo alias
   if (product === "daypass") return process.env.STRIPE_PRICE_DAYPASS
   if (product === "pro") return process.env.STRIPE_PRICE_PRO
   if (product === "msp") return process.env.STRIPE_PRICE_MSP
-  if (product === "enterprise") return process.env.STRIPE_PRICE_ENTERPRISE
-  return process.env.STRIPE_PRICE_TEAM
+  // Enterprise falls back to the team price when STRIPE_PRICE_ENTERPRISE is not set
+  if (product === "enterprise") return process.env.STRIPE_PRICE_ENTERPRISE || teamPriceId
+  return teamPriceId
 }
 
 function getMode(product: Product): "payment" | "subscription" {

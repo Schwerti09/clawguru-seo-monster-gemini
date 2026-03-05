@@ -37,12 +37,19 @@ export async function POST(req: NextRequest) {
     console.log(
       `[magic-link] RESEND_API_KEY vorhanden: ${apiKey ? `ja (Länge: ${apiKey.length})` : "nein"}`
     )
+    if (!apiKey) {
+      console.error("[magic-link] RESEND_API_KEY fehlt – E-Mail-Versand nicht möglich")
+      return NextResponse.json(
+        { error: "E-Mail-Versand ist derzeit nicht verfügbar. Bitte später erneut versuchen." },
+        { status: 503 }
+      )
+    }
 
     const from =
       process.env.MAIL_FROM ||
       process.env.RESEND_FROM ||
       process.env.EMAIL_FROM ||
-      "ClawGuru <hello@clawguru.org>"
+      "ClawGuru <noreply@clawguru.org>"
     console.log(`[magic-link] from: ${from}`)
 
     const token = signMagicToken(email)
@@ -69,6 +76,9 @@ export async function POST(req: NextRequest) {
     const message = err instanceof Error ? err.message : String(err)
     console.error("[magic-link] Fehler beim Senden des Magic Links:", message)
     console.error("[magic-link] Vollständiger Fehler:", err)
-    return NextResponse.json({ error: "Failed to send magic link" }, { status: 500 })
+    return NextResponse.json(
+      { error: "Magic Link konnte nicht gesendet werden. Bitte nochmal versuchen." },
+      { status: 500 }
+    )
   }
 }

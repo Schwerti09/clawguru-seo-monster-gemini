@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
 
     const apiKey = process.env.RESEND_API_KEY
     console.log(
-      `[magic-link] RESEND_API_KEY vorhanden: ${apiKey ? `ja (Länge: ${apiKey.length})` : "nein"}`
+      `[magic-link] RESEND_API_KEY vorhanden: ${apiKey ? `ja (Länge: ${apiKey.length})` : "nein – fehlt!"}`
     )
     if (!apiKey) {
       console.error("[magic-link] RESEND_API_KEY fehlt – E-Mail-Versand nicht möglich")
@@ -44,13 +44,6 @@ export async function POST(req: NextRequest) {
         { status: 503 }
       )
     }
-
-    const from =
-      process.env.MAIL_FROM ||
-      process.env.RESEND_FROM ||
-      process.env.EMAIL_FROM ||
-      "ClawGuru <noreply@clawguru.org>"
-    console.log(`[magic-link] from: ${from}`)
 
     const token = signMagicToken(email)
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"

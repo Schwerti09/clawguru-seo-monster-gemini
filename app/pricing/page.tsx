@@ -1,6 +1,7 @@
 import { cookies } from "next/headers"
 import Container from "@/components/shared/Container"
 import BuyButton from "@/components/commerce/BuyButton"
+import EnterpriseConciergeButton from "@/components/enterprise/EnterpriseConciergeButton"
 import { SEO_TARGET_KEYWORDS_2026 } from "@/lib/seo/targets"
 import { TIER_LIMITS } from "@/lib/feature-gating"
 import { SUPPORTED_LOCALES, type Locale, t } from "@/lib/i18n"
@@ -494,13 +495,7 @@ export default async function PricingPage() {
                   <p className="mt-4 text-sm text-gray-300 leading-relaxed">
                     {t(locale, "pricingEnterpriseDesc")}
                   </p>
-                  <a
-                    href="mailto:enterprise@clawguru.org?subject=Enterprise%20Intel%20Feed%20API"
-                    className="mt-6 inline-block w-full text-center py-3 px-6 rounded-2xl font-black text-sm text-black transition-all duration-300 hover:opacity-90"
-                    style={{ background: "linear-gradient(135deg, #ffaa00 0%, #ff5000 100%)", boxShadow: "0 0 30px rgba(255,165,0,0.3)" }}
-                  >
-                    {t(locale, "pricingEnterpriseBtn")}
-                  </a>
+                  <EnterpriseConciergeButton />
                   <div className="mt-3 text-xs text-gray-500 text-center">
                     {t(locale, "pricingEnterpriseContact")}
                   </div>

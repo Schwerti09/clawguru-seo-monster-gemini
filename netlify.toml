@@ -1,5 +1,5 @@
 [build]
-  command = "npm install --legacy-peer-deps --no-audit --no-fund && npm run build"
+  command = "npm install --legacy-peer-deps --no-audit --no-fund && npm run check:imports && npm run build"
   publish = ".next"
 
 [[plugins]]

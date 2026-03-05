@@ -55,6 +55,7 @@ export async function POST(req: NextRequest) {
     console.log(`[enterprise-contact] Sende Enterprise-Anfrage von ${name} an ${to} …`)
 
     const { id } = await sendEmail({
+      from: "ClawGuru <hello@clawguru.org>",
       to,
       subject: `Enterprise Anfrage von ${name}${company ? ` (${company})` : ""}`,
       html: notificationHtml(name, email, company, message),

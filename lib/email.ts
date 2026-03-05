@@ -3,6 +3,7 @@ type SendArgs = {
   subject: string
   html: string
   replyTo?: string
+  from?: string
 }
 
 export async function sendEmail(args: SendArgs): Promise<{ id?: string }> {
@@ -13,6 +14,7 @@ export async function sendEmail(args: SendArgs): Promise<{ id?: string }> {
   }
 
   const from =
+    args.from ||
     process.env.MAIL_FROM ||
     process.env.RESEND_FROM ||
     process.env.EMAIL_FROM ||

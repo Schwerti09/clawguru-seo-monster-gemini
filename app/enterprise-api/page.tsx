@@ -1,5 +1,6 @@
 import Container from "@/components/shared/Container"
 import type { Metadata } from "next"
+import EnterpriseContactForm from "@/components/marketing/EnterpriseContactForm"
 
 export const metadata: Metadata = {
   title: "Enterprise API | ClawGuru – Security Intel for SIEM & SOAR",
@@ -403,23 +404,25 @@ await jira.createComment(ticketId, \`
       <section className="py-24">
         <Container>
           <div
-            className="max-w-3xl mx-auto rounded-3xl p-12 text-center"
+            className="max-w-3xl mx-auto rounded-3xl p-10 md:p-12"
             style={{
               background: "linear-gradient(135deg, rgba(0,184,255,0.08) 0%, rgba(0,255,157,0.06) 100%)",
               border: "1px solid rgba(0,255,157,0.2)",
             }}
           >
-            <div className="text-[10px] font-mono uppercase tracking-[0.3em] mb-3" style={{ color: C.green }}>
-              Ready to integrate?
+            <div className="text-center mb-8">
+              <div className="text-[10px] font-mono uppercase tracking-[0.3em] mb-3" style={{ color: C.green }}>
+                Ready to integrate?
+              </div>
+              <h2 className="text-3xl md:text-4xl font-black text-white mb-4">
+                Get your Enterprise API key today.
+              </h2>
+              <p className="text-gray-400 text-base max-w-xl mx-auto">
+                Füll das Formular aus – wir melden uns innerhalb von 24 h.
+                Die ersten 500 API-Calls gehen auf uns.
+              </p>
             </div>
-            <h2 className="text-3xl md:text-4xl font-black text-white mb-4">
-              Get your Enterprise API key today.
-            </h2>
-            <p className="text-gray-400 text-base mb-8 max-w-xl mx-auto">
-              Start with the API reference, then reach out for an Enterprise key.
-              First 500 calls are on us.
-            </p>
-            <div className="flex flex-wrap justify-center gap-4">
+            <div className="mb-6 flex justify-center">
               <a
                 href="/api-docs"
                 className="inline-block px-8 py-4 rounded-2xl font-black text-sm text-black transition-all duration-200 hover:opacity-90"
@@ -427,14 +430,8 @@ await jira.createComment(ticketId, \`
               >
                 API Reference →
               </a>
-              <a
-                href="mailto:enterprise@clawguru.org"
-                className="inline-block px-8 py-4 rounded-2xl font-black text-sm text-white border transition-all duration-200 hover:bg-white/5"
-                style={{ borderColor: C.border }}
-              >
-                Contact Enterprise Sales
-              </a>
             </div>
+            <EnterpriseContactForm />
           </div>
         </Container>
       </section>

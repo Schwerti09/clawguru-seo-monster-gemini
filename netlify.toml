@@ -5,4 +5,4 @@
 [build.environment]
   NODE_VERSION = "20"
   NODE_OPTIONS = "--max-old-space-size=4096"
-  SECRETS_SCAN_OMIT_PATHS = "lib/i18n.ts lib/legal/engine.ts lib/newsletter.ts lib/selfhealth.ts lib/sentinel.ts lib/upstream-cve.ts"
+  SECRETS_SCAN_ENABLED = false

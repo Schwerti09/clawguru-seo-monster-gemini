@@ -7,8 +7,7 @@
   },
   "scripts": {
     "dev": "next dev",
-    "build": "NODE_OPTIONS=--max-old-space-size=4096 next build",
-    "start": "next start",
+"build": "next build --max-old-space-size=4096"    "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {

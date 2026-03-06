@@ -1,9 +1,8 @@
 import { cookies } from "next/headers"
 import type { Metadata } from "next"
-import { verifySessionToken, USER_SESSION_COOKIE } from "../../lib/auth"
-import LoginPage from "@/components/pages/LoginPage"
 import AccountPage from "@/components/pages/AccountPage"
 import { SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
+import { verifySessionToken, USER_SESSION_COOKIE } from "../../lib/auth.ts"  // ← HIER der Fix: relativer Pfad + .ts-Endung
 
 export const runtime = "nodejs"
 
@@ -56,16 +55,13 @@ export default async function LocaleAccountPage(props: {
 }) {
   const params = await props.params
   const searchParams = await props.searchParams
-
   const jar = await cookies()
   const token = jar.get(USER_SESSION_COOKIE)?.value
   const session = token ? verifySessionToken(token) : null
   const error =
     typeof searchParams?.error === "string" ? searchParams.error : null
-
   if (!session) {
     return <LoginPage error={error} />
   }
-
   return <AccountPage email={session.email} />
 }

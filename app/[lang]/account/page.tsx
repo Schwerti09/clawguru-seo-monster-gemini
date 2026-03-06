@@ -1,6 +1,6 @@
 import { cookies } from "next/headers"
 import type { Metadata } from "next"
-import { verifySessionToken, USER_SESSION_COOKIE } from "@/lib/auth"
+import { verifySessionToken, USER_SESSION_COOKIE } from "../../lib/auth"
 import LoginPage from "@/components/pages/LoginPage"
 import AccountPage from "@/components/pages/AccountPage"
 import { SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"

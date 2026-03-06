@@ -303,14 +303,20 @@ async function sendAccessEmail(session: Stripe.Checkout.Session) {
     if (!subscriptionId) return
   }
 
-  const token = signAccessToken({
-    v: 1,
-    plan,
-    customerId,
-    subscriptionId,
-    iat: now,
-    exp: tokenExp(plan, now)
-  })
+  let token: string
+  try {
+    token = signAccessToken({
+      v: 1,
+      plan,
+      customerId,
+      subscriptionId,
+      iat: now,
+      exp: tokenExp(plan, now)
+    })
+  } catch (err) {
+    console.error("[sendAccessEmail] Failed to sign access token – ACCESS_TOKEN_SECRET missing?", err)
+    return
+  }
 
   const base = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
   const url = `${base}/api/auth/recover?token=${encodeURIComponent(token)}`
@@ -385,7 +391,8 @@ export async function POST(req: NextRequest) {
     }
 
     return NextResponse.json({ received: true })
-  } catch {
+  } catch (err) {
+    console.error("[stripe/webhook] Unhandled error processing event:", err)
     return NextResponse.json({ received: true })
   }
 }

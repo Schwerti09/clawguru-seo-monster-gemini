@@ -31,8 +31,8 @@ function b64urlToBuf(s: string) {
 export function signAccessToken(payload: AccessTokenPayload) {
   // IMPORTANT: Never fall back to unrelated secrets (e.g. STRIPE_SECRET_KEY).
   // This token is used for user access. Treat it like a JWT secret.
-  const secret = process.env.ACCESS_TOKEN_SECRET || process.env.NEXTAUTH_SECRET
-  if (!secret) throw new Error("Missing ACCESS_TOKEN_SECRET (or NEXTAUTH_SECRET)")
+  const secret = process.env.ACCESS_TOKEN_SECRET || process.env.NEXTAUTH_SECRET || process.env.SESSION_SECRET
+  if (!secret) throw new Error("Missing ACCESS_TOKEN_SECRET (or NEXTAUTH_SECRET / SESSION_SECRET)")
   const body = b64url(JSON.stringify(payload))
   const sig = crypto.createHmac("sha256", secret).update(body).digest()
   return `${body}.${b64url(sig)}`
@@ -40,7 +40,7 @@ export function signAccessToken(payload: AccessTokenPayload) {
 
 export function verifyAccessToken(token: string): AccessTokenPayload | null {
   try {
-    const secret = process.env.ACCESS_TOKEN_SECRET || process.env.NEXTAUTH_SECRET
+    const secret = process.env.ACCESS_TOKEN_SECRET || process.env.NEXTAUTH_SECRET || process.env.SESSION_SECRET
     if (!secret) return null
     const [body, sig] = token.split(".")
     if (!body || !sig) return null

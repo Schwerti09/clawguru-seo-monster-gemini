@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { stripe } from "@/lib/stripe"
-import { sendEmail } from "@/lib/email"
+import { sendEmail, buildMagicLinkHtml } from "@/lib/email"
 import { signAccessToken, AccessPlan } from "@/lib/access-token"
 
 export const runtime = "nodejs"
@@ -27,23 +27,6 @@ function okToProceed(key: string) {
 function tokenExp(plan: AccessPlan, now: number) {
   if (plan === "daypass") return now + 60 * 60 * 24
   return now + 60 * 60 * 24 * 30
-}
-
-function emailHtml(url: string) {
-  return `
-  <div style="font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial; line-height: 1.5; color:#111;">
-    <h2 style="margin:0 0 10px 0;">ClawGuru Recovery Link</h2>
-    <p style="margin:0 0 18px 0;">Hier ist dein Magic Link zum Dashboard:</p>
-    <p style="margin:18px 0;">
-      <a href="${url}" style="display:inline-block; padding:12px 18px; background:#111827; color:#fff; text-decoration:none; border-radius:12px; font-weight:800;">
-        Zugriff aktivieren → Dashboard
-      </a>
-    </p>
-    <p style="margin:0 0 10px 0; font-size:12px; color:#555;">
-      Direktlink:<br/>
-      <a href="${url}">${url}</a>
-    </p>
-  </div>`
 }
 
 async function issueTokenForCustomer(customerId: string): Promise<string | null> {
@@ -132,11 +115,12 @@ export async function POST(req: NextRequest) {
     const url = `${base}/api/auth/recover?token=${encodeURIComponent(token)}`
     await sendEmail({
       to: email,
-      subject: "ClawGuru Recovery Link",
-      html: emailHtml(url)
+      subject: "ClawGuru – Dein Magic Link",
+      html: buildMagicLinkHtml(url, 60), // 60 minutes validity
     })
-  } catch {
-    // swallow
+  } catch (err) {
+    console.error("[recovery/request] Failed to process recovery request:", err)
+    // Still redirect to success page to avoid leaking account existence
   }
 
   return NextResponse.redirect(redirectUrl)

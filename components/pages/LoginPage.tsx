@@ -1,1 +1,7 @@
-export default function LoginPage() { return <div>Login Page Placeholder</div>; } 
+import React from 'react'; 
+ 
+const LoginPage: React.FC = () =
+  return <div>Login Page Component</div>; 
+}; 
+ 
+export default LoginPage; 

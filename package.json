@@ -21,7 +21,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "stripe": "^16.0.0",
-    "three": "^0.183.2"
+    "three": "^0.167.1"
   },
   "devDependencies": {
     "@netlify/plugin-nextjs": "^5.8.1",

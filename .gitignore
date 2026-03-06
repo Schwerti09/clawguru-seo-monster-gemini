@@ -22,3 +22,6 @@ __pycache__/
 .pytest_cache/
 private_downloads/ 
 private_downloads/ 
+
+# Local Netlify folder
+.netlify

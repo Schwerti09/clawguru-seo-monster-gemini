@@ -53,7 +53,7 @@ export type SubscriberInfo = {
  * Docs: https://nvd.nist.gov/developers/vulnerabilities
  */
 export async function fetchCriticalCVEs(limit = 10): Promise<CveItem[]> {
-  const base = "https://services.nvd.nist.gov/rest/json/cves/2.0"
+const cveApi = process.env.CVE_API_URL;
 
   // Pull the last 7 days of CVEs
   const now = new Date()

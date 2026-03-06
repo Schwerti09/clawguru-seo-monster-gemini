@@ -4,21 +4,8 @@ const nextConfig = {
   trailingSlash: false,
   poweredByHeader: false,
   compress: true,
-  compiler: {
-    removeConsole: process.env.NODE_ENV === "production",
-  },
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  images: {
-    remotePatterns: [
-      { protocol: "https", hostname: "cdn.clawguru.org" },
-      { protocol: "https", hostname: "*.clawguru.org" },
-      { protocol: "https", hostname: "images.unsplash.com" },
-      { protocol: "https", hostname: "*.unsplash.com" },
-      { protocol: "https", hostname: "avatars.githubusercontent.com" },
-    ],
-  },
+  eslint: { ignoreDuringBuilds: true },
+  images: { unoptimized: true },
   webpack: (config) => {
     config.resolve.alias = {
       ...config.resolve.alias,
@@ -27,5 +14,4 @@ const nextConfig = {
     return config
   }
 }
-
-module.exports = nextConfigs
+module.exports = nextConfig

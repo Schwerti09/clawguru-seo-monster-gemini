@@ -1,3 +1,6 @@
 [build]
   command = "npm ci --include=dev && npm run build"
   publish = ".next"
+[build.environment]
+  NODE_VERSION = "20"
+  NODE_OPTIONS = "--max-old-space-size=4096"

@@ -1,8 +1,9 @@
 import { cookies } from "next/headers"
 import type { Metadata } from "next"
+import LoginPage from "@/components/pages/LoginPage"
 import AccountPage from "@/components/pages/AccountPage"
 import { SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
-import { verifySessionToken, USER_SESSION_COOKIE } from "../../lib/auth.ts"  // ← HIER der Fix: relativer Pfad + .ts-Endung
+import { verifySessionToken, USER_SESSION_COOKIE } from "../../../lib/auth.ts" // ← KORREKT: relativer Pfad von app/[lang]/account/ aus zum Root lib/auth.ts
 
 export const runtime = "nodejs"
 
@@ -17,6 +18,7 @@ export async function generateMetadata(
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale)
     ? params.lang
     : "de") as Locale
+
   const titles: Record<Locale, string> = {
     de: "Account | ClawGuru",
     en: "Account | ClawGuru",
@@ -29,6 +31,7 @@ export async function generateMetadata(
     ja: "アカウント | ClawGuru",
     ar: "الحساب | ClawGuru",
   }
+
   const descriptions: Record<Locale, string> = {
     de: "Dein ClawGuru Account – Gespeicherte Checks, Darwinian Feed, Runbook-Verlauf.",
     en: "Your ClawGuru account – Saved Checks, Darwinian Feed, Runbook History.",
@@ -41,6 +44,7 @@ export async function generateMetadata(
     ja: "ClawGuru アカウント – 保存済みチェック、Darwinian Feed、Runbook 履歴。",
     ar: "حسابك في ClawGuru – الفحوصات المحفوظة، Darwinian Feed، سجل Runbook.",
   }
+
   return {
     title: titles[locale] ?? "Account | ClawGuru",
     description:
@@ -55,13 +59,17 @@ export default async function LocaleAccountPage(props: {
 }) {
   const params = await props.params
   const searchParams = await props.searchParams
+
   const jar = await cookies()
   const token = jar.get(USER_SESSION_COOKIE)?.value
   const session = token ? verifySessionToken(token) : null
+
   const error =
     typeof searchParams?.error === "string" ? searchParams.error : null
+
   if (!session) {
     return <LoginPage error={error} />
   }
+
   return <AccountPage email={session.email} />
 }

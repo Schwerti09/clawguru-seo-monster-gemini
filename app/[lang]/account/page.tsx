@@ -3,7 +3,8 @@ import type { Metadata } from "next"
 import LoginPage from "../../../components/pages/LoginPage"
 import AccountPage from "../../../components/pages/AccountPage"
 import { SUPPORTED_LOCALES, type Locale } from "../../../lib/i18n"
-import { verifySessionToken, USER_SESSION_COOKIE } from "../../../lib/auth.ts" // ← KORREKT: relativer Pfad von app/[lang]/account/ aus zum Root lib/auth.ts
+import { verifySessionToken, USER_SESSION_COOKIE } from "../../../lib/auth"
+
 
 export const runtime = "nodejs"
 

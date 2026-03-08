@@ -1,27 +1,32 @@
 # dependencies
 node_modules/
 
-# build output
+# next build
 .next/
 out/
 
-# environment
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# env files
 .env
 .env.local
-.env.*.local
+.env.development
+.env.production
 
-# misc
+# mac / windows junk
 .DS_Store
-*.pem
-tsconfig.tsbuildinfo
+Thumbs.db
 
-# Python
-__pycache__/
-*.pyc
-*.pyo
-.pytest_cache/
-private_downloads/ 
-private_downloads/ 
+# build artifacts
+dist/
+build/
 
-# Local Netlify folder
+# netlify
 .netlify
+
+# vscode
+.vscode

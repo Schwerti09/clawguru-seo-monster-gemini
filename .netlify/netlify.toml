@@ -1,0 +1,35 @@
+functionsDirectory = "C:\\clawguru-seo-monster-gemini\\netlify\\functions"
+functionsDirectoryOrigin = "default"
+headers = []
+redirects = []
+
+[build]
+publish = "C:\\clawguru-seo-monster-gemini\\.next"
+publishOrigin = "ui"
+commandOrigin = "ui"
+command = "npm run build"
+functions = "C:\\clawguru-seo-monster-gemini\\netlify\\functions"
+
+[build.environment]
+
+[build.processing]
+
+[build.processing.css]
+
+[build.processing.html]
+
+[build.processing.images]
+
+[build.processing.js]
+
+[build.services]
+
+[functions]
+
+[functions."*"]
+
+[[plugins]]
+origin = "default"
+package = "@netlify/plugin-nextjs"
+
+[plugins.inputs]

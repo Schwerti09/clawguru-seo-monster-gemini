@@ -15,6 +15,7 @@ type NavItem = { href: string; label: string }
 export default function Header() {
   const [moreOpen, setMoreOpen] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [hasAccess, setHasAccess] = useState(false)
   const moreRef = useRef<HTMLDivElement>(null)
   const pathname = usePathname()
 
@@ -51,6 +52,9 @@ export default function Header() {
 
   const ALL_NAV = [...PRIMARY_NAV, ...MORE_NAV]
 
+  const accountHref = hasAccess ? "/dashboard" : `/${currentLocale}/account`
+  const accountLabel = hasAccess ? "Dashboard" : "Zugang"
+
   // Close "More" dropdown on outside click
   useEffect(() => {
     function handler(e: MouseEvent) {
@@ -65,7 +69,30 @@ export default function Header() {
   // Close mobile menu on route change (simple approach)
   useEffect(() => {
     setMobileOpen(false)
-  }, [])
+  }, [pathname])
+
+  // Check auth/access status client-side
+  useEffect(() => {
+    let cancelled = false
+
+    async function checkAccess() {
+      try {
+        const res = await fetch("/api/auth/me", { cache: "no-store" })
+        if (!cancelled) {
+          setHasAccess(res.ok)
+        }
+      } catch {
+        if (!cancelled) {
+          setHasAccess(false)
+        }
+      }
+    }
+
+    checkAccess()
+    return () => {
+      cancelled = true
+    }
+  }, [pathname])
 
   // Compact header share: Web Share API → X intent fallback
   const handleHeaderShare = useCallback(() => {
@@ -112,7 +139,9 @@ export default function Header() {
               </div>
               <div className="leading-tight">
                 <div className="font-black text-white tracking-tight">ClawGuru</div>
-                <div className="text-xs hidden sm:block" style={{ color: "rgba(212,175,55,0.7)" }}>Mycelial Singularity Engine v3.0</div>
+                <div className="text-xs hidden sm:block" style={{ color: "rgba(212,175,55,0.7)" }}>
+                  Mycelial Singularity Engine v3.0
+                </div>
               </div>
             </Link>
 
@@ -182,15 +211,19 @@ export default function Header() {
                 }}
               >
                 <span aria-hidden>🍄</span>
-                <span className="hidden md:inline text-xs font-mono tracking-wide">{t(currentLocale, "shareMyceliumXBtn")}</span>
+                <span className="hidden md:inline text-xs font-mono tracking-wide">
+                  {t(currentLocale, "shareMyceliumXBtn")}
+                </span>
               </button>
+
               {/* Language switcher */}
               <div className="hidden sm:block">
                 <LanguageSwitcher currentLocale={currentLocale} variant="compact" />
               </div>
-              {/* Login button */}
+
+              {/* Access / Dashboard button */}
               <Link
-                href={`/${currentLocale}/account`}
+                href={accountHref}
                 className="hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-xl font-bold text-sm transition-all duration-200 hover:brightness-110"
                 style={{
                   background: "linear-gradient(135deg, #d4af37 0%, #e8cc6a 50%, #a8872a 100%)",
@@ -199,8 +232,9 @@ export default function Header() {
                 }}
               >
                 <LogIn className="w-4 h-4" aria-hidden="true" />
-                <span>{t(currentLocale, "navLogin")}</span>
+                <span>{accountLabel}</span>
               </Link>
+
               <Link
                 href="/security/notfall-leitfaden"
                 className="hidden sm:block px-3 py-2 rounded-xl font-black text-sm transition-all duration-200"
@@ -208,6 +242,7 @@ export default function Header() {
               >
                 {t(currentLocale, "navEmergency")}
               </Link>
+
               <Link
                 href="/pricing"
                 className="hidden sm:block px-4 py-2 rounded-xl font-black text-sm transition-all duration-200"
@@ -250,6 +285,7 @@ export default function Header() {
           style={{ background: "rgba(0,0,0,0.4)", backdropFilter: "blur(4px)" }}
         />
       )}
+
       <div
         className={`fixed top-0 right-0 h-full w-72 z-50 lg:hidden transform transition-transform duration-300 ease-in-out ${
           mobileOpen ? "translate-x-0" : "translate-x-full"
@@ -277,6 +313,7 @@ export default function Header() {
               {item.label}
             </Link>
           ))}
+
           <div className="pt-4 flex flex-col gap-2">
             {/* Mycelium share button (mobile) */}
             <button
@@ -286,6 +323,7 @@ export default function Header() {
             >
               🍄 {t(currentLocale, "shareMyceliumBtn")}
             </button>
+
             <Link
               href="/security/notfall-leitfaden"
               className="block px-4 py-3 rounded-xl font-black text-sm text-center"
@@ -294,8 +332,9 @@ export default function Header() {
             >
               {t(currentLocale, "navEmergency")}
             </Link>
+
             <Link
-              href={`/${currentLocale}/account`}
+              href={accountHref}
               className="block px-4 py-3 rounded-xl font-bold text-sm text-center flex items-center justify-center gap-2"
               style={{
                 background: "linear-gradient(135deg, #d4af37 0%, #e8cc6a 50%, #a8872a 100%)",
@@ -305,8 +344,9 @@ export default function Header() {
               onClick={() => setMobileOpen(false)}
             >
               <LogIn className="w-4 h-4" aria-hidden="true" />
-              {t(currentLocale, "navLogin")}
+              {accountLabel}
             </Link>
+
             <Link
               href="/pricing"
               className="block px-4 py-3 rounded-xl font-black text-sm text-center text-black"
@@ -321,4 +361,3 @@ export default function Header() {
     </>
   )
 }
-

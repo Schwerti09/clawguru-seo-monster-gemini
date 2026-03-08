@@ -28,8 +28,33 @@ export default function BuyButton({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ product })
       })
-      const data = await res.json()
-      if (data?.url) window.location.href = data.url
+
+      const text = await res.text()
+      console.log("[BuyButton] status:", res.status)
+      console.log("[BuyButton] raw response:", text)
+
+      let data: any = null
+      try {
+        data = JSON.parse(text)
+      } catch {
+        alert("Checkout antwortet nicht als JSON:\n" + text)
+        return
+      }
+
+      if (!res.ok) {
+        alert("Checkout-Fehler:\n" + (data?.error || `HTTP ${res.status}`))
+        return
+      }
+
+      if (!data?.url) {
+        alert("Keine Checkout-URL erhalten.\nResponse:\n" + JSON.stringify(data, null, 2))
+        return
+      }
+
+      window.location.href = data.url
+    } catch (err) {
+      console.error("[BuyButton] fetch failed:", err)
+      alert("Checkout-Request fehlgeschlagen. Details in der Browser-Konsole.")
     } finally {
       setLoading(false)
     }
@@ -45,7 +70,7 @@ export default function BuyButton({
       }
       style={style}
     >
-      {loading ? t(locale, 'buyLoading') : label}
+      {loading ? t(locale, "buyLoading") : label}
     </button>
   )
 }

@@ -19,15 +19,19 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const session = await stripe.checkout.sessions.retrieve(session_id, { expand: ["subscription", "customer"] })
+    const session = await stripe.checkout.sessions.retrieve(session_id, {
+      expand: ["subscription", "customer"],
+    })
 
-    // Ensure paid / completed
     const paid = session.payment_status === "paid" || session.status === "complete"
-    if (!paid) return NextResponse.redirect(new URL(`/success?session_id=${encodeURIComponent(session_id)}`, getOrigin(req)))
+    if (!paid) {
+      return NextResponse.redirect(
+        new URL(`/success?session_id=${encodeURIComponent(session_id)}`, getOrigin(req))
+      )
+    }
 
     const origin = getOrigin(req)
 
-    // Determine plan from metadata/price
     const product = (session.metadata?.product || "").toLowerCase()
     let plan: AccessPlan | null = null
 
@@ -36,7 +40,6 @@ export async function GET(req: NextRequest) {
     if (product === "team") plan = "team"
 
     if (!plan) {
-      // Fallback by mode
       plan = session.mode === "payment" ? "daypass" : "pro"
     }
 
@@ -51,15 +54,16 @@ export async function GET(req: NextRequest) {
 
     const now = Math.floor(Date.now() / 1000)
 
-    let exp = now + 60 * 60 * 24 // 24h for daypass
+    let exp = now + 60 * 60 * 24
     let subscriptionId: string | undefined = undefined
 
     if (plan === "pro" || plan === "team") {
-      exp = now + 60 * 60 * 24 * 30 // 30d token lifetime (subscription validated on each access)
+      exp = now + 60 * 60 * 24 * 30
       subscriptionId =
         typeof session.subscription === "string"
           ? session.subscription
           : (session.subscription as { id: string } | null)?.id
+
       if (!subscriptionId) {
         return NextResponse.redirect(new URL("/pricing?no_subscription=1", origin))
       }
@@ -71,8 +75,10 @@ export async function GET(req: NextRequest) {
       customerId,
       subscriptionId,
       iat: now,
-      exp
+      exp,
     })
+
+    const isSecure = origin.startsWith("https://")
 
     const res = NextResponse.redirect(new URL("/dashboard", origin))
     res.cookies.set({
@@ -80,12 +86,16 @@ export async function GET(req: NextRequest) {
       value: token,
       httpOnly: true,
       sameSite: "lax",
-      secure: true,
+      secure: isSecure,
       path: "/",
-      maxAge: Math.max(60, exp - now)
+      maxAge: Math.max(60, exp - now),
     })
+
     return res
-  } catch {
-    return NextResponse.redirect(new URL(`/success?session_id=${encodeURIComponent(session_id)}`, getOrigin(req)))
+  } catch (error) {
+    console.error("[auth/activate] failed:", error)
+    return NextResponse.redirect(
+      new URL(`/success?session_id=${encodeURIComponent(session_id)}`, getOrigin(req))
+    )
   }
-}
+} 

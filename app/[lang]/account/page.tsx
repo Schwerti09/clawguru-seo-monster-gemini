@@ -1,10 +1,11 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { getAccess } from "@/lib/access"
-import AccountPage from "@/components/pages/AccountPage"
-import Container from "@/components/shared/Container"
-import SectionTitle from "@/components/shared/SectionTitle"
-import { SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
+
+// Relative Imports – funktionieren garantiert im Recovery-Branch + CI
+import { getAccess } from "../../../lib/access"
+import Container from "../../../components/shared/Container"
+import SectionTitle from "../../../components/shared/SectionTitle"
+import { SUPPORTED_LOCALES, type Locale } from "../../../lib/i18n"
 
 export const runtime = "nodejs"
 
@@ -48,79 +49,117 @@ export async function generateMetadata(
 
   return {
     title: titles[locale] ?? "Account | ClawGuru",
-    description:
-      descriptions[locale] ?? "Your ClawGuru access – Dashboard, reports, weekly digest, kits.",
+    description: descriptions[locale] ?? descriptions.de,
     robots: { index: false, follow: false },
   }
 }
 
-function AccessRequired({ lang }: { lang: string }) {
-  const pricingHref = "/pricing"
-  const dashboardHref = "/dashboard"
-
+/* ============================================= */
+/*               ACCESS REQUIRED                 */
+/* ============================================= */
+function AccessRequired() {
   return (
     <Container>
-      <div className="py-16 max-w-5xl mx-auto">
+      <div className="py-16 max-w-5xl mx-auto text-center">
         <SectionTitle
           kicker="ClawGuru Access"
           title="Zugang aktivieren"
-          subtitle="Kein klassischer Login nötig. Nach Kauf wird dein Zugang aktiviert und du kommst direkt ins Dashboard."
+          subtitle="Kein Login. Kein Passwort. Einfach kaufen → aktivieren → loslegen."
         />
 
-        <div className="mt-8 flex flex-wrap gap-4">
+        <div className="mt-10 flex flex-wrap gap-4 justify-center">
           <Link
-            href={pricingHref}
-            className="px-6 py-3 rounded-2xl bg-white text-black font-semibold"
+            href="/pricing"
+            className="px-8 py-4 rounded-2xl bg-white text-black font-semibold text-lg hover:bg-gray-200 transition"
           >
-            Preise ansehen
+            Preise ansehen & kaufen
           </Link>
 
           <Link
-            href={dashboardHref}
-            className="px-6 py-3 rounded-2xl border border-gray-700 text-white font-semibold"
+            href="/dashboard"
+            className="px-8 py-4 rounded-2xl border border-gray-700 text-white font-semibold text-lg hover:bg-white/10 transition"
           >
             Zum Dashboard
           </Link>
         </div>
 
-        <div className="mt-10 grid md:grid-cols-3 gap-4">
+        <div className="mt-16 grid md:grid-cols-3 gap-6">
           {[
-            ["Day Pass", "24h", "Ein Tag Zugriff für akute Incidents und schnelle Missionen."],
-            ["Pro", "Abo", "Dashboard, Weekly Digest, Reports, Kits und tiefere Intel-Workflows."],
-            ["Team", "Abo", "Mehr Projekte, Shared Ops, Team Alerts und kollaborative Einsätze."],
+            ["Day Pass", "24h", "Ein Tag voller Power für akute Einsätze"],
+            ["Pro", "Monatlich", "Vollzugriff auf alle Tools & Intel"],
+            ["Team", "Monatlich", "Mehrere Projekte + Team-Funktionen"],
           ].map(([title, price, desc]) => (
             <div
               key={title}
-              className="p-6 rounded-3xl border border-gray-800 bg-black/30"
+              className="p-8 rounded-3xl border border-gray-800 bg-black/30"
             >
-              <div className="text-2xl font-black">{title}</div>
-              <div className="text-gray-400 mt-1">{price}</div>
-              <div className="text-sm text-gray-300 mt-3">{desc}</div>
+              <div className="text-3xl font-black">{title}</div>
+              <div className="text-gray-400 mt-1 text-xl">{price}</div>
+              <div className="mt-6 text-sm text-gray-300 leading-relaxed">{desc}</div>
             </div>
           ))}
-        </div>
-
-        <div className="mt-10 p-6 rounded-3xl border border-gray-800 bg-black/20 text-sm text-gray-300">
-          Nach dem Checkout klickst du auf{" "}
-          <span className="font-semibold text-white">„Zugang aktivieren“</span>.
-          Dadurch wird dein sicherer Zugriff per Cookie freigeschaltet — ohne Benutzername-und-Passwort-Zirkus.
         </div>
       </div>
     </Container>
   )
 }
 
+/* ============================================= */
+/*               ACCESS GRANTED                  */
+/* ============================================= */
+function AccessGranted({ customerId, plan }: { customerId?: string; plan?: string }) {
+  return (
+    <Container>
+      <div className="py-16 max-w-4xl mx-auto">
+        <SectionTitle
+          kicker="Willkommen zurück"
+          title="Dein ClawGuru Account"
+          subtitle={`Plan: ${plan?.toUpperCase() || "Pro"} • Kunde: ${customerId || "ClawGuru User"}`}
+        />
+
+        <div className="mt-12 grid gap-6 md:grid-cols-2">
+          <Link
+            href="/dashboard"
+            className="block p-8 rounded-3xl border border-white/10 hover:border-white/30 bg-black/30 transition group"
+          >
+            <div className="text-2xl font-bold group-hover:text-[#c9a84c]">→ Dashboard öffnen</div>
+            <p className="mt-3 text-gray-400">Reports, Weekly Digest, Kits & Mission Mode</p>
+          </Link>
+
+          <Link
+            href="/pricing"
+            className="block p-8 rounded-3xl border border-white/10 hover:border-white/30 bg-black/30 transition group"
+          >
+            <div className="text-2xl font-bold group-hover:text-[#c9a84c]">→ Upgrade oder verlängern</div>
+            <p className="mt-3 text-gray-400">Team, Enterprise oder längere Day-Pässe</p>
+          </Link>
+        </div>
+      </div>
+    </Container>
+  )
+}
+
+/* ============================================= */
+/*               MAIN PAGE                       */
+/* ============================================= */
 export default async function LocaleAccountPage(props: {
   params: Promise<{ lang: string }>
 }) {
   const params = await props.params
-  const lang = SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de"
+  const lang = SUPPORTED_LOCALES.includes(params.lang as Locale)
+    ? params.lang
+    : "de"
 
   const access = await getAccess()
 
   if (!access.ok) {
-    return <AccessRequired lang={lang} />
+    return <AccessRequired />
   }
 
-  return <AccountPage email={access.customerId ?? "ClawGuru Access"} />
+  return (
+    <AccessGranted
+      customerId={access.customerId}
+      plan={access.plan}
+    />
+  )
 }

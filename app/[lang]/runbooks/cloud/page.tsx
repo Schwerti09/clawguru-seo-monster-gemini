@@ -1,9 +1,9 @@
 // Hub page: /[lang]/runbooks/cloud
 // Strong hub for cloud provider runbooks – internal linking anchor
 
-import Container from "@/components/shared/Container"
-import { RUNBOOKS } from "@/lib/pseo"
-import { type Locale, SUPPORTED_LOCALES } from "@/lib/i18n"
+import Container from "../../../../components/shared/Container"
+import { RUNBOOKS } from "../../../../lib/pseo"
+import { type Locale, SUPPORTED_LOCALES } from "../../../../lib/i18n"
 import Link from "next/link"
 
 export const revalidate = 60

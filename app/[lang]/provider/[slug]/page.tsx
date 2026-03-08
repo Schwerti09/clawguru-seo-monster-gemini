@@ -1,9 +1,10 @@
 // Localized provider pages: /de/provider/[slug], /en/provider/[slug], etc.
 // Delegates to the base provider page so all locales resolve without 404.
 
-import { SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
-import { allProviders } from "@/lib/pseo"
-import ProviderPage from "@/app/provider/[slug]/page"
+// Korrekte relative Imports für app/[lang]/provider/[slug]/page.tsx
+import { SUPPORTED_LOCALES, type Locale } from "../../../../lib/i18n"
+import { allProviders } from "../../../../lib/pseo"
+import ProviderPage from "../../../../app/provider/[slug]/page"
 
 export const revalidate = 60
 export const dynamicParams = true
@@ -21,6 +22,7 @@ export async function generateMetadata(props: {
   const locale = (SUPPORTED_LOCALES.includes(lang as Locale) ? lang : "de") as Locale
   const p = allProviders().find((x) => x.slug === slug.toLowerCase())
   if (!p) return {}
+
   return {
     title: `${p.name} Runbooks | ClawGuru`,
     alternates: { canonical: `/${locale}/provider/${p.slug}` },

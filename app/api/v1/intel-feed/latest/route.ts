@@ -21,7 +21,9 @@
  */
 
 import { NextRequest, NextResponse } from "next/server"
-import { authenticateApiRequest, reportUsage } from "../../../../lib/api-auth"
+
+// Korrekte relative Imports für app/api/v1/intel-feed/latest/route.ts
+import { authenticateApiRequest, reportUsage } from "../../../../../lib/api-auth"
 
 export const dynamic = "force-dynamic"
 
@@ -40,7 +42,18 @@ type IntelItem = {
 }
 
 const FEED_ITEMS: IntelItem[] = [
-  // ... (deine 10 Items bleiben gleich – ich kürze hier, kopiere den Rest aus deiner Datei)
+  // ... deine 10 Items bleiben gleich – kopiere sie aus deiner Datei rein
+  {
+    id: "ioc-001",
+    title: "Exposed Gateway (public) → Token Leakage",
+    severity: "high",
+    category: "exposure",
+    when: "2026-02-25T12:00:00Z",
+    summary: "Public gateway endpoints without private networking + weak auth repeatedly lead to key/token leaks.",
+    actions: ["Enforce private subnet/VPN", "Firewall deny-by-default", "Rotate all keys", "Enable auth-fail alerts"],
+    tags: ["gateway", "token", "exposure", "critical-infrastructure"],
+  },
+  // ... die anderen 9 Items
 ]
 
 const VALID_SEVERITIES: Severity[] = ["high", "medium", "low"]
@@ -49,12 +62,8 @@ const VALID_CATEGORIES: Category[] = ["exposure", "websocket", "secrets", "suppl
 export async function GET(req: NextRequest) {
   const auth = authenticateApiRequest(req)
 
-  // Typ-Narrowing + non-null assertion für auth.error
   if (!auth.ok) {
-    return NextResponse.json(
-      { error: auth.error! }, // ! sagt TS: "hier ist error garantiert da"
-      { status: auth.status }
-    )
+    return NextResponse.json({ error: auth.error! }, { status: auth.status })
   }
 
   const { searchParams } = req.nextUrl

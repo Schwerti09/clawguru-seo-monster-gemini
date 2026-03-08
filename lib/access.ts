@@ -18,7 +18,12 @@ export async function getAccess(): Promise<AccessInfo> {
 
   // daypass = only expiry check (already verified in token)
   if (payload.plan === "daypass") {
-    return { ok: true, plan: payload.plan, customerId: payload.customerId, exp: payload.exp }
+    return {
+      ok: true,
+      plan: payload.plan,
+      customerId: payload.customerId,
+      exp: payload.exp
+    }
   }
 
   // subscription plans: verify Stripe subscription status (authoritative)
@@ -30,6 +35,7 @@ export async function getAccess(): Promise<AccessInfo> {
     const status = sub.status
     const active = status === "active" || status === "trialing"
     if (!active) return { ok: false, reason: "subscription_inactive" }
+
     return {
       ok: true,
       plan: payload.plan,

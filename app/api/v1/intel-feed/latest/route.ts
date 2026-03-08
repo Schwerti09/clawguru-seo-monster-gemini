@@ -21,7 +21,9 @@
  */
 
 import { NextRequest, NextResponse } from "next/server"
-import { authenticateApiRequest, reportUsage } from "@/lib/api-auth"
+
+// Korrekte relative Imports für app/api/v1/intel-feed/latest/route.ts
+import { authenticateApiRequest, reportUsage } from "../../../../../lib/api-auth"
 
 export const dynamic = "force-dynamic"
 
@@ -147,8 +149,9 @@ const VALID_CATEGORIES: Category[] = ["exposure", "websocket", "secrets", "suppl
 
 export async function GET(req: NextRequest) {
   const auth = authenticateApiRequest(req)
+
   if (!auth.ok) {
-    return NextResponse.json({ error: auth.error }, { status: auth.status })
+    return NextResponse.json({ error: auth.error! }, { status: auth.status })
   }
 
   const { searchParams } = req.nextUrl
@@ -168,7 +171,6 @@ export async function GET(req: NextRequest) {
 
   items = items.slice(0, limit)
 
-  // Report usage to Stripe (fire-and-forget)
   await reportUsage(auth.info)
 
   return NextResponse.json({

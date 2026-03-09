@@ -1,18 +1,26 @@
-functionsDirectory = "C:\\clawguru-seo-monster-gemini\\netlify\\functions"
-functionsDirectoryOrigin = "default"
-headers = []
-redirects = []
+headersOrigin = "inline"
+redirectsOrigin = "inline"
+
+[functions]
+
+[functions."*"]
+
+[[plugins]]
+origin = "default"
+package = "@netlify/plugin-nextjs"
+
+[plugins.inputs]
 
 [build]
 publish = "C:\\clawguru-seo-monster-gemini\\.next"
-publishOrigin = "ui"
-commandOrigin = "ui"
+publishOrigin = "config"
+commandOrigin = "config"
 command = "npm run build"
-functions = "C:\\clawguru-seo-monster-gemini\\netlify\\functions"
 
 [build.environment]
 
 [build.processing]
+skip_processing = true
 
 [build.processing.css]
 
@@ -24,12 +32,38 @@ functions = "C:\\clawguru-seo-monster-gemini\\netlify\\functions"
 
 [build.services]
 
-[functions]
+[[headers]]
+for = "/_next/static/*"
 
-[functions."*"]
+[headers.values]
+Cache-Control = "public, max-age=31536000, immutable"
 
-[[plugins]]
-origin = "default"
-package = "@netlify/plugin-nextjs"
+[[redirects]]
+from = "/_next/image"
+to = "/.netlify/images?url=:url&w=:width&q=:quality"
+status = 200.0
+force = false
 
-[plugins.inputs]
+[redirects.query]
+url = ":url"
+w = ":width"
+q = ":quality"
+
+[redirects.conditions]
+
+[redirects.headers]
+
+[[redirects]]
+from = "/_ipx/*"
+to = "/.netlify/images?url=:url&w=:width&q=:quality"
+status = 200.0
+force = false
+
+[redirects.query]
+url = ":url"
+w = ":width"
+q = ":quality"
+
+[redirects.conditions]
+
+[redirects.headers]

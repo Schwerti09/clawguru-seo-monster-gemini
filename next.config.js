@@ -1,18 +1,18 @@
 ﻿/** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Deine bestehenden Einstellungen (z.B. reactStrictMode, images, etc.)
+  productionBrowserSourceMaps: true, // Erzwingt Source Maps für den Client
   experimental: {
-    isrFlushToDisk: true,
+    serverSourceMaps: true, // Erzwingt Source Maps für Server/Edge
   },
-  eslint: {
-    ignoreDuringBuilds: true,
+  // Webpack-Konfiguration für Edge-Funktionen (Middleware)
+  webpack: (config, { isServer, dev }) => {
+    // Nur für Produktions-Builds und nicht für den Server (betrifft Edge)
+    if (!dev && !isServer) {
+      config.devtool = 'source-map';
+    }
+    return config;
   },
 };
 
 module.exports = nextConfig;
-module.exports = {
-  // ... andere Konfigurationen
-  productionBrowserSourceMaps: true, // für Client-seitigen Code (optional)
-  experimental: {
-    serverSourceMaps: true, // **wichtig**: aktiviert Source Maps für Server/Edge-Funktionen
-  },
-}

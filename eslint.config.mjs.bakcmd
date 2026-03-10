@@ -1,0 +1,21 @@
+import { defineConfig } from 'eslint/config';
+import nextVitals from 'eslint-config-next/core-web-vitals';
+
+export default defineConfig([
+  ...nextVitals,
+  {
+    rules: {
+      // Deaktiviert die Regel für unescaped Anführungszeichen in JSX
+      'react/no-unescaped-entities': 'off',
+      // Stoppt die Fehler für ungenutzte Variablen (lässt sie als Warnung)
+      '@typescript-eslint/no-unused-vars': ['warn', { 
+        argsIgnorePattern: '^_',
+        varsIgnorePattern: '^_' 
+      }],
+      // Deaktiviert die Regel, die 'any' verbietet
+      '@typescript-eslint/no-explicit-any': 'off',
+      // Deaktiviert die Warnung für anonyme Default-Exports
+      'import/no-anonymous-default-export': 'off',
+    },
+  },
+]);

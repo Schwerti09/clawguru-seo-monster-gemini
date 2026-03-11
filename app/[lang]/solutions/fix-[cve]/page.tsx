@@ -14,7 +14,7 @@
       <li>✅ Neustart der Services</li>
       <li>✅ Monitoring aktivieren</li>
     </ul>
-    <p><strong>Status:</strong> Vollständig generiert</p>
+    <p><strong>Status:</strong> Vollständig generiert • Letzte Aktualisierung: gerade eben</p>
   `
 
   return (

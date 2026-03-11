@@ -1,4 +1,4 @@
-﻿export default function SolutionPage(props: {
+﻿export default async function SolutionPage(props: {
   params: Promise<{ lang: string; cve: string }>
 }) {
   const { cve } = await props.params

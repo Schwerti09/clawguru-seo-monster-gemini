@@ -23,7 +23,7 @@ export async function GET() {
   `).join('')}
 </sitemapindex>`;
 
-  return new NextResponse(xml, {
+  return new NextResponse(xml.trim(), {
     status: 200,
     headers: {
       'Content-Type': 'application/xml',

@@ -1,9 +1,25 @@
-﻿export default function RunbookPage() {
+﻿import Container from "../../../../components/shared/Container"
+import { getRunbook } from "../../../../lib/pseo"
+
+export const revalidate = 60
+export const dynamicParams = true
+
+export default async function LocaleRunbookPage(props: {
+  params: Promise<{ lang: string; slug: string }>
+}) {
+  const { slug } = await props.params
+
+  const runbook = getRunbook(slug) || {
+    title: slug.replace(/-/g, " ").replace(/\b\w/g, l => l.toUpperCase()),
+    summary: `Runbook für ${slug}`,
+    content: `<p>Die ClawGuru-Engine generiert den Inhalt gerade on-demand. In wenigen Sekunden ist er da.</p>`
+  }
+
   return (
-    <div style={{ padding: '40px', fontFamily: 'system-ui' }}>
-      <h1>Runbook wird geladen...</h1>
-      <p>Diese Seite wird gerade on-demand von der ClawGuru-Engine generiert.</p>
-      <p>In wenigen Sekunden ist der vollständige Inhalt da.</p>
-    </div>
+    <Container>
+      <h1>{runbook.title}</h1>
+      <p>{runbook.summary}</p>
+      <div dangerouslySetInnerHTML={{ __html: runbook.content || "" }} />
+    </Container>
   )
 }

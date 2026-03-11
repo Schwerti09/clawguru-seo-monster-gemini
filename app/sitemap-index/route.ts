@@ -1,34 +1,33 @@
-import { NextResponse } from "next/server";
+﻿import { NextResponse } from 'next/server';
+
+const BASE_URL = 'https://clawguru.org';
 
 export async function GET() {
-  const base = "https://clawguru.org";
-  const today = new Date().toISOString().split("T")[0];
+  const today = new Date().toISOString().split('T')[0];
 
-  const sitemaps = [
-    "main",
-    "providers",
-    "runbooks-a-f",
-    "runbooks-g-l",
-    "runbooks-m-r",
-    "runbooks-s-z",
-    "tags-a-f",
-    "tags-g-l",
-    "tags-m-r",
-    "tags-s-z",
+  const subSitemaps = [
+    { loc: `${BASE_URL}/sitemap/runbooks.xml`, lastmod: today },
+    { loc: `${BASE_URL}/sitemap/providers.xml`, lastmod: today },
+    { loc: `${BASE_URL}/sitemap/tags.xml`, lastmod: today },
+    { loc: `${BASE_URL}/sitemap/solutions.xml`, lastmod: today },
+    { loc: `${BASE_URL}/sitemap/cves.xml`, lastmod: today },
   ];
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${sitemaps.map(name => `  <sitemap>
-    <loc>${base}/sitemaps/${name}.xml</loc>
-    <lastmod>${today}</lastmod>
-  </sitemap>`).join("\n")}
+  ${subSitemaps.map(s => `
+    <sitemap>
+      <loc>${s.loc}</loc>
+      <lastmod>${s.lastmod}</lastmod>
+    </sitemap>
+  `).join('')}
 </sitemapindex>`;
 
   return new NextResponse(xml, {
+    status: 200,
     headers: {
-      "Content-Type": "application/xml; charset=utf-8",
-      "Cache-Control": "public, max-age=3600",
+      'Content-Type': 'application/xml',
+      'Cache-Control': 'public, max-age=3600, stale-while-revalidate=86400',
     },
   });
 }

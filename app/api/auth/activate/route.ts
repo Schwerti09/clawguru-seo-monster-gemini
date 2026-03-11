@@ -1,101 +1,62 @@
-import { NextRequest, NextResponse } from "next/server"
-import { stripe } from "@/lib/stripe"
-import { signAccessToken, AccessPlan } from "@/lib/access-token"
+import { NextRequest, NextResponse } from "next/server";
+import { getStripe } from "@/lib/stripe";
+import { signAccessToken } from "@/lib/access-token";
 
-export const runtime = "nodejs"
+export const runtime = "nodejs";
 
-function getOrigin(req: NextRequest) {
-  return (
-    req.headers.get("origin") ||
-    process.env.NEXT_PUBLIC_SITE_URL ||
-    "http://localhost:3000"
-  )
+function mapPlan(product: string): "daypass" | "pro" | "team" {
+  if (product === "daypass") return "daypass";
+  if (product === "team") return "team";
+  return "pro";
 }
 
 export async function GET(req: NextRequest) {
-  const session_id = req.nextUrl.searchParams.get("session_id") || ""
-  if (!session_id) {
-    return NextResponse.redirect(new URL("/pricing?missing_session=1", getOrigin(req)))
-  }
-
   try {
-    const session = await stripe.checkout.sessions.retrieve(session_id, {
-      expand: ["subscription", "customer"],
-    })
+    const url = new URL(req.url);
+    const sessionId = url.searchParams.get("session_id");
 
-    const paid = session.payment_status === "paid" || session.status === "complete"
-    if (!paid) {
-      return NextResponse.redirect(
-        new URL(`/success?session_id=${encodeURIComponent(session_id)}`, getOrigin(req))
-      )
+    if (!sessionId) {
+      return NextResponse.redirect(new URL("/success?error=missing_session", req.url));
     }
 
-    const origin = getOrigin(req)
+    const stripe = getStripe();
+    const session = await stripe.checkout.sessions.retrieve(sessionId);
 
-    const product = (session.metadata?.product || "").toLowerCase()
-    let plan: AccessPlan | null = null
+    const isPaid =
+      session.payment_status === "paid" ||
+      session.status === "complete";
 
-    if (product === "daypass") plan = "daypass"
-    if (product === "pro") plan = "pro"
-    if (product === "team") plan = "team"
-
-    if (!plan) {
-      plan = session.mode === "payment" ? "daypass" : "pro"
+    if (!isPaid) {
+      return NextResponse.redirect(new URL(`/success?session_id=${sessionId}&error=not_paid`, req.url));
     }
 
-    const customerId =
-      typeof session.customer === "string"
-        ? session.customer
-        : (session.customer as { id: string } | null)?.id
+    const product = String(session.metadata?.product || "pro");
+    const plan = mapPlan(product);
 
-    if (!customerId) {
-      return NextResponse.redirect(new URL("/pricing?no_customer=1", origin))
-    }
+    // Für localhost darf das Cookie NICHT secure sein
+    const isProduction = process.env.NODE_ENV === "production";
 
-    const now = Math.floor(Date.now() / 1000)
-
-    let exp = now + 60 * 60 * 24
-    let subscriptionId: string | undefined = undefined
-
-    if (plan === "pro" || plan === "team") {
-      exp = now + 60 * 60 * 24 * 30
-      subscriptionId =
-        typeof session.subscription === "string"
-          ? session.subscription
-          : (session.subscription as { id: string } | null)?.id
-
-      if (!subscriptionId) {
-        return NextResponse.redirect(new URL("/pricing?no_subscription=1", origin))
-      }
-    }
-
-    const token = signAccessToken({
-      v: 1,
+    const token = await signAccessToken({
       plan,
-      customerId,
-      subscriptionId,
-      iat: now,
-      exp,
-    })
+      email: session.customer_details?.email ?? undefined,
+      stripeCustomerId:
+        typeof session.customer === "string" ? session.customer : undefined,
+      checkoutSessionId: session.id,
+    });
 
-    const isSecure = origin.startsWith("https://")
+    const res = NextResponse.redirect(new URL("/dashboard", req.url));
 
-    const res = NextResponse.redirect(new URL("/dashboard", origin))
-    res.cookies.set({
-      name: "claw_access",
-      value: token,
+    res.cookies.set("claw_access", token, {
       httpOnly: true,
+      secure: isProduction,
       sameSite: "lax",
-      secure: isSecure,
       path: "/",
-      maxAge: Math.max(60, exp - now),
-    })
+      maxAge: 60 * 60 * 24 * 30, // 30 Tage
+    });
 
-    return res
+    return res;
   } catch (error) {
-    console.error("[auth/activate] failed:", error)
-    return NextResponse.redirect(
-      new URL(`/success?session_id=${encodeURIComponent(session_id)}`, getOrigin(req))
-    )
+    console.error("Activate route failed:", error);
+    return NextResponse.redirect(new URL("/success?error=activation_failed", req.url));
   }
-} 
+}

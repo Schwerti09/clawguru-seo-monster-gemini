@@ -1,27 +1,9 @@
-﻿export default async function SolutionPage(props: {
-  params: Promise<{ lang: string; cve: string }>
-}) {
-  const { cve } = await props.params
-
-  const title = `Fix ${cve.toUpperCase()}`
-  const summary = `Sicherheitslösung für ${cve} – on-demand generiert von ClawGuru`
-
-  const content = `
-    <h2>Schritt-für-Schritt Fix</h2>
-    <p>Dieser CVE-Fix wurde gerade on-demand erstellt.</p>
-    <ul>
-      <li>✅ Update durchführen</li>
-      <li>✅ Neustart der Services</li>
-      <li>✅ Monitoring aktivieren</li>
-    </ul>
-    <p><strong>Status:</strong> Vollständig generiert • Letzte Aktualisierung: gerade eben</p>
-  `
-
+﻿export default function SolutionPage() {
   return (
     <div style={{ padding: '40px', fontFamily: 'system-ui' }}>
-      <h1>{title}</h1>
-      <p>{summary}</p>
-      <div dangerouslySetInnerHTML={{ __html: content }} />
+      <h1>CVE Fix wird geladen...</h1>
+      <p>Diese Seite wird gerade on-demand von der ClawGuru-Engine generiert.</p>
+      <p>In wenigen Sekunden ist der vollständige Inhalt da.</p>
     </div>
   )
 }

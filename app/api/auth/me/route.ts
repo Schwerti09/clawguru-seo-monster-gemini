@@ -1,41 +1,28 @@
-import { NextResponse } from "next/server"
-import { cookies } from "next/headers"
-import { verifySessionToken, USER_SESSION_COOKIE } from "@/lib/auth"
-import { verifyAccessToken } from "@/lib/access-token"
-
-export const runtime = "nodejs"
+import { NextResponse } from "next/server";
 
 export async function GET() {
-  const jar = await cookies()
+  const base = "https://clawguru.org";
+  const today = new Date().toISOString().split("T")[0];
 
-  // 1) Legacy / password-session flow
-  const sessionToken = jar.get(USER_SESSION_COOKIE)?.value
-  if (sessionToken) {
-    const session = verifySessionToken(sessionToken)
-    if (session) {
-      return NextResponse.json({
-        authenticated: true,
-        authType: "session",
-        email: session.email,
-      })
-    }
-  }
+  const sitemaps = [
+    "main",
+    "providers",
+    "runbooks-a-f",
+    "runbooks-g-l",
+    "runbooks-m-r",
+    "runbooks-s-z",
+  ];
 
-  // 2) Stripe activate / access-token flow
-  const accessToken = jar.get("claw_access")?.value
-  if (accessToken) {
-    const access = verifyAccessToken(accessToken)
-    if (access) {
-      return NextResponse.json({
-        authenticated: true,
-        authType: "access",
-        plan: access.plan,
-        customerId: access.customerId,
-        subscriptionId: access.subscriptionId ?? null,
-        email: null,
-      })
-    }
-  }
+  const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${sitemaps.map(s => `
+  <sitemap>
+    <loc>${base}/sitemaps/${s}.xml</loc>
+    <lastmod>${today}</lastmod>
+  </sitemap>`).join("")}
+</sitemapindex>`;
 
-  return NextResponse.json({ authenticated: false }, { status: 401 })
+  return new NextResponse(xml, {
+    headers: { "Content-Type": "application/xml" },
+  });
 }

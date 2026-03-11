@@ -5,7 +5,7 @@ export async function GET() {
 
   const slugs = ['ssh-hardening', 'nginx-security', 'docker-firewall', 'fail2ban-setup', 'prometheus-rate-limit-baseline'];
 
-  const locales = ['de', 'en', 'fr', 'es', 'it', 'nl', 'pl', 'ru', 'zh', 'ja'];
+  const locales = ['de','en','fr','es','it','nl','pl','ru','zh','ja'];
 
   const entries = locales.flatMap(locale =>
     slugs.map(slug => ({
@@ -18,11 +18,11 @@ export async function GET() {
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${entries.map(entry => `  <url>
-    <loc>${entry.url}</loc>
-    <lastmod>${entry.lastModified.toISOString()}</lastmod>
-    <changefreq>${entry.changeFrequency}</changefreq>
-    <priority>${entry.priority}</priority>
+${entries.map(e => `  <url>
+    <loc>${e.url}</loc>
+    <lastmod>${e.lastModified.toISOString()}</lastmod>
+    <changefreq>${e.changeFrequency}</changefreq>
+    <priority>${e.priority}</priority>
   </url>`).join('\n')}
 </urlset>`;
 

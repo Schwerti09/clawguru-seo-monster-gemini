@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
-import Stripe from "stripe"
 import { getOrigin } from "@/lib/origin"
 import { isStripeActive, apiUnavailableResponse } from "@/lib/api-guard"
+import { getStripe } from "@/lib/stripe"
 
 export const dynamic = "force-dynamic"
 
@@ -24,18 +24,6 @@ function getPriceId(product: Product) {
 
 function getMode(product: Product): "payment" | "subscription" {
   return product === "daypass" ? "payment" : "subscription"
-}
-
-function getStripe() {
-  const key = process.env.STRIPE_SECRET_KEY?.trim()
-
-  if (!key) {
-    throw new Error("STRIPE_SECRET_KEY is not configured")
-  }
-
-  return new Stripe(key, {
-    apiVersion: "2024-06-20",
-  })
 }
 
 export async function POST(req: NextRequest) {
@@ -61,6 +49,7 @@ export async function POST(req: NextRequest) {
     const price = getPriceId(product)
 
     if (!price) {
+      console.error("[stripe/checkout] missing price id for product", { product })
       return NextResponse.json(
         { error: "Checkout für dieses Produkt ist aktuell nicht verfügbar." },
         { status: 503 }
@@ -95,8 +84,18 @@ export async function POST(req: NextRequest) {
       },
     })
 
+    console.info("[stripe/checkout] created checkout session", {
+      sessionId: session.id,
+      mode,
+      product,
+      hasUrl: Boolean(session.url),
+    })
+
     return NextResponse.json({ url: session.url })
   } catch (e: unknown) {
+    console.error("[stripe/checkout] failed", {
+      err: e instanceof Error ? e.message : String(e),
+    })
     return NextResponse.json(
       { error: e instanceof Error ? e.message : "Checkout failed" },
       { status: 500 }

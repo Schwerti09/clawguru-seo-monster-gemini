@@ -40,7 +40,15 @@ export async function GET(req: NextRequest) {
     }
   }
 
-  if (!ok) return NextResponse.json({ error: "Not authorized" }, { status: 403 })
+  if (!ok) {
+    console.warn("[download] not authorized", {
+      key,
+      hasCookie: Boolean(token),
+      cookieValid: Boolean(payload),
+      hasSessionId: Boolean(session_id),
+    })
+    return NextResponse.json({ error: "Not authorized" }, { status: 403 })
+  }
 
   try {
     const full = path.join(process.cwd(), "private_downloads", f.filename)

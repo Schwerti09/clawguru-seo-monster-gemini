@@ -3,6 +3,8 @@
 // HeyGen/Runway API payloads for each runbook. Produces structured video briefs
 // when video API keys are not configured.
 
+import { BASE_URL } from "@/lib/config"
+
 // WORLD BEAST UPGRADE: Gemini helper (self-contained)
 async function callGeminiVideo(prompt: string): Promise<string | null> {
   const geminiKey = process.env.GEMINI_API_KEY
@@ -166,11 +168,11 @@ export async function generateVideoRunbook(opts: {
         {
           sceneNumber: 4,
           durationSeconds: 20,
-          narration: `Fixed. Full runbook at clawguru.org/runbook/${slug}`,
+          narration: `Fixed. Full runbook at ${BASE_URL}/runbook/${slug}`,
           visualDescription: "ClawGuru website with runbook page",
         },
       ],
-      closingCTA: `Full runbook: clawguru.org/runbook/${slug}`,
+      closingCTA: `Full runbook: ${BASE_URL}/runbook/${slug}`,
       thumbnailPrompt: `Dark cyberpunk terminal screen, green neon text, showing "${title}", dramatic lighting, tech aesthetic`,
       heygenPayload: buildHeyGenPayload([]),
       generatedAt: now,
@@ -196,7 +198,7 @@ export async function generateVideoRunbook(opts: {
       targetAudience: parsed.targetAudience || "DevOps engineers",
       openingHook: parsed.openingHook || "",
       scenes,
-      closingCTA: parsed.closingCTA || `Full runbook: clawguru.org/runbook/${slug}`,
+      closingCTA: parsed.closingCTA || `Full runbook: ${BASE_URL}/runbook/${slug}`,
       thumbnailPrompt: parsed.thumbnailPrompt || "",
       heygenPayload: buildHeyGenPayload(scenes),
       generatedAt: now,
@@ -209,7 +211,7 @@ export async function generateVideoRunbook(opts: {
       targetAudience: "DevOps engineers",
       openingHook: `Fixing ${title} in 90 seconds.`,
       scenes: [],
-      closingCTA: `clawguru.org/runbook/${slug}`,
+      closingCTA: `${BASE_URL}/runbook/${slug}`,
       thumbnailPrompt: `Dark cyberpunk tech security illustration for ${title}`,
       heygenPayload: buildHeyGenPayload([]),
       generatedAt: now,

@@ -153,7 +153,7 @@ function ClawCertifiedBadge({ score, tier }: { score: number; tier: ClawCertifie
 }
 
 function ShareButtons({ title, slug }: { title: string; slug: string }) {
-  const url = `https://clawguru.org/runbook/${slug}`
+  const url = `${BASE_URL}/runbook/${slug}`
   const encoded = encodeURIComponent(url)
   const text = encodeURIComponent(`${title} – ClawGuru Runbook`)
   return (

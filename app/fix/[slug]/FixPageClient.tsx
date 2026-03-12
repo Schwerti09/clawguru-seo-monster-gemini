@@ -4,6 +4,7 @@
 
 import { useState } from "react"
 import type { FixCodeResult } from "@/lib/agents/fix-agent"
+import { BASE_URL } from "@/lib/config"
 
 interface Props {
   slug: string
@@ -81,8 +82,8 @@ export default function FixPageClient({ slug, fixData }: Props) {
   const prBody = [
     `## 🔧 Automated Fix: ${fixData.title}`,
     "",
-    `**Runbook:** https://clawguru.org/runbook/${slug}`,
-    `**Fix Generator:** https://clawguru.org/fix/${slug}`,
+    `**Runbook:** ${BASE_URL}/runbook/${slug}`,
+    `**Fix Generator:** ${BASE_URL}/fix/${slug}`,
     "",
     "### Problem",
     fixData.problemDescription,

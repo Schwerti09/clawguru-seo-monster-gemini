@@ -6,6 +6,7 @@ import { useRef, useState } from "react"
 import { motion } from "framer-motion"
 import type { SeverityLevel } from "@/lib/design-system"
 import { severityConfig } from "@/lib/design-system"
+import { useI18n } from "@/components/i18n/I18nProvider"
 
 type RunbookCardProps = {
   slug: string
@@ -24,6 +25,8 @@ export default function RunbookCard({
   severity = "medium",
   fixReadiness = 70,
 }: RunbookCardProps) {
+  const { locale } = useI18n()
+  const prefix = `/${locale}`
   const cardRef = useRef<HTMLDivElement>(null)
   const [tilt, setTilt] = useState({ x: 0, y: 0 })
   const [isHovered, setIsHovered] = useState(false)
@@ -46,7 +49,7 @@ export default function RunbookCard({
 
   return (
     <motion.a
-      href={`/runbook/${slug}`}
+      href={`${prefix}/runbook/${slug}`}
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}

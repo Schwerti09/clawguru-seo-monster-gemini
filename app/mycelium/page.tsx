@@ -2,12 +2,13 @@
 // The entire ClawGuru runbook library rendered as a living, breathing mycelium.
 
 import type { Metadata } from "next"
-import { cookies } from "next/headers"
 import Container from "@/components/shared/Container"
 import MyceliumView from "@/components/visual/MyceliumView"
 import MyceliumShareCard from "@/components/share/MyceliumShareCard"
 import { RUNBOOKS } from "@/lib/pseo"
-import { SUPPORTED_LOCALES, type Locale, t } from "@/lib/i18n"
+import { headers } from "next/headers"
+import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
+import { getDictionary } from "@/lib/getDictionary"
 import {
   buildMyceliumGraph,
   type RunbookSummary,
@@ -26,9 +27,10 @@ export const metadata: Metadata = {
 export const revalidate = 3600
 
 export default async function MyceliumPage() {
-  const cookieStore = await cookies()
-  const localeCookie = cookieStore.get("cg_locale")?.value
-  const locale: Locale = SUPPORTED_LOCALES.includes(localeCookie as Locale) ? (localeCookie as Locale) : "de"
+  const h = headers()
+  const locale = (h.get("x-claw-locale") ?? DEFAULT_LOCALE) as Locale
+  const dict = await getDictionary(locale)
+  const prefix = `/${locale}`
   // MYCELIAL SINGULARITY v3.0 – Build the living graph from the full runbook library
   // Server-side only: keeps heavy Runbook blocks out of the client bundle
   const graph = buildMyceliumGraph(RUNBOOKS, 250)
@@ -52,7 +54,7 @@ export default async function MyceliumPage() {
           <div className="flex flex-col md:flex-row md:items-end gap-4 md:gap-8">
             <div className="flex-1">
               <div className="text-xs font-mono text-[#00ff9d] tracking-widest mb-2 uppercase">
-                {t(locale, "heroGenesisBadge")}
+                {dict.hero.badge}
               </div>
               <h1 className="text-4xl md:text-5xl font-black mb-3 leading-tight">
                 The{" "}
@@ -174,8 +176,8 @@ export default async function MyceliumPage() {
         <Container>
           <MyceliumShareCard
             locale={locale}
-            title="The Living Mycelium · ClawGuru"
-            pageUrl="/mycelium"
+            title="Live Ops Wall · ClawGuru"
+            pageUrl={`${prefix}/mycelium`}
             className="max-w-2xl"
           />
         </Container>

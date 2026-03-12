@@ -19,14 +19,12 @@ function CopyCard({
   icon,
   content,
   shareUrl,
-  slug,
   accentColor = "#00ff9d",
 }: {
   label: string
   icon: string
   content: string
   shareUrl?: string
-  slug: string
   accentColor?: string
 }) {
   const [copied, setCopied] = useState(false)
@@ -127,36 +125,29 @@ export function ShareButtons({
         </motion.button>
       )}
 
-      <motion.div variants={item}>
+      <div className="grid md:grid-cols-3 gap-4">
         <CopyCard
-          label="Twitter / X Thread"
-          icon="🐦"
+          label="X / Twitter"
+          icon="𝕏"
           content={twitterThread}
           shareUrl={twitterUrl}
-          slug={slug}
           accentColor="#1da1f2"
         />
-      </motion.div>
-      <motion.div variants={item}>
         <CopyCard
-          label="LinkedIn Post"
-          icon="💼"
+          label="LinkedIn"
+          icon="in"
           content={linkedinPost}
           shareUrl={linkedinUrl}
-          slug={slug}
-          accentColor="#0077b5"
+          accentColor="#0a66c2"
         />
-      </motion.div>
-      <motion.div variants={item}>
         <CopyCard
-          label="Reddit Thread"
-          icon="🤖"
+          label="Reddit"
+          icon="👽"
           content={redditPost}
           shareUrl={redditUrl}
-          slug={slug}
           accentColor="#ff4500"
         />
-      </motion.div>
+      </div>
 
       {/* VISUAL UPGRADE 2026: AI thread suggestion with glassmorphism */}
       <motion.div variants={item} className="p-4 rounded-2xl glass-card text-sm text-gray-400">

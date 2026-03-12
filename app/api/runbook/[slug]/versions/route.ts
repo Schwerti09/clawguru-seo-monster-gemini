@@ -15,9 +15,9 @@ export const dynamic = "force-dynamic"
 
 export async function GET(
   _req: NextRequest,
-  props: { params: Promise<{ slug: string }> }
+  props: { params: { slug: string } }
 ) {
-  const { slug } = await props.params
+  const { slug } = props.params
   const runbook = getRunbook(slug)
   if (!runbook) {
     return NextResponse.json({ error: "Runbook not found" }, { status: 404 })
@@ -28,9 +28,9 @@ export async function GET(
 
 export async function POST(
   req: NextRequest,
-  props: { params: Promise<{ slug: string }> }
+  props: { params: { slug: string } }
 ) {
-  const { slug } = await props.params
+  const { slug } = props.params
 
   // Auth check
   const jar = await cookies()

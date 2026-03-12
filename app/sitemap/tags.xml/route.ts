@@ -1,46 +1,18 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from "next/server"
+import { logTelemetry } from "@/lib/ops/telemetry"
+import { getRequestId } from "@/lib/ops/request-id"
 
-import { BASE_URL } from '@/lib/config';
-import { bucketsTagsAF } from '@/lib/pseo';
-import { SUPPORTED_LOCALES } from '@/lib/i18n';
+export async function GET(req: NextRequest) {
+  const requestId = getRequestId(req.headers)
+  const startedAt = Date.now()
+  const target = new URL("/sitemap.xml", req.url)
 
-function isoDate(d = new Date()) {
-  return d.toISOString().slice(0, 10);
-}
+  logTelemetry("sitemap.legacy_child.redirect", {
+    requestId,
+    from: new URL(req.url).pathname,
+    target: target.toString(),
+    durationMs: Date.now() - startedAt,
+  })
 
-const SITEMAP_HEADERS = {
-  'Content-Type': 'application/xml; charset=utf-8',
-  'Cache-Control': 'public, max-age=3600',
-} as const;
-
-export async function GET() {
-  const lastmod = isoDate();
-  const buckets = bucketsTagsAF();
-  const tags = [...buckets['a-f'], ...buckets['g-l'], ...buckets['m-r'], ...buckets['s-z'], ...buckets['0-9']];
-
-  const urls = SUPPORTED_LOCALES.flatMap((locale) =>
-    tags.map((tag) => ({
-      loc: `${BASE_URL}/${locale}/tag/${encodeURIComponent(tag)}`,
-      lastmod,
-    }))
-  );
-
-  const xml =
-    `<?xml version="1.0" encoding="UTF-8"?>\n` +
-    `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
-    urls
-      .map(
-        (u) =>
-          `  <url>\n` +
-          `    <loc>${u.loc}</loc>\n` +
-          `    <lastmod>${u.lastmod}</lastmod>\n` +
-          `  </url>`
-      )
-      .join("\n") +
-    `\n</urlset>\n`;
-
-  return new NextResponse(xml, {
-    status: 200,
-    headers: SITEMAP_HEADERS,
-  });
+  return NextResponse.redirect(target, 308)
 }

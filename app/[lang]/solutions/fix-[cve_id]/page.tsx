@@ -15,9 +15,9 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata(props: {
-  params: Promise<{ lang: string; cve_id: string }>
+  params: { lang: string; cve_id: string }
 }) {
-  const { cve_id, lang } = await props.params
+  const { cve_id, lang } = props.params
   const locale = (SUPPORTED_LOCALES.includes(lang as Locale) ? lang : "de") as Locale
   return {
     title: `How to fix ${decodeURIComponent(cve_id)} | ClawGuru`,
@@ -26,8 +26,8 @@ export async function generateMetadata(props: {
 }
 
 export default async function LocaleCveFixPage(props: {
-  params: Promise<{ lang: string; cve_id: string }>
+  params: { lang: string; cve_id: string }
 }) {
-  const { cve_id } = await props.params
-  return <CveFixPage params={Promise.resolve({ cve_id })} />
+  const { cve_id } = props.params
+  return <CveFixPage params={{ cve_id }} />
 }

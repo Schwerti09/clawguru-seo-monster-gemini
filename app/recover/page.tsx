@@ -8,10 +8,10 @@ export const metadata = {
 
 export default async function RecoverPage(
   props: {
-    searchParams?: Promise<Record<string, string | string[] | undefined>>
+    searchParams?: Record<string, string | string[] | undefined>
   }
 ) {
-  const searchParams = await props.searchParams;
+  const searchParams = props.searchParams
   const token = typeof searchParams?.token === "string" ? searchParams?.token : ""
   return (
     <Container>

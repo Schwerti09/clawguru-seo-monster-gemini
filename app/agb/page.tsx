@@ -45,7 +45,7 @@ export default function AGBPage() {
             <p className="text-gray-300">
               Diese AGB gelten für die Nutzung der Website clawguru.org und der angebotenen digitalen Leistungen,
               insbesondere: Security-Check, Runbooks, Darwinian Engine, Copilot-Funktionen (Gemini), digitale Downloads
-              (PDF/ZIP) sowie kostenpflichtige Zugänge (Abo „Pro", Abo „Enterprise", „Day Pass").
+              (PDF/ZIP) sowie kostenpflichtige Zugänge (Abo &ldquo;Pro&rdquo;, Abo &ldquo;Enterprise&rdquo;, &ldquo;Day Pass&rdquo;).
             </p>
           </section>
 

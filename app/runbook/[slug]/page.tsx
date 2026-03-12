@@ -12,6 +12,9 @@ import { ActivateSwarmButton } from "@/components/shared/ActivateSwarmButton"
 import { BASE_URL } from "@/lib/config"
 import { buildLinkEngine } from "@/lib/seo/link-engine"
 import MyceliumShareCard from "@/components/share/MyceliumShareCard"
+import { headers } from "next/headers"
+import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
+import { getDictionary } from "@/lib/getDictionary"
 
 // Pre-build slug→runbook Map for O(1) related lookups on static RUNBOOKS
 const RUNBOOK_MAP = new Map(RUNBOOKS.map((r) => [r.slug, r]))
@@ -47,8 +50,10 @@ export async function generateStaticParams() {
   return [...staticParams, ...key100kSlugs.map((slug) => ({ slug }))]
 }
 
-export async function generateMetadata(props: { params: Promise<{ slug: string }> }) {
-  const params = await props.params;
+export async function generateMetadata(props: { params: { slug: string } }) {
+  const params = props.params
+  const h = headers()
+  const locale = (h.get("x-claw-locale") ?? DEFAULT_LOCALE) as Locale
   const r = getRunbook(params.slug)
   if (!r) return {}
   const title = r.title.length > 60 ? r.title.slice(0, 57) + "..." : r.title
@@ -56,7 +61,7 @@ export async function generateMetadata(props: { params: Promise<{ slug: string }
   return {
     title: `${title} | ClawGuru Runbook`,
     description,
-    alternates: { canonical: `/runbook/${r.slug}` },
+    alternates: { canonical: `/${locale}/runbook/${r.slug}` },
     openGraph: {
       title: `${title} | ClawGuru`,
       description,
@@ -65,14 +70,14 @@ export async function generateMetadata(props: { params: Promise<{ slug: string }
   }
 }
 
-function howToJsonLd(r: { title: string; summary: string; slug: string; steps: string[] }) {
+function howToJsonLd(opts: { title: string; summary: string; slug: string; steps: string[]; locale: Locale }) {
   return {
     "@context": "https://schema.org",
     "@type": "HowTo",
-    name: r.title,
-    description: r.summary,
-    url: `${BASE_URL}/runbook/${r.slug}`,
-    step: r.steps.map((s, i) => ({
+    name: opts.title,
+    description: opts.summary,
+    url: `${BASE_URL}/${opts.locale}/runbook/${opts.slug}`,
+    step: opts.steps.map((s, i) => ({
       "@type": "HowToStep",
       position: i + 1,
       name: s,
@@ -81,26 +86,26 @@ function howToJsonLd(r: { title: string; summary: string; slug: string; steps: s
   }
 }
 
-function breadcrumbJsonLd(title: string, slug: string) {
+function breadcrumbJsonLd(opts: { title: string; slug: string; locale: Locale; runbooksLabel: string }) {
   return {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "ClawGuru", item: BASE_URL },
-      { "@type": "ListItem", position: 2, name: "Runbooks", item: `${BASE_URL}/runbooks` },
-      { "@type": "ListItem", position: 3, name: title, item: `${BASE_URL}/runbook/${slug}` },
+      { "@type": "ListItem", position: 1, name: "ClawGuru", item: `${BASE_URL}/${opts.locale}` },
+      { "@type": "ListItem", position: 2, name: opts.runbooksLabel, item: `${BASE_URL}/${opts.locale}/runbooks` },
+      { "@type": "ListItem", position: 3, name: opts.title, item: `${BASE_URL}/${opts.locale}/runbook/${opts.slug}` },
     ],
   }
 }
 
-function techArticleJsonLd(r: { title: string; summary: string; slug: string; lastmod: string }) {
+function techArticleJsonLd(opts: { title: string; summary: string; slug: string; lastmod: string; locale: Locale }) {
   return {
     "@context": "https://schema.org",
     "@type": "TechArticle",
-    headline: r.title,
-    description: r.summary,
-    url: `${BASE_URL}/runbook/${r.slug}`,
-    dateModified: r.lastmod,
+    headline: opts.title,
+    description: opts.summary,
+    url: `${BASE_URL}/${opts.locale}/runbook/${opts.slug}`,
+    dateModified: opts.lastmod,
     author: { "@type": "Organization", name: "ClawGuru", url: BASE_URL },
     publisher: { "@type": "Organization", name: "ClawGuru", url: BASE_URL, logo: { "@type": "ImageObject", url: `${BASE_URL}/og-image.png` } },
   }
@@ -152,8 +157,8 @@ function ClawCertifiedBadge({ score, tier }: { score: number; tier: ClawCertifie
   )
 }
 
-function ShareButtons({ title, slug }: { title: string; slug: string }) {
-  const url = `${BASE_URL}/runbook/${slug}`
+function ShareButtons({ title, slug, locale }: { title: string; slug: string; locale: Locale }) {
+  const url = `${BASE_URL}/${locale}/runbook/${slug}`
   const encoded = encodeURIComponent(url)
   const text = encodeURIComponent(`${title} – ClawGuru Runbook`)
   return (
@@ -242,8 +247,12 @@ function FaqSection({ faq }: { faq: RunbookFaqEntry[] }) {
   )
 }
 
-export default async function RunbookPage(props: { params: Promise<{ slug: string }> }) {
-  const params = await props.params;
+export default async function RunbookPage(props: { params: { slug: string } }) {
+  const params = props.params
+  const h = headers()
+  const locale = (h.get("x-claw-locale") ?? DEFAULT_LOCALE) as Locale
+  const dict = await getDictionary(locale)
+  const prefix = `/${locale}`
   const r = getRunbook(params.slug)
   if (!r) return notFound()
 
@@ -270,16 +279,16 @@ export default async function RunbookPage(props: { params: Promise<{ slug: strin
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(howToJsonLd({ title: r.title, summary: r.summary, slug: r.slug, steps: r.howto.steps })),
+          __html: JSON.stringify(howToJsonLd({ title: r.title, summary: r.summary, slug: r.slug, steps: r.howto.steps, locale })),
         }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd(r.title, r.slug)) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd({ title: r.title, slug: r.slug, locale, runbooksLabel: dict.nav.runbooks })) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(techArticleJsonLd({ title: r.title, summary: r.summary, slug: r.slug, lastmod: r.lastmod })) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(techArticleJsonLd({ title: r.title, summary: r.summary, slug: r.slug, lastmod: r.lastmod, locale })) }}
       />
       {r.faq?.length > 0 && (
         <script
@@ -291,14 +300,14 @@ export default async function RunbookPage(props: { params: Promise<{ slug: strin
         <nav className="text-sm text-gray-500 mb-6" aria-label="Breadcrumb">
           <ol className="flex flex-wrap items-center gap-2">
             <li>
-              <a href="/" className="hover:text-cyan-400">
+              <a href={`${prefix}`} className="hover:text-cyan-400">
                 ClawGuru
               </a>
             </li>
             <li>/</li>
             <li>
-              <a href="/runbooks" className="hover:text-cyan-400">
-                Runbooks
+              <a href={`${prefix}/runbooks`} className="hover:text-cyan-400">
+                {dict.nav.runbooks}
               </a>
             </li>
             <li>/</li>
@@ -320,7 +329,7 @@ export default async function RunbookPage(props: { params: Promise<{ slug: strin
 
         <SectionTitle kicker="Runbook" title={r.title} subtitle={r.summary} />
 
-        <ShareButtons title={r.title} slug={r.slug} />
+        <ShareButtons title={r.title} slug={r.slug} locale={locale} />
 
         <div className="mt-10 p-6 rounded-3xl border border-gray-800 bg-black/25">
           {/* Rich blocks (Tier-2 content) */}
@@ -362,7 +371,7 @@ export default async function RunbookPage(props: { params: Promise<{ slug: strin
             {r.tags.map((t) => (
               <a
                 key={t}
-                href={`/tag/${encodeURIComponent(t)}`}
+                href={`${prefix}/tag/${encodeURIComponent(t)}`}
                 className="px-2 py-1 rounded-lg border border-gray-800 bg-black/30 text-xs text-gray-300 hover:bg-black/40"
               >
                 {t}
@@ -401,7 +410,7 @@ export default async function RunbookPage(props: { params: Promise<{ slug: strin
               {relatedList.slice(0, 10).map((x) => (
                 <a
                   key={x.slug}
-                  href={`/runbook/${x.slug}`}
+                  href={`${prefix}/runbook/${x.slug}`}
                   className="p-5 rounded-3xl border border-gray-800 bg-black/25 hover:bg-black/35 transition-colors"
                 >
                   <div className="flex items-center gap-2 mb-1">
@@ -426,7 +435,7 @@ export default async function RunbookPage(props: { params: Promise<{ slug: strin
           <MyceliumShareCard
             title={r.title}
             answer={r.summary}
-            pageUrl={`/runbook/${r.slug}`}
+            pageUrl={`${prefix}/runbook/${r.slug}`}
           />
         </div>
       </div>

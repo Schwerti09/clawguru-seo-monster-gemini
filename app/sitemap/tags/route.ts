@@ -1,17 +1,18 @@
-﻿import { MetadataRoute } from 'next';
+﻿import { NextRequest, NextResponse } from "next/server"
+import { logTelemetry } from "@/lib/ops/telemetry"
+import { getRequestId } from "@/lib/ops/request-id"
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://clawguru.org';
-  const tags = ['ssh', 'nginx', 'docker', 'fail2ban', 'prometheus', 'kubernetes', 'traefik'];
+export async function GET(req: NextRequest) {
+  const requestId = getRequestId(req.headers)
+  const startedAt = Date.now()
+  const target = new URL("/sitemap.xml", req.url)
 
-  const locales = ['de','en','fr','es','it','nl','pl','ru','zh','ja'];
+  logTelemetry("sitemap.legacy_child.redirect", {
+    requestId,
+    from: new URL(req.url).pathname,
+    target: target.toString(),
+    durationMs: Date.now() - startedAt,
+  })
 
-  return locales.flatMap(locale =>
-    tags.map(tag => ({
-      url: `${baseUrl}/${locale}/tag/${tag}`,
-      lastModified: new Date(),
-      changeFrequency: 'daily' as const,
-      priority: 0.8,
-    }))
-  );
+  return NextResponse.redirect(target, 308)
 }

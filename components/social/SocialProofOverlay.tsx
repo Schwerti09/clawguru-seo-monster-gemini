@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useState } from "react"
+import { useI18n } from "@/components/i18n/I18nProvider"
 
 type SocialProofEvent = {
   id: string
@@ -13,6 +14,8 @@ type SocialProofEvent = {
 const ROTATE_MS = 7500
 
 export default function SocialProofOverlay() {
+  const { locale } = useI18n()
+  const prefix = `/${locale}`
   const [events, setEvents] = useState<SocialProofEvent[]>([])
   const [index, setIndex] = useState(0)
 
@@ -52,7 +55,7 @@ export default function SocialProofOverlay() {
       <div className="font-semibold text-cyan-200">Live Ops</div>
       <div className="mt-1 text-gray-300">
         Gerade hat ein User aus <span className="font-bold text-white">{event.country}</span> das Runbook für{" "}
-        <a href={`/runbook/${event.runbookSlug}`} className="font-bold text-cyan-300 hover:text-cyan-200">
+        <a href={`${prefix}/runbook/${event.runbookSlug}`} className="font-bold text-cyan-300 hover:text-cyan-200">
           {event.cveId}
         </a>{" "}
         gefixt.

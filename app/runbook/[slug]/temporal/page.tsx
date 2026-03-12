@@ -9,35 +9,42 @@ import { validateRunbook } from "@/lib/quality-gate"
 import { getTemporalHistory, findVersionByQuarter } from "@/lib/temporal-mycelium"
 import TemporalTimeline from "@/components/visual/TemporalTimeline"
 import { BASE_URL } from "@/lib/config"
+import { headers } from "next/headers"
+import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
 
 export const revalidate = 60
 
 export async function generateMetadata(
   props: {
-    params: Promise<{ slug: string }>
-    searchParams: Promise<{ version?: string }>
+    params: { slug: string }
+    searchParams: { version?: string }
   }
 ) {
-  const searchParams = await props.searchParams;
-  const params = await props.params;
+  const searchParams = props.searchParams;
+  const params = props.params;
+  const h = headers()
+  const locale = (h.get("x-claw-locale") ?? DEFAULT_LOCALE) as Locale
   const r = getRunbook(params.slug)
   if (!r) return {}
   const version = searchParams.version ?? "aktuell"
   return {
     title: `${r.title} – Temporal View (${version}) | ClawGuru`,
     description: `Zeitreise: ${r.title} in Version ${version}. The Mycelium remembers every lesson.`,
-    alternates: { canonical: `/runbook/${r.slug}/temporal` },
+    alternates: { canonical: `/${locale}/runbook/${r.slug}/temporal` },
   }
 }
 
 export default async function TemporalPage(
   props: {
-    params: Promise<{ slug: string }>
-    searchParams: Promise<{ version?: string }>
+    params: { slug: string }
+    searchParams: { version?: string }
   }
 ) {
-  const searchParams = await props.searchParams;
-  const params = await props.params;
+  const searchParams = props.searchParams;
+  const params = props.params;
+  const h = headers()
+  const locale = (h.get("x-claw-locale") ?? DEFAULT_LOCALE) as Locale
+  const prefix = `/${locale}`
   const r = getRunbook(params.slug)
   if (!r) return notFound()
 
@@ -57,15 +64,15 @@ export default async function TemporalPage(
         <nav className="text-sm text-gray-500 mb-6" aria-label="Breadcrumb">
           <ol className="flex flex-wrap items-center gap-2">
             <li>
-              <a href="/" className="hover:text-cyan-400">ClawGuru</a>
+              <a href={`${prefix}`} className="hover:text-cyan-400">ClawGuru</a>
             </li>
             <li>/</li>
             <li>
-              <a href="/runbooks" className="hover:text-cyan-400">Runbooks</a>
+              <a href={`${prefix}/runbooks`} className="hover:text-cyan-400">Runbooks</a>
             </li>
             <li>/</li>
             <li>
-              <a href={`/runbook/${r.slug}`} className="hover:text-cyan-400">{r.title}</a>
+              <a href={`${prefix}/runbook/${r.slug}`} className="hover:text-cyan-400">{r.title}</a>
             </li>
             <li>/</li>
             <li className="text-gray-300">Temporal View</li>
@@ -116,18 +123,18 @@ export default async function TemporalPage(
             {history.versions.map((v) => (
               <a
                 key={v.quarter}
-                href={`/runbook/${r.slug}/temporal?version=${v.quarter}`}
+                href={`${prefix}/runbook/${r.slug}/temporal?version=${v.quarter}`}
                 className={`px-3 py-1.5 rounded-xl border text-xs font-mono transition-colors ${
-                  pinnedVersion.quarter === v.quarter
-                    ? "border-cyan-500/60 bg-cyan-500/10 text-cyan-300"
-                    : "border-gray-800 bg-black/20 text-gray-400 hover:border-gray-700"
+                  requestedVersion === v.quarter
+                    ? "border-cyan-500/50 bg-cyan-500/10 text-cyan-300"
+                    : "border-gray-800 bg-black/25 text-gray-400 hover:bg-black/35"
                 }`}
               >
                 {v.quarter}
               </a>
             ))}
             <a
-              href={`/runbook/${r.slug}`}
+              href={`${prefix}/runbook/${r.slug}`}
               className="px-3 py-1.5 rounded-xl border border-gray-800 bg-black/20 text-xs text-gray-400 hover:border-gray-700 transition-colors"
             >
               ← Zurück zum Runbook
@@ -163,10 +170,10 @@ export default async function TemporalPage(
               "@context": "https://schema.org",
               "@type": "BreadcrumbList",
               itemListElement: [
-                { "@type": "ListItem", position: 1, name: "ClawGuru", item: BASE_URL },
-                { "@type": "ListItem", position: 2, name: "Runbooks", item: `${BASE_URL}/runbooks` },
-                { "@type": "ListItem", position: 3, name: r.title, item: `${BASE_URL}/runbook/${r.slug}` },
-                { "@type": "ListItem", position: 4, name: "Temporal View", item: `${BASE_URL}/runbook/${r.slug}/temporal` },
+                { "@type": "ListItem", position: 1, name: "ClawGuru", item: `${BASE_URL}/${locale}` },
+                { "@type": "ListItem", position: 2, name: "Runbooks", item: `${BASE_URL}/${locale}/runbooks` },
+                { "@type": "ListItem", position: 3, name: r.title, item: `${BASE_URL}/${locale}/runbook/${r.slug}` },
+                { "@type": "ListItem", position: 4, name: "Temporal View", item: `${BASE_URL}/${locale}/runbook/${r.slug}/temporal` },
               ],
             }),
           }}

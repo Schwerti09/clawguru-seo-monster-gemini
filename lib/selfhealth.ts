@@ -32,11 +32,15 @@ export type SiteHealthReport = {
 // ---------------------------------------------------------------------------
 
 const SITEMAP_PATHS = [
-  "/sitemap/runbooks.xml",
-  "/sitemap/providers.xml",
-  "/sitemap/tags.xml",
-  "/sitemap/solutions.xml",
-  "/sitemap/cves.xml",
+  "/sitemaps/main.xml",
+  "/sitemaps/providers.xml",
+  "/sitemaps/issues.xml",
+  "/sitemaps/services.xml",
+  "/sitemaps/years.xml",
+  "/sitemaps/tools-check.xml",
+  "/sitemaps/solutions-cve.xml",
+  "/sitemaps/runbooks-a-f.xml",
+  "/sitemaps/tags-a-f.xml",
 ] as const
 
 const CRITICAL_PAGES = [

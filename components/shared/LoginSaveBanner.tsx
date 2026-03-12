@@ -2,12 +2,15 @@
 
 import { useState } from "react"
 import Link from "next/link"
+import { useI18n } from "@/components/i18n/I18nProvider"
 
 /**
  * Displayed in Copilot and Live-Check pages when the user is not logged in.
  * Prompts them to log in so their check results can be saved to their account.
  */
 export default function LoginSaveBanner() {
+  const { locale } = useI18n()
+  const prefix = `/${locale}`
   const [dismissed, setDismissed] = useState(false)
 
   if (dismissed) return null
@@ -20,7 +23,7 @@ export default function LoginSaveBanner() {
         </span>
         <span className="text-sm text-gray-300">
           <Link
-            href="/account"
+            href={`${prefix}/account`}
             className="text-[#c9a84c] font-semibold hover:underline"
           >
             Einloggen

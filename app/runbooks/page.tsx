@@ -1,5 +1,8 @@
 import RunbooksPageContent from "@/components/pages/RunbooksPageContent"
 import { SEO_TARGET_KEYWORDS_2026 } from "@/lib/seo/targets"
+import { headers } from "next/headers"
+import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
+import { getDictionary } from "@/lib/getDictionary"
 
 export const dynamic = "force-static"
 
@@ -11,6 +14,9 @@ export const metadata = {
   alternates: { canonical: "/runbooks" }
 }
 
-export default function RunbooksPage() {
-  return <RunbooksPageContent />
+export default async function RunbooksPage() {
+  const h = headers()
+  const locale = (h.get("x-claw-locale") ?? DEFAULT_LOCALE) as Locale
+  const dict = await getDictionary(locale)
+  return <RunbooksPageContent locale={locale} subtitle={dict.runbooks.subtitle} />
 }

@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useI18n } from "@/components/i18n/I18nProvider"
 
 const TEST_KEY = "test_clawguru_demo_key_2024"
 
@@ -219,6 +220,8 @@ function LiveTester() {
 }
 
 export default function DeveloperHub() {
+  const { locale } = useI18n()
+  const prefix = `/${locale}`
   const [activeSnippet, setActiveSnippet] = useState<keyof typeof SNIPPETS>("curl")
 
   const snippet = SNIPPETS[activeSnippet]
@@ -259,7 +262,7 @@ export default function DeveloperHub() {
                     test_clawguru_demo_key_2024
                   </code>{" "}
                   right now — no signup required. For production, register at{" "}
-                  <a href="/dashboard" className="underline text-[#00b8ff]">
+                  <a href={`${prefix}/dashboard`} className="underline text-[#00b8ff]">
                     /dashboard
                   </a>{" "}
                   to get a real key.

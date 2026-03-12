@@ -11,9 +11,9 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata(props: {
-  params: Promise<{ lang: string }>
+  params: { lang: string }
 }) {
-  const { lang } = await props.params
+  const { lang } = props.params
   const locale = (SUPPORTED_LOCALES.includes(lang as Locale) ? lang : "de") as Locale
   return {
     title: "CVE Fix Solutions | ClawGuru",

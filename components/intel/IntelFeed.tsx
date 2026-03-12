@@ -26,6 +26,7 @@ export default function IntelFeed() {
   const pathname = usePathname()
   const firstSegment = pathname.split("/").filter(Boolean)[0] as Locale
   const locale: Locale = SUPPORTED_LOCALES.includes(firstSegment) ? firstSegment : "de"
+  const prefix = `/${locale}`
 
   const [items, setItems] = useState<Incident[]>([])
   const [q, setQ] = useState("")
@@ -111,9 +112,9 @@ export default function IntelFeed() {
             </div>
 
             <div className="mt-5 flex flex-wrap gap-2">
-              <a className="px-4 py-2 rounded-xl bg-black/30 border border-gray-700 hover:bg-black/40 text-sm" href="/tools">{i18nT(locale, 'intelValidator')}</a>
-              <a className="px-4 py-2 rounded-xl bg-black/30 border border-gray-700 hover:bg-black/40 text-sm" href="/security/notfall-leitfaden">{i18nT(locale, 'intelRunbook')}</a>
-              <a className="px-4 py-2 rounded-xl bg-black/30 border border-gray-700 hover:bg-black/40 text-sm" href="/openclaw-security-2026">{i18nT(locale, 'intelReport')}</a>
+              <a className="px-4 py-2 rounded-xl bg-black/30 border border-gray-700 hover:bg-black/40 text-sm" href={`${prefix}/tools`}>{i18nT(locale, 'intelValidator')}</a>
+              <a className="px-4 py-2 rounded-xl bg-black/30 border border-gray-700 hover:bg-black/40 text-sm" href={`${prefix}/security/notfall-leitfaden`}>{i18nT(locale, 'intelRunbook')}</a>
+              <a className="px-4 py-2 rounded-xl bg-black/30 border border-gray-700 hover:bg-black/40 text-sm" href={`${prefix}/openclaw-security-2026`}>{i18nT(locale, 'intelReport')}</a>
             </div>
           </div>
         ))}

@@ -7,12 +7,15 @@ import { motion } from "framer-motion"
 import SecurityScoreCounter from "@/components/visual/SecurityScoreCounter"
 import { Shield, Cpu, BookOpen, Zap, LockKeyhole } from "lucide-react"
 import type { Dictionary } from "@/lib/getDictionary"
+import { useI18n } from "@/components/i18n/I18nProvider"
 
 interface HeroInstitutionProps {
   dict?: Dictionary["hero"]
 }
 
 export default function HeroInstitution({ dict }: HeroInstitutionProps) {
+  const { locale } = useI18n()
+  const prefix = `/${locale}`
   const [q, setQ] = useState("")
   const [hasAccess, setHasAccess] = useState(false)
 
@@ -38,7 +41,7 @@ export default function HeroInstitution({ dict }: HeroInstitutionProps) {
   const container = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.1 } } }
   const item = { hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0, transition: { duration: 0.5 } } }
 
-  const accessHref = hasAccess ? "/dashboard" : "/de/account"
+  const accessHref = hasAccess ? `${prefix}/dashboard` : `${prefix}/account`
   const accessLabel = hasAccess ? "Dashboard öffnen" : "Zugang aktivieren"
 
   return (
@@ -64,7 +67,7 @@ export default function HeroInstitution({ dict }: HeroInstitutionProps) {
           <motion.div variants={item} className="mt-8 flex flex-wrap gap-3">
             <a
               className="group relative px-5 py-3 rounded-xl font-black text-black bg-claw-green hover:shadow-neon-green transition-all duration-300 hover:scale-105"
-              href="/mycelium"
+              href={`${prefix}/mycelium`}
             >
               <span className="relative z-10 flex items-center gap-2">
                 <Zap className="w-4 h-4" /> {dict?.ctaMycelium ?? "Living Mycelium →"}
@@ -76,7 +79,7 @@ export default function HeroInstitution({ dict }: HeroInstitutionProps) {
 
             <a
               className="px-5 py-3 rounded-xl border border-white/10 bg-white/[0.03] backdrop-blur-xl hover:bg-white/[0.06] hover:border-white/20 font-bold transition-all duration-300"
-              href="/copilot"
+              href={`${prefix}/copilot`}
             >
               {dict?.ctaCopilot ?? "Ask Copilot"}
             </a>
@@ -91,7 +94,7 @@ export default function HeroInstitution({ dict }: HeroInstitutionProps) {
 
             <a
               className="px-5 py-3 rounded-xl border border-white/10 bg-white/[0.03] backdrop-blur-xl hover:bg-white/[0.06] hover:border-white/20 font-bold transition-all duration-300"
-              href="/intel"
+              href={`${prefix}/intel`}
             >
               {dict?.ctaIntel ?? "Intel Feed"}
             </a>
@@ -136,7 +139,7 @@ export default function HeroInstitution({ dict }: HeroInstitutionProps) {
                 className="flex-1 px-4 py-3 rounded-xl bg-black/40 border border-white/10 focus:outline-none focus:ring-2 focus:ring-claw-green/30 focus:border-claw-green transition-all"
               />
               <a
-                href={"/copilot?q=" + encodeURIComponent(q || "ich will hardening")}
+                href={`${prefix}/copilot?q=` + encodeURIComponent(q || "ich will hardening")}
                 className="px-5 py-3 rounded-xl font-black bg-gradient-to-r from-orange-500 to-red-600 hover:opacity-90"
               >
                 {dict?.miniCopilotSubmit ?? "Los"}
@@ -152,7 +155,7 @@ export default function HeroInstitution({ dict }: HeroInstitutionProps) {
                   "Welche Provider sind stabil & günstig?",
                   "Was sind die Top 5 Misconfigs?"
                 ].map((s) => (
-                  <a key={s} href={"/copilot?q=" + encodeURIComponent(s)} className="px-3 py-2 rounded-xl glass-card glass-card-hover text-sm">
+                  <a key={s} href={`${prefix}/copilot?q=` + encodeURIComponent(s)} className="px-3 py-2 rounded-xl glass-card glass-card-hover text-sm">
                     {s}
                   </a>
                 ))}

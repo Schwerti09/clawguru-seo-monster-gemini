@@ -4,6 +4,8 @@ import fs from "fs/promises"
 import { cookies } from "next/headers"
 import { verifyAccessToken } from "@/lib/access-token"
 import { stripe } from "@/lib/stripe"
+import { logTelemetry } from "@/lib/ops/telemetry"
+import { getRequestId } from "@/lib/ops/request-id"
 
 export const runtime = "nodejs"
 
@@ -20,10 +22,25 @@ async function sessionAllows(session_id: string) {
 }
 
 export async function GET(req: NextRequest) {
+  const requestId = getRequestId(req.headers)
+  const startedAt = Date.now()
   const key = req.nextUrl.searchParams.get("key") || ""
   const session_id = req.nextUrl.searchParams.get("session_id") || ""
+  logTelemetry("download.request", {
+    requestId,
+    key,
+    hasSessionId: Boolean(session_id),
+  })
   const f = fileForKey(key)
-  if (!f) return NextResponse.json({ error: "Invalid key" }, { status: 400 })
+  if (!f) {
+    logTelemetry("download.error", {
+      requestId,
+      key,
+      reason: "invalid_key",
+      durationMs: Date.now() - startedAt,
+    })
+    return NextResponse.json({ error: "Invalid key" }, { status: 400 })
+  }
 
   // New primary auth: access cookie
   const token = (await cookies()).get("claw_access")?.value || ""
@@ -47,6 +64,15 @@ export async function GET(req: NextRequest) {
       cookieValid: Boolean(payload),
       hasSessionId: Boolean(session_id),
     })
+    logTelemetry("download.error", {
+      requestId,
+      key,
+      reason: "not_authorized",
+      hasCookie: Boolean(token),
+      cookieValid: Boolean(payload),
+      hasSessionId: Boolean(session_id),
+      durationMs: Date.now() - startedAt,
+    })
     return NextResponse.json({ error: "Not authorized" }, { status: 403 })
   }
 
@@ -57,9 +83,21 @@ export async function GET(req: NextRequest) {
       await fs.stat(full)
     } catch {
       console.error("[download] file missing", { key, path: full })
+      logTelemetry("download.error", {
+        requestId,
+        key,
+        reason: "file_missing",
+        durationMs: Date.now() - startedAt,
+      })
       return NextResponse.json({ error: "File not found" }, { status: 404 })
     }
     const data = await fs.readFile(full)
+    logTelemetry("download.success", {
+      requestId,
+      key,
+      filename: f.filename,
+      durationMs: Date.now() - startedAt,
+    })
     return new NextResponse(data, {
       status: 200,
       headers: {
@@ -69,6 +107,12 @@ export async function GET(req: NextRequest) {
       }
     })
   } catch {
+    logTelemetry("download.error", {
+      requestId,
+      key,
+      reason: "read_failed",
+      durationMs: Date.now() - startedAt,
+    })
     return NextResponse.json({ error: "Download failed" }, { status: 500 })
   }
 }

@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getStripe } from "@/lib/stripe";
 import { signAccessToken, type AccessPlan } from "@/lib/access-token";
+import { logTelemetry } from "@/lib/ops/telemetry";
+import { getRequestId } from "@/lib/ops/request-id";
 
 export const runtime = "nodejs";
 
@@ -20,12 +22,22 @@ function tokenExp(plan: AccessPlan, now: number) {
 }
 
 export async function GET(req: NextRequest) {
+  const requestId = getRequestId(req.headers)
+  const startedAt = Date.now()
+  logTelemetry("auth.activate.request", {
+    requestId,
+  })
+
   try {
     const url = new URL(req.url);
     const sessionId = url.searchParams.get("session_id");
 
     if (!sessionId) {
       console.warn("[auth/activate] missing session_id")
+      logTelemetry("auth.activate.error", {
+        requestId,
+        reason: "missing_session_id",
+      })
       return NextResponse.redirect(new URL("/success?error=missing_session", req.url));
     }
 
@@ -37,6 +49,11 @@ export async function GET(req: NextRequest) {
       console.error("[auth/activate] stripe checkout.sessions.retrieve failed", {
         sessionId,
         err: err instanceof Error ? err.message : String(err),
+      })
+      logTelemetry("auth.activate.error", {
+        requestId,
+        sessionId,
+        reason: "stripe_retrieve_failed",
       })
       return NextResponse.redirect(new URL(`/success?session_id=${encodeURIComponent(sessionId)}&error=invalid_session`, req.url));
     }
@@ -51,6 +68,11 @@ export async function GET(req: NextRequest) {
         payment_status: session.payment_status,
         status: session.status,
       })
+      logTelemetry("auth.activate.error", {
+        requestId,
+        sessionId,
+        reason: "session_not_paid",
+      })
       return NextResponse.redirect(new URL(`/success?session_id=${sessionId}&error=not_paid`, req.url));
     }
 
@@ -60,6 +82,11 @@ export async function GET(req: NextRequest) {
     const customerId = typeof session.customer === "string" ? session.customer : undefined
     if (!customerId) {
       console.error("[auth/activate] missing customer id on session", { sessionId })
+      logTelemetry("auth.activate.error", {
+        requestId,
+        sessionId,
+        reason: "missing_customer_id",
+      })
       return NextResponse.redirect(new URL(`/success?session_id=${encodeURIComponent(sessionId)}&error=missing_customer`, req.url));
     }
 
@@ -98,10 +125,21 @@ export async function GET(req: NextRequest) {
       plan,
       secure: isProduction,
     })
+    logTelemetry("auth.activate.success", {
+      requestId,
+      sessionId,
+      plan,
+      durationMs: Date.now() - startedAt,
+    })
 
     return res;
   } catch (error) {
     console.error("Activate route failed:", error);
+    logTelemetry("auth.activate.error", {
+      requestId,
+      reason: "unhandled_exception",
+      durationMs: Date.now() - startedAt,
+    })
     return NextResponse.redirect(new URL("/success?error=activation_failed", req.url));
   }
 }

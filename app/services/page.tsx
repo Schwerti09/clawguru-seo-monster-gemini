@@ -2,6 +2,8 @@ import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
 import { allServices100k, CLOUD_PROVIDERS_100K, ISSUES_100K, YEARS_100K } from "@/lib/pseo"
 import { BASE_URL } from "@/lib/config"
+import { headers } from "next/headers"
+import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
 
 export const dynamic = "force-static"
 
@@ -13,6 +15,9 @@ export const metadata = {
 }
 
 export default function ServicesPage() {
+  const h = headers()
+  const locale = (h.get("x-claw-locale") ?? DEFAULT_LOCALE) as Locale
+  const prefix = `/${locale}`
   const services = allServices100k()
   const totalPerService =
     (CLOUD_PROVIDERS_100K as unknown as unknown[]).length *
@@ -25,12 +30,12 @@ export default function ServicesPage() {
     name: "ClawGuru Service Hub Index",
     description: "Alle Services mit vollständiger Provider × Issue × Year Runbook-Matrix.",
     numberOfItems: services.length,
-    url: `${BASE_URL}/services`,
+    url: `${BASE_URL}${prefix}/services`,
     itemListElement: services.map((service, i) => ({
       "@type": "ListItem",
       position: i + 1,
       name: service.name,
-      url: `${BASE_URL}/service/${service.slug}`,
+      url: `${BASE_URL}${prefix}/service/${service.slug}`,
     })),
   }
 
@@ -40,7 +45,7 @@ export default function ServicesPage() {
       <div className="py-16 max-w-6xl mx-auto">
         <nav className="text-sm text-gray-500 mb-6" aria-label="Breadcrumb">
           <ol className="flex flex-wrap items-center gap-2">
-            <li><a href="/" className="hover:text-cyan-400">ClawGuru</a></li>
+            <li><a href={prefix} className="hover:text-cyan-400">ClawGuru</a></li>
             <li>/</li>
             <li className="text-gray-300">Services</li>
           </ol>
@@ -56,7 +61,7 @@ export default function ServicesPage() {
           {services.map((service) => (
             <a
               key={service.slug}
-              href={`/service/${service.slug}`}
+              href={`${prefix}/service/${service.slug}`}
               className="p-6 rounded-3xl border border-gray-800 bg-black/25 hover:bg-black/35 transition-colors"
             >
               <div className="text-xs uppercase tracking-widest text-gray-500">Service Hub</div>
@@ -71,9 +76,9 @@ export default function ServicesPage() {
 
         <div className="mt-12 text-sm text-gray-500">
           Mehr:{" "}
-          <a className="hover:text-cyan-400" href="/issues">Issue Hubs</a> ·{" "}
-          <a className="hover:text-cyan-400" href="/years">Year Hubs</a> ·{" "}
-          <a className="hover:text-cyan-400" href="/runbooks">Runbook Library</a>
+          <a className="hover:text-cyan-400" href={`${prefix}/issues`}>Issue Hubs</a> ·{" "}
+          <a className="hover:text-cyan-400" href={`${prefix}/years`}>Year Hubs</a> ·{" "}
+          <a className="hover:text-cyan-400" href={`${prefix}/runbooks`}>Runbook Library</a>
         </div>
       </div>
     </Container>

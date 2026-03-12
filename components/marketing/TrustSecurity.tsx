@@ -1,5 +1,8 @@
+"use client"
+
 // TRUST & SECURITY FORTRESS 2026: Institutional trust section for CISOs and security teams
 import Container from "@/components/shared/Container"
+import { useI18n } from "@/components/i18n/I18nProvider"
 
 const COMPLIANCE_SIGNALS = [
   "All Runbooks are 100% Security Scanned & Sandbox Tested",
@@ -61,6 +64,8 @@ const TRUST_STATS = [
 ]
 
 export default function TrustSecurity({ fullPage = false }: { fullPage?: boolean }) {
+  const { locale } = useI18n()
+  const prefix = `/${locale}`
   return (
     <section
       id="trust-security"
@@ -169,13 +174,13 @@ export default function TrustSecurity({ fullPage = false }: { fullPage?: boolean
             </p>
             <div className="mt-6 flex flex-wrap justify-center gap-3">
               <a
-                href="/trust-security"
+                href={`${prefix}/trust-security`}
                 className="px-5 py-2.5 rounded-xl border border-[#b8975a]/30 hover:border-[#b8975a]/60 text-[#b8975a] text-sm font-semibold transition-colors duration-300"
               >
                 Full Trust Center →
               </a>
               <a
-                href="/check"
+                href={`${prefix}/check`}
                 className="px-5 py-2.5 rounded-xl border border-white/10 hover:border-white/20 text-gray-300 text-sm font-semibold transition-colors duration-300"
               >
                 Run Security Check →

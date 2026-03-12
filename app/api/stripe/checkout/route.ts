@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server"
 import { getOrigin } from "@/lib/origin"
 import { isStripeActive, apiUnavailableResponse } from "@/lib/api-guard"
 import { getStripe } from "@/lib/stripe"
+import { logTelemetry } from "@/lib/ops/telemetry"
+import { getRequestId } from "@/lib/ops/request-id"
 
 export const dynamic = "force-dynamic"
 
@@ -29,6 +31,12 @@ function getMode(product: Product): "payment" | "subscription" {
 export async function POST(req: NextRequest) {
   if (!isStripeActive()) return apiUnavailableResponse()
 
+  const requestId = getRequestId(req.headers)
+  const startedAt = Date.now()
+  logTelemetry("stripe.checkout.request", {
+    requestId,
+  })
+
   try {
     const stripe = getStripe()
     const body = await req.json().catch(() => ({}))
@@ -50,6 +58,13 @@ export async function POST(req: NextRequest) {
 
     if (!price) {
       console.error("[stripe/checkout] missing price id for product", { product })
+      logTelemetry("stripe.checkout.error", {
+        requestId,
+        error: "missing price id",
+        product,
+        durationMs: Date.now() - startedAt,
+      })
+
       return NextResponse.json(
         { error: "Checkout für dieses Produkt ist aktuell nicht verfügbar." },
         { status: 503 }
@@ -90,12 +105,25 @@ export async function POST(req: NextRequest) {
       product,
       hasUrl: Boolean(session.url),
     })
+    logTelemetry("stripe.checkout.success", {
+      requestId,
+      sessionId: session.id,
+      mode,
+      product,
+      durationMs: Date.now() - startedAt,
+    })
 
     return NextResponse.json({ url: session.url })
   } catch (e: unknown) {
     console.error("[stripe/checkout] failed", {
       err: e instanceof Error ? e.message : String(e),
     })
+    logTelemetry("stripe.checkout.error", {
+      requestId,
+      error: e instanceof Error ? e.message : String(e),
+      durationMs: Date.now() - startedAt,
+    })
+
     return NextResponse.json(
       { error: e instanceof Error ? e.message : "Checkout failed" },
       { status: 500 }

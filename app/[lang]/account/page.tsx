@@ -14,9 +14,10 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata(
-  props: { params: Promise<{ lang: string }> }
+  props: { params: { lang: string } }
 ): Promise<Metadata> {
-  const params = await props.params
+  const params = props.params
+
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale)
     ? params.lang
     : "de") as Locale
@@ -32,6 +33,11 @@ export async function generateMetadata(
     zh: "账户 | ClawGuru",
     ja: "アカウント | ClawGuru",
     ar: "الحساب | ClawGuru",
+    nl: "Account | ClawGuru",
+    hi: "अकाउंट | ClawGuru",
+    tr: "Hesap | ClawGuru",
+    pl: "Konto | ClawGuru",
+    ko: "계정 | ClawGuru",
   }
 
   const descriptions: Record<Locale, string> = {
@@ -45,6 +51,11 @@ export async function generateMetadata(
     zh: "您的 ClawGuru 访问权限 – Dashboard、报告、weekly digest、kits。",
     ja: "ClawGuru アクセス – Dashboard、レポート、weekly digest、kits。",
     ar: "وصولك إلى ClawGuru – لوحة التحكم، التقارير، weekly digest، kits.",
+    nl: "Je ClawGuru toegang – Dashboard, rapporten, weekly digest, kits.",
+    hi: "आपका ClawGuru एक्सेस – Dashboard, रिपोर्ट, weekly digest, kits.",
+    tr: "ClawGuru erişiminiz – Dashboard, raporlar, weekly digest, kitler.",
+    pl: "Twój dostęp do ClawGuru – Dashboard, raporty, weekly digest, zestawy.",
+    ko: "ClawGuru 접근 권한 – Dashboard, 리포트, weekly digest, kits.",
   }
 
   return {
@@ -57,7 +68,8 @@ export async function generateMetadata(
 /* ============================================= */
 /*               ACCESS REQUIRED                 */
 /* ============================================= */
-function AccessRequired() {
+function AccessRequired({ locale }: { locale: Locale }) {
+  const prefix = `/${locale}`
   return (
     <Container>
       <div className="py-16 max-w-5xl mx-auto text-center">
@@ -69,14 +81,14 @@ function AccessRequired() {
 
         <div className="mt-10 flex flex-wrap gap-4 justify-center">
           <Link
-            href="/pricing"
+            href={`${prefix}/pricing`}
             className="px-8 py-4 rounded-2xl bg-white text-black font-semibold text-lg hover:bg-gray-200 transition"
           >
             Preise ansehen & kaufen
           </Link>
 
           <Link
-            href="/dashboard"
+            href={`${prefix}/dashboard`}
             className="px-8 py-4 rounded-2xl border border-gray-700 text-white font-semibold text-lg hover:bg-white/10 transition"
           >
             Zum Dashboard
@@ -107,7 +119,8 @@ function AccessRequired() {
 /* ============================================= */
 /*               ACCESS GRANTED                  */
 /* ============================================= */
-function AccessGranted({ customerId, plan }: { customerId?: string; plan?: string }) {
+function AccessGranted({ customerId, plan, locale }: { customerId?: string; plan?: string; locale: Locale }) {
+  const prefix = `/${locale}`
   return (
     <Container>
       <div className="py-16 max-w-4xl mx-auto">
@@ -119,7 +132,7 @@ function AccessGranted({ customerId, plan }: { customerId?: string; plan?: strin
 
         <div className="mt-12 grid gap-6 md:grid-cols-2">
           <Link
-            href="/dashboard"
+            href={`${prefix}/dashboard`}
             className="block p-8 rounded-3xl border border-white/10 hover:border-white/30 bg-black/30 transition group"
           >
             <div className="text-2xl font-bold group-hover:text-[#c9a84c]">→ Dashboard öffnen</div>
@@ -127,7 +140,7 @@ function AccessGranted({ customerId, plan }: { customerId?: string; plan?: strin
           </Link>
 
           <Link
-            href="/pricing"
+            href={`${prefix}/pricing`}
             className="block p-8 rounded-3xl border border-white/10 hover:border-white/30 bg-black/30 transition group"
           >
             <div className="text-2xl font-bold group-hover:text-[#c9a84c]">→ Upgrade oder verlängern</div>
@@ -143,23 +156,25 @@ function AccessGranted({ customerId, plan }: { customerId?: string; plan?: strin
 /*               MAIN PAGE                       */
 /* ============================================= */
 export default async function LocaleAccountPage(props: {
-  params: Promise<{ lang: string }>
+  params: { lang: string }
 }) {
-  const params = await props.params
-  const lang = SUPPORTED_LOCALES.includes(params.lang as Locale)
+  const params = props.params
+
+  const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale)
     ? params.lang
-    : "de"
+    : "de") as Locale
 
   const access = await getAccess()
 
   if (!access.ok) {
-    return <AccessRequired />
+    return <AccessRequired locale={locale} />
   }
 
   return (
     <AccessGranted
       customerId={access.customerId}
       plan={access.plan}
+      locale={locale}
     />
   )
 }

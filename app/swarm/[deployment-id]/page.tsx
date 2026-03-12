@@ -14,8 +14,8 @@ import { generateSwarmDeployment, generateApprovedSwarmPlan, type RemediationSco
 export const dynamic = "force-dynamic"
 
 export async function generateMetadata(props: PageProps): Promise<Metadata> {
-  const searchParams = await props.searchParams;
-  const params = await props.params;
+  const searchParams = props.searchParams
+  const params = props.params
   const runbookSlug = searchParams.runbook
   const deploymentId = params["deployment-id"]
   const isApproved = searchParams.mode === "approved"
@@ -31,13 +31,13 @@ export async function generateMetadata(props: PageProps): Promise<Metadata> {
 }
 
 interface PageProps {
-  params: Promise<{ "deployment-id": string }>
-  searchParams: Promise<{ runbook?: string; target?: string; mode?: string; scope?: string }>
+  params: { "deployment-id": string }
+  searchParams: { runbook?: string; target?: string; mode?: string; scope?: string }
 }
 
 export default async function SwarmPage(props: PageProps) {
-  const searchParams = await props.searchParams;
-  const params = await props.params;
+  const searchParams = props.searchParams
+  const params = props.params
   const deploymentId = params["deployment-id"]
   const runbookSlug = searchParams.runbook ?? "unknown-runbook"
   const isApprovedMode = searchParams.mode === "approved"

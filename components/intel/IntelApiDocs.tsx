@@ -1,4 +1,10 @@
+"use client"
+
+import { useI18n } from "@/components/i18n/I18nProvider"
+
 export default function IntelApiDocs() {
+  const { locale } = useI18n()
+  const prefix = `/${locale}`
   return (
     <div className="mt-16 rounded-3xl border border-orange-900/40 bg-gradient-to-br from-orange-950/20 to-black p-8">
       <div className="flex flex-col lg:flex-row lg:items-start gap-8">
@@ -36,7 +42,7 @@ export default function IntelApiDocs() {
             </div>
           </div>
           <a
-            href="/pricing#enterprise"
+            href={`${prefix}/pricing#enterprise`}
             className="mt-6 inline-block w-full text-center py-3 px-6 rounded-2xl font-black text-sm text-black transition-all duration-300 hover:opacity-90"
             style={{ background: "linear-gradient(135deg, #ffaa00 0%, #ff5000 100%)" }}
           >
@@ -94,7 +100,7 @@ X-API-Key: YOUR_API_KEY`}
           <div className="rounded-xl border border-orange-900/30 bg-orange-950/20 p-4 text-sm text-gray-300">
             <span className="font-bold text-orange-300">API Key erhalten: </span>
             Enterprise-Zugang inkl. dedizierten API Key buchen unter{" "}
-            <a href="/pricing" className="text-orange-400 hover:underline">/pricing</a>
+            <a href={`${prefix}/pricing`} className="text-orange-400 hover:underline">/pricing</a>
             {" "}oder per Mail an{" "}
             <a href="mailto:enterprise@clawguru.org" className="text-orange-400 hover:underline">
               enterprise@clawguru.org

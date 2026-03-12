@@ -10,6 +10,7 @@
  */
 
 import { useState, useEffect, useCallback } from "react"
+import { useI18n } from "@/components/i18n/I18nProvider"
 import type { RunbookVersion, MergeRequest } from "@/lib/runbook-versions"
 
 // ── Diff helpers ─────────────────────────────────────────────────────────────
@@ -135,6 +136,8 @@ interface Props {
 type Tab = "versions" | "forks" | "merge-requests"
 
 export default function VersionsAndForksTab({ slug }: Props) {
+  const { locale } = useI18n()
+  const prefix = `/${locale}`
   const [tab, setTab] = useState<Tab>("versions")
   const [versions, setVersions] = useState<RunbookVersion[]>([])
   const [mrs, setMrs] = useState<MergeRequest[]>([])
@@ -328,7 +331,7 @@ export default function VersionsAndForksTab({ slug }: Props) {
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-lg font-black text-gray-100">Community Forks</h2>
                 {!userEmail && (
-                  <a href="/account" className="text-xs text-cyan-400 hover:text-cyan-200 underline underline-offset-2">
+                  <a href={`${prefix}/account`} className="text-xs text-cyan-400 hover:text-cyan-200 underline underline-offset-2">
                     Login, um zu forken →
                   </a>
                 )}
@@ -359,7 +362,7 @@ export default function VersionsAndForksTab({ slug }: Props) {
               {!userEmail ? (
                 <div className="text-center py-6">
                   <p className="text-sm text-gray-500 mb-3">Login erforderlich, um Merge Requests zu sehen oder einzureichen.</p>
-                  <a href="/account" className="text-xs text-cyan-400 hover:text-cyan-200 underline underline-offset-2">
+                  <a href={`${prefix}/account`} className="text-xs text-cyan-400 hover:text-cyan-200 underline underline-offset-2">
                     Einloggen →
                   </a>
                 </div>

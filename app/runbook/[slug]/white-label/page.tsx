@@ -96,12 +96,12 @@ function FaqSection({ faq }: { faq: RunbookFaqEntry[] }) {
 
 export default async function WhiteLabelRunbookPage(
   props: {
-    params: Promise<{ slug: string }>
-    searchParams: Promise<{ logo?: string; company?: string; accent?: string }>
+    params: { slug: string }
+    searchParams: { logo?: string; company?: string; accent?: string }
   }
 ) {
-  const searchParams = await props.searchParams;
-  const params = await props.params;
+  const searchParams = props.searchParams;
+  const params = props.params;
   const r = getRunbook(params.slug)
   if (!r) return notFound()
 

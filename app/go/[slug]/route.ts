@@ -3,8 +3,8 @@ import { AFFILIATE_REDIRECTS } from "@/lib/constants"
 
 export const dynamic = "force-dynamic"
 
-export async function GET(_req: NextRequest, props: { params: Promise<{ slug: string }> }) {
-  const params = await props.params;
+export async function GET(_req: NextRequest, props: { params: { slug: string } }) {
+  const params = props.params;
   const slug = (params?.slug || "").toLowerCase()
   const target = AFFILIATE_REDIRECTS[slug]
 

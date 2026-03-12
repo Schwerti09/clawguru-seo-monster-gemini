@@ -2,8 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback } from "react"
 import { motion, useInView } from "framer-motion"
-import { usePathname } from "next/navigation"
-import { SUPPORTED_LOCALES, type Locale, t } from "@/lib/i18n"
+import { useI18n } from "@/components/i18n/I18nProvider"
 
 // LUXURY DESIGN 2026: Mycelial Singularity Graph – hoverable canvas nodes
 // Pure Canvas API: no SSR issues, no extra bundle size beyond what's needed.
@@ -81,10 +80,9 @@ export default function MycelialSingularityHero() {
   const sectionRef = useRef<HTMLDivElement>(null)
   const isInView = useInView(sectionRef, { once: true, amount: 0.2 })
 
-  // Detect locale from URL
-  const pathname = usePathname()
-  const firstSegment = pathname.split("/").filter(Boolean)[0] as Locale
-  const locale: Locale = SUPPORTED_LOCALES.includes(firstSegment) ? firstSegment : "de"
+  const { locale, dict } = useI18n()
+  const prefix = `/${locale}`
+  const isGerman = locale === "de"
 
   const draw = useCallback(() => {
     const canvas = canvasRef.current
@@ -335,7 +333,7 @@ export default function MycelialSingularityHero() {
                 style={{ background: "#d4af37", boxShadow: "0 0 8px rgba(212,175,55,0.8)" }}
               />
               <span className="text-xs font-mono tracking-[0.25em] uppercase" style={{ color: "#d4af37" }}>
-                {t(locale, "heroGenesisBadge")}
+                {dict.hero.badge}
               </span>
             </div>
           </motion.div>
@@ -346,9 +344,9 @@ export default function MycelialSingularityHero() {
             className="font-display font-black leading-[1.02] tracking-tight"
             style={{ fontSize: "clamp(2.8rem, 7vw, 6.5rem)" }}
           >
-            <span className="text-white">Enter the</span>
+            <span className="text-white">{isGerman ? "ClawGuru" : "Enter the"}</span>
             <br />
-            <span className="text-gold-shimmer">Mycelium</span>
+            <span className="text-gold-shimmer">{isGerman ? dict.hero.titleSuffix : "Mycelium"}</span>
           </motion.h1>
 
           {/* Subheading */}
@@ -357,25 +355,25 @@ export default function MycelialSingularityHero() {
             className="mt-6 text-gray-300 max-w-2xl leading-relaxed"
             style={{ fontSize: "clamp(1rem, 2vw, 1.2rem)" }}
           >
-            {t(locale, "heroMyceliumSubtitle")}
+            {dict.hero.subtitle}
           </motion.p>
 
           {/* CTA buttons */}
           <motion.div variants={fadeSlide} className="mt-10 flex flex-wrap gap-4 justify-center">
             <a
-              href="/mycelium"
+              href={`${prefix}/mycelium`}
               className="btn-luxury-gold px-8 py-4 rounded-2xl text-sm font-black tracking-wide shadow-neon-gold"
             >
-              {t(locale, "heroEnterMycelium")}
+              {dict.hero.ctaMycelium}
             </a>
             <a
-              href="/copilot"
+              href={`${prefix}/copilot`}
               className="px-8 py-4 rounded-2xl text-sm font-bold glass-vault luxury-border-gold text-gray-100 hover:text-white transition-all duration-300"
             >
-              {t(locale, "heroAskCopilot")}
+              {dict.hero.ctaCopilot}
             </a>
             <a
-              href="/pricing"
+              href={`${prefix}/pricing`}
               className="px-8 py-4 rounded-2xl text-sm font-black transition-all duration-300"
               style={{
                 background: "linear-gradient(135deg, rgba(0,184,255,0.15) 0%, rgba(0,255,157,0.08) 100%)",
@@ -383,51 +381,45 @@ export default function MycelialSingularityHero() {
                 color: "#00b8ff",
               }}
             >
-              {t(locale, "heroVaultAccess")}
+              {dict.hero.ctaProKits}
             </a>
           </motion.div>
 
-          {/* Live stats strip */}
-          <motion.div variants={fadeSlide} className="mt-12 flex flex-wrap gap-6 justify-center">
+          {/* Stats row */}
+          <motion.div variants={fadeSlide} className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-3xl">
             {[
               { value: "1M+", label: "Runbooks" },
               { value: "94", label: "Security Score" },
-              { value: "∞", label: t(locale, "heroKnowledgeEdges") },
-              { value: "v3.0", label: t(locale, "heroGenesisProtocol") },
+              { value: "∞", label: dict.hero.knowledgeEdges },
+              { value: "v3.0", label: dict.hero.genesisProtocol },
             ].map((stat) => (
               <div
                 key={stat.label}
-                className="flex flex-col items-center px-6 py-3 rounded-2xl glass-vault"
+                className="p-5 rounded-2xl border border-white/10 bg-black/30"
               >
-                <span
-                  className="text-2xl font-black font-display"
-                  style={{ color: "#d4af37", textShadow: "0 0 20px rgba(212,175,55,0.4)" }}
-                >
-                  {stat.value}
-                </span>
-                <span className="text-xs text-gray-400 mt-0.5 tracking-wide uppercase">{stat.label}</span>
+                <div className="text-2xl font-black text-white">{stat.value}</div>
+                <div className="mt-1 text-xs uppercase tracking-widest text-gray-400">{stat.label}</div>
               </div>
             ))}
           </motion.div>
         </motion.div>
 
-        {/* Hovered node tooltip */}
+        {/* Hover tooltip */}
         {hoveredNode && (
           <motion.div
-            initial={{ opacity: 0, y: 6 }}
+            initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 px-5 py-2.5 rounded-xl glass-vault pointer-events-none"
-            style={{ borderColor: hoveredNode.color + "40" }}
+            className="absolute bottom-6 left-1/2 -translate-x-1/2 rounded-2xl border border-gray-800 bg-black/60 backdrop-blur px-4 py-2"
           >
             <span className="text-sm font-bold" style={{ color: hoveredNode.color }}>
               {hoveredNode.label}
             </span>
-            <span className="text-xs text-gray-400 ml-2">· {t(locale, "heroNodeTooltip")}</span>
+            <span className="text-xs text-gray-400 ml-2">· {dict.hero.nodeTooltip}</span>
           </motion.div>
         )}
       </div>
 
-      {/* Scroll indicator */}
+      {/* Scroll hint */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -435,7 +427,7 @@ export default function MycelialSingularityHero() {
         className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
         aria-hidden="true"
       >
-        <span className="text-xs text-gray-500 tracking-widest uppercase">{t(locale, "heroScrollLabel")}</span>
+        <span className="text-xs text-gray-500 tracking-widest uppercase">{dict.hero.scrollLabel}</span>
         <motion.div
           animate={{ y: [0, 8, 0] }}
           transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}

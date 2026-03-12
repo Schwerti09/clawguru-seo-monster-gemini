@@ -10,7 +10,7 @@ export default async function SuccessPage(
     searchParams?: Promise<Record<string, string | string[] | undefined>>
   }
 ) {
-  const searchParams = await props.searchParams;
+  const searchParams = props.searchParams;
   const session_id = typeof searchParams?.session_id === "string" ? searchParams?.session_id : ""
   if (!session_id) {
     console.warn("[success] missing session_id")

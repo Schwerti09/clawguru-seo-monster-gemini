@@ -23,9 +23,9 @@ async function getSession() {
 
 export async function GET(
   _req: NextRequest,
-  props: { params: Promise<{ slug: string }> }
+  props: { params: { slug: string } }
 ) {
-  const { slug } = await props.params
+  const { slug } = props.params
   const session = await getSession()
   if (!session) {
     return NextResponse.json({ error: "Authentication required" }, { status: 401 })
@@ -40,9 +40,9 @@ export async function GET(
 
 export async function POST(
   req: NextRequest,
-  props: { params: Promise<{ slug: string }> }
+  props: { params: { slug: string } }
 ) {
-  const { slug } = await props.params
+  const { slug } = props.params
   const session = await getSession()
   if (!session) {
     return NextResponse.json({ error: "Authentication required" }, { status: 401 })
@@ -70,9 +70,9 @@ export async function POST(
 
 export async function PATCH(
   req: NextRequest,
-  props: { params: Promise<{ slug: string }> }
+  props: { params: { slug: string } }
 ) {
-  const { slug } = await props.params
+  const { slug } = props.params
   const session = await getSession()
   if (!session || session.email !== ADMIN_EMAIL) {
     return NextResponse.json({ error: "Admin access required" }, { status: 403 })

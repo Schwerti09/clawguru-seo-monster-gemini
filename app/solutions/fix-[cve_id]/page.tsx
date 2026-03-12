@@ -11,9 +11,11 @@ import Container from "@/components/shared/Container"
 import { getCveEntry, KNOWN_CVES, parseCveId } from "@/lib/cve-pseo"
 import { generateCveContent } from "@/lib/agents/cve-agent"
 import { BASE_URL } from "@/lib/config"
+import { headers } from "next/headers"
+import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
 
 interface Props {
-  params: Promise<{ cve_id: string }>
+  params: { cve_id: string }
 }
 
 export const revalidate = 60 // 60s ISR
@@ -24,7 +26,9 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
-  const params = await props.params;
+  const params = props.params
+  const h = headers()
+  const locale = (h.get("x-claw-locale") ?? DEFAULT_LOCALE) as Locale
   const cveId = parseCveId(decodeURIComponent(params.cve_id))
   if (!cveId) return {}
   const entry = getCveEntry(cveId)
@@ -32,7 +36,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   return {
     title: `How to fix ${entry.cveId} (${entry.name}) – Step-by-Step Guide | ClawGuru`,
     description: `${entry.description} CVSS ${entry.cvssScore}. Affected: ${entry.affectedVersions}. Fixed: ${entry.fixedVersions}. Mitigation steps, verification commands, and security best practices.`,
-    alternates: { canonical: `/solutions/fix-${entry.cveId}` },
+    alternates: { canonical: `/${locale}/solutions/fix-${entry.cveId}` },
     openGraph: {
       title: `How to fix ${entry.cveId} – ${entry.name} | ClawGuru`,
       description: entry.description,
@@ -49,7 +53,10 @@ function severityColor(severity: string) {
 }
 
 export default async function CveFixPage(props: Props) {
-  const params = await props.params;
+  const params = props.params
+  const h = headers()
+  const locale = (h.get("x-claw-locale") ?? DEFAULT_LOCALE) as Locale
+  const prefix = `/${locale}`
   const cveId = parseCveId(decodeURIComponent(params.cve_id))
   if (!cveId) return notFound()
 
@@ -66,7 +73,7 @@ export default async function CveFixPage(props: Props) {
     "@type": "HowTo",
     name: `How to fix ${entry.cveId} – ${entry.name}`,
     description: entry.description,
-    url: `${BASE_URL}/solutions/fix-${entry.cveId}`,
+    url: `${BASE_URL}/${locale}/solutions/fix-${entry.cveId}`,
     step: entry.mitigationSteps.map((s, i) => ({
       "@type": "HowToStep",
       position: i + 1,
@@ -80,7 +87,7 @@ export default async function CveFixPage(props: Props) {
     "@type": "TechArticle",
     headline: `How to fix ${entry.cveId} – ${entry.name}`,
     description: entry.description,
-    url: `${BASE_URL}/solutions/fix-${entry.cveId}`,
+    url: `${BASE_URL}/${locale}/solutions/fix-${entry.cveId}`,
     datePublished: entry.publishedDate,
     dateModified: entry.publishedDate,
     author: { "@type": "Organization", name: "ClawGuru", url: BASE_URL },
@@ -100,9 +107,9 @@ export default async function CveFixPage(props: Props) {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "ClawGuru", item: BASE_URL },
-      { "@type": "ListItem", position: 2, name: "Solutions", item: `${BASE_URL}/solutions` },
-      { "@type": "ListItem", position: 3, name: entry.cveId, item: `${BASE_URL}/solutions/fix-${entry.cveId}` },
+      { "@type": "ListItem", position: 1, name: "ClawGuru", item: `${BASE_URL}/${locale}` },
+      { "@type": "ListItem", position: 2, name: "Solutions", item: `${BASE_URL}/${locale}/solutions` },
+      { "@type": "ListItem", position: 3, name: entry.cveId, item: `${BASE_URL}/${locale}/solutions/fix-${entry.cveId}` },
     ],
   }
 
@@ -144,9 +151,9 @@ export default async function CveFixPage(props: Props) {
         {/* Breadcrumb */}
         <nav className="text-sm text-gray-500 mb-6" aria-label="Breadcrumb">
           <ol className="flex flex-wrap items-center gap-2">
-            <li><a href="/" className="hover:text-cyan-400">ClawGuru</a></li>
+            <li><a href={`${prefix}`} className="hover:text-cyan-400">ClawGuru</a></li>
             <li>/</li>
-            <li><a href="/solutions" className="hover:text-cyan-400">Solutions</a></li>
+            <li><a href={`${prefix}/solutions`} className="hover:text-cyan-400">Solutions</a></li>
             <li>/</li>
             <li className="text-gray-300">{entry.cveId}</li>
           </ol>
@@ -324,20 +331,20 @@ export default async function CveFixPage(props: Props) {
         {/* CTA row */}
         <div className="mt-12 flex flex-wrap gap-3">
           <a
-            href="/check"
+            href={`${prefix}/check`}
             className="px-6 py-3 rounded-2xl font-black text-black transition-all duration-300 hover:opacity-90"
             style={{ background: "linear-gradient(135deg, #00ff9d, #00b8ff)" }}
           >
             Run Security Check →
           </a>
           <a
-            href="/runbooks"
+            href={`${prefix}/runbooks`}
             className="px-6 py-3 rounded-2xl border border-gray-700 hover:border-gray-500 font-bold text-gray-200 transition-colors"
           >
             Browse Runbooks →
           </a>
           <a
-            href="/solutions"
+            href={`${prefix}/solutions`}
             className="px-6 py-3 rounded-2xl border border-gray-700 hover:border-gray-500 font-bold text-gray-200 transition-colors"
           >
             ← All CVE Solutions

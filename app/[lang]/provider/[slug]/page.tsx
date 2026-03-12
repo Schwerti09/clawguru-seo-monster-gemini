@@ -16,9 +16,9 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata(props: {
-  params: Promise<{ lang: string; slug: string }>
+  params: { lang: string; slug: string }
 }) {
-  const { slug, lang } = await props.params
+  const { slug, lang } = props.params
   const locale = (SUPPORTED_LOCALES.includes(lang as Locale) ? lang : "de") as Locale
   const p = allProviders().find((x) => x.slug === slug.toLowerCase())
   if (!p) return {}
@@ -30,8 +30,8 @@ export async function generateMetadata(props: {
 }
 
 export default async function LocaleProviderPage(props: {
-  params: Promise<{ lang: string; slug: string }>
+  params: { lang: string; slug: string }
 }) {
-  const { slug } = await props.params
-  return <ProviderPage params={Promise.resolve({ slug })} />
+  const { slug } = props.params
+  return <ProviderPage params={{ slug }} />
 }

@@ -56,6 +56,11 @@ const LOCALE_NAMES: Record<Locale, string> = {
   zh: "Simplified Chinese",
   ja: "Japanese",
   ar: "Arabic",
+  nl: "Dutch",
+  hi: "Hindi",
+  tr: "Turkish",
+  pl: "Polish",
+  ko: "Korean",
 }
 
 const DOC_TTL_SECONDS = 60 * 60 * 24

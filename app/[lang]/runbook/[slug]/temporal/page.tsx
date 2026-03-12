@@ -18,9 +18,9 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata(props: {
-  params: Promise<{ lang: string; slug: string }>
+  params: { lang: string; slug: string }
 }) {
-  const { slug, lang } = await props.params
+  const { slug, lang } = props.params
   const locale = (SUPPORTED_LOCALES.includes(lang as Locale) ? lang : "de") as Locale
 
   return {
@@ -31,10 +31,10 @@ export async function generateMetadata(props: {
 }
 
 export default async function LocaleTemporalRunbookPage(props: {
-  params: Promise<{ lang: string; slug: string }>
+  params: { lang: string; slug: string }
 }) {
-  const { slug, lang } = await props.params
-  const locale = (SUPPORTED_LOCALES.includes(lang as Locale) ? lang : "de") as Locale
+  const { slug, lang } = props.params
+  void ((SUPPORTED_LOCALES.includes(lang as Locale) ? lang : "de") as Locale)
 
   const runbook = getRunbook(slug)
   if (!runbook) notFound()

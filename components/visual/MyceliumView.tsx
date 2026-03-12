@@ -2,7 +2,8 @@
 // MYCELIAL SINGULARITY v3.0 – Full-page interactive mycelium visualization
 // Canvas-based force-directed graph with genetic evolution sidebar and oracle mode.
 
-import { useEffect, useRef, useState, useCallback } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
+import { useI18n } from "@/components/i18n/I18nProvider"
 import type {
   MyceliumGraph,
   MycelNode,
@@ -77,6 +78,9 @@ interface Props {
 
 // ── Main component ─────────────────────────────────────────────────────────────
 export default function MyceliumView({ graph, summaries, totalRunbooks }: Props) {
+  const { locale } = useI18n()
+  const prefix = `/${locale}`
+
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const animRef = useRef<number>(0)
   const simRef = useRef<SimState>({
@@ -589,7 +593,7 @@ export default function MyceliumView({ graph, summaries, totalRunbooks }: Props)
             </div>
             {!selectedNode.evolved && (
               <a
-                href={`/runbook/${selectedNode.id}`}
+                href={`${prefix}/runbook/${selectedNode.id}`}
                 className="text-[#00b8ff] hover:underline text-xs font-mono"
               >
                 → Open Runbook ↗
@@ -708,7 +712,7 @@ export default function MyceliumView({ graph, summaries, totalRunbooks }: Props)
                     </span>
                     {!r.id.startsWith("evolved-") && (
                       <a
-                        href={`/runbook/${r.id}`}
+                        href={`${prefix}/runbook/${r.id}`}
                         className="text-[#00b8ff] hover:underline font-mono"
                         onClick={(e) => e.stopPropagation()}
                       >

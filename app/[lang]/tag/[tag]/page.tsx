@@ -16,9 +16,9 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata(props: {
-  params: Promise<{ lang: string; tag: string }>
+  params: { lang: string; tag: string }
 }) {
-  const { tag, lang } = await props.params
+  const { tag, lang } = props.params
   const locale = (SUPPORTED_LOCALES.includes(lang as Locale) ? lang : "de") as Locale
   const decodedTag = decodeURIComponent(tag)
   return {
@@ -28,8 +28,8 @@ export async function generateMetadata(props: {
 }
 
 export default async function LocaleTagPage(props: {
-  params: Promise<{ lang: string; tag: string }>
+  params: { lang: string; tag: string }
 }) {
-  const { tag } = await props.params
-  return <TagPage params={Promise.resolve({ tag })} />
+  const { tag } = props.params
+  return <TagPage params={{ tag }} />
 }

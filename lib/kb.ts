@@ -1,1 +1,1 @@
-export const kb: any[] = [];
+export const kb: unknown[] = [];

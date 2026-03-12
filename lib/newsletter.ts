@@ -43,6 +43,7 @@ export function currentWeekLabel(): string {
 }
 
 export async function fetchCriticalCVEs(limit: number = 10): Promise<CveItem[]> {
+
   const params = new URLSearchParams({
     cvssV3Severity: "CRITICAL",
     resultsPerPage: String(limit),
@@ -54,21 +55,58 @@ export async function fetchCriticalCVEs(limit: number = 10): Promise<CveItem[]> 
 
   if (!res.ok) throw new Error(`NVD API error ${res.status}`)
 
-  const data = await res.json()
+  const data: unknown = await res.json()
 
-  return (data?.vulnerabilities ?? []).map((v: any) => {
-    const cve = v.cve
-    const metric =
-      cve?.metrics?.cvssMetricV31?.[0]?.cvssData ??
-      cve?.metrics?.cvssMetricV30?.[0]?.cvssData
+  const vulnerabilities =
+    data && typeof data === "object" && "vulnerabilities" in data
+      ? (data as { vulnerabilities?: unknown }).vulnerabilities
+      : undefined
+
+  if (!Array.isArray(vulnerabilities)) return []
+
+  return vulnerabilities.map((v: unknown) => {
+    const cve =
+      v && typeof v === "object" && "cve" in v
+        ? (v as { cve?: unknown }).cve
+        : undefined
+
+    const cveObj = (cve && typeof cve === "object" ? (cve as Record<string, unknown>) : {})
+
+    const metrics =
+      "metrics" in cveObj && cveObj.metrics && typeof cveObj.metrics === "object"
+        ? (cveObj.metrics as Record<string, unknown>)
+        : {}
+
+    const v31 = Array.isArray(metrics.cvssMetricV31) ? metrics.cvssMetricV31 : []
+    const v30 = Array.isArray(metrics.cvssMetricV30) ? metrics.cvssMetricV30 : []
+
+    const firstMetric = (arr: unknown[]) => {
+      const first = arr[0]
+      if (!first || typeof first !== "object") return undefined
+      return (first as { cvssData?: unknown }).cvssData
+    }
+
+    const metricData = firstMetric(v31 as unknown[]) ?? firstMetric(v30 as unknown[])
+    const metricObj = (metricData && typeof metricData === "object" ? (metricData as Record<string, unknown>) : {})
+
+    const descriptions = Array.isArray(cveObj.descriptions) ? (cveObj.descriptions as unknown[]) : []
+    const enDesc = descriptions.find((d) => {
+      if (!d || typeof d !== "object") return false
+      const dObj = d as { lang?: unknown }
+      return dObj.lang === "en"
+    })
+
+    const descValue =
+      enDesc && typeof enDesc === "object" && "value" in enDesc && typeof (enDesc as { value?: unknown }).value === "string"
+        ? ((enDesc as { value: string }).value as string)
+        : ""
 
     return {
-      id: cve?.id ?? "unknown",
-      description:
-        cve?.descriptions?.find((d: any) => d.lang === "en")?.value ?? "",
-      severity: metric?.baseSeverity,
-      cvssScore: metric?.baseScore,
-      published: cve?.published,
+      id: typeof cveObj.id === "string" ? cveObj.id : "unknown",
+      description: descValue,
+      severity: typeof metricObj.baseSeverity === "string" ? metricObj.baseSeverity : undefined,
+      cvssScore: typeof metricObj.baseScore === "number" ? metricObj.baseScore : undefined,
+      published: typeof cveObj.published === "string" ? cveObj.published : undefined,
     }
   })
 }

@@ -5,6 +5,8 @@
  */
 
 import { NextRequest, NextResponse } from "next/server"
+import { validateApiKey } from "@/lib/api-key-auth"
+import { isFeatureEnabled } from "@/lib/api-security"
 
 export const dynamic = "force-dynamic"
 
@@ -129,8 +131,19 @@ const VALID_SEVERITIES: Severity[] = ["high", "medium", "low"]
 const VALID_CATEGORIES: Category[] = ["exposure", "websocket", "secrets", "supply-chain", "ops"]
 
 export async function GET(req: NextRequest) {
-  // Dummy Success – Auth wird später wieder eingebaut
+  const requireAuth = isFeatureEnabled("V1_INTEL_REQUIRE_AUTH")
+  if (requireAuth && !validateApiKey(req)) {
+    return NextResponse.json(
+      { error: "Unauthorized. Provide a valid API key via Authorization: Bearer <key> or X-API-Key header." },
+      {
+        status: 401,
+        headers: { "WWW-Authenticate": 'Bearer realm="ClawGuru Intel Feed API"' },
+      }
+    )
+  }
+
   const { searchParams } = req.nextUrl
+
   const severityParam = searchParams.get("severity") as Severity | null
   const categoryParam = searchParams.get("category") as Category | null
   const limitParam = parseInt(searchParams.get("limit") ?? "20", 10)
@@ -150,6 +163,7 @@ export async function GET(req: NextRequest) {
   return NextResponse.json({
     items,
     total: items.length,
+    authEnforced: requireAuth,
     updatedAt: new Date().toISOString(),
   })
 }

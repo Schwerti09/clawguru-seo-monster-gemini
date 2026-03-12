@@ -3,6 +3,21 @@
 import { useState } from 'react';
 import { Mic, MicOff } from 'lucide-react';
 
+type SpeechRecognitionEventLike = {
+  results: ArrayLike<ArrayLike<{ transcript: string }>>
+}
+
+type SpeechRecognitionLike = {
+  continuous: boolean
+  interimResults: boolean
+  lang: string
+  onresult: ((event: SpeechRecognitionEventLike) => void) | null
+  start: () => void
+  stop: () => void
+}
+
+type SpeechRecognitionConstructorLike = new () => SpeechRecognitionLike
+
 interface VoiceCopilotProps {
   lang?: string;
 }
@@ -12,7 +27,11 @@ export default function VoiceCopilot({ lang = 'de' }: VoiceCopilotProps) {
   const [transcript, setTranscript] = useState('');
 
   const toggleListening = () => {
-    const SpeechRecognitionAPI = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    const win = window as unknown as {
+      SpeechRecognition?: SpeechRecognitionConstructorLike
+      webkitSpeechRecognition?: SpeechRecognitionConstructorLike
+    }
+    const SpeechRecognitionAPI = win.SpeechRecognition || win.webkitSpeechRecognition;
 
     if (!SpeechRecognitionAPI) {
       alert('Speech Recognition wird von deinem Browser nicht unterstützt.');
@@ -24,9 +43,9 @@ export default function VoiceCopilot({ lang = 'de' }: VoiceCopilotProps) {
     recognition.interimResults = true;
     recognition.lang = lang;
 
-    recognition.onresult = (event: any) => {
+    recognition.onresult = (event: SpeechRecognitionEventLike) => {
       const current = Array.from(event.results)
-        .map((result: any) => result[0].transcript)
+        .map((result) => result[0].transcript)
         .join('');
       setTranscript(current);
     };

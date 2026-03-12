@@ -1,33 +1,16 @@
-﻿import { NextResponse } from 'next/server';
+﻿import { NextRequest, NextResponse } from 'next/server';
+import { logTelemetry } from "@/lib/ops/telemetry"
+import { getRequestId } from "@/lib/ops/request-id"
 
-const BASE_URL = 'https://clawguru.org';
+export async function GET(req: NextRequest) {
+  const requestId = getRequestId(req.headers)
+  const startedAt = Date.now()
+  const target = new URL("/sitemap.xml", req.url)
+  logTelemetry("sitemap.legacy_index.redirect", {
+    requestId,
+    target: target.toString(),
+    durationMs: Date.now() - startedAt,
+  })
 
-export async function GET() {
-  const today = new Date().toISOString().split('T')[0];
-
-  const subSitemaps = [
-    { loc: `${BASE_URL}/sitemap/runbooks.xml`, lastmod: today },
-    { loc: `${BASE_URL}/sitemap/providers.xml`, lastmod: today },
-    { loc: `${BASE_URL}/sitemap/tags.xml`, lastmod: today },
-    { loc: `${BASE_URL}/sitemap/solutions.xml`, lastmod: today },
-    { loc: `${BASE_URL}/sitemap/cves.xml`, lastmod: today },
-  ];
-
-  const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  ${subSitemaps.map(s => `
-    <sitemap>
-      <loc>${s.loc}</loc>
-      <lastmod>${s.lastmod}</lastmod>
-    </sitemap>
-  `).join('')}
-</sitemapindex>`;
-
-  return new NextResponse(xml.trim(), {
-    status: 200,
-    headers: {
-      'Content-Type': 'application/xml',
-      'Cache-Control': 'public, max-age=3600',
-    },
-  });
+  return NextResponse.redirect(target, 308)
 }

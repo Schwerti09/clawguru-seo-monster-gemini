@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from "react"
+import { useI18n } from "@/components/i18n/I18nProvider"
 
 type Incident = { id: string; title: string; severity: "low" | "medium" | "high"; when: string; summary: string }
 
@@ -11,6 +12,9 @@ function pill(sev: Incident["severity"]) {
 }
 
 export default function IntelPreview() {
+  const { locale } = useI18n()
+  const prefix = `/${locale}`
+  const isGerman = locale === "de"
   const [items, setItems] = useState<Incident[]>([])
   useEffect(() => {
     fetch("/api/incidents").then(r => r.json()).then(d => setItems((d.items || []).slice(0, 3))).catch(() => setItems([]))
@@ -30,8 +34,8 @@ export default function IntelPreview() {
           <div className="mt-2 text-sm text-gray-300">{i.summary}</div>
         </div>
       ))}
-      <a className="inline-flex items-center justify-center px-5 py-3 rounded-xl bg-black/30 border border-gray-700 hover:bg-black/40 font-bold" href="/intel">
-        Alle Intel sehen →
+      <a className="inline-flex items-center justify-center px-5 py-3 rounded-xl bg-black/30 border border-gray-700 hover:bg-black/40 font-bold" href={`${prefix}/intel`}>
+        {isGerman ? "Alle Intel sehen →" : "See all intel →"}
       </a>
     </div>
   )

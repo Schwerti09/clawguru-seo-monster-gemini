@@ -8,7 +8,7 @@ import { stripe } from "@/lib/stripe"
 export const runtime = "nodejs"
 
 function fileForKey(key: string) {
-  if (key === "sprint-pack") return { filename: "sprint-pack.pdf", type: "application/pdf" }
+  if (key === "sprint-pack") return { filename: "sprint-pack.zip", type: "application/zip" }
   if (key === "incident-kit") return { filename: "incident-kit.zip", type: "application/zip" }
   return null
 }
@@ -51,7 +51,14 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const full = path.join(process.cwd(), "private_downloads", f.filename)
+    const full = path.join(process.cwd(), "public", "downloads", f.filename)
+    // Fail explicitly when the asset is not present (better than generic 500)
+    try {
+      await fs.stat(full)
+    } catch {
+      console.error("[download] file missing", { key, path: full })
+      return NextResponse.json({ error: "File not found" }, { status: 404 })
+    }
     const data = await fs.readFile(full)
     return new NextResponse(data, {
       status: 200,

@@ -1,7 +1,7 @@
-﻿import { NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 
 import { BASE_URL } from '@/lib/config';
-import { bucketsAF } from '@/lib/pseo';
+import { bucketsTagsAF } from '@/lib/pseo';
 import { SUPPORTED_LOCALES } from '@/lib/i18n';
 
 function isoDate(d = new Date()) {
@@ -14,15 +14,14 @@ const SITEMAP_HEADERS = {
 } as const;
 
 export async function GET() {
-  const lastmodFallback = isoDate();
-  const rb = bucketsAF();
-
-  const runbooks = [...rb['a-f'], ...rb['g-l'], ...rb['m-r'], ...rb['s-z'], ...rb['0-9']];
+  const lastmod = isoDate();
+  const buckets = bucketsTagsAF();
+  const tags = [...buckets['a-f'], ...buckets['g-l'], ...buckets['m-r'], ...buckets['s-z'], ...buckets['0-9']];
 
   const urls = SUPPORTED_LOCALES.flatMap((locale) =>
-    runbooks.map((r) => ({
-      loc: `${BASE_URL}/${locale}/runbook/${r.slug}`,
-      lastmod: r.lastmod || lastmodFallback,
+    tags.map((tag) => ({
+      loc: `${BASE_URL}/${locale}/tag/${encodeURIComponent(tag)}`,
+      lastmod,
     }))
   );
 
@@ -30,11 +29,12 @@ export async function GET() {
     `<?xml version="1.0" encoding="UTF-8"?>\n` +
     `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
     urls
-      .map((u) =>
-        `  <url>\n` +
-        `    <loc>${u.loc}</loc>\n` +
-        `    <lastmod>${u.lastmod}</lastmod>\n` +
-        `  </url>`
+      .map(
+        (u) =>
+          `  <url>\n` +
+          `    <loc>${u.loc}</loc>\n` +
+          `    <lastmod>${u.lastmod}</lastmod>\n` +
+          `  </url>`
       )
       .join("\n") +
     `\n</urlset>\n`;

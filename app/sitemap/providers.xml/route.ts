@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 
 import { BASE_URL } from '@/lib/config';
+import { allProviders } from '@/lib/pseo';
+import { SUPPORTED_LOCALES } from '@/lib/i18n';
 
 function isoDate(d = new Date()) {
   return d.toISOString().slice(0, 10);
@@ -13,28 +15,28 @@ const SITEMAP_HEADERS = {
 
 export async function GET() {
   const lastmod = isoDate();
+  const providers = allProviders();
 
-  const subSitemaps = [
-    `${BASE_URL}/sitemap/runbooks.xml`,
-    `${BASE_URL}/sitemap/providers.xml`,
-    `${BASE_URL}/sitemap/tags.xml`,
-    `${BASE_URL}/sitemap/solutions.xml`,
-    `${BASE_URL}/sitemap/cves.xml`,
-  ];
+  const urls = SUPPORTED_LOCALES.flatMap((locale) =>
+    providers.map((p) => ({
+      loc: `${BASE_URL}/${locale}/provider/${p.slug}`,
+      lastmod,
+    }))
+  );
 
   const xml =
     `<?xml version="1.0" encoding="UTF-8"?>\n` +
-    `<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
-    subSitemaps
+    `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
+    urls
       .map(
-        (loc) =>
-          `  <sitemap>\n` +
-          `    <loc>${loc}</loc>\n` +
-          `    <lastmod>${lastmod}</lastmod>\n` +
-          `  </sitemap>`
+        (u) =>
+          `  <url>\n` +
+          `    <loc>${u.loc}</loc>\n` +
+          `    <lastmod>${u.lastmod}</lastmod>\n` +
+          `  </url>`
       )
       .join("\n") +
-    `\n</sitemapindex>\n`;
+    `\n</urlset>\n`;
 
   return new NextResponse(xml, {
     status: 200,

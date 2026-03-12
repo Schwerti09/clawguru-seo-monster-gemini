@@ -8,19 +8,6 @@ const nextConfig = {
   typescript: { ignoreBuildErrors: true },
   images: { unoptimized: true },
 
-  async rewrites() {
-    return [
-      {
-        source: "/sitemap.xml",
-        destination: "/sitemap-index",
-      },
-      {
-        source: "/sitemap/:name.xml",
-        destination: "/sitemap/:name",
-      },
-    ];
-  },
-
   webpack: (config) => {
     config.resolve.alias = {
       ...config.resolve.alias,

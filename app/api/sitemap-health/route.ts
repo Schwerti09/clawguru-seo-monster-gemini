@@ -31,9 +31,9 @@ export async function GET(req: Request) {
   const protocol = host.startsWith("localhost") ? "http" : "https"
   const base = `${protocol}://${host}`
 
-  const [indexResult, mainResult] = await Promise.all([
+  const [indexResult, runbooksResult] = await Promise.all([
     checkUrl(`${base}/sitemap.xml`, "<sitemapindex"),
-    checkUrl(`${base}/sitemaps/main.xml`, "<urlset"),
+    checkUrl(`${base}/sitemap/runbooks.xml`, "<urlset"),
   ])
 
   // Verify index lists at least one child sitemap
@@ -42,7 +42,7 @@ export async function GET(req: Request) {
     try {
       const res = await fetch(`${base}/sitemap.xml`, { cache: "no-store" })
       const text = await res.text()
-      indexListsChildSitemap = text.includes("/sitemaps/")
+      indexListsChildSitemap = text.includes("/sitemap/")
     } catch (err) {
       console.error("Failed to verify child sitemap listing:", err)
       // ignore
@@ -52,8 +52,8 @@ export async function GET(req: Request) {
   const allPassed =
     indexResult.ok &&
     indexResult.containsExpected &&
-    mainResult.ok &&
-    mainResult.containsExpected &&
+    runbooksResult.ok &&
+    runbooksResult.containsExpected &&
     indexListsChildSitemap
 
   return NextResponse.json(
@@ -64,13 +64,13 @@ export async function GET(req: Request) {
           ...indexResult,
           description: "/sitemap.xml must return <sitemapindex>",
         },
-        mainUrlset: {
-          ...mainResult,
-          description: "/sitemaps/main.xml must return <urlset>",
+        runbooksUrlset: {
+          ...runbooksResult,
+          description: "/sitemap/runbooks.xml must return <urlset>",
         },
         indexListsChild: {
           ok: indexListsChildSitemap,
-          description: "sitemap index must list at least one /sitemaps/ child URL",
+          description: "sitemap index must list at least one /sitemap/ child URL",
         },
       },
     },

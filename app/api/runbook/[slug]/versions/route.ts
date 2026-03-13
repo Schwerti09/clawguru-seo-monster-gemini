@@ -7,7 +7,6 @@
 
 import { NextRequest, NextResponse } from "next/server"
 import { cookies } from "next/headers"
-import { getRunbook } from "@/lib/pseo"
 import { verifySessionToken, USER_SESSION_COOKIE } from "@/lib/auth"
 import { getVersions, createFork } from "@/lib/runbook-versions"
 
@@ -18,6 +17,7 @@ export async function GET(
   props: { params: { slug: string } }
 ) {
   const { slug } = props.params
+  const { getRunbook } = await import("@/lib/pseo")
   const runbook = getRunbook(slug)
   if (!runbook) {
     return NextResponse.json({ error: "Runbook not found" }, { status: 404 })
@@ -31,6 +31,7 @@ export async function POST(
   props: { params: { slug: string } }
 ) {
   const { slug } = props.params
+  const { getRunbook } = await import("@/lib/pseo")
 
   // Auth check
   const jar = await cookies()

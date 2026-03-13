@@ -4,7 +4,6 @@
 // GENESIS QUALITY GATE 2.0 – Auto-Improve Engine included.
 
 import { NextResponse } from "next/server"
-import { RUNBOOKS } from "@/lib/pseo"
 import { computeQualityStats, validateRunbook, DEFAULT_THRESHOLDS } from "@/lib/quality-gate"
 
 export const dynamic = "force-dynamic"
@@ -52,6 +51,7 @@ export async function GET(req: Request) {
   const { searchParams } = new URL(req.url)
   const slug = searchParams.get("slug")
   const autoImprove = searchParams.get("autoImprove") === "true"
+  const { RUNBOOKS } = await import("@/lib/pseo")
 
   // Single runbook quality report
   if (slug) {

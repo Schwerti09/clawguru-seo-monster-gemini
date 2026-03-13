@@ -3,7 +3,6 @@ import { NextRequest, NextResponse } from "next/server"
 // Korrekter relativer Pfad für app/api/v1/runbook/[id]/route.ts
 import { authenticateApiRequest } from "../../../../../lib/api-auth"
 import { isFeatureEnabled } from "@/lib/api-security"
-import { RUNBOOKS } from "@/lib/pseo"
 
 export async function GET(
   req: NextRequest,
@@ -36,6 +35,7 @@ export async function GET(
 
   const realDataMode = isFeatureEnabled("V1_RUNBOOK_REAL_DATA")
   if (realDataMode) {
+    const { RUNBOOKS } = await import("@/lib/pseo")
     const runbook = RUNBOOKS.find((entry) => entry.slug === id)
     if (!runbook) {
       return NextResponse.json({ error: "Runbook not found" }, { status: 404 })

@@ -27,13 +27,30 @@ Diese Datei dokumentiert den Status der Phase A/B Beobachtungen und Sicherheitsa
    - ✅ Legacy-Sitemap-Endpunkte unter `app/sitemap/*` konsolidiert (alle auf 308 Redirect zu `/sitemap.xml`)
    - ✅ Middleware-BYPASS für `/sitemap/*` ergänzt, damit kein Locale-Redirect die Sitemap-Redirects überschreibt (`middleware.ts`)
    - ✅ D.2 vorbereitet: Post-Deploy-Checkskript `scripts/check-sitemap-redirects.js` + npm script `check:sitemap-redirects`
-   - ℹ️ Live-Check gegen `https://clawguru.org` aktuell noch rot (`2 pass / 11 fail`) — entspricht altem Deploy-Stand; nach Deployment erneut prüfen
-   - ⛔️ Rest: D.2 Verifikation gegen Live-Deploy + Search-Console
+   - ✅ Live-Check gegen `https://clawguru.org` jetzt grün (`13 pass / 0 fail`)
+   - ✅ Legacy-Route `/securitycheck` stabilisiert (`/securitycheck -> /check`, `/<lang>/securitycheck -> /<lang>/check`)
+   - ✅ `/de/intel` Produktions-500 behoben (Root-Cause: ungültiger `i18n`-Funktionsaufruf in `components/intel/IntelFeed.tsx`)
+   - ✅ `DYNAMIC_SERVER_USAGE` Produktions-500 auf `/<lang>/issue/*` behoben (`app/[lang]/issue/[slug]/page.tsx` locale-safe umgesetzt + `dynamic = "force-dynamic"`)
+   - ✅ `DYNAMIC_SERVER_USAGE` Produktions-500 auf `/<lang>/provenance/*` behoben (`app/[lang]/provenance/[runbook-slug]/page.tsx` locale-safe Redirect + `dynamic = "force-dynamic"`)
+   - ✅ Live-Smoke-Check grün: `https://clawguru.org/ru/issue/ebpf-security` = `200`, `https://clawguru.org/de/provenance/prometheus-rabbitmq-hsts-2030` = `307` zu kanonischem Provenance-Pfad
+   - ⛔️ Rest: Search-Console-Reindexing/Monitoring (Sitemap technisch grün)
 
 ## Nächste Schritte (Punkt für Punkt)
-1. **Phase D.2**: Direkt nach Deploy `npm run check:sitemap-redirects -- --base=https://<prod-domain>` ausführen.
+1. **Phase D.2**: Direkt nach Deploy `npm run check:sitemap-redirects -- https://<prod-domain>` ausführen.
 2. Search Console prüfen: nur `/sitemap.xml` einreichen; Legacy-`/sitemap/*` als Redirect verifizieren.
 3. Legacy-Crawler-Monitoring: 404/Redirect-Rate für alte `/sitemap/*` Pfade beobachten.
+
+### Search-Console-Reindexing-Checkliste (operativ)
+- Sitemap-Einreichung auf eine Quelle begrenzen: nur `https://clawguru.org/sitemap.xml`.
+- Alte Einträge (`/sitemap-index`, `/sitemap/*`, `*.xml` Legacy) in der Search Console nicht neu einreichen; als Redirect akzeptieren.
+- Für repräsentative Seiten Live-URL-Inspektion starten:
+  - `https://clawguru.org/de/intel`
+  - `https://clawguru.org/ru/issue/ebpf-security`
+  - `https://clawguru.org/provenance/prometheus-rabbitmq-hsts-2030`
+- Nach dem Deploy 48-72h beobachten:
+  - `Gelesene Sitemaps` steigt für `/sitemap.xml`
+  - `Weitergeleitete URL`-Signale für alte `/sitemap/*` sind erwartbar
+  - keine neuen `500`/`Soft 404` Cluster auf `/issue/*` und `/provenance/*`
 
 ## Flag-Konfiguration (zum schnellen Nachschlagen)
 - `OBS_ENABLED` (default `0`) — aktiviert Logging-Sampling
@@ -95,14 +112,21 @@ Diese Datei dokumentiert den Status der Phase A/B Beobachtungen und Sicherheitsa
   - `scripts/check-sitemap-redirects.js`
   - `package.json`
   - `middleware.ts`
+  - `components/intel/IntelFeed.tsx`
+  - `components/intel/IntelApiDocs.tsx`
+  - `app/[lang]/intel/page.tsx`
+  - `app/securitycheck/page.tsx`
+  - `app/[lang]/securitycheck/page.tsx`
+  - `app/[lang]/issue/[slug]/page.tsx`
+  - `app/[lang]/provenance/[runbook-slug]/page.tsx`
 
 ## D.2 Deployment-Runbook (kurz)
-- Command: `npm run check:sitemap-redirects -- --base=https://clawguru.org`
+- Command: `npm run check:sitemap-redirects -- https://clawguru.org`
 - Erwartung:
   - alte `/sitemap/*` und `/sitemap-index` liefern `308` auf `https://clawguru.org/sitemap.xml`
   - `https://clawguru.org/sitemap.xml` liefert `200` + `<sitemapindex>`
   - `https://clawguru.org/sitemaps/runbooks-a-f.xml` liefert `200` + `<urlset>`
 - Wenn FAIL:
-  - Redirect-Header in Netlify/Edge prüfen
+  - Redirect-Header in Vercel/Edge prüfen
   - Route-Konflikte mit alten Catch-All-Regeln ausschließen
   - Search Console erst nach grünem Check neu anstoßen

@@ -1,7 +1,9 @@
 import type { Metadata } from "next"
 
 import { SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
-import RootPage from "@/app/intel/page"
+import Container from "@/components/shared/Container"
+import IntelFeed from "@/components/intel/IntelFeed"
+import IntelApiDocs from "@/components/intel/IntelApiDocs"
 
 export const revalidate = 60
 
@@ -19,5 +21,16 @@ export async function generateMetadata(props: { params: { lang: string } }): Pro
 }
 
 export default function LocaleIntelPage() {
-  return <RootPage />
+  return (
+    <Container>
+      <div className="py-16">
+        <h1 className="text-4xl md:text-5xl font-black mb-4">Intel Feed</h1>
+        <p className="text-gray-300 text-lg mb-8">
+          Wiederkehrende Muster, kuratiert. Kein Clickbait. Du willst Handlungswissen.
+        </p>
+        <IntelFeed />
+        <IntelApiDocs />
+      </div>
+    </Container>
+  )
 }

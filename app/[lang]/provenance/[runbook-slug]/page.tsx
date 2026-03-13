@@ -1,10 +1,11 @@
 import type { Metadata } from "next"
 
 import { SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
-import RootPage from "@/app/provenance/[runbook-slug]/page"
+import { redirect } from "next/navigation"
 
 export const revalidate = 60
 export const dynamicParams = true
+export const dynamic = "force-dynamic"
 
 export async function generateStaticParams() {
   return SUPPORTED_LOCALES.map((lang) => ({ lang }))
@@ -24,5 +25,5 @@ export async function generateMetadata(
 export default function LocaleProvenanceRunbookPage(
   props: { params: { lang: string; "runbook-slug": string } }
 ) {
-  return <RootPage params={{ "runbook-slug": props.params["runbook-slug"] }} />
+  redirect(`/provenance/${props.params["runbook-slug"]}`)
 }

@@ -1,9 +1,12 @@
 "use client"
 
-import { useI18n } from "@/components/i18n/I18nProvider"
+import { usePathname } from "next/navigation"
+import { SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
 
 export default function IntelApiDocs() {
-  const { locale } = useI18n()
+  const pathname = usePathname()
+  const firstSegment = pathname.split("/").filter(Boolean)[0] as Locale
+  const locale: Locale = SUPPORTED_LOCALES.includes(firstSegment) ? firstSegment : "de"
   const prefix = `/${locale}`
   return (
     <div className="mt-16 rounded-3xl border border-orange-900/40 bg-gradient-to-br from-orange-950/20 to-black p-8">

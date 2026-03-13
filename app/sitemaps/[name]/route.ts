@@ -1,12 +1,12 @@
 import type { NextRequest } from "next/server"
 import { NextResponse } from "next/server"
-import { bucketsTagsAF, allProviders, get100kSlugsPage, allIssues100k, allServices100k, allYears100k, RUNBOOKS } from "@/lib/pseo"
-import { KNOWN_CVES, SERVICE_CHECKS } from "@/lib/cve-pseo"
 import { BASE_URL } from "@/lib/config"
 import { DEFAULT_LOCALE, SUPPORTED_LOCALES, type Locale, getLocaleHrefLang, localizePath, stripLocalePrefix } from "@/lib/i18n"
 import { logTelemetry } from "@/lib/ops/telemetry"
 import { getRequestId } from "@/lib/ops/request-id"
 import { validateRunbook } from "@/lib/quality-gate"
+import type { Runbook } from "@/lib/pseo"
+import { KNOWN_CVES, SERVICE_CHECKS } from "@/lib/cve-pseo"
 
 // IMPORTANT: This route must stay dynamic (Netlify prerender can call it without params)
 export const dynamic = "force-dynamic"
@@ -17,8 +17,8 @@ const SITEMAP_HEADERS = {
   "Cache-Control": "public, max-age=3600, s-maxage=3600",
 } as const
 
-function bucketsAFQualityPassed() {
-  const groups: Record<"a-f" | "g-l" | "m-r" | "s-z" | "0-9", typeof RUNBOOKS> = {
+function bucketsAFQualityPassed(runbooks: Runbook[]) {
+  const groups: Record<"a-f" | "g-l" | "m-r" | "s-z" | "0-9", Runbook[]> = {
     "a-f": [],
     "g-l": [],
     "m-r": [],
@@ -26,7 +26,7 @@ function bucketsAFQualityPassed() {
     "0-9": [],
   }
 
-  for (const runbook of RUNBOOKS) {
+  for (const runbook of runbooks) {
     if (validateRunbook(runbook).violations.some((v) => v.severity === "error")) continue
     const c = (runbook.slug[0] || "").toLowerCase()
     if (c >= "a" && c <= "f") groups["a-f"].push(runbook)
@@ -94,6 +94,18 @@ export async function GET(
   const base = BASE_URL
   const lastmod = isoDate()
   const name = params.name.replace(/\.xml$/, "")
+  const {
+    bucketsTagsAF,
+    allProviders,
+    get100kSlugsPage,
+    allIssues100k,
+    allServices100k,
+    allYears100k,
+    RUNBOOKS,
+  } = await import("@/lib/pseo")
+
+  const rb = bucketsAFQualityPassed(RUNBOOKS)
+  const tg = bucketsTagsAF()
   logTelemetry("sitemap.chunk.request", {
     requestId,
     name,
@@ -152,7 +164,8 @@ export async function GET(
 
 
     if (name === `providers-${locale}` || name === "providers") {
-      const urls = allProviders().map((p) => ({
+      const providersList = allProviders()
+      const urls = providersList.map((p) => ({
         loc: `${base}/${locale}/provider/${p.slug}`,
         lastmod,
         changefreq: "weekly",
@@ -163,9 +176,6 @@ export async function GET(
         headers: SITEMAP_HEADERS
       })
     }
-
-    const rb = bucketsAFQualityPassed()
-    const tg = bucketsTagsAF()
 
     const rbMap: Record<string, keyof typeof rb> = {
       "runbooks-a-f": "a-f",

@@ -1,4 +1,9 @@
 // File: lib/pseo.ts
+
+// BUILD GUARD: Prevent heavy data materialization during Next.js build phase
+// During Vercel production builds, we return lightweight placeholders to avoid 60s worker timeout
+const IS_BUILD_PHASE = process.env.NEXT_PHASE === "phase-production-build"
+
 export type RunbookBlock =
   | { kind: "h2"; text: string }
   | { kind: "h3"; text: string }
@@ -1554,18 +1559,36 @@ function _buildRunbooksWithRelated(limit: number): Runbook[] {
   return list
 }
 
-export const RUNBOOKS: Runbook[] = _buildRunbooksWithRelated(Number(process.env.PSEO_RUNBOOK_COUNT || 500))
+// BUILD GUARD: During build phase, return empty array to prevent timeout
+// At runtime, materialize the full dataset
+let _runbooksCache: Runbook[] | null = null
+function _getRunbooks(): Runbook[] {
+  if (IS_BUILD_PHASE) return []
+  if (!_runbooksCache) {
+    _runbooksCache = _buildRunbooksWithRelated(Number(process.env.PSEO_RUNBOOK_COUNT || 500))
+  }
+  return _runbooksCache
+}
+
+export const RUNBOOKS: Runbook[] = _getRunbooks()
 
 export function allProviders() {
   return [...PROVIDERS]
 }
 
 export function runbooksByProvider(providerSlug: string) {
+  if (IS_BUILD_PHASE) return []
   const p = providerSlug.toLowerCase()
   return RUNBOOKS.filter((r) => r.tags.includes("provider:" + p) || r.tags.includes(p))
 }
 
 export function getRunbook(slug: string): Runbook | null {
+  if (IS_BUILD_PHASE) {
+    // During build, generate on-demand only (no static RUNBOOKS lookup)
+    const meta = parseRunbookSlug100k(slug)
+    if (meta) return generateRunbook100k(meta)
+    return null
+  }
   // Check static RUNBOOKS first (fast path for existing content)
   const existing = RUNBOOKS.find((r) => r.slug === slug)
   if (existing) return existing
@@ -1595,6 +1618,7 @@ export function bucketsAF() {
 }
 
 export function allTags() {
+  if (IS_BUILD_PHASE) return []
   const set = new Set<string>()
   for (const r of RUNBOOKS) for (const t of r.tags) set.add(t)
   return Array.from(set).sort((a, b) => a.localeCompare(b))
@@ -1621,11 +1645,13 @@ export function bucketsTagsAF() {
 }
 
 export function runbooksByTag(tag: string) {
+  if (IS_BUILD_PHASE) return []
   return RUNBOOKS.filter((r) => r.tags.includes(tag))
 }
 
 /** Top-N runbooks per tag (sorted by clawScore desc) */
 export function topRunbooksByTag(tag: string, n = 10): Runbook[] {
+  if (IS_BUILD_PHASE) return []
   return runbooksByTag(tag)
     .sort((a, b) => b.clawScore - a.clawScore)
     .slice(0, n)
@@ -1740,6 +1766,16 @@ const MAIN_SITEMAP_PAGE_COUNT = 10
  * Covers: main pages + provider pages + runbook pages + tag pages + issue/service/year hubs.
  */
 export function totalSitemapUrls(): number {
+  if (IS_BUILD_PHASE) {
+    return (
+      MAIN_SITEMAP_PAGE_COUNT +
+      PROVIDERS.length +
+      count100kSlugs() +
+      ISSUES_100K.length +
+      SERVICES_100K.length +
+      YEARS_100K.length
+    )
+  }
   return (
     MAIN_SITEMAP_PAGE_COUNT +
     PROVIDERS.length +

@@ -33,12 +33,14 @@ Diese Datei dokumentiert den Status der Phase A/B Beobachtungen und Sicherheitsa
    - ✅ `DYNAMIC_SERVER_USAGE` Produktions-500 auf `/<lang>/issue/*` behoben (`app/[lang]/issue/[slug]/page.tsx` locale-safe umgesetzt + `dynamic = "force-dynamic"`)
    - ✅ `DYNAMIC_SERVER_USAGE` Produktions-500 auf `/<lang>/provenance/*` behoben (`app/[lang]/provenance/[runbook-slug]/page.tsx` locale-safe Redirect + `dynamic = "force-dynamic"`)
    - ✅ Live-Smoke-Check grün: `https://clawguru.org/ru/issue/ebpf-security` = `200`, `https://clawguru.org/de/provenance/prometheus-rabbitmq-hsts-2030` = `307` zu kanonischem Provenance-Pfad
-   - ⛔️ Rest: Search-Console-Reindexing/Monitoring (Sitemap technisch grün)
+   - ✅ Monitoring-Check ergänzt: `npm run check:prod-smoke -- --base=https://clawguru.org` (kritische Pages + erwartete Redirect/Auth-Responses)
+   - ⛔️ Rest: Search-Console-Reindexing/Monitoring-Auswertung (Sitemap technisch grün)
 
 ## Nächste Schritte (Punkt für Punkt)
 1. **Phase D.2**: Direkt nach Deploy `npm run check:sitemap-redirects -- https://<prod-domain>` ausführen.
 2. Search Console prüfen: nur `/sitemap.xml` einreichen; Legacy-`/sitemap/*` als Redirect verifizieren.
 3. Legacy-Crawler-Monitoring: 404/Redirect-Rate für alte `/sitemap/*` Pfade beobachten.
+4. `npm run check:prod-smoke -- --base=https://clawguru.org` täglich nach Deploy ausführen und Ergebnisse protokollieren.
 
 ### Search-Console-Reindexing-Checkliste (operativ)
 - Sitemap-Einreichung auf eine Quelle begrenzen: nur `https://clawguru.org/sitemap.xml`.
@@ -110,6 +112,7 @@ Diese Datei dokumentiert den Status der Phase A/B Beobachtungen und Sicherheitsa
   - `app/sitemap/solutions.xml/route.ts`
   - `app/sitemap/cves.xml/route.ts`
   - `scripts/check-sitemap-redirects.js`
+  - `scripts/check-production-smoke.js`
   - `package.json`
   - `middleware.ts`
   - `components/intel/IntelFeed.tsx`

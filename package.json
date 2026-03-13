@@ -6,6 +6,7 @@
     "dev": "next dev",
     "check:i18n": "node scripts/check-i18n.js",
     "check:sitemap-redirects": "node scripts/check-sitemap-redirects.js",
+    "check:prod-smoke": "node scripts/check-production-smoke.js",
     "i18n:sync-dictionaries": "node scripts/sync-dictionaries.js",
     "build": "next build",
     "start": "next start",

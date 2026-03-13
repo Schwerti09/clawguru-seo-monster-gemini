@@ -3,14 +3,6 @@
 // Returns runbook counts, Quality Gate 2.0 pass-rate, sitemap size, and next batch info.
 
 import { NextResponse } from "next/server"
-import {
-  count100kSlugs,
-  count100kSitemapPages,
-  get100kSlugsPage,
-  generateRunbook100k,
-  parseRunbookSlug100k,
-  SITEMAP_PAGE_SIZE_100K,
-} from "@/lib/pseo"
 import { computeQualityStats, DEFAULT_THRESHOLDS } from "@/lib/quality-gate"
 
 export const dynamic = "force-dynamic"
@@ -20,6 +12,14 @@ export const runtime = "nodejs"
 const SAMPLE_BATCH = 200
 
 export async function GET() {
+  const {
+    count100kSlugs,
+    count100kSitemapPages,
+    get100kSlugsPage,
+    generateRunbook100k,
+    parseRunbookSlug100k,
+    SITEMAP_PAGE_SIZE_100K,
+  } = await import("@/lib/pseo")
   const totalSlugs = count100kSlugs()
   const sitemapPages = count100kSitemapPages()
 

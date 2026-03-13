@@ -5,11 +5,6 @@
 // Secured by CRON_SECRET to prevent unauthorised triggering.
 
 import { NextRequest, NextResponse } from "next/server"
-import {
-  get100kSlugsPage,
-  generateRunbook100k,
-  parseRunbookSlug100k,
-} from "@/lib/pseo"
 import { computeQualityStats, DEFAULT_THRESHOLDS } from "@/lib/quality-gate"
 
 export const dynamic = "force-dynamic"
@@ -34,6 +29,11 @@ export async function GET(req: NextRequest) {
   const batchPage = pageParam !== null ? Math.max(0, parseInt(pageParam, 10) || 0) : 0
 
   const startedAt = Date.now()
+  const {
+    get100kSlugsPage,
+    generateRunbook100k,
+    parseRunbookSlug100k,
+  } = await import("@/lib/pseo")
 
   // 1M LIVE LAUNCH v2.0 – Overlord AI: fetch slug page and generate runbooks
   const slugs = get100kSlugsPage(batchPage, CRON_BATCH_SIZE)

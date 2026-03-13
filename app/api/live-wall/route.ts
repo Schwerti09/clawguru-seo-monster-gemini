@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server"
-import { RUNBOOKS, allTags } from "@/lib/pseo"
 
 export const runtime = "nodejs"
 export const dynamic = "force-dynamic"
@@ -47,6 +46,7 @@ function countTop<T extends string>(items: T[]) {
 }
 
 export async function GET() {
+  const { RUNBOOKS, allTags } = await import("@/lib/pseo")
   const now = new Date()
   const day = isoDate(now)
   const seed = hash(day)

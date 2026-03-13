@@ -2,13 +2,13 @@
 // Delegates to the base tag page so all locales resolve without 404.
 
 import { SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
-import { allTags } from "@/lib/pseo"
 import TagPage from "@/app/tag/[tag]/page"
 
 export const revalidate = 60
 export const dynamicParams = true
 
 export async function generateStaticParams() {
+  const { allTags } = await import("@/lib/pseo")
   const tags = allTags().slice(0, 200)
   return SUPPORTED_LOCALES.flatMap((lang) =>
     tags.map((tag) => ({ lang, tag }))

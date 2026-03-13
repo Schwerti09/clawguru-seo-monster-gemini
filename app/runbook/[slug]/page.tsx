@@ -1,7 +1,7 @@
 // File: app/runbook/[slug]/page.tsx
 import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
-import { RUNBOOKS, getRunbook, type Runbook, type RunbookBlock, type RunbookFaqEntry } from "@/lib/pseo"
+import type { Runbook, RunbookBlock, RunbookFaqEntry } from "@/lib/pseo"
 import { validateRunbook, type ClawCertifiedTier } from "@/lib/quality-gate"
 import { getTemporalHistory } from "@/lib/temporal-mycelium"
 import TemporalTimeline from "@/components/visual/TemporalTimeline"
@@ -16,19 +16,12 @@ import { headers } from "next/headers"
 import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
 import { getDictionary } from "@/lib/getDictionary"
 
-// Pre-build slug→runbook Map for O(1) related lookups on static RUNBOOKS
-const RUNBOOK_MAP = new Map(RUNBOOKS.map((r) => [r.slug, r]))
-const LINK_ENGINE = buildLinkEngine(RUNBOOKS, {
-  maxLinks: 10,
-  urlForPage: (page) => `/runbook/${page.slug}`,
-  authorityForPage: (page) => page.clawScore,
-})
-
 export const revalidate = 60 // 60s ISR; use revalidateSeconds() from quality-gate for finer-grained tooling
 export const dynamicParams = true
 
 export async function generateStaticParams() {
   // Pre-render top 200 static RUNBOOKS + key 100k slugs for fast initial crawl
+  const { RUNBOOKS } = await import("@/lib/pseo")
   const staticParams = RUNBOOKS.slice(0, 200).map((r) => ({ slug: r.slug }))
   const key100kSlugs = [
     "aws-ssh-hardening-2026",
@@ -52,6 +45,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata(props: { params: { slug: string } }) {
   const params = props.params
+  const { getRunbook } = await import("@/lib/pseo")
   const h = headers()
   const locale = (h.get("x-claw-locale") ?? DEFAULT_LOCALE) as Locale
   const r = getRunbook(params.slug)
@@ -249,6 +243,7 @@ function FaqSection({ faq }: { faq: RunbookFaqEntry[] }) {
 
 export default async function RunbookPage(props: { params: { slug: string } }) {
   const params = props.params
+  const { RUNBOOKS, getRunbook } = await import("@/lib/pseo")
   const h = headers()
   const locale = (h.get("x-claw-locale") ?? DEFAULT_LOCALE) as Locale
   const dict = await getDictionary(locale)
@@ -263,15 +258,23 @@ export default async function RunbookPage(props: { params: { slug: string } }) {
   // TEMPORAL MYCELIUM v3.1 – Overlord AI: compute deterministic evolution history
   const temporalHistory = getTemporalHistory(r)
 
+  // Pre-build slug→runbook Map for O(1) related lookups
+  const runbookMap = new Map(RUNBOOKS.map((rb) => [rb.slug, rb]))
+  const linkEngine = buildLinkEngine(RUNBOOKS, {
+    maxLinks: 10,
+    urlForPage: (page) => `/runbook/${page.slug}`,
+    authorityForPage: (page) => page.clawScore,
+  })
+
   // Embedding-driven internal links (Spider-Web) with relatedSlugs as seed hints
   const relatedSlugs = Array.from(
     new Set([
       ...r.relatedSlugs,
-      ...LINK_ENGINE.linksForSlug(r.slug).map((link) => link.slug),
+      ...linkEngine.linksForSlug(r.slug).map((link) => link.slug),
     ])
   ).slice(0, 10)
   const relatedList = relatedSlugs.length > 0
-    ? relatedSlugs.map((s) => RUNBOOK_MAP.get(s) ?? getRunbook(s)).filter(Boolean) as Runbook[]
+    ? relatedSlugs.map((s) => runbookMap.get(s) ?? getRunbook(s)).filter(Boolean) as Runbook[]
     : RUNBOOKS.filter((x) => x.slug !== r.slug && x.tags.some((t) => r.tags.includes(t))).slice(0, 10)
 
   return (

@@ -1,6 +1,5 @@
 import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
-import { allTags, runbooksByTag, topRunbooksByTag } from "@/lib/pseo"
 import { notFound } from "next/navigation"
 import { BASE_URL } from "@/lib/config"
 import { headers } from "next/headers"
@@ -11,11 +10,13 @@ export const dynamicParams = true
 
 export async function generateStaticParams() {
   // pre-render a slice of tags
+  const { allTags } = await import("@/lib/pseo")
   return allTags().slice(0, 200).map((t) => ({ tag: t }))
 }
 
 export async function generateMetadata(props: { params: { tag: string } }) {
   const params = props.params
+  const { runbooksByTag } = await import("@/lib/pseo")
   const h = headers()
   const locale = (h.get("x-claw-locale") ?? DEFAULT_LOCALE) as Locale
   const tag = decodeURIComponent(params.tag)
@@ -30,6 +31,7 @@ export async function generateMetadata(props: { params: { tag: string } }) {
 
 export default async function TagPage(props: { params: { tag: string } }) {
   const params = props.params
+  const { runbooksByTag, topRunbooksByTag } = await import("@/lib/pseo")
   const h = headers()
   const locale = (h.get("x-claw-locale") ?? DEFAULT_LOCALE) as Locale
   const prefix = `/${locale}`

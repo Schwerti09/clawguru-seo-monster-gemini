@@ -3,14 +3,6 @@ import type { Metadata } from "next"
 import { SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
 import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
-import {
-  allIssues100k,
-  getSampleSlugsByIssue,
-  getRunbook,
-  CLOUD_PROVIDERS_100K,
-  SERVICES_100K,
-  YEARS_100K,
-} from "@/lib/pseo"
 import { notFound } from "next/navigation"
 import { BASE_URL } from "@/lib/config"
 
@@ -19,6 +11,7 @@ export const dynamicParams = true
 export const dynamic = "force-dynamic"
 
 export async function generateStaticParams() {
+  const { allIssues100k } = await import("@/lib/pseo")
   return SUPPORTED_LOCALES.flatMap((lang) =>
     allIssues100k().map((issue) => ({ lang, slug: issue.slug }))
   )
@@ -28,6 +21,7 @@ export async function generateMetadata(
   props: { params: { lang: string; slug: string } }
 ): Promise<Metadata> {
   const params = props.params
+  const { allIssues100k } = await import("@/lib/pseo")
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const issue = allIssues100k().find((i) => i.slug === params.slug)
   if (!issue) return {}
@@ -39,8 +33,9 @@ export async function generateMetadata(
   }
 }
 
-export default function LocaleIssueHubPage(props: { params: { lang: string; slug: string } }) {
+export default async function LocaleIssueHubPage(props: { params: { lang: string; slug: string } }) {
   const params = props.params
+  const { allIssues100k, getSampleSlugsByIssue, getRunbook, CLOUD_PROVIDERS_100K, SERVICES_100K, YEARS_100K } = await import("@/lib/pseo")
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const prefix = `/${locale}`
   const issue = allIssues100k().find((i) => i.slug === params.slug)

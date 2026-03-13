@@ -1,13 +1,5 @@
 import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
-import {
-  allIssues100k,
-  getSampleSlugsByIssue,
-  getRunbook,
-  CLOUD_PROVIDERS_100K,
-  SERVICES_100K,
-  YEARS_100K,
-} from "@/lib/pseo"
 import { notFound } from "next/navigation"
 import { BASE_URL } from "@/lib/config"
 import { headers } from "next/headers"
@@ -17,11 +9,13 @@ export const revalidate = 60
 export const dynamicParams = true
 
 export async function generateStaticParams() {
+  const { allIssues100k } = await import("@/lib/pseo")
   return allIssues100k().map((i) => ({ slug: i.slug }))
 }
 
 export async function generateMetadata(props: { params: { slug: string } }) {
   const params = props.params
+  const { allIssues100k, CLOUD_PROVIDERS_100K, SERVICES_100K, YEARS_100K } = await import("@/lib/pseo")
   const issue = allIssues100k().find((i) => i.slug === params.slug)
   if (!issue) return {}
   const totalPerIssue =
@@ -42,6 +36,7 @@ export async function generateMetadata(props: { params: { slug: string } }) {
 
 export default async function IssueHubPage(props: { params: { slug: string } }) {
   const params = props.params
+  const { allIssues100k, getSampleSlugsByIssue, getRunbook, CLOUD_PROVIDERS_100K, SERVICES_100K, YEARS_100K } = await import("@/lib/pseo")
   const issue = allIssues100k().find((i) => i.slug === params.slug)
   if (!issue) return notFound()
   const h = headers()

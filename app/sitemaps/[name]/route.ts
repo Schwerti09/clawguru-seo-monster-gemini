@@ -1,11 +1,12 @@
 import type { NextRequest } from "next/server"
 import { NextResponse } from "next/server"
-import { bucketsAF, bucketsTagsAF, allProviders, get100kSlugsPage, allIssues100k, allServices100k, allYears100k } from "@/lib/pseo"
+import { bucketsTagsAF, allProviders, get100kSlugsPage, allIssues100k, allServices100k, allYears100k, RUNBOOKS } from "@/lib/pseo"
 import { KNOWN_CVES, SERVICE_CHECKS } from "@/lib/cve-pseo"
 import { BASE_URL } from "@/lib/config"
 import { DEFAULT_LOCALE, SUPPORTED_LOCALES, type Locale, getLocaleHrefLang, localizePath, stripLocalePrefix } from "@/lib/i18n"
 import { logTelemetry } from "@/lib/ops/telemetry"
 import { getRequestId } from "@/lib/ops/request-id"
+import { validateRunbook } from "@/lib/quality-gate"
 
 // IMPORTANT: This route must stay dynamic (Netlify prerender can call it without params)
 export const dynamic = "force-dynamic"
@@ -15,6 +16,28 @@ const SITEMAP_HEADERS = {
   "Content-Type": "application/xml; charset=utf-8",
   "Cache-Control": "public, max-age=3600, s-maxage=3600",
 } as const
+
+function bucketsAFQualityPassed() {
+  const groups: Record<"a-f" | "g-l" | "m-r" | "s-z" | "0-9", typeof RUNBOOKS> = {
+    "a-f": [],
+    "g-l": [],
+    "m-r": [],
+    "s-z": [],
+    "0-9": [],
+  }
+
+  for (const runbook of RUNBOOKS) {
+    if (validateRunbook(runbook).violations.some((v) => v.severity === "error")) continue
+    const c = (runbook.slug[0] || "").toLowerCase()
+    if (c >= "a" && c <= "f") groups["a-f"].push(runbook)
+    else if (c >= "g" && c <= "l") groups["g-l"].push(runbook)
+    else if (c >= "m" && c <= "r") groups["m-r"].push(runbook)
+    else if (c >= "s" && c <= "z") groups["s-z"].push(runbook)
+    else groups["0-9"].push(runbook)
+  }
+
+  return groups
+}
 
 function isoDate(d = new Date()) {
   return d.toISOString().slice(0, 10)
@@ -141,7 +164,7 @@ export async function GET(
       })
     }
 
-    const rb = bucketsAF()
+    const rb = bucketsAFQualityPassed()
     const tg = bucketsTagsAF()
 
     const rbMap: Record<string, keyof typeof rb> = {

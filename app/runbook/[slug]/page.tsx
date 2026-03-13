@@ -258,7 +258,7 @@ export default async function RunbookPage(props: { params: { slug: string } }) {
 
   // Quality Gate: reject thin content before serving (ClawGuru 2026 Standard)
   const quality = validateRunbook(r)
-  if (!quality.pass) return notFound()
+  if (quality.violations.some((v) => v.severity === "error")) return notFound()
 
   // TEMPORAL MYCELIUM v3.1 – Overlord AI: compute deterministic evolution history
   const temporalHistory = getTemporalHistory(r)

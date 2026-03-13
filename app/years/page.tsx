@@ -1,6 +1,5 @@
 import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
-import { allYears100k, CLOUD_PROVIDERS_100K, SERVICES_100K, ISSUES_100K } from "@/lib/pseo"
 import { BASE_URL } from "@/lib/config"
 import { headers } from "next/headers"
 import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
@@ -24,7 +23,8 @@ const YEAR_DESCRIPTIONS: Record<string, string> = {
   "2030": "Vision 2030: Institutional Ops für das nächste Jahrzehnt. Langfristige Strategie.",
 }
 
-export default function YearsPage() {
+export default async function YearsPage() {
+  const { allYears100k, CLOUD_PROVIDERS_100K, SERVICES_100K, ISSUES_100K } = await import("@/lib/pseo")
   const h = headers()
   const locale = (h.get("x-claw-locale") ?? DEFAULT_LOCALE) as Locale
   const prefix = `/${locale}`

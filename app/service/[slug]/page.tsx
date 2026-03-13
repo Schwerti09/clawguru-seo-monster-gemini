@@ -1,13 +1,5 @@
 import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
-import {
-  allServices100k,
-  getSampleSlugsByService,
-  getRunbook,
-  CLOUD_PROVIDERS_100K,
-  ISSUES_100K,
-  YEARS_100K,
-} from "@/lib/pseo"
 import { notFound } from "next/navigation"
 import { BASE_URL } from "@/lib/config"
 import { headers } from "next/headers"
@@ -17,11 +9,13 @@ export const revalidate = 60
 export const dynamicParams = true
 
 export async function generateStaticParams() {
+  const { allServices100k } = await import("@/lib/pseo")
   return allServices100k().map((s) => ({ slug: s.slug }))
 }
 
 export async function generateMetadata(props: { params: { slug: string } }) {
   const params = props.params;
+  const { allServices100k, CLOUD_PROVIDERS_100K, ISSUES_100K, YEARS_100K } = await import("@/lib/pseo")
   const service = allServices100k().find((s) => s.slug === params.slug)
   if (!service) return {}
   const totalPerService =
@@ -42,6 +36,7 @@ export async function generateMetadata(props: { params: { slug: string } }) {
 
 export default async function ServiceHubPage(props: { params: { slug: string } }) {
   const params = props.params;
+  const { allServices100k, getSampleSlugsByService, getRunbook, CLOUD_PROVIDERS_100K, ISSUES_100K, YEARS_100K } = await import("@/lib/pseo")
   const service = allServices100k().find((s) => s.slug === params.slug)
   if (!service) return notFound()
   const h = headers()

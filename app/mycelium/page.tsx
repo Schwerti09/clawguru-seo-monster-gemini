@@ -5,7 +5,6 @@ import type { Metadata } from "next"
 import Container from "@/components/shared/Container"
 import MyceliumView from "@/components/visual/MyceliumView"
 import MyceliumShareCard from "@/components/share/MyceliumShareCard"
-import { RUNBOOKS } from "@/lib/pseo"
 import { headers } from "next/headers"
 import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
 import { getDictionary } from "@/lib/getDictionary"
@@ -27,6 +26,7 @@ export const metadata: Metadata = {
 export const revalidate = 3600
 
 export default async function MyceliumPage() {
+  const { RUNBOOKS } = await import("@/lib/pseo")
   const h = headers()
   const locale = (h.get("x-claw-locale") ?? DEFAULT_LOCALE) as Locale
   const dict = await getDictionary(locale)

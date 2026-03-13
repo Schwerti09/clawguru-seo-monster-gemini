@@ -1,6 +1,5 @@
 import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
-import { allProviders, runbooksByProvider } from "@/lib/pseo"
 import { notFound } from "next/navigation"
 import { headers } from "next/headers"
 import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
@@ -9,11 +8,13 @@ export const revalidate = 60
 export const dynamicParams = true
 
 export async function generateStaticParams() {
+  const { allProviders } = await import("@/lib/pseo")
   return allProviders().slice(0, 30).map((p) => ({ slug: p.slug }))
 }
 
 export async function generateMetadata(props: { params: { slug: string } }) {
   const params = props.params
+  const { allProviders, runbooksByProvider } = await import("@/lib/pseo")
   const slug = params.slug.toLowerCase()
   const p = allProviders().find((x) => x.slug === slug)
   if (!p) return {}
@@ -27,6 +28,7 @@ export async function generateMetadata(props: { params: { slug: string } }) {
 
 export default async function ProviderPage(props: { params: { slug: string } }) {
   const params = props.params
+  const { allProviders, runbooksByProvider } = await import("@/lib/pseo")
   const slug = params.slug.toLowerCase()
   const p = allProviders().find((x) => x.slug === slug)
   if (!p) return notFound()

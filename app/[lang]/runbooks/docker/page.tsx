@@ -2,7 +2,6 @@
 // Strong hub for Docker runbooks
 
 import Container from "@/components/shared/Container"
-import { RUNBOOKS } from "@/lib/pseo"
 import { type Locale, SUPPORTED_LOCALES } from "@/lib/i18n"
 import Link from "next/link"
 
@@ -24,6 +23,7 @@ export async function generateMetadata(props: { params: { lang: string } }) {
 
 export default async function DockerHubPage(props: { params: { lang: string } }) {
   const params = props.params;
+  const { RUNBOOKS } = await import("@/lib/pseo")
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
 
   const dockerRunbooks = RUNBOOKS.filter(

@@ -4,7 +4,6 @@
 
 import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
-import { RUNBOOKS } from "@/lib/pseo"
 import { BASE_URL } from "@/lib/config"
 
 export const dynamic = "force-static"
@@ -16,7 +15,8 @@ export const metadata = {
   alternates: { canonical: "/provenance" },
 }
 
-export default function ProvenanceIndexPage() {
+export default async function ProvenanceIndexPage() {
+  const { RUNBOOKS } = await import("@/lib/pseo")
   const itemListLd = {
     "@context": "https://schema.org",
     "@type": "ItemList",

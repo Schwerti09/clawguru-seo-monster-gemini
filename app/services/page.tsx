@@ -1,6 +1,5 @@
 import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
-import { allServices100k, CLOUD_PROVIDERS_100K, ISSUES_100K, YEARS_100K } from "@/lib/pseo"
 import { BASE_URL } from "@/lib/config"
 import { headers } from "next/headers"
 import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
@@ -14,7 +13,8 @@ export const metadata = {
   alternates: { canonical: "/services" },
 }
 
-export default function ServicesPage() {
+export default async function ServicesPage() {
+  const { allServices100k, CLOUD_PROVIDERS_100K, ISSUES_100K, YEARS_100K } = await import("@/lib/pseo")
   const h = headers()
   const locale = (h.get("x-claw-locale") ?? DEFAULT_LOCALE) as Locale
   const prefix = `/${locale}`

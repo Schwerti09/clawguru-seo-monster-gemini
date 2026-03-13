@@ -1,13 +1,5 @@
 import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
-import {
-  allYears100k,
-  getSampleSlugsByYear,
-  getRunbook,
-  CLOUD_PROVIDERS_100K,
-  SERVICES_100K,
-  ISSUES_100K,
-} from "@/lib/pseo"
 import { notFound } from "next/navigation"
 import { BASE_URL } from "@/lib/config"
 import { headers } from "next/headers"
@@ -17,11 +9,13 @@ export const revalidate = 60
 export const dynamicParams = true
 
 export async function generateStaticParams() {
+  const { allYears100k } = await import("@/lib/pseo")
   return allYears100k().map((year) => ({ year }))
 }
 
 export async function generateMetadata(props: { params: { year: string } }) {
   const params = props.params
+  const { allYears100k, CLOUD_PROVIDERS_100K, SERVICES_100K, ISSUES_100K } = await import("@/lib/pseo")
   const years = allYears100k()
   if (!years.includes(params.year)) return {}
   const totalPerYear =
@@ -42,6 +36,7 @@ export async function generateMetadata(props: { params: { year: string } }) {
 
 export default async function YearHubPage(props: { params: { year: string } }) {
   const params = props.params
+  const { allYears100k, getSampleSlugsByYear, getRunbook, CLOUD_PROVIDERS_100K, SERVICES_100K, ISSUES_100K } = await import("@/lib/pseo")
   const years = allYears100k()
   if (!years.includes(params.year)) return notFound()
   const h = headers()

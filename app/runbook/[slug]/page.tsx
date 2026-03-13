@@ -16,6 +16,7 @@ import { headers } from "next/headers"
 import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
 import { getDictionary } from "@/lib/getDictionary"
 
+export const dynamic = "force-dynamic"
 export const revalidate = 60 // 60s ISR; use revalidateSeconds() from quality-gate for finer-grained tooling
 export const dynamicParams = true
 

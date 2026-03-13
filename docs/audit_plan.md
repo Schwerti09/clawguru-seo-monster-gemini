@@ -54,6 +54,23 @@ Diese Datei dokumentiert den Status der Phase A/B Beobachtungen und Sicherheitsa
   - `Weitergeleitete URL`-Signale für alte `/sitemap/*` sind erwartbar
   - keine neuen `500`/`Soft 404` Cluster auf `/issue/*` und `/provenance/*`
 
+### Search-Console-Monitoring-Runbook (D.3)
+- **Täglich (erste 14 Tage nach SEO-Deploy):**
+  - `npm run check:sitemap-redirects -- https://clawguru.org`
+  - `npm run check:prod-smoke -- --base=https://clawguru.org`
+  - Search Console: Coverage/Indexing-Report auf neue Fehler-Spikes prüfen (`Serverfehler (5xx)`, `Soft 404`, `Weitergeleitete Seite`).
+- **Wöchentlich (ab Woche 3):**
+  - Search Console Vergleich zur Vorwoche: Anzahl gültiger indexierter Seiten vs. ausgeschlossene Seiten.
+  - Legacy-Pfade stichprobenartig prüfen (`/sitemap/runbooks`, `/sitemap/providers.xml`, `/sitemap-index`) auf `308` → `/sitemap.xml`.
+- **Zielwerte / Erwartung:**
+  - Technische Checks bleiben stabil bei `13/0` (sitemap) und `7/0` (prod smoke).
+  - Keine neuen 5xx-Cluster für `/<lang>/issue/*` und `/<lang>/provenance/*`.
+  - Redirect-Excludes für alte `/sitemap/*` können anfangs steigen, sollten danach abflachen.
+- **Eskalation (sofort handeln):**
+  - irgendein FAIL in `check:sitemap-redirects` oder `check:prod-smoke`
+  - Search Console zeigt neue 5xx-Häufung auf SEO-kritischen Routen
+  - `/sitemap.xml` fällt auf `!=200` oder liefert kein `<sitemapindex>`
+
 ## Flag-Konfiguration (zum schnellen Nachschlagen)
 - `OBS_ENABLED` (default `0`) — aktiviert Logging-Sampling
 - `OBS_SAMPLE_RATE` (0-1)

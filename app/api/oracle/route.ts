@@ -3,7 +3,6 @@
 // wisest, most-evolved answer. Every request is fully auditable.
 
 import { NextRequest, NextResponse } from "next/server"
-import { RUNBOOKS } from "@/lib/pseo"
 import { buildMyceliumGraph, oracleSearch } from "@/lib/mycelium"
 
 // MYCELIUM ORACLE v3.3 – Overlord AI: Oracle query modes
@@ -15,9 +14,9 @@ type OracleRequestBody = {
 }
 
 // MYCELIUM ORACLE v3.3 – Overlord AI: Build lightweight summaries for RAG context
-function buildSummaries() {
+function buildSummaries(runbooks: Array<{ slug: string; title: string; summary?: string; tags: string[] }>) {
   const summaries: Record<string, { title: string; summary: string; tags: string[] }> = {}
-  for (const r of RUNBOOKS) {
+  for (const r of runbooks) {
     summaries[r.slug] = { title: r.title, summary: r.summary ?? "", tags: r.tags }
   }
   return summaries
@@ -125,6 +124,7 @@ function fallbackAnswer(
 
 export async function POST(req: NextRequest) {
   try {
+    const { RUNBOOKS } = await import("@/lib/pseo")
     const body = (await req.json().catch(() => ({}))) as OracleRequestBody
     const question = (body.question || "").toString().slice(0, 4000).trim()
     const mode: OracleMode =
@@ -137,7 +137,7 @@ export async function POST(req: NextRequest) {
     }
 
     // MYCELIUM ORACLE v3.3 – Overlord AI: RAG – search the entire Mycelium graph
-    const summaries = buildSummaries()
+    const summaries = buildSummaries(RUNBOOKS)
     const graph = buildMyceliumGraph(RUNBOOKS, 250)
     const oracleResults = oracleSearch(question, graph, summaries, 5)
 

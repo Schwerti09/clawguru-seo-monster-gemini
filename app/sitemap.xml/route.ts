@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 
 import { BASE_URL } from '@/lib/config';
 import { SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
-import { count100kSitemapPages } from "@/lib/pseo"
 import { logTelemetry } from "@/lib/ops/telemetry"
 import { getRequestId } from "@/lib/ops/request-id"
 
@@ -19,6 +18,7 @@ export async function GET(req: NextRequest) {
   const requestId = getRequestId(req.headers)
   const startedAt = Date.now()
   const lastmod = isoDate();
+  const { count100kSitemapPages } = await import("@/lib/pseo")
 
   const buckets = ["a-f", "g-l", "m-r", "s-z", "0-9"] as const
   const pages100k = count100kSitemapPages()

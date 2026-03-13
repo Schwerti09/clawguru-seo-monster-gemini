@@ -5,7 +5,6 @@
 import { NextResponse } from "next/server"
 import { cookies } from "next/headers"
 import { adminCookieName, verifyAdminToken } from "@/lib/admin-auth"
-import { autoHeal } from "@/lib/selfhealth"
 import { BASE_URL } from "@/lib/config"
 
 export const runtime = "nodejs"
@@ -22,6 +21,7 @@ export async function POST() {
 
   try {
     const { totalSitemapUrls } = await import("@/lib/pseo")
+    const { autoHeal } = await import("@/lib/selfhealth")
     // Run autoHeal to regenerate runbook metadata + ping sitemaps
     const healResult = await autoHeal()
 

@@ -3,6 +3,9 @@ import { NextResponse } from "next/server"
 export const runtime = "nodejs"
 export const dynamic = "force-dynamic"
 
+let CACHE: { body: any; expiresAt: number } | null = null
+const CACHE_TTL_MS = 60 * 1000
+
 function isoDate(d = new Date()) {
   return d.toISOString().slice(0, 10)
 }
@@ -46,6 +49,13 @@ function countTop<T extends string>(items: T[]) {
 }
 
 export async function GET() {
+  if (CACHE && Date.now() < CACHE.expiresAt) {
+    return NextResponse.json(CACHE.body, {
+      headers: {
+        "Cache-Control": "public, s-maxage=60, stale-while-revalidate=30"
+      }
+    })
+  }
   const { RUNBOOKS, allTags } = await import("@/lib/pseo")
   const now = new Date()
   const day = isoDate(now)
@@ -99,23 +109,22 @@ export async function GET() {
   const t = now.getTime() / 1000
   const pulse = Math.round(60 + 18 * Math.sin(t / 18) + 11 * Math.sin(t / 7) + rnd() * 7)
 
-  return NextResponse.json(
-    {
-      updatedAt: now.toISOString(),
-      day,
-      counts: {
-        runbooks: RUNBOOKS.length,
-        tags: tags.length
-      },
-      pulse: Math.max(7, pulse),
-      topTags,
-      issueCounts,
-      trending
+  const payload = {
+    updatedAt: now.toISOString(),
+    day,
+    counts: {
+      runbooks: RUNBOOKS.length,
+      tags: tags.length
     },
-    {
-      headers: {
-        "Cache-Control": "public, s-maxage=300, stale-while-revalidate=60"
-      }
+    pulse: Math.max(7, pulse),
+    topTags,
+    issueCounts,
+    trending
+  }
+  CACHE = { body: payload, expiresAt: Date.now() + CACHE_TTL_MS }
+  return NextResponse.json(payload, {
+    headers: {
+      "Cache-Control": "public, s-maxage=60, stale-while-revalidate=30"
     }
-  )
+  })
 }

@@ -32,7 +32,7 @@ export default function OpsWall() {
 
   async function load() {
     try {
-      const res = await fetch("/api/live-wall", { cache: "no-store" })
+      const res = await fetch("/api/live-wall")
       if (!res.ok) throw new Error("Live Feed nicht erreichbar")
       const json = (await res.json()) as LivePayload
       setData(json)
@@ -44,7 +44,7 @@ export default function OpsWall() {
 
   useEffect(() => {
     load()
-    const t = setInterval(load, 12000)
+    const t = setInterval(load, 60000)
     return () => clearInterval(t)
   }, [])
 

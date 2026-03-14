@@ -5,7 +5,7 @@ import { BASE_URL } from "@/lib/config"
 import { headers } from "next/headers"
 import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
 
-export const revalidate = 60
+export const revalidate = 3600
 export const dynamicParams = true
 export const dynamic = "force-dynamic"
 

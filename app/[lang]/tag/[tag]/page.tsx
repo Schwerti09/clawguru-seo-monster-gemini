@@ -4,7 +4,7 @@
 import { SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
 import TagPage from "@/app/tag/[tag]/page"
 
-export const revalidate = 60
+export const revalidate = 3600
 export const dynamicParams = true
 export const dynamic = "force-dynamic"
 

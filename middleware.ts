@@ -101,6 +101,7 @@ function preferredLocale(request: NextRequest): Locale {
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
   const requestId = getRequestId(request.headers)
+  const method = request.method
 
   // Apply per-IP rate limiting for hot routes
   const bucket = routeBucket(pathname)
@@ -146,6 +147,14 @@ export function middleware(request: NextRequest) {
   res.headers.set("x-claw-locale", locale)
   res.headers.set("x-claw-dir", localeDir(locale))
   res.headers.set(getRequestIdHeaderName(), requestId)
+  // Light CDN caching for Tag pages to lower CPU
+  if (method === "GET") {
+    const isTagDetail = /^\/(?:[a-z]{2}(?:-[a-z]{2})?)\/tag\//i.test(pathname) || /^\/tag\//i.test(pathname)
+    const isTagIndex = /^\/(?:[a-z]{2}(?:-[a-z]{2})?)\/tags\/?$/i.test(pathname) || /^\/tags\/?$/i.test(pathname)
+    if (isTagDetail || isTagIndex) {
+      res.headers.set("Cache-Control", "public, s-maxage=600, stale-while-revalidate=60")
+    }
+  }
   if (request.cookies.get(LOCALE_COOKIE_NAME)?.value !== locale) {
     res.cookies.set(LOCALE_COOKIE_NAME, locale, {
       path: "/",

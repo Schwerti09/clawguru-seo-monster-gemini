@@ -1,6 +1,6 @@
 import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
-export const dynamic = "force-dynamic"
+export const revalidate = 3600
 
 export const metadata = {
   title: "Tags | ClawGuru",

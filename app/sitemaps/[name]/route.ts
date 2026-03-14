@@ -258,7 +258,7 @@ export async function GET(
       const slugs = get100kSlugsPage(page)
       const urls = slugs.map((slug) => ({
         loc: `${base}/${loc}/runbook/${slug}`,
-        lastmod: "2026-02-25",
+        lastmod,
         changefreq: "monthly",
         priority: "0.8",
       }))
@@ -385,7 +385,7 @@ export async function GET(
     }
 
     // PROGRAMMATIC SEO: CVE Solutions sitemap (/solutions/fix-CVE-*)
-    if (name === "solutions-cve") {
+    if (name === "solutions-cve" || name === "solutions" || name === "cves") {
       const urls = [
         { loc: `${base}/${DEFAULT_LOCALE}/solutions`, lastmod, changefreq: "weekly", priority: "0.85" },
         ...KNOWN_CVES.map((cve) => ({
@@ -446,15 +446,17 @@ export async function GET(
     })
     return new NextResponse("Not Found", { status: 404 })
   } catch {
-    // Return a minimal valid urlset on error so crawlers always get a 200
-    const empty = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>\n`
+    // Return a minimal valid urlset with at least one URL so crawlers always get a 200
     logTelemetry("sitemap.chunk.error", {
       requestId,
       name,
       reason: "generator_exception",
       durationMs: Date.now() - startedAt,
     })
-    return new NextResponse(empty, {
+    const minimal = urlset([
+      { loc: `${base}/${DEFAULT_LOCALE}`, lastmod, changefreq: "daily", priority: "0.5" },
+    ])
+    return new NextResponse(minimal, {
       status: 200,
       headers: {
         "Content-Type": "application/xml; charset=utf-8",

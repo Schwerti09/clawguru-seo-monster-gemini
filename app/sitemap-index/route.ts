@@ -10,7 +10,7 @@ function isoDate(d = new Date()) {
 
 const SITEMAP_HEADERS = {
   'Content-Type': 'application/xml; charset=utf-8',
-  'Cache-Control': 'public, max-age=86400',
+  'Cache-Control': 'public, max-age=86400, stale-while-revalidate=3600',
 } as const;
 
 export async function GET(req: NextRequest) {
@@ -42,6 +42,19 @@ export async function GET(req: NextRequest) {
     return [...main, ...hubs, ...tools, ...solutions, ...tags, ...runbooks, ...runbook100k]
   })
 
+  const bucketNoLocale: string[] = [
+    `${BASE_URL}/sitemaps/runbooks-a-f.xml`,
+    `${BASE_URL}/sitemaps/runbooks-g-l.xml`,
+    `${BASE_URL}/sitemaps/runbooks-m-r.xml`,
+    `${BASE_URL}/sitemaps/runbooks-s-z.xml`,
+    `${BASE_URL}/sitemaps/runbooks-0-9.xml`,
+    `${BASE_URL}/sitemaps/tags-a-f.xml`,
+    `${BASE_URL}/sitemaps/tags-g-l.xml`,
+    `${BASE_URL}/sitemaps/tags-m-r.xml`,
+    `${BASE_URL}/sitemaps/tags-s-z.xml`,
+    `${BASE_URL}/sitemaps/tags-0-9.xml`,
+  ]
+
   const legacyCompat: string[] = [
     `${BASE_URL}/sitemaps/main.xml`,
     `${BASE_URL}/sitemaps/providers.xml`,
@@ -50,9 +63,11 @@ export async function GET(req: NextRequest) {
     `${BASE_URL}/sitemaps/years.xml`,
     `${BASE_URL}/sitemaps/tools-check.xml`,
     `${BASE_URL}/sitemaps/solutions-cve.xml`,
+    `${BASE_URL}/sitemaps/solutions.xml`,
+    `${BASE_URL}/sitemaps/cves.xml`,
   ]
 
-  const all = Array.from(new Set([...subSitemaps, ...legacyCompat]))
+  const all = Array.from(new Set([...subSitemaps, ...bucketNoLocale, ...legacyCompat]))
 
   const xml =
     `<?xml version="1.0" encoding="UTF-8"?>\n` +
@@ -63,6 +78,7 @@ export async function GET(req: NextRequest) {
           `  <sitemap>\n` +
           `    <loc>${loc}</loc>\n` +
           `    <lastmod>${lastmod}</lastmod>\n` +
+          `    <changefreq>daily</changefreq>\n` +
           `  </sitemap>`
       )
       .join("\n") +

@@ -12,22 +12,21 @@ export async function GET(req: NextRequest) {
       { status: 401, headers: { "Cache-Control": "no-store" } }
     )
   }
-  const {
-    count100kSlugs,
-    allProviders100k,
-    allServices100k,
-    allIssues100k,
-    allYears100k,
-  } = await import("@/lib/pseo")
+  const PROVIDER_100K_COUNT = 50
+  const SERVICE_100K_COUNT = 80
+  const ISSUE_100K_COUNT = 122
+  const YEAR_100K_COUNT = 7
+  const COUNT_100K_SLUGS =
+    PROVIDER_100K_COUNT * SERVICE_100K_COUNT * ISSUE_100K_COUNT * YEAR_100K_COUNT
 
   return NextResponse.json(
     {
       materializedRunbooksCount: Number(process.env.PSEO_RUNBOOK_COUNT || 500),
-      count100kSlugs: count100kSlugs(),
-      providerCount: allProviders100k().length,
-      serviceCount: allServices100k().length,
-      issueCount: allIssues100k().length,
-      yearCount: allYears100k().length,
+      count100kSlugs: COUNT_100K_SLUGS,
+      providerCount: PROVIDER_100K_COUNT,
+      serviceCount: SERVICE_100K_COUNT,
+      issueCount: ISSUE_100K_COUNT,
+      yearCount: YEAR_100K_COUNT,
       localeCount: SUPPORTED_LOCALES.length,
       generatedAt: new Date().toISOString(),
       env: {

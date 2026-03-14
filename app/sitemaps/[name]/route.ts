@@ -14,7 +14,7 @@ export const runtime = "nodejs"
 
 const SITEMAP_HEADERS = {
   "Content-Type": "application/xml; charset=utf-8",
-  "Cache-Control": "public, max-age=86400",
+  "Cache-Control": "no-store, no-cache, must-revalidate",
 } as const
 
 function bucketsAFQualityPassed(runbooks: Runbook[]) {
@@ -110,6 +110,15 @@ export async function GET(
     requestId,
     name,
   })
+
+  // Live debug hooks
+  console.log("SITEMAP DEBUG", { path: req.nextUrl.pathname, start: Date.now() })
+  console.time("sitemap-gen")
+  function respond(xml: string) {
+    console.timeEnd("sitemap-gen")
+    console.log("SITEMAP RESPONSE", { status: 200, length: xml.length, first50: xml.slice(0,50) + "..." })
+    return new NextResponse(xml, { status: 200, headers: SITEMAP_HEADERS })
+  }
 
   const localeMatch = name.match(/-([a-z]{2})(?:-|$)/i)
   const locale = (SUPPORTED_LOCALES.includes((localeMatch?.[1] ?? "") as Locale) ? localeMatch?.[1] : DEFAULT_LOCALE) as Locale
@@ -216,7 +225,7 @@ export async function GET(
         changefreq: "weekly",
         priority: "0.6"
       }))
-      return new NextResponse(urlset(urls), { status: 200, headers: SITEMAP_HEADERS })
+      return respond(urlset(urls))
     }
 
     if (rbMap[name]) {
@@ -227,10 +236,7 @@ export async function GET(
         changefreq: "weekly",
         priority: "0.8"
       }))
-      return new NextResponse(urlset(urls), {
-        status: 200,
-        headers: SITEMAP_HEADERS
-      })
+      return respond(urlset(urls))
     }
 
     if (tgMap[name]) {
@@ -255,14 +261,16 @@ export async function GET(
         ? pageMatch100kLocale[1]
         : DEFAULT_LOCALE) as Locale
       const page = parseInt((pageMatch100kLocale?.[2] ?? pageMatch100kLegacy?.[1]) as string, 10)
-      const slugs = get100kSlugsPage(page)
+      const slugsFull = get100kSlugsPage(page)
+      const BATCH_LIMIT = 5000
+      const slugs = slugsFull.slice(0, BATCH_LIMIT)
       const urls = slugs.map((slug) => ({
         loc: `${base}/${loc}/runbook/${slug}`,
         lastmod,
         changefreq: "monthly",
         priority: "0.8",
       }))
-      return new NextResponse(urlset(urls), { status: 200, headers: SITEMAP_HEADERS })
+      return respond(urlset(urls))
     }
 
     // NEXT-LEVEL UPGRADE 2026: Language-specific sitemaps for i18n runbook pages
@@ -444,8 +452,10 @@ export async function GET(
       reason: "sitemap_not_found",
       durationMs: Date.now() - startedAt,
     })
+    console.timeEnd("sitemap-gen")
+    console.log("SITEMAP RESPONSE", { status: 404, length: 0, first50: "" })
     return new NextResponse("Not Found", { status: 404 })
-  } catch {
+  } catch (error) {
     // Return a minimal valid urlset with at least one URL so crawlers always get a 200
     logTelemetry("sitemap.chunk.error", {
       requestId,
@@ -453,14 +463,17 @@ export async function GET(
       reason: "generator_exception",
       durationMs: Date.now() - startedAt,
     })
+    console.error("SITEMAP CRASH", { name, error: String(error) })
     const minimal = urlset([
-      { loc: `${base}/${DEFAULT_LOCALE}`, lastmod, changefreq: "daily", priority: "0.5" },
+      { loc: `${BASE_URL}/en/runbook/test-debug-slug`, lastmod },
     ])
+    console.timeEnd("sitemap-gen")
+    console.log("SITEMAP RESPONSE", { status: 200, length: minimal.length, first50: minimal.slice(0,50) + "..." })
     return new NextResponse(minimal, {
       status: 200,
       headers: {
         "Content-Type": "application/xml; charset=utf-8",
-        "Cache-Control": "public, max-age=86400",
+        "Cache-Control": "no-store, no-cache, must-revalidate",
       }
     })
   }

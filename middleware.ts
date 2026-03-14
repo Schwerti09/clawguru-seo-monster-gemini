@@ -119,6 +119,12 @@ export function middleware(request: NextRequest) {
   if (shouldBypassMiddleware(pathname)) {
     const res = NextResponse.next()
     res.headers.set(getRequestIdHeaderName(), requestId)
+    // DEBUG: ensure sitemap routes are never cached during live debugging and log edge-start
+    if (pathname === "/sitemap.xml" || pathname === "/sitemap-index" || pathname.startsWith("/sitemaps")) {
+      res.headers.set("Cache-Control", "no-store, no-cache")
+      res.headers.set("x-sitemap-debug", "1")
+      console.log("sitemap request (edge-start)", { path: pathname, requestId })
+    }
     return res
   }
 

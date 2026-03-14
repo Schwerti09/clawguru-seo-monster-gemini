@@ -8,9 +8,13 @@ function isoDate(d = new Date()) {
   return d.toISOString().slice(0, 10);
 }
 
+export const runtime = 'nodejs'
+export const dynamic = 'force-dynamic'
+
 const SITEMAP_HEADERS = {
   'Content-Type': 'application/xml; charset=utf-8',
-  'Cache-Control': 'public, max-age=86400, stale-while-revalidate=3600',
+  // DEBUG: bypass CDN cache to validate live behaviour; switch back to 86400 after verification
+  'Cache-Control': 'no-store, no-cache',
 } as const;
 
 export async function GET(req: NextRequest) {
@@ -18,6 +22,8 @@ export async function GET(req: NextRequest) {
   const startedAt = Date.now()
   const lastmod = isoDate();
   const { count100kSitemapPages } = await import("@/lib/pseo")
+  const label = 'sitemap:legacy_index'
+  console.time(label)
 
   const buckets = ["a-f", "g-l", "m-r", "s-z", "0-9"] as const
   const pages100k = count100kSitemapPages()
@@ -69,29 +75,45 @@ export async function GET(req: NextRequest) {
 
   const all = Array.from(new Set([...subSitemaps, ...bucketNoLocale, ...legacyCompat]))
 
-  const xml =
-    `<?xml version="1.0" encoding="UTF-8"?>\n` +
-    `<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
-    all
-      .map(
-        (loc) =>
-          `  <sitemap>\n` +
-          `    <loc>${loc}</loc>\n` +
-          `    <lastmod>${lastmod}</lastmod>\n` +
-          `    <changefreq>daily</changefreq>\n` +
-          `  </sitemap>`
-      )
-      .join("\n") +
-    `\n</sitemapindex>\n`;
+  try {
+    const xml =
+      `<?xml version="1.0" encoding="UTF-8"?>\n` +
+      `<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
+      all
+        .map(
+          (loc) =>
+            `  <sitemap>\n` +
+            `    <loc>${loc}</loc>\n` +
+            `    <lastmod>${lastmod}</lastmod>\n` +
+            `    <changefreq>daily</changefreq>\n` +
+            `  </sitemap>`
+        )
+        .join("\n") +
+      `\n</sitemapindex>\n`;
 
-  logTelemetry("sitemap.legacy_index.success", {
-    requestId,
-    sitemapCount: all.length,
-    durationMs: Date.now() - startedAt,
-  })
+    const durationMs = Date.now() - startedAt
+    console.timeEnd(label)
+    console.log('sitemap request', { kind: 'legacy_index', requestId, status: 200, durationMs, count: all.length })
+    logTelemetry("sitemap.legacy_index.success", { requestId, sitemapCount: all.length, durationMs })
 
-  return new NextResponse(xml, {
-    status: 200,
-    headers: SITEMAP_HEADERS,
-  });
+    return new NextResponse(xml, {
+      status: 200,
+      headers: SITEMAP_HEADERS,
+    });
+  } catch (error) {
+    const durationMs = Date.now() - startedAt
+    console.timeEnd(label)
+    console.error('sitemap request', { kind: 'legacy_index', requestId, status: 200, durationMs, error: String(error) })
+    const fallback =
+      `<?xml version="1.0" encoding="UTF-8"?>\n` +
+      `<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
+      `  <sitemap>\n` +
+      `    <loc>${BASE_URL}/sitemaps/main.xml</loc>\n` +
+      `    <lastmod>${lastmod}</lastmod>\n` +
+      `    <changefreq>daily</changefreq>\n` +
+      `  </sitemap>\n` +
+      `</sitemapindex>\n`;
+    logTelemetry("sitemap.legacy_index.fallback", { requestId, sitemapCount: 1, durationMs })
+    return new NextResponse(fallback, { status: 200, headers: SITEMAP_HEADERS })
+  }
 }

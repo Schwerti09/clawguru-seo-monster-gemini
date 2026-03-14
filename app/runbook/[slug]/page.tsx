@@ -4,8 +4,8 @@ import SectionTitle from "@/components/shared/SectionTitle"
 import type { Runbook, RunbookBlock, RunbookFaqEntry } from "@/lib/pseo"
 import { validateRunbook, type ClawCertifiedTier } from "@/lib/quality-gate"
 import { getTemporalHistory } from "@/lib/temporal-mycelium"
-import TemporalTimeline from "@/components/visual/TemporalTimeline"
-import VersionsAndForksTab from "@/components/runbook/VersionsAndForksTab"
+import NextDynamic from "next/dynamic"
+import { Suspense } from "react"
 import { notFound } from "next/navigation"
 import { CopyLinkButton } from "./CopyLinkButton"
 import { ActivateSwarmButton } from "@/components/shared/ActivateSwarmButton"
@@ -16,8 +16,18 @@ import { headers } from "next/headers"
 import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
 import { getDictionary } from "@/lib/getDictionary"
 
+const TemporalTimelineLazy = NextDynamic(() => import("@/components/visual/TemporalTimeline"), {
+  ssr: false,
+  loading: () => <div className="text-sm text-gray-500 py-6 text-center">Lade Timeline…</div>,
+})
+
+const VersionsAndForksTabLazy = NextDynamic(() => import("@/components/runbook/VersionsAndForksTab"), {
+  ssr: false,
+  loading: () => <div className="text-sm text-gray-500 py-6 text-center">Lade Tabs…</div>,
+})
+
 export const dynamic = "force-dynamic"
-export const revalidate = 60 // 60s ISR; use revalidateSeconds() from quality-gate for finer-grained tooling
+export const revalidate = 3600 // reduce rebuild frequency to cut CPU
 export const dynamicParams = true
 
 export async function generateStaticParams() {
@@ -259,7 +269,9 @@ export default async function RunbookPage(props: { params: { slug: string } }) {
   if (quality.violations.some((v) => v.severity === "error")) return notFound()
 
   // TEMPORAL MYCELIUM v3.1 – Overlord AI: compute deterministic evolution history
+  console.time(`${__label}:temporalHistory`)
   const temporalHistory = getTemporalHistory(r)
+  console.timeEnd(`${__label}:temporalHistory`)
 
   // Pre-build slug→runbook Map for O(1) related lookups
   const runbookMap = new Map(RUNBOOKS.map((rb) => [rb.slug, rb]))
@@ -269,13 +281,16 @@ export default async function RunbookPage(props: { params: { slug: string } }) {
   } else {
     console.count("pseo.materialized_hit")
   }
+  console.time(`${__label}:linkEngine`)
   const linkEngine = buildLinkEngine(RUNBOOKS, {
     maxLinks: 10,
     urlForPage: (page) => `/runbook/${page.slug}`,
     authorityForPage: (page) => page.clawScore,
   })
+  console.timeEnd(`${__label}:linkEngine`)
 
   // Embedding-driven internal links (Spider-Web) with relatedSlugs as seed hints
+  console.time(`${__label}:related`)
   const relatedSlugs = Array.from(
     new Set([
       ...r.relatedSlugs,
@@ -285,6 +300,7 @@ export default async function RunbookPage(props: { params: { slug: string } }) {
   const relatedList = relatedSlugs.length > 0
     ? relatedSlugs.map((s) => runbookMap.get(s) ?? getRunbook(s)).filter(Boolean) as Runbook[]
     : RUNBOOKS.filter((x) => x.slug !== r.slug && x.tags.some((t) => r.tags.includes(t))).slice(0, 10)
+  console.timeEnd(`${__label}:related`)
 
   console.timeEnd(__label)
   return (
@@ -396,10 +412,14 @@ export default async function RunbookPage(props: { params: { slug: string } }) {
         <FaqSection faq={r.faq} />
 
         {/* TEMPORAL MYCELIUM v3.1 – Overlord AI: Temporal Evolution Timeline */}
-        <TemporalTimeline history={temporalHistory} slug={r.slug} />
+        <Suspense fallback={<div className="text-sm text-gray-500 py-6 text-center">Lade Timeline…</div>}>
+          <TemporalTimelineLazy history={temporalHistory} slug={r.slug} />
+        </Suspense>
 
         {/* MYCELIUM CORE: Runbook Versioning + Community Fork */}
-        <VersionsAndForksTab slug={r.slug} />
+        <Suspense fallback={<div className="text-sm text-gray-500 py-6 text-center">Lade Tabs…</div>}>
+          <VersionsAndForksTabLazy slug={r.slug} />
+        </Suspense>
 
         {/* PROVENANCE SINGULARITY v3.4 – Overlord AI: Provenance chain link */}
         <div className="mt-6 px-4 py-3 rounded-2xl border border-cyan-500/20 bg-cyan-500/5 flex items-center gap-3">

@@ -14,7 +14,7 @@ export const runtime = "nodejs"
 
 const SITEMAP_HEADERS = {
   "Content-Type": "application/xml; charset=utf-8",
-  "Cache-Control": "public, max-age=3600, s-maxage=3600",
+  "Cache-Control": "public, max-age=86400",
 } as const
 
 function bucketsAFQualityPassed(runbooks: Runbook[]) {
@@ -458,7 +458,7 @@ export async function GET(
       status: 200,
       headers: {
         "Content-Type": "application/xml; charset=utf-8",
-        "Cache-Control": "public, max-age=300, s-maxage=300",
+        "Cache-Control": "public, max-age=86400",
       }
     })
   }

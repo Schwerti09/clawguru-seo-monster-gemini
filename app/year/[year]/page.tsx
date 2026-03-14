@@ -1,25 +1,21 @@
 import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
-import {
-  allYears100k,
-  getSampleSlugsByYear,
-  getRunbook,
-  CLOUD_PROVIDERS_100K,
-  SERVICES_100K,
-  ISSUES_100K,
-} from "@/lib/pseo"
 import { notFound } from "next/navigation"
 import { BASE_URL } from "@/lib/config"
+import { headers } from "next/headers"
+import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
 
 export const revalidate = 60
 export const dynamicParams = true
 
 export async function generateStaticParams() {
+  const { allYears100k } = await import("@/lib/pseo")
   return allYears100k().map((year) => ({ year }))
 }
 
-export async function generateMetadata(props: { params: Promise<{ year: string }> }) {
-  const params = await props.params;
+export async function generateMetadata(props: { params: { year: string } }) {
+  const params = props.params
+  const { allYears100k, CLOUD_PROVIDERS_100K, SERVICES_100K, ISSUES_100K } = await import("@/lib/pseo")
   const years = allYears100k()
   if (!years.includes(params.year)) return {}
   const totalPerYear =
@@ -38,10 +34,14 @@ export async function generateMetadata(props: { params: Promise<{ year: string }
   }
 }
 
-export default async function YearHubPage(props: { params: Promise<{ year: string }> }) {
-  const params = await props.params;
+export default async function YearHubPage(props: { params: { year: string } }) {
+  const params = props.params
+  const { allYears100k, getSampleSlugsByYear, getRunbook, CLOUD_PROVIDERS_100K, SERVICES_100K, ISSUES_100K } = await import("@/lib/pseo")
   const years = allYears100k()
   if (!years.includes(params.year)) return notFound()
+  const h = headers()
+  const locale = (h.get("x-claw-locale") ?? DEFAULT_LOCALE) as Locale
+  const prefix = `/${locale}`
 
   const year = params.year
   const sampleSlugs = getSampleSlugsByYear(year, 48)
@@ -56,9 +56,9 @@ export default async function YearHubPage(props: { params: Promise<{ year: strin
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "ClawGuru", item: BASE_URL },
-      { "@type": "ListItem", position: 2, name: "Years", item: `${BASE_URL}/years` },
-      { "@type": "ListItem", position: 3, name: year, item: `${BASE_URL}/year/${year}` },
+      { "@type": "ListItem", position: 1, name: "ClawGuru", item: `${BASE_URL}${prefix}` },
+      { "@type": "ListItem", position: 2, name: "Years", item: `${BASE_URL}${prefix}/years` },
+      { "@type": "ListItem", position: 3, name: year, item: `${BASE_URL}${prefix}/year/${year}` },
     ],
   }
 
@@ -71,7 +71,7 @@ export default async function YearHubPage(props: { params: Promise<{ year: strin
     itemListElement: samples.slice(0, 10).map((r, i) => ({
       "@type": "ListItem",
       position: i + 1,
-      url: `${BASE_URL}/runbook/${r.slug}`,
+      url: `${BASE_URL}${prefix}/runbook/${r.slug}`,
       name: r.title,
     })),
   }
@@ -83,9 +83,9 @@ export default async function YearHubPage(props: { params: Promise<{ year: strin
       <div className="py-16 max-w-6xl mx-auto">
         <nav className="text-sm text-gray-500 mb-6" aria-label="Breadcrumb">
           <ol className="flex flex-wrap items-center gap-2">
-            <li><a href="/" className="hover:text-cyan-400">ClawGuru</a></li>
+            <li><a href={prefix} className="hover:text-cyan-400">ClawGuru</a></li>
             <li>/</li>
-            <li><a href="/years" className="hover:text-cyan-400">Years</a></li>
+            <li><a href={`${prefix}/years`} className="hover:text-cyan-400">Years</a></li>
             <li>/</li>
             <li className="text-gray-300">{year}</li>
           </ol>
@@ -105,7 +105,7 @@ export default async function YearHubPage(props: { params: Promise<{ year: strin
           {samples.map((r) => (
             <a
               key={r.slug}
-              href={`/runbook/${r.slug}`}
+              href={`${prefix}/runbook/${r.slug}`}
               className="p-6 rounded-3xl border border-gray-800 bg-black/25 hover:bg-black/35 transition-colors"
             >
               <div className="text-xs uppercase tracking-widest text-gray-500">Runbook</div>
@@ -123,9 +123,9 @@ export default async function YearHubPage(props: { params: Promise<{ year: strin
         </div>
 
         <div className="mt-12 text-sm text-gray-500">
-          <a href="/years" className="hover:text-cyan-400">← Alle Years</a> ·{" "}
-          <a href="/issues" className="hover:text-cyan-400">Issue Hubs</a> ·{" "}
-          <a href="/runbooks" className="hover:text-cyan-400">Runbook Library</a>
+          <a href={`${prefix}/years`} className="hover:text-cyan-400">← Alle Years</a> ·{" "}
+          <a href={`${prefix}/issues`} className="hover:text-cyan-400">Issue Hubs</a> ·{" "}
+          <a href={`${prefix}/runbooks`} className="hover:text-cyan-400">Runbook Library</a>
         </div>
       </div>
     </Container>

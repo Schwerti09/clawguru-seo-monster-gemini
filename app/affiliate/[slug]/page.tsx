@@ -1,20 +1,13 @@
 import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
 import { getAffiliateProfile, humanizeSlug } from "@/lib/affiliate-store"
-import { RUNBOOKS } from "@/lib/pseo"
 import { buildLinkEngine } from "@/lib/seo/link-engine"
 
 export const revalidate = 60
 export const dynamicParams = true
 
-const LINK_ENGINE = buildLinkEngine(RUNBOOKS, {
-  maxLinks: 10,
-  urlForPage: (page) => `/runbook/${page.slug}`,
-  authorityForPage: (page) => page.clawScore,
-})
-
-export async function generateMetadata(props: { params: Promise<{ slug: string }> }) {
-  const params = await props.params;
+export async function generateMetadata(props: { params: { slug: string } }) {
+  const params = props.params
   const profile = getAffiliateProfile(params.slug)
   const name = profile?.name ?? humanizeSlug(params.slug)
   const keyword = profile?.keyword ?? `${name} Security Recommendations`
@@ -25,14 +18,21 @@ export async function generateMetadata(props: { params: Promise<{ slug: string }
   }
 }
 
-export default async function AffiliateBridgePage(props: { params: Promise<{ slug: string }> }) {
-  const params = await props.params;
+export default async function AffiliateBridgePage(props: { params: { slug: string } }) {
+  const params = props.params
   const profile = getAffiliateProfile(params.slug)
   const name = profile?.name ?? humanizeSlug(params.slug)
   const keyword = profile?.keyword ?? `${name} Security Recommendations`
   const description = profile?.description ?? `Kuratiertes ClawGuru Runbook-Setup für ${name}.`
 
-  const recommendations = LINK_ENGINE.linksForPage({
+  const { RUNBOOKS } = await import("@/lib/pseo")
+  const linkEngine = buildLinkEngine(RUNBOOKS, {
+    maxLinks: 10,
+    urlForPage: (page) => `/runbook/${page.slug}`,
+    authorityForPage: (page) => page.clawScore,
+  })
+
+  const recommendations = linkEngine.linksForPage({
     slug: params.slug,
     title: keyword,
     summary: description,

@@ -1,9 +1,9 @@
 // Hub page: /[lang]/runbooks/cloud
 // Strong hub for cloud provider runbooks – internal linking anchor
 
-import Container from "@/components/shared/Container"
-import { RUNBOOKS } from "@/lib/pseo"
-import { type Locale, SUPPORTED_LOCALES } from "@/lib/i18n"
+import Container from "../../../../components/shared/Container"
+import { RUNBOOKS } from "../../../../lib/pseo"
+import { type Locale, SUPPORTED_LOCALES } from "../../../../lib/i18n"
 import Link from "next/link"
 
 export const revalidate = 60
@@ -21,8 +21,8 @@ export async function generateStaticParams() {
   return SUPPORTED_LOCALES.map((lang) => ({ lang }))
 }
 
-export async function generateMetadata(props: { params: Promise<{ lang: string }> }) {
-  const params = await props.params;
+export async function generateMetadata(props: { params: { lang: string } }) {
+  const params = props.params;
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   return {
     title: `Cloud Runbooks – Hetzner, AWS, GCP, Azure & mehr | ClawGuru`,
@@ -31,8 +31,8 @@ export async function generateMetadata(props: { params: Promise<{ lang: string }
   }
 }
 
-export default async function CloudHubPage(props: { params: Promise<{ lang: string }> }) {
-  const params = await props.params;
+export default async function CloudHubPage(props: { params: { lang: string } }) {
+  const params = props.params;
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
 
   const cloudRunbooks = RUNBOOKS.filter((r) =>

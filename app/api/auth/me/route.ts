@@ -1,18 +1,28 @@
-import { NextResponse } from "next/server"
-import { cookies } from "next/headers"
-import { verifySessionToken, USER_SESSION_COOKIE } from "@/lib/auth"
-
-export const runtime = "nodejs"
+import { NextResponse } from "next/server";
 
 export async function GET() {
-  const jar = await cookies()
-  const token = jar.get(USER_SESSION_COOKIE)?.value
-  if (!token) {
-    return NextResponse.json({ authenticated: false }, { status: 401 })
-  }
-  const session = verifySessionToken(token)
-  if (!session) {
-    return NextResponse.json({ authenticated: false }, { status: 401 })
-  }
-  return NextResponse.json({ authenticated: true, email: session.email })
+  const base = "https://clawguru.org";
+  const today = new Date().toISOString().split("T")[0];
+
+  const sitemaps = [
+    "main",
+    "providers",
+    "runbooks-a-f",
+    "runbooks-g-l",
+    "runbooks-m-r",
+    "runbooks-s-z",
+  ];
+
+  const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${sitemaps.map(s => `
+  <sitemap>
+    <loc>${base}/sitemaps/${s}.xml</loc>
+    <lastmod>${today}</lastmod>
+  </sitemap>`).join("")}
+</sitemapindex>`;
+
+  return new NextResponse(xml, {
+    headers: { "Content-Type": "application/xml" },
+  });
 }

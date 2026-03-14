@@ -1,7 +1,8 @@
 import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
-import { allYears100k, CLOUD_PROVIDERS_100K, SERVICES_100K, ISSUES_100K } from "@/lib/pseo"
 import { BASE_URL } from "@/lib/config"
+import { headers } from "next/headers"
+import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
 
 export const dynamic = "force-static"
 
@@ -22,7 +23,11 @@ const YEAR_DESCRIPTIONS: Record<string, string> = {
   "2030": "Vision 2030: Institutional Ops für das nächste Jahrzehnt. Langfristige Strategie.",
 }
 
-export default function YearsPage() {
+export default async function YearsPage() {
+  const { allYears100k, CLOUD_PROVIDERS_100K, SERVICES_100K, ISSUES_100K } = await import("@/lib/pseo")
+  const h = headers()
+  const locale = (h.get("x-claw-locale") ?? DEFAULT_LOCALE) as Locale
+  const prefix = `/${locale}`
   const years = allYears100k()
   const totalPerYear =
     (CLOUD_PROVIDERS_100K as unknown as unknown[]).length *
@@ -35,12 +40,12 @@ export default function YearsPage() {
     name: "ClawGuru Year Hub Index",
     description: "Runbooks nach Jahr sortiert: 2024–2030. Security, Ops und Compliance.",
     numberOfItems: years.length,
-    url: `${BASE_URL}/years`,
+    url: `${BASE_URL}${prefix}/years`,
     itemListElement: years.map((year, i) => ({
       "@type": "ListItem",
       position: i + 1,
       name: `${year} Runbooks`,
-      url: `${BASE_URL}/year/${year}`,
+      url: `${BASE_URL}${prefix}/year/${year}`,
     })),
   }
 
@@ -50,7 +55,7 @@ export default function YearsPage() {
       <div className="py-16 max-w-6xl mx-auto">
         <nav className="text-sm text-gray-500 mb-6" aria-label="Breadcrumb">
           <ol className="flex flex-wrap items-center gap-2">
-            <li><a href="/" className="hover:text-cyan-400">ClawGuru</a></li>
+            <li><a href={prefix} className="hover:text-cyan-400">ClawGuru</a></li>
             <li>/</li>
             <li className="text-gray-300">Years</li>
           </ol>
@@ -66,7 +71,7 @@ export default function YearsPage() {
           {years.map((year) => (
             <a
               key={year}
-              href={`/year/${year}`}
+              href={`${prefix}/year/${year}`}
               className="p-6 rounded-3xl border border-gray-800 bg-black/25 hover:bg-black/35 transition-colors"
             >
               <div className="text-xs uppercase tracking-widest text-gray-500">Year Hub</div>
@@ -81,9 +86,9 @@ export default function YearsPage() {
 
         <div className="mt-12 text-sm text-gray-500">
           Mehr:{" "}
-          <a className="hover:text-cyan-400" href="/issues">Issue Hubs</a> ·{" "}
-          <a className="hover:text-cyan-400" href="/services">Service Hubs</a> ·{" "}
-          <a className="hover:text-cyan-400" href="/runbooks">Runbook Library</a>
+          <a className="hover:text-cyan-400" href={`${prefix}/issues`}>Issue Hubs</a> ·{" "}
+          <a className="hover:text-cyan-400" href={`${prefix}/services`}>Service Hubs</a> ·{" "}
+          <a className="hover:text-cyan-400" href={`${prefix}/runbooks`}>Runbook Library</a>
         </div>
       </div>
     </Container>

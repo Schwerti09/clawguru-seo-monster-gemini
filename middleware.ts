@@ -1,201 +1,161 @@
-// NEXT-LEVEL UPGRADE 2026: Browser language detection middleware
-// Automatically redirects to the user's preferred language on first visit,
-// respecting a persistent cookie for user language choice.
+import { NextRequest, NextResponse } from "next/server"
+import { DEFAULT_LOCALE, SUPPORTED_LOCALES, type Locale, localeDir } from "@/lib/i18n"
+import { getRequestId, getRequestIdHeaderName } from "@/lib/ops/request-id"
 
-import { NextResponse } from "next/server"
-import type { NextRequest } from "next/server"
-import { SUPPORTED_LOCALES, DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
+const LOCALE_COOKIE_NAME = "cg_locale"
+const LOCALE_COOKIE_MAX_AGE_SECONDS = 60 * 60 * 24 * 365
 
-const LOCALE_COOKIE = "cg_locale"
+// Lightweight per-IP rate limiter (per edge isolate) – 5 req/min per bucket
+const RATE_LIMIT_MAX = 5
+const RATE_LIMIT_WINDOW_MS = 60 * 1000
+type Bucket = { count: number; resetAt: number }
+const RL = new Map<string, Bucket>()
 
-// ---------------------------------------------------------------------------
-// Maintenance Mode / Kill-Switch
-// ---------------------------------------------------------------------------
-const BYPASS_HEADER = "x-clawguru-bypass"
-const BYPASS_COOKIE = "cg_bypass"
+function getClientIp(request: NextRequest): string {
+  return (
+    request.ip ||
+    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+    request.headers.get("x-real-ip") ||
+    "0.0.0.0"
+  )
+}
 
-/**
- * Returns true when the request should bypass maintenance mode.
- * Bypass conditions (checked in order):
- *  1. Path starts with /admin or /maintenance (always pass-through)
- *  2. Secret bypass header X-ClawGuru-Bypass matches BYPASS_SECRET env var
- *  3. Secret bypass cookie `cg_bypass` matches BYPASS_SECRET env var
- *  4. Requester IP matches ADMIN_IP env var
- */
-function shouldBypassMaintenance(request: NextRequest): boolean {
-  const { pathname } = request.nextUrl
+function routeBucket(pathname: string): string | null {
+  if (pathname === "/api/live-wall") return "live-wall"
+  if (/^\/(?:[a-z]{2}(?:-[a-z]{2})?)\/runbook\//i.test(pathname) || /^\/runbook\//i.test(pathname)) return "runbook-detail"
+  if (/^\/(?:[a-z]{2}(?:-[a-z]{2})?)\/tag\//i.test(pathname) || /^\/tag\//i.test(pathname)) return "tag-detail"
+  if (/^\/(?:[a-z]{2}(?:-[a-z]{2})?)\/runbooks\/?$/i.test(pathname) || /^\/runbooks\/?$/i.test(pathname)) return "runbooks-index"
+  return null
+}
 
-  // Always allow the maintenance page itself and admin routes through
-  if (pathname.startsWith("/admin") || pathname.startsWith("/maintenance")) {
-    return true
+function checkRateLimit(ip: string, bucket: string): { ok: boolean; retryAfter: number } {
+  const key = `${bucket}:${ip}`
+  const now = Date.now()
+  const entry = RL.get(key)
+  if (!entry || now >= entry.resetAt) {
+    RL.set(key, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS })
+    return { ok: true, retryAfter: 0 }
   }
-
-  const secret = process.env.BYPASS_SECRET
-  if (secret) {
-    // Check bypass header
-    if (request.headers.get(BYPASS_HEADER) === secret) return true
-    // Check bypass cookie
-    if (request.cookies.get(BYPASS_COOKIE)?.value === secret) return true
+  if (entry.count < RATE_LIMIT_MAX) {
+    entry.count++
+    return { ok: true, retryAfter: 0 }
   }
+  return { ok: false, retryAfter: Math.ceil((entry.resetAt - now) / 1000) }
+}
 
-  // Check admin IP
-  const adminIp = process.env.ADMIN_IP
-  if (adminIp) {
-    const requestIp =
-      request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
-      request.headers.get("x-real-ip") ??
-      ""
-    if (requestIp && requestIp === adminIp) return true
-  }
+function isPublicFile(pathname: string): boolean {
+  return pathname.includes(".")
+}
 
+function shouldBypassMiddleware(pathname: string): boolean {
+  if (pathname.startsWith("/api/") && pathname !== "/api/live-wall") return true
+  if (pathname.startsWith("/admin")) return true
+  if (pathname.startsWith("/_next/")) return true
+  if (pathname === "/favicon.ico") return true
+  if (pathname === "/robots.txt") return true
+  if (pathname === "/sitemap.xml") return true
+  if (pathname === "/sitemap-index") return true
+  if (pathname.startsWith("/sitemap/")) return true
+  if (pathname.startsWith("/sitemaps")) return true
+  if (pathname.startsWith("/stripe/webhooks")) return true
+  if (pathname.startsWith("/maintenance")) return true
+  if (pathname.startsWith("/success")) return true
+  if (pathname.startsWith("/checkout")) return true
+  if (isPublicFile(pathname)) return true
   return false
 }
 
-/**
- * Detect the best matching locale from the Accept-Language header.
- * Returns the first supported locale that matches any browser preference.
- */
-function detectLocaleFromHeader(acceptLanguage: string | null): Locale {
-  if (!acceptLanguage) return DEFAULT_LOCALE
-
-  const languages = acceptLanguage
-    .split(",")
-    .map((lang) => {
-      const [tag, q] = lang.trim().split(";q=")
-      return { tag: tag.trim().toLowerCase(), q: q ? parseFloat(q) : 1 }
-    })
-    .sort((a, b) => b.q - a.q)
-
-  for (const { tag } of languages) {
-    // Match full locale code (e.g. "zh-cn" → "zh")
-    const primary = tag.split("-")[0] as Locale
-    if (SUPPORTED_LOCALES.includes(primary)) {
-      return primary
-    }
-  }
-
-  return DEFAULT_LOCALE
+function localeFromPathname(pathname: string): Locale | null {
+  const first = pathname.split("/").filter(Boolean)[0]?.toLowerCase() as Locale | undefined
+  if (!first) return null
+  return SUPPORTED_LOCALES.includes(first) ? first : null
 }
 
-/** Paths that should never be redirected */
-function isStaticOrApi(pathname: string): boolean {
-  return (
-    pathname.startsWith("/_next") ||
-    pathname.startsWith("/api") ||
-    pathname.startsWith("/sitemaps") ||
-    pathname.startsWith("/sitemap") ||
-    pathname.startsWith("/robots") ||
-    pathname.startsWith("/go/") ||
-    pathname.includes(".") // static files with extensions
-  )
+function localeFromCookie(request: NextRequest): Locale | null {
+  const value = request.cookies.get(LOCALE_COOKIE_NAME)?.value as Locale | undefined
+  if (!value) return null
+  return SUPPORTED_LOCALES.includes(value) ? value : null
+}
+
+function localeFromAcceptLanguage(request: NextRequest): Locale | null {
+  const header = request.headers.get("accept-language")
+  if (!header) return null
+
+  const candidates = header
+    .split(",")
+    .map((part) => part.split(";")[0]?.trim().toLowerCase())
+    .filter(Boolean)
+
+  for (const candidate of candidates) {
+    const base = candidate.split("-")[0] as Locale
+    if (SUPPORTED_LOCALES.includes(base)) return base
+  }
+
+  return null
+}
+
+function preferredLocale(request: NextRequest): Locale {
+  return localeFromCookie(request) ?? localeFromAcceptLanguage(request) ?? DEFAULT_LOCALE
 }
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
-  if (request.method !== "GET" && request.method !== "HEAD") {
-    return NextResponse.next()
-  }
+  const requestId = getRequestId(request.headers)
 
-  // ---------------------------------------------------------------------------
-  // Maintenance Mode check – redirect everyone except bypass users
-  // ---------------------------------------------------------------------------
-  if (process.env.MAINTENANCE_MODE === "true" && !isStaticOrApi(pathname)) {
-    if (!shouldBypassMaintenance(request)) {
-      const url = request.nextUrl.clone()
-      url.pathname = "/maintenance"
-      return NextResponse.redirect(url, { status: 307 })
+  // Apply per-IP rate limiting for hot routes
+  const bucket = routeBucket(pathname)
+  if (bucket) {
+    const ip = getClientIp(request)
+    const rl = checkRateLimit(ip, bucket)
+    if (!rl.ok) {
+      const res = NextResponse.json({ error: "rate_limited", bucket }, { status: 429 })
+      res.headers.set("Retry-After", String(rl.retryAfter))
+      res.headers.set(getRequestIdHeaderName(), requestId)
+      return res
     }
   }
 
-  // Skip static assets, API routes and special paths
-  if (isStaticOrApi(pathname)) {
-    return NextResponse.next()
+  if (shouldBypassMiddleware(pathname)) {
+    const res = NextResponse.next()
+    res.headers.set(getRequestIdHeaderName(), requestId)
+    return res
   }
 
-  // Check if the URL already contains a supported locale prefix
-  const firstSegment = pathname.split("/").filter(Boolean)[0] as Locale
-  if (SUPPORTED_LOCALES.includes(firstSegment)) {
-    // Persist the chosen locale in a cookie for future visits
-    const response = NextResponse.next()
-    response.cookies.set(LOCALE_COOKIE, firstSegment, {
-      maxAge: 60 * 60 * 24 * 365, // 1 year
+  const locale = localeFromPathname(pathname)
+
+  // Enforce locale-prefix-only routing:
+  // /runbook/x -> /de/runbook/x
+  if (!locale) {
+    const targetLocale = preferredLocale(request)
+    const url = request.nextUrl.clone()
+    url.pathname = `/${targetLocale}${pathname}`
+    const res = NextResponse.redirect(url, 308)
+    res.headers.set("x-claw-locale", targetLocale)
+    res.headers.set("x-claw-dir", localeDir(targetLocale))
+    res.headers.set(getRequestIdHeaderName(), requestId)
+    res.cookies.set(LOCALE_COOKIE_NAME, targetLocale, {
       path: "/",
+      maxAge: LOCALE_COOKIE_MAX_AGE_SECONDS,
       sameSite: "lax",
     })
-    return response
+    return res
   }
 
-  // 301 redirect: legacy non-language-prefixed content paths → /de/...
-  // e.g. /runbook/contabo-xyz → /de/runbook/contabo-xyz
-  const LOCALIZED_PATHS = [
-    "/runbook/",
-    "/runbooks/",
-    "/provider/",
-    "/providers/",
-    "/tag/",
-    "/tags/",
-    "/solutions/",
-  ]
-  const isLocalizedContent = LOCALIZED_PATHS.some((p) => pathname.startsWith(p))
-  if (isLocalizedContent) {
-    const url = request.nextUrl.clone()
-    url.pathname = `/de${pathname}`
-    return NextResponse.redirect(url, { status: 301 })
+  // Pass locale+dir to the app for SSR-safe html lang/dir.
+  const res = NextResponse.next()
+  res.headers.set("x-claw-locale", locale)
+  res.headers.set("x-claw-dir", localeDir(locale))
+  res.headers.set(getRequestIdHeaderName(), requestId)
+  if (request.cookies.get(LOCALE_COOKIE_NAME)?.value !== locale) {
+    res.cookies.set(LOCALE_COOKIE_NAME, locale, {
+      path: "/",
+      maxAge: LOCALE_COOKIE_MAX_AGE_SECONDS,
+      sameSite: "lax",
+    })
   }
-
-  // Redirect /account → /{locale}/account so the locale-prefixed route is always used
-  if (pathname === "/account") {
-    const cookieLocaleAcc = request.cookies.get(LOCALE_COOKIE)?.value as Locale | undefined
-    const localeAcc =
-      cookieLocaleAcc && SUPPORTED_LOCALES.includes(cookieLocaleAcc)
-        ? cookieLocaleAcc
-        : detectLocaleFromHeader(request.headers.get("accept-language"))
-    const url = request.nextUrl.clone()
-    url.pathname = `/${localeAcc}/account`
-    return NextResponse.redirect(url, { status: 302 })
-  }
-
-  // Only redirect on the root path to avoid disrupting existing non-localized routes
-  if (pathname !== "/") {
-    return NextResponse.next()
-  }
-
-  // Check for persisted user cookie first
-  // If the cookie is set (even to the default locale), always respect it and
-  // do NOT let the Accept-Language header override the user's explicit choice.
-  const cookieLocale = request.cookies.get(LOCALE_COOKIE)?.value as Locale | undefined
-  if (cookieLocale && SUPPORTED_LOCALES.includes(cookieLocale)) {
-    if (cookieLocale !== DEFAULT_LOCALE) {
-      const url = request.nextUrl.clone()
-      url.pathname = `/${cookieLocale}`
-      return NextResponse.redirect(url, { status: 302 })
-    }
-    // Cookie explicitly set to default locale (de) – stay on root, skip header detection
-    return NextResponse.next()
-  }
-
-  // No cookie – detect from Accept-Language header
-  const acceptLanguage = request.headers.get("accept-language")
-  const detected = detectLocaleFromHeader(acceptLanguage)
-
-  // Only redirect if detected locale differs from default
-  if (detected !== DEFAULT_LOCALE) {
-    const url = request.nextUrl.clone()
-    url.pathname = `/${detected}`
-    return NextResponse.redirect(url, { status: 302 })
-  }
-
-  return NextResponse.next()
+  return res
 }
 
 export const config = {
-  matcher: [
-    /*
-     * Match all paths except:
-     * - _next/static (static files)
-     * - _next/image (image optimization)
-     * - favicon.ico, robots.txt, etc.
-     */
-    "/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|sitemaps|api|manifest.json|og-image.png).*)",
-  ],
+  matcher: ["/((?!api|_next/static|_next/image).*)", "/api/live-wall"],
 }

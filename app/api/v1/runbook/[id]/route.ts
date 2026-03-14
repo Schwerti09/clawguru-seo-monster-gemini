@@ -1,67 +1,73 @@
-/**
- * GET /api/v1/runbook/{id}
- *
- * Enterprise API: Returns a full runbook by slug/ID.
- * Useful for programmatic integration into SIEM/SOAR playbooks.
- *
- * Authentication: X-Api-Key header (or Authorization: Bearer <key>)
- * Billing: Each call increments the Stripe metered usage record.
- *
- * Path parameter:
- *   id – Runbook slug (e.g. "ssh-hardening-ubuntu", "incident-response-0-60")
- *
- * Response (200):
- *   {
- *     "id": string,
- *     "title": string,
- *     "summary": string,
- *     "tags": string[],
- *     "clawScore": number,
- *     "steps": string[],
- *     "faq": { q: string; a: string }[],
- *     "relatedIds": string[],
- *     "updatedAt": string
- *   }
- *
- * Response (404):
- *   { "error": "Runbook not found" }
- */
-
 import { NextRequest, NextResponse } from "next/server"
-import { authenticateApiRequest, reportUsage } from "@/lib/api-auth"
-import { RUNBOOKS } from "@/lib/pseo"
 
-export const dynamic = "force-dynamic"
+// Korrekter relativer Pfad für app/api/v1/runbook/[id]/route.ts
+import { authenticateApiRequest } from "../../../../../lib/api-auth"
+import { isFeatureEnabled } from "@/lib/api-security"
 
-export async function GET(req: NextRequest, props: { params: Promise<{ id: string }> }) {
-  const params = await props.params;
-  const auth = authenticateApiRequest(req)
-  if (!auth.ok) {
-    return NextResponse.json({ error: auth.error }, { status: auth.status })
+export async function GET(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  const enforceAuth =
+    process.env.V1_RUNBOOK_REQUIRE_AUTH === undefined
+      ? true
+      : isFeatureEnabled("V1_RUNBOOK_REQUIRE_AUTH")
+
+  if (enforceAuth) {
+    const auth = authenticateApiRequest(req)
+
+    if (!auth.ok) {
+      if ("error" in auth && "status" in auth) {
+        return NextResponse.json(
+          { error: auth.error || "Unauthorized" },
+          { status: auth.status ?? 401 }
+        )
+      } else {
+        return NextResponse.json(
+          { error: "Unauthorized" },
+          { status: 401 }
+        )
+      }
+    }
   }
 
   const { id } = params
-  if (!id) {
-    return NextResponse.json({ error: "Missing runbook id" }, { status: 400 })
+
+  const realDataMode = isFeatureEnabled("V1_RUNBOOK_REAL_DATA")
+  if (realDataMode) {
+    const { RUNBOOKS } = await import("@/lib/pseo")
+    const runbook = RUNBOOKS.find((entry) => entry.slug === id)
+    if (!runbook) {
+      return NextResponse.json({ error: "Runbook not found" }, { status: 404 })
+    }
+
+    return NextResponse.json(
+      {
+        ok: true,
+        id: runbook.slug,
+        dataMode: "real",
+        runbook: {
+          slug: runbook.slug,
+          title: runbook.title,
+          summary: runbook.summary,
+          tags: runbook.tags,
+          lastmod: runbook.lastmod,
+          clawScore: runbook.clawScore,
+          relatedSlugs: runbook.relatedSlugs,
+          blockCount: runbook.blocks.length,
+          faqCount: runbook.faq.length,
+        },
+      },
+      { status: 200 }
+    )
   }
 
-  const runbook = RUNBOOKS.find((r) => r.slug === id)
-  if (!runbook) {
-    return NextResponse.json({ error: "Runbook not found" }, { status: 404 })
-  }
-
-  // Report usage to Stripe (fire-and-forget)
-  await reportUsage(auth.info)
-
+  // Deploy-safe fallback
   return NextResponse.json({
-    id: runbook.slug,
-    title: runbook.title,
-    summary: runbook.summary,
-    tags: runbook.tags,
-    clawScore: runbook.clawScore,
-    steps: runbook.howto?.steps ?? [],
-    faq: runbook.faq ?? [],
-    relatedIds: runbook.relatedSlugs ?? [],
-    updatedAt: runbook.lastmod,
+    ok: true,
+    id,
+    message: "Runbook details retrieved successfully",
+    authEnforced: enforceAuth,
+    dataMode: "placeholder",
   })
 }

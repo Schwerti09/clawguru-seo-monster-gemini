@@ -1,6 +1,6 @@
 import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
-import { allTags } from "@/lib/pseo"
+export const dynamic = "force-dynamic"
 
 export const metadata = {
   title: "Tags | ClawGuru",
@@ -9,7 +9,8 @@ export const metadata = {
   alternates: { canonical: "/tags" }
 }
 
-export default function TagsPage() {
+export default async function TagsPage() {
+  const { allTags } = await import("@/lib/pseo")
   const tags = allTags()
   return (
     <Container>

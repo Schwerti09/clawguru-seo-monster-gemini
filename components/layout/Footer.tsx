@@ -1,14 +1,12 @@
 'use client'
 
-import { usePathname } from 'next/navigation'
 import Container from "@/components/shared/Container"
 import { COMMUNITY } from "@/lib/constants"
-import { SUPPORTED_LOCALES, type Locale, t } from "@/lib/i18n"
+import { useI18n } from "@/components/i18n/I18nProvider"
 
 export default function Footer() {
-  const pathname = usePathname()
-  const firstSegment = pathname.split("/").filter(Boolean)[0] as Locale
-  const locale: Locale = SUPPORTED_LOCALES.includes(firstSegment) ? firstSegment : "de"
+  const { locale, dict } = useI18n()
+  const prefix = `/${locale}`
 
   return (
     <footer role="contentinfo" className="mt-20 py-10 pb-24 lg:pb-10 border-t" style={{ borderColor: "rgba(212,175,55,0.1)", background: "var(--surface-1)" }}>
@@ -24,34 +22,34 @@ export default function Footer() {
               <div className="font-black text-white">ClawGuru</div>
             </div>
             <p>
-              {t(locale, 'footerDescription')}
+              {dict.nav.footerDescription}
             </p>
             <div className="mt-4 text-xs text-gray-500">
-              {t(locale, 'footerDisclaimer')}
+              {dict.nav.footerDisclaimer}
             </div>
           </div>
           <nav aria-label="Seiten-Navigation">
-            <div className="font-black mb-2" style={{ color: "#d4af37" }}>{t(locale, 'footerHubs')}</div>
+            <div className="font-black mb-2" style={{ color: "#d4af37" }}>{dict.nav.footerHubs}</div>
             <ul className="space-y-1">
-              <li><a href="/clawverse" className="hover:text-white transition-colors">ClawVerse</a></li>
-              <li><a href="/check" className="hover:text-white transition-colors">{t(locale, 'navSecurityCheck')}</a></li>
-              <li><a href="/copilot" className="hover:text-white transition-colors">{t(locale, 'navCopilot')}</a></li>
-              <li><a href="/intel" className="hover:text-white transition-colors">{t(locale, 'navIntelFeed')}</a></li>
-              <li><a href="/academy" className="hover:text-white transition-colors">{t(locale, 'navAcademy')}</a></li>
-              <li><a href="/vault" className="hover:text-white transition-colors">{t(locale, 'navVault')}</a></li>
-              <li><a href="/pricing" className="hover:text-white transition-colors">{t(locale, 'navPricing')}</a></li>
-              <li><a href="/downloads" className="hover:text-white transition-colors">{t(locale, 'navDownloads')}</a></li>
-              <li><a href="/case-studies" className="hover:text-white transition-colors">{t(locale, 'navCases')}</a></li>
-              <li><a href="/ueber-uns" className="hover:text-white transition-colors">{t(locale, 'navAbout')}</a></li>
+              <li><a href={`${prefix}/clawverse`} className="hover:text-white transition-colors">ClawVerse</a></li>
+              <li><a href={`${prefix}/check`} className="hover:text-white transition-colors">{dict.nav.securityCheck}</a></li>
+              <li><a href={`${prefix}/copilot`} className="hover:text-white transition-colors">{dict.nav.copilot}</a></li>
+              <li><a href={`${prefix}/intel`} className="hover:text-white transition-colors">{dict.nav.intelFeed}</a></li>
+              <li><a href={`${prefix}/academy`} className="hover:text-white transition-colors">{dict.nav.academy}</a></li>
+              <li><a href={`${prefix}/vault`} className="hover:text-white transition-colors">{dict.nav.vault}</a></li>
+              <li><a href={`${prefix}/pricing`} className="hover:text-white transition-colors">{dict.nav.pricing}</a></li>
+              <li><a href={`${prefix}/downloads`} className="hover:text-white transition-colors">{dict.nav.downloads}</a></li>
+              <li><a href={`${prefix}/case-studies`} className="hover:text-white transition-colors">{dict.nav.cases}</a></li>
+              <li><a href={`${prefix}/ueber-uns`} className="hover:text-white transition-colors">{dict.nav.about}</a></li>
             </ul>
           </nav>
           <nav aria-label="Rechtliche Links">
-            <div className="font-black mb-2" style={{ color: "#d4af37" }}>{t(locale, 'footerLegal')}</div>
+            <div className="font-black mb-2" style={{ color: "#d4af37" }}>{dict.nav.footerLegal}</div>
             <ul className="space-y-1">
-              <li><a href="/impressum" className="hover:text-white transition-colors">{t(locale, 'footerImprint')}</a></li>
-              <li><a href="/datenschutz" className="hover:text-white transition-colors">{t(locale, 'footerPrivacy')}</a></li>
-              <li><a href="/agb" className="hover:text-white transition-colors">{t(locale, 'footerTerms')}</a></li>
-              <li><a href="/trust-security" className="hover:text-white transition-colors">{t(locale, 'footerTrustCenter')}</a></li>
+              <li><a href={`${prefix}/impressum`} className="hover:text-white transition-colors">{dict.nav.imprint}</a></li>
+              <li><a href={`${prefix}/datenschutz`} className="hover:text-white transition-colors">{dict.nav.privacy}</a></li>
+              <li><a href={`${prefix}/agb`} className="hover:text-white transition-colors">{dict.nav.terms}</a></li>
+              <li><a href={`${prefix}/trust-security`} className="hover:text-white transition-colors">{dict.nav.trustCenter}</a></li>
             </ul>
             <div className="mt-4">
               <a
@@ -61,11 +59,11 @@ export default function Footer() {
                 target="_blank"
                 rel="noreferrer noopener"
               >
-                {t(locale, 'footerDiscord')}
+                {dict.nav.footerDiscord}
               </a>
             </div>
             <div className="mt-4 text-xs text-gray-500">
-              {t(locale, 'footerAffiliate')}
+              {dict.nav.footerAffiliate}
             </div>
           </nav>
         </div>

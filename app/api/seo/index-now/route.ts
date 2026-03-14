@@ -5,7 +5,6 @@
 
 import { NextRequest, NextResponse } from "next/server"
 import { KNOWN_CVES } from "@/lib/cve-pseo"
-import { get100kSlugsPage } from "@/lib/pseo"
 import { indexUrls } from "@/lib/google-indexer"
 
 export const dynamic = "force-dynamic"
@@ -46,6 +45,7 @@ export async function GET(req: NextRequest) {
 
   // 2. Dynamic runbook URLs (fill the remainder of the 200-URL batch)
   const remaining = Math.max(0, BATCH_SIZE - cveUrls.length)
+  const { get100kSlugsPage } = await import("@/lib/pseo")
   const runbookSlugs = get100kSlugsPage(0, remaining)
   const runbookUrls = runbookSlugs.map(
     (slug) => `${BASE_URL}/runbook/${slug}`

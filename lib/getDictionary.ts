@@ -7,6 +7,55 @@ import { DEFAULT_LOCALE } from "@/lib/i18n"
 
 /** Shape of every dictionary JSON file */
 export type Dictionary = {
+  common: {
+    ctaDashboard: string
+    ctaMissionControl: string
+  }
+  share: {
+    myceliumBtn: string
+    myceliumXBtn: string
+    myceliumLinkedinBtn: string
+    myceliumCta: string
+    myceliumPost: string
+    myceliumCount: string
+    myceliumGenerating: string
+    myceliumCopied: string
+  }
+  copilot: {
+    greeting: string
+    followup1: string
+    followup2: string
+    followup3: string
+    followup4: string
+    error: string
+    mode: string
+    emergencyLink: string
+    launchpad: string
+    you: string
+    thinking: string
+    placeholder: string
+    send: string
+    tip: string
+    proAccess: string
+    proTitle: string
+    proDesc: string
+    proLabel: string
+    proSub: string
+    dayPassLabel: string
+    dayPassSub: string
+    dayPassBtn: string
+    allPlans: string
+    links: string
+    llmTitle: string
+    llmDesc: string
+  }
+  live: {
+    title: string
+    subtitle: string
+  }
+  runbooks: {
+    subtitle: string
+  }
   hero: {
     badge: string
     /** Text displayed after the gradient "ClawGuru" brand prefix in the hero h1 */
@@ -16,6 +65,10 @@ export type Dictionary = {
     ctaCopilot: string
     ctaProKits: string
     ctaIntel: string
+    knowledgeEdges: string
+    genesisProtocol: string
+    nodeTooltip: string
+    scrollLabel: string
     miniCopilotTitle: string
     miniCopilotSubtitle: string
     miniCopilotPlaceholder: string
@@ -38,6 +91,32 @@ export type Dictionary = {
     pricing: string
     emergency: string
     proKits: string
+    more: string
+    clawVerse: string
+    summon: string
+    oracle: string
+    neuro: string
+    mycelium: string
+    tags: string
+    academy: string
+    vault: string
+    report: string
+    downloads: string
+    cases: string
+    costs: string
+    about: string
+    login: string
+    footerDescription: string
+    footerDisclaimer: string
+    footerHubs: string
+    footerLegal: string
+    imprint: string
+    privacy: string
+    terms: string
+    trustCenter: string
+    footerTrustCenter: string
+    footerDiscord: string
+    footerAffiliate: string
   }
   dayPass: {
     label: string
@@ -84,10 +163,74 @@ export type Dictionary = {
     myceliumDesc: string
     openMycelium: string
   }
+
+  pricing: {
+    accessBadge: string
+    title: string
+    subtitle: string
+    emergencyText: string
+    emergencyLink: string
+    featureComparison: string
+    voiceCopilotLimited: string
+    dayPassBadge: string
+    dayPassDesc: string
+    dayPassBtn: string
+    dayPassMeta: string
+    dayPassOnce: string
+    mostPopular: string
+    proBadge: string
+    proDesc: string
+    proBtn: string
+    cancelable: string
+    teamBadge: string
+    teamDesc: string
+    teamBtn: string
+    enterpriseDesc: string
+    enterpriseBtn: string
+    enterpriseContact: string
+    contactSectionTitle: string
+    contactSectionDesc: string
+    instantAccess: string
+    instantAccessDesc: string
+    noAccount: string
+    noAccountDesc: string
+    paymentIssue: string
+    paymentIssueDesc: string
+    faqDuration: string
+    faqDurationA: string
+    faqTransfer: string
+    faqTransferA: string
+    faqNoAccess: string
+    faqNoAccessA: string
+    faqCancel: string
+    faqCancelA: string
+    faqNewPro: string
+    faqNewProA: string
+    faqIntelligence: string
+    faqIntelligenceA: string
+    recoverLink: string
+    monthly: string
+    grpSecurity: string
+    grpOps: string
+    grpKnowledge: string
+    grpLimits: string
+    grpAllDayPass: string
+    grpFeatureUnlocks: string
+    grpIntelligence: string
+    grpDeployment: string
+    grpProExtras: string
+    grpAllPro: string
+    grpTeamCollab: string
+    grpRoadmap: string
+    grpEnterpriseUnlocks: string
+    grpIntelFeedApi: string
+    grpEnterpriseSupport: string
+    newBadge: string
+  }
 }
 
 // Supported dictionary locales (JSON files that exist in /dictionaries)
-const DICTIONARY_LOCALES = ["de", "en", "es", "fr", "pt", "it", "ru", "zh", "ja", "ar"] as const
+const DICTIONARY_LOCALES = ["de", "en", "es", "fr", "pt", "it", "ru", "zh", "ja", "ar", "nl", "hi", "tr", "pl", "ko"] as const
 type DictionaryLocale = (typeof DICTIONARY_LOCALES)[number]
 
 const loaders: Record<DictionaryLocale, () => Promise<Dictionary>> = {
@@ -101,6 +244,11 @@ const loaders: Record<DictionaryLocale, () => Promise<Dictionary>> = {
   zh: () => import("@/dictionaries/zh.json").then((m) => m.default as unknown as Dictionary),
   ja: () => import("@/dictionaries/ja.json").then((m) => m.default as unknown as Dictionary),
   ar: () => import("@/dictionaries/ar.json").then((m) => m.default as unknown as Dictionary),
+  nl: () => import("@/dictionaries/nl.json").then((m) => m.default as unknown as Dictionary),
+  hi: () => import("@/dictionaries/hi.json").then((m) => m.default as unknown as Dictionary),
+  tr: () => import("@/dictionaries/tr.json").then((m) => m.default as unknown as Dictionary),
+  pl: () => import("@/dictionaries/pl.json").then((m) => m.default as unknown as Dictionary),
+  ko: () => import("@/dictionaries/ko.json").then((m) => m.default as unknown as Dictionary),
 }
 
 /** Returns the best available dictionary locale for the given locale. */

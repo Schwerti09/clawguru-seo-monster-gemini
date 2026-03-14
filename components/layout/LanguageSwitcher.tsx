@@ -1,14 +1,16 @@
 'use client'
 
 // NEXT-LEVEL UPGRADE 2026: Language Switcher with persistent cookie + URL prefix
-// Supports all 10 locales with proper flag/name display and RTL indication.
+// Supports all locales with proper flag/name display and RTL indication.
 
 import { useCallback } from "react"
-import { useRouter, usePathname } from "next/navigation"
+import { usePathname } from "next/navigation"
 import { Globe } from "lucide-react"
 import { SUPPORTED_LOCALES, type Locale, isRTL } from "@/lib/i18n"
 
-const LOCALE_META: Record<Locale, { flag: string; name: string; native: string }> = {
+type LocaleMeta = { flag: string; name: string; native: string }
+
+const LOCALE_META: Partial<Record<Locale, LocaleMeta>> = {
   de: { flag: "🇩🇪", name: "Deutsch", native: "Deutsch" },
   en: { flag: "🇺🇸", name: "English", native: "English" },
   es: { flag: "🇪🇸", name: "Spanish", native: "Español" },
@@ -19,6 +21,19 @@ const LOCALE_META: Record<Locale, { flag: string; name: string; native: string }
   zh: { flag: "🇨🇳", name: "Chinese", native: "中文" },
   ja: { flag: "🇯🇵", name: "Japanese", native: "日本語" },
   ar: { flag: "🇸🇦", name: "Arabic", native: "العربية" },
+  nl: { flag: "NL", name: "Dutch", native: "Nederlands" },
+  hi: { flag: "🇮🇳", name: "Hindi", native: "हिन्दी" },
+  tr: { flag: "TR", name: "Turkish", native: "Türkçe" },
+  pl: { flag: "🇵🇱", name: "Polish", native: "Polski" },
+  ko: { flag: "🇰🇷", name: "Korean", native: "한국어" },
+}
+
+function getLocaleMeta(locale: Locale): LocaleMeta {
+  return LOCALE_META[locale] ?? {
+    flag: "🌐",
+    name: locale.toUpperCase(),
+    native: locale.toUpperCase(),
+  }
 }
 
 interface LanguageSwitcherProps {
@@ -31,7 +46,6 @@ export default function LanguageSwitcher({
   currentLocale = "de",
   variant = "compact",
 }: LanguageSwitcherProps) {
-  const router = useRouter()
   const pathname = usePathname()
 
   const handleChange = useCallback(
@@ -47,18 +61,18 @@ export default function LanguageSwitcher({
       const hasLocalePrefix = SUPPORTED_LOCALES.includes(firstSegment)
 
       const restPath = hasLocalePrefix ? segments.slice(1).join("/") : segments.join("/")
-      const newPath = locale === "de" ? `/${restPath}` : `/${locale}${restPath ? "/" + restPath : ""}`
+      const newPath = `/${locale}${restPath ? "/" + restPath : ""}`
 
-      router.push(newPath)
+      window.location.assign(newPath)
     },
-    [currentLocale, pathname, router]
+    [currentLocale, pathname]
   )
 
   if (variant === "full") {
     return (
       <div className="grid grid-cols-5 gap-2">
         {SUPPORTED_LOCALES.map((locale) => {
-          const meta = LOCALE_META[locale]
+          const meta = getLocaleMeta(locale)
           const isActive = locale === currentLocale
           return (
             <button
@@ -88,14 +102,14 @@ export default function LanguageSwitcher({
     <div className="relative group">
       <button className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-gray-700 hover:border-gray-500 transition-colors text-gray-400 hover:text-gray-200">
         <Globe className="w-3.5 h-3.5" />
-        <span className="text-xs font-bold">{LOCALE_META[currentLocale].flag}</span>
+        <span className="text-xs font-bold">{getLocaleMeta(currentLocale).flag}</span>
         <span className="text-xs">{currentLocale.toUpperCase()}</span>
       </button>
 
       {/* Dropdown */}
       <div className="absolute right-0 top-full mt-1 w-48 rounded-xl border border-white/10 bg-black/90 backdrop-blur-xl shadow-xl opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-all duration-200 z-50 overflow-hidden">
         {SUPPORTED_LOCALES.map((locale) => {
-          const meta = LOCALE_META[locale]
+          const meta = getLocaleMeta(locale)
           const isActive = locale === currentLocale
           return (
             <button

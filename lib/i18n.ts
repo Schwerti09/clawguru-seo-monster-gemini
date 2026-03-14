@@ -1,11 +1,42 @@
 // WORLD BEAST: lib/i18n.ts
-// NEXT-LEVEL UPGRADE 2026: 10-language system with RTL support
-// de/en (primary) + es/fr/pt/it/ru/zh-CN/ja/ar
+// NEXT-LEVEL UPGRADE 2026: 14-language system with RTL support
+// de/en (primary) + es/fr/pt/it/ru/zh-CN/ja/ar/nl/hi/tr/pl/ko
 // Auto-detects language from URL prefix; Gemini auto-translates runbook metadata.
 
-export type Locale = "de" | "en" | "es" | "fr" | "pt" | "it" | "ru" | "zh" | "ja" | "ar"
+export type Locale =
+  | "de"
+  | "en"
+  | "es"
+  | "fr"
+  | "pt"
+  | "it"
+  | "ru"
+  | "zh"
+  | "ja"
+  | "ar"
+  | "nl"
+  | "hi"
+  | "tr"
+  | "pl"
+  | "ko"
 
-export const SUPPORTED_LOCALES: Locale[] = ["de", "en", "es", "fr", "pt", "it", "ru", "zh", "ja", "ar"]
+export const SUPPORTED_LOCALES: Locale[] = [
+  "de",
+  "en",
+  "es",
+  "fr",
+  "pt",
+  "it",
+  "ru",
+  "zh",
+  "ja",
+  "ar",
+  "nl",
+  "hi",
+  "tr",
+  "pl",
+  "ko",
+]
 export const DEFAULT_LOCALE: Locale = "de"
 
 // NEXT-LEVEL UPGRADE 2026: RTL locales
@@ -22,7 +53,7 @@ export function localeDir(locale: Locale): "rtl" | "ltr" {
 }
 
 /** Maps locale code to BCP-47 language tag for hreflang */
-export const LOCALE_HREFLANG: Record<Locale, string> = {
+export const LOCALE_HREFLANG: Partial<Record<Locale, string>> = {
   de: "de",
   en: "en",
   es: "es",
@@ -33,14 +64,69 @@ export const LOCALE_HREFLANG: Record<Locale, string> = {
   zh: "zh-CN",
   ja: "ja",
   ar: "ar",
+  nl: "nl-NL",
+  hi: "hi-IN",
+  tr: "tr",
+  pl: "pl-PL",
+  ko: "ko-KR",
+}
+
+export function getLocaleHrefLang(locale: Locale): string {
+  return LOCALE_HREFLANG[locale] ?? locale
+}
+
+export function isSupportedLocale(value: string): value is Locale {
+  return SUPPORTED_LOCALES.includes(value as Locale)
+}
+
+export function normalizeLocale(value: string | null | undefined): Locale {
+  const lower = (value ?? "").toLowerCase()
+  return isSupportedLocale(lower) ? lower : DEFAULT_LOCALE
+}
+
+export function stripLocalePrefix(pathname: string): string {
+  const normalized = pathname.startsWith("/") ? pathname : `/${pathname}`
+  const [first, ...rest] = normalized.split("/").filter(Boolean)
+  if (first && isSupportedLocale(first)) {
+    return `/${rest.join("/")}`.replace(/\/+$/, "") || "/"
+  }
+  return normalized.replace(/\/+$/, "") || "/"
+}
+
+export function localizePath(locale: Locale, pathname: string): string {
+  const base = stripLocalePrefix(pathname)
+  if (base === "/") return `/${locale}`
+  return `/${locale}${base.startsWith("/") ? base : `/${base}`}`
+}
+
+export function linkFor(locale: Locale, pathname: string): string {
+  return localizePath(locale, pathname)
+}
+
+export function localeAlternates(pathname: string): {
+  canonical: string
+  languages: Record<string, string>
+} {
+  const base = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
+  const canonicalPath = stripLocalePrefix(pathname)
+  const canonical = `${base}${localizePath(DEFAULT_LOCALE, canonicalPath)}`
+  const languages = Object.fromEntries(
+    SUPPORTED_LOCALES.map((locale) => [
+      getLocaleHrefLang(locale),
+      `${base}${localizePath(locale, canonicalPath)}`,
+    ])
+  ) as Record<string, string>
+  languages["x-default"] = `${base}${localizePath(DEFAULT_LOCALE, canonicalPath)}`
+
+  return { canonical, languages }
 }
 
 // ---------------------------------------------------------------------------
 // Locale UI strings
 // ---------------------------------------------------------------------------
 
-// NEXT-LEVEL UPGRADE 2026: Extended to 10 languages
-export const UI_STRINGS: Record<Locale, Record<string, string>> = {
+// NEXT-LEVEL UPGRADE 2026: Extended to 14 languages (fallback-friendly)
+export const LEGACY_UI_STRINGS: Partial<Record<Locale, Record<string, string>>> = {
   de: {
     runbooks: "Runbooks",
     providers: "Anbieter",
@@ -2105,10 +2191,6 @@ export const UI_STRINGS: Record<Locale, Record<string, string>> = {
 // Helpers
 // ---------------------------------------------------------------------------
 
-export function t(locale: Locale, key: string): string {
-  return UI_STRINGS[locale]?.[key] ?? UI_STRINGS[DEFAULT_LOCALE][key] ?? key
-}
-
 /** Detect locale from URL path segment (e.g. "/de/runbook/...") */
 export function localeFromPath(pathname: string): Locale {
   const seg = pathname.split("/").filter(Boolean)[0]?.toLowerCase() as Locale
@@ -2125,7 +2207,7 @@ export function hreflangAlternates(path: string): { hreflang: string; href: stri
   const base = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
   // NEXT-LEVEL UPGRADE 2026: Use proper BCP-47 hreflang tags for all 10 locales
   return SUPPORTED_LOCALES.map((locale) => ({
-    hreflang: LOCALE_HREFLANG[locale],
+    hreflang: getLocaleHrefLang(locale),
     href: `${base}/${locale}${path.startsWith("/") ? path : "/" + path}`,
   }))
 }
@@ -2156,7 +2238,7 @@ export async function translateRunbook(opts: {
     return { title, summary, locale: "de" }
   }
 
-  // NEXT-LEVEL UPGRADE 2026: All 10 locale names for Gemini translation
+  // NEXT-LEVEL UPGRADE 2026: All 14 locale names for Gemini translation
   const localeNames: Record<Locale, string> = {
     de: "German",
     en: "English",
@@ -2168,6 +2250,11 @@ export async function translateRunbook(opts: {
     zh: "Simplified Chinese",
     ja: "Japanese",
     ar: "Arabic",
+    nl: "Dutch",
+    hi: "Hindi",
+    tr: "Turkish",
+    pl: "Polish",
+    ko: "Korean",
   }
 
   const geminiKey = process.env.GEMINI_API_KEY

@@ -8,48 +8,63 @@ import { LogIn } from "lucide-react"
 import Container from "@/components/shared/Container"
 import LanguageSwitcher from "@/components/layout/LanguageSwitcher"
 import { usePathname } from "next/navigation"
-import { SUPPORTED_LOCALES, type Locale, t } from "@/lib/i18n"
+import { useI18n } from "@/components/i18n/I18nProvider"
+import { SUPPORTED_LOCALES, type Locale, localizePath } from "@/lib/i18n"
 
 type NavItem = { href: string; label: string }
 
 export default function Header() {
   const [moreOpen, setMoreOpen] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [hasAccess, setHasAccess] = useState(false)
+  const [promptVisible, setPromptVisible] = useState(false)
+  const [suggestedLocale, setSuggestedLocale] = useState<Locale | null>(null)
   const moreRef = useRef<HTMLDivElement>(null)
   const pathname = usePathname()
 
-  // NEXT-LEVEL UPGRADE 2026: Detect current locale from URL
-  const firstSegment = pathname.split("/").filter(Boolean)[0] as Locale
-  const currentLocale: Locale = SUPPORTED_LOCALES.includes(firstSegment) ? firstSegment : "de"
+  const { locale, dict } = useI18n()
+  const prefix = `/${locale}`
 
   // Primary nav items shown on desktop (max 6)
   const PRIMARY_NAV: NavItem[] = [
-    { href: "/live", label: t(currentLocale, "navLive") },
-    { href: "/check", label: t(currentLocale, "navSecurityCheck") },
-    { href: "/copilot", label: t(currentLocale, "navCopilot") },
-    { href: "/runbooks", label: t(currentLocale, "navRunbooks") },
-    { href: "/intel", label: t(currentLocale, "navIntelFeed") },
-    { href: "/pricing", label: t(currentLocale, "navPricing") },
+    { href: `${prefix}/live`, label: dict.nav.live },
+    { href: `${prefix}/check`, label: dict.nav.securityCheck },
+    { href: `${prefix}/copilot`, label: dict.nav.copilot },
+    { href: `${prefix}/runbooks`, label: dict.nav.runbooks },
+    { href: `${prefix}/intel`, label: dict.nav.intelFeed },
+    { href: `${prefix}/pricing`, label: dict.nav.pricing },
   ]
 
   // Overflow items – visible in "More" dropdown on desktop and in mobile menu
   const MORE_NAV: NavItem[] = [
-    { href: "/clawverse", label: t(currentLocale, "navClawVerse") },
-    { href: "/summon", label: t(currentLocale, "navSummon") },
-    { href: "/oracle", label: t(currentLocale, "navOracle") },
-    { href: "/neuro", label: t(currentLocale, "navNeuro") },
-    { href: "/mycelium", label: t(currentLocale, "navMycelium") },
-    { href: "/tags", label: t(currentLocale, "navTags") },
-    { href: "/academy", label: t(currentLocale, "navAcademy") },
-    { href: "/vault", label: t(currentLocale, "navVault") },
-    { href: "/openclaw-security-2026", label: t(currentLocale, "navReport") },
-    { href: "/downloads", label: t(currentLocale, "navDownloads") },
-    { href: "/case-studies", label: t(currentLocale, "navCases") },
-    { href: "/hosting-kosten", label: t(currentLocale, "navCosts") },
-    { href: "/ueber-uns", label: t(currentLocale, "navAbout") },
+    { href: `${prefix}/clawverse`, label: dict.nav.clawVerse },
+    { href: `${prefix}/summon`, label: dict.nav.summon },
+    { href: `${prefix}/oracle`, label: dict.nav.oracle },
+    { href: `${prefix}/neuro`, label: dict.nav.neuro },
+    { href: `${prefix}/mycelium`, label: dict.nav.mycelium },
+    { href: `${prefix}/tags`, label: dict.nav.tags },
+    { href: `${prefix}/academy`, label: dict.nav.academy },
+    { href: `${prefix}/vault`, label: dict.nav.vault },
+    { href: `${prefix}/openclaw-security-2026`, label: dict.nav.report },
+    { href: `${prefix}/downloads`, label: dict.nav.downloads },
+    { href: `${prefix}/case-studies`, label: dict.nav.cases },
+    { href: `${prefix}/hosting-kosten`, label: dict.nav.costs },
+    { href: `${prefix}/ueber-uns`, label: dict.nav.about },
   ]
 
   const ALL_NAV = [...PRIMARY_NAV, ...MORE_NAV]
+
+  const accountHref = hasAccess ? `${prefix}/dashboard` : `${prefix}/account`
+  const accountLabel = hasAccess ? "Dashboard" : "Zugang"
+
+  const switchLocale = useCallback(
+    (nextLocale: Locale) => {
+      document.cookie = `cg_locale=${nextLocale}; max-age=${60 * 60 * 24 * 365}; path=/; samesite=lax`
+      const nextPath = localizePath(nextLocale, pathname || "/")
+      window.location.assign(nextPath)
+    },
+    [pathname]
+  )
 
   // Close "More" dropdown on outside click
   useEffect(() => {
@@ -65,24 +80,87 @@ export default function Header() {
   // Close mobile menu on route change (simple approach)
   useEffect(() => {
     setMobileOpen(false)
-  }, [])
+  }, [pathname])
+
+  useEffect(() => {
+    if (typeof window === "undefined") return
+    if (!pathname) return
+
+    const dismissed = window.localStorage.getItem("cg_lang_prompt_dismissed") === "1"
+    if (dismissed) return
+
+    const firstSegment = pathname.split("/").filter(Boolean)[0]?.toLowerCase()
+    if (firstSegment && SUPPORTED_LOCALES.includes(firstSegment as Locale)) {
+      return
+    }
+
+    const browserCandidate =
+      window.navigator.languages?.[0] ??
+      window.navigator.language ??
+      ""
+
+    const browserLocale = browserCandidate.toLowerCase().split("-")[0] as Locale
+    if (!SUPPORTED_LOCALES.includes(browserLocale)) return
+    if (browserLocale === locale) return
+
+    setSuggestedLocale(browserLocale)
+    setPromptVisible(true)
+  }, [locale, pathname])
+
+  // Check auth/access status client-side
+  useEffect(() => {
+    let cancelled = false
+
+    async function checkAccess() {
+      try {
+        const res = await fetch("/api/auth/me", { cache: "no-store" })
+        if (!cancelled) {
+          setHasAccess(res.ok)
+        }
+      } catch {
+        if (!cancelled) {
+          setHasAccess(false)
+        }
+      }
+    }
+
+    checkAccess()
+    return () => {
+      cancelled = true
+    }
+  }, [pathname])
 
   // Compact header share: Web Share API → X intent fallback
   const handleHeaderShare = useCallback(() => {
     const url = typeof window !== "undefined" ? window.location.href : "https://clawguru.org"
-    const text = t(currentLocale, "shareMyceliumPost")
+    const text = dict.share.myceliumPost
     if (typeof navigator !== "undefined" && navigator.share) {
       navigator.share({ title: "ClawGuru · Mycelial Singularity Engine", text, url }).catch(() => {})
     } else {
       const xUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`
       window.open(xUrl, "_blank", "noopener,noreferrer")
     }
-  }, [currentLocale])
+  }, [dict.share.myceliumPost])
 
   const handleMobileShare = useCallback(() => {
     setMobileOpen(false)
     handleHeaderShare()
   }, [handleHeaderShare])
+
+  const handlePromptDismiss = useCallback(() => {
+    if (typeof window !== "undefined") {
+      window.localStorage.setItem("cg_lang_prompt_dismissed", "1")
+    }
+    setPromptVisible(false)
+  }, [])
+
+  const handlePromptSwitch = useCallback(() => {
+    if (!suggestedLocale) return
+    if (typeof window !== "undefined") {
+      window.localStorage.setItem("cg_lang_prompt_dismissed", "1")
+    }
+    switchLocale(suggestedLocale)
+  }, [suggestedLocale, switchLocale])
 
   return (
     <>
@@ -99,7 +177,7 @@ export default function Header() {
             }}
           >
             {/* Logo */}
-            <Link href="/" className="flex items-center gap-3 shrink-0" aria-label="ClawGuru – Startseite">
+            <Link href={prefix} className="flex items-center gap-3 shrink-0" aria-label="ClawGuru – Startseite">
               <div
                 className="w-9 h-9 rounded-xl flex items-center justify-center"
                 aria-hidden="true"
@@ -112,7 +190,9 @@ export default function Header() {
               </div>
               <div className="leading-tight">
                 <div className="font-black text-white tracking-tight">ClawGuru</div>
-                <div className="text-xs hidden sm:block" style={{ color: "rgba(212,175,55,0.7)" }}>Mycelial Singularity Engine v3.0</div>
+                <div className="text-xs hidden sm:block" style={{ color: "rgba(212,175,55,0.7)" }}>
+                  Mycelial Singularity Engine v3.0
+                </div>
               </div>
             </Link>
 
@@ -136,7 +216,7 @@ export default function Header() {
                   aria-expanded={moreOpen}
                   aria-haspopup="true"
                 >
-                  {t(currentLocale, "navMore")}
+                  {dict.nav.more}
                   <svg className={`w-3 h-3 transition-transform ${moreOpen ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
                   </svg>
@@ -172,8 +252,8 @@ export default function Header() {
               {/* Mycelium share button */}
               <button
                 onClick={handleHeaderShare}
-                title={t(currentLocale, "shareMyceliumBtn")}
-                aria-label={t(currentLocale, "shareMyceliumBtn")}
+                title={dict.share.myceliumBtn}
+                aria-label={dict.share.myceliumBtn}
                 className="hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-bold transition-all duration-200"
                 style={{
                   background: "rgba(255,200,0,0.08)",
@@ -182,15 +262,19 @@ export default function Header() {
                 }}
               >
                 <span aria-hidden>🍄</span>
-                <span className="hidden md:inline text-xs font-mono tracking-wide">{t(currentLocale, "shareMyceliumXBtn")}</span>
+                <span className="hidden md:inline text-xs font-mono tracking-wide">
+                  {dict.share.myceliumXBtn}
+                </span>
               </button>
+
               {/* Language switcher */}
-              <div className="hidden sm:block">
-                <LanguageSwitcher currentLocale={currentLocale} variant="compact" />
+              <div className="block">
+                <LanguageSwitcher currentLocale={locale} variant="compact" />
               </div>
-              {/* Login button */}
+
+              {/* Access / Dashboard button */}
               <Link
-                href={`/${currentLocale}/account`}
+                href={accountHref}
                 className="hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-xl font-bold text-sm transition-all duration-200 hover:brightness-110"
                 style={{
                   background: "linear-gradient(135deg, #d4af37 0%, #e8cc6a 50%, #a8872a 100%)",
@@ -199,17 +283,19 @@ export default function Header() {
                 }}
               >
                 <LogIn className="w-4 h-4" aria-hidden="true" />
-                <span>{t(currentLocale, "navLogin")}</span>
+                <span>{accountLabel}</span>
               </Link>
+
               <Link
-                href="/security/notfall-leitfaden"
+                href={`${prefix}/emergency`}
                 className="hidden sm:block px-3 py-2 rounded-xl font-black text-sm transition-all duration-200"
                 style={{ background: "rgba(239,68,68,0.15)", border: "1px solid rgba(239,68,68,0.25)", color: "#f87171" }}
               >
-                {t(currentLocale, "navEmergency")}
+                {dict.nav.emergency}
               </Link>
+
               <Link
-                href="/pricing"
+                href={`${prefix}/pricing`}
                 className="hidden sm:block px-4 py-2 rounded-xl font-black text-sm transition-all duration-200"
                 style={{
                   background: "linear-gradient(135deg, #d4af37 0%, #e8cc6a 50%, #a8872a 100%)",
@@ -217,7 +303,7 @@ export default function Header() {
                   boxShadow: "0 0 16px rgba(212,175,55,0.25)",
                 }}
               >
-                {t(currentLocale, "navProKits")}
+                {dict.nav.proKits}
               </Link>
 
               {/* Hamburger button (mobile only) */}
@@ -241,6 +327,31 @@ export default function Header() {
         </Container>
       </header>
 
+      {promptVisible && suggestedLocale && (
+        <div className="fixed top-24 left-1/2 -translate-x-1/2 z-40 w-[calc(100%-1.5rem)] max-w-xl rounded-2xl border border-[#d4af37]/25 bg-black/85 backdrop-blur-xl p-3 sm:p-4">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
+            <div className="text-sm text-gray-200">
+              We detected <span className="font-bold">{suggestedLocale.toUpperCase()}</span>. Switch language?
+            </div>
+            <div className="ml-auto flex items-center gap-2">
+              <button
+                onClick={handlePromptDismiss}
+                className="px-3 py-1.5 rounded-lg border border-white/15 text-xs text-gray-300 hover:text-white"
+              >
+                Stay here
+              </button>
+              <button
+                onClick={handlePromptSwitch}
+                className="px-3 py-1.5 rounded-lg text-xs font-bold text-black"
+                style={{ background: "linear-gradient(135deg, #d4af37, #e8cc6a, #a8872a)" }}
+              >
+                Switch
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Mobile slide-in menu */}
       {mobileOpen && (
         <div
@@ -250,6 +361,7 @@ export default function Header() {
           style={{ background: "rgba(0,0,0,0.4)", backdropFilter: "blur(4px)" }}
         />
       )}
+
       <div
         className={`fixed top-0 right-0 h-full w-72 z-50 lg:hidden transform transition-transform duration-300 ease-in-out ${
           mobileOpen ? "translate-x-0" : "translate-x-full"
@@ -267,6 +379,10 @@ export default function Header() {
         aria-label="Mobile Menü"
       >
         <nav aria-label="Mobilnavigation" className="px-4 space-y-0.5">
+          <div className="pb-3">
+            <LanguageSwitcher currentLocale={locale} variant="full" />
+          </div>
+
           {ALL_NAV.map((item) => (
             <Link
               key={item.href}
@@ -277,6 +393,7 @@ export default function Header() {
               {item.label}
             </Link>
           ))}
+
           <div className="pt-4 flex flex-col gap-2">
             {/* Mycelium share button (mobile) */}
             <button
@@ -284,18 +401,20 @@ export default function Header() {
               className="block w-full px-4 py-3 rounded-xl font-bold text-sm text-center"
               style={{ background: "rgba(255,200,0,0.08)", border: "1px solid rgba(255,200,0,0.18)", color: "#ffc800" }}
             >
-              🍄 {t(currentLocale, "shareMyceliumBtn")}
+              🍄 {dict.share.myceliumBtn}
             </button>
+
             <Link
-              href="/security/notfall-leitfaden"
+              href={`${prefix}/emergency`}
               className="block px-4 py-3 rounded-xl font-black text-sm text-center"
               style={{ background: "rgba(239,68,68,0.15)", border: "1px solid rgba(239,68,68,0.25)", color: "#f87171" }}
               onClick={() => setMobileOpen(false)}
             >
-              {t(currentLocale, "navEmergency")}
+              {dict.nav.emergency}
             </Link>
+
             <Link
-              href={`/${currentLocale}/account`}
+              href={accountHref}
               className="block px-4 py-3 rounded-xl font-bold text-sm text-center flex items-center justify-center gap-2"
               style={{
                 background: "linear-gradient(135deg, #d4af37 0%, #e8cc6a 50%, #a8872a 100%)",
@@ -305,15 +424,16 @@ export default function Header() {
               onClick={() => setMobileOpen(false)}
             >
               <LogIn className="w-4 h-4" aria-hidden="true" />
-              {t(currentLocale, "navLogin")}
+              {accountLabel}
             </Link>
+
             <Link
-              href="/pricing"
+              href={`${prefix}/pricing`}
               className="block px-4 py-3 rounded-xl font-black text-sm text-center text-black"
               style={{ background: "linear-gradient(135deg, #d4af37, #e8cc6a, #a8872a)" }}
               onClick={() => setMobileOpen(false)}
             >
-              {t(currentLocale, "navProKits")}
+              {dict.nav.proKits}
             </Link>
           </div>
         </nav>
@@ -321,4 +441,3 @@ export default function Header() {
     </>
   )
 }
-

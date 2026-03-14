@@ -1,7 +1,8 @@
 import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
-import { allIssues100k, CLOUD_PROVIDERS_100K, SERVICES_100K, YEARS_100K } from "@/lib/pseo"
 import { BASE_URL } from "@/lib/config"
+import { headers } from "next/headers"
+import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
 
 export const dynamic = "force-static"
 
@@ -12,7 +13,11 @@ export const metadata = {
   alternates: { canonical: "/issues" },
 }
 
-export default function IssuesPage() {
+export default async function IssuesPage() {
+  const { allIssues100k, CLOUD_PROVIDERS_100K, SERVICES_100K, YEARS_100K } = await import("@/lib/pseo")
+  const h = headers()
+  const locale = (h.get("x-claw-locale") ?? DEFAULT_LOCALE) as Locale
+  const prefix = `/${locale}`
   const issues = allIssues100k()
   const totalPerIssue =
     (CLOUD_PROVIDERS_100K as unknown as unknown[]).length *
@@ -25,12 +30,12 @@ export default function IssuesPage() {
     name: "ClawGuru Issue Hub Index",
     description: "Alle Security & Ops Issue-Typen mit vollständiger Provider × Service × Year Runbook-Matrix.",
     numberOfItems: issues.length,
-    url: `${BASE_URL}/issues`,
+    url: `${BASE_URL}${prefix}/issues`,
     itemListElement: issues.map((issue, i) => ({
       "@type": "ListItem",
       position: i + 1,
       name: issue.name,
-      url: `${BASE_URL}/issue/${issue.slug}`,
+      url: `${BASE_URL}${prefix}/issue/${issue.slug}`,
     })),
   }
 
@@ -40,7 +45,7 @@ export default function IssuesPage() {
       <div className="py-16 max-w-6xl mx-auto">
         <nav className="text-sm text-gray-500 mb-6" aria-label="Breadcrumb">
           <ol className="flex flex-wrap items-center gap-2">
-            <li><a href="/" className="hover:text-cyan-400">ClawGuru</a></li>
+            <li><a href={prefix} className="hover:text-cyan-400">ClawGuru</a></li>
             <li>/</li>
             <li className="text-gray-300">Issues</li>
           </ol>
@@ -56,7 +61,7 @@ export default function IssuesPage() {
           {issues.map((issue) => (
             <a
               key={issue.slug}
-              href={`/issue/${issue.slug}`}
+              href={`${prefix}/issue/${issue.slug}`}
               className="p-6 rounded-3xl border border-gray-800 bg-black/25 hover:bg-black/35 transition-colors"
             >
               <div className="text-xs uppercase tracking-widest text-gray-500">Issue Hub</div>
@@ -71,9 +76,9 @@ export default function IssuesPage() {
 
         <div className="mt-12 text-sm text-gray-500">
           Mehr:{" "}
-          <a className="hover:text-cyan-400" href="/services">Service Hubs</a> ·{" "}
-          <a className="hover:text-cyan-400" href="/years">Year Hubs</a> ·{" "}
-          <a className="hover:text-cyan-400" href="/runbooks">Runbook Library</a>
+          <a className="hover:text-cyan-400" href={`${prefix}/services`}>Service Hubs</a> ·{" "}
+          <a className="hover:text-cyan-400" href={`${prefix}/years`}>Year Hubs</a> ·{" "}
+          <a className="hover:text-cyan-400" href={`${prefix}/runbooks`}>Runbook Library</a>
         </div>
       </div>
     </Container>

@@ -6,7 +6,6 @@ import { NextResponse } from "next/server"
 import { cookies } from "next/headers"
 import { adminCookieName, verifyAdminToken } from "@/lib/admin-auth"
 import { stripe } from "@/lib/stripe"
-import { totalSitemapUrls } from "@/lib/pseo"
 import { AFFILIATE_REDIRECTS } from "@/lib/constants"
 
 export const runtime = "nodejs"
@@ -72,7 +71,8 @@ async function fetchRevenue() {
 // ---------------------------------------------------------------------------
 // SEO index tracker
 // ---------------------------------------------------------------------------
-function seoIndexData() {
+async function seoIndexData() {
+  const { totalSitemapUrls } = await import("@/lib/pseo")
   const total = totalSitemapUrls()
   const target = 100_000
   return {
@@ -133,7 +133,7 @@ export async function GET() {
   return NextResponse.json({
     generatedAt: new Date().toISOString(),
     revenue: stripeData,
-    seo: seoIndexData(),
+    seo: await seoIndexData(),
     affiliates: affiliateData(),
     system: {
       geminiStatus,

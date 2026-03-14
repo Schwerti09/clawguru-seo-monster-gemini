@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import Container from "@/components/shared/Container"
+import { useI18n } from "@/components/i18n/I18nProvider"
 
 type SavedCheck = { url: string; score: number; savedAt: string }
 type RunbookEntry = { title: string; slug: string; visitedAt: string }
@@ -9,6 +10,8 @@ type RunbookEntry = { title: string; slug: string; visitedAt: string }
 const MAX_DAYPASS_CHECKS = 5
 
 export default function AccountPage({ email }: { email: string }) {
+  const { locale } = useI18n()
+  const prefix = `/${locale}`
   const [savedChecks, setSavedChecks] = useState<SavedCheck[]>([])
   const [runbookHistory, setRunbookHistory] = useState<RunbookEntry[]>([])
 
@@ -92,7 +95,7 @@ export default function AccountPage({ email }: { email: string }) {
                 <span>Du hast das Limit von <strong className="text-white">{MAX_DAYPASS_CHECKS} Saved Checks</strong> erreicht (Day Pass).</span>
               </div>
               <a
-                href="/pricing#pro"
+                href={`${prefix}/pricing#pro`}
                 className="shrink-0 px-4 py-1.5 rounded-xl font-black text-xs text-black transition-opacity hover:opacity-90 whitespace-nowrap"
                 style={{ background: "linear-gradient(135deg,#a78bfa 0%,#00ff9d 100%)" }}
               >
@@ -148,7 +151,7 @@ export default function AccountPage({ email }: { email: string }) {
               <div className="min-w-0">
                 <div className="font-black text-sm text-white mb-0.5">Private Nodes</div>
                 <div className="text-xs text-gray-400 mb-3">Erstelle private Runbook-Forks, die nur du siehst.</div>
-                <a href="/pricing#pro" className="text-xs font-bold text-[#a78bfa] hover:underline underline-offset-2">
+                <a href={`${prefix}/pricing#pro`} className="text-xs font-bold text-[#a78bfa] hover:underline underline-offset-2">
                   Upgrade to Pro →
                 </a>
               </div>
@@ -161,7 +164,7 @@ export default function AccountPage({ email }: { email: string }) {
               <div className="min-w-0">
                 <div className="font-black text-sm text-white mb-0.5">Darwinian Feed</div>
                 <div className="text-xs text-gray-400 mb-3">Dein personalisierter Security-Intelligence-Feed.</div>
-                <a href="/pricing#pro" className="text-xs font-bold text-[#a78bfa] hover:underline underline-offset-2">
+                <a href={`${prefix}/pricing#pro`} className="text-xs font-bold text-[#a78bfa] hover:underline underline-offset-2">
                   Upgrade to Pro →
                 </a>
               </div>
@@ -181,7 +184,7 @@ export default function AccountPage({ email }: { email: string }) {
               {runbookHistory.slice(0, 20).map((r, i) => (
                 <a
                   key={i}
-                  href={`/de/runbook/${r.slug}`}
+                  href={`${prefix}/runbook/${r.slug}`}
                   className="flex items-center justify-between p-3 rounded-xl border border-gray-800
                              bg-black/30 hover:border-gray-600 transition-colors"
                 >

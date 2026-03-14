@@ -7,9 +7,11 @@ import { notFound } from "next/navigation"
 import Container from "@/components/shared/Container"
 import { getServiceCheck, SERVICE_CHECKS } from "@/lib/cve-pseo"
 import { BASE_URL } from "@/lib/config"
+import { headers } from "next/headers"
+import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
 
 interface Props {
-  params: Promise<{ service_name: string }>
+  params: { service_name: string }
 }
 
 export const revalidate = 60 // 60s ISR
@@ -20,14 +22,17 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
-  const params = await props.params;
+  const params = props.params
   const slug = decodeURIComponent(params.service_name).toLowerCase()
   const entry = getServiceCheck(slug)
   if (!entry) return {}
+  const h = headers()
+  const locale = (h.get("x-claw-locale") ?? DEFAULT_LOCALE) as Locale
+
   return {
     title: `${entry.name} Security Check – Tools & Commands | ClawGuru`,
     description: `${entry.description} Check commands, common vulnerabilities, hardening tips, and related CVEs for ${entry.name}.`,
-    alternates: { canonical: `/tools/check-${entry.slug}` },
+    alternates: { canonical: `/${locale}/tools/check-${entry.slug}` },
     openGraph: {
       title: `${entry.name} Security Check | ClawGuru`,
       description: `Security check and hardening guide for ${entry.name} with copy-paste commands.`,
@@ -37,18 +42,21 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 }
 
 export default async function ServiceCheckPage(props: Props) {
-  const params = await props.params;
+  const params = props.params
   const slug = decodeURIComponent(params.service_name).toLowerCase()
   const entry = getServiceCheck(slug)
   if (!entry) return notFound()
+  const h = headers()
+  const locale = (h.get("x-claw-locale") ?? DEFAULT_LOCALE) as Locale
+  const prefix = `/${locale}`
 
   const breadcrumbLd = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "ClawGuru", item: BASE_URL },
-      { "@type": "ListItem", position: 2, name: "Tools", item: `${BASE_URL}/tools` },
-      { "@type": "ListItem", position: 3, name: `Check ${entry.name}`, item: `${BASE_URL}/tools/check-${entry.slug}` },
+      { "@type": "ListItem", position: 1, name: "ClawGuru", item: `${BASE_URL}${prefix}` },
+      { "@type": "ListItem", position: 2, name: "Tools", item: `${BASE_URL}${prefix}/tools` },
+      { "@type": "ListItem", position: 3, name: `Check ${entry.name}`, item: `${BASE_URL}${prefix}/tools/check-${entry.slug}` },
     ],
   }
 
@@ -57,7 +65,7 @@ export default async function ServiceCheckPage(props: Props) {
     "@type": "HowTo",
     name: `How to check ${entry.name} security`,
     description: entry.description,
-    url: `${BASE_URL}/tools/check-${entry.slug}`,
+    url: `${BASE_URL}${prefix}/tools/check-${entry.slug}`,
     step: entry.checkCommands.map((cmd, i) => ({
       "@type": "HowToStep",
       position: i + 1,
@@ -98,9 +106,9 @@ export default async function ServiceCheckPage(props: Props) {
         {/* Breadcrumb */}
         <nav className="text-sm text-gray-500 mb-6" aria-label="Breadcrumb">
           <ol className="flex flex-wrap items-center gap-2">
-            <li><a href="/" className="hover:text-cyan-400">ClawGuru</a></li>
+            <li><a href={prefix} className="hover:text-cyan-400">ClawGuru</a></li>
             <li>/</li>
-            <li><a href="/tools" className="hover:text-cyan-400">Tools</a></li>
+            <li><a href={`${prefix}/tools`} className="hover:text-cyan-400">Tools</a></li>
             <li>/</li>
             <li className="text-gray-300">check-{entry.slug}</li>
           </ol>
@@ -190,7 +198,7 @@ export default async function ServiceCheckPage(props: Props) {
               {entry.relatedCves.map((cveId) => (
                 <a
                   key={cveId}
-                  href={`/solutions/fix-${cveId}`}
+                  href={`${prefix}/solutions/fix-${cveId}`}
                   className="px-4 py-2.5 rounded-2xl border border-red-500/30 bg-red-500/10 text-red-400 text-sm font-black hover:border-red-500/60 hover:text-red-300 transition-colors"
                 >
                   {cveId} →
@@ -217,20 +225,20 @@ export default async function ServiceCheckPage(props: Props) {
         {/* CTA row */}
         <div className="mt-10 flex flex-wrap gap-3">
           <a
-            href="/check"
+            href={`${prefix}/check`}
             className="px-6 py-3 rounded-2xl font-black text-black transition-all duration-300 hover:opacity-90"
             style={{ background: "linear-gradient(135deg, #00ff9d, #00b8ff)" }}
           >
             Run Full Security Check →
           </a>
           <a
-            href="/runbooks"
+            href={`${prefix}/runbooks`}
             className="px-6 py-3 rounded-2xl border border-gray-700 hover:border-gray-500 font-bold text-gray-200 transition-colors"
           >
             View Runbooks →
           </a>
           <a
-            href="/solutions"
+            href={`${prefix}/solutions`}
             className="px-6 py-3 rounded-2xl border border-gray-700 hover:border-gray-500 font-bold text-gray-200 transition-colors"
           >
             CVE Solutions →
@@ -244,7 +252,7 @@ export default async function ServiceCheckPage(props: Props) {
             {SERVICE_CHECKS.filter((s) => s.slug !== entry.slug).map((s) => (
               <a
                 key={s.slug}
-                href={`/tools/check-${s.slug}`}
+                href={`${prefix}/tools/check-${s.slug}`}
                 className="px-3 py-1.5 rounded-xl border border-gray-800 bg-black/25 text-xs text-gray-400 hover:border-cyan-500/40 hover:text-cyan-400 transition-colors"
               >
                 {s.name}

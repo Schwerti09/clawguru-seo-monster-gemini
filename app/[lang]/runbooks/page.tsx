@@ -3,6 +3,7 @@
 
 import { SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
 import RunbooksPageContent from "@/components/pages/RunbooksPageContent"
+import { getDictionary } from "@/lib/getDictionary"
 
 export const revalidate = 60
 
@@ -10,8 +11,8 @@ export async function generateStaticParams() {
   return SUPPORTED_LOCALES.map((lang) => ({ lang }))
 }
 
-export async function generateMetadata(props: { params: Promise<{ lang: string }> }) {
-  const params = await props.params;
+export async function generateMetadata(props: { params: { lang: string } }) {
+  const params = props.params
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   return {
     title: "Runbooks | ClawGuru",
@@ -21,8 +22,9 @@ export async function generateMetadata(props: { params: Promise<{ lang: string }
   }
 }
 
-export default async function LocaleRunbooksPage(props: { params: Promise<{ lang: string }> }) {
-  const params = await props.params;
+export default async function LocaleRunbooksPage(props: { params: { lang: string } }) {
+  const params = props.params
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
-  return <RunbooksPageContent locale={locale} />
+  const dict = await getDictionary(locale)
+  return <RunbooksPageContent locale={locale} subtitle={dict.runbooks.subtitle} />
 }

@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useState } from "react"
+import { useI18n } from "@/components/i18n/I18nProvider"
 
 type LivePayload = {
   updatedAt: string
@@ -22,6 +23,8 @@ function fmtTime(iso: string) {
 }
 
 export default function OpsWall() {
+  const { locale } = useI18n()
+  const prefix = `/${locale}`
   const [data, setData] = useState<LivePayload | null>(null)
   const [err, setErr] = useState<string | null>(null)
   const [q, setQ] = useState("")
@@ -49,8 +52,8 @@ export default function OpsWall() {
     const base = incident.trim()
       ? `Ich habe ein Incident-Symptom: ${incident.trim()}. Gib mir ein Runbook mit Steps + Checks.`
       : `Ich will eine Härtungs-Session: gib mir ein Runbook für sichere Defaults (Firewall, SSH, Secrets, Webhooks).`
-    return `/copilot?q=${encodeURIComponent(base)}`
-  }, [incident])
+    return `${prefix}/copilot?q=${encodeURIComponent(base)}`
+  }, [incident, prefix])
 
   return (
     <div className="space-y-6">
@@ -103,7 +106,7 @@ export default function OpsWall() {
                   className="flex-1 px-4 py-3 rounded-2xl bg-black/40 border border-gray-700 text-white placeholder-gray-500 focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all"
                 />
                 <a
-                  href={`/runbooks?q=${encodeURIComponent(q.trim())}`}
+                  href={`${prefix}/runbooks?q=${encodeURIComponent(q.trim())}`}
                   className="px-4 py-3 rounded-2xl bg-gray-900 hover:bg-gray-800 border border-gray-700 font-bold"
                 >
                   Go
@@ -127,7 +130,7 @@ export default function OpsWall() {
                   Copilot öffnen →
                 </a>
                 <a
-                  href="/check"
+                  href={`${prefix}/check`}
                   className="px-4 py-2 rounded-xl border border-gray-700 hover:border-gray-500 font-bold text-gray-200 transition-colors"
                 >
                   Score prüfen
@@ -144,7 +147,7 @@ export default function OpsWall() {
         <div className="p-6 rounded-3xl border border-gray-800 bg-black/30">
           <div className="flex items-center justify-between mb-4">
             <div className="text-lg font-black">Trending Fixes</div>
-            <a href="/runbooks" className="text-sm text-cyan-300 hover:text-cyan-200 underline">
+            <a href={`${prefix}/runbooks`} className="text-sm text-cyan-300 hover:text-cyan-200 underline">
               alle Runbooks →
             </a>
           </div>
@@ -153,7 +156,7 @@ export default function OpsWall() {
             {(data?.trending || []).map((t) => (
               <a
                 key={t.slug}
-                href={`/runbook/${t.slug}`}
+                href={`${prefix}/runbook/${t.slug}`}
                 className="block p-4 rounded-2xl border border-gray-800 bg-black/20 hover:bg-black/30 transition-colors"
               >
                 <div className="font-bold text-gray-100">{t.title}</div>
@@ -177,7 +180,7 @@ export default function OpsWall() {
               {(data?.topTags || []).slice(0, 12).map((t) => (
                 <a
                   key={t.name}
-                  href={`/tag/${encodeURIComponent(t.name)}`}
+                  href={`${prefix}/tag/${encodeURIComponent(t.name)}`}
                   className="px-3 py-2 rounded-2xl border border-gray-800 bg-black/20 hover:bg-black/30 transition-colors flex items-center justify-between"
                 >
                   <span className="text-sm font-bold">{t.name}</span>
@@ -219,13 +222,13 @@ export default function OpsWall() {
           Das Ziel ist nicht “Content”. Das Ziel ist Rückkehr: Score → Runbook → Fix → Re-Check → Share → Team-Workflow.
         </p>
         <div className="mt-4 flex flex-wrap gap-3">
-          <a href="/check" className="px-5 py-3 rounded-2xl bg-cyan-600 hover:bg-cyan-700 font-bold text-white">
+          <a href={`${prefix}/check`} className="px-5 py-3 rounded-2xl bg-cyan-600 hover:bg-cyan-700 font-bold text-white">
             Security-Check
           </a>
-          <a href="/copilot" className="px-5 py-3 rounded-2xl border border-gray-700 hover:border-gray-500 font-bold text-gray-200">
+          <a href={`${prefix}/copilot`} className="px-5 py-3 rounded-2xl border border-gray-700 hover:border-gray-500 font-bold text-gray-200">
             Copilot
           </a>
-          <a href="/pricing" className="px-5 py-3 rounded-2xl border border-gray-700 hover:border-gray-500 font-bold text-gray-200">
+          <a href={`${prefix}/pricing`} className="px-5 py-3 rounded-2xl border border-gray-700 hover:border-gray-500 font-bold text-gray-200">
             Pro / Team
           </a>
         </div>

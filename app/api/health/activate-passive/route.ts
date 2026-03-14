@@ -4,7 +4,6 @@
 
 import { NextResponse } from "next/server"
 import { getAccess } from "@/lib/access"
-import { checkSiteHealth, autoHeal } from "@/lib/selfhealth"
 import { calculateDailyRevenue, generateDailyReport } from "@/lib/passive"
 import { sendEmail } from "@/lib/email"
 
@@ -19,6 +18,7 @@ export async function POST() {
   }
 
   try {
+    const { checkSiteHealth, autoHeal } = await import("@/lib/selfhealth")
     // FULL PASSIVE WELTMACHT: run all passive-mode tasks in parallel
     const [report, healResult, revenue] = await Promise.all([
       checkSiteHealth({ skipRemote: false }),

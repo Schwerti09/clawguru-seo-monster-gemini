@@ -8,7 +8,7 @@ import { RUNBOOKS } from "@/lib/pseo"
 import type { SeverityLevel } from "@/lib/design-system"
 import type { RunbookSummary } from "@/components/shared/RunbooksSearch"
 import { BASE_URL } from "@/lib/config"
-import { type Locale, t, DEFAULT_LOCALE } from "@/lib/i18n"
+import type { Locale } from "@/lib/i18n"
 
 // VISUAL UPGRADE 2026: Derive severity from runbook tags
 function deriveSeverity(tags: string[]): SeverityLevel {
@@ -26,7 +26,13 @@ function deriveReadiness(r: typeof RUNBOOKS[number]): number {
   return Math.min(95, 50 + steps * 8)
 }
 
-export default function RunbooksPageContent({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
+export default function RunbooksPageContent({
+  locale,
+  subtitle,
+}: {
+  locale: Locale
+  subtitle: string
+}) {
   const items: RunbookSummary[] = [...RUNBOOKS]
     .sort((a, b) => a.title.localeCompare(b.title))
     .map((r) => ({
@@ -48,7 +54,7 @@ export default function RunbooksPageContent({ locale = DEFAULT_LOCALE }: { local
     itemListElement: top20.map((r, i) => ({
       "@type": "ListItem",
       position: i + 1,
-      url: `${BASE_URL}/runbook/${r.slug}`,
+      url: `${BASE_URL}/${locale}/runbook/${r.slug}`,
       name: r.title,
     })),
   }
@@ -60,7 +66,7 @@ export default function RunbooksPageContent({ locale = DEFAULT_LOCALE }: { local
         <SectionTitle
           kicker="Programmatic SEO"
           title="Runbook Library"
-          subtitle={t(locale, "runbooksSubtitle")}
+          subtitle={subtitle}
         />
         <RunbooksSearch items={items} />
       </div>

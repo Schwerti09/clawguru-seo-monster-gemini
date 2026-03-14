@@ -1,182 +1,100 @@
-// TEMPORAL MYCELIUM v3.1 – Overlord AI
-// Localized temporal search page: /[lang]/runbook/[slug]/temporal?version=2025-Q3
-// Shows the runbook as it existed at a specific point in time.
+// Localized temporal runbook pages: /de/runbook/[slug]/temporal, etc.
 
+// Relative Imports – korrekt für app/[lang]/runbook/[slug]/temporal/page.tsx
+import Container from "../../../../../components/shared/Container"
+import { getRunbook, RUNBOOKS } from "../../../../../lib/pseo"
+import { validateRunbook } from "../../../../../lib/quality-gate"
+import { getTemporalHistory, findVersionByQuarter } from "../../../../../lib/temporal-mycelium"
 import { notFound } from "next/navigation"
-import Container from "@/components/shared/Container"
-import { getRunbook } from "@/lib/pseo"
-import { validateRunbook } from "@/lib/quality-gate"
-import { getTemporalHistory, findVersionByQuarter } from "@/lib/temporal-mycelium"
-import { type Locale, SUPPORTED_LOCALES } from "@/lib/i18n"
-import TemporalTimeline from "@/components/visual/TemporalTimeline"
-import { BASE_URL } from "@/lib/config"
+import { type Locale, SUPPORTED_LOCALES } from "../../../../../lib/i18n"
 
 export const revalidate = 60
 export const dynamicParams = true
 
-export async function generateMetadata(
-  props: {
-    params: Promise<{ lang: string; slug: string }>
-    searchParams: Promise<{ version?: string }>
-  }
-) {
-  const searchParams = await props.searchParams;
-  const params = await props.params;
-  const r = getRunbook(params.slug)
-  if (!r) return {}
-  const version = searchParams.version ?? "aktuell"
+export async function generateStaticParams() {
+  return SUPPORTED_LOCALES.flatMap((lang) =>
+    RUNBOOKS.map((r) => ({ lang, slug: r.slug }))
+  )
+}
+
+export async function generateMetadata(props: {
+  params: { lang: string; slug: string }
+}) {
+  const { slug, lang } = props.params
+  const locale = (SUPPORTED_LOCALES.includes(lang as Locale) ? lang : "de") as Locale
+
   return {
-    title: `${r.title} – Temporal View (${version}) | ClawGuru`,
-    description: `Zeitreise: ${r.title} in Version ${version}. The Mycelium remembers every lesson.`,
-    alternates: { canonical: `/${params.lang}/runbook/${r.slug}/temporal` },
+    title: `Temporal History | ClawGuru Runbooks`,
+    description: "Zeitliche Entwicklung und Versionsgeschichte des Runbooks",
+    alternates: { canonical: `/${locale}/runbook/${slug}/temporal` },
   }
 }
 
-export default async function LocalizedTemporalPage(
-  props: {
-    params: Promise<{ lang: string; slug: string }>
-    searchParams: Promise<{ version?: string }>
-  }
-) {
-  const searchParams = await props.searchParams;
-  const params = await props.params;
-  const locale: Locale = SUPPORTED_LOCALES.includes(params.lang as Locale)
-    ? (params.lang as Locale)
-    : "de"
+export default async function LocaleTemporalRunbookPage(props: {
+  params: { lang: string; slug: string }
+}) {
+  const { slug, lang } = props.params
+  void ((SUPPORTED_LOCALES.includes(lang as Locale) ? lang : "de") as Locale)
 
-  const r = getRunbook(params.slug)
-  if (!r) return notFound()
+  const runbook = getRunbook(slug)
+  if (!runbook) notFound()
 
-  const quality = validateRunbook(r)
-  if (!quality.pass) return notFound()
+  const history = getTemporalHistory(runbook)
+  const currentQuarter = `${new Date().getFullYear()}-Q${Math.floor(new Date().getMonth() / 3) + 1}`
+  const currentVersion = findVersionByQuarter(history, currentQuarter)
 
-  const history = getTemporalHistory(r)
-  const requestedVersion = searchParams.version ?? null
-  const pinnedVersion = requestedVersion
-    ? findVersionByQuarter(history, requestedVersion)
-    : history.versions[history.versions.length - 1]
+  const validationResult = validateRunbook(runbook)
 
   return (
     <Container>
-      <div className="py-16 max-w-4xl mx-auto">
-        {/* TEMPORAL MYCELIUM v3.1 – Overlord AI: Breadcrumb */}
-        <nav className="text-sm text-gray-500 mb-6" aria-label="Breadcrumb">
-          <ol className="flex flex-wrap items-center gap-2">
-            <li>
-              <a href="/" className="hover:text-cyan-400">ClawGuru</a>
-            </li>
-            <li>/</li>
-            <li>
-              <a href="/runbooks" className="hover:text-cyan-400">Runbooks</a>
-            </li>
-            <li>/</li>
-            <li>
-              <a href={`/${locale}/runbook/${r.slug}`} className="hover:text-cyan-400">{r.title}</a>
-            </li>
-            <li>/</li>
-            <li className="text-gray-300">Temporal View</li>
-          </ol>
-        </nav>
+      <div className="py-16 max-w-5xl mx-auto">
+        <h1 className="text-4xl font-black text-center">Temporal History: {runbook.title}</h1>
+        <p className="mt-6 text-center text-xl text-gray-400">
+          Versionsgeschichte und zeitliche Entwicklung (Stand: {currentQuarter})
+        </p>
 
-        {/* TEMPORAL MYCELIUM v3.1 – Overlord AI: Page header */}
-        <div className="mb-8 p-6 rounded-3xl border border-violet-500/20 bg-violet-500/5">
-          <div className="flex items-center gap-3 mb-3">
-            <span className="text-2xl">🍄</span>
-            <h1 className="text-2xl font-black text-gray-100">
-              Temporal Mycelium
-            </h1>
-            <span className="px-2 py-1 rounded-lg border border-violet-500/40 bg-violet-500/10 text-xs font-black text-violet-300">
-              v3.1
-            </span>
-          </div>
-          <p className="text-gray-400 text-sm leading-relaxed">
-            <span className="font-bold text-gray-200">{r.title}</span> –
-            Das Mycelium hat die Zeitachse dieses Runbooks rekonstruiert.{" "}
-            <span className="text-violet-300">
-              {history.totalEvolutions} Evolutionen seit Erstellung.
-            </span>
+        {/* Aktuelle Version */}
+        <div className="mt-8 p-6 rounded-3xl border border-gray-800 bg-black/20">
+          <h2 className="text-2xl font-bold mb-4">Aktuelle Version</h2>
+          <p className="text-gray-300">
+            {currentVersion
+              ? `${currentVersion.label} – ${currentVersion.mutationReason || "Keine Beschreibung"}`
+              : "Keine aktuelle Version gefunden"}
           </p>
-
-          {/* TEMPORAL MYCELIUM v3.1 – Overlord AI: Pinned version highlight */}
-          {requestedVersion && (
-            <div className="mt-4 p-4 rounded-2xl border border-cyan-500/30 bg-cyan-500/5">
-              <div className="text-xs font-black text-cyan-400 uppercase tracking-widest mb-1">
-                🔍 Temporal Search – Angeforderte Version
-              </div>
-              <div className="text-sm text-gray-200">
-                <span className="font-mono text-cyan-300">{requestedVersion}</span>
-                {" – "}
-                {pinnedVersion.label}
-              </div>
-              <div className="text-xs text-gray-400 mt-1">{pinnedVersion.mutationReason}</div>
-            </div>
-          )}
         </div>
 
-        {/* TEMPORAL MYCELIUM v3.1 – Overlord AI: Quick version links */}
-        <div className="mb-6">
-          <div className="text-xs text-gray-500 mb-2 font-black uppercase tracking-widest">
-            Temporal Search – Version auswählen:
-          </div>
-          <div className="flex flex-wrap gap-2">
-            {history.versions.map((v) => (
-              <a
-                key={v.quarter}
-                href={`/${locale}/runbook/${r.slug}/temporal?version=${v.quarter}`}
-                className={`px-3 py-1.5 rounded-xl border text-xs font-mono transition-colors ${
-                  pinnedVersion.quarter === v.quarter
-                    ? "border-cyan-500/60 bg-cyan-500/10 text-cyan-300"
-                    : "border-gray-800 bg-black/20 text-gray-400 hover:border-gray-700"
+        {/* Validierungs-Status */}
+        <div className="mt-8 p-6 rounded-3xl border border-gray-800 bg-black/30">
+          <h2 className="text-2xl font-bold mb-4">Qualitäts-Check</h2>
+          <p className={validationResult.pass ? "text-green-400" : "text-red-400"}>
+            {validationResult.pass
+              ? "Runbook ist gültig"
+              : `Probleme: ${
+                  validationResult.violations
+                    ?.filter((v) => v.severity === "error")
+                    .map((v) => v.message)
+                    .join(", ") || "Unbekannte Validierungsfehler"
                 }`}
-              >
-                {v.quarter}
-              </a>
-            ))}
-            <a
-              href={`/${locale}/runbook/${r.slug}`}
-              className="px-3 py-1.5 rounded-xl border border-gray-800 bg-black/20 text-xs text-gray-400 hover:border-gray-700 transition-colors"
-            >
-              ← Zurück zum Runbook
-            </a>
-          </div>
-        </div>
-
-        {/* TEMPORAL MYCELIUM v3.1 – Overlord AI: Full interactive timeline */}
-        <TemporalTimeline history={history} slug={r.slug} />
-
-        {/* TEMPORAL MYCELIUM v3.1 – Overlord AI: Backward propagation indicator */}
-        <div className="mt-10 p-5 rounded-3xl border border-violet-500/15 bg-black/20">
-          <div className="text-xs font-black text-violet-400 uppercase tracking-widest mb-2">
-            ⚗ Backward Propagation Engine
-          </div>
-          <p className="text-xs text-gray-400 leading-relaxed">
-            Wenn ein neuer Runbook mit einem Claw Score &gt; 97 entsteht,
-            prüft das Mycelium automatisch alle historischen Runbooks desselben
-            Providers und Services. Betroffene werden als{" "}
-            <span className="text-violet-300 font-bold">Temporal Fork</span> markiert
-            und durch Quality Gate 2.0 veredelt.{" "}
-            <span className="text-gray-300">
-              &bdquo;The Mycelium has rewritten history.&rdquo;
-            </span>
           </p>
         </div>
 
-        {/* TEMPORAL MYCELIUM v3.1 – Overlord AI: Schema.org breadcrumb for SEO */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "BreadcrumbList",
-              itemListElement: [
-                { "@type": "ListItem", position: 1, name: "ClawGuru", item: BASE_URL },
-                { "@type": "ListItem", position: 2, name: "Runbooks", item: `${BASE_URL}/runbooks` },
-                { "@type": "ListItem", position: 3, name: r.title, item: `${BASE_URL}/${locale}/runbook/${r.slug}` },
-                { "@type": "ListItem", position: 4, name: "Temporal View", item: `${BASE_URL}/${locale}/runbook/${r.slug}/temporal` },
-              ],
-            }),
-          }}
-        />
+        {/* Versions-Timeline */}
+        <div className="mt-12">
+          <h2 className="text-3xl font-bold mb-6">Versions-History</h2>
+          <div className="space-y-6">
+            {history.versions.map((version) => (
+              <div
+                key={version.quarter}
+                className="p-6 rounded-3xl border border-gray-800 bg-black/20"
+              >
+                <div className="text-xl font-bold">{version.quarter}</div>
+                <p className="mt-2 text-gray-300">
+                  {version.mutationReason || "Keine Änderungen dokumentiert"}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </Container>
   )

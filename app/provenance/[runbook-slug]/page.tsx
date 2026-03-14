@@ -20,10 +20,10 @@ export async function generateStaticParams() {
 
 export async function generateMetadata(
   props: {
-    params: Promise<{ "runbook-slug": string }>
+    params: { "runbook-slug": string }
   }
 ) {
-  const params = await props.params;
+  const params = props.params
   const r = getRunbook(params["runbook-slug"])
   if (!r) return {}
   return {
@@ -45,10 +45,10 @@ function SignatureCountBadge({ count }: { count: number }) {
 
 export default async function ProvenancePage(
   props: {
-    params: Promise<{ "runbook-slug": string }>
+    params: { "runbook-slug": string }
   }
 ) {
-  const params = await props.params;
+  const params = props.params
   const r = getRunbook(params["runbook-slug"])
   if (!r) return notFound()
 

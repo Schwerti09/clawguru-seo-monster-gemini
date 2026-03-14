@@ -3,7 +3,6 @@
 // Returns aggregate pass-rate, top violations, badge counts, and provider heatmap.
 
 import { NextResponse } from "next/server"
-import { RUNBOOKS } from "@/lib/pseo"
 import {
   computeProviderHeatmap,
   validateRunbook,
@@ -14,6 +13,7 @@ export const dynamic = "force-dynamic"
 export const runtime = "nodejs"
 
 export async function GET() {
+  const { RUNBOOKS } = await import("@/lib/pseo")
   // Validate all runbooks once; derive all stats from the single pass
   const reports = RUNBOOKS.map((r) => validateRunbook(r, DEFAULT_THRESHOLDS))
   const passed = reports.filter((r) => r.pass).length

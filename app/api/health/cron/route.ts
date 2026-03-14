@@ -4,7 +4,6 @@
 // FULL PASSIVE WELTMACHT: runs autoHeal + sends daily passive-income summary email.
 
 import { NextRequest, NextResponse } from "next/server"
-import { checkSiteHealth, autoHeal } from "@/lib/selfhealth"
 import { calculateDailyRevenue, generateDailyReport } from "@/lib/passive"
 import { sendEmail } from "@/lib/email"
 
@@ -24,6 +23,7 @@ export async function GET(req: NextRequest) {
   const alertEmail = process.env.HEALTH_ALERT_EMAIL || undefined
 
   try {
+    const { checkSiteHealth, autoHeal } = await import("@/lib/selfhealth")
     // FULL PASSIVE WELTMACHT: run health check + auto-heal in parallel
     const [report, healResult, revenue] = await Promise.all([
       checkSiteHealth({ alertEmail }),

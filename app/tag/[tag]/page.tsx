@@ -1,31 +1,41 @@
 import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
-import { allTags, runbooksByTag, topRunbooksByTag } from "@/lib/pseo"
 import { notFound } from "next/navigation"
 import { BASE_URL } from "@/lib/config"
+import { headers } from "next/headers"
+import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
 
 export const revalidate = 60
 export const dynamicParams = true
+export const dynamic = "force-dynamic"
 
 export async function generateStaticParams() {
   // pre-render a slice of tags
+  const { allTags } = await import("@/lib/pseo")
   return allTags().slice(0, 200).map((t) => ({ tag: t }))
 }
 
-export async function generateMetadata(props: { params: Promise<{ tag: string }> }) {
-  const params = await props.params;
+export async function generateMetadata(props: { params: { tag: string } }) {
+  const params = props.params
+  const { runbooksByTag } = await import("@/lib/pseo")
+  const h = headers()
+  const locale = (h.get("x-claw-locale") ?? DEFAULT_LOCALE) as Locale
   const tag = decodeURIComponent(params.tag)
   const items = runbooksByTag(tag)
   if (!items.length) return {}
   return {
     title: `${tag} Runbooks | ClawGuru Tag-Hub`,
     description: `${items.length} Runbooks f\u00fcr den Tag \u201e${tag}\u201c. Ops, Security und Debugging-Guides \u2013 schnell findbar.`,
-    alternates: { canonical: `/tag/${encodeURIComponent(tag)}` }
+    alternates: { canonical: `/${locale}/tag/${encodeURIComponent(tag)}` }
   }
 }
 
-export default async function TagPage(props: { params: Promise<{ tag: string }> }) {
-  const params = await props.params;
+export default async function TagPage(props: { params: { tag: string } }) {
+  const params = props.params
+  const { runbooksByTag, topRunbooksByTag } = await import("@/lib/pseo")
+  const h = headers()
+  const locale = (h.get("x-claw-locale") ?? DEFAULT_LOCALE) as Locale
+  const prefix = `/${locale}`
   const tag = decodeURIComponent(params.tag)
   const items = runbooksByTag(tag)
   if (!items.length) return notFound()
@@ -36,9 +46,9 @@ export default async function TagPage(props: { params: Promise<{ tag: string }> 
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "ClawGuru", item: BASE_URL },
-      { "@type": "ListItem", position: 2, name: "Tags", item: `${BASE_URL}/tags` },
-      { "@type": "ListItem", position: 3, name: tag, item: `${BASE_URL}/tag/${encodeURIComponent(tag)}` },
+      { "@type": "ListItem", position: 1, name: "ClawGuru", item: `${BASE_URL}/${locale}` },
+      { "@type": "ListItem", position: 2, name: "Tags", item: `${BASE_URL}/${locale}/tags` },
+      { "@type": "ListItem", position: 3, name: tag, item: `${BASE_URL}/${locale}/tag/${encodeURIComponent(tag)}` },
     ],
   }
 
@@ -51,7 +61,7 @@ export default async function TagPage(props: { params: Promise<{ tag: string }> 
     itemListElement: top10.map((r, i) => ({
       "@type": "ListItem",
       position: i + 1,
-      url: `${BASE_URL}/runbook/${r.slug}`,
+      url: `${BASE_URL}/${locale}/runbook/${r.slug}`,
       name: r.title,
     })),
   }
@@ -63,9 +73,9 @@ export default async function TagPage(props: { params: Promise<{ tag: string }> 
       <div className="py-16 max-w-6xl mx-auto">
         <nav className="text-sm text-gray-500 mb-6" aria-label="Breadcrumb">
           <ol className="flex flex-wrap items-center gap-2">
-            <li><a href="/" className="hover:text-cyan-400">ClawGuru</a></li>
+            <li><a href={`${prefix}`} className="hover:text-cyan-400">ClawGuru</a></li>
             <li>/</li>
-            <li><a href="/tags" className="hover:text-cyan-400">Tags</a></li>
+            <li><a href={`${prefix}/tags`} className="hover:text-cyan-400">Tags</a></li>
             <li>/</li>
             <li className="text-gray-300">{tag}</li>
           </ol>
@@ -84,7 +94,7 @@ export default async function TagPage(props: { params: Promise<{ tag: string }> 
               {top10.map((r, i) => (
                 <a
                   key={r.slug}
-                  href={`/runbook/${r.slug}`}
+                  href={`${prefix}/runbook/${r.slug}`}
                   className="p-4 rounded-2xl border border-gray-800 bg-black/30 hover:bg-black/40 transition-colors flex items-start gap-3"
                 >
                   <span className="text-lg font-black text-gray-600 w-6 shrink-0">{i + 1}</span>
@@ -107,7 +117,7 @@ export default async function TagPage(props: { params: Promise<{ tag: string }> 
           {items.slice(0, 120).map((r) => (
             <a
               key={r.slug}
-              href={`/runbook/${r.slug}`}
+              href={`${prefix}/runbook/${r.slug}`}
               className="p-6 rounded-3xl border border-gray-800 bg-black/25 hover:bg-black/35 transition-colors"
             >
               <div className="text-lg font-black">{r.title}</div>

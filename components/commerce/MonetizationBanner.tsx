@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useI18n } from "@/components/i18n/I18nProvider"
 
 /**
  * MonetizationBanner – Dynamic FOMO overlay for high-traffic pages.
@@ -9,6 +10,8 @@ import { useEffect, useState } from "react"
  * Automatically hides after dismissal (stored in sessionStorage).
  */
 export default function MonetizationBanner() {
+  const { locale } = useI18n()
+  const prefix = `/${locale}`
   const [visible, setVisible] = useState(false)
 
   useEffect(() => {
@@ -38,7 +41,7 @@ export default function MonetizationBanner() {
             </p>
             <div className="mt-3 flex flex-wrap gap-3">
               <a
-                href="/pricing"
+                href={`${prefix}/pricing`}
                 className="inline-flex items-center gap-2 px-5 py-2 rounded-xl font-black text-sm bg-gradient-to-r from-brand-cyan to-brand-violet hover:opacity-90 text-white"
               >
                 Grab the Deal →

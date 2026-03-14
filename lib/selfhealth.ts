@@ -31,19 +31,16 @@ export type SiteHealthReport = {
 // Config
 // ---------------------------------------------------------------------------
 
-const SITEMAP_NAMES = [
-  "main",
-  "providers",
-  "runbooks-a-f",
-  "runbooks-g-l",
-  "runbooks-m-r",
-  "runbooks-s-z",
-  "runbooks-0-9",
-  "tags-a-f",
-  "tags-g-l",
-  "tags-m-r",
-  "tags-s-z",
-  "tags-0-9",
+const SITEMAP_PATHS = [
+  "/sitemaps/main.xml",
+  "/sitemaps/providers.xml",
+  "/sitemaps/issues.xml",
+  "/sitemaps/services.xml",
+  "/sitemaps/years.xml",
+  "/sitemaps/tools-check.xml",
+  "/sitemaps/solutions-cve.xml",
+  "/sitemaps/runbooks-a-f.xml",
+  "/sitemaps/tags-a-f.xml",
 ] as const
 
 const CRITICAL_PAGES = [
@@ -122,18 +119,18 @@ export async function checkSitemaps(): Promise<HealthCheck[]> {
   })
 
   // Check each named sub-sitemap
-  for (const name of SITEMAP_NAMES) {
-    const url = `${b}/sitemaps/${name}.xml`
+  for (const path of SITEMAP_PATHS) {
+    const url = `${b}${path}`
     const res = await fetchWithTimeout(url)
     const hasUrlset = res.body.includes("<urlset") || res.body.includes("<sitemapindex")
     results.push({
-      name: `sitemap:${name}`,
+      name: `sitemap:${path}`,
       status: res.ok && hasUrlset ? "ok"
         : res.ok ? "warn"
         : "fail",
       message: res.ok
-        ? hasUrlset ? `${name}.xml OK` : `${name}.xml reachable but missing <urlset>`
-        : `${name}.xml unreachable (HTTP ${res.status})`,
+        ? hasUrlset ? `${path} OK` : `${path} reachable but missing <urlset>`
+        : `${path} unreachable (HTTP ${res.status})`,
       detail: res.ok ? undefined : res.body.slice(0, 200),
     })
   }

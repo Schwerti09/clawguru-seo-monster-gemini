@@ -3,6 +3,7 @@
 // Shown after exactly 3 security checks. Displays personalized Claw Score + upsell CTA.
 
 import { useEffect, useState } from "react"
+import { useI18n } from "@/components/i18n/I18nProvider"
 
 const UPSELL_SHOWN_KEY = "cg_upsell_shown"
 
@@ -11,6 +12,8 @@ type Props = {
 }
 
 export default function UpsellModal({ score }: Props) {
+  const { locale } = useI18n()
+  const prefix = `/${locale}`
   const [open, setOpen] = useState(false)
 
   useEffect(() => {
@@ -79,14 +82,14 @@ export default function UpsellModal({ score }: Props) {
         {/* CTAs */}
         <div className="flex flex-col sm:flex-row gap-3">
           <a
-            href="/pricing"
+            href={`${prefix}/pricing`}
             onClick={handleCTA}
             className="flex-1 text-center px-6 py-3 rounded-2xl font-black bg-gradient-to-r from-brand-cyan to-brand-violet hover:opacity-90 transition-opacity"
           >
             Jetzt freischalten →
           </a>
           <a
-            href="/pricing?product=daypass"
+            href={`${prefix}/pricing?product=daypass`}
             onClick={handleCTA}
             className="flex-1 text-center px-6 py-3 rounded-2xl border border-gray-700 hover:border-gray-500 font-bold text-gray-200 transition-colors"
           >

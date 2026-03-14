@@ -58,8 +58,8 @@ async function getTopCve(): Promise<UpstreamCVE> {
   return top
 }
 
-export async function GET(req: NextRequest, props: { params: Promise<{ partnerId: string }> }) {
-  const params = await props.params;
+export async function GET(req: NextRequest, props: { params: { partnerId: string } }) {
+  const params = props.params;
   const { searchParams } = new URL(req.url)
   const partnerId = params.partnerId || "partner"
   const partnerKey = partnerId.toLowerCase()

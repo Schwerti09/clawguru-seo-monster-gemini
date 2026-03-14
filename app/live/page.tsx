@@ -1,10 +1,11 @@
-import { cookies } from "next/headers"
 import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
 import OpsWall from "@/components/live/OpsWall"
 import LoginSaveBanner from "@/components/shared/LoginSaveBanner"
 import MyceliumShareCard from "@/components/share/MyceliumShareCard"
-import { SUPPORTED_LOCALES, type Locale, t } from "@/lib/i18n"
+import { headers } from "next/headers"
+import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
+import { getDictionary } from "@/lib/getDictionary"
 
 export const metadata = {
   title: "Live Ops Wall | ClawGuru",
@@ -14,17 +15,18 @@ export const metadata = {
 }
 
 export default async function LivePage() {
-  const cookieStore = await cookies()
-  const localeCookie = cookieStore.get("cg_locale")?.value
-  const locale: Locale = SUPPORTED_LOCALES.includes(localeCookie as Locale) ? (localeCookie as Locale) : "de"
+  const h = headers()
+  const locale = (h.get("x-claw-locale") ?? DEFAULT_LOCALE) as Locale
+  const dict = await getDictionary(locale)
+  const prefix = `/${locale}`
 
   return (
     <Container>
       <div className="py-16 max-w-6xl mx-auto">
         <SectionTitle
           kicker="LIVE"
-          title={t(locale, "liveTitle")}
-          subtitle={t(locale, "liveSubtitle")}
+          title={dict.live.title}
+          subtitle={dict.live.subtitle}
         />
         <div className="mt-10">
           <LoginSaveBanner />
@@ -34,7 +36,7 @@ export default async function LivePage() {
           <MyceliumShareCard
             locale={locale}
             title="Live Ops Wall · ClawGuru"
-            pageUrl="/live"
+            pageUrl={`${prefix}/live`}
             className="max-w-2xl"
           />
         </div>

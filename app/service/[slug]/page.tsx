@@ -1,25 +1,21 @@
 import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
-import {
-  allServices100k,
-  getSampleSlugsByService,
-  getRunbook,
-  CLOUD_PROVIDERS_100K,
-  ISSUES_100K,
-  YEARS_100K,
-} from "@/lib/pseo"
 import { notFound } from "next/navigation"
 import { BASE_URL } from "@/lib/config"
+import { headers } from "next/headers"
+import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
 
 export const revalidate = 60
 export const dynamicParams = true
 
 export async function generateStaticParams() {
+  const { allServices100k } = await import("@/lib/pseo")
   return allServices100k().map((s) => ({ slug: s.slug }))
 }
 
-export async function generateMetadata(props: { params: Promise<{ slug: string }> }) {
-  const params = await props.params;
+export async function generateMetadata(props: { params: { slug: string } }) {
+  const params = props.params;
+  const { allServices100k, CLOUD_PROVIDERS_100K, ISSUES_100K, YEARS_100K } = await import("@/lib/pseo")
   const service = allServices100k().find((s) => s.slug === params.slug)
   if (!service) return {}
   const totalPerService =
@@ -38,10 +34,14 @@ export async function generateMetadata(props: { params: Promise<{ slug: string }
   }
 }
 
-export default async function ServiceHubPage(props: { params: Promise<{ slug: string }> }) {
-  const params = await props.params;
+export default async function ServiceHubPage(props: { params: { slug: string } }) {
+  const params = props.params;
+  const { allServices100k, getSampleSlugsByService, getRunbook, CLOUD_PROVIDERS_100K, ISSUES_100K, YEARS_100K } = await import("@/lib/pseo")
   const service = allServices100k().find((s) => s.slug === params.slug)
   if (!service) return notFound()
+  const h = headers()
+  const locale = (h.get("x-claw-locale") ?? DEFAULT_LOCALE) as Locale
+  const prefix = `/${locale}`
 
   const sampleSlugs = getSampleSlugsByService(service.slug, 48)
   const samples = sampleSlugs.map((s) => getRunbook(s)).filter(Boolean) as NonNullable<ReturnType<typeof getRunbook>>[]
@@ -55,9 +55,9 @@ export default async function ServiceHubPage(props: { params: Promise<{ slug: st
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "ClawGuru", item: BASE_URL },
-      { "@type": "ListItem", position: 2, name: "Services", item: `${BASE_URL}/services` },
-      { "@type": "ListItem", position: 3, name: service.name, item: `${BASE_URL}/service/${service.slug}` },
+      { "@type": "ListItem", position: 1, name: "ClawGuru", item: `${BASE_URL}${prefix}` },
+      { "@type": "ListItem", position: 2, name: "Services", item: `${BASE_URL}${prefix}/services` },
+      { "@type": "ListItem", position: 3, name: service.name, item: `${BASE_URL}${prefix}/service/${service.slug}` },
     ],
   }
 
@@ -70,7 +70,7 @@ export default async function ServiceHubPage(props: { params: Promise<{ slug: st
     itemListElement: samples.slice(0, 10).map((r, i) => ({
       "@type": "ListItem",
       position: i + 1,
-      url: `${BASE_URL}/runbook/${r.slug}`,
+      url: `${BASE_URL}${prefix}/runbook/${r.slug}`,
       name: r.title,
     })),
   }
@@ -82,9 +82,9 @@ export default async function ServiceHubPage(props: { params: Promise<{ slug: st
       <div className="py-16 max-w-6xl mx-auto">
         <nav className="text-sm text-gray-500 mb-6" aria-label="Breadcrumb">
           <ol className="flex flex-wrap items-center gap-2">
-            <li><a href="/" className="hover:text-cyan-400">ClawGuru</a></li>
+            <li><a href={prefix} className="hover:text-cyan-400">ClawGuru</a></li>
             <li>/</li>
-            <li><a href="/services" className="hover:text-cyan-400">Services</a></li>
+            <li><a href={`${prefix}/services`} className="hover:text-cyan-400">Services</a></li>
             <li>/</li>
             <li className="text-gray-300">{service.name}</li>
           </ol>
@@ -104,7 +104,7 @@ export default async function ServiceHubPage(props: { params: Promise<{ slug: st
           {samples.map((r) => (
             <a
               key={r.slug}
-              href={`/runbook/${r.slug}`}
+              href={`${prefix}/runbook/${r.slug}`}
               className="p-6 rounded-3xl border border-gray-800 bg-black/25 hover:bg-black/35 transition-colors"
             >
               <div className="text-xs uppercase tracking-widest text-gray-500">Runbook</div>
@@ -122,9 +122,9 @@ export default async function ServiceHubPage(props: { params: Promise<{ slug: st
         </div>
 
         <div className="mt-12 text-sm text-gray-500">
-          <a href="/services" className="hover:text-cyan-400">← Alle Services</a> ·{" "}
-          <a href="/issues" className="hover:text-cyan-400">Issue Hubs</a> ·{" "}
-          <a href="/runbooks" className="hover:text-cyan-400">Runbook Library</a>
+          <a href={`${prefix}/services`} className="hover:text-cyan-400">← Alle Services</a> ·{" "}
+          <a href={`${prefix}/issues`} className="hover:text-cyan-400">Issue Hubs</a> ·{" "}
+          <a href={`${prefix}/runbooks`} className="hover:text-cyan-400">Runbook Library</a>
         </div>
       </div>
     </Container>

@@ -10,9 +10,10 @@ export default async function SuccessPage(
     searchParams?: Promise<Record<string, string | string[] | undefined>>
   }
 ) {
-  const searchParams = await props.searchParams;
+  const searchParams = props.searchParams;
   const session_id = typeof searchParams?.session_id === "string" ? searchParams?.session_id : ""
   if (!session_id) {
+    console.warn("[success] missing session_id")
     return (
       <Container>
         <div className="py-16 max-w-3xl mx-auto">
@@ -40,7 +41,11 @@ export default async function SuccessPage(
     email = session.customer_details?.email || null
     product = (session.metadata?.product as string) || null
     mode = session.mode || null
-  } catch {
+  } catch (err) {
+    console.error("[success] stripe checkout.sessions.retrieve failed", {
+      sessionId: session_id,
+      err: err instanceof Error ? err.message : String(err),
+    })
     ok = false
   }
 

@@ -1,6 +1,7 @@
 import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
-import { allProviders, runbooksByProvider } from "@/lib/pseo"
+import { headers } from "next/headers"
+import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
 
 export const revalidate = 60
 
@@ -10,7 +11,11 @@ export const metadata = {
   alternates: { canonical: "/providers" }
 }
 
-export default function ProvidersPage() {
+export default async function ProvidersPage() {
+  const { allProviders, runbooksByProvider } = await import("@/lib/pseo")
+  const h = headers()
+  const locale = (h.get("x-claw-locale") ?? DEFAULT_LOCALE) as Locale
+  const prefix = `/${locale}`
   const providers = allProviders()
   return (
     <Container>
@@ -27,7 +32,7 @@ export default function ProvidersPage() {
             return (
               <a
                 key={p.slug}
-                href={`/provider/${p.slug}`}
+                href={`${prefix}/provider/${p.slug}`}
                 className="p-6 rounded-3xl border border-gray-800 bg-black/25 hover:bg-black/35 transition-colors"
               >
                 <div className="text-sm text-gray-500">Provider</div>

@@ -31,9 +31,9 @@ export async function GET(req: Request) {
   const protocol = host.startsWith("localhost") ? "http" : "https"
   const base = `${protocol}://${host}`
 
-  const [indexResult, mainResult] = await Promise.all([
+  const [indexResult, runbooksResult] = await Promise.all([
     checkUrl(`${base}/sitemap.xml`, "<sitemapindex"),
-    checkUrl(`${base}/sitemaps/main.xml`, "<urlset"),
+    checkUrl(`${base}/sitemaps/runbooks-a-f.xml`, "<urlset"),
   ])
 
   // Verify index lists at least one child sitemap
@@ -52,8 +52,8 @@ export async function GET(req: Request) {
   const allPassed =
     indexResult.ok &&
     indexResult.containsExpected &&
-    mainResult.ok &&
-    mainResult.containsExpected &&
+    runbooksResult.ok &&
+    runbooksResult.containsExpected &&
     indexListsChildSitemap
 
   return NextResponse.json(
@@ -64,9 +64,9 @@ export async function GET(req: Request) {
           ...indexResult,
           description: "/sitemap.xml must return <sitemapindex>",
         },
-        mainUrlset: {
-          ...mainResult,
-          description: "/sitemaps/main.xml must return <urlset>",
+        runbooksUrlset: {
+          ...runbooksResult,
+          description: "/sitemaps/runbooks-a-f.xml must return <urlset>",
         },
         indexListsChild: {
           ok: indexListsChildSitemap,

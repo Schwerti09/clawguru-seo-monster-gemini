@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 export default async function Account(props: {
   searchParams?: Promise<Record<string, string | string[] | undefined>>
 }) {
-  const searchParams = await props.searchParams
+  const searchParams = props.searchParams
   const jar = await cookies()
   const token = jar.get(USER_SESSION_COOKIE)?.value
   const session = token ? verifySessionToken(token) : null

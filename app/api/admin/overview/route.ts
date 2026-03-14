@@ -2,7 +2,6 @@ import { NextResponse } from "next/server"
 import { cookies } from "next/headers"
 import { adminCookieName, verifyAdminToken } from "@/lib/admin-auth"
 import { stripe } from "@/lib/stripe"
-import { totalSitemapUrls } from "@/lib/pseo"
 
 export const runtime = "nodejs"
 
@@ -77,6 +76,7 @@ export async function GET() {
     }
   }
 
+  const { totalSitemapUrls } = await import("@/lib/pseo")
   const total = totalSitemapUrls()
 
   const parseEnvInt = (key: string, fallback: number) => {

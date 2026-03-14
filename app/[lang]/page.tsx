@@ -1,7 +1,8 @@
 // Locale home pages: /en, /es, /fr, /pt, /it, /ru, /zh, /ja, /ar
 // Renders the same main page with locale-aware dictionary so content is translated.
 
-import { SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
+import { SUPPORTED_LOCALES, localeAlternates, normalizeLocale, getLocaleHrefLang } from "@/lib/i18n"
+
 import { getDictionary } from "@/lib/getDictionary"
 import Home from "@/app/page"
 
@@ -11,17 +12,24 @@ export async function generateStaticParams() {
   return SUPPORTED_LOCALES.map((lang) => ({ lang }))
 }
 
-export async function generateMetadata(props: { params: Promise<{ lang: string }> }) {
-  const params = await props.params;
-  const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
+export async function generateMetadata(props: { params: { lang: string } }) {
+  const locale = normalizeLocale(props.params.lang)
+  const alternates = localeAlternates("/")
+  const localeHrefLang = getLocaleHrefLang(locale)
+  const canonical = alternates.languages[localeHrefLang] ?? alternates.canonical
+
   return {
-    alternates: { canonical: `/${locale}` },
+    alternates: {
+      canonical,
+      languages: alternates.languages,
+    },
   }
 }
 
-export default async function LocaleHomePage(props: { params: Promise<{ lang: string }> }) {
-  const params = await props.params;
-  const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
+export default async function LocaleHomePage(props: { params: { lang: string } }) {
+  const locale = normalizeLocale(props.params.lang)
+
   const dict = await getDictionary(locale)
-  return <Home dict={dict} />
+
+  return <Home dict={dict} locale={locale} />
 }

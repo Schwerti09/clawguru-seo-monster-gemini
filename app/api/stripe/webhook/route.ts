@@ -4,6 +4,8 @@ import { stripe } from "@/lib/stripe"
 import { signAccessToken, AccessPlan } from "@/lib/access-token"
 import { sendEmail } from "@/lib/email"
 import { buildSocialProofEventFromStripe, recordSocialProofEvent } from "@/lib/social-proof"
+import { logTelemetry } from "@/lib/ops/telemetry"
+import { getRequestId } from "@/lib/ops/request-id"
 
 export const runtime = "nodejs"
 
@@ -331,21 +333,52 @@ async function sendAccessEmail(session: Stripe.Checkout.Session) {
 }
 
 export async function POST(req: NextRequest) {
+  const requestId = getRequestId(req.headers)
+  const startedAt = Date.now()
+  logTelemetry("stripe.webhook.request", { requestId })
+
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET
   if (!webhookSecret) {
+    logTelemetry("stripe.webhook.error", {
+      requestId,
+      reason: "missing_webhook_secret",
+    })
     return NextResponse.json({ error: "Missing STRIPE_WEBHOOK_SECRET" }, { status: 500 })
   }
 
   const sig = req.headers.get("stripe-signature")
-  if (!sig) return NextResponse.json({ error: "Missing stripe-signature" }, { status: 400 })
+  if (!sig) {
+    logTelemetry("stripe.webhook.error", {
+      requestId,
+      reason: "missing_signature",
+    })
+    return NextResponse.json({ error: "Missing stripe-signature" }, { status: 400 })
+  }
 
-  let event: Stripe.Event
+  let event: Stripe.Event | undefined
   try {
     const raw = await readRawBody(req)
     event = stripe.webhooks.constructEvent(raw, sig, webhookSecret)
   } catch {
+    logTelemetry("stripe.webhook.error", {
+      requestId,
+      reason: "invalid_signature",
+    })
     return NextResponse.json({ error: "Invalid signature" }, { status: 400 })
   }
+
+  if (!event) {
+    logTelemetry("stripe.webhook.error", {
+      requestId,
+      reason: "missing_event",
+    })
+    return NextResponse.json({ error: "Invalid event" }, { status: 400 })
+  }
+
+  logTelemetry("stripe.webhook.event", {
+    requestId,
+    eventType: event.type,
+  })
 
   try {
     if (event.type === "checkout.session.completed") {
@@ -390,9 +423,20 @@ export async function POST(req: NextRequest) {
       await handleSubscriptionDeleted(subscription)
     }
 
+    logTelemetry("stripe.webhook.success", {
+      requestId,
+      eventType: event.type,
+      durationMs: Date.now() - startedAt,
+    })
     return NextResponse.json({ received: true })
   } catch (err) {
     console.error("[stripe/webhook] Unhandled error processing event:", err)
+    logTelemetry("stripe.webhook.error", {
+      requestId,
+      eventType: event?.type ?? "unknown",
+      reason: "unhandled_exception",
+      durationMs: Date.now() - startedAt,
+    })
     return NextResponse.json({ received: true })
   }
 }

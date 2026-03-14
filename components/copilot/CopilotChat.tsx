@@ -1,10 +1,9 @@
 'use client'
 
 import { useEffect, useMemo, useRef, useState } from "react"
-import { usePathname } from "next/navigation"
 import BuyButton from "@/components/commerce/BuyButton"
 import { hash10 } from "@/lib/utils"
-import { SUPPORTED_LOCALES, type Locale, t } from "@/lib/i18n"
+import { useI18n } from "@/components/i18n/I18nProvider"
 
 type ChatMsg = { id: string; role: "user" | "assistant"; content: string }
 
@@ -22,20 +21,24 @@ function bubble(role: ChatMsg["role"]) {
 }
 
 export default function CopilotChat() {
-  const pathname = usePathname()
-  const firstSegment = pathname.split("/").filter(Boolean)[0] as Locale
-  const locale: Locale = SUPPORTED_LOCALES.includes(firstSegment) ? firstSegment : "de"
+  const { locale, dict } = useI18n()
+  const prefix = `/${locale}`
 
   const startMsgs = useMemo<ChatMsg[]>(() => [
-    { id: "a0", role: "assistant", content: t(locale, 'copilotGreeting') }
-  ], [locale])
+    { id: "a0", role: "assistant", content: dict.copilot.greeting }
+  ], [dict.copilot.greeting])
 
   const initialFollowups = useMemo(() => [
-    t(locale, 'copilotFollowup1'),
-    t(locale, 'copilotFollowup2'),
-    t(locale, 'copilotFollowup3'),
-    t(locale, 'copilotFollowup4'),
-  ], [locale])
+    dict.copilot.followup1,
+    dict.copilot.followup2,
+    dict.copilot.followup3,
+    dict.copilot.followup4,
+  ], [
+    dict.copilot.followup1,
+    dict.copilot.followup2,
+    dict.copilot.followup3,
+    dict.copilot.followup4,
+  ])
 
   const [msgs, setMsgs] = useState<ChatMsg[]>(startMsgs)
   const [input, setInput] = useState("")
@@ -76,7 +79,7 @@ export default function CopilotChat() {
         {
           id: hash10("a:err:" + Date.now()),
           role: "assistant",
-          content: t(locale, 'copilotError')
+          content: dict.copilot.error
         }
       ])
     } finally {
@@ -91,16 +94,16 @@ export default function CopilotChat() {
         <div className="px-5 py-4 border-b border-gray-800 flex items-center justify-between">
           <div>
             <div className="font-black text-brand-cyan">Copilot</div>
-            <div className="text-xs text-gray-400">{t(locale, 'copilotMode')}</div>
+            <div className="text-xs text-gray-400">{dict.copilot.mode}</div>
           </div>
-          <a className="text-xs text-gray-400 hover:text-brand-cyan" href="/security/notfall-leitfaden">
-            {t(locale, 'copilotEmergencyLink')}
+          <a className="text-xs text-gray-400 hover:text-brand-cyan" href={`${prefix}/security/notfall-leitfaden`}>
+            {dict.copilot.emergencyLink}
           </a>
         </div>
 
         {/* Launchpad */}
         <div className="px-5 py-4 border-b border-gray-800 bg-black/20">
-          <div className="text-xs uppercase tracking-widest text-gray-500">{t(locale, 'copilotLaunchpad')}</div>
+          <div className="text-xs uppercase tracking-widest text-gray-500">{dict.copilot.launchpad}</div>
           <div className="mt-2 flex flex-wrap gap-2">
             {followups.slice(0, 6).map((f) => (
               <button
@@ -119,14 +122,14 @@ export default function CopilotChat() {
           {msgs.map((m) => (
             <div key={m.id} className={"p-4 rounded-2xl border " + bubble(m.role)}>
               <div className="text-xs uppercase tracking-widest text-gray-500 mb-2">
-                {m.role === "assistant" ? "ClawGuru" : t(locale, 'copilotYou')}
+                {m.role === "assistant" ? "ClawGuru" : dict.copilot.you}
               </div>
               <div className="text-gray-100 whitespace-pre-wrap leading-relaxed">{m.content}</div>
             </div>
           ))}
           {loading ? (
             <div className="p-4 rounded-2xl border border-gray-800 bg-black/20 text-gray-300">
-              {t(locale, 'copilotThinking')}
+              {dict.copilot.thinking}
             </div>
           ) : null}
           <div ref={endRef} />
@@ -138,7 +141,7 @@ export default function CopilotChat() {
             <textarea
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder={t(locale, 'copilotPlaceholder')}
+              placeholder={dict.copilot.placeholder}
               rows={3}
               className="flex-1 p-3 rounded-xl bg-gray-900/40 border border-gray-800 focus:border-brand-cyan focus:ring-2 focus:ring-brand-cyan/20 outline-none text-gray-100 placeholder:text-gray-500"
             />
@@ -147,11 +150,11 @@ export default function CopilotChat() {
               onClick={() => send(input)}
               className="px-6 py-3 rounded-xl font-black bg-gradient-to-r from-brand-cyan to-brand-violet hover:opacity-90 disabled:opacity-60"
             >
-              {loading ? "…" : t(locale, 'copilotSend')}
+              {loading ? "…" : dict.copilot.send}
             </button>
           </div>
           <div className="mt-3 text-xs text-gray-500">
-            {t(locale, 'copilotTip')}
+            {dict.copilot.tip}
           </div>
         </div>
       </div>
@@ -159,42 +162,42 @@ export default function CopilotChat() {
       {/* Side panel */}
       <aside className="space-y-6">
         <div className="p-5 rounded-2xl border border-gray-800 bg-black/30">
-          <div className="text-xs uppercase tracking-widest text-gray-500">{t(locale, 'copilotProAccess')}</div>
-          <div className="mt-2 text-xl font-black">{t(locale, 'copilotProTitle')}</div>
+          <div className="text-xs uppercase tracking-widest text-gray-500">{dict.copilot.proAccess}</div>
+          <div className="mt-2 text-xl font-black">{dict.copilot.proTitle}</div>
           <div className="mt-3 text-sm text-gray-300">
-            {t(locale, 'copilotProDesc')}
+            {dict.copilot.proDesc}
           </div>
 
           <div className="mt-4 grid gap-3">
             <div className="p-4 rounded-2xl border border-gray-800 bg-black/30">
-              <div className="font-black">{t(locale, 'copilotProLabel')}</div>
-              <div className="text-xs text-gray-400 mt-1">{t(locale, 'copilotProSub')}</div>
+              <div className="font-black">{dict.copilot.proLabel}</div>
+              <div className="text-xs text-gray-400 mt-1">{dict.copilot.proSub}</div>
               <div className="mt-3">
                 
               </div>
             </div>
 
             <div className="p-4 rounded-2xl border border-gray-800 bg-black/30">
-              <div className="font-black">{t(locale, 'copilotDayPassLabel')}</div>
-              <div className="text-xs text-gray-400 mt-1">{t(locale, 'copilotDayPassSub')}</div>
+              <div className="font-black">{dict.copilot.dayPassLabel}</div>
+              <div className="text-xs text-gray-400 mt-1">{dict.copilot.dayPassSub}</div>
               <div className="mt-3">
                 <BuyButton
                   product="daypass"
-                  label={t(locale, 'copilotDayPassBtn')}
+                  label={dict.copilot.dayPassBtn}
                   className="w-full px-4 py-3 rounded-2xl font-black bg-gradient-to-r from-brand-cyan to-brand-violet hover:opacity-90"
                 />
               </div>
             </div>
 
-            <a href="/pricing" className="text-sm text-cyan-300 underline hover:text-cyan-200 text-center">
-              {t(locale, 'copilotAllPlans')}
+            <a href={`${prefix}/pricing`} className="text-sm text-cyan-300 underline hover:text-cyan-200 text-center">
+              {dict.copilot.allPlans}
             </a>
           </div>
         </div>
 
         {actions.length > 0 ? (
           <div className="p-5 rounded-2xl border border-gray-800 bg-black/30">
-            <div className="font-black mb-3">{t(locale, 'copilotLinks')}</div>
+            <div className="font-black mb-3">{dict.copilot.links}</div>
             <div className="grid gap-2">
               {actions.map((a) => (
                 <a
@@ -210,7 +213,7 @@ export default function CopilotChat() {
         ) : null}
 
         <div className="p-5 rounded-2xl border border-gray-800 bg-black/30">
-          <div className="font-black">{t(locale, 'copilotLlmTitle')}</div>
+          <div className="font-black">{dict.copilot.llmTitle}</div>
           <div className="text-sm text-gray-400 mt-2">
             Setze <code className="text-gray-200">GEMINI_API_KEY</code> (optional{" "}
             <code className="text-gray-200">GEMINI_MODEL</code>) als Env. Ohne Keys läuft alles rule-based.

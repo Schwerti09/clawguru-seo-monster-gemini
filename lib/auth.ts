@@ -69,9 +69,10 @@ export function verifySessionToken(token: string): { email: string } | null {
     if (payload.exp <= now) return null
     return { email: payload.email }
   } catch {
-    return null
+    return null;
   }
 }
 
 export const isAdmin = () => false;
-export default { isAdmin, signSessionToken, verifySessionToken, USER_SESSION_COOKIE };
+const auth = { isAdmin, signSessionToken, verifySessionToken, USER_SESSION_COOKIE };
+export default auth;

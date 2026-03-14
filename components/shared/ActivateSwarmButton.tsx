@@ -5,6 +5,7 @@
 // APPROVED REMEDIATION SWARM v3.2 SAFE – Overlord AI: Also supports "Activate Approved Swarm" mode.
 
 import { useState } from "react"
+import { useI18n } from "@/components/i18n/I18nProvider"
 import {
   makeDeploymentId,
   makeApprovedSwarmId,
@@ -41,6 +42,8 @@ interface Props {
 }
 
 export function ActivateSwarmButton({ slug, isPro = false }: Props) {
+  const { locale } = useI18n()
+  const prefix = `/${locale}`
   const [open, setOpen] = useState(false)
   const [mode, setMode] = useState<"swarm" | "approved">("swarm")
   const [selected, setSelected] = useState<TargetEnvironment>("kubernetes")
@@ -54,13 +57,13 @@ export function ActivateSwarmButton({ slug, isPro = false }: Props) {
       // APPROVED REMEDIATION SWARM v3.2 SAFE – Overlord AI: Navigate to approved swarm dashboard
       const swarmId = makeApprovedSwarmId(slug, scope)
       setTimeout(() => {
-        window.location.href = `/swarm/${swarmId}?runbook=${encodeURIComponent(slug)}&mode=approved&scope=${encodeURIComponent(scope)}`
+        window.location.href = `${prefix}/swarm/${swarmId}?runbook=${encodeURIComponent(slug)}&mode=approved&scope=${encodeURIComponent(scope)}`
       }, 900)
     } else {
       const deploymentId = makeDeploymentId(slug)
       // SWARM DEPLOYMENT v3.2 – Overlord AI: brief delay for UX tension before redirect
       setTimeout(() => {
-        window.location.href = `/swarm/${deploymentId}?runbook=${encodeURIComponent(slug)}&target=${encodeURIComponent(selected)}`
+        window.location.href = `${prefix}/swarm/${deploymentId}?runbook=${encodeURIComponent(slug)}&target=${encodeURIComponent(selected)}`
       }, 900)
     }
   }
@@ -70,7 +73,7 @@ export function ActivateSwarmButton({ slug, isPro = false }: Props) {
     return (
       <div className="flex flex-wrap gap-2">
         <a
-          href="/pricing"
+          href={`${prefix}/pricing`}
           className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl border border-orange-500/40 bg-orange-500/10 text-orange-300 text-xs font-black hover:bg-orange-500/15 transition-colors"
           title="Pro/Enterprise only – upgrade to activate"
         >
@@ -81,7 +84,7 @@ export function ActivateSwarmButton({ slug, isPro = false }: Props) {
         </a>
         {/* APPROVED REMEDIATION SWARM v3.2 SAFE – Overlord AI: Approved swarm upgrade CTA */}
         <a
-          href="/pricing"
+          href={`${prefix}/pricing`}
           className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl border border-emerald-500/40 bg-emerald-500/10 text-emerald-300 text-xs font-black hover:bg-emerald-500/15 transition-colors"
           title="Enterprise only – upgrade to activate"
         >

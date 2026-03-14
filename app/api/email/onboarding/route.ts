@@ -3,6 +3,7 @@
 
 import { NextRequest, NextResponse } from "next/server"
 import { sendEmail } from "@/lib/email"
+import { BASE_URL } from "@/lib/config"
 
 export const runtime = "nodejs"
 
@@ -18,14 +19,14 @@ const EMAILS: Record<SequenceStep, { subject: string; html: (name?: string) => s
         <p style="color:#9ca3af;margin-bottom:24px">Du hast gerade den ersten Schritt zu einer sicheren Ops-Infrastruktur gemacht. Respekt.</p>
         <p style="margin-bottom:16px">Was du jetzt tun kannst:</p>
         <ol style="color:#d1d5db;margin-bottom:24px;padding-left:20px">
-          <li style="margin-bottom:8px">🔍 <a href="https://clawguru.org/check" style="color:#22d3ee">Security-Check starten</a> — kostenlos, 30 Sekunden</li>
-          <li style="margin-bottom:8px">📚 <a href="https://clawguru.org/runbooks" style="color:#22d3ee">Runbooks durchsuchen</a> — 10.000+ sofort verfügbar</li>
-          <li style="margin-bottom:8px">💬 <a href="https://clawguru.org/copilot" style="color:#22d3ee">Copilot fragen</a> — dein KI-SRE, 24/7</li>
+          <li style="margin-bottom:8px">🔍 <a href="${BASE_URL}/check" style="color:#22d3ee">Security-Check starten</a> — kostenlos, 30 Sekunden</li>
+          <li style="margin-bottom:8px">📚 <a href="${BASE_URL}/runbooks" style="color:#22d3ee">Runbooks durchsuchen</a> — 10.000+ sofort verfügbar</li>
+          <li style="margin-bottom:8px">💬 <a href="${BASE_URL}/copilot" style="color:#22d3ee">Copilot fragen</a> — dein KI-SRE, 24/7</li>
         </ol>
-        <a href="https://clawguru.org/check" style="display:inline-block;background:linear-gradient(to right,#22d3ee,#8b5cf6);color:#fff;font-weight:900;padding:12px 24px;border-radius:12px;text-decoration:none">
+        <a href="${BASE_URL}/check" style="display:inline-block;background:linear-gradient(to right,#22d3ee,#8b5cf6);color:#fff;font-weight:900;padding:12px 24px;border-radius:12px;text-decoration:none">
           Jetzt Security-Check starten →
         </a>
-        <p style="margin-top:32px;color:#6b7280;font-size:12px">ClawGuru · clawguru.org · <a href="https://clawguru.org/datenschutz" style="color:#6b7280">Datenschutz</a></p>
+        <p style="margin-top:32px;color:#6b7280;font-size:12px">ClawGuru · clawguru.org · <a href="${BASE_URL}/datenschutz" style="color:#6b7280">Datenschutz</a></p>
       </div>
     `,
   },
@@ -37,20 +38,20 @@ const EMAILS: Record<SequenceStep, { subject: string; html: (name?: string) => s
         <p style="color:#9ca3af;margin-bottom:24px">Ops-Security muss nicht komplex sein. Hier sind 3 Dinge, die du heute in unter 30 Minuten umsetzen kannst:</p>
         <div style="background:#111827;border:1px solid #374151;border-radius:12px;padding:16px;margin-bottom:16px">
           <div style="font-weight:900;color:#22d3ee;margin-bottom:4px">1. SSH-Keys rotieren</div>
-          <p style="color:#d1d5db;font-size:14px;margin:0">Wann hast du das zuletzt gemacht? Alte Keys sind dein größtes Risiko. <a href="https://clawguru.org/runbook/ssh-key-rotation" style="color:#22d3ee">Runbook →</a></p>
+          <p style="color:#d1d5db;font-size:14px;margin:0">Wann hast du das zuletzt gemacht? Alte Keys sind dein größtes Risiko. <a href="${BASE_URL}/runbook/ssh-key-rotation" style="color:#22d3ee">Runbook →</a></p>
         </div>
         <div style="background:#111827;border:1px solid #374151;border-radius:12px;padding:16px;margin-bottom:16px">
           <div style="font-weight:900;color:#10b981;margin-bottom:4px">2. Firewall-Rules auditieren</div>
-          <p style="color:#d1d5db;font-size:14px;margin:0">Port 22 offen? 0.0.0.0/0? Das muss weg. <a href="https://clawguru.org/runbook/firewall-hardening" style="color:#22d3ee">Runbook →</a></p>
+          <p style="color:#d1d5db;font-size:14px;margin:0">Port 22 offen? 0.0.0.0/0? Das muss weg. <a href="${BASE_URL}/runbook/firewall-hardening" style="color:#22d3ee">Runbook →</a></p>
         </div>
         <div style="background:#111827;border:1px solid #374151;border-radius:12px;padding:16px;margin-bottom:24px">
           <div style="font-weight:900;color:#f59e0b;margin-bottom:4px">3. Container-Images updaten</div>
-          <p style="color:#d1d5db;font-size:14px;margin:0">Veraltete Base-Images = bekannte CVEs. <a href="https://clawguru.org/runbook/container-security" style="color:#22d3ee">Runbook →</a></p>
+          <p style="color:#d1d5db;font-size:14px;margin:0">Veraltete Base-Images = bekannte CVEs. <a href="${BASE_URL}/runbook/container-security" style="color:#22d3ee">Runbook →</a></p>
         </div>
-        <a href="https://clawguru.org/runbooks" style="display:inline-block;background:linear-gradient(to right,#22d3ee,#8b5cf6);color:#fff;font-weight:900;padding:12px 24px;border-radius:12px;text-decoration:none">
+        <a href="${BASE_URL}/runbooks" style="display:inline-block;background:linear-gradient(to right,#22d3ee,#8b5cf6);color:#fff;font-weight:900;padding:12px 24px;border-radius:12px;text-decoration:none">
           Alle 10.000+ Runbooks ansehen →
         </a>
-        <p style="margin-top:32px;color:#6b7280;font-size:12px">ClawGuru · clawguru.org · <a href="https://clawguru.org/datenschutz" style="color:#6b7280">Datenschutz</a></p>
+        <p style="margin-top:32px;color:#6b7280;font-size:12px">ClawGuru · clawguru.org · <a href="${BASE_URL}/datenschutz" style="color:#6b7280">Datenschutz</a></p>
       </div>
     `,
   },
@@ -71,11 +72,11 @@ const EMAILS: Record<SequenceStep, { subject: string; html: (name?: string) => s
           <li style="margin-bottom:8px">📬 Weekly Digest — automatische Lageberichte</li>
           <li style="margin-bottom:8px">🔧 Self-Healing Alerts — bevor du gerufen wirst</li>
         </ul>
-        <a href="https://clawguru.org/pricing?offer=launch50" style="display:inline-block;background:linear-gradient(to right,#22d3ee,#8b5cf6);color:#fff;font-weight:900;padding:14px 28px;border-radius:12px;text-decoration:none;font-size:16px">
+        <a href="${BASE_URL}/pricing?offer=launch50" style="display:inline-block;background:linear-gradient(to right,#22d3ee,#8b5cf6);color:#fff;font-weight:900;padding:14px 28px;border-radius:12px;text-decoration:none;font-size:16px">
           🔓 Jetzt Pro für €4.50 freischalten →
         </a>
-        <p style="margin-top:16px;color:#6b7280;font-size:13px">Oder starte mit dem <a href="https://clawguru.org/pricing?product=daypass" style="color:#22d3ee">Day Pass für €4.99</a> — 24h volles Pro-Erlebnis.</p>
-        <p style="margin-top:32px;color:#6b7280;font-size:12px">ClawGuru · clawguru.org · <a href="https://clawguru.org/datenschutz" style="color:#6b7280">Datenschutz</a> · <a href="https://clawguru.org/abmelden" style="color:#6b7280">Abmelden</a></p>
+        <p style="margin-top:16px;color:#6b7280;font-size:13px">Oder starte mit dem <a href="${BASE_URL}/pricing?product=daypass" style="color:#22d3ee">Day Pass für €4.99</a> — 24h volles Pro-Erlebnis.</p>
+        <p style="margin-top:32px;color:#6b7280;font-size:12px">ClawGuru · clawguru.org · <a href="${BASE_URL}/datenschutz" style="color:#6b7280">Datenschutz</a> · <a href="${BASE_URL}/abmelden" style="color:#6b7280">Abmelden</a></p>
       </div>
     `,
   },

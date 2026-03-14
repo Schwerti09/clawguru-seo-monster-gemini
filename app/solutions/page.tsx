@@ -5,19 +5,26 @@ import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
 import { KNOWN_CVES } from "@/lib/cve-pseo"
 import { BASE_URL } from "@/lib/config"
+import { headers } from "next/headers"
+import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
+import type { Metadata } from "next"
 
 export const dynamic = "force-static"
 
-export const metadata = {
-  title: "CVE Fix Solutions | ClawGuru",
-  description:
-    "Step-by-step guides to fix critical CVEs: OpenSSH regreSSHion, XZ Utils backdoor, runc container escape, Next.js middleware bypass, and 1,000+ more. Actionable mitigation with verification commands.",
-  alternates: { canonical: "/solutions" },
-  openGraph: {
+export async function generateMetadata(): Promise<Metadata> {
+  const h = headers()
+  const locale = (h.get("x-claw-locale") ?? DEFAULT_LOCALE) as Locale
+  return {
     title: "CVE Fix Solutions | ClawGuru",
-    description: "Programmatic CVE fix guides with Gemini-generated unique content per vulnerability.",
-    type: "website",
-  },
+    description:
+      "Step-by-step guides to fix critical CVEs: OpenSSH regreSSHion, XZ Utils backdoor, runc container escape, Next.js middleware bypass, and 1,000+ more. Actionable mitigation with verification commands.",
+    alternates: { canonical: `/${locale}/solutions` },
+    openGraph: {
+      title: "CVE Fix Solutions | ClawGuru",
+      description: "Programmatic CVE fix guides with Gemini-generated unique content per vulnerability.",
+      type: "website",
+    },
+  }
 }
 
 function severityColor(severity: string) {
@@ -28,6 +35,9 @@ function severityColor(severity: string) {
 }
 
 export default function SolutionsPage() {
+  const h = headers()
+  const locale = (h.get("x-claw-locale") ?? DEFAULT_LOCALE) as Locale
+  const prefix = `/${locale}`
   const sorted = [...KNOWN_CVES].sort((a, b) => b.cvssScore - a.cvssScore)
 
   const itemListLd = {
@@ -39,7 +49,7 @@ export default function SolutionsPage() {
     itemListElement: sorted.map((c, i) => ({
       "@type": "ListItem",
       position: i + 1,
-      url: `${BASE_URL}/solutions/fix-${c.cveId}`,
+      url: `${BASE_URL}/${locale}/solutions/fix-${c.cveId}`,
       name: `How to fix ${c.cveId} – ${c.name}`,
     })),
   }
@@ -68,7 +78,7 @@ export default function SolutionsPage() {
             return (
               <a
                 key={cve.cveId}
-                href={`/solutions/fix-${cve.cveId}`}
+                href={`${prefix}/solutions/fix-${cve.cveId}`}
                 className="p-5 rounded-3xl border border-gray-800 bg-black/25 hover:bg-black/35 transition-colors group"
               >
                 <div className="flex items-center justify-between mb-3">
@@ -110,9 +120,9 @@ export default function SolutionsPage() {
         </div>
 
         <div className="mt-6 text-sm text-gray-500">
-          <a href="/runbooks" className="hover:text-cyan-400">Runbook Library</a> ·{" "}
-          <a href="/tools" className="hover:text-cyan-400">Security Tools</a> ·{" "}
-          <a href="/check" className="hover:text-cyan-400">Security Check</a>
+          <a href={`${prefix}/runbooks`} className="hover:text-cyan-400">Runbook Library</a> ·{" "}
+          <a href={`${prefix}/tools`} className="hover:text-cyan-400">Security Tools</a> ·{" "}
+          <a href={`${prefix}/check`} className="hover:text-cyan-400">Security Check</a>
         </div>
       </div>
     </Container>

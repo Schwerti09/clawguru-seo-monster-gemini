@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react"
 import { usePathname } from "next/navigation"
-import { SUPPORTED_LOCALES, type Locale, t as i18nT } from "@/lib/i18n"
+import { LEGACY_UI_STRINGS, SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
 
 type Incident = {
   id: string
@@ -22,10 +22,15 @@ function pill(sev: Incident["severity"]) {
 
 const CATS: Array<Incident["category"] | "all"> = ["all", "exposure", "websocket", "secrets", "supply-chain", "ops"]
 
+function ui(locale: Locale, key: string, fallback: string) {
+  return LEGACY_UI_STRINGS[locale]?.[key] ?? LEGACY_UI_STRINGS.de?.[key] ?? fallback
+}
+
 export default function IntelFeed() {
   const pathname = usePathname()
   const firstSegment = pathname.split("/").filter(Boolean)[0] as Locale
   const locale: Locale = SUPPORTED_LOCALES.includes(firstSegment) ? firstSegment : "de"
+  const prefix = `/${locale}`
 
   const [items, setItems] = useState<Incident[]>([])
   const [q, setQ] = useState("")
@@ -52,9 +57,9 @@ export default function IntelFeed() {
   return (
     <div className="space-y-4">
       <div className="p-5 rounded-2xl border border-gray-800 bg-black/30">
-        <div className="font-black text-lg">{i18nT(locale, 'intelTitle')}</div>
+        <div className="font-black text-lg">{ui(locale, "intelTitle", "Intel Feed")}</div>
         <div className="text-sm text-gray-400 mt-1">
-          {i18nT(locale, 'intelSubtitle')}
+          {ui(locale, "intelSubtitle", "Curated recurring patterns and practical countermeasures.")}
         </div>
 
         <div className="mt-4 grid md:grid-cols-3 gap-3">
@@ -62,7 +67,7 @@ export default function IntelFeed() {
             value={q}
             onChange={(e) => setQ(e.target.value)}
             className="px-4 py-3 rounded-xl bg-black/40 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-brand-cyan/30 focus:border-brand-cyan"
-            placeholder={i18nT(locale, 'intelSearchPlaceholder')}
+            placeholder={ui(locale, "intelSearchPlaceholder", "Search…")}
           />
           <select
             value={cat}
@@ -71,7 +76,8 @@ export default function IntelFeed() {
           >
             {CATS.map((c) => (
               <option key={c} value={c}>
-                {i18nT(locale, 'intelCategory')}: {c}
+                {ui(locale, "intelCategory", "Category")}: {c}
+                
               </option>
             ))}
           </select>
@@ -80,7 +86,7 @@ export default function IntelFeed() {
             onChange={(e) => setSev(e.target.value as Incident["severity"] | "all")}
             className="px-4 py-3 rounded-xl bg-black/40 border border-gray-700"
           >
-            <option value="all">{i18nT(locale, 'intelSeverity')}: all</option>
+            <option value="all">{ui(locale, "intelSeverity", "Severity")}: all</option>
             <option value="high">high</option>
             <option value="medium">medium</option>
             <option value="low">low</option>
@@ -104,16 +110,16 @@ export default function IntelFeed() {
             <p className="mt-3 text-gray-300">{i.summary}</p>
 
             <div className="mt-4">
-              <div className="text-sm font-bold text-gray-200 mb-2">{i18nT(locale, 'intelRecommended')}</div>
+              <div className="text-sm font-bold text-gray-200 mb-2">{ui(locale, "intelRecommended", "Recommended actions")}</div>
               <ul className="list-disc pl-5 space-y-1 text-sm text-gray-300">
                 {i.actions.map((a) => <li key={a}>{a}</li>)}
               </ul>
             </div>
 
             <div className="mt-5 flex flex-wrap gap-2">
-              <a className="px-4 py-2 rounded-xl bg-black/30 border border-gray-700 hover:bg-black/40 text-sm" href="/tools">{i18nT(locale, 'intelValidator')}</a>
-              <a className="px-4 py-2 rounded-xl bg-black/30 border border-gray-700 hover:bg-black/40 text-sm" href="/security/notfall-leitfaden">{i18nT(locale, 'intelRunbook')}</a>
-              <a className="px-4 py-2 rounded-xl bg-black/30 border border-gray-700 hover:bg-black/40 text-sm" href="/openclaw-security-2026">{i18nT(locale, 'intelReport')}</a>
+              <a className="px-4 py-2 rounded-xl bg-black/30 border border-gray-700 hover:bg-black/40 text-sm" href={`${prefix}/tools`}>{ui(locale, "intelValidator", "Validator")}</a>
+              <a className="px-4 py-2 rounded-xl bg-black/30 border border-gray-700 hover:bg-black/40 text-sm" href={`${prefix}/security/notfall-leitfaden`}>{ui(locale, "intelRunbook", "Runbook")}</a>
+              <a className="px-4 py-2 rounded-xl bg-black/30 border border-gray-700 hover:bg-black/40 text-sm" href={`${prefix}/openclaw-security-2026`}>{ui(locale, "intelReport", "Report")}</a>
             </div>
           </div>
         ))}
@@ -121,7 +127,7 @@ export default function IntelFeed() {
 
       {filtered.length === 0 && (
         <div className="p-8 rounded-2xl border border-gray-800 bg-black/30 text-gray-400">
-          {i18nT(locale, 'intelNoResults')}
+          {ui(locale, "intelNoResults", "No results found.")}
         </div>
       )}
     </div>

@@ -2,7 +2,6 @@
 // Strong hub for Docker runbooks
 
 import Container from "@/components/shared/Container"
-import { RUNBOOKS } from "@/lib/pseo"
 import { type Locale, SUPPORTED_LOCALES } from "@/lib/i18n"
 import Link from "next/link"
 
@@ -12,8 +11,8 @@ export async function generateStaticParams() {
   return SUPPORTED_LOCALES.map((lang) => ({ lang }))
 }
 
-export async function generateMetadata(props: { params: Promise<{ lang: string }> }) {
-  const params = await props.params;
+export async function generateMetadata(props: { params: { lang: string } }) {
+  const params = props.params;
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   return {
     title: `Docker Runbooks – Container Security & Ops 2026 | ClawGuru`,
@@ -22,8 +21,9 @@ export async function generateMetadata(props: { params: Promise<{ lang: string }
   }
 }
 
-export default async function DockerHubPage(props: { params: Promise<{ lang: string }> }) {
-  const params = await props.params;
+export default async function DockerHubPage(props: { params: { lang: string } }) {
+  const params = props.params;
+  const { RUNBOOKS } = await import("@/lib/pseo")
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
 
   const dockerRunbooks = RUNBOOKS.filter(

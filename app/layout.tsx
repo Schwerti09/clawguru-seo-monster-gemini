@@ -15,8 +15,11 @@ import PageTransition from "@/components/visual/PageTransition"
 import RTLProvider from "@/components/layout/RTLProvider"
 // VIRAL SHARE 2026: Global floating Mycelium share button
 import FloatingMyceliumShareBtn from "@/components/share/FloatingMyceliumShareBtn"
-import { SUPPORTED_LOCALES, LOCALE_HREFLANG } from "@/lib/i18n"
+import { headers } from "next/headers"
+import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
 import { SEO_TARGET_KEYWORDS_2026 } from "@/lib/seo/targets"
+import { getDictionary } from "@/lib/getDictionary"
+import { I18nProvider } from "@/components/i18n/I18nProvider"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 
@@ -28,13 +31,6 @@ export const metadata: Metadata = {
   keywords: SEO_TARGET_KEYWORDS_2026,
   alternates: {
     canonical: "/",
-    // 100/100 OPTIMIZATION 2026: hreflang for all 10 supported locales
-    languages: Object.fromEntries(
-      SUPPORTED_LOCALES.map((locale) => [
-        LOCALE_HREFLANG[locale],
-        `${SITE_URL}/${locale}`,
-      ])
-    ),
   },
   openGraph: {
     type: "website",
@@ -84,9 +80,14 @@ const websiteJsonLd = {
   },
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const h = headers()
+  const locale = (h.get("x-claw-locale") ?? DEFAULT_LOCALE) as Locale
+  const dir = (h.get("x-claw-dir") ?? "ltr") as "ltr" | "rtl"
+  const dict = await getDictionary(locale)
+
   return (
-    <html lang="de">
+    <html lang={locale} dir={dir}>
       <head>
         {/* WORLD BEAST FINAL LAUNCH: Umami analytics */}
         <UmamiAnalytics />
@@ -125,22 +126,23 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <a href="#main-content" className="skip-to-content">
           Zum Hauptinhalt springen
         </a>
-        {/* NEXT-LEVEL UPGRADE 2026: RTL direction support – updates html[dir] based on locale URL */}
-        <RTLProvider>
-          <TrustBadge />
-          <Header />
-          {/* 100/100 OPTIMIZATION 2026: id="main-content" for skip link target; role implicit from <main> */}
-          <main id="main-content" className="pt-20 pb-20 lg:pb-0">
-            <PageTransition>{children}</PageTransition>
-          </main>
-          <Footer />
-          <ActionDock />
-          <SocialProofOverlay />
-          {/* VIRAL SHARE 2026: Global floating Mycelium share button */}
-          <FloatingMyceliumShareBtn />
-          {/* VISUAL UPGRADE 2026: Custom neon cursor for desktop */}
-          <NeonCursor />
-        </RTLProvider>
+        <I18nProvider locale={locale} dict={dict}>
+          <RTLProvider>
+            <TrustBadge />
+            <Header />
+            {/* 100/100 OPTIMIZATION 2026: id="main-content" for skip link target; role implicit from <main> */}
+            <main id="main-content" className="pt-20 pb-20 lg:pb-0">
+              <PageTransition>{children}</PageTransition>
+            </main>
+            <Footer />
+            <ActionDock />
+            <SocialProofOverlay />
+            {/* VIRAL SHARE 2026: Global floating Mycelium share button */}
+            <FloatingMyceliumShareBtn />
+            {/* VISUAL UPGRADE 2026: Custom neon cursor for desktop */}
+            <NeonCursor />
+          </RTLProvider>
+        </I18nProvider>
       </body>
     </html>
   )

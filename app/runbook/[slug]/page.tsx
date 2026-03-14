@@ -244,6 +244,8 @@ function FaqSection({ faq }: { faq: RunbookFaqEntry[] }) {
 
 export default async function RunbookPage(props: { params: { slug: string } }) {
   const params = props.params
+  const __label = `runbook:${params.slug}`
+  console.time(__label)
   const { RUNBOOKS, getRunbook } = await import("@/lib/pseo")
   const h = headers()
   const locale = (h.get("x-claw-locale") ?? DEFAULT_LOCALE) as Locale
@@ -261,6 +263,12 @@ export default async function RunbookPage(props: { params: { slug: string } }) {
 
   // Pre-build slug→runbook Map for O(1) related lookups
   const runbookMap = new Map(RUNBOOKS.map((rb) => [rb.slug, rb]))
+  const isGenerated100k = !runbookMap.has(r.slug)
+  if (isGenerated100k) {
+    console.count("pseo.on_demand_100k_hit")
+  } else {
+    console.count("pseo.materialized_hit")
+  }
   const linkEngine = buildLinkEngine(RUNBOOKS, {
     maxLinks: 10,
     urlForPage: (page) => `/runbook/${page.slug}`,
@@ -278,6 +286,7 @@ export default async function RunbookPage(props: { params: { slug: string } }) {
     ? relatedSlugs.map((s) => runbookMap.get(s) ?? getRunbook(s)).filter(Boolean) as Runbook[]
     : RUNBOOKS.filter((x) => x.slug !== r.slug && x.tags.some((t) => r.tags.includes(t))).slice(0, 10)
 
+  console.timeEnd(__label)
   return (
     <Container>
       <script

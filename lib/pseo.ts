@@ -1591,10 +1591,20 @@ export function getRunbook(slug: string): Runbook | null {
   }
   // Check static RUNBOOKS first (fast path for existing content)
   const existing = RUNBOOKS.find((r) => r.slug === slug)
-  if (existing) return existing
+  if (existing) {
+    console.count("pseo.getRunbook.hit.materialized")
+    return existing
+  }
   // Fall through to 100k on-demand generation (provider-service-issue-year format)
   const meta = parseRunbookSlug100k(slug)
-  if (meta) return generateRunbook100k(meta)
+  if (meta) {
+    console.count("pseo.getRunbook.hit.on_demand")
+    const __label = `gen100k:${slug}`
+    console.time(__label)
+    const rb = generateRunbook100k(meta)
+    console.timeEnd(__label)
+    return rb
+  }
   return null
 }
 

@@ -4,7 +4,7 @@ import { SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
 import RootRunbookPage from "@/app/runbook/[slug]/page"
 
 export const dynamic = "force-dynamic"
-export const revalidate = 60
+export const revalidate = 3600
 export const dynamicParams = true
 
 export async function generateStaticParams() {

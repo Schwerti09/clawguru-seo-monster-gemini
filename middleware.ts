@@ -5,12 +5,50 @@ import { getRequestId, getRequestIdHeaderName } from "@/lib/ops/request-id"
 const LOCALE_COOKIE_NAME = "cg_locale"
 const LOCALE_COOKIE_MAX_AGE_SECONDS = 60 * 60 * 24 * 365
 
+// Lightweight per-IP rate limiter (per edge isolate) – 5 req/min per bucket
+const RATE_LIMIT_MAX = 5
+const RATE_LIMIT_WINDOW_MS = 60 * 1000
+type Bucket = { count: number; resetAt: number }
+const RL = new Map<string, Bucket>()
+
+function getClientIp(request: NextRequest): string {
+  return (
+    request.ip ||
+    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+    request.headers.get("x-real-ip") ||
+    "0.0.0.0"
+  )
+}
+
+function routeBucket(pathname: string): string | null {
+  if (pathname === "/api/live-wall") return "live-wall"
+  if (/^\/(?:[a-z]{2}(?:-[a-z]{2})?)\/runbook\//i.test(pathname) || /^\/runbook\//i.test(pathname)) return "runbook-detail"
+  if (/^\/(?:[a-z]{2}(?:-[a-z]{2})?)\/tag\//i.test(pathname) || /^\/tag\//i.test(pathname)) return "tag-detail"
+  if (/^\/(?:[a-z]{2}(?:-[a-z]{2})?)\/runbooks\/?$/i.test(pathname) || /^\/runbooks\/?$/i.test(pathname)) return "runbooks-index"
+  return null
+}
+
+function checkRateLimit(ip: string, bucket: string): { ok: boolean; retryAfter: number } {
+  const key = `${bucket}:${ip}`
+  const now = Date.now()
+  const entry = RL.get(key)
+  if (!entry || now >= entry.resetAt) {
+    RL.set(key, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS })
+    return { ok: true, retryAfter: 0 }
+  }
+  if (entry.count < RATE_LIMIT_MAX) {
+    entry.count++
+    return { ok: true, retryAfter: 0 }
+  }
+  return { ok: false, retryAfter: Math.ceil((entry.resetAt - now) / 1000) }
+}
+
 function isPublicFile(pathname: string): boolean {
   return pathname.includes(".")
 }
 
 function shouldBypassMiddleware(pathname: string): boolean {
-  if (pathname.startsWith("/api/")) return true
+  if (pathname.startsWith("/api/") && pathname !== "/api/live-wall") return true
   if (pathname.startsWith("/admin")) return true
   if (pathname.startsWith("/_next/")) return true
   if (pathname === "/favicon.ico") return true
@@ -64,6 +102,19 @@ export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
   const requestId = getRequestId(request.headers)
 
+  // Apply per-IP rate limiting for hot routes
+  const bucket = routeBucket(pathname)
+  if (bucket) {
+    const ip = getClientIp(request)
+    const rl = checkRateLimit(ip, bucket)
+    if (!rl.ok) {
+      const res = NextResponse.json({ error: "rate_limited", bucket }, { status: 429 })
+      res.headers.set("Retry-After", String(rl.retryAfter))
+      res.headers.set(getRequestIdHeaderName(), requestId)
+      return res
+    }
+  }
+
   if (shouldBypassMiddleware(pathname)) {
     const res = NextResponse.next()
     res.headers.set(getRequestIdHeaderName(), requestId)
@@ -106,5 +157,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image).*)"],
+  matcher: ["/((?!api|_next/static|_next/image).*)", "/api/live-wall"],
 }

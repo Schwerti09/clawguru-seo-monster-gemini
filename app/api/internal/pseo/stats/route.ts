@@ -13,7 +13,6 @@ export async function GET(req: NextRequest) {
     )
   }
   const {
-    RUNBOOKS,
     count100kSlugs,
     allProviders100k,
     allServices100k,
@@ -23,7 +22,7 @@ export async function GET(req: NextRequest) {
 
   return NextResponse.json(
     {
-      materializedRunbooksCount: RUNBOOKS.length,
+      materializedRunbooksCount: Number(process.env.PSEO_RUNBOOK_COUNT || 500),
       count100kSlugs: count100kSlugs(),
       providerCount: allProviders100k().length,
       serviceCount: allServices100k().length,

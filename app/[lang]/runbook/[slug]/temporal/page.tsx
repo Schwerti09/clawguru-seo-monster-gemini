@@ -8,7 +8,7 @@ import { getTemporalHistory, findVersionByQuarter } from "../../../../../lib/tem
 import { notFound } from "next/navigation"
 import { type Locale, SUPPORTED_LOCALES } from "../../../../../lib/i18n"
 
-export const revalidate = 60
+export const revalidate = 86400
 export const dynamicParams = true
 
 export async function generateStaticParams() {

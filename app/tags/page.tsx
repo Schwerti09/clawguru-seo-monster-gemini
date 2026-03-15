@@ -1,7 +1,7 @@
 import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
 import dynamic from "next/dynamic"
-const TagOrbitCloud = dynamic(() => import("@/components/tags/TagOrbitCloud"), { ssr: false })
+const TagOrbitCloud3D = dynamic(() => import("@/components/tags/TagOrbitCloud3D"), { ssr: false })
 export const revalidate = 3600
 
 export const metadata = {
@@ -23,7 +23,7 @@ export default async function TagsPage() {
           subtitle="Provider · Error · Topic · Config – jede Kombination wird ein Einstiegspunkt."
         />
 
-        <TagOrbitCloud tags={tags} />
+        <TagOrbitCloud3D tags={tags} />
 
         <div className="mt-10 flex flex-wrap gap-2">
           {tags.map((t) => (

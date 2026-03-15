@@ -21,6 +21,7 @@ import { SEO_TARGET_KEYWORDS_2026 } from "@/lib/seo/targets"
 import { getDictionary } from "@/lib/getDictionary"
 import { I18nProvider } from "@/components/i18n/I18nProvider"
 import CommandK from "@/components/search/CommandK"
+import { useEffect } from "react"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 
@@ -132,6 +133,16 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       </head>
       {/* VISUAL UPGRADE 2026: scanline + noise overlays on body */}
       <body className="min-h-screen scanline-overlay noise-overlay">
+        {/* Global subtle particle background (mycelium-style) */}
+        <div
+          aria-hidden
+          className="pointer-events-none fixed inset-0 -z-10"
+          style={{
+            background:
+              "radial-gradient(600px 300px at 10% 10%, rgba(0,184,255,0.06), rgba(0,0,0,0)), radial-gradient(800px 400px at 90% 20%, rgba(0,255,157,0.04), rgba(0,0,0,0)), radial-gradient(700px 350px at 30% 90%, rgba(212,175,55,0.035), rgba(0,0,0,0))",
+            maskImage: "radial-gradient(80% 80% at 50% 50%, black, transparent)",
+          }}
+        />
         {/* 100/100 OPTIMIZATION 2026: Skip-to-content link for keyboard/screen-reader users */}
         <a href="#main-content" className="skip-to-content">
           Zum Hauptinhalt springen

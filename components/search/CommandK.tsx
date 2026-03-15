@@ -27,6 +27,7 @@ export default function CommandK() {
   const [data, setData] = useState<LivePayload | null>(null)
   const prefersReduced = useReducedMotion()
   const inputRef = useRef<HTMLInputElement | null>(null)
+  const [activeIdx, setActiveIdx] = useState(0)
 
   const fetchData = useCallback(async () => {
     try {
@@ -45,6 +46,22 @@ export default function CommandK() {
         setOpen((o) => !o)
       } else if (e.key === "Escape") {
         setOpen(false)
+      } else if (open && (e.key === "ArrowDown" || e.key === "Down")) {
+        e.preventDefault()
+        setActiveIdx((i) => Math.min((results.length || 1) - 1, i + 1))
+      } else if (open && (e.key === "ArrowUp" || e.key === "Up")) {
+        e.preventDefault()
+        setActiveIdx((i) => Math.max(0, i - 1))
+      } else if (open && e.key === "Enter") {
+        const it = results[activeIdx]
+        if (it) {
+          if (e.metaKey || e.ctrlKey) {
+            window.open(`/runbook/${it.slug}`, "_blank")
+          } else {
+            window.location.href = `/runbook/${it.slug}`
+          }
+          setOpen(false)
+        }
       }
     }
     window.addEventListener("keydown", onKey)
@@ -69,6 +86,10 @@ export default function CommandK() {
       .slice(0, 12)
       .map((x) => x.it)
   }, [data, q])
+
+  useEffect(() => {
+    setActiveIdx(0)
+  }, [q])
 
   return (
     <AnimatePresence>
@@ -98,12 +119,21 @@ export default function CommandK() {
               <button onClick={() => setOpen(false)} className="px-3 py-2 rounded-xl border border-gray-700 hover:border-gray-500 text-gray-300">Esc</button>
             </div>
             <div className="p-3 grid grid-cols-1 md:grid-cols-2 gap-2">
-              {results.map((t) => (
+              {results.map((t, idx) => (
                 <a
                   key={t.slug}
                   href={`/runbook/${t.slug}`}
-                  className="block p-3 rounded-xl border border-gray-800 bg-black/20 hover:bg-black/30 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_0_0_1px_rgba(34,211,238,0.35)_inset,0_10px_24px_-12px_rgba(34,211,238,0.35)]"
-                  onClick={() => setOpen(false)}
+                  className={`block p-3 rounded-xl border border-gray-800 bg-black/20 hover:bg-black/30 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_0_0_1px_rgba(34,211,238,0.35)_inset,0_10px_24px_-12px_rgba(34,211,238,0.35)] ${
+                    idx === activeIdx ? "ring-1 ring-cyan-500/50 bg-black/30" : ""
+                  }`}
+                  onMouseEnter={() => setActiveIdx(idx)}
+                  onClick={(e) => {
+                    if (e.metaKey || e.ctrlKey) {
+                      // allow browser to open new tab
+                    } else {
+                      setOpen(false)
+                    }
+                  }}
                 >
                   <div className="font-bold text-gray-100">{t.title}</div>
                   <div className="mt-1 text-xs text-gray-400">{t.summary}</div>
@@ -117,6 +147,14 @@ export default function CommandK() {
               {results.length === 0 && (
                 <div className="text-sm text-gray-500 p-4">Keine Treffer. Tippe allgemeiner oder drücke Enter.</div>
               )}
+            </div>
+            <div className="flex items-center justify-between px-3 py-2 border-t border-gray-800 text-[11px] text-gray-500">
+              <div className="flex items-center gap-3">
+                <span>↑/↓ Auswahl</span>
+                <span>Enter Öffnen</span>
+                <span>Esc Schließen</span>
+              </div>
+              <div className="opacity-80">Cmd+K öffnen · Cmd+Click neuer Tab</div>
             </div>
           </motion.div>
         </motion.div>

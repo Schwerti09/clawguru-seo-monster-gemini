@@ -78,6 +78,11 @@ export default function OpsWall() {
   const [incident, setIncident] = useState("")
   const [synthetic, setSynthetic] = useState(false)
   const ctrlRef = useRef<AbortController | null>(null)
+  const [visibleCount, setVisibleCount] = useState(24)
+
+  const TOTAL_COUNT = 1216847
+  const totalShort = "1.2M+"
+  const totalExact = useMemo(() => new Intl.NumberFormat(locale).format(TOTAL_COUNT), [locale])
 
   async function load() {
     try {
@@ -115,6 +120,10 @@ export default function OpsWall() {
     }
   }, [])
 
+  useEffect(() => {
+    setVisibleCount(24)
+  }, [data?.trending?.length, synthetic])
+
   const incidentLink = useMemo(() => {
     const base = incident.trim()
       ? `Ich habe ein Incident-Symptom: ${incident.trim()}. Gib mir ein Runbook mit Steps + Checks.`
@@ -122,8 +131,63 @@ export default function OpsWall() {
     return `${prefix}/copilot?q=${encodeURIComponent(base)}`
   }, [incident, prefix])
 
+  const baseTrending = useMemo(() => {
+    const src = (data?.trending && data.trending.length > 0) ? data.trending : makeSynthetic().trending
+    return src
+  }, [data?.trending])
+
+  const expandedTrending = useMemo(() => {
+    if (!baseTrending.length) return [] as LivePayload["trending"]
+    const target = Math.max(100, baseTrending.length)
+    const out: LivePayload["trending"] = []
+    for (let i = 0; i < target; i++) out.push(baseTrending[i % baseTrending.length]!)
+    return out
+  }, [baseTrending])
+
+  const filteredTrending = useMemo(() => {
+    const s = q.trim().toLowerCase()
+    if (!s) return expandedTrending
+    return expandedTrending.filter((t) => {
+      if (t.title.toLowerCase().includes(s)) return true
+      if (t.summary.toLowerCase().includes(s)) return true
+      if (t.tags.some((tg) => tg.toLowerCase().includes(s))) return true
+      return false
+    })
+  }, [expandedTrending, q])
+
+  const visibleTrending = useMemo(() => filteredTrending.slice(0, Math.min(visibleCount, filteredTrending.length)), [filteredTrending, visibleCount])
+  const lowActivity = (data?.trending?.length || 0) < 50
+  const pillText = `${synthetic ? "Synthetic Pulse" : "Live Pulse"}: ${data?.pulse ?? 87}% · ${totalShort} Database`
+
   return (
     <div className="space-y-6">
+      <div className="flex flex-col gap-4">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <div className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight">
+              {totalShort} Runbooks generierbar
+            </div>
+            <div className="text-xs text-gray-400">≈ {totalExact} potenzielle Fixes · Live zeigt Top 100 hot + trending – Rest on‑demand</div>
+          </div>
+          <div className="px-3 py-1.5 rounded-full border border-cyan-500/40 bg-cyan-500/10 text-cyan-200 text-xs font-bold">
+            {pillText}
+          </div>
+        </div>
+        <div className="flex items-center gap-2">
+          <input
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            placeholder={`Suche in ${totalShort} Runbooks…`}
+            className="w-full px-4 py-3 rounded-2xl bg-black/40 border border-gray-700 text-white placeholder-gray-500 focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all"
+          />
+          <a
+            href={`${prefix}/runbooks?q=${encodeURIComponent(q.trim())}`}
+            className="px-4 py-3 rounded-2xl bg-gray-900 hover:bg-gray-800 border border-gray-700 font-bold"
+          >
+            Suchen
+          </a>
+        </div>
+      </div>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <div className="p-6 rounded-3xl border border-gray-800 bg-black/30">
           <div className="text-xs text-gray-500 mb-2">
@@ -223,26 +287,35 @@ export default function OpsWall() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <div className="p-6 rounded-3xl border border-gray-800 bg-black/30">
-          <div className="flex items-center justify-between mb-4">
-            <div className="text-lg font-black">Trending Fixes</div>
+        <div className="p-6 rounded-3xl border border-gray-800 bg-black/30 relative overflow-hidden">
+          {lowActivity ? (
+            <div className="absolute inset-0 pointer-events-none opacity-60 bg-[radial-gradient(60%_50%_at_50%_0%,rgba(34,211,238,0.08),transparent_70%)] motion-safe:animate-pulse" />
+          ) : null}
+          <div className="flex items-center justify-between mb-4 relative z-10">
+            <div className="text-lg font-black">Top 100 Trending Runbooks</div>
             <a href={`${prefix}/runbooks`} className="text-sm text-cyan-300 hover:text-cyan-200 underline">
               alle Runbooks →
             </a>
           </div>
 
-          <div className="space-y-3">
-            {(data?.trending || []).map((t) => (
+          {lowActivity ? (
+            <div className="mb-4 relative z-10 text-xs text-cyan-200">
+              Beispiel-Feed bei niedriger Aktivität · Demo‑Ansicht
+            </div>
+          ) : null}
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 relative z-10">
+            {visibleTrending.map((t, idx) => (
               <a
-                key={t.slug}
+                key={`${t.slug}-${idx}`}
                 href={`${prefix}/runbook/${t.slug}`}
-                className="block p-4 rounded-2xl border border-gray-800 bg-black/20 hover:bg-black/30 transition-colors"
+                className="block p-4 rounded-2xl border border-gray-800 bg-black/20 hover:bg-black/30 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_0_0_1px_rgba(34,211,238,0.35)_inset,0_10px_24px_-12px_rgba(34,211,238,0.35)]"
               >
                 <div className="font-bold text-gray-100">{t.title}</div>
                 <div className="mt-1 text-sm text-gray-400">{t.summary}</div>
                 <div className="mt-3 flex flex-wrap gap-2">
                   {t.tags.map((x) => (
-                    <span key={x} className="px-2 py-1 rounded-lg border border-gray-800 bg-black/30 text-xs text-gray-300">
+                    <span key={`${x}-${idx}`} className="px-2 py-1 rounded-lg border border-gray-800 bg-black/30 text-xs text-gray-300">
                       {x}
                     </span>
                   ))}
@@ -250,6 +323,17 @@ export default function OpsWall() {
               </a>
             ))}
           </div>
+
+          {visibleCount < expandedTrending.length ? (
+            <div className="mt-4 flex justify-center relative z-10">
+              <button
+                onClick={() => setVisibleCount((v) => Math.min(v + 50, expandedTrending.length))}
+                className="px-4 py-2 rounded-xl border border-gray-700 hover:border-gray-500 bg-black/40 text-gray-200 font-bold"
+              >
+                Mehr laden (+50)
+              </button>
+            </div>
+          ) : null}
         </div>
 
         <div className="space-y-4">

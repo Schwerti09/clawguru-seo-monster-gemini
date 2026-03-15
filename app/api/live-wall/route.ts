@@ -99,6 +99,7 @@ function syntheticPayload(now = new Date()) {
     day: isoDate(now),
     counts: { runbooks: 100, tags: 20 },
     pulse: 87,
+    sessions: 5,
     topTags,
     issueCounts,
     trending

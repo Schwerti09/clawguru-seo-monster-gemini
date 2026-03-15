@@ -4,7 +4,8 @@
 // Shows chronological version history with mutation badges and diff views.
 // Slider enables live time-travel through all historical versions.
 
-import { useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
+import { motion, useInView, useReducedMotion } from "framer-motion"
 import type { TemporalHistory, TemporalVersion, TemporalDiff } from "@/lib/temporal-mycelium"
 
 // TEMPORAL MYCELIUM v3.1 – Overlord AI: Badge color per evolution stage
@@ -55,22 +56,36 @@ function VersionCard({
   onClick: () => void
 }) {
   const [open, setOpen] = useState(false)
+  const prefersReduced = useReducedMotion()
 
   return (
-    <div
-      className={`relative rounded-2xl border p-4 cursor-pointer transition-all duration-300 ${
+    <motion.div
+      className={`relative rounded-2xl border p-4 cursor-pointer will-change-transform ${
         isSelected
-          ? "border-cyan-500/60 bg-cyan-500/5 shadow-[0_0_20px_rgba(0,184,255,0.12)]"
+          ? "border-cyan-500/60 bg-cyan-500/5 shadow-[0_0_28px_rgba(0,184,255,0.16)]"
           : "border-gray-800 bg-black/20 hover:border-gray-700"
       }`}
       onClick={onClick}
+      whileHover={prefersReduced ? undefined : { y: -2, scale: 1.01 }}
+      transition={{ type: "spring", stiffness: 260, damping: 20, mass: 0.4 }}
     >
       {/* Connector dot */}
-      <div
-        className={`absolute -left-[1.25rem] top-5 w-3 h-3 rounded-full border-2 transition-colors ${
+      <motion.div
+        className={`absolute -left-[1.25rem] top-5 w-3 h-3 rounded-full border-2 ${
           isSelected ? "border-cyan-400 bg-cyan-500" : "border-gray-600 bg-gray-800"
         }`}
+        animate={prefersReduced ? undefined : { boxShadow: isSelected ? "0 0 12px rgba(0,184,255,0.55)" : "0 0 0 rgba(0,0,0,0)" }}
+        transition={{ duration: 1.2, repeat: Infinity, repeatType: "reverse" }}
       />
+      {/* Hover-reveal connector */}
+      {!prefersReduced && (
+        <motion.div
+          className="absolute left-[-0.9rem] top-[1.375rem] h-px bg-cyan-500/40 origin-left"
+          initial={{ width: 0, opacity: 0 }}
+          whileHover={{ width: 22, opacity: 1 }}
+          transition={{ duration: 0.25 }}
+        />
+      )}
 
       <div className="flex flex-wrap items-center gap-2 mb-2">
         <span
@@ -109,7 +124,7 @@ function VersionCard({
           ))}
         </div>
       )}
-    </div>
+    </motion.div>
   )
 }
 
@@ -132,9 +147,31 @@ export default function TemporalTimeline({ history, slug, lang }: Props) {
   const temporalHref = lang
     ? `/${lang}/runbook/${slug}/temporal`
     : `/runbook/${slug}/temporal`
+  const prefersReduced = useReducedMotion()
+
+  // Scroll-sync: observe cards and set selectedIdx to the most visible one
+  const containerRef = useRef<HTMLDivElement>(null)
+  const itemsRef = useRef<Array<HTMLDivElement | null>>([])
+  useEffect(() => {
+    if (!containerRef.current || prefersReduced) return
+    const obs = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)
+        if (visible[0]) {
+          const idx = itemsRef.current.findIndex((el) => el === visible[0].target)
+          if (idx >= 0) setSelectedIdx(idx)
+        }
+      },
+      { root: null, rootMargin: "-20% 0px -60% 0px", threshold: [0, 0.25, 0.5, 0.75, 1] }
+    )
+    itemsRef.current.forEach((el) => el && obs.observe(el))
+    return () => obs.disconnect()
+  }, [prefersReduced])
 
   return (
-    <section className="mt-12">
+    <section className="mt-12" id="timeline">
       {/* TEMPORAL MYCELIUM v3.1 – Overlord AI: Mycelium Remembers Banner */}
       <div className="mb-6 flex items-center gap-3 px-4 py-3 rounded-2xl border border-violet-500/20 bg-violet-500/5">
         <span className="text-violet-400 text-lg shrink-0">🍄</span>
@@ -197,9 +234,12 @@ export default function TemporalTimeline({ history, slug, lang }: Props) {
         </div>
 
         {/* TEMPORAL MYCELIUM v3.1 – Overlord AI: Live snapshot of selected version */}
-        <div
-          className="mt-4 rounded-xl border border-gray-800 bg-black/30 p-4 transition-all duration-300"
+        <motion.div
+          className="mt-4 rounded-xl border border-gray-800 bg-black/30 p-4"
           key={selectedIdx}
+          initial={prefersReduced ? false : { opacity: 0, y: 8 }}
+          animate={prefersReduced ? undefined : { opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
         >
           <div className="flex flex-wrap items-center gap-2 mb-2">
             <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-lg border text-xs font-black ${badgeStyle(selected.badge)}`}>
@@ -220,20 +260,23 @@ export default function TemporalTimeline({ history, slug, lang }: Props) {
               ))}
             </div>
           )}
-        </div>
+        </motion.div>
       </div>
 
       {/* TEMPORAL MYCELIUM v3.1 – Overlord AI: Chronological timeline list */}
-      <div className="relative ml-5 space-y-4">
-        {/* Vertical timeline rail */}
-        <div className="absolute left-[-1rem] top-0 bottom-0 w-px bg-gray-800" />
+      <div ref={containerRef} className="relative ml-5 space-y-4">
+        {/* Vertical timeline rail with draw animation */}
+        <motion.div
+          className="absolute left-[-1rem] top-0 bottom-0 w-px bg-gray-800 origin-top"
+          initial={prefersReduced ? false : { scaleY: 0 }}
+          whileInView={prefersReduced ? undefined : { scaleY: 1 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+        />
         {history.versions.map((v, i) => (
-          <VersionCard
-            key={v.quarter + v.version}
-            v={v}
-            isSelected={i === selectedIdx}
-            onClick={() => setSelectedIdx(i)}
-          />
+          <div key={v.quarter + v.version} ref={(el) => { itemsRef.current[i] = el }}>
+            <VersionCard v={v} isSelected={i === selectedIdx} onClick={() => setSelectedIdx(i)} />
+          </div>
         ))}
       </div>
     </section>

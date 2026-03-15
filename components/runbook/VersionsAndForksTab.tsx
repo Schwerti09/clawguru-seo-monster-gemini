@@ -187,6 +187,26 @@ export default function VersionsAndForksTab({ slug }: Props) {
     if (tab === "merge-requests") loadMrs()
   }, [tab, loadMrs])
 
+  // Deep link: read ?tab= from URL on mount
+  useEffect(() => {
+    if (typeof window === "undefined") return
+    try {
+      const sp = new URLSearchParams(window.location.search)
+      const t = sp.get("tab") as Tab | null
+      if (t === "versions" || t === "forks" || t === "merge-requests") setTab(t)
+    } catch {}
+  }, [])
+
+  // Persist tab in URL without navigation for shareability
+  useEffect(() => {
+    if (typeof window === "undefined") return
+    try {
+      const url = new URL(window.location.href)
+      url.searchParams.set("tab", tab)
+      window.history.replaceState(null, "", url.toString())
+    } catch {}
+  }, [tab])
+
   // Fork & Evolve action
   async function handleForkEvolve(evolve: boolean, sourceVersion?: RunbookVersion) {
     if (!userEmail) {
@@ -282,11 +302,13 @@ export default function VersionsAndForksTab({ slug }: Props) {
       )}
 
       {/* Tabs */}
-      <div className="flex gap-1 mb-6 border-b border-gray-800 pb-0">
+      <div className="flex gap-1 mb-6 border-b border-gray-800 pb-0" role="tablist" aria-label="Runbook Tabs">
         {(["versions", "forks", "merge-requests"] as Tab[]).map((t) => (
           <button
             key={t}
             onClick={() => setTab(t)}
+            role="tab"
+            aria-selected={tab === t}
             className={`px-4 py-2 text-sm font-bold rounded-t-xl transition-colors ${
               tab === t
                 ? "bg-black/40 border border-b-0 border-gray-700 text-white"

@@ -6,6 +6,7 @@ import { validateRunbook, type ClawCertifiedTier } from "@/lib/quality-gate"
 import { getTemporalHistory } from "@/lib/temporal-mycelium"
 import NextDynamic from "next/dynamic"
 import { Suspense } from "react"
+import dynamic from "next/dynamic"
 import { notFound } from "next/navigation"
 import { CopyLinkButton } from "./CopyLinkButton"
 import { ActivateSwarmButton } from "@/components/shared/ActivateSwarmButton"
@@ -16,6 +17,7 @@ import { headers } from "next/headers"
 import { unstable_cache } from "next/cache"
 import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
 import { getDictionary } from "@/lib/getDictionary"
+const RunbookMiniTabs = dynamic(() => import("@/components/runbook/RunbookMiniTabs"), { ssr: false })
 
 const TemporalTimelineLazy = NextDynamic(() => import("@/components/visual/TemporalTimeline"), {
   ssr: false,
@@ -380,9 +382,20 @@ export default async function RunbookPage(props: { params: { slug: string } }) {
 
         <SectionTitle kicker="Runbook" title={r.title} subtitle={r.summary} />
 
+        {/* Sticky Glass Mini-Tabs + Progress Tracker */}
+        <RunbookMiniTabs />
+
         <ShareButtons title={r.title} slug={r.slug} locale={locale} />
 
-        <div className="mt-10 p-6 rounded-3xl border border-gray-800 bg-black/25">
+        <div
+          id="overview"
+          className="mt-10 p-6 rounded-3xl border bg-black/25"
+          style={{
+            borderColor: "rgba(148,163,184,0.25)",
+            boxShadow: "0 10px 30px rgba(0,0,0,0.35), inset 0 0 0 1px rgba(255,255,255,0.04)",
+            transformStyle: "preserve-3d",
+          }}
+        >
           {/* Rich blocks (Tier-2 content) */}
           {Array.isArray(r.blocks) && r.blocks.length > 0 ? (
             <div className="mb-10">
@@ -392,7 +405,7 @@ export default async function RunbookPage(props: { params: { slug: string } }) {
             </div>
           ) : null}
 
-          <div className="text-xs uppercase tracking-widest text-gray-500">Schritt-für-Schritt</div>
+          <div id="steps" className="text-xs uppercase tracking-widest text-gray-500">Schritt-für-Schritt</div>
           <ol className="mt-4 list-decimal pl-6 space-y-3 text-gray-200">
             {r.howto.steps.map((s, i) => (
               <li key={i} className="leading-relaxed">
@@ -435,12 +448,16 @@ export default async function RunbookPage(props: { params: { slug: string } }) {
 
         {/* TEMPORAL MYCELIUM v3.1 – Overlord AI: Temporal Evolution Timeline */}
         <Suspense fallback={<div className="text-sm text-gray-500 py-6 text-center">Lade Timeline…</div>}>
-          <TemporalTimelineLazy history={temporalHistory} slug={r.slug} />
+          <div id="timeline">
+            <TemporalTimelineLazy history={temporalHistory} slug={r.slug} />
+          </div>
         </Suspense>
 
         {/* MYCELIUM CORE: Runbook Versioning + Community Fork */}
         <Suspense fallback={<div className="text-sm text-gray-500 py-6 text-center">Lade Tabs…</div>}>
-          <VersionsAndForksTabLazy slug={r.slug} />
+          <div id="versions">
+            <VersionsAndForksTabLazy slug={r.slug} />
+          </div>
         </Suspense>
 
         {/* PROVENANCE SINGULARITY v3.4 – Overlord AI: Provenance chain link */}
@@ -466,7 +483,12 @@ export default async function RunbookPage(props: { params: { slug: string } }) {
                 <a
                   key={x.slug}
                   href={`${prefix}/runbook/${x.slug}`}
-                  className="p-5 rounded-3xl border border-gray-800 bg-black/25 hover:bg-black/35 transition-colors"
+                  className="p-5 rounded-3xl border bg-black/25 hover:bg-black/35 transition-colors"
+                  style={{
+                    borderColor: "rgba(148,163,184,0.25)",
+                    boxShadow: "0 10px 30px rgba(0,0,0,0.35), inset 0 0 0 1px rgba(255,255,255,0.04)",
+                    transform: "translateZ(0)",
+                  }}
                 >
                   <div className="flex items-center gap-2 mb-1">
                     <div className="font-black text-sm">{x.title}</div>

@@ -1572,6 +1572,47 @@ function _getRunbooks(): Runbook[] {
 
 export const RUNBOOKS: Runbook[] = _getRunbooks()
 
+// Fallback builder used when on-demand generation crashes
+function _buildDummyRunbook(slug: string): Runbook {
+  const now = new Date()
+  const lastmod = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`
+  const providerGuess = PROVIDERS.find((p) => slug.includes(p.slug))?.slug ?? "generic"
+  const title = slug
+    .split("-")
+    .map((s) => s[0]?.toUpperCase() + s.slice(1))
+    .join(" ")
+  return {
+    slug,
+    title: `Runbook: ${title}`,
+    summary: "Automatisch erstelltes Fallback-Runbook. Inhalte werden on-demand generiert oder stammen aus der Library.",
+    tags: ["fallback", `provider:${providerGuess}`],
+    lastmod,
+    howto: {
+      steps: [
+        "Ist-Zustand prüfen (Logs, Metriken, Error-Raten)",
+        "Kleinsten Fix anwenden (rückrollbar)",
+        "Verifizieren (Smoke Test + Re-Check)",
+      ],
+    },
+    blocks: [
+      { kind: "h2", text: "Hinweis" },
+      { kind: "p", text: "Dieses Fallback-Runbook wird angezeigt, wenn die on‑demand Generierung vorübergehend nicht verfügbar ist." },
+      { kind: "h2", text: "Schnell‑Triage" },
+      { kind: "ul", items: [
+        "Welche Komponenten sind betroffen (Provider, Service, Year, Issue)?",
+        "Welche Errors sieht man in den letzten 15 Minuten?",
+        "Welche letzten Änderungen könnten ursächlich sein?",
+      ]},
+    ],
+    clawScore: clawScoreFor(slug),
+    faq: [
+      { q: "Ist das ein vollständiges Runbook?", a: "Es ist ein Platzhalter. Vollständige Inhalte werden dynamisch generiert/geladen." },
+    ],
+    relatedSlugs: [],
+    author: DEFAULT_AUTHOR,
+  }
+}
+
 export function allProviders() {
   return [...PROVIDERS]
 }
@@ -1585,14 +1626,28 @@ export function runbooksByProvider(providerSlug: string) {
 export function getRunbook(slug: string): Runbook | null {
   if (IS_BUILD_PHASE) {
     // During build, generate on-demand only (no static RUNBOOKS lookup)
-    const meta = parseRunbookSlug100k(slug)
-    if (meta) return generateRunbook100k(meta)
-    return null
+    try {
+      const meta = parseRunbookSlug100k(slug)
+      if (meta) {
+        const __label = `gen100k:${slug}`
+        console.time(__label)
+        const rb = generateRunbook100k(meta)
+        console.timeEnd(__label)
+        console.log("getRunbook", { slug, result: rb ? "found:on_demand(build)" : "null" })
+        return rb ?? _buildDummyRunbook(slug)
+      }
+      console.log("getRunbook", { slug, result: "null(build)" })
+      return _buildDummyRunbook(slug)
+    } catch (e: unknown) {
+      console.error("gen100k error(build)", { slug, error: e instanceof Error ? e.message : String(e) })
+      return _buildDummyRunbook(slug)
+    }
   }
   // Check static RUNBOOKS first (fast path for existing content)
   const existing = RUNBOOKS.find((r) => r.slug === slug)
   if (existing) {
     console.count("pseo.getRunbook.hit.materialized")
+    console.log("getRunbook", { slug, result: "found:materialized" })
     return existing
   }
   // Fall through to 100k on-demand generation (provider-service-issue-year format)
@@ -1601,11 +1656,19 @@ export function getRunbook(slug: string): Runbook | null {
     console.count("pseo.getRunbook.hit.on_demand")
     const __label = `gen100k:${slug}`
     console.time(__label)
-    const rb = generateRunbook100k(meta)
-    console.timeEnd(__label)
-    return rb
+    try {
+      const rb = generateRunbook100k(meta)
+      console.timeEnd(__label)
+      console.log("getRunbook", { slug, result: rb ? "found:on_demand" : "null" })
+      return rb ?? _buildDummyRunbook(slug)
+    } catch (e: unknown) {
+      console.timeEnd(__label)
+      console.error("gen100k error", { slug, error: e instanceof Error ? e.message : String(e) })
+      return _buildDummyRunbook(slug)
+    }
   }
-  return null
+  console.log("getRunbook", { slug, result: "null" })
+  return _buildDummyRunbook(slug)
 }
 
 export function bucketsAF() {

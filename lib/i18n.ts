@@ -2235,7 +2235,9 @@ export async function translateRunbook(opts: {
   const { slug, title, summary, targetLocale } = opts
 
   if (targetLocale === "de") {
-    return { title, summary, locale: "de" }
+    const result = { title, summary, locale: "de" as const }
+    console.log("translateRunbook", { slug, result: "bypass:de" })
+    return result
   }
 
   // NEXT-LEVEL UPGRADE 2026: All 14 locale names for Gemini translation
@@ -2264,7 +2266,9 @@ export async function translateRunbook(opts: {
   ).replace(/\/$/, "")
 
   if (!geminiKey) {
-    return { title, summary, locale: targetLocale }
+    const result = { title, summary, locale: targetLocale }
+    console.log("translateRunbook", { slug, result: "fallback:no_key" })
+    return result
   }
 
   const prompt = [
@@ -2288,7 +2292,10 @@ export async function translateRunbook(opts: {
       }),
       signal: AbortSignal.timeout(15_000),
     })
-    if (!res.ok) return { title, summary, locale: targetLocale }
+    if (!res.ok) {
+      console.warn("translateRunbook", { slug, status: res.status, result: "fallback:http" })
+      return { title, summary, locale: targetLocale }
+    }
     const data = await res.json()
     const text: string =
       data?.candidates?.[0]?.content?.parts
@@ -2297,11 +2304,15 @@ export async function translateRunbook(opts: {
     const jsonStr = text.replace(/```json|```/g, "").trim()
     const parsed = JSON.parse(jsonStr) as { title?: string; summary?: string }
     if (parsed.title && parsed.summary) {
-      return { title: parsed.title, summary: parsed.summary, locale: targetLocale }
+      const result = { title: parsed.title, summary: parsed.summary, locale: targetLocale as Locale }
+      console.log("translateRunbook", { slug, result: "ok" })
+      return result
     }
-  } catch {
-    // fall through to default
+  } catch (e: unknown) {
+    console.error("translateRunbook error", { slug, error: e instanceof Error ? e.message : String(e) })
   }
 
-  return { title, summary, locale: targetLocale }
+  const result = { title, summary, locale: targetLocale }
+  console.log("translateRunbook", { slug, result: "fallback:parse" })
+  return result
 }

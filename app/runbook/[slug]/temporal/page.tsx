@@ -13,6 +13,8 @@ import { headers } from "next/headers"
 import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
 
 export const revalidate = 60
+export const runtime = "nodejs"
+export const maxDuration = 120
 
 export async function generateMetadata(
   props: {

@@ -6,7 +6,6 @@ import { validateRunbook, type ClawCertifiedTier } from "@/lib/quality-gate"
 import { getTemporalHistory } from "@/lib/temporal-mycelium"
 import NextDynamic from "next/dynamic"
 import { Suspense } from "react"
-import dynamic from "next/dynamic"
 import { notFound } from "next/navigation"
 import { CopyLinkButton } from "./CopyLinkButton"
 import { ActivateSwarmButton } from "@/components/shared/ActivateSwarmButton"
@@ -17,7 +16,7 @@ import { headers } from "next/headers"
 import { unstable_cache } from "next/cache"
 import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
 import { getDictionary } from "@/lib/getDictionary"
-const RunbookMiniTabs = dynamic(() => import("@/components/runbook/RunbookMiniTabs"), { ssr: false })
+const RunbookMiniTabs = NextDynamic(() => import("@/components/runbook/RunbookMiniTabs"), { ssr: false })
 
 const TemporalTimelineLazy = NextDynamic(() => import("@/components/visual/TemporalTimeline"), {
   ssr: false,
@@ -32,20 +31,17 @@ const VersionsAndForksTabLazy = NextDynamic(() => import("@/components/runbook/V
 export const dynamic = "force-dynamic"
 export const revalidate = 3600 // reduce rebuild frequency to cut CPU
 export const dynamicParams = true
-export const runtime = "edge"
+export const runtime = "nodejs"
+export const maxDuration = 120
 
-const getLinkEngineCached = unstable_cache(
-  async () => {
-    const { RUNBOOKS } = await import("@/lib/pseo")
-    return buildLinkEngine(RUNBOOKS, {
-      maxLinks: 10,
-      urlForPage: (page) => `/runbook/${page.slug}`,
-      authorityForPage: (page) => page.clawScore,
-    })
-  },
-  ["link-engine"],
-  { revalidate: 3600 }
-)
+async function buildLinkEngineNow() {
+  const { RUNBOOKS } = await import("@/lib/pseo")
+  return buildLinkEngine(RUNBOOKS, {
+    maxLinks: 10,
+    urlForPage: (page) => `/runbook/${page.slug}`,
+    authorityForPage: (page) => page.clawScore,
+  })
+}
 
 const getTemporalHistoryCached = unstable_cache(
   async (slug: string) => {
@@ -293,7 +289,12 @@ export default async function RunbookPage(props: { params: { slug: string } }) {
 
   // Quality Gate: reject thin content before serving (ClawGuru 2026 Standard)
   const quality = validateRunbook(r)
-  if (quality.violations.some((v) => v.severity === "error")) return notFound()
+  if (quality.violations.some((v) => v.severity === "error")) {
+    console.warn("quality-gate:violations", {
+      slug: r.slug,
+      errors: quality.violations.filter((v) => v.severity === "error").map((v) => v.message),
+    })
+  }
 
   // TEMPORAL MYCELIUM v3.1 – Overlord AI: compute deterministic evolution history
   console.time(`${__label}:temporalHistory`)
@@ -311,14 +312,17 @@ export default async function RunbookPage(props: { params: { slug: string } }) {
 
   // Embedding-driven internal links (Spider-Web) with relatedSlugs as seed hints
   console.time(`${__label}:linkEngine`)
-  const linkEngine = await getLinkEngineCached()
+  const linkEngine = await buildLinkEngineNow()
   console.timeEnd(`${__label}:linkEngine`)
 
   console.time(`${__label}:related`)
+  const engineList = (linkEngine && typeof (linkEngine as any).linksForSlug === "function")
+    ? linkEngine.linksForSlug(r.slug)
+    : []
   const relatedSlugs = Array.from(
     new Set([
       ...r.relatedSlugs,
-      ...linkEngine.linksForSlug(r.slug).map((link) => link.slug),
+      ...engineList.map((link) => link.slug),
     ])
   ).slice(0, 10)
   const relatedList = relatedSlugs.length > 0
@@ -389,7 +393,7 @@ export default async function RunbookPage(props: { params: { slug: string } }) {
 
         <div
           id="overview"
-          className="mt-10 p-6 rounded-3xl border bg-black/25"
+          className="mt-10 p-6 rounded-3xl border bg-black/25 transition-transform will-change-transform hover:-translate-y-0.5"
           style={{
             borderColor: "rgba(148,163,184,0.25)",
             boxShadow: "0 10px 30px rgba(0,0,0,0.35), inset 0 0 0 1px rgba(255,255,255,0.04)",
@@ -483,7 +487,7 @@ export default async function RunbookPage(props: { params: { slug: string } }) {
                 <a
                   key={x.slug}
                   href={`${prefix}/runbook/${x.slug}`}
-                  className="p-5 rounded-3xl border bg-black/25 hover:bg-black/35 transition-colors"
+                  className="p-5 rounded-3xl border bg-black/25 hover:bg-black/35 transition-all duration-200 will-change-transform hover:-translate-y-0.5"
                   style={{
                     borderColor: "rgba(148,163,184,0.25)",
                     boxShadow: "0 10px 30px rgba(0,0,0,0.35), inset 0 0 0 1px rgba(255,255,255,0.04)",

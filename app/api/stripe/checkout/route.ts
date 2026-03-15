@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server"
+﻿import { NextRequest, NextResponse } from "next/server"
 import { getOrigin } from "@/lib/origin"
 import { isStripeActive, apiUnavailableResponse } from "@/lib/api-guard"
 import { getStripe } from "@/lib/stripe"
@@ -6,7 +6,7 @@ import { logTelemetry } from "@/lib/ops/telemetry"
 import { getRequestId } from "@/lib/ops/request-id"
 
 export const dynamic = "force-dynamic"
-
+export const runtime = "nodejs"
 type Product = "daypass" | "pro" | "team" | "msp" | "enterprise"
 
 function getPriceId(product: Product) {
@@ -66,7 +66,7 @@ export async function POST(req: NextRequest) {
       })
 
       return NextResponse.json(
-        { error: "Checkout für dieses Produkt ist aktuell nicht verfügbar." },
+        { error: "Checkout fÃ¼r dieses Produkt ist aktuell nicht verfÃ¼gbar." },
         { status: 503 }
       )
     }

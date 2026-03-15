@@ -7,6 +7,9 @@ import { headers } from "next/headers"
 import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
 import { getDictionary } from "@/lib/getDictionary"
 
+export const runtime = "edge"
+export const revalidate = 60
+
 export const metadata = {
   title: "Live Ops Wall | ClawGuru",
   description:

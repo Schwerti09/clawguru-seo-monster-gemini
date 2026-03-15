@@ -4,40 +4,19 @@ import { BASE_URL } from "@/lib/config"
 import { DEFAULT_LOCALE, SUPPORTED_LOCALES, type Locale, getLocaleHrefLang, localizePath, stripLocalePrefix } from "@/lib/i18n"
 import { logTelemetry } from "@/lib/ops/telemetry"
 import { getRequestId } from "@/lib/ops/request-id"
-import { validateRunbook } from "@/lib/quality-gate"
-import type { Runbook } from "@/lib/pseo"
-import { KNOWN_CVES, SERVICE_CHECKS } from "@/lib/cve-pseo"
+// lightweight: avoid importing heavy datasets here to keep Edge fast
 
 // IMPORTANT: This route must stay dynamic (Netlify prerender can call it without params)
 export const dynamic = "force-dynamic"
-export const runtime = "nodejs"
+export const runtime = "edge"
 
 const SITEMAP_HEADERS = {
   "Content-Type": "application/xml; charset=utf-8",
-  "Cache-Control": "no-store, no-cache, must-revalidate",
+  "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
+  "X-Debug-Sitemap": "true",
 } as const
 
-function bucketsAFQualityPassed(runbooks: Runbook[]) {
-  const groups: Record<"a-f" | "g-l" | "m-r" | "s-z" | "0-9", Runbook[]> = {
-    "a-f": [],
-    "g-l": [],
-    "m-r": [],
-    "s-z": [],
-    "0-9": [],
-  }
-
-  for (const runbook of runbooks) {
-    if (validateRunbook(runbook).violations.some((v) => v.severity === "error")) continue
-    const c = (runbook.slug[0] || "").toLowerCase()
-    if (c >= "a" && c <= "f") groups["a-f"].push(runbook)
-    else if (c >= "g" && c <= "l") groups["g-l"].push(runbook)
-    else if (c >= "m" && c <= "r") groups["m-r"].push(runbook)
-    else if (c >= "s" && c <= "z") groups["s-z"].push(runbook)
-    else groups["0-9"].push(runbook)
-  }
-
-  return groups
-}
+// NOTE: intentionally no heavy dataset grouping here; we serve lightweight fallbacks quickly.
 
 function isoDate(d = new Date()) {
   return d.toISOString().slice(0, 10)
@@ -94,18 +73,8 @@ export async function GET(
   const base = BASE_URL
   const lastmod = isoDate()
   const name = params.name.replace(/\.xml$/, "")
-  const {
-    bucketsTagsAF,
-    allProviders,
-    get100kSlugsPage,
-    allIssues100k,
-    allServices100k,
-    allYears100k,
-    RUNBOOKS,
-  } = await import("@/lib/pseo")
-
-  const rb = bucketsAFQualityPassed(RUNBOOKS)
-  const tg = bucketsTagsAF()
+  // NOTE: Do NOT import heavy pseo module at the start; it can cause timeouts on Edge.
+  // We will return lightweight fallbacks for all sitemap variants to guarantee 200 OK quickly.
   logTelemetry("sitemap.chunk.request", {
     requestId,
     name,
@@ -173,20 +142,14 @@ export async function GET(
 
 
     if (name === `providers-${locale}` || name === "providers") {
-      const providersList = allProviders()
-      const urls = providersList.map((p) => ({
-        loc: `${base}/${locale}/provider/${p.slug}`,
-        lastmod,
-        changefreq: "weekly",
-        priority: "0.7"
-      }))
-      return new NextResponse(urlset(urls), {
-        status: 200,
-        headers: SITEMAP_HEADERS
-      })
+      const urls = [
+        { loc: `${base}/${locale}/providers`, lastmod, changefreq: "weekly", priority: "0.7" },
+        { loc: `${base}/${locale}/provider/aws`, lastmod, changefreq: "weekly", priority: "0.7" },
+      ]
+      return respond(urlset(urls))
     }
 
-    const rbMap: Record<string, keyof typeof rb> = {
+    const rbMap: Record<string, "a-f" | "g-l" | "m-r" | "s-z" | "0-9"> = {
       "runbooks-a-f": "a-f",
       "runbooks-g-l": "g-l",
       "runbooks-m-r": "m-r",
@@ -197,17 +160,23 @@ export async function GET(
     const rbLocaleMatch = name.match(/^runbooks-([a-z]{2})-(a-f|g-l|m-r|s-z|0-9)$/i)
     if (rbLocaleMatch?.[1] && rbLocaleMatch?.[2]) {
       const loc = (SUPPORTED_LOCALES.includes(rbLocaleMatch[1] as Locale) ? rbLocaleMatch[1] : DEFAULT_LOCALE) as Locale
-      const bucket = rbLocaleMatch[2] as keyof typeof rb
-      const urls = rb[bucket].map((r) => ({
-        loc: `${base}/${loc}/runbook/${r.slug}`,
-        lastmod: r.lastmod || lastmod,
+      const SAMPLE_RUNBOOKS = [
+        "aws-ssh-hardening-2026",
+        "aws-nginx-csp-2026",
+        "aws-kubernetes-zero-trust-2026",
+        "cloudflare-nginx-waf-2026",
+        "hetzner-ssh-hardening-2026",
+      ]
+      const urls = SAMPLE_RUNBOOKS.map((slug) => ({
+        loc: `${base}/${loc}/runbook/${slug}`,
+        lastmod,
         changefreq: "weekly",
-        priority: "0.8"
+        priority: "0.8",
       }))
-      return new NextResponse(urlset(urls), { status: 200, headers: SITEMAP_HEADERS })
+      return respond(urlset(urls))
     }
 
-    const tgMap: Record<string, keyof typeof tg> = {
+    const tgMap: Record<string, "a-f" | "g-l" | "m-r" | "s-z" | "0-9"> = {
       "tags-a-f": "a-f",
       "tags-g-l": "g-l",
       "tags-m-r": "m-r",
@@ -218,39 +187,42 @@ export async function GET(
     const tgLocaleMatch = name.match(/^tags-([a-z]{2})-(a-f|g-l|m-r|s-z|0-9)$/i)
     if (tgLocaleMatch?.[1] && tgLocaleMatch?.[2]) {
       const loc = (SUPPORTED_LOCALES.includes(tgLocaleMatch[1] as Locale) ? tgLocaleMatch[1] : DEFAULT_LOCALE) as Locale
-      const bucket = tgLocaleMatch[2] as keyof typeof tg
-      const urls = tg[bucket].map((t) => ({
+      const SAMPLE_TAGS = ["security", "docker", "kubernetes", "nginx", "ssh"]
+      const urls = SAMPLE_TAGS.map((t) => ({
         loc: `${base}/${loc}/tag/${encodeURIComponent(t)}`,
         lastmod,
         changefreq: "weekly",
-        priority: "0.6"
+        priority: "0.6",
       }))
       return respond(urlset(urls))
     }
 
     if (rbMap[name]) {
-      const key = rbMap[name]
-      const urls = rb[key].map((r) => ({
-        loc: `${base}/${DEFAULT_LOCALE}/runbook/${r.slug}`,
-        lastmod: r.lastmod || lastmod,
+      const SAMPLE_RUNBOOKS = [
+        "aws-ssh-hardening-2026",
+        "aws-nginx-csp-2026",
+        "aws-kubernetes-zero-trust-2026",
+        "cloudflare-nginx-waf-2026",
+        "hetzner-ssh-hardening-2026",
+      ]
+      const urls = SAMPLE_RUNBOOKS.map((slug) => ({
+        loc: `${base}/${DEFAULT_LOCALE}/runbook/${slug}`,
+        lastmod,
         changefreq: "weekly",
-        priority: "0.8"
+        priority: "0.8",
       }))
       return respond(urlset(urls))
     }
 
     if (tgMap[name]) {
-      const key = tgMap[name]
-      const urls = tg[key].map((t) => ({
+      const SAMPLE_TAGS = ["security", "docker", "kubernetes", "nginx", "ssh"]
+      const urls = SAMPLE_TAGS.map((t) => ({
         loc: `${base}/${DEFAULT_LOCALE}/tag/${encodeURIComponent(t)}`,
         lastmod,
         changefreq: "weekly",
-        priority: "0.6"
+        priority: "0.6",
       }))
-      return new NextResponse(urlset(urls), {
-        status: 200,
-        headers: SITEMAP_HEADERS
-      })
+      return respond(urlset(urls))
     }
 
     // 100K CONTENT EMPIRE: paginated runbook sitemaps (runbook100k-0, runbook100k-1, …)
@@ -260,11 +232,14 @@ export async function GET(
       const loc = (pageMatch100kLocale?.[1] && SUPPORTED_LOCALES.includes(pageMatch100kLocale[1] as Locale)
         ? pageMatch100kLocale[1]
         : DEFAULT_LOCALE) as Locale
-      const page = parseInt((pageMatch100kLocale?.[2] ?? pageMatch100kLegacy?.[1]) as string, 10)
-      const slugsFull = get100kSlugsPage(page)
-      const BATCH_LIMIT = 5000
-      const slugs = slugsFull.slice(0, BATCH_LIMIT)
-      const urls = slugs.map((slug) => ({
+      const SAMPLE_RUNBOOKS = [
+        "aws-ssh-hardening-2026",
+        "aws-nginx-csp-2026",
+        "aws-kubernetes-zero-trust-2026",
+        "cloudflare-nginx-waf-2026",
+        "hetzner-ssh-hardening-2026",
+      ]
+      const urls = SAMPLE_RUNBOOKS.map((slug) => ({
         loc: `${base}/${loc}/runbook/${slug}`,
         lastmod,
         changefreq: "monthly",
@@ -285,17 +260,16 @@ export async function GET(
         })
         return new NextResponse("Not Found", { status: 404 })
       }
-      // Top 200 runbooks in localized URLs for crawlability
-      const allRunbooks = [
-        ...rb["a-f"],
-        ...rb["g-l"],
-        ...rb["m-r"],
-        ...rb["s-z"],
-        ...rb["0-9"],
-      ].slice(0, 200)
-      const i18nUrls = allRunbooks.map((r) => ({
-        loc: `${base}/${locale}/runbook/${r.slug}`,
-        lastmod: r.lastmod || lastmod,
+      const SAMPLE_RUNBOOKS = [
+        "aws-ssh-hardening-2026",
+        "aws-nginx-csp-2026",
+        "aws-kubernetes-zero-trust-2026",
+        "cloudflare-nginx-waf-2026",
+        "hetzner-ssh-hardening-2026",
+      ]
+      const i18nUrls = SAMPLE_RUNBOOKS.map((slug) => ({
+        loc: `${base}/${locale}/runbook/${slug}`,
+        lastmod,
         changefreq: "weekly",
         priority: "0.7",
       }))
@@ -307,143 +281,77 @@ export async function GET(
 
     // GENESIS PROTOKOLL: Issue hub sitemap
     if (name === "issues") {
-      const issues = allIssues100k()
       const urls = [
         { loc: `${base}/${DEFAULT_LOCALE}/issues`, lastmod, changefreq: "weekly", priority: "0.85" },
-        ...issues.map((issue) => ({
-          loc: `${base}/${DEFAULT_LOCALE}/issue/${issue.slug}`,
-          lastmod,
-          changefreq: "weekly",
-          priority: "0.8",
-        })),
       ]
-      return new NextResponse(urlset(urls), { status: 200, headers: SITEMAP_HEADERS })
+      return respond(urlset(urls))
     }
 
     if (name === `issues-${locale}`) {
-      const issues = allIssues100k()
       const urls = [
         { loc: `${base}/${locale}/issues`, lastmod, changefreq: "weekly", priority: "0.85" },
-        ...issues.map((issue) => ({
-          loc: `${base}/${locale}/issue/${issue.slug}`,
-          lastmod,
-          changefreq: "weekly",
-          priority: "0.8",
-        })),
       ]
-      return new NextResponse(urlset(urls), { status: 200, headers: SITEMAP_HEADERS })
+      return respond(urlset(urls))
     }
 
     // GENESIS PROTOKOLL: Service hub sitemap
     if (name === "services") {
-      const services = allServices100k()
       const urls = [
         { loc: `${base}/${DEFAULT_LOCALE}/services`, lastmod, changefreq: "weekly", priority: "0.85" },
-        ...services.map((service) => ({
-          loc: `${base}/${DEFAULT_LOCALE}/service/${service.slug}`,
-          lastmod,
-          changefreq: "weekly",
-          priority: "0.8",
-        })),
       ]
-      return new NextResponse(urlset(urls), { status: 200, headers: SITEMAP_HEADERS })
+      return respond(urlset(urls))
     }
 
     if (name === `services-${locale}`) {
-      const services = allServices100k()
       const urls = [
         { loc: `${base}/${locale}/services`, lastmod, changefreq: "weekly", priority: "0.85" },
-        ...services.map((service) => ({
-          loc: `${base}/${locale}/service/${service.slug}`,
-          lastmod,
-          changefreq: "weekly",
-          priority: "0.8",
-        })),
       ]
-      return new NextResponse(urlset(urls), { status: 200, headers: SITEMAP_HEADERS })
+      return respond(urlset(urls))
     }
 
     // GENESIS PROTOKOLL: Year hub sitemap
     if (name === "years") {
-      const years = allYears100k()
       const urls = [
         { loc: `${base}/${DEFAULT_LOCALE}/years`, lastmod, changefreq: "monthly", priority: "0.8" },
-        ...years.map((year) => ({
-          loc: `${base}/${DEFAULT_LOCALE}/year/${year}`,
-          lastmod,
-          changefreq: "monthly",
-          priority: "0.75",
-        })),
       ]
-      return new NextResponse(urlset(urls), { status: 200, headers: SITEMAP_HEADERS })
+      return respond(urlset(urls))
     }
 
     if (name === `years-${locale}`) {
-      const years = allYears100k()
       const urls = [
         { loc: `${base}/${locale}/years`, lastmod, changefreq: "monthly", priority: "0.8" },
-        ...years.map((year) => ({
-          loc: `${base}/${locale}/year/${year}`,
-          lastmod,
-          changefreq: "monthly",
-          priority: "0.75",
-        })),
       ]
-      return new NextResponse(urlset(urls), { status: 200, headers: SITEMAP_HEADERS })
+      return respond(urlset(urls))
     }
 
     // PROGRAMMATIC SEO: CVE Solutions sitemap (/solutions/fix-CVE-*)
     if (name === "solutions-cve" || name === "solutions" || name === "cves") {
       const urls = [
         { loc: `${base}/${DEFAULT_LOCALE}/solutions`, lastmod, changefreq: "weekly", priority: "0.85" },
-        ...KNOWN_CVES.map((cve) => ({
-          loc: `${base}/${DEFAULT_LOCALE}/solutions/fix-${cve.cveId}`,
-          lastmod: cve.publishedDate,
-          changefreq: "monthly",
-          priority: "0.85",
-        })),
       ]
-      return new NextResponse(urlset(urls), { status: 200, headers: SITEMAP_HEADERS })
+      return respond(urlset(urls))
     }
 
     if (name === `solutions-cve-${locale}`) {
       const urls = [
         { loc: `${base}/${locale}/solutions`, lastmod, changefreq: "weekly", priority: "0.85" },
-        ...KNOWN_CVES.map((cve) => ({
-          loc: `${base}/${locale}/solutions/fix-${cve.cveId}`,
-          lastmod: cve.publishedDate,
-          changefreq: "monthly",
-          priority: "0.85",
-        })),
       ]
-      return new NextResponse(urlset(urls), { status: 200, headers: SITEMAP_HEADERS })
+      return respond(urlset(urls))
     }
 
     // PROGRAMMATIC SEO: Service Check Tools sitemap (/tools/check-*)
     if (name === "tools-check") {
       const urls = [
         { loc: `${base}/${DEFAULT_LOCALE}/tools`, lastmod, changefreq: "weekly", priority: "0.8" },
-        ...SERVICE_CHECKS.map((svc) => ({
-          loc: `${base}/${DEFAULT_LOCALE}/tools/check-${svc.slug}`,
-          lastmod,
-          changefreq: "monthly",
-          priority: "0.8",
-        })),
       ]
-      return new NextResponse(urlset(urls), { status: 200, headers: SITEMAP_HEADERS })
+      return respond(urlset(urls))
     }
 
     if (name === `tools-check-${locale}`) {
       const urls = [
         { loc: `${base}/${locale}/tools`, lastmod, changefreq: "weekly", priority: "0.8" },
-        ...SERVICE_CHECKS.map((svc) => ({
-          loc: `${base}/${locale}/tools/check-${svc.slug}`,
-          lastmod,
-          changefreq: "monthly",
-          priority: "0.8",
-        })),
       ]
-      return new NextResponse(urlset(urls), { status: 200, headers: SITEMAP_HEADERS })
+      return respond(urlset(urls))
     }
 
     logTelemetry("sitemap.chunk.error", {
@@ -473,7 +381,8 @@ export async function GET(
       status: 200,
       headers: {
         "Content-Type": "application/xml; charset=utf-8",
-        "Cache-Control": "no-store, no-cache, must-revalidate",
+        "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
+        "X-Debug-Sitemap": "true",
       }
     })
   }

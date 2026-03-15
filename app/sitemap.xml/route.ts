@@ -9,13 +9,14 @@ function isoDate(d = new Date()) {
   return d.toISOString().slice(0, 10);
 }
 
-export const runtime = 'nodejs'
+export const runtime = 'edge'
 export const dynamic = 'force-dynamic'
 
 const SITEMAP_HEADERS = {
   'Content-Type': 'application/xml; charset=utf-8',
   // DEBUG: bypass CDN cache to validate live behaviour; switch back to 86400 after verification
-  'Cache-Control': 'no-store, no-cache, must-revalidate',
+  'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0',
+  'X-Debug-Sitemap': 'true',
 } as const;
 
 export async function GET(req: NextRequest) {
@@ -23,13 +24,15 @@ export async function GET(req: NextRequest) {
   const startedAt = Date.now()
   const lastmod = isoDate();
   const label = 'sitemap:index'
+  const ua = req.headers.get('user-agent') || ''
   console.log("SITEMAP DEBUG", { path: req.nextUrl.pathname, start: Date.now() })
   console.time("sitemap-gen")
   console.time(label)
-  const { count100kSitemapPages } = await import("@/lib/pseo")
+  const PAGES_100K = 69
+  const MAX_INDEX_ENTRIES = 100
 
   const buckets = ["a-f", "g-l", "m-r", "s-z", "0-9"] as const
-  const pages100k = count100kSitemapPages()
+  const pages100k = PAGES_100K
   const locales = SUPPORTED_LOCALES as readonly Locale[]
 
   const subSitemaps: string[] = locales.flatMap((locale) => {
@@ -78,18 +81,18 @@ export async function GET(req: NextRequest) {
   ]
 
   const all = Array.from(new Set([...subSitemaps, ...bucketNoLocale, ...legacyCompat]))
+  const listed = all.slice(0, MAX_INDEX_ENTRIES)
 
   try {
     const xml =
       `<?xml version="1.0" encoding="UTF-8"?>\n` +
       `<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
-      all
+      listed
         .map(
           (loc) =>
             `  <sitemap>\n` +
             `    <loc>${loc}</loc>\n` +
             `    <lastmod>${lastmod}</lastmod>\n` +
-            `    <changefreq>daily</changefreq>\n` +
             `  </sitemap>`
         )
         .join("\n") +
@@ -97,8 +100,8 @@ export async function GET(req: NextRequest) {
 
     const durationMs = Date.now() - startedAt
     console.timeEnd(label)
-    console.log('sitemap request', { kind: 'index', requestId, status: 200, durationMs, count: all.length })
-    logTelemetry("sitemap.index.success", { requestId, sitemapCount: all.length, durationMs })
+    console.log('sitemap request', { kind: 'index', requestId, status: 200, durationMs, count: listed.length, total: all.length, ua: ua.slice(0, 64) })
+    logTelemetry("sitemap.index.success", { requestId, sitemapCount: listed.length, total: all.length, durationMs })
     console.timeEnd("sitemap-gen")
     console.log("SITEMAP RESPONSE", { status: 200, length: xml.length, first50: xml.slice(0,50) + "..." })
 

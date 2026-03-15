@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { useI18n } from "@/components/i18n/I18nProvider"
 
 type LivePayload = {
@@ -8,9 +8,56 @@ type LivePayload = {
   day: string
   counts: { runbooks: number; tags: number }
   pulse: number
+  sessions?: number
   topTags: { name: string; count: number }[]
   issueCounts: { name: string; count: number }[]
   trending: { slug: string; title: string; summary: string; tags: string[] }[]
+}
+
+function isMeaningful(p: Partial<LivePayload> | null | undefined): p is LivePayload {
+  if (!p) return false
+  const hasLists = Boolean((p.topTags && p.topTags.length) || (p.trending && p.trending.length) || (p.issueCounts && p.issueCounts.length))
+  const hasCounts = Boolean(p.counts && (p.counts.runbooks ?? 0) + (p.counts.tags ?? 0) > 0)
+  return hasLists || hasCounts
+}
+
+function makeSynthetic(): LivePayload {
+  const now = new Date().toISOString()
+  const tags = [
+    "nginx", "webhook", "ssl", "docker", "secrets", "stripe", "oauth", "sso", "redis", "postgres",
+    "cdn", "cache", "ci/cd", "vercel", "nextjs", "rate-limit", "cors", "k8s", "helm", "kafka"
+  ]
+  const topTags = tags.slice(0, 20).map((name, i) => ({ name, count: 5 + ((i * 3) % 17) }))
+  const issueCounts = [
+    { name: "5xx", count: 14 },
+    { name: "DB", count: 9 },
+    { name: "Cache", count: 7 },
+    { name: "Webhook", count: 11 },
+    { name: "Auth", count: 6 },
+    { name: "Build", count: 4 }
+  ]
+  const trending = [
+    { slug: "nginx-502-gateway-timeout", title: "Nginx 502 Gateway Timeout fixen", summary: "Upstreams prüfen, timeouts erhöhen, health-checks.", tags: ["nginx", "timeouts", "upstream"] },
+    { slug: "stripe-webhook-signature-mismatch", title: "Stripe Webhook: Signature mismatch", summary: "Signing-Secret, raw body, clock skew.", tags: ["stripe", "webhook", "security"] },
+    { slug: "docker-secrets-best-practices", title: "Docker Secrets Best Practices", summary: "Kein ENV-Leak, mounts, rotation.", tags: ["docker", "secrets"] },
+    { slug: "cdn-cache-busting-strategies", title: "CDN Cache Busting Strategien", summary: "s-maxage, stale-while-revalidate, keys.", tags: ["cdn", "cache"] },
+    { slug: "postgres-connections", title: "Postgres: Too many connections", summary: "Pooling, pgbouncer, idle-killer.", tags: ["postgres", "pool"] },
+    { slug: "oauth-callback-mismatch", title: "OAuth Callback Mismatch", summary: "Origin korrekt setzen, redirect-URIs prüfen.", tags: ["oauth", "sso"] },
+    { slug: "k8s-crashloopbackoff", title: "K8s CrashLoopBackOff", summary: "Probes, resources, logs.", tags: ["k8s", "probes"] },
+    { slug: "cors-preflight-fail", title: "CORS Preflight Fail", summary: "Allowed origins, headers, methods.", tags: ["cors", "security"] },
+    { slug: "redis-evictions", title: "Redis Evictions", summary: "Maxmemory, eviction policy, sizing.", tags: ["redis", "memory"] },
+    { slug: "nextjs-edge-timeout", title: "Next.js Edge Timeout", summary: "Runtime wählen, payload minimieren, streaming.", tags: ["nextjs", "vercel"] }
+  ]
+  return {
+    updatedAt: now,
+    day: new Date().toLocaleDateString(undefined, { weekday: "short" }),
+    counts: { runbooks: 100, tags: 20 },
+    pulse: 87,
+    sessions: 5,
+    topTags,
+    issueCounts,
+    trending
+  }
 }
 
 function fmtTime(iso: string) {
@@ -29,15 +76,32 @@ export default function OpsWall() {
   const [err, setErr] = useState<string | null>(null)
   const [q, setQ] = useState("")
   const [incident, setIncident] = useState("")
+  const [synthetic, setSynthetic] = useState(false)
+  const ctrlRef = useRef<AbortController | null>(null)
 
   async function load() {
     try {
-      const res = await fetch("/api/live-wall")
+      if (ctrlRef.current) ctrlRef.current.abort()
+      const ctrl = new AbortController()
+      ctrlRef.current = ctrl
+      const res = await fetch("/api/live-wall", { cache: "default", signal: ctrl.signal })
       if (!res.ok) throw new Error("Live Feed nicht erreichbar")
-      const json = (await res.json()) as LivePayload
-      setData(json)
-      setErr(null)
+      const json = (await res.json()) as Partial<LivePayload>
+      if (isMeaningful(json)) {
+        setData(json as LivePayload)
+        setSynthetic(false)
+        setErr(null)
+      } else {
+        const s = makeSynthetic()
+        setData(s)
+        setSynthetic(true)
+        setErr(null)
+        console.warn("/api/live-wall returned empty – using synthetic fallback")
+      }
     } catch (e: unknown) {
+      const s = makeSynthetic()
+      setData(s)
+      setSynthetic(true)
       setErr(e instanceof Error ? e.message : "Live Feed Fehler")
     }
   }
@@ -45,7 +109,10 @@ export default function OpsWall() {
   useEffect(() => {
     load()
     const t = setInterval(load, 60000)
-    return () => clearInterval(t)
+    return () => {
+      clearInterval(t)
+      if (ctrlRef.current) ctrlRef.current.abort()
+    }
   }, [])
 
   const incidentLink = useMemo(() => {
@@ -59,9 +126,11 @@ export default function OpsWall() {
     <div className="space-y-6">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <div className="p-6 rounded-3xl border border-gray-800 bg-black/30">
-          <div className="text-xs text-gray-500 mb-2">Ops Pulse (synthetisch)</div>
+          <div className="text-xs text-gray-500 mb-2">
+            Ops Pulse {synthetic ? "(synthetic fallback)" : "(live)"}
+          </div>
           <div className="flex items-end gap-3">
-            <div className="text-5xl font-black">{data?.pulse ?? "—"}</div>
+            <div className="text-5xl font-black">{data?.sessions ?? data?.pulse ?? "—"}</div>
             <div className="pb-2 text-sm text-gray-300">aktive “Sessions”</div>
           </div>
           <div className="mt-3 text-xs text-gray-500">
@@ -70,7 +139,7 @@ export default function OpsWall() {
           <div className="mt-4 h-2 rounded-full bg-gray-900 overflow-hidden">
             <div
               className="h-full bg-gradient-to-r from-brand-cyan to-brand-violet"
-              style={{ width: `${Math.min(100, Math.max(5, (data?.pulse ?? 5))) }%` }}
+              style={{ width: `${Math.min(100, Math.max(5, (data?.pulse ?? 87))) }%` }}
             />
           </div>
         </div>
@@ -79,11 +148,11 @@ export default function OpsWall() {
           <div className="text-xs text-gray-500 mb-2">Library</div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <div className="text-3xl font-black">{data?.counts.runbooks ?? "—"}</div>
+              <div className="text-3xl font-black">{data?.counts?.runbooks ?? "—"}</div>
               <div className="text-sm text-gray-300">Runbooks</div>
             </div>
             <div>
-              <div className="text-3xl font-black">{data?.counts.tags ?? "—"}</div>
+              <div className="text-3xl font-black">{data?.counts?.tags ?? "—"}</div>
               <div className="text-sm text-gray-300">Tags</div>
             </div>
           </div>
@@ -139,7 +208,17 @@ export default function OpsWall() {
             </div>
           </div>
 
-          {err ? <div className="mt-4 text-sm text-red-200">{err}</div> : null}
+          {err ? (
+            <div className="mt-4 text-sm text-red-200 flex items-center gap-3">
+              <span>{err} – Synthetic Mode aktiv</span>
+              <button
+                onClick={() => load()}
+                className="px-3 py-1 rounded-lg border border-red-500/50 hover:border-red-400 text-red-200/90 hover:text-white transition-colors"
+              >
+                Retry
+              </button>
+            </div>
+          ) : null}
         </div>
       </div>
 
@@ -202,7 +281,7 @@ export default function OpsWall() {
                   <div className="flex-1 h-2 rounded-full bg-gray-900 overflow-hidden">
                     <div
                       className="h-full bg-gradient-to-r from-brand-cyan to-brand-violet"
-                      style={{ width: `${Math.min(100, Math.max(3, (x.count / (data?.counts.runbooks || 1)) * 220))}%` }}
+                      style={{ width: `${Math.min(100, Math.max(3, (x.count / (data?.counts?.runbooks || 1)) * 220))}%` }}
                     />
                   </div>
                   <div className="w-12 text-right text-xs text-gray-400">{x.count}</div>

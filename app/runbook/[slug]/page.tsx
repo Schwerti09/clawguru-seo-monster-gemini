@@ -13,6 +13,7 @@ import { BASE_URL } from "@/lib/config"
 import { buildLinkEngine } from "@/lib/seo/link-engine"
 import MyceliumShareCard from "@/components/share/MyceliumShareCard"
 import { headers } from "next/headers"
+import { unstable_cache } from "next/cache"
 import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
 import { getDictionary } from "@/lib/getDictionary"
 
@@ -29,6 +30,30 @@ const VersionsAndForksTabLazy = NextDynamic(() => import("@/components/runbook/V
 export const dynamic = "force-dynamic"
 export const revalidate = 3600 // reduce rebuild frequency to cut CPU
 export const dynamicParams = true
+export const runtime = "edge"
+
+const getLinkEngineCached = unstable_cache(
+  async () => {
+    const { RUNBOOKS } = await import("@/lib/pseo")
+    return buildLinkEngine(RUNBOOKS, {
+      maxLinks: 10,
+      urlForPage: (page) => `/runbook/${page.slug}`,
+      authorityForPage: (page) => page.clawScore,
+    })
+  },
+  ["link-engine"],
+  { revalidate: 3600 }
+)
+
+const getTemporalHistoryCached = unstable_cache(
+  async (slug: string) => {
+    const { getRunbook } = await import("@/lib/pseo")
+    const rb = getRunbook(slug)
+    return rb ? getTemporalHistory(rb) : null
+  },
+  ["temporal-history"],
+  { revalidate: 3600 }
+)
 
 export async function generateStaticParams() {
   // Pre-render top 200 static RUNBOOKS + key 100k slugs for fast initial crawl
@@ -270,7 +295,7 @@ export default async function RunbookPage(props: { params: { slug: string } }) {
 
   // TEMPORAL MYCELIUM v3.1 – Overlord AI: compute deterministic evolution history
   console.time(`${__label}:temporalHistory`)
-  const temporalHistory = getTemporalHistory(r)
+  const temporalHistory = await getTemporalHistoryCached(r.slug)
   console.timeEnd(`${__label}:temporalHistory`)
 
   // Pre-build slug→runbook Map for O(1) related lookups
@@ -281,15 +306,12 @@ export default async function RunbookPage(props: { params: { slug: string } }) {
   } else {
     console.count("pseo.materialized_hit")
   }
-  console.time(`${__label}:linkEngine`)
-  const linkEngine = buildLinkEngine(RUNBOOKS, {
-    maxLinks: 10,
-    urlForPage: (page) => `/runbook/${page.slug}`,
-    authorityForPage: (page) => page.clawScore,
-  })
-  console.timeEnd(`${__label}:linkEngine`)
 
   // Embedding-driven internal links (Spider-Web) with relatedSlugs as seed hints
+  console.time(`${__label}:linkEngine`)
+  const linkEngine = await getLinkEngineCached()
+  console.timeEnd(`${__label}:linkEngine`)
+
   console.time(`${__label}:related`)
   const relatedSlugs = Array.from(
     new Set([

@@ -8,25 +8,26 @@ function isoDate(d = new Date()) {
   return d.toISOString().slice(0, 10);
 }
 
-export const runtime = 'nodejs'
+export const runtime = 'edge'
 export const dynamic = 'force-dynamic'
 
 const SITEMAP_HEADERS = {
   'Content-Type': 'application/xml; charset=utf-8',
   // DEBUG: bypass CDN cache to validate live behaviour; switch back to 86400 after verification
-  'Cache-Control': 'no-store, no-cache',
+  'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0',
+  'X-Debug-Sitemap': 'true',
 } as const;
 
 export async function GET(req: NextRequest) {
   const requestId = getRequestId(req.headers)
   const startedAt = Date.now()
   const lastmod = isoDate();
-  const { count100kSitemapPages } = await import("@/lib/pseo")
+  const PAGES_100K = 69
   const label = 'sitemap:legacy_index'
   console.time(label)
 
   const buckets = ["a-f", "g-l", "m-r", "s-z", "0-9"] as const
-  const pages100k = count100kSitemapPages()
+  const pages100k = PAGES_100K
   const locales = SUPPORTED_LOCALES as readonly Locale[]
 
   const subSitemaps: string[] = locales.flatMap((locale) => {

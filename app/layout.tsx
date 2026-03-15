@@ -20,6 +20,7 @@ import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
 import { SEO_TARGET_KEYWORDS_2026 } from "@/lib/seo/targets"
 import { getDictionary } from "@/lib/getDictionary"
 import { I18nProvider } from "@/components/i18n/I18nProvider"
+import CommandK from "@/components/search/CommandK"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 
@@ -150,6 +151,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             <FloatingMyceliumShareBtn />
             {/* VISUAL UPGRADE 2026: Custom neon cursor for desktop */}
             <NeonCursor />
+            <CommandK />
           </RTLProvider>
         </I18nProvider>
       </body>

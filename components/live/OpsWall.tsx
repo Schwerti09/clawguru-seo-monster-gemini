@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useRef, useState } from "react"
+import { motion, useReducedMotion } from "framer-motion"
 import { useI18n } from "@/components/i18n/I18nProvider"
 
 type LivePayload = {
@@ -79,6 +80,8 @@ export default function OpsWall() {
   const [synthetic, setSynthetic] = useState(false)
   const ctrlRef = useRef<AbortController | null>(null)
   const [visibleCount, setVisibleCount] = useState(24)
+  const prefersReduced = useReducedMotion()
+  const [rel, setRel] = useState<string>("")
 
   const TOTAL_COUNT = 1216847
   const totalShort = "1.2M+"
@@ -119,6 +122,22 @@ export default function OpsWall() {
       if (ctrlRef.current) ctrlRef.current.abort()
     }
   }, [])
+
+  useEffect(() => {
+    function computeRelative(iso?: string) {
+      if (!iso) return "—"
+      const d = new Date(iso).getTime()
+      const s = Math.max(0, Math.round((Date.now() - d) / 1000))
+      if (s < 60) return `${s}s`
+      const m = Math.floor(s / 60)
+      if (m < 60) return `${m}m`
+      const h = Math.floor(m / 60)
+      return `${h}h`
+    }
+    setRel(computeRelative(data?.updatedAt))
+    const id = setInterval(() => setRel(computeRelative(data?.updatedAt)), 1000)
+    return () => clearInterval(id)
+  }, [data?.updatedAt])
 
   useEffect(() => {
     setVisibleCount(24)
@@ -165,12 +184,25 @@ export default function OpsWall() {
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
             <div className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight">
-              {totalShort} Runbooks generierbar
+              <span className="relative">
+                {totalShort} Runbooks generierbar
+                <span
+                  className="absolute -inset-1.5 -z-10 rounded-full blur-2xl opacity-40"
+                  style={{ background: "radial-gradient(60% 60% at 50% 50%, rgba(0,184,255,0.25), rgba(0,0,0,0))" }}
+                />
+              </span>
             </div>
             <div className="text-xs text-gray-400">≈ {totalExact} potenzielle Fixes · Live zeigt Top 100 hot + trending – Rest on‑demand</div>
           </div>
-          <div className="px-3 py-1.5 rounded-full border border-cyan-500/40 bg-cyan-500/10 text-cyan-200 text-xs font-bold">
-            {pillText}
+          <div className="flex items-center gap-2">
+            <div className="px-3 py-1.5 rounded-full border border-cyan-500/40 bg-cyan-500/10 text-cyan-200 text-xs font-bold">
+              {pillText}
+            </div>
+            <div className="px-3 py-1.5 rounded-full text-[11px] font-extrabold text-white"
+              style={{ background: "linear-gradient(90deg, rgba(0,255,157,0.25), rgba(0,184,255,0.25))", boxShadow: "0 0 24px rgba(0,184,255,0.25) inset, 0 0 14px rgba(0,255,157,0.25)" }}
+            >
+              1.2M+ Badge
+            </div>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -189,16 +221,34 @@ export default function OpsWall() {
         </div>
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <div className="p-6 rounded-3xl border border-gray-800 bg-black/30">
+        <div className="p-6 rounded-3xl border border-gray-800 bg-black/30 relative overflow-hidden">
           <div className="text-xs text-gray-500 mb-2">
             Ops Pulse {synthetic ? "(synthetic fallback)" : "(live)"}
           </div>
           <div className="flex items-end gap-3">
-            <div className="text-5xl font-black">{data?.sessions ?? data?.pulse ?? "—"}</div>
+            <div className="relative">
+              <div className="text-5xl font-black relative z-10">{data?.sessions ?? data?.pulse ?? "—"}</div>
+              {!prefersReduced && (
+                <>
+                  <motion.div
+                    className="absolute inset-[-10px] rounded-full border border-cyan-500/30"
+                    initial={{ scale: 0.95, opacity: 0.6 }}
+                    animate={{ scale: 1.1, opacity: 0 }}
+                    transition={{ duration: 1.8, repeat: Infinity, ease: "easeOut" }}
+                  />
+                  <motion.div
+                    className="absolute inset-[-18px] rounded-full border border-cyan-500/20"
+                    initial={{ scale: 0.9, opacity: 0.5 }}
+                    animate={{ scale: 1.18, opacity: 0 }}
+                    transition={{ duration: 2.2, repeat: Infinity, ease: "easeOut", delay: 0.4 }}
+                  />
+                </>
+              )}
+            </div>
             <div className="pb-2 text-sm text-gray-300">aktive “Sessions”</div>
           </div>
           <div className="mt-3 text-xs text-gray-500">
-            Updated: {data ? fmtTime(data.updatedAt) : "—"} · Day: {data?.day ?? "—"}
+            Updated: {data ? fmtTime(data.updatedAt) : "—"} ({rel}) · Day: {data?.day ?? "—"}
           </div>
           <div className="mt-4 h-2 rounded-full bg-gray-900 overflow-hidden">
             <div
@@ -208,7 +258,7 @@ export default function OpsWall() {
           </div>
         </div>
 
-        <div className="p-6 rounded-3xl border border-gray-800 bg-black/30">
+        <div className="p-6 rounded-3xl border border-gray-800 bg-black/30 transition-all will-change-transform hover:-translate-y-0.5 hover:shadow-[0_10px_24px_-12px_rgba(34,211,238,0.25)]">
           <div className="text-xs text-gray-500 mb-2">Library</div>
           <div className="grid grid-cols-2 gap-4">
             <div>
@@ -225,7 +275,7 @@ export default function OpsWall() {
           </div>
         </div>
 
-        <div className="p-6 rounded-3xl border border-gray-800 bg-black/30">
+        <div className="p-6 rounded-3xl border border-gray-800 bg-black/30 transition-all will-change-transform hover:-translate-y-0.5 hover:shadow-[0_10px_24px_-12px_rgba(34,211,238,0.25)]">
           <div className="text-xs text-gray-500 mb-2">Fast Actions</div>
 
           <div className="space-y-3">
@@ -309,8 +359,45 @@ export default function OpsWall() {
               <a
                 key={`${t.slug}-${idx}`}
                 href={`${prefix}/runbook/${t.slug}`}
-                className="block p-4 rounded-2xl border border-gray-800 bg-black/20 hover:bg-black/30 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_0_0_1px_rgba(34,211,238,0.35)_inset,0_10px_24px_-12px_rgba(34,211,238,0.35)]"
+                className="group block p-4 rounded-2xl border border-gray-800 bg-black/20 hover:bg-black/30 transition-all duration-200 will-change-transform hover:-translate-y-0.5 hover:shadow-[0_0_0_1px_rgba(34,211,238,0.35)_inset,0_10px_24px_-12px_rgba(34,211,238,0.35)] relative overflow-hidden"
+                onMouseDown={(e) => {
+                  if (prefersReduced) return
+                  const el = (e.currentTarget as HTMLAnchorElement)
+                  const burst = document.createElement('span')
+                  burst.className = 'pointer-events-none absolute w-24 h-24 rounded-full'
+                  const rect = el.getBoundingClientRect()
+                  burst.style.left = `${e.clientX - rect.left - 48}px`
+                  burst.style.top = `${e.clientY - rect.top - 48}px`
+                  burst.style.background = 'radial-gradient(circle, rgba(0,184,255,0.5) 0%, rgba(0,184,255,0.15) 40%, rgba(0,184,255,0) 70%)'
+                  burst.style.filter = 'blur(1px)'
+                  burst.style.opacity = '0.9'
+                  burst.style.transform = 'scale(0.6)'
+                  burst.style.transition = 'transform 420ms cubic-bezier(0.16,1,0.3,1), opacity 420ms'
+                  el.appendChild(burst)
+                  requestAnimationFrame(() => {
+                    burst.style.transform = 'scale(1.35)'
+                    burst.style.opacity = '0'
+                  })
+                  setTimeout(() => burst.remove(), 450)
+                }}
               >
+                {!prefersReduced && (
+                  <div className="pointer-events-none absolute inset-0">
+                    {Array.from({ length: 6 }).map((_, i) => (
+                      <span
+                        key={i}
+                        className="absolute block w-1.5 h-1.5 rounded-full bg-cyan-400/70 opacity-0 translate-y-0 translate-x-0 scale-75 group-hover:opacity-0 group-hover:scale-110"
+                        style={{
+                          top: `${(i * 17 + idx * 7) % 90 + 5}%`,
+                          left: `${(i * 23 + idx * 11) % 90 + 5}%`,
+                          boxShadow: "0 0 10px rgba(0,184,255,0.6)",
+                          transition: "transform 400ms cubic-bezier(0.16,1,0.3,1), opacity 400ms",
+                          transform: `translate(${((i%2)*2-1)*6}px, ${(((i+1)%2)*2-1)*6}px)`
+                        }}
+                      />
+                    ))}
+                  </div>
+                )}
                 <div className="font-bold text-gray-100">{t.title}</div>
                 <div className="mt-1 text-sm text-gray-400">{t.summary}</div>
                 <div className="mt-3 flex flex-wrap gap-2">

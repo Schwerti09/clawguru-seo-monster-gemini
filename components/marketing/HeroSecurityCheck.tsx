@@ -153,9 +153,36 @@ export default function HeroSecurityCheck() {
         </button>
       </div>
 
+      {loading ? (
+        <div className="mt-6 animate-pulse">
+          <div className="h-4 w-40 bg-gray-800 rounded mb-3" />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="p-4 rounded-2xl border border-gray-800 bg-black/30">
+              <div className="h-6 w-48 bg-gray-800 rounded mb-3" />
+              <div className="h-8 w-32 bg-gray-800 rounded mb-2" />
+              <div className="h-4 w-full bg-gray-800 rounded" />
+            </div>
+            <div className="p-4 rounded-2xl border border-gray-800 bg-black/30">
+              <div className="h-6 w-56 bg-gray-800 rounded mb-3" />
+              <div className="space-y-2">
+                <div className="h-4 w-full bg-gray-800 rounded" />
+                <div className="h-4 w-5/6 bg-gray-800 rounded" />
+                <div className="h-4 w-2/3 bg-gray-800 rounded" />
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : null}
+
       {error ? (
-        <div className="mt-6 p-4 rounded-2xl border border-red-800 bg-red-950/30 text-red-200">
-          {error}
+        <div className="mt-6 p-4 rounded-2xl border border-red-800 bg-red-950/30 text-red-200 flex items-center justify-between gap-3">
+          <span>{isGerman ? "Etwas ist schiefgelaufen. Bitte versuche es erneut." : "Something went wrong. Please try again."}</span>
+          <button
+            onClick={handleCheck}
+            className="px-3 py-1.5 rounded-xl border border-red-500/50 hover:border-red-400 text-red-200 hover:text-white transition-colors"
+          >
+            {isGerman ? "Nochmal" : "Retry"}
+          </button>
         </div>
       ) : null}
 

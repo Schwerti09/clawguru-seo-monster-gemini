@@ -2,6 +2,7 @@ import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
 import dynamic from "next/dynamic"
 const TagOrbitCloud3D = dynamic(() => import("@/components/tags/TagOrbitCloud3D"), { ssr: false })
+const TagList = dynamic(() => import("@/components/tags/TagList"), { ssr: false })
 export const revalidate = 3600
 
 export const metadata = {
@@ -25,17 +26,7 @@ export default async function TagsPage() {
 
         <TagOrbitCloud3D tags={tags} />
 
-        <div className="mt-10 flex flex-wrap gap-2">
-          {tags.map((t) => (
-            <a
-              key={t}
-              href={`/tag/${encodeURIComponent(t)}`}
-              className="px-3 py-2 rounded-xl border border-gray-800 bg-black/25 hover:bg-black/35 text-sm text-gray-200"
-            >
-              {t}
-            </a>
-          ))}
-        </div>
+        <TagList tags={tags} />
 
         <div className="mt-10 text-sm text-gray-500">
           Tipp: Tags sind ein Link-Graph. Je mehr Runbooks du fütterst, desto stärker wird die interne Autorität.

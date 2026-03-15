@@ -1,8 +1,11 @@
 "use client"
 
-import { useEffect, useRef, useState, useCallback } from "react"
+import { useEffect, useRef, useState, useCallback, useMemo } from "react"
 import { motion, useInView } from "framer-motion"
 import { useI18n } from "@/components/i18n/I18nProvider"
+import dynamic from "next/dynamic"
+import Typewriter from "@/components/visual/Typewriter"
+import MagicCTAButton from "@/components/ui/MagicCTAButton"
 
 // LUXURY DESIGN 2026: Mycelial Singularity Graph – hoverable canvas nodes
 // Pure Canvas API: no SSR issues, no extra bundle size beyond what's needed.
@@ -83,6 +86,9 @@ export default function MycelialSingularityHero() {
   const { locale, dict } = useI18n()
   const prefix = `/${locale}`
   const isGerman = locale === "de"
+
+  const R3FField = useRef<any>(null)
+  const R3FComp = useMemo(() => dynamic(() => import("@/components/visual/ThreeMyceliumField"), { ssr: false, loading: () => null }), [])
 
   const draw = useCallback(() => {
     const canvas = canvasRef.current
@@ -278,6 +284,9 @@ export default function MycelialSingularityHero() {
       style={{ background: "var(--surface-0)" }}
       aria-label="Mycelial Singularity Engine Hero"
     >
+      <div className="absolute inset-0" aria-hidden="true">
+        <R3FComp />
+      </div>
       {/* Luxury ambient orbs */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">
         <div
@@ -358,6 +367,14 @@ export default function MycelialSingularityHero() {
             {dict.hero.subtitle}
           </motion.p>
 
+          <div className="mt-4 text-cyan-200 font-mono text-sm sm:text-base">
+            <Typewriter
+              text={isGerman ? "ClawGuru – Runbooks. Live Intel. Zero Bullshit." : "ClawGuru – Runbooks. Live Intel. Zero Bullshit."}
+              speed={28}
+              cursor
+            />
+          </div>
+
           {/* CTA buttons */}
           <motion.div variants={fadeSlide} className="mt-10 flex flex-wrap gap-4 justify-center">
             <a
@@ -372,17 +389,7 @@ export default function MycelialSingularityHero() {
             >
               {dict.hero.ctaCopilot}
             </a>
-            <a
-              href={`${prefix}/pricing`}
-              className="px-8 py-4 rounded-2xl text-sm font-black transition-all duration-300"
-              style={{
-                background: "linear-gradient(135deg, rgba(0,184,255,0.15) 0%, rgba(0,255,157,0.08) 100%)",
-                border: "1px solid rgba(0,184,255,0.25)",
-                color: "#00b8ff",
-              }}
-            >
-              {dict.hero.ctaProKits}
-            </a>
+            <MagicCTAButton href={`${prefix}/pricing`} label={dict.hero.ctaProKits} />
           </motion.div>
 
           {/* Stats row */}
@@ -417,6 +424,23 @@ export default function MycelialSingularityHero() {
             <span className="text-xs text-gray-400 ml-2">· {dict.hero.nodeTooltip}</span>
           </motion.div>
         )}
+      </div>
+
+      <div className="pointer-events-none absolute right-6 top-24 sm:right-12 sm:top-28 z-10 hidden md:block" aria-hidden="true">
+        <div className="grid gap-3" style={{ transform: "rotate(-2deg)" }}>
+          {["Nginx 502 Gateway Timeout", "Stripe Webhook Signature", "Docker Secrets Rotation"].map((t, i) => (
+            <a
+              key={t}
+              href={`${prefix}/runbooks?q=` + encodeURIComponent(t.split(" ")[0])}
+              className="pointer-events-auto block p-4 rounded-2xl border border-white/10 bg-black/30 backdrop-blur-xl transition-all duration-200 hover:-translate-y-0.5 hover:rotate-1 hover:shadow-[0_10px_30px_-10px_rgba(0,184,255,0.35)]"
+              style={{ boxShadow: i === 0 ? "0 0 0 1px rgba(0,184,255,0.25) inset" : undefined }}
+            >
+              <div className="text-xs text-cyan-300 font-mono">Runbook</div>
+              <div className="font-bold text-gray-100">{t}</div>
+              <div className="mt-1 text-xs text-gray-400">Hover für Tiefe · Neon‑Pulse</div>
+            </a>
+          ))}
+        </div>
       </div>
 
       {/* Scroll hint */}

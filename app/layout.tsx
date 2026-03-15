@@ -91,6 +91,15 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <head>
         {/* WORLD BEAST FINAL LAUNCH: Umami analytics */}
         <UmamiAnalytics />
+        {/* FAVICON PACK 2026 */}
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+        <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+        <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png" />
+        <link rel="icon" type="image/png" sizes="512x512" href="/favicon-512.png" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
         {/* 100/100 OPTIMIZATION 2026: Preconnect for Google Fonts (DNS early resolution) */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />

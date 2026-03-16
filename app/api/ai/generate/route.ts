@@ -5,27 +5,70 @@ type ReqBody = {
   prompt?: string;
 };
 
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic"; // prevents static caching for AI endpoint
+
 function extractGeminiText(data: unknown): string {
   const d = data as { candidates?: Array<{ content?: { parts?: Array<{ text?: string }>; text?: string } }> };
-  // Gemini: candidates[0].content.parts[].text
   const cand = d?.candidates?.[0];
   const parts = cand?.content?.parts;
   if (Array.isArray(parts)) {
-    const txt = parts
-      .map((p) => (typeof p?.text === "string" ? p.text : ""))
-      .join("")
-      .trim();
+    const txt = parts.map((p) => (typeof p?.text === "string" ? p.text : "")).join("").trim();
     if (txt) return txt;
   }
-  // Some responses use: candidates[0].content.text
   const t = cand?.content?.text;
   if (typeof t === "string" && t.trim()) return t.trim();
   return "";
 }
 
+// BULLETPROOF readPrompt
+async function readPrompt(req: NextRequest): Promise<string> {
+  const contentType = (req.headers.get("content-type") || "").toLowerCase();
+
+  // 1) Try JSON first
+  try {
+    const body = (await req.json()) as Record<string, unknown>;
+    const candidate = (body as any)?.prompt ?? (body as any)?.message ?? (body as any)?.text;
+    if (typeof candidate === "string" && candidate.trim()) {
+      return candidate.trim().slice(0, 12000);
+    }
+  } catch {}
+
+  // 2) Fallback to raw text
+  let raw = "";
+  try {
+    raw = await req.text();
+  } catch {}
+
+  const trimmed = (raw || "").trim();
+  if (!trimmed) return "";
+
+  // If JSON was sent as plain string
+  if (trimmed.startsWith("{") && trimmed.endsWith("}")) {
+    try {
+      const body = JSON.parse(trimmed) as Record<string, unknown>;
+      const candidate = (body as any)?.prompt ?? (body as any)?.message;
+      if (typeof candidate === "string" && candidate.trim()) return candidate.trim().slice(0, 12000);
+    } catch {}
+  }
+
+  // application/x-www-form-urlencoded
+  if (contentType.includes("application/x-www-form-urlencoded")) {
+    const parts = trimmed.split("&");
+    for (const p of parts) {
+      const [k, v] = p.split("=");
+      if ((k === "prompt" || k === "message") && v) {
+        return decodeURIComponent(v.replace(/\+/g, " ")).trim().slice(0, 12000);
+      }
+    }
+  }
+
+  // Plain-text fallback
+  return trimmed.slice(0, 12000);
+}
+
 function extractOutputText(data: unknown): string {
   const d = data as { output?: Array<{ content?: Array<{ type?: string; text?: string }> }>; choices?: Array<{ message?: { content?: string } }> };
-  // Responses API: data.output[...].content[...].text
   const out = d?.output;
   if (Array.isArray(out)) {
     let buf = "";
@@ -40,7 +83,6 @@ function extractOutputText(data: unknown): string {
     }
     if (buf.trim()) return buf.trim();
   }
-  // Chat Completions fallback shape
   const cc = d?.choices?.[0]?.message?.content;
   if (typeof cc === "string" && cc.trim()) return cc.trim();
   return "";
@@ -49,8 +91,7 @@ function extractOutputText(data: unknown): string {
 export async function POST(req: NextRequest) {
   if (!isApiActive()) return apiUnavailableResponse();
   try {
-    const { prompt } = (await req.json().catch(() => ({}))) as ReqBody;
-    const p = (prompt || "").toString().slice(0, 12000);
+    const p = await readPrompt(req);
     if (!p.trim()) return NextResponse.json({ error: "Missing prompt" }, { status: 400 });
 
     const provider = (process.env.AI_PROVIDER || "openai").toLowerCase();
@@ -66,7 +107,7 @@ export async function POST(req: NextRequest) {
       const geminiKey = process.env.GEMINI_API_KEY;
       if (!geminiKey) {
         return NextResponse.json(
-          { error: "GEMINI_API_KEY missing on server (Netlify env vars)" },
+          { error: "GEMINI_API_KEY missing on server (Vercel env vars)" },
           { status: 500 },
         );
       }
@@ -111,11 +152,54 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ text });
     }
 
+    if (provider === "deepseek") {
+      const apiKey = process.env.DEEPSEEK_API_KEY;
+      if (!apiKey) {
+        return NextResponse.json(
+          { error: "DEEPSEEK_API_KEY missing on server (Vercel env vars)" },
+          { status: 500 },
+        );
+      }
+
+      const model = process.env.OPENAI_MODEL || "deepseek-chat";
+      const base = (process.env.OPENAI_BASE_URL || process.env.DEEPSEEK_BASE_URL || "https://api.deepseek.com/v1").replace(/\/$/, "");
+      const chatUrl = `${base}/chat/completions`;
+      const res3 = await fetch(chatUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${apiKey}`,
+        },
+        body: JSON.stringify({
+          model,
+          messages: [
+            { role: "system", content: system },
+            { role: "user", content: p },
+          ],
+          temperature: 0.35,
+          max_tokens: 900,
+        }),
+      });
+
+      if (!res3.ok) {
+        const t3 = await res3.text().catch(() => "");
+        return NextResponse.json(
+          { error: "DeepSeek request failed", status: res3.status, detail: t3.slice(0, 2000) },
+          { status: 502 },
+        );
+      }
+
+      const data3 = await res3.json();
+      const text3 = extractOutputText(data3);
+      if (!text3) return NextResponse.json({ error: "No output" }, { status: 502 });
+      return NextResponse.json({ text: text3 });
+    }
+
     // Default: OpenAI
     const apiKey = process.env.OPENAI_API_KEY;
     if (!apiKey) {
       return NextResponse.json(
-        { error: "OPENAI_API_KEY missing on server (Netlify env vars)" },
+        { error: "OPENAI_API_KEY missing on server (Vercel env vars)" },
         { status: 500 },
       );
     }

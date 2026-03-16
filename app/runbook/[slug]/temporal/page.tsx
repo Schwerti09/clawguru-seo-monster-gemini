@@ -15,6 +15,7 @@ import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
 export const revalidate = 60
 export const runtime = "nodejs"
 export const maxDuration = 180
+export const dynamic = "force-static"
 
 export async function generateMetadata(
   props: {
@@ -53,11 +54,18 @@ export default async function TemporalPage(
   const quality = validateRunbook(r)
   if (!quality.pass) return notFound()
 
-  const history = getTemporalHistory(r)
+  let history: any = null
+  try {
+    history = getTemporalHistory(r)
+  } catch (e) {
+    history = null
+  }
   const requestedVersion = searchParams.version ?? null
-  const pinnedVersion = requestedVersion
-    ? findVersionByQuarter(history, requestedVersion)
-    : history.versions[history.versions.length - 1]
+  const pinnedVersion = history
+    ? (requestedVersion
+        ? findVersionByQuarter(history, requestedVersion)
+        : history.versions[history.versions.length - 1])
+    : null
 
   return (
     <Container>
@@ -96,12 +104,12 @@ export default async function TemporalPage(
             <span className="font-bold text-gray-200">{r.title}</span> –
             Das Mycelium hat die Zeitachse dieses Runbooks rekonstruiert.{" "}
             <span className="text-violet-300">
-              {history.totalEvolutions} Evolutionen seit Erstellung.
+              {history ? history.totalEvolutions : 0} Evolutionen seit Erstellung.
             </span>
           </p>
 
           {/* TEMPORAL MYCELIUM v3.1 – Overlord AI: Pinned version highlight */}
-          {requestedVersion && (
+          {requestedVersion && pinnedVersion && (
             <div className="mt-4 p-4 rounded-2xl border border-cyan-500/30 bg-cyan-500/5">
               <div className="text-xs font-black text-cyan-400 uppercase tracking-widest mb-1">
                 🔍 Temporal Search – Angeforderte Version
@@ -117,35 +125,39 @@ export default async function TemporalPage(
         </div>
 
         {/* TEMPORAL MYCELIUM v3.1 – Overlord AI: Quick version links */}
-        <div className="mb-6">
-          <div className="text-xs text-gray-500 mb-2 font-black uppercase tracking-widest">
-            Temporal Search – Version auswählen:
-          </div>
-          <div className="flex flex-wrap gap-2">
-            {history.versions.map((v) => (
+        {history && Array.isArray(history.versions) && history.versions.length > 0 ? (
+          <div className="mb-6">
+            <div className="text-xs text-gray-500 mb-2 font-black uppercase tracking-widest">
+              Temporal Search – Version auswählen:
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {history.versions.map((v: any) => (
+                <a
+                  key={v.quarter}
+                  href={`${prefix}/runbook/${r.slug}/temporal?version=${v.quarter}`}
+                  className={`px-3 py-1.5 rounded-xl border text-xs font-mono transition-colors ${
+                    requestedVersion === v.quarter
+                      ? "border-cyan-500/50 bg-cyan-500/10 text-cyan-300"
+                      : "border-gray-800 bg-black/25 text-gray-400 hover:bg-black/35"
+                  }`}
+                >
+                  {v.quarter}
+                </a>
+              ))}
               <a
-                key={v.quarter}
-                href={`${prefix}/runbook/${r.slug}/temporal?version=${v.quarter}`}
-                className={`px-3 py-1.5 rounded-xl border text-xs font-mono transition-colors ${
-                  requestedVersion === v.quarter
-                    ? "border-cyan-500/50 bg-cyan-500/10 text-cyan-300"
-                    : "border-gray-800 bg-black/25 text-gray-400 hover:bg-black/35"
-                }`}
+                href={`${prefix}/runbook/${r.slug}`}
+                className="px-3 py-1.5 rounded-xl border border-gray-800 bg-black/20 text-xs text-gray-400 hover:border-gray-700 transition-colors"
               >
-                {v.quarter}
+                ← Zurück zum Runbook
               </a>
-            ))}
-            <a
-              href={`${prefix}/runbook/${r.slug}`}
-              className="px-3 py-1.5 rounded-xl border border-gray-800 bg-black/20 text-xs text-gray-400 hover:border-gray-700 transition-colors"
-            >
-              ← Zurück zum Runbook
-            </a>
+            </div>
           </div>
-        </div>
+        ) : null}
 
         {/* TEMPORAL MYCELIUM v3.1 – Overlord AI: Full interactive timeline */}
-        <TemporalTimeline history={history} slug={r.slug} />
+        {history && Array.isArray(history.versions) && history.versions.length > 0 ? (
+          <TemporalTimeline history={history} slug={r.slug} />
+        ) : null}
 
         {/* TEMPORAL MYCELIUM v3.1 – Overlord AI: Backward propagation indicator */}
         <div className="mt-10 p-5 rounded-3xl border border-violet-500/15 bg-black/20">

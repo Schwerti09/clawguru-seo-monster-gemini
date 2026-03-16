@@ -3,7 +3,7 @@ import type { Metadata } from "next"
 import { SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
 import RootRunbookPage from "@/app/runbook/[slug]/page"
 
-export const dynamic = "force-dynamic"
+export const dynamic = "force-static"
 export const revalidate = 3600
 export const dynamicParams = true
 export const runtime = "nodejs"

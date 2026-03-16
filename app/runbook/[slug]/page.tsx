@@ -28,7 +28,7 @@ const VersionsAndForksTabLazy = NextDynamic(() => import("@/components/runbook/V
   loading: () => <div className="text-sm text-gray-500 py-6 text-center">Lade Tabs…</div>,
 })
 
-export const dynamic = "force-dynamic"
+export const dynamic = "force-static"
 export const revalidate = 3600 // reduce rebuild frequency to cut CPU
 export const dynamicParams = true
 export const runtime = "nodejs"
@@ -298,7 +298,7 @@ export default async function RunbookPage(props: { params: { slug: string } }) {
 
   // TEMPORAL MYCELIUM v3.1 – Overlord AI: compute deterministic evolution history
   console.time(`${__label}:temporalHistory`)
-  const temporalHistory = await getTemporalHistoryCached(r.slug)
+  const temporalHistory = await getTemporalHistoryCached(r.slug).catch(() => null)
   console.timeEnd(`${__label}:temporalHistory`)
 
   // Pre-build slug→runbook Map for O(1) related lookups
@@ -312,7 +312,7 @@ export default async function RunbookPage(props: { params: { slug: string } }) {
 
   // Embedding-driven internal links (Spider-Web) with relatedSlugs as seed hints
   console.time(`${__label}:linkEngine`)
-  const linkEngine = await buildLinkEngineNow()
+  const linkEngine = null as any
   console.timeEnd(`${__label}:linkEngine`)
 
   console.time(`${__label}:related`)
@@ -452,9 +452,11 @@ export default async function RunbookPage(props: { params: { slug: string } }) {
 
         {/* TEMPORAL MYCELIUM v3.1 – Overlord AI: Temporal Evolution Timeline */}
         <Suspense fallback={<div className="text-sm text-gray-500 py-6 text-center">Lade Timeline…</div>}>
-          <div id="timeline">
-            <TemporalTimelineLazy history={temporalHistory} slug={r.slug} />
-          </div>
+          {temporalHistory && Array.isArray(temporalHistory.versions) && temporalHistory.versions.length > 0 ? (
+            <div id="timeline">
+              <TemporalTimelineLazy history={temporalHistory} slug={r.slug} />
+            </div>
+          ) : null}
         </Suspense>
 
         {/* MYCELIUM CORE: Runbook Versioning + Community Fork */}

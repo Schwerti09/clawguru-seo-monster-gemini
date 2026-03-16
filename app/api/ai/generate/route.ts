@@ -20,16 +20,16 @@ function extractGeminiText(data: unknown): string {
 async function readPrompt(req: NextRequest): Promise<string> {
   const contentType = (req.headers.get("content-type") || "").toLowerCase();
 
-  // 1) JSON zuerst
+  // 1) JSON zuerst (clone to avoid consuming body stream)
   try {
-    const body = (await req.json()) as Record<string, unknown>;
+    const body = (await req.clone().json()) as Record<string, unknown>;
     const p = (body as any)?.prompt ?? (body as any)?.message ?? (body as any)?.text;
     if (typeof p === "string" && p.trim()) return p.trim().slice(0, 12000);
   } catch {}
 
-  // 2) Raw Text + Fallbacks
+  // 2) Raw Text + Fallbacks (clone as well)
   let raw = "";
-  try { raw = await req.text(); } catch {}
+  try { raw = await req.clone().text(); } catch {}
   const trimmed = (raw || "").trim();
   if (!trimmed) return "";
 

@@ -5,14 +5,32 @@ import RootRunbookPage from "@/app/runbook/[slug]/page"
 
 export const dynamic = "force-static"
 export const revalidate = 3600
-export const dynamicParams = true
+export const dynamicParams = false
 export const runtime = "nodejs"
 export const maxDuration = 180
 
 export async function generateStaticParams() {
   const { RUNBOOKS } = await import("@/lib/pseo")
   const topSlugs = RUNBOOKS.slice(0, 200).map((r) => r.slug)
-  return SUPPORTED_LOCALES.flatMap((lang) => topSlugs.map((slug) => ({ lang, slug })))
+  const key100kSlugs = [
+    "aws-ssh-hardening-2026",
+    "aws-nginx-csp-2026",
+    "aws-kubernetes-zero-trust-2026",
+    "cloudflare-nginx-waf-2026",
+    "hetzner-ssh-hardening-2026",
+    "gcp-kubernetes-rbac-misconfig-2026",
+    "azure-docker-hardening-2026",
+    "digitalocean-nginx-rate-limiting-2026",
+    "kubernetes-docker-supply-chain-attack-2026",
+    "aws-github-actions-secrets-management-2026",
+    "cloudflare-nginx-hsts-2026",
+    "aws-kubernetes-sbom-2026",
+    "hetzner-nginx-firewall-rules-2026",
+    "gcp-docker-image-signing-2026",
+    "azure-kubernetes-mfa-enforcement-2026",
+  ]
+  const slugs = Array.from(new Set([...topSlugs, ...key100kSlugs]))
+  return SUPPORTED_LOCALES.flatMap((lang) => slugs.map((slug) => ({ lang, slug })))
 }
 
 export async function generateMetadata(props: {

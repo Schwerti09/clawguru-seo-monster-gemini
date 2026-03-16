@@ -12,7 +12,6 @@ import { ActivateSwarmButton } from "@/components/shared/ActivateSwarmButton"
 import { BASE_URL } from "@/lib/config"
 import { buildLinkEngine } from "@/lib/seo/link-engine"
 import MyceliumShareCard from "@/components/share/MyceliumShareCard"
-import { headers } from "next/headers"
 import { unstable_cache } from "next/cache"
 import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
 import { getDictionary } from "@/lib/getDictionary"
@@ -80,8 +79,7 @@ export async function generateStaticParams() {
 export async function generateMetadata(props: { params: { slug: string } }) {
   const params = props.params
   const { getRunbook } = await import("@/lib/pseo")
-  const h = headers()
-  const locale = (h.get("x-claw-locale") ?? DEFAULT_LOCALE) as Locale
+  const locale = DEFAULT_LOCALE as Locale
   const r = getRunbook(params.slug)
   if (!r) return {}
   const title = r.title.length > 60 ? r.title.slice(0, 57) + "..." : r.title
@@ -280,8 +278,7 @@ export default async function RunbookPage(props: { params: { slug: string } }) {
   const __label = `runbook:${params.slug}`
   console.time(__label)
   const { RUNBOOKS, getRunbook } = await import("@/lib/pseo")
-  const h = headers()
-  const locale = (h.get("x-claw-locale") ?? DEFAULT_LOCALE) as Locale
+  const locale = DEFAULT_LOCALE as Locale
   const dict = await getDictionary(locale)
   const prefix = `/${locale}`
   const r = getRunbook(params.slug)

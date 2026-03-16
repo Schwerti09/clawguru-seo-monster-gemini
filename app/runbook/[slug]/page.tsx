@@ -32,7 +32,7 @@ export const dynamic = "force-dynamic"
 export const revalidate = 3600 // reduce rebuild frequency to cut CPU
 export const dynamicParams = true
 export const runtime = "nodejs"
-export const maxDuration = 120
+export const maxDuration = 180
 
 async function buildLinkEngineNow() {
   const { RUNBOOKS } = await import("@/lib/pseo")

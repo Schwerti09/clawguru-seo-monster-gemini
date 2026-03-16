@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next"
+import type { Metadata } from "next"
 
 import { SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
 import RootRunbookPage from "@/app/runbook/[slug]/page"
@@ -6,6 +6,8 @@ import RootRunbookPage from "@/app/runbook/[slug]/page"
 export const dynamic = "force-dynamic"
 export const revalidate = 3600
 export const dynamicParams = true
+export const runtime = "nodejs"
+export const maxDuration = 180
 
 export async function generateStaticParams() {
   const { RUNBOOKS } = await import("@/lib/pseo")

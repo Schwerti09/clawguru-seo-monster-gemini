@@ -23,7 +23,11 @@ function sign(data: string, secret: string) {
 }
 
 export function issueAdminToken(username: string, ttlSeconds = 60 * 60 * 8) {
-  const secret = process.env.ADMIN_SESSION_SECRET || ""
+  const secret =
+    process.env.ADMIN_SESSION_SECRET ||
+    process.env.SESSION_SECRET ||
+    process.env.NEXTAUTH_SECRET ||
+    ""
   if (!secret) throw new Error("ADMIN_SESSION_SECRET missing")
 
   const now = Math.floor(Date.now() / 1000)
@@ -34,7 +38,11 @@ export function issueAdminToken(username: string, ttlSeconds = 60 * 60 * 8) {
 }
 
 export function verifyAdminToken(token: string) {
-  const secret = process.env.ADMIN_SESSION_SECRET || ""
+  const secret =
+    process.env.ADMIN_SESSION_SECRET ||
+    process.env.SESSION_SECRET ||
+    process.env.NEXTAUTH_SECRET ||
+    ""
   if (!secret) return null
   const parts = token.split(".")
   if (parts.length !== 2) return null

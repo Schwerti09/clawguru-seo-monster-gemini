@@ -62,9 +62,9 @@ export default function RunbookMiniTabs() {
       <div
         className="relative flex items-center gap-1 px-2 py-2 rounded-2xl border backdrop-blur"
         style={{
-          background: "rgba(10,10,10,0.65)",
-          borderColor: "rgba(212,175,55,0.12)",
-          boxShadow: "0 0 22px rgba(212,175,55,0.06), 0 0 0 1px rgba(212,175,55,0.06) inset",
+          background: "rgba(6,7,11,0.6)",
+          borderColor: "rgba(0,184,255,0.12)",
+          boxShadow: "0 0 18px rgba(0,184,255,0.08), 0 0 0 1px rgba(0,184,255,0.06) inset",
         }}
       >
         {tabs.map((t) => {
@@ -84,8 +84,8 @@ export default function RunbookMiniTabs() {
                   aria-hidden
                   className="absolute left-1 right-1 -bottom-0.5 h-[2px] rounded-full"
                   style={{
-                    background: "linear-gradient(90deg, rgba(0,184,255,0.85), rgba(0,255,157,0.7))",
-                    boxShadow: "0 0 14px rgba(0,184,255,0.45)",
+                    background: "linear-gradient(90deg, rgba(0,184,255,0.9), rgba(0,255,157,0.7))",
+                    boxShadow: "0 0 10px rgba(0,184,255,0.4), 0 0 18px rgba(0,255,157,0.3)",
                   }}
                 />)
               }
@@ -94,15 +94,20 @@ export default function RunbookMiniTabs() {
         })}
         {!prefersReduced && (
           <motion.div
-            className="absolute left-1 right-1 -bottom-1 h-[2px] rounded-full"
-            initial={{ width: 0 }}
+            className="pointer-events-none absolute left-1 right-1 -bottom-1 h-[2px] rounded-full overflow-hidden"
+            initial={false}
             animate={{ width: `${progress}%` }}
-            transition={{ type: "tween", ease: "easeOut", duration: 0.2 }}
-            style={{
-              background: "linear-gradient(90deg, rgba(212,175,55,0.6), rgba(0,184,255,0.5))",
-              boxShadow: "0 0 12px rgba(212,175,55,0.5)",
-            }}
-          />
+            transition={{ type: "tween", ease: [0.16, 1, 0.3, 1], duration: 0.18 }}
+            style={{ background: "transparent" }}
+          >
+            <div
+              className="h-full w-full"
+              style={{
+                background: "linear-gradient(90deg, rgba(0,255,157,0.55), rgba(0,184,255,0.55))",
+                boxShadow: "0 0 8px rgba(0,255,157,0.4), 0 0 14px rgba(0,184,255,0.35)",
+              }}
+            />
+          </motion.div>
         )}
       </div>
     </div>

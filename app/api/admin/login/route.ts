@@ -10,10 +10,22 @@ function json(status: number, body: unknown) {
 export async function POST(req: NextRequest) {
   const { user, pass } = await req.json().catch(() => ({ user: "", pass: "" }))
 
-  const ADMIN_USERNAME = process.env.ADMIN_USERNAME || ""
-  const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || ""
+  const ADMIN_USERNAME =
+    process.env.ADMIN_USER_NAME ||
+    process.env.ADMIN_USERNAME ||
+    ""
+  const ADMIN_PASSWORD =
+    process.env.ADMIN_PASSWORT ||
+    process.env.ADMIN_PASSWORD ||
+    ""
 
-  if (!ADMIN_USERNAME || !ADMIN_PASSWORD || !(process.env.ADMIN_SESSION_SECRET || "")) {
+  const sessionSecret =
+    process.env.ADMIN_SESSION_SECRET ||
+    process.env.SESSION_SECRET ||
+    process.env.NEXTAUTH_SECRET ||
+    ""
+
+  if (!ADMIN_USERNAME || !ADMIN_PASSWORD || !sessionSecret) {
     return json(500, { error: "Admin ENV missing" })
   }
 

@@ -1,9 +1,12 @@
 import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
-import dynamic from "next/dynamic"
-const TagOrbitCloud3D = dynamic(() => import("@/components/tags/TagOrbitCloud3D"), { ssr: false })
-const TagList = dynamic(() => import("@/components/tags/TagList"), { ssr: false })
+import NextDynamic from "next/dynamic"
+const TagOrbitCloud3D = NextDynamic(() => import("@/components/tags/TagOrbitCloud3D"), { ssr: false })
+const TagList = NextDynamic(() => import("@/components/tags/TagList"), { ssr: false })
+export const dynamic = "force-static"
 export const revalidate = 3600
+export const runtime = "nodejs"
+export const maxDuration = 180
 
 export const metadata = {
   title: "Tags | ClawGuru",
@@ -13,8 +16,25 @@ export const metadata = {
 }
 
 export default async function TagsPage() {
-  const { allTags } = await import("@/lib/pseo")
-  const tags = allTags()
+  let tags: string[] = []
+  try {
+    const { allTags } = await import("@/lib/pseo")
+    tags = allTags()
+  } catch {}
+  if (!Array.isArray(tags) || tags.length === 0) {
+    tags = [
+      "security",
+      "nginx",
+      "aws",
+      "kubernetes",
+      "docker",
+      "cloudflare",
+      "ssh",
+      "firewall",
+      "waf",
+      "backup",
+    ]
+  }
   return (
     <Container>
       <div className="py-16 max-w-6xl mx-auto">

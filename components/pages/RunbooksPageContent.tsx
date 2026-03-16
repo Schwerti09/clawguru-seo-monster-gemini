@@ -21,7 +21,7 @@ function deriveSeverity(tags: string[]): SeverityLevel {
 }
 
 // VISUAL UPGRADE 2026: Derive fix readiness from howto steps count
-function deriveReadiness(r: typeof RUNBOOKS[number]): number {
+function deriveReadiness(r: Runbook): number {
   const steps = r.howto?.steps?.length ?? 3
   return Math.min(95, 50 + steps * 8)
 }

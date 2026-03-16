@@ -295,7 +295,7 @@ export default async function RunbookPage(props: { params: { slug: string } }) {
 
   // TEMPORAL MYCELIUM v3.1 – Overlord AI: compute deterministic evolution history
   console.time(`${__label}:temporalHistory`)
-  const temporalHistory = await getTemporalHistoryCached(r.slug).catch(() => null)
+  const temporalHistory = null as any
   console.timeEnd(`${__label}:temporalHistory`)
 
   // Pre-build slug→runbook Map for O(1) related lookups
@@ -323,8 +323,10 @@ export default async function RunbookPage(props: { params: { slug: string } }) {
     ])
   ).slice(0, 10)
   const relatedList = relatedSlugs.length > 0
-    ? relatedSlugs.map((s) => runbookMap.get(s) ?? getRunbook(s)).filter(Boolean) as Runbook[]
-    : RUNBOOKS.filter((x) => x.slug !== r.slug && x.tags.some((t) => r.tags.includes(t))).slice(0, 10)
+    ? (relatedSlugs
+        .map((s) => runbookMap.get(s) ?? getRunbook(s))
+        .filter(Boolean) as Runbook[])
+    : []
   console.timeEnd(`${__label}:related`)
 
   console.timeEnd(__label)

@@ -74,8 +74,15 @@ function VersionCard({
         className={`absolute -left-[1.25rem] top-5 w-3 h-3 rounded-full border-2 ${
           isSelected ? "border-cyan-400 bg-cyan-500" : "border-gray-600 bg-gray-800"
         }`}
-        animate={prefersReduced ? undefined : { boxShadow: isSelected ? "0 0 12px rgba(0,184,255,0.55)" : "0 0 0 rgba(0,0,0,0)" }}
-        transition={{ duration: 1.2, repeat: Infinity, repeatType: "reverse" }}
+        animate={
+          prefersReduced
+            ? undefined
+            : {
+                boxShadow: isSelected ? "0 0 10px rgba(0,184,255,0.5)" : "0 0 0 rgba(0,0,0,0)",
+                scale: isSelected ? 1.04 : 1,
+              }
+        }
+        transition={{ duration: 1.4, repeat: Infinity, repeatType: "reverse", ease: "easeInOut" }}
       />
       {/* Hover-reveal connector */}
       {!prefersReduced && (
@@ -83,7 +90,7 @@ function VersionCard({
           className="absolute left-[-0.9rem] top-[1.375rem] h-px bg-cyan-500/40 origin-left"
           initial={{ width: 0, opacity: 0 }}
           whileHover={{ width: 22, opacity: 1 }}
-          transition={{ duration: 0.25 }}
+          transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
         />
       )}
 
@@ -268,10 +275,10 @@ export default function TemporalTimeline({ history, slug, lang }: Props) {
         {/* Vertical timeline rail with draw animation */}
         <motion.div
           className="absolute left-[-1rem] top-0 bottom-0 w-px bg-gray-800 origin-top"
-          initial={prefersReduced ? false : { scaleY: 0 }}
-          whileInView={prefersReduced ? undefined : { scaleY: 1 }}
+          initial={prefersReduced ? false : { scaleY: 0, opacity: 0.6 }}
+          whileInView={prefersReduced ? undefined : { scaleY: 1, opacity: 1 }}
           viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
+          transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
         />
         {history.versions.map((v, i) => (
           <div key={v.quarter + v.version} ref={(el) => { itemsRef.current[i] = el }}>

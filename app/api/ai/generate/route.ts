@@ -1,12 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { isApiActive, apiUnavailableResponse } from "@/lib/api-guard";
 
-type ReqBody = {
-  prompt?: string;
-};
-
-export const runtime = "nodejs";
-export const dynamic = "force-dynamic"; // prevents static caching for AI endpoint
+export const dynamic = "force-dynamic";
 
 function extractGeminiText(data: unknown): string {
   const d = data as { candidates?: Array<{ content?: { parts?: Array<{ text?: string }>; text?: string } }> };
@@ -21,49 +16,41 @@ function extractGeminiText(data: unknown): string {
   return "";
 }
 
-// BULLETPROOF readPrompt
+// BULLETPROOF readPrompt (JSON -> Raw Text -> URL-encoded -> Plain)
 async function readPrompt(req: NextRequest): Promise<string> {
   const contentType = (req.headers.get("content-type") || "").toLowerCase();
 
-  // 1) Try JSON first
+  // 1) JSON zuerst
   try {
     const body = (await req.json()) as Record<string, unknown>;
-    const candidate = (body as any)?.prompt ?? (body as any)?.message ?? (body as any)?.text;
-    if (typeof candidate === "string" && candidate.trim()) {
-      return candidate.trim().slice(0, 12000);
-    }
+    const p = (body as any)?.prompt ?? (body as any)?.message ?? (body as any)?.text;
+    if (typeof p === "string" && p.trim()) return p.trim().slice(0, 12000);
   } catch {}
 
-  // 2) Fallback to raw text
+  // 2) Raw Text + Fallbacks
   let raw = "";
-  try {
-    raw = await req.text();
-  } catch {}
-
+  try { raw = await req.text(); } catch {}
   const trimmed = (raw || "").trim();
   if (!trimmed) return "";
 
-  // If JSON was sent as plain string
   if (trimmed.startsWith("{") && trimmed.endsWith("}")) {
     try {
       const body = JSON.parse(trimmed) as Record<string, unknown>;
-      const candidate = (body as any)?.prompt ?? (body as any)?.message;
-      if (typeof candidate === "string" && candidate.trim()) return candidate.trim().slice(0, 12000);
+      const p = (body as any)?.prompt ?? (body as any)?.message;
+      if (typeof p === "string" && p.trim()) return p.trim().slice(0, 12000);
     } catch {}
   }
 
-  // application/x-www-form-urlencoded
   if (contentType.includes("application/x-www-form-urlencoded")) {
     const parts = trimmed.split("&");
-    for (const p of parts) {
-      const [k, v] = p.split("=");
+    for (const part of parts) {
+      const [k, v] = part.split("=");
       if ((k === "prompt" || k === "message") && v) {
         return decodeURIComponent(v.replace(/\+/g, " ")).trim().slice(0, 12000);
       }
     }
   }
 
-  // Plain-text fallback
   return trimmed.slice(0, 12000);
 }
 
@@ -94,7 +81,11 @@ export async function POST(req: NextRequest) {
     const p = await readPrompt(req);
     if (!p.trim()) return NextResponse.json({ error: "Missing prompt" }, { status: 400 });
 
-    const provider = (process.env.AI_PROVIDER || "openai").toLowerCase();
+    let provider = (process.env.AI_PROVIDER || "deepseek").toLowerCase();
+    if (provider === "gemini" && !process.env.GEMINI_API_KEY) {
+      console.warn("GEMINI_API_KEY fehlt → fallback auf deepseek");
+      provider = "deepseek";
+    }
 
     const system = [
       "You are ClawGuru Runbook Factory.",

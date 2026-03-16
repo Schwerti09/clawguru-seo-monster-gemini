@@ -2,10 +2,10 @@ import type { Metadata } from "next"
 
 import { SUPPORTED_LOCALES, DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
 import Container from "@/components/shared/Container"
-import MyceliumView from "@/components/visual/MyceliumView"
+import MyceliumClientLoader from "@/components/visual/MyceliumClientLoader"
 import MyceliumShareCard from "@/components/share/MyceliumShareCard"
 import { getDictionary } from "@/lib/getDictionary"
-import { buildMyceliumGraph, type RunbookSummary } from "@/lib/mycelium"
+ 
 
 export const dynamic = "force-static"
 export const revalidate = 3600
@@ -32,34 +32,6 @@ export default async function LocaleMyceliumPage(props: { params: { lang: string
   const dict = await getDictionary(locale)
   const prefix = `/${locale}`
 
-  let runbooks: any[] = []
-  try {
-    const mod = await import("@/lib/pseo")
-    const list = (mod as { RUNBOOKS?: any[] }).RUNBOOKS ?? []
-    if (Array.isArray(list) && list.length > 0) runbooks = list
-  } catch {}
-
-  if (runbooks.length === 0) {
-    runbooks = [
-      { slug: "hetzner-ssh-hardening-2026", title: "Hetzner: SSH Hardening 2026", summary: "Key-only, Root aus, Rate-Limits, sichere Admin-Zugänge.", tags: ["hetzner","ssh","security","hardening"], clawScore: 90, howto: { steps: ["","",""] }, relatedSlugs: [] },
-      { slug: "aws-firewall-baseline-2026", title: "AWS: Firewall Baseline 2026", summary: "Default deny, minimal offene Ports, sichere Defaults.", tags: ["aws","firewall","security"], clawScore: 88, howto: { steps: ["","",""] }, relatedSlugs: [] },
-      { slug: "nginx-502-bad-gateway-2026", title: "Nginx: 502 Bad Gateway Fix 2026", summary: "Timeouts, Upstream-Health, Buffering – schnell triagieren und fixen.", tags: ["nginx","error:502","fix"], clawScore: 84, howto: { steps: ["","",""] }, relatedSlugs: [] },
-      { slug: "docker-secrets-management-2026", title: "Docker: Secrets Management 2026", summary: "Kein .env in Git – sichere Secret Stores nutzen.", tags: ["docker","secrets","security"], clawScore: 86, howto: { steps: ["","",""] }, relatedSlugs: [] },
-      { slug: "cloudflare-waf-baseline-2026", title: "Cloudflare: WAF Baseline 2026", summary: "Managed Rules + Rate Limits – sinnvolle Defaults.", tags: ["cloudflare","waf","security"], clawScore: 83, howto: { steps: ["","",""] }, relatedSlugs: [] },
-      { slug: "kubernetes-rbac-2026", title: "Kubernetes: RBAC Hardening 2026", summary: "Least privilege, Service Accounts, Audit Logs.", tags: ["kubernetes","rbac","security"], clawScore: 85, howto: { steps: ["","",""] }, relatedSlugs: [] },
-      { slug: "stripe-webhook-verify-2026", title: "Stripe: Webhook Verify 2026", summary: "Signaturen prüfen, Replay verhindern, Idempotency.", tags: ["stripe","webhook","security"], clawScore: 82, howto: { steps: ["","",""] }, relatedSlugs: [] },
-      { slug: "redis-auth-tls-2026", title: "Redis: Auth + TLS 2026", summary: "Redis nicht öffentlich – Auth + TLS erzwingen.", tags: ["redis","security","tls"], clawScore: 81, howto: { steps: ["","",""] }, relatedSlugs: [] },
-      { slug: "postgres-backup-restore-2026", title: "Postgres: Backup/Restore Drill 2026", summary: "PITR, WAL, regelmäßige Restore-Tests.", tags: ["postgres","backup","drill"], clawScore: 87, howto: { steps: ["","",""] }, relatedSlugs: [] },
-      { slug: "security-headers-csp-2026", title: "Security Headers & CSP 2026", summary: "HSTS, CSP, XFO, Referrer Policy – richtig setzen.", tags: ["security","headers","csp"], clawScore: 80, howto: { steps: ["","",""] }, relatedSlugs: [] },
-    ]
-  }
-
-  const graph = buildMyceliumGraph(runbooks, 250)
-  const summaries: Record<string, RunbookSummary> = {}
-  for (const r of runbooks) {
-    summaries[r.slug] = { title: r.title, summary: r.summary ?? "", tags: r.tags }
-  }
-
   return (
     <>
       <div className="border-b border-white/10 bg-gradient-to-b from-gray-950 to-[#050608] py-10">
@@ -83,19 +55,6 @@ export default async function LocaleMyceliumPage(props: { params: { lang: string
               </p>
             </div>
 
-            <div className="flex flex-wrap gap-4 md:gap-6 shrink-0">
-              {[
-                { label: "Library Size", value: `${(runbooks.length).toLocaleString()}+`, color: "#00ff9d" },
-                { label: "Active Nodes", value: graph.nodes.length.toString(), color: "#00b8ff" },
-                { label: "Synapses", value: graph.edges.length.toString(), color: "#b464ff" },
-                { label: "Evolved", value: graph.nodes.filter((n) => n.evolved).length.toString(), color: "#ffc800" },
-              ].map(({ label, value, color }) => (
-                <div key={label} className="text-center">
-                  <div className="text-2xl font-black font-mono" style={{ color }}>{value}</div>
-                  <div className="text-xs text-gray-500 uppercase tracking-wide">{label}</div>
-                </div>
-              ))}
-            </div>
           </div>
 
           <div className="flex flex-wrap gap-2 mt-6">
@@ -107,7 +66,7 @@ export default async function LocaleMyceliumPage(props: { params: { lang: string
       </div>
 
       <div className="px-4 py-4">
-        <MyceliumView graph={graph} summaries={summaries} totalRunbooks={runbooks.length} />
+        <MyceliumClientLoader />
       </div>
 
       <div className="border-t border-white/10 mt-4">

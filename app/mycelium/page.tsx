@@ -3,15 +3,16 @@
 
 import type { Metadata } from "next"
 import Container from "@/components/shared/Container"
-import MyceliumView from "@/components/visual/MyceliumView"
+import MyceliumClientLoader from "@/components/visual/MyceliumClientLoader"
 import MyceliumShareCard from "@/components/share/MyceliumShareCard"
-import { headers } from "next/headers"
 import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
 import { getDictionary } from "@/lib/getDictionary"
-import {
-  buildMyceliumGraph,
-  type RunbookSummary,
-} from "@/lib/mycelium"
+ 
+export const dynamic = "force-static"
+export const revalidate = 3600
+export const dynamicParams = false
+export const runtime = "nodejs"
+export const maxDuration = 180
 
 export const metadata: Metadata = {
   title: "Mycelial Singularity | ClawGuru",
@@ -21,30 +22,10 @@ export const metadata: Metadata = {
   alternates: { canonical: "/mycelium" },
 }
 
-// MYCELIAL SINGULARITY v3.0 – ISR: regenerate graph snapshot every 60 minutes
-// (mirrors the hourly genetic evolution cron cadence)
-export const revalidate = 3600
-
 export default async function MyceliumPage() {
-  const { RUNBOOKS } = await import("@/lib/pseo")
-  const h = headers()
-  const locale = (h.get("x-claw-locale") ?? DEFAULT_LOCALE) as Locale
+  const locale = DEFAULT_LOCALE as Locale
   const dict = await getDictionary(locale)
   const prefix = `/${locale}`
-  // MYCELIAL SINGULARITY v3.0 – Build the living graph from the full runbook library
-  // Server-side only: keeps heavy Runbook blocks out of the client bundle
-  const graph = buildMyceliumGraph(RUNBOOKS, 250)
-
-  // MYCELIAL SINGULARITY v3.0 – Lightweight oracle summaries (title+summary+tags)
-  // Sent to client for in-browser similarity search — no API key required
-  const summaries: Record<string, RunbookSummary> = {}
-  for (const r of RUNBOOKS) {
-    summaries[r.slug] = {
-      title: r.title,
-      summary: r.summary ?? "",
-      tags: r.tags,
-    }
-  }
 
   return (
     <>
@@ -78,30 +59,6 @@ export default async function MyceliumPage() {
                 grows, learns, and evolves autonomously through Darwinian selection.
               </p>
             </div>
-
-            {/* MYCELIAL SINGULARITY v3.0 – Stats bar */}
-            <div className="flex flex-wrap gap-4 md:gap-6 shrink-0">
-              {[
-                { label: "Library Size", value: `${(RUNBOOKS.length).toLocaleString()}+`, color: "#00ff9d" },
-                { label: "Active Nodes", value: graph.nodes.length.toString(), color: "#00b8ff" },
-                { label: "Synapses", value: graph.edges.length.toString(), color: "#b464ff" },
-                {
-                  label: "Evolved",
-                  value: graph.nodes.filter((n) => n.evolved).length.toString(),
-                  color: "#ffc800",
-                },
-              ].map(({ label, value, color }) => (
-                <div key={label} className="text-center">
-                  <div
-                    className="text-2xl font-black font-mono"
-                    style={{ color }}
-                  >
-                    {value}
-                  </div>
-                  <div className="text-xs text-gray-500 uppercase tracking-wide">{label}</div>
-                </div>
-              ))}
-            </div>
           </div>
 
           {/* MYCELIAL SINGULARITY v3.0 – Feature description chips */}
@@ -126,11 +83,7 @@ export default async function MyceliumPage() {
 
       {/* MYCELIAL SINGULARITY v3.0 – Main graph view (full-width, no container padding) */}
       <div className="px-4 py-4">
-        <MyceliumView
-          graph={graph}
-          summaries={summaries}
-          totalRunbooks={RUNBOOKS.length}
-        />
+        <MyceliumClientLoader />
       </div>
 
       {/* MYCELIAL SINGULARITY v3.0 – Genetic algorithm explainer */}

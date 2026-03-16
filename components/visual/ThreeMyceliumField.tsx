@@ -4,7 +4,7 @@ import { Canvas, useFrame } from "@react-three/fiber"
 import { useMemo, useRef } from "react"
 import * as THREE from "three"
 
-function MyceliumPoints({ count = 1800 }: { count?: number }) {
+function MyceliumPoints({ count = 9000 }: { count?: number }) {
   const positions = useMemo(() => {
     const arr = new Float32Array(count * 3)
     for (let i = 0; i < count; i++) {
@@ -21,7 +21,7 @@ function MyceliumPoints({ count = 1800 }: { count?: number }) {
     return arr
   }, [count])
 
-  const speeds = useMemo(() => Float32Array.from({ length: count }, () => 0.2 + Math.random() * 0.8), [count])
+  const speeds = useMemo(() => Float32Array.from({ length: count }, () => 0.15 + Math.random() * 0.7), [count])
   const ref = useRef<THREE.Points>(null)
 
   useFrame(({ clock }) => {
@@ -47,7 +47,7 @@ function MyceliumPoints({ count = 1800 }: { count?: number }) {
       <bufferGeometry>
         <bufferAttribute attach="attributes-position" count={positions.length / 3} array={positions} itemSize={3} />
       </bufferGeometry>
-      <pointsMaterial size={0.02} color="#7dd3fc" sizeAttenuation depthWrite={false} transparent opacity={0.8} />
+      <pointsMaterial size={0.012} color="#7dd3fc" sizeAttenuation depthWrite={false} transparent opacity={0.8} />
     </points>
   )
 }

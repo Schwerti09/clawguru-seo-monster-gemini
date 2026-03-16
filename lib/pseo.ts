@@ -1559,6 +1559,12 @@ function _buildRunbooksWithRelated(limit: number): Runbook[] {
   return list
 }
 
+// Client-side helper: materialize runbooks with related links.
+// Safe to call in the browser (pure functions, no I/O). Use for large visualizations.
+export function buildRunbooksClient(limit: number): Runbook[] {
+  return _buildRunbooksWithRelated(limit)
+}
+
 // BUILD GUARD: During build phase, return empty array to prevent timeout
 // At runtime, materialize the full dataset
 let _runbooksCache: Runbook[] | null = null

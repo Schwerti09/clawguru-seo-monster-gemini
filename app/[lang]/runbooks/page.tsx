@@ -5,7 +5,11 @@ import { SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
 import RunbooksPageContent from "@/components/pages/RunbooksPageContent"
 import { getDictionary } from "@/lib/getDictionary"
 
-export const revalidate = 60
+export const dynamic = "force-static"
+export const revalidate = 3600
+export const dynamicParams = false
+export const runtime = "nodejs"
+export const maxDuration = 180
 
 export async function generateStaticParams() {
   return SUPPORTED_LOCALES.map((lang) => ({ lang }))

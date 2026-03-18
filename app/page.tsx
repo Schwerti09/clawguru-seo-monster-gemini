@@ -1,10 +1,11 @@
 import Container from "@/components/shared/Container"
-import MycelialSingularityHero from "@/components/visual/MycelialSingularityHero"
+import dynamic from "next/dynamic"
 import HeroSecurityCheck from "@/components/marketing/HeroSecurityCheck"
 import TrustSecurity from "@/components/marketing/TrustSecurity"
 import SectionTitle from "@/components/shared/SectionTitle"
 import IntelPreview from "@/components/pages/IntelPreview"
 import CopilotPreview from "@/components/pages/CopilotPreview"
+import LivePreview from "@/components/pages/LivePreview"
 import FAQ from "@/components/marketing/FAQ"
 import TransparencyWidget from "@/components/marketing/TransparencyWidget"
 import BuyButton from "@/components/commerce/BuyButton"
@@ -19,6 +20,11 @@ interface HomeProps {
 
 export default function Home({ dict, locale }: HomeProps) {
   const prefix = `/${locale}`
+
+  const MycelialSingularityHero = dynamic(() => import("@/components/visual/MycelialSingularityHero"), {
+    ssr: false,
+    loading: () => <div className="h-[60vh] rounded-3xl animate-pulse bg-gray-800/20" />,
+  })
 
   const faqJsonLd = {
     "@context": "https://schema.org",
@@ -63,16 +69,19 @@ export default function Home({ dict, locale }: HomeProps) {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
 
-      {/* LUXURY DESIGN 2026: Full-viewport Mycelial Singularity Hero with interactive canvas */}
-      <MycelialSingularityHero />
-
       {/* Security check – luxury glass card */}
       <section className="relative py-16 border-b border-white/5 overflow-hidden" style={{ background: "var(--surface-1)" }}>
         <div className="pointer-events-none absolute inset-0 bg-vault-gradient opacity-60" aria-hidden="true" />
         <Container>
-          <HeroSecurityCheck />
+          <div className="grid md:grid-cols-2 gap-8 items-stretch">
+            <HeroSecurityCheck />
+            <LivePreview />
+          </div>
         </Container>
       </section>
+
+      {/* LUXURY DESIGN 2026: Full-viewport Mycelial Singularity Hero with interactive canvas */}
+      <MycelialSingularityHero />
 
       {/* UNIVERSE MODULE – LUXURY DESIGN 2026: Gold+Cyan premium section */}
       <section className="relative py-28 overflow-hidden" style={{ background: "var(--surface-1)" }}>

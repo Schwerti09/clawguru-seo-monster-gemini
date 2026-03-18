@@ -32,7 +32,7 @@ function fallbackResult(target: string): SecurityCheckResult {
 
 export async function performSecurityCheck(target: string): Promise<SecurityCheckResult> {
   try {
-    const res = await fetch("/api/security-check", {
+    const res = await fetch("/api/public-security-check", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ target })

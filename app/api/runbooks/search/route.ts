@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { RUNBOOKS } from '@/lib/pseo'
 
 export const runtime = 'nodejs'
 
@@ -116,14 +115,14 @@ export async function GET(req: NextRequest) {
     const rawLimit = Math.max(1, parseInt(sp.get('limit') || '24', 10) || 24)
     const limit = Math.min(100, rawLimit)
 
-    const materialized = Array.isArray(RUNBOOKS) ? RUNBOOKS : []
-    const base = materialized.length ? materialized : FALLBACK
+    // IMPORTANT: Avoid importing heavy RUNBOOKS here to prevent cold-start timeouts on serverless.
+    // Operate on a curated FALLBACK set for now.
+    const materialized: any[] = []
+    const base = FALLBACK
     const { total, items } = searchRunbooks(base, q, tags, page, limit)
 
     const payload: Record<string, any> = { q, tags, page, limit, total, items }
-    if (materialized.length === 0) {
-      payload.warning = 'RUNBOOKS not materialized; returning empty result set'
-    }
+    payload.warning = 'Degraded mode: using lightweight fallback index to ensure fast responses'
 
     const res = NextResponse.json(payload)
     res.headers.set('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=30')

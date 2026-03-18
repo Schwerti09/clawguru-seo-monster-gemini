@@ -103,6 +103,15 @@ export function middleware(request: NextRequest) {
   const requestId = getRequestId(request.headers)
   const method = request.method
 
+  // Compatibility rewrite: serve /api/clawlink.js from /api/clawlink
+  if (pathname === "/api/clawlink.js") {
+    const url = request.nextUrl.clone()
+    url.pathname = "/api/clawlink"
+    const res = NextResponse.rewrite(url)
+    res.headers.set(getRequestIdHeaderName(), requestId)
+    return res
+  }
+
   // Apply per-IP rate limiting for hot routes
   const bucket = routeBucket(pathname)
   if (bucket) {

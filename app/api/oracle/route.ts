@@ -4,6 +4,7 @@
 
 import { NextRequest, NextResponse } from "next/server"
 import { buildMyceliumGraph, oracleSearch } from "@/lib/mycelium"
+import { unstable_cache } from "next/cache"
 
 // MYCELIUM ORACLE v3.3 – Overlord AI: Oracle query modes
 export type OracleMode = "pure" | "temporal" | "swarm" | "prophetic"
@@ -21,6 +22,18 @@ function buildSummaries(runbooks: Array<{ slug: string; title: string; summary?:
   }
   return summaries
 }
+
+// Cache heavy Mycelium context (RUNBOOKS + Graph + Summaries) for faster teaser demos
+const getOracleContext = unstable_cache(
+  async () => {
+    const { RUNBOOKS } = await import("@/lib/pseo")
+    const summaries = buildSummaries(RUNBOOKS)
+    const graph = buildMyceliumGraph(RUNBOOKS, 150)
+    return { RUNBOOKS, summaries, graph }
+  },
+  ["ORACLE_CONTEXT_V1"],
+  { revalidate: 1800 }
+)
 
 // MYCELIUM ORACLE v3.3 – Overlord AI: Mode-specific system prompt prefix
 const MODE_PROMPTS: Record<OracleMode, string> = {
@@ -45,14 +58,22 @@ async function callGemini(systemPrompt: string, question: string): Promise<strin
 
   const url = `${base}/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(apiKey)}`
 
-  const res = await fetch(url, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      contents: [{ role: "user", parts: [{ text: `${systemPrompt}\n\nQUESTION:\n${question}` }] }],
-      generationConfig: { temperature: 0.6, maxOutputTokens: 1200 },
-    }),
-  })
+  const controller = new AbortController()
+  const timeout = setTimeout(() => controller.abort(), 10000)
+  let res: Response
+  try {
+    res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        contents: [{ role: "user", parts: [{ text: `${systemPrompt}\n\nQUESTION:\n${question}` }] }],
+        generationConfig: { temperature: 0.6, maxOutputTokens: 1200 },
+      }),
+      signal: controller.signal,
+    })
+  } finally {
+    clearTimeout(timeout)
+  }
 
   if (!res.ok) return null
   const data = await res.json()
@@ -124,7 +145,7 @@ function fallbackAnswer(
 
 export async function POST(req: NextRequest) {
   try {
-    const { RUNBOOKS } = await import("@/lib/pseo")
+    const { RUNBOOKS, summaries, graph } = await getOracleContext()
     const body = (await req.json().catch(() => ({}))) as OracleRequestBody
     const question = (body.question || "").toString().slice(0, 4000).trim()
     const mode: OracleMode =
@@ -136,9 +157,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "No question provided" }, { status: 400 })
     }
 
-    // MYCELIUM ORACLE v3.3 – Overlord AI: RAG – search the entire Mycelium graph
-    const summaries = buildSummaries(RUNBOOKS)
-    const graph = buildMyceliumGraph(RUNBOOKS, 250)
+    // MYCELIUM ORACLE v3.3 – Overlord AI: RAG – search the cached Mycelium graph
     const oracleResults = oracleSearch(question, graph, summaries, 5)
 
     // MYCELIUM ORACLE v3.3 – Overlord AI: Build LLM context from top results

@@ -275,6 +275,9 @@ export default function NeuroPage() {
   const triggerOracleRef = useRef<(q: string, fromGaze?: boolean) => void>(() => {})
   // NEURO-MYCELIUM INTERFACE v3.5 – Overlord AI: Ref for fallback text input – focused when camera unavailable
   const textInputRef = useRef<HTMLTextAreaElement>(null)
+  // Client-mount guard to defer heavy canvas until after hydration
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => { setMounted(true) }, [])
 
   // NEURO-MYCELIUM INTERFACE v3.5 – Overlord AI: Load webgazer.js from CDN after consent+opt-in
   const loadWebgazer = useCallback(async () => {
@@ -413,11 +416,14 @@ export default function NeuroPage() {
     setSelectedQuestion(q)
 
     try {
+      const controller = new AbortController()
+      const timeout = window.setTimeout(() => controller.abort(), 10000)
       const res = await fetch("/api/oracle", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ question: q, mode: "pure" }),
-      })
+        signal: controller.signal,
+      }).finally(() => window.clearTimeout(timeout))
       if (!res.ok) {
         const data = await res.json().catch(() => ({}))
         throw new Error((data as { error?: string }).error || "Oracle unreachable")
@@ -494,7 +500,7 @@ export default function NeuroPage() {
   if (!consented) {
     return (
       <>
-        <NeuroMyceliumBackground />
+        {mounted && <NeuroMyceliumBackground />}
         <div
           className="relative min-h-screen flex items-center justify-center px-4"
           style={{ zIndex: 1 }}
@@ -571,7 +577,7 @@ export default function NeuroPage() {
   // ──────────────────────────────────────────────────────────────────────────────
   return (
     <>
-      <NeuroMyceliumBackground />
+      {mounted && <NeuroMyceliumBackground />}
 
       {/* Camera permission box – shown automatically when camera is detected */}
       {showCameraPermissionBox && !eyeTrackingEnabled && !gazeActive && (

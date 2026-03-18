@@ -256,6 +256,9 @@ export default function OraclePage() {
   const [error, setError] = useState<string | null>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
   const responseRef = useRef<HTMLDivElement>(null)
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => { setMounted(true) }, [])
 
   const activeMode = MODES.find((m) => m.id === mode)!
 
@@ -268,11 +271,14 @@ export default function OraclePage() {
     setError(null)
 
     try {
+      const controller = new AbortController()
+      const timeout = window.setTimeout(() => controller.abort(), 10000)
       const res = await fetch("/api/oracle", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ question: q, mode }),
-      })
+        signal: controller.signal,
+      }).finally(() => window.clearTimeout(timeout))
 
       if (!res.ok) {
         const data = await res.json().catch(() => ({}))
@@ -303,8 +309,8 @@ export default function OraclePage() {
 
   return (
     <>
-      {/* MYCELIUM ORACLE v3.3 – Overlord AI: Living background */}
-      <MyceliumBackground />
+      {/* MYCELIUM ORACLE v3.3 – Overlord AI: Living background (client-only after mount) */}
+      {mounted && <MyceliumBackground />}
 
       <div
         className="relative min-h-screen flex flex-col"

@@ -13,9 +13,8 @@ export const dynamic = 'force-dynamic'
 
 const SITEMAP_HEADERS = {
   'Content-Type': 'application/xml; charset=utf-8',
-  // DEBUG: bypass CDN cache to validate live behaviour; switch back to 86400 after verification
-  'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0',
-  'X-Debug-Sitemap': 'true',
+  // Enable CDN caching to emulate ISR behaviour
+  'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=60',
 } as const;
 
 export async function GET(req: NextRequest) {

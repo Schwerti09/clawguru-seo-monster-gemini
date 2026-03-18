@@ -18,6 +18,7 @@ type ApiResponse = {
   limit: number
   total: number
   items: Item[]
+  warning?: string
 }
 
 function useDebounced<T extends (...args: any[]) => void>(fn: T, delay = 300) {
@@ -46,9 +47,23 @@ export default function RunbookNexus() {
       if (params.tags.length) sp.set("tags", params.tags.join(","))
       sp.set("page", String(params.page))
       sp.set("limit", String(params.limit))
-      const res = await fetch(`/api/runbooks/search?${sp.toString()}`, { next: { revalidate: 0 } })
-      const json = (await res.json()) as ApiResponse
-      setData(json)
+      const controller = new AbortController()
+      const timeout = window.setTimeout(() => controller.abort(), 10000)
+      const res = await fetch(`/api/runbooks/search?${sp.toString()}`, { next: { revalidate: 0 }, signal: controller.signal })
+      window.clearTimeout(timeout)
+      if (!res.ok) {
+        const text = await res.text().catch(() => "")
+        throw new Error(`Search failed (${res.status}): ${text.slice(0, 160)}`)
+      }
+      // Some hosting layers may return text/plain for JSON bodies during errors – try JSON, then fallback
+      let json: ApiResponse | null = null
+      try {
+        json = (await res.json()) as ApiResponse
+      } catch (e) {
+        const text = await res.text().catch(() => "")
+        throw new Error(text || 'Unexpected non-JSON response from search API')
+      }
+      setData(json!)
     } catch (e) {
       setError(e instanceof Error ? e.message : String(e))
     } finally {
@@ -95,7 +110,7 @@ export default function RunbookNexus() {
             aria-label="Search runbooks"
             placeholder="Search runbooks (e.g. nginx, aws ssh)"
             className="w-full px-4 py-3 rounded-2xl bg-black/40 border border-gray-700 text-white placeholder-gray-500 focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all"
-            defaultValue={q}
+            value={q}
             onChange={(e) => { setQ(e.target.value); debouncedSearch(e.target.value) }}
           />
         </div>
@@ -132,31 +147,38 @@ export default function RunbookNexus() {
         {!loading && data && (
           <>
             <div className="text-sm text-gray-400 mb-3">{data.total.toLocaleString()} Ergebnisse</div>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {data.items.map((rb) => (
-                <a key={rb.slug} href={`/runbook/${rb.slug}`} className="group relative p-5 rounded-2xl border border-cyan-500/20 bg-white/[0.03] hover:bg-white/[0.06] transition-all hover:shadow-[0_0_20px_rgba(0,255,157,0.15)]">
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="text-lg font-bold leading-snug line-clamp-2 text-white">{rb.title}</div>
-                    <div className="mt-1 ml-2 flex items-center gap-2">
-                      <span className="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse" aria-hidden="true" />
+            {data.items.length === 0 ? (
+              <div className="p-6 rounded-2xl border border-white/10 bg-white/[0.02] text-gray-400">
+                {q || tags.length ? 'Keine Runbooks gefunden.' : 'Noch keine Ergebnisse. Starte eine Suche.'}
+                {data.warning ? <div className="mt-2 text-xs text-amber-300">Hinweis: {data.warning}</div> : null}
+              </div>
+            ) : (
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {data.items.map((rb) => (
+                  <a key={rb.slug} href={`/runbook/${rb.slug}`} className="group relative p-5 rounded-2xl border border-cyan-500/20 bg-white/[0.03] hover:bg-white/[0.06] transition-all hover:shadow-[0_0_20px_rgba(0,255,157,0.15)]">
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="text-lg font-bold leading-snug line-clamp-2 text-white">{rb.title}</div>
+                      <div className="mt-1 ml-2 flex items-center gap-2">
+                        <span className="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse" aria-hidden="true" />
+                      </div>
                     </div>
-                  </div>
-                  <div className="mt-2 text-sm text-gray-300 line-clamp-3">{rb.summary}</div>
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    {(rb.tags || []).slice(0, 4).map((t) => (
-                      <span key={t} className="text-[11px] px-2 py-1 rounded-full border border-white/10 text-gray-300">
-                        {t}
-                      </span>
-                    ))}
-                  </div>
-                  <div className="mt-3 flex items-center justify-between text-xs text-gray-400">
-                    <span>Score: {Math.round((rb.clawScore || 0))}</span>
-                    <span>Updated: {rb.lastmod || "—"}</span>
-                  </div>
-                  <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/10 pointer-events-none" />
-                </a>
-              ))}
-            </div>
+                    <div className="mt-2 text-sm text-gray-300 line-clamp-3">{rb.summary}</div>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {(rb.tags || []).slice(0, 4).map((t) => (
+                        <span key={t} className="text-[11px] px-2 py-1 rounded-full border border-white/10 text-gray-300">
+                          {t}
+                        </span>
+                      ))}
+                    </div>
+                    <div className="mt-3 flex items-center justify-between text-xs text-gray-400">
+                      <span>Score: {Math.round((rb.clawScore || 0))}</span>
+                      <span>Updated: {rb.lastmod || "—"}</span>
+                    </div>
+                    <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/10 pointer-events-none" />
+                  </a>
+                ))}
+              </div>
+            )}
 
             {/* Pagination */}
             {totalPages > 1 && (

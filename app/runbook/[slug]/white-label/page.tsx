@@ -7,6 +7,7 @@ import { notFound } from "next/navigation"
 import { getRunbook, RUNBOOKS } from "@/lib/pseo"
 import { validateRunbook } from "@/lib/quality-gate"
 import type { RunbookBlock, RunbookFaqEntry } from "@/lib/pseo"
+import Image from "next/image"
 
 export const dynamicParams = true
 
@@ -119,8 +120,15 @@ export default async function WhiteLabelRunbookPage(
       {/* Branded header */}
       <header className="border-b border-gray-800 bg-black/40 px-6 py-4 flex items-center gap-4">
         {logoUrl ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          (<img src={logoUrl} alt={`${company} Logo`} className="h-8 w-auto object-contain" />)
+          <Image
+            src={logoUrl}
+            alt={`${company} Logo`}
+            width={120}
+            height={32}
+            unoptimized
+            sizes="(max-width: 640px) 96px, 120px"
+            className="h-8 w-auto object-contain"
+          />
         ) : (
           <div
             className="text-lg font-black"

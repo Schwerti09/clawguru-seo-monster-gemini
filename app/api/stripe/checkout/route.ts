@@ -72,7 +72,7 @@ export async function POST(req: NextRequest) {
     }
 
     const origin = getOrigin(req)
-    const success_url = `${origin}/success?session_id={CHECKOUT_SESSION_ID}`
+    const success_url = `${origin}/api/auth/activate?session_id={CHECKOUT_SESSION_ID}`
     const cancel_url = `${origin}/pricing?canceled=1`
     const mode = getMode(product)
 

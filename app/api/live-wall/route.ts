@@ -1,10 +1,9 @@
 import { NextResponse } from "next/server"
+import { unstable_cache } from "next/cache"
 
-export const runtime = "edge"
+export const runtime = "nodejs"
 export const dynamic = "force-dynamic"
-
-let CACHE: { body: any; expiresAt: number } | null = null
-const CACHE_TTL_MS = 60 * 1000
+export const maxDuration = 15
 
 function isoDate(d = new Date()) {
   return d.toISOString().slice(0, 10)
@@ -106,101 +105,117 @@ function syntheticPayload(now = new Date()) {
   }
 }
 
-export async function GET() {
-  if (CACHE && Date.now() < CACHE.expiresAt) {
-    const resp = NextResponse.json(CACHE.body, {
-      headers: {
-        "Cache-Control": "public, s-maxage=60, stale-while-revalidate=30"
+export const getLiveWallCached = unstable_cache(
+  async () => {
+    let status: "ok" | "fallback" | "error" = "ok"
+    let payload: any = null
+    let error: any = null
+
+    try {
+      const { RUNBOOKS } = await import("@/lib/pseo")
+      const cveMod: any = await import("@/lib/cve-pseo").catch(() => null)
+      const now = new Date()
+      const day = isoDate(now)
+      const seed = hash(day)
+      const rnd = mulberry32(seed)
+
+      const RB = RUNBOOKS.slice(0, Math.min(5000, RUNBOOKS.length))
+      const topTags = countTop(RB.flatMap((r) => r.tags))
+
+      const issueKeywords = [
+        "502",
+        "503",
+        "504",
+        "ECONNRESET",
+        "ETIMEDOUT",
+        "webhook",
+        "signature",
+        "CORS",
+        "rate limit",
+        "SSH",
+        "firewall",
+        "nginx",
+        "docker",
+        "secrets",
+        "env",
+        "redis",
+        "postgres",
+        "neon",
+        "oauth",
+        "cookie"
+      ]
+
+      const issueCounts = issueKeywords
+        .map((k) => {
+          const key = k.toLowerCase()
+          const count = RB.filter((r) => (r.title + " " + r.summary).toLowerCase().includes(key)).length
+          return { name: k, count }
+        })
+        .filter((x) => x.count > 0)
+        .sort((a, b) => b.count - a.count)
+        .slice(0, 10)
+
+      const trending = pickUnique(RB, 10, rnd).map((r) => ({
+        slug: r.slug,
+        title: r.title,
+        summary: r.summary,
+        tags: r.tags.slice(0, 4)
+      }))
+
+      let cves: Array<{ cveId: string; name: string; severity: string; cvssScore: number; publishedDate: string; tags: string[] }> | undefined
+      if (cveMod && Array.isArray(cveMod.KNOWN_CVES)) {
+        cves = cveMod.KNOWN_CVES
+          .slice()
+          .sort((a: any, b: any) => String(b.publishedDate || "").localeCompare(String(a.publishedDate || "")))
+          .slice(0, 40)
+          .map((e: any) => ({
+            cveId: e.cveId,
+            name: e.name,
+            severity: e.severity,
+            cvssScore: e.cvssScore,
+            publishedDate: e.publishedDate,
+            tags: e.tags || [],
+          }))
       }
-    })
-    console.log("live-wall fetch", { status: "cache", data: summarize(CACHE.body), error: null })
-    return resp
-  }
 
-  let status: "ok" | "fallback" | "error" = "ok"
-  let payload: any = null
-  let error: any = null
+      const t = now.getTime() / 1000
+      const pulse = Math.round(60 + 18 * Math.sin(t / 18) + 11 * Math.sin(t / 7) + rnd() * 7)
 
-  try {
-    const { RUNBOOKS, allTags } = await import("@/lib/pseo")
-    const now = new Date()
-    const day = isoDate(now)
-    const seed = hash(day)
-    const rnd = mulberry32(seed)
+      payload = {
+        updatedAt: now.toISOString(),
+        day,
+        counts: {
+          runbooks: RUNBOOKS.length,
+          tags: new Set(RB.flatMap((r) => r.tags)).size
+        },
+        pulse: Math.max(7, pulse),
+        topTags,
+        issueCounts,
+        trending,
+        ...(cves ? { cves } : {})
+      }
 
-    const tags = allTags()
-    const topTags = countTop(RUNBOOKS.flatMap((r) => r.tags))
-
-    const issueKeywords = [
-      "502",
-      "503",
-      "504",
-      "ECONNRESET",
-      "ETIMEDOUT",
-      "webhook",
-      "signature",
-      "CORS",
-      "rate limit",
-      "SSH",
-      "firewall",
-      "nginx",
-      "docker",
-      "secrets",
-      "env",
-      "redis",
-      "postgres",
-      "neon",
-      "oauth",
-      "cookie"
-    ]
-
-    const issueCounts = issueKeywords
-      .map((k) => {
-        const key = k.toLowerCase()
-        const count = RUNBOOKS.filter((r) => (r.title + " " + r.summary).toLowerCase().includes(key)).length
-        return { name: k, count }
-      })
-      .filter((x) => x.count > 0)
-      .sort((a, b) => b.count - a.count)
-      .slice(0, 10)
-
-    const trending = pickUnique(RUNBOOKS, 10, rnd).map((r) => ({
-      slug: r.slug,
-      title: r.title,
-      summary: r.summary,
-      tags: r.tags.slice(0, 4)
-    }))
-
-    const t = now.getTime() / 1000
-    const pulse = Math.round(60 + 18 * Math.sin(t / 18) + 11 * Math.sin(t / 7) + rnd() * 7)
-
-    payload = {
-      updatedAt: now.toISOString(),
-      day,
-      counts: {
-        runbooks: RUNBOOKS.length,
-        tags: tags.length
-      },
-      pulse: Math.max(7, pulse),
-      topTags,
-      issueCounts,
-      trending
-    }
-
-    if (!isMeaningfulPayload(payload)) {
-      status = "fallback"
+      if (!isMeaningfulPayload(payload)) {
+        status = "fallback"
+        payload = syntheticPayload(now)
+      }
+    } catch (e: any) {
+      status = "error"
+      error = e?.message || String(e)
+      const now = new Date()
       payload = syntheticPayload(now)
     }
-  } catch (e: any) {
-    status = "error"
-    error = e?.message || String(e)
-    const now = new Date()
-    payload = syntheticPayload(now)
-  }
 
-  CACHE = { body: payload, expiresAt: Date.now() + CACHE_TTL_MS }
-  console.log("live-wall fetch", { status, data: summarize(payload), error })
-  return NextResponse.json(payload, {
+    console.log("live-wall fetch", { status, data: summarize(payload), error })
+    return payload
+  },
+  ["live-wall-real"],
+  { revalidate: 30 }
+)
+
+export async function GET() {
+  const body = await getLiveWallCached()
+  return NextResponse.json(body, {
     headers: {
       "Cache-Control": "public, s-maxage=60, stale-while-revalidate=30"
     }

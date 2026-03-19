@@ -1,8 +1,10 @@
 # dependencies
 node_modules/
+**/node_modules/**
 
 # next build
 .next/
+**/.next/**
 out/
 
 # logs
@@ -16,6 +18,13 @@ pnpm-debug.log*
 .env.local
 .env.development
 .env.production
+.env.*
+# prevent committing exported/backup env files
+env-*.env
+env-*.production
+
+# common backup artifacts
+*.bak
 
 # mac / windows junk
 .DS_Store
@@ -23,7 +32,9 @@ Thumbs.db
 
 # build artifacts
 dist/
+**/dist/**
 build/
+**/build/**
 
 # netlify
 .netlify
@@ -31,4 +42,30 @@ build/
 # vscode
 .vscode
 .vercel
+**/.vercel/**
 .env*.local
+
+# deployment: exclude large local artifacts to keep upload small
+tmp/
+_deploy/
+downloads-src/
+.cache/
+.turbo/
+.husky/
+.pnpm-store/
+.nyc_output/
+coverage/
+.next-tmp/
+.vercel-output/
+.lh-*/
+.lighthouse*/
+lhtmp*/
+lh-*.json
+clawguru-seo-monster-gemini-*/
+.git/
+.github/
+**/*.zip
+
+.env.local
+.lhtmp4-runbooks/
+

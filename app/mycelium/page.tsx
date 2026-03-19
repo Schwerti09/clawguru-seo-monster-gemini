@@ -3,7 +3,7 @@
 
 import type { Metadata } from "next"
 import Container from "@/components/shared/Container"
-import MyceliumClientLoader from "@/components/visual/MyceliumClientLoader"
+import NextDynamic from "next/dynamic"
 import MyceliumShareCard from "@/components/share/MyceliumShareCard"
 import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
 import { getDictionary } from "@/lib/getDictionary"
@@ -83,7 +83,15 @@ export default async function MyceliumPage() {
 
       {/* MYCELIAL SINGULARITY v3.0 – Main graph view (full-width, no container padding) */}
       <div className="px-4 py-4">
-        <MyceliumClientLoader />
+        {(() => {
+          const MyceliumClientLoader = NextDynamic(() => import("@/components/visual/MyceliumClientLoader"), {
+            ssr: false,
+            loading: () => (
+              <div className="h-[60vh] rounded-3xl animate-pulse bg-white/[0.04] border border-white/10" />
+            ),
+          })
+          return <MyceliumClientLoader />
+        })()}
       </div>
 
       {/* MYCELIAL SINGULARITY v3.0 – Genetic algorithm explainer */}

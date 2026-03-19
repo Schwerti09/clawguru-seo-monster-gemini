@@ -32,7 +32,6 @@ export default function DatenschutzPage() {
               <p className="text-white font-semibold">{LEGAL_INFO.company}</p>
               <p>{LEGAL_INFO.address}</p>
               <p>{LEGAL_INFO.city}</p>
-              <p>Telefon: {LEGAL_INFO.phone}</p>
               <p>
                 E-Mail:{" "}
                 <a className="text-cyan-300 hover:underline" href={`mailto:${LEGAL_INFO.email}`}>

@@ -91,6 +91,13 @@ export default function RunbookNexus() {
     return Math.max(1, Math.ceil(data.total / data.limit))
   }, [data])
 
+  // Infer locale from current pathname (e.g., /de/runbooks) to localize detail links
+  const localePrefix = useMemo(() => {
+    if (typeof window === 'undefined') return ''
+    const seg = (window.location.pathname.split('/')[1] || '').trim()
+    return /^[a-z]{2}(?:-[A-Z]{2})?$/.test(seg) ? `/${seg}` : ''
+  }, [])
+
   return (
     <div className="space-y-8">
       {/* Hero */}
@@ -155,7 +162,7 @@ export default function RunbookNexus() {
             ) : (
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {data.items.map((rb) => (
-                  <a key={rb.slug} href={`/runbook/${rb.slug}`} className="group relative p-5 rounded-2xl border border-cyan-500/20 bg-white/[0.03] hover:bg-white/[0.06] transition-all hover:shadow-[0_0_20px_rgba(0,255,157,0.15)]">
+                  <a key={rb.slug} href={`${localePrefix}/runbook/${rb.slug}`} className="group relative p-5 rounded-2xl border border-cyan-500/20 bg-white/[0.03] hover:bg-white/[0.06] transition-all hover:shadow-[0_0_20px_rgba(0,255,157,0.15)]">
                     <div className="flex items-start justify-between gap-3">
                       <div className="text-lg font-bold leading-snug line-clamp-2 text-white">{rb.title}</div>
                       <div className="mt-1 ml-2 flex items-center gap-2">

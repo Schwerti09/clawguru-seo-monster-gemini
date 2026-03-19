@@ -45,6 +45,8 @@ const REPULSION_RADIUS = 120
 const EDGE_FADE_DISTANCE = 280
 const MYCELIUM_NODE_INDEX = 6
 
+const ENABLE_LOCAL_CANVAS = false
+
 function initNodes(w: number, h: number): Node[] {
   return NODE_DATA.map((d, i) => ({
     id: i,
@@ -89,6 +91,19 @@ export default function MycelialSingularityHero() {
 
   const R3FField = useRef<any>(null)
   const R3FComp = useMemo(() => dynamic(() => import("@/components/visual/ThreeMyceliumField"), { ssr: false, loading: () => null }), [])
+  const MyceliumEmbedComp = useMemo(() => dynamic(() => import("@/components/visual/MyceliumClientLoader"), { ssr: false, loading: () => null }), [])
+  // Mount expensive FX only on capable devices and when in view
+  const [canMountFX, setCanMountFX] = useState(false)
+  useEffect(() => {
+    try {
+      const w = typeof window !== "undefined" ? window.innerWidth : 1024
+      const prefersReduced = typeof window !== "undefined" && window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      // Only enable 3D/embeds on >= md screens and when user does not prefer reduced motion
+      setCanMountFX(w >= 768 && !prefersReduced)
+    } catch {
+      setCanMountFX(false)
+    }
+  }, [])
 
   const draw = useCallback(() => {
     const canvas = canvasRef.current
@@ -220,6 +235,7 @@ export default function MycelialSingularityHero() {
   }, [])
 
   useEffect(() => {
+    if (!ENABLE_LOCAL_CANVAS) return
     const canvas = canvasRef.current
     if (!canvas) return
     const setSize = () => {
@@ -285,7 +301,10 @@ export default function MycelialSingularityHero() {
       aria-label="Mycelial Singularity Engine Hero"
     >
       <div className="absolute inset-0" aria-hidden="true">
-        <R3FComp />
+        {canMountFX && isInView ? <R3FComp /> : null}
+      </div>
+      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+        {canMountFX && isInView ? <MyceliumEmbedComp ui="embed" /> : null}
       </div>
       {/* Luxury ambient orbs */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">
@@ -318,13 +337,15 @@ export default function MycelialSingularityHero() {
       </div>
 
       {/* Interactive Canvas */}
-      <div
-        className="absolute inset-0"
-        aria-hidden="true"
-        style={{ cursor: hoveredNode ? "pointer" : "default" }}
-      >
-        <canvas ref={canvasRef} className="w-full h-full" />
-      </div>
+      {ENABLE_LOCAL_CANVAS && (
+        <div
+          className="absolute inset-0"
+          aria-hidden="true"
+          style={{ cursor: hoveredNode ? "pointer" : "default" }}
+        >
+          <canvas ref={canvasRef} className="w-full h-full" />
+        </div>
+      )}
 
       {/* Content overlay */}
       <div className="relative z-10 flex flex-col items-center text-center px-6 max-w-5xl mx-auto pt-28 pb-20">

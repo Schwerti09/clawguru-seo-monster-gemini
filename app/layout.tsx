@@ -1,27 +1,30 @@
 // 100/100 OPTIMIZATION 2026: Self-hosted fonts via next/font (non-render-blocking, font-display:swap)
 import type { Metadata, Viewport } from "next"
+import Script from "next/script"
 import "./globals.css"
 import TrustBadge from "@/components/layout/TrustBadge"
 import Header from "@/components/layout/Header"
 import Footer from "@/components/layout/Footer"
-import ActionDock from "@/components/layout/ActionDock"
-import SocialProofOverlay from "@/components/social/SocialProofOverlay"
+import TrustShield from "@/components/layout/TrustShield"
+import dynamic from "next/dynamic"
+const ActionDock = dynamic(() => import("@/components/layout/ActionDock"), { ssr: false })
+const SocialProofOverlay = dynamic(() => import("@/components/social/SocialProofOverlay"), { ssr: false })
 // WORLD BEAST FINAL LAUNCH: Umami privacy-first analytics
 import UmamiAnalytics from "@/components/analytics/UmamiAnalytics"
 // VISUAL UPGRADE 2026: Neon cursor + page transition wrapper
-import NeonCursor from "@/components/visual/NeonCursor"
+const NeonCursor = dynamic(() => import("@/components/visual/NeonCursor"), { ssr: false })
 import PageTransition from "@/components/visual/PageTransition"
 // NEXT-LEVEL UPGRADE 2026: RTL direction support for Arabic + other RTL locales
 import RTLProvider from "@/components/layout/RTLProvider"
 // VIRAL SHARE 2026: Global floating Mycelium share button
-import FloatingMyceliumShareBtn from "@/components/share/FloatingMyceliumShareBtn"
+const FloatingMyceliumShareBtn = dynamic(() => import("@/components/share/FloatingMyceliumShareBtn"), { ssr: false })
 import { headers } from "next/headers"
 import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
 import { SEO_TARGET_KEYWORDS_2026 } from "@/lib/seo/targets"
 import { getDictionary } from "@/lib/getDictionary"
 import { I18nProvider } from "@/components/i18n/I18nProvider"
 import CommandK from "@/components/search/CommandK"
-import GlobalMagnetics from "@/components/visual/GlobalMagnetics"
+const GlobalMagnetics = dynamic(() => import("@/components/visual/GlobalMagnetics"), { ssr: false })
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 
@@ -76,7 +79,7 @@ const websiteJsonLd = {
     "@type": "SearchAction",
     target: {
       "@type": "EntryPoint",
-      urlTemplate: `${SITE_URL}/runbooks?q={search_term_string}`,
+      urlTemplate: `${SITE_URL}/${DEFAULT_LOCALE}/runbooks?q={search_term_string}`,
     },
     "query-input": "required name=search_term_string",
   },
@@ -93,6 +96,13 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <head>
         {/* WORLD BEAST FINAL LAUNCH: Umami analytics */}
         <UmamiAnalytics />
+        <Script src="https://www.googletagmanager.com/gtag/js?id=G-FJ4MY7V41N" strategy="afterInteractive" />
+        <Script id="ga-gtag" strategy="afterInteractive">{`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);} 
+          gtag('js', new Date());
+          gtag('config', 'G-FJ4MY7V41N');
+        `}</Script>
         {/* FAVICON PACK 2026 */}
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -155,6 +165,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             <main id="main-content" className="pt-20 pb-20 lg:pb-0">
               <PageTransition>{children}</PageTransition>
             </main>
+            <TrustShield />
             <Footer />
             <ActionDock />
             <SocialProofOverlay />

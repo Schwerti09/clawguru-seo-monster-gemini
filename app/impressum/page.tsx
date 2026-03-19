@@ -60,10 +60,6 @@ export default function Impressum() {
                 <p>{LEGAL_INFO.address}<br />{LEGAL_INFO.city}</p>
               </div>
               <div>
-                <p className="text-xs font-bold uppercase tracking-widest text-gray-500 mb-1">Telefon</p>
-                <p>{LEGAL_INFO.phone}</p>
-              </div>
-              <div>
                 <p className="text-xs font-bold uppercase tracking-widest text-gray-500 mb-1">E-Mail</p>
                 <a className="text-cyan-300 hover:text-cyan-200 hover:underline transition-colors"
                   href={`mailto:${LEGAL_INFO.email}`}>
@@ -74,18 +70,8 @@ export default function Impressum() {
           </Section>
 
           {/* Steuer & Register */}
-          <Section title="Steuerliche Angaben" accent="linear-gradient(90deg,#22d3ee,#6366f1)">
-            <p>
-              <span className="text-gray-500 mr-2">USt-Identifikationsnummer (§ 27a UStG):</span>
-              <span className="font-mono text-white">{LEGAL_INFO.ustId}</span>
-            </p>
-            <p>
-              <span className="text-gray-500 mr-2">Zuständiges Finanzamt:</span>
-              <span>{LEGAL_INFO.registergericht}</span>
-            </p>
-            <p className="text-sm text-gray-500 mt-2">
-              Rolf Schwertfechter ist Einzelunternehmer und nicht im Handelsregister eingetragen (Kleingewerbetreibender gemäß § 1 Abs. 2 HGB).
-            </p>
+          <Section title="Steuerangaben" accent="linear-gradient(90deg,#22d3ee,#6366f1)">
+            <p className="text-white">Auf Anfrage</p>
           </Section>
 
           {/* Verantwortlich für Inhalte */}

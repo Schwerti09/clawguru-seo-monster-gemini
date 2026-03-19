@@ -2,7 +2,8 @@
 // Client component: handles search filtering of runbooks entirely client-side.
 // This allows the parent page to be statically generated (no searchParams dependency).
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect } from "react"
+import { useSearchParams } from "next/navigation"
 import RunbookCard from "@/components/shared/RunbookCard"
 import type { SeverityLevel } from "@/lib/design-system"
 
@@ -21,6 +22,13 @@ type Props = {
 
 export default function RunbooksSearch({ items }: Props) {
   const [q, setQ] = useState("")
+  const searchParams = useSearchParams()
+  useEffect(() => {
+    try {
+      const qp = searchParams?.get("q") || ""
+      if (qp && !q) setQ(qp)
+    } catch {}
+  }, [])
   const trimmed = q.trim().toLowerCase()
 
   const filtered = useMemo(() => {
@@ -65,7 +73,10 @@ export default function RunbooksSearch({ items }: Props) {
       </div>
 
       {/* RunbookCard grid */}
-      <div className="mt-10 grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div
+        className="mt-10 grid md:grid-cols-2 lg:grid-cols-3 gap-4"
+        style={{ contentVisibility: "auto", containIntrinsicSize: "auto 1200px", minHeight: filtered.length === 0 ? "80vh" : undefined }}
+      >
         {filtered.map((r) => (
           <RunbookCard
             key={r.slug}

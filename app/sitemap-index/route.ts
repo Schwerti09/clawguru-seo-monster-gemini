@@ -21,7 +21,7 @@ export async function GET(req: NextRequest) {
   const requestId = getRequestId(req.headers)
   const startedAt = Date.now()
   const lastmod = isoDate();
-  const PAGES_100K = 69
+  const PAGES_100K = Number(process.env.SITEMAP_100K_PAGES || 69)
   const label = 'sitemap:legacy_index'
   console.time(label)
 

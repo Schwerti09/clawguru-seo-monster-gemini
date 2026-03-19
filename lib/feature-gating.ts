@@ -21,7 +21,8 @@ const TIER_RANK: Record<TierName, number> = {
 
 /** Map an AccessPlan (from access-token.ts) to a TierName. */
 export function planToTier(plan: AccessPlan | undefined | null): TierName {
-  if (plan === "pro" || plan === "team") return "pro"
+  if (plan === "team") return "enterprise"
+  if (plan === "pro") return "pro"
   if (plan === "daypass") return "daypass"
   return "free"
 }

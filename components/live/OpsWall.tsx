@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useRef, useState } from "react"
-import { motion, useReducedMotion } from "framer-motion"
+import { motion, useReducedMotion, useInView } from "framer-motion"
 import { useI18n } from "@/components/i18n/I18nProvider"
 
 type LivePayload = {
@@ -13,6 +13,7 @@ type LivePayload = {
   topTags: { name: string; count: number }[]
   issueCounts: { name: string; count: number }[]
   trending: { slug: string; title: string; summary: string; tags: string[] }[]
+  cves?: { cveId: string; name: string; severity: string; cvssScore: number; publishedDate: string; tags: string[] }[]
 }
 
 function isMeaningful(p: Partial<LivePayload> | null | undefined): p is LivePayload {
@@ -82,10 +83,49 @@ export default function OpsWall() {
   const [visibleCount, setVisibleCount] = useState(24)
   const prefersReduced = useReducedMotion()
   const [rel, setRel] = useState<string>("")
+  const [cves, setCves] = useState<
+    { cveId: string; name: string; severity: string; cvssScore: number; publishedDate: string; tags: string[] }[] | null
+  >(null)
+  const [visibleCveCount, setVisibleCveCount] = useState(12)
+  const [buying, setBuying] = useState<null | "daypass" | "pro">(null)
+  const rootRef = useRef<HTMLDivElement>(null)
+  const inView = useInView(rootRef, { amount: 0.2, once: true })
+  const [heavyReady, setHeavyReady] = useState(false)
+  useEffect(() => {
+    try {
+      const w = typeof window !== "undefined" ? window.innerWidth : 1024
+      const cores = (typeof navigator !== "undefined" && (navigator as any).hardwareConcurrency) || 4
+      setHeavyReady((w >= 1024 || cores >= 6) && !prefersReduced)
+    } catch {
+      setHeavyReady(false)
+    }
+  }, [prefersReduced])
 
   const TOTAL_COUNT = 1216847
   const totalShort = "1.2M+"
   const totalExact = useMemo(() => new Intl.NumberFormat(locale).format(TOTAL_COUNT), [locale])
+
+  async function checkout(product: "daypass" | "pro") {
+    try {
+      setBuying(product)
+      const res = await fetch("/api/stripe/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ product }),
+      })
+      const json = await res.json().catch(() => null)
+      const url = (json && typeof json.url === "string") ? json.url : null
+      if (url) {
+        window.location.href = url
+        return
+      }
+      window.location.href = `${prefix}/pricing`
+    } catch {
+      window.location.href = `${prefix}/pricing`
+    } finally {
+      setBuying(null)
+    }
+  }
 
   async function load() {
     try {
@@ -115,6 +155,12 @@ export default function OpsWall() {
   }
 
   useEffect(() => {
+    if (!data) {
+      const s = makeSynthetic()
+      setData(s)
+      setSynthetic(true)
+      setErr(null)
+    }
     load()
     const t = setInterval(load, 60000)
     return () => {
@@ -140,6 +186,54 @@ export default function OpsWall() {
   }, [data?.updatedAt])
 
   useEffect(() => {
+    let mounted = true
+    ;(async () => {
+      try {
+        const mod: any = await import("@/lib/cve-pseo")
+        const arr = Array.isArray(mod.KNOWN_CVES) ? mod.KNOWN_CVES.slice() : []
+        arr.sort((a: any, b: any) => String(b.publishedDate || "").localeCompare(String(a.publishedDate || "")))
+        const small = arr.slice(0, 24).map((e: any) => ({
+          cveId: e.cveId,
+          name: e.name,
+          severity: e.severity,
+          cvssScore: e.cvssScore,
+          publishedDate: e.publishedDate,
+          tags: e.tags || [],
+        }))
+        if (mounted) setCves(small)
+      } catch {
+        if (mounted) setCves(null)
+      }
+    })()
+    return () => { mounted = false }
+  }, [])
+
+  useEffect(() => {
+    if (!inView || !heavyReady) return
+    let id: number | null = null
+    ;(async () => {
+      try {
+        const pseo: any = await import("@/lib/pseo")
+        const buildClient: undefined | ((n: number) => any[]) = pseo.buildRunbooksClient
+        if (!buildClient) return
+        id = window.setTimeout(() => {
+          try {
+            const list = buildClient(12000)
+            const mapped = list.slice(0, 1200).map((r: any) => ({
+              slug: r.slug,
+              title: r.title,
+              summary: r.summary,
+              tags: (r.tags || []).slice(0, 4),
+            }))
+            setData((prev) => (prev ? { ...prev, trending: mapped.length ? mapped : prev.trending } : prev))
+          } catch {}
+        }, 600)
+      } catch {}
+    })()
+    return () => { if (id) window.clearTimeout(id) }
+  }, [inView, heavyReady])
+
+  useEffect(() => {
     setVisibleCount(24)
   }, [data?.trending?.length, synthetic])
 
@@ -157,7 +251,7 @@ export default function OpsWall() {
 
   const expandedTrending = useMemo(() => {
     if (!baseTrending.length) return [] as LivePayload["trending"]
-    const target = Math.max(100, baseTrending.length)
+    const target = Math.max(300, baseTrending.length)
     const out: LivePayload["trending"] = []
     for (let i = 0; i < target; i++) out.push(baseTrending[i % baseTrending.length]!)
     return out
@@ -179,8 +273,9 @@ export default function OpsWall() {
   const pillText = `${synthetic ? "Synthetic Pulse" : "Live Pulse"}: ${data?.pulse ?? 87}% · ${totalShort} Database`
 
   return (
-    <div className="space-y-6">
+    <div ref={rootRef} className="space-y-6">
       <div className="flex flex-col gap-4">
+        <div className="text-xl md:text-2xl font-black tracking-tight">LIVE OPS WALL – Neueste Viren & Hot Threats</div>
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
             <div className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight">
@@ -218,6 +313,20 @@ export default function OpsWall() {
           >
             Suchen
           </a>
+        </div>
+        <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-cyan-500/40 bg-cyan-500/5 p-3">
+          <div className="text-sm font-bold text-gray-200">Freischalten</div>
+          <div className="flex items-center gap-2">
+            <button onClick={() => checkout("daypass")} disabled={buying === "daypass"} className="px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-600 to-green-500 text-white font-bold hover:opacity-90 disabled:opacity-60">
+              Daypass 9,99 € – 24h Full Live Feed
+            </button>
+            <button onClick={() => checkout("pro")} disabled={buying === "pro"} className="px-4 py-2 rounded-xl bg-gradient-to-r from-violet-600 to-fuchsia-500 text-white font-bold hover:opacity-90 disabled:opacity-60">
+              Pro 29 €/Monat – Unbegrenzter Zugriff + Alerts
+            </button>
+            <a href={`${prefix}/pricing`} className="px-4 py-2 rounded-xl border border-gray-700 hover:border-gray-500 font-bold text-gray-200">
+              Team 99 €/Monat – Collaboration + Enterprise
+            </a>
+          </div>
         </div>
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
@@ -462,6 +571,38 @@ export default function OpsWall() {
             <div className="mt-4 text-xs text-gray-500">
               “Hot” = Häufigkeit in Titles/Summaries der Library, nicht aus deinen Logs.
             </div>
+          </div>
+
+          <div className="p-6 rounded-3xl border border-gray-800 bg-black/30">
+            <div className="text-lg font-black mb-4">Neueste Viren (CVE‑Pulse)</div>
+            <div className="space-y-2">
+              {(cves || []).slice(0, visibleCveCount).map((x) => (
+                <a
+                  key={x.cveId}
+                  href={`${prefix}/solutions/fix-${x.cveId}`}
+                  className="flex items-center justify-between px-3 py-2 rounded-2xl border border-gray-800 bg-black/20 hover:bg-black/30 transition-colors"
+                >
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-mono px-2 py-0.5 rounded-full border border-gray-700 text-gray-300">{x.cveId}</span>
+                    <span className="text-sm font-bold text-gray-100">{x.name}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className={`${x.severity === "critical" ? "bg-red-600/20 border border-red-600/50 text-red-200" : x.severity === "high" ? "bg-orange-600/20 border border-orange-600/50 text-orange-200" : "bg-yellow-600/20 border border-yellow-600/50 text-yellow-200"} text-xs font-bold px-2 py-0.5 rounded-full`}>{x.severity.toUpperCase()}</span>
+                    <span className="text-xs text-gray-400">{(x.cvssScore as any)?.toFixed ? (x.cvssScore as any).toFixed(1) : x.cvssScore}</span>
+                  </div>
+                </a>
+              ))}
+            </div>
+            {cves && visibleCveCount < cves.length ? (
+              <div className="mt-4 flex justify-center">
+                <button
+                  onClick={() => setVisibleCveCount((v) => v + 10)}
+                  className="px-4 py-2 rounded-xl border border-gray-700 hover:border-gray-500 bg-black/40 text-gray-200 font-bold"
+                >
+                  Mehr laden (+10)
+                </button>
+              </div>
+            ) : null}
           </div>
         </div>
       </div>

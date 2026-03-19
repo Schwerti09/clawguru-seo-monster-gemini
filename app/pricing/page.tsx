@@ -248,6 +248,86 @@ export default async function PricingPage() {
 
       <Container>
         <div className="pb-20">
+          <section className="mb-12 rounded-3xl p-[1px] overflow-hidden" style={{ background: "linear-gradient(135deg, rgba(255,0,102,0.6) 0%, rgba(0,184,255,0.35) 100%)" }}>
+            <div className="rounded-3xl p-8" style={{ background: "#0c070a" }}>
+              <div className="grid lg:grid-cols-3 gap-6 items-center">
+                <div className="lg:col-span-2">
+                  <div className="text-[11px] font-mono uppercase tracking-[0.2em] mb-2" style={{ color: "#ff3377" }}>Claw Swarm Oracle</div>
+                  <div className="text-3xl font-black text-white font-heading">Summon your Army</div>
+                  <p className="mt-3 text-sm text-gray-300">Neon-roter Summon-Button, 4 Swarm-Typen, Live Mycelium-Graph. Ergebnis in unter 8 Sekunden: Angriffspfade, Vorhersage, personalisiertes Runbook und One-Click-Fix.</p>
+                  <div className="mt-4 flex flex-wrap gap-2 text-[10px]">
+                    {['Neuro','Oracle','Hunter','Defense'].map((x) => (
+                      <span key={x} className="px-2 py-1 rounded-full border" style={{ borderColor: "rgba(255,0,102,0.3)", color: "#ff3377", background: "rgba(255,0,102,0.06)" }}>{x}</span>
+                    ))}
+                  </div>
+                </div>
+                <div className="lg:col-span-1">
+                  <div className="rounded-2xl border border-white/10 bg-black/40 p-4">
+                    <a href="/summon" className="w-full mb-3 block text-center px-5 py-3 rounded-2xl font-black text-white" style={{ background: "linear-gradient(135deg,#ff0066,#ff9900)", boxShadow: "0 0 24px rgba(255,0,102,0.25)" }}>Summon Now</a>
+                    <div className="grid gap-2">
+                      <BuyButton product="daypass" label="Daypass 9,99 € – 24h" className="w-full px-4 py-3 rounded-2xl font-black text-black" style={{ background: "linear-gradient(135deg,#ff0066,#ff9900)" }} />
+                      <BuyButton product="pro" label="Pro 49 € / Monat" className="w-full px-4 py-3 rounded-2xl font-black text-black" style={{ background: "linear-gradient(135deg,#a78bfa,#00ff9d)" }} />
+                      <BuyButton product="team" label="Team 89 € / Monat" className="w-full px-4 py-3 rounded-2xl font-black text-white border" style={{ borderColor: "rgba(0,255,157,0.4)" }} />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* ── Claw Swarm Oracle – Product Card with tier benefits ── */}
+          <section className="mb-12 rounded-3xl p-[1px] overflow-hidden" style={{ background: "linear-gradient(135deg, rgba(255,0,102,0.6) 0%, rgba(0,184,255,0.25) 100%)" }}>
+            <div className="rounded-3xl p-8" style={{ background: "#0b070b" }}>
+              <div className="grid lg:grid-cols-3 gap-6 items-center">
+                <div className="lg:col-span-2">
+                  <div className="text-[11px] font-mono uppercase tracking-[0.2em] mb-2" style={{ color: "#ff3377" }}>Claw Swarm Oracle</div>
+                  <div className="text-3xl font-black text-white font-heading">Produktkarte · Detaillierte Tier‑Benefits</div>
+                  <ul className="mt-4 space-y-2 text-sm text-gray-300">
+                    <li className="flex items-start gap-2"><span className="mt-[3px] size-[14px] rounded-full border" style={{ borderColor: "rgba(255,0,102,0.35)" }} aria-hidden> </span>Daypass 9,99 € – 60s Teaser + 1 Report/Tag</li>
+                    <li className="flex items-start gap-2"><span className="mt-[3px] size-[14px] rounded-full border" style={{ borderColor: "rgba(167,139,250,0.35)" }} aria-hidden> </span>Pro 49 € / Monat – Vollzugriff + unbegrenzte History + Predictive</li>
+                    <li className="flex items-start gap-2"><span className="mt-[3px] size-[14px] rounded-full border" style={{ borderColor: "rgba(0,255,157,0.35)" }} aria-hidden> </span>Team 89 € / Monat – Collaboration + Team‑Sharing</li>
+                  </ul>
+                </div>
+                <div className="lg:col-span-1">
+                  <div className="rounded-2xl border border-white/10 bg-black/40 p-4">
+                    <a href="/summon" className="w-full mb-3 block text-center px-5 py-3 rounded-2xl font-black text-white" style={{ background: "linear-gradient(135deg,#ff0066,#ff9900)", boxShadow: "0 0 24px rgba(255,0,102,0.25)" }}>Summon Now</a>
+                    <div className="grid gap-2">
+                      <BuyButton product="daypass" label="Daypass 9,99 € – 24h" className="w-full px-4 py-3 rounded-2xl font-black text-black" style={{ background: "linear-gradient(135deg,#ff0066,#ff9900)" }} />
+                      <BuyButton product="pro" label="Pro 49 € / Monat" className="w-full px-4 py-3 rounded-2xl font-black text-black" style={{ background: "linear-gradient(135deg,#a78bfa,#00ff9d)" }} />
+                      <BuyButton product="team" label="Team 89 € / Monat" className="w-full px-4 py-3 rounded-2xl font-black text-white border" style={{ borderColor: "rgba(0,255,157,0.4)" }} />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* ── Mycelium Intel Nexus ── */}
+          <section className="mb-12 rounded-3xl p-[1px] overflow-hidden" style={{ background: "linear-gradient(135deg, rgba(0,255,157,0.55) 0%, rgba(0,184,255,0.35) 100%)" }}>
+            <div className="rounded-3xl p-8" style={{ background: "#070b0a" }}>
+              <div className="grid lg:grid-cols-3 gap-6 items-center">
+                <div className="lg:col-span-2">
+                  <div className="text-[11px] font-mono uppercase tracking-[0.2em] mb-2" style={{ color: "#00ff9d" }}>Mycelium Intel Nexus</div>
+                  <div className="text-3xl font-black text-white font-heading">Cinematic Intelligence · Threat‑Map · Predictive</div>
+                  <p className="mt-3 text-sm text-gray-300">Tiefschwarzer Luxus‑Look mit biolumineszenten Fasern, Glassmorphism & Gold‑Akzenten. 60s echter Teaser‑Report mit 3D‑Threat‑Map, Prognose & Runbook‑Snippet.</p>
+                  <div className="mt-4 flex flex-wrap gap-2 text-[10px]">
+                    {["Threat‑Map","Predictive","Export","Alerts"].map((x) => (
+                      <span key={x} className="px-2 py-1 rounded-full border" style={{ borderColor: "rgba(0,255,157,0.35)", color: "#00ff9d", background: "rgba(0,255,157,0.08)" }}>{x}</span>
+                    ))}
+                  </div>
+                </div>
+                <div className="lg:col-span-1">
+                  <div className="rounded-2xl border border-white/10 bg-black/40 p-4">
+                    <a href="/intel" className="w-full mb-3 block text-center px-5 py-3 rounded-2xl font-black text-white" style={{ background: "linear-gradient(135deg,#00ff9d,#00b8ff)", boxShadow: "0 0 24px rgba(0,255,157,0.25)" }}>Open Intel</a>
+                    <div className="grid gap-2">
+                      <BuyButton product="daypass" label="Daypass 9,99 € – 24h" className="w-full px-4 py-3 rounded-2xl font-black text-black" style={{ background: "linear-gradient(135deg,#ff0033,#ff7a00)" }} />
+                      <BuyButton product="pro" label="Pro 49 € / Monat" className="w-full px-4 py-3 rounded-2xl font-black text-black" style={{ background: "linear-gradient(135deg,#a78bfa,#00ff9d)" }} />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
 
           {/* ── Feature Comparison Table ── */}
           <section id="compare" className="mb-12 overflow-x-auto">

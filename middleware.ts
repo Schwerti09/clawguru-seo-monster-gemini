@@ -112,6 +112,15 @@ export function middleware(request: NextRequest) {
     return res
   }
 
+  // Compatibility rewrite: route /api/runbooks/search to the new index-backed endpoint
+  if (pathname === "/api/runbooks/search") {
+    const url = request.nextUrl.clone()
+    url.pathname = "/api/runbooks/search-index"
+    const res = NextResponse.rewrite(url)
+    res.headers.set(getRequestIdHeaderName(), requestId)
+    return res
+  }
+
   // Apply per-IP rate limiting for hot routes
   const bucket = routeBucket(pathname)
   if (bucket) {
@@ -175,5 +184,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|.*\\..*).*)", "/api/live-wall"],
+  matcher: ["/((?!api|_next/static|_next/image|.*\\..*).*)", "/api/live-wall", "/api/runbooks/search"],
 }

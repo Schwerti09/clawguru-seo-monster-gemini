@@ -25,7 +25,7 @@ export default function AdminLogin() {
         setErr(j?.error || "Login fehlgeschlagen")
         return
       }
-      window.location.href = "/admin/center"
+      window.location.href = "/admin/dashboard"
     } catch {
       setErr("Netzwerkfehler")
     } finally {

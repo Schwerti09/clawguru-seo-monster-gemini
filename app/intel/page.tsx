@@ -1,26 +1,15 @@
 import type { Metadata } from "next"
-import Container from "@/components/shared/Container"
-import IntelFeed from "@/components/intel/IntelFeed"
-import IntelApiDocs from "@/components/intel/IntelApiDocs"
+import dynamic from "next/dynamic"
+
+const IntelNexusClient = dynamic(() => import("@/components/intel/IntelNexusClient"), { ssr: false })
 
 export const metadata: Metadata = {
-  title: "Intel Feed | ClawGuru",
+  title: "Mycelium Intel Nexus | ClawGuru",
   description:
-    "Kuratierte Security-Patterns für OpenClaw/Moltbot: wiederkehrende Risiken, aktuelle Angriffsvektoren, Handlungswissen. Kein Clickbait.",
+    "Luxuriöses, cineastisches Intel: 3D‑Threat‑Map, Teaser‑Report, Predictive Engine, Export & Alerts. Freemium‑Flow mit Daypass/Pro.",
   alternates: { canonical: "/intel" }
 }
 
 export default function IntelPage() {
-  return (
-    <Container>
-      <div className="py-16">
-        <h1 className="text-4xl md:text-5xl font-black mb-4">Intel Feed</h1>
-        <p className="text-gray-300 text-lg mb-8">
-          Wiederkehrende Muster, kuratiert. Kein Clickbait. Du willst Handlungswissen.
-        </p>
-        <IntelFeed />
-        <IntelApiDocs />
-      </div>
-    </Container>
-  )
+  return <IntelNexusClient />
 }

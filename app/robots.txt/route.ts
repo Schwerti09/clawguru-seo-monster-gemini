@@ -24,6 +24,8 @@ export async function GET(req: NextRequest) {
   const body = [
     "User-agent: *",
     "Allow: /",
+    // Explicitly allow public embed script under /api
+    "Allow: /api/clawlink.js",
     "",
     "# Blockiere Admin & Backend",
     "Disallow: /admin/",

@@ -7,8 +7,10 @@ import { headers } from "next/headers"
 import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
 import { getDictionary } from "@/lib/getDictionary"
 
+export const dynamic = "force-static"
+export const dynamicParams = false
 export const runtime = "nodejs"
-export const revalidate = 60
+export const revalidate = 3600
 export const maxDuration = 180
 
 export const metadata = {

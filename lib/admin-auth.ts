@@ -22,13 +22,22 @@ function sign(data: string, secret: string) {
   return b64url(crypto.createHmac("sha256", secret).update(data).digest())
 }
 
-export function issueAdminToken(username: string, ttlSeconds = 60 * 60 * 8) {
-  const secret =
+function getAdminSessionSecret(): string {
+  const direct =
     process.env.ADMIN_SESSION_SECRET ||
     process.env.SESSION_SECRET ||
     process.env.NEXTAUTH_SECRET ||
+    process.env.ACCESS_TOKEN_SECRET ||
     ""
-  if (!secret) throw new Error("ADMIN_SESSION_SECRET missing")
+  if (direct) return direct
+  const u = process.env.ADMIN_USER_NAME || process.env.ADMIN_USERNAME || ""
+  const p = process.env.ADMIN_PASSWORT || process.env.ADMIN_PASSWORD || ""
+  const seed = `${process.env.VERCEL_URL || process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"}|${u}|${p}`
+  return crypto.createHash("sha256").update(seed).digest("hex")
+}
+
+export function issueAdminToken(username: string, ttlSeconds = 60 * 60 * 8) {
+  const secret = getAdminSessionSecret()
 
   const now = Math.floor(Date.now() / 1000)
   const payload: AdminSession = { v: 1, u: username, iat: now, exp: now + ttlSeconds }
@@ -38,11 +47,7 @@ export function issueAdminToken(username: string, ttlSeconds = 60 * 60 * 8) {
 }
 
 export function verifyAdminToken(token: string) {
-  const secret =
-    process.env.ADMIN_SESSION_SECRET ||
-    process.env.SESSION_SECRET ||
-    process.env.NEXTAUTH_SECRET ||
-    ""
+  const secret = getAdminSessionSecret()
   if (!secret) return null
   const parts = token.split(".")
   if (parts.length !== 2) return null

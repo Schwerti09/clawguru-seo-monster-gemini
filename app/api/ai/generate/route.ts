@@ -173,9 +173,35 @@ export async function POST(req: NextRequest) {
       });
 
       if (!res3.ok) {
+        const status = res3.status;
         const t3 = await res3.text().catch(() => "");
+        if (status === 402) {
+          const gkey = process.env.GEMINI_API_KEY;
+          if (gkey) {
+            const base = (process.env.GEMINI_BASE_URL || "https://generativelanguage.googleapis.com/v1beta").replace(/\/$/, "");
+            const gurl = `${base}/models/${encodeURIComponent("gemini-2.0-flash")}:generateContent?key=${encodeURIComponent(gkey)}`;
+            const gres = await fetch(gurl, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                contents: [
+                  {
+                    role: "user",
+                    parts: [{ text: `${system}\n\nUSER REQUEST:\n${p}` }],
+                  },
+                ],
+                generationConfig: { temperature: 0.35, maxOutputTokens: 900 },
+              }),
+            });
+            if (gres.ok) {
+              const gdata = await gres.json();
+              const gtext = extractGeminiText(gdata);
+              if (gtext) return NextResponse.json({ text: gtext });
+            }
+          }
+        }
         return NextResponse.json(
-          { error: "DeepSeek request failed", status: res3.status, detail: t3.slice(0, 2000) },
+          { error: "DeepSeek request failed", status, detail: t3.slice(0, 2000) },
           { status: 502 },
         );
       }

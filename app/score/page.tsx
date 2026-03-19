@@ -1,8 +1,9 @@
 import Container from "@/components/shared/Container"
 import ShareScore from "@/components/shared/ShareScore"
+import Image from "next/image"
 
 export default async function ScorePage(
-  props: { searchParams?: Promise<Record<string, string | string[] | undefined>> }
+  props: { searchParams?: Record<string, string | string[] | undefined> }
 ) {
   const searchParams = props.searchParams;
   const target = typeof searchParams?.target === "string" ? searchParams?.target : "unknown"
@@ -33,8 +34,15 @@ export default async function ScorePage(
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
           <div className="rounded-3xl overflow-hidden border border-gray-800 bg-black/30">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={badgeUrl} alt="Claw Security Score Badge" className="w-full h-auto" />
+            <div className="relative w-full aspect-[16/9]">
+              <Image
+                src={badgeUrl}
+                alt="Claw Security Score Badge"
+                fill
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                placeholder="empty"
+              />
+            </div>
           </div>
 
           <div className="space-y-5">

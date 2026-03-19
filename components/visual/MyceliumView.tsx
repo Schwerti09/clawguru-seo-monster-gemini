@@ -74,10 +74,11 @@ interface Props {
   graph: MyceliumGraph
   summaries: Record<string, RunbookSummary>
   totalRunbooks: number
+  ui?: "full" | "embed"
 }
 
 // ── Main component ─────────────────────────────────────────────────────────────
-export default function MyceliumView({ graph, summaries, totalRunbooks }: Props) {
+export default function MyceliumView({ graph, summaries, totalRunbooks, ui = "full" }: Props) {
   const { locale } = useI18n()
   const prefix = `/${locale}`
 
@@ -486,75 +487,80 @@ export default function MyceliumView({ graph, summaries, totalRunbooks }: Props)
   }
 
   // ── Render ──────────────────────────────────────────────────────────────────
+  const isEmbed = ui === "embed"
 
   return (
-    <div className="flex flex-col lg:flex-row h-[calc(100vh-120px)] min-h-[600px] gap-0">
+    <div className={isEmbed ? "absolute inset-0 overflow-hidden pointer-events-none" : "flex flex-col lg:flex-row h-[calc(100vh-120px)] min-h-[600px] gap-0"}>
 
       {/* ── Canvas graph area ─────────────────────────────────────────────── */}
-      <div className="relative flex-1 min-h-[400px] lg:min-h-0 bg-[#050608] border border-white/8 rounded-xl overflow-hidden">
+      <div className={isEmbed ? "absolute inset-0" : "relative flex-1 min-h-[400px] lg:min-h-0 bg-[#050608] border border-white/8 rounded-xl overflow-hidden"}>
         <canvas
           ref={canvasRef}
           className="w-full h-full block"
-          style={{ cursor: "grab" }}
-          onMouseMove={handleMouseMove}
-          onMouseDown={handleMouseDown}
-          onMouseUp={handleMouseUp}
-          onMouseLeave={() => { simRef.current.isPanning = false }}
-          onWheel={handleWheel}
+          style={{ cursor: isEmbed ? "default" : "grab" }}
+          onMouseMove={isEmbed ? undefined : handleMouseMove}
+          onMouseDown={isEmbed ? undefined : handleMouseDown}
+          onMouseUp={isEmbed ? undefined : handleMouseUp}
+          onMouseLeave={isEmbed ? undefined : (() => { simRef.current.isPanning = false })}
+          onWheel={isEmbed ? undefined : handleWheel}
         />
 
         {/* MYCELIAL SINGULARITY v3.0 – Top-left stats overlay */}
-        <div className="absolute top-3 left-3 bg-black/70 border border-white/10 rounded-xl px-4 py-3 text-xs space-y-1 backdrop-blur-sm">
-          <div className="font-black text-[#00ff9d] text-sm mb-1 tracking-wider">
-            MYCELIAL SINGULARITY v3.0
+        {!isEmbed && (
+          <div className="absolute top-3 left-3 bg-black/70 border border-white/10 rounded-xl px-4 py-3 text-xs space-y-1 backdrop-blur-sm">
+            <div className="font-black text-[#00ff9d] text-sm mb-1 tracking-wider">
+              MYCELIAL SINGULARITY v3.0
+            </div>
+            <div className="text-gray-400">
+              Total library: <span className="text-white font-mono">{totalRunbooks.toLocaleString()}+</span> runbooks
+            </div>
+            <div className="text-gray-400">
+              Active nodes: <span className="text-white font-mono">{graph.nodes.length}</span>
+            </div>
+            <div className="text-gray-400">
+              Edges: <span className="text-white font-mono">{graph.edges.length}</span>
+            </div>
+            <div className="text-gray-400">
+              Evolved: <span className="text-[#ffc800] font-mono">{evolvedCount}</span>
+            </div>
+            <div className="text-gray-400">
+              Generation: <span className="text-[#b464ff] font-mono">{graph.generation}</span>
+            </div>
           </div>
-          <div className="text-gray-400">
-            Total library: <span className="text-white font-mono">{totalRunbooks.toLocaleString()}+</span> runbooks
-          </div>
-          <div className="text-gray-400">
-            Active nodes: <span className="text-white font-mono">{graph.nodes.length}</span>
-          </div>
-          <div className="text-gray-400">
-            Edges: <span className="text-white font-mono">{graph.edges.length}</span>
-          </div>
-          <div className="text-gray-400">
-            Evolved: <span className="text-[#ffc800] font-mono">{evolvedCount}</span>
-          </div>
-          <div className="text-gray-400">
-            Generation: <span className="text-[#b464ff] font-mono">{graph.generation}</span>
-          </div>
-        </div>
+        )}
 
         {/* MYCELIAL SINGULARITY v3.0 – Edge legend */}
-        <div className="absolute top-3 right-3 bg-black/70 border border-white/10 rounded-xl px-3 py-3 text-xs backdrop-blur-sm space-y-1">
-          {(Object.entries(EDGE_LABEL_COLORS) as [string, string][]).map(([kind, color]) => (
-            <div key={kind} className="flex items-center gap-2">
-              <div className="w-5 h-px" style={{ backgroundColor: color }} />
-              <span className="text-gray-400">{kind}</span>
-            </div>
-          ))}
-          <div className="border-t border-white/10 mt-1 pt-1 space-y-0.5">
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-[#00ff9d]" />
-              <span className="text-gray-400">elite (≥92)</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-[#00b8ff]" />
-              <span className="text-gray-400">strong (80-91)</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full" style={{ background: "rgb(180,100,255)" }} />
-              <span className="text-gray-400">mid (65-79)</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-[#ffc800]" />
-              <span className="text-gray-400">★ evolved</span>
+        {!isEmbed && (
+          <div className="absolute top-3 right-3 bg-black/70 border border-white/10 rounded-xl px-3 py-3 text-xs backdrop-blur-sm space-y-1">
+            {(Object.entries(EDGE_LABEL_COLORS) as [string, string][]).map(([kind, color]) => (
+              <div key={kind} className="flex items-center gap-2">
+                <div className="w-5 h-px" style={{ backgroundColor: color }} />
+                <span className="text-gray-400">{kind}</span>
+              </div>
+            ))}
+            <div className="border-t border-white/10 mt-1 pt-1 space-y-0.5">
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-[#00ff9d]" />
+                <span className="text-gray-400">elite (≥92)</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-[#00b8ff]" />
+                <span className="text-gray-400">strong (80-91)</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full" style={{ background: "rgb(180,100,255)" }} />
+                <span className="text-gray-400">mid (65-79)</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-[#ffc800]" />
+                <span className="text-gray-400">★ evolved</span>
+              </div>
             </div>
           </div>
-        </div>
+        )}
 
         {/* MYCELIAL SINGULARITY v3.0 – Selected node inspector */}
-        {selectedNode && (
+        {!isEmbed && selectedNode && (
           <div className="absolute bottom-4 left-4 max-w-[280px] bg-black/85 border border-[#00ff9d]/30 rounded-xl p-4 backdrop-blur-sm text-sm shadow-neon-green">
             <div className="flex justify-between items-start mb-2">
               <span className="font-black text-[#00ff9d] text-xs tracking-wide uppercase">Node Inspector</span>
@@ -603,12 +609,15 @@ export default function MyceliumView({ graph, summaries, totalRunbooks }: Props)
         )}
 
         {/* MYCELIAL SINGULARITY v3.0 – Navigation hint */}
-        <div className="absolute bottom-3 right-3 text-gray-600 text-xs pointer-events-none">
-          scroll to zoom · drag to pan · click node to inspect
-        </div>
+        {!isEmbed && (
+          <div className="absolute bottom-3 right-3 text-gray-600 text-xs pointer-events-none">
+            scroll to zoom · drag to pan · click node to inspect
+          </div>
+        )}
       </div>
 
       {/* ── Sidebar ──────────────────────────────────────────────────────────── */}
+      {!isEmbed && (
       <div className="w-full lg:w-80 flex flex-col bg-gray-950/80 border border-white/8 rounded-xl ml-0 lg:ml-3 overflow-hidden">
 
         {/* MYCELIAL SINGULARITY v3.0 – Sidebar header */}
@@ -781,6 +790,7 @@ export default function MyceliumView({ graph, summaries, totalRunbooks }: Props)
           </span>
         </div>
       </div>
+      )}
     </div>
   )
 }

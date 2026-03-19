@@ -18,14 +18,7 @@ export async function POST(req: NextRequest) {
     process.env.ADMIN_PASSWORT ||
     process.env.ADMIN_PASSWORD ||
     ""
-
-  const sessionSecret =
-    process.env.ADMIN_SESSION_SECRET ||
-    process.env.SESSION_SECRET ||
-    process.env.NEXTAUTH_SECRET ||
-    ""
-
-  if (!ADMIN_USERNAME || !ADMIN_PASSWORD || !sessionSecret) {
+  if (!ADMIN_USERNAME || !ADMIN_PASSWORD) {
     return json(500, { error: "Admin ENV missing" })
   }
 

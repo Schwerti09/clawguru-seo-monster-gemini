@@ -7,6 +7,7 @@ import BuyButton from "@/components/commerce/BuyButton"
 import { SERVICE } from "@/lib/constants"
 import dynamic from "next/dynamic"
 import { useI18n } from "@/components/i18n/I18nProvider"
+import Image from "next/image"
 
 // WORLD BEAST FINAL LAUNCH: lazy-load upsell modal
 const UpsellModal = dynamic(() => import("@/components/onboarding/UpsellModal"), { ssr: false })
@@ -268,8 +269,15 @@ export default function HeroSecurityCheck() {
             <div className="lg:w-[240px]">
               <div className="text-sm text-gray-400 mb-2">{isGerman ? "Share-Badge Preview" : "Share badge preview"}</div>
               <div className="rounded-2xl overflow-hidden border border-gray-800 bg-black/30">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={badgeUrl} alt="Claw Security Score Badge" className="w-full h-auto" />
+                <div className="relative w-full aspect-[16/9]">
+                  <Image
+                    src={badgeUrl || "/api/score-badge?target=example&score=0&vulnerable=0"}
+                    alt="Claw Security Score Badge"
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 240px"
+                    placeholder="empty"
+                  />
+                </div>
               </div>
               <a
                 className="mt-3 inline-flex text-sm text-cyan-300 hover:text-cyan-200 underline"

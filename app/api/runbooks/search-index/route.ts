@@ -2,66 +2,8 @@
 import { loadRunbooks } from '@/lib/runbooks-data'
 
 export const runtime = 'nodejs'
-const INDEX_TIMEOUT_MS = Number(process.env.RUNBOOKS_INDEX_TIMEOUT_MS || 300)
 
-// Mirror the minimal static fallback used by the legacy route to guarantee results before index warmup
-const FALLBACK: Array<{
-  slug: string
-  title: string
-  summary: string
-  tags: string[]
-  lastmod?: string
-  clawScore?: number
-}> = [
-  {
-    slug: 'aws-ssh-hardening-2026',
-    title: 'SSH Hardening auf AWS (2026)',
-    summary: 'CIS-konforme SSH-HÃ¤rtung: SchlÃ¼ssel-Policy, Rate-Limits, MFAâ€‘Gate, Auditâ€‘Logs.',
-    tags: ['aws', 'ssh', 'hardening', 'security'],
-    lastmod: '2026-02-25',
-    clawScore: 92,
-  },
-  {
-    slug: 'aws-nginx-csp-2026',
-    title: 'Nginx CSP Harden (AWS, 2026)',
-    summary: 'Content Security Policy korrekt setzen, XFO/XCTO anziehen, Subresource Integrity.',
-    tags: ['aws', 'nginx', 'csp', 'hardening'],
-    lastmod: '2026-02-25',
-    clawScore: 88,
-  },
-  {
-    slug: 'gcp-kubernetes-zero-trust-2026',
-    title: 'Kubernetes Zeroâ€‘Trust (GCP, 2026)',
-    summary: 'RBAC minimieren, PodSecurity, NetworkPolicies, Imageâ€‘Scanning, Admissionâ€‘Controls.',
-    tags: ['gcp', 'kubernetes', 'hardening', 'zero-trust'],
-    lastmod: '2026-02-25',
-    clawScore: 90,
-  },
-  {
-    slug: 'hetzner-ssh-hardening-2026',
-    title: 'SSH Hardening auf Hetzner (2026)',
-    summary: 'Keyâ€‘Rotation, Fail2ban, Portâ€‘Knocking optional, Logging & Alerting baseline.',
-    tags: ['hetzner', 'ssh', 'hardening'],
-    lastmod: '2026-02-25',
-    clawScore: 86,
-  },
-  {
-    slug: 'azure-docker-csp-2026',
-    title: 'Docker CSP & Registry Hygiene (Azure, 2026)',
-    summary: 'Trusted Base Images, Signierung, CSP im Ingress, Secrets aus Vault.',
-    tags: ['azure', 'docker', 'csp', 'security'],
-    lastmod: '2026-02-25',
-    clawScore: 84,
-  },
-  {
-    slug: 'aws-kubernetes-zero-trust-2026',
-    title: 'Kubernetes Zeroâ€‘Trust (AWS, 2026)',
-    summary: 'OPA Gatekeeper, mTLS Service Mesh, least privilege IAM/RBAC.',
-    tags: ['aws', 'kubernetes', 'zero-trust', 'security'],
-    lastmod: '2026-02-25',
-    clawScore: 91,
-  },
-]
+// Data is loaded from public/runbooks.json via loadRunbooks() and cached in globalThis
 
 function normalize(str: string) {
   return (str || '').toLowerCase()
@@ -115,25 +57,13 @@ export async function GET(req: NextRequest) {
 
     let total = 0
     let items: any[] = []
-    let warning: string | undefined
-    let source: 'index' | 'fallback' = 'fallback'
 
-    try {
-      const data = await loadRunbooks()
-      const r = searchFallback(data.length ? data : FALLBACK, q, tags, page, limit)
-      total = r.total
-      items = r.items
-      source = 'fallback'
-    } catch {
-      const r = searchFallback(FALLBACK, q, tags, page, limit)
-      total = r.total
-      items = r.items
-      source = 'fallback'
-      warning = 'Data load error: using lightweight fallback set'
-    }
+    const data = await loadRunbooks()
+    const r = searchFallback(data, q, tags, page, limit)
+    total = r.total
+    items = r.items
 
-    const payload: Record<string, any> = { q, tags, page, limit, total, items, source }
-    if (warning) payload.warning = warning
+    const payload: Record<string, any> = { q, tags, page, limit, total, items }
 
     const res = NextResponse.json(payload)
     res.headers.set('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=30')

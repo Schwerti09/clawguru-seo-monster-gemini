@@ -11,10 +11,11 @@
     "check:sitemap-redirects": "node scripts/check-sitemap-redirects.js",
     "check:prod-smoke": "node scripts/check-production-smoke.js",
     "i18n:sync-dictionaries": "node scripts/sync-dictionaries.js",
-    "build": "next build",
+    "build": "npm run build:data && next build",
     "start": "next start",
     "lint": "next lint",
-    "icons:generate": "node scripts/generate-favicons.mjs"
+    "icons:generate": "node scripts/generate-favicons.mjs",
+    "build:data": "node scripts/generate-runbooks-json.js"
   },
   "dependencies": {
     "@react-three/drei": "^8.17.0",

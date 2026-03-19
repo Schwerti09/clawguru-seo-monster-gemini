@@ -1571,7 +1571,7 @@ let _runbooksCache: Runbook[] | null = null
 function _getRunbooks(): Runbook[] {
   if (IS_BUILD_PHASE) return []
   if (!_runbooksCache) {
-    _runbooksCache = _buildRunbooksWithRelated(Number(process.env.PSEO_RUNBOOK_COUNT || 500))
+    _runbooksCache = _buildRunbooksWithRelated(Number(process.env.PSEO_RUNBOOK_COUNT || 100))
   }
   return _runbooksCache
 }
@@ -1660,18 +1660,7 @@ export function getRunbook(slug: string): Runbook | null {
   const meta = parseRunbookSlug100k(slug)
   if (meta) {
     console.count("pseo.getRunbook.hit.on_demand")
-    const __label = `gen100k:${slug}`
-    console.time(__label)
-    try {
-      const rb = generateRunbook100k(meta)
-      console.timeEnd(__label)
-      console.log("getRunbook", { slug, result: rb ? "found:on_demand" : "null" })
-      return rb ?? _buildDummyRunbook(slug)
-    } catch (e: unknown) {
-      console.timeEnd(__label)
-      console.error("gen100k error", { slug, error: e instanceof Error ? e.message : String(e) })
-      return _buildDummyRunbook(slug)
-    }
+    return _buildDummyRunbook(slug)
   }
   console.log("getRunbook", { slug, result: "null" })
   return _buildDummyRunbook(slug)

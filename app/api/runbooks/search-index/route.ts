@@ -1,4 +1,5 @@
 ﻿import { NextRequest, NextResponse } from 'next/server'
+import { loadRunbooks } from '@/lib/runbooks-data'
 
 export const runtime = 'nodejs'
 const INDEX_TIMEOUT_MS = Number(process.env.RUNBOOKS_INDEX_TIMEOUT_MS || 300)
@@ -118,34 +119,17 @@ export async function GET(req: NextRequest) {
     let source: 'index' | 'fallback' = 'fallback'
 
     try {
-      // Lazy import to avoid top-level cold-start penalties or bundle init issues
-      let indexApi: any = null
-      try {
-        indexApi = await import('@/lib/runbooks-index')
-      } catch {
-        indexApi = null
-      }
-
-      if (indexApi && typeof indexApi.isReady === 'function' && indexApi.isReady()) {
-        const r = indexApi.search(q, tags, page, limit)
-        total = r.total
-        items = r.items
-        source = 'index'
-      } else {
-        // Trigger warmup in the background without blocking the response
-        try {
-          if (indexApi && typeof indexApi.warmup === 'function') void indexApi.warmup()
-        } catch {}
-        const r = searchFallback(FALLBACK, q, tags, page, limit)
-        total = r.total
-        items = r.items
-        warning = 'Index not warm yet: using lightweight fallback set'
-      }
+      const data = await loadRunbooks()
+      const r = searchFallback(data.length ? data : FALLBACK, q, tags, page, limit)
+      total = r.total
+      items = r.items
+      source = 'fallback'
     } catch {
       const r = searchFallback(FALLBACK, q, tags, page, limit)
       total = r.total
       items = r.items
-      warning = 'Index error: using lightweight fallback set'
+      source = 'fallback'
+      warning = 'Data load error: using lightweight fallback set'
     }
 
     const payload: Record<string, any> = { q, tags, page, limit, total, items, source }

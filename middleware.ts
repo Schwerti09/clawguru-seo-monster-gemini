@@ -103,6 +103,22 @@ export function middleware(request: NextRequest) {
   const requestId = getRequestId(request.headers)
   const method = request.method
 
+  // EARLY BYPASS: minimize Edge CPU for most API/static routes, keep only required API rewrites
+  const isApi = pathname.startsWith("/api/")
+  if (isApi) {
+    const keep = pathname === "/api/live-wall" || pathname === "/api/runbooks/search" || pathname === "/api/clawlink.js"
+    if (!keep) {
+      const res = NextResponse.next()
+      res.headers.set(getRequestIdHeaderName(), requestId)
+      return res
+    }
+  }
+  if (isPublicFile(pathname)) {
+    const res = NextResponse.next()
+    res.headers.set(getRequestIdHeaderName(), requestId)
+    return res
+  }
+
   // Compatibility rewrite: serve /api/clawlink.js from /api/clawlink
   if (pathname === "/api/clawlink.js") {
     const url = request.nextUrl.clone()
@@ -112,19 +128,28 @@ export function middleware(request: NextRequest) {
     return res
   }
 
-  // Note: Temporarily disable the compatibility rewrite for /api/runbooks/search
-  // so the legacy fallback route serves requests without involving the index route.
+  // Compatibility rewrite (env-gated): /api/runbooks/search -> /api/runbooks/search-index
+  // Enable by setting RUNBOOKS_SEARCH_REWRITE=1 in the environment
+  if (pathname === "/api/runbooks/search" && process.env.RUNBOOKS_SEARCH_REWRITE === '1') {
+    const url = request.nextUrl.clone()
+    url.pathname = "/api/runbooks/search-index"
+    const res = NextResponse.rewrite(url)
+    res.headers.set(getRequestIdHeaderName(), requestId)
+    return res
+  }
 
-  // Apply per-IP rate limiting for hot routes
-  const bucket = routeBucket(pathname)
-  if (bucket) {
-    const ip = getClientIp(request)
-    const rl = checkRateLimit(ip, bucket)
-    if (!rl.ok) {
-      const res = NextResponse.json({ error: "rate_limited", bucket }, { status: 429 })
-      res.headers.set("Retry-After", String(rl.retryAfter))
-      res.headers.set(getRequestIdHeaderName(), requestId)
-      return res
+  // Apply per-IP rate limiting for hot routes (env-gated to reduce Edge CPU when not needed)
+  if (process.env.MW_RL_ENABLED === '1') {
+    const bucket = routeBucket(pathname)
+    if (bucket) {
+      const ip = getClientIp(request)
+      const rl = checkRateLimit(ip, bucket)
+      if (!rl.ok) {
+        const res = NextResponse.json({ error: "rate_limited", bucket }, { status: 429 })
+        res.headers.set("Retry-After", String(rl.retryAfter))
+        res.headers.set(getRequestIdHeaderName(), requestId)
+        return res
+      }
     }
   }
 
@@ -178,5 +203,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|.*\\..*).*)", "/api/live-wall"],
+  matcher: ["/((?!api|_next/static|_next/image|.*\\..*).*)", "/api/live-wall", "/api/runbooks/search"],
 }

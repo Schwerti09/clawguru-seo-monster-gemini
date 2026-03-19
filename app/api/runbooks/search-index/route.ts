@@ -66,7 +66,7 @@ export async function GET(req: NextRequest) {
     const payload: Record<string, any> = { q, tags, page, limit, total, items }
 
     const res = NextResponse.json(payload)
-    res.headers.set('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=30')
+    res.headers.set('Cache-Control', 'public, s-maxage=600, stale-while-revalidate=300')
     return res
   } catch (e) {
     console.error('runbooks/search-index error', e)

@@ -1,5 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { search as indexSearch, isReady, warmup } from '@/lib/runbooks-index'
+﻿import { NextRequest, NextResponse } from 'next/server'
 
 export const runtime = 'nodejs'
 const INDEX_TIMEOUT_MS = Number(process.env.RUNBOOKS_INDEX_TIMEOUT_MS || 300)
@@ -16,7 +15,7 @@ const FALLBACK: Array<{
   {
     slug: 'aws-ssh-hardening-2026',
     title: 'SSH Hardening auf AWS (2026)',
-    summary: 'CIS-konforme SSH-Härtung: Schlüssel-Policy, Rate-Limits, MFA‑Gate, Audit‑Logs.',
+    summary: 'CIS-konforme SSH-HÃ¤rtung: SchlÃ¼ssel-Policy, Rate-Limits, MFAâ€‘Gate, Auditâ€‘Logs.',
     tags: ['aws', 'ssh', 'hardening', 'security'],
     lastmod: '2026-02-25',
     clawScore: 92,
@@ -31,8 +30,8 @@ const FALLBACK: Array<{
   },
   {
     slug: 'gcp-kubernetes-zero-trust-2026',
-    title: 'Kubernetes Zero‑Trust (GCP, 2026)',
-    summary: 'RBAC minimieren, PodSecurity, NetworkPolicies, Image‑Scanning, Admission‑Controls.',
+    title: 'Kubernetes Zeroâ€‘Trust (GCP, 2026)',
+    summary: 'RBAC minimieren, PodSecurity, NetworkPolicies, Imageâ€‘Scanning, Admissionâ€‘Controls.',
     tags: ['gcp', 'kubernetes', 'hardening', 'zero-trust'],
     lastmod: '2026-02-25',
     clawScore: 90,
@@ -40,7 +39,7 @@ const FALLBACK: Array<{
   {
     slug: 'hetzner-ssh-hardening-2026',
     title: 'SSH Hardening auf Hetzner (2026)',
-    summary: 'Key‑Rotation, Fail2ban, Port‑Knocking optional, Logging & Alerting baseline.',
+    summary: 'Keyâ€‘Rotation, Fail2ban, Portâ€‘Knocking optional, Logging & Alerting baseline.',
     tags: ['hetzner', 'ssh', 'hardening'],
     lastmod: '2026-02-25',
     clawScore: 86,
@@ -55,7 +54,7 @@ const FALLBACK: Array<{
   },
   {
     slug: 'aws-kubernetes-zero-trust-2026',
-    title: 'Kubernetes Zero‑Trust (AWS, 2026)',
+    title: 'Kubernetes Zeroâ€‘Trust (AWS, 2026)',
     summary: 'OPA Gatekeeper, mTLS Service Mesh, least privilege IAM/RBAC.',
     tags: ['aws', 'kubernetes', 'zero-trust', 'security'],
     lastmod: '2026-02-25',
@@ -119,15 +118,23 @@ export async function GET(req: NextRequest) {
     let source: 'index' | 'fallback' = 'fallback'
 
     try {
-      if (isReady()) {
-        const r = indexSearch(q, tags, page, limit)
+      // Lazy import to avoid top-level cold-start penalties or bundle init issues
+      let indexApi: any = null
+      try {
+        indexApi = await import('@/lib/runbooks-index')
+      } catch {
+        indexApi = null
+      }
+
+      if (indexApi && typeof indexApi.isReady === 'function' && indexApi.isReady()) {
+        const r = indexApi.search(q, tags, page, limit)
         total = r.total
         items = r.items
         source = 'index'
       } else {
         // Trigger warmup in the background without blocking the response
         try {
-          void warmup()
+          if (indexApi && typeof indexApi.warmup === 'function') void indexApi.warmup()
         } catch {}
         const r = searchFallback(FALLBACK, q, tags, page, limit)
         total = r.total

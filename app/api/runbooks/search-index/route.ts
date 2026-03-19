@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { ensureReadyWithin, search as indexSearch, isReady } from '@/lib/runbooks-index'
+import { search as indexSearch, isReady, warmup } from '@/lib/runbooks-index'
 
 export const runtime = 'nodejs'
 const INDEX_TIMEOUT_MS = Number(process.env.RUNBOOKS_INDEX_TIMEOUT_MS || 300)
@@ -119,13 +119,16 @@ export async function GET(req: NextRequest) {
     let source: 'index' | 'fallback' = 'fallback'
 
     try {
-      const ready = await ensureReadyWithin(INDEX_TIMEOUT_MS)
-      if (ready && isReady()) {
+      if (isReady()) {
         const r = indexSearch(q, tags, page, limit)
         total = r.total
         items = r.items
         source = 'index'
       } else {
+        // Trigger warmup in the background without blocking the response
+        try {
+          void warmup()
+        } catch {}
         const r = searchFallback(FALLBACK, q, tags, page, limit)
         total = r.total
         items = r.items

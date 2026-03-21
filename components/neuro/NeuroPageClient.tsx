@@ -27,15 +27,23 @@ export default function NeuroPageClient() {
   useEffect(() => {
     if (!selected.length) {
       setData(null)
+      try { if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent('neuro:selected', { detail: { selected: 0 } })) } catch {}
       return
     }
     const t = setTimeout(() => {
       setLoading(true)
       setError(null)
+      try { if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent('neuro:selected', { detail: { selected: selected.length } })) } catch {}
       const qs = encodeURIComponent(selected.join(","))
       fetch(`/api/neuro?stack=${qs}&limit=5`)
         .then((r) => (r.ok ? r.json() : Promise.reject(new Error(`${r.status}`))))
-        .then((d) => setData(d))
+        .then((d) => {
+          setData(d)
+          try {
+            const found = Array.isArray(d?.recommended_runbooks) ? d.recommended_runbooks.length : 0
+            if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent('neuro:found', { detail: { found } }))
+          } catch {}
+        })
         .catch(() => setError("Fehler beim Laden."))
         .finally(() => setLoading(false))
     }, 500)

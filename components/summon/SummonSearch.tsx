@@ -40,7 +40,14 @@ export default function SummonSearch({ initialQuery = "" }: { initialQuery?: str
       setError(null)
       fetch(`/api/summon?q=${encodeURIComponent(query)}`)
         .then((r) => r.ok ? r.json() : Promise.reject(new Error(`${r.status}`)))
-        .then((data) => setResult(data))
+        .then((data) => {
+          setResult(data)
+          try {
+            if (typeof window !== 'undefined' && data && typeof data.confidence === 'number') {
+              window.dispatchEvent(new CustomEvent('summon:confidence', { detail: { confidence: data.confidence } }))
+            }
+          } catch { /* noop */ }
+        })
         .catch((e) => setError("Fehler beim Laden."))
         .finally(() => setLoading(false))
     }, 450)

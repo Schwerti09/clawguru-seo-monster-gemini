@@ -1,3 +1,17 @@
+// Mission Control – Analyse (2026-03)
+// Sichtbare Elemente & Struktur:
+// - Diese Seite ist derzeit eine statische Erläuterung (Definition, 3 Info-Karten).
+// - Kein Tab/Sidebar‑Gerüst, keine API‑Anbindung.
+// Verwandte Seiten:
+// - app/dashboard/page.tsx rendert <DashboardClient/> mit modularen Tiles (Gating, Buttons).
+//   Datenverbindungen: Stripe‑Checkout, Live‑Wall, Tier‑Abfrage (/api/auth/tier), diverse Platzhalter.
+//   Layout: Tailwind, Kartenraster, Glassmorphism.
+// - app/admin/dashboard/page.tsx lädt <UniverseDashboard/> (Admin‑Cockpit)
+//   Datenverbindungen: Admin‑Cookie, Stripe/Gemini/Index‑Status u.a. im Client; modulare Cards/Drawer.
+// Fazit:
+// - Für das zentrale Command Center ist eine neue Seite mit Tabs/Sidebar sinnvoll.
+//   Die existierende Mission‑Control‑Seite bleibt als Intro bestehen.
+
 import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
 

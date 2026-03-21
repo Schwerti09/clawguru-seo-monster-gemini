@@ -72,3 +72,9 @@ clawguru-seo-monster-gemini-*/
 
 .lhtmp4-live/
 
+ 
+# large local bundles/archives — never commit
+*.tgz
+*.tar.gz
+*.tar
+clawguru-deploy.tgz

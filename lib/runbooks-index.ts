@@ -1,3 +1,10 @@
+// lib/runbooks-index.ts
+// NOTE (2026-03): Lightweight in-memory index for runbooks used by API routes.
+// - Exports: isReady(), warmup(), ensureReadyWithin(ms), search(q, tags, page, limit)
+// - Data source: lib/pseo (RUNBOOKS or buildRunbooksClient(n)) → materialized to docs
+// - Tags filter in search(): treats provided tags as intersection
+// - Use ensureReadyWithin() before calling search() on cold starts
+
 export type RunbookDoc = {
   slug: string
   title: string

@@ -41,6 +41,7 @@ export default function Header() {
     { href: `${prefix}/summon`, label: dict.nav.summon },
     { href: `${prefix}/oracle`, label: dict.nav.oracle },
     { href: `${prefix}/neuro`, label: dict.nav.neuro },
+    { href: `${prefix}/command-center`, label: "Command Center" },
     { href: `${prefix}/mycelium`, label: dict.nav.mycelium },
     { href: `${prefix}/tags`, label: dict.nav.tags },
     { href: `${prefix}/academy`, label: dict.nav.academy },

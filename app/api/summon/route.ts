@@ -1,8 +1,17 @@
 // COSMIC INTER-AI SUMMON v∞ – Overlord AI
 // API route: Gemini-powered "OpenAI voice" for the /summon page
+// NOTE (2026-03): This route now also provides a GET endpoint that serves real
+// runbook search results derived from our local index. Data sources:
+// - lib/runbooks-index.ts: exports ensureReadyWithin() and search(q,tags,page,limit)
+//   (there is NO exported function named `searchRunbooks`; use `search` instead)
+// - lib/runbooks-data.ts: can load public/runbooks.json (build artifact) if needed
+// - public/runbooks.json: exists and is materialized at build or fallback via HTTP
 
 import { NextRequest, NextResponse } from "next/server";
 import { isApiActive, apiUnavailableResponse } from "@/lib/api-guard";
+import { ensureReadyWithin, search as searchRunbooks } from "@/lib/runbooks-index";
+
+export const runtime = "nodejs";
 
 // Maximum characters accepted from client to guard against oversized payloads
 const MAX_MESSAGE_LENGTH = 2000;
@@ -99,5 +108,62 @@ export async function POST(req: NextRequest) {
       },
       { status: 200 },
     );
+  }
+}
+
+// GET /api/summon?q=...&limit=5&min_score=0
+// Returns structured runbook matches using the lightweight in-memory index
+export async function GET(req: NextRequest) {
+  try {
+    const url = new URL(req.url)
+    const q = (url.searchParams.get("q") || "").toString().trim()
+    const rawLimit = Math.max(1, parseInt(url.searchParams.get("limit") || "5", 10) || 5)
+    const limit = Math.min(20, rawLimit)
+    const minScore = Math.max(0, parseInt(url.searchParams.get("min_score") || "0", 10) || 0)
+
+    await ensureReadyWithin(1200)
+    const base = searchRunbooks(q, [], 1, 50)
+    const filtered = (base.items || [])
+      .filter((r) => typeof r.clawScore === "number" ? r.clawScore >= minScore : true)
+      .sort((a, b) => (b.clawScore ?? 0) - (a.clawScore ?? 0))
+      .slice(0, limit)
+
+    // Aggregate affected services (unique tags, top 5 by frequency)
+    const freq = new Map<string, number>()
+    for (const r of filtered) {
+      for (const t of (r.tags || [])) freq.set(t, (freq.get(t) || 0) + 1)
+    }
+    const affected_services = Array.from(freq.entries())
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 5)
+      .map(([t]) => t)
+
+    const avg = filtered.length
+      ? Math.round(
+          Math.max(0, Math.min(100,
+            filtered.reduce((s, r) => s + (r.clawScore ?? 50), 0) / filtered.length
+          ))
+        )
+      : 0
+
+    const payload = {
+      problem: filtered[0]?.title || q,
+      relevant_runbooks: filtered.map((r) => ({
+        slug: r.slug,
+        title: r.title,
+        clawScore: r.clawScore ?? 0,
+        summary: r.summary,
+        tags: r.tags || [],
+      })),
+      affected_services,
+      confidence: avg,
+      total_available: base.total || 0,
+    }
+    const res = NextResponse.json(payload)
+    res.headers.set("Cache-Control", "public, s-maxage=60, stale-while-revalidate=30")
+    return res
+  } catch (err) {
+    console.error("[/api/summon] error", err)
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 })
   }
 }

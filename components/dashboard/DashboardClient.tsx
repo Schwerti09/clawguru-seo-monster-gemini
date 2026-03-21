@@ -2,9 +2,8 @@
 
 import { useEffect, useMemo, useRef, useState } from "react"
 import Container from "@/components/shared/Container"
-import dynamic from "next/dynamic"
 import { useInView } from "framer-motion"
-const MyceliumClientLoader = dynamic(() => import("@/components/visual/MyceliumClientLoader"), { ssr: false })
+// Mycelium wird später als optimierte Lazy-Version wieder eingebaut
 
 type AccessPlan = "free" | "daypass" | "pro" | "enterprise"
 
@@ -17,6 +16,17 @@ type TierInfo = {
 
 type Product = "daypass" | "pro" | "team" | "enterprise"
 
+function LazySection(props: { children: React.ReactNode; minH?: string }) {
+  const { children, minH } = props
+  const holderRef = useRef<HTMLDivElement>(null)
+  const visible = useInView(holderRef, { amount: 0.2, once: true })
+  return (
+    <div ref={holderRef} className={minH ? minH : undefined}>
+      {visible ? children : <div aria-hidden className={`w-full ${minH || "min-h-[160px]"} rounded-2xl bg-black/20 border border-white/5`} />}
+    </div>
+  )
+}
+
 function useTier() {
   const [tier, setTier] = useState<AccessPlan>("free")
   const [plan, setPlan] = useState<AccessPlan>("free")
@@ -24,7 +34,7 @@ function useTier() {
 
   useEffect(() => {
     let stop = false
-    async function fetchTier() {
+    ;(async () => {
       try {
         const res = await fetch("/api/auth/tier", { cache: "no-store" })
         if (!res.ok) throw new Error(String(res.status))
@@ -43,13 +53,8 @@ function useTier() {
           setLoading(false)
         }
       }
-    }
-    fetchTier()
-    const id = window.setInterval(fetchTier, 15000)
-    return () => {
-      stop = true
-      window.clearInterval(id)
-    }
+    })()
+    return () => { stop = true }
   }, [])
 
   return { tier, plan, loading }
@@ -126,14 +131,9 @@ function MyceliumCommandCore(props: { tier: AccessPlan }) {
       <div className="grid md:grid-cols-2 gap-4">
         <div className="rounded-2xl border border-cyan-500/30 bg-black/40 p-3">
           <div className="text-xs text-cyan-300 mb-2">Interaktiver 3D-Graph</div>
-          <div ref={mountRef} className="relative aspect-[16/10] rounded-xl overflow-hidden bg-black/50">
-            {inView && ready ? <MyceliumClientLoader ui="embed" /> : null}
-            <a
-              href="/mycelium"
-              className="absolute right-3 top-3 px-3 py-1.5 rounded-xl text-xs font-bold text-gray-100 border border-white/15 backdrop-blur bg-black/30 hover:bg-black/40"
-            >
-              Expand →
-            </a>
+          <div ref={mountRef} className="relative aspect-[16/10] rounded-xl overflow-hidden bg-black/50 grid place-items-center text-gray-400">
+            {/* Mycelium wird später als optimierte Lazy-Version wieder eingebaut */}
+            <div className="text-xs opacity-70">Preview vorübergehend deaktiviert</div>
           </div>
         </div>
         <div className="rounded-2xl border border-cyan-500/20 bg-black/40 p-4 flex flex-col justify-between">
@@ -154,19 +154,28 @@ function MyceliumCommandCore(props: { tier: AccessPlan }) {
 
 function SecurityScoreRing() {
   const [score, setScore] = useState(620)
+  const rootRef = useRef<HTMLDivElement>(null)
+  const inView = useInView(rootRef, { amount: 0.3 })
   useEffect(() => {
-    const id = window.setInterval(() => {
-      setScore((s) => {
-        const next = s + (Math.random() * 8 - 4)
-        return Math.max(120, Math.min(980, Math.round(next)))
-      })
-    }, 1800)
-    return () => window.clearInterval(id)
-  }, [])
+    let id: number | null = null
+    try {
+      const isMobile = window.innerWidth < 768
+      const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      if (!isMobile && !reduce && inView) {
+        id = window.setInterval(() => {
+          setScore((s) => {
+            const next = s + (Math.random() * 6 - 3)
+            return Math.max(120, Math.min(980, Math.round(next)))
+          })
+        }, 4000)
+      }
+    } catch {}
+    return () => { if (id) window.clearInterval(id) }
+  }, [inView])
   const pct = Math.min(1000, Math.max(0, score)) / 10
   const bg = `conic-gradient(#06b6d4 ${pct}%, rgba(6,182,212,0.15) ${pct}% 100%)`
   return (
-    <div className="p-6 rounded-3xl border border-gray-800 bg-black/30">
+    <div ref={rootRef} className="p-6 rounded-3xl border border-gray-800 bg-black/30">
       <div className="text-lg font-black mb-3">Mycelium Security Score</div>
       <div className="flex items-center gap-6">
         <div className="w-40 h-40 rounded-full grid place-items-center" style={{ background: bg }}>
@@ -298,8 +307,9 @@ function SwarmOracleSection(props: { tier: AccessPlan }) {
             <UpgradeButton product="pro" label="Pro 49 € / Monat" />
           </div>
         </div>
-        <div className="rounded-2xl border border-white/10 bg-black/30 aspect-[16/9] overflow-hidden">
-          <MyceliumClientLoader ui="embed" />
+        <div className="rounded-2xl border border-white/10 bg-black/30 aspect-[16/9] overflow-hidden grid place-items-center text-gray-400">
+          {/* Mycelium wird später als optimierte Lazy-Version wieder eingebaut */}
+          <div className="text-xs opacity-70">Preview vorübergehend deaktiviert</div>
         </div>
       </div>
     </GatedTile>
@@ -321,8 +331,9 @@ function IntelNexusSection(props: { tier: AccessPlan }) {
             <UpgradeButton product="pro" label="Pro 49 € / Monat" />
           </div>
         </div>
-        <div className="rounded-2xl border border-white/10 bg-black/30 aspect-[16/9] overflow-hidden">
-          <MyceliumClientLoader ui="embed" />
+        <div className="rounded-2xl border border-white/10 bg-black/30 aspect-[16/9] overflow-hidden grid place-items-center text-gray-400">
+          {/* Mycelium wird später als optimierte Lazy-Version wieder eingebaut */}
+          <div className="text-xs opacity-70">Preview vorübergehend deaktiviert</div>
         </div>
       </div>
     </GatedTile>
@@ -350,14 +361,9 @@ export default function DashboardClient() {
         {/* Mini tablet preview always visible at top */}
         <div className="mb-6 rounded-2xl border border-white/10 bg-black/30 p-3">
           <div className="text-xs text-gray-400 mb-2">Mycelium Vorschau</div>
-          <div className="relative aspect-[16/10] rounded-xl overflow-hidden bg-black/60">
-            <MyceliumClientLoader ui="embed" />
-            <a
-              href="/mycelium"
-              className="absolute right-3 top-3 px-3 py-1.5 rounded-xl text-xs font-bold text-gray-100 border border-white/15 backdrop-blur bg-black/30 hover:bg-black/40"
-            >
-              Expand Mycelium →
-            </a>
+          <div className="relative aspect-[16/10] rounded-xl overflow-hidden bg-black/60 grid place-items-center text-gray-400">
+            {/* Mycelium wird später als optimierte Lazy-Version wieder eingebaut */}
+            <div className="text-xs opacity-70">Preview vorübergehend deaktiviert</div>
           </div>
         </div>
 
@@ -365,20 +371,31 @@ export default function DashboardClient() {
           <div className="text-sm text-gray-400">Lade Zugang…</div>
         ) : (
           <div className="space-y-6">
-            <MyceliumCommandCore tier={tier} />
-            <SecurityScoreRing />
-            <div className="grid md:grid-cols-2 gap-4">
-              <AiRunbookGenerator tier={tier} />
-              <AutoPentest tier={tier} />
-            </div>
-            <div className="grid md:grid-cols-2 gap-4">
-              <BreachSimulator tier={tier} />
-              <LiveThreatNetwork tier={tier} />
-            </div>
-            <div className="grid md:grid-cols-2 gap-4">
-              <EnterpriseDeck tier={tier} />
-              <AffiliateNetwork tier={tier} />
-            </div>
+            <LazySection minH="min-h-[280px]">
+              <MyceliumCommandCore tier={tier} />
+            </LazySection>
+            <LazySection minH="min-h-[220px]">
+              <SecurityScoreRing />
+            </LazySection>
+            <LazySection>
+              <div className="grid md:grid-cols-2 gap-4">
+                <AiRunbookGenerator tier={tier} />
+                <AutoPentest tier={tier} />
+              </div>
+            </LazySection>
+            <LazySection>
+              <div className="grid md:grid-cols-2 gap-4">
+                <BreachSimulator tier={tier} />
+                {/* Mycelium wird später als optimierte Lazy-Version wieder eingebaut */}
+                <div className="p-6 rounded-3xl border border-gray-800 bg-black/30 grid place-items-center text-gray-400 text-sm">Live Threat Network vorübergehend deaktiviert</div>
+              </div>
+            </LazySection>
+            <LazySection>
+              <div className="grid md:grid-cols-2 gap-4">
+                <EnterpriseDeck tier={tier} />
+                <AffiliateNetwork tier={tier} />
+              </div>
+            </LazySection>
           </div>
         )}
       </Container>

@@ -1,10 +1,8 @@
 "use client"
 
 import { motion } from "framer-motion"
-import dynamic from "next/dynamic"
 import { GlowButton } from "@/components/ui/GlowButton"
-
-const MyceliumClientLoader = dynamic(() => import("@/components/visual/MyceliumClientLoader"), { ssr: false })
+import HeroPreview from "@/components/home/HeroPreview"
 
 export const Hero = () => {
   return (
@@ -37,20 +35,8 @@ export const Hero = () => {
             <GlowButton variant="outline" href="/vorstellung">Mehr erfahren</GlowButton>
           </div>
 
-          {/* Mini tablet preview (fast) */}
-          <div className="mt-10 mx-auto max-w-3xl">
-            <div className="rounded-[24px] border border-white/10 bg-black/30 p-3 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.5)]">
-              <div className="relative aspect-[16/10] rounded-[18px] overflow-hidden bg-black/60">
-                <MyceliumClientLoader ui="embed" />
-                <a
-                  href="/mycelium"
-                  className="absolute right-3 top-3 px-3 py-1.5 rounded-xl text-xs font-bold text-gray-100 border border-white/15 backdrop-blur bg-black/30 hover:bg-black/40"
-                >
-                  Expand Mycelium →
-                </a>
-              </div>
-            </div>
-          </div>
+          {/* High-tech platform preview (perf-optimized) */}
+          <HeroPreview />
         </motion.div>
       </div>
     </section>

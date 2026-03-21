@@ -28,7 +28,7 @@ export default function LocaleSummonPage(props: { params: { lang: string } }) {
   const prefix = `/${locale}`
   return (
     <div className="space-y-6">
-      <SummonHero prefix={prefix} />
+      <SummonHero prefix={prefix} locale={locale} />
       <section className="py-2">
         <div className="px-4 sm:px-6 lg:px-8">
           <SummonPageClient />

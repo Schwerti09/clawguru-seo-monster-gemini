@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation"
 export default function SummonHero({ prefix = "", locale: locProp }: { prefix?: string; locale?: string }) {
   const pathname = usePathname()
   const locale = useMemo(() => locProp || pathname?.split("/").filter(Boolean)[0] || "de", [locProp, pathname])
-  const isDe = String(locale).startsWith("de")
+  const isDe = !String(locale).startsWith("en")
   const [rbCount, setRbCount] = useState<number | null>(null)
   const [avgConf, setAvgConf] = useState<number | null>(null)
 

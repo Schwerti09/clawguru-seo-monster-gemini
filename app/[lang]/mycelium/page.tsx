@@ -1,10 +1,14 @@
 import type { Metadata } from "next"
+import dynamic from "next/dynamic"
 
 import { SUPPORTED_LOCALES, DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
 import Container from "@/components/shared/Container"
-import MyceliumClientLoader from "@/components/visual/MyceliumClientLoader"
 import MyceliumShareCard from "@/components/share/MyceliumShareCard"
 import { getDictionary } from "@/lib/getDictionary"
+import MyceliumHero from "@/components/mycelium/MyceliumHero"
+import ExampleNodes from "@/components/mycelium/ExampleNodes"
+
+const MyceliumVisualizationWrapper = dynamic(() => import("@/components/mycelium/MyceliumVisualizationWrapper"), { ssr: false })
  
 
 export const dynamic = "force-static"
@@ -34,59 +38,31 @@ export default async function LocaleMyceliumPage(props: { params: { lang: string
 
   return (
     <>
-      <div className="border-b border-white/10 bg-gradient-to-b from-gray-950 to-[#050608] py-10">
-        <Container>
-          <div className="flex flex-col md:flex-row md:items-end gap-4 md:gap-8">
-            <div className="flex-1">
-              <div className="text-xs font-mono text-[#00ff9d] tracking-widest mb-2 uppercase">
-                {dict.hero.badge}
-              </div>
-              <h1 className="text-4xl md:text-5xl font-black mb-3 leading-tight">
-                The{" "}
-                <span
-                  className="bg-clip-text text-transparent"
-                  style={{ backgroundImage: "linear-gradient(90deg, #00ff9d, #00b8ff, #b464ff)" }}
-                >
-                  Living Mycelium
-                </span>
-              </h1>
-              <p className="text-gray-400 text-lg max-w-2xl leading-relaxed">
-                Every runbook is a mycel-node. Edges are semantic relationships: <em className="text-[#00ff9d] not-italic">prevents</em>, <em className="text-[#ff4646] not-italic">causes</em>, <em className="text-[#00b8ff] not-italic">depends-on</em>, <em className="text-[#b464ff] not-italic">evolves-from</em>, <em className="text-[#ffc800] not-italic">mutates-into</em>. The network grows, learns, and evolves autonomously through Darwinian selection.
-              </p>
-            </div>
+      <MyceliumHero prefix={prefix} />
 
+      <section className="container mx-auto px-4 py-12">
+        <div className="rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
+          <MyceliumVisualizationWrapper />
+        </div>
+      </section>
+
+      <section className="container mx-auto px-4 py-16">
+        <div className="grid md:grid-cols-2 gap-12 items-center">
+          <div>
+            <h2 className="text-3xl font-bold bg-gradient-to-r from-white to-cyan-300 bg-clip-text text-transparent">Wie Mycelium funktioniert</h2>
+            <p className="mt-4 text-gray-300">Jeder Knoten im Netzwerk ist ein Runbook, jede Verbindung zeigt gemeinsame Tags, betroffene Services oder CVEs. So erkennst du auf einen Blick, welche Sicherheitslücken zusammenhängen und in welcher Reihenfolge du sie beheben solltest.</p>
           </div>
-
-          <div className="flex flex-wrap gap-2 mt-6">
-            {["⚡ Force-directed graph", "🧬 Genetic evolution engine", "♾️ Autopoietic self-maintenance", "🔮 Oracle mode", "📡 Live mutation feed"].map((feat) => (
-              <span key={feat} className="text-xs font-mono px-3 py-1 rounded-full bg-white/5 border border-white/10 text-gray-400">{feat}</span>
-            ))}
+          <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
+            <div className="text-cyan-400 text-2xl mb-2">🔍 Pro‑Tipp</div>
+            <p className="text-gray-300">Klicke auf einen Knoten, um zum Runbook zu gelangen. Mit einem Daypass kannst du den gesamten Graphen als interaktives HTML exportieren und in dein Team teilen.</p>
           </div>
-        </Container>
-      </div>
+        </div>
+      </section>
 
-      <div className="px-4 py-4">
-        <MyceliumClientLoader />
-      </div>
-
-      <div className="border-t border-white/10 mt-4">
-        <Container>
-          <div className="py-12 grid md:grid-cols-3 gap-8">
-            <div>
-              <div className="text-[#00ff9d] font-black text-lg mb-2">🧬 Darwinian Breeding</div>
-              <p className="text-gray-400 text-sm leading-relaxed">Every hour, the top 1,000 runbooks are paired for genetic crossover. Steps are recombined, commands mutated, fitness re-scored through Quality Gate 2.0. Successful mutants earn the <span className="text-[#ffc800]">★ Evolved</span> badge.</p>
-            </div>
-            <div>
-              <div className="text-[#00b8ff] font-black text-lg mb-2">♾️ Autopoietic Repair</div>
-              <p className="text-gray-400 text-sm leading-relaxed">Runbooks scoring below 85 are automatically &ldquo;fed&rdquo; by their three strongest neighbours — knowledge is transferred via the mycelial network until the weak node reaches elite fitness or is gracefully recombined.</p>
-            </div>
-            <div>
-              <div className="text-[#b464ff] font-black text-lg mb-2">🔮 Singularity Oracle</div>
-              <p className="text-gray-400 text-sm leading-relaxed">Describe any ops problem. The oracle traces the optimal path through the semantic graph — scoring nodes on content similarity × evolutionary fitness — and returns the most evolved runbook for your exact scenario.</p>
-            </div>
-          </div>
-        </Container>
-      </div>
+      <section className="container mx-auto px-4 py-8">
+        <h3 className="text-xl font-semibold text-center text-white mb-4">Beliebte Runbooks im Netzwerk</h3>
+        <ExampleNodes prefix={prefix} />
+      </section>
 
       <div className="py-8 border-t border-white/5">
         <Container>

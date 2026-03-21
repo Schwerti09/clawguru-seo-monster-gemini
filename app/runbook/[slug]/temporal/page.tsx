@@ -15,7 +15,7 @@ import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
 export const revalidate = 60
 export const runtime = "nodejs"
 export const maxDuration = 180
-export const dynamic = "force-static"
+export const dynamic = "force-dynamic"
 
 export async function generateMetadata(
   props: {
@@ -52,7 +52,6 @@ export default async function TemporalPage(
   if (!r) return notFound()
 
   const quality = validateRunbook(r)
-  if (!quality.pass) return notFound()
 
   let history: any = null
   try {

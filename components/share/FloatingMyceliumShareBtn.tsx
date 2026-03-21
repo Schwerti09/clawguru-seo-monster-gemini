@@ -6,6 +6,7 @@
 
 import { useState, useCallback, useEffect, useRef } from "react"
 import { useI18n } from "@/components/i18n/I18nProvider"
+import type { Locale } from "@/lib/i18n"
 
 const SHARE_COUNT_KEY = "cg_mycelium_share_count"
 // Baseline count representing shares before client-side tracking began
@@ -121,7 +122,9 @@ export default function FloatingMyceliumShareBtn({ locale: localeProp }: Floatin
         >
           {/* Header */}
           <div className="flex items-center gap-2 mb-3">
-            <span className="text-lg" aria-hidden>🍄</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="#ffc800" aria-hidden>
+              <path d="M18 8a3 3 0 0 0-2.995 2.824L15 11v1h-3a4 4 0 0 0-3.995 3.8L8 16v1H6a3 3 0 0 1-2.995-2.824L3 13a7 7 0 0 1 7-7h1V5a3 3 0 1 1 6 0v3h1a3 3 0 1 1 0 6h-2v-3a3 3 0 0 0-3-3h-3a5 5 0 0 0-4.995 4.783L5 13a5 5 0 0 1 5-5h3a5 5 0 0 1 5 5v3h-3v-1h2a1 1 0 0 0 0-2h-1v-3a1 1 0 1 0-2 0v3h-2v-3a1 1 0 0 0-1-1h-3a3 3 0 0 0-2.995 2.824L7 13v1h2v-1a1 1 0 0 1 .883-.993L10 12h3a1 1 0 0 1 1 1v3h4v-5a5 5 0 0 0-5-5h-1V5a1 1 0 0 0-1.993-.117L10 5v1H9a9 9 0 0 0-9 9 5 5 0 0 0 5 5h2v-2h2v2h10v-4a5 5 0 0 0-5-5z"/>
+            </svg>
             <span className="text-xs font-mono font-bold tracking-widest uppercase" style={{ color: "#ffc800" }}>
               {dict.share.myceliumCta}
             </span>
@@ -143,7 +146,9 @@ export default function FloatingMyceliumShareBtn({ locale: localeProp }: Floatin
                 boxShadow: "0 0 12px rgba(255,200,0,0.35)",
               }}
             >
-              <span>🚀</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                <path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z" />
+              </svg>
               {dict.share.myceliumBtn}
             </button>
 
@@ -207,7 +212,9 @@ export default function FloatingMyceliumShareBtn({ locale: localeProp }: Floatin
             : "0 0 18px rgba(255,200,0,0.4)",
         }}
       >
-        <span className="text-xl" aria-hidden>🍄</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="#111" aria-hidden>
+          <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.02-4.11c.53.5 1.23.81 2.01.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.91 9.81A2.99 2.99 0 0 0 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.83 0 1.58-.34 2.12-.88l7.06 4.14c-.05.21-.08.43-.08.66 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z" />
+        </svg>
       </button>
     </div>
   )

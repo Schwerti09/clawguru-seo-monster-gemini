@@ -5,6 +5,7 @@ import { performSecurityCheck, type SecurityCheckResult } from "@/lib/security-c
 import CTAButton from "@/components/marketing/CTAButton"
 import BuyButton from "@/components/commerce/BuyButton"
 import { SERVICE } from "@/lib/constants"
+import { ClawguruAvatar } from "@/components/ui/ClawguruAvatar"
 import dynamic from "next/dynamic"
 import { useI18n } from "@/components/i18n/I18nProvider"
 import Image from "next/image"
@@ -56,6 +57,20 @@ export default function HeroSecurityCheck() {
     })
     return `/api/score-badge?${params.toString()}`
   }, [result])
+
+  const improveTitle = useMemo(() => {
+    if (!result) return ""
+    if (result.score >= 90) return isGerman ? "Exzellent – jetzt Monitoring & Rotation" : "Excellent – add monitoring & rotation"
+    if (result.score >= 75) return isGerman ? "Auf „exzellent“ in 30 Minuten" : "Upgrade to “excellent” in 30 minutes"
+    return isGerman ? "Verbessern in 30 Minuten" : "Improve in 30 minutes"
+  }, [result, isGerman])
+
+  const improveText = useMemo(() => {
+    if (!result) return ""
+    if (result.score >= 90) return isGerman ? "Bleib exzellent: Automatisiere Rotation, Alerts & Baselines." : "Stay excellent: automate rotation, alerts & baselines."
+    if (result.score >= 75) return isGerman ? "Nimm den Academy‑Sprint und geh auf „safe by default“." : "Take the Academy sprint and go “safe by default”."
+    return isGerman ? "Jetzt schnell härten und Defaults sicher machen." : "Harden quickly and make defaults safe."
+  }, [result, isGerman])
 
   async function handleCheck() {
     if (!input.trim()) return
@@ -116,6 +131,9 @@ export default function HeroSecurityCheck() {
     <div className="bg-gradient-to-br from-gray-900/60 to-blue-950/30 border border-gray-800 rounded-3xl p-6 md:p-8 backdrop-blur-sm">
       <div className="flex flex-col md:flex-row md:items-end gap-4">
         <div className="flex-grow">
+          <div className="flex justify-start md:justify-start mb-2">
+            <ClawguruAvatar className="w-12 h-12 md:w-16 md:h-16" />
+          </div>
           <h2 className="text-xl sm:text-2xl md:text-3xl font-black mb-2">
             {isGerman ? "LIVE Security-Check (Heuristik) — 30 Sekunden" : "LIVE Security Check (Heuristic) — 30 Seconds"}
           </h2>
@@ -218,8 +236,15 @@ export default function HeroSecurityCheck() {
                     <button onClick={copyLink} className="px-4 py-2 rounded-xl border border-gray-700 hover:border-gray-500 font-bold text-gray-200 transition-colors">
                       {isGerman ? "Link kopieren" : "Copy link"}
                     </button>
-                    <a href={copilotPrefill} className="px-4 py-2 rounded-xl border border-gray-700 hover:border-gray-500 font-bold text-gray-200 transition-colors">
-                      {isGerman ? "Copilot fragen →" : "Ask Copilot →"}
+                    <a
+                      href={copilotPrefill}
+                      className="px-4 py-2 rounded-xl font-black text-black transition-all"
+                      style={{
+                        background: "linear-gradient(135deg, #d4af37 0%, #e8cc6a 50%, #a8872a 100%)",
+                        boxShadow: "0 6px 24px rgba(212,175,55,0.22)",
+                      }}
+                    >
+                      Ask the Guru →
                     </a>
                   </div>
 
@@ -247,18 +272,18 @@ export default function HeroSecurityCheck() {
                         <span className="font-bold">{SERVICE.managedFromPrice}</span>.
                       </div>
                       <div className="flex flex-col sm:flex-row gap-3">
-                        <CTAButton href={SERVICE.managedHref} label={isGerman ? "Managed Service starten" : "Start managed service"} variant="primary" size="md" />
+                        <BuyButton product="msp" label={isGerman ? "Managed Service starten" : "Start managed service"} className="px-5 py-3 rounded-2xl font-black bg-gradient-to-r from-cyan-500 to-blue-600 hover:opacity-90" />
                         <BuyButton product="daypass" label={isGerman ? "Day Pass (24h Zugriff)" : "Day Pass (24h access)"} className="px-5 py-3 rounded-2xl font-black bg-gradient-to-r from-orange-500 to-red-600 hover:opacity-90" />
                         <CTAButton href={`${prefix}/pricing`} label={isGerman ? "Pro/Team ansehen" : "See Pro/Team"} variant="outline" size="md" />
                       </div>
                     </div>
                   ) : (
                     <div className="mt-5 p-4 rounded-2xl border border-gray-800 bg-black/20">
-                      <div className="text-sm font-bold text-gray-100 mb-2">{isGerman ? "Upgrade auf „solide“ in 30 Minuten" : "Upgrade to “solid” in 30 minutes"}</div>
-                      <div className="text-gray-300 mb-3">{isGerman ? "Nimm den Academy-Sprint und bring deine Defaults auf „safe by default“." : "Take the Academy sprint and bring your defaults to “safe by default”."}</div>
+                      <div className="text-sm font-bold text-gray-100 mb-2">{improveTitle}</div>
+                      <div className="text-gray-300 mb-3">{improveText}</div>
                       <div className="flex flex-col sm:flex-row gap-3">
                         <CTAButton href={`${prefix}/dashboard`} label={isGerman ? "Dashboard öffnen" : "Open dashboard"} variant="primary" size="md" />
-                        
+                        <CTAButton href={`${prefix}/pricing`} label={isGerman ? "Pro/Team ansehen" : "See Pro/Team"} variant="outline" size="md" />
                       </div>
                     </div>
                   )}

@@ -179,6 +179,46 @@ export function middleware(request: NextRequest) {
     return res
   }
 
+  const allowedLocales = (process.env.SITEMAP_100K_LOCALES ?? "de,en").split(",").map((s) => s.trim()).filter(Boolean)
+  if (!allowedLocales.includes(locale)) {
+    const isRunbookDetail = new RegExp(`^/${locale}/runbook/`, "i").test(pathname)
+    const isTagDetail = new RegExp(`^/${locale}/tag/`, "i").test(pathname)
+    const isRunbooksIndex = new RegExp(`^/${locale}/runbooks(?:/|$)`, "i").test(pathname)
+    if (isRunbookDetail || isTagDetail || isRunbooksIndex) {
+      const res = NextResponse.json({}, { status: 404 })
+      res.headers.set(getRequestIdHeaderName(), requestId)
+      return res
+    }
+  }
+
+  // Compatibility rewrite: map localized temporal page to root temporal page
+  // Keeps external URL stable and avoids locale-enforcement redirect loop
+  const localizedTemporal = pathname.match(/^\/([a-z]{2}(?:-[a-z]{2})?)\/runbook\/([^/]+)\/temporal\/?$/i)
+  if (localizedTemporal) {
+    const slug = localizedTemporal[2]
+    const url = request.nextUrl.clone()
+    url.pathname = `/runbook/${slug}/temporal`
+    const res = NextResponse.rewrite(url)
+    res.headers.set("x-claw-locale", locale)
+    res.headers.set("x-claw-dir", localeDir(locale))
+    res.headers.set(getRequestIdHeaderName(), requestId)
+    return res
+  }
+
+  // Compatibility rewrite: map localized provenance page to root provenance page
+  // Keeps external URL stable and avoids locale-enforcement redirect loop
+  const localizedProvenance = pathname.match(/^\/([a-z]{2}(?:-[a-z]{2})?)\/provenance\/([^/]+)\/?$/i)
+  if (localizedProvenance) {
+    const slug = localizedProvenance[2]
+    const url = request.nextUrl.clone()
+    url.pathname = `/provenance/${slug}`
+    const res = NextResponse.rewrite(url)
+    res.headers.set("x-claw-locale", locale)
+    res.headers.set("x-claw-dir", localeDir(locale))
+    res.headers.set(getRequestIdHeaderName(), requestId)
+    return res
+  }
+
   // Pass locale+dir to the app for SSR-safe html lang/dir.
   const res = NextResponse.next()
   res.headers.set("x-claw-locale", locale)
@@ -188,7 +228,9 @@ export function middleware(request: NextRequest) {
   if (method === "GET") {
     const isTagDetail = /^\/(?:[a-z]{2}(?:-[a-z]{2})?)\/tag\//i.test(pathname) || /^\/tag\//i.test(pathname)
     const isTagIndex = /^\/(?:[a-z]{2}(?:-[a-z]{2})?)\/tags\/?$/i.test(pathname) || /^\/tags\/?$/i.test(pathname)
-    if (isTagDetail || isTagIndex) {
+    const isRunbookDetail = /^\/(?:[a-z]{2}(?:-[a-z]{2})?)\/runbook\//i.test(pathname) || /^\/runbook\//i.test(pathname)
+    const isTemporalDetail = /\/(?:[a-z]{2}(?:-[a-z]{2})?)?\/runbook\/[^/]+\/temporal\/?$/i.test(pathname)
+    if (isTagDetail || isTagIndex || (isRunbookDetail && !isTemporalDetail)) {
       res.headers.set("Cache-Control", "public, s-maxage=600, stale-while-revalidate=60")
     }
   }

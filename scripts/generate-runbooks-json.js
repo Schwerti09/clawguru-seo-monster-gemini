@@ -54,6 +54,32 @@ function tagsFromSlug(slug) {
   return [provider, service, issue, year].filter(Boolean)
 }
 
+function hashScore(slug) {
+  // Deterministic 0..39 added to base 60
+  let h = 5381
+  for (let i = 0; i < slug.length; i++) h = (((h << 5) + h) ^ slug.charCodeAt(i)) >>> 0
+  return h % 40
+}
+
+function computeClawScoreForJson({ slug, title, summary, tags }) {
+  const base = 60 + hashScore(slug)
+  const tlen = (title || '').split(/\s+/).filter(Boolean).length
+  const slen = (summary || '').split(/\s+/).filter(Boolean).length
+  const lengthScore = Math.min(10, Math.floor((tlen + slen) / 30) * 2) // up to +10
+
+  const tg = (tags || []).map(String)
+  const issue = tg[2] || ''
+  const service = tg[1] || ''
+  const issueWeight = /hardening|csp|waf|rbac|sbom/.test(issue) ? 8 : 0
+  const serviceWeight = /nginx|kubernetes|docker|ssh/.test(service) ? 6 : 0
+
+  const freshness = 6 // JSON is regenerated at build, treat as fresh medium weight
+
+  let score = base + lengthScore + issueWeight + serviceWeight + freshness
+  if (!Number.isFinite(score)) score = 60
+  return Math.max(0, Math.min(100, Math.round(score)))
+}
+
 function getPage(page, pageSize) {
   const start = page * pageSize
   const end = start + pageSize
@@ -95,14 +121,15 @@ function main() {
   for (let p = 0; p < pages; p++) {
     const slugs = getPage(p, pageSize)
     for (const slug of slugs) {
-      out.push({
+      const item = {
         slug,
         title: toTitle(slug),
         summary: 'Deterministic 100k entry',
         tags: tagsFromSlug(slug),
         lastmod: '2026-01-01',
-        clawScore: 80,
-      })
+      }
+      item.clawScore = computeClawScoreForJson(item)
+      out.push(item)
     }
     console.log(`Included page ${p} with ${slugs.length} slugs`)
   }

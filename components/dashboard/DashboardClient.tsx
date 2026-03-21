@@ -95,13 +95,11 @@ function GatedTile(props: { title: string; minTier: AccessPlan; tier: AccessPlan
   return (
     <div className="relative p-6 rounded-3xl border border-gray-800 bg-black/30 overflow-hidden">
       <div className="text-lg font-black mb-3">{title}</div>
-      <div className={allowed ? "opacity-100" : "opacity-50 pointer-events-none select-none"}>{children}</div>
+      <div className={allowed ? "opacity-100" : "opacity-100"}>{children}</div>
       {!allowed && (
-        <div className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center">
-          <div className="flex flex-col items-center gap-3">
-            <div className="text-sm text-gray-200">Upgrade erforderlich</div>
-            <UpgradeButton product={need} label={needLabel} />
-          </div>
+        <div className="mt-4 flex items-center justify-between gap-3 text-xs text-gray-400">
+          <span>Vorschau sichtbar · Vollzugriff per Upgrade</span>
+          <UpgradeButton product={need} label={needLabel} />
         </div>
       )}
     </div>
@@ -128,8 +126,14 @@ function MyceliumCommandCore(props: { tier: AccessPlan }) {
       <div className="grid md:grid-cols-2 gap-4">
         <div className="rounded-2xl border border-cyan-500/30 bg-black/40 p-3">
           <div className="text-xs text-cyan-300 mb-2">Interaktiver 3D-Graph</div>
-          <div ref={mountRef} className="aspect-[16/10] rounded-xl overflow-hidden bg-black/50">
+          <div ref={mountRef} className="relative aspect-[16/10] rounded-xl overflow-hidden bg-black/50">
             {inView && ready ? <MyceliumClientLoader ui="embed" /> : null}
+            <a
+              href="/mycelium"
+              className="absolute right-3 top-3 px-3 py-1.5 rounded-xl text-xs font-bold text-gray-100 border border-white/15 backdrop-blur bg-black/30 hover:bg-black/40"
+            >
+              Expand →
+            </a>
           </div>
         </div>
         <div className="rounded-2xl border border-cyan-500/20 bg-black/40 p-4 flex flex-col justify-between">
@@ -343,12 +347,24 @@ export default function DashboardClient() {
           </div>
         </div>
 
+        {/* Mini tablet preview always visible at top */}
+        <div className="mb-6 rounded-2xl border border-white/10 bg-black/30 p-3">
+          <div className="text-xs text-gray-400 mb-2">Mycelium Vorschau</div>
+          <div className="relative aspect-[16/10] rounded-xl overflow-hidden bg-black/60">
+            <MyceliumClientLoader ui="embed" />
+            <a
+              href="/mycelium"
+              className="absolute right-3 top-3 px-3 py-1.5 rounded-xl text-xs font-bold text-gray-100 border border-white/15 backdrop-blur bg-black/30 hover:bg-black/40"
+            >
+              Expand Mycelium →
+            </a>
+          </div>
+        </div>
+
         {loading ? (
           <div className="text-sm text-gray-400">Lade Zugang…</div>
         ) : (
           <div className="space-y-6">
-            <SwarmOracleSection tier={tier} />
-            <IntelNexusSection tier={tier} />
             <MyceliumCommandCore tier={tier} />
             <SecurityScoreRing />
             <div className="grid md:grid-cols-2 gap-4">

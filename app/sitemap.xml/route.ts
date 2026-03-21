@@ -27,26 +27,28 @@ export async function GET(req: NextRequest) {
   console.log("SITEMAP DEBUG", { path: req.nextUrl.pathname, start: Date.now() })
   console.time("sitemap-gen")
   console.time(label)
-  const PAGES_100K = 69
+  const PAGES_100K = Number(process.env.SITEMAP_100K_PAGES || 100)
 
   const buckets = ["a-f", "g-l", "m-r", "s-z", "0-9"] as const
   const pages100k = PAGES_100K
-  const locale: Locale = DEFAULT_LOCALE
+  const localesCfg = (process.env.SITEMAP_100K_LOCALES || "").split(",").map((s) => s.trim()).filter(Boolean)
+  const allLocales = [DEFAULT_LOCALE] as Locale[]
+  const selectedLocales = localesCfg.length ? (localesCfg as Locale[]) : allLocales
 
   const base = `${BASE_URL}/sitemaps`
 
-  const main = [`${base}/main-${locale}.xml`]
-  const hubs = [
-    `${base}/providers-${locale}.xml`,
-    `${base}/issues-${locale}.xml`,
-    `${base}/services-${locale}.xml`,
-    `${base}/years-${locale}.xml`,
-  ]
-  const tools = [`${base}/tools-check-${locale}.xml`]
-  const solutions = [`${base}/solutions-cve-${locale}.xml`]
-  const tags = buckets.map((b) => `${base}/tags-${locale}-${b}.xml`)
-  const runbooks = buckets.map((b) => `${base}/runbooks-${locale}-${b}.xml`)
-  const runbook100k = Array.from({ length: pages100k }, (_, page) => `${base}/runbook100k-${locale}-${page}.xml`)
+  const main = selectedLocales.map((loc) => `${base}/main-${loc}.xml`)
+  const hubs = selectedLocales.flatMap((loc) => [
+    `${base}/providers-${loc}.xml`,
+    `${base}/issues-${loc}.xml`,
+    `${base}/services-${loc}.xml`,
+    `${base}/years-${loc}.xml`,
+  ])
+  const tools = selectedLocales.map((loc) => `${base}/tools-check-${loc}.xml`)
+  const solutions = selectedLocales.map((loc) => `${base}/solutions-cve-${loc}.xml`)
+  const tags = selectedLocales.flatMap((loc) => buckets.map((b) => `${base}/tags-${loc}-${b}.xml`))
+  const runbooks = selectedLocales.flatMap((loc) => buckets.map((b) => `${base}/runbooks-${loc}-${b}.xml`))
+  const runbook100k = selectedLocales.flatMap((loc) => Array.from({ length: pages100k }, (_, page) => `${base}/runbook100k-${loc}-${page}.xml`))
 
   // Non-locale bucket sitemaps for compatibility and quick crawl seeds
   const bucketNoLocale: string[] = [

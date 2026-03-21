@@ -5,7 +5,6 @@
 
 import { useRef, useMemo, Suspense } from "react"
 import { Canvas, useFrame } from "@react-three/fiber"
-import { OrbitControls } from "@react-three/drei"
 import * as THREE from "three"
 import { QV } from "./qv"
 
@@ -117,13 +116,6 @@ export default function MyceliumGraph() {
       >
         <Suspense fallback={null}>
           <MyceliumScene />
-          <OrbitControls
-            enableZoom={false}
-            enablePan={false}
-            autoRotate={false}
-            maxPolarAngle={Math.PI}
-            minPolarAngle={0}
-          />
         </Suspense>
       </Canvas>
     </div>

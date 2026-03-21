@@ -21,13 +21,17 @@ export async function GET(req: NextRequest) {
   const requestId = getRequestId(req.headers)
   const startedAt = Date.now()
   const lastmod = isoDate();
-  const PAGES_100K = Number(process.env.SITEMAP_100K_PAGES || 69)
+  const PAGES_100K = Number(process.env.SITEMAP_100K_PAGES || 100)
   const label = 'sitemap:legacy_index'
   console.time(label)
 
   const buckets = ["a-f", "g-l", "m-r", "s-z", "0-9"] as const
   const pages100k = PAGES_100K
-  const locales = SUPPORTED_LOCALES as readonly Locale[]
+  const localesCfg = (process.env.SITEMAP_100K_LOCALES || "").split(",").map((s) => s.trim()).filter(Boolean)
+  const allLocales = SUPPORTED_LOCALES as readonly Locale[]
+  const locales = (localesCfg.length
+    ? (allLocales.filter((l) => localesCfg.includes(l)) as readonly Locale[])
+    : allLocales)
 
   const subSitemaps: string[] = locales.flatMap((locale) => {
     const base = `${BASE_URL}/sitemaps`
@@ -85,7 +89,6 @@ export async function GET(req: NextRequest) {
             `  <sitemap>\n` +
             `    <loc>${loc}</loc>\n` +
             `    <lastmod>${lastmod}</lastmod>\n` +
-            `    <changefreq>daily</changefreq>\n` +
             `  </sitemap>`
         )
         .join("\n") +
@@ -110,7 +113,6 @@ export async function GET(req: NextRequest) {
       `  <sitemap>\n` +
       `    <loc>${BASE_URL}/sitemaps/main.xml</loc>\n` +
       `    <lastmod>${lastmod}</lastmod>\n` +
-      `    <changefreq>daily</changefreq>\n` +
       `  </sitemap>\n` +
       `</sitemapindex>\n`;
     logTelemetry("sitemap.legacy_index.fallback", { requestId, sitemapCount: 1, durationMs })

@@ -4,6 +4,7 @@ import { SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
 import { redirect } from "next/navigation"
 
 export const revalidate = 60
+export const dynamic = "force-dynamic"
 export const dynamicParams = true
 
 export async function generateStaticParams() {

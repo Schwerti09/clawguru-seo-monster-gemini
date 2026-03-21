@@ -11,7 +11,7 @@ import type {
   ZeroKnowledgeProof,
   ChainVerificationResult,
 } from "@/lib/provenance"
-import { generateZeroKnowledgeProof, verifyProvenanceChain, exportProvenanceJson, mutationTypeIcon, mutationTypeLabel } from "@/lib/provenance"
+import { generateZeroKnowledgeProof, verifyProvenanceChain, exportProvenanceJson, mutationTypeIcon, mutationTypeLabel } from "@/lib/provenance-client"
 
 // PROVENANCE SINGULARITY v3.4 – Overlord AI: Mutation type badge colours
 const MUTATION_COLORS: Record<string, string> = {

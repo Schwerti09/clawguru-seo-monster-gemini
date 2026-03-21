@@ -272,6 +272,37 @@ function clawScoreFor(slug: string): number {
   return 60 + (hash % 40)
 }
 
+/** Compute holistic quality score (0-100) based on content depth and freshness */
+function computeClawScore(r: Runbook): number {
+  const steps = Array.isArray(r.howto?.steps) ? r.howto.steps.length : 0
+  const blocks = Array.isArray(r.blocks) ? r.blocks : []
+  const codeBlocks = blocks.filter((b: any) => b.kind === "code").length
+  const hasRollback =
+    blocks.some((b: any) => b.kind === "h2" && /rollback|zurück|roll\s*back/i.test(b.text || "")) ||
+    (r.howto?.steps || []).some((s) => /rollback|zurück|roll\s*back/i.test(s)) ||
+    (r.tags || []).some((t) => /rollback/.test(t))
+  const variants = new Set<string>()
+  for (const t of r.tags || []) if (/^(provider:|service:|issue:|year:)/.test(t)) variants.add(t.split(":")[0])
+  const variantsScore = Math.min(12, variants.size * 3)
+  const sourcesScore = Math.min(10, Math.max(0, (r.author?.sources || []).length) * 2)
+  let freshness = 5
+  try {
+    const lm = new Date(r.lastmod)
+    const days = Math.max(0, (Date.now() - lm.getTime()) / 86400000)
+    freshness = days <= 90 ? 10 : days <= 180 ? 7 : days <= 365 ? 5 : 2
+  } catch {}
+  const stepsScore = Math.min(20, steps * 2)
+  const codeScore = Math.min(20, codeBlocks * 4)
+  const rollbackScore = hasRollback ? 10 : 0
+  const lengthApproxWords =
+    (r.title?.split(/\s+/).length || 0) +
+    (r.summary?.split(/\s+/).length || 0) +
+    blocks.reduce((acc: number, b: any) => acc + ((b.text || b.code || "").split(/\s+/).length), 0)
+  const lengthScore = Math.min(18, Math.floor(lengthApproxWords / 250) * 6)
+  const total = stepsScore + codeScore + rollbackScore + variantsScore + sourcesScore + freshness + lengthScore
+  return Math.max(0, Math.min(100, total))
+}
+
 export type FaqKind = "provider-topic" | "error-stack" | "config" | "provider-error" | "year-topic" | "severity-topic" | "solution-type"
 
 function buildFaq(
@@ -607,19 +638,54 @@ function buildBlocks(r: Runbook): RunbookBlock[] {
     const topicSpecific: RunbookBlock[] = []
     if (topicSlug === "ssh-hardening") {
       topicSpecific.push(
-        { kind: "h2", text: "Konfiguration (sshd_config)" },
+        { kind: "h2", text: "Konfiguration (sshd_config) – AWS Linux (Ubuntu/Debian kompatibel)" },
         { kind: "code", lang: "text", code:
-`# /etc/ssh/sshd_config (Essentials)
+`# /etc/ssh/sshd_config (Härtung)
 PermitRootLogin no
 PasswordAuthentication no
 PubkeyAuthentication yes
-MaxAuthTries 3
+KexAlgorithms curve25519-sha256@libssh.org,ecdh-sha2-nistp256
+MACs hmac-sha2-512,hmac-sha2-256
+Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com
 LoginGraceTime 30
+MaxAuthTries 3
 AllowUsers deploy admin
-# Optional:
+# Optional: gruppenbasiert
 # AllowGroups ssh-users
 `},
-        { kind: "callout", tone: "tip", title: "Pro-Tipp", text: "SSH am besten nur via VPN/Tailscale/WireGuard – dann ist das Internet als Angriffsfläche raus." },
+        { kind: "h2", text: "Audit & Monitoring" },
+        { kind: "code", lang: "bash", code:
+`# Auth-Logs live beobachten
+sudo journalctl -u ssh -f | sed -n 's/.*Failed password.*/[FAIL] &/p; s/.*Accepted publickey.*/[OK] &/p'
+
+# Fail2ban Status (falls aktiv)
+sudo fail2ban-client status sshd || true
+
+# CloudWatch Agent (optional) – SSH Auth Logs shippen
+sudo tee /opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.d/ssh.json <<'JSON'
+{
+  "logs": { "logs_collected": { "files": { "collect_list": [ { "file_path": "/var/log/auth.log", "log_group_name": "ssh-auth" } ] } } }
+}
+JSON
+sudo systemctl restart amazon-cloudwatch-agent || true
+`},
+        { kind: "h2", text: "Rollback" },
+        { kind: "code", lang: "bash", code:
+`# Vor Änderung Backup anlegen
+sudo cp -a /etc/ssh/sshd_config /etc/ssh/sshd_config.bak.$(date +%s)
+
+# Rollback durchführen
+sudo cp -a /etc/ssh/sshd_config.bak.* /etc/ssh/sshd_config && sudo systemctl reload ssh
+`},
+        { kind: "h2", text: "Validierung" },
+        { kind: "code", lang: "bash", code:
+`# Konfig testen und Dienst neuladen
+sudo sshd -t && sudo systemctl reload ssh
+
+# Negativ-Test: Passwort-Login muss scheitern
+ssh -o PreferredAuthentications=password -o PubkeyAuthentication=no user@host || echo "OK: password login disabled"
+`},
+        { kind: "callout", tone: "tip", title: "Pro-Tipp", text: "SSH ideal via Tailscale/WireGuard – öffentliche Angriffsfläche schließen." },
       )
     } else if (topicSlug === "firewall-baseline") {
       topicSpecific.push(
@@ -645,14 +711,28 @@ if ($http_origin !~* ^https://(www\.)?deine-domain\.com$) { return 403; }
       )
     } else if (topicSlug === "security-headers-csp") {
       topicSpecific.push(
-        { kind: "h2", text: "Header Baseline (Nginx)" },
+        { kind: "h2", text: "CSP Policies (strict vs. relaxed) – Nginx" },
         { kind: "code", lang: "nginx", code:
-`add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
-add_header X-Frame-Options "DENY" always;
+`# Strict (Prod)
+add_header Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; upgrade-insecure-requests" always;
+add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
 add_header X-Content-Type-Options "nosniff" always;
-add_header Referrer-Policy "no-referrer" always;
-# CSP erst report-only:
-# add_header Content-Security-Policy-Report-Only "default-src 'self'; ..." always;
+add_header X-Frame-Options "DENY" always;
+
+# Relaxed (Dev)
+# add_header Content-Security-Policy "default-src 'self' 'unsafe-inline' 'unsafe-eval' data: https:" always;
+
+# CSP Reports (optional)
+# add_header Report-To '{"group":"csp-endpoint","max_age":10886400,"endpoints":[{"url":"https://csp-report.example.com/report"}]}' always;
+# add_header Content-Security-Policy "...; report-to=csp-endpoint; report-uri=https://csp-report.example.com/report" always;
+`},
+        { kind: "h2", text: "Validierung & Reload" },
+        { kind: "code", lang: "bash", code:
+`# Nginx Config testen + neu laden
+sudo nginx -t && sudo systemctl reload nginx
+
+# Quick Test
+curl -I https://your-domain | grep -Ei "content-security-policy|strict-transport-security|x-content-type-options|x-frame-options"
 `},
       )
     }
@@ -1571,12 +1651,17 @@ let _runbooksCache: Runbook[] | null = null
 function _getRunbooks(): Runbook[] {
   if (IS_BUILD_PHASE) return []
   if (!_runbooksCache) {
-    _runbooksCache = _buildRunbooksWithRelated(Number(process.env.PSEO_RUNBOOK_COUNT || 100))
+    const req = Number(process.env.PSEO_RUNBOOK_COUNT ?? 100)
+    const safe = Number.isFinite(req) && req > 0 ? Math.min(req, 1200) : 100
+    _runbooksCache = _buildRunbooksWithRelated(safe)
   }
   return _runbooksCache
 }
 
-export const RUNBOOKS: Runbook[] = _getRunbooks()
+export function materializedRunbooks(): Runbook[] {
+  return _getRunbooks()
+}
+export const RUNBOOKS: Runbook[] = []
 
 // Fallback builder used when on-demand generation crashes
 function _buildDummyRunbook(slug: string): Runbook {
@@ -1626,7 +1711,8 @@ export function allProviders() {
 export function runbooksByProvider(providerSlug: string) {
   if (IS_BUILD_PHASE) return []
   const p = providerSlug.toLowerCase()
-  return RUNBOOKS.filter((r) => r.tags.includes("provider:" + p) || r.tags.includes(p))
+  const list = _getRunbooks()
+  return list.filter((r) => r.tags.includes("provider:" + p) || r.tags.includes(p))
 }
 
 export function getRunbook(slug: string): Runbook | null {
@@ -1649,20 +1735,8 @@ export function getRunbook(slug: string): Runbook | null {
       return _buildDummyRunbook(slug)
     }
   }
-  // Check static RUNBOOKS first (fast path for existing content)
-  const existing = RUNBOOKS.find((r) => r.slug === slug)
-  if (existing) {
-    console.count("pseo.getRunbook.hit.materialized")
-    console.log("getRunbook", { slug, result: "found:materialized" })
-    return existing
-  }
-  // Fall through to 100k on-demand generation (provider-service-issue-year format)
   const meta = parseRunbookSlug100k(slug)
-  if (meta) {
-    console.count("pseo.getRunbook.hit.on_demand")
-    return _buildDummyRunbook(slug)
-  }
-  console.log("getRunbook", { slug, result: "null" })
+  if (meta) return _buildDummyRunbook(slug)
   return _buildDummyRunbook(slug)
 }
 
@@ -1674,7 +1748,8 @@ export function bucketsAF() {
     "s-z": [],
     "0-9": [],
   }
-  for (const r of RUNBOOKS) {
+  const list = _getRunbooks()
+  for (const r of list) {
     const c = (r.slug[0] || "").toLowerCase()
     if (c >= "a" && c <= "f") groups["a-f"].push(r)
     else if (c >= "g" && c <= "l") groups["g-l"].push(r)
@@ -1688,7 +1763,8 @@ export function bucketsAF() {
 export function allTags() {
   if (IS_BUILD_PHASE) return []
   const set = new Set<string>()
-  for (const r of RUNBOOKS) for (const t of r.tags) set.add(t)
+  const list = _getRunbooks()
+  for (const r of list) for (const t of r.tags) set.add(t)
   return Array.from(set).sort((a, b) => a.localeCompare(b))
 }
 
@@ -1714,7 +1790,8 @@ export function bucketsTagsAF() {
 
 export function runbooksByTag(tag: string) {
   if (IS_BUILD_PHASE) return []
-  return RUNBOOKS.filter((r) => r.tags.includes(tag))
+  const list = _getRunbooks()
+  return list.filter((r) => r.tags.includes(tag))
 }
 
 /** Top-N runbooks per tag (sorted by clawScore desc) */
@@ -1847,7 +1924,7 @@ export function totalSitemapUrls(): number {
   return (
     MAIN_SITEMAP_PAGE_COUNT +
     PROVIDERS.length +
-    RUNBOOKS.length +
+    _getRunbooks().length +
     allTags().length +
     count100kSlugs() +
     ISSUES_100K.length +

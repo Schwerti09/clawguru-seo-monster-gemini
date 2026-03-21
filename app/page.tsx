@@ -12,6 +12,9 @@ import BuyButton from "@/components/commerce/BuyButton"
 import { COMMUNITY } from "@/lib/constants"
 import type { Dictionary } from "@/lib/getDictionary"
 import type { Locale } from "@/lib/i18n"
+import { Hero as RedesignHero } from "@/components/sections/Hero"
+import { FeaturesGrid } from "@/components/sections/FeaturesGrid"
+import { CTA as RedesignCTA } from "@/components/sections/CTA"
 
 interface HomeProps {
   dict: Dictionary
@@ -69,6 +72,9 @@ export default function Home({ dict, locale }: HomeProps) {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
 
+      {/* Hyper-modern Redesign Hero (non-breaking, visual only) */}
+      <RedesignHero />
+
       {/* Security check – luxury glass card */}
       <section className="relative py-16 border-b border-white/5 overflow-hidden" style={{ background: "var(--surface-1)" }}>
         <div className="pointer-events-none absolute inset-0 bg-vault-gradient opacity-60" aria-hidden="true" />
@@ -80,8 +86,8 @@ export default function Home({ dict, locale }: HomeProps) {
         </Container>
       </section>
 
-      {/* LUXURY DESIGN 2026: Full-viewport Mycelial Singularity Hero with interactive canvas */}
-      <MycelialSingularityHero />
+      {/* Redesign CTA (visual only) */}
+      <RedesignCTA />
 
       {/* UNIVERSE MODULE – LUXURY DESIGN 2026: Gold+Cyan premium section */}
       <section className="relative py-28 overflow-hidden" style={{ background: "var(--surface-1)" }}>
@@ -89,6 +95,17 @@ export default function Home({ dict, locale }: HomeProps) {
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center" aria-hidden="true">
           <div style={{ width: "700px", height: "350px", background: "radial-gradient(ellipse, rgba(212,175,55,0.06) 0%, rgba(0,184,255,0.04) 50%, transparent 70%)", filter: "blur(50px)" }} />
         </div>
+        {/* Starfield dots overlay */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0"
+          style={{
+            backgroundImage: "radial-gradient(rgba(255,255,255,0.1) 1px, transparent 1px)",
+            backgroundSize: "3px 3px",
+            opacity: 0.35,
+            maskImage: "radial-gradient(80% 80% at 50% 50%, black, transparent)",
+          }}
+        />
         {/* Gold edge line */}
         <div className="absolute top-0 left-0 right-0 h-px" style={{ background: "linear-gradient(to right, transparent, rgba(212,175,55,0.2), transparent)" }} aria-hidden="true" />
         <div className="relative z-10 flex flex-col items-center text-center px-4 max-w-4xl mx-auto">
@@ -170,8 +187,22 @@ export default function Home({ dict, locale }: HomeProps) {
         </Container>
       </section>
 
+      {/* Hyper-modern Features Grid (visual only) */}
+      <FeaturesGrid />
+
       {/* Mycelial Singularity Engine CTA – LUXURY DESIGN 2026: gold border accent */}
-      <section className="py-16 border-y border-white/5" style={{ background: "var(--surface-1)" }}>
+      <section className="relative py-16 border-y border-white/5 overflow-hidden" style={{ background: "var(--surface-1)" }}>
+        {/* Starfield dots overlay */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0"
+          style={{
+            backgroundImage: "radial-gradient(rgba(255,255,255,0.1) 1px, transparent 1px)",
+            backgroundSize: "3px 3px",
+            opacity: 0.25,
+            maskImage: "radial-gradient(80% 80% at 50% 50%, black, transparent)",
+          }}
+        />
         <Container>
           <div className="max-w-5xl mx-auto p-8 rounded-3xl glass-vault" style={{ borderColor: "rgba(212,175,55,0.18)" }}>
             <div className="text-xs font-mono neon-text-gold uppercase tracking-widest">{dict.home.genesisProtocol}</div>

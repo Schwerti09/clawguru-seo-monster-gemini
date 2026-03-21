@@ -2,6 +2,7 @@
 // Delegates to the base tag page so all locales resolve without 404.
 
 import { SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
+import { notFound } from "next/navigation"
 import TagPage from "@/app/tag/[tag]/page"
 
 export const revalidate = 3600
@@ -11,9 +12,8 @@ export const dynamic = "force-dynamic"
 export async function generateStaticParams() {
   const { allTags } = await import("@/lib/pseo")
   const tags = allTags().slice(0, 200)
-  return SUPPORTED_LOCALES.flatMap((lang) =>
-    tags.map((tag) => ({ lang, tag }))
-  )
+  const allowed = (process.env.SITEMAP_100K_LOCALES ?? "de,en").split(",").map((s) => s.trim()).filter(Boolean)
+  return allowed.flatMap((lang) => tags.map((tag) => ({ lang, tag })))
 }
 
 export async function generateMetadata(props: {
@@ -31,6 +31,8 @@ export async function generateMetadata(props: {
 export default async function LocaleTagPage(props: {
   params: { lang: string; tag: string }
 }) {
-  const { tag } = props.params
+  const { lang, tag } = props.params
+  const allowed = (process.env.SITEMAP_100K_LOCALES ?? "de,en").split(",").map((s) => s.trim()).filter(Boolean)
+  if (!allowed.includes(lang)) return notFound()
   return <TagPage params={{ tag }} />
 }

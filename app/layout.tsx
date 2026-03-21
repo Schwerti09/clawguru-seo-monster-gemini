@@ -7,10 +7,12 @@ import Header from "@/components/layout/Header"
 import Footer from "@/components/layout/Footer"
 import TrustShield from "@/components/layout/TrustShield"
 import dynamic from "next/dynamic"
+import { AnimatedBackground } from "@/components/ui/AnimatedBackground"
 const ActionDock = dynamic(() => import("@/components/layout/ActionDock"), { ssr: false })
 const SocialProofOverlay = dynamic(() => import("@/components/social/SocialProofOverlay"), { ssr: false })
 // WORLD BEAST FINAL LAUNCH: Umami privacy-first analytics
 import UmamiAnalytics from "@/components/analytics/UmamiAnalytics"
+import GA4Pageview from "@/components/analytics/GA4Pageview"
 // VISUAL UPGRADE 2026: Neon cursor + page transition wrapper
 const NeonCursor = dynamic(() => import("@/components/visual/NeonCursor"), { ssr: false })
 import PageTransition from "@/components/visual/PageTransition"
@@ -43,7 +45,7 @@ export const metadata: Metadata = {
     url: SITE_URL,
     title: "ClawGuru | Mycelial Singularity Engine v3.0",
     description: "Das lebende Mycelium von 1M+ Runbooks. Force-directed Graph, Darwinian Evolution, Oracle Mode.",
-    images: ["/og-image.png"]
+    images: ["/og-image.png", "/og-image.svg"]
   },
   twitter: { card: "summary_large_image", creator: "@clawguru" },
   verification: { google: "b629ac432cdf0f21" },
@@ -96,12 +98,12 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <head>
         {/* WORLD BEAST FINAL LAUNCH: Umami analytics */}
         <UmamiAnalytics />
-        <Script src="https://www.googletagmanager.com/gtag/js?id=G-FJ4MY7V41N" strategy="afterInteractive" />
+        <Script src="https://www.googletagmanager.com/gtag/js?id=G-1BHBS4FG2Y" strategy="afterInteractive" />
         <Script id="ga-gtag" strategy="afterInteractive">{`
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);} 
           gtag('js', new Date());
-          gtag('config', 'G-FJ4MY7V41N');
+          gtag('config', 'G-1BHBS4FG2Y');
         `}</Script>
         {/* FAVICON PACK 2026 */}
         <link rel="icon" href="/favicon.ico" sizes="any" />
@@ -153,6 +155,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             maskImage: "radial-gradient(80% 80% at 50% 50%, black, transparent)",
           }}
         />
+        {/* Hyper-modern animated gradient background layer (SSR-safe) */}
+        <AnimatedBackground />
         {/* 100/100 OPTIMIZATION 2026: Skip-to-content link for keyboard/screen-reader users */}
         <a href="#main-content" className="skip-to-content">
           Zum Hauptinhalt springen
@@ -175,6 +179,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             <NeonCursor />
             <CommandK />
             <GlobalMagnetics />
+            <GA4Pageview />
           </RTLProvider>
         </I18nProvider>
       </body>

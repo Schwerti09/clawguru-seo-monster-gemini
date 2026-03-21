@@ -4,6 +4,7 @@ import { notFound } from "next/navigation"
 import { BASE_URL } from "@/lib/config"
 import { headers } from "next/headers"
 import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
+import { loadRunbooks } from "@/lib/runbooks-data"
 
 export const revalidate = 3600
 export const dynamicParams = true
@@ -17,11 +18,11 @@ export async function generateStaticParams() {
 
 export async function generateMetadata(props: { params: { tag: string } }) {
   const params = props.params
-  const { runbooksByTag } = await import("@/lib/pseo")
   const h = headers()
   const locale = (h.get("x-claw-locale") ?? DEFAULT_LOCALE) as Locale
   const tag = decodeURIComponent(params.tag)
-  const items = runbooksByTag(tag)
+  const data = await loadRunbooks()
+  const items = Array.isArray(data) ? data.filter((r) => (r.tags || []).includes(tag)) : []
   if (!items.length) return {}
   return {
     title: `${tag} Runbooks | ClawGuru Tag-Hub`,
@@ -32,15 +33,18 @@ export async function generateMetadata(props: { params: { tag: string } }) {
 
 export default async function TagPage(props: { params: { tag: string } }) {
   const params = props.params
-  const { runbooksByTag, topRunbooksByTag } = await import("@/lib/pseo")
   const h = headers()
   const locale = (h.get("x-claw-locale") ?? DEFAULT_LOCALE) as Locale
   const prefix = `/${locale}`
   const tag = decodeURIComponent(params.tag)
-  const items = runbooksByTag(tag)
+  const data = await loadRunbooks()
+  const items = Array.isArray(data) ? data.filter((r) => (r.tags || []).includes(tag)) : []
   if (!items.length) return notFound()
 
-  const top10 = topRunbooksByTag(tag, 10)
+  const top10 = items
+    .slice()
+    .sort((a, b) => (b.clawScore ?? 0) - (a.clawScore ?? 0))
+    .slice(0, 10)
 
   const breadcrumbLd = {
     "@context": "https://schema.org",

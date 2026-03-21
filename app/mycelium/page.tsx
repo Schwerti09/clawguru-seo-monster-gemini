@@ -87,10 +87,11 @@ export default async function MyceliumPage() {
           const MyceliumClientLoader = NextDynamic(() => import("@/components/visual/MyceliumClientLoader"), {
             ssr: false,
             loading: () => (
-              <div className="h-[60vh] rounded-3xl animate-pulse bg-white/[0.04] border border-white/10" />
+              <div className="h-[50vh] rounded-3xl animate-pulse bg-white/[0.04] border border-white/10" />
             ),
           })
-          return <MyceliumClientLoader />
+          // Use lightweight embed UI for faster initial load
+          return <MyceliumClientLoader ui="embed" />
         })()}
       </div>
 

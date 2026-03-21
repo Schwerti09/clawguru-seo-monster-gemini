@@ -1,13 +1,14 @@
 import type { Metadata } from "next"
 
 import { SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
-import RootRunbookPage from "@/app/runbook/[slug]/page"
+import { notFound } from "next/navigation"
 
 export const dynamic = "force-static"
-export const revalidate = 3600
+export const revalidate = 86400
 export const dynamicParams = true
 export const runtime = "nodejs"
 export const maxDuration = 180
+export const preferredRegion = "iad1"
 
 export async function generateStaticParams() {
   const { RUNBOOKS } = await import("@/lib/pseo")
@@ -30,7 +31,8 @@ export async function generateStaticParams() {
     "azure-kubernetes-mfa-enforcement-2026",
   ]
   const slugs = Array.from(new Set([...topSlugs, ...key100kSlugs]))
-  return SUPPORTED_LOCALES.flatMap((lang) => slugs.map((slug) => ({ lang, slug })))
+  const allowed = (process.env.SITEMAP_100K_LOCALES ?? "de,en").split(",").map((s) => s.trim()).filter(Boolean)
+  return allowed.flatMap((lang) => slugs.map((slug) => ({ lang, slug })))
 }
 
 export async function generateMetadata(props: {
@@ -44,9 +46,14 @@ export async function generateMetadata(props: {
   }
 }
 
-export default function LocaleRunbookPage(props: {
+export default async function LocaleRunbookPage(props: {
   params: { lang: string; slug: string }
 }) {
-  return <RootRunbookPage params={{ slug: props.params.slug }} />
+  const { lang, slug } = props.params
+  const allowed = (process.env.SITEMAP_100K_LOCALES ?? "de,en").split(",").map((s) => s.trim()).filter(Boolean)
+  if (!allowed.includes(lang)) return notFound()
+  const Mod = await import("@/app/runbook/[slug]/page")
+  const RootRunbookPage = Mod.default
+  return <RootRunbookPage params={{ slug }} />
 }
 

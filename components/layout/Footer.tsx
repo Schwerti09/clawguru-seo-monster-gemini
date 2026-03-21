@@ -16,17 +16,32 @@ export default function Footer() {
 
         <div>
           <h4 className="font-semibold mb-4">Platform</h4>
-          <ul className="space-y-2 opacity-70">Runbooks • Live Ops Wall • Academy • Tools</ul>
+          <ul className="space-y-2 opacity-70">
+            <li><a href={`${prefix}/runbooks`}>Runbooks</a></li>
+            <li><a href={`${prefix}/tags`}>Tags</a></li>
+            <li><a href={`${prefix}/intel`}>Intel Feed</a></li>
+            <li><a href={`${prefix}/copilot`}>Copilot</a></li>
+          </ul>
         </div>
 
         <div>
           <h4 className="font-semibold mb-4">Solutions</h4>
-          <ul className="space-y-2 opacity-70">Cloud Hardening • Kubernetes • Incident Response • CVE Pulse</ul>
+          <ul className="space-y-2 opacity-70">
+            <li><a href={`${prefix}/solutions`}>Solutions</a></li>
+            <li><a href={`${prefix}/emergency`}>Emergency</a></li>
+            <li><a href={`${prefix}/check`}>Security-Check</a></li>
+            <li><a href={`${prefix}/pricing`}>Pricing</a></li>
+          </ul>
         </div>
 
         <div>
           <h4 className="font-semibold mb-4">Company</h4>
-          <ul className="space-y-2 opacity-70">Über uns • Blog • Careers • Press</ul>
+          <ul className="space-y-2 opacity-70">
+            <li><a href={`${prefix}/ueber-uns`}>Über uns</a></li>
+            <li><a href={`${prefix}/case-studies`}>Case Studies</a></li>
+            <li><a href={`${prefix}/support`}>Support</a></li>
+            <li><a href={`${prefix}/downloads`}>Downloads</a></li>
+          </ul>
         </div>
 
         <div>

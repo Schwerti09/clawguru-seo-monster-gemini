@@ -28,10 +28,11 @@ const VersionsAndForksTabLazy = NextDynamic(() => import("@/components/runbook/V
 })
 
 export const dynamic = "force-static"
-export const revalidate = 3600 // reduce rebuild frequency to cut CPU
+export const revalidate = 86400 // reduce rebuild frequency to cut CPU
 export const dynamicParams = true
 export const runtime = "nodejs"
 export const maxDuration = 180
+export const preferredRegion = "iad1"
 
 async function buildLinkEngineNow() {
   const { RUNBOOKS } = await import("@/lib/pseo")
@@ -277,7 +278,7 @@ export default async function RunbookPage(props: { params: { slug: string } }) {
   const params = props.params
   const __label = `runbook:${params.slug}`
   console.time(__label)
-  const { RUNBOOKS, getRunbook } = await import("@/lib/pseo")
+  const { getRunbook } = await import("@/lib/pseo")
   const locale = DEFAULT_LOCALE as Locale
   const dict = await getDictionary(locale)
   const prefix = `/${locale}`
@@ -298,14 +299,7 @@ export default async function RunbookPage(props: { params: { slug: string } }) {
   const temporalHistory = null as any
   console.timeEnd(`${__label}:temporalHistory`)
 
-  // Pre-build slug→runbook Map for O(1) related lookups
-  const runbookMap = new Map(RUNBOOKS.map((rb) => [rb.slug, rb]))
-  const isGenerated100k = !runbookMap.has(r.slug)
-  if (isGenerated100k) {
-    console.count("pseo.on_demand_100k_hit")
-  } else {
-    console.count("pseo.materialized_hit")
-  }
+  console.count("pseo.runbook_request")
 
   // Embedding-driven internal links (Spider-Web) with relatedSlugs as seed hints
   console.time(`${__label}:linkEngine`)
@@ -324,7 +318,7 @@ export default async function RunbookPage(props: { params: { slug: string } }) {
   ).slice(0, 10)
   const relatedList = relatedSlugs.length > 0
     ? (relatedSlugs
-        .map((s) => runbookMap.get(s) ?? getRunbook(s))
+        .map((s) => getRunbook(s))
         .filter(Boolean) as Runbook[])
     : []
   console.timeEnd(`${__label}:related`)

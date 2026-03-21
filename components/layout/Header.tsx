@@ -1,5 +1,5 @@
-"use client"
-// VISUAL & PERFORMANCE POLISH 2026: Responsive header – max 6 desktop links + "More" dropdown + mobile hamburger
+﻿"use client"
+// VISUAL & PERFORMANCE POLISH 2026: Responsive header â€“ max 6 desktop links + "More" dropdown + mobile hamburger
 // NEXT-LEVEL UPGRADE 2026: Language switcher added for 10-language support
 
 import { useState, useRef, useEffect, useCallback } from "react"
@@ -35,7 +35,7 @@ export default function Header() {
     { href: `${prefix}/pricing`, label: dict.nav.pricing },
   ]
 
-  // Overflow items – visible in "More" dropdown on desktop and in mobile menu
+  // Overflow items â€“ visible in "More" dropdown on desktop and in mobile menu
   const MORE_NAV: NavItem[] = [
     { href: `${prefix}/clawverse`, label: dict.nav.clawVerse },
     { href: `${prefix}/summon`, label: dict.nav.summon },
@@ -130,12 +130,12 @@ export default function Header() {
     }
   }, [pathname])
 
-  // Compact header share: Web Share API → X intent fallback
+  // Compact header share: Web Share API â†’ X intent fallback
   const handleHeaderShare = useCallback(() => {
     const url = typeof window !== "undefined" ? window.location.href : "https://clawguru.org"
     const text = dict.share.myceliumPost
     if (typeof navigator !== "undefined" && navigator.share) {
-      navigator.share({ title: "ClawGuru · Mycelial Singularity Engine", text, url }).catch(() => {})
+      navigator.share({ title: "ClawGuru Â· Mycelial Singularity Engine", text, url }).catch(() => {})
     } else {
       const xUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`
       window.open(xUrl, "_blank", "noopener,noreferrer")
@@ -177,7 +177,7 @@ export default function Header() {
             }}
           >
             {/* Logo */}
-            <Link href={prefix} className="flex items-center gap-3 shrink-0" aria-label="ClawGuru – Startseite">
+            <Link href="/" className="flex items-center gap-3 shrink-0" aria-label="ClawGuru â€“ Startseite">
               <div
                 className="w-9 h-9 rounded-xl flex items-center justify-center"
                 aria-hidden="true"
@@ -261,7 +261,9 @@ export default function Header() {
                   color: "#ffc800",
                 }}
               >
-                <span aria-hidden>🍄</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="#ffc800" aria-hidden>
+                  <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.02-4.11c.53.5 1.23.81 2.01.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.91 9.81A2.99 2.99 0 0 0 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.83 0 1.58-.34 2.12-.88l7.06 4.14c-.05.21-.08.43-.08.66 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z" />
+                </svg>
                 <span className="hidden md:inline text-xs font-mono tracking-wide">
                   {dict.share.myceliumXBtn}
                 </span>
@@ -311,7 +313,7 @@ export default function Header() {
                 onClick={() => setMobileOpen((v) => !v)}
                 className="lg:hidden p-2 rounded-xl transition-colors text-gray-300 hover:text-white"
                 style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(212,175,55,0.1)" }}
-                aria-label="Navigation öffnen"
+                aria-label="Navigation Ã¶ffnen"
                 aria-expanded={mobileOpen}
               >
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -376,7 +378,7 @@ export default function Header() {
         aria-hidden={!mobileOpen}
         role="dialog"
         aria-modal="true"
-        aria-label="Mobile Menü"
+        aria-label="Mobile MenÃ¼"
       >
         <nav aria-label="Mobilnavigation" className="px-4 space-y-0.5">
           <div className="pb-3">
@@ -401,7 +403,10 @@ export default function Header() {
               className="block w-full px-4 py-3 rounded-xl font-bold text-sm text-center"
               style={{ background: "rgba(255,200,0,0.08)", border: "1px solid rgba(255,200,0,0.18)", color: "#ffc800" }}
             >
-              🍄 {dict.share.myceliumBtn}
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="#ffc800" aria-hidden style={{ marginRight: 6 }}>
+                <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.02-4.11c.53.5 1.23.81 2.01.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.91 9.81A2.99 2.99 0 0 0 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.83 0 1.58-.34 2.12-.88l7.06 4.14c-.05.21-.08.43-.08.66 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z" />
+              </svg>
+              {dict.share.myceliumBtn}
             </button>
 
             <Link

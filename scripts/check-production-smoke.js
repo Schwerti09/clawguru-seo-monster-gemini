@@ -8,7 +8,7 @@ const CHECKS = [
   {
     path: "/de/provenance/prometheus-rabbitmq-hsts-2030",
     method: "GET",
-    expected: [307],
+    expected: [307, 308],
     note: "expected locale provenance redirect",
     expectLocationIncludes: "/provenance/prometheus-rabbitmq-hsts-2030",
   },

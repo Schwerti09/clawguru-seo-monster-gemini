@@ -205,14 +205,14 @@ export function middleware(request: NextRequest) {
     return res
   }
 
-  // Compatibility rewrite: map localized provenance page to root provenance page
-  // Keeps external URL stable and avoids locale-enforcement redirect loop
+  // Compatibility redirect: map localized provenance page to root provenance page
+  // Use redirect (308) so external checks see a proper redirect status
   const localizedProvenance = pathname.match(/^\/([a-z]{2}(?:-[a-z]{2})?)\/provenance\/([^/]+)\/?$/i)
   if (localizedProvenance) {
     const slug = localizedProvenance[2]
     const url = request.nextUrl.clone()
     url.pathname = `/provenance/${slug}`
-    const res = NextResponse.rewrite(url)
+    const res = NextResponse.redirect(url, 308)
     res.headers.set("x-claw-locale", locale)
     res.headers.set("x-claw-dir", localeDir(locale))
     res.headers.set(getRequestIdHeaderName(), requestId)

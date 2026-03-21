@@ -1,9 +1,9 @@
 import type { Metadata } from "next"
 
 import { SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
-import { redirect } from "next/navigation"
+import { permanentRedirect } from "next/navigation"
 
-export const revalidate = 60
+export const revalidate = 0
 export const dynamic = "force-dynamic"
 export const dynamicParams = true
 
@@ -25,5 +25,5 @@ export async function generateMetadata(
 export default function LocaleProvenanceRunbookPage(
   props: { params: { lang: string; "runbook-slug": string } }
 ) {
-  redirect(`/provenance/${props.params["runbook-slug"]}`)
+  permanentRedirect(`/provenance/${props.params["runbook-slug"]}`)
 }

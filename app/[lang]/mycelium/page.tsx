@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import dynamic from "next/dynamic"
+import NextDynamic from "next/dynamic"
 
 import { SUPPORTED_LOCALES, DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
 import Container from "@/components/shared/Container"
@@ -8,7 +8,7 @@ import { getDictionary } from "@/lib/getDictionary"
 import MyceliumHero from "@/components/mycelium/MyceliumHero"
 import ExampleNodes from "@/components/mycelium/ExampleNodes"
 
-const MyceliumVisualizationWrapper = dynamic(() => import("@/components/mycelium/MyceliumVisualizationWrapper"), { ssr: false })
+const MyceliumVisualizationWrapper = NextDynamic(() => import("@/components/mycelium/MyceliumVisualizationWrapper"), { ssr: false })
  
 
 export const dynamic = "force-static"

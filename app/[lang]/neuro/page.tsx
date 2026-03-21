@@ -1,7 +1,12 @@
 import type { Metadata } from "next"
+import dynamic from "next/dynamic"
 
 import { SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
-import RootPage from "@/app/neuro/page"
+import NeuroHero from "@/components/neuro/NeuroHero"
+import HowItWorks from "@/components/neuro/HowItWorks"
+import UpgradeCTA from "@/components/neuro/UpgradeCTA"
+
+const NeuroPageClient = dynamic(() => import("@/components/neuro/NeuroPageClient"), { ssr: false })
 
 export const revalidate = 60
 
@@ -18,6 +23,27 @@ export async function generateMetadata(props: { params: { lang: string } }): Pro
   }
 }
 
-export default function LocaleNeuroPage() {
-  return <RootPage />
+export default function LocaleNeuroPage(props: { params: { lang: string } }) {
+  const locale = (SUPPORTED_LOCALES.includes(props.params.lang as Locale) ? props.params.lang : "de") as Locale
+  const prefix = `/${locale}`
+  return (
+    <div className="space-y-6">
+      <NeuroHero prefix={prefix} />
+      <section className="py-2">
+        <div className="px-4 sm:px-6 lg:px-8">
+          <NeuroPageClient />
+        </div>
+      </section>
+      <section className="py-4">
+        <div className="px-4 sm:px-6 lg:px-8">
+          <HowItWorks />
+        </div>
+      </section>
+      <section className="py-2">
+        <div className="px-4 sm:px-6 lg:px-8">
+          <UpgradeCTA prefix={prefix} />
+        </div>
+      </section>
+    </div>
+  )
 }

@@ -19,22 +19,37 @@ export default function VorstellungClient() {
   useEffect(() => {
     let canceled = false
     let idleId: number | null = null
-    let t: any = null
+    let tFallback: any = null
+    let tForce: any = null
+    const isDesktop = typeof window !== "undefined" ? window.innerWidth >= 768 : false
     const enable = () => { if (!canceled) setFx(true) }
     try {
-      const ric = (window as any).requestIdleCallback as undefined | ((cb: any, opts?: any) => number)
-      if (ric) {
-        idleId = ric(enable, { timeout: 1200 })
+      if (isDesktop) {
+        // Desktop: sofort aktivieren für sichtbare Previews
+        enable()
       } else {
-        t = setTimeout(enable, 600)
+        const ric = (window as any).requestIdleCallback as undefined | ((cb: any, opts?: any) => number)
+        if (ric) {
+          idleId = ric(enable, { timeout: 1200 })
+        }
+        // Mobile: Fallback/Force-Timer
+        tFallback = setTimeout(enable, 800)
+        tForce = setTimeout(enable, 1800)
       }
     } catch {
-      t = setTimeout(enable, 600)
+      // Conservative fallback
+      if (isDesktop) {
+        enable()
+      } else {
+        tFallback = setTimeout(enable, 800)
+        tForce = setTimeout(enable, 1800)
+      }
     }
     return () => {
       canceled = true
       try { if (idleId && (window as any).cancelIdleCallback) (window as any).cancelIdleCallback(idleId) } catch {}
-      if (t) clearTimeout(t)
+      if (tFallback) clearTimeout(tFallback)
+      if (tForce) clearTimeout(tForce)
     }
   }, [])
   return (
@@ -42,13 +57,11 @@ export default function VorstellungClient() {
       {/* Fullscreen Hero with orbiting logo */}
       <section ref={heroRef} className="relative overflow-hidden pt-24 pb-16 px-4">
         {/* Desktop particle field (very light), masked and lazy */}
-        {fx && (
-          <div className="hidden md:block absolute inset-0" aria-hidden>
-            <Suspense fallback={null}>
-              <PreviewField />
-            </Suspense>
-          </div>
-        )}
+        <div className="hidden md:block absolute inset-0" aria-hidden>
+          <Suspense fallback={null}>
+            <PreviewField />
+          </Suspense>
+        </div>
         <div aria-hidden className="pointer-events-none absolute inset-0" style={{
           backgroundImage: "radial-gradient(rgba(255,255,255,0.12) 1px, transparent 1px)",
           backgroundSize: "3px 3px",
@@ -68,15 +81,7 @@ export default function VorstellungClient() {
           <div className="mt-6 flex items-center justify-center">
             <Suspense fallback={null}>
               <div className="opacity-90" aria-hidden>
-                {fx ? (
-                  <OrbitingLogo />
-                ) : (
-                  <div className="relative w-full max-w-xs mx-auto aspect-square">
-                    <div className="w-full h-full rounded-full grid place-items-center">
-                      <div className="w-[55%] h-[55%] rounded-full border border-white/10" style={{ boxShadow: "0 0 24px rgba(0,184,255,0.25), inset 0 0 24px rgba(0,255,157,0.15)" }} />
-                    </div>
-                  </div>
-                )}
+                <OrbitingLogo />
               </div>
             </Suspense>
           </div>
@@ -93,7 +98,7 @@ export default function VorstellungClient() {
       <Container>
         <div className="py-10 max-w-6xl mx-auto space-y-12">
           {/* Particle/Video background section (lightweight) */}
-          <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.55 }} className="rounded-[24px] border border-white/10 bg-black/30 p-4" style={{ contentVisibility: "auto", containIntrinsicSize: "540px" }}>
+          <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.55 }} className="rounded-[24px] border border-white/10 bg-black/30 p-4">
             <div className="text-sm text-gray-400 mb-2">Das bekommst du</div>
             <div className="rounded-2xl overflow-hidden relative" style={{ aspectRatio: "16/9" }}>
               <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-transparent to-emerald-500/10" aria-hidden />
@@ -114,7 +119,7 @@ export default function VorstellungClient() {
           </motion.div>
 
           {/* Sections with mini previews */}
-          <div className="grid md:grid-cols-2 gap-6" style={{ contentVisibility: "auto", containIntrinsicSize: "600px" }}>
+          <div className="grid md:grid-cols-2 gap-6">
             <div className="rounded-2xl p-6 border border-white/10" style={{ background: "rgba(255,255,255,0.03)" }}>
               <div className="mb-3 rounded-xl border border-cyan-400/20 bg-gradient-to-br from-cyan-500/10 to-transparent aspect-[16/9]" aria-hidden />
               <div className="text-xs font-mono uppercase tracking-[0.3em] text-cyan-300 mb-1">Copilot</div>

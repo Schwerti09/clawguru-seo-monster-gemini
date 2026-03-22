@@ -3,9 +3,24 @@
 import Container from "@/components/shared/Container"
 import { GlowButton } from "@/components/ui/GlowButton"
 import dynamic from "next/dynamic"
-import { Suspense, useEffect, useRef, useState } from "react"
+import React, { Suspense, useEffect, useRef, useState } from "react"
 import { usePathname } from "next/navigation"
-import { motion } from "framer-motion"
+import { motion, useReducedMotion } from "framer-motion"
+
+class ErrorBoundary extends React.Component<{ fallback?: React.ReactNode }, { hasError: boolean }> {
+  constructor(props: { fallback?: React.ReactNode }) {
+    super(props)
+    this.state = { hasError: false }
+  }
+  static getDerivedStateFromError() {
+    return { hasError: true }
+  }
+  componentDidCatch() {}
+  render() {
+    if (this.state.hasError) return this.props.fallback || null
+    return this.props.children as React.ReactElement
+  }
+}
 
 const OrbitingLogo = dynamic(() => import("@/components/vorstellung/OrbitingLogo"), {
   ssr: false,
@@ -175,6 +190,7 @@ export default function VorstellungClient({ dict }: { dict?: any }) {
   const first = pathname?.split("/")[1] || ""
   const isLang = /(^[a-z]{2}(-[A-Z]{2})?$)/.test(first) || ["de","en","ru","es","fr","it","pt","nl","pl","tr","uk","cs","sk","sv","no","da","fi","ja","ko","zh"].includes(first)
   const prefix = isLang ? `/${first}` : ""
+  const reduce = useReducedMotion()
   const [fx, setFx] = useState(false)
   const heroRef = useRef<HTMLDivElement | null>(null)
   const timelineItems = Array.isArray((dict as any)?.timelineItems)
@@ -248,26 +264,28 @@ export default function VorstellungClient({ dict }: { dict?: any }) {
           opacity: 0.4,
         }} />
         <div className="relative z-10 max-w-4xl mx-auto text-center">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
+          <motion.div initial={reduce ? undefined : { opacity: 0, y: 20 }} whileInView={reduce ? undefined : { opacity: 1, y: 0 }} viewport={{ once: true }} transition={reduce ? undefined : { duration: 0.6 }}>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-emerald-400/30 bg-emerald-400/10 text-emerald-200 text-[11px] uppercase tracking-widest">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-300" /> {dict?.badge ?? "Quantum‑Resistant"}
             </div>
           </motion.div>
-          <motion.h1 initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.05 }}
+          <motion.h1 initial={reduce ? undefined : { opacity: 0, y: 10 }} whileInView={reduce ? undefined : { opacity: 1, y: 0 }} viewport={{ once: true }} transition={reduce ? undefined : { duration: 0.6, delay: 0.05 }}
             className="text-4xl sm:text-6xl font-black font-heading text-white leading-tight mt-3">
             {dict?.title ?? "ClawGuru vorgestellt"}
           </motion.h1>
           <div className="mt-6 flex items-center justify-center">
             <Suspense fallback={null}>
               <div className="opacity-90" aria-hidden>
-                <OrbitingLogo />
+                <ErrorBoundary fallback={<div className="h-[52vh] grid place-items-center rounded-3xl border border-white/10 bg-black/50 text-white/70">{dict?.fallbackLogo ?? "Logo"}</div>}>
+                  <OrbitingLogo />
+                </ErrorBoundary>
               </div>
             </Suspense>
           </div>
-          <motion.p initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.1 }} className="mt-4 text-gray-300 text-lg leading-relaxed max-w-2xl mx-auto">
+          <motion.p initial={reduce ? undefined : { opacity: 0 }} whileInView={reduce ? undefined : { opacity: 1 }} viewport={{ once: true }} transition={reduce ? undefined : { duration: 0.6, delay: 0.1 }} className="mt-4 text-gray-300 text-lg leading-relaxed max-w-2xl mx-auto">
             {dict?.subtitle ?? "Die Ops‑Intelligence Plattform: schnell, fokussiert, ergebnisorientiert. Hier siehst du in 60 Sekunden, was du bekommst."}
           </motion.p>
-          <motion.div initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.15 }} className="mt-6 flex flex-col sm:flex-row gap-3 justify-center">
+          <motion.div initial={reduce ? undefined : { opacity: 0, y: 10 }} whileInView={reduce ? undefined : { opacity: 1, y: 0 }} viewport={{ once: true }} transition={reduce ? undefined : { duration: 0.6, delay: 0.15 }} className="mt-6 flex flex-col sm:flex-row gap-3 justify-center">
             <GlowButton variant="primary" href="/check">{dict?.ctaPrimary ?? "Jetzt testen"}</GlowButton>
             <GlowButton variant="outline" href="/pricing">{dict?.ctaSecondary ?? "Pläne"}</GlowButton>
           </motion.div>
@@ -277,7 +295,7 @@ export default function VorstellungClient({ dict }: { dict?: any }) {
       <Container>
         <div className="py-10 max-w-6xl mx-auto space-y-12">
           {/* Particle/Video background section (lightweight) */}
-          <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.55 }} className="rounded-[24px] border border-white/10 bg-black/30 p-4">
+          <motion.div initial={reduce ? undefined : { opacity: 0, y: 16 }} whileInView={reduce ? undefined : { opacity: 1, y: 0 }} viewport={{ once: true }} transition={reduce ? undefined : { duration: 0.55 }} className="rounded-[24px] border border-white/10 bg-black/30 p-4">
             <div className="text-sm text-gray-400 mb-2">{dict?.sectionGet ?? "Das bekommst du"}</div>
             <div className="rounded-2xl overflow-hidden relative" style={{ aspectRatio: "16/9" }}>
               <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-transparent to-emerald-500/10" aria-hidden />
@@ -287,22 +305,26 @@ export default function VorstellungClient({ dict }: { dict?: any }) {
                 maskImage: "radial-gradient(70% 70% at 50% 50%, black, transparent)",
               }} aria-hidden />
               <Suspense fallback={null}>
-                <HeroPreview />
+                <ErrorBoundary fallback={<div className="absolute inset-0" aria-hidden /> }>
+                  <HeroPreview />
+                </ErrorBoundary>
               </Suspense>
             </div>
           </motion.div>
 
           {/* Feature Live Previews */}
-          <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.55 }}>
-            <FeatureShowcase prefix={prefix} />
+          <motion.div initial={reduce ? undefined : { opacity: 0, y: 16 }} whileInView={reduce ? undefined : { opacity: 1, y: 0 }} viewport={{ once: true }} transition={reduce ? undefined : { duration: 0.55 }}>
+            <ErrorBoundary fallback={<div className="h-96 bg-white/5 rounded-2xl border border-white/10" /> }>
+              <FeatureShowcase prefix={prefix} />
+            </ErrorBoundary>
           </motion.div>
 
           {/* Timeline */}
-          <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.55 }} className="rounded-2xl border border-white/10 bg-black/30 p-6" style={{ contentVisibility: "auto", containIntrinsicSize: "520px" }}>
+          <motion.div initial={reduce ? undefined : { opacity: 0, y: 16 }} whileInView={reduce ? undefined : { opacity: 1, y: 0 }} viewport={{ once: true }} transition={reduce ? undefined : { duration: 0.55 }} className="rounded-2xl border border-white/10 bg-black/30 p-6" style={{ contentVisibility: "auto", containIntrinsicSize: "520px" }}>
             <div className="text-sm font-bold text-white mb-3">{dict?.timelineTitle ?? "ClawVerse Timeline"}</div>
             <ol className="relative border-l border-white/10 pl-6 space-y-5">
               {timelineItems.map((x, i) => (
-                <motion.li key={i} initial={{ opacity: 0, x: -6 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.45, delay: i * 0.05 }} className="ml-2">
+                <motion.li key={i} initial={reduce ? undefined : { opacity: 0, x: -6 }} whileInView={reduce ? undefined : { opacity: 1, x: 0 }} viewport={{ once: true }} transition={reduce ? undefined : { duration: 0.45, delay: i * 0.05 }} className="ml-2">
                   <div className="absolute -left-1.5 w-3 h-3 rounded-full" style={{ background: i === 0 ? "#00b8ff" : i === 1 ? "#d4af37" : "#00ff9d" }} />
                   <div className="text-xs text-gray-400">{x.y}</div>
                   <div className="text-sm font-semibold text-white">{x.t}</div>
@@ -313,23 +335,25 @@ export default function VorstellungClient({ dict }: { dict?: any }) {
           </motion.div>
 
           {/* Copilot live demo teaser */}
-          <motion.div initial={{ opacity: 0, y: 14 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.55 }} className="rounded-2xl border border-white/10 bg-black/30 p-4" style={{ contentVisibility: "auto", containIntrinsicSize: "220px" }}>
+          <motion.div initial={reduce ? undefined : { opacity: 0, y: 14 }} whileInView={reduce ? undefined : { opacity: 1, y: 0 }} viewport={{ once: true }} transition={reduce ? undefined : { duration: 0.55 }} className="rounded-2xl border border-white/10 bg-black/30 p-4" style={{ contentVisibility: "auto", containIntrinsicSize: "220px" }}>
             <Suspense fallback={<div className="text-xs text-gray-400">{dict?.copilotInit ?? "Initialisiere Copilot…"}</div>}>
-              <CopilotTeaser />
+              <ErrorBoundary fallback={<div className="rounded-2xl border border-white/10 bg-black/30 p-4 text-sm text-gray-400">{dict?.copilotFallback ?? "Copilot nicht verfügbar"}</div>}>
+                <CopilotTeaser />
+              </ErrorBoundary>
             </Suspense>
           </motion.div>
 
           {/* Trusted logos + stats */}
-          <motion.div initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.55 }} className="rounded-2xl border border-white/10 bg-black/30 p-6" style={{ contentVisibility: "auto", containIntrinsicSize: "480px" }}>
+          <motion.div initial={reduce ? undefined : { opacity: 0, y: 12 }} whileInView={reduce ? undefined : { opacity: 1, y: 0 }} viewport={{ once: true }} transition={reduce ? undefined : { duration: 0.55 }} className="rounded-2xl border border-white/10 bg-black/30 p-6" style={{ contentVisibility: "auto", containIntrinsicSize: "480px" }}>
             <div className="text-xs font-mono tracking-[0.3em] uppercase text-gray-400">{dict?.trustedBy ?? "Trusted by SecOps Leaders"}</div>
             <div className="mt-3 grid grid-cols-2 md:grid-cols-4 gap-3">
               {trustedLogos.map((n, i) => (
-                <motion.div key={n} initial={{ opacity: 0, y: 6 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: i * 0.03 }} className="rounded-xl border border-white/10 bg-black/50 p-3 text-center text-sm text-gray-300">{n}</motion.div>
+                <motion.div key={n} initial={reduce ? undefined : { opacity: 0, y: 6 }} whileInView={reduce ? undefined : { opacity: 1, y: 0 }} viewport={{ once: true }} transition={reduce ? undefined : { duration: 0.4, delay: i * 0.03 }} className="rounded-xl border border-white/10 bg-black/50 p-3 text-center text-sm text-gray-300">{n}</motion.div>
               ))}
             </div>
             <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-3">
               {stats.map((s, i) => (
-                <motion.div key={s.l} initial={{ opacity: 0, y: 6 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: i * 0.03 }} className="rounded-xl border border-white/10 bg-black/50 p-3 text-center">
+                <motion.div key={s.l} initial={reduce ? undefined : { opacity: 0, y: 6 }} whileInView={reduce ? undefined : { opacity: 1, y: 0 }} viewport={{ once: true }} transition={reduce ? undefined : { duration: 0.4, delay: i * 0.03 }} className="rounded-xl border border-white/10 bg-black/50 p-3 text-center">
                   <div className="text-xl font-black text-white">{s.v}</div>
                   <div className="text-[10px] uppercase tracking-wider text-gray-400">{s.l}</div>
                 </motion.div>

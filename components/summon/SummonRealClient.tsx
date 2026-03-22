@@ -29,10 +29,18 @@ export default function SummonRealClient({ dict, prefix = "" }: { dict?: Dict; p
   const [res, setRes] = useState<SummonResult | null>(null)
   const [progress, setProgress] = useState(0)
   const mounted = useRef(true)
+  const recRef = useRef<any | null>(null)
+  const [listening, setListening] = useState(false)
 
   useEffect(() => {
     return () => {
       mounted.current = false
+      try {
+        if (recRef.current) {
+          recRef.current.stop()
+          recRef.current = null
+        }
+      } catch {}
     }
   }, [])
 
@@ -44,6 +52,53 @@ export default function SummonRealClient({ dict, prefix = "" }: { dict?: Dict; p
 
   function onPrefillClick(s: string) {
     setQ(s)
+  }
+
+  function toggleVoice() {
+    try {
+      const SR = (typeof window !== 'undefined' && ((window as any).SpeechRecognition || (window as any).webkitSpeechRecognition)) || null
+      if (!SR) {
+        setErr(t?.voice_unsupported || "Spracherkennung wird von deinem Browser nicht unterstützt.")
+        return
+      }
+      if (recRef.current) {
+        try { recRef.current.stop() } catch {}
+        recRef.current = null
+        setListening(false)
+        return
+      }
+      const rec = new SR()
+      rec.lang = t?.voice_lang || "de-DE"
+      rec.interimResults = true
+      rec.continuous = false
+      let finalText = ""
+      rec.onresult = (e: any) => {
+        let interim = ""
+        for (let i = e.resultIndex; i < e.results.length; i++) {
+          const tr = e.results[i][0]?.transcript || ""
+          if (e.results[i].isFinal) finalText += tr + " "
+          else interim += tr
+        }
+        const combined = (finalText + interim).trim()
+        if (mounted.current) setQ(combined)
+      }
+      rec.onend = () => {
+        recRef.current = null
+        if (mounted.current) setListening(false)
+      }
+      rec.onerror = (ev: any) => {
+        if (mounted.current) setErr(ev?.error || t?.voice_error || "Voice-Fehler")
+        recRef.current = null
+        if (mounted.current) setListening(false)
+      }
+      recRef.current = rec
+      setListening(true)
+      rec.start()
+    } catch (e: any) {
+      if (mounted.current) setErr(e?.message || t?.voice_error || "Voice-Fehler")
+      recRef.current = null
+      if (mounted.current) setListening(false)
+    }
   }
 
   async function startSummon() {
@@ -119,9 +174,12 @@ export default function SummonRealClient({ dict, prefix = "" }: { dict?: Dict; p
           />
           <div className="absolute bottom-1 right-2 text-[11px] text-gray-400">{q.length}/1200</div>
           <button
-            aria-label={t?.voice_label || "Voice"}
-            title={t?.voice_label || "Voice"}
-            className="absolute top-1.5 right-2 h-8 w-8 grid place-items-center rounded-md border border-white/10 bg-white/5 text-gray-300 hover:bg-white/10"
+            onClick={toggleVoice}
+            aria-label={listening ? (t?.voice_stop_label || "Stop Voice") : (t?.voice_label || "Voice")}
+            title={listening ? (t?.voice_stop_label || "Stop Voice") : (t?.voice_label || "Voice")}
+            className={`absolute top-1.5 right-2 h-8 w-8 grid place-items-center rounded-md border ${
+              listening ? 'border-red-400/50 bg-red-500/10 text-red-200' : 'border-white/10 bg-white/5 text-gray-300 hover:bg-white/10'
+            }`}
           >
             <MicIcon />
           </button>
@@ -436,7 +494,7 @@ function MicIcon() {
   )
 }
 
-class ErrorBoundary extends React.Component<{ fallback?: React.ReactNode }, { hasError: boolean }> {
+class ErrorBoundary extends React.Component<{ fallback?: React.ReactNode; children?: React.ReactNode }, { hasError: boolean }> {
   constructor(props: { fallback?: React.ReactNode }) {
     super(props)
     this.state = { hasError: false }

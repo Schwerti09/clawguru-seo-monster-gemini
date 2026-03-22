@@ -70,6 +70,7 @@ export default function SummonRealClient({ dict, prefix = "" }: { dict?: Dict; p
       const rec = new SR()
       rec.lang = t?.voice_lang || "de-DE"
       rec.interimResults = true
+      ;(rec as any).maxAlternatives = 1
       rec.continuous = false
       let finalText = ""
       rec.onresult = (e: any) => {
@@ -82,12 +83,26 @@ export default function SummonRealClient({ dict, prefix = "" }: { dict?: Dict; p
         const combined = (finalText + interim).trim()
         if (mounted.current) setQ(combined)
       }
+      rec.onspeechend = () => {
+        try { rec.stop() } catch {}
+      }
       rec.onend = () => {
         recRef.current = null
         if (mounted.current) setListening(false)
       }
       rec.onerror = (ev: any) => {
-        if (mounted.current) setErr(ev?.error || t?.voice_error || "Voice-Fehler")
+        if (mounted.current) {
+          const code = ev?.error as string | undefined
+          if (code === 'no-speech') {
+            setErr(t?.voice_no_speech || "Kein Sprachsignal erkannt. Bitte näher ans Mikrofon sprechen und erneut versuchen.")
+          } else if (code === 'audio-capture') {
+            setErr(t?.voice_no_mic || "Kein Mikrofon gefunden oder Zugriff verweigert.")
+          } else if (code === 'not-allowed') {
+            setErr(t?.voice_perm_denied || "Mikrofon-Berechtigung verweigert. Bitte im Browser erlauben.")
+          } else {
+            setErr(code || t?.voice_error || "Voice-Fehler")
+          }
+        }
         recRef.current = null
         if (mounted.current) setListening(false)
       }

@@ -72,6 +72,7 @@ export async function GET(req: NextRequest) {
         clawScore: r.clawScore || 0,
         relevance: (r as any).relevance as number,
         summary: r.summary,
+        summonUrl: `/summon?q=${encodeURIComponent(r.title)}`,
       })),
       execution_plan,
       estimated_time,

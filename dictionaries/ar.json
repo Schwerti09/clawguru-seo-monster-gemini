@@ -261,6 +261,7 @@
     "predictive_loading": "جارٍ تحميل التنبؤات…",
     "predictive_more": "المزيد في لوحة Oracle →",
     "predictive_error": "خطأ Oracle",
+    "myceliumPreview_header": "معاينة الميسليوم",
     "stats_header": "الإحصاءات والاتجاهات",
     "stats_loading": "جارٍ تحميل الإحصاءات…",
     "stats_error": "خطأ تحميل الإحصاءات",
@@ -268,7 +269,8 @@
     "tile_with_runbooks": "CVE مع Runbooks",
     "tile_avg_cvss": "متوسط CVSS",
     "tile_top_services": "أفضل الخدمات",
-    "spark_title": "منشورات CVE (14 يوماً)"
+    "spark_title": "منشورات CVE (14 يوماً)",
+    "scope_all": "الكل"
   },
   "oracle": {
     "hero_title": "Oracle – رادار المخاطر التنبئي",

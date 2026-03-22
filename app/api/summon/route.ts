@@ -242,7 +242,12 @@ export async function POST(req: NextRequest) {
       payload = fallbackFromSearch(top, q);
     }
 
-    const resp = NextResponse.json(payload, { status: 200 });
+    const enriched = {
+      ...payload,
+      runbookUrl: `/runbook/${encodeURIComponent(payload.slug)}`,
+      summonUrl: `/summon?q=${encodeURIComponent(payload.title)}`,
+    };
+    const resp = NextResponse.json(enriched, { status: 200 });
     resp.headers.set("Cache-Control", "no-store");
     resp.headers.set("X-RateLimit-Remaining", String(Math.max(0, burst.remaining)));
     return resp;
@@ -295,6 +300,8 @@ export async function GET(req: NextRequest) {
         clawScore: r.clawScore ?? 0,
         summary: r.summary,
         tags: r.tags || [],
+        runbookUrl: `/runbook/${encodeURIComponent(r.slug)}`,
+        summonUrl: `/summon?q=${encodeURIComponent(r.title)}`,
       })),
       affected_services,
       confidence: avg,

@@ -41,6 +41,7 @@ interface OracleResult {
   radar: RadarPoint[]
   cves: CVEItem[]
   updatedAt: string
+  suggestedStacks?: string[]
 }
 
 class ErrorBoundary extends React.Component<{ fallback?: React.ReactNode; children?: React.ReactNode }, { hasError: boolean }> {
@@ -223,14 +224,22 @@ export default function OraclePage({ params, dict }: { params: { lang: string };
     setBusy(true)
     setError(null)
     try {
-      const r = await fetch("/api/oracle", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ scope: scopes }),
-      })
+      const url = new URL(window.location.href)
+      const cve = (url.searchParams.get("cve") || "").toUpperCase()
+      const sp = new URLSearchParams()
+      if (cve) sp.set("cve", cve)
+      if (!cve && scopes.length) sp.set("scope", scopes.join(","))
+      const r = await fetch(`/api/oracle?${sp.toString()}`, { cache: "no-store" })
       if (!r.ok) throw new Error(String(r.status))
-      const j = (await r.json()) as OracleResult
-      setData(j)
+      const j = (await r.json()) as any
+      const mapped: OracleResult = {
+        scope: Array.isArray(j.scope) ? j.scope : [],
+        predictiveScore: Number(j.predictiveScore) || 0,
+        radar: Array.isArray(j.radar) ? j.radar : [],
+        cves: Array.isArray(j.cves) ? j.cves : [],
+        updatedAt: j.updatedAt || new Date().toISOString(),
+      }
+      setData(mapped)
     } catch (e) {
       setError(t.fetch_error)
     } finally {
@@ -239,6 +248,14 @@ export default function OraclePage({ params, dict }: { params: { lang: string };
   }
 
   useEffect(() => {
+    // Prefill from URL cve/scope on first mount
+    const url = new URL(window.location.href)
+    const cve = url.searchParams.get("cve")
+    const scopeQ = url.searchParams.get("scope")
+    if (scopeQ && !cve) {
+      const next = Array.from(new Set(scopeQ.split(/[\s,;|]+/).map((s) => s.trim()).filter(Boolean)))
+      if (next.length) setScopes(next.slice(0, 8))
+    }
     fetchOracle()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -310,6 +327,14 @@ export default function OraclePage({ params, dict }: { params: { lang: string };
         <section className="rounded-2xl border border-white/10 bg-black/40 p-4 sm:p-5">
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-white font-semibold">{t.risk_radar}</h2>
+            {data?.suggestedStacks?.length ? (
+              <a
+                href={`${prefix}/neuro?stack=${encodeURIComponent(data.suggestedStacks.join(","))}`}
+                className="px-3 py-1.5 rounded-lg text-xs font-bold border border-emerald-500/40 bg-emerald-500/15 text-emerald-100 hover:shadow-[0_0_20px_rgba(0,255,157,0.35)]"
+              >
+                In Neuro analysieren
+              </a>
+            ) : null}
           </div>
           <ErrorBoundary fallback={<Shimmer className="h-64" />}>
             <Suspense fallback={<Shimmer className="h-64" />}>

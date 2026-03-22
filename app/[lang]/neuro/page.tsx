@@ -97,7 +97,7 @@ const ScoreRing = dynamic(() => Promise.resolve(function ScoreRingImpl({ score, 
   )
 }), { ssr: false })
 
-export default function NeuroPage({ dict }: { dict?: DictShape }) {
+export default function NeuroPage({ params, dict }: { params: { lang: string }; dict?: DictShape }) {
   const t: NeuroDict = useMemo(() => ({
     title: dict?.neuro?.title ?? "Neuro – Personal Intelligence",
     subtitle: dict?.neuro?.subtitle ?? "Dein Stack. Deine Ziele. Dein persönlicher Ausführungsplan.",
@@ -192,7 +192,15 @@ export default function NeuroPage({ dict }: { dict?: DictShape }) {
   }
 
   useEffect(() => {
-    runNeuro()
+    const url = new URL(window.location.href)
+    const stackQ = url.searchParams.get("stack")
+    if (stackQ) {
+      const next = Array.from(new Set(stackQ.split(/[\s,;|]+/).map((s) => s.trim().toLowerCase()).filter(Boolean))).slice(0, 8)
+      if (next.length) setChosen(next)
+      setTimeout(() => runNeuro(), 0)
+    } else {
+      runNeuro()
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -309,12 +317,20 @@ export default function NeuroPage({ dict }: { dict?: DictShape }) {
                         ClawScore {r.score}
                       </div>
                     </div>
-                    <a
-                      href={`/runbook/${encodeURIComponent(r.slug)}`}
-                      className="shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold border border-cyan-500/40 bg-cyan-500/15 text-cyan-100 hover:shadow-[0_0_20px_rgba(0,184,255,0.35)]"
-                    >
-                      Runbook
-                    </a>
+                    <div className="flex gap-2 shrink-0">
+                      <a
+                        href={`/runbook/${encodeURIComponent(r.slug)}`}
+                        className="px-3 py-1.5 rounded-lg text-xs font-bold border border-cyan-500/40 bg-cyan-500/15 text-cyan-100 hover:shadow-[0_0_20px_rgba(0,184,255,0.35)]"
+                      >
+                        Runbook
+                      </a>
+                      <a
+                        href={`${prefix}/summon?q=${encodeURIComponent(r.title)}`}
+                        className="px-3 py-1.5 rounded-lg text-xs font-bold border border-emerald-500/40 bg-emerald-500/15 text-emerald-100 hover:shadow-[0_0_20px_rgba(0,255,157,0.35)]"
+                      >
+                        In Summon starten
+                      </a>
+                    </div>
                   </div>
                 </li>
               ))}

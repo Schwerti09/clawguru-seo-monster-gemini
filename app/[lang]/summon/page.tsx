@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import dynamic from "next/dynamic"
 
 import { SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
-import { getDictionary } from "@/lib/dictionary"
+import { getDictionary } from "@/lib/getDictionary"
 import SummonHero from "@/components/summon/SummonHero"
 import HowItWorks from "@/components/summon/HowItWorks"
 import UpgradeCTA from "@/components/shared/UpgradeCTA"

@@ -361,6 +361,7 @@
     "predictive_loading": "Lade Prognosen…",
     "predictive_more": "Mehr im Oracle‑Dashboard →",
     "predictive_error": "Oracle‑Fehler",
+    "myceliumPreview_header": "Mycelium‑Vorschau",
 
     "stats_header": "Statistiken & Trends",
     "stats_loading": "Lade Statistiken…",
@@ -369,7 +370,8 @@
     "tile_with_runbooks": "CVEs mit Runbooks",
     "tile_avg_cvss": "Ø CVSS",
     "tile_top_services": "Top Services",
-    "spark_title": "CVE‑Veröffentlichungen (14 Tage)"
+    "spark_title": "CVE‑Veröffentlichungen (14 Tage)",
+    "scope_all": "Alle"
   },
   "vorstellung": {
     "badge": "Quantum‑Resistant",

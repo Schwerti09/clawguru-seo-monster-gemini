@@ -2,7 +2,14 @@
 
 import React from "react"
 
-export default function IntelHero({ dict }: { dict?: any }) {
+type IntelHeroDict = {
+  hero_badge?: string
+  hero_title?: string
+  hero_subline?: string
+  cta_daypass?: string
+}
+
+export default function IntelHero({ dict }: { dict?: IntelHeroDict }) {
   return (
     <section className="relative overflow-hidden pt-16 pb-10 text-center px-4">
       <div className="pointer-events-none absolute inset-0" aria-hidden="true"

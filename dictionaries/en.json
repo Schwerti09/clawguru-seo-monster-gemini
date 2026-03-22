@@ -261,6 +261,7 @@
     "predictive_loading": "Loading predictions...",
     "predictive_more": "More in the Oracle dashboard ->",
     "predictive_error": "Oracle error",
+    "myceliumPreview_header": "Mycelium Preview",
     "stats_header": "Statistics & Trends",
     "stats_loading": "Loading statistics...",
     "stats_error": "Stats load error",
@@ -268,7 +269,8 @@
     "tile_with_runbooks": "CVEs with Runbooks",
     "tile_avg_cvss": "Avg CVSS",
     "tile_top_services": "Top Services",
-    "spark_title": "CVE publications (14 days)"
+    "spark_title": "CVE publications (14 days)",
+    "scope_all": "All"
   },
   "oracle": {
     "hero_title": "Oracle - Your predictive risk radar",

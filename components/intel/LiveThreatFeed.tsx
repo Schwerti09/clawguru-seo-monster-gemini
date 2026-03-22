@@ -1,159 +1,122 @@
 "use client"
 
 import React, { useEffect, useMemo, useState } from "react"
+import { motion, useReducedMotion } from "framer-motion"
 
-type CveEntry = {
+type Severity = "CRITICAL" | "HIGH" | "MEDIUM" | "LOW"
+type Source = "NVD" | "EXPLOIT_DB" | "CLAWGURU"
+type FeedItem = {
   id: string
   title: string
-  description: string
-  score: number
-  severity: string
+  severity: Severity
+  source: Source
   published: string
+  clawScore: number
+  runbook?: { slug: string; title: string; clawScore: number }
 }
 
-type Tier = "free" | "daypass" | "pro" | "enterprise"
+type IntelDict = {
+  live_header?: string
+  live_loading?: string
+  live_error?: string
+  scope_all?: string
+}
 
-export default function LiveThreatFeed(props: { prefix?: string; dict?: any }) {
-  const { prefix = "", dict } = props
-  const [entries, setEntries] = useState<CveEntry[]>([])
-  const [tier, setTier] = useState<Tier>("free")
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [busyExport, setBusyExport] = useState(false)
+export default function LiveThreatFeed({ prefix = "", dict = {} as IntelDict }: { prefix?: string; dict?: IntelDict }) {
+  const reduce = useReducedMotion()
+  const [severity, setSeverity] = useState<"" | Severity>("")
+  const [source, setSource] = useState<"" | Source>("")
+  const [items, setItems] = useState<FeedItem[] | null>(null)
+  const [err, setErr] = useState<string | null>(null)
+  const nf = useMemo(() => new Intl.NumberFormat(typeof navigator !== "undefined" ? navigator.language : "en-US"), [])
 
-  useEffect(() => {
-    let stop = false
-    async function load() {
-      setLoading(true)
-      try {
-        const [feedRes, tierRes] = await Promise.all([
-          fetch('/api/intel/cves?limit=50&offset=0', { cache: 'no-store' }),
-          fetch('/api/auth/tier', { cache: 'no-store' }).catch(() => null as any),
-        ])
-        if (!feedRes.ok) throw new Error(`HTTP ${feedRes.status}`)
-        const feed = await feedRes.json()
-        const list: CveEntry[] = Array.isArray(feed?.items) ? feed.items : []
-        list.sort((a, b) => (b.published || '').localeCompare(a.published || ''))
-        if (!stop) setEntries(list)
-        if (tierRes && tierRes.ok) {
-          const j = await tierRes.json().catch(() => null)
-          const t = (j?.tier as string) || "free"
-          if (!stop) setTier(t === 'daypass' || t === 'pro' || t === 'enterprise' ? (t as Tier) : 'free')
-        } else if (!stop) {
-          setTier('free')
-        }
-      } catch (e: any) {
-        if (!stop) setError(e?.message || dict?.live_error || 'Feed-Ladefehler')
-      } finally {
-        if (!stop) setLoading(false)
-      }
+  async function load() {
+    setErr(null)
+    setItems(null)
+    const u = new URL("/api/intel", window.location.origin)
+    u.searchParams.set("op", "feed")
+    if (severity) u.searchParams.set("severity", severity)
+    if (source) u.searchParams.set("source", source)
+    try {
+      const r = await fetch(u.toString(), { cache: "no-store" })
+      if (!r.ok) throw new Error(String(r.status))
+      const j = (await r.json()) as { items: FeedItem[] }
+      setItems(j.items)
+    } catch (e: any) {
+      setErr(e?.message || "Load error")
     }
-    load()
-    return () => { stop = true }
-  }, [])
-
-  const visible = useMemo(() => {
-    const max = tier === 'free' ? 5 : 50
-    return entries.slice(0, max)
-  }, [entries, tier])
-
-  function sevColor(sev: string) {
-    const s = (sev || '').toLowerCase()
-    if (s.includes('critical')) return 'text-red-400'
-    if (s.includes('high')) return 'text-orange-400'
-    if (s.includes('medium')) return 'text-yellow-300'
-    if (s.includes('low')) return 'text-green-400'
-    return 'text-gray-400'
   }
 
-  if (loading) return <div className="rounded-2xl border border-white/10 bg-black/40 p-4 text-gray-400">{dict?.live_loading || 'Lade CVE‑Feed…'}</div>
-  if (error) return <div className="rounded-2xl border border-white/10 bg-black/40 p-4 text-red-400">{error}</div>
+  useEffect(() => {
+    load()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [severity, source])
+
+  const header = dict.live_header || "Live Threat Feed"
+  const loading = dict.live_loading || "Loading…"
+  const errorText = dict.live_error || "Feed load error"
 
   return (
-    <div className="rounded-2xl border border-white/10 bg-black/40 overflow-hidden">
-      <div className="p-3 flex items-center justify-between">
-        <div className="text-sm text-cyan-300">{dict?.live_header || 'Live Threat Feed'}</div>
-        {tier !== 'free' ? (
-          <div className="flex items-center gap-2">
-            <button disabled={busyExport} onClick={() => exportCsv(entries, setBusyExport)} className="text-xs px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/15 text-gray-200">{dict?.export_csv || 'Export CSV'}</button>
-            <button disabled={busyExport} onClick={() => exportJson(entries, setBusyExport)} className="text-xs px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/15 text-gray-200">{dict?.export_json || 'Export JSON'}</button>
-            <button disabled={busyExport} onClick={() => exportPdfLike(entries, setBusyExport)} className="text-xs px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/15 text-gray-200">{dict?.export_pdf || 'PDF (Drucken)'}</button>
-          </div>
-        ) : null}
-      </div>
-      <div className="divide-y divide-white/5">
-        {visible.map((e) => (
-        <div key={e.id} className="p-4 hover:bg-white/5 transition-colors group">
-          <div className="flex items-center justify-between gap-3">
-            <div className="text-sm font-mono text-gray-400">{e.id}</div>
-            <div className={`text-xs font-bold ${sevColor(e.severity)}`}>{e.severity?.toUpperCase()} · {e.score?.toFixed?.(1)}</div>
-          </div>
-          <div className="mt-1 text-white font-semibold">{e.title}</div>
-          <div className="mt-1 text-sm text-gray-400 line-clamp-2">{e.description}</div>
-          <div className="mt-2 text-xs text-gray-500 flex items-center justify-between">
-            <span>{new Date(e.published).toISOString().slice(0,10)}</span>
-            <a href={`${prefix || ''}/solutions/fix-${encodeURIComponent(e.id)}`} className="opacity-0 group-hover:opacity-100 underline text-cyan-300 transition-opacity">{dict?.fix_link_label || 'Fix‑Runbook öffnen'}</a>
-          </div>
+    <div className="rounded-2xl border border-white/10 bg-black/40 backdrop-blur-md p-4">
+      <div className="flex items-center justify-between gap-3">
+        <div className="text-sm font-semibold text-white">{header}</div>
+        <div className="flex items-center gap-2">
+          <select
+            aria-label="Severity"
+            value={severity}
+            onChange={(e) => setSeverity(e.target.value as any)}
+            className="text-xs bg-black/60 text-gray-200 border border-white/10 rounded-md px-2 py-1 focus:outline-none"
+          >
+            <option value="">{dict.scope_all || "All"}</option>
+            <option value="CRITICAL">Critical</option>
+            <option value="HIGH">High</option>
+            <option value="MEDIUM">Medium</option>
+            <option value="LOW">Low</option>
+          </select>
+          <select
+            aria-label="Source"
+            value={source}
+            onChange={(e) => setSource(e.target.value as any)}
+            className="text-xs bg-black/60 text-gray-200 border border-white/10 rounded-md px-2 py-1 focus:outline-none"
+          >
+            <option value="">{dict.scope_all || "All"}</option>
+            <option value="NVD">NVD</option>
+            <option value="EXPLOIT_DB">Exploit-DB</option>
+            <option value="CLAWGURU">ClawGuru</option>
+          </select>
         </div>
-      ))}
       </div>
-      {tier === 'free' && entries.length > visible.length && (
-        <div className="p-4 text-sm text-gray-400 flex items-center justify-between">
-          <span>{dict?.free_teaser_text || 'Nur die letzten 5 CVEs sichtbar. Mit Daypass siehst du den kompletten Feed und kannst exportieren.'}</span>
-          <a href={`${prefix || ''}/daypass`} className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-cyan-500 to-cyan-700 text-white text-xs font-semibold">{dict?.free_teaser_button || 'Daypass kaufen'}</a>
+
+      {!items && !err && (
+        <div className="mt-3 h-10 rounded-md bg-white/5 animate-pulse grid place-items-center text-[11px] text-gray-300">{loading}</div>
+      )}
+      {err && <div className="mt-3 text-xs text-red-300">{errorText}: {err}</div>}
+
+      {items && (
+        <div className="relative overflow-hidden mt-3">
+          <div className={`flex gap-6 whitespace-nowrap ${reduce ? "" : "animate-[ticker_30s_linear_infinite]"}`} style={{ willChange: reduce ? undefined : "transform" }}>
+            {[...items, ...items].map((it, idx) => (
+              <motion.a
+                key={`${it.id}-${idx}`}
+                href={`${prefix}/runbook/${it.runbook?.slug ?? ""}`.replace(/\/\//g, "/")}
+                className="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10"
+                whileHover={reduce ? undefined : { scale: 1.025, y: -2 }}
+              >
+                <span className={`text-[10px] px-2 py-[2px] rounded-full border ${
+                  it.severity === "CRITICAL" ? "border-red-500/40 text-red-300" :
+                  it.severity === "HIGH" ? "border-orange-500/40 text-orange-300" :
+                  it.severity === "MEDIUM" ? "border-yellow-500/40 text-yellow-200" : "border-green-500/40 text-green-300"
+                }`}>{it.id}</span>
+                <span className="text-xs text-gray-200">{it.title}</span>
+                <span className="text-[10px] text-cyan-200 ml-1">ClawScore {nf.format(it.clawScore)}</span>
+              </motion.a>
+            ))}
+          </div>
+          <style>{`
+            @keyframes ticker { 0% { transform: translateX(0%); } 100% { transform: translateX(-50%); } }
+          `}</style>
         </div>
       )}
     </div>
   )
-}
-
-function exportCsv(entries: CveEntry[], setBusy: (b: boolean) => void) {
-  setBusy(true)
-  try {
-    const header = ["id","title","description","score","severity","published"].join(",")
-    const rows = entries.map(e => [e.id, q(e.title), q(e.description), String(e.score ?? ""), String(e.severity ?? ""), String(e.published ?? "")].join(","))
-    const csv = [header, ...rows].join("\n")
-    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = `cve-feed-${new Date().toISOString().slice(0,10)}.csv`
-    a.click()
-    URL.revokeObjectURL(url)
-  } finally { setBusy(false) }
-}
-
-function exportJson(entries: CveEntry[], setBusy: (b: boolean) => void) {
-  setBusy(true)
-  try {
-    const blob = new Blob([JSON.stringify({ exportedAt: new Date().toISOString(), entries }, null, 2)], { type: "application/json" })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = `cve-feed-${new Date().toISOString().slice(0,10)}.json`
-    a.click()
-    URL.revokeObjectURL(url)
-  } finally { setBusy(false) }
-}
-
-function exportPdfLike(entries: CveEntry[], setBusy: (b: boolean) => void) {
-  setBusy(true)
-  try {
-    const w = window.open('', '_blank', 'noopener,noreferrer,width=900,height=700')
-    if (!w) return
-    const rows = entries.map(e => `<tr><td style="font-family:monospace;padding:6px 8px;border-bottom:1px solid #ddd">${e.id}</td><td style="padding:6px 8px;border-bottom:1px solid #ddd">${escapeHtml(e.title)}</td><td style="padding:6px 8px;border-bottom:1px solid #ddd">${escapeHtml(e.severity?.toUpperCase() || '')} · ${e.score?.toFixed?.(1) || ''}</td><td style="padding:6px 8px;border-bottom:1px solid #ddd">${new Date(e.published).toISOString().slice(0,10)}</td></tr>`).join('')
-    const html = `<!doctype html><html><head><meta charset="utf-8"><title>CVE Export</title></head><body><h1 style="font-family:system-ui">CVE Feed Export</h1><table style="width:100%;border-collapse:collapse">${rows}</table><script>setTimeout(()=>window.print(),200)</script></body></html>`
-    w.document.write(html)
-    w.document.close()
-  } finally { setBusy(false) }
-}
-
-function q(s?: string) {
-  const v = (s || '').replace(/"/g, '""')
-  return `"${v}"`
-}
-
-function escapeHtml(s?: string) {
-  const t = (s || '')
-  return t.replace(/[&<>\"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'} as any)[c] || c)
 }

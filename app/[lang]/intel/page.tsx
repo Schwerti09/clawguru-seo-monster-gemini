@@ -1,13 +1,22 @@
 import type { Metadata } from "next"
+import dynamic from "next/dynamic"
 import { SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
-import { getDictionary } from "@/lib/dictionary"
+import { getDictionary } from "@/lib/getDictionary"
 import IntelHero from "@/components/intel/IntelHero"
 import LiveThreatFeed from "@/components/intel/LiveThreatFeed"
 import CveAnalyzer from "@/components/intel/CveAnalyzer"
-import PredictiveRadar from "@/components/intel/PredictiveRadar"
-import MyceliumPreview from "@/components/intel/MyceliumPreview"
 import StatsDashboard from "@/components/intel/StatsDashboard"
 import UpgradeCTA from "@/components/shared/UpgradeCTA"
+
+const PredictiveRadar = dynamic(() => import("@/components/intel/PredictiveRadar"), {
+  ssr: false,
+  loading: () => <div className="h-72 rounded-2xl border border-white/10 bg-white/5 animate-pulse" />,
+})
+
+const MyceliumPreview = dynamic(() => import("@/components/intel/MyceliumPreview"), {
+  ssr: false,
+  loading: () => <div className="h-72 rounded-2xl border border-white/10 bg-white/5 animate-pulse" />,
+})
 
 export const revalidate = 300
 
@@ -37,7 +46,7 @@ export default async function LocaleIntelPage(props: { params: { lang: string } 
         </div>
         <div className="grid md:grid-cols-2 gap-8">
           <PredictiveRadar prefix={prefix} dict={intel} />
-          <MyceliumPreview ui="embed" />
+          <MyceliumPreview prefix={prefix} dict={intel} />
         </div>
         <StatsDashboard dict={intel} />
       </section>

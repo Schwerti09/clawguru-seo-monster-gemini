@@ -28,10 +28,11 @@ type OracleRequestBody = {
 export async function GET(req: NextRequest) {
   try {
     const url = new URL(req.url)
-    const scope = (url.searchParams.get("scope") || "").toLowerCase().trim()
+    const scopeParam = (url.searchParams.get("scope") || "").toLowerCase().trim()
+    const scopes = Array.from(new Set(scopeParam.split(/[\s,;|]+/).map((s) => s.trim()).filter(Boolean)))
+    const cveId = (url.searchParams.get("cve") || "").toUpperCase().trim()
     const days = Math.max(1, parseInt(url.searchParams.get("days") || "7", 10) || 7)
 
-    // Build derived services list from CVE entry
     function servicesOf(entry: typeof KNOWN_CVES[number]): string[] {
       const base: string[] = []
       if (entry.affectedSoftware) base.push(entry.affectedSoftware.toLowerCase())
@@ -39,46 +40,69 @@ export async function GET(req: NextRequest) {
       return Array.from(new Set(base.filter(Boolean)))
     }
 
-    // Filter by scope (in services or title/name)
-    const pool = KNOWN_CVES.filter((c) => {
-      if (!scope) return true
-      const s = servicesOf(c)
-      return s.includes(scope) || c.name.toLowerCase().includes(scope) || c.affectedSoftware.toLowerCase().includes(scope)
-    })
+    let pool = KNOWN_CVES.slice()
+    if (cveId) {
+      pool = pool.filter((c) => c.cveId.toUpperCase() === cveId)
+    } else if (scopes.length) {
+      pool = pool.filter((c) => {
+        const s = servicesOf(c)
+        const nm = `${c.name} ${c.affectedSoftware}`.toLowerCase()
+        return scopes.some((sc) => s.includes(sc) || nm.includes(sc))
+      })
+    }
 
-    // Choose up to 5 relevant by severity/cvss
     const sevRank: Record<string, number> = { critical: 3, high: 2, medium: 1, low: 0 }
     const top = pool
       .slice()
       .sort((a, b) => (sevRank[b.severity] - sevRank[a.severity]) || (b.cvssScore - a.cvssScore))
-      .slice(0, 5)
+      .slice(0, Math.min(8, cveId ? 1 : 5))
 
     await ensureReadyWithin(1200)
 
-    const critical_risk = await Promise.all(top.map(async (cve) => {
-      const services = servicesOf(cve)
-      const q = services.length ? services.join(" ") : cve.name
-      const r = searchRunbooks(q, [], 1, 1)
-      const best = r.items?.[0]
-      const recommended_runbook = best ? { slug: best.slug, title: best.title, clawScore: best.clawScore ?? 0 } : null
-      const probability = Math.round(50 + Math.random() * 30)
-      return {
-        cve_id: cve.cveId,
-        title: cve.name,
-        probability,
-        recommended_runbook,
-        services,
-      }
-    }))
+    // Map to page's expected shape
+    const cves = await Promise.all(
+      top.map(async (cve) => {
+        const services = servicesOf(cve)
+        const q = services.length ? services.join(" ") : cve.name
+        const r = searchRunbooks(q, [], 1, 1)
+        const best = r.items?.[0]
+        const runbookSlug = best?.slug || ""
+        const clawScore = best?.clawScore ?? 0
+        const severity = (cve.severity || "").toUpperCase()
+        const sev = severity === "CRITICAL" || severity === "HIGH" || severity === "MEDIUM" ? (severity as "CRITICAL" | "HIGH" | "MEDIUM") : "LOW"
+        return {
+          id: cve.cveId,
+          title: cve.name,
+          severity: sev,
+          clawScore,
+          runbookSlug,
+        }
+      })
+    )
 
-    const now = new Date()
-    now.setDate(now.getDate() + Math.max(2, Math.min(14, Math.ceil(days / 2))))
-    const timeline = now.toISOString().slice(0, 10)
+    // Simple radial points for radar visualization
+    const radar = cves.map((it, i) => ({ label: it.title, risk: Math.min(98, 55 + (i * 9) % 40) }))
+    const predictiveScore = Math.round(radar.reduce((s, p) => s + p.risk, 0) / Math.max(1, radar.length))
 
-    const summary = `Predicted ${critical_risk.length} critical risks${scope ? ` for scope ${scope}` : ""} within next ${days} days.`
+    const wordTags = new Set<string>()
+    for (const it of cves) {
+      const base = `${it.title}`.toLowerCase().split(/[^a-z0-9+.-]+/).filter((w) => w.length >= 3 && w.length <= 18)
+      for (const w of base) wordTags.add(w)
+    }
+    const suggestedStacks = Array.from(wordTags).slice(0, 8)
 
-    const res = NextResponse.json({ critical_risk, timeline, summary })
-    res.headers.set("Cache-Control", "public, s-maxage=3600, stale-while-revalidate=60")
+    const payload = {
+      scope: scopes,
+      predictiveScore,
+      radar,
+      cves,
+      suggestedStacks,
+      updatedAt: new Date().toISOString(),
+      timeline: new Date(Date.now() + Math.max(2, Math.min(14, Math.ceil(days / 2))) * 86400000).toISOString().slice(0, 10),
+    }
+
+    const res = NextResponse.json(payload)
+    res.headers.set("Cache-Control", "public, s-maxage=900, stale-while-revalidate=60")
     return res
   } catch (err) {
     console.error("[/api/oracle] GET error", err)

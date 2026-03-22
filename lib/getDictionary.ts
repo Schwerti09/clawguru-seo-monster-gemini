@@ -227,6 +227,125 @@ export type Dictionary = {
     grpEnterpriseSupport: string
     newBadge: string
   }
+  summon: {
+    example_queries_items: string[]
+    input_placeholder: string
+    start_label: string
+    analyzing_label: string
+    attack_label: string
+    attack_desc: string
+    defense_label: string
+    defense_desc: string
+    recovery_label: string
+    recovery_desc: string
+    optimize_label: string
+    optimize_desc: string
+    voice_label: string
+    voice_stop_label: string
+    voice_lang: string
+    voice_unsupported: string
+    voice_no_speech: string
+    voice_no_mic: string
+    voice_perm_denied: string
+    voice_error: string
+    error_boundary_fallback: string
+    free_limit_title: string
+    free_limit_desc: string
+    daypass_btn: string
+    clawscore_label: string
+    confidence_label: string
+    eta_label: string
+    view_link_label: string
+    copy_label: string
+    share_x_label: string
+    share_linkedin_label: string
+  }
+  oracle: {
+    title: string
+    subtitle: string
+    scope_label: string
+    scope_placeholder: string
+    add_scope: string
+    remove: string
+    predict_btn: string
+    scope_hint: string
+    risk_radar: string
+    live_score: string
+    cve_title: string
+    runbook_label: string
+    severity_low: string
+    severity_medium: string
+    severity_high: string
+    severity_critical: string
+    clawscore_label: string
+    loading: string
+    fetch_error: string
+  }
+  neuro: {
+    title: string
+    subtitle: string
+    pick_stack: string
+    add_stack: string
+    input_placeholder: string
+    recommend: string
+    recommendations: string
+    plan_title: string
+    score_title: string
+    confidence: string
+    loading: string
+    fetch_error: string
+    available_label: string
+    chosen_label: string
+    runbook_label: string
+    retry: string
+  }
+  intel: {
+    hero_badge: string
+    hero_title: string
+    hero_subline: string
+    cta_daypass: string
+    upgrade_premium_label: string
+    upgrade_title: string
+    upgrade_text: string
+    upgrade_button: string
+    live_header: string
+    live_loading: string
+    live_error: string
+    export_csv: string
+    export_json: string
+    export_pdf: string
+    fix_link_label: string
+    free_teaser_text: string
+    free_teaser_button: string
+    analyzer_header: string
+    analyzer_input_placeholder: string
+    analyzing_label: string
+    analyze_btn: string
+    feed_loading: string
+    examples_label: string
+    published_label: string
+    recommended_runbook_label: string
+    link_oracle: string
+    link_mycelium: string
+    link_neuro: string
+    link_fix_page: string
+    analyzer_error: string
+    predictive_header: string
+    predictive_loading: string
+    predictive_more: string
+    predictive_error: string
+    myceliumPreview_header: string
+    scope_all: string
+    stats_header: string
+    stats_loading: string
+    stats_error: string
+    tile_new_7d: string
+    tile_with_runbooks: string
+    tile_avg_cvss: string
+    tile_top_services: string
+    spark_title: string
+  }
+  vorstellung?: Record<string, unknown>
 }
 
 // Supported dictionary locales (JSON files that exist in /dictionaries)

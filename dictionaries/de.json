@@ -255,5 +255,144 @@
       "Personalisierte Empfehlungen"
     ],
     "upgrade_button": "Daypass starten"
+  },
+  "oracle": {
+    "hero_title": "Oracle – Dein prädiktiver Risikoradar",
+    "hero_subline": "Sieh voraus, welche Schwachstellen als nächstes relevant werden – mit konkreten Runbook‑Empfehlungen und Eintrittswahrscheinlichkeiten.",
+    "cta_daypass": "Jetzt Daypass kaufen",
+
+    "how_title": "Wie Oracle funktioniert",
+    "how_text": "Oracle verknüpft aktuelle CVE‑Feeds mit deinen Technologien und priorisiert die dringendsten Bedrohungen. Für jedes Risiko siehst du Eintrittswahrscheinlichkeiten, betroffene Services und passende Runbooks.",
+    "how_diagram": "Radar‑Visualisierung",
+
+    "example_scopes_title": "Beispiel‑Scopes",
+    "example_scopes_items": ["AWS", "GCP", "Azure", "Kubernetes"],
+
+    "upgrade_title": "Mehr Power mit Daypass",
+    "upgrade_items": [
+      "Detaillierte Risikoberichte als PDF",
+      "Automatische Ausführung der empfohlenen Runbooks",
+      "Export der Risikodaten für SIEM/Ticketing"
+    ],
+    "upgrade_button": "Daypass starten",
+
+    "scope_label": "Scope",
+    "scope_all": "Alle",
+    "error_load": "Fehler beim Laden.",
+    "critical_risks_title": "Kritische Risiken",
+    "probability_label": "Wahrscheinlichkeit",
+    "timeline_prefix": "Erste kritische Bedrohung erwartet ab: ",
+    "recommended_runbook_link": "Empfohlenes Runbook →",
+    "empty_state": "Keine akuten Risiken für den gewählten Scope erkannt. 🛡️"
+  },
+  "neuro": {
+    "hero_title": "Neuro – Dein persönlicher Runbook‑Guide",
+    "hero_subline": "Gib deinen Technologie‑Stack an – ClawGuru findet die wichtigsten Runbooks, priorisiert nach Relevanz und gibt dir einen klaren Plan.",
+    "metrics_tags_selected": "Tags ausgewählt",
+    "metrics_recommendations": "Empfehlungen (live)",
+    "cta_daypass": "Jetzt Daypass kaufen",
+
+    "how_title": "Wie Neuro funktioniert",
+    "how_text": "Neuro vergleicht deinen Technologie‑Stack mit den Tags in unserer Runbook‑Datenbank, bewertet die Relevanz in % und erstellt daraus einen klaren Ausführungsplan.",
+    "how_diagram": "Visualisierung",
+
+    "upgrade_title": "Mehr Power mit Daypass",
+    "upgrade_items": [
+      "Stack‑basierte Empfehlungen als PDF",
+      "Automatische Ausführung ausgewählter Runbooks",
+      "Export der Empfehlungen für Ticketing/Teams"
+    ],
+    "upgrade_button": "Daypass starten",
+
+    "error_load": "Fehler beim Laden.",
+    "empty_hint": "Wähle oben einen oder mehrere Technologie‑Tags, um personalisierte Runbook‑Empfehlungen zu erhalten.",
+    "stack_label": "Dein Stack",
+    "stack_placeholder": "Tags hinzufügen (Enter) – z.B. aws, nginx",
+    "add_button": "Hinzufügen",
+    "example_stacks_label": "Beispiel‑Stacks"
+  },
+  "mycelium": {
+    "hero_title": "Mycelium – Das lebendige Wissensnetzwerk",
+    "hero_subline": "Erkunde die Zusammenhänge zwischen Runbooks, CVEs, Services und Best Practices. Jeder Knoten ist ein Runbook, jede Verbindung eine gemeinsame Schwachstelle oder Abhängigkeit.",
+    "cta_daypass": "Jetzt Daypass kaufen",
+
+    "how_title": "Wie Mycelium funktioniert",
+    "how_text": "Jeder Knoten im Netzwerk ist ein Runbook, jede Verbindung zeigt gemeinsame Tags, betroffene Services oder CVEs. So erkennst du auf einen Blick, welche Sicherheitslücken zusammenhängen und in welcher Reihenfolge du sie beheben solltest.",
+    "pro_tip_title": "🔍 Pro‑Tipp",
+    "pro_tip_text": "Klicke auf einen Knoten, um zum Runbook zu gelangen. Mit einem Daypass kannst du den gesamten Graphen als interaktives HTML exportieren und in dein Team teilen.",
+    "popular_nodes_title": "Beliebte Runbooks im Netzwerk"
+  },
+  "intel": {
+    "hero_badge": "Intel · Live CVE + Runbooks",
+    "hero_title": "Intel – Das Mycelial Threat Intelligence Center",
+    "hero_subline": "Echtzeit‑CVE‑Feeds, KI‑gestützte Risikoanalyse und direkte Runbook‑Empfehlungen. Bleib immer einen Schritt voraus.",
+    "cta_daypass": "Jetzt Daypass kaufen",
+
+    "upgrade_premium_label": "Premium",
+    "upgrade_title": "Mehr Sichtbarkeit mit Daypass",
+    "upgrade_text": "Vollständiger CVE‑Feed, Export (CSV/PDF), erweiterte Filter und automatische Runbook‑Ausführung.",
+    "upgrade_button": "Daypass starten",
+
+    "live_header": "Live Threat Feed",
+    "live_loading": "Lade CVE‑Feed…",
+    "live_error": "Feed‑Ladefehler",
+    "export_csv": "Export CSV",
+    "export_json": "Export JSON",
+    "export_pdf": "PDF (Drucken)",
+    "fix_link_label": "Fix‑Runbook öffnen",
+    "free_teaser_text": "Nur die letzten 5 CVEs sichtbar. Mit Daypass siehst du den kompletten Feed und kannst exportieren.",
+    "free_teaser_button": "Daypass kaufen",
+
+    "analyzer_header": "CVE‑Analyzer & Runbook‑Matcher",
+    "analyzer_input_placeholder": "CVE‑ID (z. B. CVE-2024-6387) oder Stichwort (z. B. ssh)",
+    "analyzing_label": "Analysiere…",
+    "analyze_btn": "Analysieren",
+    "feed_loading": "Lade Feed…",
+    "examples_label": "Beispiele",
+    "published_label": "Veröffentlicht",
+    "recommended_runbook_label": "Empfohlenes Runbook",
+    "link_oracle": "Oracle",
+    "link_mycelium": "Mycelium",
+    "link_neuro": "Neuro",
+    "link_fix_page": "Fix‑Seite",
+    "analyzer_error": "Analyzer‑Ladefehler",
+
+    "predictive_header": "Predictive Threat Radar",
+    "predictive_loading": "Lade Prognosen…",
+    "predictive_more": "Mehr im Oracle‑Dashboard →",
+    "predictive_error": "Oracle‑Fehler",
+
+    "stats_header": "Statistiken & Trends",
+    "stats_loading": "Lade Statistiken…",
+    "stats_error": "Stats‑Ladefehler",
+    "tile_new_7d": "Neue CVEs (7d)",
+    "tile_with_runbooks": "CVEs mit Runbooks",
+    "tile_avg_cvss": "Ø CVSS",
+    "tile_top_services": "Top Services",
+    "spark_title": "CVE‑Veröffentlichungen (14 Tage)"
+  },
+  "vorstellung": {
+    "badge": "Quantum‑Resistant",
+    "title": "ClawGuru vorgestellt",
+    "subtitle": "Die Ops‑Intelligence Plattform: schnell, fokussiert, ergebnisorientiert. Hier siehst du in 60 Sekunden, was du bekommst.",
+    "ctaPrimary": "Jetzt testen",
+    "ctaSecondary": "Pläne",
+    "sectionGet": "Das bekommst du",
+    "timelineTitle": "ClawVerse Timeline",
+    "timelineItems": [
+      { "y": "2026", "t": "ClawGuru Launch", "d": "Public launch mit Ops‑Intel & Copilot" },
+      { "y": "2026 Q1", "t": "Mycelium v3", "d": "Neues UI, Performance, Embed‑Modus" },
+      { "y": "2026 Q2", "t": "3,4 Mio Runbooks", "d": "Massives Vault‑Upgrade & Qualitätssiegel" }
+    ],
+    "copilotInit": "Initialisiere Copilot…",
+    "trustedBy": "Trusted by SecOps Leaders",
+    "trustedLogos": ["ACME Cloud", "HelixOps", "NordSec", "Vector Labs"],
+    "stats": [
+      { "v": "94", "l": "ClawScore" },
+      { "v": "3.4M", "l": "Runbooks" },
+      { "v": "128K", "l": "Checks" },
+      { "v": "Quantum", "l": "Resistant" }
+    ],
+    "finalCta": "Day Pass 7€ – Sofortzugang"
   }
 }

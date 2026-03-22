@@ -41,7 +41,7 @@ export default function Header() {
     { href: `${prefix}/summon`, label: dict.nav.summon },
     { href: `${prefix}/oracle`, label: dict.nav.oracle },
     { href: `${prefix}/neuro`, label: dict.nav.neuro },
-    { href: `${prefix}/command-center`, label: "Command Center" },
+    { href: `${prefix}/command-center`, label: (dict as any).nav?.command_center || "Command Center" },
     { href: `${prefix}/mycelium`, label: dict.nav.mycelium },
     { href: `${prefix}/tags`, label: dict.nav.tags },
     { href: `${prefix}/academy`, label: dict.nav.academy },
@@ -56,7 +56,7 @@ export default function Header() {
   const ALL_NAV = [...PRIMARY_NAV, ...MORE_NAV]
 
   const accountHref = hasAccess ? `${prefix}/dashboard` : `${prefix}/account`
-  const accountLabel = hasAccess ? "Dashboard" : "Zugang"
+  const accountLabel = hasAccess ? ((dict as any).common?.ctaDashboard || "Dashboard") : ((dict as any).nav?.account || "Account")
 
   const switchLocale = useCallback(
     (nextLocale: Locale) => {
@@ -334,21 +334,21 @@ export default function Header() {
         <div className="fixed top-24 left-1/2 -translate-x-1/2 z-40 w-[calc(100%-1.5rem)] max-w-xl rounded-2xl border border-[#d4af37]/25 bg-black/85 backdrop-blur-xl p-3 sm:p-4">
           <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
             <div className="text-sm text-gray-200">
-              We detected <span className="font-bold">{suggestedLocale.toUpperCase()}</span>. Switch language?
+              {((dict as any).common?.locale_detected || "We detected")} <span className="font-bold">{suggestedLocale.toUpperCase()}</span>. {((dict as any).common?.switch_language || "Switch language?")}
             </div>
             <div className="ml-auto flex items-center gap-2">
               <button
                 onClick={handlePromptDismiss}
                 className="px-3 py-1.5 rounded-lg border border-white/15 text-xs text-gray-300 hover:text-white"
               >
-                Stay here
+                {((dict as any).common?.stay_here || "Stay here")}
               </button>
               <button
                 onClick={handlePromptSwitch}
                 className="px-3 py-1.5 rounded-lg text-xs font-bold text-black"
                 style={{ background: "linear-gradient(135deg, #d4af37, #e8cc6a, #a8872a)" }}
               >
-                Switch
+                {((dict as any).common?.switch || "Switch")}
               </button>
             </div>
           </div>

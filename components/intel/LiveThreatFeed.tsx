@@ -13,8 +13,8 @@ type CveEntry = {
 
 type Tier = "free" | "daypass" | "pro" | "enterprise"
 
-export default function LiveThreatFeed(props: { prefix?: string }) {
-  const { prefix = "" } = props
+export default function LiveThreatFeed(props: { prefix?: string; dict?: any }) {
+  const { prefix = "", dict } = props
   const [entries, setEntries] = useState<CveEntry[]>([])
   const [tier, setTier] = useState<Tier>("free")
   const [loading, setLoading] = useState(true)
@@ -43,7 +43,7 @@ export default function LiveThreatFeed(props: { prefix?: string }) {
           setTier('free')
         }
       } catch (e: any) {
-        if (!stop) setError(e?.message || 'Feed-Ladefehler')
+        if (!stop) setError(e?.message || dict?.live_error || 'Feed-Ladefehler')
       } finally {
         if (!stop) setLoading(false)
       }
@@ -66,18 +66,18 @@ export default function LiveThreatFeed(props: { prefix?: string }) {
     return 'text-gray-400'
   }
 
-  if (loading) return <div className="rounded-2xl border border-white/10 bg-black/40 p-4 text-gray-400">Lade CVE‑Feed…</div>
+  if (loading) return <div className="rounded-2xl border border-white/10 bg-black/40 p-4 text-gray-400">{dict?.live_loading || 'Lade CVE‑Feed…'}</div>
   if (error) return <div className="rounded-2xl border border-white/10 bg-black/40 p-4 text-red-400">{error}</div>
 
   return (
     <div className="rounded-2xl border border-white/10 bg-black/40 overflow-hidden">
       <div className="p-3 flex items-center justify-between">
-        <div className="text-sm text-cyan-300">Live Threat Feed</div>
+        <div className="text-sm text-cyan-300">{dict?.live_header || 'Live Threat Feed'}</div>
         {tier !== 'free' ? (
           <div className="flex items-center gap-2">
-            <button disabled={busyExport} onClick={() => exportCsv(entries, setBusyExport)} className="text-xs px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/15 text-gray-200">Export CSV</button>
-            <button disabled={busyExport} onClick={() => exportJson(entries, setBusyExport)} className="text-xs px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/15 text-gray-200">Export JSON</button>
-            <button disabled={busyExport} onClick={() => exportPdfLike(entries, setBusyExport)} className="text-xs px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/15 text-gray-200">PDF (Drucken)</button>
+            <button disabled={busyExport} onClick={() => exportCsv(entries, setBusyExport)} className="text-xs px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/15 text-gray-200">{dict?.export_csv || 'Export CSV'}</button>
+            <button disabled={busyExport} onClick={() => exportJson(entries, setBusyExport)} className="text-xs px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/15 text-gray-200">{dict?.export_json || 'Export JSON'}</button>
+            <button disabled={busyExport} onClick={() => exportPdfLike(entries, setBusyExport)} className="text-xs px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/15 text-gray-200">{dict?.export_pdf || 'PDF (Drucken)'}</button>
           </div>
         ) : null}
       </div>
@@ -92,15 +92,15 @@ export default function LiveThreatFeed(props: { prefix?: string }) {
           <div className="mt-1 text-sm text-gray-400 line-clamp-2">{e.description}</div>
           <div className="mt-2 text-xs text-gray-500 flex items-center justify-between">
             <span>{new Date(e.published).toISOString().slice(0,10)}</span>
-            <a href={`${prefix || ''}/solutions/fix-${encodeURIComponent(e.id)}`} className="opacity-0 group-hover:opacity-100 underline text-cyan-300 transition-opacity">Fix‑Runbook öffnen</a>
+            <a href={`${prefix || ''}/solutions/fix-${encodeURIComponent(e.id)}`} className="opacity-0 group-hover:opacity-100 underline text-cyan-300 transition-opacity">{dict?.fix_link_label || 'Fix‑Runbook öffnen'}</a>
           </div>
         </div>
       ))}
       </div>
       {tier === 'free' && entries.length > visible.length && (
         <div className="p-4 text-sm text-gray-400 flex items-center justify-between">
-          <span>Nur die letzten 5 CVEs sichtbar. Mit Daypass siehst du den kompletten Feed und kannst exportieren.</span>
-          <a href={`${prefix || ''}/daypass`} className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-cyan-500 to-cyan-700 text-white text-xs font-semibold">Daypass kaufen</a>
+          <span>{dict?.free_teaser_text || 'Nur die letzten 5 CVEs sichtbar. Mit Daypass siehst du den kompletten Feed und kannst exportieren.'}</span>
+          <a href={`${prefix || ''}/daypass`} className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-cyan-500 to-cyan-700 text-white text-xs font-semibold">{dict?.free_teaser_button || 'Daypass kaufen'}</a>
         </div>
       )}
     </div>

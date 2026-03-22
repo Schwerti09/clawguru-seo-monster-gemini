@@ -2,9 +2,10 @@ import type { Metadata } from "next"
 import dynamic from "next/dynamic"
 
 import { SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
+import { getDictionary } from "@/lib/dictionary"
 import NeuroHero from "@/components/neuro/NeuroHero"
 import HowItWorks from "@/components/neuro/HowItWorks"
-import UpgradeCTA from "@/components/neuro/UpgradeCTA"
+import UpgradeCTA from "@/components/shared/UpgradeCTA"
 
 const NeuroPageClient = dynamic(() => import("@/components/neuro/NeuroPageClient"), { ssr: false })
 
@@ -23,25 +24,28 @@ export async function generateMetadata(props: { params: { lang: string } }): Pro
   }
 }
 
-export default function LocaleNeuroPage(props: { params: { lang: string } }) {
+export default async function LocaleNeuroPage(props: { params: { lang: string } }) {
   const locale = (SUPPORTED_LOCALES.includes(props.params.lang as Locale) ? props.params.lang : "de") as Locale
   const prefix = `/${locale}`
+  const dict = await getDictionary(locale)
+  const neuro = dict.neuro || {}
+  const common = dict.common || {}
   return (
     <div className="space-y-6">
-      <NeuroHero prefix={prefix} />
+      <NeuroHero prefix={prefix} dict={neuro} />
       <section className="py-2">
         <div className="px-4 sm:px-6 lg:px-8">
-          <NeuroPageClient />
+          <NeuroPageClient dict={neuro} />
         </div>
       </section>
       <section className="py-4">
         <div className="px-4 sm:px-6 lg:px-8">
-          <HowItWorks />
+          <HowItWorks dict={neuro} />
         </div>
       </section>
       <section className="py-2">
         <div className="px-4 sm:px-6 lg:px-8">
-          <UpgradeCTA prefix={prefix} />
+          <UpgradeCTA prefix={prefix} dict={neuro} />
         </div>
       </section>
     </div>

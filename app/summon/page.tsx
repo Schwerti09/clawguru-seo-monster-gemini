@@ -7,13 +7,13 @@ export const metadata: Metadata = {
   description: "Summon your Army: 4 Swarm‑Typen, Live‑Intel, Top‑Runbooks, Vorhersage & One‑Click‑Fix.",
 }
 
-const SummonFreemiumClient = dynamic(() => import("@/components/summon/SummonFreemiumClient"), { ssr: false })
+const SummonRealClient = dynamic(() => import("@/components/summon/SummonRealClient"), { ssr: false })
 
 export default function SummonPage() {
   return (
     <div className="space-y-10">
       <SummonLiveOverview />
-      <SummonFreemiumClient />
+      <SummonRealClient />
     </div>
   )
 }

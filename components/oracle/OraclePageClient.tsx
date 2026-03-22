@@ -17,16 +17,16 @@ function useLocalePrefix() {
   }, [pathname])
 }
 
-export default function OraclePageClient() {
+export default function OraclePageClient({ dict }: { dict?: any }) {
   const prefix = useLocalePrefix()
   const [scope, setScope] = useState<string>("")
   const [data, setData] = useState<any | null>(null)
 
   return (
     <div className="space-y-8">
-      <ScopeSelector value={scope} onChange={setScope} onScope={setScope} onData={setData} />
-      {data && <RiskList risks={data} prefix={prefix} />}
-      <ExampleScopes onSelect={(s) => setScope(s)} />
+      <ScopeSelector value={scope} onChange={setScope} onScope={setScope} onData={setData} dict={dict} />
+      {data && <RiskList risks={data} prefix={prefix} dict={dict} />}
+      <ExampleScopes onSelect={(s) => setScope(s)} dict={dict} />
     </div>
   )
 }

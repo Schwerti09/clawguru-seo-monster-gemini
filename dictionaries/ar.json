@@ -1,7 +1,11 @@
 {
   "common": {
     "ctaDashboard": "لوحة القيادة →",
-    "ctaMissionControl": "مركز القيادة →"
+    "ctaMissionControl": "مركز القيادة →",
+    "locale_detected": "اكتشفنا اللغة",
+    "switch_language": "تغيير اللغة؟",
+    "stay_here": "ابق هنا",
+    "switch": "تبديل"
   },
   "hero": {
     "badge": "Mycelial Singularity Engine v3.0 · بروتوكول GENESIS نشط",
@@ -62,7 +66,12 @@
     "trustCenter": "ClawGuru Institutional Trust Center",
     "footerTrustCenter": "ClawGuru Institutional Trust Center",
     "footerDiscord": "Discord Community →",
-    "footerAffiliate": "Affiliate notice: Some links may contain commissions. Transparency remains mandatory."
+    "footerAffiliate": "إشعار تابع: قد تحتوي بعض الروابط على عمولات. الشفافية إلزامية.",
+    "command_center": "مركز الأوامر",
+    "account": "الحساب",
+    "support": "الدعم",
+    "solutions": "الحلول",
+    "company": "الشركة"
   },
   "dayPass": {
     "label": "تصريح يومي (24 ساعة)"
@@ -216,5 +225,170 @@
     "grpIntelFeedApi": "Intel Feed API",
     "grpEnterpriseSupport": "Enterprise Support",
     "newBadge": "NEW"
+  },
+  "intel": {
+    "hero_badge": "Intel · CVE مباشرة + Runbooks",
+    "hero_title": "Intel – مركز استخبارات التهديدات الميسليومي",
+    "hero_subline": "تغذية CVE آنية، تحليل مخاطر بالذكاء الاصطناعي وتوصيات Runbook مباشرة.",
+    "cta_daypass": "احصل على Day Pass",
+    "upgrade_premium_label": "Premium",
+    "upgrade_title": "رؤية أوسع مع Day Pass",
+    "upgrade_text": "تغذية CVE كاملة، تصدير (CSV/PDF)، فلاتر متقدمة وتنفيذ تلقائي للـRunbook.",
+    "upgrade_button": "ابدأ Day Pass",
+    "live_header": "تغذية التهديدات المباشرة",
+    "live_loading": "جارٍ تحميل تغذية CVE…",
+    "live_error": "خطأ في تحميل التغذية",
+    "export_csv": "تصدير CSV",
+    "export_json": "تصدير JSON",
+    "export_pdf": "PDF (طباعة)",
+    "fix_link_label": "افتح Runbook الإصلاح",
+    "free_teaser_text": "مرئية آخر 5 CVE فقط. مع Day Pass ترى التغذية الكاملة ويمكنك التصدير.",
+    "free_teaser_button": "اشترِ Day Pass",
+    "analyzer_header": "محلل CVE ومطابق الـRunbook",
+    "analyzer_input_placeholder": "CVE ID (مثل CVE-2024-6387) أو كلمة مفتاحية (ssh مثلًا)",
+    "analyzing_label": "جارٍ التحليل…",
+    "analyze_btn": "حلّل",
+    "feed_loading": "جارٍ تحميل التغذية…",
+    "examples_label": "أمثلة",
+    "published_label": "نُشر",
+    "recommended_runbook_label": "Runbook موصى به",
+    "link_oracle": "Oracle",
+    "link_mycelium": "Mycelium",
+    "link_neuro": "Neuro",
+    "link_fix_page": "صفحة الإصلاح",
+    "analyzer_error": "خطأ في تحميل المحلل",
+    "predictive_header": "رادار التهديدات التنبئي",
+    "predictive_loading": "جارٍ تحميل التنبؤات…",
+    "predictive_more": "المزيد في لوحة Oracle →",
+    "predictive_error": "خطأ Oracle",
+    "stats_header": "الإحصاءات والاتجاهات",
+    "stats_loading": "جارٍ تحميل الإحصاءات…",
+    "stats_error": "خطأ تحميل الإحصاءات",
+    "tile_new_7d": "CVE جديدة (7 أيام)",
+    "tile_with_runbooks": "CVE مع Runbooks",
+    "tile_avg_cvss": "متوسط CVSS",
+    "tile_top_services": "أفضل الخدمات",
+    "spark_title": "منشورات CVE (14 يوماً)"
+  },
+  "oracle": {
+    "hero_title": "Oracle – رادار المخاطر التنبئي",
+    "hero_subline": "اعرف ما الذي سيهم تالياً – مع توصيات Runbook واحتمالات حدوث واضحة.",
+    "cta_daypass": "احصل على Day Pass",
+    "how_title": "كيف يعمل Oracle",
+    "how_text": "يربط Oracle تغذية CVE الحالية بتقنياتك ويعطي الأولوية لأخطر التهديدات. لكل خطر سترى الاحتمالات والخدمات المتأثرة والـRunbooks المناسبة.",
+    "how_diagram": "تصور الرادار",
+    "example_scopes_title": "نطاقات مثال",
+    "example_scopes_items": [
+      "AWS",
+      "GCP",
+      "Azure",
+      "Kubernetes"
+    ],
+    "upgrade_title": "قوة أكبر مع Day Pass",
+    "upgrade_items": [
+      "تقارير مخاطر مفصلة بصيغة PDF",
+      "تنفيذ تلقائي للـRunbooks الموصى بها",
+      "تصدير بيانات المخاطر لـ SIEM/Ticketing"
+    ],
+    "upgrade_button": "ابدأ Day Pass",
+    "scope_label": "النطاق",
+    "scope_all": "الكل",
+    "error_load": "خطأ في التحميل.",
+    "critical_risks_title": "مخاطر حرجة",
+    "probability_label": "الاحتمال",
+    "timeline_prefix": "أول تهديد حرج متوقع من: ",
+    "recommended_runbook_link": "Runbook موصى به →",
+    "empty_state": "لا توجد مخاطر حادة للنطاق المحدد. 🛡️"
+  },
+  "neuro": {
+    "hero_title": "Neuro – دليلك الشخصي للـRunbook",
+    "hero_subline": "اذكر مكدسك التقني – ClawGuru يجد أهم الـRunbooks ويعطيك خطة واضحة.",
+    "metrics_tags_selected": "وسوم محددة",
+    "metrics_recommendations": "توصيات (مباشر)",
+    "cta_daypass": "احصل على Day Pass",
+    "how_title": "كيف يعمل Neuro",
+    "how_text": "يقارن Neuro مكدسك التقني مع وسوم قاعدة الـRunbooks لدينا ويحتسب الصلة ٪ وينشئ خطة تنفيذ واضحة.",
+    "how_diagram": "تصور",
+    "upgrade_title": "قوة أكبر مع Day Pass",
+    "upgrade_items": [
+      "توصيات معتمدة على المكدس بصيغة PDF",
+      "تنفيذ تلقائي للـRunbooks المختارة",
+      "تصدير التوصيات للتذاكر/الفرق"
+    ],
+    "upgrade_button": "ابدأ Day Pass",
+    "error_load": "خطأ في التحميل.",
+    "empty_hint": "اختر وسماً أو أكثر بالأعلى للحصول على توصيات Runbook مخصصة.",
+    "stack_label": "مكدسك",
+    "stack_placeholder": "أضف وسوماً (Enter) – مثل aws, nginx",
+    "add_button": "إضافة",
+    "example_stacks_label": "مكدسات مثال"
+  },
+  "summon": {
+    "hero_title": "COSMIC SUMMON – بوابة بين-الذكاءات",
+    "hero_subline": "اسأل عبر الأبعاد. نجيب بروح مرحة وRunbooks مفيدة.",
+    "input_placeholder": "صف مشكلتك أو الصق السجلات…",
+    "summary_label": "الملخص",
+    "confidence_label": "الثقة",
+    "relevant_runbooks_label": "Runbooks ذات صلة",
+    "score_label": "النتيجة",
+    "view_button": "عرض",
+    "daypass_hint": "الميزات الكاملة مع Day Pass.",
+    "daypass_button": "احصل على Day Pass",
+    "upgrade_title": "قوة أكبر مع Day Pass",
+    "upgrade_button": "ابدأ Day Pass",
+    "error_load": "خطأ في التحميل.",
+    "summary_title": "الملخص",
+    "view_link_label": "عرض →",
+    "callout_strong": "يمكن حل هذه المشكلة تلقائيًا مع Day Pass — بما في ذلك التنفيذ وإثبات المعالجة!",
+    "callout_button": "احصل على Day Pass",
+    "example_queries_title": "استفسارات مثال",
+    "example_queries_items": [
+      "AWS S3 Public Bucket",
+      "تهيئة RBAC في Kubernetes",
+      "تقوية SSH",
+      "Nginx TLS 1.3"
+    ]
+  },
+  "mycelium": {
+    "hero_title": "Mycelium – شبكة المعرفة الحية",
+    "hero_subline": "استكشف العلاقات بين الـRunbooks وCVE والخدمات وأفضل الممارسات.",
+    "how_title": "كيف يعمل Mycelium",
+    "how_text": "كل عقدة هي Runbook، وكل حافة تُظهر وسوماً مشتركة أو خدمات متأثرة.",
+    "pro_tip_title": "نصيحة للمحترفين",
+    "pro_tip_text": "انقر عقدة لفتح الـRunbook. مع Day Pass يمكنك تصدير الرسم كاملاً كـHTML تفاعلي.",
+    "popular_nodes_title": "Runbooks شائعة في الشبكة",
+    "upgrade_title": "قوة أكبر مع Day Pass",
+    "upgrade_button": "ابدأ Day Pass"
+  },
+  "footer": {
+    "solutions_title": "الحلول",
+    "company_title": "الشركة",
+    "legal_title": "القانوني",
+    "links_title": "روابط",
+    "disclaimer": "الأدوات تعطي توجيهاً استدلالياً، لا ضمانات. للتدقيق الصارم: مراجعة مهنية."
+  },
+  "vorstellung": {
+    "badge": "مقاوم للكم",
+    "title": "تقديم ClawGuru",
+    "subtitle": "منصة ذكاء العمليات: سريعة، مركّزة، موجّهة للنتائج. شاهد ما ستحصل عليه خلال 60 ثانية.",
+    "ctaPrimary": "جرّب الآن",
+    "ctaSecondary": "الخطط",
+    "sectionGet": "ما الذي ستحصل عليه",
+    "timelineTitle": "ClawVerse Timeline",
+    "timelineItems": [
+      { "y": "2026", "t": "إطلاق ClawGuru", "d": "إطلاق عام مع Ops‑Intel وCopilot" },
+      { "y": "2026 Q1", "t": "Mycelium v3", "d": "واجهة جديدة، أداء، وضع التضمين" },
+      { "y": "2026 Q2", "t": "3.4M Runbooks", "d": "ترقية ضخمة للمخزن وختم الجودة" }
+    ],
+    "copilotInit": "جارٍ تهيئة Copilot…",
+    "trustedBy": "موثوق به من قادة SecOps",
+    "trustedLogos": ["ACME Cloud", "HelixOps", "NordSec", "Vector Labs"],
+    "stats": [
+      { "v": "94", "l": "ClawScore" },
+      { "v": "3.4M", "l": "Runbooks" },
+      { "v": "128K", "l": "Checks" },
+      { "v": "Quantum", "l": "Resistant" }
+    ],
+    "finalCta": "Day Pass €7 – وصول فوري"
   }
 }

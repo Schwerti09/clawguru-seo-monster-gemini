@@ -12,6 +12,7 @@ type Props = {
   recommendations?: any | null
   loading: boolean
   error?: string | null
+  dict?: any
 }
 
 function TagChip({ tag, selected, onClick }: { tag: string; selected: boolean; onClick: (t: string) => void }) {
@@ -29,7 +30,7 @@ function TagChip({ tag, selected, onClick }: { tag: string; selected: boolean; o
   )
 }
 
-export default function StackPicker({ selected, onToggle, onAddFreeform, recommendations, loading, error }: Props) {
+export default function StackPicker({ selected, onToggle, onAddFreeform, recommendations, loading, error, dict }: Props) {
   const [input, setInput] = useState("")
   const allTags = DEFAULT_TAGS
 
@@ -43,20 +44,20 @@ export default function StackPicker({ selected, onToggle, onAddFreeform, recomme
   return (
     <div className="max-w-4xl mx-auto">
       <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-300 mb-2">Dein Stack</label>
+        <label className="block text-sm font-medium text-gray-300 mb-2">{dict?.stack_label || 'Dein Stack'}</label>
         <div className="flex gap-2 items-center">
           <input
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => { if (e.key === 'Enter') addInputTag() }}
-            placeholder="Tags hinzufügen (Enter) – z.B. aws, nginx"
+            placeholder={dict?.stack_placeholder || 'Tags hinzufügen (Enter) – z.B. aws, nginx'}
             className="flex-1 p-3 rounded-2xl bg-black/40 border border-white/10 text-white placeholder-gray-500 focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all"
           />
           <button
             onClick={addInputTag}
             className="px-4 py-2 rounded-2xl border border-white/10 hover:border-white/20 text-gray-200"
           >
-            Hinzufügen
+            {dict?.add_button || 'Hinzufügen'}
           </button>
         </div>
       </div>

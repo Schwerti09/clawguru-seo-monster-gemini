@@ -16,8 +16,8 @@ type OracleResp = {
   summary?: string
 }
 
-export default function PredictiveRadar(props: { prefix?: string }) {
-  const { prefix = "" } = props
+export default function PredictiveRadar(props: { prefix?: string; dict?: any }) {
+  const { prefix = "", dict } = props
   const [data, setData] = useState<OracleResp | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -32,7 +32,7 @@ export default function PredictiveRadar(props: { prefix?: string }) {
         const j = await res.json()
         if (!stop) setData(j)
       } catch (e: any) {
-        if (!stop) setError(e?.message || 'Oracle-Fehler')
+        if (!stop) setError(e?.message || dict?.predictive_error || 'Oracle-Fehler')
       } finally {
         if (!stop) setLoading(false)
       }
@@ -41,7 +41,7 @@ export default function PredictiveRadar(props: { prefix?: string }) {
     return () => { stop = true }
   }, [])
 
-  if (loading) return <div className="rounded-2xl border border-white/10 bg-black/40 p-4 text-gray-400">Lade Prognosen…</div>
+  if (loading) return <div className="rounded-2xl border border-white/10 bg-black/40 p-4 text-gray-400">{dict?.predictive_loading || 'Lade Prognosen…'}</div>
   if (error) return <div className="rounded-2xl border border-white/10 bg-black/40 p-4 text-red-400">{error}</div>
   if (!data) return null
 
@@ -49,7 +49,7 @@ export default function PredictiveRadar(props: { prefix?: string }) {
 
   return (
     <div className="rounded-2xl border border-white/10 bg-black/40 p-4">
-      <div className="text-sm text-emerald-300 mb-2">Predictive Threat Radar</div>
+      <div className="text-sm text-emerald-300 mb-2">{dict?.predictive_header || 'Predictive Threat Radar'}</div>
       <div className="space-y-3">
         {risks.map((r) => (
           <div key={r.cve_id} className="rounded-xl border border-white/10 bg-black/50 p-3">
@@ -68,8 +68,8 @@ export default function PredictiveRadar(props: { prefix?: string }) {
           </div>
         ))}
       </div>
-      <div className="mt-3 text-right">
-        <a href={`${prefix || ''}/oracle`} className="text-xs underline text-gray-400 hover:text-gray-200">Mehr im Oracle‑Dashboard →</a>
+      <div className="mt-3 ltr:text-right rtl:text-left">
+        <a href={`${prefix || ''}/oracle`} className="text-xs underline text-gray-400 hover:text-gray-200">{dict?.predictive_more || 'Mehr im Oracle‑Dashboard →'}</a>
       </div>
     </div>
   )

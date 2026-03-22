@@ -22,7 +22,7 @@ type IntelStats = {
 
 type Stat = { label: string; value: number; hint?: string }
 
-export default function StatsDashboard() {
+export default function StatsDashboard({ dict }: { dict?: any }) {
   const [items, setItems] = useState<CveEntry[]>([])
   const [statsData, setStatsData] = useState<IntelStats | null>(null)
   const [loading, setLoading] = useState(true)
@@ -48,7 +48,7 @@ export default function StatsDashboard() {
           setItems(es)
         }
       } catch (e: any) {
-        if (!stop) setError(e?.message || 'Stats-Ladefehler')
+        if (!stop) setError(e?.message || dict?.stats_error || 'Stats-Ladefehler')
       } finally {
         if (!stop) setLoading(false)
       }
@@ -61,10 +61,10 @@ export default function StatsDashboard() {
     if (!statsData) return []
     const top = (statsData.topServices || []).slice(0, 3)
     return [
-      { label: 'Neue CVEs (7d)', value: statsData.newThisWeek },
-      { label: 'CVEs mit Runbooks', value: statsData.coverage.mapped, hint: `${Math.round((statsData.coverage.ratio || 0) * 100)}%` },
-      { label: 'Ø CVSS', value: Math.round((statsData.avgScore || 0) * 10) / 10 },
-      { label: 'Top Services', value: 0, hint: top.map((t) => `${t.name} (${t.count})`).join(' · ') },
+      { label: dict?.tile_new_7d || 'Neue CVEs (7d)', value: statsData.newThisWeek },
+      { label: dict?.tile_with_runbooks || 'CVEs mit Runbooks', value: statsData.coverage.mapped, hint: `${Math.round((statsData.coverage.ratio || 0) * 100)}%` },
+      { label: dict?.tile_avg_cvss || 'Ø CVSS', value: Math.round((statsData.avgScore || 0) * 10) / 10 },
+      { label: dict?.tile_top_services || 'Top Services', value: 0, hint: top.map((t) => `${t.name} (${t.count})`).join(' · ') },
     ]
   }, [statsData])
 
@@ -86,12 +86,12 @@ export default function StatsDashboard() {
     return Object.values(buckets)
   }, [items])
 
-  if (loading) return <div className="rounded-2xl border border-white/10 bg-black/40 p-4 text-gray-400">Lade Statistiken…</div>
+  if (loading) return <div className="rounded-2xl border border-white/10 bg-black/40 p-4 text-gray-400">{dict?.stats_loading || 'Lade Statistiken…'}</div>
   if (error) return <div className="rounded-2xl border border-white/10 bg-black/40 p-4 text-red-400">{error}</div>
 
   return (
     <div className="rounded-2xl border border-white/10 bg-black/40 p-4">
-      <div className="text-sm text-cyan-300 mb-3">Statistiken & Trends</div>
+      <div className="text-sm text-cyan-300 mb-3">{dict?.stats_header || 'Statistiken & Trends'}</div>
       <div className="grid md:grid-cols-4 gap-4">
         {tiles.map((s, i) => (
           <div key={i} className="rounded-xl border border-white/10 bg-black/50 p-3">
@@ -101,7 +101,7 @@ export default function StatsDashboard() {
         ))}
       </div>
       <div className="mt-5">
-        <div className="text-xs text-gray-400 mb-1">CVE‑Veröffentlichungen (14 Tage)</div>
+        <div className="text-xs text-gray-400 mb-1">{dict?.spark_title || 'CVE‑Veröffentlichungen (14 Tage)'}</div>
         <div className="flex items-end gap-1 h-16">
           {spark.map((v, idx) => (
             <div key={idx} className="w-3 bg-gradient-to-t from-cyan-700 to-cyan-400 rounded"

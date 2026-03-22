@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
-import RootPage from "@/app/vorstellung/page"
+import { getDictionary } from "@/lib/dictionary"
+import VorstellungClient from "@/components/vorstellung/VorstellungClient"
 
 export const revalidate = 60
 
@@ -17,6 +18,9 @@ export async function generateMetadata(props: { params: { lang: string } }): Pro
   }
 }
 
-export default function LocaleVorstellungPage() {
-  return <RootPage />
+export default async function LocaleVorstellungPage(props: { params: { lang: string } }) {
+  const locale = (SUPPORTED_LOCALES.includes(props.params.lang as Locale) ? props.params.lang : "de") as Locale
+  const dict = await getDictionary(locale)
+  const v = (dict?.vorstellung || null) as unknown as Record<string, unknown> | null
+  return <VorstellungClient dict={v as any} />
 }

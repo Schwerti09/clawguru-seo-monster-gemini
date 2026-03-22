@@ -170,13 +170,31 @@ function MiniScoreGauge() {
   )
 }
 
-export default function VorstellungClient() {
+export default function VorstellungClient({ dict }: { dict?: any }) {
   const pathname = usePathname()
   const first = pathname?.split("/")[1] || ""
   const isLang = /(^[a-z]{2}(-[A-Z]{2})?$)/.test(first) || ["de","en","ru","es","fr","it","pt","nl","pl","tr","uk","cs","sk","sv","no","da","fi","ja","ko","zh"].includes(first)
   const prefix = isLang ? `/${first}` : ""
   const [fx, setFx] = useState(false)
   const heroRef = useRef<HTMLDivElement | null>(null)
+  const timelineItems = Array.isArray((dict as any)?.timelineItems)
+    ? ((dict as any).timelineItems as Array<{ y: string; t: string; d: string }>)
+    : [
+        { y: "2026", t: "ClawGuru Launch", d: "Public launch mit Ops‑Intel & Copilot" },
+        { y: "2026 Q1", t: "Mycelium v3", d: "Neues UI, Performance, Embed‑Modus" },
+        { y: "2026 Q2", t: "3,4 Mio Runbooks", d: "Massives Vault‑Upgrade & Qualitätssiegel" },
+      ]
+  const trustedLogos = Array.isArray((dict as any)?.trustedLogos)
+    ? ((dict as any).trustedLogos as string[])
+    : ["ACME Cloud", "HelixOps", "NordSec", "Vector Labs"]
+  const stats = Array.isArray((dict as any)?.stats)
+    ? ((dict as any).stats as Array<{ v: string; l: string }>)
+    : [
+        { v: "94", l: "ClawScore" },
+        { v: "3.4M", l: "Runbooks" },
+        { v: "128K", l: "Checks" },
+        { v: "Quantum", l: "Resistant" },
+      ]
   useEffect(() => {
     let canceled = false
     let idleId: number | null = null
@@ -232,12 +250,12 @@ export default function VorstellungClient() {
         <div className="relative z-10 max-w-4xl mx-auto text-center">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-emerald-400/30 bg-emerald-400/10 text-emerald-200 text-[11px] uppercase tracking-widest">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-300" /> Quantum‑Resistant
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-300" /> {dict?.badge ?? "Quantum‑Resistant"}
             </div>
           </motion.div>
           <motion.h1 initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.05 }}
             className="text-4xl sm:text-6xl font-black font-heading text-white leading-tight mt-3">
-            ClawGuru vorgestellt
+            {dict?.title ?? "ClawGuru vorgestellt"}
           </motion.h1>
           <div className="mt-6 flex items-center justify-center">
             <Suspense fallback={null}>
@@ -247,11 +265,11 @@ export default function VorstellungClient() {
             </Suspense>
           </div>
           <motion.p initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.1 }} className="mt-4 text-gray-300 text-lg leading-relaxed max-w-2xl mx-auto">
-            Die Ops‑Intelligence Plattform: schnell, fokussiert, ergebnisorientiert. Hier siehst du in 60 Sekunden, was du bekommst.
+            {dict?.subtitle ?? "Die Ops‑Intelligence Plattform: schnell, fokussiert, ergebnisorientiert. Hier siehst du in 60 Sekunden, was du bekommst."}
           </motion.p>
           <motion.div initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.15 }} className="mt-6 flex flex-col sm:flex-row gap-3 justify-center">
-            <GlowButton variant="primary" href="/check">Jetzt testen</GlowButton>
-            <GlowButton variant="outline" href="/pricing">Pläne</GlowButton>
+            <GlowButton variant="primary" href="/check">{dict?.ctaPrimary ?? "Jetzt testen"}</GlowButton>
+            <GlowButton variant="outline" href="/pricing">{dict?.ctaSecondary ?? "Pläne"}</GlowButton>
           </motion.div>
         </div>
       </section>
@@ -260,7 +278,7 @@ export default function VorstellungClient() {
         <div className="py-10 max-w-6xl mx-auto space-y-12">
           {/* Particle/Video background section (lightweight) */}
           <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.55 }} className="rounded-[24px] border border-white/10 bg-black/30 p-4">
-            <div className="text-sm text-gray-400 mb-2">Das bekommst du</div>
+            <div className="text-sm text-gray-400 mb-2">{dict?.sectionGet ?? "Das bekommst du"}</div>
             <div className="rounded-2xl overflow-hidden relative" style={{ aspectRatio: "16/9" }}>
               <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-transparent to-emerald-500/10" aria-hidden />
               <div className="absolute inset-0" style={{
@@ -281,13 +299,9 @@ export default function VorstellungClient() {
 
           {/* Timeline */}
           <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.55 }} className="rounded-2xl border border-white/10 bg-black/30 p-6" style={{ contentVisibility: "auto", containIntrinsicSize: "520px" }}>
-            <div className="text-sm font-bold text-white mb-3">ClawVerse Timeline</div>
+            <div className="text-sm font-bold text-white mb-3">{dict?.timelineTitle ?? "ClawVerse Timeline"}</div>
             <ol className="relative border-l border-white/10 pl-6 space-y-5">
-              {[
-                { y: "2026", t: "ClawGuru Launch", d: "Public launch mit Ops‑Intel & Copilot" },
-                { y: "2026 Q1", t: "Mycelium v3", d: "Neues UI, Performance, Embed‑Modus" },
-                { y: "2026 Q2", t: "3,4 Mio Runbooks", d: "Massives Vault‑Upgrade & Qualitätssiegel" },
-              ].map((x, i) => (
+              {timelineItems.map((x, i) => (
                 <motion.li key={i} initial={{ opacity: 0, x: -6 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.45, delay: i * 0.05 }} className="ml-2">
                   <div className="absolute -left-1.5 w-3 h-3 rounded-full" style={{ background: i === 0 ? "#00b8ff" : i === 1 ? "#d4af37" : "#00ff9d" }} />
                   <div className="text-xs text-gray-400">{x.y}</div>
@@ -300,26 +314,21 @@ export default function VorstellungClient() {
 
           {/* Copilot live demo teaser */}
           <motion.div initial={{ opacity: 0, y: 14 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.55 }} className="rounded-2xl border border-white/10 bg-black/30 p-4" style={{ contentVisibility: "auto", containIntrinsicSize: "220px" }}>
-            <Suspense fallback={<div className="text-xs text-gray-400">Initialisiere Copilot…</div>}>
+            <Suspense fallback={<div className="text-xs text-gray-400">{dict?.copilotInit ?? "Initialisiere Copilot…"}</div>}>
               <CopilotTeaser />
             </Suspense>
           </motion.div>
 
           {/* Trusted logos + stats */}
           <motion.div initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.55 }} className="rounded-2xl border border-white/10 bg-black/30 p-6" style={{ contentVisibility: "auto", containIntrinsicSize: "480px" }}>
-            <div className="text-xs font-mono tracking-[0.3em] uppercase text-gray-400">Trusted by SecOps Leaders</div>
+            <div className="text-xs font-mono tracking-[0.3em] uppercase text-gray-400">{dict?.trustedBy ?? "Trusted by SecOps Leaders"}</div>
             <div className="mt-3 grid grid-cols-2 md:grid-cols-4 gap-3">
-              {["ACME Cloud", "HelixOps", "NordSec", "Vector Labs"].map((n, i) => (
+              {trustedLogos.map((n, i) => (
                 <motion.div key={n} initial={{ opacity: 0, y: 6 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: i * 0.03 }} className="rounded-xl border border-white/10 bg-black/50 p-3 text-center text-sm text-gray-300">{n}</motion.div>
               ))}
             </div>
             <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-3">
-              {[
-                { v: "94", l: "ClawScore" },
-                { v: "3.4M", l: "Runbooks" },
-                { v: "128K", l: "Checks" },
-                { v: "Quantum", l: "Resistant" },
-              ].map((s, i) => (
+              {stats.map((s, i) => (
                 <motion.div key={s.l} initial={{ opacity: 0, y: 6 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: i * 0.03 }} className="rounded-xl border border-white/10 bg-black/50 p-3 text-center">
                   <div className="text-xl font-black text-white">{s.v}</div>
                   <div className="text-[10px] uppercase tracking-wider text-gray-400">{s.l}</div>
@@ -330,7 +339,7 @@ export default function VorstellungClient() {
 
           {/* Final CTA */}
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="text-center pt-6">
-            <GlowButton variant="primary" href="/daypass">Day Pass 7€ – Sofortzugang</GlowButton>
+            <GlowButton variant="primary" href="/daypass">{dict?.finalCta ?? "Day Pass 7€ – Sofortzugang"}</GlowButton>
           </motion.div>
         </div>
       </Container>

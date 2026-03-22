@@ -6,10 +6,10 @@ const EXAMPLES: string[][] = [
   ["ssh", "terraform", "azure"],
 ]
 
-export default function ExampleStacks({ onSelect }: { onSelect: (tags: string[]) => void }) {
+export default function ExampleStacks({ onSelect, dict }: { onSelect: (tags: string[]) => void; dict?: any }) {
   return (
     <div className="max-w-4xl mx-auto">
-      <div className="text-sm text-gray-400 mb-2">Beispiel‑Stacks</div>
+      <div className="text-sm text-gray-400 mb-2">{dict?.example_stacks_label || 'Beispiel‑Stacks'}</div>
       <div className="flex flex-wrap gap-2">
         {EXAMPLES.map((arr, idx) => (
           <button

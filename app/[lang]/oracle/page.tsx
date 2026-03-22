@@ -2,9 +2,10 @@ import type { Metadata } from "next"
 import dynamic from "next/dynamic"
 
 import { SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
+import { getDictionary } from "@/lib/dictionary"
 import OracleHero from "@/components/oracle/OracleHero"
 import HowItWorks from "@/components/oracle/HowItWorks"
-import UpgradeCTA from "@/components/oracle/UpgradeCTA"
+import UpgradeCTA from "@/components/shared/UpgradeCTA"
 
 const OraclePageClient = dynamic(() => import("@/components/oracle/OraclePageClient"), { ssr: false })
 
@@ -23,25 +24,28 @@ export async function generateMetadata(props: { params: { lang: string } }): Pro
   }
 }
 
-export default function LocaleOraclePage(props: { params: { lang: string } }) {
+export default async function LocaleOraclePage(props: { params: { lang: string } }) {
   const locale = (SUPPORTED_LOCALES.includes(props.params.lang as Locale) ? props.params.lang : "de") as Locale
   const prefix = `/${locale}`
+  const dict = await getDictionary(locale)
+  const oracle = dict.oracle || {}
+  const common = dict.common || {}
   return (
     <div className="space-y-6">
-      <OracleHero prefix={prefix} />
+      <OracleHero prefix={prefix} dict={oracle} />
       <section className="py-2">
         <div className="px-4 sm:px-6 lg:px-8">
-          <OraclePageClient />
+          <OraclePageClient dict={oracle} />
         </div>
       </section>
       <section className="py-4">
         <div className="px-4 sm:px-6 lg:px-8">
-          <HowItWorks />
+          <HowItWorks dict={oracle} />
         </div>
       </section>
       <section className="py-2">
         <div className="px-4 sm:px-6 lg:px-8">
-          <UpgradeCTA prefix={prefix} />
+          <UpgradeCTA prefix={prefix} dict={oracle} />
         </div>
       </section>
     </div>

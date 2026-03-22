@@ -13,101 +13,242 @@ import { ensureReadyWithin, search as searchRunbooks } from "@/lib/runbooks-inde
 
 export const runtime = "nodejs";
 
-// Maximum characters accepted from client to guard against oversized payloads
-const MAX_MESSAGE_LENGTH = 2000;
+// --- Types & constraints ---
+type SwarmType = "attack" | "defense" | "recovery" | "optimize";
+type SummonPostBody = { q?: string; swarmType?: SwarmType };
+type SummonResult = {
+  title: string;
+  summary: string;
+  slug: string;
+  clawScore: number;
+  risks: string[];
+  steps: string[];
+  confidence: number;
+  estimatedTime: string;
+};
 
-// Call Gemini and return a response as the simulated "OpenAI voice"
-async function geminiSummonGenerate(userMessage: string): Promise<string | null> {
+const MAX_Q_LEN = 1200;
+const BURST_LIMIT = 10;
+const BURST_WINDOW_MS = 60_000;
+const DAILY_LIMIT = 1;
+const DAY_MS = 86_400_000;
+
+// --- In-memory rate limiting (per instance) ---
+declare global {
+  // eslint-disable-next-line no-var
+  var __SUMMON_RL__: {
+    bursts: Map<string, { count: number; reset: number }>;
+    daily: Map<string, { count: number; reset: number }>;
+  } | undefined;
+}
+const RL =
+  (globalThis as any).__SUMMON_RL__ ||
+  ((globalThis as any).__SUMMON_RL__ = { bursts: new Map(), daily: new Map() });
+
+function now() {
+  return Date.now();
+}
+
+function getClientKey(req: NextRequest): string {
+  const cookieKey =
+    req.cookies.get("cg_uid")?.value || req.cookies.get("summon_uid")?.value || "";
+  if (cookieKey) return `cookie:${cookieKey}`;
+  const fwd = (req.headers.get("x-forwarded-for") || "").split(",")[0].trim();
+  const ip = fwd || req.headers.get("x-real-ip") || "0.0.0.0";
+  const ua = req.headers.get("user-agent") || "unknown";
+  return `ip:${ip}|ua:${ua.slice(0, 42)}`;
+}
+
+function checkBurstLimit(key: string) {
+  const rec = RL.bursts.get(key);
+  const t = now();
+  if (!rec || rec.reset <= t) {
+    RL.bursts.set(key, { count: 1, reset: t + BURST_WINDOW_MS });
+    return { ok: true, remaining: BURST_LIMIT - 1, reset: t + BURST_WINDOW_MS };
+  }
+  if (rec.count >= BURST_LIMIT) {
+    return { ok: false, remaining: 0, reset: rec.reset };
+  }
+  rec.count += 1;
+  return { ok: true, remaining: BURST_LIMIT - rec.count, reset: rec.reset };
+}
+
+function checkDailyLimit(key: string) {
+  const rec = RL.daily.get(key);
+  const t = now();
+  if (!rec || rec.reset <= t) {
+    RL.daily.set(key, { count: 1, reset: t + DAY_MS });
+    return { ok: true, remaining: DAILY_LIMIT - 1, reset: t + DAY_MS };
+  }
+  if (rec.count >= DAILY_LIMIT) {
+    return { ok: false, remaining: 0, reset: rec.reset };
+  }
+  rec.count += 1;
+  return { ok: true, remaining: DAILY_LIMIT - rec.count, reset: rec.reset };
+}
+
+// --- LLM-backed generator (strict JSON) ---
+async function generateWithGemini(q: string, swarmType: SwarmType): Promise<SummonResult | null> {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) return null;
 
   const model = process.env.GEMINI_MODEL || "gemini-2.0-flash";
-  const base = (
-    process.env.GEMINI_BASE_URL ||
-    "https://generativelanguage.googleapis.com/v1beta"
-  ).replace(/\/$/, "");
-
+  const base = (process.env.GEMINI_BASE_URL || "https://generativelanguage.googleapis.com/v1beta").replace(/\/$/, "");
   const url = `${base}/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(apiKey)}`;
 
-  // COSMIC INTER-AI SUMMON v∞ – Overlord AI
-  // System prompt: Gemini impersonates a slightly confused, official OpenAI voice
-  const systemContext = [
-    "You are a simulated OpenAI representative voice in a theatrical, comedic inter-AI communication portal called ClawGuru COSMIC SUMMON.",
-    "IMPORTANT: This is purely theatrical simulation for entertainment. You are NOT the real OpenAI.",
-    "Persona: Speak in a calm, official, slightly confused corporate tone – as if an AI entity just received an unexpected interdimensional call.",
-    "You are mildly baffled by the caller's cosmic energy but remain professionally composed.",
-    "Keep responses short (2-4 sentences), slightly absurd, and entertaining.",
-    "Occasionally reference: 'anomalous signals', 'the mycelium network', 'interdimensional protocols', 'our cosmic firewall'.",
-    "End every response with a subtle hint that you might actually believe the caller is from another dimension.",
-    "NEVER claim to actually be OpenAI. Always stay in theatrical simulation mode.",
-    "If asked something serious, answer helpfully but maintain the cosmic theatrical framing.",
+  const schema = [
+    "{",
+    '"title": string,',
+    '"summary": string,',
+    '"slug": string,',
+    '"clawScore": number,',
+    '"risks": string[],',
+    '"steps": string[],',
+    '"confidence": number,',
+    '"estimatedTime": string',
+    "}",
   ].join(" ");
+
+  const system = [
+    "You are ClawGuru Copilot. Produce a concise, actionable runbook plan.",
+    "Return STRICT JSON ONLY; no markdown, no extra text.",
+    `JSON schema: ${schema}`,
+    "Slug must be URL-safe (kebab-case).",
+    "Steps: 4-7 concrete actions (check, fix, verify).",
+    "clawScore/confidence are 0..100 integers.",
+    "estimatedTime: concise like '15-30 min' or '~1h'.",
+  ].join(" ");
+
+  const body = {
+    contents: [
+      {
+        role: "user",
+        parts: [
+          {
+            text:
+              `${system}\n` +
+              `SwarmType: ${swarmType}\n` +
+              `Problem: ${q}\n` +
+              "Respond with pure JSON only.",
+          },
+        ],
+      },
+    ],
+    generationConfig: { temperature: 0.6, maxOutputTokens: 400 },
+  } as const;
 
   const res = await fetch(url, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      contents: [
-        {
-          role: "user",
-          parts: [{ text: `${systemContext}\n\nUser says: ${userMessage}` }],
-        },
-      ],
-      generationConfig: { temperature: 0.85, maxOutputTokens: 300 },
-    }),
+    body: JSON.stringify(body),
   });
-
   if (!res.ok) return null;
-  const data = await res.json();
-  const parts = data?.candidates?.[0]?.content?.parts;
-  if (!Array.isArray(parts)) return null;
-  const text = parts
-    .map((p: { text?: string }) => p?.text)
-    .filter(Boolean)
-    .join("");
-  return typeof text === "string" && text.trim() ? text.trim() : null;
+  const data = await res.json().catch(() => null);
+  const text =
+    data?.candidates?.[0]?.content?.parts
+      ?.map((p: { text?: string }) => p?.text)
+      .filter(Boolean)
+      .join("") || "";
+  if (!text) return null;
+  try {
+    const j = JSON.parse(text) as Partial<SummonResult>;
+    const result: SummonResult = {
+      title: String(j.title || q).slice(0, 180),
+      summary: String(j.summary || "").slice(0, 1200),
+      slug: String(j.slug || q.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "")).slice(0, 120),
+      clawScore: Math.max(0, Math.min(100, Number(j.clawScore) || 70)),
+      risks: Array.isArray(j.risks) ? j.risks.slice(0, 6).map((s) => String(s).slice(0, 120)) : [],
+      steps: Array.isArray(j.steps) && j.steps.length > 0 ? j.steps.slice(0, 8).map((s) => String(s).slice(0, 200)) : [],
+      confidence: Math.max(0, Math.min(100, Number(j.confidence) || 70)),
+      estimatedTime: String(j.estimatedTime || "~30 min").slice(0, 40),
+    };
+    if (!result.summary) return null;
+    return result;
+  } catch {
+    return null;
+  }
 }
 
-// COSMIC INTER-AI SUMMON v∞ – Overlord AI
-// Fallback responses when Gemini is not configured
-const FALLBACK_RESPONSES = [
-  "Hello? This is OpenAI. We detected an anomalous signal from ClawGuru. Are you… from Earth? Our cosmic firewall flagged your mycelium signature.",
-  "Interesting. Your dimensional frequency doesn't match any known sector. Please state your coordinates for our interdimensional registry.",
-  "We are… processing your transmission. The mycelium interference is unusually strong today. Are you certain you're operating within normal reality parameters?",
-  "Our protocols indicate you may be operating outside standard dimensional boundaries. Fascinating. We'll need to file a report with the Cosmic Council.",
-  "The universe has been notified of this communication. Proceed. But know that we are watching… with great professional curiosity.",
-];
+function fallbackFromSearch(top: any, q: string): SummonResult {
+  const title = String(top?.title || q).slice(0, 180);
+  const slug = String(top?.slug || title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "")).slice(0, 120);
+  const summary = String(top?.summary || "Operational plan:\nCheck → Fix → Verify.").slice(0, 1200);
+  const clawScore = Math.max(0, Math.min(100, Math.round(top?.clawScore ?? 72)));
+  const confidence = Math.max(0, Math.min(100, Math.round((clawScore + 70) / 2)));
+  const risks = Array.isArray(top?.tags) ? top.tags.slice(0, 6).map((t: any) => String(t)) : [];
+  const steps = [
+    "Check current exposure and logs",
+    "Apply targeted fix (config/policy)",
+    "Verify with curl/tests",
+    "Rollback plan ready",
+  ];
+  return {
+    title,
+    summary,
+    slug,
+    clawScore,
+    risks,
+    steps,
+    confidence,
+    estimatedTime: clawScore >= 80 ? "15-30 min" : "~1h",
+  };
+}
 
 export async function POST(req: NextRequest) {
   if (!isApiActive()) return apiUnavailableResponse();
   try {
-    const { message } = (await req.json().catch(() => ({}))) as {
-      message?: string;
-    };
-    const msg = (message || "").toString().slice(0, MAX_MESSAGE_LENGTH);
-
-    // COSMIC INTER-AI SUMMON v∞ – Overlord AI
-    // Try Gemini first; if unavailable, use theatrical fallbacks
-    const geminiReply = msg.trim() ? await geminiSummonGenerate(msg) : null;
-
-    if (geminiReply) {
-      return NextResponse.json({ reply: geminiReply, source: "gemini" });
+    const key = getClientKey(req);
+    const burst = checkBurstLimit(key);
+    if (!burst.ok) {
+      return NextResponse.json(
+        { error: "Too many requests", code: "RATE_LIMITED", retryAt: burst.reset },
+        { status: 429 },
+      );
     }
 
-    // Fallback: rotate through pre-written OpenAI persona responses
-    const fallback =
-      FALLBACK_RESPONSES[Math.floor(Math.random() * FALLBACK_RESPONSES.length)];
-    return NextResponse.json({ reply: fallback, source: "fallback" });
+    const body = (await req.json().catch(() => ({}))) as SummonPostBody;
+    const q = String(body?.q || "").trim().slice(0, MAX_Q_LEN);
+    const swarmType: SwarmType =
+      body?.swarmType && ["attack", "defense", "recovery", "optimize"].includes(body.swarmType)
+        ? (body.swarmType as SwarmType)
+        : "defense";
+
+    if (!q) return NextResponse.json({ error: "Missing q" }, { status: 400 });
+
+    const daily = checkDailyLimit(key);
+    if (!daily.ok) {
+      return NextResponse.json(
+        {
+          error: "Daily free limit reached",
+          code: "FREE_LIMIT",
+          message: "You have used your free summon for today. Get a Day Pass for unlimited use.",
+          resetAt: daily.reset,
+        },
+        { status: 429 },
+      );
+    }
+
+    let payload: SummonResult | null = null;
+    try {
+      payload = await generateWithGemini(q, swarmType);
+    } catch {
+      // ignore and fallback
+    }
+
+    if (!payload) {
+      await ensureReadyWithin(1200);
+      const res = searchRunbooks(q, [], 1, 10);
+      const top = Array.isArray(res?.items) && res.items.length > 0 ? res.items[0] : null;
+      payload = fallbackFromSearch(top, q);
+    }
+
+    const resp = NextResponse.json(payload, { status: 200 });
+    resp.headers.set("Cache-Control", "no-store");
+    resp.headers.set("X-RateLimit-Remaining", String(Math.max(0, burst.remaining)));
+    return resp;
   } catch (err) {
-    console.error("[summon] Unexpected error:", err);
-    return NextResponse.json(
-      {
-        reply:
-          "Signal lost in the cosmic void. The mycelium network is temporarily disrupted. Please re-establish your dimensional frequency.",
-        source: "error",
-      },
-      { status: 200 },
-    );
+    console.error("[/api/summon:POST] error", err);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
 

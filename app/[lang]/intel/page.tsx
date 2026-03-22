@@ -1,12 +1,13 @@
 import type { Metadata } from "next"
 import { SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
+import { getDictionary } from "@/lib/dictionary"
 import IntelHero from "@/components/intel/IntelHero"
 import LiveThreatFeed from "@/components/intel/LiveThreatFeed"
 import CveAnalyzer from "@/components/intel/CveAnalyzer"
 import PredictiveRadar from "@/components/intel/PredictiveRadar"
 import MyceliumPreview from "@/components/intel/MyceliumPreview"
 import StatsDashboard from "@/components/intel/StatsDashboard"
-import UpgradeCTA from "@/components/intel/UpgradeCTA"
+import UpgradeCTA from "@/components/shared/UpgradeCTA"
 
 export const revalidate = 300
 
@@ -20,25 +21,27 @@ export async function generateMetadata(props: { params: { lang: string } }): Pro
   return { alternates: { canonical: `/${locale}/intel` } }
 }
 
-export default function LocaleIntelPage(props: { params: { lang: string } }) {
+export default async function LocaleIntelPage(props: { params: { lang: string } }) {
   const lang = props?.params?.lang
   const locale = (SUPPORTED_LOCALES.includes(lang as Locale) ? lang : "de") as Locale
   const prefix = `/${locale}`
+  const dict = await getDictionary(locale)
+  const intel = dict.intel || {}
   return (
     <main className="min-h-screen bg-[#05060A]">
-      <IntelHero />
+      <IntelHero dict={intel} />
       <section className="container mx-auto px-4 py-12 space-y-16">
         <div className="grid md:grid-cols-2 gap-8">
-          <LiveThreatFeed prefix={prefix} />
-          <CveAnalyzer prefix={prefix} />
+          <LiveThreatFeed prefix={prefix} dict={intel} />
+          <CveAnalyzer prefix={prefix} dict={intel} />
         </div>
         <div className="grid md:grid-cols-2 gap-8">
-          <PredictiveRadar prefix={prefix} />
+          <PredictiveRadar prefix={prefix} dict={intel} />
           <MyceliumPreview ui="embed" />
         </div>
-        <StatsDashboard />
+        <StatsDashboard dict={intel} />
       </section>
-      <UpgradeCTA prefix={prefix} />
+      <UpgradeCTA prefix={prefix} dict={intel} variant="intel" />
     </main>
   )
 }

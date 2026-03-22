@@ -23,15 +23,36 @@ export default function CopilotTeaser() {
     setBusy(true)
     setErr(null)
     try {
-      const res = await fetch("/api/summon/teaser", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ q }),
-        cache: "no-store",
-      })
+      const url = `/api/summon?q=${encodeURIComponent(q)}`
+      const res = await fetch(url, { method: "GET", cache: "no-store" })
       if (!res.ok) throw new Error(String(res.status))
-      const j: TeaserResult = await res.json()
-      setData(j)
+      type ApiSummonResp = {
+        problem?: string
+        relevant_runbooks?: Array<{
+          slug?: string
+          title?: string
+          summary?: string
+          clawScore?: number
+          tags?: string[]
+        }>
+        affected_services?: string[]
+        confidence?: number
+        total_available?: number
+      }
+      const j: ApiSummonResp = await res.json()
+      const first = (j.relevant_runbooks && j.relevant_runbooks[0]) || null
+      const mapped: TeaserResult = {
+        top: first ? { slug: first.slug, title: first.title, summary: first.summary } : null,
+        results: (j.relevant_runbooks || []).map((r) => ({
+          slug: r.slug,
+          title: r.title,
+          summary: r.summary,
+          clawScore: r.clawScore,
+        })),
+        prediction: j.problem,
+        risks: j.confidence,
+      }
+      setData(mapped)
     } catch (e: any) {
       setErr(e?.message || "Fehler")
       setData(null)

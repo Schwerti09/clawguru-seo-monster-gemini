@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react"
 import Skeleton from "@/components/ui/Skeleton"
 
-const SCOPES = [
+const BASE_SCOPES = [
   { id: "", label: "Alle" },
   { id: "aws", label: "AWS" },
   { id: "gcp", label: "GCP" },
@@ -15,14 +15,21 @@ type Props = {
   onScope?: (s: string) => void
   value?: string
   onChange?: (s: string) => void
+  dict?: any
 }
 
-export default function ScopeSelector({ onData, onScope, value, onChange }: Props) {
+export default function ScopeSelector({ onData, onScope, value, onChange, dict }: Props) {
   const isControlled = typeof value === 'string' && typeof onChange === 'function'
-  const [internal, setInternal] = useState<string>(SCOPES[0].id)
+  const [internal, setInternal] = useState<string>(BASE_SCOPES[0].id)
   const selected = isControlled ? (value as string) : internal
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+
+  const SCOPES = useMemo(() => {
+    const allLabel = dict?.scope_all || 'Alle'
+    const base = BASE_SCOPES.map(s => s.id === '' ? { ...s, label: allLabel } : s)
+    return base
+  }, [dict])
 
   useEffect(() => {
     onScope?.(selected)
@@ -31,14 +38,14 @@ export default function ScopeSelector({ onData, onScope, value, onChange }: Prop
     fetch(`/api/oracle?scope=${encodeURIComponent(selected)}`)
       .then((r) => (r.ok ? r.json() : Promise.reject(new Error(`${r.status}`))))
       .then((d) => onData(d))
-      .catch(() => { setError("Fehler beim Laden."); onData(null) })
+      .catch(() => { setError(dict?.error_load || "Fehler beim Laden."); onData(null) })
       .finally(() => setLoading(false))
   }, [selected])
 
   return (
     <div className="max-w-4xl mx-auto">
       <div className="mb-6">
-        <label className="block text-sm font-medium text-gray-300 mb-2">Scope</label>
+        <label className="block text-sm font-medium text-gray-300 mb-2">{dict?.scope_label || 'Scope'}</label>
         <div className="flex flex-wrap gap-2">
           {SCOPES.map((s) => (
             <button

@@ -5,9 +5,9 @@ import { SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
 import { getDictionary } from "@/lib/dictionary"
 import SummonHero from "@/components/summon/SummonHero"
 import HowItWorks from "@/components/summon/HowItWorks"
-import UpgradeCTA from "@/components/summon/UpgradeCTA"
+import UpgradeCTA from "@/components/shared/UpgradeCTA"
 
-const SummonPageClient = dynamic(() => import("@/components/summon/SummonPageClient"), { ssr: false })
+const SummonRealClient = dynamic(() => import("@/components/summon/SummonRealClient"), { ssr: false })
 
 export const revalidate = 60
 
@@ -35,7 +35,7 @@ export default async function LocaleSummonPage(props: { params: { lang: string }
       <SummonHero prefix={prefix} dict={summon} />
       <section className="py-2">
         <div className="px-4 sm:px-6 lg:px-8">
-          <SummonPageClient dict={summon} />
+          <SummonRealClient prefix={prefix} dict={summon} />
         </div>
       </section>
       <section className="py-4">
@@ -45,7 +45,7 @@ export default async function LocaleSummonPage(props: { params: { lang: string }
       </section>
       <section className="py-2">
         <div className="px-4 sm:px-6 lg:px-8">
-          <UpgradeCTA prefix={prefix} dict={summon} common={common} />
+          <UpgradeCTA prefix={prefix} dict={summon} />
         </div>
       </section>
     </div>

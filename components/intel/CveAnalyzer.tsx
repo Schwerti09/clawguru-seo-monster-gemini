@@ -19,8 +19,8 @@ type Detail = {
   summon?: { slug: string; title: string; clawScore?: number } | null
 }
 
-export default function CveAnalyzer(props: { prefix?: string }) {
-  const { prefix = "" } = props
+export default function CveAnalyzer(props: { prefix?: string; dict?: any }) {
+  const { prefix = "", dict } = props
   const [q, setQ] = useState("")
   const [feed, setFeed] = useState<CveEntry[]>([])
   const [loading, setLoading] = useState(true)
@@ -39,7 +39,7 @@ export default function CveAnalyzer(props: { prefix?: string }) {
         const entries: CveEntry[] = Array.isArray(feedJ?.items) ? feedJ.items : []
         if (!stop) setFeed(entries)
       } catch (e: any) {
-        if (!stop) setError(e?.message || 'Analyzer-Ladefehler')
+        if (!stop) setError(e?.message || dict?.analyzer_error || 'Analyzer-Ladefehler')
       } finally {
         if (!stop) setLoading(false)
       }
@@ -121,23 +121,23 @@ export default function CveAnalyzer(props: { prefix?: string }) {
 
   return (
     <div className="rounded-2xl border border-white/10 bg-black/40 p-4">
-      <div className="text-sm text-cyan-300 mb-2">CVE‑Analyzer & Runbook‑Matcher</div>
+      <div className="text-sm text-cyan-300 mb-2">{dict?.analyzer_header || 'CVE‑Analyzer & Runbook‑Matcher'}</div>
       <div className="flex gap-2">
         <input
           value={q}
           onChange={(e) => setQ(e.target.value)}
-          placeholder="CVE‑ID (z. B. CVE-2024-6387) oder Stichwort (z. B. ssh)"
+          placeholder={dict?.analyzer_input_placeholder || 'CVE‑ID (z. B. CVE-2024-6387) oder Stichwort (z. B. ssh)'}
           className="flex-1 px-4 py-2.5 rounded-xl bg-black/60 border border-white/10 text-white placeholder-gray-500 focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20"
         />
         <button onClick={analyze} disabled={busy}
                 className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-cyan-700 text-white font-semibold">
-          {busy ? 'Analysiere…' : 'Analysieren'}
+          {busy ? (dict?.analyzing_label || 'Analysiere…') : (dict?.analyze_btn || 'Analysieren')}
         </button>
       </div>
 
-      {loading && <div className="mt-4 text-sm text-gray-400">Lade Feed…</div>}
+      {loading && <div className="mt-4 text-sm text-gray-400">{dict?.feed_loading || 'Lade Feed…'}</div>}
       {!loading && recent.length > 0 && (
-        <div className="mt-3 text-xs text-gray-400">Beispiele: {recent.map((e, i) => (
+        <div className="mt-3 text-xs text-gray-400">{(dict?.examples_label || 'Beispiele') + ':'} {recent.map((e, i) => (
           <button key={e.id} className="underline hover:text-gray-200 mr-2" onClick={() => setQ(e.id)}>{e.id}</button>
         ))}</div>
       )}
@@ -153,11 +153,11 @@ export default function CveAnalyzer(props: { prefix?: string }) {
           </div>
           <div className="mt-1 text-white font-semibold">{detail.cve.title}</div>
           <div className="mt-1 text-sm text-gray-400">{detail.cve.description}</div>
-          <div className="mt-2 text-xs text-gray-500">Veröffentlicht: {new Date(detail.cve.published).toISOString().slice(0,10)}</div>
+          <div className="mt-2 text-xs text-gray-500">{(dict?.published_label || 'Veröffentlicht') + ': '} {new Date(detail.cve.published).toISOString().slice(0,10)}</div>
 
           {(detail.mapping || detail.summon) && (
             <div className="mt-4 rounded-lg border border-white/10 bg-black/40 p-3">
-              <div className="text-xs font-mono text-gray-400">Empfohlenes Runbook</div>
+              <div className="text-xs font-mono text-gray-400">{dict?.recommended_runbook_label || 'Empfohlenes Runbook'}</div>
               <div className="text-sm text-white font-semibold">
                 <a href={`${prefix || ''}/runbook/${(detail.mapping?.slug || detail.summon?.slug)}`}
                    className="hover:underline">
@@ -165,11 +165,11 @@ export default function CveAnalyzer(props: { prefix?: string }) {
                 </a>
               </div>
               <div className="mt-2 flex gap-2 text-xs">
-                <a className="underline text-cyan-300" href={`${prefix || ''}/oracle`}>Oracle</a>
-                <a className="underline text-emerald-300" href={`${prefix || ''}/mycelium`}>Mycelium</a>
-                <a className="underline text-indigo-300" href={`${prefix || ''}/neuro`}>Neuro</a>
+                <a className="underline text-cyan-300" href={`${prefix || ''}/oracle`}>{dict?.link_oracle || 'Oracle'}</a>
+                <a className="underline text-emerald-300" href={`${prefix || ''}/mycelium`}>{dict?.link_mycelium || 'Mycelium'}</a>
+                <a className="underline text-indigo-300" href={`${prefix || ''}/neuro`}>{dict?.link_neuro || 'Neuro'}</a>
                 {detail.cve?.id ? (
-                  <a className="underline text-pink-300" href={`${prefix || ''}/solutions/fix-${encodeURIComponent(detail.cve.id)}`}>Fix‑Seite</a>
+                  <a className="underline text-pink-300" href={`${prefix || ''}/solutions/fix-${encodeURIComponent(detail.cve.id)}`}>{dict?.link_fix_page || 'Fix‑Seite'}</a>
                 ) : null}
               </div>
             </div>

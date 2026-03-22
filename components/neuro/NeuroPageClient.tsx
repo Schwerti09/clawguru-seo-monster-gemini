@@ -17,7 +17,7 @@ function useLocalePrefix() {
   }, [pathname])
 }
 
-export default function NeuroPageClient() {
+export default function NeuroPageClient({ dict }: { dict?: any }) {
   const prefix = useLocalePrefix()
   const [selected, setSelected] = useState<string[]>([])
   const [loading, setLoading] = useState(false)
@@ -44,7 +44,7 @@ export default function NeuroPageClient() {
             if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent('neuro:found', { detail: { found } }))
           } catch {}
         })
-        .catch(() => setError("Fehler beim Laden."))
+        .catch(() => setError(dict?.error_load || "Fehler beim Laden."))
         .finally(() => setLoading(false))
     }, 500)
     return () => clearTimeout(t)
@@ -70,17 +70,16 @@ export default function NeuroPageClient() {
         recommendations={data}
         loading={loading}
         error={error}
+        dict={dict}
       />
 
       {!loading && !data && selected.length === 0 && (
-        <div className="text-center text-gray-400 py-12">
-          Wähle oben einen oder mehrere Technologie‑Tags, um personalisierte Runbook‑Empfehlungen zu erhalten.
-        </div>
+        <div className="text-center text-gray-400 py-12">{dict?.empty_hint || 'Wähle oben einen oder mehrere Technologie‑Tags, um personalisierte Runbook‑Empfehlungen zu erhalten.'}</div>
       )}
 
       {data && <RecommendationList data={data} prefix={prefix} />}
 
-      <ExampleStacks onSelect={setExample} />
+      <ExampleStacks onSelect={setExample} dict={dict} />
     </div>
   )
 }

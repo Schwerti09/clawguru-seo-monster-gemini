@@ -99,7 +99,7 @@ export default function Home({ dict, locale }: HomeProps) {
 
       <section className="py-14" style={{ background: "var(--surface-1)" }}>
         <Container>
-          <PricingSection prefix={prefix} locale={locale} />
+          <PricingSection prefix={prefix} locale={locale} dict={(dict as any)?.pricing} />
         </Container>
       </section>
 

@@ -4,7 +4,7 @@ import NextDynamic from "next/dynamic"
 import { SUPPORTED_LOCALES, DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
 import Container from "@/components/shared/Container"
 import MyceliumShareCard from "@/components/share/MyceliumShareCard"
-import { getDictionary } from "@/lib/getDictionary"
+import { getDictionary } from "@/lib/dictionary"
 import MyceliumHero from "@/components/mycelium/MyceliumHero"
 import ExampleNodes from "@/components/mycelium/ExampleNodes"
 
@@ -38,7 +38,7 @@ export default async function LocaleMyceliumPage(props: { params: { lang: string
 
   return (
     <>
-      <MyceliumHero prefix={prefix} />
+      <MyceliumHero prefix={prefix} dict={dict?.mycelium} />
 
       <section className="container mx-auto px-4 py-12">
         <div className="rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
@@ -49,18 +49,18 @@ export default async function LocaleMyceliumPage(props: { params: { lang: string
       <section className="container mx-auto px-4 py-16">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div>
-            <h2 className="text-3xl font-bold bg-gradient-to-r from-white to-cyan-300 bg-clip-text text-transparent">Wie Mycelium funktioniert</h2>
-            <p className="mt-4 text-gray-300">Jeder Knoten im Netzwerk ist ein Runbook, jede Verbindung zeigt gemeinsame Tags, betroffene Services oder CVEs. So erkennst du auf einen Blick, welche Sicherheitslücken zusammenhängen und in welcher Reihenfolge du sie beheben solltest.</p>
+            <h2 className="text-3xl font-bold bg-gradient-to-r from-white to-cyan-300 bg-clip-text text-transparent">{dict?.mycelium?.how_title || "Wie Mycelium funktioniert"}</h2>
+            <p className="mt-4 text-gray-300">{dict?.mycelium?.how_text || "Jeder Knoten im Netzwerk ist ein Runbook, jede Verbindung zeigt gemeinsame Tags, betroffene Services oder CVEs. So erkennst du auf einen Blick, welche Sicherheitslücken zusammenhängen und in welcher Reihenfolge du sie beheben solltest."}</p>
           </div>
           <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
-            <div className="text-cyan-400 text-2xl mb-2">🔍 Pro‑Tipp</div>
-            <p className="text-gray-300">Klicke auf einen Knoten, um zum Runbook zu gelangen. Mit einem Daypass kannst du den gesamten Graphen als interaktives HTML exportieren und in dein Team teilen.</p>
+            <div className="text-cyan-400 text-2xl mb-2">{dict?.mycelium?.pro_tip_title || "🔍 Pro‑Tipp"}</div>
+            <p className="text-gray-300">{dict?.mycelium?.pro_tip_text || "Klicke auf einen Knoten, um zum Runbook zu gelangen. Mit einem Daypass kannst du den gesamten Graphen als interaktives HTML exportieren und in dein Team teilen."}</p>
           </div>
         </div>
       </section>
 
       <section className="container mx-auto px-4 py-8">
-        <h3 className="text-xl font-semibold text-center text-white mb-4">Beliebte Runbooks im Netzwerk</h3>
+        <h3 className="text-xl font-semibold text-center text-white mb-4">{dict?.mycelium?.popular_nodes_title || "Beliebte Runbooks im Netzwerk"}</h3>
         <ExampleNodes prefix={prefix} />
       </section>
 

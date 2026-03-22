@@ -2,12 +2,12 @@
 
 const EXAMPLES = ["AWS", "GCP", "Azure", "Kubernetes"]
 
-export default function ExampleScopes({ onSelect }: { onSelect: (scope: string) => void }) {
+export default function ExampleScopes({ onSelect, dict }: { onSelect: (scope: string) => void; dict?: any }) {
   return (
     <div className="max-w-4xl mx-auto">
-      <div className="text-sm text-gray-400 mb-2">Beispiel‑Scopes</div>
+      <div className="text-sm text-gray-400 mb-2">{dict?.example_scopes_title || "Beispiel‑Scopes"}</div>
       <div className="flex flex-wrap gap-2">
-        {EXAMPLES.map((s) => (
+        {(Array.isArray(dict?.example_scopes_items) ? dict.example_scopes_items : EXAMPLES).map((s: string) => (
           <button
             key={s}
             onClick={() => onSelect(s.toLowerCase())}

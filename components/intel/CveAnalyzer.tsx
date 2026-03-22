@@ -23,7 +23,6 @@ export default function CveAnalyzer(props: { prefix?: string }) {
   const { prefix = "" } = props
   const [q, setQ] = useState("")
   const [feed, setFeed] = useState<CveEntry[]>([])
-  const [map, setMap] = useState<Mapping>({})
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [detail, setDetail] = useState<Detail | null>(null)
@@ -34,18 +33,11 @@ export default function CveAnalyzer(props: { prefix?: string }) {
     async function load() {
       setLoading(true)
       try {
-        const [feedRes, mapRes] = await Promise.all([
-          fetch('/cve-feed.json', { cache: 'no-store' }),
-          fetch('/cve-runbook-mapping.json', { cache: 'no-store' }).catch(() => null as any),
-        ])
+        const feedRes = await fetch('/api/intel/cves?limit=200&offset=0', { cache: 'no-store' })
         if (!feedRes.ok) throw new Error(`HTTP ${feedRes.status}`)
         const feedJ = await feedRes.json()
-        const entries: CveEntry[] = Array.isArray(feedJ?.entries) ? feedJ.entries : []
+        const entries: CveEntry[] = Array.isArray(feedJ?.items) ? feedJ.items : []
         if (!stop) setFeed(entries)
-        if (mapRes && mapRes.ok) {
-          const mj = await mapRes.json().catch(() => null)
-          if (mj && typeof mj.mapping === 'object' && mj.mapping) setMap(mj.mapping)
-        }
       } catch (e: any) {
         if (!stop) setError(e?.message || 'Analyzer-Ladefehler')
       } finally {
@@ -63,14 +55,46 @@ export default function CveAnalyzer(props: { prefix?: string }) {
     if (!term) return
     setBusy(true)
     try {
-      const byId = feed.find((e) => e.id.toUpperCase() === term.toUpperCase())
-      const byTitle = !byId ? feed.find((e) => e.title?.toLowerCase().includes(term.toLowerCase())) : undefined
-      const cve = byId || byTitle || null
-      const mapping = cve ? map[cve.id] : undefined
-      let summon: Detail['summon'] = null
-      if (!mapping && cve) {
+      const looksLikeId = /^CVE-\d{4}-\d+$/i.test(term)
+      let chosen: CveEntry | null = null
+      let idForDetail: string | null = null
+
+      const byId = feed.find((e) => e.id.toUpperCase() === term.toUpperCase()) || null
+      if (byId) {
+        chosen = byId
+        idForDetail = byId.id
+      } else if (!looksLikeId) {
+        const byTitle = feed.find((e) => (e.title || '').toLowerCase().includes(term.toLowerCase())) || null
+        if (byTitle) {
+          chosen = byTitle
+          idForDetail = byTitle.id
+        }
+      }
+
+      // If input looks like an ID or we found a CVE in the feed, try detail endpoint
+      if (looksLikeId && !idForDetail) idForDetail = term.toUpperCase()
+
+      let cve: CveEntry | null = chosen
+      let mapping: Detail['mapping'] | null = null
+
+      if (idForDetail) {
         try {
-          const res = await fetch(`/api/summon?q=${encodeURIComponent(cve.title || term)}`)
+          const res = await fetch(`/api/intel/cve/${encodeURIComponent(idForDetail)}`, { cache: 'no-store' })
+          if (res.ok) {
+            const j = await res.json().catch(() => null)
+            if (j) {
+              cve = j.cve || cve
+              mapping = j.recommendation || null
+            }
+          }
+        } catch {}
+      }
+
+      let summon: Detail['summon'] = null
+      if (!mapping) {
+        const qTitle = cve?.title || term
+        try {
+          const res = await fetch(`/api/summon?q=${encodeURIComponent(qTitle)}`)
           if (res.ok) {
             const j = await res.json().catch(() => null)
             const rb = Array.isArray(j?.relevant_runbooks) ? j.relevant_runbooks[0] : null
@@ -78,7 +102,8 @@ export default function CveAnalyzer(props: { prefix?: string }) {
           }
         } catch {}
       }
-      setDetail({ cve, mapping: mapping || null, summon })
+
+      setDetail({ cve, mapping, summon })
     } finally {
       setBusy(false)
     }

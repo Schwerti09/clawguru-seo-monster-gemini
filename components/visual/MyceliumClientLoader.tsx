@@ -5,8 +5,9 @@ import MyceliumView from "@/components/visual/MyceliumView"
 import type { MyceliumGraph, RunbookSummary } from "@/lib/mycelium"
 import type { Runbook } from "@/lib/pseo"
 
-export default function MyceliumClientLoader(props: { ui?: "full" | "embed" } = {}) {
+export default function MyceliumClientLoader(props: { ui?: "full" | "embed"; filterSlugs?: string[] } = {}) {
   const ui = props.ui ?? "full"
+  const filterSlugs = Array.isArray(props.filterSlugs) ? props.filterSlugs : []
   const [data, setData] = useState<{
     graph: MyceliumGraph
     summaries: Record<string, RunbookSummary>
@@ -24,6 +25,11 @@ export default function MyceliumClientLoader(props: { ui?: "full" | "embed" } = 
           runbooks = buildClient ? buildClient(8000) : (pseo.RUNBOOKS ?? [])
         } catch {
           runbooks = (pseo.RUNBOOKS ?? []) as Runbook[]
+        }
+        if (filterSlugs.length > 0) {
+          const set = new Set(filterSlugs)
+          const filtered = runbooks.filter((r) => set.has(r.slug))
+          if (filtered.length > 0) runbooks = filtered
         }
         const total = (typeof pseo.count100kSlugs === "function") ? pseo.count100kSlugs() : runbooks.length
         const { buildMyceliumGraph } = await import("@/lib/mycelium")

@@ -27,12 +27,12 @@ export default function LiveThreatFeed(props: { prefix?: string }) {
       setLoading(true)
       try {
         const [feedRes, tierRes] = await Promise.all([
-          fetch('/cve-feed.json', { cache: 'no-store' }),
+          fetch('/api/intel/cves?limit=50&offset=0', { cache: 'no-store' }),
           fetch('/api/auth/tier', { cache: 'no-store' }).catch(() => null as any),
         ])
         if (!feedRes.ok) throw new Error(`HTTP ${feedRes.status}`)
         const feed = await feedRes.json()
-        const list: CveEntry[] = Array.isArray(feed?.entries) ? feed.entries : []
+        const list: CveEntry[] = Array.isArray(feed?.items) ? feed.items : []
         list.sort((a, b) => (b.published || '').localeCompare(a.published || ''))
         if (!stop) setEntries(list)
         if (tierRes && tierRes.ok) {

@@ -7,6 +7,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { ensureReadyWithin, search as searchIndex } from "@/lib/runbooks-index"
 
 export const runtime = "nodejs"
+export const dynamic = "force-dynamic"
 
 function parseStack(sp: URLSearchParams): string[] {
   const raw = (sp.get("stack") || "").toLowerCase()

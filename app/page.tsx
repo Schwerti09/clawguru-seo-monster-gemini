@@ -19,6 +19,19 @@ interface HomeProps {
 
 export default function Home({ dict, locale }: HomeProps) {
   const prefix = `/${locale}`
+  const faq = (dict as any)?.faq ?? {
+    kicker: "",
+    title: "",
+    subtitle: "",
+    q1: "",
+    a1: "",
+    q2: "",
+    a2: "",
+    q3: "",
+    a3: "",
+    q4: "",
+    a4: "",
+  }
 
   const FeatureShowcase = dynamic(() => import("@/components/FeatureShowcase"), {
     ssr: false,
@@ -36,34 +49,34 @@ export default function Home({ dict, locale }: HomeProps) {
     mainEntity: [
       {
         "@type": "Question",
-        name: dict.faq.q1,
+        name: faq.q1,
         acceptedAnswer: {
           "@type": "Answer",
-          text: dict.faq.a1,
+          text: faq.a1,
         }
       },
       {
         "@type": "Question",
-        name: dict.faq.q2,
+        name: faq.q2,
         acceptedAnswer: {
           "@type": "Answer",
-          text: dict.faq.a2,
+          text: faq.a2,
         }
       },
       {
         "@type": "Question",
-        name: dict.faq.q3,
+        name: faq.q3,
         acceptedAnswer: {
           "@type": "Answer",
-          text: dict.faq.a3,
+          text: faq.a3,
         }
       },
       {
         "@type": "Question",
-        name: dict.faq.q4,
+        name: faq.q4,
         acceptedAnswer: {
           "@type": "Answer",
-          text: dict.faq.a4,
+          text: faq.a4,
         },
       },
     ]
@@ -120,11 +133,11 @@ export default function Home({ dict, locale }: HomeProps) {
           <div className="grid lg:grid-cols-2 gap-10 items-start">
             <div>
               <SectionTitle
-                kicker={dict.faq.kicker}
-                title={dict.faq.title}
-                subtitle={dict.faq.subtitle}
+                kicker={faq.kicker}
+                title={faq.title}
+                subtitle={faq.subtitle}
               />
-              <FAQ dict={dict.faq} />
+              <FAQ dict={faq} />
             </div>
             <div>
               <TransparencyWidget />

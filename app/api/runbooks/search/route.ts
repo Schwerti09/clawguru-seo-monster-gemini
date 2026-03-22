@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 export const runtime = 'nodejs'
+export const dynamic = 'force-dynamic'
 
 // Minimal static fallback to ensure non-empty results during cold starts or materialization issues
 const FALLBACK: Array<{

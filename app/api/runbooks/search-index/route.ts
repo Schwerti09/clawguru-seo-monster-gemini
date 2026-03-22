@@ -3,6 +3,7 @@ import { loadRunbooks } from '@/lib/runbooks-data'
 import { SITE_URL } from '@/lib/config'
 
 export const runtime = 'nodejs'
+export const dynamic = 'force-dynamic'
 
 // Data is loaded from public/runbooks.json via loadRunbooks() and cached in globalThis
 

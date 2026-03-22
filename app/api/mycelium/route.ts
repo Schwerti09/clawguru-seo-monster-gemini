@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { buildMyceliumGraph } from "@/lib/mycelium"
 
 export const runtime = "nodejs"
+export const dynamic = "force-dynamic"
 
 export async function GET(req: NextRequest) {
   try {

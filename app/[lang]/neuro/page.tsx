@@ -3,6 +3,7 @@
 import React, { Suspense, useEffect, useMemo, useState } from "react"
 import dynamic from "next/dynamic"
 import { motion, useReducedMotion } from "framer-motion"
+import { usePathname } from "next/navigation"
 
 interface NeuroDict {
   title: string
@@ -97,7 +98,7 @@ const ScoreRing = dynamic(() => Promise.resolve(function ScoreRingImpl({ score, 
   )
 }), { ssr: false })
 
-export default function NeuroPage({ params, dict }: { params: { lang: string }; dict?: DictShape }) {
+export default function NeuroPage({ dict }: { dict?: DictShape }) {
   const t: NeuroDict = useMemo(() => ({
     title: dict?.neuro?.title ?? "Neuro – Personal Intelligence",
     subtitle: dict?.neuro?.subtitle ?? "Dein Stack. Deine Ziele. Dein persönlicher Ausführungsplan.",
@@ -115,6 +116,12 @@ export default function NeuroPage({ params, dict }: { params: { lang: string }; 
     chosen_label: dict?.neuro?.chosen_label ?? "Chosen",
   }), [dict])
 
+  const pathname = usePathname()
+  const lang = useMemo(() => {
+    const seg = (pathname || "").split("/")[1] || "en"
+    return seg || "en"
+  }, [pathname])
+  const prefix = `/${lang}`
   const reduce = useReducedMotion()
   const [available, setAvailable] = useState<string[]>([
     "nodejs", "nginx", "postgres", "redis", "kubernetes", "aws-eks", "gcp-gke", "terraform", "github-actions",

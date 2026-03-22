@@ -68,11 +68,12 @@ export default function SummonRealClient({ dict, prefix = "" }: { dict?: Dict; p
         return
       }
       const rec = new SR()
-      rec.lang = t?.voice_lang || "de-DE"
+      rec.lang = (t?.voice_lang as string) || (typeof navigator !== 'undefined' ? navigator.language : '') || "en-US"
       rec.interimResults = true
       ;(rec as any).maxAlternatives = 1
       rec.continuous = false
       let finalText = ""
+      let gotAny = false
       rec.onresult = (e: any) => {
         let interim = ""
         for (let i = e.resultIndex; i < e.results.length; i++) {
@@ -81,7 +82,11 @@ export default function SummonRealClient({ dict, prefix = "" }: { dict?: Dict; p
           else interim += tr
         }
         const combined = (finalText + interim).trim()
+        if (combined) gotAny = true
         if (mounted.current) setQ(combined)
+      }
+      rec.onnomatch = () => {
+        if (!gotAny && mounted.current) setErr(t?.voice_no_speech || "Kein Sprachsignal erkannt. Bitte erneut versuchen.")
       }
       rec.onspeechend = () => {
         try { rec.stop() } catch {}
@@ -109,6 +114,12 @@ export default function SummonRealClient({ dict, prefix = "" }: { dict?: Dict; p
       recRef.current = rec
       setListening(true)
       rec.start()
+      // Hard timeout if no speech is detected within 8s
+      window.setTimeout(() => {
+        if (recRef.current === rec && !gotAny) {
+          try { rec.stop() } catch {}
+        }
+      }, 8000)
     } catch (e: any) {
       if (mounted.current) setErr(e?.message || t?.voice_error || "Voice-Fehler")
       recRef.current = null

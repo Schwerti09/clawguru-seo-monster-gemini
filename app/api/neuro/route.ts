@@ -58,16 +58,25 @@ export async function GET(req: NextRequest) {
       : "Keine passenden Runbooks gefunden."
     const estimated_time = `${top.length * 5 || 5} Minuten`
 
+    const avgClaw = top.length ? top.reduce((s, x) => s + (x.clawScore || 0), 0) / top.length : 0
+    const avgRel = top.length ? top.reduce((s, x) => s + (x as any).relevance, 0) / top.length : 0
+    const neuroScore = Math.max(45, Math.min(98, Math.round(0.6 * avgClaw + 0.4 * avgRel)))
+    const confidence = Math.max(45, Math.min(96,
+      Math.round(40 + avgRel * 0.4 + Math.min(5, tags.length) * 4 + Math.min(10, top.length) * 2)
+    ))
+
     const payload = {
       recommended_runbooks: top.map((r) => ({
         slug: r.slug,
         title: r.title,
         clawScore: r.clawScore || 0,
-        relevance: r.relevance,
+        relevance: (r as any).relevance as number,
         summary: r.summary,
       })),
       execution_plan,
       estimated_time,
+      neuroScore,
+      confidence,
     }
 
     const res = NextResponse.json(payload)

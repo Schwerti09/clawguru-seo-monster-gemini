@@ -143,6 +143,9 @@ export default function CveAnalyzer(props: { prefix?: string }) {
                 <a className="underline text-cyan-300" href={`${prefix || ''}/oracle`}>Oracle</a>
                 <a className="underline text-emerald-300" href={`${prefix || ''}/mycelium`}>Mycelium</a>
                 <a className="underline text-indigo-300" href={`${prefix || ''}/neuro`}>Neuro</a>
+                {detail.cve?.id ? (
+                  <a className="underline text-pink-300" href={`${prefix || ''}/solutions/fix-${encodeURIComponent(detail.cve.id)}`}>Fix‑Seite</a>
+                ) : null}
               </div>
             </div>
           )}

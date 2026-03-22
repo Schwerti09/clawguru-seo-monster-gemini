@@ -241,9 +241,10 @@ export async function GET(
 
   // Live debug hooks
   console.log("SITEMAP DEBUG", { path: req.nextUrl.pathname, start: Date.now() })
-  console.time("sitemap-gen")
+  const timeLabel = `sitemap-gen:${requestId}`
+  console.time(timeLabel)
   function respond(xml: string) {
-    console.timeEnd("sitemap-gen")
+    console.timeEnd(timeLabel)
     console.log("SITEMAP RESPONSE", { status: 200, length: xml.length, first50: xml.slice(0,50) + "..." })
     return new NextResponse(xml, { status: 200, headers: SITEMAP_HEADERS })
   }
@@ -293,10 +294,7 @@ export async function GET(
         { loc: `${base}/${locale}/clawlink`, lastmod, changefreq: "weekly", priority: "0.85" },
         ...hubUrls,
       ]
-      return new NextResponse(urlset(urls), {
-        status: 200,
-        headers: SITEMAP_HEADERS
-      })
+      return respond(urlset(urls))
     }
 
 
@@ -453,10 +451,7 @@ export async function GET(
         changefreq: "weekly",
         priority: "0.85",
       }))
-      return new NextResponse(urlset(i18nUrls), {
-        status: 200,
-        headers: SITEMAP_HEADERS,
-      })
+      return respond(urlset(i18nUrls))
     }
 
     // GENESIS PROTOKOLL: Issue hub sitemap
@@ -540,7 +535,7 @@ export async function GET(
       reason: "sitemap_not_found",
       durationMs: Date.now() - startedAt,
     })
-    console.timeEnd("sitemap-gen")
+    console.timeEnd(timeLabel)
     console.log("SITEMAP RESPONSE", { status: 404, length: 0, first50: "" })
     return new NextResponse("Not Found", { status: 404 })
   } catch (error) {
@@ -555,7 +550,7 @@ export async function GET(
     const minimal = urlset([
       { loc: `${BASE_URL}/${DEFAULT_LOCALE}/runbook/test-debug-slug`, lastmod },
     ])
-    console.timeEnd("sitemap-gen")
+    console.timeEnd(timeLabel)
     console.log("SITEMAP RESPONSE", { status: 200, length: minimal.length, first50: minimal.slice(0,50) + "..." })
     return new NextResponse(minimal, {
       status: 200,

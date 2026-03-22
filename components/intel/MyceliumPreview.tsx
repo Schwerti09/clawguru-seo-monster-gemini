@@ -14,9 +14,9 @@ export default function MyceliumPreview({ ui = "embed" }: Props) {
     let stop = false
     async function load() {
       try {
-        const res = await fetch('/cve-runbook-mapping.json', { cache: 'no-store' })
+        const res = await fetch('/api/intel/mapping', { cache: 'no-store' })
         if (!res.ok) throw new Error(`HTTP ${res.status}`)
-        const j = await res.json()
+        const j = await res.json().catch(() => null)
         const mapping: Mapping = (j?.mapping || {}) as Mapping
         const uniq = Array.from(new Set(Object.values(mapping).map((m) => m.slug))).slice(0, 50)
         if (!stop) setSlugs(uniq)

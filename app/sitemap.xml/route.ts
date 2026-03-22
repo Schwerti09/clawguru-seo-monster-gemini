@@ -25,7 +25,8 @@ export async function GET(req: NextRequest) {
   const label = 'sitemap:index'
   const ua = req.headers.get('user-agent') || ''
   console.log("SITEMAP DEBUG", { path: req.nextUrl.pathname, start: Date.now() })
-  console.time("sitemap-gen")
+  const timeLabel = `sitemap-gen:${requestId}`
+  console.time(timeLabel)
   console.time(label)
   const PAGES_100K = Number(process.env.SITEMAP_100K_PAGES || 100)
 
@@ -100,7 +101,7 @@ export async function GET(req: NextRequest) {
     console.timeEnd(label)
     console.log('sitemap request', { kind: 'index', requestId, status: 200, durationMs, count: listed.length, ua: ua.slice(0, 64) })
     logTelemetry("sitemap.index.success", { requestId, sitemapCount: listed.length, durationMs })
-    console.timeEnd("sitemap-gen")
+    console.timeEnd(timeLabel)
     console.log("SITEMAP RESPONSE", { status: 200, length: xml.length, first50: xml.slice(0,50) + "..." })
 
     return new NextResponse(xml, {
@@ -122,7 +123,7 @@ export async function GET(req: NextRequest) {
       `  </sitemap>\n` +
       `</sitemapindex>\n`
     logTelemetry("sitemap.index.fallback", { requestId, sitemapCount: 1, durationMs })
-    console.timeEnd("sitemap-gen")
+    console.timeEnd(timeLabel)
     console.log("SITEMAP RESPONSE", { status: 200, length: fallback.length, first50: fallback.slice(0,50) + "..." })
     return new NextResponse(fallback, { status: 200, headers: SITEMAP_HEADERS })
   }

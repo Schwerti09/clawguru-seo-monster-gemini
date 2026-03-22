@@ -217,4 +217,43 @@
     "grpEnterpriseSupport": "Enterprise Support",
     "newBadge": "NEW"
   }
+  ,
+  "summon": {
+    "hero_title": "Summon – Wissen, das sofort wirkt",
+    "hero_subline": "Stell eine Frage zu deinem Sicherheits‑ oder Betriebsproblem, und ClawGuru liefert passende Runbooks – inkl. Confidence.",
+    "metrics_runbooks": "Runbooks im Index",
+    "metrics_avg_conf": "Ø‑Confidence (live)",
+    "cta_daypass": "Jetzt Daypass kaufen",
+
+    "how_title": "Wie Summon arbeitet",
+    "how_text": "Summon durchsucht die Runbook‑Datenbank, matched Tags und berechnet einen Confidence‑Score. So erhältst du die relevantesten Anleitungen für dein konkretes Problem.",
+    "how_diagram": "Diagramm",
+
+    "input_placeholder": "z.B. ssh hardening",
+    "error_load": "Fehler beim Laden.",
+    "summary_title": "Zusammenfassung",
+    "confidence_label": "Confidence",
+    "view_link_label": "Ansehen →",
+    "score_label": "Score",
+
+    "callout_strong": "🚀 Dieses Problem kann mit einem Daypass automatisch behoben werden – inklusive Ausführung und Nachweis!",
+    "callout_button": "Daypass sichern",
+
+    "example_queries_title": "Beispiel‑Anfragen",
+    "example_queries_items": [
+      "AWS S3 Public Bucket",
+      "PostgreSQL Connection Pooling",
+      "Kubernetes RBAC",
+      "SSH Hardening",
+      "Nginx TLS 1.3"
+    ],
+
+    "upgrade_title": "Mehr Power mit Daypass",
+    "upgrade_items": [
+      "Runbooks automatisch ausführen",
+      "Export als PDF / Markdown",
+      "Personalisierte Empfehlungen"
+    ],
+    "upgrade_button": "Daypass starten"
+  }
 }

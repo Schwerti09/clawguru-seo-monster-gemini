@@ -16,14 +16,14 @@ function useLocalePrefix() {
   }, [pathname])
 }
 
-export default function SummonPageClient() {
+export default function SummonPageClient({ dict }: { dict?: any }) {
   const prefix = useLocalePrefix()
   const [prefill, setPrefill] = useState("")
 
   return (
     <div className="space-y-8">
-      <SummonSearch initialQuery={prefill} />
-      <ExampleQueries onSelect={(q) => setPrefill(q)} />
+      <SummonSearch initialQuery={prefill} dict={dict} />
+      <ExampleQueries onSelect={(q) => setPrefill(q)} dict={dict} />
     </div>
   )
 }

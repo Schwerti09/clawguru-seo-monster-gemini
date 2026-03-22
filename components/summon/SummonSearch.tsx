@@ -16,7 +16,7 @@ function useLocalePrefix() {
   }, [pathname])
 }
 
-export default function SummonSearch({ initialQuery = "" }: { initialQuery?: string }) {
+export default function SummonSearch({ initialQuery = "", dict }: { initialQuery?: string; dict?: any }) {
   const prefix = useLocalePrefix()
   const [query, setQuery] = useState("")
   const [loading, setLoading] = useState(false)
@@ -48,7 +48,7 @@ export default function SummonSearch({ initialQuery = "" }: { initialQuery?: str
             }
           } catch { /* noop */ }
         })
-        .catch((e) => setError("Fehler beim Laden."))
+        .catch((e) => setError(dict?.error_load || "Fehler beim Laden."))
         .finally(() => setLoading(false))
     }, 450)
     return () => clearTimeout(t)
@@ -61,7 +61,7 @@ export default function SummonSearch({ initialQuery = "" }: { initialQuery?: str
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="z.B. ssh hardening"
+          placeholder={dict?.input_placeholder || "z.B. ssh hardening"}
           className="w-full p-4 rounded-2xl bg-black/40 border border-white/10 text-white placeholder-gray-500 focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all"
         />
       </div>
@@ -81,11 +81,11 @@ export default function SummonSearch({ initialQuery = "" }: { initialQuery?: str
       {result && !loading && (
         <div className="space-y-6">
           <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
-            <h3 className="text-xl font-semibold text-cyan-400">Zusammenfassung</h3>
+            <h3 className="text-xl font-semibold text-cyan-400">{dict?.summary_title || "Zusammenfassung"}</h3>
             <p className="mt-2 text-gray-200">{result.problem}</p>
             <div className="mt-4">
               <div className="flex justify-between text-sm">
-                <span>Confidence</span>
+                <span>{dict?.confidence_label || "Confidence"}</span>
                 <span>{result.confidence}%</span>
               </div>
               <div className="w-full bg-gray-700 rounded-full h-2 mt-1">
@@ -112,12 +112,12 @@ export default function SummonSearch({ initialQuery = "" }: { initialQuery?: str
                       <p className="text-sm text-gray-400 mt-1">{rb.summary}</p>
                     </div>
                     <Link href={`${prefix}/runbook/${rb.slug}`} className="text-cyan-400 hover:text-cyan-300 shrink-0">
-                      Ansehen →
+                      {dict?.view_link_label || "Ansehen →"}
                     </Link>
                   </div>
                   <div className="mt-2">
                     <div className="flex justify-between text-xs text-gray-400">
-                      <span>Score</span>
+                      <span>{dict?.score_label || "Score"}</span>
                       <span>{rb.clawScore}%</span>
                     </div>
                     <div className="w-full bg-gray-700 rounded-full h-1 mt-1">
@@ -132,10 +132,10 @@ export default function SummonSearch({ initialQuery = "" }: { initialQuery?: str
           {result.confidence > 80 && (
             <div className="bg-gradient-to-r from-cyan-500/20 to-transparent rounded-xl p-4 border border-cyan-500/30">
               <p className="text-cyan-300">
-                🚀 Dieses Problem kann mit einem Daypass automatisch behoben werden – inklusive Ausführung und Nachweis!
+                {dict?.callout_strong || "🚀 Dieses Problem kann mit einem Daypass automatisch behoben werden – inklusive Ausführung und Nachweis!"}
               </p>
               <Link href={`${prefix}/pricing`} className="inline-block mt-2 text-white bg-cyan-600 hover:bg-cyan-500 px-4 py-2 rounded-full text-sm">
-                Daypass sichern
+                {dict?.callout_button || "Daypass sichern"}
               </Link>
             </div>
           )}

@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import dynamic from "next/dynamic"
 
 import { SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
+import { getDictionary } from "@/lib/dictionary"
 import SummonHero from "@/components/summon/SummonHero"
 import HowItWorks from "@/components/summon/HowItWorks"
 import UpgradeCTA from "@/components/summon/UpgradeCTA"
@@ -23,25 +24,28 @@ export async function generateMetadata(props: { params: { lang: string } }): Pro
   }
 }
 
-export default function LocaleSummonPage(props: { params: { lang: string } }) {
+export default async function LocaleSummonPage(props: { params: { lang: string } }) {
   const locale = (SUPPORTED_LOCALES.includes(props.params.lang as Locale) ? props.params.lang : "de") as Locale
   const prefix = `/${locale}`
+  const dict = await getDictionary(locale)
+  const summon = dict.summon || {}
+  const common = dict.common || {}
   return (
     <div className="space-y-6">
-      <SummonHero prefix={prefix} locale={locale} />
+      <SummonHero prefix={prefix} dict={summon} />
       <section className="py-2">
         <div className="px-4 sm:px-6 lg:px-8">
-          <SummonPageClient />
+          <SummonPageClient dict={summon} />
         </div>
       </section>
       <section className="py-4">
         <div className="px-4 sm:px-6 lg:px-8">
-          <HowItWorks />
+          <HowItWorks dict={summon} />
         </div>
       </section>
       <section className="py-2">
         <div className="px-4 sm:px-6 lg:px-8">
-          <UpgradeCTA prefix={prefix} />
+          <UpgradeCTA prefix={prefix} dict={summon} common={common} />
         </div>
       </section>
     </div>

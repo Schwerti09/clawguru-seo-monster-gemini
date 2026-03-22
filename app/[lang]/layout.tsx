@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
-import { normalizeLocale, localeAlternates, SUPPORTED_LOCALES, getLocaleHrefLang } from "@/lib/i18n"
+import { normalizeLocale, localeAlternates, SUPPORTED_LOCALES, getLocaleHrefLang, localeDir } from "@/lib/i18n"
 
 export async function generateMetadata(props: { params: { lang: string } }): Promise<Metadata> {
   const locale = normalizeLocale(props.params.lang)
@@ -25,5 +25,9 @@ export default async function LocaleLayout(props: {
     notFound()
   }
 
-  return props.children
+  return (
+    <div dir={localeDir(locale)} data-locale={locale}>
+      {props.children}
+    </div>
+  )
 }

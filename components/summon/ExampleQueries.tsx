@@ -1,16 +1,18 @@
 "use client"
 
-export default function ExampleQueries({ onSelect }: { onSelect: (q: string) => void }) {
-  const items = [
-    "AWS S3 Public Bucket",
-    "PostgreSQL Connection Pooling",
-    "Kubernetes RBAC",
-    "SSH Hardening",
-    "Nginx TLS 1.3"
-  ]
+export default function ExampleQueries({ onSelect, dict }: { onSelect: (q: string) => void; dict?: any }) {
+  const items = Array.isArray(dict?.example_queries_items) && dict.example_queries_items.length > 0
+    ? dict.example_queries_items
+    : [
+        "AWS S3 Public Bucket",
+        "PostgreSQL Connection Pooling",
+        "Kubernetes RBAC",
+        "SSH Hardening",
+        "Nginx TLS 1.3",
+      ]
   return (
     <div className="max-w-4xl mx-auto">
-      <div className="text-sm text-gray-400 mb-2">Beispiel‑Anfragen</div>
+      <div className="text-sm text-gray-400 mb-2">{dict?.example_queries_title || "Beispiel‑Anfragen"}</div>
       <div className="flex flex-wrap gap-2">
         {items.map((q) => (
           <button

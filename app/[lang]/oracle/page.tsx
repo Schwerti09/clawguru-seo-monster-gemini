@@ -3,6 +3,7 @@
 import React, { Suspense, useEffect, useMemo, useRef, useState } from "react"
 import dynamic from "next/dynamic"
 import { motion, useReducedMotion } from "framer-motion"
+import { usePathname } from "next/navigation"
 
 type Severity = "LOW" | "MEDIUM" | "HIGH" | "CRITICAL"
 
@@ -202,6 +203,13 @@ export default function OraclePage({ params, dict }: { params: { lang: string };
     fetch_error: dict?.oracle?.fetch_error ?? "Laden fehlgeschlagen",
     scope_hint: dict?.oracle?.scope_hint ?? "Tippe Enter zum Hinzufügen. Nutze 3–6 präzise Begriffe.",
   }), [dict])
+
+  const pathname = usePathname()
+  const lang = useMemo(() => {
+    const seg = (pathname || "").split("/")[1] || "en"
+    return seg || "en"
+  }, [pathname])
+  const prefix = `/${lang}`
 
   const reduce = useReducedMotion()
   const [scopes, setScopes] = useState<string[]>(["nginx", "ubuntu-22.04", "aws-ec2"])

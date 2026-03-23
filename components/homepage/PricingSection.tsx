@@ -9,7 +9,7 @@ export default function PricingSection({ prefix = "", locale = "de", dict }: Pro
   const tiers = [
     {
       name: d.dayPassBadge || "Daypass",
-      price: (isDe ? "9–19 € / 24h" : "€9–19 / 24h"),
+      price: (isDe ? "9 € / 24h" : "€9 / 24h"),
       features: (isDe
         ? ["Voller Zugriff auf alle Runbooks", "Ausführung in eigener Umgebung", "Export & Audit‑Report"]
         : ["Full access to all runbooks", "Execute in your own environment", "Export & audit report"]),
@@ -17,7 +17,7 @@ export default function PricingSection({ prefix = "", locale = "de", dict }: Pro
     },
     {
       name: d.proBadge || "Pro",
-      price: (isDe ? "49–149 € / Monat" : "€49–149 / month"),
+      price: (isDe ? "49 € / Monat" : "€49 / month"),
       features: (isDe
         ? ["Unlimitierte Ausführungen", "API‑Zugriff & Team‑Support", "Compliance & Reports"]
         : ["Unlimited executions", "API access & team support", "Compliance & reports"]),

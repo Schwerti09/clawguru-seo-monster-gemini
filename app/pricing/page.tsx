@@ -261,8 +261,8 @@ export default async function PricingPage() {
               <thead>
                 <tr>
                   <th className="text-left py-3 px-4 text-gray-500 font-mono text-xs uppercase tracking-widest w-1/2">Feature</th>
-                  <th className="py-3 px-4 text-center font-black text-[#00b8ff] text-xs uppercase tracking-wider">Day Pass<br /><span className="font-normal text-gray-500 normal-case">7 € / 24h</span></th>
-                  <th className="py-3 px-4 text-center font-black text-[#a78bfa] text-xs uppercase tracking-wider">Pro<br /><span className="font-normal text-gray-500 normal-case">14,99 € / Mo</span></th>
+                  <th className="py-3 px-4 text-center font-black text-[#00b8ff] text-xs uppercase tracking-wider">Day Pass<br /><span className="font-normal text-gray-500 normal-case">9 € / 24h</span></th>
+                  <th className="py-3 px-4 text-center font-black text-[#a78bfa] text-xs uppercase tracking-wider">Pro<br /><span className="font-normal text-gray-500 normal-case">49 € / Mo</span></th>
                   <th className="py-3 px-4 text-center font-black text-[#ffaa00] text-xs uppercase tracking-wider">Enterprise<br /><span className="font-normal text-gray-500 normal-case">Custom</span></th>
                 </tr>
               </thead>
@@ -370,7 +370,7 @@ export default async function PricingPage() {
                 </div>
 
                 <div className="mt-5 flex items-end gap-2">
-                  <span className="text-5xl font-black text-white">7€</span>
+                  <span className="text-5xl font-black text-white">9€</span>
                   <span className="text-sm text-gray-400 pb-2">{dict.pricing.dayPassOnce}</span>
                 </div>
 
@@ -383,7 +383,7 @@ export default async function PricingPage() {
                 <div className="mt-auto pt-6">
                   <BuyButton
                     product="daypass"
-                    label={dict.pricing.dayPassBtn}
+                    label={"Day Pass kaufen (9€) → Stripe"}
                     className="w-full py-3 px-6 rounded-2xl font-black text-sm text-black transition-all duration-300 hover:opacity-90 disabled:opacity-60"
                     style={{ background: "linear-gradient(135deg, #00b8ff 0%, #0077ff 100%)", boxShadow: "0 0 30px rgba(0,184,255,0.3)" }}
                   />
@@ -418,7 +418,7 @@ export default async function PricingPage() {
                 </div>
 
                 <div className="mt-5 flex items-end gap-2">
-                  <span className="text-5xl font-black text-white">14,99€</span>
+                  <span className="text-5xl font-black text-white">49€</span>
                   <span className="text-sm text-gray-400 pb-2">{dict.pricing.monthly}</span>
                 </div>
 
@@ -431,7 +431,7 @@ export default async function PricingPage() {
                 <div className="mt-auto pt-6">
                   <BuyButton
                     product="pro"
-                    label={dict.pricing.proBtn}
+                    label={"Pro starten (49€/Monat) → Stripe"}
                     className="w-full py-3 px-6 rounded-2xl font-black text-sm text-black transition-all duration-300 hover:opacity-90 disabled:opacity-60"
                     style={{ background: "linear-gradient(135deg, #a78bfa 0%, #00ff9d 100%)", boxShadow: "0 0 30px rgba(139,92,246,0.35)" }}
                   />
@@ -460,7 +460,7 @@ export default async function PricingPage() {
                 </div>
 
                 <div className="mt-5 flex items-end gap-2">
-                  <span className="text-5xl font-black text-white">29,99€</span>
+                  <span className="text-5xl font-black text-white">129€</span>
                   <span className="text-sm text-gray-400 pb-2">{dict.pricing.monthly}</span>
                 </div>
 
@@ -473,7 +473,7 @@ export default async function PricingPage() {
                 <div className="mt-auto pt-6">
                   <BuyButton
                     product="team"
-                    label={dict.pricing.teamBtn}
+                    label={"Teams starten (129€/Monat) → Stripe"}
                     className="w-full py-3 px-6 rounded-2xl font-black text-sm text-white border transition-all duration-300 hover:bg-white/5 disabled:opacity-60"
                     style={{ borderColor: "rgba(0,255,157,0.4)", boxShadow: "0 0 20px rgba(0,255,157,0.1)" }}
                   />

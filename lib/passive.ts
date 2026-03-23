@@ -228,7 +228,7 @@ export const PLANS: Plan[] = [
   {
     id: "daypass",
     name: "Day Pass",
-    priceEurCents: 499,
+    priceEurCents: 900,
     billingCycle: "once",
     stripePriceId: process.env.STRIPE_PRICE_DAYPASS,
     features: ["24h Pro-Zugang", "Alle Runbooks", "Copilot Chat"],

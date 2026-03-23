@@ -4,7 +4,6 @@ import { useMemo, useState } from "react"
 import { performSecurityCheck, type SecurityCheckResult } from "@/lib/security-check"
 import CTAButton from "@/components/marketing/CTAButton"
 import BuyButton from "@/components/commerce/BuyButton"
-import { SERVICE } from "@/lib/constants"
 import { ClawguruAvatar } from "@/components/ui/ClawguruAvatar"
 import dynamic from "next/dynamic"
 import { useI18n } from "@/components/i18n/I18nProvider"
@@ -268,13 +267,14 @@ export default function HeroSecurityCheck() {
                     <div className="mt-5 p-4 rounded-2xl border border-cyan-900 bg-gradient-to-br from-cyan-950/30 to-blue-950/20">
                       <div className="text-sm text-cyan-200 font-bold mb-2">{isGerman ? "Sofort raus aus dem Risiko?" : "Want out of the risk immediately?"}</div>
                       <div className="text-gray-200 mb-3">
-                        {isGerman ? "Überwacht, gepatcht, gewartet:" : "Monitored, patched, maintained:"} <span className="font-semibold">{SERVICE.managedName}</span> {isGerman ? "ab" : "from"}{" "}
-                        <span className="font-bold">{SERVICE.managedFromPrice}</span>.
+                        {isGerman
+                          ? "Pro: dauerhafter Vollzugriff ab 49€/Monat. Day Pass: 24h Vollzugriff für 9€."
+                          : "Pro: permanent full access from €49/month. Day Pass: 24h full access for €9."}
                       </div>
                       <div className="flex flex-col sm:flex-row gap-3">
-                        <BuyButton product="msp" label={isGerman ? "Managed Service starten" : "Start managed service"} className="px-5 py-3 rounded-2xl font-black bg-gradient-to-r from-cyan-500 to-blue-600 hover:opacity-90" />
-                        <BuyButton product="daypass" label={isGerman ? "Day Pass (24h Zugriff)" : "Day Pass (24h access)"} className="px-5 py-3 rounded-2xl font-black bg-gradient-to-r from-orange-500 to-red-600 hover:opacity-90" />
-                        <CTAButton href={`${prefix}/pricing`} label={isGerman ? "Pro/Team ansehen" : "See Pro/Team"} variant="outline" size="md" />
+                        <BuyButton product="pro" label={isGerman ? "Pro 49 € / Monat" : "Pro €49 / month"} className="px-5 py-3 rounded-2xl font-black bg-gradient-to-r from-cyan-500 to-blue-600 hover:opacity-90" />
+                        <BuyButton product="daypass" label={isGerman ? "Day Pass (9€ / 24h)" : "Day Pass (€9 / 24h)"} className="px-5 py-3 rounded-2xl font-black bg-gradient-to-r from-orange-500 to-red-600 hover:opacity-90" />
+                        <CTAButton href={`${prefix}/pricing`} label={isGerman ? "Alle Pläne" : "All plans"} variant="outline" size="md" />
                       </div>
                     </div>
                   ) : (

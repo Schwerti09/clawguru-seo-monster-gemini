@@ -21,10 +21,10 @@ const CHECKS = [
     expectLocationIncludes: "checkout.stripe.com",
   },
   // 3D pages (Three.js)
-  { path: "/universe", method: "GET", expected: [200], note: "3D universe page" },
-  { path: "/mycelium", method: "GET", expected: [200], note: "3D mycelium page" },
+  { path: "/universe", method: "GET", expected: [200, 307, 308], note: "3D universe page (allow locale redirect)" },
+  { path: "/mycelium", method: "GET", expected: [200, 307, 308], note: "3D mycelium page (allow locale redirect)" },
   // Summon UI baseline check (status only)
-  { path: "/summon", method: "GET", expected: [200], note: "summon page" },
+  { path: "/summon", method: "GET", expected: [200, 307, 308], note: "summon page (allow locale redirect)" },
   {
     path: "/api/v1/intel-feed/latest",
     method: "GET",

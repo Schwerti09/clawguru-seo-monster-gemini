@@ -433,13 +433,13 @@ export default async function RunbookPage(props: { params: { slug: string } }) {
               Intel
             </a>
             <a
-              href={`${prefix}/oracle`}
+              href={`${prefix}/oracle?scope=${encodeURIComponent((r.tags || []).slice(0,5).join(','))}`}
               className="px-3 py-2 rounded-xl border border-white/10 bg-white/5 text-xs text-gray-200 hover:bg-white/10"
             >
               Oracle
             </a>
             <a
-              href={`${prefix}/neuro`}
+              href={`${prefix}/neuro?stack=${encodeURIComponent((r.tags || []).slice(0,5).join(','))}&auto=1`}
               className="px-3 py-2 rounded-xl border border-white/10 bg-white/5 text-xs text-gray-200 hover:bg-white/10"
             >
               Neuro

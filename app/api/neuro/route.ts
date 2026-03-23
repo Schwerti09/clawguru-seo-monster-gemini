@@ -9,6 +9,35 @@ import { ensureReadyWithin, search as searchIndex } from "@/lib/runbooks-index"
 export const runtime = "nodejs"
 export const dynamic = "force-dynamic"
 
+// --- In-memory daily free limit (per instance) ---
+const DAY_MS = 86_400_000
+declare global {
+  // eslint-disable-next-line no-var
+  var __NEURO_RL__: Map<string, { count: number; reset: number }> | undefined
+}
+const DAILY_LIMIT = 1
+const RL = (globalThis as any).__NEURO_RL__ || ((globalThis as any).__NEURO_RL__ = new Map())
+function now() { return Date.now() }
+function getClientKey(req: NextRequest): string {
+  const cookieKey = req.cookies.get("cg_uid")?.value || req.cookies.get("neuro_uid")?.value || ""
+  if (cookieKey) return `cookie:${cookieKey}`
+  const fwd = (req.headers.get("x-forwarded-for") || "").split(",")[0].trim()
+  const ip = fwd || req.headers.get("x-real-ip") || "0.0.0.0"
+  const ua = req.headers.get("user-agent") || "unknown"
+  return `ip:${ip}|ua:${ua.slice(0, 42)}`
+}
+function checkDailyLimit(key: string) {
+  const rec = RL.get(key)
+  const t = now()
+  if (!rec || rec.reset <= t) {
+    RL.set(key, { count: 1, reset: t + DAY_MS })
+    return { ok: true, remaining: DAILY_LIMIT - 1, reset: t + DAY_MS }
+  }
+  if (rec.count >= DAILY_LIMIT) return { ok: false, remaining: 0, reset: rec.reset }
+  rec.count += 1
+  return { ok: true, remaining: DAILY_LIMIT - rec.count, reset: rec.reset }
+}
+
 function parseStack(sp: URLSearchParams): string[] {
   const raw = (sp.get("stack") || "").toLowerCase()
   return Array.from(new Set(raw.split(/[\s,;|]+/).map((s) => s.trim()).filter(Boolean)))
@@ -16,6 +45,21 @@ function parseStack(sp: URLSearchParams): string[] {
 
 export async function GET(req: NextRequest) {
   try {
+    // Enforce daily free limit
+    const key = getClientKey(req)
+    const daily = checkDailyLimit(key)
+    if (!daily.ok) {
+      return NextResponse.json(
+        {
+          error: "Daily free limit reached",
+          code: "FREE_LIMIT",
+          message: "You have used your free neuro request for today. Get a Day Pass for unlimited use.",
+          resetAt: daily.reset,
+        },
+        { status: 429 },
+      )
+    }
+
     const url = new URL(req.url)
     const tags = parseStack(url.searchParams)
     const rawLimit = Math.max(1, parseInt(url.searchParams.get("limit") || "5", 10) || 5)

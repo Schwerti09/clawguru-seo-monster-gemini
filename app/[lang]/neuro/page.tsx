@@ -131,6 +131,7 @@ export default function NeuroPage({ dict }: { dict?: DictShape }) {
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [data, setData] = useState<NeuroResult | null>(null)
+  const [freeLimited, setFreeLimited] = useState<{ resetAt?: number } | null>(null)
 
   function addStack() {
     const s = input.trim().toLowerCase()
@@ -163,6 +164,14 @@ export default function NeuroPage({ dict }: { dict?: DictShape }) {
       params.set("stack", chosen.join(","))
       params.set("limit", "8")
       const r = await fetch(`/api/neuro?${params.toString()}`, { cache: "no-store" })
+      if (r.status === 429) {
+        const j = (await r.json().catch(() => ({}))) as { code?: string; resetAt?: number; message?: string }
+        if (j?.code === "FREE_LIMIT") {
+          setFreeLimited({ resetAt: j.resetAt })
+          return
+        }
+        throw new Error(j?.message || "Rate limited")
+      }
       if (!r.ok) throw new Error(String(r.status))
       const j = (await r.json()) as {
         recommended_runbooks: Array<{ slug: string; title: string; summary: string; clawScore?: number; relevance?: number }>
@@ -212,6 +221,7 @@ export default function NeuroPage({ dict }: { dict?: DictShape }) {
   }, [])
 
   return (
+    <>
     <main className="px-4 sm:px-6 lg:px-8 py-8 max-w-6xl mx-auto">
       <motion.header
         initial={reduce ? undefined : { opacity: 0, y: 12 }}
@@ -390,5 +400,22 @@ export default function NeuroPage({ dict }: { dict?: DictShape }) {
         </section>
       </div>
     </main>
+    {freeLimited && (
+      <div className="fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center z-50">
+        <div className="p-6 rounded-3xl border text-center max-w-md w-[92%]"
+             style={{ borderColor: "rgba(212,175,55,0.25)", background: "rgba(0,0,0,0.65)", boxShadow: "0 0 60px rgba(0,255,157,0.06) inset" }}>
+          <div className="text-[11px] font-mono uppercase tracking-[0.25em] mb-2" style={{ color: "#d4af37" }}>Premium Access</div>
+          <div className="text-lg md:text-xl font-black text-white">Mehr Neuro‑Empfehlungen freischalten</div>
+          <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <a href={`${prefix}/pricing`} className="px-4 py-3 rounded-2xl font-black text-black text-sm"
+               style={{ background: "linear-gradient(135deg,#ff0033,#ff7a00)" }}>Day Pass 9 €</a>
+            <a href={`${prefix}/pricing`} className="px-4 py-3 rounded-2xl font-black text-black text-sm"
+               style={{ background: "linear-gradient(135deg,#a78bfa,#00ff9d)" }}>Pro 49 € / Monat</a>
+          </div>
+          <div className="mt-2 text-xs text-gray-400">Day Pass: 24h Zugriff — Pro: dauerhaft mit History, Export & Oracle</div>
+        </div>
+      </div>
+    )}
+    </>
   )
 }

@@ -217,6 +217,7 @@ export default function OraclePage({ params, dict }: { params: { lang: string };
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [data, setData] = useState<OracleResult | null>(null)
+  const [freeLimited, setFreeLimited] = useState<{ resetAt?: number } | null>(null)
 
   function addScope() {
     const s = input.trim()
@@ -238,6 +239,14 @@ export default function OraclePage({ params, dict }: { params: { lang: string };
       if (cve) sp.set("cve", cve)
       if (!cve && scopes.length) sp.set("scope", scopes.join(","))
       const r = await fetch(`/api/oracle?${sp.toString()}`, { cache: "no-store" })
+      if (r.status === 429) {
+        const j = (await r.json().catch(() => ({}))) as { code?: string; resetAt?: number; message?: string }
+        if (j?.code === "FREE_LIMIT") {
+          setFreeLimited({ resetAt: j.resetAt })
+          return
+        }
+        throw new Error(j?.message || "Rate limited")
+      }
       if (!r.ok) throw new Error(String(r.status))
       const j = (await r.json()) as any
       const mapped: OracleResult = {
@@ -246,6 +255,7 @@ export default function OraclePage({ params, dict }: { params: { lang: string };
         radar: Array.isArray(j.radar) ? j.radar : [],
         cves: Array.isArray(j.cves) ? j.cves : [],
         updatedAt: j.updatedAt || new Date().toISOString(),
+        suggestedStacks: Array.isArray(j.suggestedStacks) ? j.suggestedStacks : [],
       }
       setData(mapped)
     } catch (e) {
@@ -269,6 +279,7 @@ export default function OraclePage({ params, dict }: { params: { lang: string };
   }, [])
 
   return (
+    <>
     <main className="px-4 sm:px-6 lg:px-8 py-8 max-w-6xl mx-auto">
       <motion.header
         initial={reduce ? undefined : { opacity: 0, y: 12 }}
@@ -335,14 +346,17 @@ export default function OraclePage({ params, dict }: { params: { lang: string };
         <section className="rounded-2xl border border-white/10 bg-black/40 p-4 sm:p-5">
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-white font-semibold">{t.risk_radar}</h2>
-            {data?.suggestedStacks?.length ? (
-              <a
-                href={`${prefix}/neuro?stack=${encodeURIComponent(data.suggestedStacks.join(","))}`}
-                className="px-3 py-1.5 rounded-lg text-xs font-bold border border-emerald-500/40 bg-emerald-500/15 text-emerald-100 hover:shadow-[0_0_20px_rgba(0,255,157,0.35)]"
-              >
-                In Neuro analysieren
-              </a>
-            ) : null}
+            {(() => {
+              const stacks = (data?.suggestedStacks && data.suggestedStacks.length ? data.suggestedStacks : scopes) || []
+              return stacks.length ? (
+                <a
+                  href={`${prefix}/neuro?stack=${encodeURIComponent(stacks.join(","))}`}
+                  className="px-3 py-1.5 rounded-lg text-xs font-bold border border-emerald-500/40 bg-emerald-500/15 text-emerald-100 hover:shadow-[0_0_20px_rgba(0,255,157,0.35)]"
+                >
+                  In Neuro analysieren
+                </a>
+              ) : null
+            })()}
           </div>
           <ErrorBoundary fallback={<Shimmer className="h-64" />}>
             <Suspense fallback={<Shimmer className="h-64" />}>
@@ -397,5 +411,22 @@ export default function OraclePage({ params, dict }: { params: { lang: string };
         )}
       </section>
     </main>
+    {freeLimited && (
+      <div className="fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center z-50">
+        <div className="p-6 rounded-3xl border text-center max-w-md w-[92%]"
+             style={{ borderColor: "rgba(212,175,55,0.25)", background: "rgba(0,0,0,0.65)", boxShadow: "0 0 60px rgba(0,255,157,0.06) inset" }}>
+          <div className="text-[11px] font-mono uppercase tracking-[0.25em] mb-2" style={{ color: "#d4af37" }}>Premium Access</div>
+          <div className="text-lg md:text-xl font-black text-white">Mehr Oracle‑Vorhersagen freischalten</div>
+          <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <a href={`${prefix}/pricing`} className="px-4 py-3 rounded-2xl font-black text-black text-sm"
+               style={{ background: "linear-gradient(135deg,#ff0033,#ff7a00)" }}>Day Pass 9 €</a>
+            <a href={`${prefix}/pricing`} className="px-4 py-3 rounded-2xl font-black text-black text-sm"
+               style={{ background: "linear-gradient(135deg,#a78bfa,#00ff9d)" }}>Pro 49 € / Monat</a>
+          </div>
+          <div className="mt-2 text-xs text-gray-400">Day Pass: 24h Zugriff — Pro: dauerhaft mit History, Export & Neuro</div>
+        </div>
+      </div>
+    )}
+    </>
   )
 }

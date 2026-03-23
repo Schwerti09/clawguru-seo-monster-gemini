@@ -35,6 +35,7 @@ export default function CveAnalyzer({ prefix = "", dict = {} as IntelDict }: { p
   const [busy, setBusy] = useState(false)
   const [err, setErr] = useState<string | null>(null)
   const [res, setRes] = useState<AnalyzeResult | null>(null)
+  const [freeLimited, setFreeLimited] = useState<{ resetAt?: number } | null>(null)
   const df = useMemo(
     () =>
       new Intl.DateTimeFormat(typeof navigator !== "undefined" ? navigator.language : "en-US", {
@@ -70,6 +71,14 @@ export default function CveAnalyzer({ prefix = "", dict = {} as IntelDict }: { p
       u.searchParams.set("op", "analyze")
       u.searchParams.set("id", id)
       const r = await fetch(u.toString(), { cache: "no-store" })
+      if (r.status === 429) {
+        const j = (await r.json().catch(() => ({}))) as { code?: string; resetAt?: number; message?: string }
+        if (j?.code === "FREE_LIMIT") {
+          setFreeLimited({ resetAt: j.resetAt })
+          return
+        }
+        throw new Error(j?.message || "Rate limited")
+      }
       if (!r.ok) throw new Error(String(r.status))
       const j = (await r.json()) as AnalyzeResult
       setRes(j)
@@ -81,7 +90,7 @@ export default function CveAnalyzer({ prefix = "", dict = {} as IntelDict }: { p
   }
 
   return (
-    <div className="rounded-2xl border border-white/10 bg-black/40 backdrop-blur-md p-4">
+    <div className="rounded-2xl border border-white/10 bg-black/40 backdrop-blur-md p-4 relative">
       <div className="text-sm font-semibold text-white mb-3">{header}</div>
       <div className="flex gap-2">
         <label className="sr-only" htmlFor="cve-input">CVE ID</label>
@@ -154,11 +163,34 @@ export default function CveAnalyzer({ prefix = "", dict = {} as IntelDict }: { p
               </>
             )}
             <a
+              href={`${prefix}/oracle?cve=${encodeURIComponent(res.id)}`.replace(/\/\//g, "/")}
+              className="px-3 py-2 rounded-lg text-xs font-bold border border-white/10 bg-white/5 text-gray-200"
+            >
+              {`Open in Oracle`}
+            </a>
+            <a
               href={`${prefix}/runbooks`.replace(/\/\//g, "/")}
               className="px-3 py-2 rounded-lg text-xs font-bold border border-white/10 bg-white/5 text-gray-200"
             >
               {linkFix}
             </a>
+          </div>
+        </div>
+      )}
+
+      {freeLimited && (
+        <div className="absolute inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center z-20 rounded-2xl">
+          <div className="p-5 rounded-3xl border text-center max-w-md w-[92%]"
+               style={{ borderColor: "rgba(212,175,55,0.25)", background: "rgba(0,0,0,0.65)", boxShadow: "0 0 60px rgba(0,255,157,0.06) inset" }}>
+            <div className="text-[11px] font-mono uppercase tracking-[0.25em] mb-2" style={{ color: "#d4af37" }}>Premium Access</div>
+            <div className="text-lg md:text-xl font-black text-white">Unbegrenzte CVE‑Analysen freischalten</div>
+            <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <a href="/pricing" className="px-4 py-3 rounded-2xl font-black text-black text-sm"
+                 style={{ background: "linear-gradient(135deg,#ff0033,#ff7a00)" }}>Day Pass 9 €</a>
+              <a href="/pricing" className="px-4 py-3 rounded-2xl font-black text-black text-sm"
+                 style={{ background: "linear-gradient(135deg,#a78bfa,#00ff9d)" }}>Pro 49 € / Monat</a>
+            </div>
+            <div className="mt-2 text-xs text-gray-400">Day Pass: 24h Zugriff — Pro: dauerhaft mit History, Export & Oracle</div>
           </div>
         </div>
       )}

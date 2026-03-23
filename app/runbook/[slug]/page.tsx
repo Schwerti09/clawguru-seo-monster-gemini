@@ -430,19 +430,19 @@ export default async function RunbookPage(props: { params: { slug: string } }) {
               href={`${prefix}/intel`}
               className="px-3 py-2 rounded-xl border border-white/10 bg-white/5 text-xs text-gray-200 hover:bg-white/10"
             >
-              Intel
+              {dict?.runbook?.back_to_intel ?? "Zurück zu Intel"}
             </a>
             <a
               href={`${prefix}/oracle?scope=${encodeURIComponent((r.tags || []).slice(0,5).join(','))}`}
               className="px-3 py-2 rounded-xl border border-white/10 bg-white/5 text-xs text-gray-200 hover:bg-white/10"
             >
-              Oracle
+              {dict?.runbook?.back_to_oracle ?? "Zurück zu Oracle"}
             </a>
             <a
               href={`${prefix}/neuro?stack=${encodeURIComponent((r.tags || []).slice(0,5).join(','))}&auto=1`}
               className="px-3 py-2 rounded-xl border border-white/10 bg-white/5 text-xs text-gray-200 hover:bg-white/10"
             >
-              Neuro
+              {dict?.runbook?.back_to_neuro ?? "Zurück zu Neuro"}
             </a>
           </div>
 

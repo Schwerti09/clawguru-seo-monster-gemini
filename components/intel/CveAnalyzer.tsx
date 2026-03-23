@@ -185,9 +185,9 @@ export default function CveAnalyzer({ prefix = "", dict = {} as IntelDict }: { p
             <div className="text-[11px] font-mono uppercase tracking-[0.25em] mb-2" style={{ color: "#d4af37" }}>Premium Access</div>
             <div className="text-lg md:text-xl font-black text-white">Unbegrenzte CVE‑Analysen freischalten</div>
             <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2">
-              <a href="/pricing" className="px-4 py-3 rounded-2xl font-black text-black text-sm"
+              <a href={`${prefix}/pricing`} className="px-4 py-3 rounded-2xl font-black text-black text-sm"
                  style={{ background: "linear-gradient(135deg,#ff0033,#ff7a00)" }}>Day Pass 9 €</a>
-              <a href="/pricing" className="px-4 py-3 rounded-2xl font-black text-black text-sm"
+              <a href={`${prefix}/pricing`} className="px-4 py-3 rounded-2xl font-black text-black text-sm"
                  style={{ background: "linear-gradient(135deg,#a78bfa,#00ff9d)" }}>Pro 49 € / Monat</a>
             </div>
             <div className="mt-2 text-xs text-gray-400">Day Pass: 24h Zugriff — Pro: dauerhaft mit History, Export & Oracle</div>

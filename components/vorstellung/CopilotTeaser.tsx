@@ -109,7 +109,7 @@ export default function CopilotTeaser() {
         <button onClick={ask} disabled={busy} className="px-3 py-2 rounded-lg text-xs font-bold border border-cyan-500/30 bg-cyan-500/20 text-cyan-100 disabled:opacity-50">
           {busy ? "Lade…" : "Fragen"}
         </button>
-        <a href={`${prefix}/summon?prefill=${prefill}`} className="px-3 py-2 rounded-lg text-xs font-bold border border-white/15 bg-black/40 text-gray-200">Open</a>
+        <a href={`${prefix}/summon?q=${prefill}&auto=1`} className="px-3 py-2 rounded-lg text-xs font-bold border border-white/15 bg-black/40 text-gray-200">Open</a>
       </div>
       {err && <div className="mt-2 text-xs text-red-400">{err}</div>}
       {!visible && !data && !err && (

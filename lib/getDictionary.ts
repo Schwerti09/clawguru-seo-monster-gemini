@@ -11,6 +11,11 @@ export type Dictionary = {
     ctaDashboard: string
     ctaMissionControl: string
   }
+  runbook: {
+    back_to_intel: string
+    back_to_oracle: string
+    back_to_neuro: string
+  }
   share: {
     myceliumBtn: string
     myceliumXBtn: string

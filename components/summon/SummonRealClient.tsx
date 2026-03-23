@@ -44,6 +44,25 @@ export default function SummonRealClient({ dict, prefix = "" }: { dict?: Dict; p
     }
   }, [])
 
+  // URL-Param-Prefill & One-Click Auto-Start
+  useEffect(() => {
+    try {
+      const url = new URL(window.location.href)
+      const qp = (url.searchParams.get("q") || "").trim()
+      const st = (url.searchParams.get("swarmType") || "").toLowerCase()
+      const auto = url.searchParams.get("auto")
+      if (qp) setQ(qp.slice(0, 1200))
+      if (st === "attack" || st === "defense" || st === "recovery" || st === "optimize") {
+        setType(st as SwarmType)
+      }
+      if (auto && (qp || q)) {
+        // ensure state updates are applied first
+        setTimeout(() => { if (mounted.current) startSummon() }, 0)
+      }
+    } catch {}
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   const examples: string[] =
     (t?.example_queries_items as string[]) ||
     ["AWS S3 Public Bucket", "PostgreSQL Connection Pooling", "Kubernetes RBAC", "SSH Hardening", "Nginx TLS 1.3"]

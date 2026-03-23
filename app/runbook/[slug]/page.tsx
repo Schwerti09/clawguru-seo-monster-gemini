@@ -426,6 +426,24 @@ export default async function RunbookPage(props: { params: { slug: string } }) {
             </a>
             {/* SWARM DEPLOYMENT v3.2 – Overlord AI: One-click swarm activation for Pro users */}
             <ActivateSwarmButton slug={r.slug} />
+            <a
+              href={`${prefix}/intel`}
+              className="px-3 py-2 rounded-xl border border-white/10 bg-white/5 text-xs text-gray-200 hover:bg-white/10"
+            >
+              Intel
+            </a>
+            <a
+              href={`${prefix}/oracle`}
+              className="px-3 py-2 rounded-xl border border-white/10 bg-white/5 text-xs text-gray-200 hover:bg-white/10"
+            >
+              Oracle
+            </a>
+            <a
+              href={`${prefix}/neuro`}
+              className="px-3 py-2 rounded-xl border border-white/10 bg-white/5 text-xs text-gray-200 hover:bg-white/10"
+            >
+              Neuro
+            </a>
           </div>
 
           <div className="mt-6 flex flex-wrap gap-2">

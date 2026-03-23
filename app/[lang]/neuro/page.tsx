@@ -342,7 +342,7 @@ export default function NeuroPage({ dict }: { dict?: DictShape }) {
                         Runbook
                       </a>
                       <a
-                        href={`${prefix}/summon?q=${encodeURIComponent(r.title)}`}
+                        href={`${prefix}/summon?q=${encodeURIComponent(r.title)}&auto=1`}
                         className="px-3 py-1.5 rounded-lg text-xs font-bold border border-emerald-500/40 bg-emerald-500/15 text-emerald-100 hover:shadow-[0_0_20px_rgba(0,255,157,0.35)]"
                       >
                         In Summon starten

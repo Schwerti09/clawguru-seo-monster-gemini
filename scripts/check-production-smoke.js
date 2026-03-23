@@ -12,6 +12,19 @@ const CHECKS = [
     note: "expected locale provenance redirect",
     expectLocationIncludes: "/provenance/prometheus-rabbitmq-hsts-2030",
   },
+  // Stripe Daypass Checkout redirect (should 303 to checkout.stripe.com)
+  {
+    path: "/api/stripe/checkout?plan=daypass",
+    method: "GET",
+    expected: [303],
+    note: "stripe daypass redirect",
+    expectLocationIncludes: "checkout.stripe.com",
+  },
+  // 3D pages (Three.js)
+  { path: "/universe", method: "GET", expected: [200], note: "3D universe page" },
+  { path: "/mycelium", method: "GET", expected: [200], note: "3D mycelium page" },
+  // Summon UI baseline check (status only)
+  { path: "/summon", method: "GET", expected: [200], note: "summon page" },
   {
     path: "/api/v1/intel-feed/latest",
     method: "GET",

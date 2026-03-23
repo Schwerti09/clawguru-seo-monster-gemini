@@ -9,6 +9,13 @@ type SendArgs = {
 const RESEND_TIMEOUT_MS = 10_000
 
 export async function sendEmail(args: SendArgs): Promise<{ id?: string }> {
+  if (process.env.RESEND_DISABLED === "1" || process.env.RESEND_DISABLED === "true") {
+    console.warn("[email] RESEND_DISABLED is set – skipping email send", {
+      to: Array.isArray(args.to) ? args.to : [args.to],
+      subject: args.subject,
+    })
+    return {}
+  }
   const apiKey = process.env.RESEND_API_KEY
   console.log(`[email] RESEND_API_KEY present: ${apiKey ? `yes (length: ${apiKey.length})` : "no – missing!"}`)
   if (!apiKey) {

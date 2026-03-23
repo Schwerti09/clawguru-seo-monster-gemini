@@ -6,6 +6,7 @@ import dynamic from "next/dynamic"
 import React, { Suspense, useEffect, useRef, useState } from "react"
 import { usePathname } from "next/navigation"
 import { motion, useReducedMotion } from "framer-motion"
+import { STATS } from "@/lib/stats"
 
 class ErrorBoundary extends React.Component<{ fallback?: React.ReactNode }, { hasError: boolean }> {
   constructor(props: { fallback?: React.ReactNode }) {
@@ -203,14 +204,20 @@ export default function VorstellungClient({ dict }: { dict?: any }) {
   const trustedLogos = Array.isArray((dict as any)?.trustedLogos)
     ? ((dict as any).trustedLogos as string[])
     : ["ACME Cloud", "HelixOps", "NordSec", "Vector Labs"]
-  const stats = Array.isArray((dict as any)?.stats)
-    ? ((dict as any).stats as Array<{ v: string; l: string }>)
-    : [
-        { v: "94", l: "ClawScore" },
-        { v: "3.4M", l: "Runbooks" },
-        { v: "128K", l: "Checks" },
-        { v: "Quantum", l: "Resistant" },
-      ]
+  const nf = useMemo(() => {
+    try {
+      const lang = (first || "en").slice(0, 2)
+      return new Intl.NumberFormat(lang === "de" ? "de-DE" : "en-US")
+    } catch {
+      return new Intl.NumberFormat("en-US")
+    }
+  }, [first])
+  const stats = [
+    { v: String(STATS.avgClawScore), l: (dict as any)?.stats?.[0]?.l ?? "ClawScore" },
+    { v: nf.format(STATS.totalRunbooks), l: (dict as any)?.stats?.[1]?.l ?? "Runbooks" },
+    { v: nf.format(STATS.checksTotal), l: (dict as any)?.stats?.[2]?.l ?? "Checks" },
+    { v: (dict as any)?.stats?.[3]?.v ?? "Quantum", l: (dict as any)?.stats?.[3]?.l ?? "Resistant" },
+  ]
   useEffect(() => {
     let canceled = false
     let idleId: number | null = null

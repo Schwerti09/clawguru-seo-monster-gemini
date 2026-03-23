@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import { RUNBOOKS, PROVIDERS, totalSitemapUrls } from "@/lib/pseo"
+import { STATS } from "@/lib/stats"
 import { getLiveWallCached } from "@/app/api/live-wall/route"
 
 export const runtime = "nodejs"
@@ -10,15 +11,15 @@ export async function GET() {
   try {
     // Core counts derived from local dataset (no external calls)
     const runbooks = RUNBOOKS
-    const totalRunbooks = runbooks.length
+    const totalRunbooks = STATS.totalRunbooks
     const uniqueTags = new Set<string>(runbooks.flatMap((r) => r.tags)).size
     const providers = PROVIDERS.length
-    const sitemapUrls = totalSitemapUrls()
+    const sitemapUrls = STATS.totalSitemapUrls || totalSitemapUrls()
 
     // Quality distribution (use existing runbook.clawScore field)
     const sample = runbooks.slice(0, Math.min(5000, totalRunbooks))
     const scores = sample.map((r) => Number(r.clawScore || 0) || 0)
-    const avgClaw = scores.length ? Math.round((scores.reduce((a, b) => a + b, 0) / scores.length) * 10) / 10 : 0
+    const avgClaw = STATS.avgClawScore
     const p90Claw = scores.length ? scores.slice().sort((a, b) => a - b)[Math.floor(scores.length * 0.9)] : 0
     const gold = sample.filter((r) => (r.clawScore || 0) >= 85).length
     const silver = sample.filter((r) => (r.clawScore || 0) >= 75 && (r.clawScore || 0) < 85).length

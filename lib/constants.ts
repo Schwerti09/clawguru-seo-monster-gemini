@@ -4,12 +4,14 @@ export const BRAND = {
   twitter: "@clawguru"
 }
 
+import { STATS } from "@/lib/stats"
+
 export const SECURITY_STATS = {
-  exposedInstances: 21639,
-  bypassRate: 93.4,
-  checksTotal: 128457,
-  checksToday: 912,
-  lastUpdated: "Feb 2026"
+  exposedInstances: STATS.exposedInstances,
+  bypassRate: STATS.bypassRate,
+  checksTotal: STATS.checksTotal,
+  checksToday: STATS.checksToday,
+  lastUpdated: "Feb 2026",
 }
 
 export const AFFILIATE_LINKS = {

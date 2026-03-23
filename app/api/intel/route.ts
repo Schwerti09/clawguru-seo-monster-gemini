@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { ensureReadyWithin, search as searchRunbooks } from "@/lib/runbooks-index"
+import { STATS } from "@/lib/stats"
 
 export const runtime = "nodejs"
 
@@ -182,8 +183,8 @@ function synthesizeStats() {
   const pts = Array.from({ length: 24 }, (_, i) => Math.round(20 + Math.sin(i / 2) * 8 + r() * 12))
   return {
     newCvesToday: Math.round(40 + r() * 30),
-    activeExploits: Math.round(8 + r() * 12),
-    avgClawScore: Math.round(70 + r() * 20),
+    activeExploits: STATS.activeExploitsToday,
+    avgClawScore: STATS.avgClawScore,
     threatLevel: Math.round(50 + r() * 45),
     series: pts,
   }

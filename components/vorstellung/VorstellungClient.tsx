@@ -286,8 +286,8 @@ export default function VorstellungClient({ dict }: { dict?: any }) {
             {dict?.subtitle ?? "Die Ops‑Intelligence Plattform: schnell, fokussiert, ergebnisorientiert. Hier siehst du in 60 Sekunden, was du bekommst."}
           </motion.p>
           <motion.div initial={reduce ? undefined : { opacity: 0, y: 10 }} whileInView={reduce ? undefined : { opacity: 1, y: 0 }} viewport={{ once: true }} transition={reduce ? undefined : { duration: 0.6, delay: 0.15 }} className="mt-6 flex flex-col sm:flex-row gap-3 justify-center">
-            <GlowButton variant="primary" href="/check">{dict?.ctaPrimary ?? "Jetzt testen"}</GlowButton>
-            <GlowButton variant="outline" href="/pricing">{dict?.ctaSecondary ?? "Pläne"}</GlowButton>
+            <GlowButton variant="primary" href={`${prefix}/check`}>{dict?.ctaPrimary ?? "Jetzt testen"}</GlowButton>
+            <GlowButton variant="outline" href={`${prefix}/pricing`}>{dict?.ctaSecondary ?? "Pläne"}</GlowButton>
           </motion.div>
         </div>
       </section>
@@ -363,7 +363,7 @@ export default function VorstellungClient({ dict }: { dict?: any }) {
 
           {/* Final CTA */}
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="text-center pt-6">
-            <GlowButton variant="primary" href="/daypass">{dict?.finalCta ?? "Day Pass 7€ – Sofortzugang"}</GlowButton>
+            <GlowButton variant="primary" href={`${prefix}/daypass`}>{dict?.finalCta ?? "Day Pass 7€ – Sofortzugang"}</GlowButton>
           </motion.div>
         </div>
       </Container>

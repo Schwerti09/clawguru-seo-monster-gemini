@@ -2,8 +2,16 @@
 
 import { motion } from "framer-motion"
 import { GlowButton } from "@/components/ui/GlowButton"
+import { usePathname } from "next/navigation"
+import { useMemo } from "react"
 
 export const CTA = () => {
+  const pathname = usePathname()
+  const prefix = useMemo(() => {
+    const first = (pathname || "").split("/")[1] || ""
+    const isLang = /^[a-z]{2}(-[A-Z]{2})?$/.test(first)
+    return isLang ? `/${first}` : ""
+  }, [pathname])
   return (
     <section className="py-24 px-6">
       <motion.div
@@ -17,7 +25,7 @@ export const CTA = () => {
         <p className="text-white/70 text-lg mb-8 max-w-2xl mx-auto">
           Werde Teil von ClawGuru und erlebe, wie Technologie neu definiert wird.
         </p>
-        <GlowButton variant="primary" href="/check">Jetzt starten →</GlowButton>
+        <GlowButton variant="primary" href={`${prefix}/check`}>Jetzt starten →</GlowButton>
       </motion.div>
     </section>
   )

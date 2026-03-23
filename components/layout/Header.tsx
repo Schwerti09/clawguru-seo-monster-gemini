@@ -178,7 +178,7 @@ export default function Header() {
             }}
           >
             {/* Logo */}
-            <Link href="/" className="flex items-center gap-3 shrink-0" aria-label="ClawGuru â€“ Startseite">
+            <Link href={localizePath(locale, "/")} className="flex items-center gap-3 shrink-0" aria-label="ClawGuru â€“ Startseite">
               <div
                 className="w-9 h-9 rounded-xl flex items-center justify-center"
                 aria-hidden="true"

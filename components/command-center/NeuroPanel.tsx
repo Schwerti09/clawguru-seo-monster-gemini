@@ -1,8 +1,15 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
+import { usePathname } from "next/navigation"
 
 export default function NeuroPanel() {
+  const pathname = usePathname()
+  const prefix = useMemo(() => {
+    const first = (pathname || "").split("/")[1] || ""
+    const isLang = /^[a-z]{2}(-[A-Z]{2})?$/.test(first)
+    return isLang ? `/${first}` : ""
+  }, [pathname])
   const [stack, setStack] = useState("aws,nginx,postgres")
   const [limit, setLimit] = useState(6)
   const [busy, setBusy] = useState(false)
@@ -47,7 +54,7 @@ export default function NeuroPanel() {
           <div className="text-sm text-gray-400">Plan: <span className="font-bold text-gray-200">{data.execution_plan}</span> · Zeit: {data.estimated_time}</div>
           <div className="grid gap-2">
             {(data.recommended_runbooks || []).map((r: any) => (
-              <a key={r.slug} href={`/runbook/${r.slug}`} className="p-3 rounded-xl border border-white/10 bg-black/40 hover:bg-black/50">
+              <a key={r.slug} href={`${prefix}/runbook/${r.slug}`} className="p-3 rounded-xl border border-white/10 bg-black/40 hover:bg-black/50">
                 <div className="flex items-center justify-between">
                   <div className="font-bold text-gray-100">{r.title}</div>
                   <div className="text-xs text-fuchsia-300">{r.relevance}%</div>

@@ -1,8 +1,15 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
+import { usePathname } from "next/navigation"
 
 export default function SummonPanel() {
+  const pathname = usePathname()
+  const prefix = useMemo(() => {
+    const first = (pathname || "").split("/")[1] || ""
+    const isLang = /^[a-z]{2}(-[A-Z]{2})?$/.test(first)
+    return isLang ? `/${first}` : ""
+  }, [pathname])
   const [q, setQ] = useState("ssh")
   const [busy, setBusy] = useState(false)
   const [err, setErr] = useState<string | null>(null)
@@ -49,7 +56,7 @@ export default function SummonPanel() {
           <div className="text-sm text-gray-400">Confidence: <span className="font-bold text-gray-200">{data.confidence}</span> · Services: {data.affected_services?.join(", ") || "—"}</div>
           <div className="grid gap-2">
             {(data.relevant_runbooks || []).map((r: any) => (
-              <a key={r.slug} href={`/runbook/${r.slug}`} className="p-3 rounded-xl border border-white/10 bg-black/40 hover:bg-black/50">
+              <a key={r.slug} href={`${prefix}/runbook/${r.slug}`} className="p-3 rounded-xl border border-white/10 bg-black/40 hover:bg-black/50">
                 <div className="font-bold text-gray-100">{r.title}</div>
                 <div className="text-xs text-gray-400">Score {r.clawScore}</div>
                 <div className="text-sm text-gray-300 line-clamp-2">{r.summary}</div>

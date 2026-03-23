@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useRef, useState } from "react"
+import { usePathname } from "next/navigation"
 
 export type TeaserResult = {
   risks?: number
@@ -11,6 +12,12 @@ export type TeaserResult = {
 }
 
 export default function CopilotTeaser() {
+  const pathname = usePathname()
+  const prefix = useMemo(() => {
+    const first = (pathname || "").split("/")[1] || ""
+    const isLang = /^[a-z]{2}(-[A-Z]{2})?$/.test(first)
+    return isLang ? `/${first}` : ""
+  }, [pathname])
   const [q, setQ] = useState("Zeig mir Top-Fixes für nginx")
   const [busy, setBusy] = useState(false)
   const [err, setErr] = useState<string | null>(null)
@@ -102,14 +109,14 @@ export default function CopilotTeaser() {
         <button onClick={ask} disabled={busy} className="px-3 py-2 rounded-lg text-xs font-bold border border-cyan-500/30 bg-cyan-500/20 text-cyan-100 disabled:opacity-50">
           {busy ? "Lade…" : "Fragen"}
         </button>
-        <a href={`/summon?prefill=${prefill}`} className="px-3 py-2 rounded-lg text-xs font-bold border border-white/15 bg-black/40 text-gray-200">Open</a>
+        <a href={`${prefix}/summon?prefill=${prefill}`} className="px-3 py-2 rounded-lg text-xs font-bold border border-white/15 bg-black/40 text-gray-200">Open</a>
       </div>
       {err && <div className="mt-2 text-xs text-red-400">{err}</div>}
       {!visible && !data && !err && (
         <div className="mt-2 text-xs text-gray-400">Scrolle, um Copilot zu laden…</div>
       )}
       {top && (
-        <a href={top.slug ? `/runbook/${top.slug}` : "/summon"} className="block mt-3 p-3 rounded-xl border border-white/10 bg-black/40 hover:bg-black/50">
+        <a href={top.slug ? `${prefix}/runbook/${top.slug}` : `${prefix}/summon`} className="block mt-3 p-3 rounded-xl border border-white/10 bg-black/40 hover:bg-black/50">
           <div className="text-sm font-semibold text-white">{top.title || "Empfohlenes Runbook"}</div>
           {top.summary && <div className="text-xs text-gray-400 line-clamp-2">{top.summary}</div>}
         </a>

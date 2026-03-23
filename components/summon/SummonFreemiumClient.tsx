@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useRef, useState } from "react"
+import { usePathname } from "next/navigation"
 import Container from "@/components/shared/Container"
 import dynamic from "next/dynamic"
 import BuyButton from "@/components/commerce/BuyButton"
@@ -27,6 +28,12 @@ type Teaser = {
 }
 
 export default function SummonFreemiumClient() {
+  const pathname = usePathname()
+  const prefix = useMemo(() => {
+    const first = (pathname || "").split("/")[1] || ""
+    const isLang = /^[a-z]{2}(-[A-Z]{2})?$/.test(first)
+    return isLang ? `/${first}` : ""
+  }, [pathname])
   const [q, setQ] = useState("")
   const [secondsLeft, setSecondsLeft] = useState(0)
   const [running, setRunning] = useState(false)
@@ -236,7 +243,7 @@ export default function SummonFreemiumClient() {
             <div className="mt-3 flex gap-2">
               <BuyButton product="pro" label="Pro 49 € / Monat" className="px-3 py-2 rounded-xl font-black text-black"
                          style={{ background: "linear-gradient(135deg,#a78bfa,#00ff9d)" }} />
-              <a href="/pricing" className="px-3 py-2 rounded-xl border border-white/10 text-gray-300 hover:bg-white/5">Mehr erfahren</a>
+              <a href={`${prefix}/pricing`} className="px-3 py-2 rounded-xl border border-white/10 text-gray-300 hover:bg-white/5">Mehr erfahren</a>
             </div>
           </div>
         )}

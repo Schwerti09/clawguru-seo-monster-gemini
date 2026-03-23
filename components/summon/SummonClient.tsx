@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useState } from "react"
+import { usePathname } from "next/navigation"
 import Container from "@/components/shared/Container"
 import SummonButton, { type SummonResult } from "@/components/summon/SummonButton"
 import SwarmResults from "@/components/summon/SwarmResults"
@@ -8,6 +9,12 @@ import SummonHistory from "@/components/summon/SummonHistory"
 import BuyButton from "@/components/commerce/BuyButton"
 
 export default function SummonClient() {
+  const pathname = usePathname()
+  const prefix = useMemo(() => {
+    const first = (pathname || "").split("/")[1] || ""
+    const isLang = /^[a-z]{2}(-[A-Z]{2})?$/.test(first)
+    return isLang ? `/${first}` : ""
+  }, [pathname])
   const [allowed, setAllowed] = useState(false)
   const [permanent, setPermanent] = useState(false)
   const [loading, setLoading] = useState(true)
@@ -94,7 +101,7 @@ export default function SummonClient() {
             <div className="text-xs text-gray-400 mt-1">Upgrade auf Pro für dauerhafte History & Oracle‑Modus.</div>
             <div className="mt-3 flex gap-2">
               <BuyButton product="pro" label="Pro 49 € / Monat" className="px-3 py-2 rounded-xl font-black text-black" style={{ background: "linear-gradient(135deg,#a78bfa,#00ff9d)" }} />
-              <a href="/pricing" className="px-3 py-2 rounded-xl border border-white/10 text-gray-300 hover:bg-white/5">Mehr erfahren</a>
+              <a href={`${prefix}/pricing`} className="px-3 py-2 rounded-xl border border-white/10 text-gray-300 hover:bg-white/5">Mehr erfahren</a>
             </div>
           </div>
         )}

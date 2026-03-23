@@ -1,6 +1,7 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
+import { usePathname } from "next/navigation"
 
 type IntelItem = { id: string; title: string; severity: string; category: string; when: string; tags: string[] }
 
@@ -15,6 +16,12 @@ type LiveData = {
 }
 
 export default function SummonLiveOverview() {
+  const pathname = usePathname()
+  const prefix = useMemo(() => {
+    const first = (pathname || "").split("/")[1] || ""
+    const isLang = /^[a-z]{2}(-[A-Z]{2})?$/.test(first)
+    return isLang ? `/${first}` : ""
+  }, [pathname])
   const [data, setData] = useState<LiveData | null>(null)
   const [error, setError] = useState<string | null>(null)
 
@@ -96,7 +103,7 @@ export default function SummonLiveOverview() {
           <div className="text-sm font-bold text-white mb-3">Top Runbooks (ClawScore)</div>
           <div className="divide-y divide-white/5">
             {data.topRunbooks.map((r) => (
-              <a key={r.slug} href={`/runbook/${r.slug}`} className="flex items-center justify-between py-3 hover:bg-white/[0.02] rounded-lg px-2">
+              <a key={r.slug} href={`${prefix}/runbook/${r.slug}`} className="flex items-center justify-between py-3 hover:bg-white/[0.02] rounded-lg px-2">
                 <div>
                   <div className="text-sm text-white font-semibold">{r.title}</div>
                   <div className="text-xs text-gray-400 line-clamp-1">{r.summary}</div>

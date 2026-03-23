@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react"
 import Container from "@/components/shared/Container"
 import { useInView } from "framer-motion"
+import { usePathname } from "next/navigation"
 // Mycelium wird später als optimierte Lazy-Version wieder eingebaut
 
 type AccessPlan = "free" | "daypass" | "pro" | "enterprise"
@@ -77,9 +78,15 @@ function UpgradeButton(props: { product: Product; label: string; className?: str
         window.location.href = url
         return
       }
-      window.location.href = "/pricing"
+      {
+        const seg = (typeof window !== "undefined" ? window.location.pathname : "").split("/")[1] || ""
+        const locPrefix = /^[a-z]{2}(-[A-Z]{2})?$/.test(seg) ? `/${seg}` : ""
+        window.location.href = `${locPrefix}/pricing`
+      }
     } catch {
-      window.location.href = "/pricing"
+      const seg = (typeof window !== "undefined" ? window.location.pathname : "").split("/")[1] || ""
+      const locPrefix = /^[a-z]{2}(-[A-Z]{2})?$/.test(seg) ? `/${seg}` : ""
+      window.location.href = `${locPrefix}/pricing`
     } finally {
       setBusy(false)
     }
@@ -228,6 +235,12 @@ function LiveThreatNetwork(props: { tier: AccessPlan }) {
   const [data, setData] = useState<any | null>(null)
   const rootRef = useRef<HTMLDivElement>(null)
   const inView = useInView(rootRef, { amount: 0.2, once: true })
+  const pathname = usePathname()
+  const prefix = useMemo(() => {
+    const first = (pathname || "").split("/")[1] || ""
+    const isLang = /^[a-z]{2}(-[A-Z]{2})?$/.test(first)
+    return isLang ? `/${first}` : ""
+  }, [pathname])
   useEffect(() => {
     if (!inView) return
     let stop = false
@@ -250,7 +263,7 @@ function LiveThreatNetwork(props: { tier: AccessPlan }) {
           <div className="text-sm font-bold mb-2">Trending Fixes</div>
           <div className="grid grid-cols-1 gap-2">
             {trending.map((t: any) => (
-              <a key={t.slug} href={`/runbook/${t.slug}`} className="px-3 py-2 rounded-xl border border-gray-800 bg-black/30 hover:bg-black/40">
+              <a key={t.slug} href={`${prefix}/runbook/${t.slug}`} className="px-3 py-2 rounded-xl border border-gray-800 bg-black/30 hover:bg-black/40">
                 <div className="font-bold text-gray-100">{t.title}</div>
                 <div className="text-xs text-gray-400">{t.summary}</div>
               </a>
@@ -261,7 +274,7 @@ function LiveThreatNetwork(props: { tier: AccessPlan }) {
           <div className="text-sm font-bold mb-2">Neueste Viren (CVE‑Pulse)</div>
           <div className="grid grid-cols-1 gap-2">
             {cves.map((x: any) => (
-              <a key={x.cveId} href={`/solutions/fix-${x.cveId}`} className="px-3 py-2 rounded-xl border border-gray-800 bg-black/30 hover:bg-black/40 flex items-center justify-between">
+              <a key={x.cveId} href={`${prefix}/solutions/fix-${x.cveId}`} className="px-3 py-2 rounded-xl border border-gray-800 bg-black/30 hover:bg-black/40 flex items-center justify-between">
                 <span className="text-xs font-mono text-gray-300">{x.cveId}</span>
                 <span className="text-sm font-bold text-gray-100">{x.name}</span>
                 <span className="text-xs text-gray-400">{x.cvssScore}</span>
@@ -293,6 +306,12 @@ function AffiliateNetwork(props: { tier: AccessPlan }) {
 
 function SwarmOracleSection(props: { tier: AccessPlan }) {
   const { tier } = props
+  const pathname = usePathname()
+  const prefix = useMemo(() => {
+    const first = (pathname || "").split("/")[1] || ""
+    const isLang = /^[a-z]{2}(-[A-Z]{2})?$/.test(first)
+    return isLang ? `/${first}` : ""
+  }, [pathname])
   const prefill = encodeURIComponent("Mein Kubernetes-Cluster")
   return (
     <GatedTile title="Claw Swarm Oracle" minTier="free" tier={tier}>
@@ -302,7 +321,7 @@ function SwarmOracleSection(props: { tier: AccessPlan }) {
           <div className="text-2xl font-black">Neon-roter Summon-Button · 4 Swarm-Typen</div>
           <div className="mt-2 text-sm text-gray-400">Ergebnis in unter 8 Sekunden: Angriffspfade, Vorhersage, Runbook + One-Click-Fix</div>
           <div className="mt-4 flex flex-wrap gap-2">
-            <a href={`/summon?prefill=${prefill}`} className="px-5 py-3 rounded-2xl font-black text-white" style={{ background: "linear-gradient(135deg,#ff0066,#ff9900)", boxShadow: "0 0 24px rgba(255,0,102,0.25)" }}>Jetzt summonen</a>
+            <a href={`${prefix}/summon?prefill=${prefill}`} className="px-5 py-3 rounded-2xl font-black text-white" style={{ background: "linear-gradient(135deg,#ff0066,#ff9900)", boxShadow: "0 0 24px rgba(255,0,102,0.25)" }}>Jetzt summonen</a>
             <UpgradeButton product="daypass" label="Daypass 9,99 € - 24h" />
             <UpgradeButton product="pro" label="Pro 49 € / Monat" />
           </div>
@@ -318,6 +337,12 @@ function SwarmOracleSection(props: { tier: AccessPlan }) {
 
 function IntelNexusSection(props: { tier: AccessPlan }) {
   const { tier } = props
+  const pathname = usePathname()
+  const prefix = useMemo(() => {
+    const first = (pathname || "").split("/")[1] || ""
+    const isLang = /^[a-z]{2}(-[A-Z]{2})?$/.test(first)
+    return isLang ? `/${first}` : ""
+  }, [pathname])
   return (
     <GatedTile title="Mycelium Intel Nexus" minTier="free" tier={tier}>
       <div className="grid md:grid-cols-2 gap-4 items-center">
@@ -326,7 +351,7 @@ function IntelNexusSection(props: { tier: AccessPlan }) {
           <div className="text-2xl font-black">3D Threat‑Map · Teaser‑Report · Predictive</div>
           <div className="mt-2 text-sm text-gray-400">Luxus‑Look mit Glassmorphism & Gold‑Akzenten. 60s Preview, dann starker Paywall‑Nudge.</div>
           <div className="mt-4 flex flex-wrap gap-2">
-            <a href={`/intel`} className="px-5 py-3 rounded-2xl font-black text-white" style={{ background: "linear-gradient(135deg,#00ff9d,#00b8ff)", boxShadow: "0 0 24px rgba(0,255,157,0.25)" }}>Open Intel</a>
+            <a href={`${prefix}/intel`} className="px-5 py-3 rounded-2xl font-black text-white" style={{ background: "linear-gradient(135deg,#00ff9d,#00b8ff)", boxShadow: "0 0 24px rgba(0,255,157,0.25)" }}>Open Intel</a>
             <UpgradeButton product="daypass" label="Daypass 9,99 € - 24h" />
             <UpgradeButton product="pro" label="Pro 49 € / Monat" />
           </div>

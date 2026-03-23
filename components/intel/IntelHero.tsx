@@ -1,6 +1,7 @@
 "use client"
 
-import React from "react"
+import React, { useMemo } from "react"
+import { usePathname } from "next/navigation"
 
 type IntelHeroDict = {
   hero_badge?: string
@@ -10,6 +11,12 @@ type IntelHeroDict = {
 }
 
 export default function IntelHero({ dict }: { dict?: IntelHeroDict }) {
+  const pathname = usePathname()
+  const prefix = useMemo(() => {
+    const first = (pathname || "").split("/")[1] || ""
+    const isLang = /^[a-z]{2}(-[A-Z]{2})?$/.test(first)
+    return isLang ? `/${first}` : ""
+  }, [pathname])
   return (
     <section className="relative overflow-hidden pt-16 pb-10 text-center px-4">
       <div className="pointer-events-none absolute inset-0" aria-hidden="true"
@@ -28,7 +35,7 @@ export default function IntelHero({ dict }: { dict?: IntelHeroDict }) {
         <h1 className="text-4xl sm:text-5xl font-black text-white">{dict?.hero_title || "Intel – Das Mycelial Threat Intelligence Center"}</h1>
         <p className="mt-3 text-gray-400 text-lg">{dict?.hero_subline || "Echtzeit‑CVE‑Feeds, KI‑gestützte Risikoanalyse und direkte Runbook‑Empfehlungen. Bleib immer einen Schritt voraus."}</p>
         <div className="mt-6">
-          <a href="/daypass" className="inline-flex items-center px-6 py-3 rounded-2xl font-black text-black"
+          <a href={`${prefix}/daypass`} className="inline-flex items-center px-6 py-3 rounded-2xl font-black text-black"
              style={{ background: "linear-gradient(135deg,#00e6a0,#00b8ff)" }}>
             {dict?.cta_daypass || "Jetzt Daypass kaufen"}
           </a>

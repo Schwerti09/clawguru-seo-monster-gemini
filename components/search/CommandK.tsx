@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useRef, useState, useCallback } from "react"
+import { usePathname } from "next/navigation"
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion"
 
 type LivePayload = {
@@ -22,6 +23,12 @@ function score(q: string, item: { title: string; summary: string; tags: string[]
 }
 
 export default function CommandK() {
+  const pathname = usePathname()
+  const prefix = useMemo(() => {
+    const first = (pathname || "").split("/")[1] || ""
+    const isLang = /^[a-z]{2}(-[A-Z]{2})?$/.test(first)
+    return isLang ? `/${first}` : ""
+  }, [pathname])
   const [open, setOpen] = useState(false)
   const [q, setQ] = useState("")
   const [data, setData] = useState<LivePayload | null>(null)
@@ -56,9 +63,9 @@ export default function CommandK() {
         const it = results[activeIdx]
         if (it) {
           if (e.metaKey || e.ctrlKey) {
-            window.open(`/runbook/${it.slug}`, "_blank")
+            window.open(`${prefix}/runbook/${it.slug}`, "_blank")
           } else {
-            window.location.href = `/runbook/${it.slug}`
+            window.location.href = `${prefix}/runbook/${it.slug}`
           }
           setOpen(false)
         }
@@ -122,7 +129,7 @@ export default function CommandK() {
               {results.map((t, idx) => (
                 <a
                   key={t.slug}
-                  href={`/runbook/${t.slug}`}
+                  href={`${prefix}/runbook/${t.slug}`}
                   className={`block p-3 rounded-xl border border-gray-800 bg-black/20 hover:bg-black/30 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_0_0_1px_rgba(34,211,238,0.35)_inset,0_10px_24px_-12px_rgba(34,211,238,0.35)] ${
                     idx === activeIdx ? "ring-1 ring-cyan-500/50 bg-black/30" : ""
                   }`}

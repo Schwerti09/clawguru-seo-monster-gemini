@@ -5,10 +5,11 @@ import { Html } from "@react-three/drei"
 import { useMemo, useRef } from "react"
 import { useReducedMotion } from "framer-motion"
 import * as THREE from "three"
+import { usePathname } from "next/navigation"
 
 type Props = { tags: string[] }
 
-function OrbitGroup({ tags }: Props) {
+function OrbitGroup({ tags, prefix }: { tags: string[]; prefix: string }) {
   const prefersReduced = useReducedMotion()
   const group = useRef<THREE.Group>(null!)
   const targetTilt = useRef<[number, number]>([0, 0])
@@ -60,7 +61,7 @@ function OrbitGroup({ tags }: Props) {
           occlude
         >
           <a
-            href={`/tag/${encodeURIComponent(p.t)}`}
+            href={`${prefix}/tag/${encodeURIComponent(p.t)}`}
             className="px-3 py-1.5 rounded-xl border border-gray-800 bg-black/30 text-sm text-gray-200 will-change-transform hover:shadow-[0_0_0_1px_rgba(34,211,238,0.35)_inset,0_10px_24px_-12px_rgba(34,211,238,0.35)]"
           >
             {p.t}
@@ -73,6 +74,12 @@ function OrbitGroup({ tags }: Props) {
 
 export default function TagOrbitCloud3D({ tags }: Props) {
   const prefersReduced = useReducedMotion()
+  const pathname = usePathname()
+  const prefix = useMemo(() => {
+    const first = (pathname || "").split("/")[1] || ""
+    const isLang = /^[a-z]{2}(-[A-Z]{2})?$/.test(first)
+    return isLang ? `/${first}` : ""
+  }, [pathname])
   return (
     <div className="relative mx-auto my-10 h-[460px] max-w-5xl rounded-[36px] overflow-hidden">
       <Canvas camera={{ position: [0, 0, 7.5], fov: 50 }} dpr={[1, 1.75]} gl={{ antialias: true }}>
@@ -81,7 +88,7 @@ export default function TagOrbitCloud3D({ tags }: Props) {
         {!prefersReduced && (
           <fog attach="fog" args={["#03040a", 12, 20]} />
         )}
-        <OrbitGroup tags={tags} />
+        <OrbitGroup tags={tags} prefix={prefix} />
       </Canvas>
       <div className="pointer-events-none absolute inset-0 rounded-[36px] border border-cyan-500/10 bg-gradient-to-br from-cyan-500/5 to-transparent" />
     </div>

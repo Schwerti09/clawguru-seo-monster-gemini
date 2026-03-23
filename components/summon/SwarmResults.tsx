@@ -1,9 +1,17 @@
 "use client"
 
 import type { SummonResult } from "@/components/summon/SummonButton"
+import { useMemo } from "react"
+import { usePathname } from "next/navigation"
 
 export default function SwarmResults({ r }: { r: SummonResult }) {
-  const fixUrl = r.oneClickFixUrl || `/runbook/${r.runbookSlug}#quickfix`
+  const pathname = usePathname()
+  const prefix = useMemo(() => {
+    const first = (pathname || "").split("/")[1] || ""
+    const isLang = /^[a-z]{2}(-[A-Z]{2})?$/.test(first)
+    return isLang ? `/${first}` : ""
+  }, [pathname])
+  const fixUrl = r.oneClickFixUrl || `${prefix}/runbook/${r.runbookSlug}#quickfix`
   return (
     <div className="mt-10 rounded-3xl border border-red-900/40 bg-black/40 p-6">
       <div className="flex items-center justify-between">
@@ -18,7 +26,7 @@ export default function SwarmResults({ r }: { r: SummonResult }) {
           <div className="text-lg font-black text-white">Vorhersage</div>
           <div className="text-sm text-gray-300 leading-relaxed">{r.prediction}</div>
           <div className="mt-2 grid grid-cols-2 gap-3">
-            <a href={`/runbook/${r.runbookSlug}`} className="px-4 py-3 rounded-2xl border border-white/10 text-gray-200 hover:bg-white/5 text-center font-bold">Runbook öffnen</a>
+            <a href={`${prefix}/runbook/${r.runbookSlug}`} className="px-4 py-3 rounded-2xl border border-white/10 text-gray-200 hover:bg-white/5 text-center font-bold">Runbook öffnen</a>
             <a href={fixUrl} className="px-4 py-3 rounded-2xl text-black font-black text-center" style={{ background:"linear-gradient(135deg,#ff0066,#ff9900)", boxShadow:"0 0 20px rgba(255,0,102,0.35)"}}>One‑Click‑Fix</a>
           </div>
         </div>

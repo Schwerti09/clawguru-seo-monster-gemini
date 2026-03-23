@@ -2,8 +2,15 @@
 
 import { useEffect, useMemo } from "react"
 import { motion, useReducedMotion } from "framer-motion"
+import { usePathname } from "next/navigation"
 
 export default function TagOrbitCloud({ tags }: { tags: string[] }) {
+  const pathname = usePathname()
+  const prefix = useMemo(() => {
+    const first = (pathname || "").split("/")[1] || ""
+    const isLang = /^[a-z]{2}(-[A-Z]{2})?$/.test(first)
+    return isLang ? `/${first}` : ""
+  }, [pathname])
   const prefersReduced = useReducedMotion()
   const items = useMemo(() => tags.slice(0, 60), [tags])
 
@@ -34,7 +41,7 @@ export default function TagOrbitCloud({ tags }: { tags: string[] }) {
           {positioned.map(({ t, x, y }, idx) => (
             <motion.a
               key={t + idx}
-              href={`/tag/${encodeURIComponent(t)}`}
+              href={`${prefix}/tag/${encodeURIComponent(t)}`}
               className="absolute px-3 py-1.5 rounded-xl border border-gray-800 bg-black/30 text-sm text-gray-200 will-change-transform hover:shadow-[0_0_0_1px_rgba(34,211,238,0.35)_inset,0_10px_24px_-12px_rgba(34,211,238,0.35)]"
               style={{ left: x, top: y }}
               whileHover={prefersReduced ? undefined : { scale: 1.08, x: x * 0.05, y: y * 0.05 }}

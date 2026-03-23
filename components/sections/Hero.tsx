@@ -3,8 +3,16 @@
 import { motion } from "framer-motion"
 import { GlowButton } from "@/components/ui/GlowButton"
 import HeroPreview from "@/components/home/HeroPreview"
+import { usePathname } from "next/navigation"
+import { useMemo } from "react"
 
 export const Hero = () => {
+  const pathname = usePathname()
+  const prefix = useMemo(() => {
+    const first = (pathname || "").split("/")[1] || ""
+    const isLang = /^[a-z]{2}(-[A-Z]{2})?$/.test(first)
+    return isLang ? `/${first}` : ""
+  }, [pathname])
   return (
     <section className="relative min-h-[70vh] flex items-center justify-center px-6 py-20">
       {/* Starfield overlay */}
@@ -31,8 +39,8 @@ export const Hero = () => {
             Next‑Generation Tech Solutions – schneller, smarter, besser.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <GlowButton variant="primary" href="/check">Loslegen</GlowButton>
-            <GlowButton variant="outline" href="/vorstellung">Mehr erfahren</GlowButton>
+            <GlowButton variant="primary" href={`${prefix}/check`}>Loslegen</GlowButton>
+            <GlowButton variant="outline" href={`${prefix}/vorstellung`}>Mehr erfahren</GlowButton>
           </div>
 
           {/* High-tech platform preview (perf-optimized) */}

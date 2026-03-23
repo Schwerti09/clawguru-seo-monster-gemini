@@ -37,6 +37,14 @@ const CHECKS = [
     expected: [405],
     note: "POST-only route",
   },
+  // Extended page checks with locale-redirect acceptance
+  { path: "/oracle?scope=nginx,postgres,aws-ec2", method: "GET", expected: [200, 307, 308], note: "oracle page (prefilled scope)" },
+  { path: "/neuro?stack=nodejs,postgres,nginx", method: "GET", expected: [200, 307, 308], note: "neuro page (prefilled stack)" },
+  { path: "/summon?q=NGINX%20TLS&auto=1", method: "GET", expected: [200, 307, 308], note: "summon page (prefilled query)" },
+  // Corresponding API checks
+  { path: "/api/oracle?scope=nginx,postgres,aws-ec2", method: "GET", expected: [200], note: "oracle api (scope)" },
+  { path: "/api/neuro?stack=nodejs,postgres,nginx&limit=5", method: "GET", expected: [200, 400, 429], note: "neuro api (stack)" },
+  { path: "/api/summon?q=NGINX%20TLS&limit=3", method: "GET", expected: [200], note: "summon api (query)" },
 ]
 
 function getBaseUrl() {

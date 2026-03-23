@@ -326,7 +326,7 @@ export default function NeuroPage({ dict }: { dict?: DictShape }) {
                     </div>
                     <div className="flex gap-2 shrink-0">
                       <a
-                        href={`/runbook/${encodeURIComponent(r.slug)}`}
+                        href={`${prefix}/runbook/${encodeURIComponent(r.slug)}`}
                         className="px-3 py-1.5 rounded-lg text-xs font-bold border border-cyan-500/40 bg-cyan-500/15 text-cyan-100 hover:shadow-[0_0_20px_rgba(0,184,255,0.35)]"
                       >
                         Runbook

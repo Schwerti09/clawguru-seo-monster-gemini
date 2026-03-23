@@ -386,7 +386,7 @@ export default function OraclePage({ params, dict }: { params: { lang: string };
                   </div>
                   <a
                     className="shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold border border-cyan-500/40 bg-cyan-500/15 text-cyan-100 hover:shadow-[0_0_20px_rgba(0,184,255,0.35)]"
-                    href={`/runbook/${encodeURIComponent(cve.runbookSlug)}`}
+                    href={`${prefix}/runbook/${encodeURIComponent(cve.runbookSlug)}`}
                   >
                     Runbook
                   </a>

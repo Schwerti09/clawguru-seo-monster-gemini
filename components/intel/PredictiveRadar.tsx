@@ -48,6 +48,17 @@ export default function PredictiveRadar({ prefix = "", dict = {} as IntelDict }:
   const loading = dict.predictive_loading || "Loading predictions…"
   const errorText = dict.predictive_error || "Oracle error"
 
+  if (reduce) {
+    return (
+      <div className="rounded-2xl border border-white/10 bg-black/40 backdrop-blur-md p-4 relative">
+        <div className="text-sm font-semibold text-white mb-3">{header}</div>
+        <div className="h-72 rounded-xl border border-white/10 bg-[#07090f] grid place-items-center text-[11px] text-gray-300">
+          {loading}
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="rounded-2xl border border-white/10 bg-black/40 backdrop-blur-md p-4 relative">
       <div className="text-sm font-semibold text-white mb-3">{header}</div>

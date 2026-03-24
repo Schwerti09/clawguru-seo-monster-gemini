@@ -3,21 +3,40 @@
 import { useEffect, useMemo, useState } from "react"
 import { usePathname } from "next/navigation"
 import dynamic from "next/dynamic"
+import { useReducedMotion } from "framer-motion"
 
 const TagList = dynamic(() => import("@/components/tags/TagList"), { ssr: false })
-const TagOrbitCloud3D = dynamic(() => import("@/components/tags/TagOrbitCloud3D"), { ssr: false })
+const TagOrbitCloud3D = dynamic(() => import("@/components/tags/TagOrbitCloud3D"), {
+  ssr: false,
+  loading: () => (
+    <div className="relative mx-auto my-10 h-[460px] max-w-5xl rounded-[36px] overflow-hidden">
+      <div className="absolute inset-0 rounded-[36px] border border-white/10 bg-white/[0.04] animate-pulse" />
+    </div>
+  ),
+})
 
 export default function TagsClientLoader() {
+  const reduce = useReducedMotion()
   const [tags, setTags] = useState<string[] | null>(null)
   const [counts, setCounts] = useState<Record<string, number>>({})
   const [avgClaw, setAvgClaw] = useState<Record<string, number>>({})
   const [q, setQ] = useState("")
   const pathname = usePathname()
+  const [show3D, setShow3D] = useState(false)
   const prefix = useMemo(() => {
     const first = (pathname || "").split("/")[1] || ""
     const isLang = /^[a-z]{2}(-[A-Z]{2})?$/.test(first)
     return isLang ? `/${first}` : ""
   }, [pathname])
+
+  useEffect(() => {
+    try {
+      const isMd = typeof window !== "undefined" ? window.innerWidth >= 768 : false
+      setShow3D(isMd && !reduce)
+    } catch {
+      setShow3D(false)
+    }
+  }, [reduce])
 
   useEffect(() => {
     let mounted = true
@@ -83,7 +102,11 @@ export default function TagsClientLoader() {
 
   return (
     <div>
-      <TagOrbitCloud3D tags={tags} />
+      {show3D ? <TagOrbitCloud3D tags={tags} /> : (
+        <div className="relative mx-auto my-10 h-[460px] max-w-5xl rounded-[36px] overflow-hidden">
+          <div className="absolute inset-0 rounded-[36px] border border-white/10 bg-white/[0.04]" />
+        </div>
+      )}
 
       <div className="mt-6 flex items-center gap-2">
         <input

@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react"
 import { usePathname } from "next/navigation"
 import dynamic from "next/dynamic"
 import { useReducedMotion } from "framer-motion"
+import { buildTagStatsClient } from "@/lib/stats"
 
 const TagList = dynamic(() => import("@/components/tags/TagList"), { ssr: false })
 const TagOrbitCloud3D = dynamic(() => import("@/components/tags/TagOrbitCloud3D"), {
@@ -15,7 +16,7 @@ const TagOrbitCloud3D = dynamic(() => import("@/components/tags/TagOrbitCloud3D"
   ),
 })
 
-export default function TagsClientLoader() {
+export default function TagsClientLoader({ dict }: { dict?: any }) {
   const reduce = useReducedMotion()
   const [tags, setTags] = useState<string[] | null>(null)
   const [counts, setCounts] = useState<Record<string, number>>({})
@@ -42,40 +43,11 @@ export default function TagsClientLoader() {
     let mounted = true
     ;(async () => {
       try {
-        const pseo: any = await import("@/lib/pseo")
-        // Prefer a large client-built sample to approximate the full tag universe
-        const buildClient: undefined | ((n: number) => any[]) = pseo.buildRunbooksClient
-        let list: any[] = []
-        try {
-          list = buildClient ? buildClient(10000) : (pseo.RUNBOOKS ?? [])
-        } catch {
-          list = (pseo.RUNBOOKS ?? []) as any[]
-        }
-        const setUniq = new Set<string>()
-        const cMap = new Map<string, number>()
-        const sMap = new Map<string, number>()
-        for (const r of list) {
-          const score = Number(r.clawScore || 0) || 0
-          for (const t of r.tags || []) {
-            const key = String(t)
-            setUniq.add(key)
-            cMap.set(key, (cMap.get(key) || 0) + 1)
-            sMap.set(key, (sMap.get(key) || 0) + score)
-          }
-        }
-        const countsObj: Record<string, number> = {}
-        const avgObj: Record<string, number> = {}
-        for (const t of setUniq) {
-          const c = cMap.get(t) || 0
-          const s = sMap.get(t) || 0
-          countsObj[t] = c
-          avgObj[t] = c ? Math.round((s / c) * 10) / 10 : 0
-        }
-        const arr = Array.from(setUniq).sort((a, b) => a.localeCompare(b))
+        const { tags, counts, avgClaw } = await buildTagStatsClient(10000)
         if (mounted) {
-          setTags(arr)
-          setCounts(countsObj)
-          setAvgClaw(avgObj)
+          setTags(tags)
+          setCounts(counts)
+          setAvgClaw(avgClaw)
         }
       } catch {
         if (mounted) setTags([
@@ -88,11 +60,20 @@ export default function TagsClientLoader() {
 
   if (!tags) return <div className="text-sm text-gray-500 mt-6">Lade Tags…</div>
 
+  const sortedByFreq = useMemo(() => {
+    return (tags || []).slice().sort((a, b) => {
+      const da = counts[a] || 0
+      const db = counts[b] || 0
+      if (db !== da) return db - da
+      return a.localeCompare(b)
+    })
+  }, [tags, counts])
+
   const filtered = useMemo(() => {
     const ql = q.trim().toLowerCase()
-    if (!ql) return tags
-    return tags.filter((t) => t.toLowerCase().includes(ql))
-  }, [tags, q])
+    if (!ql) return sortedByFreq
+    return sortedByFreq.filter((t) => t.toLowerCase().includes(ql))
+  }, [sortedByFreq, q])
 
   const top10 = useMemo(() => {
     return [...(tags || [])]
@@ -100,10 +81,18 @@ export default function TagsClientLoader() {
       .slice(0, 10)
   }, [tags, counts])
 
+  const lblTop = (dict?.top_label as string) || "Top Tags"
+  const lblRunbooks = (dict?.runbooks_label as string) || "Runbooks"
+  const lblAvg = (dict?.avg_claw_label as string) || "Ø ClawScore"
+  const lblSearch = (dict?.search_placeholder as string) || "Tags durchsuchen…"
+  const lblCats = (dict?.categories_label as string) || "Beliebteste Kategorien"
+
+  const topCats = top10.slice(0, 6)
+
   return (
     <div>
       {show3D ? <TagOrbitCloud3D tags={tags} /> : (
-        <div className="relative mx-auto my-10 h-[460px] max-w-5xl rounded-[36px] overflow-hidden">
+        <div className="relative mx-auto my-10 h-[460px] w-full max-w-[1400px] rounded-[36px] overflow-hidden">
           <div className="absolute inset-0 rounded-[36px] border border-white/10 bg-white/[0.04]" />
         </div>
       )}
@@ -112,14 +101,14 @@ export default function TagsClientLoader() {
         <input
           value={q}
           onChange={(e) => setQ(e.target.value)}
-          placeholder="Tags durchsuchen…"
+          placeholder={lblSearch}
           className="flex-1 rounded-xl bg-black/40 border border-white/10 px-3 py-2 text-sm text-gray-200"
         />
       </div>
 
       {top10.length > 0 && (
         <div className="mt-8">
-          <div className="text-xs text-gray-400 uppercase tracking-widest mb-2">Top Tags</div>
+          <div className="text-xs text-gray-400 uppercase tracking-widest mb-2">{lblTop}</div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {top10.map((t) => (
               <a
@@ -129,9 +118,27 @@ export default function TagsClientLoader() {
               >
                 <div className="flex items-baseline justify-between">
                   <div className="font-bold text-gray-100">{t}</div>
-                  <div className="text-xs text-gray-400">{counts[t] || 0} Runbooks</div>
+                  <div className="text-xs text-gray-400">{counts[t] || 0} {lblRunbooks}</div>
                 </div>
-                <div className="mt-1 text-xs text-cyan-300">Ø ClawScore {avgClaw[t] ?? 0}</div>
+                <div className="mt-1 text-xs text-cyan-300">{lblAvg} {avgClaw[t] ?? 0}</div>
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {topCats.length > 0 && (
+        <div className="mt-10">
+          <div className="text-xs text-gray-400 uppercase tracking-widest mb-2">{lblCats}</div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            {topCats.map((t) => (
+              <a
+                key={`cat-${t}`}
+                href={`${prefix}/tag/${encodeURIComponent(t)}`}
+                className="p-4 rounded-2xl border border-white/10 bg-gradient-to-br from-cyan-500/5 to-emerald-500/5 hover:from-cyan-500/10 hover:to-emerald-500/10 transition-colors"
+              >
+                <div className="font-bold text-white">{t}</div>
+                <div className="mt-1 text-xs text-gray-400">{counts[t] || 0} {lblRunbooks} · {lblAvg} {avgClaw[t] ?? 0}</div>
               </a>
             ))}
           </div>

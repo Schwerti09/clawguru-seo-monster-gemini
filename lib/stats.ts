@@ -33,3 +33,44 @@ export const STATS = {
   checksTotal: CHECKS_TOTAL,
   checksToday: CHECKS_TODAY,
 } as const
+
+export type TagStats = {
+  tags: string[]
+  counts: Record<string, number>
+  avgClaw: Record<string, number>
+}
+
+// Build per-tag stats on the client (or server) from the canonical pseo dataset.
+// Uses a sampled synthetic builder if available to avoid large payloads.
+export async function buildTagStatsClient(sampleSize = 10000): Promise<TagStats> {
+  const pseo: any = await import("@/lib/pseo")
+  const buildClient: undefined | ((n: number) => any[]) = (pseo as any).buildRunbooksClient
+  let list: any[] = []
+  try {
+    list = buildClient ? buildClient(sampleSize) : ((pseo as any).RUNBOOKS ?? [])
+  } catch {
+    list = ((pseo as any).RUNBOOKS ?? []) as any[]
+  }
+  const setUniq = new Set<string>()
+  const cMap = new Map<string, number>()
+  const sMap = new Map<string, number>()
+  for (const r of list) {
+    const score = Number(r?.clawScore || 0) || 0
+    for (const t of r?.tags || []) {
+      const key = String(t)
+      setUniq.add(key)
+      cMap.set(key, (cMap.get(key) || 0) + 1)
+      sMap.set(key, (sMap.get(key) || 0) + score)
+    }
+  }
+  const counts: Record<string, number> = {}
+  const avgClaw: Record<string, number> = {}
+  for (const t of setUniq) {
+    const c = cMap.get(t) || 0
+    const s = sMap.get(t) || 0
+    counts[t] = c
+    avgClaw[t] = c ? Math.round((s / c) * 10) / 10 : 0
+  }
+  const tags = Array.from(setUniq).sort((a, b) => a.localeCompare(b))
+  return { tags, counts, avgClaw }
+}

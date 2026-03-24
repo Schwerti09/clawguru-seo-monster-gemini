@@ -40,6 +40,7 @@
     "@types/three": "^0.183.1",
     "eslint": "^8.57.0",
     "eslint-config-next": "14.2.21",
+    "playwright": "^1.58.2",
     "png-to-ico": "^2.1.8",
     "postcss": "^8.4.0",
     "sharp": "^0.33.5",

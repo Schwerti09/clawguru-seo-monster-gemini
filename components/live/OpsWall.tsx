@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react"
 import { motion, useReducedMotion, useInView } from "framer-motion"
 import { useI18n } from "@/components/i18n/I18nProvider"
+import { STATS } from "@/lib/stats"
 
 type LivePayload = {
   updatedAt: string
@@ -101,9 +102,29 @@ export default function OpsWall() {
     }
   }, [prefersReduced])
 
-  const TOTAL_COUNT = 1216847
-  const totalShort = "1.2M+"
-  const totalExact = useMemo(() => new Intl.NumberFormat(locale).format(TOTAL_COUNT), [locale])
+  const TOTAL_COUNT = STATS.totalRunbooks
+  const totalShort = useMemo(() => {
+    try {
+      const isDE = String(locale).toLowerCase().startsWith("de")
+      const nf = new Intl.NumberFormat(locale, { maximumFractionDigits: 1 })
+      if (TOTAL_COUNT >= 1_000_000_000) {
+        const v = TOTAL_COUNT / 1_000_000_000
+        return `${nf.format(v)}${isDE ? " Mrd" : "B"}+`
+      }
+      if (TOTAL_COUNT >= 1_000_000) {
+        const v = TOTAL_COUNT / 1_000_000
+        return `${nf.format(v)}${isDE ? " Mio" : "M"}+`
+      }
+      if (TOTAL_COUNT >= 1_000) {
+        const v = TOTAL_COUNT / 1_000
+        return `${nf.format(v)}${isDE ? " Tsd" : "K"}+`
+      }
+      return new Intl.NumberFormat(locale).format(TOTAL_COUNT)
+    } catch {
+      return "4.2M+"
+    }
+  }, [locale])
+  const totalExact = useMemo(() => new Intl.NumberFormat(locale).format(TOTAL_COUNT), [locale, TOTAL_COUNT])
 
   async function checkout(product: "daypass" | "pro") {
     try {
@@ -270,7 +291,7 @@ export default function OpsWall() {
 
   const visibleTrending = useMemo(() => filteredTrending.slice(0, Math.min(visibleCount, filteredTrending.length)), [filteredTrending, visibleCount])
   const lowActivity = (data?.trending?.length || 0) < 50
-  const pillText = `${synthetic ? "Synthetic Pulse" : "Live Pulse"}: ${data?.pulse ?? 87}% · ${totalShort} Database`
+  const pillText = `${synthetic ? "Synthetic Pulse" : "Live Pulse"}: ${data?.pulse ?? 87}% · ${totalShort} Library`
 
   return (
     <div ref={rootRef} className="space-y-6">
@@ -296,7 +317,7 @@ export default function OpsWall() {
             <div className="px-3 py-1.5 rounded-full text-[11px] font-extrabold text-white"
               style={{ background: "linear-gradient(90deg, rgba(0,255,157,0.25), rgba(0,184,255,0.25))", boxShadow: "0 0 24px rgba(0,184,255,0.25) inset, 0 0 14px rgba(0,255,157,0.25)" }}
             >
-              1.2M+ Badge
+              {totalShort} Badge
             </div>
           </div>
         </div>

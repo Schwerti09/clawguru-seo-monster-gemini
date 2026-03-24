@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import dynamic from "next/dynamic"
 
 const TagList = dynamic(() => import("@/components/tags/TagList"), { ssr: false })
+const TagOrbitCloud3D = dynamic(() => import("@/components/tags/TagOrbitCloud3D"), { ssr: false })
 
 export default function TagsClientLoader() {
   const [tags, setTags] = useState<string[] | null>(null)
@@ -38,6 +39,7 @@ export default function TagsClientLoader() {
 
   return (
     <div>
+      <TagOrbitCloud3D tags={tags} />
       <TagList tags={tags} />
     </div>
   )

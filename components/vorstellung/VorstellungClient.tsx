@@ -3,7 +3,7 @@
 import Container from "@/components/shared/Container"
 import { GlowButton } from "@/components/ui/GlowButton"
 import dynamic from "next/dynamic"
-import React, { Suspense, useEffect, useRef, useState } from "react"
+import React, { Suspense, useEffect, useMemo, useRef, useState } from "react"
 import { usePathname } from "next/navigation"
 import { motion, useReducedMotion } from "framer-motion"
 import { STATS } from "@/lib/stats"

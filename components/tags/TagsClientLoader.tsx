@@ -33,6 +33,7 @@ export default function TagsClientLoader({ dict }: { dict?: any }) {
   useEffect(() => {
     try {
       const isMd = typeof window !== "undefined" ? window.innerWidth >= 768 : false
+      const no3d = typeof window !== "undefined" ? new URLSearchParams(window.location.search).get("no3d") === "1" : false
       let glOK = false
       if (typeof document !== "undefined") {
         try {
@@ -43,7 +44,7 @@ export default function TagsClientLoader({ dict }: { dict?: any }) {
           glOK = false
         }
       }
-      setShow3D(isMd && !reduce && glOK)
+      setShow3D(isMd && !reduce && glOK && !no3d)
     } catch {
       setShow3D(false)
     }
@@ -163,7 +164,9 @@ export default function TagsClientLoader({ dict }: { dict?: any }) {
         </div>
       )}
 
-      <TagList tags={filtered} counts={counts} />
+      <ErrorBoundary fallback={<div className="mt-6 text-sm text-gray-500">Tags nicht verfügbar.</div>}>
+        <TagList tags={filtered} counts={counts} />
+      </ErrorBoundary>
     </div>
   )
 }

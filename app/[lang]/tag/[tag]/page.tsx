@@ -108,6 +108,15 @@ export default async function LocaleTagPage(props: { params: { lang: string; tag
           </div>
         )}
 
+        <div className="mt-10">
+          <a
+            href={`${prefix}/summon?q=${encodeURIComponent(tag)}&auto=1`}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl border border-cyan-500/30 bg-cyan-500/10 text-cyan-300 hover:bg-cyan-500/15 transition-colors"
+          >
+            In Summon starten mit diesem Tag →
+          </a>
+        </div>
+
         <h2 className="mt-12 text-base font-black text-gray-300 uppercase tracking-widest mb-4">Alle Runbooks</h2>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
           {items.slice(0, 120).map((r) => (

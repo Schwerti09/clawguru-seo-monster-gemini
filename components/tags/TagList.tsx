@@ -4,7 +4,7 @@ import useMagneticHover from "@/hooks/useMagneticHover"
 import { useMemo } from "react"
 import { usePathname } from "next/navigation"
 
-export default function TagList({ tags }: { tags: string[] }) {
+export default function TagList({ tags, counts }: { tags: string[]; counts?: Record<string, number> }) {
   const mag = useMagneticHover({ strength: 8, scale: 1.03 })
   const pathname = usePathname()
   const prefix = useMemo(() => {
@@ -22,7 +22,7 @@ export default function TagList({ tags }: { tags: string[] }) {
           onMouseLeave={mag.onMouseLeave}
           className="px-3 py-2 rounded-xl border border-gray-800 bg-black/25 hover:bg-black/35 text-sm text-gray-200 transition-all will-change-transform"
         >
-          {t}
+          {t}{typeof counts?.[t] === "number" ? <span className="text-xs text-gray-500 ml-1">({counts![t]})</span> : null}
         </a>
       ))}
     </div>

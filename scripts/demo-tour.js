@@ -3,7 +3,7 @@ const path = require('path');
 const { chromium } = require('playwright');
 
 (async () => {
-  const BASE = 'https://clawguru.org';
+  const BASE = process.env.DEMO_BASE || 'https://clawguru.org';
 
   // Ensure video output directory exists
   const videoDir = path.resolve(__dirname, '../demo-videos');
@@ -22,9 +22,18 @@ const { chromium } = require('playwright');
 
   async function gotoSafe(url) {
     try {
-      await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 30000 });
+      const resp = await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 30000 });
       await page.waitForLoadState('networkidle', { timeout: 15000 }).catch(() => {});
-    } catch {}
+      if (!resp || resp.status() >= 400) {
+        await page.goto(`${BASE}/de`, { waitUntil: 'domcontentloaded' }).catch(() => {});
+        await page.waitForLoadState('networkidle').catch(() => {});
+      }
+    } catch {
+      try {
+        await page.goto(`${BASE}/de`, { waitUntil: 'domcontentloaded' });
+        await page.waitForLoadState('networkidle').catch(() => {});
+      } catch {}
+    }
   }
 
   async function waitStable(selector, timeout = 10000) {
@@ -36,6 +45,7 @@ const { chromium } = require('playwright');
   }
 
   async function showOverlay(text, duration = 2200) {
+    if (page.isClosed()) return;
     await page.evaluate((msg) => {
       const old = document.getElementById('claw-demo-overlay');
       if (old) old.remove();
@@ -57,11 +67,13 @@ const { chromium } = require('playwright');
       document.body.appendChild(s);
       document.body.appendChild(div);
     }, text);
-    await page.waitForTimeout(duration);
-    await page.evaluate(() => { const el = document.getElementById('claw-demo-overlay'); if (el) el.remove(); });
+    await page.waitForTimeout(duration).catch(() => {});
+    if (page.isClosed()) return;
+    await page.evaluate(() => { const el = document.getElementById('claw-demo-overlay'); if (el) el.remove(); }).catch(() => {});
   }
 
   async function highlight(selector, ms = 1600) {
+    if (page.isClosed()) return;
     const el = page.locator(selector).first();
     await el.waitFor({ state: 'visible', timeout: 8000 }).catch(() => {});
     await page.evaluate((sel) => {
@@ -82,17 +94,25 @@ const { chromium } = require('playwright');
       document.body.appendChild(r);
     }, selector).catch(() => {});
     await sleep(ms);
+    if (page.isClosed()) return;
     await page.evaluate(() => { const r = document.getElementById('claw-demo-highlight'); if (r) r.remove(); }).catch(() => {});
   }
 
   async function moveTo(selector) {
-    const loc = page.locator(selector).first();
-    await loc.waitFor({ state: 'visible', timeout: 10000 });
-    const box = await loc.boundingBox();
-    if (!box) return;
-    const x = box.x + box.width / 2 + rand(-5, 5);
-    const y = box.y + box.height / 2 + rand(-4, 4);
-    await page.mouse.move(x, y, { steps: rand(30, 40) });
+    try {
+      if (page.isClosed()) return;
+      const loc = page.locator(selector).first();
+      await loc.waitFor({ state: 'visible', timeout: 12000 });
+      const box = await loc.boundingBox().catch(() => null);
+      if (!box) {
+        // fallback: gentle move near center if no box
+        await page.mouse.move(720 + rand(-80, 80), 450 + rand(-60, 60), { steps: rand(28, 36) }).catch(() => {});
+        return;
+      }
+      const x = box.x + box.width / 2 + rand(-5, 5);
+      const y = box.y + box.height / 2 + rand(-4, 4);
+      await page.mouse.move(x, y, { steps: rand(30, 40) }).catch(() => {});
+    } catch {}
   }
 
   async function clickByText(name, { role = 'link', timeout = 10000 } = {}) {
@@ -106,7 +126,7 @@ const { chromium } = require('playwright');
   }
 
   // Start tour
-  await gotoSafe(`${BASE}/de/vorstellung`);
+  await gotoSafe(`${BASE}/de`);
   await showOverlay('Willkommen! In 3 Minuten siehst du alle Kern‑Tools live.');
 
   // Highlight primary CTA on Vorstellung
@@ -127,7 +147,7 @@ const { chromium } = require('playwright');
   await showOverlay('Oracle: Scope wählen und Risiko‑Radar starten.');
   await clickByText('Oracle');
   await page.waitForLoadState('networkidle').catch(() => {});
-  await page.waitForTimeout(900);
+  await sleep(900);
   await clickByText('nginx', { role: 'button', timeout: 3000 }).catch(() => {});
   await clickByText('Predict', { role: 'button', timeout: 8000 }).catch(() => {});
   await highlight('canvas, [class*=Canvas], svg', 1200);
@@ -150,10 +170,10 @@ const { chromium } = require('playwright');
   await clickByText('Defense', { role: 'button', timeout: 3000 }).catch(() => {});
   await page.waitForSelector('textarea', { timeout: 6000 }).catch(() => {});
   await moveTo('textarea');
-  await page.fill('textarea', 'Nginx 502 bei Node.js + TLS 1.3 – wie härten?');
+  try { await page.fill('textarea', 'Nginx 502 bei Node.js + TLS 1.3 – wie härten?'); } catch {}
   await sleep(800);
   await clickByText('Summon starten', { role: 'button', timeout: 8000 }).catch(() => {});
-  await page.waitForTimeout(2000);
+  await sleep(2000);
   await showOverlay('Ergebnis: Score, Schritte und Diagramm.');
   await highlight('svg, [class*=Diagram], .h-16', 1100);
   await moveTo('svg, [class*=Diagram], .h-16');
@@ -186,14 +206,12 @@ const { chromium } = require('playwright');
   await sleep(1200);
   await highlight('a[href*="/tag/"], .grid, .flex.flex-wrap', 1000);
   // Direct to example tag for reliability
-  await page.goto(`${BASE}/de/tag/nginx`, { waitUntil: 'domcontentloaded' });
-  await page.waitForLoadState('networkidle').catch(() => {});
+  await gotoSafe(`${BASE}/de/tag/nginx`);
   await sleep(1600);
 
   // 9) Runbook‑Beispiel (Hardening)
   await showOverlay('Runbooks: Tiefe, ausführbare Lösungen.');
-  await page.goto(`${BASE}/de/runbook/aws-ssh-hardening-2026`, { waitUntil: 'domcontentloaded' });
-  await page.waitForLoadState('networkidle').catch(() => {});
+  await gotoSafe(`${BASE}/de/provenance/prometheus-rabbitmq-hsts-2030`);
   await sleep(2200);
 
   // Abschluss

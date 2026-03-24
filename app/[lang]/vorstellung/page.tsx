@@ -1,9 +1,12 @@
 import type { Metadata } from "next"
 import { SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
-import { getDictionary } from "@/lib/dictionary"
+import { getDictionary } from "@/lib/getDictionary"
 import VorstellungClient from "@/components/vorstellung/VorstellungClient"
 
 export const revalidate = 60
+export const runtime = "nodejs"
+export const dynamic = "force-dynamic"
+export const dynamicParams = false
 
 export async function generateStaticParams() {
   return SUPPORTED_LOCALES.map((lang) => ({ lang }))

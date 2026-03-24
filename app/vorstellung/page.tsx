@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import VorstellungClient from "@/components/vorstellung/VorstellungClient"
+import { redirect } from "next/navigation"
 
 export const metadata: Metadata = {
   title: "Vorstellung • ClawGuru",
@@ -8,5 +8,5 @@ export const metadata: Metadata = {
 }
 
 export default function VorstellungPage() {
-  return <VorstellungClient />
+  redirect("/de/vorstellung")
 }

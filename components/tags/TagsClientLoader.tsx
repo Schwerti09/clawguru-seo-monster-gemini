@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useMemo, useState } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import { usePathname } from "next/navigation"
 import dynamic from "next/dynamic"
 import { useReducedMotion } from "framer-motion"
@@ -33,7 +33,17 @@ export default function TagsClientLoader({ dict }: { dict?: any }) {
   useEffect(() => {
     try {
       const isMd = typeof window !== "undefined" ? window.innerWidth >= 768 : false
-      setShow3D(isMd && !reduce)
+      let glOK = false
+      if (typeof document !== "undefined") {
+        try {
+          const c = document.createElement("canvas")
+          const ctx = (c.getContext("webgl") || c.getContext("experimental-webgl")) as any
+          glOK = !!ctx
+        } catch {
+          glOK = false
+        }
+      }
+      setShow3D(isMd && !reduce && glOK)
     } catch {
       setShow3D(false)
     }
@@ -91,7 +101,15 @@ export default function TagsClientLoader({ dict }: { dict?: any }) {
 
   return (
     <div>
-      {show3D ? <TagOrbitCloud3D tags={tags} /> : (
+      {show3D ? (
+        <ErrorBoundary fallback={
+          <div className="relative mx-auto my-10 h-[460px] max-w-5xl rounded-[36px] overflow-hidden">
+            <div className="absolute inset-0 rounded-[36px] border border-white/10 bg-white/[0.04]" />
+          </div>
+        }>
+          <TagOrbitCloud3D tags={tags} />
+        </ErrorBoundary>
+      ) : (
         <div className="relative mx-auto my-10 h-[460px] w-full max-w-[1400px] rounded-[36px] overflow-hidden">
           <div className="absolute inset-0 rounded-[36px] border border-white/10 bg-white/[0.04]" />
         </div>
@@ -148,4 +166,19 @@ export default function TagsClientLoader({ dict }: { dict?: any }) {
       <TagList tags={filtered} counts={counts} />
     </div>
   )
+}
+
+class ErrorBoundary extends React.Component<{ fallback: React.ReactNode; children: React.ReactNode }, { hasError: boolean }> {
+  constructor(props: any) {
+    super(props)
+    this.state = { hasError: false }
+  }
+  static getDerivedStateFromError() {
+    return { hasError: true }
+  }
+  componentDidCatch() {}
+  render() {
+    if (this.state.hasError) return this.props.fallback
+    return this.props.children as any
+  }
 }

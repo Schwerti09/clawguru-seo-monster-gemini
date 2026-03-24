@@ -112,7 +112,7 @@ export default function SummonPreviewCard({ prefix = "" }: Props) {
                 {top.map((rb: any, idx: number) => (
                   <motion.a
                     key={idx}
-                    href={`${prefix}/runbooks/${encodeURIComponent(rb.slug)}`}
+                    href={`${prefix}/runbook/${encodeURIComponent(rb.slug)}`}
                     target="_blank"
                     rel="noreferrer"
                     className="block bg-black/30 rounded-lg p-3 border border-white/10 hover:border-cyan-400/30 transition-colors"

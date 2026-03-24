@@ -138,7 +138,7 @@ export default function MyceliumPreviewCard({ prefix = "" }: Props) {
               </g>
               <g>
                 {(norm.nodes as any).map((n: any, i: number) => (
-                  <a key={n.id} href={`${prefix}/runbooks/${encodeURIComponent(n.id)}`} target="_blank" rel="noreferrer">
+                  <a key={n.id} href={`${prefix}/runbook/${encodeURIComponent(n.id)}`} target="_blank" rel="noreferrer">
                     <circle cx={n.nx} cy={n.ny} r={n.r} fill={n.hi ? "#00ff9d" : "#8b5cf6"} opacity={n.hi ? 0.85 : 0.65} filter="url(#glow)">
                       <title>{`${n.title || n.id} — ${n.fitness >= 85 ? "Wird in 80% aller Sicherheitspläne verwendet" : "Basis für Compliance"}`}</title>
                     </circle>

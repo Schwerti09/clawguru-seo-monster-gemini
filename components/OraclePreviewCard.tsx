@@ -118,7 +118,7 @@ export default function OraclePreviewCard({ prefix = "" }: Props) {
                       </div>
                       {r.recommended_runbook && (
                         <div className="mt-2 text-xs text-gray-400">
-                          Empfohlenes Runbook: <a href={`${prefix}/runbooks/${encodeURIComponent(r.recommended_runbook.slug)}`} target="_blank" className="text-violet-300 hover:text-violet-200">{r.recommended_runbook.title} →</a>
+                          Empfohlenes Runbook: <a href={`${prefix}/runbook/${encodeURIComponent(r.recommended_runbook.slug)}`} target="_blank" className="text-violet-300 hover:text-violet-200">{r.recommended_runbook.title} →</a>
                         </div>
                       )}
                     </a>

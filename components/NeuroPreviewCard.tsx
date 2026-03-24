@@ -130,7 +130,7 @@ export default function NeuroPreviewCard({ prefix = "" }: Props) {
                   <div className="text-sm text-gray-400">Keine passenden Empfehlungen. Wähle mehr oder andere Technologien aus.</div>
                 )}
                 {top.map((rb: any, i: number) => (
-                  <a key={i} href={`${prefix}/runbooks/${encodeURIComponent(rb.slug)}`} target="_blank" rel="noreferrer"
+                  <a key={i} href={`${prefix}/runbook/${encodeURIComponent(rb.slug)}`} target="_blank" rel="noreferrer"
                      className="block p-3 rounded-lg bg-black/30 border border-white/10 hover:border-cyan-400/30 transition-colors">
                     <div className="flex justify-between items-center gap-3">
                       <div className="text-sm font-mono text-gray-200 line-clamp-1">{rb.title}</div>

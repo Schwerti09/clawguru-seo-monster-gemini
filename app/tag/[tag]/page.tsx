@@ -4,7 +4,7 @@ import { notFound } from "next/navigation"
 import { BASE_URL } from "@/lib/config"
 import { headers } from "next/headers"
 import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
-import { loadRunbooks } from "@/lib/runbooks-data"
+// Use canonical pseo dataset to align with /api/stats/tags
 
 export const revalidate = 3600
 export const dynamicParams = true
@@ -21,12 +21,39 @@ export async function generateMetadata(props: { params: { tag: string } }) {
   const h = headers()
   const locale = (h.get("x-claw-locale") ?? DEFAULT_LOCALE) as Locale
   const tag = decodeURIComponent(params.tag)
-  const data = await loadRunbooks()
-  const items = Array.isArray(data) ? data.filter((r) => (r.tags || []).includes(tag)) : []
-  if (!items.length) return {}
+  let count = 0
+  try {
+    const pseo: any = await import("@/lib/pseo")
+    let list: any[] = []
+    try {
+      list = typeof pseo.buildRunbooksClient === "function" ? pseo.buildRunbooksClient(10000) : (pseo.RUNBOOKS ?? [])
+    } catch {
+      list = (pseo.RUNBOOKS ?? [])
+    }
+    const key = String(tag).toLowerCase()
+    const candidates = new Set<string>([key])
+    if (key.includes(":")) {
+      const bare = key.split(":", 2)[1]
+      if (bare) candidates.add(bare)
+    } else {
+      for (const ns of ["topic","issue","provider","service","stack","year"]) candidates.add(`${ns}:${key}`)
+    }
+    const items = Array.isArray(list)
+      ? list.filter((r: any) => (r.tags || []).some((t: string) => {
+          const tn = String(t).toLowerCase()
+          if (candidates.has(tn)) return true
+          if (tn.includes(":")) {
+            const bare = tn.split(":", 2)[1]
+            if (bare && candidates.has(bare)) return true
+          }
+          return false
+        }))
+      : []
+    count = items.length
+  } catch {}
   return {
     title: `${tag} Runbooks | ClawGuru Tag-Hub`,
-    description: `${items.length} Runbooks f\u00fcr den Tag \u201e${tag}\u201c. Ops, Security und Debugging-Guides \u2013 schnell findbar.`,
+    description: `${count} Runbooks f\u00fcr den Tag \u201e${tag}\u201c. Ops, Security und Debugging-Guides \u2013 schnell findbar.`,
     alternates: { canonical: `/${locale}/tag/${encodeURIComponent(tag)}` }
   }
 }
@@ -37,9 +64,33 @@ export default async function TagPage(props: { params: { tag: string } }) {
   const locale = (h.get("x-claw-locale") ?? DEFAULT_LOCALE) as Locale
   const prefix = `/${locale}`
   const tag = decodeURIComponent(params.tag)
-  const data = await loadRunbooks()
-  const items = Array.isArray(data) ? data.filter((r) => (r.tags || []).includes(tag)) : []
-  if (!items.length) return notFound()
+  const pseo: any = await import("@/lib/pseo")
+  let list: any[] = []
+  try {
+    list = typeof pseo.buildRunbooksClient === "function" ? pseo.buildRunbooksClient(10000) : (pseo.RUNBOOKS ?? [])
+  } catch {
+    list = (pseo.RUNBOOKS ?? [])
+  }
+  const key = String(tag).toLowerCase()
+  const candidates = new Set<string>([key])
+  if (key.includes(":")) {
+    const bare = key.split(":", 2)[1]
+    if (bare) candidates.add(bare)
+  } else {
+    for (const ns of ["topic","issue","provider","service","stack","year"]) candidates.add(`${ns}:${key}`)
+  }
+  const items = Array.isArray(list)
+    ? list.filter((r: any) => (r.tags || []).some((t: string) => {
+        const tn = String(t).toLowerCase()
+        if (candidates.has(tn)) return true
+        if (tn.includes(":")) {
+          const bare = tn.split(":", 2)[1]
+          if (bare && candidates.has(bare)) return true
+        }
+        return false
+      }))
+    : []
+  // Do not 404 for unknown/empty tags; render an empty state to encourage exploration
 
   const top10 = items
     .slice()

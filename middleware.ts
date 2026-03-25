@@ -179,7 +179,12 @@ export function middleware(request: NextRequest) {
     return res
   }
 
-  const allowedLocales = (process.env.SITEMAP_100K_LOCALES ?? "de,en").split(",").map((s) => s.trim()).filter(Boolean)
+  // Determine allowed locales for high-volume routes. If env var is missing or empty, fall back to sane defaults.
+  const rawAllowed = process.env.SITEMAP_100K_LOCALES
+  let allowedLocales = (rawAllowed ?? "de,en").split(",").map((s) => s.trim()).filter(Boolean)
+  if (allowedLocales.length === 0) {
+    allowedLocales = ["de", "en"]
+  }
   if (!allowedLocales.includes(locale)) {
     const isRunbookDetail = new RegExp(`^/${locale}/runbook/`, "i").test(pathname)
     const isTagDetail = new RegExp(`^/${locale}/tag/`, "i").test(pathname)

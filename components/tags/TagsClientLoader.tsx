@@ -70,7 +70,7 @@ export default function TagsClientLoader({ dict }: { dict?: any }) {
             setAvgClaw(avgClaw || {})
             setSorted(s)
             setVisible(s)
-            setCloudTags(s.slice(0, 150))
+            setCloudTags(s.slice(0, 300))
           } else {
             const demo = [
               "security","nginx","aws","kubernetes","docker","cloudflare","ssh","firewall","waf","backup"
@@ -83,7 +83,7 @@ export default function TagsClientLoader({ dict }: { dict?: any }) {
             setAvgClaw(demoAvg)
             setSorted(s)
             setVisible(s)
-            setCloudTags(s.slice(0, 150))
+            setCloudTags(s.slice(0, 300))
           }
           setReady(true)
         }
@@ -100,7 +100,7 @@ export default function TagsClientLoader({ dict }: { dict?: any }) {
           setAvgClaw(demoAvg)
           setSorted(s)
           setVisible(s)
-          setCloudTags(s.slice(0, 150))
+          setCloudTags(s.slice(0, 300))
           setReady(true)
         }
       }
@@ -119,7 +119,7 @@ export default function TagsClientLoader({ dict }: { dict?: any }) {
         setAvgClaw(demoAvg)
         setSorted(s)
         setVisible(s)
-        setCloudTags(s.slice(0, 150))
+        setCloudTags(s.slice(0, 300))
         setReady(true)
       }
     }, 2000)
@@ -137,7 +137,7 @@ export default function TagsClientLoader({ dict }: { dict?: any }) {
     }
   }, [q, ready, sorted])
 
-  const top10 = useMemo(() => sorted.slice(0, 10), [sorted])
+  const top10 = useMemo(() => sorted.slice(0, 100), [sorted])
 
   const lblTop = (dict?.top_label as string) || "Top Tags"
   const lblRunbooks = (dict?.runbooks_label as string) || "Runbooks"

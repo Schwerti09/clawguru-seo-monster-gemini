@@ -7,7 +7,6 @@ import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
 import { SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
 import { getDictionary } from "@/lib/getDictionary"
-import { loadRunbooks } from "@/lib/runbooks-data"
 import { notFound } from "next/navigation"
 
 export const revalidate = 3600
@@ -27,10 +26,18 @@ export async function generateMetadata(props: { params: { lang: string; tag: str
   const { tag, lang } = props.params
   const locale = (SUPPORTED_LOCALES.includes(lang as Locale) ? lang : "de") as Locale
   const decodedTag = decodeURIComponent(tag)
-  return {
-    title: `${decodedTag} Runbooks | ClawGuru Tag-Hub`,
-    alternates: { canonical: `/${locale}/tag/${encodeURIComponent(decodedTag)}` },
-  }
+  try {
+    const pseo: any = await import("@/lib/pseo")
+    let list: any[] = []
+    try {
+      list = typeof pseo.buildRunbooksClient === "function" ? pseo.buildRunbooksClient(10000) : (pseo.RUNBOOKS ?? [])
+    } catch {
+      list = (pseo.RUNBOOKS ?? [])
+    }
+    const items = Array.isArray(list) ? list.filter((r: any) => (r?.tags || []).includes(decodedTag)) : []
+    if (!items.length) return { alternates: { canonical: `/${locale}/tag/${encodeURIComponent(decodedTag)}` } }
+  } catch {}
+  return { title: `${decodedTag} Runbooks | ClawGuru Tag-Hub`, alternates: { canonical: `/${locale}/tag/${encodeURIComponent(decodedTag)}` } }
 }
 
 export default async function LocaleTagPage(props: { params: { lang: string; tag: string } }) {
@@ -39,9 +46,36 @@ export default async function LocaleTagPage(props: { params: { lang: string; tag
   const dict = await getDictionary(locale)
   const tag = decodeURIComponent(props.params.tag)
   const prefix = `/${locale}`
-  const data = await loadRunbooks()
-  const items = Array.isArray(data) ? data.filter((r) => (r.tags || []).includes(tag)) : []
-  if (!items.length) return notFound()
+  // Materialize runbooks from the same source as /api/stats/tags
+  const pseo: any = await import("@/lib/pseo")
+  let list: any[] = []
+  try {
+    list = typeof pseo.buildRunbooksClient === "function" ? pseo.buildRunbooksClient(10000) : (pseo.RUNBOOKS ?? [])
+  } catch {
+    list = (pseo.RUNBOOKS ?? [])
+  }
+  // Flexible matching: support namespaced tags like "topic:x" or plain "x"
+  const key = String(tag).toLowerCase()
+  const candidates = new Set<string>([key])
+  if (key.includes(":")) {
+    const bare = key.split(":", 2)[1]
+    if (bare) candidates.add(bare)
+  } else {
+    for (const ns of ["topic","issue","provider","service","stack","year"]) candidates.add(`${ns}:${key}`)
+  }
+  const items = Array.isArray(list)
+    ? list.filter((r: any) =>
+        (r.tags || []).some((t: string) => {
+          const tn = String(t).toLowerCase()
+          if (candidates.has(tn)) return true
+          if (tn.includes(":")) {
+            const bare = tn.split(":", 2)[1]
+            if (bare && candidates.has(bare)) return true
+          }
+          return false
+        })
+      )
+    : []
 
   const top10 = items
     .slice()

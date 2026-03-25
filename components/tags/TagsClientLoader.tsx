@@ -34,8 +34,6 @@ export default function TagsClientLoader({ dict }: { dict?: any }) {
   useEffect(() => {
     try {
       const isMd = typeof window !== "undefined" ? window.innerWidth >= 768 : false
-      const usp = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null
-      const allow3d = usp ? usp.get("3d") === "1" : false
       let glOK = false
       if (typeof document !== "undefined") {
         try {
@@ -46,7 +44,7 @@ export default function TagsClientLoader({ dict }: { dict?: any }) {
           glOK = false
         }
       }
-      setShow3D(isMd && !reduce && glOK && allow3d)
+      setShow3D(isMd && !reduce && glOK)
     } catch {
       setShow3D(false)
     }
@@ -54,19 +52,38 @@ export default function TagsClientLoader({ dict }: { dict?: any }) {
 
   useEffect(() => {
     let mounted = true
+    let timer: any = null
     ;(async () => {
       try {
         const res = await fetch(`/api/stats/tags?limit=10000`, { cache: "no-store" })
         if (!res.ok) throw new Error(String(res.status))
         const { tags, counts, avgClaw } = await res.json()
-        if (mounted) { setTags(tags); setCounts(counts); setAvgClaw(avgClaw) }
+        if (mounted) {
+          if (Array.isArray(tags) && tags.length > 0) {
+            setTags(tags)
+            setCounts(counts || {})
+            setAvgClaw(avgClaw || {})
+          } else {
+            setTags([
+              "security","nginx","aws","kubernetes","docker","cloudflare","ssh","firewall","waf","backup"
+            ])
+          }
+        }
       } catch {
         if (mounted) setTags([
           "security","nginx","aws","kubernetes","docker","cloudflare","ssh","firewall","waf","backup"
         ])
       }
     })()
-    return () => { mounted = false }
+    // Safety net: if after 2s noch keine Tags, setze Demo-Tags
+    timer = setTimeout(() => {
+      if (mounted && !tags) {
+        setTags([
+          "security","nginx","aws","kubernetes","docker","cloudflare","ssh","firewall","waf","backup"
+        ])
+      }
+    }, 2000)
+    return () => { mounted = false; if (timer) clearTimeout(timer) }
   }, [])
 
   // Do not early-return before hooks to preserve hook order across renders

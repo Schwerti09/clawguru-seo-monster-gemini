@@ -64,23 +64,34 @@ export default function TagsClientLoader({ dict }: { dict?: any }) {
             setCounts(counts || {})
             setAvgClaw(avgClaw || {})
           } else {
-            setTags([
+            const demo = [
               "security","nginx","aws","kubernetes","docker","cloudflare","ssh","firewall","waf","backup"
-            ])
+            ]
+            setTags(demo)
+            setCounts(Object.fromEntries(demo.map((t, i) => [t, 100 - i * 7])))
+            setAvgClaw(Object.fromEntries(demo.map((t, i) => [t, 70 + (i % 5)])))
           }
         }
       } catch {
-        if (mounted) setTags([
-          "security","nginx","aws","kubernetes","docker","cloudflare","ssh","firewall","waf","backup"
-        ])
+        if (mounted) {
+          const demo = [
+            "security","nginx","aws","kubernetes","docker","cloudflare","ssh","firewall","waf","backup"
+          ]
+          setTags(demo)
+          setCounts(Object.fromEntries(demo.map((t, i) => [t, 100 - i * 7])))
+          setAvgClaw(Object.fromEntries(demo.map((t, i) => [t, 70 + (i % 5)])))
+        }
       }
     })()
     // Safety net: if after 2s noch keine Tags, setze Demo-Tags
     timer = setTimeout(() => {
       if (mounted && !tags) {
-        setTags([
+        const demo = [
           "security","nginx","aws","kubernetes","docker","cloudflare","ssh","firewall","waf","backup"
-        ])
+        ]
+        setTags(demo)
+        setCounts(Object.fromEntries(demo.map((t, i) => [t, 100 - i * 7])))
+        setAvgClaw(Object.fromEntries(demo.map((t, i) => [t, 70 + (i % 5)])))
       }
     }, 2000)
     return () => { mounted = false; if (timer) clearTimeout(timer) }

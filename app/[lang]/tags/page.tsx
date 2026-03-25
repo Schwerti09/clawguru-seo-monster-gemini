@@ -1,7 +1,5 @@
 import type { Metadata } from "next"
 import NextDynamic from "next/dynamic"
-import Container from "@/components/shared/Container"
-import SectionTitle from "@/components/shared/SectionTitle"
 import { SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
 import { getDictionary } from "@/lib/getDictionary"
 import { Suspense } from "react"
@@ -46,31 +44,19 @@ export default async function LocaleTagsPage(props: { params: { lang: string } }
   const locale = (SUPPORTED_LOCALES.includes(lang as Locale) ? lang : "de") as Locale
   const dict = await getDictionary(locale)
   return (
-    <Container>
-      <div className="py-16 max-w-6xl mx-auto">
-        <SectionTitle
-          kicker={(dict as any)?.tags?.kicker || "Internal Link Clusters"}
-          title={(dict as any)?.tags?.title || "Tag Index"}
-          subtitle={(dict as any)?.tags?.subtitle || "Provider · Error · Topic · Config – jede Kombination wird ein Einstiegspunkt."}
-        />
-        <Suspense fallback={
-          <div className="mt-8">
-            <div className="relative mx-auto my-10 h-[460px] max-w-5xl rounded-[36px] overflow-hidden">
-              <div className="absolute inset-0 rounded-[36px] border border-white/10 bg-white/[0.04] animate-pulse" />
-            </div>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
-              {Array.from({ length: 6 }).map((_, i) => (
-                <div key={i} className="h-20 rounded-2xl border border-white/10 bg-black/30 animate-pulse" />
-              ))}
-            </div>
-          </div>
-        }>
-          <TagsClientLoader dict={(dict as any)?.tags} />
-        </Suspense>
-        <div className="mt-10 text-sm text-gray-500">
-          {(dict as any)?.tags?.hint || "Tipp: Tags sind ein Link-Graph. Je mehr Runbooks du fütterst, desto stärker wird die interne Autorität."}
+    <Suspense fallback={
+      <div className="mt-8">
+        <div className="relative mx-auto my-10 h-[460px] max-w-5xl rounded-[36px] overflow-hidden">
+          <div className="absolute inset-0 rounded-[36px] border border-white/10 bg-white/[0.04] animate-pulse" />
+        </div>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div key={i} className="h-20 rounded-2xl border border-white/10 bg-black/30 animate-pulse" />
+          ))}
         </div>
       </div>
-    </Container>
+    }>
+      <TagsClientLoader dict={(dict as any)?.tags} />
+    </Suspense>
   )
 }

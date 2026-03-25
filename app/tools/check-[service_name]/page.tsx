@@ -16,6 +16,7 @@ interface Props {
 
 export const revalidate = 60 // 60s ISR
 export const dynamicParams = true
+export const dynamic = "force-dynamic"
 
 export async function generateStaticParams() {
   return SERVICE_CHECKS.map((s) => ({ service_name: s.slug }))

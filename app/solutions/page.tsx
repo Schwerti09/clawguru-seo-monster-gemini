@@ -9,7 +9,7 @@ import { headers } from "next/headers"
 import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
 import type { Metadata } from "next"
 
-export const dynamic = "force-static"
+export const dynamic = "force-dynamic"
 
 export async function generateMetadata(): Promise<Metadata> {
   const h = headers()

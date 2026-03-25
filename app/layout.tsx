@@ -131,6 +131,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         {/* NEXT-LEVEL UPGRADE 2026: PWA manifest */}
         <link rel="manifest" href="/manifest.json" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         {/* 100/100 OPTIMIZATION 2026: Organization structured data for AEO */}
         <script

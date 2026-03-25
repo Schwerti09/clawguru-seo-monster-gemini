@@ -4,6 +4,8 @@ import React, { useEffect, useMemo, useState } from "react"
 import { usePathname } from "next/navigation"
 import dynamic from "next/dynamic"
 import { useReducedMotion } from "framer-motion"
+import Container from "@/components/shared/Container"
+import SectionTitle from "@/components/shared/SectionTitle"
 
 const TagList = dynamic(() => import("@/components/tags/TagList"), { ssr: false })
 const TagOrbitCloud3D = dynamic(() => import("@/components/tags/TagOrbitCloud3D"), {
@@ -67,7 +69,7 @@ export default function TagsClientLoader({ dict }: { dict?: any }) {
     return () => { mounted = false }
   }, [])
 
-  if (!tags) return <div className="text-sm text-gray-500 mt-6">Lade Tags…</div>
+  // Do not early-return before hooks to preserve hook order across renders
 
   const sortedByFreq = useMemo(() => {
     return (tags || []).slice().sort((a, b) => {
@@ -99,15 +101,28 @@ export default function TagsClientLoader({ dict }: { dict?: any }) {
   const topCats = top10.slice(0, 6)
 
   return (
-    <div>
+    <Container>
+      <div className="py-16 max-w-6xl mx-auto">
+        <SectionTitle
+          kicker="Internal Link Clusters"
+          title="Tag Index"
+          subtitle="Provider · Error · Topic · Config – jede Kombination wird ein Einstiegspunkt."
+        />
+
       {show3D ? (
-        <ErrorBoundary fallback={
+        tags && tags.length > 0 ? (
+          <ErrorBoundary fallback={
+            <div className="relative mx-auto my-10 h-[460px] max-w-5xl rounded-[36px] overflow-hidden">
+              <div className="absolute inset-0 rounded-[36px] border border-white/10 bg-white/[0.04]" />
+            </div>
+          }>
+            <TagOrbitCloud3D tags={tags} />
+          </ErrorBoundary>
+        ) : (
           <div className="relative mx-auto my-10 h-[460px] max-w-5xl rounded-[36px] overflow-hidden">
-            <div className="absolute inset-0 rounded-[36px] border border-white/10 bg-white/[0.04]" />
+            <div className="absolute inset-0 rounded-[36px] border border-white/10 bg-white/[0.04] animate-pulse" />
           </div>
-        }>
-          <TagOrbitCloud3D tags={tags} />
-        </ErrorBoundary>
+        )
       ) : (
         <div className="relative mx-auto my-10 h-[460px] w-full max-w-[1400px] rounded-[36px] overflow-hidden">
           <div className="absolute inset-0 rounded-[36px] border border-white/10 bg-white/[0.04]" />
@@ -122,6 +137,10 @@ export default function TagsClientLoader({ dict }: { dict?: any }) {
           className="flex-1 rounded-xl bg-black/40 border border-white/10 px-3 py-2 text-sm text-gray-200"
         />
       </div>
+
+      {!tags && (
+        <div className="text-sm text-gray-500 mt-6">Lade Tags…</div>
+      )}
 
       {top10.length > 0 && (
         <div className="mt-8">
@@ -162,10 +181,17 @@ export default function TagsClientLoader({ dict }: { dict?: any }) {
         </div>
       )}
 
-      <ErrorBoundary fallback={<div className="mt-6 text-sm text-gray-500">Tags nicht verfügbar.</div>}>
-        <TagList tags={filtered} counts={counts} />
-      </ErrorBoundary>
-    </div>
+      {tags && (
+        <ErrorBoundary fallback={<div className="mt-6 text-sm text-gray-500">Tags nicht verfügbar.</div>}>
+          <TagList tags={filtered} counts={counts} />
+        </ErrorBoundary>
+      )}
+
+      <div className="mt-10 text-sm text-gray-500">
+        Tipp: Tags sind ein Link-Graph. Je mehr Runbooks du fütterst, desto stärker wird die interne Autorität.
+      </div>
+      </div>
+    </Container>
   )
 }
 

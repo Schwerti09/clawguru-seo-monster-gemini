@@ -392,7 +392,7 @@ export default function OpsWall() {
           <div className="text-xs text-gray-500 mb-2">Library</div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <div className="text-3xl font-black">{data?.counts?.runbooks ?? "—"}</div>
+              <div className="text-3xl font-black">{totalExact}</div>
               <div className="text-sm text-gray-300">Runbooks</div>
             </div>
             <div>

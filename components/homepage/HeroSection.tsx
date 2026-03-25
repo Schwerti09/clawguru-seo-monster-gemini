@@ -34,7 +34,12 @@ export default function HeroSection({ prefix = "", locale = "de" }: Props) {
           <h1 className="text-4xl sm:text-6xl font-black leading-tight text-white">{t.title}</h1>
           <p className="mt-5 text-lg sm:text-xl text-gray-300">{t.sub}</p>
           <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
-            <BuyButton product="daypass" label={t.daypass} />
+            <a
+              href="/daypass"
+              className="px-6 py-3 rounded-2xl font-black bg-gradient-to-r from-brand-cyan to-brand-violet hover:opacity-90 text-white text-center"
+            >
+              {t.daypass}
+            </a>
             <a
               href="#live-previews"
               className="px-6 py-3 rounded-2xl border border-white/10 hover:border-white/20 font-bold text-gray-200 transition-all duration-300"

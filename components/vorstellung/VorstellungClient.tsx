@@ -84,15 +84,6 @@ function MiniCopilot() {
     t = setTimeout(step, 150)
     return () => { if (t) clearTimeout(t) }
   }, [])
-
-  useEffect(() => {
-    if (!showTour) return
-    try {
-      const step = tourStep
-      const target = step <= 1 ? heroRef.current : featureRef.current
-      if (target) target.scrollIntoView({ behavior: "smooth", block: "center" })
-    } catch {}
-  }, [showTour, tourStep])
   return (
     <div className="absolute inset-0 p-3 flex flex-col gap-2">
       <div className="max-w-[72%] rounded-2xl bg-white/5 border border-white/10 px-3 py-2 text-[10px] text-gray-200">

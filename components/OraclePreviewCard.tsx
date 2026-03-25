@@ -4,134 +4,210 @@ import React, { useEffect, useRef, useState } from "react"
 import FeaturePreviewCard from "./FeaturePreviewCard"
 import Skeleton from "./ui/Skeleton"
 
-function useInView<T extends HTMLElement>(opts?: IntersectionObserverInit) {
-  const ref = useRef<T | null>(null)
-  const [inView, setInView] = useState(false)
-  useEffect(() => {
-    if (!ref.current || inView) return
-    const el = ref.current
-    const io = new IntersectionObserver(([e]) => {
-      if (e.isIntersecting) {
-        setInView(true)
-        io.disconnect()
-      }
-    }, opts)
-    io.observe(el)
-    return () => io.disconnect()
-  }, [opts, inView])
-  return { ref, inView }
-}
-
 type Risk = {
   cve_id: string
   title: string
+  severity: "Critical" | "High" | "Medium"
   probability: number
+  description: string
   recommended_runbook?: { slug: string; title: string; clawScore: number } | null
 }
 
 type Props = { prefix?: string }
 
+const DEMO_THREATS: Risk[] = [
+  {
+    cve_id: "CVE-2026-1337",
+    title: "OpenSSH pre‑auth RCE",
+    severity: "Critical",
+    probability: 91,
+    description: "Pre‑auth code execution in OpenSSH daemon under specific KEX paths.",
+    recommended_runbook: { slug: "openssh-rce-hardening-2026", title: "OpenSSH Emergency Patch", clawScore: 98 },
+  },
+  {
+    cve_id: "CVE-2026-2048",
+    title: "XZ Utils supply‑chain backdoor",
+    severity: "High",
+    probability: 78,
+    description: "Backdoored liblzma pipeline enabling remote code exec in SSH auth path.",
+    recommended_runbook: { slug: "xz-supply-chain-mitigation-2026", title: "XZ Backdoor Mitigation", clawScore: 96 },
+  },
+  {
+    cve_id: "CVE-2025-9876",
+    title: "Nginx HTTP/2 rapid reset DoS",
+    severity: "High",
+    probability: 64,
+    description: "Resource exhaustion via HTTP/2 stream abuse on unpatched reverse proxies.",
+    recommended_runbook: { slug: "nginx-http2-dos-hardening-2026", title: "Nginx HTTP/2 DoS Hardening", clawScore: 94 },
+  },
+  {
+    cve_id: "CVE-2026-2718",
+    title: "Kubernetes RBAC privilege escalation",
+    severity: "Medium",
+    probability: 42,
+    description: "Misconfigured ClusterRoles allow unauthorized workload mutations.",
+    recommended_runbook: { slug: "k8s-rbac-audit-2026", title: "K8s RBAC Audit & Lockdown", clawScore: 92 },
+  },
+]
+
+const RADAR_POINTS: Array<{ x: number; y: number; lvl: 1 | 2 | 3 }> = [
+  { x: 18, y: 32, lvl: 3 },
+  { x: 62, y: 24, lvl: 2 },
+  { x: 72, y: 62, lvl: 1 },
+  { x: 28, y: 68, lvl: 2 },
+  { x: 45, y: 48, lvl: 3 },
+  { x: 84, y: 38, lvl: 2 },
+  { x: 12, y: 58, lvl: 1 },
+  { x: 52, y: 20, lvl: 2 },
+]
+
 export default function OraclePreviewCard({ prefix = "" }: Props) {
-  const scopes: Array<{ value: string; label: string }> = [
-    { value: "alle", label: "Alle CVEs" },
-    { value: "aws", label: "Meine Cloud (AWS)" },
-    { value: "gcp", label: "Meine Cloud (GCP)" },
-    { value: "azure", label: "Meine Cloud (Azure)" },
-  ]
-  const [scope, setScope] = useState("alle")
-  const [data, setData] = useState<{ critical_risk: Risk[]; timeline?: string; summary?: string } | null>(null)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const { ref, inView } = useInView<HTMLDivElement>({ rootMargin: "200px" })
+  const [ready, setReady] = useState(false)
+  const [feedIdx, setFeedIdx] = useState(0)
+  const [input, setInput] = useState("")
+  const [warning, setWarning] = useState<string | null>(null)
 
   useEffect(() => {
-    if (!inView) return
-    let canceled = false
-    setLoading(true)
-    setError(null)
-    const q = scope === "alle" ? "" : scope
-    fetch(`/api/oracle?scope=${encodeURIComponent(q)}&preview=1`)
-      .then((res) => (res.ok ? res.json() : Promise.reject(new Error(String(res.status)))))
-      .then((j) => {
-        if (!canceled) setData(j)
-      })
-      .catch(() => { if (!canceled) setError("Fehler beim Laden") })
-      .finally(() => { if (!canceled) setLoading(false) })
-    return () => { canceled = true }
-  }, [inView, scope])
+    // Mount-only: enable animations and start feed rotator
+    setReady(true)
+    const id = setInterval(() => setFeedIdx((v) => (v + 1) % DEMO_THREATS.length), 3500)
+    return () => clearInterval(id)
+  }, [])
+
+  const active = DEMO_THREATS[feedIdx]
+
+  function simulateCheck() {
+    if (!input.trim()) return
+    setWarning(`Warnung für ${input.trim()}: ${active.title} (${active.cve_id}) – Risiko ${active.probability}%`)
+  }
 
   return (
-    <div ref={ref}>
+    <div>
       <FeaturePreviewCard
         title="Oracle"
         description="Welche Bedrohungen kommen auf dich zu? Oracle warnt rechtzeitig – mit klaren Next‑Steps."
         link={`${prefix}/oracle`}
       >
-        <div className="flex items-center gap-2">
-          <label className="text-xs text-gray-400">Welche Bedrohungen sind für dich relevant?</label>
-          <select
-            value={scope}
-            onChange={(e) => setScope(e.target.value)}
-            className="px-3 py-2 rounded-xl bg-black/40 border border-white/10 text-gray-200 focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20 outline-none transition-all"
-          >
-            {scopes.map((s) => (
-              <option key={s.value} value={s.value}>{s.label}</option>
-            ))}
-          </select>
-        </div>
-        <div className="mt-2 text-[11px] text-gray-500">1.200+ aktive CVEs überwacht</div>
-        <div className="mt-4">
-          {loading && (
-            <div className="space-y-3">
-              <div className="text-xs text-gray-400">Analysiere aktuelle Bedrohungen…</div>
-              <Skeleton className="h-4 w-2/3" />
-              {[0,1,2].map((k) => (
-                <div key={k} className="p-3 rounded-lg bg-black/30 border border-white/10">
-                  <Skeleton className="h-4 w-3/4" />
-                  <div className="w-full bg-gray-800 rounded-full h-1 mt-2">
-                    <div className="bg-violet-500 h-1 rounded-full w-1/3" />
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-          {!loading && error && <div className="text-sm text-red-400">{error}</div>}
-          {!loading && !error && data && (
-            <>
-              {data.summary && <div className="text-sm text-violet-300 mb-2">{data.summary}</div>}
+        {!ready ? (
+          <div className="h-96 rounded-2xl border border-white/10 bg-black/30 p-4">
+            <div className="text-xs text-gray-500 mb-3">Initialisiere Oracle…</div>
+            <div className="grid grid-cols-3 gap-3">
+              <Skeleton className="h-64 col-span-2" />
               <div className="space-y-2">
-                {(data.critical_risk || []).slice(0,3).map((r, i) => {
-                  const urgent = r.title?.toLowerCase().includes("openssh")
-                    ? "Kritische OpenSSH-Lücke – Ausnutzung in <48h wahrscheinlich. Jetzt patchen."
-                    : r.title?.toLowerCase().includes("xz")
-                    ? "Neue XZ-Backdoor – schnelles Handeln erforderlich."
-                    : `${r.title}`
-                  return (
-                    <a key={i} href={`https://nvd.nist.gov/vuln/detail/${encodeURIComponent(r.cve_id)}`} target="_blank" rel="noreferrer"
-                       className="block p-3 rounded-lg bg-black/30 border border-white/10 hover:border-violet-400/30 transition-colors">
-                      <div className="flex justify-between items-center gap-3">
-                        <div className="text-sm font-mono text-gray-200 line-clamp-1">{r.cve_id} — {urgent}</div>
-                        <div className="text-xs text-gray-400">{r.probability}%</div>
-                      </div>
-                      <div className="w-full bg-gray-800 rounded-full h-1 mt-2">
-                        <div className={`h-1 rounded-full ${r.probability>70?"bg-red-500":r.probability>30?"bg-yellow-400":"bg-emerald-400"}`} style={{ width: `${r.probability}%` }} />
-                      </div>
-                      {r.recommended_runbook && (
-                        <div className="mt-2 text-xs text-gray-400">
-                          Empfohlenes Runbook: <a href={`${prefix}/runbook/${encodeURIComponent(r.recommended_runbook.slug)}`} target="_blank" className="text-violet-300 hover:text-violet-200">{r.recommended_runbook.title} →</a>
-                        </div>
-                      )}
-                    </a>
-                  )
-                })}
+                <Skeleton className="h-6 w-32" />
+                <Skeleton className="h-4 w-full" />
+                <Skeleton className="h-4 w-5/6" />
+                <Skeleton className="h-4 w-2/3" />
+                <Skeleton className="h-10 w-full" />
               </div>
-              {(!data.critical_risk || data.critical_risk.length === 0) && (
-                <div className="text-sm text-emerald-300 mt-2">Deine Umgebung ist aktuell sicher. Überwachen wir weiter.</div>
-              )}
-              {data.timeline && <div className="mt-2 text-[11px] text-gray-500">Erstes kritisches Ereignis: {data.timeline}</div>}
-            </>
-          )}
-        </div>
+            </div>
+          </div>
+        ) : (
+          <div className="grid md:grid-cols-2 gap-5">
+            {/* Left: Futuristic radar */}
+            <div className="relative rounded-2xl border border-cyan-500/20 bg-gradient-to-br from-black/60 to-black/20 p-4 overflow-hidden">
+              <div className="absolute inset-0 pointer-events-none opacity-20" style={{ backgroundImage: "linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px)", backgroundSize: "auto 3px" }} />
+              <div className="relative w-full aspect-square max-w-sm mx-auto">
+                {/* concentric circles */}
+                {[1,2,3,4].map((i) => (
+                  <div key={i} className="absolute inset-0 rounded-full" style={{
+                    border: "1px solid rgba(56,189,248,0.25)",
+                    transform: `scale(${1 - i*0.12})`,
+                    transformOrigin: "center",
+                  }} />
+                ))}
+                {/* scanning arc */}
+                <div className="absolute inset-0 rounded-full animate-[spin_7s_linear_infinite]" style={{
+                  background: "conic-gradient(from 0deg, rgba(56,189,248,0.0) 0deg, rgba(56,189,248,0.35) 60deg, rgba(56,189,248,0.0) 85deg)",
+                  WebkitMaskImage: "radial-gradient(circle at center, transparent 28%, black 29%)",
+                  maskImage: "radial-gradient(circle at center, transparent 28%, black 29%)",
+                }} />
+                {/* radar points */}
+                {RADAR_POINTS.map((p, i) => (
+                  <div key={i} className="absolute" style={{ left: `${p.x}%`, top: `${p.y}%` }}>
+                    <span className={`block rounded-full ${p.lvl===3?"h-2.5 w-2.5 bg-cyan-300":"h-2 w-2 bg-cyan-400"}`} />
+                    <span className={`absolute inset-0 rounded-full ${p.lvl===3?"animate-ping" : "animate-pulse"} ${p.lvl===3?"bg-cyan-300/40":"bg-cyan-400/30"}`} />
+                  </div>
+                ))}
+              </div>
+              {/* Stats overlay */}
+              <div className="mt-4 grid grid-cols-3 gap-2 text-center">
+                <div className="rounded-xl border border-cyan-500/20 bg-cyan-500/5 p-2">
+                  <div className="text-xs text-cyan-300">Aktiv</div>
+                  <div className="text-base font-black text-white">1.247</div>
+                </div>
+                <div className="rounded-xl border border-violet-500/20 bg-violet-500/5 p-2">
+                  <div className="text-xs text-violet-300">Nächstes</div>
+                  <div className="text-base font-black text-white">47h</div>
+                </div>
+                <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-2">
+                  <div className="text-xs text-emerald-300">Sicherheit</div>
+                  <div className="text-base font-black text-white">98,4%</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Right: Threat feed + actions */}
+            <div className="flex flex-col gap-3">
+              {/* Live-like feed */}
+              <div className="rounded-2xl border border-white/10 bg-black/40 p-3">
+                <div className="text-xs uppercase tracking-widest text-gray-400 mb-2">Live Threat Feed</div>
+                <div className="space-y-2">
+                  {Array.from({ length: 3 }).map((_, k) => {
+                    const r = DEMO_THREATS[(feedIdx + k) % DEMO_THREATS.length]
+                    const bar = r.probability
+                    const sevColor = r.severity === "Critical" ? "text-red-400" : r.severity === "High" ? "text-yellow-300" : "text-emerald-300"
+                    const barColor = r.severity === "Critical" ? "bg-red-500" : r.severity === "High" ? "bg-yellow-400" : "bg-emerald-400"
+                    return (
+                      <a key={r.cve_id} href={`https://nvd.nist.gov/vuln/detail/${encodeURIComponent(r.cve_id)}`} target="_blank" rel="noreferrer" className="group block p-3 rounded-xl border border-white/10 bg-black/30 hover:border-cyan-400/30 transition-colors relative">
+                        <div className="flex items-center gap-2">
+                          <div className="text-xs font-mono text-gray-400">{r.cve_id}</div>
+                          <div className={`ml-auto text-[11px] ${sevColor}`}>{r.severity}</div>
+                          <div className="text-[11px] text-gray-400">{r.probability}%</div>
+                        </div>
+                        <div className="text-sm text-gray-200 mt-0.5 line-clamp-1">{r.title}</div>
+                        <div className="w-full h-1 bg-gray-800 rounded-full mt-2">
+                          <div className={`h-1 rounded-full ${barColor}`} style={{ width: `${bar}%` }} />
+                        </div>
+                        {/* Tooltip */}
+                        <div className="pointer-events-none absolute left-3 right-3 top-full mt-1 hidden group-hover:block">
+                          <div className="rounded-xl border border-cyan-500/20 bg-black/80 backdrop-blur p-2">
+                            <div className="text-[11px] text-gray-300">{r.description}</div>
+                            {r.recommended_runbook && (
+                              <div className="mt-1 text-[10px] text-cyan-300">
+                                ClawScore {r.recommended_runbook.clawScore} · {r.recommended_runbook.title}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </a>
+                    )
+                  })}
+                </div>
+              </div>
+
+              {/* Mini input */}
+              <div className="rounded-2xl border border-white/10 bg-black/40 p-3">
+                <div className="text-xs text-gray-400 mb-2">Gib deine Domain/IP ein</div>
+                <div className="flex gap-2">
+                  <input value={input} onChange={(e) => setInput(e.target.value)} placeholder="z.B. example.com" className="flex-1 px-3 py-2 rounded-xl bg-black/40 border border-white/10 text-gray-200 focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 outline-none" />
+                  <button onClick={simulateCheck} className="px-3 py-2 rounded-xl font-bold text-sm text-black" style={{ background: "linear-gradient(135deg,#06b6d4,#8b5cf6)" }}>Analysieren</button>
+                </div>
+                {warning && (
+                  <div className="mt-2 rounded-xl border border-red-500/30 bg-red-500/10 text-red-200 text-xs p-2">{warning}</div>
+                )}
+              </div>
+
+              {/* Next steps */}
+              <div className="grid grid-cols-2 gap-2">
+                <a href={active.recommended_runbook ? `${prefix}/runbook/${active.recommended_runbook.slug}` : `${prefix}/oracle`} className="px-3 py-2 rounded-xl text-center text-sm font-bold text-white bg-gradient-to-r from-rose-500/70 to-red-600/70 hover:from-rose-500 hover:to-red-600 transition-all active:scale-95 shadow-[0_0_20px_rgba(244,63,94,0.25)]">Sofort patchen</a>
+                <a href={active.recommended_runbook ? `${prefix}/runbook/${active.recommended_runbook.slug}` : `${prefix}/oracle`} className="px-3 py-2 rounded-xl text-center text-sm font-bold text-white bg-gradient-to-r from-cyan-500/70 to-violet-600/70 hover:from-cyan-500 hover:to-violet-600 transition-all active:scale-95 shadow-[0_0_20px_rgba(56,189,248,0.25)]">Runbook starten</a>
+                <a href={`${prefix}/command-center`} className="px-3 py-2 rounded-xl text-center text-sm font-bold text-cyan-300 border border-cyan-500/30 hover:border-cyan-400/50 bg-cyan-500/10 transition-all active:scale-95">Team benachrichtigen</a>
+                <a href={`${prefix}/oracle`} className="px-3 py-2 rounded-xl text-center text-sm font-bold text-gray-200 border border-white/15 hover:border-white/30 bg-white/5 transition-all active:scale-95">Details ansehen</a>
+              </div>
+            </div>
+          </div>
+        )}
       </FeaturePreviewCard>
     </div>
   )

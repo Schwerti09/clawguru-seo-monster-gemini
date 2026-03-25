@@ -162,13 +162,14 @@ export default function HeroSecurityCheck() {
           />
         </div>
 
-        <button
-          onClick={handleCheck}
-          disabled={loading || !input.trim()}
-          className="w-full md:w-auto px-8 py-4 rounded-2xl font-black text-white bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg hover:shadow-xl hover:shadow-red-900/30"
+        <a
+          href={`${prefix}/check`}
+          onClick={(e) => { if (!loading && input.trim()) { e.preventDefault(); handleCheck(); } }}
+          aria-disabled={loading || !input.trim()}
+          className={`w-full md:w-auto px-8 py-4 rounded-2xl font-black text-white bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 transition-all shadow-lg hover:shadow-xl hover:shadow-red-900/30 ${loading || !input.trim() ? "opacity-50 pointer-events-none" : ""}`}
         >
           {loading ? (isGerman ? "Prüfe..." : "Checking...") : isGerman ? "KOSTENLOS PRÜFEN" : "CHECK FOR FREE"}
-        </button>
+        </a>
       </div>
 
       {loading ? (

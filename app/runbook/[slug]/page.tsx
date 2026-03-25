@@ -325,7 +325,7 @@ export default async function RunbookPage(props: { params: { slug: string } }) {
 
   console.timeEnd(__label)
   return (
-    <Container>
+      <Container>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -412,6 +412,15 @@ export default async function RunbookPage(props: { params: { slug: string } }) {
           </ol>
 
           <div className="mt-6 flex flex-wrap gap-3">
+            <a
+              href={`/${locale}/runbook/${r.slug}/temporal`}
+              className="group flex items-center gap-2 px-6 py-3 bg-white/10 hover:bg-white/20 border border-white/20 rounded-2xl transition-all active:scale-95"
+              aria-label="Timeline / Versionsgeschichte öffnen"
+            >
+              <span className="text-lg">📅</span>
+              <span className="font-medium">Timeline</span>
+              <span className="text-white/60 group-hover:text-white transition-colors">→</span>
+            </a>
             <a
               href="/check"
               className="px-6 py-3 rounded-2xl font-black bg-gradient-to-r from-orange-500 to-red-600 hover:opacity-90"
@@ -533,6 +542,6 @@ export default async function RunbookPage(props: { params: { slug: string } }) {
           />
         </div>
       </div>
-    </Container>
+      </Container>
   )
 }

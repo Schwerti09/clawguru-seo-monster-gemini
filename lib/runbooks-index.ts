@@ -33,6 +33,15 @@ function tokenSplit(s: string): string[] {
   return (s || "").toLowerCase().split(/[^a-z0-9]+/).filter(Boolean)
 }
 
+const STOPWORDS = new Set<string>([
+  "der","die","das","ein","eine","einer","eines","und","oder","aber","den","dem","des","mit","ohne","von","für","auf","in","im","an","am","als","auch","ist","sind","war","waren","ich","du","er","sie","es","wir","ihr","man","was","wie","wo","wann","jetzt","heute","sofort","bitte","habe","hat","haben","kritische","kritisch","groß","klein","schnell","langsam","mein","meine","dein","deine","sein","seine","ihr","ihre","einfach","so","nur","noch","schon","mal","viel","viele","wenig","keine","nicht",
+])
+
+function filterMeaningful(tokens: string[]): string[] {
+  const keepShort = new Set(["ssh","aws","gcp","api","cve","nginx","k8s","dns","tls","ssl"])
+  return tokens.filter((t) => keepShort.has(t) || (!STOPWORDS.has(t) && t.length >= 3))
+}
+
 function mapDoc(r: any): RunbookDoc {
   return {
     slug: String(r.slug || ""),
@@ -137,25 +146,35 @@ export function search(q: string, tags: string[], page: number, limit: number): 
   const st: IndexState = g.__RB_INDEX
   const idx = st.index
   if (!idx) return { total: 0, items: [] }
-  const terms = tokenSplit(q)
-  const tagTerms = (tags || []).map((t) => String(t).toLowerCase()).filter(Boolean)
-  const all = [...terms, ...tagTerms]
+  const rawTerms = tokenSplit(q)
+  const terms = filterMeaningful(rawTerms)
+  const tagTerms = filterMeaningful((tags || []).map((t) => String(t).toLowerCase()))
+  const all = [...new Set([...terms, ...tagTerms])]
+
+  // If nothing meaningful, return first page (fallback)
   if (all.length === 0) {
     const total = idx.docs.length
     const start = Math.max(0, (page - 1) * limit)
     return { total, items: idx.docs.slice(start, start + limit) }
   }
-  let cand: Set<number> | null = null
+
+  // Union-based scoring: each matching token adds 1 (tags add +2)
+  const scores = new Map<number, number>()
   for (const t of all) {
     const s = idx.postings.get(t)
-    if (!s) return { total: 0, items: [] }
-    cand = cand ? intersect(cand, s) : new Set<number>(s)
-    if (cand.size === 0) return { total: 0, items: [] }
+    if (!s) continue
+    const boost = tagTerms.includes(t) ? 2 : 1
+    for (const i of s) scores.set(i, (scores.get(i) || 0) + boost)
   }
-  const ids = Array.from(cand!)
+  const ids = Array.from(scores.entries())
+    .sort((a, b) => b[1] - a[1])
+    .map(([i]) => i)
+
   const total = ids.length
   const start = Math.max(0, (page - 1) * limit)
   const pageIds = ids.slice(start, start + limit)
-  const items = pageIds.map((i) => idx.docs[i])
+  const items = pageIds
+    .map((i) => idx.docs[i])
+    .sort((a, b) => (b.clawScore ?? 0) - (a.clawScore ?? 0))
   return { total, items }
 }

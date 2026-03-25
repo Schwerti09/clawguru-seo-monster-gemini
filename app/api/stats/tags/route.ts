@@ -1,0 +1,55 @@
+import { NextRequest, NextResponse } from "next/server"
+
+export const runtime = "nodejs"
+export const dynamic = "force-dynamic"
+
+export async function GET(req: NextRequest) {
+  try {
+    const url = new URL(req.url)
+    const raw = parseInt(url.searchParams.get("limit") || "4000", 10)
+    const limit = Math.max(500, Math.min(20000, isNaN(raw) ? 4000 : raw))
+
+    const pseo: any = await import("@/lib/pseo")
+    let list: any[] = []
+    try {
+      if (typeof pseo.buildRunbooksClient === "function") {
+        list = pseo.buildRunbooksClient(limit)
+      } else {
+        list = (pseo.RUNBOOKS ?? []) as any[]
+      }
+    } catch {
+      list = (pseo.RUNBOOKS ?? []) as any[]
+    }
+
+    const setUniq = new Set<string>()
+    const cMap = new Map<string, number>()
+    const sMap = new Map<string, number>()
+
+    for (const r of list) {
+      const score = Number(r?.clawScore || 0) || 0
+      const tags: string[] = Array.isArray(r?.tags) ? r.tags : []
+      for (const t of tags) {
+        const key = String(t)
+        setUniq.add(key)
+        cMap.set(key, (cMap.get(key) || 0) + 1)
+        sMap.set(key, (sMap.get(key) || 0) + score)
+      }
+    }
+
+    const counts: Record<string, number> = {}
+    const avgClaw: Record<string, number> = {}
+    for (const t of setUniq) {
+      const c = cMap.get(t) || 0
+      const s = sMap.get(t) || 0
+      counts[t] = c
+      avgClaw[t] = c ? Math.round((s / c) * 10) / 10 : 0
+    }
+    const tags = Array.from(setUniq).sort((a, b) => a.localeCompare(b))
+
+    const res = NextResponse.json({ tags, counts, avgClaw })
+    res.headers.set("Cache-Control", "public, s-maxage=300, stale-while-revalidate=60")
+    return res
+  } catch (err) {
+    return NextResponse.json({ tags: [], counts: {}, avgClaw: {} }, { status: 200 })
+  }
+}

@@ -4,7 +4,6 @@ import React, { useEffect, useMemo, useState } from "react"
 import { usePathname } from "next/navigation"
 import dynamic from "next/dynamic"
 import { useReducedMotion } from "framer-motion"
-import { buildTagStatsClient } from "@/lib/stats"
 
 const TagList = dynamic(() => import("@/components/tags/TagList"), { ssr: false })
 const TagOrbitCloud3D = dynamic(() => import("@/components/tags/TagOrbitCloud3D"), {
@@ -55,12 +54,10 @@ export default function TagsClientLoader({ dict }: { dict?: any }) {
     let mounted = true
     ;(async () => {
       try {
-        const { tags, counts, avgClaw } = await buildTagStatsClient(10000)
-        if (mounted) {
-          setTags(tags)
-          setCounts(counts)
-          setAvgClaw(avgClaw)
-        }
+        const res = await fetch(`/api/stats/tags?limit=10000`, { cache: "no-store" })
+        if (!res.ok) throw new Error(String(res.status))
+        const { tags, counts, avgClaw } = await res.json()
+        if (mounted) { setTags(tags); setCounts(counts); setAvgClaw(avgClaw) }
       } catch {
         if (mounted) setTags([
           "security","nginx","aws","kubernetes","docker","cloudflare","ssh","firewall","waf","backup"

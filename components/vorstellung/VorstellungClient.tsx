@@ -8,7 +8,7 @@ import { usePathname } from "next/navigation"
 import { motion, useReducedMotion } from "framer-motion"
 import { STATS } from "@/lib/stats"
 
-class ErrorBoundary extends React.Component<{ fallback?: React.ReactNode }, { hasError: boolean }> {
+class ErrorBoundary extends React.Component<{ fallback?: React.ReactNode; children?: React.ReactNode }, { hasError: boolean }> {
   constructor(props: { fallback?: React.ReactNode }) {
     super(props)
     this.state = { hasError: false }
@@ -193,6 +193,8 @@ export default function VorstellungClient({ dict }: { dict?: any }) {
   const prefix = isLang ? `/${first}` : ""
   const reduce = useReducedMotion()
   const [fx, setFx] = useState(false)
+  const [showTour, setShowTour] = useState(false)
+  const [tourStep, setTourStep] = useState(0)
   const heroRef = useRef<HTMLDivElement | null>(null)
   const timelineItems = Array.isArray((dict as any)?.timelineItems)
     ? ((dict as any).timelineItems as Array<{ y: string; t: string; d: string }>)
@@ -296,6 +298,11 @@ export default function VorstellungClient({ dict }: { dict?: any }) {
             <GlowButton variant="primary" href={`${prefix}/check`}>{dict?.ctaPrimary ?? "Jetzt testen"}</GlowButton>
             <GlowButton variant="outline" href={`${prefix}/pricing`}>{dict?.ctaSecondary ?? "Pläne"}</GlowButton>
           </motion.div>
+          <div className="mt-3">
+            <button onClick={() => { setTourStep(0); setShowTour(true) }} className="text-xs text-cyan-300 hover:text-cyan-200 underline">
+              {dict?.tourStart ?? "Tour starten"}
+            </button>
+          </div>
         </div>
       </section>
 
@@ -374,6 +381,30 @@ export default function VorstellungClient({ dict }: { dict?: any }) {
           </motion.div>
         </div>
       </Container>
+      {showTour && (
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4">
+          <div className="absolute inset-0 bg-black/60" onClick={() => setShowTour(false)} />
+          <div className="relative w-full max-w-lg rounded-2xl border border-white/10 bg-black/80 text-white p-4 shadow-2xl">
+            <div className="text-sm text-gray-300">
+              {[
+                dict?.tourS1 ?? "Überblick: Sieh die Kern‑Features in Aktion.",
+                dict?.tourS2 ?? "Intel: Live‑Feed und CVE‑Radar.",
+                dict?.tourS3 ?? "Oracle: Risiko‑Radar nach Scope.",
+                dict?.tourS4 ?? "Neuro: Empfehlungen für deinen Stack.",
+                dict?.tourS5 ?? "Summon: Problem beschreiben, Fix erhalten.",
+                dict?.tourS6 ?? "Mycelium & Live: Realtime‑Netz & Zahlen.",
+              ][tourStep]}
+            </div>
+            <div className="mt-4 flex justify-between gap-3">
+              <button onClick={() => setShowTour(false)} className="px-3 py-1.5 rounded-lg border border-white/10 text-xs text-gray-200 hover:bg-white/10">{dict?.tourEnd ?? "Beenden"}</button>
+              <div className="flex items-center gap-2">
+                <div className="text-xs text-gray-400">{tourStep + 1}/6</div>
+                <button onClick={() => setTourStep((s) => (s + 1) % 6)} className="px-3 py-1.5 rounded-lg bg-cyan-500/20 border border-cyan-400/30 text-xs text-cyan-100 hover:bg-cyan-500/30">{dict?.tourNext ?? "Weiter"}</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   )
 }

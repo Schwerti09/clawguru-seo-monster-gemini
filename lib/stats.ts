@@ -2,10 +2,20 @@
 // Centralized, canonical stats used across the entire organism.
 // All pages/components and APIs should import from here to keep numbers consistent.
 
-import { totalSitemapUrls } from "@/lib/pseo"
+function safeTotalSitemapUrls(): number {
+  try {
+    if (typeof window === "undefined") {
+      // Resolve only on the server to keep client bundle light and avoid Node-only deps
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const { totalSitemapUrls } = require("@/lib/pseo")
+      return typeof totalSitemapUrls === "function" ? totalSitemapUrls() : 0
+    }
+  } catch {}
+  return 0
+}
 
 export const TOTAL_RUNBOOKS = 4_200_000
-export const TOTAL_SITEMAP_URLS = totalSitemapUrls()
+export const TOTAL_SITEMAP_URLS = safeTotalSitemapUrls()
 export const AVG_CLAW_SCORE = 78
 export const ACTIVE_EXPLOITS_TODAY = 42
 export const USERS_SAVED = 1_247_000

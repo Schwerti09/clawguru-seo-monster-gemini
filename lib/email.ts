@@ -23,8 +23,10 @@ export async function sendEmail(args: SendArgs): Promise<{ id?: string }> {
     throw new Error("Missing RESEND_API_KEY")
   }
 
-  // Hardcoded sender – avoids any misconfigured env var issues
-  const from = "ClawGuru <noreply@clawguru.org>"
+  // Sender: allow override via env; default to clawguru.org
+  const from = process.env.RESEND_FROM && process.env.RESEND_FROM.trim().length > 0
+    ? process.env.RESEND_FROM
+    : "ClawGuru <noreply@clawguru.org>"
 
   // Resend REST API requires `to` to be an array of strings
   const toArray = Array.isArray(args.to) ? args.to : [args.to]
@@ -73,6 +75,9 @@ export async function sendEmail(args: SendArgs): Promise<{ id?: string }> {
 
   if (!res.ok) {
     console.error(`[email] Resend error ${res.status}: ${responseText}`)
+    if (res.status === 403 && /domain is not verified/i.test(responseText)) {
+      throw new Error(`Email send failed (403): Domain not verified at Resend. Verify your sending domain or set RESEND_FROM to a verified domain.`)
+    }
     throw new Error(`Email send failed (${res.status}): ${responseText}`)
   }
 

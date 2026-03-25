@@ -8,7 +8,7 @@ function isoDate(d = new Date()) {
   return d.toISOString().slice(0, 10);
 }
 
-export const runtime = 'edge'
+export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 
 const SITEMAP_HEADERS = {

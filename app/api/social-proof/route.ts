@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
 import { getSocialProofEvents } from "@/lib/social-proof"
 
-export const runtime = "edge"
+export const runtime = "nodejs"
 
 export async function GET() {
   const events = getSocialProofEvents()

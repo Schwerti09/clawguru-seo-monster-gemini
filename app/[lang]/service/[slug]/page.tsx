@@ -22,5 +22,5 @@ export async function generateMetadata(
 }
 
 export default function LocaleServiceHubPage(props: { params: { lang: string; slug: string } }) {
-  return <RootPage params={{ slug: props.params.slug }} />
+  return <RootPage params={{ slug: props.params.slug }} locale={props.params.lang as Locale} />
 }

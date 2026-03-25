@@ -2,7 +2,6 @@ import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
 import { notFound } from "next/navigation"
 import { BASE_URL } from "@/lib/config"
-import { headers } from "next/headers"
 import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
 
 export const revalidate = 60
@@ -34,13 +33,12 @@ export async function generateMetadata(props: { params: { slug: string } }) {
   }
 }
 
-export default async function ServiceHubPage(props: { params: { slug: string } }) {
+export default async function ServiceHubPage(props: { params: { slug: string }; locale?: Locale }) {
   const params = props.params;
   const { allServices100k, getSampleSlugsByService, getRunbook, CLOUD_PROVIDERS_100K, ISSUES_100K, YEARS_100K } = await import("@/lib/pseo")
   const service = allServices100k().find((s) => s.slug === params.slug)
   if (!service) return notFound()
-  const h = headers()
-  const locale = (h.get("x-claw-locale") ?? DEFAULT_LOCALE) as Locale
+  const locale = (props.locale ?? DEFAULT_LOCALE) as Locale
   const prefix = `/${locale}`
 
   const sampleSlugs = getSampleSlugsByService(service.slug, 48)

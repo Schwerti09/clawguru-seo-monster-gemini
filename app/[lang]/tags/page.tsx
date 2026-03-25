@@ -11,7 +11,6 @@ export const runtime = "nodejs"
 export const maxDuration = 180
 
 const TagsClientLoader = NextDynamic(() => import("@/components/tags/TagsClientLoader"), {
-  ssr: false,
   loading: () => (
     <div className="mt-8">
       <div className="relative mx-auto my-10 h-[460px] max-w-5xl rounded-[36px] overflow-hidden">

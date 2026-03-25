@@ -15,15 +15,13 @@ import MyceliumShareCard from "@/components/share/MyceliumShareCard"
 import { unstable_cache } from "next/cache"
 import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
 import { getDictionary } from "@/lib/getDictionary"
-const RunbookMiniTabs = NextDynamic(() => import("@/components/runbook/RunbookMiniTabs"), { ssr: false })
+const RunbookMiniTabs = NextDynamic(() => import("@/components/runbook/RunbookMiniTabs"))
 
 const TemporalTimelineLazy = NextDynamic(() => import("@/components/visual/TemporalTimeline"), {
-  ssr: false,
   loading: () => <div className="text-sm text-gray-500 py-6 text-center">Lade Timeline…</div>,
 })
 
 const VersionsAndForksTabLazy = NextDynamic(() => import("@/components/runbook/VersionsAndForksTab"), {
-  ssr: false,
   loading: () => <div className="text-sm text-gray-500 py-6 text-center">Lade Tabs…</div>,
 })
 

@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   description: "Summon your Army: 4 Swarm‑Typen, Live‑Intel, Top‑Runbooks, Vorhersage & One‑Click‑Fix.",
 }
 
-const SummonRealClient = dynamic(() => import("@/components/summon/SummonRealClient"), { ssr: false })
+const SummonRealClient = dynamic(() => import("@/components/summon/SummonRealClient"))
 
 export default function SummonPage() {
   return (

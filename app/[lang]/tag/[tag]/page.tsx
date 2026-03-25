@@ -13,7 +13,7 @@ export const revalidate = 3600
 export const dynamicParams = true
 export const dynamic = "force-dynamic"
 
-const TagList = NextDynamic(() => import("@/components/tags/TagList"), { ssr: false })
+const TagList = NextDynamic(() => import("@/components/tags/TagList"))
 
 export async function generateStaticParams() {
   const { allTags } = await import("@/lib/pseo")

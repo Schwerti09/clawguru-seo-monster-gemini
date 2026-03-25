@@ -8,7 +8,7 @@ import { getDictionary } from "@/lib/dictionary"
 import MyceliumHero from "@/components/mycelium/MyceliumHero"
 import ExampleNodes from "@/components/mycelium/ExampleNodes"
 
-const MyceliumVisualizationWrapper = NextDynamic(() => import("@/components/mycelium/MyceliumVisualizationWrapper"), { ssr: false })
+const MyceliumVisualizationWrapper = NextDynamic(() => import("@/components/mycelium/MyceliumVisualizationWrapper"))
  
 
 export const dynamic = "force-static"

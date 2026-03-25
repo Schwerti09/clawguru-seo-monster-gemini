@@ -7,7 +7,7 @@ import SummonHero from "@/components/summon/SummonHero"
 import HowItWorks from "@/components/summon/HowItWorks"
 import UpgradeCTA from "@/components/shared/UpgradeCTA"
 
-const SummonRealClient = dynamic(() => import("@/components/summon/SummonRealClient"), { ssr: false })
+const SummonRealClient = dynamic(() => import("@/components/summon/SummonRealClient"))
 
 export const revalidate = 60
 

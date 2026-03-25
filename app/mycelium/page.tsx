@@ -85,7 +85,6 @@ export default async function MyceliumPage() {
       <div className="px-4 py-4">
         {(() => {
           const MyceliumClientLoader = NextDynamic(() => import("@/components/visual/MyceliumClientLoader"), {
-            ssr: false,
             loading: () => (
               <div className="h-[50vh] rounded-3xl animate-pulse bg-white/[0.04] border border-white/10" />
             ),

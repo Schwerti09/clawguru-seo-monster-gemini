@@ -9,12 +9,10 @@ import StatsDashboard from "@/components/intel/StatsDashboard"
 import UpgradeCTA from "@/components/shared/UpgradeCTA"
 
 const PredictiveRadar = dynamic(() => import("@/components/intel/PredictiveRadar"), {
-  ssr: false,
   loading: () => <div className="h-72 rounded-2xl border border-white/10 bg-white/5 animate-pulse" />,
 })
 
 const MyceliumPreview = dynamic(() => import("@/components/intel/MyceliumPreview"), {
-  ssr: false,
   loading: () => <div className="h-72 rounded-2xl border border-white/10 bg-white/5 animate-pulse" />,
 })
 

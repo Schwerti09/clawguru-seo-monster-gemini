@@ -45,22 +45,24 @@ function parseStack(sp: URLSearchParams): string[] {
 
 export async function GET(req: NextRequest) {
   try {
-    // Enforce daily free limit
-    const key = getClientKey(req)
-    const daily = checkDailyLimit(key)
-    if (!daily.ok) {
-      return NextResponse.json(
-        {
-          error: "Daily free limit reached",
-          code: "FREE_LIMIT",
-          message: "You have used your free neuro request for today. Get a Day Pass for unlimited use.",
-          resetAt: daily.reset,
-        },
-        { status: 429 },
-      )
+    const url = new URL(req.url)
+    const isPreview = url.searchParams.get("preview") === "1"
+    if (!isPreview) {
+      const key = getClientKey(req)
+      const daily = checkDailyLimit(key)
+      if (!daily.ok) {
+        return NextResponse.json(
+          {
+            error: "Daily free limit reached",
+            code: "FREE_LIMIT",
+            message: "You have used your free neuro request for today. Get a Day Pass for unlimited use.",
+            resetAt: daily.reset,
+          },
+          { status: 429 },
+        )
+      }
     }
 
-    const url = new URL(req.url)
     const tags = parseStack(url.searchParams)
     const rawLimit = Math.max(1, parseInt(url.searchParams.get("limit") || "5", 10) || 5)
     const limit = Math.min(20, rawLimit)

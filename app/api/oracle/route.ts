@@ -56,22 +56,24 @@ type OracleRequestBody = {
 // Predict critical risks based on curated CVE data + best matching runbooks
 export async function GET(req: NextRequest) {
   try {
-    // Enforce daily free limit for Oracle predictive GET
-    const key = getClientKey(req)
-    const daily = checkDailyLimit(key)
-    if (!daily.ok) {
-      return NextResponse.json(
-        {
-          error: "Daily free limit reached",
-          code: "FREE_LIMIT",
-          message: "You have used your free oracle request for today. Get a Day Pass for unlimited use.",
-          resetAt: daily.reset,
-        },
-        { status: 429 },
-      )
+    const url = new URL(req.url)
+    const isPreview = url.searchParams.get("preview") === "1"
+    if (!isPreview) {
+      const key = getClientKey(req)
+      const daily = checkDailyLimit(key)
+      if (!daily.ok) {
+        return NextResponse.json(
+          {
+            error: "Daily free limit reached",
+            code: "FREE_LIMIT",
+            message: "You have used your free oracle request for today. Get a Day Pass for unlimited use.",
+            resetAt: daily.reset,
+          },
+          { status: 429 },
+        )
+      }
     }
 
-    const url = new URL(req.url)
     const scopeParam = (url.searchParams.get("scope") || "").toLowerCase().trim()
     const scopes = Array.from(new Set(scopeParam.split(/[\s,;|]+/).map((s) => s.trim()).filter(Boolean)))
     const cveId = (url.searchParams.get("cve") || "").toUpperCase().trim()

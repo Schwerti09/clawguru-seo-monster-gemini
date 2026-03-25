@@ -84,6 +84,15 @@ function MiniCopilot() {
     t = setTimeout(step, 150)
     return () => { if (t) clearTimeout(t) }
   }, [])
+
+  useEffect(() => {
+    if (!showTour) return
+    try {
+      const step = tourStep
+      const target = step <= 1 ? heroRef.current : featureRef.current
+      if (target) target.scrollIntoView({ behavior: "smooth", block: "center" })
+    } catch {}
+  }, [showTour, tourStep])
   return (
     <div className="absolute inset-0 p-3 flex flex-col gap-2">
       <div className="max-w-[72%] rounded-2xl bg-white/5 border border-white/10 px-3 py-2 text-[10px] text-gray-200">
@@ -196,6 +205,7 @@ export default function VorstellungClient({ dict }: { dict?: any }) {
   const [showTour, setShowTour] = useState(false)
   const [tourStep, setTourStep] = useState(0)
   const heroRef = useRef<HTMLDivElement | null>(null)
+  const featureRef = useRef<HTMLDivElement | null>(null)
   const timelineItems = Array.isArray((dict as any)?.timelineItems)
     ? ((dict as any).timelineItems as Array<{ y: string; t: string; d: string }>)
     : [
@@ -327,7 +337,7 @@ export default function VorstellungClient({ dict }: { dict?: any }) {
           </motion.div>
 
           {/* Feature Live Previews */}
-          <motion.div initial={reduce ? undefined : { opacity: 0, y: 16 }} whileInView={reduce ? undefined : { opacity: 1, y: 0 }} viewport={{ once: true }} transition={reduce ? undefined : { duration: 0.55 }}>
+          <motion.div ref={featureRef} initial={reduce ? undefined : { opacity: 0, y: 16 }} whileInView={reduce ? undefined : { opacity: 1, y: 0 }} viewport={{ once: true }} transition={reduce ? undefined : { duration: 0.55 }}>
             <ErrorBoundary fallback={<div className="h-96 bg-white/5 rounded-2xl border border-white/10" /> }>
               <FeatureShowcase prefix={prefix} />
             </ErrorBoundary>

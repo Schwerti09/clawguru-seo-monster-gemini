@@ -50,7 +50,7 @@ export default function OraclePreviewCard({ prefix = "" }: Props) {
     setLoading(true)
     setError(null)
     const q = scope === "alle" ? "" : scope
-    fetch(`/api/oracle?scope=${encodeURIComponent(q)}`)
+    fetch(`/api/oracle?scope=${encodeURIComponent(q)}&preview=1`)
       .then((res) => (res.ok ? res.json() : Promise.reject(new Error(String(res.status)))))
       .then((j) => {
         if (!canceled) setData(j)

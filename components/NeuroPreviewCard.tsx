@@ -46,7 +46,7 @@ export default function NeuroPreviewCard({ prefix = "" }: Props) {
     setLoading(true)
     setError(null)
     const stack = debounced.join(",")
-    fetch(`/api/neuro?stack=${encodeURIComponent(stack)}`)
+    fetch(`/api/neuro?stack=${encodeURIComponent(stack)}&preview=1`)
       .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
       .then((j) => { if (!canceled) setData(j) })
       .catch(() => { if (!canceled) setError("Fehler beim Laden") })

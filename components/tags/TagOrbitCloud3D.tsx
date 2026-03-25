@@ -4,19 +4,18 @@ import { Canvas, useFrame } from "@react-three/fiber"
 import { Html } from "@react-three/drei"
 import { useMemo, useRef } from "react"
 import { useReducedMotion } from "framer-motion"
-import * as THREE from "three"
 import { usePathname } from "next/navigation"
 
 type Props = { tags: string[] }
 
 function OrbitGroup({ tags, prefix }: { tags: string[]; prefix: string }) {
   const prefersReduced = useReducedMotion()
-  const group = useRef<THREE.Group>(null!)
+  const group = useRef<any>(null!)
   const targetTilt = useRef<[number, number]>([0, 0])
 
   const points = useMemo(() => {
     const items = tags.slice(0, 60)
-    const out: Array<{ pos: THREE.Vector3; t: string }> = []
+    const out: Array<{ pos: [number, number, number]; t: string }> = []
     const rings = 5
     for (let r = 0; r < rings; r++) {
       const radius = 2 + r * 0.5
@@ -27,7 +26,7 @@ function OrbitGroup({ tags, prefix }: { tags: string[]; prefix: string }) {
         const x = Math.cos(angle) * radius
         const z = Math.sin(angle) * radius
         const idx = (r * count + i) % items.length
-        out.push({ pos: new THREE.Vector3(x, y, z), t: items[idx]! })
+        out.push({ pos: [x, y, z], t: items[idx]! })
       }
     }
     return out

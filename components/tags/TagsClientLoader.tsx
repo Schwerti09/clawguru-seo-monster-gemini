@@ -33,7 +33,8 @@ export default function TagsClientLoader({ dict }: { dict?: any }) {
   useEffect(() => {
     try {
       const isMd = typeof window !== "undefined" ? window.innerWidth >= 768 : false
-      const no3d = typeof window !== "undefined" ? new URLSearchParams(window.location.search).get("no3d") === "1" : false
+      const usp = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null
+      const allow3d = usp ? usp.get("3d") === "1" : false
       let glOK = false
       if (typeof document !== "undefined") {
         try {
@@ -44,7 +45,7 @@ export default function TagsClientLoader({ dict }: { dict?: any }) {
           glOK = false
         }
       }
-      setShow3D(isMd && !reduce && glOK && !no3d)
+      setShow3D(isMd && !reduce && glOK && allow3d)
     } catch {
       setShow3D(false)
     }

@@ -25,6 +25,10 @@ export default function TagsClientLoader({ dict }: { dict?: any }) {
   const [q, setQ] = useState("")
   const pathname = usePathname()
   const [show3D, setShow3D] = useState(false)
+  const [ready, setReady] = useState(false)
+  const [sorted, setSorted] = useState<string[]>([])
+  const [visible, setVisible] = useState<string[]>([])
+  const [cloudTags, setCloudTags] = useState<string[]>([])
   const prefix = useMemo(() => {
     const first = (pathname || "").split("/")[1] || ""
     const isLang = /^[a-z]{2}(-[A-Z]{2})?$/.test(first)
@@ -60,26 +64,44 @@ export default function TagsClientLoader({ dict }: { dict?: any }) {
         const { tags, counts, avgClaw } = await res.json()
         if (mounted) {
           if (Array.isArray(tags) && tags.length > 0) {
+            const s = tags.slice().sort((a: string, b: string) => (counts[b] || 0) - (counts[a] || 0) || a.localeCompare(b))
             setTags(tags)
             setCounts(counts || {})
             setAvgClaw(avgClaw || {})
+            setSorted(s)
+            setVisible(s)
+            setCloudTags(s.slice(0, 150))
           } else {
             const demo = [
               "security","nginx","aws","kubernetes","docker","cloudflare","ssh","firewall","waf","backup"
             ]
+            const demoCounts = Object.fromEntries(demo.map((t, i) => [t, 100 - i * 7])) as Record<string, number>
+            const demoAvg = Object.fromEntries(demo.map((t, i) => [t, 70 + (i % 5)])) as Record<string, number>
+            const s = demo.slice().sort((a, b) => (demoCounts[b] || 0) - (demoCounts[a] || 0) || a.localeCompare(b))
             setTags(demo)
-            setCounts(Object.fromEntries(demo.map((t, i) => [t, 100 - i * 7])))
-            setAvgClaw(Object.fromEntries(demo.map((t, i) => [t, 70 + (i % 5)])))
+            setCounts(demoCounts)
+            setAvgClaw(demoAvg)
+            setSorted(s)
+            setVisible(s)
+            setCloudTags(s.slice(0, 150))
           }
+          setReady(true)
         }
       } catch {
         if (mounted) {
           const demo = [
             "security","nginx","aws","kubernetes","docker","cloudflare","ssh","firewall","waf","backup"
           ]
+          const demoCounts = Object.fromEntries(demo.map((t, i) => [t, 100 - i * 7])) as Record<string, number>
+          const demoAvg = Object.fromEntries(demo.map((t, i) => [t, 70 + (i % 5)])) as Record<string, number>
+          const s = demo.slice().sort((a, b) => (demoCounts[b] || 0) - (demoCounts[a] || 0) || a.localeCompare(b))
           setTags(demo)
-          setCounts(Object.fromEntries(demo.map((t, i) => [t, 100 - i * 7])))
-          setAvgClaw(Object.fromEntries(demo.map((t, i) => [t, 70 + (i % 5)])))
+          setCounts(demoCounts)
+          setAvgClaw(demoAvg)
+          setSorted(s)
+          setVisible(s)
+          setCloudTags(s.slice(0, 150))
+          setReady(true)
         }
       }
     })()
@@ -89,36 +111,33 @@ export default function TagsClientLoader({ dict }: { dict?: any }) {
         const demo = [
           "security","nginx","aws","kubernetes","docker","cloudflare","ssh","firewall","waf","backup"
         ]
+        const demoCounts = Object.fromEntries(demo.map((t, i) => [t, 100 - i * 7])) as Record<string, number>
+        const demoAvg = Object.fromEntries(demo.map((t, i) => [t, 70 + (i % 5)])) as Record<string, number>
+        const s = demo.slice().sort((a, b) => (demoCounts[b] || 0) - (demoCounts[a] || 0) || a.localeCompare(b))
         setTags(demo)
-        setCounts(Object.fromEntries(demo.map((t, i) => [t, 100 - i * 7])))
-        setAvgClaw(Object.fromEntries(demo.map((t, i) => [t, 70 + (i % 5)])))
+        setCounts(demoCounts)
+        setAvgClaw(demoAvg)
+        setSorted(s)
+        setVisible(s)
+        setCloudTags(s.slice(0, 150))
+        setReady(true)
       }
     }, 2000)
     return () => { mounted = false; if (timer) clearTimeout(timer) }
   }, [])
 
-  // Do not early-return before hooks to preserve hook order across renders
-
-  const sortedByFreq = useMemo(() => {
-    return (tags || []).slice().sort((a, b) => {
-      const da = counts[a] || 0
-      const db = counts[b] || 0
-      if (db !== da) return db - da
-      return a.localeCompare(b)
-    })
-  }, [tags, counts])
-
-  const filtered = useMemo(() => {
+  // Update visible tags only when query changes; cloudTags remain stable
+  useEffect(() => {
+    if (!ready) return
     const ql = q.trim().toLowerCase()
-    if (!ql) return sortedByFreq
-    return sortedByFreq.filter((t) => t.toLowerCase().includes(ql))
-  }, [sortedByFreq, q])
+    if (!ql) {
+      setVisible(sorted)
+    } else {
+      setVisible(sorted.filter((t) => t.toLowerCase().includes(ql)))
+    }
+  }, [q, ready, sorted])
 
-  const top10 = useMemo(() => {
-    return [...(tags || [])]
-      .sort((a, b) => (counts[b] || 0) - (counts[a] || 0))
-      .slice(0, 10)
-  }, [tags, counts])
+  const top10 = useMemo(() => sorted.slice(0, 10), [sorted])
 
   const lblTop = (dict?.top_label as string) || "Top Tags"
   const lblRunbooks = (dict?.runbooks_label as string) || "Runbooks"
@@ -127,6 +146,28 @@ export default function TagsClientLoader({ dict }: { dict?: any }) {
   const lblCats = (dict?.categories_label as string) || "Beliebteste Kategorien"
 
   const topCats = top10.slice(0, 6)
+
+  if (!ready) {
+    return (
+      <Container>
+        <div className="py-16 max-w-6xl mx-auto">
+          <SectionTitle
+            kicker="Internal Link Clusters"
+            title="Tag Index"
+            subtitle="Provider · Error · Topic · Config – jede Kombination wird ein Einstiegspunkt."
+          />
+          <div className="relative mx-auto my-10 h-[460px] max-w-5xl rounded-[36px] overflow-hidden">
+            <div className="absolute inset-0 rounded-[36px] border border-white/10 bg-white/[0.04] animate-pulse" />
+          </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="h-20 rounded-2xl border border-white/10 bg-black/30 animate-pulse" />
+            ))}
+          </div>
+        </div>
+      </Container>
+    )
+  }
 
   return (
     <Container>
@@ -138,13 +179,13 @@ export default function TagsClientLoader({ dict }: { dict?: any }) {
         />
 
       {show3D ? (
-        tags && tags.length > 0 ? (
+        cloudTags && cloudTags.length > 0 ? (
           <ErrorBoundary fallback={
             <div className="relative mx-auto my-10 h-[460px] max-w-5xl rounded-[36px] overflow-hidden">
               <div className="absolute inset-0 rounded-[36px] border border-white/10 bg-white/[0.04]" />
             </div>
           }>
-            <TagOrbitCloud3D tags={tags} />
+            <TagOrbitCloud3D tags={cloudTags} />
           </ErrorBoundary>
         ) : (
           <div className="relative mx-auto my-10 h-[460px] max-w-5xl rounded-[36px] overflow-hidden">
@@ -165,10 +206,6 @@ export default function TagsClientLoader({ dict }: { dict?: any }) {
           className="flex-1 rounded-xl bg-black/40 border border-white/10 px-3 py-2 text-sm text-gray-200"
         />
       </div>
-
-      {!tags && (
-        <div className="text-sm text-gray-500 mt-6">Lade Tags…</div>
-      )}
 
       {top10.length > 0 && (
         <div className="mt-8">
@@ -209,9 +246,9 @@ export default function TagsClientLoader({ dict }: { dict?: any }) {
         </div>
       )}
 
-      {tags && (
+      {visible.length > 0 && (
         <ErrorBoundary fallback={<div className="mt-6 text-sm text-gray-500">Tags nicht verfügbar.</div>}>
-          <TagList tags={filtered} counts={counts} />
+          <TagList tags={visible} counts={counts} />
         </ErrorBoundary>
       )}
 

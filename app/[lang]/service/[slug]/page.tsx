@@ -5,6 +5,7 @@ import RootPage from "@/app/service/[slug]/page"
 
 export const revalidate = 60
 export const dynamicParams = true
+export const dynamic = "force-dynamic"
 
 export async function generateStaticParams() {
   return SUPPORTED_LOCALES.map((lang) => ({ lang }))

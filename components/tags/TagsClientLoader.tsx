@@ -29,6 +29,8 @@ export default function TagsClientLoader({ dict }: { dict?: any }) {
   const [sorted, setSorted] = useState<string[]>([])
   const [visible, setVisible] = useState<string[]>([])
   const [cloudTags, setCloudTags] = useState<string[]>([])
+  const [runbookCount, setRunbookCount] = useState<number>(0)
+  const [activeTab, setActiveTab] = useState<string>("All Tags")
   const prefix = useMemo(() => {
     const first = (pathname || "").split("/")[1] || ""
     const isLang = /^[a-z]{2}(-[A-Z]{2})?$/.test(first)
@@ -61,7 +63,7 @@ export default function TagsClientLoader({ dict }: { dict?: any }) {
       try {
         const res = await fetch(`/api/stats/tags?limit=10000`, { cache: "no-store" })
         if (!res.ok) throw new Error(String(res.status))
-        const { tags, counts, avgClaw } = await res.json()
+        const { tags, counts, avgClaw, runbookCount } = await res.json()
         if (mounted) {
           if (Array.isArray(tags) && tags.length > 0) {
             const s = tags.slice().sort((a: string, b: string) => (counts[b] || 0) - (counts[a] || 0) || a.localeCompare(b))
@@ -71,6 +73,7 @@ export default function TagsClientLoader({ dict }: { dict?: any }) {
             setSorted(s)
             setVisible(s)
             setCloudTags(s.slice(0, 300))
+            setRunbookCount(typeof runbookCount === "number" ? runbookCount : tags.length)
           } else {
             const demo = [
               "security","nginx","aws","kubernetes","docker","cloudflare","ssh","firewall","waf","backup"
@@ -84,6 +87,7 @@ export default function TagsClientLoader({ dict }: { dict?: any }) {
             setSorted(s)
             setVisible(s)
             setCloudTags(s.slice(0, 300))
+            setRunbookCount(demo.length)
           }
           setReady(true)
         }
@@ -101,6 +105,7 @@ export default function TagsClientLoader({ dict }: { dict?: any }) {
           setSorted(s)
           setVisible(s)
           setCloudTags(s.slice(0, 300))
+          setRunbookCount(demo.length)
           setReady(true)
         }
       }
@@ -120,22 +125,71 @@ export default function TagsClientLoader({ dict }: { dict?: any }) {
         setSorted(s)
         setVisible(s)
         setCloudTags(s.slice(0, 300))
+        setRunbookCount(demo.length)
         setReady(true)
       }
     }, 2000)
     return () => { mounted = false; if (timer) clearTimeout(timer) }
   }, [])
 
-  // Update visible tags only when query changes; cloudTags remain stable
+  const tabs = useMemo(() => [
+    "All Tags",
+    "Most Popular",
+    "New 2026",
+    "Security",
+    "DevOps",
+    "Cloud",
+  ], [])
+
+  const baseList = useMemo(() => {
+    const lower = (s: string) => s.toLowerCase()
+    const popular = sorted.slice(0, 200)
+    switch (activeTab) {
+      case "Most Popular":
+        return popular
+      case "New 2026": {
+        const sel = sorted.filter((t) => {
+          const tl = lower(t)
+          return tl.includes("2026") || tl.startsWith("year:2026")
+        })
+        return sel.slice(0, 200)
+      }
+      case "Security": {
+        const keys = ["security","waf","csp","cve","hardening","auth","zero-trust","mfa","mitre"]
+        return sorted.filter((t) => {
+          const tl = lower(t)
+          return keys.some((k) => tl.includes(k))
+        }).slice(0, 200)
+      }
+      case "DevOps": {
+        const keys = ["kubernetes","docker","ci","cd","pipeline","helm","devops","terraform"]
+        return sorted.filter((t) => {
+          const tl = lower(t)
+          return keys.some((k) => tl.includes(k))
+        }).slice(0, 200)
+      }
+      case "Cloud": {
+        const keys = ["aws","gcp","azure","cloudflare","hetzner","provider:"]
+        return sorted.filter((t) => {
+          const tl = lower(t)
+          return keys.some((k) => tl.includes(k))
+        }).slice(0, 200)
+      }
+      default:
+        return sorted
+    }
+  }, [activeTab, sorted])
+
+  // Update visible tags when query or tab changes; cloudTags remain stable
   useEffect(() => {
     if (!ready) return
     const ql = q.trim().toLowerCase()
     if (!ql) {
-      setVisible(sorted)
+      setVisible(baseList)
     } else {
-      setVisible(sorted.filter((t) => t.toLowerCase().includes(ql)))
+      setVisible(baseList.filter((t) => t.toLowerCase().includes(ql)))
     }
-  }, [q, ready, sorted])
+  }, [q, ready, baseList])
 
   const top10 = useMemo(() => sorted.slice(0, 100), [sorted])
 
@@ -185,7 +239,7 @@ export default function TagsClientLoader({ dict }: { dict?: any }) {
               <div className="absolute inset-0 rounded-[36px] border border-white/10 bg-white/[0.04]" />
             </div>
           }>
-            <TagOrbitCloud3D tags={cloudTags} />
+            <TagOrbitCloud3D tags={cloudTags} counts={counts} avgClaw={avgClaw} />
           </ErrorBoundary>
         ) : (
           <div className="relative mx-auto my-10 h-[460px] max-w-5xl rounded-[36px] overflow-hidden">
@@ -205,6 +259,23 @@ export default function TagsClientLoader({ dict }: { dict?: any }) {
           placeholder={lblSearch}
           className="flex-1 rounded-xl bg-black/40 border border-white/10 px-3 py-2 text-sm text-gray-200"
         />
+        <div className="text-xs text-gray-400">
+          {Intl && typeof Intl.NumberFormat !== "undefined" ? new Intl.NumberFormat().format(visible.length) : visible.length} Tags · {Intl && typeof Intl.NumberFormat !== "undefined" ? new Intl.NumberFormat().format(runbookCount) : runbookCount} Runbooks
+        </div>
+      </div>
+
+      <div className="mt-4 overflow-x-auto scrollbar-none">
+        <div className="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-black/30 p-1">
+          {tabs.map((t) => (
+            <button
+              key={t}
+              onClick={() => setActiveTab(t)}
+              className={`px-3 py-1.5 rounded-xl text-xs transition-colors ${activeTab === t ? "bg-cyan-500/15 text-cyan-300 border border-cyan-500/20" : "text-gray-400 hover:text-gray-200"}`}
+            >
+              {t}
+            </button>
+          ))}
+        </div>
       </div>
 
       {top10.length > 0 && (

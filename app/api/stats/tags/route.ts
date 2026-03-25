@@ -45,8 +45,9 @@ export async function GET(req: NextRequest) {
       avgClaw[t] = c ? Math.round((s / c) * 10) / 10 : 0
     }
     const tags = Array.from(setUniq).sort((a, b) => a.localeCompare(b))
+    const runbookCount = Array.isArray(list) ? list.length : 0
 
-    const res = NextResponse.json({ tags, counts, avgClaw })
+    const res = NextResponse.json({ tags, counts, avgClaw, runbookCount })
     res.headers.set("Cache-Control", "public, s-maxage=300, stale-while-revalidate=60")
     return res
   } catch (err) {

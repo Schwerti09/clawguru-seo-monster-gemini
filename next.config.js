@@ -45,8 +45,6 @@ const nextConfig = {
     config.resolve.alias = {
       ...config.resolve.alias,
       "@": require("path").resolve(__dirname),
-      // Force legacy consumers of 'react-dom' to use our React 18 compatibility shim
-      "react-dom$": require("path").resolve(__dirname, "lib/react-dom-compat.js"),
     };
     return config;
   },

@@ -58,6 +58,7 @@ export default function FloatingMyceliumShareBtn({ locale: localeProp }: Floatin
 
   // Close popover on outside click
   useEffect(() => {
+    if (typeof document === "undefined") return
     if (!open) return
     const handler = (e: MouseEvent) => {
       if (popoverRef.current && !popoverRef.current.contains(e.target as Node)) {

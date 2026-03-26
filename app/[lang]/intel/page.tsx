@@ -1,5 +1,4 @@
 import type { Metadata } from "next"
-import dynamic from "next/dynamic"
 import { SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
 import { getDictionary } from "@/lib/getDictionary"
 import IntelHero from "@/components/intel/IntelHero"
@@ -7,14 +6,9 @@ import LiveThreatFeed from "@/components/intel/LiveThreatFeed"
 import CveAnalyzer from "@/components/intel/CveAnalyzer"
 import StatsDashboard from "@/components/intel/StatsDashboard"
 import UpgradeCTA from "@/components/shared/UpgradeCTA"
+import IntelClientBlock from "@/components/intel/IntelClientBlock"
 
-const PredictiveRadar = dynamic(() => import("@/components/intel/PredictiveRadar"), {
-  loading: () => <div className="h-72 rounded-2xl border border-white/10 bg-white/5 animate-pulse" />,
-})
-
-const MyceliumPreview = dynamic(() => import("@/components/intel/MyceliumPreview"), {
-  loading: () => <div className="h-72 rounded-2xl border border-white/10 bg-white/5 animate-pulse" />,
-})
+// Client-only visualizations are hosted inside IntelClientBlock
 
 export const revalidate = 300
 
@@ -42,10 +36,7 @@ export default async function LocaleIntelPage(props: { params: { lang: string } 
           <LiveThreatFeed prefix={prefix} dict={intel} />
           <CveAnalyzer prefix={prefix} dict={intel} />
         </div>
-        <div className="grid md:grid-cols-2 gap-8">
-          <PredictiveRadar prefix={prefix} dict={intel} />
-          <MyceliumPreview prefix={prefix} dict={intel} />
-        </div>
+        <IntelClientBlock prefix={prefix} dict={intel} />
         <StatsDashboard dict={intel} />
       </section>
       <UpgradeCTA prefix={prefix} dict={intel} variant="intel" />

@@ -11,7 +11,7 @@
     "check:sitemap-redirects": "node scripts/check-sitemap-redirects.js",
     "check:prod-smoke": "node scripts/check-production-smoke.js",
     "i18n:sync-dictionaries": "node scripts/sync-dictionaries.js",
-    "build": "npm run build:data && next build",
+    "build": "node scripts/scan-react-dom-legacy.js || echo scan-continued && npm run build:data && next build",
     "start": "next start",
     "lint": "next lint",
     "icons:generate": "node scripts/generate-favicons.mjs",

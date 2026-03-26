@@ -17,8 +17,28 @@ export default async function ProvidersPage() {
   const locale = (h.get("x-claw-locale") ?? DEFAULT_LOCALE) as Locale
   const prefix = `/${locale}`
   const providers = allProviders()
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: [
+      {
+        "@type": "Question",
+        name: "Warum Provider-Hubs?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "ClawGuru bündelt Runbooks und Fixes pro Provider (AWS, Hetzner, Cloudflare etc.), damit Teams schneller von Frage zu exakter Lösung gelangen.",
+        },
+      },
+    ],
+  }
   return (
-    <Container>
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
+      <section className="px-4 sm:px-6 lg:px-8 py-8 max-w-6xl mx-auto">
+        <h1 className="text-3xl sm:text-4xl font-black text-white">Antwort‑First: Fix‑Navigation nach Provider</h1>
+        <p className="mt-2 text-gray-300 max-w-3xl">Schneller zu passenden Runbooks: ClawGuru strukturiert Inhalte pro Plattform – mit klaren Hubs, Metriken und Deep‑Links.</p>
+      </section>
+      <Container>
       <div className="py-16 max-w-6xl mx-auto">
         <SectionTitle
           kicker="SEO Hubs"
@@ -50,5 +70,6 @@ export default async function ProvidersPage() {
         </div>
       </div>
     </Container>
+    </>
   )
 }

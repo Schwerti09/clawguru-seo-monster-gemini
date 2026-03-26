@@ -278,8 +278,28 @@ export default function OraclePage({ params, dict }: { params: { lang: string };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: [
+      {
+        "@type": "Question",
+        name: "Wofür ist das Oracle?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Das Oracle priorisiert Risiken und empfiehlt Runbooks anhand deines Stacks – mit visueller Evidenz und exportierbaren Ergebnissen.",
+        },
+      },
+    ],
+  }
+
   return (
     <>
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
+    <section className="px-4 sm:px-6 lg:px-8 py-8 max-w-6xl mx-auto">
+      <h1 className="text-3xl sm:text-4xl font-black text-white">Antwort‑First: Priorisierte Risiken für deinen Stack</h1>
+      <p className="mt-2 text-gray-300 max-w-3xl">Wähle Stacks oder eine CVE – das Oracle liefert Radar, Score und Runbooks. Perfekt für Audits, Fix‑Planung und Reports.</p>
+    </section>
     <main className="px-4 sm:px-6 lg:px-8 py-8 max-w-6xl mx-auto">
       <motion.header
         initial={reduce ? undefined : { opacity: 0, y: 12 }}

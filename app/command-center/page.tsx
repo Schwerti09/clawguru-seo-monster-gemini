@@ -52,6 +52,10 @@ export default function CommandCenterPage() {
 
   return (
     <div className="py-10">
+      <section className="px-4 sm:px-6 lg:px-8 py-4 max-w-6xl mx-auto">
+        <h1 className="text-3xl sm:text-4xl font-black text-white">Antwort‑First: Mission Control für Ops‑Intelligence</h1>
+        <p className="mt-2 text-gray-300 max-w-3xl">Wechsle zwischen Summon, Oracle, Neuro und Mycelium – ein UI, vier Perspektiven, ein Ziel: schneller von Problem zu Fix.</p>
+      </section>
       <Container>
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center justify-between mb-6">

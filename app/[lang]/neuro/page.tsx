@@ -222,6 +222,25 @@ export default function NeuroPage({ dict }: { dict?: DictShape }) {
 
   return (
     <>
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: [
+            {
+              "@type": "Question",
+              name: "Was ist Neuro?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "Neuro analysiert deinen Stack und liefert eine priorisierte Liste an Runbooks plus Ausführungsplan – Antwort‑first, zitierfähig und operativ.",
+              },
+            },
+          ],
+        }),
+      }}
+    />
     <main className="px-4 sm:px-6 lg:px-8 py-8 max-w-6xl mx-auto">
       <motion.header
         initial={reduce ? undefined : { opacity: 0, y: 12 }}
@@ -232,6 +251,9 @@ export default function NeuroPage({ dict }: { dict?: DictShape }) {
       >
         <h1 className="text-3xl sm:text-4xl font-black text-white drop-shadow-[0_0_22px_rgba(0,255,157,0.35)]">{t.title}</h1>
         <p className="text-gray-300 mt-2">{t.subtitle}</p>
+        <div className="mt-3 text-sm text-gray-400">
+          <span className="text-white font-semibold">Antwort‑First:</span> Sofort verwertbare Empfehlungen mit Begründung und Verifikation. <span className="text-cyan-300 font-semibold">4,2 Millionen Runbooks</span> als Wissensbasis.
+        </div>
       </motion.header>
 
       <section className="rounded-2xl border border-white/10 bg-black/40 p-4 sm:p-5 backdrop-blur">

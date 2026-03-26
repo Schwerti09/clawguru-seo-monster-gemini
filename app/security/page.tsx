@@ -10,9 +10,28 @@ export const metadata = {
 }
 
 export default function Security() {
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: [
+      {
+        "@type": "Question",
+        name: "Was ist der Security Hub?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Antwort‑first Einstieg in CVE‑Klassen, Misconfigs und Notfall‑Runbooks – priorisiert, zitierfähig, operativ.",
+        },
+      },
+    ],
+  }
   return (
     <Container>
       <div className="py-16 max-w-4xl mx-auto">
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
+        <section className="mb-6">
+          <h1 className="text-3xl sm:text-4xl font-black text-white">Antwort‑First: Handeln statt Scrollen</h1>
+          <p className="mt-2 text-gray-300">ClawGuru führt dich von Risiko zu Runbook – mit visueller Evidenz, 4,2 Mio. vernetzten Runbooks und sofort einsatzfähigen Playbooks.</p>
+        </section>
         <SectionTitle
           kicker="Hub"
           title="Security"

@@ -87,6 +87,15 @@ export default function Home({ dict, locale }: HomeProps) {
 
       <HeroSection prefix={prefix} locale={locale} />
 
+      <section className="py-8" style={{ background: "var(--surface-0)" }}>
+        <Container>
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="text-2xl sm:text-3xl font-black text-white">Antwort‑First: Von Risiko zu Runbook in Minuten</h2>
+            <p className="mt-2 text-gray-300">ClawGuru liefert priorisierte Antworten mit Evidenz – gestützt von <span className="text-cyan-300 font-semibold">4,2 Millionen vernetzten Runbooks</span>. Marktführer‑Qualität in Sicherheit und Ausführung.</p>
+          </div>
+        </Container>
+      </section>
+
       <section id="live-previews" className="py-14" style={{ background: "var(--surface-0)" }}>
         <Container>
           <div className="max-w-3xl mx-auto text-center mb-8">

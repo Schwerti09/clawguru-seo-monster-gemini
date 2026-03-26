@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { ruleBasedCopilot } from "@/lib/copilot";
+import { ensureReadyWithin, search as searchRunbooks } from "@/lib/runbooks-index";
 
 type CopilotAction = { label: string; href: string };
 type CopilotResponse = {
@@ -98,6 +99,102 @@ function buildCopilotPrompt(userMessage: string): string {
   ].join("\n");
 }
 
+function buildMermaidFlow(problem: string, topTitles: string[]): string {
+  const safe = (s: string) => s.replace(/[^a-z0-9\- ]/gi, "").slice(0, 40);
+  const p = safe(problem) || "Problem";
+  const t1 = safe(topTitles[0] || "Runbook A");
+  const t2 = safe(topTitles[1] || "Runbook B");
+  const t3 = safe(topTitles[2] || "Runbook C");
+  return [
+    "```mermaid",
+    "flowchart LR",
+    `  A[${p}] --> B{Assess}`,
+    `  B --> C[${t1}]`,
+    `  B --> D[${t2}]`,
+    `  B --> E[${t3}]`,
+    "  C --> F[Verify]",
+    "  D --> F[Verify]",
+    "  E --> F[Verify]",
+    "```",
+  ].join("\n");
+}
+
+function toKebab(s: string): string {
+  return String(s || "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 120);
+}
+
+async function enrichWithRunbooks(message: string, base: CopilotResponse): Promise<CopilotResponse> {
+  try {
+    await ensureReadyWithin(1200);
+    const res = searchRunbooks(message, [], 1, 6);
+    const items = Array.isArray(res?.items) ? res.items.slice(0, 6) : [];
+    const top = items[0];
+
+    const clawAvg = items.length
+      ? Math.round(
+          Math.max(
+            0,
+            Math.min(
+              100,
+              items.reduce((s: number, r: any) => s + (r.clawScore ?? 60), 0) / items.length,
+            ),
+          ),
+        )
+      : 0;
+
+    const recLines = items.map((r: any) => `• ${r.title} — /runbook/${encodeURIComponent(r.slug)}`);
+    const mermaid = buildMermaidFlow(message, items.map((r: any) => r.title));
+
+    const explain = base.reply || "";
+    const richReply = [
+      `Problem: ${message}`,
+      "\nErklärung:",
+      explain,
+      "\nRunbook-Empfehlungen (aus 4,2 Millionen):",
+      recLines.join("\n"),
+      "\nNext Steps:",
+      "1) Check Exposure & Logs",
+      "2) Wende das passende Runbook an",
+      "3) Verifiziere mit /check und Monitoring",
+      `\nClawScore: ~${clawAvg} · Vertrauen: ${base.confidence}`,
+      "\nDiagramm:",
+      mermaid,
+      "\nDeep Links:",
+      `• Oracle: /oracle?q=${encodeURIComponent(message)}`,
+      `• Summon: /summon?q=${encodeURIComponent(top?.title || message)}`,
+      "• Mycelium: /mycelium",
+      "• Neuro: /neuro",
+    ].join("\n");
+
+    const actions: CopilotAction[] = [
+      { label: "Runbooks", href: "/runbooks" },
+      { label: "Oracle Vorhersage", href: `/oracle?q=${encodeURIComponent(message)}` },
+      { label: "Summon Suche", href: `/summon?q=${encodeURIComponent(top?.title || message)}` },
+      { label: "Mycelium Graph", href: "/mycelium" },
+      { label: "Neuro Playbooks", href: "/neuro" },
+    ];
+    if (top?.slug) actions.unshift({ label: `Top Runbook: ${top.title}`, href: `/runbook/${encodeURIComponent(toKebab(top.slug))}` });
+
+    return {
+      ...base,
+      reply: richReply,
+      actions,
+      followups: base.followups?.length ? base.followups : [
+        "Zeig mir ein konkretes Runbook",
+        "Wie verifiziere ich den Fix?",
+        "Gibt es Risiken/Tradeoffs?",
+        "Wie automatisiere ich das mit Neuro?",
+      ],
+    };
+  } catch {
+    return base;
+  }
+}
+
 export async function POST(req: NextRequest) {
   try {
     const { message } = (await req.json().catch(() => ({}))) as { message?: string };
@@ -120,7 +217,8 @@ export async function POST(req: NextRequest) {
     const llmText = await geminiGenerate(buildCopilotPrompt(msg));
     const parsed = llmText ? extractJson(llmText) : null;
 
-    const out = parsed ? coerceCopilot(parsed, rb) : rb;
+    const base = parsed ? coerceCopilot(parsed, rb) : rb;
+    const out = await enrichWithRunbooks(msg, base);
     return NextResponse.json(out);
   } catch {
     return NextResponse.json(ruleBasedCopilot(""), { status: 200 });

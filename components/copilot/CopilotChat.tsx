@@ -51,10 +51,43 @@ export default function CopilotChat() {
     endRef.current?.scrollIntoView({ behavior: "smooth" })
   }, [msgs.length, loading])
 
+  // Persist/restore session per-locale
   useEffect(() => {
+    try {
+      const raw = localStorage.getItem(`cg_copilot_chat_${locale}`)
+      if (raw) {
+        const parsed = JSON.parse(raw) as { msgs?: ChatMsg[]; followups?: string[] }
+        if (Array.isArray(parsed?.msgs) && parsed.msgs.length > 0) setMsgs(parsed.msgs)
+        if (Array.isArray(parsed?.followups)) setFollowups(parsed.followups)
+        return
+      }
+    } catch {}
     setMsgs(startMsgs)
     setFollowups(initialFollowups)
-  }, [locale, startMsgs, initialFollowups])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [locale])
+
+  useEffect(() => {
+    try {
+      const payload = JSON.stringify({ msgs, followups })
+      localStorage.setItem(`cg_copilot_chat_${locale}`, payload)
+    } catch {}
+  }, [msgs, followups, locale])
+
+  // Voice integration: listen for custom event dispatched by VoiceCopilot
+  useEffect(() => {
+    function onVoice(ev: Event) {
+      const anyEv = ev as unknown as { detail?: { text?: string } }
+      const text = anyEv?.detail?.text || ""
+      if (typeof text === "string" && text.trim()) {
+        setInput(text)
+        void send(text)
+      }
+    }
+    window.addEventListener("copilot:voice", onVoice as EventListener)
+    return () => window.removeEventListener("copilot:voice", onVoice as EventListener)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   async function send(text: string) {
     const txt = text.trim()

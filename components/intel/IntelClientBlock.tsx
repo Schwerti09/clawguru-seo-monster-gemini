@@ -1,8 +1,10 @@
 "use client"
 
 import React from "react"
-import PredictiveRadar from "@/components/intel/PredictiveRadar"
-import MyceliumPreview from "@/components/intel/MyceliumPreview"
+import dynamic from "next/dynamic"
+
+const PredictiveRadar = dynamic(() => import("@/components/intel/PredictiveRadar"), { ssr: false })
+const MyceliumPreview = dynamic(() => import("@/components/intel/MyceliumPreview"), { ssr: false })
 
 type IntelDict = {
   predictive_header?: string

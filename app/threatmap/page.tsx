@@ -28,7 +28,30 @@ export default function ThreatMapPage() {
 
   return (
     <Container>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: [
+              {
+                "@type": "Question",
+                name: "Was ist die ThreatMap?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "Antwort‑first Übersicht über exponierte Instanzen weltweit – priorisierte Regionen, direkte Runbook‑Links und Live‑Updates.",
+                },
+              },
+            ],
+          }),
+        }}
+      />
       <div className="py-12 max-w-6xl mx-auto">
+        <section className="mb-4">
+          <h1 className="text-3xl sm:text-4xl font-black text-white">Antwort‑First: Globale Risiken in Minuten verstehen</h1>
+          <p className="mt-2 text-gray-300">ClawGuru zeigt dir, wo es brennt – mit <span className="text-cyan-300 font-semibold">4,2 Millionen Runbooks</span> als Gegenmaßnahme. Klicke eine Region und starte direkt ins passende Runbook.</p>
+        </section>
         {/* WORLD BEAST UPGRADE: Header */}
         <div className="mb-2 text-xs uppercase tracking-widest" style={{ color: "#ff3b5c" }}>
           ▸ Live Intelligence · Updated every 5 min

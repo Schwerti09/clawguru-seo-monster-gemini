@@ -15,6 +15,29 @@ export default function CheckPage() {
   return (
     <Container>
       <div className="py-16">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              mainEntity: [
+                {
+                  "@type": "Question",
+                  name: "Was ist der Security‑Check?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "Antwort‑first Check: IP/Domain rein, Score und nächste Schritte raus – direktes Runbook mit Verifikation.",
+                  },
+                },
+              ],
+            }),
+          }}
+        />
+        <section className="mb-6">
+          <h1 className="text-3xl sm:text-4xl font-black text-white">Antwort‑First: 30‑Sekunden Risiko‑Check</h1>
+          <p className="mt-2 text-gray-300">Klare Prioritäten, direktes Runbook, <span className="text-cyan-300 font-semibold">4,2 Millionen</span> vernetzte Runbooks als Basis.</p>
+        </section>
         <SectionTitle
           kicker="LIVE"
           title="Security-Check"

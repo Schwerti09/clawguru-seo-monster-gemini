@@ -47,8 +47,10 @@ export default function MyceliumPreview({ prefix = "", dict = {} as IntelDict }:
     if (!ctx) return
     let raf = 0
     function step() {
-      const W = canvasRef.current!.width
-      const H = canvasRef.current!.height
+      const canvas = canvasRef.current
+      if (!canvas) { cancelAnimationFrame(raf); return }
+      const W = canvas.width
+      const H = canvas.height
       ctx.clearRect(0, 0, W, H)
       // physics lite
       for (let i = 0; i < nodes.length; i++) {

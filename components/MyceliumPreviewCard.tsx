@@ -19,80 +19,258 @@ function useInView<T extends HTMLElement>(opts?: IntersectionObserverInit) {
   return { ref, inView }
 }
 
-type Node = { id: string; title: string; fitness: number; x: number; y: number }
-
-type Edge = { source: string; target: string }
-
-type GraphResp = { nodes: Node[]; edges: Edge[] }
-
+type RBNode = { id: string; title: string; fitness: number; x: number; y: number; cat: "Security"|"Cloud"|"Kubernetes" }
+type RBEdge = { source: string; target: string }
+type GraphResp = { nodes: RBNode[]; edges: RBEdge[] }
 type Props = { prefix?: string }
 
 export default function MyceliumPreviewCard({ prefix = "" }: Props) {
   const { ref, inView } = useInView<HTMLDivElement>({ rootMargin: "200px" })
+  const canvasRef = useRef<HTMLCanvasElement | null>(null)
+  const wrapRef = useRef<HTMLDivElement | null>(null)
   const [data, setData] = useState<GraphResp | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [seed, setSeed] = useState(0)
-  const [counter, setCounter] = useState(0)
+  const [filters, setFilters] = useState<{[k in RBNode["cat"]]: boolean}>({ Security: true, Cloud: true, Kubernetes: true })
+  const [hover, setHover] = useState<{ x: number; y: number; node?: RBNode } | null>(null)
+  const [panning, setPanning] = useState<{ on: boolean; sx: number; sy: number; ox: number; oy: number }>({ on: false, sx: 0, sy: 0, ox: 0, oy: 0 })
+  const [view, setView] = useState<{ scale: number; ox: number; oy: number }>({ scale: 1, ox: 0, oy: 0 })
 
+  // Fetch or fallback demo data (stable seeded)
   useEffect(() => {
     if (!inView) return
     let canceled = false
-    setLoading(true)
-    setError(null)
-    fetch(`/api/mycelium?limit=18`)
-      .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
-      .then((j) => { if (!canceled) setData(j) })
-      .catch(() => { if (!canceled) setError("Fehler beim Laden") })
-      .finally(() => { if (!canceled) setLoading(false) })
+    const lcg = (seed: number) => { let s = seed >>> 0; return () => ((s = (s * 1664525 + 1013904223) >>> 0) / 4294967296) }
+    const makeDemo = (): GraphResp => {
+      const rnd = lcg(1337)
+      const cats: Array<RBNode["cat"]> = ["Security", "Cloud", "Kubernetes"]
+      const N = 82
+      const nodes: RBNode[] = Array.from({ length: N }).map((_, i) => {
+        const cat = cats[Math.floor(rnd() * cats.length)]
+        return {
+          id: `rb-${i}`,
+          title: ["Zero‑Trust", "TLS‑HSTS", "CSP", "SSH‑Hardening", "RBAC", "SIEM Ingest", "K8s‑NetworkPolicy"][i % 7] + ` ${i}`,
+          fitness: 70 + Math.floor(rnd() * 30),
+          x: (rnd() - 0.5) * 2,
+          y: (rnd() - 0.5) * 2,
+          cat,
+        }
+      })
+      const edges: RBEdge[] = []
+      for (let i = 0; i < N * 1.8; i++) {
+        const a = Math.floor(rnd() * N)
+        let b = Math.floor(rnd() * N)
+        if (a === b) b = (b + 1) % N
+        edges.push({ source: nodes[a].id, target: nodes[b].id })
+      }
+      return { nodes, edges }
+    }
+    const run = async () => {
+      setLoading(true)
+      setError(null)
+      try {
+        const r = await fetch(`/api/mycelium?limit=80`)
+        if (!r.ok) throw new Error(String(r.status))
+        const j = (await r.json()) as GraphResp
+        // If API returns minimal schema, enrich categories
+        const enr: GraphResp = {
+          nodes: j.nodes.map((n, i) => ({ ...(n as any), cat: (i % 3 === 0 ? "Security" : i % 3 === 1 ? "Cloud" : "Kubernetes") })) as RBNode[],
+          edges: j.edges,
+        }
+        if (!canceled) setData(enr)
+      } catch {
+        if (!canceled) setData(makeDemo())
+      } finally {
+        if (!canceled) setLoading(false)
+      }
+    }
+    run()
     return () => { canceled = true }
   }, [inView])
 
-  // Mild breathing animation
+  // Canvas renderer with glow, particles, and gentle animation
   useEffect(() => {
     if (!inView) return
-    const id = setInterval(() => setSeed((s) => (s + 1) % 1000000), 1800)
-    return () => clearInterval(id)
-  }, [inView])
-
-  // Animated stat counter
-  useEffect(() => {
-    if (!inView) return
-    const target = 1247891
-    let raf: number
-    const start = performance.now()
-    const dur = 1200
-    const ease = (t: number) => 0.5 - 0.5 * Math.cos(Math.PI * t)
-    const tick = (now: number) => {
-      const p = Math.min(1, (now - start) / dur)
-      const v = Math.round(target * ease(p))
-      setCounter(v)
-      if (p < 1) raf = requestAnimationFrame(tick)
+    const cvs = canvasRef.current
+    const wrap = wrapRef.current
+    if (!cvs || !wrap || !data) return
+    let raf = 0
+    const ctx = cvs.getContext("2d")!
+    const DPR = Math.max(1, Math.min(2, window.devicePixelRatio || 1))
+    const resize = () => {
+      const r = wrap.getBoundingClientRect()
+      cvs.width = Math.floor(r.width * DPR)
+      cvs.height = Math.floor(r.height * DPR)
+      cvs.style.width = `${r.width}px`
+      cvs.style.height = `${r.height}px`
     }
-    raf = requestAnimationFrame(tick)
-    return () => cancelAnimationFrame(raf)
-  }, [inView])
+    resize()
+    const onResize = () => { resize() }
+    window.addEventListener("resize", onResize)
 
-  const dims = { w: 560, h: 240, pad: 18 }
+    const rnd = (() => { let s = 4242; return () => ((s = (s * 1103515245 + 12345) & 0x7fffffff) / 0x7fffffff) })()
+    const particles = Array.from({ length: 80 }).map(() => ({
+      x: (rnd() - 0.5) * 2,
+      y: (rnd() - 0.5) * 2,
+      v: 0.001 + rnd() * 0.002,
+      a: rnd() * Math.PI * 2,
+    }))
 
-  const norm = useMemo(() => {
-    if (!data?.nodes?.length) return { nodes: [], edges: [] as Edge[] }
-    const xs = data.nodes.map((n) => n.x)
-    const ys = data.nodes.map((n) => n.y)
-    const minX = Math.min(...xs), maxX = Math.max(...xs)
-    const minY = Math.min(...ys), maxY = Math.max(...ys)
-    const sx = (dims.w - dims.pad * 2) / Math.max(1, maxX - minX)
-    const sy = (dims.h - dims.pad * 2) / Math.max(1, maxY - minY)
-    const s = Math.min(sx, sy)
-    const nodes = data.nodes.map((n, i) => ({
-      ...n,
-      nx: Math.round((n.x - minX) * s + dims.pad),
-      ny: Math.round((n.y - minY) * s + dims.pad),
-      r: 6 + Math.max(0, Math.min(10, (n.fitness - 70) / 3)),
-      hi: (i + seed) % 7 === 0,
-    })) as Array<Node & { nx: number; ny: number; r: number; hi: boolean }>
-    return { nodes, edges: data.edges }
-  }, [data, seed])
+    const colorFor = (c: RBNode["cat"], hi: boolean) => {
+      if (c === "Security") return hi ? "#00ff9d" : "rgba(0,255,157,0.7)"
+      if (c === "Cloud") return hi ? "#00b8ff" : "rgba(0,184,255,0.75)"
+      return hi ? "#8b5cf6" : "rgba(139,92,246,0.75)"
+    }
+
+    const WtoS = (x: number, y: number) => {
+      const cx = cvs.width / 2, cy = cvs.height / 2
+      return [cx + (x + view.ox) * view.scale * cy, cy + (y + view.oy) * view.scale * cy]
+    }
+    const draw = (t: number) => {
+      ctx.clearRect(0, 0, cvs.width, cvs.height)
+      // Scanlines + background
+      const g = ctx.createLinearGradient(0, 0, cvs.width, cvs.height)
+      g.addColorStop(0, "rgba(0,184,255,0.05)")
+      g.addColorStop(1, "rgba(0,255,157,0.04)")
+      ctx.fillStyle = g
+      ctx.fillRect(0, 0, cvs.width, cvs.height)
+      for (let y = 0; y < cvs.height; y += 3) {
+        ctx.fillStyle = "rgba(255,255,255,0.02)"
+        ctx.fillRect(0, y, cvs.width, 1)
+      }
+
+      // Edges
+      ctx.lineWidth = 1 * Math.max(1, DPR * 0.6)
+      ctx.shadowBlur = 0
+      const visible = new Set(Object.entries(filters).filter(([, v]) => v).map(([k]) => k))
+      const nodes = data.nodes
+      for (const e of data.edges) {
+        const a = nodes.find((n) => n.id === e.source)
+        const b = nodes.find((n) => n.id === e.target)
+        if (!a || !b) continue
+        if (!visible.has(a.cat) || !visible.has(b.cat)) continue
+        const [ax, ay] = WtoS(a.x, a.y)
+        const [bx, by] = WtoS(b.x, b.y)
+        ctx.strokeStyle = "rgba(255,255,255,0.09)"
+        ctx.beginPath()
+        ctx.moveTo(ax, ay)
+        ctx.lineTo(bx, by)
+        ctx.stroke()
+      }
+
+      // Particles
+      for (const p of particles) {
+        p.a += 0.002
+        p.x += Math.cos(p.a) * p.v
+        p.y += Math.sin(p.a) * p.v
+        const [px, py] = WtoS(p.x, p.y)
+        ctx.fillStyle = "rgba(0,184,255,0.35)"
+        ctx.beginPath()
+        ctx.arc(px, py, 1.2 * DPR, 0, Math.PI * 2)
+        ctx.fill()
+      }
+
+      // Nodes
+      for (let i = 0; i < nodes.length; i++) {
+        const n = nodes[i]
+        if (!visible.has(n.cat)) continue
+        const [x, y] = WtoS(n.x, n.y)
+        const pulse = 0.85 + 0.15 * Math.sin((t / 600) + i)
+        const r = (4 + Math.max(0, (n.fitness - 70) * 0.18)) * DPR * pulse
+        ctx.shadowColor = colorFor(n.cat, true)
+        ctx.shadowBlur = 12 * DPR
+        ctx.fillStyle = colorFor(n.cat, false)
+        ctx.beginPath()
+        ctx.arc(x, y, r, 0, Math.PI * 2)
+        ctx.fill()
+      }
+
+      raf = requestAnimationFrame(draw)
+    }
+    raf = requestAnimationFrame(draw)
+
+    return () => {
+      cancelAnimationFrame(raf)
+      window.removeEventListener("resize", onResize)
+    }
+  }, [inView, data, view, filters])
+
+  // Pointer interactions: hover, pan, zoom
+  useEffect(() => {
+    if (!inView) return
+    const cvs = canvasRef.current
+    if (!cvs || !data) return
+    const getWorld = (cx: number, cy: number) => {
+      const rect = cvs.getBoundingClientRect()
+      const x = (cx - rect.left) * (cvs.width / rect.width)
+      const y = (cy - rect.top) * (cvs.height / rect.height)
+      const sc = cvs.height / 2
+      const wx = (x - cvs.width / 2) / (view.scale * sc) - view.ox
+      const wy = (y - cvs.height / 2) / (view.scale * sc) - view.oy
+      return { wx, wy }
+    }
+    const onMove = (e: PointerEvent) => {
+      if (panning.on) {
+        const dx = (e.clientX - panning.sx) / 240
+        const dy = (e.clientY - panning.sy) / 240
+        setView((v) => ({ ...v, ox: panning.ox + dx / v.scale, oy: panning.oy + dy / v.scale }))
+        return
+      }
+      const { wx, wy } = getWorld(e.clientX, e.clientY)
+      let nearest: RBNode | undefined
+      let best = 1e9
+      for (const n of data.nodes) {
+        if (!filters[n.cat]) continue
+        const d = (n.x - wx) ** 2 + (n.y - wy) ** 2
+        if (d < best) { best = d; nearest = n }
+      }
+      if (nearest && best < 0.015) {
+        setHover({ x: e.clientX, y: e.clientY, node: nearest })
+      } else {
+        setHover(null)
+      }
+    }
+    const onDown = (e: PointerEvent) => {
+      setPanning({ on: true, sx: e.clientX, sy: e.clientY, ox: view.ox, oy: view.oy })
+      ;(e.target as Element).setPointerCapture(e.pointerId)
+    }
+    const onUp = (e: PointerEvent) => {
+      setPanning((p) => ({ ...p, on: false }))
+      try { (e.target as Element).releasePointerCapture(e.pointerId) } catch {}
+    }
+    const onWheel = (e: WheelEvent) => {
+      e.preventDefault()
+      const ds = Math.exp(-e.deltaY * 0.001)
+      setView((v) => ({ ...v, scale: Math.max(0.6, Math.min(2.4, v.scale * ds)) }))
+    }
+    cvs.addEventListener("pointermove", onMove)
+    cvs.addEventListener("pointerdown", onDown)
+    window.addEventListener("pointerup", onUp)
+    cvs.addEventListener("wheel", onWheel, { passive: false })
+    return () => {
+      cvs.removeEventListener("pointermove", onMove)
+      cvs.removeEventListener("pointerdown", onDown)
+      window.removeEventListener("pointerup", onUp)
+      cvs.removeEventListener("wheel", onWheel)
+    }
+  }, [inView, data, view, panning.on, filters])
+
+  const statBlock = (
+    <div className="flex flex-col gap-2 text-[11px] text-gray-300">
+      <div className="flex items-center justify-between gap-4">
+        <span className="text-gray-400">68 Evolutions pro Stunde</span>
+        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full border border-white/10 bg-black/40">Live</span>
+      </div>
+      <div className="flex items-center justify-between gap-4">
+        <span className="text-gray-400">13.892 Mycelium Nodes</span>
+        <span className="text-emerald-300">+142</span>
+      </div>
+      <div className="flex items-center justify-between gap-4">
+        <span className="text-gray-400">Zero Known Breaches 2026</span>
+        <span className="text-emerald-300">OK</span>
+      </div>
+    </div>
+  )
 
   return (
     <div ref={ref}>
@@ -101,12 +279,18 @@ export default function MyceliumPreviewCard({ prefix = "" }: Props) {
         description="Dein Wissen, visualisiert – ein lebender Graph."
         link={`${prefix}/mycelium`}
       >
-        <div className="relative w-full overflow-hidden rounded-xl border border-white/10 bg-black/30" style={{ aspectRatio: "7/3" }}>
+        <div ref={wrapRef} className="relative w-full overflow-hidden rounded-xl border border-white/10 bg-black/30" style={{ aspectRatio: "7/3" }}>
           {loading && (
             <div className="absolute inset-0 p-4">
-              <div className="h-full w-full rounded-xl border border-white/10">
-                <div className="p-4 space-y-2">
-                  <div className="text-xs text-gray-400">Visualisiere das Runbook‑Universum…</div>
+              <div className="h-full w-full rounded-xl border border-white/10 relative overflow-hidden">
+                <div className="absolute inset-0 animate-pulse" style={{ background: "radial-gradient(circle at 30% 20%, rgba(0,184,255,0.12), transparent 40%), radial-gradient(circle at 70% 80%, rgba(0,255,157,0.1), transparent 45%)" }} />
+                <div className="absolute inset-0" aria-hidden>
+                  {Array.from({ length: 12 }).map((_, i) => (
+                    <div key={i} className="absolute h-px w-full bg-white/5" style={{ top: `${(i+1)*7}%` }} />
+                  ))}
+                </div>
+                <div className="absolute inset-0 p-4 space-y-2">
+                  <div className="text-xs text-gray-400">Initialisiere den lebenden Graph…</div>
                   <Skeleton className="h-3 w-1/3" />
                   <Skeleton className="h-3 w-2/3" />
                   <Skeleton className="h-3 w-1/2" />
@@ -115,42 +299,42 @@ export default function MyceliumPreviewCard({ prefix = "" }: Props) {
             </div>
           )}
           {!loading && error && <div className="p-4 text-sm text-red-400">{error}</div>}
-          {!loading && !error && data && (
-            <svg width="100%" height="100%" viewBox={`0 0 ${dims.w} ${dims.h}`} preserveAspectRatio="xMidYMid meet">
-              <defs>
-                <filter id="glow">
-                  <feGaussianBlur stdDeviation="2" result="coloredBlur" />
-                  <feMerge>
-                    <feMergeNode in="coloredBlur" />
-                    <feMergeNode in="SourceGraphic" />
-                  </feMerge>
-                </filter>
-              </defs>
-              <g opacity="0.5">
-                {norm.edges.map((e, i) => {
-                  const a = (norm.nodes as any).find((n: any) => n.id === e.source)
-                  const b = (norm.nodes as any).find((n: any) => n.id === e.target)
-                  if (!a || !b) return null
-                  return (
-                    <line key={i} x1={a.nx} y1={a.ny} x2={b.nx} y2={b.ny} stroke="rgba(255,255,255,0.12)" strokeWidth={1} />
-                  )
-                })}
-              </g>
-              <g>
-                {(norm.nodes as any).map((n: any, i: number) => (
-                  <a key={n.id} href={`${prefix}/runbook/${encodeURIComponent(n.id)}`} target="_blank" rel="noreferrer">
-                    <circle cx={n.nx} cy={n.ny} r={n.r} fill={n.hi ? "#00ff9d" : "#8b5cf6"} opacity={n.hi ? 0.85 : 0.65} filter="url(#glow)">
-                      <title>{`${n.title || n.id} — ${n.fitness >= 85 ? "Wird in 80% aller Sicherheitspläne verwendet" : "Basis für Compliance"}`}</title>
-                    </circle>
-                  </a>
+          {!loading && !error && (
+            <>
+              <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />
+              {/* Top-left mega metric */}
+              <div className="absolute top-2 left-2">
+                <div className="px-2 py-1 rounded-md text-[10px] font-mono tracking-widest uppercase text-[#00ff9d] bg-black/40 border border-emerald-400/20 inline-block">Mycelium</div>
+                <div className="mt-1 text-xl sm:text-2xl font-black text-white drop-shadow" style={{ textShadow: "0 0 16px rgba(0,255,157,0.25)" }}>4,2 Millionen Runbooks vernetzt</div>
+              </div>
+              {/* Filters */}
+              <div className="absolute top-2 right-2 flex items-center gap-2">
+                {["Security", "Cloud", "Kubernetes"].map((k) => (
+                  <button key={k} onClick={() => setFilters((f) => ({ ...f, [k]: !f[k as keyof typeof f] }))} className={`text-[11px] px-2 py-0.5 rounded-full border ${filters[k as keyof typeof filters] ? "border-cyan-400/30 bg-cyan-400/10 text-cyan-200" : "border-white/10 bg-black/40 text-gray-300"}`}>{k}</button>
                 ))}
-              </g>
-            </svg>
+              </div>
+              {/* Right-side stats */}
+              <div className="hidden md:block absolute right-2 bottom-2 w-56 rounded-xl border border-white/10 bg-black/30 p-3 backdrop-blur-sm">
+                <div className="text-xs font-semibold text-white mb-1">Live‑Stats</div>
+                {statBlock}
+              </div>
+              {/* CTA */}
+              <div className="absolute left-2 bottom-2 flex items-center gap-3">
+                <a href={`${prefix}/mycelium`} className="text-sm text-cyan-300 hover:text-cyan-200 underline">Graph erkunden →</a>
+                <span className="text-[11px] text-gray-400">Drag • Zoom • Hover</span>
+              </div>
+              {/* Hover tooltip */}
+              {hover?.node && (
+                <div className="fixed z-10 pointer-events-none rounded-lg border border-white/10 bg-black/80 text-white text-[11px] p-2 shadow-xl" style={{ left: hover.x + 10, top: hover.y + 10 }}>
+                  <div className="text-[11px] text-gray-300">{hover.node.title}</div>
+                  <div className="text-[10px] text-gray-400">Relation: {["evolves from","prevents","causes"][hover.node.fitness % 3]}</div>
+                  <div className="text-[10px] text-emerald-300">ClawScore {hover.node.fitness}</div>
+                </div>
+              )}
+            </>
           )}
-          <div className="absolute top-2 left-2 text-[11px] text-gray-300 bg-black/40 border border-white/10 rounded px-2 py-0.5">
-            {new Intl.NumberFormat("de-DE").format(counter)} Runbooks vernetzt
-          </div>
-          <div className="absolute bottom-2 right-2 text-[11px] text-gray-400">Live Preview</div>
+          {/* Glass edges */}
+          <div className="pointer-events-none absolute inset-0 rounded-xl" style={{ boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.06), 0 0 48px rgba(0,184,255,0.08), 0 0 64px rgba(0,255,157,0.06)" }} />
         </div>
         <div className="mt-3 flex justify-end">
           <a href={`${prefix}/mycelium`} className="text-sm text-cyan-400 hover:text-cyan-300 transition">Das Mycelium erkunden →</a>

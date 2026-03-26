@@ -6,6 +6,9 @@ const nextConfig = {
   compress: true,
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },
+  generateBuildId: async () => {
+    return `${Date.now()}`
+  },
   images: {
     formats: ["image/avif", "image/webp"],
     deviceSizes: [640, 750, 828, 1080, 1200],
@@ -13,7 +16,25 @@ const nextConfig = {
   async headers() {
     return [
       {
-        source: "/:path*",
+        source: "/_next/static/:path*",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
+        ],
+      },
+      {
+        source: "/_next/image",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
+        ],
+      },
+      {
+        source: "/fonts/:path*",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
+        ],
+      },
+      {
+        source: "/images/:path*",
         headers: [
           { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
         ],

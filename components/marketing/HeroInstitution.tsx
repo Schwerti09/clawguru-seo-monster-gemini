@@ -24,8 +24,12 @@ export default function HeroInstitution({ dict }: HeroInstitutionProps) {
 
     async function checkAccess() {
       try {
-        const res = await fetch("/api/auth/me", { cache: "no-store" })
-        if (!cancelled) setHasAccess(res.ok)
+        const res = await fetch("/api/auth/tier", { cache: "no-store" })
+        const j = await res.json().catch(() => null)
+        if (!cancelled) {
+          const t = (j?.tier as string) || "free"
+          setHasAccess(t === "daypass" || t === "pro" || t === "enterprise")
+        }
       } catch {
         if (!cancelled) setHasAccess(false)
       }

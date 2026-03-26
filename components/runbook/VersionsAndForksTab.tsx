@@ -149,11 +149,11 @@ export default function VersionsAndForksTab({ slug }: Props) {
   const [mrMsg, setMrMsg] = useState<string | null>(null)
   const [mrLoading, setMrLoading] = useState(false)
 
-  // Fetch session
+  // Fetch session (tier endpoint avoids 401 noise when logged out)
   useEffect(() => {
-    fetch("/api/auth/me")
-      .then((r) => r.json())
-      .then((d) => { if (d.authenticated) setUserEmail(d.email) })
+    fetch("/api/auth/tier", { cache: "no-store" })
+      .then((r) => r.json().catch(() => null))
+      .then((d) => { if (d?.email) setUserEmail(d.email as string) })
       .catch(() => {})
   }, [])
 

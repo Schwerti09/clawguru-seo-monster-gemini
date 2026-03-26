@@ -351,10 +351,10 @@ function AccountButton() {
   const [email, setEmail] = useState<string | null>(null)
 
   useEffect(() => {
-    // Lightweight check: ask the session endpoint
-    fetch("/api/auth/me")
+    // Lightweight check: ask the tier endpoint (avoids 401 noise when logged out)
+    fetch("/api/auth/tier", { cache: "no-store" })
       .then((r) => (r.ok ? r.json() : null))
-      .then((d) => { if (d?.email) setEmail(d.email) })
+      .then((d) => { if (d?.email) setEmail(d.email as string) })
       .catch(() => {})
   }, [])
 

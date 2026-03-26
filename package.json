@@ -25,8 +25,8 @@
     "googleapis": "^171.4.0",
     "lucide-react": "^0.577.0",
     "next": "^15.5.14",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
     "stripe": "^16.0.0",
     "tailwindcss": "^3.4.0",
     "three": "0.151.3",
@@ -48,7 +48,7 @@
   "overrides": {
     "glob": "^10.4.5",
     "rimraf": "^5.0.5",
-    "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
   }
 }

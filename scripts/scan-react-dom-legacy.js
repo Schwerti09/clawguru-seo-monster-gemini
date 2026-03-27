@@ -8,8 +8,10 @@ const fs = require('fs')
 const path = require('path')
 
 const ROOT = process.cwd()
+const SCAN_NODE_MODULES = process.env.SCAN_NODE_MODULES === 'true'
 const IGNORES = new Set([
-  'node_modules', '.git', '.next', '.vercel', '.netlify', '.turbo', 'dist', 'build', 'out'
+  SCAN_NODE_MODULES ? '__NO_IGNORE__' : 'node_modules',
+  '.git', '.next', '.vercel', '.netlify', '.turbo', 'dist', 'build', 'out', '_deploy'
 ])
 const EXTS = new Set(['.js', '.jsx', '.ts', '.tsx', '.mjs', '.cjs'])
 
@@ -27,6 +29,8 @@ let findings = []
 
 function scanFile(file) {
   const rel = path.relative(ROOT, file)
+  // Do not scan this script itself
+  if (rel.replace(/\\/g, '/') === 'scripts/scan-react-dom-legacy.js') return
   let data
   try { data = fs.readFileSync(file, 'utf8') } catch { return }
   const lines = data.split(/\r?\n/)

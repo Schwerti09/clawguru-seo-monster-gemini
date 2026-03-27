@@ -10,8 +10,13 @@ declare global {
   // eslint-disable-next-line no-var
   var __INTEL_RL__: Map<string, { count: number; reset: number }> | undefined
 }
-const DAILY_LIMIT = 1
+declare global {
+  // eslint-disable-next-line no-var
+  var __INTEL_CACHE__: Map<string, { body: any; until: number }> | undefined
+}
+const DAILY_LIMIT = 200
 const RL = (globalThis as any).__INTEL_RL__ || ((globalThis as any).__INTEL_RL__ = new Map())
+const CACHE = (globalThis as any).__INTEL_CACHE__ || ((globalThis as any).__INTEL_CACHE__ = new Map())
 function now() { return Date.now() }
 function getClientKey(req: NextRequest): string {
   const cookieKey = req.cookies.get("cg_uid")?.value || req.cookies.get("intel_uid")?.value || ""
@@ -196,7 +201,7 @@ export async function GET(req: NextRequest) {
     const key = getClientKey(req)
     const daily = checkDailyLimit(key)
     if (!daily.ok) {
-      return NextResponse.json(
+      const res429 = NextResponse.json(
         {
           error: "Daily free limit reached",
           code: "FREE_LIMIT",
@@ -205,6 +210,8 @@ export async function GET(req: NextRequest) {
         },
         { status: 429 },
       )
+      res429.headers.set("Retry-After", "30")
+      return res429
     }
 
     const url = new URL(req.url)
@@ -213,6 +220,14 @@ export async function GET(req: NextRequest) {
     if (op === "feed") {
       const sev = (url.searchParams.get("severity") || "").toUpperCase() as Severity
       const src = (url.searchParams.get("source") || "").toUpperCase() as Source
+      const key = `feed:${sev}:${src}`
+      const cached = CACHE.get(key)
+      const t = now()
+      if (cached && cached.until > t) {
+        const res = NextResponse.json(cached.body)
+        res.headers.set("Cache-Control", "public, s-maxage=60, stale-while-revalidate=30")
+        return res
+      }
       let items = synthesizeFeed(28)
       if (["CRITICAL", "HIGH", "MEDIUM", "LOW"].includes(sev)) items = items.filter((x) => x.severity === sev)
       if (["NVD", "EXPLOIT_DB", "CLAWGURU"].includes(src)) items = items.filter((x) => x.source === src)
@@ -223,7 +238,9 @@ export async function GET(req: NextRequest) {
         })
       )
       const withLinks = items.map((it) => ({ ...it, oracleUrl: `/oracle?cve=${encodeURIComponent(it.id)}` }))
-      const res = NextResponse.json({ items: withLinks })
+      const body = { items: withLinks }
+      CACHE.set(key, { body, until: t + 60_000 })
+      const res = NextResponse.json(body)
       res.headers.set("Cache-Control", "public, s-maxage=60, stale-while-revalidate=30")
       return res
     }
@@ -243,7 +260,14 @@ export async function GET(req: NextRequest) {
     }
 
     if (op === "preview") {
+      const key = `preview`
+      const t = now()
+      const cached = CACHE.get(key)
+      if (cached && cached.until > t) {
+        return NextResponse.json(cached.body)
+      }
       const graph = await synthesizePreview()
+      CACHE.set(key, { body: graph, until: t + 60_000 })
       return NextResponse.json(graph)
     }
 

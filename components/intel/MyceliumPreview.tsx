@@ -13,91 +13,106 @@ export default function MyceliumPreview({ prefix = "", dict = {} as IntelDict }:
   const [nodes, setNodes] = useState<Node[]>([])
   const [edges, setEdges] = useState<Edge[]>([])
   const [hover, setHover] = useState<Node | null>(null)
+  const [err, setErr] = useState<string | null>(null)
+  const nodesRef = useRef<Node[]>([])
+  const edgesRef = useRef<Edge[]>([])
+  const retryRef = useRef<number>(30000)
+  const timeoutRef = useRef<number | null>(null)
 
   useEffect(() => {
     let alive = true
-    ;(async () => {
+    async function load() {
       try {
         const r = await fetch("/api/intel?op=preview", { cache: "no-store" })
-        const j = (await r.json()) as { nodes: Array<{ id: string; title: string; slug: string; score: number }>; edges: Edge[] }
         if (!alive) return
-        const rnd = (i: number) => {
-          const t = (i * 9301 + 49297) % 233280
-          return t / 233280
+        if (r.status === 429) {
+          setErr("429")
+          const ra = Number(r.headers.get("Retry-After") || "30") * 1000 || 30000
+          const next = Math.min(Math.max(retryRef.current, ra), 300000)
+          retryRef.current = Math.min(next * 2, 300000)
+          if (timeoutRef.current) window.clearTimeout(timeoutRef.current)
+          timeoutRef.current = window.setTimeout(() => { if (alive) load() }, next)
+          return
         }
-        const ns: Node[] = j.nodes.map((n, i) => ({
-          ...n,
-          x: 40 + rnd(i) * 220,
-          y: 40 + rnd(i + 1) * 140,
-          vx: 0,
-          vy: 0,
-        }))
+        if (!r.ok) {
+          setErr(String(r.status))
+          return
+        }
+        const j = (await r.json()) as { nodes?: Array<{ id: string; title: string; slug: string; score: number }>; edges?: Edge[] }
+        const rnd = (i: number) => { const t = (i * 9301 + 49297) % 233280; return t / 233280 }
+        const srcNodes = Array.isArray(j?.nodes) ? j.nodes! : []
+        const srcEdges = Array.isArray(j?.edges) ? j.edges! : []
+        const ns: Node[] = srcNodes.map((n, i) => ({ ...n, x: 40 + rnd(i) * 220, y: 40 + rnd(i + 1) * 140, vx: 0, vy: 0 }))
+        setErr(null)
         setNodes(ns)
-        setEdges(j.edges)
+        setEdges(srcEdges)
+        nodesRef.current = ns
+        edgesRef.current = srcEdges
+        retryRef.current = 30000
       } catch {
-        // ignore
+        setErr("load")
       }
-    })()
-    return () => { alive = false }
+    }
+    timeoutRef.current = window.setTimeout(() => { if (alive) load() }, 10000)
+    return () => { alive = false; if (timeoutRef.current) window.clearTimeout(timeoutRef.current) }
   }, [])
 
   useEffect(() => {
     if (!canvasRef.current || reduce) return
     const ctx = canvasRef.current.getContext("2d")
     if (!ctx) return
-    let raf = 0
-    function step() {
-      const canvas = canvasRef.current
-      if (!canvas) { cancelAnimationFrame(raf); return }
-      const W = canvas.width
-      const H = canvas.height
-      ctx.clearRect(0, 0, W, H)
-      // physics lite
-      for (let i = 0; i < nodes.length; i++) {
-        for (let j = i + 1; j < nodes.length; j++) {
-          const a = nodes[i], b = nodes[j]
-          const dx = b.x - a.x, dy = b.y - a.y
-          const d2 = Math.max(25, dx * dx + dy * dy)
-          const f = 1200 / d2
-          const fx = f * dx, fy = f * dy
-          a.vx -= fx * 0.0005; a.vy -= fy * 0.0005
-          b.vx += fx * 0.0005; b.vy += fy * 0.0005
-        }
-      }
-      for (const e of edges) {
-        const a = nodes.find((n) => n.id === e[0])!, b = nodes.find((n) => n.id === e[1])!
+    const canvas = canvasRef.current
+    const W = canvas.width
+    const H = canvas.height
+    const nodes = nodesRef.current
+    const edges = edgesRef.current
+    ctx.clearRect(0, 0, W, H)
+    for (let i = 0; i < nodes.length; i++) {
+      for (let j = i + 1; j < nodes.length; j++) {
+        const a = nodes[i], b = nodes[j]
         const dx = b.x - a.x, dy = b.y - a.y
-        const d = Math.sqrt(dx * dx + dy * dy) || 1
-        const k = (d - 80) * 0.02
-        const nx = (dx / d) * k, ny = (dy / d) * k
-        a.vx += nx; a.vy += ny
-        b.vx -= nx; b.vy -= ny
+        const d2 = Math.max(25, dx * dx + dy * dy)
+        const f = 1200 / d2
+        const fx = f * dx, fy = f * dy
+        a.vx -= fx * 0.0005; a.vy -= fy * 0.0005
+        b.vx += fx * 0.0005; b.vy += fy * 0.0005
       }
-      for (const n of nodes) {
-        n.vx *= 0.92; n.vy *= 0.92
-        n.x = Math.min(W - 20, Math.max(20, n.x + n.vx))
-        n.y = Math.min(H - 20, Math.max(20, n.y + n.vy))
-      }
-      // draw edges
-      ctx.strokeStyle = "rgba(0,184,255,0.25)"
-      ctx.lineWidth = 1
-      for (const e of edges) {
-        const a = nodes.find((n) => n.id === e[0])!, b = nodes.find((n) => n.id === e[1])!
-        ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke()
-      }
-      // draw nodes
-      for (const n of nodes) {
-        ctx.shadowBlur = 12
-        ctx.shadowColor = "rgba(0,184,255,0.4)"
-        ctx.fillStyle = "rgba(0,184,255,0.2)"
-        ctx.strokeStyle = "rgba(255,255,255,0.2)"
-        ctx.beginPath(); ctx.arc(n.x, n.y, 8, 0, Math.PI * 2); ctx.fill(); ctx.stroke()
-      }
-      raf = requestAnimationFrame(step)
     }
-    raf = requestAnimationFrame(step)
-    return () => cancelAnimationFrame(raf)
-  }, [nodes, edges, reduce])
+    for (const e of edges) {
+      const a = nodes.find((n) => n.id === e[0])
+      const b = nodes.find((n) => n.id === e[1])
+      if (!a || !b) continue
+      const dx = b.x - a.x, dy = b.y - a.y
+      const d = Math.sqrt(dx * dx + dy * dy) || 1
+      const k = (d - 80) * 0.02
+      const nx = (dx / d) * k, ny = (dy / d) * k
+      a.vx += nx; a.vy += ny
+      b.vx -= nx; b.vy -= ny
+    }
+    for (const n of nodes) {
+      n.vx *= 0.92; n.vy *= 0.92
+      n.x = Math.min(W - 20, Math.max(20, n.x + n.vx))
+      n.y = Math.min(H - 20, Math.max(20, n.y + n.vy))
+    }
+    ctx.strokeStyle = "rgba(0,184,255,0.25)"
+    ctx.lineWidth = 1
+    for (const e of edges) {
+      const a = nodes.find((n) => n.id === e[0])
+      const b = nodes.find((n) => n.id === e[1])
+      if (!a || !b) continue
+      ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke()
+    }
+    for (const n of nodes) {
+      ctx.shadowBlur = 12
+      ctx.shadowColor = "rgba(0,184,255,0.4)"
+      ctx.fillStyle = "rgba(0,184,255,0.2)"
+      ctx.strokeStyle = "rgba(255,255,255,0.2)"
+      ctx.beginPath(); ctx.arc(n.x, n.y, 8, 0, Math.PI * 2); ctx.fill(); ctx.stroke()
+    }
+  }, [reduce])
+
+  useEffect(() => { nodesRef.current = nodes }, [nodes])
+  useEffect(() => { edgesRef.current = edges }, [edges])
 
   function onPointerMove(e: React.MouseEvent<HTMLCanvasElement>) {
     const rect = e.currentTarget.getBoundingClientRect()
@@ -115,6 +130,9 @@ export default function MyceliumPreview({ prefix = "", dict = {} as IntelDict }:
     <div className="rounded-2xl border border-white/10 bg-black/40 backdrop-blur-md p-4 relative">
       <div className="text-sm font-semibold text-white mb-3">{dict.myceliumPreview_header || "Mycelium Preview"}</div>
       <div className="relative">
+        {err === "429" && (
+          <div className="mb-2 text-[11px] text-amber-300">Threat Feed wird gerade aktualisiert… (429)</div>
+        )}
         <canvas
           ref={canvasRef}
           onMouseMove={onPointerMove}

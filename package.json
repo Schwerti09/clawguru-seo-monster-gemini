@@ -11,7 +11,7 @@
     "check:sitemap-redirects": "node scripts/check-sitemap-redirects.js",
     "check:prod-smoke": "node scripts/check-production-smoke.js",
     "i18n:sync-dictionaries": "node scripts/sync-dictionaries.js",
-    "build": "node scripts/scan-react-dom-legacy.js || echo scan-continued && npm run build:data && next build",
+    "build": "node scripts/scan-react-dom-legacy.js && npm run build:data && next build",
     "start": "next start",
     "lint": "next lint",
     "icons:generate": "node scripts/generate-favicons.mjs",
@@ -24,9 +24,9 @@
     "framer-motion": "^12.35.0",
     "googleapis": "^171.4.0",
     "lucide-react": "^0.577.0",
-    "next": "^15.5.14",
-    "react": "18.3.1",
-    "react-dom": "18.3.1",
+    "next": "15.2.4",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
     "stripe": "^16.0.0",
     "tailwindcss": "^3.4.0",
     "three": "0.151.3",
@@ -48,7 +48,7 @@
   "overrides": {
     "glob": "^10.4.5",
     "rimraf": "^5.0.5",
-    "react": "18.3.1",
-    "react-dom": "18.3.1"
+    "react": "19.0.0",
+    "react-dom": "19.0.0"
   }
 }

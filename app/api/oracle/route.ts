@@ -21,7 +21,7 @@ declare global {
   // eslint-disable-next-line no-var
   var __ORACLE_RL__: Map<string, { count: number; reset: number }> | undefined
 }
-const DAILY_LIMIT = 1
+const DAILY_LIMIT = 200
 const RL = (globalThis as any).__ORACLE_RL__ || ((globalThis as any).__ORACLE_RL__ = new Map())
 function now() { return Date.now() }
 function getClientKey(req: NextRequest): string {
@@ -62,7 +62,7 @@ export async function GET(req: NextRequest) {
       const key = getClientKey(req)
       const daily = checkDailyLimit(key)
       if (!daily.ok) {
-        return NextResponse.json(
+        const res429 = NextResponse.json(
           {
             error: "Daily free limit reached",
             code: "FREE_LIMIT",
@@ -71,6 +71,8 @@ export async function GET(req: NextRequest) {
           },
           { status: 429 },
         )
+        res429.headers.set("Retry-After", "30")
+        return res429
       }
     }
 

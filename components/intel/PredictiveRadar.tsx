@@ -27,21 +27,39 @@ export default function PredictiveRadar({ prefix = "", dict = {} as IntelDict }:
   const reduce = useReducedMotion()
   const [nodes, setNodes] = useState<RadarNode[] | null>(null)
   const [err, setErr] = useState<string | null>(null)
+  const retryRef = React.useRef<number>(30000)
+  const timeoutRef = React.useRef<number | null>(null)
   const [hover, setHover] = useState<RadarNode | null>(null)
 
   useEffect(() => {
     let alive = true
-    ;(async () => {
+    async function load() {
       try {
         const r = await fetch("/api/intel?op=radar", { cache: "no-store" })
-        if (!r.ok) throw new Error(String(r.status))
+        if (!alive) return
+        if (r.status === 429) {
+          setErr("429")
+          const ra = Number(r.headers.get("Retry-After") || "30") * 1000 || 30000
+          const next = Math.min(Math.max(retryRef.current, ra), 300000)
+          retryRef.current = Math.min(next * 2, 300000)
+          if (timeoutRef.current) window.clearTimeout(timeoutRef.current)
+          timeoutRef.current = window.setTimeout(() => { if (alive) load() }, next)
+          return
+        }
+        if (!r.ok) {
+          setErr(String(r.status))
+          return
+        }
         const j = (await r.json()) as { nodes: RadarNode[] }
-        if (alive) setNodes(j.nodes.slice(0, 50))
+        setNodes(j.nodes.slice(0, 50))
+        setErr(null)
+        retryRef.current = 30000
       } catch (e: unknown) {
-        if (alive) setErr(e instanceof Error ? e.message : "Load error")
+        setErr(e instanceof Error ? e.message : "Load error")
       }
-    })()
-    return () => { alive = false }
+    }
+    timeoutRef.current = window.setTimeout(() => { if (alive) load() }, 10000)
+    return () => { alive = false; if (timeoutRef.current) window.clearTimeout(timeoutRef.current) }
   }, [])
 
   const header = dict.predictive_header || "Predictive Threat Radar"
@@ -64,7 +82,9 @@ export default function PredictiveRadar({ prefix = "", dict = {} as IntelDict }:
       <div className="text-sm font-semibold text-white mb-3">{header}</div>
 
       {!nodes && !err && <div className="h-72 rounded-xl border border-white/10 bg-white/5 animate-pulse grid place-items-center text-[11px] text-gray-300">{loading}</div>}
-      {err && <div className="text-xs text-red-300">{errorText}: {err}</div>}
+      {err && (
+        <div className="text-xs text-red-300">{err === "429" ? "Threat Feed wird gerade aktualisiert… (429)" : `${errorText}: ${err}`}</div>
+      )}
 
       {nodes && (
         <div className="relative">

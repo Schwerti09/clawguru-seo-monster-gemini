@@ -1,14 +1,35 @@
-import type { Metadata } from "next"
+"use client"
+
+import React, { Suspense } from "react"
 import dynamic from "next/dynamic"
 
 const IntelNexusClient = dynamic(() => import("@/components/intel/IntelNexusClient"))
 
-export const metadata: Metadata = {
-  title: "Mycelium Intel Nexus | ClawGuru",
-  description:
-    "Luxuriöses, cineastisches Intel: 3D‑Threat‑Map, Teaser‑Report, Predictive Engine, Export & Alerts. Freemium‑Flow mit Daypass/Pro.",
-  alternates: { canonical: "/intel" }
+class IntelErrorBoundary extends React.Component<{ children: React.ReactNode }, { hasError: boolean }> {
+  constructor(props: { children: React.ReactNode }) {
+    super(props)
+    this.state = { hasError: false }
+  }
+  static getDerivedStateFromError() {
+    return { hasError: true }
+  }
+  componentDidCatch() {}
+  render() {
+    if (this.state.hasError) {
+      return (
+        <section className="px-4 sm:px-6 lg:px-8 py-10 max-w-6xl mx-auto">
+          <div className="rounded-2xl border border-white/10 bg-black/40 backdrop-blur-md p-6">
+            <div className="h-6 w-48 bg-white/10 rounded animate-pulse mb-3" />
+            <div className="h-4 w-3/4 bg-white/10 rounded animate-pulse" />
+          </div>
+        </section>
+      )
+    }
+    return this.props.children as any
+  }
 }
+
+// metadata removed in client component to satisfy Next.js constraints
 
 export default function IntelPage() {
   const faqJsonLd = {
@@ -35,7 +56,15 @@ export default function IntelPage() {
           ClawGuru liefert zitierfähige Antworten, priorisierte Risiken und visuelle Evidenz. Direkt einsatzfähig für Audits, Reports und operative Entscheidungen.
         </p>
       </section>
-      <IntelNexusClient />
+      <Suspense
+        fallback={
+          <div className="min-h-screen bg-black flex items-center justify-center">Lade Mycelium...</div>
+        }
+      >
+        <IntelErrorBoundary>
+          <IntelNexusClient />
+        </IntelErrorBoundary>
+      </Suspense>
     </>
   )
 }

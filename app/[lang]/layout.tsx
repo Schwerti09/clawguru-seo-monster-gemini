@@ -2,8 +2,9 @@ import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { normalizeLocale, localeAlternates, SUPPORTED_LOCALES, getLocaleHrefLang, localeDir } from "@/lib/i18n"
 
-export async function generateMetadata(props: { params: { lang: string } }): Promise<Metadata> {
-  const locale = normalizeLocale(props.params.lang)
+export async function generateMetadata(props: { params: Promise<{ lang: string }> }): Promise<Metadata> {
+  const { lang } = await props.params
+  const locale = normalizeLocale(lang)
   const alternates = localeAlternates("/")
   const localeHrefLang = getLocaleHrefLang(locale)
   const canonical = alternates.languages[localeHrefLang] ?? alternates.canonical
@@ -18,9 +19,10 @@ export async function generateMetadata(props: { params: { lang: string } }): Pro
 
 export default async function LocaleLayout(props: {
   children: React.ReactNode
-  params: { lang: string }
+  params: Promise<{ lang: string }>
 }) {
-  const locale = normalizeLocale(props.params.lang)
+  const { lang } = await props.params
+  const locale = normalizeLocale(lang)
   if (!SUPPORTED_LOCALES.includes(locale)) {
     notFound()
   }

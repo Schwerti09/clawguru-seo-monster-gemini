@@ -34,6 +34,8 @@ export default function IntelNexusClient() {
   const [tier, setTier] = useState<Tier>("free")
   const [permanent, setPermanent] = useState(false)
   const timerRef = useRef<number | null>(null)
+  const oracleRetryRef = useRef<number>(30000)
+  const oracleTimeoutRef = useRef<number | null>(null)
   const pathname = usePathname()
   const prefix = useMemo(() => {
     const first = (pathname || "").split("/")[1] || ""
@@ -58,29 +60,17 @@ export default function IntelNexusClient() {
       }
     }
     fetchTier()
-    const pollId = window.setInterval(fetchTier, 5000)
     const url = typeof window !== "undefined" ? new URL(window.location.href) : null
     const qp = url ? url.searchParams.get("q") : null
     const pf = url ? url.searchParams.get("prefill") : null
     if (qp) setQ(qp)
     else if (pf) setQ(pf)
-    return () => { stop = true; window.clearInterval(pollId) }
+    return () => { stop = true }
   }, [])
 
   useEffect(() => {
-    if (!running) return
-    if (secondsLeft <= 0) return
-    timerRef.current = window.setInterval(() => {
-      setSecondsLeft((s) => {
-        if (s <= 1) {
-          if (timerRef.current) window.clearInterval(timerRef.current)
-          return 0
-        }
-        return s - 1
-      })
-    }, 1000)
-    return () => { if (timerRef.current) window.clearInterval(timerRef.current) }
-  }, [running])
+    return () => { if (timerRef.current) { window.clearInterval(timerRef.current); timerRef.current = null } }
+  }, [])
 
   const showRetention = useMemo(() => running && !permanent, [running, permanent])
 
@@ -102,7 +92,14 @@ export default function IntelNexusClient() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ question: query, mode: "prophetic" }),
         })
-        if (res.ok) {
+        if (res.status === 429) {
+          const ra = Number(res.headers.get("Retry-After") || "30") * 1000 || 30000
+          const next = Math.min(Math.max(oracleRetryRef.current, ra), 300000)
+          oracleRetryRef.current = Math.min(next * 2, 300000)
+          setTeaser({ risks: 0, top: null, results: [], runbook: null, prediction: "Oracle limitiert (429) – erneuter Versuch in Kürze" })
+          if (oracleTimeoutRef.current) window.clearTimeout(oracleTimeoutRef.current)
+          oracleTimeoutRef.current = window.setTimeout(() => { startDemo() }, next)
+        } else if (res.ok) {
           const j = await res.json().catch(() => null as any)
           const sources = Array.isArray(j?.sources) ? j.sources : []
           results = sources.slice(0, 5).map((s: any) => ({
@@ -130,6 +127,7 @@ export default function IntelNexusClient() {
               }
             } catch {}
           }
+          oracleRetryRef.current = 30000
         }
       } catch {}
 

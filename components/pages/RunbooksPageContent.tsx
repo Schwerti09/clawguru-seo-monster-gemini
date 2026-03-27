@@ -7,7 +7,6 @@ import { BASE_URL } from "@/lib/config"
 import type { Locale } from "@/lib/i18n"
 import dynamic from "next/dynamic"
 const RunbookNexus = dynamic(() => import("@/components/pages/RunbookNexus"), {
-  ssr: false,
   loading: () => (
     <div style={{ minHeight: "80vh", contentVisibility: "auto", containIntrinsicSize: "auto 1200px" }} />
   ),

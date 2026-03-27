@@ -1,6 +1,6 @@
 import NextDynamic from "next/dynamic"
 import { Suspense } from "react"
-const TagsClientLoader = NextDynamic(() => import("@/components/tags/TagsClientLoader"), { ssr: false })
+const TagsClientLoader = NextDynamic(() => import("@/components/tags/TagsClientLoader"))
 export const dynamic = "force-static"
 export const revalidate = 3600
 export const runtime = "nodejs"

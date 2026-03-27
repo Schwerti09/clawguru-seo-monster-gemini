@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import dynamic from "next/dynamic"
 
-const IntelNexusClient = dynamic(() => import("@/components/intel/IntelNexusClient"), { ssr: false })
+const IntelNexusClient = dynamic(() => import("@/components/intel/IntelNexusClient"))
 
 export const metadata: Metadata = {
   title: "Mycelium Intel Nexus | ClawGuru",

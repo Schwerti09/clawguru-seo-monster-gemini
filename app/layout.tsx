@@ -8,25 +8,25 @@ import Footer from "@/components/layout/Footer"
 import TrustShield from "@/components/layout/TrustShield"
 import dynamic from "next/dynamic"
 import { AnimatedBackground } from "@/components/ui/AnimatedBackground"
-const ActionDock = dynamic(() => import("@/components/layout/ActionDock"), { ssr: false })
-const SocialProofOverlay = dynamic(() => import("@/components/social/SocialProofOverlay"), { ssr: false })
+const ActionDock = dynamic(() => import("@/components/layout/ActionDock"))
+const SocialProofOverlay = dynamic(() => import("@/components/social/SocialProofOverlay"))
 // WORLD BEAST FINAL LAUNCH: Umami privacy-first analytics
 import UmamiAnalytics from "@/components/analytics/UmamiAnalytics"
 import GA4Pageview from "@/components/analytics/GA4Pageview"
 // VISUAL UPGRADE 2026: Neon cursor + page transition wrapper
-const NeonCursor = dynamic(() => import("@/components/visual/NeonCursor"), { ssr: false })
+const NeonCursor = dynamic(() => import("@/components/visual/NeonCursor"))
 import PageTransition from "@/components/visual/PageTransition"
 // NEXT-LEVEL UPGRADE 2026: RTL direction support for Arabic + other RTL locales
 import RTLProvider from "@/components/layout/RTLProvider"
 // VIRAL SHARE 2026: Global floating Mycelium share button
-const FloatingMyceliumShareBtn = dynamic(() => import("@/components/share/FloatingMyceliumShareBtn"), { ssr: false })
+const FloatingMyceliumShareBtn = dynamic(() => import("@/components/share/FloatingMyceliumShareBtn"))
 import { headers } from "next/headers"
 import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
 import { SEO_TARGET_KEYWORDS_2026 } from "@/lib/seo/targets"
 import { getDictionary } from "@/lib/getDictionary"
 import { I18nProvider } from "@/components/i18n/I18nProvider"
 import CommandK from "@/components/search/CommandK"
-const GlobalMagnetics = dynamic(() => import("@/components/visual/GlobalMagnetics"), { ssr: false })
+const GlobalMagnetics = dynamic(() => import("@/components/visual/GlobalMagnetics"))
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 

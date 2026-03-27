@@ -34,7 +34,6 @@ export default function Home({ dict, locale }: HomeProps) {
   }
 
   const FeatureShowcase = dynamic(() => import("@/components/FeatureShowcase"), {
-    ssr: false,
     loading: () => (
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="h-96 bg-white/5 rounded-2xl animate-pulse border border-white/10" />

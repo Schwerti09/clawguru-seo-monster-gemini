@@ -130,6 +130,76 @@ async function geminiGenerate(prompt: string): Promise<string | null> {
   }
 }
 
+async function deepseekGenerate(prompt: string): Promise<string | null> {
+  const apiKey = process.env.DEEPSEEK_API_KEY;
+  if (!apiKey) return null;
+
+  const model = process.env.DEEPSEEK_MODEL || "deepseek-chat";
+  const base = (process.env.DEEPSEEK_BASE_URL || "https://api.deepseek.com/v1").replace(/\/$/, "");
+  const url = `${base}/chat/completions`;
+
+  try {
+    const res = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        model,
+        messages: [
+          { role: "system", content: "Antworte ausschließlich mit validem JSON ohne Markdown." },
+          { role: "user", content: prompt },
+        ],
+        temperature: 0.3,
+        stream: false,
+      }),
+    });
+
+    if (!res.ok) return null;
+    const data = await res.json();
+    const text = data?.choices?.[0]?.message?.content;
+    return typeof text === "string" && text.trim() ? text.trim() : null;
+  } catch {
+    return null;
+  }
+}
+
+async function openaiGenerate(prompt: string): Promise<string | null> {
+  const apiKey = process.env.OPENAI_API_KEY;
+  if (!apiKey) return null;
+
+  const model = process.env.OPENAI_MODEL || "gpt-4o-mini";
+  const base = (process.env.OPENAI_BASE_URL || "https://api.openai.com/v1").replace(/\/$/, "");
+  const url = `${base}/chat/completions`;
+
+  try {
+    const res = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        model,
+        messages: [
+          { role: "system", content: "Antworte ausschließlich mit validem JSON ohne Markdown." },
+          { role: "user", content: prompt },
+        ],
+        temperature: 0.3,
+        stream: false,
+      }),
+    });
+
+    if (!res.ok) return null;
+    const data = await res.json();
+    const text = data?.choices?.[0]?.message?.content;
+    return typeof text === "string" && text.trim() ? text.trim() : null;
+  } catch {
+    return null;
+  }
+}
+
 function buildCopilotPrompt(userMessage: string): string {
   const schema = JSON.stringify({
     reply: "string - kurz, konkret, schrittweise",
@@ -177,19 +247,32 @@ export async function POST(req: NextRequest) {
 
     const rb = ruleBasedCopilot(msg) as CopilotResponse;
 
-    // Try Gemini first if API key is configured
-    const llmText = await geminiGenerate(buildCopilotPrompt(msg));
-    const parsed = llmText ? extractJson(llmText) : null;
+    const prompt = buildCopilotPrompt(msg);
 
-    // Always log (for debugging on Vercel)
-    console.log("[COPILOT_GEMINI]", {
-      messageLength: msg.length,
-      geminiResponseReceived: !!llmText,
-      geminiResponseLength: llmText?.length || 0,
-      geminiFirstChars: llmText?.substring(0, 100),
-      jsonParsed: !!parsed,
-      usingFallback: !parsed,
-    });
+    // Provider-Reihenfolge: DeepSeek -> OpenAI -> Gemini (wie gewünscht)
+    // Optional kann AI_PROVIDER die Reihenfolge an den Anfang verschieben
+    const desiredOrder = ["deepseek", "openai", "gemini"] as const;
+    const preferred = (process.env.AI_PROVIDER || "").toLowerCase();
+    const ordered = preferred && desiredOrder.includes(preferred as any)
+      ? ([preferred, ...desiredOrder.filter((p) => p !== preferred)] as typeof desiredOrder)
+      : desiredOrder;
+
+    let parsed: unknown = null;
+    for (const provider of ordered) {
+      let text: string | null = null;
+      if (provider === "deepseek") text = await deepseekGenerate(prompt);
+      else if (provider === "openai") text = await openaiGenerate(prompt);
+      else if (provider === "gemini") text = await geminiGenerate(prompt);
+
+      if (!text) continue;
+      parsed = extractJson(text);
+      if (parsed) {
+        console.log(`[COPILOT] provider=${provider} ok`);
+        break;
+      } else {
+        console.log(`[COPILOT] provider=${provider} invalid_json`);
+      }
+    }
 
     const out = parsed ? coerceCopilot(parsed, rb) : rb;
     return NextResponse.json(out);

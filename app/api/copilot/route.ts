@@ -181,16 +181,15 @@ export async function POST(req: NextRequest) {
     const llmText = await geminiGenerate(buildCopilotPrompt(msg));
     const parsed = llmText ? extractJson(llmText) : null;
 
-    // Debug logging
-    if (process.env.NODE_ENV === "development") {
-      console.log("[COPILOT_GEMINI]", {
-        messageLength: msg.length,
-        geminiResponseReceived: !!llmText,
-        geminiResponseLength: llmText?.length || 0,
-        geminiFirstChars: llmText?.substring(0, 100),
-        jsonParsed: !!parsed,
-      });
-    }
+    // Always log (for debugging on Vercel)
+    console.log("[COPILOT_GEMINI]", {
+      messageLength: msg.length,
+      geminiResponseReceived: !!llmText,
+      geminiResponseLength: llmText?.length || 0,
+      geminiFirstChars: llmText?.substring(0, 100),
+      jsonParsed: !!parsed,
+      usingFallback: !parsed,
+    });
 
     const out = parsed ? coerceCopilot(parsed, rb) : rb;
     return NextResponse.json(out);

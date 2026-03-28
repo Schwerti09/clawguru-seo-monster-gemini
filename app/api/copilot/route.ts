@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { ruleBasedCopilot } from "@/lib/copilot";
+import { generateOrdered, type AiProvider } from "@/lib/ai/providers";
+import { logTelemetry } from "@/lib/ops/telemetry";
+import { getRequestId } from "@/lib/ops/request-id";
 
 type CopilotAction = { label: string; href: string };
 type CopilotResponse = {
@@ -246,35 +249,20 @@ export async function POST(req: NextRequest) {
     }
 
     const rb = ruleBasedCopilot(msg) as CopilotResponse;
-
     const prompt = buildCopilotPrompt(msg);
-
-    // Provider-Reihenfolge: DeepSeek -> OpenAI -> Gemini (wie gewünscht)
-    // Optional kann AI_PROVIDER die Reihenfolge an den Anfang verschieben
-    const desiredOrder = ["deepseek", "openai", "gemini"] as const;
-    const preferred = (process.env.AI_PROVIDER || "").toLowerCase();
-    const ordered = preferred && desiredOrder.includes(preferred as any)
-      ? ([preferred, ...desiredOrder.filter((p) => p !== preferred)] as typeof desiredOrder)
-      : desiredOrder;
-
-    let parsed: unknown = null;
-    for (const provider of ordered) {
-      let text: string | null = null;
-      if (provider === "deepseek") text = await deepseekGenerate(prompt);
-      else if (provider === "openai") text = await openaiGenerate(prompt);
-      else if (provider === "gemini") text = await geminiGenerate(prompt);
-
-      if (!text) continue;
-      parsed = extractJson(text);
-      if (parsed) {
-        console.log(`[COPILOT] provider=${provider} ok`);
-        break;
-      } else {
-        console.log(`[COPILOT] provider=${provider} invalid_json`);
-      }
-    }
+    const { parsed, provider } = await generateOrdered(prompt, process.env.AI_PROVIDER as AiProvider | undefined);
 
     const out = parsed ? coerceCopilot(parsed, rb) : rb;
+
+    try {
+      const requestId = getRequestId(req.headers);
+      logTelemetry("copilot.provider_used", {
+        requestId,
+        provider: provider || "fallback",
+        usedFallback: !parsed,
+        messageLength: msg.length,
+      });
+    } catch {}
     return NextResponse.json(out);
   } catch (err) {
     console.error("[COPILOT_ERROR]", err);

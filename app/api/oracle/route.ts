@@ -12,6 +12,7 @@ import { buildMyceliumGraph, oracleSearch } from "@/lib/mycelium"
 import { unstable_cache } from "next/cache"
 import { KNOWN_CVES } from "@/lib/cve-pseo"
 import { ensureReadyWithin, search as searchRunbooks } from "@/lib/runbooks-index"
+import { generateTextOrdered, type AiProvider } from "@/lib/ai/providers"
 
 export const runtime = "nodejs"
 
@@ -189,42 +190,9 @@ const MODE_PROMPTS: Record<OracleMode, string> = {
 }
 
 // MYCELIUM ORACLE v3.3 – Overlord AI: Call Gemini with streaming support
-async function callGemini(systemPrompt: string, question: string): Promise<string | null> {
-  const apiKey = process.env.GEMINI_API_KEY
-  if (!apiKey) return null
-
-  const model = process.env.GEMINI_MODEL || "gemini-2.0-flash"
-  const base = (
-    process.env.GEMINI_BASE_URL || "https://generativelanguage.googleapis.com/v1beta"
-  ).replace(/\/$/, "")
-
-  const url = `${base}/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(apiKey)}`
-
-  const controller = new AbortController()
-  const timeout = setTimeout(() => controller.abort(), 10000)
-  let res: Response
-  try {
-    res = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        contents: [{ role: "user", parts: [{ text: `${systemPrompt}\n\nQUESTION:\n${question}` }] }],
-        generationConfig: { temperature: 0.6, maxOutputTokens: 1200 },
-      }),
-      signal: controller.signal,
-    })
-  } finally {
-    clearTimeout(timeout)
-  }
-
-  if (!res.ok) return null
-  const data = await res.json()
-  const parts = data?.candidates?.[0]?.content?.parts
-  if (!Array.isArray(parts)) return null
-  const text = parts
-    .map((p: { text?: string }) => p?.text ?? "")
-    .join("")
-    .trim()
+async function callOracleOrdered(systemPrompt: string, question: string): Promise<string | null> {
+  const prefixedQuestion = `${systemPrompt}\n\nQUESTION:\n${question}`;
+  const { text } = await generateTextOrdered("", prefixedQuestion, process.env.AI_PROVIDER as AiProvider | undefined)
   return text || null
 }
 
@@ -312,8 +280,8 @@ export async function POST(req: NextRequest) {
 
     const systemPrompt = buildSystemPrompt(mode, topRunbooks)
 
-    // MYCELIUM ORACLE v3.3 – Overlord AI: Call AI (Gemini preferred) or use fallback
-    let answer = await callGemini(systemPrompt, question)
+    // MYCELIUM ORACLE v3.3 – Overlord AI: Call AI via unified provider pipeline or use fallback
+    let answer = await callOracleOrdered(systemPrompt, question)
     if (!answer) {
       answer = fallbackAnswer(mode, question, topRunbooks)
     }

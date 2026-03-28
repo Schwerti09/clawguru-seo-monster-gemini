@@ -5,46 +5,17 @@
 
 import { NextResponse } from "next/server"
 import { computeQualityStats, validateRunbook, DEFAULT_THRESHOLDS } from "@/lib/quality-gate"
+import { generateOrdered, type AiProvider } from "@/lib/ai/providers"
 
 export const dynamic = "force-dynamic"
 export const runtime = "nodejs"
 
-// GENESIS QUALITY GATE 2.0 – Gemini auto-improve helper
-async function callGeminiImprove(runbookJson: string): Promise<string | null> {
-  const geminiKey = process.env.GEMINI_API_KEY
-  const geminiModel = process.env.GEMINI_MODEL || "gemini-2.0-flash"
-  const geminiBase = (
-    process.env.GEMINI_BASE_URL || "https://generativelanguage.googleapis.com/v1beta"
-  ).replace(/\/$/, "")
-  const geminiTimeoutMs = parseInt(process.env.GEMINI_TIMEOUT_MS ?? "60000", 10)
-
-  if (!geminiKey) return null
-
-  // Truncate runbook JSON to prevent token exhaustion; internal data only
+// GENESIS QUALITY GATE 2.0 – Multi-provider auto-improve helper
+async function callImproveOrdered(runbookJson: string): Promise<string | null> {
   const safeJson = runbookJson.slice(0, 8000)
   const prompt = `Improve this runbook to 98+ without changing facts. Return only valid JSON matching the original schema.\n\n${safeJson}`
-
-  try {
-    const url = `${geminiBase}/models/${encodeURIComponent(geminiModel)}:generateContent?key=${encodeURIComponent(geminiKey)}`
-    const res = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        contents: [{ role: "user", parts: [{ text: prompt }] }],
-        generationConfig: { temperature: 0.3, maxOutputTokens: 2048 },
-      }),
-      signal: AbortSignal.timeout(geminiTimeoutMs),
-    })
-    if (!res.ok) return null
-    const data = await res.json()
-    const parts = data?.candidates?.[0]?.content?.parts
-    if (Array.isArray(parts)) {
-      return parts.map((p: { text?: string }) => p?.text ?? "").join("").trim() || null
-    }
-    return null
-  } catch {
-    return null
-  }
+  const { parsed } = await generateOrdered(prompt, process.env.AI_PROVIDER as AiProvider | undefined)
+  return parsed && typeof parsed === "string" ? parsed : null
 }
 
 export async function GET(req: Request) {
@@ -63,11 +34,11 @@ export async function GET(req: Request) {
 
     // GENESIS QUALITY GATE 2.0 – Auto-Improve Engine: call Gemini when score < 90
     if (autoImprove && report.score < 90) {
-      const improved = await callGeminiImprove(JSON.stringify(runbook, null, 2))
+      const improved = await callImproveOrdered(JSON.stringify(runbook, null, 2))
       return NextResponse.json({
         ...report,
         autoImproved: improved !== null,
-        autoImproveLog: improved !== null ? "Auto-Improved by Overlord AI" : "Auto-improve unavailable (no Gemini key or API error)",
+        autoImproveLog: improved !== null ? "Auto-Improved via Provider Pipeline" : "Auto-improve unavailable (no provider available)",
         improvedContent: improved,
       })
     }

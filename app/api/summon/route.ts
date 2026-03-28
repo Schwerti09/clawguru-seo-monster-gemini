@@ -10,6 +10,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { isApiActive, apiUnavailableResponse } from "@/lib/api-guard";
 import { ensureReadyWithin, search as searchRunbooks } from "@/lib/runbooks-index";
+import { generateOrdered, type AiProvider } from "@/lib/ai/providers";
 
 export const runtime = "nodejs";
 
@@ -87,15 +88,8 @@ function checkDailyLimit(key: string) {
   return { ok: true, remaining: DAILY_LIMIT - rec.count, reset: rec.reset };
 }
 
-// --- LLM-backed generator (strict JSON) ---
-async function generateWithGemini(q: string, swarmType: SwarmType): Promise<SummonResult | null> {
-  const apiKey = process.env.GEMINI_API_KEY;
-  if (!apiKey) return null;
-
-  const model = process.env.GEMINI_MODEL || "gemini-2.0-flash";
-  const base = (process.env.GEMINI_BASE_URL || "https://generativelanguage.googleapis.com/v1beta").replace(/\/$/, "");
-  const url = `${base}/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(apiKey)}`;
-
+// --- LLM-backed generator (strict JSON via provider pipeline) ---
+async function generateWithOrdered(q: string, swarmType: SwarmType): Promise<SummonResult | null> {
   const schema = [
     "{",
     '"title": string,',
@@ -109,7 +103,7 @@ async function generateWithGemini(q: string, swarmType: SwarmType): Promise<Summ
     "}",
   ].join(" ");
 
-  const system = [
+  const prompt = [
     "You are ClawGuru Copilot. Produce a concise, actionable runbook plan.",
     "Return STRICT JSON ONLY; no markdown, no extra text.",
     `JSON schema: ${schema}`,
@@ -117,41 +111,16 @@ async function generateWithGemini(q: string, swarmType: SwarmType): Promise<Summ
     "Steps: 4-7 concrete actions (check, fix, verify).",
     "clawScore/confidence are 0..100 integers.",
     "estimatedTime: concise like '15-30 min' or '~1h'.",
-  ].join(" ");
+    `SwarmType: ${swarmType}`,
+    `Problem: ${q}`,
+    "Respond with pure JSON only.",
+  ].join("\n");
 
-  const body = {
-    contents: [
-      {
-        role: "user",
-        parts: [
-          {
-            text:
-              `${system}\n` +
-              `SwarmType: ${swarmType}\n` +
-              `Problem: ${q}\n` +
-              "Respond with pure JSON only.",
-          },
-        ],
-      },
-    ],
-    generationConfig: { temperature: 0.6, maxOutputTokens: 400 },
-  } as const;
+  const { parsed } = await generateOrdered(prompt, process.env.AI_PROVIDER as AiProvider | undefined);
+  if (!parsed || typeof parsed !== "object") return null;
 
-  const res = await fetch(url, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-  });
-  if (!res.ok) return null;
-  const data = await res.json().catch(() => null);
-  const text =
-    data?.candidates?.[0]?.content?.parts
-      ?.map((p: { text?: string }) => p?.text)
-      .filter(Boolean)
-      .join("") || "";
-  if (!text) return null;
   try {
-    const j = JSON.parse(text) as Partial<SummonResult>;
+    const j = parsed as Partial<SummonResult>;
     const result: SummonResult = {
       title: String(j.title || q).slice(0, 180),
       summary: String(j.summary || "").slice(0, 1200),
@@ -230,7 +199,7 @@ export async function POST(req: NextRequest) {
 
     let payload: SummonResult | null = null;
     try {
-      payload = await generateWithGemini(q, swarmType);
+      payload = await generateWithOrdered(q, swarmType);
     } catch {
       // ignore and fallback
     }

@@ -4,14 +4,17 @@ import { STATS } from "@/lib/stats"
 
 export const runtime = "nodejs"
 
-// --- In-memory daily free limit (per instance) ---
-const DAY_MS = 86_400_000
+// --- In-memory rate limit + cache (per instance) ---
+const MINUTE_MS = 60_000
 declare global {
   // eslint-disable-next-line no-var
-  var __INTEL_RL__: Map<string, { count: number; reset: number }> | undefined
+  var __INTEL_RL_MIN__: Map<string, { count: number; reset: number }> | undefined
+  // eslint-disable-next-line no-var
+  var __INTEL_CACHE__: Map<string, { exp: number; data: any }> | undefined
 }
-const DAILY_LIMIT = 1
-const RL = (globalThis as any).__INTEL_RL__ || ((globalThis as any).__INTEL_RL__ = new Map())
+const RATE_LIMIT = 200
+const RL = (globalThis as any).__INTEL_RL_MIN__ || ((globalThis as any).__INTEL_RL_MIN__ = new Map())
+const CACHE = (globalThis as any).__INTEL_CACHE__ || ((globalThis as any).__INTEL_CACHE__ = new Map())
 function now() { return Date.now() }
 function getClientKey(req: NextRequest): string {
   const cookieKey = req.cookies.get("cg_uid")?.value || req.cookies.get("intel_uid")?.value || ""
@@ -21,16 +24,31 @@ function getClientKey(req: NextRequest): string {
   const ua = req.headers.get("user-agent") || "unknown"
   return `ip:${ip}|ua:${ua.slice(0, 42)}`
 }
-function checkDailyLimit(key: string) {
+function checkRateLimit(key: string) {
   const rec = RL.get(key)
   const t = now()
   if (!rec || rec.reset <= t) {
-    RL.set(key, { count: 1, reset: t + DAY_MS })
-    return { ok: true, remaining: DAILY_LIMIT - 1, reset: t + DAY_MS }
+    RL.set(key, { count: 1, reset: t + MINUTE_MS })
+    return { ok: true, remaining: RATE_LIMIT - 1, reset: t + MINUTE_MS }
   }
-  if (rec.count >= DAILY_LIMIT) return { ok: false, remaining: 0, reset: rec.reset }
+  if (rec.count >= RATE_LIMIT) return { ok: false, remaining: 0, reset: rec.reset }
   rec.count += 1
-  return { ok: true, remaining: DAILY_LIMIT - rec.count, reset: rec.reset }
+  return { ok: true, remaining: RATE_LIMIT - rec.count, reset: rec.reset }
+}
+
+const DEFAULT_TTL = 45_000
+function cacheKeyFor(op: string, url: URL) {
+  const qs = url.searchParams.toString() || "_"
+  return `intel:${op}:${qs}`
+}
+function getCached<T>(key: string): T | undefined {
+  const rec = CACHE.get(key)
+  if (!rec) return undefined
+  if (rec.exp <= now()) { CACHE.delete(key); return undefined }
+  return rec.data as T
+}
+function setCached<T>(key: string, data: T, ttl = DEFAULT_TTL) {
+  CACHE.set(key, { data, exp: now() + ttl })
 }
 
 type Severity = "CRITICAL" | "HIGH" | "MEDIUM" | "LOW"
@@ -192,23 +210,34 @@ function synthesizeStats() {
 
 export async function GET(req: NextRequest) {
   try {
-    // Enforce daily free limit for Intel API bundle/radar/preview/analyze
+    // Enforce per-minute limit for Intel API operations (lenient)
     const key = getClientKey(req)
-    const daily = checkDailyLimit(key)
-    if (!daily.ok) {
+    const rl = checkRateLimit(key)
+    if (!rl.ok) {
       return NextResponse.json(
         {
-          error: "Daily free limit reached",
-          code: "FREE_LIMIT",
-          message: "You have used your free intel request for today. Get a Day Pass for unlimited use.",
-          resetAt: daily.reset,
+          error: "Rate limit exceeded",
+          code: "RATE_LIMIT",
+          message: "Too many requests. Please retry shortly.",
+          resetAt: rl.reset,
         },
-        { status: 429 },
+        { status: 429, headers: { "Retry-After": Math.max(1, Math.ceil((rl.reset - now()) / 1000)).toString() } },
       )
     }
 
     const url = new URL(req.url)
     const op = (url.searchParams.get("op") || "bundle").toLowerCase()
+
+    // Try cache for inexpensive GET operations
+    if (["feed", "radar", "preview", "stats", "bundle"].includes(op)) {
+      const k = cacheKeyFor(op, url)
+      const cached = getCached<any>(k)
+      if (cached) {
+        const res = NextResponse.json(cached)
+        res.headers.set("Cache-Control", "public, s-maxage=45, stale-while-revalidate=30")
+        return res
+      }
+    }
 
     if (op === "feed") {
       const sev = (url.searchParams.get("severity") || "").toUpperCase() as Severity
@@ -223,8 +252,10 @@ export async function GET(req: NextRequest) {
         })
       )
       const withLinks = items.map((it) => ({ ...it, oracleUrl: `/oracle?cve=${encodeURIComponent(it.id)}` }))
-      const res = NextResponse.json({ items: withLinks })
-      res.headers.set("Cache-Control", "public, s-maxage=60, stale-while-revalidate=30")
+      const payload = { items: withLinks }
+      setCached(cacheKeyFor(op, url), payload)
+      const res = NextResponse.json(payload)
+      res.headers.set("Cache-Control", "public, s-maxage=45, stale-while-revalidate=30")
       return res
     }
 
@@ -239,16 +270,27 @@ export async function GET(req: NextRequest) {
 
     if (op === "radar") {
       const nodes = await synthesizeRadar(40)
-      return NextResponse.json({ nodes })
+      const payload = { nodes }
+      setCached(cacheKeyFor(op, url), payload)
+      const res = NextResponse.json(payload)
+      res.headers.set("Cache-Control", "public, s-maxage=45, stale-while-revalidate=30")
+      return res
     }
 
     if (op === "preview") {
       const graph = await synthesizePreview()
-      return NextResponse.json(graph)
+      setCached(cacheKeyFor(op, url), graph)
+      const res = NextResponse.json(graph)
+      res.headers.set("Cache-Control", "public, s-maxage=45, stale-while-revalidate=30")
+      return res
     }
 
     if (op === "stats") {
-      return NextResponse.json(synthesizeStats())
+      const payload = synthesizeStats()
+      setCached(cacheKeyFor(op, url), payload)
+      const res = NextResponse.json(payload)
+      res.headers.set("Cache-Control", "public, s-maxage=45, stale-while-revalidate=30")
+      return res
     }
 
     const [feed, radar, stats] = await Promise.all([
@@ -262,7 +304,11 @@ export async function GET(req: NextRequest) {
       Promise.resolve(synthesizeStats()),
     ])
 
-    return NextResponse.json({ feed, radar, stats })
+    const bundle = { feed, radar, stats }
+    setCached(cacheKeyFor("bundle", url), bundle)
+    const res = NextResponse.json(bundle)
+    res.headers.set("Cache-Control", "public, s-maxage=45, stale-while-revalidate=30")
+    return res
   } catch (err) {
     console.error("[/api/intel] error", err)
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })

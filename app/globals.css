@@ -31,15 +31,15 @@
   --glass-vault: linear-gradient(135deg, rgba(212,175,55,0.04) 0%, rgba(0,0,0,0.6) 50%, rgba(0,184,255,0.03) 100%);
 }
 
-/* Fonts are loaded non-render-blocking via async <link> in layout.tsx */
+/* Fonts use next/font CSS variables for optimal loading performance */
 body {
   @apply bg-[#0a0a0a] text-gray-100 antialiased;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-inter), 'Inter', system-ui, sans-serif;
 }
 
 /* Space Grotesk for headings */
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-family: var(--font-space-grotesk), 'Space Grotesk', system-ui, sans-serif;
 }
 
 a { @apply hover:text-[#00ff9d] transition-colors; }

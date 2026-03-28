@@ -2,15 +2,17 @@ import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
 import { BASE_URL } from "@/lib/config"
 import { headers } from "next/headers"
-import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
+import { DEFAULT_LOCALE, type Locale, localeAlternates } from "@/lib/i18n"
 
 export const dynamic = "force-static"
 
-export const metadata = {
-  title: "Issues | ClawGuru",
-  description:
-    "Issue-Index: RBAC Misconfiguration, SQL Injection, Container Escape, SBOM, Zero-Trust und 100+ weitere Security & Ops Issues — jeweils mit vollständiger Provider × Service × Year Runbook-Matrix.",
-  alternates: { canonical: "/issues" },
+export async function generateMetadata() {
+  const alts = localeAlternates("/issues")
+  return {
+    title: "Issues | ClawGuru",
+    description: "Issue-Index: RBAC Misconfiguration, SQL Injection, Container Escape, SBOM, Zero-Trust und 100+ weitere Security & Ops Issues — jeweils mit vollständiger Provider × Service × Year Runbook-Matrix.",
+    alternates: alts,
+  }
 }
 
 export default async function IssuesPage() {
@@ -39,9 +41,19 @@ export default async function IssuesPage() {
     })),
   }
 
+  const breadcrumbLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "ClawGuru", item: `${BASE_URL}${prefix}` },
+      { "@type": "ListItem", position: 2, name: "Issues", item: `${BASE_URL}${prefix}/issues` },
+    ],
+  }
+
   return (
     <Container>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
       <div className="py-16 max-w-6xl mx-auto">
         <nav className="text-sm text-gray-500 mb-6" aria-label="Breadcrumb">
           <ol className="flex flex-wrap items-center gap-2">

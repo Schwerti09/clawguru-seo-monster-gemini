@@ -1,5 +1,6 @@
 // 100/100 OPTIMIZATION 2026: Self-hosted fonts via next/font (non-render-blocking, font-display:swap)
 import type { Metadata, Viewport } from "next"
+import { Inter, Space_Grotesk } from "next/font/google"
 import Script from "next/script"
 import "./globals.css"
 import TrustBadge from "@/components/layout/TrustBadge"
@@ -27,6 +28,21 @@ import { getDictionary } from "@/lib/getDictionary"
 import { I18nProvider } from "@/components/i18n/I18nProvider"
 import CommandK from "@/components/search/CommandK"
 const GlobalMagnetics = dynamic(() => import("@/components/visual/GlobalMagnetics"))
+
+// 100/100 OPTIMIZATION: next/font self-hosted with font-display:swap
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-inter",
+  weight: ["400", "500", "600", "700", "900"],
+})
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-space-grotesk",
+  weight: ["500", "600", "700"],
+})
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 
@@ -94,7 +110,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const dict = await getDictionary(locale)
 
   return (
-    <html lang={locale} dir={dir}>
+    <html lang={locale} dir={dir} className={`${inter.variable} ${spaceGrotesk.variable}`}>
       <head>
         {/* WORLD BEAST FINAL LAUNCH: Umami analytics */}
         <UmamiAnalytics />
@@ -114,20 +130,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png" />
         <link rel="icon" type="image/png" sizes="512x512" href="/favicon-512.png" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
-        {/* 100/100 OPTIMIZATION 2026: Preconnect for Google Fonts (DNS early resolution) */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        {/* 100/100 OPTIMIZATION 2026: Non-render-blocking font load (media=print trick).
-            Fonts download in background; script switches to screen media after load. */}
-        <link
-          id="gfonts-css"
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=Space+Grotesk:wght@500;600;700&display=swap"
-          media="print"
-        />
-        <script dangerouslySetInnerHTML={{
-          __html: `(function(){var l=document.getElementById('gfonts-css');if(l)l.onload=function(){l.media='all';};})()`
-        }} />
+        {/* 100/100 LCP OPTIMIZATION: Preload critical OG image for faster LCP */}
+        <link rel="preload" as="image" href="/og-image.png" fetchPriority="high" />
+        {/* 100/100 LCP OPTIMIZATION: DNS prefetch for analytics */}
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://umami.clawguru.org" />
         {/* NEXT-LEVEL UPGRADE 2026: PWA manifest */}
         <link rel="manifest" href="/manifest.json" />
         <meta name="apple-mobile-web-app-capable" content="yes" />

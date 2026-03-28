@@ -138,6 +138,31 @@ export function middleware(request: NextRequest) {
     return res
   }
 
+  // Compatibility rewrites: map localized top-level hubs to root pages
+  // Ensure footer links like /de/solutions/* and /de/gsc-optimize resolve to existing root routes
+  const localizedSolutions = pathname.match(/^\/([a-z]{2}(?:-[a-z]{2})?)\/(solutions)(?:\/(.*))?\/?$/i)
+  if (localizedSolutions) {
+    const rest = localizedSolutions[3] ? `/${localizedSolutions[3]}` : ""
+    const url = request.nextUrl.clone()
+    url.pathname = `/solutions${rest}`
+    const res = NextResponse.rewrite(url)
+    res.headers.set("x-claw-locale", localizedSolutions[1].toLowerCase())
+    res.headers.set("x-claw-dir", localeDir(localizedSolutions[1].toLowerCase() as any))
+    res.headers.set(getRequestIdHeaderName(), requestId)
+    return res
+  }
+
+  const localizedGuidesHub = pathname.match(/^\/([a-z]{2}(?:-[a-z]{2})?)\/(gsc-optimize)\/?$/i)
+  if (localizedGuidesHub) {
+    const url = request.nextUrl.clone()
+    url.pathname = "/gsc-optimize"
+    const res = NextResponse.rewrite(url)
+    res.headers.set("x-claw-locale", localizedGuidesHub[1].toLowerCase())
+    res.headers.set("x-claw-dir", localeDir(localizedGuidesHub[1].toLowerCase() as any))
+    res.headers.set(getRequestIdHeaderName(), requestId)
+    return res
+  }
+
   // Apply per-IP rate limiting for hot routes (env-gated to reduce Edge CPU when not needed)
   if (process.env.MW_RL_ENABLED === '1') {
     const bucket = routeBucket(pathname)

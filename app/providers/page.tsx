@@ -1,14 +1,18 @@
 import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
+import { BASE_URL } from "@/lib/config"
 import { headers } from "next/headers"
-import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
+import { DEFAULT_LOCALE, type Locale, localeAlternates } from "@/lib/i18n"
 
 export const revalidate = 60
 
-export const metadata = {
-  title: "Providers | ClawGuru",
-  description: "Provider Hubs: AWS, Hetzner, Cloudflare & Co — Runbooks, Fixes und Baselines nach Plattform sortiert.",
-  alternates: { canonical: "/providers" }
+export async function generateMetadata() {
+  const alts = localeAlternates("/providers")
+  return {
+    title: "Providers | ClawGuru",
+    description: "Provider Hubs: AWS, Hetzner, Cloudflare & Co — Runbooks, Fixes und Baselines nach Plattform sortiert.",
+    alternates: alts,
+  }
 }
 
 export default async function ProvidersPage() {
@@ -17,8 +21,35 @@ export default async function ProvidersPage() {
   const locale = (h.get("x-claw-locale") ?? DEFAULT_LOCALE) as Locale
   const prefix = `/${locale}`
   const providers = allProviders()
+
+  const itemListLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "ClawGuru Provider Hub Index",
+    description: "Alle Cloud Provider mit vollständigen Runbook-Clustern.",
+    numberOfItems: providers.length,
+    url: `${BASE_URL}${prefix}/providers`,
+    itemListElement: providers.map((p, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: p.name,
+      url: `${BASE_URL}${prefix}/provider/${p.slug}`,
+    })),
+  }
+
+  const breadcrumbLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "ClawGuru", item: `${BASE_URL}${prefix}` },
+      { "@type": "ListItem", position: 2, name: "Providers", item: `${BASE_URL}${prefix}/providers` },
+    ],
+  }
+
   return (
     <Container>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
       <div className="py-16 max-w-6xl mx-auto">
         <SectionTitle
           kicker="SEO Hubs"

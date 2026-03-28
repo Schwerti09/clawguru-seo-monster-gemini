@@ -33,6 +33,9 @@ interface BatchJob {
   errors: Array<{ taskIndex: number; error: string }>
   startTime: number
   endTime?: number
+  contentType?: string // Added in Phase 2b: for content validation
+  autoValidate?: boolean // Added in Phase 2b: auto-validate upon completion
+  validationResults?: any // Added in Phase 2b: store validation results
   telemetry: {
     provider: string
     tokensUsed: number

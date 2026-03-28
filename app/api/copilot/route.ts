@@ -234,6 +234,7 @@ ${userMessage}`;
 
 export async function POST(req: NextRequest) {
   try {
+    const t0 = Date.now();
     const { message } = (await req.json().catch(() => ({}))) as { message?: string };
     const msg = (message || "").toString().slice(0, 6000);
     if (!msg.trim()) {
@@ -261,6 +262,7 @@ export async function POST(req: NextRequest) {
         provider: provider || "fallback",
         usedFallback: !parsed,
         messageLength: msg.length,
+        durationMs: Date.now() - t0,
       });
     } catch {}
     return NextResponse.json(out);

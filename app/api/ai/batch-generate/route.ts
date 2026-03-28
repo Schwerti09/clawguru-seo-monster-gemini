@@ -402,12 +402,15 @@ export async function GET(
   request: NextRequest,
   context: { params: { jobId?: string } }
 ) {
-  const { jobId } = context.params || {}
+  const { jobId: jobIdFromParams } = context.params || {}
+  const url = new URL(request.url)
+  const jobIdFromQuery = url.searchParams.get("jobId") || undefined
+  const jobId = jobIdFromParams || jobIdFromQuery
 
   if (!jobId) {
     return NextResponse.json(
       {
-        message: "Usage: GET /api/ai/batch-generate/:jobId to check job status",
+        message: "Usage: GET /api/ai/batch-generate?jobId=YOUR_ID to check job status",
         or: "POST to submit a new batch job",
       },
       { status: 200 }

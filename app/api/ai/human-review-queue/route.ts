@@ -8,6 +8,7 @@
  */
 
 import { NextRequest, NextResponse } from "next/server"
+import { redisAvailable, redisLPushJSON, redisLRangeJSON, redisLLen } from "@/lib/kv/redis"
 
 export const dynamic = "force-dynamic"
 export const runtime = "nodejs"
@@ -47,13 +48,24 @@ export async function GET(request: NextRequest) {
   const limit = parseInt(searchParams.get("limit") || "50")
   const sort = searchParams.get("sort") || "created" // confidence-asc | confidence-desc | eeat-asc | created
 
-  // Filter items
-  let items = Array.from(reviewQueue.values()).filter((item) => {
-    if (item.status !== "pending") return false
-    if (tier !== "all" && item.tier !== tier) return false
-    if (batchId && item.batchId !== batchId) return false
-    return true
-  })
+  // Load items (Redis first, then in-memory fallback)
+  let items: any[] = []
+  if (redisAvailable()) {
+    const all = await redisLRangeJSON<any>("review:items", 0, -1)
+    items = all.filter((item) => {
+      if (item.status !== "pending") return false
+      if (tier !== "all" && item.tier !== tier) return false
+      if (batchId && item.batchId !== batchId) return false
+      return true
+    })
+  } else {
+    items = Array.from(reviewQueue.values()).filter((item) => {
+      if (item.status !== "pending") return false
+      if (tier !== "all" && item.tier !== tier) return false
+      if (batchId && item.batchId !== batchId) return false
+      return true
+    })
+  }
 
   // Sort
   switch (sort) {
@@ -77,8 +89,8 @@ export async function GET(request: NextRequest) {
 
   return NextResponse.json(
     {
-      total_queued: reviewQueue.size,
-      pending: Array.from(reviewQueue.values()).filter((i) => i.status === "pending").length,
+      total_queued: redisAvailable() ? await redisLLen("review:items") : reviewQueue.size,
+      pending: items.length,
       showing: items.length,
       filters: { tier, batchId, limit, sort },
       items: items.map((item) => ({
@@ -290,11 +302,13 @@ export function addToReviewQueue(item: {
   aboScore: number
   content: any
 }): void {
-  reviewQueue.set(item.contentId, {
-    ...item,
-    createdAt: Date.now(),
-    status: "pending",
-  })
+  const enriched = { ...item, createdAt: Date.now(), status: "pending" as const }
+  if (redisAvailable()) {
+    // Push to Redis list (acts like queue). Consumers can filter/sort client-side.
+    redisLPushJSON("review:items", enriched).catch(() => {})
+    return
+  }
+  reviewQueue.set(item.contentId, enriched)
 }
 
 /**

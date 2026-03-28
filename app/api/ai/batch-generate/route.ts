@@ -19,6 +19,7 @@ import {
   promptFAQ,
   validationRules,
 } from "@/lib/ai/batch-prompts"
+import { redisAvailable, redisGetJSON, redisSetJSON } from "@/lib/kv/redis"
 
 // In-memory queue for batch processing
 // TODO: Replace with Redis in production
@@ -183,26 +184,23 @@ async function processBatchTask(
     const prompt = getPromptForType(task)
 
     // Call AI provider (fallback chain: Deepseek → OpenAI → Gemini)
-    const response = await generateOrdered(prompt, task.context.preferredProvider)
+    const { parsed: aiParsed, provider, raw } = await generateOrdered(prompt, task.context.preferredProvider)
 
-    if (!response) {
+    if (!aiParsed && !raw) {
       throw new Error("No response from AI provider")
     }
 
-    // Parse JSON
-    let parsed: any
-    try {
-      // Try direct JSON first
-      parsed = JSON.parse(response)
-    } catch {
-      // Try extracting JSON from markdown code blocks
-      const jsonMatch = response.match(/```(?:json)?\n?([\s\S]*?)\n?```/)
-      if (jsonMatch && jsonMatch[1]) {
-        parsed = JSON.parse(jsonMatch[1])
-      } else {
-        throw new Error("Could not parse AI response as JSON")
+    // Use parsed JSON from provider, fallback to raw string parsing
+    let parsed: any = aiParsed
+    if (!parsed && typeof raw === "string") {
+      try {
+        parsed = JSON.parse(raw)
+      } catch {
+        const jsonMatch = raw.match(/```(?:json)?\n?([\s\S]*?)\n?```/)
+        if (jsonMatch && jsonMatch[1]) parsed = JSON.parse(jsonMatch[1])
       }
     }
+    if (!parsed) throw new Error("Could not parse AI response as JSON")
 
     // Validate content
     const validation = validateContent(parsed, task.contentType)
@@ -231,8 +229,8 @@ async function processBatchTask(
       success: true,
       result,
       telemetry: {
-        provider: "gemini", // Track which provider was actually used
-        tokensUsed: response.length / 4, // Rough estimate (4 chars per token)
+        provider: provider || "unknown",
+        tokensUsed: typeof raw === "string" ? raw.length / 4 : 0,
       },
     }
   } catch (error) {
@@ -268,6 +266,7 @@ async function processBatchAsync(jobId: string, tasks: BatchContentRequest[]) {
   }
 
   processingQueues.set(jobId, job)
+  if (redisAvailable()) await redisSetJSON(`job:${jobId}`, job, 60 * 60)
 
   // Process tasks sequentially with rate limiting
   for (let i = 0; i < tasks.length; i++) {
@@ -288,6 +287,7 @@ async function processBatchAsync(jobId: string, tasks: BatchContentRequest[]) {
     job.completedTasks++
     job.telemetry.tokensUsed += telemetry.tokensUsed
     job.telemetry.avgResponseTime = (job.telemetry.avgResponseTime * (i) + (Date.now() - taskStartTime)) / (i + 1)
+    if (redisAvailable()) await redisSetJSON(`job:${jobId}`, job, 60 * 60)
 
     // Rate limiting: wait 1 second between API calls to avoid hitting limits
     if (i < tasks.length - 1) {
@@ -302,6 +302,7 @@ async function processBatchAsync(jobId: string, tasks: BatchContentRequest[]) {
 
   job.status = "completed"
   job.endTime = Date.now()
+  if (redisAvailable()) await redisSetJSON(`job:${jobId}`, job, 60 * 60)
 
   console.log(`[batch-generate] Job ${jobId} completed:`, {
     totalTasks: job.totalTasks,
@@ -361,7 +362,11 @@ async function handlePost(request: NextRequest) {
 async function handleGetStatus(
   jobId: string
 ): Promise<NextResponse> {
-  const job = processingQueues.get(jobId)
+  let job = processingQueues.get(jobId)
+  if (!job && redisAvailable()) {
+    const r = await redisGetJSON<BatchJob>(`job:${jobId}`)
+    if (r) job = r
+  }
 
   if (!job) {
     return NextResponse.json(

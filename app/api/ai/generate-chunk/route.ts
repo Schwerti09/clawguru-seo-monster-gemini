@@ -55,18 +55,17 @@ async function generateOne(task: BatchContentRequest): Promise<{
 }> {
   try {
     const prompt = getPromptForType(task)
-    const response = await generateOrdered(prompt, task.context.preferredProvider)
+    const { parsed: aiParsed, raw } = await generateOrdered(prompt, task.context.preferredProvider)
+    if (!aiParsed && !raw) throw new Error("No response from AI provider")
 
-    if (!response) throw new Error("No response from AI provider")
-
-    let parsed: any
-    try {
-      parsed = JSON.parse(response)
-    } catch {
-      const m = response.match(/```(?:json)?\n?([\s\S]*?)\n?```/)
-      if (m && m[1]) parsed = JSON.parse(m[1])
-      else throw new Error("Could not parse AI response as JSON")
+    let parsed: any = aiParsed
+    if (!parsed && typeof raw === "string") {
+      try { parsed = JSON.parse(raw) } catch {
+        const m = raw.match(/```(?:json)?\n?([\s\S]*?)\n?```/)
+        if (m && m[1]) parsed = JSON.parse(m[1])
+      }
     }
+    if (!parsed) throw new Error("Could not parse AI response as JSON")
 
     const result: BatchContentResult = {
       title: parsed.title || parsed.toolName || parsed.topic || "Untitled",

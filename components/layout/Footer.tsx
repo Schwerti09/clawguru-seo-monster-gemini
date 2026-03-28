@@ -30,6 +30,13 @@ export default function Footer() {
           <h4 className="font-semibold mb-4">{nav.solutions || footer.solutions_title || "Solutions"}</h4>
           <ul className="space-y-2 opacity-70">
             <li><a href={`${prefix}/solutions`}>Solutions</a></li>
+            <li><a href={`${prefix}/gsc-optimize`}>Guides Hub</a></li>
+            {/* High-impression GSC keywords for extra internal link juice */}
+            <li><a href={`${prefix}/solutions/influxdb-hipaa-compliance`}>InfluxDB HIPAA Compliance</a></li>
+            <li><a href={`${prefix}/solutions/iso-27001-google-cloud`}>ISO 27001 auf Google Cloud</a></li>
+            <li><a href={`${prefix}/solutions/github-actions-bare-metal`}>GitHub Actions auf Bare Metal</a></li>
+            <li><a href={`${prefix}/solutions/rabbitmq-audit`}>RabbitMQ Audit Guide</a></li>
+            <li><a href={`${prefix}/solutions/terraform-canary-deploy`}>Terraform Canary Deploy</a></li>
             <li><a href={`${prefix}/emergency`}>{nav.emergency || "Emergency"}</a></li>
             <li><a href={`${prefix}/check`}>{nav.securityCheck || "Security-Check"}</a></li>
             <li><a href={`${prefix}/pricing`}>{nav.pricing || "Pricing"}</a></li>

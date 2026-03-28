@@ -87,7 +87,7 @@
     "voiceCopilotLimited": "Limited",
     "dayPassBadge": "One-time · 24h",
     "dayPassDesc": "Iets in brand? 24 uur volledige toegang tot runbooks, Copilot, OpsWall, Vault en ThreatMap.",
-    "dayPassBtn": "Koop Day Pass (7€) → Stripe",
+    "dayPassBtn": "Koop Day Pass (9€) → Stripe",
     "dayPassMeta": "Instant access · no subscription · access recoverable via /recover",
     "dayPassOnce": "one-time",
     "mostPopular": "Most Popular Plan",
@@ -421,6 +421,6 @@
         "l": "Resistant"
       }
     ],
-    "finalCta": "Day Pass €7 – Instant access"
+    "finalCta": "Day Pass €9 – Instant access"
   }
 }

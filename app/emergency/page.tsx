@@ -109,7 +109,7 @@ const faqJsonLd = {
       name: "Brauche ich ein Abo oder Account-Approval?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Nein. Der Day Pass kostet 7€ einmalig, kein Abo, kein Account nötig. Zugang wird direkt im Browser freigeschaltet (Token). Ideal wenn du keine Buchhaltungs-Approval abwarten kannst.",
+        text: "Nein. Der Day Pass kostet 9€ einmalig, kein Abo, kein Account nötig. Zugang wird direkt im Browser freigeschaltet (Token). Ideal wenn du keine Buchhaltungs-Approval abwarten kannst.",
       },
     },
   ],
@@ -157,7 +157,7 @@ export default function EmergencyPage() {
           <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center items-center">
             <BuyButton
               product="daypass"
-              label="🔥 Day Pass kaufen – Sofortzugang (7€)"
+              label="🔥 Day Pass kaufen – Sofortzugang (9€)"
               className="py-4 px-8 rounded-2xl font-black text-base text-black transition-all duration-300 hover:opacity-90 disabled:opacity-60"
               style={{
                 background: "linear-gradient(135deg, #f87171 0%, #dc2626 100%)",
@@ -232,7 +232,7 @@ export default function EmergencyPage() {
             }}
           >
             <div className="text-[10px] font-mono uppercase tracking-[0.25em] text-gray-500 mb-4">
-              Day Pass · 24h Vollzugriff für 7€
+              Day Pass · 24h Vollzugriff für 9€
             </div>
             <h2 className="text-2xl font-black text-white mb-4">
               Was du sofort bekommst
@@ -269,7 +269,7 @@ export default function EmergencyPage() {
             <div className="mt-6 flex flex-col sm:flex-row gap-4 items-start sm:items-center">
               <BuyButton
                 product="daypass"
-                label="Day Pass kaufen (7€) → Sofortzugang"
+                label="Day Pass kaufen (9€) → Sofortzugang"
                 className="py-3 px-7 rounded-2xl font-black text-sm text-black transition-all duration-300 hover:opacity-90 disabled:opacity-60"
                 style={{
                   background: "linear-gradient(135deg, #f87171 0%, #dc2626 100%)",

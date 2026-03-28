@@ -4,7 +4,7 @@ import BuyButton from "@/components/commerce/BuyButton"
 export const metadata = {
   title: "24h Day Pass – Sofortzugang bei IT-Notfall | ClawGuru",
   description:
-    "Server brennt? Incident läuft? ClawGuru Day Pass: 500+ Runbooks, Copilot-Chat, Config Validator & OpsWall – 7€, kein Abo, sofort aktiv. Instant Access, No Subscription Trap.",
+    "Server brennt? Incident läuft? ClawGuru Day Pass: 500+ Runbooks, Copilot-Chat, Config Validator & OpsWall – 9€, kein Abo, sofort aktiv. Instant Access, No Subscription Trap.",
   alternates: { canonical: "/daypass" },
 }
 
@@ -18,7 +18,7 @@ const HERO_SECTIONS = [
     headline: "Dein Server brennt. Jede Minute zählt.",
     subline:
       "Ohne strukturiertes Runbook verlängerst du den Ausfall – und den Schaden. ClawGuru gibt dir in 60 Sekunden Sofort-Zugang zu Incident-Runbooks, Copilot-Chat und OpsWall. Kein Abo. Kein Onboarding. Nur Fix.",
-    cta: "Jetzt Sofort-Zugang sichern (7€)",
+    cta: "Jetzt Sofort-Zugang sichern (9€)",
     glow: "rgba(255,64,64,0.15)",
     gradientStart: "#ff4040",
     gradientEnd: "#ff8800",
@@ -32,7 +32,7 @@ const HERO_SECTIONS = [
     headline: "SSH ausgefallen. Keine Doku. Keine Reihenfolge.",
     subline:
       "Du weißt was zu tun wäre – aber nicht in welcher Reihenfolge und nicht für deinen Stack. Stack Overflow hat 15 Antworten, keine davon passt. Unsere 500+ Runbooks passen – direkt ins Terminal kopierbar.",
-    cta: "Runbooks jetzt freischalten (7€)",
+    cta: "Runbooks jetzt freischalten (9€)",
     glow: "rgba(255,184,0,0.12)",
     gradientStart: "#ffb800",
     gradientEnd: "#ff6600",
@@ -46,7 +46,7 @@ const HERO_SECTIONS = [
     headline: "Breach-Alarm. Dein Team braucht jetzt Struktur.",
     subline:
       "Falsche Reihenfolge bei der Incident-Response kostet Daten – und Vertrauen. ClawGuru liefert strukturierte IR-Playbooks + Copilot-Chat für deine spezifische Situation. Kein Abo, kein Passwort, sofort einsetzbar.",
-    cta: "IR-Playbooks öffnen (7€)",
+    cta: "IR-Playbooks öffnen (9€)",
     glow: "rgba(255,64,64,0.15)",
     gradientStart: "#ff4040",
     gradientEnd: "#cc0033",
@@ -60,7 +60,7 @@ const HERO_SECTIONS = [
     headline: "Nginx kaputt. Docker crasht. YAML falsch. Produktion unten.",
     subline:
       "Der Config Validator analysiert Docker, Nginx und YAML-Configs auf Fehler – und liefert dir das passende Runbook. Kein Suchen, kein Raten. Nur: Problem → Ursache → Fix.",
-    cta: "Config-Check starten (7€)",
+    cta: "Config-Check starten (9€)",
     glow: "rgba(0,184,255,0.12)",
     gradientStart: "#00b8ff",
     gradientEnd: "#0077ff",
@@ -73,8 +73,8 @@ const HERO_SECTIONS = [
     badgeBorder: "rgba(0,255,157,0.25)",
     headline: "Es ist 3 Uhr morgens. Alles brennt. Du brauchst Antworten.",
     subline:
-      "Ein Klick. 7€. 24 Stunden Vollzugriff auf alle ClawGuru-Tools: Score, OpsWall, ThreatMap, Mission Control, Copilot und 500+ Runbooks. Instant Access – kein Abo, keine Subscription-Falle.",
-    cta: "24h Vollzugriff kaufen (7€)",
+      "Ein Klick. 9€. 24 Stunden Vollzugriff auf alle ClawGuru-Tools: Score, OpsWall, ThreatMap, Mission Control, Copilot und 500+ Runbooks. Instant Access – kein Abo, keine Subscription-Falle.",
+    cta: "24h Vollzugriff kaufen (9€)",
     glow: "rgba(0,255,157,0.10)",
     gradientStart: "#00ff9d",
     gradientEnd: "#00b8ff",
@@ -213,7 +213,7 @@ export default function DayPassLandingPage() {
           <div className="mt-8">
             <BuyButton
               product="daypass"
-              label="Sofort-Zugang kaufen – 7€ · Kein Abo"
+              label="Sofort-Zugang kaufen – 9€ · Kein Abo"
               className="inline-block px-10 py-4 rounded-2xl font-black text-base text-black transition-all duration-300 hover:opacity-90 disabled:opacity-60"
               style={{
                 background: "linear-gradient(135deg, #ff4040 0%, #ff8800 100%)",
@@ -320,12 +320,12 @@ export default function DayPassLandingPage() {
               Stopp suchen. Fang an zu fixen.
             </h2>
             <p className="text-gray-300 text-lg mb-8 max-w-lg mx-auto">
-              7€. 24 Stunden. Vollzugriff. Kein Abo, kein Account, kein Onboarding.
+              9€. 24 Stunden. Vollzugriff. Kein Abo, kein Account, kein Onboarding.
               Zugang ist in unter 60 Sekunden aktiv.
             </p>
             <BuyButton
               product="daypass"
-              label="Day Pass kaufen – 7€ · Kein Abo · Sofort aktiv"
+              label="Day Pass kaufen – 9€ · Kein Abo · Sofort aktiv"
               className="inline-block px-10 py-4 rounded-2xl font-black text-base text-black transition-all duration-300 hover:opacity-90 disabled:opacity-60"
               style={{
                 background: "linear-gradient(135deg, #ff4040 0%, #ff8800 100%)",

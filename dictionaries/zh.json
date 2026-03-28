@@ -173,7 +173,7 @@
     "voiceCopilotLimited": "Limited",
     "dayPassBadge": "One-time · 24h",
     "dayPassDesc": "发生严重事件？立即获得24小时访问所有 Runbook、Copilot、OpsWall、Vault、ThreatMap 与 Mission Control 的能力。",
-    "dayPassBtn": "购买 Day Pass（7€）→ Stripe",
+    "dayPassBtn": "购买 Day Pass（9€）→ Stripe",
     "dayPassMeta": "Instant access · no subscription · access recoverable via /recover",
     "dayPassOnce": "一次性",
     "mostPopular": "最受欢迎的计划",
@@ -421,6 +421,6 @@
         "l": "Resistant"
       }
     ],
-    "finalCta": "Day Pass €7 – Instant access"
+    "finalCta": "Day Pass €9 – Instant access"
   }
 }

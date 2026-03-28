@@ -48,12 +48,12 @@ export default function Emergency() {
           <div className="font-black text-xl text-white">Runbooks & Copilot für deinen Incident</div>
           <p className="mt-2 text-gray-300 text-sm leading-relaxed">
             Log4j-Check, Ransomware Playbook, Key Rotation, SSH-Hardening – 500+ Runbooks sofort
-            verfügbar. Kein Abo, kein Account-Approval. 7€ einmalig, aktiv in 60 Sekunden.
+            verfügbar. Kein Abo, kein Account-Approval. 9€ einmalig, aktiv in 60 Sekunden.
           </p>
           <div className="mt-5 flex flex-wrap gap-3 items-center">
             <BuyButton
               product="daypass"
-              label="🔥 Day Pass kaufen (7€) – Sofortzugang"
+              label="🔥 Day Pass kaufen (9€) – Sofortzugang"
               className="py-3 px-6 rounded-xl font-black text-sm text-black transition-all duration-300 hover:opacity-90 disabled:opacity-60"
               style={{
                 background: "linear-gradient(135deg, #f87171 0%, #dc2626 100%)",

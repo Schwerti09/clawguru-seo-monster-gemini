@@ -378,7 +378,7 @@ export default function VorstellungClient({ dict }: { dict?: any }) {
 
           {/* Final CTA */}
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="text-center pt-6">
-            <GlowButton variant="primary" href={`${prefix}/daypass`}>{dict?.finalCta ?? "Day Pass 7€ – Sofortzugang"}</GlowButton>
+            <GlowButton variant="primary" href={`${prefix}/daypass`}>{dict?.finalCta ?? "Day Pass 9€ – Sofortzugang"}</GlowButton>
           </motion.div>
         </div>
       </Container>

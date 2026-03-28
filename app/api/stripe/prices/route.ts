@@ -28,7 +28,7 @@ export async function GET() {
   return NextResponse.json({
     daypass: {
       priceId: process.env.STRIPE_PRICE_DAYPASS ?? null,
-      amount: 700,   // cents
+      amount: 900,   // cents
       currency: "eur",
       interval: "one_time",
     },

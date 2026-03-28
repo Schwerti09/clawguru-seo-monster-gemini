@@ -217,11 +217,25 @@ export default function LiveFixSandbox() {
   const [result, setResult] = useState<SandboxResult | null>(null)
   const [copied, setCopied] = useState(false)
 
+  const trackSandboxTest = useCallback(async (detected: ConfigType, score: number) => {
+    try {
+      await fetch("/api/analytics/copilot", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          event: "sandbox_test",
+          data: { configType: detected, score }
+        })
+      }).catch(() => {}) // Silently fail
+    } catch {}
+  }, [])
+
   const handleRun = useCallback(() => {
     if (!code.trim()) return
     const r = runLint(code, configType)
     setResult(r)
-  }, [code, configType])
+    trackSandboxTest(r.configType, r.score)
+  }, [code, configType, trackSandboxTest])
 
   const handleCopy = useCallback(async () => {
     await navigator.clipboard.writeText(code)

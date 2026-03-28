@@ -1,7 +1,6 @@
 import type { Metadata } from "next"
 import Container from "@/components/shared/Container"
 import CopilotChat from "@/components/copilot/CopilotChat"
-// NEXT-LEVEL UPGRADE 2026: Voice Copilot + Live Fix Sandbox
 import VoiceCopilot from "@/components/copilot/VoiceCopilot"
 import LiveFixSandbox from "@/components/copilot/LiveFixSandbox"
 import LoginSaveBanner from "@/components/shared/LoginSaveBanner"

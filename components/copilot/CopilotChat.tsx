@@ -68,6 +68,17 @@ export default function CopilotChat() {
     setFollowups(initialFollowups)
   }, [locale, startMsgs, initialFollowups])
 
+  // Analytics tracking for user behavior
+  async function trackEvent(event: string, data: Record<string, unknown>) {
+    try {
+      await fetch("/api/analytics/copilot", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ event, data })
+      }).catch(() => {}) // Silently fail - don't break if analytics is down
+    } catch {}
+  }
+
   async function send(text: string) {
     const txt = text.trim()
     if (!txt) return
@@ -128,7 +139,10 @@ export default function CopilotChat() {
             {followups.slice(0, 5).map((f) => (
               <button
                 key={f}
-                onClick={() => send(f)}
+                onClick={() => {
+                  trackEvent("followup_clicked", { followup: f })
+                  send(f)
+                }}
                 disabled={loading}
                 className="px-3 py-2 rounded-lg text-xs font-semibold border border-gray-700/60 bg-gradient-to-br from-gray-800/40 to-gray-900/20 hover:border-brand-cyan/60 hover:text-brand-cyan transition disabled:opacity-40"
               >

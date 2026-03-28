@@ -35,7 +35,7 @@ export default function HeroSection({ prefix = "", locale = "de" }: Props) {
           <p className="mt-5 text-lg sm:text-xl text-gray-300">{t.sub}</p>
           <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
             <a
-              href="/daypass"
+              href={`${prefix}/daypass`}
               className="px-6 py-3 rounded-2xl font-black bg-gradient-to-r from-brand-cyan to-brand-violet hover:opacity-90 text-white text-center"
             >
               {t.daypass}

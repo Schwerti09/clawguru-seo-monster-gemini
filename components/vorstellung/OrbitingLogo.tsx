@@ -39,11 +39,21 @@ function Orbits() {
 
 export default function OrbitingLogo() {
   const [useStatic, setUseStatic] = useState(false)
+  const canUseWebGL = () => {
+    try {
+      const c = document.createElement("canvas")
+      const gl = (c.getContext("webgl") || c.getContext("experimental-webgl")) as WebGLRenderingContext | null
+      return !!gl
+    } catch {
+      return false
+    }
+  }
   useEffect(() => {
     try {
       const isMobile = window.innerWidth < 768
       const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches
-      setUseStatic(isMobile || reduce)
+      const webgl = canUseWebGL()
+      setUseStatic(isMobile || reduce || !webgl)
     } catch {
       setUseStatic(false)
     }

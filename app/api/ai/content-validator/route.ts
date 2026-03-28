@@ -132,10 +132,8 @@ export async function POST(request: NextRequest) {
       // Fetch batch job status from batch-generate API
       try {
         const batchResponse = await fetch(
-          new URL(`/api/ai/batch-generate/${jobId}`, request.nextUrl.origin),
-          {
-            method: "GET",
-          }
+          new URL(`/api/ai/batch-generate?jobId=${encodeURIComponent(jobId)}`, request.nextUrl.origin),
+          { method: "GET" }
         )
 
         if (!batchResponse.ok) {

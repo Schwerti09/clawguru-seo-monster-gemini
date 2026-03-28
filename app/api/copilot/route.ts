@@ -83,7 +83,10 @@ function extractJson(text: string): unknown {
 
 async function geminiGenerate(prompt: string): Promise<string | null> {
   const apiKey = process.env.GEMINI_API_KEY;
-  if (!apiKey) return null;
+  if (!apiKey) {
+    console.log("[GEMINI] No API key configured");
+    return null;
+  }
 
   const model = process.env.GEMINI_MODEL || "gemini-2.0-flash";
   const base = (process.env.GEMINI_BASE_URL || "https://generativelanguage.googleapis.com/v1beta").replace(
@@ -93,21 +96,38 @@ async function geminiGenerate(prompt: string): Promise<string | null> {
 
   const url = `${base}/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(apiKey)}`;
 
-  const res = await fetch(url, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      contents: [{ role: "user", parts: [{ text: prompt }] }],
-      generationConfig: { temperature: 0.35, maxOutputTokens: 900 },
-    }),
-  });
+  try {
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        contents: [{ role: "user", parts: [{ text: prompt }] }],
+        generationConfig: { temperature: 0.35, maxOutputTokens: 900 },
+      }),
+    });
 
-  if (!res.ok) return null;
-  const data = await res.json();
-  const parts = data?.candidates?.[0]?.content?.parts;
-  if (!Array.isArray(parts)) return null;
-  const text = parts.map((p: { text?: string }) => p?.text).filter(Boolean).join("");
-  return typeof text === "string" && text.trim() ? text.trim() : null;
+    console.log("[GEMINI] Response status:", res.status);
+    if (!res.ok) {
+      const errText = await res.text();
+      console.log("[GEMINI] Error response:", errText.substring(0, 200));
+      return null;
+    }
+
+    const data = await res.json();
+    const parts = data?.candidates?.[0]?.content?.parts;
+    if (!Array.isArray(parts)) {
+      console.log("[GEMINI] No content parts in response");
+      return null;
+    }
+
+    const text = parts.map((p: { text?: string }) => p?.text).filter(Boolean).join("");
+    const result = typeof text === "string" && text.trim() ? text.trim() : null;
+    console.log("[GEMINI] Generated text length:", result?.length || 0, "First 100 chars:", result?.substring(0, 100));
+    return result;
+  } catch (err) {
+    console.error("[GEMINI] Fetch error:", err instanceof Error ? err.message : String(err));
+    return null;
+  }
 }
 
 function buildCopilotPrompt(userMessage: string): string {
@@ -157,13 +177,25 @@ export async function POST(req: NextRequest) {
 
     const rb = ruleBasedCopilot(msg) as CopilotResponse;
 
-    // Prefer Gemini (user asked: "anstatt GPT"). If Gemini isn't configured, fall back to rule-based.
+    // Try Gemini first if API key is configured
     const llmText = await geminiGenerate(buildCopilotPrompt(msg));
     const parsed = llmText ? extractJson(llmText) : null;
 
+    // Debug logging
+    if (process.env.NODE_ENV === "development") {
+      console.log("[COPILOT_GEMINI]", {
+        messageLength: msg.length,
+        geminiResponseReceived: !!llmText,
+        geminiResponseLength: llmText?.length || 0,
+        geminiFirstChars: llmText?.substring(0, 100),
+        jsonParsed: !!parsed,
+      });
+    }
+
     const out = parsed ? coerceCopilot(parsed, rb) : rb;
     return NextResponse.json(out);
-  } catch {
+  } catch (err) {
+    console.error("[COPILOT_ERROR]", err);
     return NextResponse.json(ruleBasedCopilot(""), { status: 200 });
   }
 }

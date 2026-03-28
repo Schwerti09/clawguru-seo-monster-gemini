@@ -37,18 +37,46 @@ function coerceCopilot(payload: unknown, fallback: CopilotResponse): CopilotResp
 }
 
 function extractJson(text: string): unknown {
+  if (!text || typeof text !== "string") return null;
+  
   // Strip code-fences if present
   const cleaned = text
-    .replace(/```json/gi, "```")
-    .replace(/```/g, "")
+    .replace(/```json\n?/gi, "")
+    .replace(/```\n?/g, "")
     .trim();
 
-  // Prefer the first JSON object in the response
-  const match = cleaned.match(/\{[\s\S]*\}/);
-  if (!match) return null;
+  if (!cleaned) return null;
+
   try {
-    return JSON.parse(match[0]);
+    // Try direct JSON parse first
+    return JSON.parse(cleaned);
   } catch {
+    // If direct parse fails, try to extract JSON object
+    let braceCount = 0;
+    let jsonStart = -1;
+    let jsonEnd = -1;
+
+    for (let i = 0; i < cleaned.length; i++) {
+      if (cleaned[i] === "{") {
+        if (braceCount === 0) jsonStart = i;
+        braceCount++;
+      } else if (cleaned[i] === "}") {
+        braceCount--;
+        if (braceCount === 0 && jsonStart !== -1) {
+          jsonEnd = i + 1;
+          break;
+        }
+      }
+    }
+
+    if (jsonStart !== -1 && jsonEnd !== -1) {
+      try {
+        return JSON.parse(cleaned.substring(jsonStart, jsonEnd));
+      } catch {
+        return null;
+      }
+    }
+
     return null;
   }
 }
@@ -83,19 +111,32 @@ async function geminiGenerate(prompt: string): Promise<string | null> {
 }
 
 function buildCopilotPrompt(userMessage: string): string {
-  return [
-    "Du bist ClawGuru Copilot, ein ultra-praktischer Ops/Security-Advisor.",
-    "Antworte IMMER als JSON (ohne Markdown).",
-    "Schema:",
-    '{"reply":"string","followups":["string"],"actions":[{"label":"string","href":"/path"}],"confidence":"low|medium|high"}',
-    "Regeln:",
-    "- reply: kurz, konkret, schrittweise, mit Checkliste.",
-    "- followups: 3-5 kurze Rückfragen/Next-steps.",
-    "- actions: 2-4 interne Links (z.B. /check, /runbooks, /mission-control, /pricing, /live, /tools).",
-    "- Keine sensiblen Daten erfragen (Keys/Passwörter), keine illegalen Anleitungen.",
-    "Nachricht:",
-    userMessage,
-  ].join("\n");
+  const schema = JSON.stringify({
+    reply: "string - kurz, konkret, schrittweise",
+    followups: ["string - 3-5 Rückfragen"],
+    actions: [{ label: "string", href: "string - Pfad wie /tools oder /check" }],
+    confidence: "low | medium | high"
+  }, null, 2);
+
+  return `Du bist ClawGuru Copilot, ein Ops/Security-Advisor für DevOps, Infrastruktur und Security-Härtung.
+
+WICHTIG: Du antwortest AUSSCHLIESSLICH als valides JSON. Kein weiterer Text, keine Markdown-Fences, kein Code-Block.
+
+JSON Schema (exakt einhalten):
+${schema}
+
+Richtlinien für deine Antwort:
+- "reply": Kurz, konkret, actionable. Mit Checkliste wenn relevant. 2-4 Sätze max.
+- "followups": 3-5 kurze Fragen/Suggestions (jeweils 5-15 Wörter).
+- "actions": 2-4 interne ClawGuru-Links. Nur erlaubte Pfade: /tools, /runbooks, /check, /pricing, /live, /mission-control, /vault, /security.
+- "confidence": "low" wenn viele Infos fehlen, "medium" wenn teilweise klar, "high" wenn praxis-actionable.
+
+Sicherheit:
+- Nie Passwörter/Keys abfragen oder sensitive Daten sammeln.
+- Keine illegalen oder unethischen Anleitungen.
+
+Benutzer-Anfrage:
+${userMessage}`;
 }
 
 export async function POST(req: NextRequest) {

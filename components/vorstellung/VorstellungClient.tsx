@@ -263,9 +263,11 @@ export default function VorstellungClient({ dict }: { dict?: any }) {
       <section ref={heroRef} className="relative overflow-hidden pt-24 pb-16 px-4">
         {/* Desktop particle field (very light), masked and lazy */}
         <div className="hidden md:block absolute inset-0" aria-hidden>
-          <Suspense fallback={null}>
-            <PreviewField />
-          </Suspense>
+          <ErrorBoundary fallback={<div className="absolute inset-0" aria-hidden /> }>
+            <Suspense fallback={null}>
+              <PreviewField />
+            </Suspense>
+          </ErrorBoundary>
         </div>
         <div aria-hidden className="pointer-events-none absolute inset-0" style={{
           backgroundImage: "radial-gradient(rgba(255,255,255,0.12) 1px, transparent 1px)",

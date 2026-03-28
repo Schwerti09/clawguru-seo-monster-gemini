@@ -78,5 +78,18 @@ async function testGemini() {
 
 export async function GET() {
   const result = await testGemini();
-  return NextResponse.json(result);
+  
+  // Log additional debugging info
+  console.log("[GEMINI_DEBUG] GEMINI_API_KEY present:", !!process.env.GEMINI_API_KEY);
+  console.log("[GEMINI_DEBUG] GEMINI_MODEL:", process.env.GEMINI_MODEL);
+  console.log("[GEMINI_DEBUG] GEMINI_BASE_URL:", process.env.GEMINI_BASE_URL);
+  
+  return NextResponse.json({
+    ...result,
+    env: {
+      model: process.env.GEMINI_MODEL,
+      baseUrl: process.env.GEMINI_BASE_URL,
+      keyPresent: !!process.env.GEMINI_API_KEY,
+    },
+  });
 }

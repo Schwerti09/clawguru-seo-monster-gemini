@@ -15,13 +15,13 @@ export async function generateMetadata(): Promise<Metadata> {
   const h = headers()
   const locale = (h.get("x-claw-locale") ?? DEFAULT_LOCALE) as Locale
   return {
-    title: "CVE Fix Solutions | ClawGuru",
+    title: "Infrastructure Hardening & Compliance Guides 2026 | ClawGuru",
     description:
-      "Step-by-step guides to fix critical CVEs: OpenSSH regreSSHion, XZ Utils backdoor, runc container escape, Next.js middleware bypass, and 1,000+ more. Actionable mitigation with verification commands.",
+      "InfluxDB HIPAA, ISO 27001 on Google Cloud, RabbitMQ Audit, Terraform Canary Deployments, GitHub Actions on bare metal. Step-by-step guides with security checklists.",
     alternates: { canonical: `/${locale}/solutions` },
     openGraph: {
-      title: "CVE Fix Solutions | ClawGuru",
-      description: "Programmatic CVE fix guides with Gemini-generated unique content per vulnerability.",
+      title: "Infrastructure Hardening & Compliance | ClawGuru",
+      description: "Security hardening, compliance (HIPAA, ISO 27001, PCI-DSS), and deployment best practices for AWS, GCP, Azure.",
       type: "website",
     },
   }

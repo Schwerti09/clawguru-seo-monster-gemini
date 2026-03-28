@@ -37,6 +37,7 @@ export default function Header() {
 
   // Overflow items â€“ visible in "More" dropdown on desktop and in mobile menu
   const MORE_NAV: NavItem[] = [
+    { href: `${prefix}/gsc-optimize`, label: "Guides Hub" },
     { href: `${prefix}/clawverse`, label: dict.nav.clawVerse },
     { href: `${prefix}/summon`, label: dict.nav.summon },
     { href: `${prefix}/oracle`, label: dict.nav.oracle },

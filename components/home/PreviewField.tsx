@@ -39,10 +39,20 @@ function Particles() {
 
 export default function PreviewField() {
   const [enabled, setEnabled] = useState(true)
+  const canUseWebGL = () => {
+    try {
+      const c = document.createElement("canvas")
+      const gl = (c.getContext("webgl") || c.getContext("experimental-webgl")) as WebGLRenderingContext | null
+      return !!gl
+    } catch {
+      return false
+    }
+  }
   useEffect(() => {
     try {
       const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches
-      setEnabled(!reduce)
+      const webgl = canUseWebGL()
+      setEnabled(!reduce && webgl)
     } catch {
       setEnabled(true)
     }

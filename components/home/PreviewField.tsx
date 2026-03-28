@@ -38,7 +38,7 @@ function Particles() {
 }
 
 export default function PreviewField() {
-  const [enabled, setEnabled] = useState(true)
+  const [enabled, setEnabled] = useState(false)
   const canUseWebGL = () => {
     try {
       const c = document.createElement("canvas")
@@ -54,7 +54,7 @@ export default function PreviewField() {
       const webgl = canUseWebGL()
       setEnabled(!reduce && webgl)
     } catch {
-      setEnabled(true)
+      setEnabled(false)
     }
   }, [])
   if (!enabled) return null

@@ -38,7 +38,7 @@ function Orbits() {
 }
 
 export default function OrbitingLogo() {
-  const [useStatic, setUseStatic] = useState(false)
+  const [useStatic, setUseStatic] = useState(true)
   const canUseWebGL = () => {
     try {
       const c = document.createElement("canvas")
@@ -53,9 +53,9 @@ export default function OrbitingLogo() {
       const isMobile = window.innerWidth < 768
       const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches
       const webgl = canUseWebGL()
-      setUseStatic(isMobile || reduce || !webgl)
+      setUseStatic(isMobile || reduce || !webgl ? true : false)
     } catch {
-      setUseStatic(false)
+      setUseStatic(true)
     }
   }, [])
   return (

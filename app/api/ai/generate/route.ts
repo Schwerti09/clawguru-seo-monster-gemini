@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { isApiActive, apiUnavailableResponse } from "@/lib/api-guard";
+import { generateTextOrdered } from "@/lib/ai/providers";
 
 export const dynamic = "force-dynamic";
 
@@ -80,13 +81,6 @@ export async function POST(req: NextRequest) {
   try {
     const p = await readPrompt(req);
     if (!p.trim()) return NextResponse.json({ error: "Missing prompt" }, { status: 400 });
-
-    let provider = (process.env.AI_PROVIDER || "deepseek").toLowerCase();
-    if (provider === "gemini" && !process.env.GEMINI_API_KEY) {
-      console.warn("GEMINI_API_KEY fehlt → fallback auf deepseek");
-      provider = "deepseek";
-    }
-
     const system = [
       "You are ClawGuru Runbook Factory.",
       "Return a practical, step-by-step runbook with clear sections:",
@@ -94,191 +88,8 @@ export async function POST(req: NextRequest) {
       "Keep it concise and actionable.",
     ].join("\n");
 
-    if (provider === "gemini") {
-      const geminiKey = process.env.GEMINI_API_KEY;
-      if (!geminiKey) {
-        return NextResponse.json(
-          { error: "GEMINI_API_KEY missing on server (Vercel env vars)" },
-          { status: 500 },
-        );
-      }
-
-      const model = process.env.GEMINI_MODEL || "gemini-1.5-flash";
-      const base = (
-        process.env.GEMINI_BASE_URL || "https://generativelanguage.googleapis.com/v1beta"
-      ).replace(/\/$/, "");
-
-      const url = `${base}/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(
-        geminiKey,
-      )}`;
-
-      const res = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          contents: [
-            {
-              role: "user",
-              parts: [{ text: `${system}\n\nUSER REQUEST:\n${p}` }],
-            },
-          ],
-          generationConfig: {
-            temperature: 0.35,
-            maxOutputTokens: 900,
-          },
-        }),
-      });
-
-      if (!res.ok) {
-        const t = await res.text().catch(() => "");
-        return NextResponse.json(
-          { error: "Gemini request failed", status: res.status, detail: t.slice(0, 2000) },
-          { status: 502 },
-        );
-      }
-
-      const data = await res.json();
-      const text = extractGeminiText(data);
-      if (!text) return NextResponse.json({ error: "No output" }, { status: 502 });
-      return NextResponse.json({ text });
-    }
-
-    if (provider === "deepseek") {
-      const apiKey = process.env.DEEPSEEK_API_KEY;
-      if (!apiKey) {
-        return NextResponse.json(
-          { error: "DEEPSEEK_API_KEY missing on server (Vercel env vars)" },
-          { status: 500 },
-        );
-      }
-
-      const model = process.env.OPENAI_MODEL || "deepseek-chat";
-      const base = (process.env.OPENAI_BASE_URL || process.env.DEEPSEEK_BASE_URL || "https://api.deepseek.com/v1").replace(/\/$/, "");
-      const chatUrl = `${base}/chat/completions`;
-      const res3 = await fetch(chatUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${apiKey}`,
-        },
-        body: JSON.stringify({
-          model,
-          messages: [
-            { role: "system", content: system },
-            { role: "user", content: p },
-          ],
-          temperature: 0.35,
-          max_tokens: 900,
-        }),
-      });
-
-      if (!res3.ok) {
-        const status = res3.status;
-        const t3 = await res3.text().catch(() => "");
-        if (status === 402) {
-          const gkey = process.env.GEMINI_API_KEY;
-          if (gkey) {
-            const base = (process.env.GEMINI_BASE_URL || "https://generativelanguage.googleapis.com/v1beta").replace(/\/$/, "");
-            const gurl = `${base}/models/${encodeURIComponent("gemini-2.0-flash")}:generateContent?key=${encodeURIComponent(gkey)}`;
-            const gres = await fetch(gurl, {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                contents: [
-                  {
-                    role: "user",
-                    parts: [{ text: `${system}\n\nUSER REQUEST:\n${p}` }],
-                  },
-                ],
-                generationConfig: { temperature: 0.35, maxOutputTokens: 900 },
-              }),
-            });
-            if (gres.ok) {
-              const gdata = await gres.json();
-              const gtext = extractGeminiText(gdata);
-              if (gtext) return NextResponse.json({ text: gtext });
-            }
-          }
-        }
-        return NextResponse.json(
-          { error: "DeepSeek request failed", status, detail: t3.slice(0, 2000) },
-          { status: 502 },
-        );
-      }
-
-      const data3 = await res3.json();
-      const text3 = extractOutputText(data3);
-      if (!text3) return NextResponse.json({ error: "No output" }, { status: 502 });
-      return NextResponse.json({ text: text3 });
-    }
-
-    // Default: OpenAI
-    const apiKey = process.env.OPENAI_API_KEY;
-    if (!apiKey) {
-      return NextResponse.json(
-        { error: "OPENAI_API_KEY missing on server (Vercel env vars)" },
-        { status: 500 },
-      );
-    }
-
-    const model = process.env.OPENAI_MODEL || "gpt-4o-mini";
-    const base = (process.env.OPENAI_BASE_URL || "https://api.openai.com/v1").replace(/\/$/, "");
-
-    // Prefer Responses API (modern). If the account/model doesn't support it, OpenAI will return 404/400,
-    // and we fall back to Chat Completions.
-    const responsesUrl = `${base}/responses`;
-    const res = await fetch(responsesUrl, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({
-        model,
-        input: [
-          { role: "system", content: system },
-          { role: "user", content: p },
-        ],
-        temperature: 0.35,
-        max_output_tokens: 900,
-      }),
-    });
-
-    let data: unknown = null;
-    if (res.ok) {
-      data = await res.json();
-    } else {
-      // Fallback to chat completions
-      const chatUrl = `${base}/chat/completions`;
-      const res2 = await fetch(chatUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${apiKey}`,
-        },
-        body: JSON.stringify({
-          model,
-          messages: [
-            { role: "system", content: system },
-            { role: "user", content: p },
-          ],
-          temperature: 0.35,
-          max_tokens: 900,
-        }),
-      });
-      if (!res2.ok) {
-        const t = await res2.text().catch(() => "");
-        return NextResponse.json(
-          { error: "OpenAI request failed", status: res2.status, detail: t.slice(0, 2000) },
-          { status: 502 },
-        );
-      }
-      data = await res2.json();
-    }
-
-    const text = extractOutputText(data);
+    const { text } = await generateTextOrdered(system, p);
     if (!text) return NextResponse.json({ error: "No output" }, { status: 502 });
-
     return NextResponse.json({ text });
   } catch {
     return NextResponse.json({ error: "Server error" }, { status: 500 });

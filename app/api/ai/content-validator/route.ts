@@ -12,6 +12,7 @@
 
 import { NextRequest, NextResponse } from "next/server"
 import { validateAIContent, validateAIContentBatch } from "@/lib/ai/content-validator"
+import { addToReviewQueue } from "@/app/api/ai/human-review-queue/route"
 import type { BatchContentResult } from "@/lib/ai/batch-prompts"
 
 export const dynamic = "force-dynamic"
@@ -77,6 +78,33 @@ export async function POST(request: NextRequest) {
 
       const validation = validateAIContentBatch(results, contentType)
 
+      // Auto-fill human review queue for low-confidence items
+      try {
+        validation.reports.forEach((report: any, idx: number) => {
+          if (report.reviewRequired || report.tier === "bronze") {
+            let parsedContent: any = null
+            try {
+              parsedContent = JSON.parse(results[idx]?.content || "{}")
+            } catch {
+              parsedContent = results[idx]?.content || {}
+            }
+            addToReviewQueue({
+              contentId: report.contentId,
+              title: report.title || results[idx]?.title || "Untitled",
+              contentType,
+              confidence: report.confidenceScore,
+              tier: report.tier === "bronze" ? "bronze" : "review-required",
+              reason: report.reviewReason || (report.violations?.[0]?.message ?? "Low confidence"),
+              eeatScore: report.eeat?.overall ?? 0,
+              aboScore: report.aboRelevance?.overall ?? 0,
+              content: parsedContent,
+            })
+          }
+        })
+      } catch (e) {
+        console.warn("[content-validator] Failed to enqueue review items:", e)
+      }
+
       return NextResponse.json(
         {
           status: "batch-validated",
@@ -128,6 +156,34 @@ export async function POST(request: NextRequest) {
 
         const results: BatchContentResult[] = batchStatus.results || []
         const validation = validateAIContentBatch(results, contentType)
+
+        // Auto-fill human review queue with batchId context
+        try {
+          validation.reports.forEach((report: any, idx: number) => {
+            if (report.reviewRequired || report.tier === "bronze") {
+              let parsedContent: any = null
+              try {
+                parsedContent = JSON.parse(results[idx]?.content || "{}")
+              } catch {
+                parsedContent = results[idx]?.content || {}
+              }
+              addToReviewQueue({
+                contentId: report.contentId,
+                batchId: jobId,
+                title: report.title || results[idx]?.title || "Untitled",
+                contentType,
+                confidence: report.confidenceScore,
+                tier: report.tier === "bronze" ? "bronze" : "review-required",
+                reason: report.reviewReason || (report.violations?.[0]?.message ?? "Low confidence"),
+                eeatScore: report.eeat?.overall ?? 0,
+                aboScore: report.aboRelevance?.overall ?? 0,
+                content: parsedContent,
+              })
+            }
+          })
+        } catch (e) {
+          console.warn("[content-validator] Failed to enqueue review items for batch:", e)
+        }
 
         return NextResponse.json(
           {

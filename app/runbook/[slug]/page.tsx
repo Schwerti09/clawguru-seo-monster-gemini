@@ -27,7 +27,7 @@ const VersionsAndForksTabLazy = NextDynamic(() => import("@/components/runbook/V
 
 export const dynamic = "force-static"
 export const revalidate = 86400 // reduce rebuild frequency to cut CPU
-export const dynamicParams = true
+export const dynamicParams = false // CRITICAL: Prevent 50k+ placeholder pages from being indexed
 export const runtime = "nodejs"
 export const maxDuration = 180
 export const preferredRegion = "iad1"

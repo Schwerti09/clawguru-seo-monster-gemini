@@ -4,6 +4,7 @@ import React, { useEffect, useMemo, useState } from "react"
 import { Canvas, ThreeEvent } from "@react-three/fiber"
 import { OrbitControls } from "@react-three/drei"
 import { motion, useReducedMotion } from "framer-motion"
+import { fetchWithRetry } from "@/lib/fetch-retry"
 
 type Severity = "CRITICAL" | "HIGH" | "MEDIUM" | "LOW"
 type RadarNode = {
@@ -33,7 +34,7 @@ export default function PredictiveRadar({ prefix = "", dict = {} as IntelDict }:
     let alive = true
     ;(async () => {
       try {
-        const r = await fetch("/api/intel?op=radar", { cache: "no-store" })
+        const r = await fetchWithRetry("/api/intel?op=radar", { cache: "no-store" })
         if (!r.ok) throw new Error(String(r.status))
         const j = (await r.json()) as { nodes: RadarNode[] }
         if (alive) setNodes(j.nodes.slice(0, 50))

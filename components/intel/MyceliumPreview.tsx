@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState, useRef } from "react"
 import { motion, useReducedMotion } from "framer-motion"
+import { fetchWithRetry } from "@/lib/fetch-retry"
 
 type Node = { id: string; title: string; slug: string; score: number; x: number; y: number; vx: number; vy: number }
 type Edge = [string, string]
@@ -18,7 +19,7 @@ export default function MyceliumPreview({ prefix = "", dict = {} as IntelDict }:
     let alive = true
     ;(async () => {
       try {
-        const r = await fetch("/api/intel?op=preview", { cache: "no-store" })
+        const r = await fetchWithRetry("/api/intel?op=preview", { cache: "no-store" })
         const j = (await r.json()) as { nodes: Array<{ id: string; title: string; slug: string; score: number }>; edges: Edge[] }
         if (!alive) return
         const rnd = (i: number) => {

@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useEffect, useMemo, useState } from "react"
+import { fetchWithRetry } from "@/lib/fetch-retry"
 
 type IntelStats = {
   newCvesToday: number
@@ -22,7 +23,7 @@ export default function StatsDashboard({ dict }: { dict?: any }) {
     async function load() {
       setLoading(true)
       try {
-        const res = await fetch('/api/intel?op=stats', { cache: 'no-store' })
+        const res = await fetchWithRetry('/api/intel?op=stats', { cache: 'no-store' })
         if (!res.ok) throw new Error(`HTTP ${res.status}`)
         const s: IntelStats = await res.json()
         if (!stop) setStatsData(s)

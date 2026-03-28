@@ -52,8 +52,15 @@ export default async function LocaleRunbookPage(props: {
   const { lang, slug } = props.params
   const allowed = (process.env.SITEMAP_100K_LOCALES ?? "de,en").split(",").map((s) => s.trim()).filter(Boolean)
   if (!allowed.includes(lang)) return notFound()
-  const Mod = await import("@/app/runbook/[slug]/page")
-  const RootRunbookPage = Mod.default
-  return <RootRunbookPage params={{ slug }} />
+  
+  // PHASE 1 Fix #1: Graceful error handling for broken runbook generation
+  try {
+    const Mod = await import("@/app/runbook/[slug]/page")
+    const RootRunbookPage = Mod.default
+    return <RootRunbookPage params={{ slug }} />
+  } catch (err) {
+    console.error(`[sitemap-health] locale runbook generation failed for lang=${lang}, slug=${slug}:`, err instanceof Error ? err.message : String(err))
+    return notFound()
+  }
 }
 

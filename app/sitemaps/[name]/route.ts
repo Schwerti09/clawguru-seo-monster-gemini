@@ -223,6 +223,23 @@ function buildMassiveSlugs(page: number, size: number): string[] {
   return out
 }
 
+// PHASE 1 FIX #2: Lightweight runbook slug validation (prevents dead URLs in sitemap)
+// Returns true if slug looks valid and not obviously broken; false if it should be skipped
+function isValidRunbookSlug(slug: string): boolean {
+  if (!slug || typeof slug !== 'string') return false
+  // Basic format check: must have at least 2 dashes (provider-service-issue-year)
+  const parts = slug.split('-')
+  if (parts.length < 3) return false
+  // Year must be 4-digit number (2024-2030 range)
+  const year = parts[parts.length - 1]
+  if (!/^\d{4}$/.test(year) || parseInt(year, 10) < 2020 || parseInt(year, 10) > 2100) return false
+  // No obviously broken characters
+  if (!/^[a-z0-9\-]+$/.test(slug)) return false
+  // Avoid extremely long slugs that might indicate generation errors
+  if (slug.length > 200) return false
+  return true
+}
+
 export async function GET(
   req: NextRequest,
   { params }: { params: { name: string } }
@@ -324,13 +341,14 @@ export async function GET(
         "cloudflare-nginx-waf-2026",
         "hetzner-ssh-hardening-2026",
       ]
-      const urls = SAMPLE_RUNBOOKS.map((slug) => ({
+      // PHASE 1 FIX #2: Filter out invalid/broken runbook slugs before including in sitemap
+      const validUrls = SAMPLE_RUNBOOKS.filter(isValidRunbookSlug).map((slug) => ({
         loc: `${base}/${loc}/runbook/${slug}`,
         lastmod,
         changefreq: "weekly",
         priority: "0.85",
       }))
-      return respond(urlset(urls))
+      return respond(urlset(validUrls))
     }
 
     const tgMap: Record<string, "a-f" | "g-l" | "m-r" | "s-z" | "0-9"> = {
@@ -362,13 +380,14 @@ export async function GET(
         "cloudflare-nginx-waf-2026",
         "hetzner-ssh-hardening-2026",
       ]
-      const urls = SAMPLE_RUNBOOKS.map((slug) => ({
+      // PHASE 1 FIX #2: Filter validation
+      const validUrls = SAMPLE_RUNBOOKS.filter(isValidRunbookSlug).map((slug) => ({
         loc: `${base}/${DEFAULT_LOCALE}/runbook/${slug}`,
         lastmod,
         changefreq: "weekly",
         priority: "0.85",
       }))
-      return respond(urlset(urls))
+      return respond(urlset(validUrls))
     }
 
     if (tgMap[name]) {
@@ -445,7 +464,8 @@ export async function GET(
         "cloudflare-nginx-waf-2026",
         "hetzner-ssh-hardening-2026",
       ]
-      const i18nUrls = SAMPLE_RUNBOOKS.map((slug) => ({
+      // PHASE 1 FIX #2: Filter validation for i18n
+      const i18nUrls = SAMPLE_RUNBOOKS.filter(isValidRunbookSlug).map((slug) => ({
         loc: `${base}/${locale}/runbook/${slug}`,
         lastmod,
         changefreq: "weekly",

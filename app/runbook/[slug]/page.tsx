@@ -280,8 +280,17 @@ export default async function RunbookPage(props: { params: { slug: string } }) {
   const locale = DEFAULT_LOCALE as Locale
   const dict = await getDictionary(locale)
   const prefix = `/${locale}`
-  const r = getRunbook(params.slug)
-  if (!r) return notFound()
+  
+  // PHASE 1 Fix #1: Graceful error handling – prevent 5xx errors during runbook generation
+  let r: any
+  try {
+    r = getRunbook(params.slug)
+    if (!r) return notFound()
+  } catch (err) {
+    console.error(`[sitemap-health] runbook generation failed for slug ${params.slug}:`, err instanceof Error ? err.message : String(err))
+    // Return 404 instead of 500 – broken/orphaned runbooks should not crash the site
+    return notFound()
+  }
 
   // Quality Gate: reject thin content before serving (ClawGuru 2026 Standard)
   const quality = validateRunbook(r)

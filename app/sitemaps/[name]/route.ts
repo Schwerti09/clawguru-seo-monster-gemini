@@ -338,7 +338,7 @@ export async function GET(
       try {
         const perBucket = Math.max(50, Math.min(5000, parseInt(process.env.SITEMAP_RUNBOOKS_PER_BUCKET || "500", 10) || 500))
         const pseo = await import("@/lib/pseo")
-        const list = (pseo.RUNBOOKS || []) as Array<{ slug: string; lastmod: string; clawScore: number }>
+        const list = (pseo.materializedRunbooks?.() || pseo.RUNBOOKS || []) as Array<{ slug: string; lastmod: string; clawScore: number }>
         function inBucket(slug: string): boolean {
           const c = slug[0]?.toLowerCase() || ""
           if (bucket === "0-9") return /[0-9]/.test(c)
@@ -392,7 +392,7 @@ export async function GET(
       try {
         const perBucket = Math.max(50, Math.min(5000, parseInt(process.env.SITEMAP_RUNBOOKS_PER_BUCKET || "500", 10) || 500))
         const pseo = await import("@/lib/pseo")
-        const list = (pseo.RUNBOOKS || []) as Array<{ slug: string; lastmod: string; clawScore: number }>
+        const list = (pseo.materializedRunbooks?.() || pseo.RUNBOOKS || []) as Array<{ slug: string; lastmod: string; clawScore: number }>
         function inBucket(slug: string): boolean {
           const c = slug[0]?.toLowerCase() || ""
           if (bucket === "0-9") return /[0-9]/.test(c)

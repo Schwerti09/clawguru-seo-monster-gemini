@@ -51,7 +51,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function InfluxDBHIPAAPage({
+export default function InfluxDBHIPAAPage({
   params,
 }: {
   params: { lang: string };
@@ -397,13 +397,13 @@ influx bucket create \\
   --description "Downsampled patient data (7 years)"
   
 # Automated downsampling task
-influx task create -n 'downsample-vitals' -d 'HIPAA compliance downsampling' '`
-option task = {name: "downsample-vitals", every: 1h}
+influx task create -n 'downsample-vitals' -d 'HIPAA compliance downsampling' '` + 
+option task = \$'{name: "downsample-vitals", every: 1h}
 
 from(bucket: "patient-vitals-raw")
   |> range(start: -task.every)
   |> aggregateWindow(every: 5m, fn: mean)
-  |> to(bucket: "patient-vitals-historical")'
+  |> to(bucket: "patient-vitals-historical")' +
   
 # Secure deletion (overwrite before delete)
 influx bucket delete --name temp-research-data --force`}

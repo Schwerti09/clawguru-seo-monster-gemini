@@ -50,7 +50,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function CloudFormationSecurityPage({
+export default function CloudFormationSecurityPage({
   params,
 }: {
   params: { lang: string };
@@ -255,8 +255,8 @@ Resources:
                   - ec2:AuthorizeSecurityGroupIngress
                   - ec2:RevokeSecurityGroupIngress
                 Resource: 
-                  - !Sub "arn:aws:ec2:${AWS::Region}:${AWS::AccountId}:vpc/vpc-*"
-                  - !Sub "arn:aws:ec2:${AWS::Region}:${AWS::AccountId}:security-group/*"
+                  - !Sub "arn:aws:ec2:$\${AWS::Region}:$\${AWS::AccountId}:vpc/vpc-*"
+                  - !Sub "arn:aws:ec2:$\${AWS::Region}:$\${AWS::AccountId}:security-group/*"
                 Condition:
                   StringEquals:
                     ec2:Vpc: !ImportValue ProductionVPC
@@ -274,8 +274,8 @@ Resources:
                   - s3:PutBucketEncryption
                   - s3:PutBucketVersioning
                 Resource: 
-                  - !Sub "arn:aws:s3:::company-data-${AWS::AccountId}-*"
-                  - !Sub "arn:aws:s3:::company-data-${AWS::AccountId}-*/*"
+                  - !Sub "arn:aws:s3:::company-data-$\${AWS::AccountId}-*"
+                  - !Sub "arn:aws:s3:::company-data-$\${AWS::AccountId}-*/*"
         
         - PolicyName: RDSPermissions
           PolicyDocument:
@@ -288,7 +288,7 @@ Resources:
                   - rds:ModifyDBInstance
                   - rds:DeleteDBInstance
                 Resource: 
-                  - !Sub "arn:aws:rds:${AWS::Region}:${AWS::AccountId}:db:production-*"
+                  - !Sub "arn:aws:rds:$\${AWS::Region}:$\${AWS::AccountId}:db:production-*"
                 Condition:
                   StringEquals:
                     rds:Vpc: !ImportValue ProductionVPC
@@ -522,7 +522,7 @@ StackSetInstance:
     TemplateURL: https://s3.amazonaws.com/company-templates/vpc-baseline.yaml
     
     ExecutionRoleName: AWSCloudFormationStackSetExecutionRole
-    AdministrationRoleARN: !Sub "arn:aws:iam::${ManagementAccountId}:role/AWSCloudFormationStackSetAdministrationRole"
+    AdministrationRoleARN: !Sub "arn:aws:iam::$\${ManagementAccountId}:role/AWSCloudFormationStackSetAdministrationRole"
     
     StackInstancesGroup:
       - DeploymentTargets:

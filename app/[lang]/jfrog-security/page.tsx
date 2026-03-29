@@ -50,7 +50,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function JFrogSecurityPage({
+export default function JFrogSecurityPage({
   params,
 }: {
   params: { lang: string };
@@ -283,17 +283,18 @@ jobs:
     steps:
       - name: Get Artifactory Token
         run: |
-          TOKEN=$(curl -s -X POST \\\n            https://artifactory.company.com/api/v1/security/token \\\n            -u ci:${{ secrets.ARTIFACTORY_CI_PASS }} \\\n            -d "username=github-actions" \\\n            -d "scope=member-of-groups:github-actions" \\\n            -d "expires_in=1800" \\\n            | jq -r '.access_token')
+          TOKEN=$(curl -s -X POST \\n            https://artifactory.company.com/api/v1/security/token \\n            -u ci:${{ secrets.ARTIFACTORY_CI_PASS }} \\n            -d "username=github-actions" \\n            -d "scope=member-of-groups:github-actions" \\n            -d "expires_in=1800" \\n            | jq -r '.access_token')
           echo "::add-mask::$TOKEN"
           echo "ARTIFACTORY_TOKEN=$TOKEN" >> $GITHUB_ENV
       
       - name: Login to Artifactory Docker
         run: |
+          echo $ARTIFACTORY_TOKEN | docker login \\n            artifactory.company.com -u github-actions --password-stdin
           echo $ARTIFACTORY_TOKEN | docker login \\\n            artifactory.company.com -u github-actions --password-stdin
       
       - name: Push Docker Image
         run: |
-          docker push artifactory.company.com/docker-production/myapp:${{ github.sha }}`}
+          docker push artifactory.company.com/docker-production/myapp:$\${{ github.sha }}`}
               </pre>
             </div>
           </section>

@@ -50,7 +50,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function DockerSecurityPage({
+export default function DockerSecurityPage({
   params,
 }: {
   params: { lang: string };
@@ -279,12 +279,12 @@ jobs:
       - uses: actions/checkout@v4
       
       - name: Build image
-        run: docker build -t app:${{ github.sha }} .
+        run: docker build -t app:$\${{ github.sha }} .
       
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: 'app:${{ github.sha }}'
+          image-ref: 'app:$\${{ github.sha }}'
           format: 'sarif'
           output: 'trivy-results.sarif'
           severity: 'CRITICAL,HIGH'

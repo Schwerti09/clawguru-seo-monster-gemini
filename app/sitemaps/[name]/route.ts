@@ -227,15 +227,17 @@ function buildMassiveSlugs(page: number, size: number): string[] {
 // Returns true if slug looks valid and not obviously broken; false if it should be skipped
 function isValidRunbookSlug(slug: string): boolean {
   if (!slug || typeof slug !== 'string') return false
-  // Basic format check: must have at least 2 dashes (provider-service-issue-year)
+  // Basic format: at least provider-service (2 parts)
   const parts = slug.split('-')
-  if (parts.length < 3) return false
-  // Year must be 4-digit number (2024-2030 range)
-  const year = parts[parts.length - 1]
-  if (!/^\d{4}$/.test(year) || parseInt(year, 10) < 2020 || parseInt(year, 10) > 2100) return false
-  // No obviously broken characters
+  if (parts.length < 2) return false
+  // If last part looks like a year, validate range; otherwise allow non-year slugs
+  const last = parts[parts.length - 1]
+  if (/^\d{4}$/.test(last)) {
+    const y = parseInt(last, 10)
+    if (y < 2020 || y > 2100) return false
+  }
+  // Characters and length guardrails
   if (!/^[a-z0-9\-]+$/.test(slug)) return false
-  // Avoid extremely long slugs that might indicate generation errors
   if (slug.length > 200) return false
   return true
 }

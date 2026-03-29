@@ -1,38 +1,140 @@
-import Container from "@/components/shared/Container"
-import SectionTitle from "@/components/shared/SectionTitle"
-import AdminLogin from "@/components/admin/AdminLogin"
+import { createClient } from '@supabase/supabase-js'
+import { cookies } from 'next/headers'
+import { redirect } from 'next/navigation'
+import { AdminDashboardClient } from '@/components/cockpit/AdminDashboardClient'
+import { getUserTier } from '@/lib/tier-access'
+import { Database } from '@/types/database'
 
-export const metadata = {
-  title: "Admin Login | ClawGuru",
-  description: "Admin Control Center Login."
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+)
+
+export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
+
+export default async function AdminPage() {
+  
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) redirect('/login')
+
+  const tier = await getUserTier(user.id)
+  
+  // Only Enterprise users can access admin
+  if (tier !== 'enterprise') {
+    redirect('/dashboard')
+  }
+
+  // Real admin data fetch
+  const [
+    totalUsers,
+    activeUsers,
+    revenueToday,
+    revenueMonth,
+    totalExecutions,
+    systemHealth,
+    geminiUsage
+  ] = await Promise.all([
+    fetchTotalUsers(),
+    fetchActiveUsers(),
+    fetchRevenueToday(),
+    fetchRevenueMonth(),
+    fetchTotalExecutions(),
+    fetchSystemHealth(),
+    fetchGeminiUsage()
+  ])
+
+  return (
+    <AdminDashboardClient
+      user={user}
+      initialData={{
+        totalUsers,
+        activeUsers,
+        revenueToday,
+        revenueMonth,
+        totalExecutions,
+        systemHealth,
+        geminiUsage
+      }}
+    />
+  )
 }
 
-export default function AdminPage() {
-  return (
-    <Container>
-      <div className="py-16 max-w-4xl mx-auto">
-        <SectionTitle
-          kicker="Admin"
-          title="Control Center"
-          subtitle="Metrics, Stripe, Health, Ops – ohne die Seite anzufassen."
-        />
-        <div className="mt-10 grid lg:grid-cols-2 gap-6 items-start">
-          <AdminLogin />
-          <div className="rounded-3xl border border-gray-800 bg-black/25 p-6 text-gray-300">
-            <div className="font-black text-lg">Sicherheit</div>
-            <ul className="mt-3 text-sm text-gray-300 space-y-2">
-              <li>• Setze Admin-Creds nur als ENV (Netlify/Vercel).</li>
-              <li>• Kein Passwort im Code, kein Commit, kein Screenshot ins Internet.</li>
-              <li>• Admin-Session ist HttpOnly Cookie + HMAC Signatur.</li>
-              <li>• Optional: zusätzlich Netlify Site Password / Basic Auth vor Admin setzen.</li>
-            </ul>
-            <div className="mt-6 text-sm text-gray-400">
-              ENV benötigt: <code className="text-gray-200">ADMIN_USERNAME</code>, <code className="text-gray-200">ADMIN_PASSWORD</code>,{" "}
-              <code className="text-gray-200">ADMIN_SESSION_SECRET</code>.
-            </div>
-          </div>
-        </div>
-      </div>
-    </Container>
-  )
+async function fetchTotalUsers(): Promise<number> {
+  const { count } = await supabase
+    .from('users')
+    .select('*', { count: 'exact', head: true })
+  
+  return count || 0
+}
+
+async function fetchActiveUsers(): Promise<number> {
+  const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString()
+  
+  const { count } = await supabase
+    .from('user_metrics')
+    .select('*', { count: 'exact', head: true })
+    .gte('last_active', thirtyDaysAgo)
+  
+  return count || 0
+}
+
+async function fetchRevenueToday(): Promise<number> {
+  const today = new Date().toISOString().split('T')[0]
+  
+  const { data } = await supabase
+    .from('payments')
+    .select('amount')
+    .gte('created_at', today)
+    .eq('status', 'completed')
+  
+  return data?.reduce((sum, payment) => sum + payment.amount, 0) || 0
+}
+
+async function fetchRevenueMonth(): Promise<number> {
+  const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString()
+  
+  const { data } = await supabase
+    .from('payments')
+    .select('amount')
+    .gte('created_at', thirtyDaysAgo)
+    .eq('status', 'completed')
+  
+  return data?.reduce((sum, payment) => sum + payment.amount, 0) || 0
+}
+
+async function fetchTotalExecutions(): Promise<number> {
+  const { count } = await supabase
+    .from('runbook_executions')
+    .select('*', { count: 'exact', head: true })
+  
+  return count || 0
+}
+
+async function fetchSystemHealth(): Promise<{
+  cpu: number
+  memory: number
+  storage: number
+  uptime: number
+}> {
+  // Mock system health - in production would fetch from monitoring
+  return {
+    cpu: 45,
+    memory: 67,
+    storage: 23,
+    uptime: 99.9
+  }
+}
+
+async function fetchGeminiUsage(): Promise<{
+  tokensUsed: number
+  requestsToday: number
+  costToday: number
+}> {
+  // Mock Gemini usage - in production would fetch from Google Cloud
+  return {
+    tokensUsed: 2450000,
+    requestsToday: 1247,
+    costToday: 12.34
+  }
 }

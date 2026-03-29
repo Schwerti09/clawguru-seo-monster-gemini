@@ -27,6 +27,11 @@ export async function GET(req: NextRequest) {
     // Explicitly allow public embed script under /api
     "Allow: /api/clawlink.js",
     "",
+    "# CRITICAL: Block mass-generated duplicate content (was causing SEO penalty)",
+    "Disallow: */runbook100k-*",
+    "Disallow: */runbooks-*-*.xml",
+    "Disallow: */tags-*-*.xml",
+    "",
     "# Blockiere Admin & Backend",
     "Disallow: /admin/",
     "Disallow: /api/",

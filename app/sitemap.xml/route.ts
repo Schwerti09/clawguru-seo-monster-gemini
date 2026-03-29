@@ -28,16 +28,17 @@ export async function GET(req: NextRequest) {
   const timeLabel = `sitemap-gen:${requestId}`
   console.time(timeLabel)
   console.time(label)
-  const PAGES_100K = Number(process.env.SITEMAP_100K_PAGES || 100)
-
+  
+  // REDUCED: Only quality pages, no 100k mass-generated duplicates
+  // This was causing SEO penalty for duplicate/thin content
   const buckets = ["a-f", "g-l", "m-r", "s-z", "0-9"] as const
-  const pages100k = PAGES_100K
   const localesCfg = (process.env.SITEMAP_100K_LOCALES || "").split(",").map((s) => s.trim()).filter(Boolean)
   const allLocales = [DEFAULT_LOCALE] as Locale[]
   const selectedLocales = localesCfg.length ? (localesCfg as Locale[]) : allLocales
 
   const base = `${BASE_URL}/sitemaps`
 
+  // CORE PAGES ONLY - High quality, no duplicates
   const main = selectedLocales.map((loc) => `${base}/main-${loc}.xml`)
   const hubs = selectedLocales.flatMap((loc) => [
     `${base}/providers-${loc}.xml`,
@@ -47,23 +48,13 @@ export async function GET(req: NextRequest) {
   ])
   const tools = selectedLocales.map((loc) => `${base}/tools-check-${loc}.xml`)
   const solutions = selectedLocales.map((loc) => `${base}/solutions-cve-${loc}.xml`)
-  const tags = selectedLocales.flatMap((loc) => buckets.map((b) => `${base}/tags-${loc}-${b}.xml`))
-  const runbooks = selectedLocales.flatMap((loc) => buckets.map((b) => `${base}/runbooks-${loc}-${b}.xml`))
-  const runbook100k = selectedLocales.flatMap((loc) => Array.from({ length: pages100k }, (_, page) => `${base}/runbook100k-${loc}-${page}.xml`))
-
-  // Non-locale bucket sitemaps for compatibility and quick crawl seeds
-  const bucketNoLocale: string[] = [
-    `${base}/runbooks-a-f.xml`,
-    `${base}/runbooks-g-l.xml`,
-    `${base}/runbooks-m-r.xml`,
-    `${base}/runbooks-s-z.xml`,
-    `${base}/runbooks-0-9.xml`,
-    `${base}/tags-a-f.xml`,
-    `${base}/tags-g-l.xml`,
-    `${base}/tags-m-r.xml`,
-    `${base}/tags-s-z.xml`,
-    `${base}/tags-0-9.xml`,
-  ]
+  
+  // LIMIT tags and runbooks to prevent duplicate content penalty
+  const tags = selectedLocales.flatMap((loc) => buckets.slice(0, 3).map((b) => `${base}/tags-${loc}-${b}.xml`))
+  const runbooks = selectedLocales.flatMap((loc) => buckets.slice(0, 3).map((b) => `${base}/runbooks-${loc}-${b}.xml`))
+  
+  // REMOVED: runbook100k - was generating 100k thin/duplicate pages causing SEO penalty
+  // const runbook100k = selectedLocales.flatMap((loc) => Array.from({ length: pages100k }, (_, page) => `${base}/runbook100k-${loc}-${page}.xml`))
 
   // Minimal legacy compatibility
   const legacyCompat: string[] = [
@@ -77,8 +68,6 @@ export async function GET(req: NextRequest) {
     ...solutions,
     ...tags,
     ...runbooks,
-    ...runbook100k,
-    ...bucketNoLocale,
     ...legacyCompat,
   ]
 

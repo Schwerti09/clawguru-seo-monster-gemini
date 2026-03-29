@@ -12,27 +12,11 @@ export const preferredRegion = "iad1"
 
 export async function generateStaticParams() {
   const { RUNBOOKS } = await import("@/lib/pseo")
-  const topSlugs = RUNBOOKS.slice(0, 200).map((r) => r.slug)
-  const key100kSlugs = [
-    "aws-ssh-hardening-2026",
-    "aws-nginx-csp-2026",
-    "aws-kubernetes-zero-trust-2026",
-    "cloudflare-nginx-waf-2026",
-    "hetzner-ssh-hardening-2026",
-    "gcp-kubernetes-rbac-misconfig-2026",
-    "azure-docker-hardening-2026",
-    "digitalocean-nginx-rate-limiting-2026",
-    "kubernetes-docker-supply-chain-attack-2026",
-    "aws-github-actions-secrets-management-2026",
-    "cloudflare-nginx-hsts-2026",
-    "aws-kubernetes-sbom-2026",
-    "hetzner-nginx-firewall-rules-2026",
-    "gcp-docker-image-signing-2026",
-    "azure-kubernetes-mfa-enforcement-2026",
-  ]
-  const slugs = Array.from(new Set([...topSlugs, ...key100kSlugs]))
-  const allowed = (process.env.SITEMAP_100K_LOCALES ?? "de,en").split(",").map((s) => s.trim()).filter(Boolean)
-  return allowed.flatMap((lang) => slugs.map((slug) => ({ lang, slug })))
+  // REDUCED: From 200 to only 25 TOP runbooks to prevent duplicate content penalty
+  // These are the highest quality, most trafficked runbooks only
+  const topSlugs = RUNBOOKS.slice(0, 25).map((r) => r.slug)
+  const allowed = (process.env.SITEMAP_100K_LOCALES ?? "de").split(",").map((s) => s.trim()).filter(Boolean)
+  return allowed.flatMap((lang) => topSlugs.map((slug) => ({ lang, slug })))
 }
 
 export async function generateMetadata(props: {
@@ -43,6 +27,13 @@ export async function generateMetadata(props: {
 
   return {
     alternates: { canonical: `/${locale}/runbook/${slug}` },
+    // Prevent thin content from being indexed - only quality runbooks should rank
+    robots: {
+      index: true,
+      follow: true,
+      // If content is too short, Google may still choose not to index
+      nocache: false,
+    },
   }
 }
 

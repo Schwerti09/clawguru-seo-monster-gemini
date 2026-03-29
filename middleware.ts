@@ -61,6 +61,8 @@ function shouldBypassMiddleware(pathname: string): boolean {
   if (pathname.startsWith("/maintenance")) return true
   if (pathname.startsWith("/success")) return true
   if (pathname.startsWith("/checkout")) return true
+  // Allow direct access to the Perfection generator without locale prefix
+  if (pathname === "/perfection") return true
   if (isPublicFile(pathname)) return true
   return false
 }
@@ -148,6 +150,19 @@ export function middleware(request: NextRequest) {
     const res = NextResponse.rewrite(url)
     res.headers.set("x-claw-locale", localizedSolutions[1].toLowerCase())
     res.headers.set("x-claw-dir", localeDir(localizedSolutions[1].toLowerCase() as any))
+    res.headers.set(getRequestIdHeaderName(), requestId)
+    return res
+  }
+
+  // Compatibility rewrite: map localized generator route to root generator route
+  // Example: /de/perfection -> /perfection
+  const localizedPerfection = pathname.match(/^\/([a-z]{2}(?:-[a-z]{2})?)\/perfection\/?$/i)
+  if (localizedPerfection) {
+    const url = request.nextUrl.clone()
+    url.pathname = "/perfection"
+    const res = NextResponse.rewrite(url)
+    res.headers.set("x-claw-locale", localizedPerfection[1].toLowerCase())
+    res.headers.set("x-claw-dir", localeDir(localizedPerfection[1].toLowerCase() as any))
     res.headers.set(getRequestIdHeaderName(), requestId)
     return res
   }

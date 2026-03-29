@@ -13,8 +13,8 @@ export const maxDuration = 180
 
 const SITEMAP_HEADERS = {
   "Content-Type": "application/xml; charset=utf-8",
-  // Enable CDN caching to emulate ISR behaviour
-  "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=60",
+  // Shorter TTL so sitemap updates are visible faster
+  "Cache-Control": "public, s-maxage=300, stale-while-revalidate=60, max-age=300",
   "X-Debug-Sitemap": "true",
 } as const
 
@@ -341,6 +341,7 @@ export async function GET(
         const perBucket = Math.max(50, Math.min(5000, parseInt(process.env.SITEMAP_RUNBOOKS_PER_BUCKET || "500", 10) || 500))
         const pseo = await import("@/lib/pseo")
         const list = (pseo.materializedRunbooks?.() || pseo.RUNBOOKS || []) as Array<{ slug: string; lastmod: string; clawScore: number }>
+        console.log(`[SITEMAP] runbooks-${loc}-${bucket}: total=${list.length}, perBucket=${perBucket}`)
         function inBucket(slug: string): boolean {
           const c = slug[0]?.toLowerCase() || ""
           if (bucket === "0-9") return /[0-9]/.test(c)
@@ -351,8 +352,16 @@ export async function GET(
           return true
         }
         const filtered = list.filter((r) => inBucket(r.slug) && isValidRunbookSlug(r.slug))
+        console.log(`[SITEMAP] runbooks-${loc}-${bucket}: filtered=${filtered.length}`)
         const sorted = filtered.sort((a, b) => (b.clawScore - a.clawScore) || (b.lastmod.localeCompare(a.lastmod)))
         const top = sorted.slice(0, perBucket)
+        console.log(`[SITEMAP] runbooks-${loc}-${bucket}: top=${top.length}, sample=${top.slice(0,3).map(r=>r.slug).join(",")}`)
+        if (top.length === 0) {
+          const fallback = urlset([
+            { loc: `${base}/${loc}/runbook/aws-ssh-hardening-2026`, lastmod, changefreq: "weekly", priority: "0.85" },
+          ])
+          return respond(fallback)
+        }
         const urls = top.map((r) => ({
           loc: `${base}/${loc}/runbook/${r.slug}`,
           lastmod,
@@ -395,6 +404,7 @@ export async function GET(
         const perBucket = Math.max(50, Math.min(5000, parseInt(process.env.SITEMAP_RUNBOOKS_PER_BUCKET || "500", 10) || 500))
         const pseo = await import("@/lib/pseo")
         const list = (pseo.materializedRunbooks?.() || pseo.RUNBOOKS || []) as Array<{ slug: string; lastmod: string; clawScore: number }>
+        console.log(`[SITEMAP] runbooks-${bucket}: total=${list.length}, perBucket=${perBucket}`)
         function inBucket(slug: string): boolean {
           const c = slug[0]?.toLowerCase() || ""
           if (bucket === "0-9") return /[0-9]/.test(c)
@@ -405,8 +415,16 @@ export async function GET(
           return true
         }
         const filtered = list.filter((r) => inBucket(r.slug) && isValidRunbookSlug(r.slug))
+        console.log(`[SITEMAP] runbooks-${bucket}: filtered=${filtered.length}`)
         const sorted = filtered.sort((a, b) => (b.clawScore - a.clawScore) || (b.lastmod.localeCompare(a.lastmod)))
         const top = sorted.slice(0, perBucket)
+        console.log(`[SITEMAP] runbooks-${bucket}: top=${top.length}, sample=${top.slice(0,3).map(r=>r.slug).join(",")}`)
+        if (top.length === 0) {
+          const fallback = urlset([
+            { loc: `${base}/${DEFAULT_LOCALE}/runbook/aws-ssh-hardening-2026`, lastmod, changefreq: "weekly", priority: "0.85" },
+          ])
+          return respond(fallback)
+        }
         const urls = top.map((r) => ({
           loc: `${base}/${DEFAULT_LOCALE}/runbook/${r.slug}`,
           lastmod,

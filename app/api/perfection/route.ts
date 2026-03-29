@@ -6,7 +6,7 @@
  */
 
 import { NextRequest, NextResponse } from "next/server"
-import { generateOrdered } from "@/lib/ai/providers"
+import { generateTextOrdered } from "@/lib/ai/providers"
 
 const PRICING = {
   basic: { name: "Basic", tokens: 2000, cost: 0.02, quality: "standard", price: 35 },
@@ -73,33 +73,17 @@ export async function POST(request: NextRequest) {
     // Build prompt
     const prompt = buildPrompt(body, tier)
 
-    // Provider fallback order (env-configurable)
+    // Provider preference (env-configurable)
     const providers = getProviderOrder()
-    let usedProvider: string | null = null
-    let parsed: any = null
-    let raw: any = null
-    let lastError: unknown = null
-    for (const p of providers) {
-      try {
-        const res = await generateOrdered(prompt, p as any)
-        if (res?.parsed || res?.raw) {
-          parsed = res.parsed
-          raw = res.raw
-          usedProvider = p
-          break
-        }
-      } catch (e) {
-        lastError = e
-        continue
-      }
-    }
-
-    if (!parsed && !raw) {
-      return NextResponse.json({ error: "AI generation failed", detail: String(lastError ?? "no_result"), tried: providers }, { status: 502 })
+    const preferred = providers[0] as any
+    const system = "You are the ClawGuru Next.js Page Factory. Return ONLY valid Next.js 14 page.tsx JSX, no markdown fences, no explanations. Bilingual (DE+EN). Include SEO metadata, hero, features, real code examples inside <pre>, checklists, CTA, and JSON-LD. Escape any ${} that would conflict inside JSX string literals."
+    const { text, provider } = await generateTextOrdered(system, prompt, preferred)
+    if (!text) {
+      return NextResponse.json({ error: "AI generation failed", tried: providers }, { status: 502 })
     }
 
     // Validate
-    const content = typeof parsed === "string" ? parsed : JSON.stringify(parsed)
+    const content = text
     const validation = validateContent(content, tier)
 
     return NextResponse.json({
@@ -108,7 +92,7 @@ export async function POST(request: NextRequest) {
       tier: tier.name,
       content,
       validation,
-      provider: usedProvider,
+      provider,
       roi: {
         cost: tier.cost,
         sellPrice: tier.price,

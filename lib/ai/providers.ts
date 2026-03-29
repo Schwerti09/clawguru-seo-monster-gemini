@@ -104,27 +104,36 @@ async function generateWithOpenAI(prompt: string): Promise<string | null> {
 async function generateWithGemini(prompt: string): Promise<string | null> {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) return null;
-  const model = process.env.GEMINI_MODEL || "gemini-2.0-flash";
   const base = (process.env.GEMINI_BASE_URL || "https://generativelanguage.googleapis.com/v1beta").replace(/\/$/, "");
-  const url = `${base}/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(apiKey)}`;
-  try {
-    const res = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        contents: [{ role: "user", parts: [{ text: prompt }] }],
-        generationConfig: { temperature: 0.35, maxOutputTokens: 900 },
-      }),
-    });
-    if (!res.ok) return null;
-    const data = await res.json();
-    const parts = data?.candidates?.[0]?.content?.parts;
-    if (!Array.isArray(parts)) return null;
-    const text = parts.map((p: { text?: string }) => p?.text).filter(Boolean).join("");
-    return typeof text === "string" && text.trim() ? text.trim() : null;
-  } catch {
-    return null;
+  // Try preferred model first, then fallbacks to maximize compatibility
+  const candidates = [
+    process.env.GEMINI_MODEL || "gemini-2.0-flash",
+    "gemini-1.5-flash",
+    "gemini-1.5-pro",
+  ].filter(Boolean);
+  for (const model of candidates) {
+    const url = `${base}/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(apiKey)}`;
+    try {
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contents: [{ role: "user", parts: [{ text: prompt }] }],
+          generationConfig: { temperature: 0.35, maxOutputTokens: 900 },
+        }),
+      });
+      if (!res.ok) continue;
+      const data = await res.json();
+      const parts = data?.candidates?.[0]?.content?.parts;
+      if (!Array.isArray(parts)) continue;
+      const text = parts.map((p: { text?: string }) => p?.text).filter(Boolean).join("");
+      if (typeof text === "string" && text.trim()) return text.trim();
+    } catch {
+      // try next candidate
+      continue;
+    }
   }
+  return null;
 }
 
 export async function generateOrdered(prompt: string, preferred?: AiProvider): Promise<{ parsed: unknown | null; provider?: AiProvider; raw?: string; }>{
@@ -222,20 +231,32 @@ export async function generateTextOrdered(system: string, user: string, preferre
       } else if (p === "gemini") {
         const apiKey = process.env.GEMINI_API_KEY;
         if (!apiKey) continue;
-        const model = process.env.GEMINI_MODEL || "gemini-2.0-flash";
         const base = (process.env.GEMINI_BASE_URL || "https://generativelanguage.googleapis.com/v1beta").replace(/\/$/, "");
-        const res = await fetch(`${base}/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(apiKey)}`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            contents: [{ role: "user", parts: [{ text: `${system}\n\nUSER REQUEST:\n${user}` }] }],
-            generationConfig: { temperature: 0.35, maxOutputTokens: 900 },
-          }),
-        });
-        if (!res.ok) continue;
-        const data = await res.json();
-        const text = extractGeminiText(data);
-        if (text) return { text, provider: p };
+        const candidates = [
+          process.env.GEMINI_MODEL || "gemini-2.0-flash",
+          "gemini-1.5-flash",
+          "gemini-1.5-pro",
+        ].filter(Boolean);
+        let got: string | null = null;
+        for (const model of candidates) {
+          try {
+            const res = await fetch(`${base}/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(apiKey)}`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                contents: [{ role: "user", parts: [{ text: `${system}\n\nUSER REQUEST:\n${user}` }] }],
+                generationConfig: { temperature: 0.35, maxOutputTokens: 900 },
+              }),
+            });
+            if (!res.ok) continue;
+            const data = await res.json();
+            const text = extractGeminiText(data);
+            if (text) { got = text; break; }
+          } catch {
+            continue;
+          }
+        }
+        if (got) return { text: got, provider: p };
       }
     } catch {
       // try next

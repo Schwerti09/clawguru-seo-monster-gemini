@@ -136,7 +136,14 @@ export default function PerfectionDashboard() {
     })
     
     const data = await res.json()
-    setJobs([data, ...jobs])
+    // Build a downloadable file from the generated content
+    try {
+      const blob = new Blob([data.content ?? ""], { type: "text/plain;charset=utf-8" })
+      const url = URL.createObjectURL(blob)
+      setJobs([{ ...data, downloadUrl: url }, ...jobs])
+    } catch {
+      setJobs([data, ...jobs])
+    }
     setIsGenerating(false)
   }
 

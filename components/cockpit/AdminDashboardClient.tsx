@@ -29,6 +29,99 @@ interface AdminDashboardClientProps {
 export function AdminDashboardClient({ user, initialData }: AdminDashboardClientProps) {
   const [godMode, setGodMode] = useState(false)
   const [selectedSection, setSelectedSection] = useState('overview')
+  const [realTimeData, setRealTimeData] = useState(initialData)
+  const [users, setUsers] = useState<any[]>([])
+  const [executions, setExecutions] = useState<any[]>([])
+  const [revenueData, setRevenueData] = useState<any[]>([])
+
+  // Real-time data updates
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      try {
+        // Fetch real-time system health
+        const healthResponse = await fetch('/api/admin/system-health')
+        if (healthResponse.ok) {
+          const health = await healthResponse.json()
+          setRealTimeData(prev => ({ ...prev, systemHealth: health }))
+        }
+
+        // Fetch real-time user stats
+        const usersResponse = await fetch('/api/admin/users/stats')
+        if (usersResponse.ok) {
+          const stats = await usersResponse.json()
+          setRealTimeData(prev => ({ 
+            ...prev, 
+            totalUsers: stats.total,
+            activeUsers: stats.active
+          }))
+        }
+
+        // Fetch real-time revenue
+        const revenueResponse = await fetch('/api/admin/revenue/stats')
+        if (revenueResponse.ok) {
+          const revenue = await revenueResponse.json()
+          setRealTimeData(prev => ({ 
+            ...prev, 
+            revenueToday: revenue.today,
+            revenueMonth: revenue.month
+          }))
+        }
+
+        // Fetch real-time executions
+        const execResponse = await fetch('/api/admin/executions/stats')
+        if (execResponse.ok) {
+          const exec = await execResponse.json()
+          setRealTimeData(prev => ({ ...prev, totalExecutions: exec.total }))
+        }
+
+        // Fetch real-time Gemini usage
+        const geminiResponse = await fetch('/api/admin/gemini/stats')
+        if (geminiResponse.ok) {
+          const gemini = await geminiResponse.json()
+          setRealTimeData(prev => ({ ...prev, geminiUsage: gemini }))
+        }
+      } catch (error) {
+        console.error('Failed to fetch real-time data:', error)
+      }
+    }, 5000) // Update every 5 seconds
+
+    return () => clearInterval(interval)
+  }, [])
+
+  // Fetch detailed data when section changes
+  useEffect(() => {
+    const fetchSectionData = async () => {
+      try {
+        switch (selectedSection) {
+          case 'users':
+            const usersResponse = await fetch('/api/admin/users')
+            if (usersResponse.ok) {
+              const usersData = await usersResponse.json()
+              setUsers(usersData)
+            }
+            break
+          case 'executions':
+            const execResponse = await fetch('/api/admin/executions')
+            if (execResponse.ok) {
+              const execData = await execResponse.json()
+              setExecutions(execData)
+            }
+            break
+          case 'revenue':
+            const revenueResponse = await fetch('/api/admin/revenue')
+            if (revenueResponse.ok) {
+              const revenue = await revenueResponse.json()
+              setRevenueData(revenue)
+            }
+            break
+        }
+      } catch (error) {
+        console.error('Failed to fetch section data:', error)
+      }
+    }
+
+    fetchSectionData()
+  }, [selectedSection])
 
   const sections = [
     { id: 'overview', label: 'Mission Control', icon: '🎯' },
@@ -168,17 +261,17 @@ export function AdminDashboardClient({ user, initialData }: AdminDashboardClient
   function renderSection() {
     switch (selectedSection) {
       case 'overview':
-        return <OverviewSection data={initialData} />
+        return <OverviewSection data={realTimeData} />
       case 'users':
-        return <UsersSection />
+        return <UsersSection users={users} />
       case 'revenue':
-        return <RevenueSection data={initialData} />
+        return <RevenueSection data={realTimeData} revenueData={revenueData} />
       case 'executions':
-        return <ExecutionsSection />
+        return <ExecutionsSection executions={executions} />
       case 'system':
-        return <SystemSection health={initialData.systemHealth} />
+        return <SystemSection health={realTimeData.systemHealth} />
       case 'gemini':
-        return <GeminiSection usage={initialData.geminiUsage} />
+        return <GeminiSection usage={realTimeData.geminiUsage} />
       default:
         return null
     }
@@ -296,22 +389,73 @@ function GeminiMonitor({ usage }: { usage: any }) {
   )
 }
 
-function UsersSection() {
+function UsersSection({ users }: { users: any[] }) {
   return (
     <div className="space-y-6">
       <h3 className="text-2xl font-bold text-blue-400 mb-6">User Matrix</h3>
-      <div className="p-6 bg-gray-900/50 backdrop-blur-xl rounded-xl border border-blue-500/30">
-        <p className="text-gray-400">User management interface coming soon...</p>
+      
+      <div className="bg-gray-900/50 backdrop-blur-xl rounded-xl border border-blue-500/30 p-6">
+        <div className="mb-4">
+          <div className="flex items-center justify-between mb-4">
+            <h4 className="text-lg font-semibold text-white">Active Users</h4>
+            <div className="text-sm text-gray-400">Total: {users.length}</div>
+          </div>
+          
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-gray-700">
+                  <th className="text-left py-2 px-3 text-gray-400">Email</th>
+                  <th className="text-left py-2 px-3 text-gray-400">Tier</th>
+                  <th className="text-left py-2 px-3 text-gray-400">Joined</th>
+                  <th className="text-left py-2 px-3 text-gray-400">Status</th>
+                  <th className="text-left py-2 px-3 text-gray-400">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {users.map((user, index) => (
+                  <tr key={user.id} className="border-b border-gray-800 hover:bg-gray-800/30">
+                    <td className="py-2 px-3 text-white">{user.email}</td>
+                    <td className="py-2 px-3">
+                      <span className={`px-2 py-1 rounded text-xs ${
+                        user.tier === 'enterprise' ? 'bg-yellow-500/20 text-yellow-400' :
+                        user.tier === 'pro' ? 'bg-purple-500/20 text-purple-400' :
+                        user.tier === 'daypass' ? 'bg-blue-500/20 text-blue-400' :
+                        'bg-gray-500/20 text-gray-400'
+                      }`}>
+                        {user.tier}
+                      </span>
+                    </td>
+                    <td className="py-2 px-3 text-gray-300">
+                      {new Date(user.created_at).toLocaleDateString()}
+                    </td>
+                    <td className="py-2 px-3">
+                      <span className={`w-2 h-2 rounded-full inline-block ${
+                        user.last_active ? 'bg-green-500' : 'bg-gray-500'
+                      }`} />
+                    </td>
+                    <td className="py-2 px-3">
+                      <button className="text-blue-400 hover:text-blue-300 text-xs">
+                        View Details
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
   )
 }
 
-function RevenueSection({ data }: { data: any }) {
+function RevenueSection({ data, revenueData }: { data: any; revenueData: any[] }) {
   return (
     <div className="space-y-6">
       <h3 className="text-2xl font-bold text-blue-400 mb-6">Revenue Feed</h3>
-      <div className="grid grid-cols-2 gap-6">
+      
+      <div className="grid grid-cols-2 gap-6 mb-6">
         <MetricCard
           title="Revenue Today"
           value={`$${data.revenueToday.toLocaleString()}`}
@@ -325,16 +469,79 @@ function RevenueSection({ data }: { data: any }) {
           color="from-blue-500 to-cyan-500"
         />
       </div>
+
+      <div className="bg-gray-900/50 backdrop-blur-xl rounded-xl border border-blue-500/30 p-6">
+        <h4 className="text-lg font-semibold text-white mb-4">Recent Transactions</h4>
+        
+        <div className="space-y-3">
+          {revenueData.map((transaction, index) => (
+            <div key={transaction.id} className="flex items-center justify-between p-3 bg-gray-800/30 rounded-lg">
+              <div>
+                <div className="text-white font-medium">{transaction.user_email}</div>
+                <div className="text-xs text-gray-400">{transaction.tier} • {transaction.created_at}</div>
+              </div>
+              <div className="text-right">
+                <div className="text-green-400 font-semibold">${transaction.amount}</div>
+                <div className="text-xs text-gray-400 capitalize">{transaction.status}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   )
 }
 
-function ExecutionsSection() {
+function ExecutionsSection({ executions }: { executions: any[] }) {
   return (
     <div className="space-y-6">
       <h3 className="text-2xl font-bold text-blue-400 mb-6">Execution Logs</h3>
-      <div className="p-6 bg-gray-900/50 backdrop-blur-xl rounded-xl border border-blue-500/30">
-        <p className="text-gray-400">Execution log viewer coming soon...</p>
+      
+      <div className="bg-gray-900/50 backdrop-blur-xl rounded-xl border border-blue-500/30 p-6">
+        <div className="mb-4">
+          <div className="flex items-center justify-between mb-4">
+            <h4 className="text-lg font-semibold text-white">Recent Executions</h4>
+            <div className="text-sm text-gray-400">Total: {executions.length}</div>
+          </div>
+          
+          <div className="space-y-3">
+            {executions.map((execution, index) => (
+              <div key={execution.id} className="p-4 bg-gray-800/30 rounded-lg">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="text-white font-medium">{execution.runbook_name}</div>
+                  <div className={`px-2 py-1 rounded text-xs ${
+                    execution.status === 'completed' ? 'bg-green-500/20 text-green-400' :
+                    execution.status === 'running' ? 'bg-blue-500/20 text-blue-400' :
+                    'bg-red-500/20 text-red-400'
+                  }`}>
+                    {execution.status}
+                  </div>
+                </div>
+                
+                <div className="grid grid-cols-3 gap-4 text-sm text-gray-400">
+                  <div>
+                    <div className="text-xs text-gray-500">User</div>
+                    <div>{execution.user_email}</div>
+                  </div>
+                  <div>
+                    <div className="text-xs text-gray-500">Duration</div>
+                    <div>{execution.duration || 'N/A'}</div>
+                  </div>
+                  <div>
+                    <div className="text-xs text-gray-500">Success Rate</div>
+                    <div>{execution.success_rate || 0}%</div>
+                  </div>
+                </div>
+                
+                {execution.output && (
+                  <div className="mt-3 p-2 bg-black/50 rounded text-xs text-gray-300 font-mono">
+                    {execution.output}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   )

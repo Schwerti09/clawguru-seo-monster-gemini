@@ -5,15 +5,53 @@ import { AdminDashboardClient } from '@/components/cockpit/AdminDashboardClient'
 import { getUserTier } from '@/lib/tier-access'
 import { Database } from '@/types/database'
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
+// Only create Supabase client if environment variables are available
+const getSupabaseClient = () => {
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    return null
+  }
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    process.env.SUPABASE_SERVICE_ROLE_KEY
+  )
+}
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
 
 export default async function AdminPage() {
+  const supabase = getSupabaseClient()
+  
+  // If no Supabase, use mock data for development
+  if (!supabase) {
+    return (
+      <AdminDashboardClient
+        user={{
+          id: 'dev-user',
+          email: 'dev@clawguru.org',
+          name: 'Development User'
+        }}
+        initialData={{
+          totalUsers: 1247,
+          activeUsers: 892,
+          revenueToday: 342.50,
+          revenueMonth: 12480.00,
+          totalExecutions: 15678,
+          systemHealth: {
+            cpu: 45,
+            memory: 67,
+            storage: 23,
+            uptime: 99.9
+          },
+          geminiUsage: {
+            tokensUsed: 2450000,
+            requestsToday: 1247,
+            costToday: 12.34
+          }
+        }}
+      />
+    )
+  }
   
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
@@ -35,11 +73,11 @@ export default async function AdminPage() {
     systemHealth,
     geminiUsage
   ] = await Promise.all([
-    fetchTotalUsers(),
-    fetchActiveUsers(),
-    fetchRevenueToday(),
-    fetchRevenueMonth(),
-    fetchTotalExecutions(),
+    fetchTotalUsers(supabase),
+    fetchActiveUsers(supabase),
+    fetchRevenueToday(supabase),
+    fetchRevenueMonth(supabase),
+    fetchTotalExecutions(supabase),
     fetchSystemHealth(),
     fetchGeminiUsage()
   ])
@@ -60,7 +98,7 @@ export default async function AdminPage() {
   )
 }
 
-async function fetchTotalUsers(): Promise<number> {
+async function fetchTotalUsers(supabase: any): Promise<number> {
   const { count } = await supabase
     .from('users')
     .select('*', { count: 'exact', head: true })
@@ -68,7 +106,7 @@ async function fetchTotalUsers(): Promise<number> {
   return count || 0
 }
 
-async function fetchActiveUsers(): Promise<number> {
+async function fetchActiveUsers(supabase: any): Promise<number> {
   const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString()
   
   const { count } = await supabase
@@ -79,7 +117,7 @@ async function fetchActiveUsers(): Promise<number> {
   return count || 0
 }
 
-async function fetchRevenueToday(): Promise<number> {
+async function fetchRevenueToday(supabase: any): Promise<number> {
   const today = new Date().toISOString().split('T')[0]
   
   const { data } = await supabase
@@ -88,10 +126,10 @@ async function fetchRevenueToday(): Promise<number> {
     .gte('created_at', today)
     .eq('status', 'completed')
   
-  return data?.reduce((sum, payment) => sum + payment.amount, 0) || 0
+  return data?.reduce((sum: number, payment: any) => sum + payment.amount, 0) || 0
 }
 
-async function fetchRevenueMonth(): Promise<number> {
+async function fetchRevenueMonth(supabase: any): Promise<number> {
   const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString()
   
   const { data } = await supabase
@@ -100,10 +138,10 @@ async function fetchRevenueMonth(): Promise<number> {
     .gte('created_at', thirtyDaysAgo)
     .eq('status', 'completed')
   
-  return data?.reduce((sum, payment) => sum + payment.amount, 0) || 0
+  return data?.reduce((sum: number, payment: any) => sum + payment.amount, 0) || 0
 }
 
-async function fetchTotalExecutions(): Promise<number> {
+async function fetchTotalExecutions(supabase: any): Promise<number> {
   const { count } = await supabase
     .from('runbook_executions')
     .select('*', { count: 'exact', head: true })

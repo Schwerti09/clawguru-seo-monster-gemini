@@ -143,12 +143,12 @@ include:
 .vault-auth:
   id_tokens:
     VAULT_ID_TOKEN:
-      aud: ${VAULT_ADDR}
+      aud: $\${VAULT_ADDR}
   script:
     - export VAULT_TOKEN=$(
-        curl -s --request POST \\\n          --header "X-Vault-Namespace: admin" \\\n          --data "{ \\"jwt\\": \\"${VAULT_ID_TOKEN}\\", \\"role\\": \\"${CI_PROJECT_NAME}\\" }" \\\n          ${VAULT_ADDR}/v1/auth/jwt/login | jq -r '.auth.client_token'
+        curl -s --request POST \\\n          --header "X-Vault-Namespace: admin" \\\n          --data "{ \\"jwt\\": \\"$\${VAULT_ID_TOKEN}\\", \\"role\\": \\"$\${CI_PROJECT_NAME}\\" }" \\\n          $\${VAULT_ADDR}/v1/auth/jwt/login | jq -r '.auth.client_token'
       )
-    - vault kv get -field=api_key secret/data/${CI_PROJECT_NAME}/prod
+    - vault kv get -field=api_key secret/data/$\${CI_PROJECT_NAME}/prod
 
 # SAST Configuration
 sast:
@@ -196,7 +196,7 @@ container_scanning:
     TRIVY_SEVERITY: "CRITICAL,HIGH"
   script:
     - trivy fs --scanners vuln,secret,misconfig .
-    - trivy image --exit-code ${TRIVY_EXIT_CODE} \\\n        --severity ${TRIVY_SEVERITY} \\\n        ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHA}
+    - trivy image --exit-code $\${TRIVY_EXIT_CODE} \\\n        --severity $\${TRIVY_SEVERITY} \\\n        $\${CI_REGISTRY_IMAGE}:$\${CI_COMMIT_SHA}
   cache:
     paths:
       - .trivycache/
@@ -205,7 +205,7 @@ container_scanning:
 dast:
   stage: security
   variables:
-    DAST_WEBSITE: "${CI_ENVIRONMENT_URL}"
+    DAST_WEBSITE: "$\${CI_ENVIRONMENT_URL}"
     DAST_FULL_SCAN_ENABLED: "true"
     DAST_ZAP_USE_AJAX_SPIDER: "true"
     DAST_ZAP_ACTIVE_SCAN: "true"
@@ -222,8 +222,8 @@ build:
   services:
     - docker:dind
   script:
-    - docker build \\\n        --build-arg VAULT_TOKEN=${VAULT_TOKEN} \\\n        --tag ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHA} \\\n        --tag ${CI_REGISTRY_IMAGE}:latest \\\n        --file Dockerfile \\\n        .
-    - docker push ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHA}
+    - docker build \\\n        --build-arg VAULT_TOKEN=$\${VAULT_TOKEN} \\\n        --tag $\${CI_REGISTRY_IMAGE}:$\${CI_COMMIT_SHA} \\\n        --tag $\${CI_REGISTRY_IMAGE}:latest \\\n        --file Dockerfile \\\n        .
+    - docker push $\${CI_REGISTRY_IMAGE}:$\${CI_COMMIT_SHA}
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
 
@@ -234,7 +234,7 @@ deploy_production:
     name: production
     url: https://app.company.com
   script:
-    - kubectl set image deployment/app app=${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHA}
+    - kubectl set image deployment/app app=$\${CI_REGISTRY_IMAGE}:$\${CI_COMMIT_SHA}
   needs:
     - job: container_scanning
       artifacts: true
@@ -263,11 +263,11 @@ deploy_production:
   script:
     - |
       # Configure AWS with OIDC
-      export AWS_WEB_IDENTITY_TOKEN=${GITLAB_ID_TOKEN}
+      export AWS_WEB_IDENTITY_TOKEN=$\${GITLAB_ID_TOKEN}
       export AWS_ROLE_ARN=arn:aws:iam::123456789:role/GitLabCIRole
       
       # Assume role via OIDC
-      aws sts assume-role-with-web-identity \\\n        --role-arn ${AWS_ROLE_ARN} \\\n        --web-identity-token ${GITLAB_ID_TOKEN} \\\n        --duration-seconds 3600 > /tmp/credentials.json
+      aws sts assume-role-with-web-identity \\\n        --role-arn $\${AWS_ROLE_ARN} \\\n        --web-identity-token $\${GITLAB_ID_TOKEN} \\\n        --duration-seconds 3600 > /tmp/credentials.json
       
       export AWS_ACCESS_KEY_ID=$(cat /tmp/credentials.json | jq -r '.Credentials.AccessKeyId')
       export AWS_SECRET_ACCESS_KEY=$(cat /tmp/credentials.json | jq -r '.Credentials.SecretAccessKey')
@@ -281,7 +281,7 @@ deploy_production:
   script:
     - |
       # Authenticate to Vault via OIDC
-      VAULT_TOKEN=$(curl -s -X POST \\\n        -H "Content-Type: application/json" \\\n        -d "{ \\"role\\": \\"${CI_PROJECT_PATH_SLUG}\\", \\"jwt\\": \\"${VAULT_JWT}\\" }" \\\n        https://vault.company.com/v1/auth/jwt/login | jq -r '.auth.client_token')
+      VAULT_TOKEN=$(curl -s -X POST \\\n        -H "Content-Type: application/json" \\\n        -d "{ \\"role\\": \\"$\${CI_PROJECT_PATH_SLUG}\\", \\"jwt\\": \\"$\${VAULT_JWT}\\" }" \\\n        https://vault.company.com/v1/auth/jwt/login | jq -r '.auth.client_token')
       
       export VAULT_TOKEN
       
@@ -298,7 +298,7 @@ deploy_production:
   script:
     - |
       # Azure OIDC login
-      az login --service-principal \\\n        --username ${AZURE_CLIENT_ID} \\\n        --tenant ${AZURE_TENANT_ID} \\\n        --federated-token ${GITLAB_ID_TOKEN} \\\n        --allow-no-subscriptions
+      az login --service-principal \\\n        --username $\${AZURE_CLIENT_ID} \\\n        --tenant $\${AZURE_TENANT_ID} \\\n        --federated-token $\${GITLAB_ID_TOKEN} \\\n        --allow-no-subscriptions
       
       # Get AKS credentials
       az aks get-credentials \\\n        --resource-group production-rg \\\n        --name production-cluster`}
@@ -318,7 +318,7 @@ compliance_check:
   script:
     # Check branch naming convention
     - |
-      if [[ ! "${CI_COMMIT_BRANCH}" =~ ^(feature|bugfix|hotfix|release)/.*$ ]]; then
+      if [[ ! "$\${CI_COMMIT_BRANCH}" =~ ^(feature|bugfix|hotfix|release)/.*$ ]]; then
         echo "ERROR: Branch name does not follow convention"
         exit 1
       fi
@@ -352,13 +352,13 @@ audit_trail:
   script:
     - |
       # Log deployment to audit system
-      curl -X POST https://audit.company.com/api/events \\\n        -H "Authorization: Bearer ${AUDIT_TOKEN}" \\\n        -d "{
+      curl -X POST https://audit.company.com/api/events \\\n        -H "Authorization: Bearer $\${AUDIT_TOKEN}" \\\n        -d "{
           \\"event_type\\": \\"deployment\\",
-          \\"project\\": \\"${CI_PROJECT_PATH}\\",
-          \\"commit_sha\\": \\"${CI_COMMIT_SHA}\\",
-          \\"user\\": \\"${GITLAB_USER_LOGIN}\\",
-          \\"environment\\": \\"${CI_ENVIRONMENT_NAME}\\",
-          \\"pipeline_id\\": \\"${CI_PIPELINE_ID}\\"
+          \\"project\\": \\"$\${CI_PROJECT_PATH}\\",
+          \\"commit_sha\\": \\"$\${CI_COMMIT_SHA}\\",
+          \\"user\\": \\"$\${GITLAB_USER_LOGIN}\\",
+          \\"environment\\": \\"$\${CI_ENVIRONMENT_NAME}\\",
+          \\"pipeline_id\\": \\"$\${CI_PIPELINE_ID}\\"
         }"`}
               </pre>
             </div>

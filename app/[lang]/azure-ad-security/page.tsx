@@ -353,7 +353,7 @@ resource "azuread_application" "api_app" {
   key_credentials {
     type           = "AsymmetricX509Cert"
     usage          = "Verify"
-    value          = filebase64("${path.module}/cert.cer")
+    value          = filebase64("$\${path.module}/cert.cer")
     end_date       = "2027-03-29T00:00:00Z"
     start_date     = "2026-03-29T00:00:00Z"
   }

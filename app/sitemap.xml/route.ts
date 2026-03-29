@@ -14,8 +14,8 @@ export const dynamic = 'force-dynamic'
 
 const SITEMAP_HEADERS = {
   'Content-Type': 'application/xml; charset=utf-8',
-  // Enable CDN caching to emulate ISR behaviour
-  'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=60',
+  // Shorter TTL to reflect env-driven bucket/locale changes faster
+  'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=30, max-age=300',
 } as const;
 
 export async function GET(req: NextRequest) {

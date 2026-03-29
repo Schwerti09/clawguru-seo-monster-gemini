@@ -1661,7 +1661,8 @@ function _getRunbooks(): Runbook[] {
 export function materializedRunbooks(): Runbook[] {
   return _getRunbooks()
 }
-export const RUNBOOKS: Runbook[] = []
+// Materialize curated runbooks at runtime (empty during build to avoid timeouts)
+export const RUNBOOKS: Runbook[] = materializedRunbooks()
 
 // Fallback builder used when on-demand generation crashes
 function _buildDummyRunbook(slug: string): Runbook {

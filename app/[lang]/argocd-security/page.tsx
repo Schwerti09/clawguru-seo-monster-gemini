@@ -550,3 +550,25 @@ resource.exclusions: |
     - CiliumEndpoint
     clusters:
     - "*"
+`}
+              </pre>
+            </div>
+          </section>
+
+          <section className="bg-gradient-to-r from-cyan-600 to-blue-600 rounded-2xl p-8 text-center text-white">
+            <h2 className="text-2xl font-bold mb-4">ArgoCD Security Assessment</h2>
+            <a href="/check" className="inline-block px-6 py-3 bg-white text-cyan-600 rounded-lg font-semibold">Assessment Starten</a>
+          </section>
+        </div>
+      </div>
+
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "TechArticle",
+        headline: "ArgoCD Security 2026",
+        author: { "@type": "Organization", name: "ClawGuru", url: BASE_URL },
+        datePublished: "2026-03-29",
+      })}} />
+    </main>
+  );
+}

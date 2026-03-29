@@ -50,7 +50,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function AWSVPCFlowLogsPage({
+export default function AWSVPCFlowLogsPage({
   params,
 }: {
   params: { lang: string };
@@ -134,7 +134,7 @@ resource "aws_flow_log" "vpc_flow_logs" {
   traffic_type             = "ALL"
   log_destination_type     = "s3"
   log_destination          = aws_s3_bucket.flow_logs.arn
-  log_format               = "$${version} $${account-id} $${interface-id} $${srcaddr} $${dstaddr} $${srcport} $${dstport} $${protocol} $${packets} $${bytes} $${start} $${end} $${action} $${log-status} $${vpc-id} $${subnet-id} $${instance-id} $${tcp-flags} $${type} $${pkt-srcaddr} $${pkt-dstaddr}"
+  log_format               = "$\${version} $\${account-id} $\${interface-id} $\${srcaddr} $\${dstaddr} $\${srcport} $\${dstport} $\${protocol} $\${packets} $\${bytes} $\${start} $\${end} $\${action} $\${log-status} $\${vpc-id} $\${subnet-id} $\${instance-id} $\${tcp-flags} $\${type} $\${pkt-srcaddr} $\${pkt-dstaddr}"
   
   destination_options {
     file_format                = "parquet"
@@ -150,7 +150,7 @@ resource "aws_flow_log" "vpc_flow_logs" {
 
 # S3 Bucket für Flow Logs
 resource "aws_s3_bucket" "flow_logs" {
-  bucket = "company-vpc-flow-logs-${data.aws_caller_identity.current.account_id}"
+  bucket = "company-vpc-flow-logs-$\${data.aws_caller_identity.current.account_id}"
 }
 
 resource "aws_s3_bucket_lifecycle_configuration" "flow_logs" {

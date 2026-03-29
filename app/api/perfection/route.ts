@@ -14,6 +14,38 @@ const PRICING = {
   ultra: { name: "Ultra", tokens: 8000, cost: 0.10, quality: "perfection", price: 150 },
 }
 
+function getProviderOrder(): string[] {
+  // Default preference
+  let order = (process.env.AI_PREFERRED || "gemini,deepseek,openai")
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean)
+
+  // If explicit deepseek-first is requested
+  if (process.env.AI_FORCE_DEEPSEEK_FIRST === '1') {
+    order = ["deepseek", ...order.filter((p) => p !== "deepseek")]
+  }
+
+  // Prune providers without credentials if env hints exist
+  const hasGemini = !!process.env.GEMINI_API_KEY
+  const hasDeepseek = !!process.env.DEEPSEEK_API_KEY
+  const hasOpenAI = !!process.env.OPENAI_API_KEY
+
+  order = order.filter((p) =>
+    (p === "gemini" && hasGemini) ||
+    (p === "deepseek" && hasDeepseek) ||
+    (p === "openai" && hasOpenAI)
+  )
+
+  // Fallback to a safe minimal order if everything was filtered out
+  if (order.length === 0) {
+    if (hasDeepseek) return ["deepseek"]
+    if (hasGemini) return ["gemini"]
+    if (hasOpenAI) return ["openai"]
+  }
+  return order
+}
+
 const PREMIUM_RULES = {
   minWords: 2000,
   minCodeExamples: 3,
@@ -40,12 +72,30 @@ export async function POST(request: NextRequest) {
     
     // Build prompt
     const prompt = buildPrompt(body, tier)
-    
-    // Generate
-    const { parsed, raw } = await generateOrdered(prompt, "gemini")
-    
+
+    // Provider fallback order (env-configurable)
+    const providers = getProviderOrder()
+    let usedProvider: string | null = null
+    let parsed: any = null
+    let raw: any = null
+    let lastError: unknown = null
+    for (const p of providers) {
+      try {
+        const res = await generateOrdered(prompt, p as any)
+        if (res?.parsed || res?.raw) {
+          parsed = res.parsed
+          raw = res.raw
+          usedProvider = p
+          break
+        }
+      } catch (e) {
+        lastError = e
+        continue
+      }
+    }
+
     if (!parsed && !raw) {
-      return NextResponse.json({ error: "AI generation failed" }, { status: 500 })
+      return NextResponse.json({ error: "AI generation failed", detail: String(lastError ?? "no_result"), tried: providers }, { status: 502 })
     }
 
     // Validate
@@ -58,6 +108,7 @@ export async function POST(request: NextRequest) {
       tier: tier.name,
       content,
       validation,
+      provider: usedProvider,
       roi: {
         cost: tier.cost,
         sellPrice: tier.price,

@@ -86,7 +86,7 @@ const CATEGORIES = [
 ]
 
 export default function PerfectionDashboard() {
-  const isAdmin = true // TODO: Replace with actual auth check
+  const isAdmin = process.env.NEXT_PUBLIC_ADMIN_UI === '1'
   const [selectedTier, setSelectedTier] = useState<PricingTier>(TIERS[1])
   const [selectedCategory, setSelectedCategory] = useState(CATEGORIES[0])
   const [topic, setTopic] = useState("")
@@ -140,6 +140,9 @@ export default function PerfectionDashboard() {
     setIsGenerating(false)
   }
 
+  const wordRange = selectedTier.id === 'ultra' ? '3.000–5.000 Wörter' : selectedTier.id === 'premium' ? '2.000–3.000 Wörter' : '1.000–2.000 Wörter'
+  const codeRange = selectedTier.id === 'ultra' ? '5–8 Code‑Beispiele' : selectedTier.id === 'premium' ? '3–5 Code‑Beispiele' : '2–3 Code‑Beispiele'
+
   return (
     <div className="min-h-screen bg-slate-50 p-8">
       <div className="max-w-6xl mx-auto">
@@ -153,25 +156,25 @@ export default function PerfectionDashboard() {
           </p>
         </div>
 
-        {/* ROI Calculator */}
-        <div className="bg-gradient-to-r from-green-600 to-emerald-600 rounded-2xl p-6 text-white mb-8">
-          <h2 className="text-2xl font-bold mb-4">💰 ROI Calculator</h2>
+        {/* Paket-Überblick (kundenfreundlich) */}
+        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl p-6 text-white mb-8">
+          <h2 className="text-2xl font-bold mb-4">� Paket-Überblick</h2>
           <div className="grid md:grid-cols-4 gap-4">
             <div className="bg-white/20 rounded-lg p-4">
-              <p className="text-sm opacity-80">Generation Cost</p>
-              <p className="text-3xl font-bold">€{selectedTier.cost.toFixed(2)}</p>
-            </div>
-            <div className="bg-white/20 rounded-lg p-4">
-              <p className="text-sm opacity-80">Sell Price</p>
+              <p className="text-sm opacity-80">Preis</p>
               <p className="text-3xl font-bold">€{selectedTier.sellPrice}</p>
             </div>
-            <div className="bg-white/30 rounded-lg p-4 ring-2 ring-white">
-              <p className="text-sm opacity-80">Margin</p>
-              <p className="text-3xl font-bold">{selectedTier.margin}%</p>
+            <div className="bg-white/20 rounded-lg p-4">
+              <p className="text-sm opacity-80">Umfang</p>
+              <p className="text-3xl font-bold">{wordRange}</p>
             </div>
             <div className="bg-white/20 rounded-lg p-4">
-              <p className="text-sm opacity-80">Tokens</p>
-              <p className="text-3xl font-bold">{selectedTier.tokens.toLocaleString()}</p>
+              <p className="text-sm opacity-80">Code</p>
+              <p className="text-3xl font-bold">{codeRange}</p>
+            </div>
+            <div className="bg-white/20 rounded-lg p-4">
+              <p className="text-sm opacity-80">Qualität</p>
+              <p className="text-3xl font-bold capitalize">{selectedTier.quality}</p>
             </div>
           </div>
         </div>
@@ -276,6 +279,26 @@ export default function PerfectionDashboard() {
           </div>
         </div>
 
+        {/* Wie funktioniert's */}
+        <div className="bg-white rounded-2xl p-6 mb-8">
+          <h3 className="text-lg font-semibold text-slate-900 mb-4">So funktioniert’s</h3>
+          <ol className="list-decimal list-inside space-y-2 text-slate-700">
+            <li>Thema und Keywords wählen</li>
+            <li>Paket auswählen und bezahlen – wir generieren sofort deine Landingpage</li>
+            <li>Download-Link erscheint – Code in dein Projekt kopieren (Next.js kompatibel)</li>
+          </ol>
+        </div>
+
+        {/* Integration in deine Website */}
+        <div className="bg-white rounded-2xl p-6 mb-8">
+          <h3 className="text-lg font-semibold text-slate-900 mb-4">Integration in deine Website</h3>
+          <div className="space-y-3 text-slate-700">
+            <p><strong>Next.js (empfohlen):</strong> Lege eine Datei <code>app/[lang]/[dein-slug]/page.tsx</code> an und füge den generierten Code ein.</p>
+            <p><strong>Statisches Hosting:</strong> Nutze den Download, um die Inhalte in dein CMS (z. B. HTML‑Block) zu übernehmen.</p>
+            <p><strong>SEO‑ready:</strong> Titel, Beschreibung, OpenGraph & JSON‑LD sind enthalten.</p>
+          </div>
+        </div>
+
         {/* Generated Jobs */}
         {jobs.length > 0 && (
           <div className="bg-white rounded-2xl p-6">
@@ -286,18 +309,22 @@ export default function PerfectionDashboard() {
               {jobs.map((job) => (
                 <div key={job.jobId} className="border border-slate-200 rounded-lg p-4">
                   <div className="flex justify-between items-start mb-2">
-                    <h4 className="font-semibold text-slate-900">{job.page.title}</h4>
-                    <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm">
-                      {job.page.quality.score}/100
-                    </span>
+                    <h4 className="font-semibold text-slate-900">Job {job.jobId}</h4>
+                    {job.validation && (
+                      <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm">
+                        {job.validation.qualityScore}/100
+                      </span>
+                    )}
                   </div>
-                  <div className="grid grid-cols-3 gap-4 text-sm text-slate-600 mb-3">
-                    <span>{job.page.metadata.wordCount} Wörter</span>
-                    <span>{job.page.metadata.codeExamples} Code-Beispiele</span>
-                    <span>€{job.roi.estimatedSellPrice} Verkaufswert</span>
-                  </div>
+                  {job.validation && (
+                    <div className="grid grid-cols-3 gap-4 text-sm text-slate-600 mb-3">
+                      <span>{job.validation.wordCount} Wörter</span>
+                      <span>{job.validation.codeExamples} Code‑Beispiele</span>
+                      <span>Provider: {job.provider}</span>
+                    </div>
+                  )}
                   <a
-                    href={job.downloadUrl}
+                    href={job.downloadUrl || '#'}
                     className="text-blue-600 hover:underline text-sm"
                   >
                     📥 Download page.tsx
@@ -330,6 +357,34 @@ export default function PerfectionDashboard() {
             </div>
           </div>
         </div>
+
+        {/* JSON-LD Product Schema for SEO */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Product",
+              name: "ClawGuru Perfection Generator",
+              description: "Generiere production‑ready SEO‑Landingpages mit echten Code‑Beispielen und JSON‑LD.",
+              brand: { "@type": "Brand", name: "ClawGuru" },
+              offers: {
+                "@type": "AggregateOffer",
+                priceCurrency: "EUR",
+                lowPrice: TIERS[0].sellPrice,
+                highPrice: TIERS[2].sellPrice,
+                offerCount: TIERS.length
+              },
+              keywords: [
+                "SEO Generator",
+                "Landingpage Generator",
+                "Next.js Seite generieren",
+                "DevOps Security Content",
+                "KI Content Generator"
+              ]
+            })
+          }}
+        />
       </div>
     </div>
   )

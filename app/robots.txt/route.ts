@@ -11,6 +11,7 @@ export async function GET(req: NextRequest) {
   const requestId = getRequestId(req.headers)
   const startedAt = Date.now()
   const base = BASE_URL
+  const allowChunk = process.env.SITEMAP_ALLOW_CHUNK === '1'
   const localeDisallows = SUPPORTED_LOCALES.flatMap((l) => [
     `Disallow: /${l}/admin/`,
     `Disallow: /${l}/api/`,
@@ -29,8 +30,11 @@ export async function GET(req: NextRequest) {
     "",
     "# CRITICAL: Block mass-generated duplicate content (was causing SEO penalty)",
     "Disallow: */runbook100k-*",
-    "Disallow: */runbooks-*-*.xml",
-    "Disallow: */tags-*-*.xml",
+    // Allow curated sitemap chunks when enabled
+    ...(allowChunk ? [] : [
+      "Disallow: */runbooks-*-*.xml",
+      "Disallow: */tags-*-*.xml",
+    ]),
     "",
     "# Blockiere Admin & Backend",
     "Disallow: /admin/",
@@ -60,7 +64,7 @@ export async function GET(req: NextRequest) {
     status: 200,
     headers: {
       "Content-Type": "text/plain; charset=utf-8",
-      "Cache-Control": "public, max-age=3600"
+      "Cache-Control": "public, s-maxage=300, stale-while-revalidate=30, max-age=300"
     }
   })
 }

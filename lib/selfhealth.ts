@@ -5,6 +5,7 @@
 import { RUNBOOKS, totalSitemapUrls } from "./pseo"
 import { sendEmail } from "./email"
 import { BASE_URL } from "./config"
+import { generateTextOrdered } from "./ai/providers"
 
 // ---------------------------------------------------------------------------
 // Types
@@ -307,33 +308,12 @@ export async function autoHeal(): Promise<AutoHealResult> {
     errors: [],
   }
 
-  const geminiKey = process.env.GEMINI_API_KEY
-  const geminiModel = process.env.GEMINI_MODEL || "gemini-1.5-flash"
-  const geminiBase = (
-    process.env.GEMINI_BASE_URL || "https://generativelanguage.googleapis.com/v1beta"
-  ).replace(/\/$/, "")
-
-  // FULL PASSIVE WELTMACHT: call Gemini with a prompt, return text or null
-  async function callGemini(prompt: string): Promise<string | null> {
-    if (!geminiKey) return null
+  // FULL PASSIVE WELTMACHT: call AI via provider fallback chain, return raw text or null
+  async function callAI(prompt: string): Promise<string | null> {
     try {
-      const url = `${geminiBase}/models/${encodeURIComponent(geminiModel)}:generateContent?key=${encodeURIComponent(geminiKey)}`
-      const res = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          contents: [{ role: "user", parts: [{ text: prompt }] }],
-          generationConfig: { temperature: 0.4, maxOutputTokens: 600 },
-        }),
-        signal: AbortSignal.timeout(20_000),
-      })
-      if (!res.ok) return null
-      const data = await res.json()
-      const parts = data?.candidates?.[0]?.content?.parts
-      if (Array.isArray(parts)) {
-        return parts.map((p: { text?: string }) => p?.text ?? "").join("").trim() || null
-      }
-      return null
+      const system = "You are the ClawGuru background optimizer. Return ONLY valid JSON without Markdown fences."
+      const { text } = await generateTextOrdered(system, prompt)
+      return text && text.trim() ? text.trim() : null
     } catch {
       return null
     }
@@ -356,7 +336,7 @@ export async function autoHeal(): Promise<AutoHealResult> {
       `Current tags: ${runbook.tags.join(", ")}`,
     ].join("\n")
 
-    const text = await callGemini(prompt)
+    const text = await callAI(prompt)
     if (!text) {
       result.errors.push(`heal:${runbook.slug}: no Gemini response`)
       continue
@@ -387,7 +367,7 @@ export async function autoHeal(): Promise<AutoHealResult> {
     "Do not add any explanation outside the JSON array.",
   ].join("\n")
 
-  const genText = await callGemini(generatePrompt)
+  const genText = await callAI(generatePrompt)
   if (genText) {
     try {
       const jsonStr = genText.replace(/```json|```/g, "").trim()

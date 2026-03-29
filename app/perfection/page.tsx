@@ -156,16 +156,16 @@ export default function PerfectionDashboard() {
         {/* Header */}
         <div className="mb-12">
           <h1 className="text-4xl font-bold text-slate-900 mb-2">
-            🚀 PERFECTION MODE
+            🚀 Perfection Generator – Premium SEO Landingpages
           </h1>
           <p className="text-xl text-slate-600">
-            Generiere Premium SEO Landingpages mit echten Code-Beispielen
+            Erzeuge production‑ready Next.js Seiten inkl. JSON‑LD, OpenGraph & echten Code‑Beispielen
           </p>
         </div>
 
         {/* Paket-Überblick (kundenfreundlich) */}
         <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl p-6 text-white mb-8">
-          <h2 className="text-2xl font-bold mb-4">� Paket-Überblick</h2>
+          <h2 className="text-2xl font-bold mb-4">📦 Paket-Überblick</h2>
           <div className="grid md:grid-cols-4 gap-4">
             <div className="bg-white/20 rounded-lg p-4">
               <p className="text-sm opacity-80">Preis</p>
@@ -388,6 +388,41 @@ export default function PerfectionDashboard() {
                 "Next.js Seite generieren",
                 "DevOps Security Content",
                 "KI Content Generator"
+              ]
+            })
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              mainEntity: [
+                {
+                  "@type": "Question",
+                  name: "Wie funktioniert die Generierung?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "Thema & Keywords eingeben, Paket wählen, bezahlen – deine Landingpage wird sofort generiert und als page.tsx zum Download bereitgestellt."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  name: "Wie integriere ich die Seite in meine Website?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "Für Next.js: Lege app/[lang]/[slug]/page.tsx an und füge den Code ein. Für statisches Hosting: Übernimm die Inhalte in dein CMS."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  name: "Welche KI-Modelle werden genutzt?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "Der Generator nutzt eine robuste Fallback-Kette (Gemini, DeepSeek, OpenAI) – gesteuert per AI_PREFERRED – für maximale Zuverlässigkeit."
+                  }
+                }
               ]
             })
           }}

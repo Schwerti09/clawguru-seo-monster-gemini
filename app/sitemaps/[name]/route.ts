@@ -334,21 +334,36 @@ export async function GET(
     const rbLocaleMatch = name.match(/^runbooks-([a-z]{2})-(a-f|g-l|m-r|s-z|0-9)$/i)
     if (rbLocaleMatch?.[1] && rbLocaleMatch?.[2]) {
       const loc = (SUPPORTED_LOCALES.includes(rbLocaleMatch[1] as Locale) ? rbLocaleMatch[1] : DEFAULT_LOCALE) as Locale
-      const SAMPLE_RUNBOOKS = [
-        "aws-ssh-hardening-2026",
-        "aws-nginx-csp-2026",
-        "aws-kubernetes-zero-trust-2026",
-        "cloudflare-nginx-waf-2026",
-        "hetzner-ssh-hardening-2026",
-      ]
-      // PHASE 1 FIX #2: Filter out invalid/broken runbook slugs before including in sitemap
-      const validUrls = SAMPLE_RUNBOOKS.filter(isValidRunbookSlug).map((slug) => ({
-        loc: `${base}/${loc}/runbook/${slug}`,
-        lastmod,
-        changefreq: "weekly",
-        priority: "0.85",
-      }))
-      return respond(urlset(validUrls))
+      const bucket = rbLocaleMatch[2] as "a-f"|"g-l"|"m-r"|"s-z"|"0-9"
+      try {
+        const perBucket = Math.max(50, Math.min(5000, parseInt(process.env.SITEMAP_RUNBOOKS_PER_BUCKET || "500", 10) || 500))
+        const pseo = await import("@/lib/pseo")
+        const list = (pseo.RUNBOOKS || []) as Array<{ slug: string; lastmod: string; clawScore: number }>
+        function inBucket(slug: string): boolean {
+          const c = slug[0]?.toLowerCase() || ""
+          if (bucket === "0-9") return /[0-9]/.test(c)
+          if (bucket === "a-f") return c >= "a" && c <= "f"
+          if (bucket === "g-l") return c >= "g" && c <= "l"
+          if (bucket === "m-r") return c >= "m" && c <= "r"
+          if (bucket === "s-z") return c >= "s" && c <= "z"
+          return true
+        }
+        const filtered = list.filter((r) => inBucket(r.slug) && isValidRunbookSlug(r.slug))
+        const sorted = filtered.sort((a, b) => (b.clawScore - a.clawScore) || (b.lastmod.localeCompare(a.lastmod)))
+        const top = sorted.slice(0, perBucket)
+        const urls = top.map((r) => ({
+          loc: `${base}/${loc}/runbook/${r.slug}`,
+          lastmod,
+          changefreq: "weekly",
+          priority: "0.85",
+        }))
+        return respond(urlset(urls))
+      } catch {
+        const fallback = urlset([
+          { loc: `${base}/${loc}/runbook/aws-ssh-hardening-2026`, lastmod, changefreq: "weekly", priority: "0.85" },
+        ])
+        return respond(fallback)
+      }
     }
 
     const tgMap: Record<string, "a-f" | "g-l" | "m-r" | "s-z" | "0-9"> = {
@@ -373,21 +388,36 @@ export async function GET(
     }
 
     if (rbMap[name]) {
-      const SAMPLE_RUNBOOKS = [
-        "aws-ssh-hardening-2026",
-        "aws-nginx-csp-2026",
-        "aws-kubernetes-zero-trust-2026",
-        "cloudflare-nginx-waf-2026",
-        "hetzner-ssh-hardening-2026",
-      ]
-      // PHASE 1 FIX #2: Filter validation
-      const validUrls = SAMPLE_RUNBOOKS.filter(isValidRunbookSlug).map((slug) => ({
-        loc: `${base}/${DEFAULT_LOCALE}/runbook/${slug}`,
-        lastmod,
-        changefreq: "weekly",
-        priority: "0.85",
-      }))
-      return respond(urlset(validUrls))
+      const bucket = rbMap[name]
+      try {
+        const perBucket = Math.max(50, Math.min(5000, parseInt(process.env.SITEMAP_RUNBOOKS_PER_BUCKET || "500", 10) || 500))
+        const pseo = await import("@/lib/pseo")
+        const list = (pseo.RUNBOOKS || []) as Array<{ slug: string; lastmod: string; clawScore: number }>
+        function inBucket(slug: string): boolean {
+          const c = slug[0]?.toLowerCase() || ""
+          if (bucket === "0-9") return /[0-9]/.test(c)
+          if (bucket === "a-f") return c >= "a" && c <= "f"
+          if (bucket === "g-l") return c >= "g" && c <= "l"
+          if (bucket === "m-r") return c >= "m" && c <= "r"
+          if (bucket === "s-z") return c >= "s" && c <= "z"
+          return true
+        }
+        const filtered = list.filter((r) => inBucket(r.slug) && isValidRunbookSlug(r.slug))
+        const sorted = filtered.sort((a, b) => (b.clawScore - a.clawScore) || (b.lastmod.localeCompare(a.lastmod)))
+        const top = sorted.slice(0, perBucket)
+        const urls = top.map((r) => ({
+          loc: `${base}/${DEFAULT_LOCALE}/runbook/${r.slug}`,
+          lastmod,
+          changefreq: "weekly",
+          priority: "0.85",
+        }))
+        return respond(urlset(urls))
+      } catch {
+        const fallback = urlset([
+          { loc: `${BASE_URL}/${DEFAULT_LOCALE}/runbook/aws-ssh-hardening-2026`, lastmod, changefreq: "weekly", priority: "0.85" },
+        ])
+        return respond(fallback)
+      }
     }
 
     if (tgMap[name]) {

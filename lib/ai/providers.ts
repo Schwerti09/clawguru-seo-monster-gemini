@@ -137,11 +137,19 @@ async function generateWithGemini(prompt: string): Promise<string | null> {
 }
 
 export async function generateOrdered(prompt: string, preferred?: AiProvider): Promise<{ parsed: unknown | null; provider?: AiProvider; raw?: string; }>{
-  const order: AiProvider[] = ["deepseek", "openai", "gemini"];
-  const normalized = (preferred || (process.env.AI_PROVIDER as AiProvider) || "").toLowerCase() as AiProvider;
-  const providers = normalized && order.includes(normalized)
-    ? ([normalized, ...order.filter((p) => p !== normalized)])
-    : order;
+  const defaults: AiProvider[] = ["deepseek", "openai", "gemini"];
+  const envPref = (process.env.AI_PREFERRED || process.env.AI_PROVIDER || "") as string;
+  const envList = envPref
+    .split(",")
+    .map(s => s.trim().toLowerCase())
+    .filter((s): s is AiProvider => (defaults as string[]).includes(s))
+    .filter((v, i, a) => a.indexOf(v) === i);
+  let providers: AiProvider[] = envList.length ? envList : defaults;
+  if (preferred && providers.includes(preferred)) {
+    providers = [preferred, ...providers.filter(p => p !== preferred)];
+  } else if (preferred) {
+    providers = [preferred, ...providers.filter(p => p !== preferred)];
+  }
 
   for (const p of providers) {
     let raw: string | null = null;
@@ -175,12 +183,23 @@ function extractOpenAIText(data: unknown): string {
   return typeof cc === "string" ? cc.trim() : "";
 }
 
-export async function generateTextOrdered(system: string, user: string, preferred?: AiProvider): Promise<{ text: string | null; provider?: AiProvider }>{
-  const order: AiProvider[] = ["deepseek", "openai", "gemini"];
-  const normalized = (preferred || (process.env.AI_PROVIDER as AiProvider) || "").toLowerCase() as AiProvider;
-  const providers = normalized && order.includes(normalized)
-    ? ([normalized, ...order.filter((p) => p !== normalized)])
-    : order;
+export async function generateTextOrdered(system: string, user: string, preferred?: AiProvider, strict?: boolean): Promise<{ text: string | null; provider?: AiProvider }>{
+  const defaults: AiProvider[] = ["deepseek", "openai", "gemini"];
+  const envPref = (process.env.AI_PREFERRED || process.env.AI_PROVIDER || "") as string;
+  const envList = envPref
+    .split(",")
+    .map(s => s.trim().toLowerCase())
+    .filter((s): s is AiProvider => (defaults as string[]).includes(s))
+    .filter((v, i, a) => a.indexOf(v) === i);
+  let providers: AiProvider[] = envList.length ? envList : defaults;
+  if (preferred && providers.includes(preferred)) {
+    providers = [preferred, ...providers.filter(p => p !== preferred)];
+  } else if (preferred) {
+    providers = [preferred, ...providers.filter(p => p !== preferred)];
+  }
+  if (strict && preferred) {
+    providers = [preferred];
+  }
 
   for (const p of providers) {
     try {

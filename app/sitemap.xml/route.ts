@@ -32,6 +32,8 @@ export async function GET(req: NextRequest) {
   // REDUCED: Only quality pages, no 100k mass-generated duplicates
   // This was causing SEO penalty for duplicate/thin content
   const buckets = ["a-f", "g-l", "m-r", "s-z", "0-9"] as const
+  const bucketCount = Math.max(1, Math.min(5, parseInt(process.env.SITEMAP_BUCKETS || "3", 10) || 3))
+  const bucketsToUse = buckets.slice(0, bucketCount)
   const localesCfg = (process.env.SITEMAP_100K_LOCALES || "").split(",").map((s) => s.trim()).filter(Boolean)
   const allLocales = [DEFAULT_LOCALE] as Locale[]
   const selectedLocales = localesCfg.length ? (localesCfg as Locale[]) : allLocales
@@ -49,9 +51,9 @@ export async function GET(req: NextRequest) {
   const tools = selectedLocales.map((loc) => `${base}/tools-check-${loc}.xml`)
   const solutions = selectedLocales.map((loc) => `${base}/solutions-cve-${loc}.xml`)
   
-  // LIMIT tags and runbooks to prevent duplicate content penalty
-  const tags = selectedLocales.flatMap((loc) => buckets.slice(0, 3).map((b) => `${base}/tags-${loc}-${b}.xml`))
-  const runbooks = selectedLocales.flatMap((loc) => buckets.slice(0, 3).map((b) => `${base}/runbooks-${loc}-${b}.xml`))
+  // LIMIT tags and runbooks to prevent duplicate content penalty (configurable via SITEMAP_BUCKETS)
+  const tags = selectedLocales.flatMap((loc) => bucketsToUse.map((b) => `${base}/tags-${loc}-${b}.xml`))
+  const runbooks = selectedLocales.flatMap((loc) => bucketsToUse.map((b) => `${base}/runbooks-${loc}-${b}.xml`))
   
   // REMOVED: runbook100k - was generating 100k thin/duplicate pages causing SEO penalty
   // const runbook100k = selectedLocales.flatMap((loc) => Array.from({ length: pages100k }, (_, page) => `${base}/runbook100k-${loc}-${page}.xml`))

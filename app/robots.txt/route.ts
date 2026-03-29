@@ -28,8 +28,6 @@ export async function GET(req: NextRequest) {
     // Explicitly allow public embed script under /api
     "Allow: /api/clawlink.js",
     "",
-    "# CRITICAL: Block mass-generated duplicate content (was causing SEO penalty)",
-    "Disallow: */runbook100k-*",
     // Allow curated sitemap chunks when enabled
     ...(allowChunk ? [] : [
       "Disallow: */runbooks-*-*.xml",

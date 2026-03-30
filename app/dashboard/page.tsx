@@ -1,19 +1,18 @@
+import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { UserDashboardClient } from '@/components/cockpit/UserDashboardClient'
-import { getUserTier } from '@/lib/tier-access'
-import type { DashboardData } from '@/types/dashboard'
+import { getUserTierFromPlan } from '@/lib/tier-access'
+import { verifyAccessToken } from '@/lib/access-token'
+import { verifySessionToken, USER_SESSION_COOKIE } from '@/lib/auth'
+import { stripe } from '@/lib/stripe'
+import { dbQuery } from '@/lib/db'
+import type { QueryResultRow } from 'pg'
+import type { DashboardData, DashboardPayment } from '@/types/dashboard'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
 
-/* ── Supabase helper ── */
-function getSupabaseClient() {
-  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) return null
-  const { createClient } = require('@supabase/supabase-js')
-  return createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY)
-}
-
-/* ── Empty data for new users / dev fallback ── */
+/* ── Empty data fallback ── */
 function emptyData(): DashboardData {
   return {
     clawScore: 0,
@@ -33,116 +32,137 @@ function emptyData(): DashboardData {
   }
 }
 
-export default async function DashboardPage() {
-  const supabase = getSupabaseClient()
+/* ── Safe DB query helper (tables may not exist yet) ── */
+async function safeQuery<T extends QueryResultRow = any>(sql: string, params?: any[]): Promise<T[]> {
+  try {
+    if (!process.env.DATABASE_URL) return []
+    const result = await dbQuery<T>(sql, params)
+    return result.rows
+  } catch {
+    return []
+  }
+}
 
-  if (!supabase) {
-    // Dev mode – no Supabase configured → empty data, no fakes
-    const user = { id: 'dev-user', email: 'dev@clawguru.org' }
-    const tier = await getUserTier(user.id)
-    return <UserDashboardClient user={user} tier={tier} initialData={emptyData()} />
+/* ── Fetch Stripe payments for a customer ── */
+async function fetchStripePayments(customerId: string): Promise<{
+  payments: DashboardPayment[]
+  totalSpent: number
+  subscriptionTier: string | null
+  subscriptionId: string | null
+  nextBillingDate: string | null
+}> {
+  const payments: DashboardPayment[] = []
+  let totalSpent = 0
+  let subscriptionTier: string | null = null
+  let subscriptionId: string | null = null
+  let nextBillingDate: string | null = null
+
+  try {
+    if (!process.env.STRIPE_SECRET_KEY) return { payments, totalSpent, subscriptionTier, subscriptionId, nextBillingDate }
+
+    // Fetch recent charges
+    const charges = await stripe.charges.list({ customer: customerId, limit: 20 })
+    for (const ch of charges.data) {
+      payments.push({
+        id: ch.id,
+        amount: ch.amount / 100,
+        currency: ch.currency,
+        status: ch.status === 'succeeded' ? 'completed' : ch.status === 'failed' ? 'failed' : 'pending',
+        created_at: new Date(ch.created * 1000).toISOString()
+      })
+      if (ch.status === 'succeeded') totalSpent += ch.amount / 100
+    }
+
+    // Fetch active subscription
+    const subs = await stripe.subscriptions.list({ customer: customerId, status: 'active', limit: 1 })
+    if (subs.data.length > 0) {
+      const sub = subs.data[0]
+      subscriptionId = sub.id
+      nextBillingDate = new Date(sub.current_period_end * 1000).toISOString()
+      // Derive tier from price metadata or product
+      const priceId = sub.items.data[0]?.price?.id || ''
+      if (priceId === process.env.STRIPE_PRICE_TEAM) subscriptionTier = 'team'
+      else if (priceId === process.env.STRIPE_PRICE_PRO) subscriptionTier = 'pro'
+      else if (priceId === process.env.STRIPE_PRICE_DAYPASS) subscriptionTier = 'daypass'
+      else subscriptionTier = 'pro'
+    }
+  } catch (err) {
+    console.error('[dashboard] Stripe fetch error:', err)
   }
 
-  // Production: real user from Supabase
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/login')
+  return { payments, totalSpent, subscriptionTier, subscriptionId, nextBillingDate }
+}
 
-  const tier = await getUserTier(user.id)
-  const uid = user.id
-  const now30d = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString()
+export default async function DashboardPage() {
+  const jar = await cookies()
+
+  // ── Auth: check claw_access token first, then session cookie ──
+  const accessToken = jar.get('claw_access')?.value
+  const sessionToken = jar.get(USER_SESSION_COOKIE)?.value
+
+  const access = accessToken ? verifyAccessToken(accessToken) : null
+  const session = sessionToken ? verifySessionToken(sessionToken) : null
+
+  if (!access && !session) {
+    redirect('/account')
+  }
+
+  // Build user object from available tokens
+  const email = session?.email || access?.customerId || 'user'
+  const plan = access?.plan || null
+  const customerId = access?.customerId || null
+  const tier = getUserTierFromPlan(plan)
+  const user = { id: customerId || email, email }
+
+  // ── Fetch local DB data (tables created by migration, gracefully empty if missing) ──
   const today = new Date().toISOString().split('T')[0]
 
-  // ── Parallel fetch all real data ──
-  const [
-    execAll, execToday, threatsActive, threatsAll,
-    nodesAll, paymentsAll, subscriptionRow
-  ] = await Promise.all([
-    // Recent executions (last 50)
-    supabase
-      .from('runbook_executions')
-      .select('id, runbook_id, status, started_at, completed_at, result, created_at')
-      .eq('user_id', uid)
-      .order('created_at', { ascending: false })
-      .limit(50),
-    // Executions today count
-    supabase
-      .from('runbook_executions')
-      .select('*', { count: 'exact', head: true })
-      .eq('user_id', uid)
-      .gte('created_at', today),
-    // Active threats count (24h)
-    supabase
-      .from('threats')
-      .select('*', { count: 'exact', head: true })
-      .eq('status', 'active'),
-    // All threats (recent 50 for display)
-    supabase
-      .from('threats')
-      .select('id, title, description, severity, status, created_at')
-      .order('created_at', { ascending: false })
-      .limit(50),
-    // Mycelium nodes
-    supabase
-      .from('mycelium_nodes')
-      .select('id, type, status, connections, metadata, created_at'),
-    // Payments
-    supabase
-      .from('payments')
-      .select('id, amount, currency, status, stripe_payment_intent_id, created_at')
-      .eq('user_id', uid)
-      .order('created_at', { ascending: false })
-      .limit(20),
-    // Subscription
-    supabase
-      .from('subscriptions')
-      .select('tier, status, stripe_subscription_id, expires_at, created_at')
-      .eq('user_id', uid)
-      .eq('status', 'active')
-      .single()
+  const [executions, threats, nodes] = await Promise.all([
+    safeQuery(`SELECT id, runbook_id, status, started_at, completed_at, result, created_at
+               FROM runbook_executions WHERE customer_id = $1
+               ORDER BY created_at DESC LIMIT 50`, [user.id]),
+    safeQuery(`SELECT id, title, description, severity, status, created_at
+               FROM threats ORDER BY created_at DESC LIMIT 50`),
+    safeQuery(`SELECT id, type, status, connections, metadata
+               FROM mycelium_nodes`)
   ])
 
-  const executions: any[] = execAll.data || []
-  const threats: any[] = threatsAll.data || []
-  const nodes: any[] = nodesAll.data || []
-  const payments: any[] = paymentsAll.data || []
+  // ── Fetch Stripe data (payments, subscription) ──
+  const stripeData = customerId
+    ? await fetchStripePayments(customerId)
+    : { payments: [], totalSpent: 0, subscriptionTier: null, subscriptionId: null, nextBillingDate: null }
 
   // ── Derived metrics ──
-  const activeNodeCount = nodes.filter((n: any) => n.status === 'active').length
+  const now30d = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
+  const recentExec = executions.filter((e: any) => new Date(e.created_at) >= now30d)
+  const activeThreats = threats.filter((t: any) => t.status === 'active').length
+  const activeNodes = nodes.filter((n: any) => n.status === 'active').length
+  const execToday = executions.filter((e: any) => e.created_at?.startsWith(today)).length
 
-  // ClawScore: base 500 + activity bonus
+  // ClawScore
   let clawScore = 500
-  const recentExec = executions.filter((e: any) => new Date(e.created_at) >= new Date(now30d))
   clawScore += recentExec.length * 10
   clawScore += recentExec.filter((e: any) => e.status === 'completed').length * 5
   clawScore += threats.filter((t: any) => t.severity === 'high' || t.severity === 'critical').length * 25
   clawScore = Math.min(clawScore, 1000)
 
   // Success rate
-  const completedExec = recentExec.filter((e: any) => e.status === 'completed' || e.status === 'failed')
-  const successRate = completedExec.length > 0
-    ? Math.round(completedExec.filter((e: any) => e.status === 'completed').length / completedExec.length * 100)
+  const finished = recentExec.filter((e: any) => e.status === 'completed' || e.status === 'failed')
+  const successRate = finished.length > 0
+    ? Math.round(finished.filter((e: any) => e.status === 'completed').length / finished.length * 100)
     : 0
 
-  // Total spent
-  const totalSpent = payments
-    .filter((p: any) => p.status === 'completed')
-    .reduce((sum: number, p: any) => sum + (p.amount || 0), 0)
-
-  // Next billing: estimate from subscription
-  let nextBillingDate: string | null = null
-  if (subscriptionRow.data?.expires_at) {
-    nextBillingDate = subscriptionRow.data.expires_at
-  }
+  const effectiveTier = stripeData.subscriptionTier || plan || null
 
   const initialData: DashboardData = {
     clawScore,
-    activeThreats: threatsActive.count || 0,
-    executionsToday: execToday.count || 0,
-    myceliumNodes: activeNodeCount,
+    activeThreats,
+    executionsToday: execToday,
+    myceliumNodes: activeNodes,
     successRate,
     recentExecutions: executions.map((e: any) => ({
       id: e.id,
-      runbook_id: e.runbook_id,
+      runbook_id: e.runbook_id || '',
       status: e.status,
       started_at: e.started_at,
       completed_at: e.completed_at || null,
@@ -151,38 +171,32 @@ export default async function DashboardPage() {
     })),
     threats: threats.map((t: any) => ({
       id: t.id,
-      title: t.title,
+      title: t.title || '',
       description: t.description || '',
-      severity: t.severity,
-      status: t.status,
+      severity: t.severity || 'low',
+      status: t.status || 'active',
       created_at: t.created_at
     })),
     nodes: nodes.map((n: any) => ({
       id: n.id,
-      type: n.type,
-      status: n.status,
+      type: n.type || 'runbook',
+      status: n.status || 'inactive',
       connections: n.connections || [],
       metadata: n.metadata || {}
     })),
-    payments: payments.map((p: any) => ({
-      id: p.id,
-      amount: p.amount,
-      currency: p.currency || 'eur',
-      status: p.status,
-      created_at: p.created_at
-    })),
-    subscription: subscriptionRow.data ? {
-      tier: subscriptionRow.data.tier,
-      status: subscriptionRow.data.status,
-      stripe_subscription_id: subscriptionRow.data.stripe_subscription_id || null,
-      expires_at: subscriptionRow.data.expires_at || null,
-      created_at: subscriptionRow.data.created_at
+    payments: stripeData.payments,
+    subscription: effectiveTier ? {
+      tier: effectiveTier,
+      status: 'active',
+      stripe_subscription_id: stripeData.subscriptionId,
+      expires_at: stripeData.nextBillingDate,
+      created_at: new Date().toISOString()
     } : null,
     totalExecutions: executions.length,
     lastRunAt: executions.length > 0 ? executions[0].created_at : null,
-    totalSpent,
-    nextBillingDate
+    totalSpent: stripeData.totalSpent,
+    nextBillingDate: stripeData.nextBillingDate
   }
 
-  return <UserDashboardClient user={user} tier={tier} initialData={initialData} />
+  return <UserDashboardClient user={user} tier={getUserTierFromPlan(effectiveTier)} initialData={initialData} />
 }

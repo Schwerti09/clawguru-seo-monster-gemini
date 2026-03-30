@@ -179,32 +179,26 @@ export const TIER_CONFIGS: Record<UserTier, TierConfig> = {
   }
 }
 
-export async function getUserTier(userId: string): Promise<UserTier> {
-  // Return demo tier for development when Supabase is not configured
-  if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
-    return 'pro' // Demo tier for development
+/**
+ * Derive UserTier from an AccessPlan (from the claw_access token).
+ * If no plan is provided, the user is an explorer (free tier).
+ */
+export function getUserTierFromPlan(plan: string | null | undefined): UserTier {
+  if (!plan) return 'explorer'
+  switch (plan) {
+    case 'team': return 'enterprise'
+    case 'pro': return 'pro'
+    case 'daypass': return 'daypass'
+    default: return 'explorer'
   }
-  
-  // Real tier lookup from Supabase
-  const { createClient } = await import('@supabase/supabase-js')
-  const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
-  
-  const { data: subscription } = await supabase
-    .from('subscriptions')
-    .select('tier, expires_at, status')
-    .eq('user_id', userId)
-    .eq('status', 'active')
-    .single()
-  
-  if (!subscription) return 'explorer'
-  
-  // Check if day pass expired
-  if (subscription.tier === 'daypass' && subscription.expires_at) {
-    const expired = new Date(subscription.expires_at) < new Date()
-    if (expired) return 'explorer'
-  }
-  
-  return subscription.tier as UserTier
+}
+
+/**
+ * Legacy helper – kept for callsites that pass a userId string.
+ * Without a DB lookup the only fallback is explorer.
+ */
+export async function getUserTier(_userId: string): Promise<UserTier> {
+  return 'explorer'
 }
 
 export function canAccessFeature(tier: UserTier, feature: keyof TierConfig['canAccess']): boolean {

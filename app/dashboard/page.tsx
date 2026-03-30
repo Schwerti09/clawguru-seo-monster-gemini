@@ -1,3 +1,4 @@
+import type { Metadata } from "next"
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { UserDashboardClient } from '@/components/cockpit/UserDashboardClient'
@@ -11,6 +12,11 @@ import type { DashboardData, DashboardPayment } from '@/types/dashboard'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
+
+export const metadata: Metadata = {
+  title: "Dashboard | ClawGuru",
+  description: "Your ClawGuru dashboard — monitor security threats, runbook executions, and your subscription.",
+}
 
 /* ── Empty data fallback ── */
 function emptyData(): DashboardData {

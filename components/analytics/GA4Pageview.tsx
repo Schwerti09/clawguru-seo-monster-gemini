@@ -19,11 +19,13 @@ export default function GA4Pageview() {
     if (!window.gtag || !pathname) return
     const page_location = typeof window !== "undefined" ? window.location.href : undefined
     const page_path = `${pathname}${searchParams?.toString() ? `?${searchParams.toString()}` : ""}`
+    const page_title = document.title
     const debug_mode = typeof window !== "undefined" && window.location.hostname !== "clawguru.org"
     for (const id of GA_IDS) {
       window.gtag("config", id, {
         page_path,
         page_location,
+        page_title,
         debug_mode,
       })
     }

@@ -86,3 +86,4 @@ clawguru-seo-monster-gemini-*/
 *.tar.gz
 *.tar
 clawguru-deploy.tgz
+tsconfig.tsbuildinfo

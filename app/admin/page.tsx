@@ -165,8 +165,8 @@ async function fetchGeminiUsage(): Promise<{
       [today]
     )
   ])
-  const tokensUsed = parseInt(tokenResult.rows[0]?.total ?? '2450000', 10) || 2450000
-  const requestsToday = parseInt(requestResult.rows[0]?.count ?? '1247', 10) || 1247
+  const tokensUsed = parseInt(tokenResult.rows[0]?.total ?? '0', 10)
+  const requestsToday = parseInt(requestResult.rows[0]?.count ?? '0', 10)
   const costToday = (tokensUsed / 1000) * 0.00025
   return { tokensUsed, requestsToday, costToday }
 }

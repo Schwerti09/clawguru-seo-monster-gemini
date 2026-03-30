@@ -17,7 +17,6 @@ export async function sendEmail(args: SendArgs): Promise<{ id?: string }> {
     return {}
   }
   const apiKey = process.env.RESEND_API_KEY
-  console.log(`[email] RESEND_API_KEY present: ${apiKey ? `yes (length: ${apiKey.length})` : "no – missing!"}`)
   if (!apiKey) {
     console.error("[email] RESEND_API_KEY missing – email sending not possible")
     throw new Error("Missing RESEND_API_KEY")

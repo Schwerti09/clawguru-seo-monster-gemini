@@ -42,7 +42,10 @@ build/
 **/build/**
 
 # netlify
-.netlify
+# Trailing slash ensures the entire directory (including state files) is ignored.
+# NOTE: Already-tracked .netlify/ files must be removed manually:
+#   git rm -r --cached .netlify/ && git commit -m "chore: untrack .netlify state files" && git push
+.netlify/
 
 # vscode
 .vscode

@@ -1,60 +1,32 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
+import { dbQuery } from '@/lib/db'
 
 export async function GET() {
+  if (!process.env.DATABASE_URL) {
+    return NextResponse.json({ today: 342.50, month: 12480.00 })
+  }
+
   try {
-    // Get Supabase client
-    const getSupabaseClient = () => {
-      if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
-        return null
-      }
-      const { createClient } = require('@supabase/supabase-js')
-      return createClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL,
-        process.env.SUPABASE_SERVICE_ROLE_KEY
-      )
-    }
-
-    const supabase = getSupabaseClient()
-    
-    if (!supabase) {
-      // Fallback mock data for development
-      return NextResponse.json({
-        today: 342.50,
-        month: 12480.00
-      })
-    }
-
-    // Get revenue today
     const today = new Date().toISOString().split('T')[0]
-    const { data: todayRevenue } = await supabase
-      .from('payments')
-      .select('amount')
-      .gte('created_at', today)
-      .eq('status', 'completed')
-
-    const revenueToday = todayRevenue?.reduce((sum: number, payment: any) => sum + payment.amount, 0) || 0
-
-    // Get revenue this month
     const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString()
-    const { data: monthRevenue } = await supabase
-      .from('payments')
-      .select('amount')
-      .gte('created_at', thirtyDaysAgo)
-      .eq('status', 'completed')
 
-    const revenueMonth = monthRevenue?.reduce((sum: number, payment: any) => sum + payment.amount, 0) || 0
+    const [todayResult, monthResult] = await Promise.all([
+      dbQuery<{ total: string }>(
+        "SELECT COALESCE(SUM(amount), 0)::text AS total FROM payments WHERE created_at >= $1 AND status = 'completed'",
+        [today]
+      ),
+      dbQuery<{ total: string }>(
+        "SELECT COALESCE(SUM(amount), 0)::text AS total FROM payments WHERE created_at >= $1 AND status = 'completed'",
+        [thirtyDaysAgo]
+      )
+    ])
 
     return NextResponse.json({
-      today: revenueToday,
-      month: revenueMonth
+      today: parseFloat(todayResult.rows[0]?.total ?? '0'),
+      month: parseFloat(monthResult.rows[0]?.total ?? '0')
     })
   } catch (error) {
     console.error('Revenue stats error:', error)
-    
-    // Fallback to mock data
-    return NextResponse.json({
-      today: 342.50,
-      month: 12480.00
-    })
+    return NextResponse.json({ today: 342.50, month: 12480.00 })
   }
 }

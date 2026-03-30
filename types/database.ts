@@ -1,4 +1,4 @@
-// Database type definitions for Supabase
+// Database type definitions for Neon Postgres
 export interface Database {
   public: {
     Tables: {

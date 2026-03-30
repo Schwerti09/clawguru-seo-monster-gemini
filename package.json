@@ -22,8 +22,6 @@
   "dependencies": {
     "@react-three/drei": "^8.17.0",
     "@react-three/fiber": "^8.17.12",
-    "@supabase/auth-helpers-nextjs": "^0.15.0",
-    "@supabase/supabase-js": "^2.100.1",
     "autoprefixer": "^10.4.0",
     "dotenv": "^16.4.5",
     "framer-motion": "^12.35.0",

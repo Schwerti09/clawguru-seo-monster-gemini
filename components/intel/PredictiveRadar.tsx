@@ -70,12 +70,12 @@ export default function PredictiveRadar({ prefix = "", dict = {} as IntelDict }:
       {nodes && (
         <div className="relative">
           <div className="h-72 rounded-xl overflow-hidden border border-white/10">
-            <Canvas orthographic={reduce} dpr={[1, 2]} gl={{ antialias: true, powerPreference: "low-power" }}>
+            <Canvas orthographic={reduce ? true : false} dpr={[1, 2]} gl={{ antialias: true, powerPreference: "low-power" }}>
               {!reduce && <OrbitControls enablePan={false} enableZoom={false} autoRotate autoRotateSpeed={0.4} />}
               <ambientLight intensity={0.4} />
               <color attach="background" args={["#07090f"]} />
               <group>
-                <ThreatPoints data={nodes} reduce={reduce} onHover={setHover} />
+                <ThreatPoints data={nodes} reduce={reduce || false} onHover={setHover} />
               </group>
             </Canvas>
           </div>

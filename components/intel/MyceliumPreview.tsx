@@ -48,6 +48,7 @@ export default function MyceliumPreview({ prefix = "", dict = {} as IntelDict }:
     if (!ctx) return
     let raf = 0
     function step() {
+      if (!ctx) return
       const W = canvasRef.current!.width
       const H = canvasRef.current!.height
       ctx.clearRect(0, 0, W, H)

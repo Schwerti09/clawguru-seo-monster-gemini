@@ -38,7 +38,6 @@ export async function generateMetadata({
       "Infrastructure as Code",
     ],
     alternates: {
-      canonical: `/${locale}/terraform-security`,
       ...localeAlternates(`/${locale}/terraform-security`),
     },
     openGraph: {

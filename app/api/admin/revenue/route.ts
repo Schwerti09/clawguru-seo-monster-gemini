@@ -67,7 +67,7 @@ export async function GET() {
     }
 
     // Transform data
-    const transformedTransactions = transactions?.map(transaction => ({
+    const transformedTransactions = transactions?.map((transaction: any) => ({
       id: transaction.id,
       user_email: transaction.users.email,
       tier: transaction.subscriptions.tier,

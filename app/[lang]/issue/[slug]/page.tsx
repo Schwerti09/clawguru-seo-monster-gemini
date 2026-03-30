@@ -29,7 +29,7 @@ export async function generateMetadata(
   return {
     title: `${issue.name} Runbooks | ClawGuru Issue Hub`,
     description: `${issue.name} Runbooks mit Fixes, Hardening und Incident Response für alle Provider und Services.`,
-    alternates: { canonical: `/${locale}/issue/${params.slug}` },
+    alternates: { canonical: `/issue/:slug/page` }
   }
 }
 

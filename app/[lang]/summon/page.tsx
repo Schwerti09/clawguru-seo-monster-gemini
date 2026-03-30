@@ -20,7 +20,7 @@ export async function generateMetadata(props: { params: { lang: string } }): Pro
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
 
   return {
-    alternates: { canonical: `/${locale}/summon` },
+    alternates: { canonical: `/summon/page` }
   }
 }
 

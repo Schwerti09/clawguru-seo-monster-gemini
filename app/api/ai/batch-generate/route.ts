@@ -184,7 +184,7 @@ async function processBatchTask(
     const prompt = getPromptForType(task)
 
     // Call AI provider (fallback chain: Deepseek → OpenAI → Gemini)
-    const { parsed: aiParsed, provider, raw } = await generateOrdered(prompt, task.context.preferredProvider)
+    const { parsed: aiParsed, provider, raw } = await generateOrdered(prompt, task.context.preferredProvider as any)
 
     if (!aiParsed && !raw) {
       throw new Error("No response from AI provider")

@@ -17,7 +17,7 @@ export async function generateMetadata(props: { params: { lang: string } }) {
   return {
     title: `Kubernetes Runbooks – RBAC, Networking, Security 2026 | ClawGuru`,
     description: `Alle ClawGuru Kubernetes-Runbooks: RBAC, NetworkPolicy, Pod Security, Incident Response, Monitoring. Ops-Guides für K8s 2026.`,
-    alternates: { canonical: `/${locale}/runbooks/kubernetes` },
+    alternates: { canonical: `/runbooks/kubernetes/page` }
   }
 }
 

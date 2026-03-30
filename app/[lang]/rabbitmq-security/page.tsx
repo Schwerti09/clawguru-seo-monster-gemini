@@ -38,7 +38,6 @@ export async function generateMetadata({
       "AMQP security",
     ],
     alternates: {
-      canonical: `/${locale}/rabbitmq-security`,
       ...localeAlternates(`/${locale}/rabbitmq-security`),
     },
     openGraph: {

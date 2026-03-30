@@ -38,7 +38,6 @@ export async function generateMetadata({
       "Clean code security",
     ],
     alternates: {
-      canonical: `/${locale}/sonarqube-security`,
       ...localeAlternates(`/${locale}/sonarqube-security`),
     },
     openGraph: {

@@ -38,7 +38,6 @@ export async function generateMetadata({
       "Windows compliance",
     ],
     alternates: {
-      canonical: `/${locale}/windows-server-security`,
       ...localeAlternates(`/${locale}/windows-server-security`),
     },
     openGraph: {

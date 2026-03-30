@@ -42,7 +42,6 @@ export async function generateMetadata({
       "WAF best practices",
     ],
     alternates: {
-      canonical: `/${locale}/waf-2027`,
       ...localeAlternates(`/${locale}/waf-2027`),
     },
     openGraph: {

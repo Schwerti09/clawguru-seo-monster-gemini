@@ -14,7 +14,7 @@ export default function ExampleQueries({ onSelect, dict }: { onSelect: (q: strin
     <div className="max-w-4xl mx-auto">
       <div className="text-sm text-gray-400 mb-2">{dict?.example_queries_title || "Beispiel‑Anfragen"}</div>
       <div className="flex flex-wrap gap-2">
-        {items.map((q) => (
+        {items.map((q: string) => (
           <button
             key={q}
             onClick={() => onSelect(q)}

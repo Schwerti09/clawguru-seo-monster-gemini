@@ -38,7 +38,6 @@ export async function generateMetadata({
       "GitOps compliance",
     ],
     alternates: {
-      canonical: `/${locale}/argocd-security`,
       ...localeAlternates(`/${locale}/argocd-security`),
     },
     openGraph: {

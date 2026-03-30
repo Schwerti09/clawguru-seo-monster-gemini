@@ -21,7 +21,7 @@ export async function generateMetadata(props: {
   const locale = (SUPPORTED_LOCALES.includes(lang as Locale) ? lang : "de") as Locale
   return {
     title: `How to fix ${decodeURIComponent(cve_id)} | ClawGuru`,
-    alternates: { canonical: `/${locale}/solutions/fix-${decodeURIComponent(cve_id)}` },
+    alternates: { canonical: `/solutions/fix-:cve_id/page` }
   }
 }
 

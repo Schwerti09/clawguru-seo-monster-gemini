@@ -38,7 +38,6 @@ export async function generateMetadata({
       "Kubernetes egress",
     ],
     alternates: {
-      canonical: `/${locale}/kubernetes-network-policies`,
       ...localeAlternates(`/${locale}/kubernetes-network-policies`),
     },
     openGraph: {

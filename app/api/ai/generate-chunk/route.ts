@@ -55,7 +55,7 @@ async function generateOne(task: BatchContentRequest): Promise<{
 }> {
   try {
     const prompt = getPromptForType(task)
-    const { parsed: aiParsed, raw } = await generateOrdered(prompt, task.context.preferredProvider)
+    const { parsed: aiParsed, raw } = await generateOrdered(prompt, task.context.preferredProvider as any)
     if (!aiParsed && !raw) throw new Error("No response from AI provider")
 
     let parsed: any = aiParsed

@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 export default async function Account(props: {
   searchParams?: Promise<Record<string, string | string[] | undefined>>
 }) {
-  const searchParams = props.searchParams
+  const searchParams = await props.searchParams
   const jar = await cookies()
   const token = jar.get(USER_SESSION_COOKIE)?.value
   const session = token ? verifySessionToken(token) : null
@@ -24,7 +24,7 @@ export default async function Account(props: {
     typeof searchParams?.error === "string" ? searchParams.error : null
 
   if (!session) {
-    return <LoginPage error={error} />
+    return <LoginPage error={error || undefined} />
   }
 
   return <AccountPage email={session.email} />

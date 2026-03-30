@@ -17,7 +17,9 @@ export async function generateMetadata(
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
 
   return {
-    alternates: { canonical: `/${locale}/affiliate/${params.slug}` },
+    alternates: { 
+      canonical: `/${locale}/affiliate/${params.slug}`
+    }
   }
 }
 

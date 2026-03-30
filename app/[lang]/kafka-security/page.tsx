@@ -40,7 +40,6 @@ export async function generateMetadata({
       "Kafka mTLS",
     ],
     alternates: {
-      canonical: `/${locale}/kafka-security`,
       ...localeAlternates(`/${locale}/kafka-security`),
     },
     openGraph: {

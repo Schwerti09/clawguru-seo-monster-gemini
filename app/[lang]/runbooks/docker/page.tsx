@@ -17,7 +17,7 @@ export async function generateMetadata(props: { params: { lang: string } }) {
   return {
     title: `Docker Runbooks – Container Security & Ops 2026 | ClawGuru`,
     description: `Alle ClawGuru Docker-Runbooks: Container Hardening, Secrets, Compose, Registry, Netzwerk. Ops-Guides für Docker 2026.`,
-    alternates: { canonical: `/${locale}/runbooks/docker` },
+    alternates: { canonical: `/runbooks/docker/page` }
   }
 }
 

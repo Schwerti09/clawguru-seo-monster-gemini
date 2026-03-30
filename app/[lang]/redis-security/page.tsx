@@ -38,7 +38,6 @@ export async function generateMetadata({
       "Redis Cluster",
     ],
     alternates: {
-      canonical: `/${locale}/redis-security`,
       ...localeAlternates(`/${locale}/redis-security`),
     },
     openGraph: {

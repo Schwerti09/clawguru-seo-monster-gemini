@@ -22,7 +22,7 @@ export async function generateMetadata(props: { params: { lang: string } }) {
     title: "Runbooks | ClawGuru",
     description:
       "ClawGuru Runbooks: Security, Ops, Incident Response, Setup & Fix guides. Score → Runbook → Fix → Re-Check.",
-    alternates: { canonical: `/${locale}/runbooks` },
+    alternates: { canonical: `/runbooks/page` }
   }
 }
 

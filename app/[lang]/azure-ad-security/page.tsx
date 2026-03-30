@@ -38,7 +38,6 @@ export async function generateMetadata({
       "Microsoft security",
     ],
     alternates: {
-      canonical: `/${locale}/azure-ad-security`,
       ...localeAlternates(`/${locale}/azure-ad-security`),
     },
     openGraph: {

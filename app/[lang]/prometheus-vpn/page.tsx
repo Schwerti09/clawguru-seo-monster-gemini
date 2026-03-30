@@ -38,7 +38,6 @@ export async function generateMetadata({
       "Prometheus mTLS",
     ],
     alternates: {
-      canonical: `/${locale}/prometheus-vpn`,
       ...localeAlternates(`/${locale}/prometheus-vpn`),
     },
     openGraph: {

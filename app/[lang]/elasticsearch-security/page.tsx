@@ -38,7 +38,6 @@ export async function generateMetadata({
       "Field level security",
     ],
     alternates: {
-      canonical: `/${locale}/elasticsearch-security`,
       ...localeAlternates(`/${locale}/elasticsearch-security`),
     },
     openGraph: {

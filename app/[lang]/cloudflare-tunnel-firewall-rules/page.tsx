@@ -41,7 +41,6 @@ export async function generateMetadata({
       "cloudflared",
     ],
     alternates: {
-      canonical: `/${locale}/cloudflare-tunnel-firewall-rules`,
       ...localeAlternates(`/${locale}/cloudflare-tunnel-firewall-rules`),
     },
     openGraph: {

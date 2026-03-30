@@ -91,6 +91,7 @@ export default function CopilotTeaser() {
       }, 150)
       return () => clearTimeout(t)
     }
+    return undefined
   }, [visible, asked])
 
   const top = data?.top || data?.runbook || (data?.results && data.results[0]) || null

@@ -51,7 +51,6 @@ export async function generateMetadata({
       "XXE scanner",
     ],
     alternates: {
-      canonical: `/${locale}/xxe-2026`,
       ...localeAlternates(`/${locale}/xxe-2026`),
     },
     openGraph: {

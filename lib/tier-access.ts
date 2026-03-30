@@ -1,3 +1,6 @@
+import React from 'react'
+import { Crown, Star, Zap, Shield } from 'lucide-react'
+
 export type UserTier = 'explorer' | 'daypass' | 'pro' | 'enterprise'
 
 export interface User {
@@ -281,12 +284,12 @@ export function getTierColor(tier: UserTier): string {
   }
 }
 
-export function getTierIcon(tier: UserTier): string {
+export function getTierIcon(tier: UserTier): React.ComponentType<any> {
   switch (tier) {
-    case 'enterprise': return 'Crown'
-    case 'pro': return 'Star'
-    case 'daypass': return 'Zap'
-    case 'explorer': return 'Shield'
-    default: return 'Shield'
+    case 'enterprise': return Crown
+    case 'pro': return Star
+    case 'daypass': return Zap
+    case 'explorer': return Shield
+    default: return Shield
   }
 }

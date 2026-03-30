@@ -38,7 +38,6 @@ export async function generateMetadata({
       "Datadog best practices",
     ],
     alternates: {
-      canonical: `/${locale}/datadog-security`,
       ...localeAlternates(`/${locale}/datadog-security`),
     },
     openGraph: {

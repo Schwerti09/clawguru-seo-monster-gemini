@@ -49,8 +49,8 @@ class ErrorBoundary extends React.Component<{ fallback?: React.ReactNode; childr
     this.state = { hasError: false }
   }
   static getDerivedStateFromError() { return { hasError: true } }
-  componentDidCatch() {}
-  render() { return this.state.hasError ? (this.props.fallback || null) : (this.props.children as React.ReactElement) }
+  override componentDidCatch() {}
+  override render() { return this.state.hasError ? (this.props.fallback || null) : (this.props.children as React.ReactElement) }
 }
 
 function Shimmer({ className = "" }: { className?: string }) {
@@ -98,23 +98,23 @@ const ScoreRing = dynamic(() => Promise.resolve(function ScoreRingImpl({ score, 
   )
 }), { ssr: false })
 
-export default function NeuroPage({ dict }: { dict?: DictShape }) {
+export default function NeuroPage() {
   const t: NeuroDict = useMemo(() => ({
-    title: dict?.neuro?.title ?? "Neuro – Personal Intelligence",
-    subtitle: dict?.neuro?.subtitle ?? "Dein Stack. Deine Ziele. Dein persönlicher Ausführungsplan.",
-    pick_stack: dict?.neuro?.pick_stack ?? "Stacks wählen",
-    add_stack: dict?.neuro?.add_stack ?? "Hinzufügen",
-    input_placeholder: dict?.neuro?.input_placeholder ?? "z. B. nodejs, postgres, kubernetes, aws-eks",
-    recommend: dict?.neuro?.recommend ?? "Empfehlen",
-    recommendations: dict?.neuro?.recommendations ?? "Empfehlungen",
-    plan_title: dict?.neuro?.plan_title ?? "Ausführungsplan",
-    score_title: dict?.neuro?.score_title ?? "Neuro Score",
-    confidence: dict?.neuro?.confidence ?? "Confidence",
-    loading: dict?.neuro?.loading ?? "Lade...",
-    fetch_error: dict?.neuro?.fetch_error ?? "Laden fehlgeschlagen",
-    available_label: dict?.neuro?.available_label ?? "Available",
-    chosen_label: dict?.neuro?.chosen_label ?? "Chosen",
-  }), [dict])
+    title: "Neuro – Personal Intelligence",
+    subtitle: "Dein Stack. Deine Ziele. Dein persönlicher Ausführungsplan.",
+    pick_stack: "Stacks wählen",
+    add_stack: "Hinzufügen",
+    input_placeholder: "z. B. nodejs, postgres, kubernetes, aws-eks",
+    recommend: "Empfehlen",
+    recommendations: "Empfehlungen",
+    plan_title: "Ausführungsplan",
+    score_title: "Neuro Score",
+    confidence: "Confidence",
+    loading: "Lade...",
+    fetch_error: "Laden fehlgeschlagen",
+    available_label: "Available",
+    chosen_label: "Chosen",
+  }), [])
 
   const pathname = usePathname()
   const lang = useMemo(() => {

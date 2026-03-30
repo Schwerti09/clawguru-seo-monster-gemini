@@ -37,7 +37,7 @@ export function MyceliumTab({ isShadowed }: MyceliumTabProps) {
       vy: (Math.random() - 0.5) * 0.5,
       radius: Math.random() * 3 + 2,
       type: ['threat', 'runbook', 'oracle', 'neuro'][Math.floor(Math.random() * 4)],
-      connections: []
+      connections: [] as any[]
     }))
 
     // Create connections

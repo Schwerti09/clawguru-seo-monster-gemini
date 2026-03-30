@@ -38,7 +38,6 @@ export async function generateMetadata({
       "CloudFormation best practices",
     ],
     alternates: {
-      canonical: `/${locale}/cloudformation-security`,
       ...localeAlternates(`/${locale}/cloudformation-security`),
     },
     openGraph: {

@@ -26,7 +26,7 @@ export async function generateMetadata(props: {
   return {
     title: `Temporal History | ClawGuru Runbooks`,
     description: "Zeitliche Entwicklung und Versionsgeschichte des Runbooks",
-    alternates: { canonical: `/${locale}/runbook/${slug}/temporal` },
+    alternates: { canonical: `/runbook/:slug/temporal/page` }
   }
 }
 

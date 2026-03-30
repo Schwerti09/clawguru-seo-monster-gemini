@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
   )
 
   if (dryRun) {
-    return NextResponse.json({ would_publish: toPublish.rows.length, items: toPublish.rows.map((r) => r.id) })
+    return NextResponse.json({ would_publish: toPublish.rows.length, items: toPublish.rows.map((r: any) => r.id) })
   }
 
   const updates = [] as string[]

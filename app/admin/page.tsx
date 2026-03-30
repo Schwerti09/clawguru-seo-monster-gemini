@@ -84,7 +84,7 @@ export default async function AdminPage() {
 
   return (
     <AdminDashboardClient
-      user={user}
+      user={user as any}
       initialData={{
         totalUsers,
         activeUsers,

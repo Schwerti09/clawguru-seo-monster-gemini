@@ -38,7 +38,6 @@ export async function generateMetadata({
       "Linux compliance",
     ],
     alternates: {
-      canonical: `/${locale}/linux-hardening`,
       ...localeAlternates(`/${locale}/linux-hardening`),
     },
     openGraph: {

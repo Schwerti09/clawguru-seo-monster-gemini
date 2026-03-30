@@ -42,7 +42,6 @@ export async function generateMetadata({
       "Tailscale RBAC",
     ],
     alternates: {
-      canonical: `/${locale}/tailscale-pam`,
       ...localeAlternates(`/${locale}/tailscale-pam`),
     },
     openGraph: {

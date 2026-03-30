@@ -157,7 +157,7 @@ export class BatchGeneratorClient {
       context: {
         toolName,
         category,
-        competitors: competitors?.join(","),
+        competitors: competitors?.join(",") || "",
         year,
       },
     }

@@ -196,7 +196,7 @@ export default function SummonRealClient({ dict, prefix = "" }: { dict?: Dict; p
   return (
     <ErrorBoundary fallback={<div className="rounded-2xl border border-red-400/30 bg-red-500/10 text-red-200 p-4">{t?.error_boundary_fallback || "Ein Fehler ist aufgetreten."}</div>}>
       <div className="space-y-6">
-        <SwarmTypeCards current={type} onChange={setType} reduce={reduce} dict={t} />
+        <SwarmTypeCards current={type} onChange={setType} reduce={reduce || false} dict={t} />
 
       <div className="rounded-2xl border border-white/10 bg-black/40 p-4 backdrop-blur-md">
         <div className="flex flex-wrap gap-2 mb-3">
@@ -267,7 +267,7 @@ export default function SummonRealClient({ dict, prefix = "" }: { dict?: Dict; p
           </div>
         )}
 
-        <ResultPanel result={res} busy={busy} err={err} prefix={prefix} dict={t} reduce={reduce} />
+        <ResultPanel result={res} busy={busy} err={err} prefix={prefix} dict={t} reduce={reduce || false} />
       </div>
     </ErrorBoundary>
   )
@@ -559,10 +559,10 @@ class ErrorBoundary extends React.Component<{ fallback?: React.ReactNode; childr
   static getDerivedStateFromError() {
     return { hasError: true }
   }
-  componentDidCatch() {
+  override componentDidCatch() {
     // no-op
   }
-  render() {
+  override render() {
     if (this.state.hasError) return this.props.fallback || null
     return this.props.children as React.ReactElement
   }

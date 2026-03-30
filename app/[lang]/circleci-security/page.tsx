@@ -38,7 +38,6 @@ export async function generateMetadata({
       "CircleCI restricted contexts",
     ],
     alternates: {
-      canonical: `/${locale}/circleci-security`,
       ...localeAlternates(`/${locale}/circleci-security`),
     },
     openGraph: {

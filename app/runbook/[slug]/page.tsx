@@ -320,7 +320,7 @@ export default async function RunbookPage(props: { params: { slug: string } }) {
   const relatedSlugs = Array.from(
     new Set([
       ...r.relatedSlugs,
-      ...engineList.map((link) => link.slug),
+      ...engineList.map((link: any) => link.slug),
     ])
   ).slice(0, 10)
   const relatedList = relatedSlugs.length > 0
@@ -411,7 +411,7 @@ export default async function RunbookPage(props: { params: { slug: string } }) {
 
           <div id="steps" className="text-xs uppercase tracking-widest text-gray-500">Schritt-für-Schritt</div>
           <ol className="mt-4 list-decimal pl-6 space-y-3 text-gray-200">
-            {r.howto.steps.map((s, i) => (
+            {r.howto.steps.map((s: string, i: number) => (
               <li key={i} className="leading-relaxed">
                 {s}
               </li>
@@ -463,7 +463,7 @@ export default async function RunbookPage(props: { params: { slug: string } }) {
           </div>
 
           <div className="mt-6 flex flex-wrap gap-2">
-            {r.tags.map((t) => (
+            {r.tags.map((t: string) => (
               <a
                 key={t}
                 href={`${prefix}/tag/${encodeURIComponent(t)}`}

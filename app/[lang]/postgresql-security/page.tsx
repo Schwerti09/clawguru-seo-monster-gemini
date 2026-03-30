@@ -38,7 +38,6 @@ export async function generateMetadata({
       "Postgres hardening",
     ],
     alternates: {
-      canonical: `/${locale}/postgresql-security`,
       ...localeAlternates(`/${locale}/postgresql-security`),
     },
     openGraph: {

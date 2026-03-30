@@ -17,7 +17,6 @@ export async function generateMetadata({ params }: { params: { lang: string } })
     description: "AWS IAM Security Guide - Least Privilege, SCPs, OIDC",
     keywords: ["AWS", "IAM", "Security"],
     alternates: {
-      canonical: `/${locale}/aws-iam-security`,
       ...localeAlternates(`/${locale}/aws-iam-security`),
     },
   };

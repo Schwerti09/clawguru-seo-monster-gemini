@@ -61,7 +61,7 @@ export async function GET() {
     }
 
     // Transform data to match expected format
-    const transformedUsers = users?.map(user => ({
+    const transformedUsers = users?.map((user: any) => ({
       id: user.id,
       email: user.email,
       tier: user.user_tier.tier,

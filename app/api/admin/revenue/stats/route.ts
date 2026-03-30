@@ -32,7 +32,7 @@ export async function GET() {
       .gte('created_at', today)
       .eq('status', 'completed')
 
-    const revenueToday = todayRevenue?.reduce((sum, payment) => sum + payment.amount, 0) || 0
+    const revenueToday = todayRevenue?.reduce((sum: number, payment: any) => sum + payment.amount, 0) || 0
 
     // Get revenue this month
     const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString()
@@ -42,7 +42,7 @@ export async function GET() {
       .gte('created_at', thirtyDaysAgo)
       .eq('status', 'completed')
 
-    const revenueMonth = monthRevenue?.reduce((sum, payment) => sum + payment.amount, 0) || 0
+    const revenueMonth = monthRevenue?.reduce((sum: number, payment: any) => sum + payment.amount, 0) || 0
 
     return NextResponse.json({
       today: revenueToday,

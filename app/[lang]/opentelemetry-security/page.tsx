@@ -38,7 +38,6 @@ export async function generateMetadata({
       "Distributed tracing security",
     ],
     alternates: {
-      canonical: `/${locale}/opentelemetry-security`,
       ...localeAlternates(`/${locale}/opentelemetry-security`),
     },
     openGraph: {

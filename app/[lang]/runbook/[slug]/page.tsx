@@ -27,7 +27,6 @@ export async function generateMetadata(props: {
 
   return {
     alternates: { canonical: `/${locale}/runbook/${slug}` },
-    // Prevent thin content from being indexed - only quality runbooks should rank
     robots: {
       index: true,
       follow: true,

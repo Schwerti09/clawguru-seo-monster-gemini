@@ -38,7 +38,6 @@ export async function generateMetadata({
       "AWS network security",
     ],
     alternates: {
-      canonical: `/${locale}/aws-vpc-flow-logs`,
       ...localeAlternates(`/${locale}/aws-vpc-flow-logs`),
     },
     openGraph: {

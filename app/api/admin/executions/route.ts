@@ -75,7 +75,7 @@ export async function GET() {
     }
 
     // Transform data
-    const transformedExecutions = executions?.map(execution => ({
+    const transformedExecutions = executions?.map((execution: any) => ({
       id: execution.id,
       runbook_name: execution.runbooks.name,
       user_email: execution.users.email,

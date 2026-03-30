@@ -60,7 +60,7 @@ async function getStorageUsage(): Promise<number> {
   }
 }
 
-function getUptime(): Promise<number> {
+async function getUptime(): Promise<number> {
   try {
     const uptime = process.uptime()
     const days = Math.floor(uptime / 86400)

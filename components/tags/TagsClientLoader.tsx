@@ -339,8 +339,8 @@ class ErrorBoundary extends React.Component<{ fallback: React.ReactNode; childre
   static getDerivedStateFromError() {
     return { hasError: true }
   }
-  componentDidCatch() {}
-  render() {
+  override componentDidCatch() {}
+  override render() {
     if (this.state.hasError) return this.props.fallback
     return this.props.children as any
   }

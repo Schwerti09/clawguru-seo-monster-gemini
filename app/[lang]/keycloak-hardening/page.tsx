@@ -41,7 +41,6 @@ export async function generateMetadata({
       "Keycloak cluster",
     ],
     alternates: {
-      canonical: `/${locale}/keycloak-hardening`,
       ...localeAlternates(`/${locale}/keycloak-hardening`),
     },
     openGraph: {

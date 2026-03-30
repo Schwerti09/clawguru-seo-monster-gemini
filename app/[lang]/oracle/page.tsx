@@ -53,8 +53,8 @@ class ErrorBoundary extends React.Component<{ fallback?: React.ReactNode; childr
   static getDerivedStateFromError() {
     return { hasError: true }
   }
-  componentDidCatch() {}
-  render() {
+  override componentDidCatch() {}
+  override render() {
     if (this.state.hasError) return this.props.fallback || null
     return this.props.children as React.ReactElement
   }
@@ -188,21 +188,21 @@ const ScoreRing = dynamic(() => Promise.resolve(function ScoreRingImpl({ score, 
   )
 }), { ssr: false })
 
-export default function OraclePage({ params, dict }: { params: { lang: string }; dict?: DictShape }) {
+export default function OraclePage({ params }: { params: { lang: string } }) {
   const t: OracleDict = useMemo(() => ({
-    title: dict?.oracle?.title ?? "Oracle – Predictive Risk Radar",
-    subtitle: dict?.oracle?.subtitle ?? "Erkenne Risiken, bevor sie eintreten. Personalisierte Vorhersagen für deinen Scope.",
-    scope_label: dict?.oracle?.scope_label ?? "Scope auswählen",
-    scope_placeholder: dict?.oracle?.scope_placeholder ?? "z. B. nginx, postgres, aws-ec2",
-    add_scope: dict?.oracle?.add_scope ?? "Hinzufügen",
-    remove: dict?.oracle?.remove ?? "Entfernen",
-    risk_radar: dict?.oracle?.risk_radar ?? "Predictive Risk Radar",
-    live_score: dict?.oracle?.live_score ?? "Live Predictive Score",
-    cve_title: dict?.oracle?.cve_title ?? "Relevante CVEs",
-    loading: dict?.oracle?.loading ?? "Lade...",
-    fetch_error: dict?.oracle?.fetch_error ?? "Laden fehlgeschlagen",
-    scope_hint: dict?.oracle?.scope_hint ?? "Tippe Enter zum Hinzufügen. Nutze 3–6 präzise Begriffe.",
-  }), [dict])
+    title: "Oracle – Predictive Risk Radar",
+    subtitle: "Erkenne Risiken, bevor sie eintreten. Personalisierte Vorhersagen für deinen Scope.",
+    scope_label: "Scope auswählen",
+    scope_placeholder: "z. B. nginx, postgres, aws-ec2",
+    add_scope: "Hinzufügen",
+    remove: "Entfernen",
+    risk_radar: "Predictive Risk Radar",
+    live_score: "Live Predictive Score",
+    cve_title: "Relevante CVEs",
+    loading: "Lade...",
+    fetch_error: "Laden fehlgeschlagen",
+    scope_hint: "Tippe Enter zum Hinzufügen. Nutze 3–6 präzise Begriffe.",
+  }), [])
 
   const pathname = usePathname()
   const lang = useMemo(() => {

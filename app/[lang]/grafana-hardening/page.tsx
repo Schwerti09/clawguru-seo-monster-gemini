@@ -41,7 +41,6 @@ export async function generateMetadata({
       "Grafana enterprise",
     ],
     alternates: {
-      canonical: `/${locale}/grafana-hardening`,
       ...localeAlternates(`/${locale}/grafana-hardening`),
     },
     openGraph: {

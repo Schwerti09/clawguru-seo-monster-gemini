@@ -84,7 +84,7 @@ function searchRunbooks(runbooks: any[], q: string, tags: string[], page: number
 
   const filtered = runbooks.filter((r) => {
     if (tags.length) {
-      const rtags = (r.tags || []).map((t) => t.toLowerCase())
+      const rtags = (r.tags || []).map((t: string) => t.toLowerCase())
       for (const t of tags) if (!rtags.includes(t)) return false
     }
     if (!terms.length) return true

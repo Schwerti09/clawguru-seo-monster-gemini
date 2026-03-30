@@ -34,7 +34,7 @@ export async function GET() {
       .select('tokens_used')
       .eq('date', today)
 
-    const tokensUsed = tokenData?.reduce((sum, record) => sum + record.tokens_used, 0) || 2450000
+    const tokensUsed = tokenData?.reduce((sum: number, record: any) => sum + record.tokens_used, 0) || 2450000
 
     // Get requests today
     const { count: requestsToday } = await supabase

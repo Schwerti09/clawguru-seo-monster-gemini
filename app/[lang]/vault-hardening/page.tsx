@@ -38,7 +38,6 @@ export async function generateMetadata({
       "Secrets management",
     ],
     alternates: {
-      canonical: `/${locale}/vault-hardening`,
       ...localeAlternates(`/${locale}/vault-hardening`),
     },
     openGraph: {

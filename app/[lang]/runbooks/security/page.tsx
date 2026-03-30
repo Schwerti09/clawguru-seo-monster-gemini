@@ -24,7 +24,7 @@ export async function generateMetadata(props: { params: { lang: string } }) {
   return {
     title: `Security Runbooks – Firewall, SSH, Secrets, Zero Trust 2026 | ClawGuru`,
     description: `Alle ClawGuru Security-Runbooks: SSH Hardening, Firewall, CSP, Secrets Management, Zero Trust, Container Security. Aktuell für 2026.`,
-    alternates: { canonical: `/${locale}/runbooks/security` },
+    alternates: { canonical: `/runbooks/security/page` }
   }
 }
 

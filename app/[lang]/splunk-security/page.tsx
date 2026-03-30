@@ -38,7 +38,6 @@ export async function generateMetadata({
       "Enterprise SIEM security",
     ],
     alternates: {
-      canonical: `/${locale}/splunk-security`,
       ...localeAlternates(`/${locale}/splunk-security`),
     },
     openGraph: {

@@ -38,7 +38,6 @@ export async function generateMetadata({
       "Jenkins best practices",
     ],
     alternates: {
-      canonical: `/${locale}/jenkins-security`,
       ...localeAlternates(`/${locale}/jenkins-security`),
     },
     openGraph: {

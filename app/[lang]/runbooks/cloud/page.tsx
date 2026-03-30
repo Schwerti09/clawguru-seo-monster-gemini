@@ -27,7 +27,7 @@ export async function generateMetadata(props: { params: { lang: string } }) {
   return {
     title: `Cloud Runbooks – Hetzner, AWS, GCP, Azure & mehr | ClawGuru`,
     description: `Alle ClawGuru Cloud-Runbooks: Firewall, SSH, Sicherheits-Härtung für Hetzner, DigitalOcean, AWS, GCP, Azure und mehr. Ops-Guides für 2026.`,
-    alternates: { canonical: `/${locale}/runbooks/cloud` },
+    alternates: { canonical: `/runbooks/cloud/page` }
   }
 }
 

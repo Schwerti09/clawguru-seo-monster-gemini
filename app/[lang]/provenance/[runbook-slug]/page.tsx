@@ -18,7 +18,7 @@ export async function generateMetadata(
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
 
   return {
-    alternates: { canonical: `/${locale}/provenance/${params["runbook-slug"]}` },
+    alternates: { canonical: `/provenance/:runbook-slug/page` }
   }
 }
 

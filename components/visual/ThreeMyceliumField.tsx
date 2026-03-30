@@ -29,15 +29,16 @@ function MyceliumPoints({ count = 9000 }: { count?: number }) {
     const g = ref.current?.geometry as THREE.BufferGeometry | undefined
     if (!g) return
     const pos = g.attributes.position as THREE.BufferAttribute
+    const array = pos.array as Float32Array
     for (let i = 0; i < count; i++) {
       const ix = i * 3
-      const x = pos.array[ix]
-      const y = pos.array[ix + 1]
-      const z = pos.array[ix + 2]
+      const x = array[ix]
+      const y = array[ix + 1]
+      const z = array[ix + 2]
       const s = speeds[i]
-      pos.array[ix] = x + 0.002 * Math.sin(t * s + y * 1.5)
-      pos.array[ix + 1] = y + 0.002 * Math.cos(t * s + z * 1.5)
-      pos.array[ix + 2] = z + 0.002 * Math.sin(t * s + x * 1.5)
+      array[ix] = x + 0.002 * Math.sin(t * s + y * 1.5)
+      array[ix + 1] = y + 0.002 * Math.cos(t * s + z * 1.5)
+      array[ix + 2] = z + 0.002 * Math.sin(t * s + x * 1.5)
     }
     pos.needsUpdate = true
   })

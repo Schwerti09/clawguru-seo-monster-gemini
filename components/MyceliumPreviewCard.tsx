@@ -124,7 +124,6 @@ export default function MyceliumPreviewCard({ prefix = "" }: Props) {
           {/* Embed the live Mycelium view (limited, no pointer events) */}
           {inView && (
             <div className="absolute inset-0">
-              {/* @ts-expect-error: dynamic component type */}
               <MyceliumClientLoader ui="embed" />
             </div>
           )}

@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 export default async function CopilotPage(
   props: { searchParams?: Promise<Record<string, string | string[] | undefined>> }
 ) {
-  const searchParams = props.searchParams;
+  const searchParams = await props.searchParams;
   const q = typeof searchParams?.q === "string" ? searchParams?.q : ""
   return (
     <Container>

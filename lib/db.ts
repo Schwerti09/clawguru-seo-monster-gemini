@@ -1,4 +1,4 @@
-import { Pool, PoolClient, QueryResult } from "pg"
+import { Pool, PoolClient, QueryResult, QueryResultRow } from "pg"
 
 declare global {
   // eslint-disable-next-line no-var
@@ -26,7 +26,7 @@ export function getPool(): Pool {
   return global.__claw_db_pool
 }
 
-export async function dbQuery<T = any>(text: string, params?: any[]): Promise<QueryResult<T>> {
+export async function dbQuery<T extends QueryResultRow = any>(text: string, params?: any[]): Promise<QueryResult<T>> {
   const pool = getPool()
   return pool.query<T>(text, params)
 }

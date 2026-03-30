@@ -38,7 +38,6 @@ export async function generateMetadata({
       "Web server security",
     ],
     alternates: {
-      canonical: `/${locale}/nginx-hardening`,
       ...localeAlternates(`/${locale}/nginx-hardening`),
     },
     openGraph: {

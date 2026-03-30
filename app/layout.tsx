@@ -28,6 +28,8 @@ import { getDictionary } from "@/lib/getDictionary"
 import { I18nProvider } from "@/components/i18n/I18nProvider"
 import CommandK from "@/components/search/CommandK"
 const GlobalMagnetics = dynamic(() => import("@/components/visual/GlobalMagnetics"))
+// ONBOARDING 2026: Welcome guide for new users
+const WelcomeGuide = dynamic(() => import("@/components/onboarding/WelcomeGuide"))
 
 // 100/100 OPTIMIZATION: next/font self-hosted with font-display:swap
 const inter = Inter({
@@ -188,6 +190,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             <CommandK />
             <GlobalMagnetics />
             <GA4Pageview />
+            {/* ONBOARDING 2026: Welcome guide for new users */}
+            <WelcomeGuide />
           </RTLProvider>
         </I18nProvider>
       </body>

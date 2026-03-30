@@ -38,7 +38,6 @@ export async function generateMetadata({
       "Pipeline security",
     ],
     alternates: {
-      canonical: `/${locale}/gitlab-cicd-security`,
       ...localeAlternates(`/${locale}/gitlab-cicd-security`),
     },
     openGraph: {

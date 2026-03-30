@@ -38,7 +38,6 @@ export async function generateMetadata({
       "Container hardening",
     ],
     alternates: {
-      canonical: `/${locale}/docker-security-hardening`,
       ...localeAlternates(`/${locale}/docker-security-hardening`),
     },
     openGraph: {

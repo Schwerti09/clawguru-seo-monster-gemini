@@ -41,7 +41,6 @@ export async function generateMetadata({
       "MongoDB enterprise security",
     ],
     alternates: {
-      canonical: `/${locale}/mongodb-security`,
       ...localeAlternates(`/${locale}/mongodb-security`),
     },
     openGraph: {

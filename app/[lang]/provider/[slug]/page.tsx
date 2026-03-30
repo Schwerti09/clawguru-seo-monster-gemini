@@ -26,7 +26,7 @@ export async function generateMetadata(props: {
 
   return {
     title: `${p.name} Runbooks | ClawGuru`,
-    alternates: { canonical: `/${locale}/provider/${p.slug}` },
+    alternates: { canonical: `/provider/:slug/page` }
   }
 }
 

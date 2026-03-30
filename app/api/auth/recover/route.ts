@@ -1,16 +1,9 @@
 import { NextRequest, NextResponse } from "next/server"
 import { verifyAccessToken } from "@/lib/access-token"
+import { getOrigin } from "@/lib/origin"
 import { stripe } from "@/lib/stripe"
 
 export const runtime = "nodejs"
-
-function getOrigin(req: NextRequest) {
-  return (
-    req.headers.get("origin") ||
-    process.env.NEXT_PUBLIC_SITE_URL ||
-    "http://localhost:3000"
-  )
-}
 
 export async function GET(req: NextRequest) {
   const token = req.nextUrl.searchParams.get("token") || ""
@@ -39,7 +32,7 @@ export async function GET(req: NextRequest) {
     value: token,
     httpOnly: true,
     sameSite: "lax",
-    secure: true,
+    secure: origin.startsWith("https://"),
     path: "/",
     maxAge: Math.max(60, (payload.exp || now + 300) - now)
   })

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { cookies } from "next/headers"
 import { verifyAccessToken } from "@/lib/access-token"
+import { getOrigin } from "@/lib/origin"
 import { denyToken } from "@/lib/token-deny-list"
 
 export const runtime = "nodejs"
@@ -16,7 +17,7 @@ export async function GET(req: NextRequest) {
     }
   }
 
-  const origin = req.headers.get("origin") || process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
+  const origin = getOrigin(req)
   const res = NextResponse.redirect(new URL("/", origin))
   res.cookies.set({ name: "claw_access", value: "", maxAge: 0, path: "/" })
   res.cookies.set({ name: "cg_user", value: "", maxAge: 0, path: "/" })

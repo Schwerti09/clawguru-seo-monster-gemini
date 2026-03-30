@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import Link from "next/link"
 import Container from "@/components/shared/Container"
 import { useI18n } from "@/components/i18n/I18nProvider"
 
@@ -47,6 +48,30 @@ export default function AccountPage({ email }: { email: string }) {
   return (
     <Container>
       <div className="py-16 max-w-3xl mx-auto">
+        {/* Enter Dashboard CTA */}
+        <div className="mb-8">
+          <Link
+            href={`${prefix}/dashboard`}
+            className="flex items-center justify-between p-5 rounded-2xl border border-[#c9a84c]/30 bg-[#c9a84c]/5 hover:border-[#c9a84c]/60 hover:bg-[#c9a84c]/10 transition-all group"
+          >
+            <div>
+              <div className="text-[10px] font-mono tracking-widest uppercase text-[#c9a84c] mb-1">
+                Command Cockpit
+              </div>
+              <div className="text-lg font-black text-white group-hover:text-[#c9a84c] transition-colors">
+                → Dashboard öffnen
+              </div>
+              <p className="mt-1 text-sm text-gray-400">Overview, Mycelium-Graph, Tools, Executions, Billing</p>
+            </div>
+            <div
+              className="w-10 h-10 rounded-full flex items-center justify-center shrink-0"
+              style={{ background: 'rgba(201,168,76,0.15)', border: '1px solid rgba(201,168,76,0.3)' }}
+            >
+              <span className="text-[#c9a84c] text-lg font-bold">→</span>
+            </div>
+          </Link>
+        </div>
+
         {/* Header */}
         <div className="flex items-center justify-between mb-8 flex-wrap gap-4">
           <div>

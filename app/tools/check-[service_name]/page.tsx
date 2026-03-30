@@ -14,7 +14,6 @@ interface Props {
   params: { service_name: string }
 }
 
-export const revalidate = 60 // 60s ISR
 export const dynamicParams = true
 export const dynamic = "force-dynamic"
 

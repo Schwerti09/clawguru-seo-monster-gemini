@@ -63,6 +63,8 @@ function shouldBypassMiddleware(pathname: string): boolean {
   if (pathname.startsWith("/checkout")) return true
   // Allow direct access to the Perfection generator without locale prefix
   if (pathname === "/perfection") return true
+  if (pathname.startsWith("/dashboard")) return true
+  if (pathname.startsWith("/account")) return true
   if (isPublicFile(pathname)) return true
   return false
 }

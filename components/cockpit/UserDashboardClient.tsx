@@ -1,8 +1,9 @@
 'use client'
 
-import { useState, useEffect, useRef, useMemo } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { User, UserTier, TIER_CONFIGS, isFeatureShadowed, getUpgradePath } from '@/lib/tier-access'
+import type { DashboardData } from '@/types/dashboard'
 import { OverviewTab } from './tabs/OverviewTab'
 import { MyceliumTab } from './tabs/MyceliumTab'
 import { ToolsTab } from './tabs/ToolsTab'
@@ -13,115 +14,25 @@ import { UpgradeModal } from './UpgradeModal'
 import { MyceliumMinimap } from './MyceliumMinimap'
 import { ThreatLevelGauge } from './ThreatLevelGauge'
 import { QuickTools } from './QuickTools'
-import { Activity, Zap, Shield, Target, TrendingUp, AlertTriangle, Cpu, Globe, Lock } from 'lucide-react'
+import { Activity, Zap, Shield, Target, TrendingUp, Cpu, Globe, Lock, Sparkles } from 'lucide-react'
+
+/* ── Color Palette (Google AI Studio inspired) ──
+   Base:    #0A0A0A (deep black)
+   Gold:    #EAB308 (luxury accent)
+   Silver:  #A1A1AA (graphite secondary)
+   ────────────────────────────────────────────── */
 
 interface UserDashboardClientProps {
   user: User
   tier: UserTier
-  initialData: {
-    clawScore: number
-    activeThreats: number
-    executionsToday: number
-    myceliumNodes: number
-    successRate: number
-  }
+  initialData: DashboardData
 }
 
 export function UserDashboardClient({ user, tier, initialData }: UserDashboardClientProps) {
   const [activeTab, setActiveTab] = useState('overview')
   const [showUpgradeModal, setShowUpgradeModal] = useState(false)
-  const [isShadowRealm, setIsShadowRealm] = useState(isFeatureShadowed(tier, 'overview'))
-  const canvasRef = useRef<HTMLCanvasElement>(null)
-  const animationRef = useRef<number>()
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
 
-  // Mycelium Background Particles
-  useEffect(() => {
-    const canvas = canvasRef.current
-    if (!canvas) return
-    
-    const ctx = canvas.getContext('2d')
-    if (!ctx) return
-
-    canvas.width = window.innerWidth
-    canvas.height = window.innerHeight
-
-    const particles: Array<{
-      x: number
-      y: number
-      vx: number
-      vy: number
-      size: number
-      connections: number[]
-    }> = []
-
-    // Create particles
-    for (let i = 0; i < 50; i++) {
-      particles.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.5,
-        vy: (Math.random() - 0.5) * 0.5,
-        size: Math.random() * 2 + 1,
-        connections: []
-      })
-    }
-
-    const animate = () => {
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)'
-      ctx.fillRect(0, 0, canvas.width, canvas.height)
-
-      // Update and draw particles
-      particles.forEach((particle, i) => {
-        particle.x += particle.vx
-        particle.y += particle.vy
-
-        if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1
-        if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1
-
-        ctx.beginPath()
-        ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2)
-        ctx.fillStyle = 'rgba(0, 255, 159, 0.3)'
-        ctx.fill()
-
-        // Draw connections
-        particles.forEach((otherParticle, j) => {
-          if (i === j) return
-          const distance = Math.sqrt(
-            Math.pow(particle.x - otherParticle.x, 2) +
-            Math.pow(particle.y - otherParticle.y, 2)
-          )
-          if (distance < 150) {
-            ctx.beginPath()
-            ctx.moveTo(particle.x, particle.y)
-            ctx.lineTo(otherParticle.x, otherParticle.y)
-            ctx.strokeStyle = `rgba(0, 255, 159, ${0.1 * (1 - distance / 150)})`
-            ctx.stroke()
-          }
-        })
-      })
-
-      animationRef.current = requestAnimationFrame(animate)
-    }
-
-    animate()
-
-    const handleResize = () => {
-      canvas.width = window.innerWidth
-      canvas.height = window.innerHeight
-    }
-
-    window.addEventListener('resize', handleResize)
-
-    return () => {
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current)
-      }
-      window.removeEventListener('resize', handleResize)
-    }
-  }, [])
-
-  // Mouse tracking for interactive effects
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       setMousePosition({ x: e.clientX, y: e.clientY })
@@ -132,205 +43,223 @@ export function UserDashboardClient({ user, tier, initialData }: UserDashboardCl
 
   const tabs = [
     { id: 'overview', label: 'Command Deck', icon: Target },
-    { id: 'mycelium', label: 'The Living Brain', icon: Activity },
-    { id: 'tools', label: 'Tools Command', icon: Zap },
-    { id: 'executions', label: 'Executions & Runbooks', icon: Shield },
-    { id: 'billing', label: 'Billing & Tiers', icon: TrendingUp }
+    { id: 'mycelium', label: 'Mycelium', icon: Activity },
+    { id: 'tools', label: 'Tools', icon: Zap },
+    { id: 'executions', label: 'Executions', icon: Shield },
+    { id: 'billing', label: 'Billing', icon: TrendingUp }
   ]
 
   const renderTab = () => {
     const isShadowed = isFeatureShadowed(tier, activeTab as keyof typeof TIER_CONFIGS.explorer.canAccess)
-    
     switch (activeTab) {
       case 'overview':
         return <OverviewTab data={initialData} isShadowed={isShadowed} />
       case 'mycelium':
-        return <MyceliumTab isShadowed={isShadowed} />
+        return <MyceliumTab isShadowed={isShadowed} nodes={initialData.nodes} />
       case 'tools':
-        return <ToolsTab isShadowed={isShadowed} />
+        return <ToolsTab isShadowed={isShadowed} executions={initialData.recentExecutions} />
       case 'executions':
-        return <ExecutionsTab isShadowed={isShadowed} />
+        return <ExecutionsTab isShadowed={isShadowed} executions={initialData.recentExecutions} />
       case 'billing':
-        return <BillingTab tier={tier} onUpgrade={() => setShowUpgradeModal(true)} />
+        return <BillingTab tier={tier} onUpgrade={() => setShowUpgradeModal(true)} data={initialData} />
       default:
         return null
     }
   }
 
   return (
-    <div className="min-h-screen bg-black text-white overflow-hidden relative">
-      {/* Mycelium Particle Background */}
-      <canvas 
-        ref={canvasRef}
-        className="fixed inset-0 z-0"
-      />
-      
-      {/* Gradient Overlays */}
+    <div className="min-h-screen text-white overflow-hidden relative" style={{ background: '#0A0A0A' }}>
+
+      {/* ── Background Layers ── */}
       <div className="fixed inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900/50 to-black" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_20%_30%,rgba(255,0,51,0.1),transparent_50%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_80%_70%,rgba(0,255,159,0.05),transparent_50%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_50%,rgba(0,212,255,0.03),transparent_70%)]" />
+        {/* Base gradient */}
+        <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at 20% 0%, rgba(234,179,8,0.04) 0%, transparent 50%)' }} />
+        <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at 80% 100%, rgba(161,161,170,0.03) 0%, transparent 50%)' }} />
+
+        {/* Noise texture */}
+        <div
+          className="absolute inset-0 opacity-[0.12]"
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
+            backgroundSize: '200px 200px'
+          }}
+        />
+
+        {/* Subtle grid */}
+        <div
+          className="absolute inset-0 opacity-[0.02]"
+          style={{
+            backgroundImage: 'linear-gradient(rgba(234,179,8,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(234,179,8,0.3) 1px, transparent 1px)',
+            backgroundSize: '60px 60px'
+          }}
+        />
+
+        {/* Scanline effect */}
+        <div
+          className="absolute inset-0 pointer-events-none opacity-[0.03]"
+          style={{
+            background: 'repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(234,179,8,0.15) 3px, rgba(234,179,8,0.15) 4px)',
+          }}
+        />
       </div>
 
-      {/* Noise Texture Overlay */}
-      <div 
-        className="fixed inset-0 z-0 opacity-20"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
-          backgroundRepeat: 'repeat',
-          backgroundSize: '256px 256px'
-        }}
-      />
-
-      {/* Scanlines Effect */}
-      <div 
+      {/* Interactive gold glow following cursor */}
+      <div
         className="fixed inset-0 z-0 pointer-events-none"
         style={{
-          background: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 255, 159, 0.03) 2px, rgba(0, 255, 159, 0.03) 4px)',
-          animation: 'scanlines 8s linear infinite'
+          background: `radial-gradient(circle 300px at ${mousePosition.x}px ${mousePosition.y}px, rgba(234,179,8,0.03), transparent)`,
         }}
       />
 
-      {/* Interactive Glow Effect */}
-      <div 
-        className="fixed inset-0 z-0 pointer-events-none"
-        style={{
-          background: `radial-gradient(circle 200px at ${mousePosition.x}px ${mousePosition.y}px, rgba(0, 255, 159, 0.05), transparent)`,
-        }}
-      />
-
-      {/* Main Layout */}
+      {/* ── Main Layout ── */}
       <div className="relative z-10 flex h-screen">
-        {/* Left Sidebar - Mycelium Minimap */}
-        <div className="w-80 bg-black/40 backdrop-blur-2xl border-r border-cyan-500/20">
-          <MyceliumMinimap tier={tier} />
+
+        {/* Left Sidebar */}
+        <div
+          className="w-72 border-r flex-shrink-0"
+          style={{
+            background: 'rgba(10,10,10,0.8)',
+            borderColor: 'rgba(255,255,255,0.05)',
+            backdropFilter: 'blur(20px)'
+          }}
+        >
+          <MyceliumMinimap tier={tier} dbNodes={initialData.nodes} />
         </div>
 
         {/* Main Content */}
-        <div className="flex-1 flex flex-col">
-          {/* Top Bar */}
-          <header className="h-16 bg-black/40 backdrop-blur-2xl border-b border-cyan-500/20 flex items-center justify-between px-6">
-            <div className="flex items-center gap-6">
-              <motion.div 
-                className="flex items-center gap-3"
+        <div className="flex-1 flex flex-col min-w-0">
+
+          {/* ── Top Bar ── */}
+          <header
+            className="h-14 flex items-center justify-between px-6 border-b flex-shrink-0"
+            style={{
+              background: 'rgba(10,10,10,0.85)',
+              borderColor: 'rgba(255,255,255,0.05)',
+              backdropFilter: 'blur(20px)'
+            }}
+          >
+            <div className="flex items-center gap-5">
+              <motion.div
+                className="flex items-center gap-2.5"
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6 }}
               >
-                <div className="w-3 h-3 rounded-full bg-red-500 animate-pulse" />
-                <div className="text-2xl font-bold">
-                  <span className="bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 bg-clip-text text-transparent">
-                    ClawGuru
-                  </span>
-                  <span className="text-cyan-400 ml-2">Command Cockpit</span>
+                {/* Gold dot indicator */}
+                <div
+                  className="w-2 h-2 rounded-full"
+                  style={{ background: '#EAB308', boxShadow: '0 0 8px rgba(234,179,8,0.6)' }}
+                />
+                <div className="text-lg font-bold tracking-tight">
+                  <span style={{ color: '#EAB308' }}>ClawGuru</span>
+                  <span className="text-gray-500 font-normal ml-2 text-sm">Dashboard</span>
                 </div>
-              </motion.div>
-              <ThreatLevelGauge />
-            </div>
-            
-            <div className="flex items-center gap-6">
-              {/* Global Stats */}
-              <div className="flex items-center gap-4 text-sm">
-                <div className="flex items-center gap-2">
-                  <Globe className="w-4 h-4 text-cyan-400" />
-                  <span className="text-gray-300">Global Network</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Cpu className="w-4 h-4 text-green-400" />
-                  <span className="text-gray-300">42 Nodes Active</span>
-                </div>
-              </div>
-              
-              {/* Tier Badge */}
-              <motion.div
-                className={`px-4 py-2 rounded-full border backdrop-blur-sm ${
-                  tier === 'enterprise' 
-                    ? 'border-yellow-500/50 bg-yellow-500/10 text-yellow-400 shadow-lg shadow-yellow-500/20' 
-                    : tier === 'pro'
-                    ? 'border-purple-500/50 bg-purple-500/10 text-purple-400 shadow-lg shadow-purple-500/20'
-                    : tier === 'daypass'
-                    ? 'border-blue-500/50 bg-blue-500/10 text-blue-400 shadow-lg shadow-blue-500/20'
-                    : 'border-gray-500/50 bg-gray-500/10 text-gray-400'
-                }`}
-                animate={{
-                  boxShadow: tier !== 'explorer' 
-                    ? '0 0 30px rgba(0, 255, 159, 0.3)' 
-                    : '0 0 10px rgba(255, 255, 255, 0.1)',
-                  scale: tier !== 'explorer' ? [1, 1.05, 1] : 1
-                }}
-                transition={{ 
-                  duration: 2, 
-                  repeat: Infinity,
-                  ease: "easeInOut"
-                }}
-              >
-                <span className="text-sm font-bold tracking-wider">
-                  {TIER_CONFIGS[tier].name.toUpperCase()}
-                </span>
               </motion.div>
 
+              {/* Subtle divider */}
+              <div className="w-px h-5 bg-white/5" />
+
+              <ThreatLevelGauge activeThreats={initialData.activeThreats} />
+            </div>
+
+            <div className="flex items-center gap-5">
+              {/* Global indicators */}
+              <div className="hidden lg:flex items-center gap-4 text-xs text-gray-500">
+                <div className="flex items-center gap-1.5">
+                  <Globe className="w-3 h-3" style={{ color: '#EAB308' }} />
+                  <span>Network</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <Cpu className="w-3 h-3" style={{ color: '#A1A1AA' }} />
+                  <span>{initialData.myceliumNodes} Nodes</span>
+                </div>
+              </div>
+
+              {/* Tier Badge */}
+              <div
+                className="px-3 py-1.5 rounded-full text-[11px] font-bold tracking-wider border"
+                style={{
+                  color: tier === 'enterprise' ? '#EAB308' : tier === 'pro' ? '#EAB308' : '#A1A1AA',
+                  borderColor: tier === 'enterprise' ? 'rgba(234,179,8,0.3)' : tier === 'pro' ? 'rgba(234,179,8,0.2)' : 'rgba(255,255,255,0.08)',
+                  background: tier === 'enterprise' ? 'rgba(234,179,8,0.08)' : tier === 'pro' ? 'rgba(234,179,8,0.05)' : 'rgba(255,255,255,0.03)',
+                  boxShadow: tier !== 'explorer' ? '0 0 20px rgba(234,179,8,0.1)' : 'none'
+                }}
+              >
+                {TIER_CONFIGS[tier].name.toUpperCase()}
+              </div>
+
               {/* User Avatar */}
-              <motion.div 
-                className="w-10 h-10 rounded-full bg-gradient-to-br from-red-500 to-orange-500 flex items-center justify-center cursor-pointer"
-                whileHover={{ scale: 1.1 }}
+              <motion.div
+                className="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer border"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(234,179,8,0.15), rgba(161,161,170,0.1))',
+                  borderColor: 'rgba(234,179,8,0.2)'
+                }}
+                whileHover={{ scale: 1.08 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <span className="text-white font-bold text-lg">
+                <span className="text-white font-semibold text-sm">
                   {user.email?.[0]?.toUpperCase()}
                 </span>
               </motion.div>
             </div>
           </header>
 
-          {/* Tab Navigation */}
-          <div className="flex border-b border-cyan-500/20 bg-black/20 backdrop-blur-2xl">
+          {/* ── Tab Navigation ── */}
+          <div
+            className="flex border-b flex-shrink-0"
+            style={{
+              background: 'rgba(10,10,10,0.6)',
+              borderColor: 'rgba(255,255,255,0.05)',
+              backdropFilter: 'blur(12px)'
+            }}
+          >
             {tabs.map((tab, index) => {
               const isShadowed = isFeatureShadowed(tier, tab.id as keyof typeof TIER_CONFIGS.explorer.canAccess)
               const isActive = activeTab === tab.id
               const Icon = tab.icon
-              
+
               return (
                 <motion.button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`relative px-8 py-4 flex items-center gap-3 transition-all overflow-hidden group ${
-                    isActive 
-                      ? 'text-white bg-white/5' 
-                      : 'text-gray-400 hover:text-white hover:bg-white/5'
-                  }`}
-                  initial={{ opacity: 0, y: 20 }}
+                  className="relative px-6 py-3.5 flex items-center gap-2.5 transition-all overflow-hidden group"
+                  initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3, delay: index * 0.1 }}
-                  whileHover={{ scale: 1.02 }}
+                  transition={{ duration: 0.3, delay: index * 0.05 }}
                   whileTap={{ scale: 0.98 }}
                 >
-                  {/* Hover Glow */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 to-green-500/10 opacity-0 group-hover:opacity-100 transition-opacity" />
-                  
-                  <Icon className={`w-5 h-5 ${isActive ? 'text-cyan-400' : 'text-gray-500'}`} />
-                  <span className="font-medium tracking-wide">{tab.label}</span>
-                  
-                  {/* Lock Icon for Shadowed Features */}
+                  {/* Hover glow */}
+                  <div
+                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                    style={{ background: 'linear-gradient(180deg, rgba(234,179,8,0.03) 0%, transparent 100%)' }}
+                  />
+
+                  <Icon
+                    className="w-4 h-4 transition-colors duration-300"
+                    style={{ color: isActive ? '#EAB308' : '#52525B' }}
+                  />
+                  <span
+                    className="text-sm font-medium tracking-wide transition-colors duration-300"
+                    style={{ color: isActive ? '#FFFFFF' : '#71717A' }}
+                  >
+                    {tab.label}
+                  </span>
+
+                  {/* Lock overlay */}
                   {isShadowed && (
-                    <motion.div
-                      className="absolute inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                    >
-                      <Lock className="w-4 h-4 text-red-400" />
-                    </motion.div>
+                    <div className="absolute inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center">
+                      <Lock className="w-3.5 h-3.5" style={{ color: '#EAB308' }} />
+                    </div>
                   )}
-                  
-                  {/* Active Tab Indicator */}
+
+                  {/* Active indicator */}
                   {isActive && (
                     <motion.div
-                      className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-cyan-400 to-green-400"
+                      className="absolute bottom-0 left-0 right-0 h-[2px]"
                       layoutId="activeTab"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ duration: 0.3 }}
+                      style={{ background: 'linear-gradient(90deg, transparent, #EAB308, transparent)' }}
+                      transition={{ duration: 0.3, type: 'spring', stiffness: 300, damping: 30 }}
                     />
                   )}
                 </motion.button>
@@ -338,15 +267,15 @@ export function UserDashboardClient({ user, tier, initialData }: UserDashboardCl
             })}
           </div>
 
-          {/* Tab Content */}
+          {/* ── Tab Content ── */}
           <div className="flex-1 relative overflow-hidden">
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeTab}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.3 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.25 }}
                 className="h-full"
               >
                 {renderTab()}
@@ -355,7 +284,7 @@ export function UserDashboardClient({ user, tier, initialData }: UserDashboardCl
 
             {/* Shadow Realm Overlay */}
             {isFeatureShadowed(tier, activeTab as keyof typeof TIER_CONFIGS.explorer.canAccess) && (
-              <ShadowRealmOverlay 
+              <ShadowRealmOverlay
                 onUpgrade={() => setShowUpgradeModal(true)}
                 tier={tier}
               />
@@ -363,8 +292,15 @@ export function UserDashboardClient({ user, tier, initialData }: UserDashboardCl
           </div>
         </div>
 
-        {/* Right Sidebar - Quick Tools */}
-        <div className="w-20 bg-black/40 backdrop-blur-2xl border-l border-cyan-500/20">
+        {/* Right Sidebar */}
+        <div
+          className="w-16 border-l flex-shrink-0"
+          style={{
+            background: 'rgba(10,10,10,0.8)',
+            borderColor: 'rgba(255,255,255,0.05)',
+            backdropFilter: 'blur(20px)'
+          }}
+        >
           <QuickTools tier={tier} />
         </div>
       </div>
@@ -382,13 +318,3 @@ export function UserDashboardClient({ user, tier, initialData }: UserDashboardCl
     </div>
   )
 }
-
-// Add CSS for scanlines animation
-const style = document.createElement('style')
-style.textContent = `
-  @keyframes scanlines {
-    0% { transform: translateY(0); }
-    100% { transform: translateY(10px); }
-  }
-`
-document.head.appendChild(style)

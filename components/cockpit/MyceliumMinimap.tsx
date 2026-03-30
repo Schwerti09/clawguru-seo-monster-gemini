@@ -1,84 +1,74 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useMemo } from 'react'
 import { motion } from 'framer-motion'
 import { UserTier } from '@/lib/tier-access'
+import { Lock } from 'lucide-react'
+import type { DashboardNode } from '@/types/dashboard'
 
 interface MyceliumMinimapProps {
   tier: UserTier
+  dbNodes: DashboardNode[]
 }
 
-export function MyceliumMinimap({ tier }: MyceliumMinimapProps) {
-  const [nodes, setNodes] = useState<Array<{ id: string; x: number; y: number; type: string; strength: number }>>([])
+export function MyceliumMinimap({ tier, dbNodes }: MyceliumMinimapProps) {
   const [selectedNode, setSelectedNode] = useState<string | null>(null)
 
-  useEffect(() => {
-    // Simulate real-time Mycelium network data
-    const interval = setInterval(() => {
-      const newNodes = Array.from({ length: 20 }, (_, i) => ({
-        id: `node-${i}`,
-        x: Math.random() * 100,
-        y: Math.random() * 100,
-        type: ['threat', 'runbook', 'oracle', 'neuro'][Math.floor(Math.random() * 4)],
-        strength: Math.random()
-      }))
-      setNodes(newNodes)
-    }, 2000)
-
-    return () => clearInterval(interval)
-  }, [])
+  // Build minimap nodes from real DB data with stable positions
+  const nodes = useMemo(() => {
+    if (dbNodes.length === 0) return []
+    return dbNodes.map((n, i) => {
+      // Generate stable position from node id hash
+      const hash = n.id.split('').reduce((a, c) => a + c.charCodeAt(0), 0)
+      return {
+        id: n.id,
+        x: ((hash * 7 + i * 31) % 80) + 10,
+        y: ((hash * 13 + i * 17) % 80) + 10,
+        type: n.type,
+        strength: n.status === 'active' ? 1 : 0.4
+      }
+    })
+  }, [dbNodes])
 
   const getNodeColor = (type: string) => {
     switch (type) {
-      case 'threat': return 'rgb(239, 68, 68)'
-      case 'runbook': return 'rgb(34, 197, 94)'
-      case 'oracle': return 'rgb(59, 130, 246)'
-      case 'neuro': return 'rgb(168, 85, 247)'
-      default: return 'rgb(156, 163, 175)'
+      case 'threat': return '#EF4444'
+      case 'runbook': return '#EAB308'
+      case 'oracle': return '#A1A1AA'
+      case 'neuro': return '#D4A017'
+      default: return '#71717A'
     }
   }
 
   return (
     <div className="h-full flex flex-col">
       {/* Header */}
-      <div className="p-4 border-b border-gray-800/50">
-        <h3 className="text-lg font-semibold text-white mb-1">Mycelium Network</h3>
-        <p className="text-xs text-gray-400">
+      <div className="p-4" style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
+        <h3 className="text-sm font-semibold text-white mb-0.5">Mycelium Network</h3>
+        <p className="text-[10px] text-gray-600">
           {tier === 'explorer' ? 'Preview Mode' : 'Live Network'}
         </p>
       </div>
 
-      {/* Minimap Canvas */}
-      <div className="flex-1 relative p-4">
-        <div className="w-full h-full bg-gray-900/50 rounded-lg border border-gray-800/50 relative overflow-hidden">
-          {/* Grid Background */}
-          <div className="absolute inset-0 opacity-20">
-            {[...Array(10)].map((_, i) => (
-              <div key={`h-${i}`} className="absolute w-full border-t border-gray-800" style={{ top: `${i * 10}%` }} />
-            ))}
-            {[...Array(10)].map((_, i) => (
-              <div key={`v-${i}`} className="absolute h-full border-l border-gray-800" style={{ left: `${i * 10}%` }} />
-            ))}
-          </div>
+      {/* Minimap */}
+      <div className="flex-1 relative p-3">
+        <div
+          className="w-full h-full rounded-xl relative overflow-hidden border"
+          style={{ background: 'rgba(0,0,0,0.3)', borderColor: 'rgba(255,255,255,0.04)' }}
+        >
+          {/* Grid */}
+          <div className="absolute inset-0 opacity-[0.03]"
+            style={{ backgroundImage: 'linear-gradient(rgba(234,179,8,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(234,179,8,0.5) 1px, transparent 1px)', backgroundSize: '20px 20px' }}
+          />
 
           {/* Connection Lines */}
           <svg className="absolute inset-0 w-full h-full">
-            {nodes.map((node, i) => 
+            {nodes.map((node, i) =>
               nodes.slice(i + 1).map((otherNode, j) => {
-                const distance = Math.sqrt(
-                  Math.pow(node.x - otherNode.x, 2) + Math.pow(node.y - otherNode.y, 2)
-                )
+                const distance = Math.sqrt(Math.pow(node.x - otherNode.x, 2) + Math.pow(node.y - otherNode.y, 2))
                 if (distance < 30) {
                   return (
-                    <line
-                      key={`${i}-${j}`}
-                      x1={`${node.x}%`}
-                      y1={`${node.y}%`}
-                      x2={`${otherNode.x}%`}
-                      y2={`${otherNode.y}%`}
-                      stroke="rgba(255, 255, 255, 0.1)"
-                      strokeWidth="1"
-                    />
+                    <line key={`${i}-${j}`} x1={`${node.x}%`} y1={`${node.y}%`} x2={`${otherNode.x}%`} y2={`${otherNode.y}%`} stroke="rgba(234,179,8,0.08)" strokeWidth="1" />
                   )
                 }
                 return null
@@ -90,58 +80,43 @@ export function MyceliumMinimap({ tier }: MyceliumMinimapProps) {
           {nodes.map((node) => (
             <motion.div
               key={node.id}
-              className="absolute w-3 h-3 rounded-full cursor-pointer"
-              style={{
-                left: `${node.x}%`,
-                top: `${node.y}%`,
-                backgroundColor: getNodeColor(node.type),
-                transform: 'translate(-50%, -50%)'
-              }}
-              animate={{
-                scale: selectedNode === node.id ? 1.5 : 1,
-                boxShadow: selectedNode === node.id ? `0 0 20px ${getNodeColor(node.type)}` : 'none'
-              }}
+              className="absolute w-2.5 h-2.5 rounded-full cursor-pointer"
+              style={{ left: `${node.x}%`, top: `${node.y}%`, backgroundColor: getNodeColor(node.type), transform: 'translate(-50%, -50%)', boxShadow: `0 0 6px ${getNodeColor(node.type)}30` }}
+              animate={{ scale: selectedNode === node.id ? 1.5 : 1, boxShadow: selectedNode === node.id ? `0 0 12px ${getNodeColor(node.type)}60` : `0 0 6px ${getNodeColor(node.type)}30` }}
               whileHover={{ scale: 1.3 }}
               onClick={() => setSelectedNode(node.id)}
             />
           ))}
 
-          {/* Shadow Overlay for Explorer Tier */}
+          {/* Shadow Overlay */}
           {tier === 'explorer' && (
-            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center">
+            <div className="absolute inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center">
               <div className="text-center">
-                <div className="text-4xl mb-2">🔒</div>
-                <p className="text-xs text-gray-400">Upgrade to view live network</p>
+                <Lock className="w-5 h-5 mx-auto mb-1.5" style={{ color: '#EAB308', opacity: 0.6 }} />
+                <p className="text-[10px] text-gray-600">Upgrade für Live-Netzwerk</p>
               </div>
             </div>
           )}
         </div>
       </div>
 
-      {/* Node Info */}
-      <div className="p-4 border-t border-gray-800/50">
-        <div className="flex items-center justify-between text-xs">
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-1">
-              <div className="w-2 h-2 rounded-full bg-red-500" />
-              <span className="text-gray-400">Threats</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <div className="w-2 h-2 rounded-full bg-green-500" />
-              <span className="text-gray-400">Runbooks</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <div className="w-2 h-2 rounded-full bg-blue-500" />
-              <span className="text-gray-400">Oracle</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <div className="w-2 h-2 rounded-full bg-purple-500" />
-              <span className="text-gray-400">Neuro</span>
-            </div>
+      {/* Legend */}
+      <div className="p-3" style={{ borderTop: '1px solid rgba(255,255,255,0.04)' }}>
+        <div className="flex items-center justify-between text-[10px]">
+          <div className="flex items-center gap-3">
+            {[
+              { label: 'Threats', color: '#EF4444' },
+              { label: 'Runbooks', color: '#EAB308' },
+              { label: 'Oracle', color: '#A1A1AA' },
+              { label: 'Neuro', color: '#D4A017' }
+            ].map(item => (
+              <div key={item.label} className="flex items-center gap-1">
+                <div className="w-1.5 h-1.5 rounded-full" style={{ background: item.color }} />
+                <span className="text-gray-600">{item.label}</span>
+              </div>
+            ))}
           </div>
-          <div className="text-gray-400">
-            {nodes.length} nodes
-          </div>
+          <span className="text-gray-600">{nodes.length}</span>
         </div>
       </div>
     </div>

@@ -1,91 +1,66 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { 
-  Zap, 
-  Brain, 
-  Shield, 
-  Radar, 
-  Play, 
-  Pause, 
+import {
+  Zap,
+  Brain,
+  Shield,
+  Play,
+  Pause,
   RotateCcw,
   Activity,
   Cpu,
   Database,
   Wifi,
-  AlertTriangle,
   CheckCircle,
   Clock,
-  ArrowRight,
-  Sparkles,
   Target,
-  Lock
+  Lock,
+  Inbox
 } from 'lucide-react'
+import type { DashboardExecution } from '@/types/dashboard'
 
 interface ToolsTabProps {
   isShadowed: boolean
+  executions: DashboardExecution[]
 }
 
-export function ToolsTab({ isShadowed }: ToolsTabProps) {
+/* ── Glassmorphism card style helper ── */
+const glass = {
+  background: 'linear-gradient(135deg, rgba(255,255,255,0.025) 0%, rgba(255,255,255,0.005) 100%)',
+  borderColor: 'rgba(255,255,255,0.06)',
+  backdropFilter: 'blur(20px)',
+  boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.03)'
+} as const
+
+function timeAgo(dateStr: string): string {
+  const diff = Date.now() - new Date(dateStr).getTime()
+  const mins = Math.floor(diff / 60000)
+  if (mins < 1) return 'gerade eben'
+  if (mins < 60) return `vor ${mins} Min`
+  const hours = Math.floor(mins / 60)
+  if (hours < 24) return `vor ${hours}h`
+  const days = Math.floor(hours / 24)
+  return `vor ${days}d`
+}
+
+export function ToolsTab({ isShadowed, executions }: ToolsTabProps) {
   const [activeTool, setActiveTool] = useState<string | null>(null)
   const [executionProgress, setExecutionProgress] = useState(0)
   const [executionStatus, setExecutionStatus] = useState<'idle' | 'running' | 'completed' | 'error'>('idle')
-  const [hoveredTool, setHoveredTool] = useState<string | null>(null)
+
+  // Derive tool stats from real executions
+  const totalRuns = executions.length
+  const completedRuns = executions.filter(e => e.status === 'completed').length
+  const avgSuccess = totalRuns > 0 ? Math.round(completedRuns / totalRuns * 100) : 0
+  const lastRun = executions.length > 0 ? timeAgo(executions[0].created_at) : '–'
 
   const tools = [
-    {
-      id: 'summon',
-      name: 'ClawGuru Summon',
-      description: 'Instant security analysis with AI-powered threat detection',
-      icon: Zap,
-      color: 'from-yellow-500 to-orange-500',
-      features: ['Real-time Analysis', 'Threat Intelligence', 'Automated Response'],
-      status: 'ready',
-      executionTime: '2-5 min',
-      lastUsed: '2 hours ago',
-      successRate: 98.5,
-      category: 'Offensive'
-    },
-    {
-      id: 'oracle',
-      name: 'Security Oracle',
-      description: 'Predictive security insights powered by advanced ML models',
-      icon: Brain,
-      color: 'from-purple-500 to-pink-500',
-      features: ['72h Forecast', 'Risk Assessment', 'Strategic Planning'],
-      status: 'ready',
-      executionTime: '5-10 min',
-      lastUsed: '1 day ago',
-      successRate: 96.2,
-      category: 'Intelligence'
-    },
-    {
-      id: 'neuro',
-      name: 'Neuro Security',
-      description: 'Neural network-based security pattern recognition',
-      icon: Activity,
-      color: 'from-blue-500 to-cyan-500',
-      features: ['Pattern Detection', 'Anomaly Recognition', 'Learning System'],
-      status: 'ready',
-      executionTime: '3-7 min',
-      lastUsed: '3 hours ago',
-      successRate: 94.8,
-      category: 'Defensive'
-    },
-    {
-      id: 'check',
-      name: 'Security Check',
-      description: 'Comprehensive security audit and vulnerability assessment',
-      icon: Shield,
-      color: 'from-green-500 to-emerald-500',
-      features: ['Full Audit', 'Compliance Check', 'Remediation Guide'],
-      status: 'ready',
-      executionTime: '10-15 min',
-      lastUsed: '6 hours ago',
-      successRate: 99.1,
-      category: 'Audit'
-    }
+    { id: 'summon', name: 'ClawGuru Summon', description: 'KI-gesteuerte Echtzeit-Bedrohungserkennung', icon: Zap, features: ['Echtzeit-Analyse', 'Threat Intelligence', 'Automated Response'], status: 'ready', category: 'Offensive' },
+    { id: 'oracle', name: 'Security Oracle', description: 'Prädiktive Sicherheitsanalyse mit ML-Modellen', icon: Brain, features: ['72h Forecast', 'Risk Assessment', 'Strategic Planning'], status: 'ready', category: 'Intelligence' },
+    { id: 'neuro', name: 'Neuro Security', description: 'Neuronale Mustererkennung für Sicherheitsanomalien', icon: Activity, features: ['Pattern Detection', 'Anomaly Recognition', 'Learning System'], status: 'ready', category: 'Defensive' },
+    { id: 'check', name: 'Security Check', description: 'Umfassende Sicherheitsaudits und Schwachstellenbewertung', icon: Shield, features: ['Full Audit', 'Compliance Check', 'Remediation Guide'], status: 'ready', category: 'Audit' }
   ]
 
   const handleToolExecute = (toolId: string) => {
@@ -93,365 +68,208 @@ export function ToolsTab({ isShadowed }: ToolsTabProps) {
     setActiveTool(toolId)
     setExecutionStatus('running')
     setExecutionProgress(0)
-    
-    // Simulate execution progress
     const interval = setInterval(() => {
       setExecutionProgress(prev => {
-        if (prev >= 100) {
-          clearInterval(interval)
-          setExecutionStatus('completed')
-          return 100
-        }
+        if (prev >= 100) { clearInterval(interval); setExecutionStatus('completed'); return 100 }
         return prev + Math.random() * 15
       })
     }, 500)
-    
-    // Auto-complete after 3 seconds
-    setTimeout(() => {
-      setExecutionStatus('completed')
-      setExecutionProgress(100)
-      clearInterval(interval)
-    }, 3000)
-  }
-
-  const handleStopExecution = () => {
-    setExecutionStatus('idle')
-    setExecutionProgress(0)
-    setActiveTool(null)
-  }
-
-  const handleResetExecution = () => {
-    setExecutionStatus('idle')
-    setExecutionProgress(0)
+    setTimeout(() => { setExecutionStatus('completed'); setExecutionProgress(100); clearInterval(interval) }, 3000)
   }
 
   return (
-    <div className="p-8">
+    <div className="p-8 h-full overflow-y-auto">
       {/* Header */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="mb-8"
-      >
-        <div className="flex items-center gap-4 mb-4">
-          <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-500 flex items-center justify-center">
-            <Zap className="w-8 h-8 text-white" />
+      <motion.div initial={{ opacity: 0, y: -15 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
+        <div className="flex items-center gap-4 mb-5">
+          <div className="w-12 h-12 rounded-2xl flex items-center justify-center border" style={{ background: 'rgba(234,179,8,0.08)', borderColor: 'rgba(234,179,8,0.2)' }}>
+            <Zap className="w-6 h-6" style={{ color: '#EAB308' }} />
           </div>
           <div>
-            <h2 className="text-4xl font-bold text-white mb-2">Tools Command Center</h2>
-            <p className="text-gray-400 text-lg">
-              Execute security tools with one click. Real-time results powered by ClawGuru AI.
-            </p>
+            <h2 className="text-2xl font-bold text-white">Tools Command Center</h2>
+            <p className="text-gray-500 text-sm">Security-Tools mit einem Klick ausführen.</p>
           </div>
         </div>
-        
+
         {/* Global Stats */}
-        <div className="grid grid-cols-4 gap-4 mt-6">
-          <div className="bg-black/40 backdrop-blur-xl border border-cyan-500/20 rounded-lg p-4">
-            <div className="flex items-center gap-2 text-cyan-400 mb-1">
-              <CheckCircle className="w-4 h-4" />
-              <span className="text-xs uppercase">Active Tools</span>
+        <div className="grid grid-cols-4 gap-3">
+          {[
+            { label: 'Active Tools', value: String(tools.length), icon: CheckCircle },
+            { label: 'Avg Success', value: avgSuccess > 0 ? `${avgSuccess}%` : '–', icon: Activity },
+            { label: 'Last Run', value: lastRun, icon: Clock },
+            { label: 'Total Runs', value: String(totalRuns), icon: Target }
+          ].map(stat => (
+            <div key={stat.label} className="rounded-xl border p-4" style={glass}>
+              <div className="flex items-center gap-2 mb-1">
+                <stat.icon className="w-3.5 h-3.5" style={{ color: '#EAB308' }} />
+                <span className="text-[10px] font-semibold tracking-[0.1em] uppercase text-gray-600">{stat.label}</span>
+              </div>
+              <div className="text-xl font-black text-white">{stat.value}</div>
             </div>
-            <div className="text-2xl font-bold text-white">{tools.length}</div>
-          </div>
-          <div className="bg-black/40 backdrop-blur-xl border border-cyan-500/20 rounded-lg p-4">
-            <div className="flex items-center gap-2 text-green-400 mb-1">
-              <Activity className="w-4 h-4" />
-              <span className="text-xs uppercase">Avg Success Rate</span>
-            </div>
-            <div className="text-2xl font-bold text-white">
-              {Math.round(tools.reduce((acc, tool) => acc + tool.successRate, 0) / tools.length)}%
-            </div>
-          </div>
-          <div className="bg-black/40 backdrop-blur-xl border border-cyan-500/20 rounded-lg p-4">
-            <div className="flex items-center gap-2 text-purple-400 mb-1">
-              <Clock className="w-4 h-4" />
-              <span className="text-xs uppercase">Last Execution</span>
-            </div>
-            <div className="text-2xl font-bold text-white">2h</div>
-          </div>
-          <div className="bg-black/40 backdrop-blur-xl border border-cyan-500/20 rounded-lg p-4">
-            <div className="flex items-center gap-2 text-orange-400 mb-1">
-              <Target className="w-4 h-4" />
-              <span className="text-xs uppercase">Total Runs</span>
-            </div>
-            <div className="text-2xl font-bold text-white">247</div>
-          </div>
+          ))}
         </div>
       </motion.div>
 
       {/* Tools Grid */}
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-2 gap-5">
         {tools.map((tool, index) => (
           <motion.div
             key={tool.id}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.1 }}
-            className={`relative group cursor-pointer ${
-              isShadowed ? 'pointer-events-none' : ''
-            }`}
+            transition={{ delay: index * 0.1, duration: 0.5 }}
+            className={`relative group ${isShadowed ? 'pointer-events-none' : 'cursor-pointer'}`}
             onClick={() => handleToolExecute(tool.id)}
+            whileHover={!isShadowed ? { y: -4, transition: { duration: 0.3 } } : {}}
           >
-            {/* Tool Card */}
-            <div className={`relative p-6 rounded-2xl border transition-all ${
-              isShadowed
-                ? 'bg-gray-900/30 border-gray-800/30'
-                : 'bg-gray-900/50 border-gray-800/50 hover:border-gray-700/50'
-            } backdrop-blur-xl`}>
-              {/* Shadow Overlay */}
-              {isShadowed && (
-                <div className="absolute inset-0 bg-black/50 backdrop-blur-sm rounded-2xl" />
-              )}
+            <div
+              className="relative p-6 rounded-2xl border overflow-hidden transition-all duration-500 group-hover:border-yellow-500/20"
+              style={glass}
+            >
+              {/* Gold hover glow */}
+              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700" style={{ background: 'radial-gradient(circle at 50% 0%, rgba(234,179,8,0.06) 0%, transparent 70%)' }} />
 
-              <div className="relative">
+              {isShadowed && <div className="absolute inset-0 bg-black/60 backdrop-blur-sm rounded-2xl z-10" />}
+
+              <div className="relative z-[5]">
                 {/* Header */}
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center gap-3">
-                    <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${tool.color} flex items-center justify-center`}>
-                      <tool.icon className="w-6 h-6 text-white" />
+                    <div className="w-11 h-11 rounded-xl flex items-center justify-center border transition-all duration-500 group-hover:border-yellow-500/20" style={{ background: 'rgba(234,179,8,0.06)', borderColor: 'rgba(255,255,255,0.06)' }}>
+                      <tool.icon className="w-5 h-5 transition-colors duration-500 group-hover:text-yellow-500" style={{ color: '#A1A1AA' }} />
                     </div>
                     <div>
-                      <h3 className="text-xl font-semibold text-white">{tool.name}</h3>
-                      <div className="flex items-center gap-2 mt-1">
-                        <div className={`text-xs px-2 py-1 rounded-full inline-block ${
-                          tool.status === 'ready' 
-                            ? 'bg-green-500/20 text-green-500' 
-                            : 'bg-yellow-500/20 text-yellow-500'
-                        }`}>
-                          {tool.status}
-                        </div>
-                        <div className="text-xs text-gray-400">{tool.category}</div>
+                      <h3 className="text-lg font-semibold text-white">{tool.name}</h3>
+                      <div className="flex items-center gap-2 mt-0.5">
+                        <div className="text-[10px] px-2 py-0.5 rounded-full font-medium" style={{ background: 'rgba(234,179,8,0.1)', color: '#EAB308' }}>{tool.status}</div>
+                        <span className="text-[10px] text-gray-600">{tool.category}</span>
                       </div>
                     </div>
                   </div>
                   <div className="text-right">
-                    <div className="text-xs text-gray-400">Success Rate</div>
-                    <div className="text-lg font-bold text-green-400">{tool.successRate}%</div>
+                    <div className="text-[10px] text-gray-600 uppercase">Success</div>
+                    <div className="text-lg font-black" style={{ color: '#EAB308' }}>{avgSuccess > 0 ? `${avgSuccess}%` : '–'}</div>
                   </div>
                 </div>
 
-                {/* Description */}
-                <p className="text-gray-400 mb-4">{tool.description}</p>
+                <p className="text-sm text-gray-500 mb-4 leading-relaxed">{tool.description}</p>
 
-                {/* Tool Stats */}
-                <div className="grid grid-cols-2 gap-4 mb-4">
-                  <div className="bg-white/5 rounded-lg p-3">
-                    <div className="flex items-center gap-2 text-gray-400 mb-1">
-                      <Clock className="w-3 h-3" />
-                      <span className="text-xs">Execution Time</span>
+                {/* Stats */}
+                <div className="grid grid-cols-2 gap-3 mb-4">
+                  {[{ label: 'Total Runs', value: String(totalRuns), icon: Clock }, { label: 'Last Used', value: lastRun, icon: Activity }].map(s => (
+                    <div key={s.label} className="rounded-lg p-2.5 border" style={{ background: 'rgba(255,255,255,0.015)', borderColor: 'rgba(255,255,255,0.04)' }}>
+                      <div className="flex items-center gap-1.5 mb-0.5">
+                        <s.icon className="w-3 h-3 text-gray-600" />
+                        <span className="text-[10px] text-gray-600">{s.label}</span>
+                      </div>
+                      <div className="text-sm font-semibold text-white">{s.value}</div>
                     </div>
-                    <div className="text-sm font-semibold text-white">{tool.executionTime}</div>
-                  </div>
-                  <div className="bg-white/5 rounded-lg p-3">
-                    <div className="flex items-center gap-2 text-gray-400 mb-1">
-                      <Activity className="w-3 h-3" />
-                      <span className="text-xs">Last Used</span>
-                    </div>
-                    <div className="text-sm font-semibold text-white">{tool.lastUsed}</div>
-                  </div>
+                  ))}
                 </div>
 
                 {/* Features */}
-                <div className="space-y-2 mb-6">
+                <div className="space-y-1.5 mb-5">
                   {tool.features.map((feature, i) => (
-                    <div key={i} className="flex items-center gap-2 text-sm text-gray-300">
-                      <span className="text-green-500">✓</span>
+                    <div key={i} className="flex items-center gap-2 text-sm text-gray-400">
+                      <div className="w-1 h-1 rounded-full" style={{ background: '#EAB308' }} />
                       {feature}
                     </div>
                   ))}
                 </div>
 
-                {/* Execute Button */}
+                {/* Button */}
                 <motion.button
-                  className={`w-full py-3 rounded-lg font-semibold transition-all flex items-center justify-center gap-2 ${
-                    isShadowed
-                      ? 'bg-gray-800 text-gray-600'
-                      : `bg-gradient-to-r ${tool.color} text-white hover:opacity-90`
-                  }`}
+                  className="w-full py-3 rounded-xl font-semibold text-sm transition-all flex items-center justify-center gap-2 border"
+                  style={isShadowed
+                    ? { background: 'rgba(255,255,255,0.02)', borderColor: 'rgba(255,255,255,0.04)', color: '#52525B' }
+                    : { background: 'rgba(234,179,8,0.08)', borderColor: 'rgba(234,179,8,0.2)', color: '#EAB308' }
+                  }
                   whileHover={!isShadowed ? { scale: 1.02 } : {}}
                   whileTap={!isShadowed ? { scale: 0.98 } : {}}
                   disabled={isShadowed}
                 >
-                  {isShadowed ? (
-                    <>
-                      <Lock className="w-4 h-4" />
-                      Upgrade Required
-                    </>
-                  ) : (
-                    <>
-                      <Play className="w-4 h-4" />
-                      Execute Tool
-                    </>
-                  )}
+                  {isShadowed ? <><Lock className="w-4 h-4" /> Upgrade Required</> : <><Play className="w-4 h-4" /> Execute Tool</>}
                 </motion.button>
               </div>
             </div>
-
-            {/* Hover Effect */}
-            {!isShadowed && (
-              <motion.div
-                className="absolute inset-0 rounded-2xl bg-gradient-to-r from-red-500/20 to-orange-500/20 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
-                style={{ zIndex: -1 }}
-              />
-            )}
           </motion.div>
         ))}
       </div>
 
-      {/* Active Tool Execution Panel */}
+      {/* Execution Panel */}
       <AnimatePresence>
         {activeTool && !isShadowed && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="mt-8 p-6 bg-black/40 backdrop-blur-xl rounded-2xl border border-cyan-500/20"
+            className="mt-6 p-6 rounded-2xl border"
+            style={{ ...glass, borderColor: 'rgba(234,179,8,0.12)', boxShadow: '0 0 60px rgba(234,179,8,0.04)' }}
           >
-            <div className="flex items-center justify-between mb-6">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-500 flex items-center justify-center">
-                  {(() => {
-                    const tool = tools.find(t => t.id === activeTool)
-                    const IconComponent = tool?.icon
-                    return IconComponent ? <IconComponent className="w-6 h-6 text-white" /> : null
-                  })()}
+            <div className="flex items-center justify-between mb-5">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center border" style={{ background: 'rgba(234,179,8,0.08)', borderColor: 'rgba(234,179,8,0.15)' }}>
+                  {(() => { const t = tools.find(x => x.id === activeTool); const I = t?.icon; return I ? <I className="w-5 h-5" style={{ color: '#EAB308' }} /> : null })()}
                 </div>
                 <div>
-                  <h3 className="text-xl font-semibold text-white">
-                    Executing: {tools.find(t => t.id === activeTool)?.name}
-                  </h3>
-                  <div className="flex items-center gap-2 mt-1">
-                    <div className={`w-2 h-2 rounded-full ${
-                      executionStatus === 'running' ? 'bg-green-500 animate-pulse' :
-                      executionStatus === 'completed' ? 'bg-blue-500' :
-                      executionStatus === 'error' ? 'bg-red-500' : 'bg-gray-500'
-                    }`} />
-                    <span className={`text-sm capitalize ${
-                      executionStatus === 'running' ? 'text-green-500' :
-                      executionStatus === 'completed' ? 'text-blue-500' :
-                      executionStatus === 'error' ? 'text-red-500' : 'text-gray-500'
-                    }`}>
-                      {executionStatus}
-                    </span>
+                  <h3 className="text-base font-semibold text-white">{tools.find(t => t.id === activeTool)?.name}</h3>
+                  <div className="flex items-center gap-2 mt-0.5">
+                    <div className="w-1.5 h-1.5 rounded-full" style={{
+                      background: executionStatus === 'running' ? '#EAB308' : executionStatus === 'completed' ? '#22C55E' : '#EF4444',
+                      boxShadow: executionStatus === 'running' ? '0 0 6px rgba(234,179,8,0.5)' : 'none'
+                    }} />
+                    <span className="text-xs capitalize" style={{ color: executionStatus === 'running' ? '#EAB308' : executionStatus === 'completed' ? '#22C55E' : '#A1A1AA' }}>{executionStatus}</span>
                   </div>
                 </div>
               </div>
-              
               <div className="flex items-center gap-2">
                 {executionStatus === 'running' && (
-                  <motion.button
-                    onClick={handleStopExecution}
-                    className="px-4 py-2 bg-red-500/20 text-red-500 rounded-lg hover:bg-red-500/30 transition-colors flex items-center gap-2"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <Pause className="w-4 h-4" />
-                    Stop
-                  </motion.button>
+                  <button onClick={() => { setExecutionStatus('idle'); setExecutionProgress(0); setActiveTool(null) }} className="px-3 py-1.5 rounded-lg text-xs font-medium border transition-all hover:border-red-500/30" style={{ color: '#EF4444', background: 'rgba(239,68,68,0.08)', borderColor: 'rgba(239,68,68,0.15)' }}>
+                    <Pause className="w-3 h-3 inline mr-1" />Stop
+                  </button>
                 )}
-                
                 {executionStatus === 'completed' && (
-                  <motion.button
-                    onClick={handleResetExecution}
-                    className="px-4 py-2 bg-cyan-500/20 text-cyan-500 rounded-lg hover:bg-cyan-500/30 transition-colors flex items-center gap-2"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <RotateCcw className="w-4 h-4" />
-                    Reset
-                  </motion.button>
+                  <button onClick={() => { setExecutionStatus('idle'); setExecutionProgress(0) }} className="px-3 py-1.5 rounded-lg text-xs font-medium border transition-all" style={{ color: '#EAB308', background: 'rgba(234,179,8,0.08)', borderColor: 'rgba(234,179,8,0.15)' }}>
+                    <RotateCcw className="w-3 h-3 inline mr-1" />Reset
+                  </button>
                 )}
-                
-                <button
-                  onClick={() => setActiveTool(null)}
-                  className="text-gray-400 hover:text-white transition-colors"
-                >
-                  ✕
-                </button>
+                <button onClick={() => setActiveTool(null)} className="text-gray-600 hover:text-white text-xs ml-1">✕</button>
               </div>
             </div>
-            
-            {/* Progress Section */}
-            <div className="space-y-4">
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-gray-400">Execution Progress</span>
-                <span className="text-cyan-400 font-semibold">{Math.round(executionProgress)}%</span>
+
+            {/* Progress */}
+            <div className="mb-4">
+              <div className="flex items-center justify-between text-xs mb-2">
+                <span className="text-gray-500">Execution Progress</span>
+                <span className="font-semibold" style={{ color: '#EAB308' }}>{Math.round(executionProgress)}%</span>
               </div>
-              
-              <div className="w-full bg-gray-800 rounded-full h-3 overflow-hidden">
-                <motion.div
-                  className="h-full bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full relative"
-                  style={{ width: `${executionProgress}%` }}
-                >
-                  <div className="absolute inset-0 bg-white/20 animate-pulse" />
-                </motion.div>
+              <div className="w-full h-2 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.04)' }}>
+                <motion.div className="h-full rounded-full" style={{ width: `${executionProgress}%`, background: 'linear-gradient(90deg, #A1A1AA, #EAB308)' }} />
               </div>
-              
-              {/* Execution Details */}
-              <div className="grid grid-cols-3 gap-4 mt-6">
-                <div className="bg-white/5 rounded-lg p-3">
-                  <div className="flex items-center gap-2 text-cyan-400 mb-1">
-                    <Cpu className="w-3 h-3" />
-                    <span className="text-xs">CPU Usage</span>
-                  </div>
-                  <div className="text-lg font-bold text-white">
-                    {Math.round(Math.sin(Date.now() / 1000) * 20 + 45)}%
-                  </div>
-                </div>
-                <div className="bg-white/5 rounded-lg p-3">
-                  <div className="flex items-center gap-2 text-green-400 mb-1">
-                    <Database className="w-3 h-3" />
-                    <span className="text-xs">Memory</span>
-                  </div>
-                  <div className="text-lg font-bold text-white">
-                    {Math.round(Math.sin(Date.now() / 1500) * 15 + 60)}%
-                  </div>
-                </div>
-                <div className="bg-white/5 rounded-lg p-3">
-                  <div className="flex items-center gap-2 text-purple-400 mb-1">
-                    <Wifi className="w-3 h-3" />
-                    <span className="text-xs">Network</span>
-                  </div>
-                  <div className="text-lg font-bold text-white">
-                    {Math.round(Math.sin(Date.now() / 2000) * 25 + 35)}%
-                  </div>
-                </div>
-              </div>
-              
-              {/* Results Preview */}
-              {executionStatus === 'completed' && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="mt-6 p-4 bg-green-500/10 border border-green-500/20 rounded-lg"
-                >
-                  <div className="flex items-center gap-2 mb-2">
-                    <CheckCircle className="w-4 h-4 text-green-500" />
-                    <span className="text-green-500 font-semibold">Execution Completed Successfully</span>
-                  </div>
-                  <div className="text-sm text-gray-300">
-                    Tool execution completed in 2.3 seconds. Found 3 potential threats and 2 optimization opportunities.
-                  </div>
-                </motion.div>
-              )}
-              
-              {executionStatus === 'running' && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="mt-6 p-4 bg-cyan-500/10 border border-cyan-500/20 rounded-lg"
-                >
-                  <div className="flex items-center gap-2 mb-2">
-                    <Activity className="w-4 h-4 text-cyan-500 animate-pulse" />
-                    <span className="text-cyan-500 font-semibold">Analyzing Security Patterns...</span>
-                  </div>
-                  <div className="text-sm text-gray-300">
-                    Currently scanning system vulnerabilities and threat vectors. Results will appear here.
-                  </div>
-                </motion.div>
-              )}
             </div>
+
+            {/* Resource stats */}
+            <div className="grid grid-cols-3 gap-3">
+              {[{ label: 'CPU', icon: Cpu, val: 45 }, { label: 'Memory', icon: Database, val: 60 }, { label: 'Network', icon: Wifi, val: 35 }].map(r => (
+                <div key={r.label} className="rounded-lg p-3 border" style={{ background: 'rgba(255,255,255,0.015)', borderColor: 'rgba(255,255,255,0.04)' }}>
+                  <div className="flex items-center gap-1.5 mb-1">
+                    <r.icon className="w-3 h-3 text-gray-600" />
+                    <span className="text-[10px] text-gray-600">{r.label}</span>
+                  </div>
+                  <div className="text-base font-bold text-white">{r.val}%</div>
+                </div>
+              ))}
+            </div>
+
+            {executionStatus === 'completed' && (
+              <motion.div initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} className="mt-4 p-4 rounded-xl border" style={{ background: 'rgba(234,179,8,0.04)', borderColor: 'rgba(234,179,8,0.12)' }}>
+                <div className="flex items-center gap-2 mb-1">
+                  <CheckCircle className="w-4 h-4" style={{ color: '#EAB308' }} />
+                  <span className="text-sm font-semibold" style={{ color: '#EAB308' }}>Ausführung erfolgreich</span>
+                </div>
+                <p className="text-xs text-gray-500">3 potenzielle Bedrohungen und 2 Optimierungsmöglichkeiten gefunden.</p>
+              </motion.div>
+            )}
           </motion.div>
         )}
       </AnimatePresence>

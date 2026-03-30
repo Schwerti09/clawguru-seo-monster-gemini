@@ -1,8 +1,9 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { useState } from 'react'
+import { motion } from 'framer-motion'
 import { UserTier, TIER_CONFIGS } from '@/lib/tier-access'
+import type { DashboardData } from '@/types/dashboard'
 import { 
   CreditCard, 
   TrendingUp, 
@@ -34,50 +35,18 @@ import {
 interface BillingTabProps {
   tier: UserTier
   onUpgrade: () => void
+  data: DashboardData
 }
 
-export function BillingTab({ tier, onUpgrade }: BillingTabProps) {
+export function BillingTab({ tier, onUpgrade, data }: BillingTabProps) {
   const currentConfig = TIER_CONFIGS[tier]
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('monthly')
-  const [animatedUsage, setAnimatedUsage] = useState({
-    executions: 0,
-    aiTokens: 0,
-    storage: 0,
-    bandwidth: 0
-  })
-
-  // Animate usage stats on mount
-  useEffect(() => {
-    const duration = 2000
-    const steps = 60
-    const interval = duration / steps
-
-    const targetUsage = {
-      executions: 47,
-      aiTokens: 12300,
-      storage: 2.3,
-      bandwidth: 45.7
-    }
-
-    let currentStep = 0
-    const timer = setInterval(() => {
-      currentStep++
-      const progress = currentStep / steps
-      
-      setAnimatedUsage({
-        executions: Math.floor(targetUsage.executions * progress),
-        aiTokens: Math.floor(targetUsage.aiTokens * progress),
-        storage: parseFloat((targetUsage.storage * progress).toFixed(1)),
-        bandwidth: parseFloat((targetUsage.bandwidth * progress).toFixed(1))
-      })
-
-      if (currentStep >= steps) {
-        clearInterval(timer)
-      }
-    }, interval)
-
-    return () => clearInterval(timer)
-  }, [])
+  // Real usage from data
+  const realUsage = {
+    executions: data.totalExecutions,
+    nodes: data.myceliumNodes,
+    threats: data.activeThreats
+  }
 
   const getTierIcon = (tierKey: string) => {
     switch (tierKey) {
@@ -123,27 +92,24 @@ export function BillingTab({ tier, onUpgrade }: BillingTabProps) {
         className="mb-8"
       >
         <div className="flex items-center gap-4 mb-6">
-          <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
-            <CreditCard className="w-8 h-8 text-white" />
+          <div className="w-12 h-12 rounded-2xl flex items-center justify-center border" style={{ background: 'rgba(234,179,8,0.08)', borderColor: 'rgba(234,179,8,0.2)' }}>
+            <CreditCard className="w-6 h-6" style={{ color: '#EAB308' }} />
           </div>
           <div>
-            <h2 className="text-4xl font-bold text-white mb-2">Billing & Plans</h2>
-            <p className="text-gray-400 text-lg">
-              Manage your subscription and unlock the full power of ClawGuru.
+            <h2 className="text-2xl font-bold text-white">Billing & Plans</h2>
+            <p className="text-gray-500 text-sm">
+              Abonnement verwalten und die volle Kraft von ClawGuru freischalten.
             </p>
           </div>
         </div>
         
         {/* Billing Cycle Toggle */}
         <div className="flex items-center justify-center mb-6">
-          <div className="bg-black/40 backdrop-blur-xl border border-cyan-500/20 rounded-lg p-1 flex">
+          <div className="rounded-xl border p-1 flex" style={{ background: 'rgba(255,255,255,0.02)', borderColor: 'rgba(255,255,255,0.06)' }}>
             <motion.button
               onClick={() => setBillingCycle('monthly')}
-              className={`px-6 py-2 rounded-md text-sm font-medium transition-all ${
-                billingCycle === 'monthly'
-                  ? 'bg-cyan-500 text-white'
-                  : 'text-gray-400 hover:text-white'
-              }`}
+              className="px-6 py-2 rounded-md text-sm font-medium transition-all"
+              style={billingCycle === 'monthly' ? { background: 'rgba(234,179,8,0.15)', color: '#EAB308' } : { color: '#71717A' }}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
@@ -151,11 +117,8 @@ export function BillingTab({ tier, onUpgrade }: BillingTabProps) {
             </motion.button>
             <motion.button
               onClick={() => setBillingCycle('yearly')}
-              className={`px-6 py-2 rounded-md text-sm font-medium transition-all relative ${
-                billingCycle === 'yearly'
-                  ? 'bg-cyan-500 text-white'
-                  : 'text-gray-400 hover:text-white'
-              }`}
+              className="px-6 py-2 rounded-md text-sm font-medium transition-all relative"
+              style={billingCycle === 'yearly' ? { background: 'rgba(234,179,8,0.15)', color: '#EAB308' } : { color: '#71717A' }}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
@@ -164,7 +127,7 @@ export function BillingTab({ tier, onUpgrade }: BillingTabProps) {
                 <motion.div
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="absolute -top-2 -right-2 px-2 py-1 bg-red-500 text-white text-xs rounded-full"
+                  className="absolute -top-2 -right-2 px-2 py-1 text-xs rounded-full font-bold" style={{ background: '#EAB308', color: '#0A0A0A' }}
                 >
                   -20%
                 </motion.div>
@@ -181,7 +144,7 @@ export function BillingTab({ tier, onUpgrade }: BillingTabProps) {
         transition={{ delay: 0.1 }}
         className="mb-8"
       >
-        <div className="bg-black/40 backdrop-blur-xl border border-cyan-500/20 rounded-2xl p-8">
+        <div className="rounded-2xl border p-8" style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.025), rgba(255,255,255,0.005))', borderColor: 'rgba(255,255,255,0.06)', backdropFilter: 'blur(20px)' }}>
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-6">
               <div className={`w-20 h-20 rounded-2xl bg-gradient-to-br ${getTierGradient(tier)} flex items-center justify-center`}>
@@ -214,13 +177,14 @@ export function BillingTab({ tier, onUpgrade }: BillingTabProps) {
             <div className="flex items-center gap-4">
               <div className="text-right">
                 <div className="text-sm text-gray-400 mb-1">Next billing date</div>
-                <div className="text-lg font-semibold text-white">April 29, 2024</div>
+                <div className="text-lg font-semibold text-white">{data.nextBillingDate ? new Date(data.nextBillingDate).toLocaleDateString('de-DE') : '–'}</div>
               </div>
               
               {tier !== 'enterprise' && (
                 <motion.button
                   onClick={onUpgrade}
-                  className="px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg font-semibold text-white hover:opacity-90 transition-all flex items-center gap-2"
+                  className="px-5 py-2.5 rounded-xl font-semibold text-sm transition-all flex items-center gap-2 border"
+                  style={{ background: 'rgba(234,179,8,0.1)', borderColor: 'rgba(234,179,8,0.25)', color: '#EAB308' }}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
@@ -257,108 +221,48 @@ export function BillingTab({ tier, onUpgrade }: BillingTabProps) {
         className="grid grid-cols-2 gap-6 mb-8"
       >
         {/* Usage This Month */}
-        <div className="bg-black/40 backdrop-blur-xl border border-cyan-500/20 rounded-2xl p-6">
-          <h4 className="text-xl font-semibold text-white mb-6 flex items-center gap-2">
-            <Activity className="w-5 h-5 text-cyan-400" />
-            Usage This Month
+        <div className="rounded-2xl border p-6" style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.025), rgba(255,255,255,0.005))', borderColor: 'rgba(255,255,255,0.06)', backdropFilter: 'blur(20px)' }}>
+          <h4 className="text-base font-semibold text-white mb-5 flex items-center gap-2">
+            <Activity className="w-4 h-4" style={{ color: '#EAB308' }} />
+            Nutzung diesen Monat
           </h4>
           
           <div className="space-y-4">
-            <div>
-              <div className="flex justify-between text-sm mb-2">
-                <span className="text-gray-400 flex items-center gap-2">
-                  <Zap className="w-4 h-4" />
-                  Executions
-                </span>
-                <span className="text-white font-semibold">
-                  {animatedUsage.executions} / {currentConfig.limits.maxExecutions === Infinity ? '∞' : currentConfig.limits.maxExecutions}
-                </span>
+            {[
+              { label: 'Executions', icon: Zap, value: realUsage.executions, max: currentConfig.limits.maxExecutions, gradient: 'linear-gradient(90deg, #A1A1AA, #EAB308)' },
+              { label: 'Mycelium Nodes', icon: Globe, value: realUsage.nodes, max: currentConfig.limits.maxMyceliumNodes, gradient: 'linear-gradient(90deg, #A1A1AA, #D4A017)' },
+              { label: 'Active Threats', icon: Shield, value: realUsage.threats, max: 100, gradient: 'linear-gradient(90deg, #71717A, #EF4444)' }
+            ].map(item => (
+              <div key={item.label}>
+                <div className="flex justify-between text-sm mb-2">
+                  <span className="text-gray-400 flex items-center gap-2">
+                    <item.icon className="w-4 h-4" />
+                    {item.label}
+                  </span>
+                  <span className="text-white font-semibold">
+                    {item.value} / {item.max === Infinity ? '∞' : item.max}
+                  </span>
+                </div>
+                <div className="w-full bg-gray-800 rounded-full h-3 overflow-hidden">
+                  <motion.div
+                    className="h-3 rounded-full relative" style={{ background: item.gradient }}
+                    initial={{ width: 0 }}
+                    animate={{ width: `${Math.min(item.value / (item.max === Infinity ? 1000 : item.max) * 100, 100)}%` }}
+                    transition={{ duration: 1, ease: 'easeOut' }}
+                  >
+                    <div className="absolute inset-0 bg-white/20 animate-pulse" />
+                  </motion.div>
+                </div>
               </div>
-              <div className="w-full bg-gray-800 rounded-full h-3 overflow-hidden">
-                <motion.div 
-                  className="bg-gradient-to-r from-cyan-500 to-blue-500 h-3 rounded-full relative"
-                  initial={{ width: 0 }}
-                  animate={{ width: `${Math.min(animatedUsage.executions / (currentConfig.limits.maxExecutions || 100) * 100, 100)}%` }}
-                  transition={{ duration: 1, ease: "easeOut" }}
-                >
-                  <div className="absolute inset-0 bg-white/20 animate-pulse" />
-                </motion.div>
-              </div>
-            </div>
-            
-            <div>
-              <div className="flex justify-between text-sm mb-2">
-                <span className="text-gray-400 flex items-center gap-2">
-                  <Brain className="w-4 h-4" />
-                  AI Tokens
-                </span>
-                <span className="text-white font-semibold">
-                  {(animatedUsage.aiTokens / 1000).toFixed(1)}k / {currentConfig.limits.aiTokens === Infinity ? '∞' : `${currentConfig.limits.aiTokens / 1000}k`}
-                </span>
-              </div>
-              <div className="w-full bg-gray-800 rounded-full h-3 overflow-hidden">
-                <motion.div 
-                  className="bg-gradient-to-r from-purple-500 to-pink-500 h-3 rounded-full relative"
-                  initial={{ width: 0 }}
-                  animate={{ width: `${Math.min(animatedUsage.aiTokens / (currentConfig.limits.aiTokens || 100000) * 100, 100)}%` }}
-                  transition={{ duration: 1, ease: "easeOut" }}
-                >
-                  <div className="absolute inset-0 bg-white/20 animate-pulse" />
-                </motion.div>
-              </div>
-            </div>
-            
-            <div>
-              <div className="flex justify-between text-sm mb-2">
-                <span className="text-gray-400 flex items-center gap-2">
-                  <Database className="w-4 h-4" />
-                  Runbooks
-                </span>
-                <span className="text-white font-semibold">
-                  {Math.round(animatedUsage.storage * 4)} / {currentConfig.limits.maxRunbooks === Infinity ? '∞' : currentConfig.limits.maxRunbooks}
-                </span>
-              </div>
-              <div className="w-full bg-gray-800 rounded-full h-3 overflow-hidden">
-                <motion.div 
-                  className="bg-gradient-to-r from-green-500 to-emerald-500 h-3 rounded-full relative"
-                  initial={{ width: 0 }}
-                  animate={{ width: `${Math.min((animatedUsage.storage * 4) / (currentConfig.limits.maxRunbooks || 50) * 100, 100)}%` }}
-                  transition={{ duration: 1, ease: "easeOut" }}
-                >
-                  <div className="absolute inset-0 bg-white/20 animate-pulse" />
-                </motion.div>
-              </div>
-            </div>
-            
-            <div>
-              <div className="flex justify-between text-sm mb-2">
-                <span className="text-gray-400 flex items-center gap-2">
-                  <Globe className="w-4 h-4" />
-                  Mycelium Nodes
-                </span>
-                <span className="text-white font-semibold">
-                  {Math.round(animatedUsage.bandwidth / 10)} / {currentConfig.limits.maxMyceliumNodes === Infinity ? '∞' : currentConfig.limits.maxMyceliumNodes}
-                </span>
-              </div>
-              <div className="w-full bg-gray-800 rounded-full h-3 overflow-hidden">
-                <motion.div 
-                  className="bg-gradient-to-r from-orange-500 to-red-500 h-3 rounded-full relative"
-                  initial={{ width: 0 }}
-                  animate={{ width: `${Math.min((animatedUsage.bandwidth / 10) / (currentConfig.limits.maxMyceliumNodes || 20) * 100, 100)}%` }}
-                  transition={{ duration: 1, ease: "easeOut" }}
-                >
-                  <div className="absolute inset-0 bg-white/20 animate-pulse" />
-                </motion.div>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
 
         {/* Billing Information */}
-        <div className="bg-black/40 backdrop-blur-xl border border-cyan-500/20 rounded-2xl p-6">
-          <h4 className="text-xl font-semibold text-white mb-6 flex items-center gap-2">
-            <DollarSign className="w-5 h-5 text-green-400" />
-            Billing Information
+        <div className="rounded-2xl border p-6" style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.025), rgba(255,255,255,0.005))', borderColor: 'rgba(255,255,255,0.06)', backdropFilter: 'blur(20px)' }}>
+          <h4 className="text-base font-semibold text-white mb-5 flex items-center gap-2">
+            <DollarSign className="w-4 h-4" style={{ color: '#EAB308' }} />
+            Zahlungsinformationen
           </h4>
           
           <div className="space-y-4">
@@ -384,22 +288,29 @@ export function BillingTab({ tier, onUpgrade }: BillingTabProps) {
             </div>
             
             <div className="bg-white/5 rounded-lg p-4">
-              <div className="flex justify-between mb-2">
-                <span className="text-gray-400">Payment Method</span>
-                <span className="text-white font-semibold">•••• 4242</span>
-              </div>
+              {data.subscription?.stripe_subscription_id && (
+                <div className="flex justify-between mb-2">
+                  <span className="text-gray-400">Subscription</span>
+                  <span className="text-white font-semibold text-xs font-mono">{data.subscription.stripe_subscription_id.slice(0, 16)}…</span>
+                </div>
+              )}
               <div className="flex justify-between mb-2">
                 <span className="text-gray-400">Next Billing Date</span>
-                <span className="text-white font-semibold">April 29, 2024</span>
+                <span className="text-white font-semibold">{data.nextBillingDate ? new Date(data.nextBillingDate).toLocaleDateString('de-DE') : '–'}</span>
               </div>
               <div className="flex justify-between mb-2">
                 <span className="text-gray-400">Total Spent</span>
-                <span className="text-white font-semibold">$147.00</span>
+                <span className="text-white font-semibold">€{(data.totalSpent / 100).toFixed(2)}</span>
+              </div>
+              <div className="flex justify-between mb-2">
+                <span className="text-gray-400">Zahlungen</span>
+                <span className="text-white font-semibold">{data.payments.length}</span>
               </div>
             </div>
             
             <motion.button
-              className="w-full px-4 py-2 bg-purple-500/20 text-purple-400 rounded-lg hover:bg-purple-500/30 transition-colors flex items-center justify-center gap-2"
+              className="w-full px-4 py-2 rounded-xl transition-all flex items-center justify-center gap-2 text-sm font-medium border hover:border-yellow-500/20"
+              style={{ background: 'rgba(234,179,8,0.06)', borderColor: 'rgba(255,255,255,0.06)', color: '#EAB308' }}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
@@ -434,13 +345,12 @@ export function BillingTab({ tier, onUpgrade }: BillingTabProps) {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 + index * 0.1 }}
-                className={`relative group cursor-pointer ${
-                  isCurrentTier
-                    ? 'border-cyan-500/50 bg-cyan-500/10'
-                    : isHigherTier
-                    ? 'border-purple-500/30 bg-purple-500/5 hover:border-purple-500/50'
-                    : 'border-gray-700/30 bg-gray-900/20'
-                } border rounded-2xl p-6 backdrop-blur-xl transition-all`}
+                className="relative group cursor-pointer border rounded-2xl p-6 transition-all"
+                style={{
+                  background: isCurrentTier ? 'rgba(234,179,8,0.04)' : 'linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.005))',
+                  borderColor: isCurrentTier ? 'rgba(234,179,8,0.2)' : isHigherTier ? 'rgba(255,255,255,0.08)' : 'rgba(255,255,255,0.04)',
+                  backdropFilter: 'blur(12px)'
+                }}
                 whileHover={{ scale: isHigherTier ? 1.02 : 1 }}
                 whileTap={{ scale: isHigherTier ? 0.98 : 1 }}
               >
@@ -449,7 +359,7 @@ export function BillingTab({ tier, onUpgrade }: BillingTabProps) {
                   <motion.div
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    className="absolute -top-3 left-1/2 transform -translate-x-1/2 px-3 py-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-xs font-bold rounded-full"
+                    className="absolute -top-3 left-1/2 transform -translate-x-1/2 px-3 py-1 text-xs font-bold rounded-full" style={{ background: '#EAB308', color: '#0A0A0A' }}
                   >
                     POPULAR
                   </motion.div>
@@ -460,7 +370,7 @@ export function BillingTab({ tier, onUpgrade }: BillingTabProps) {
                   <motion.div
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    className="absolute -top-3 right-0 px-3 py-1 bg-cyan-500 text-white text-xs font-bold rounded-full"
+                    className="absolute -top-3 right-0 px-3 py-1 text-xs font-bold rounded-full border" style={{ background: 'rgba(234,179,8,0.1)', borderColor: 'rgba(234,179,8,0.3)', color: '#EAB308' }}
                   >
                     CURRENT
                   </motion.div>
@@ -515,12 +425,13 @@ export function BillingTab({ tier, onUpgrade }: BillingTabProps) {
                 <motion.button
                   className={`w-full py-3 rounded-lg font-semibold transition-all flex items-center justify-center gap-2 ${
                     isCurrentTier
-                      ? 'bg-gray-700 text-gray-400 cursor-not-allowed'
+                      ? 'cursor-not-allowed'
                       : isHigherTier
-                      ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:opacity-90'
-                      : 'bg-gray-700 text-gray-400 cursor-not-allowed'
+                      ? 'hover:opacity-90'
+                      : 'cursor-not-allowed'
                   }`}
                   disabled={!isHigherTier}
+                  style={isHigherTier ? { background: 'rgba(234,179,8,0.1)', borderColor: 'rgba(234,179,8,0.25)', color: '#EAB308' } : { background: 'rgba(255,255,255,0.02)', borderColor: 'rgba(255,255,255,0.04)', color: '#52525B' }}
                   whileHover={isHigherTier ? { scale: 1.02 } : {}}
                   whileTap={isHigherTier ? { scale: 0.98 } : {}}
                   onClick={isHigherTier ? onUpgrade : undefined}

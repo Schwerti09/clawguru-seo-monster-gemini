@@ -6,7 +6,6 @@ import OpsWall from "@/components/live/OpsWall"
 import LoginSaveBanner from "@/components/shared/LoginSaveBanner"
 import MyceliumShareCard from "@/components/share/MyceliumShareCard"
 import PageOnboarding from "@/components/onboarding/PageOnboarding"
-import LiveDashboardClient from "@/components/live/LiveDashboardClient"
 import { useState, useEffect } from "react"
 
 export default function LivePage() {
@@ -44,7 +43,6 @@ export default function LivePage() {
         />
         <div className="mt-10">
           <LoginSaveBanner />
-          <LiveDashboardClient />
         </div>
         <div className="mt-10">
           <OpsWall />

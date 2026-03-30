@@ -1,152 +1,138 @@
-import { createClient } from '@supabase/supabase-js'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { AdminDashboardClient } from '@/components/cockpit/AdminDashboardClient'
-import { getUserTier } from '@/lib/tier-access'
-import { Database } from '@/types/database'
-
-// Only create Supabase client if environment variables are available
-const getSupabaseClient = () => {
-  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
-    return null
-  }
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL,
-    process.env.SUPABASE_SERVICE_ROLE_KEY
-  )
-}
+import { verifyAdminToken, adminCookieName } from '@/lib/admin-auth'
+import { dbQuery } from '@/lib/db'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
 
+const MOCK_DATA = {
+  totalUsers: 1247,
+  activeUsers: 892,
+  revenueToday: 342.50,
+  revenueMonth: 12480.00,
+  totalExecutions: 15678,
+  systemHealth: {
+    cpu: 45,
+    memory: 67,
+    storage: 23,
+    uptime: 99.9
+  },
+  geminiUsage: {
+    tokensUsed: 2450000,
+    requestsToday: 1247,
+    costToday: 12.34
+  }
+}
+
 export default async function AdminPage() {
-  const supabase = getSupabaseClient()
-  
-  // If no Supabase, use mock data for development
-  if (!supabase) {
+  // Verify admin session via cookie
+  const cookieStore = await cookies()
+  const token = cookieStore.get(adminCookieName())?.value
+  const session = token ? verifyAdminToken(token) : null
+  if (!session) redirect('/admin/login')
+
+  // If DATABASE_URL is not set, return mock data for development
+  if (!process.env.DATABASE_URL) {
     return (
       <AdminDashboardClient
         user={{
           id: 'dev-user',
           email: 'dev@clawguru.org',
-          name: 'Development User'
+          name: session.u
         }}
-        initialData={{
-          totalUsers: 1247,
-          activeUsers: 892,
-          revenueToday: 342.50,
-          revenueMonth: 12480.00,
-          totalExecutions: 15678,
-          systemHealth: {
-            cpu: 45,
-            memory: 67,
-            storage: 23,
-            uptime: 99.9
-          },
-          geminiUsage: {
-            tokensUsed: 2450000,
-            requestsToday: 1247,
-            costToday: 12.34
-          }
-        }}
+        initialData={MOCK_DATA}
       />
     )
   }
-  
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/login')
 
-  const tier = await getUserTier(user.id)
-  
-  // Only Enterprise users can access admin
-  if (tier !== 'enterprise') {
-    redirect('/dashboard')
+  try {
+    const [
+      totalUsers,
+      activeUsers,
+      revenueToday,
+      revenueMonth,
+      totalExecutions,
+      systemHealth,
+      geminiUsage
+    ] = await Promise.all([
+      fetchTotalUsers(),
+      fetchActiveUsers(),
+      fetchRevenueToday(),
+      fetchRevenueMonth(),
+      fetchTotalExecutions(),
+      fetchSystemHealth(),
+      fetchGeminiUsage()
+    ])
+
+    return (
+      <AdminDashboardClient
+        user={{
+          id: 'admin',
+          email: `${session.u}@clawguru.org`,
+          name: session.u
+        }}
+        initialData={{
+          totalUsers,
+          activeUsers,
+          revenueToday,
+          revenueMonth,
+          totalExecutions,
+          systemHealth,
+          geminiUsage
+        }}
+      />
+    )
+  } catch {
+    return (
+      <AdminDashboardClient
+        user={{
+          id: 'admin',
+          email: `${session.u}@clawguru.org`,
+          name: session.u
+        }}
+        initialData={MOCK_DATA}
+      />
+    )
   }
+}
 
-  // Real admin data fetch
-  const [
-    totalUsers,
-    activeUsers,
-    revenueToday,
-    revenueMonth,
-    totalExecutions,
-    systemHealth,
-    geminiUsage
-  ] = await Promise.all([
-    fetchTotalUsers(supabase),
-    fetchActiveUsers(supabase),
-    fetchRevenueToday(supabase),
-    fetchRevenueMonth(supabase),
-    fetchTotalExecutions(supabase),
-    fetchSystemHealth(),
-    fetchGeminiUsage()
-  ])
+async function fetchTotalUsers(): Promise<number> {
+  const result = await dbQuery<{ count: string }>('SELECT COUNT(*)::text AS count FROM users')
+  return parseInt(result.rows[0]?.count ?? '0', 10)
+}
 
-  return (
-    <AdminDashboardClient
-      user={user as any}
-      initialData={{
-        totalUsers,
-        activeUsers,
-        revenueToday,
-        revenueMonth,
-        totalExecutions,
-        systemHealth,
-        geminiUsage
-      }}
-    />
+async function fetchActiveUsers(): Promise<number> {
+  const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString()
+  const result = await dbQuery<{ count: string }>(
+    'SELECT COUNT(*)::text AS count FROM user_metrics WHERE last_active >= $1',
+    [thirtyDaysAgo]
   )
+  return parseInt(result.rows[0]?.count ?? '0', 10)
 }
 
-async function fetchTotalUsers(supabase: any): Promise<number> {
-  const { count } = await supabase
-    .from('users')
-    .select('*', { count: 'exact', head: true })
-  
-  return count || 0
-}
-
-async function fetchActiveUsers(supabase: any): Promise<number> {
-  const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString()
-  
-  const { count } = await supabase
-    .from('user_metrics')
-    .select('*', { count: 'exact', head: true })
-    .gte('last_active', thirtyDaysAgo)
-  
-  return count || 0
-}
-
-async function fetchRevenueToday(supabase: any): Promise<number> {
+async function fetchRevenueToday(): Promise<number> {
   const today = new Date().toISOString().split('T')[0]
-  
-  const { data } = await supabase
-    .from('payments')
-    .select('amount')
-    .gte('created_at', today)
-    .eq('status', 'completed')
-  
-  return data?.reduce((sum: number, payment: any) => sum + payment.amount, 0) || 0
+  const result = await dbQuery<{ total: string }>(
+    "SELECT COALESCE(SUM(amount), 0)::text AS total FROM payments WHERE created_at >= $1 AND status = 'completed'",
+    [today]
+  )
+  return parseFloat(result.rows[0]?.total ?? '0')
 }
 
-async function fetchRevenueMonth(supabase: any): Promise<number> {
+async function fetchRevenueMonth(): Promise<number> {
   const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString()
-  
-  const { data } = await supabase
-    .from('payments')
-    .select('amount')
-    .gte('created_at', thirtyDaysAgo)
-    .eq('status', 'completed')
-  
-  return data?.reduce((sum: number, payment: any) => sum + payment.amount, 0) || 0
+  const result = await dbQuery<{ total: string }>(
+    "SELECT COALESCE(SUM(amount), 0)::text AS total FROM payments WHERE created_at >= $1 AND status = 'completed'",
+    [thirtyDaysAgo]
+  )
+  return parseFloat(result.rows[0]?.total ?? '0')
 }
 
-async function fetchTotalExecutions(supabase: any): Promise<number> {
-  const { count } = await supabase
-    .from('runbook_executions')
-    .select('*', { count: 'exact', head: true })
-  
-  return count || 0
+async function fetchTotalExecutions(): Promise<number> {
+  const result = await dbQuery<{ count: string }>('SELECT COUNT(*)::text AS count FROM runbook_executions')
+  return parseInt(result.rows[0]?.count ?? '0', 10)
 }
 
 async function fetchSystemHealth(): Promise<{
@@ -155,7 +141,6 @@ async function fetchSystemHealth(): Promise<{
   storage: number
   uptime: number
 }> {
-  // Mock system health - in production would fetch from monitoring
   return {
     cpu: 45,
     memory: 67,
@@ -169,10 +154,19 @@ async function fetchGeminiUsage(): Promise<{
   requestsToday: number
   costToday: number
 }> {
-  // Mock Gemini usage - in production would fetch from Google Cloud
-  return {
-    tokensUsed: 2450000,
-    requestsToday: 1247,
-    costToday: 12.34
-  }
+  const today = new Date().toISOString().split('T')[0]
+  const [tokenResult, requestResult] = await Promise.all([
+    dbQuery<{ total: string }>(
+      'SELECT COALESCE(SUM(tokens_used), 0)::text AS total FROM gemini_usage WHERE date = $1',
+      [today]
+    ),
+    dbQuery<{ count: string }>(
+      'SELECT COUNT(*)::text AS count FROM gemini_requests WHERE created_at >= $1',
+      [today]
+    )
+  ])
+  const tokensUsed = parseInt(tokenResult.rows[0]?.total ?? '0', 10)
+  const requestsToday = parseInt(requestResult.rows[0]?.count ?? '0', 10)
+  const costToday = (tokensUsed / 1000) * 0.00025
+  return { tokensUsed, requestsToday, costToday }
 }

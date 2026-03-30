@@ -3,11 +3,7 @@ import type { Metadata } from "next"
 import { SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
 import DashboardRootPage from "@/app/dashboard/page"
 
-export const revalidate = 60
-
-export async function generateStaticParams() {
-  return SUPPORTED_LOCALES.map((lang) => ({ lang }))
-}
+export const dynamic = 'force-dynamic'
 
 export async function generateMetadata(props: { params: { lang: string } }): Promise<Metadata> {
   const params = props.params

@@ -156,7 +156,14 @@
     "dayPassSub": "24 часа полного доступа",
     "links": "Links",
     "llmTitle": "Optional: LLM Mode",
-    "llmDesc": "Optional: LLM Mode"
+    "llmDesc": "Optional: LLM Mode",
+    "pageSubtitle": "Живая вселенная runbook'ов",
+    "prefillNote": "Предзаполнено: {q} — скопируйте это в поле ввода или нажмите на подсказку ниже.",
+    "voiceTitle": "🎤 Голосовой Copilot",
+    "voiceDesc": "Опишите проблему голосом – Web Speech API распознаёт её, Gemini анализирует и читает ответ вслух.",
+    "voiceUpgrade": "🔒 Безлимитный голос → Обновитесь до Pro",
+    "sandboxTitle": "🧪 Живая песочница для исправлений",
+    "sandboxDesc": "Вставьте конфигурацию и немедленно проанализируйте на наличие проблем безопасности – nginx, Docker, Terraform, K8s."
   },
   "live": {
     "title": "Ops Wall",

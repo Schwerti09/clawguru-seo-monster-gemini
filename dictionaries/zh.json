@@ -154,7 +154,14 @@
     "allPlans": "All Plans →",
     "links": "Links",
     "llmTitle": "Optional: LLM Mode",
-    "llmDesc": "Optional: LLM Mode"
+    "llmDesc": "Optional: LLM Mode",
+    "pageSubtitle": "运维手册的活跃宇宙",
+    "prefillNote": "预填内容：{q} — 将其复制到输入框，或点击下方的建议。",
+    "voiceTitle": "🎤 语音副驾驶",
+    "voiceDesc": "说出您的问题 – Web Speech API 识别它，Gemini 分析它并大声朗读答案。",
+    "voiceUpgrade": "🔒 无限语音 → 升级到 Pro",
+    "sandboxTitle": "🧪 实时修复沙箱",
+    "sandboxDesc": "粘贴您的配置并立即分析安全问题 – nginx、Docker、Terraform、K8s。"
   },
   "live": {
     "title": "Ops Wall",

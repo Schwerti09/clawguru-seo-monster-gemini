@@ -43,7 +43,14 @@
     "allPlans": "All Plans →",
     "links": "Links",
     "llmTitle": "Optional: LLM Mode",
-    "llmDesc": "Optional: LLM Mode"
+    "llmDesc": "Optional: LLM Mode",
+    "pageSubtitle": "The living universe of runbooks",
+    "prefillNote": "Prefill: {q} — copy that into the input or click a followup below.",
+    "voiceTitle": "🎤 Voice Copilot",
+    "voiceDesc": "Speak your problem – Web Speech API recognises it, Gemini analyses it and reads the answer aloud.",
+    "voiceUpgrade": "🔒 Unlimited Voice → Upgrade to Pro",
+    "sandboxTitle": "🧪 Live Fix Sandbox",
+    "sandboxDesc": "Paste your config and instantly analyse it for security issues – nginx, Docker, Terraform, K8s."
   },
   "live": {
     "title": "Ops Wall",
@@ -379,18 +386,47 @@
     "sectionGet": "What you get",
     "timelineTitle": "ClawVerse Timeline",
     "timelineItems": [
-      { "y": "2026", "t": "ClawGuru Launch", "d": "Public launch with Ops‑Intel & Copilot" },
-      { "y": "2026 Q1", "t": "Mycelium v3", "d": "New UI, performance, embed mode" },
-      { "y": "2026 Q2", "t": "3.4M Runbooks", "d": "Massive vault upgrade & quality seal" }
+      {
+        "y": "2026",
+        "t": "ClawGuru Launch",
+        "d": "Public launch with Ops‑Intel & Copilot"
+      },
+      {
+        "y": "2026 Q1",
+        "t": "Mycelium v3",
+        "d": "New UI, performance, embed mode"
+      },
+      {
+        "y": "2026 Q2",
+        "t": "3.4M Runbooks",
+        "d": "Massive vault upgrade & quality seal"
+      }
     ],
     "copilotInit": "Initializing Copilot…",
     "trustedBy": "Trusted by SecOps Leaders",
-    "trustedLogos": ["ACME Cloud", "HelixOps", "NordSec", "Vector Labs"],
+    "trustedLogos": [
+      "ACME Cloud",
+      "HelixOps",
+      "NordSec",
+      "Vector Labs"
+    ],
     "stats": [
-      { "v": "94", "l": "ClawScore" },
-      { "v": "3.4M", "l": "Runbooks" },
-      { "v": "128K", "l": "Checks" },
-      { "v": "Quantum", "l": "Resistant" }
+      {
+        "v": "94",
+        "l": "ClawScore"
+      },
+      {
+        "v": "3.4M",
+        "l": "Runbooks"
+      },
+      {
+        "v": "128K",
+        "l": "Checks"
+      },
+      {
+        "v": "Quantum",
+        "l": "Resistant"
+      }
     ],
     "finalCta": "Day Pass €9 – Instant access"
   }

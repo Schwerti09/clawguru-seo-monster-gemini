@@ -43,7 +43,14 @@
     "allPlans": "Wszystkie plany →",
     "links": "Links",
     "llmTitle": "Optional: LLM Mode",
-    "llmDesc": "Optional: LLM Mode"
+    "llmDesc": "Optional: LLM Mode",
+    "pageSubtitle": "Żywe universum runbooków",
+    "prefillNote": "Wstępnie wypełnione: {q} — skopiuj to do pola wejściowego lub kliknij sugestię poniżej.",
+    "voiceTitle": "🎤 Głosowy Copilot",
+    "voiceDesc": "Opisz swój problem głosem – Web Speech API go rozpozna, Gemini zanalizuje i odczyta odpowiedź na głos.",
+    "voiceUpgrade": "🔒 Nieograniczony głos → Przejdź na Pro",
+    "sandboxTitle": "🧪 Piaskownica napraw na żywo",
+    "sandboxDesc": "Wklej swoją konfigurację i natychmiast przeanalizuj ją pod kątem problemów bezpieczeństwa – nginx, Docker, Terraform, K8s."
   },
   "live": {
     "title": "Ops Wall",

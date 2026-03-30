@@ -154,7 +154,14 @@
     "allPlans": "Todos os planos →",
     "links": "Links",
     "llmTitle": "Optional: LLM Mode",
-    "llmDesc": "Optional: LLM Mode"
+    "llmDesc": "Optional: LLM Mode",
+    "pageSubtitle": "O universo vivo dos runbooks",
+    "prefillNote": "Pré-preenchido: {q} — copie isso para o campo de entrada ou clique em uma sugestão abaixo.",
+    "voiceTitle": "🎤 Copilot de Voz",
+    "voiceDesc": "Fale sobre o seu problema – Web Speech API reconhece, Gemini analisa e lê a resposta em voz alta.",
+    "voiceUpgrade": "🔒 Voz ilimitada → Atualize para Pro",
+    "sandboxTitle": "🧪 Sandbox de Correção ao Vivo",
+    "sandboxDesc": "Cole sua configuração e analise-a instantaneamente para problemas de segurança – nginx, Docker, Terraform, K8s."
   },
   "live": {
     "title": "Ops Wall",

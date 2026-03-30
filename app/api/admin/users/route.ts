@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server'
 import { dbQuery } from '@/lib/db'
 
+export const dynamic = 'force-dynamic'
+
 const MOCK_USERS = [
   {
     id: '1',

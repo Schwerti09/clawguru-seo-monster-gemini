@@ -3,7 +3,7 @@ import type { Metadata } from "next"
 import { SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
 import RootPage from "@/app/tools/check-[service_name]/page"
 
-export const revalidate = 60
+export const dynamic = "force-dynamic"
 
 export async function generateStaticParams() {
   return SUPPORTED_LOCALES.map((lang) => ({ lang }))

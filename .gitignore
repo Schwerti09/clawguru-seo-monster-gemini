@@ -25,6 +25,11 @@ env-*.production
 
 # common backup artifacts
 *.bak
+*.bakcmd
+
+# Shell artifacts
+(
+({
 
 # mac / windows junk
 .DS_Store
@@ -73,7 +78,7 @@ clawguru-seo-monster-gemini-*/
 .lhtmp4-live/
 
  
-# large local bundles/archives — never commit
+# large local bundles/archives ï¿½ never commit
 *.tgz
 *.tar.gz
 *.tar

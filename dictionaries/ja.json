@@ -154,7 +154,14 @@
     "allPlans": "All Plans →",
     "links": "Links",
     "llmTitle": "Optional: LLM Mode",
-    "llmDesc": "Optional: LLM Mode"
+    "llmDesc": "Optional: LLM Mode",
+    "pageSubtitle": "ランブックの生きた宇宙",
+    "prefillNote": "事前入力: {q} — これを入力フィールドにコピーするか、下のフォローアップをクリックしてください。",
+    "voiceTitle": "🎤 音声コパイロット",
+    "voiceDesc": "問題を話してください – Web Speech APIが認識し、Geminiが分析して回答を読み上げます。",
+    "voiceUpgrade": "🔒 無制限音声 → Proにアップグレード",
+    "sandboxTitle": "🧪 ライブフィックスサンドボックス",
+    "sandboxDesc": "設定を貼り付けてセキュリティ問題をすぐに分析 – nginx、Docker、Terraform、K8s。"
   },
   "live": {
     "title": "Ops Wall",

@@ -43,7 +43,14 @@
     "allPlans": "सभी प्लान →",
     "links": "Links",
     "llmTitle": "Optional: LLM Mode",
-    "llmDesc": "Optional: LLM Mode"
+    "llmDesc": "Optional: LLM Mode",
+    "pageSubtitle": "Runbooks का जीवंत ब्रह्मांड",
+    "prefillNote": "प्री-फिल: {q} — इसे इनपुट में कॉपी करें या नीचे एक सुझाव पर क्लिक करें।",
+    "voiceTitle": "🎤 वॉयस कोपायलट",
+    "voiceDesc": "अपनी समस्या बोलें – Web Speech API इसे पहचानती है, Gemini इसका विश्लेषण करता है और उत्तर जोर से पढ़ता है।",
+    "voiceUpgrade": "🔒 असीमित वॉयस → Pro में अपग्रेड करें",
+    "sandboxTitle": "🧪 लाइव फिक्स सैंडबॉक्स",
+    "sandboxDesc": "अपना कॉन्फिग यहाँ पेस्ट करें और सुरक्षा समस्याओं के लिए तुरंत विश्लेषण करें – nginx, Docker, Terraform, K8s।"
   },
   "live": {
     "title": "Ops Wall",

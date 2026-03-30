@@ -154,7 +154,14 @@
     "allPlans": "كل الخطط →",
     "links": "Links",
     "llmTitle": "Optional: LLM Mode",
-    "llmDesc": "Optional: LLM Mode"
+    "llmDesc": "Optional: LLM Mode",
+    "pageSubtitle": "عالم Runbooks الحي",
+    "prefillNote": "مُدخَل مسبقاً: {q} — انسخ ذلك في حقل الإدخال أو انقر على أحد الاقتراحات أدناه.",
+    "voiceTitle": "🎤 المساعد الصوتي",
+    "voiceDesc": "تحدث عن مشكلتك – Web Speech API تتعرف عليها، Gemini يحللها ويقرأ الإجابة بصوت عالٍ.",
+    "voiceUpgrade": "🔒 صوت غير محدود → الترقية إلى Pro",
+    "sandboxTitle": "🧪 صندوق الاختبار المباشر",
+    "sandboxDesc": "الصق إعداداتك وقم بتحليلها فورياً للكشف عن ثغرات أمنية – nginx، Docker، Terraform، K8s."
   },
   "live": {
     "title": "Ops Wall",
@@ -378,18 +385,47 @@
     "sectionGet": "ما الذي ستحصل عليه",
     "timelineTitle": "ClawVerse Timeline",
     "timelineItems": [
-      { "y": "2026", "t": "إطلاق ClawGuru", "d": "إطلاق عام مع Ops‑Intel وCopilot" },
-      { "y": "2026 Q1", "t": "Mycelium v3", "d": "واجهة جديدة، أداء، وضع التضمين" },
-      { "y": "2026 Q2", "t": "3.4M Runbooks", "d": "ترقية ضخمة للمخزن وختم الجودة" }
+      {
+        "y": "2026",
+        "t": "إطلاق ClawGuru",
+        "d": "إطلاق عام مع Ops‑Intel وCopilot"
+      },
+      {
+        "y": "2026 Q1",
+        "t": "Mycelium v3",
+        "d": "واجهة جديدة، أداء، وضع التضمين"
+      },
+      {
+        "y": "2026 Q2",
+        "t": "3.4M Runbooks",
+        "d": "ترقية ضخمة للمخزن وختم الجودة"
+      }
     ],
     "copilotInit": "جارٍ تهيئة Copilot…",
     "trustedBy": "موثوق به من قادة SecOps",
-    "trustedLogos": ["ACME Cloud", "HelixOps", "NordSec", "Vector Labs"],
+    "trustedLogos": [
+      "ACME Cloud",
+      "HelixOps",
+      "NordSec",
+      "Vector Labs"
+    ],
     "stats": [
-      { "v": "94", "l": "ClawScore" },
-      { "v": "3.4M", "l": "Runbooks" },
-      { "v": "128K", "l": "Checks" },
-      { "v": "Quantum", "l": "Resistant" }
+      {
+        "v": "94",
+        "l": "ClawScore"
+      },
+      {
+        "v": "3.4M",
+        "l": "Runbooks"
+      },
+      {
+        "v": "128K",
+        "l": "Checks"
+      },
+      {
+        "v": "Quantum",
+        "l": "Resistant"
+      }
     ],
     "finalCta": "Day Pass €9 – وصول فوري"
   }

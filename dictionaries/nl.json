@@ -43,7 +43,14 @@
     "allPlans": "Alle plannen →",
     "links": "Links",
     "llmTitle": "Optional: LLM Mode",
-    "llmDesc": "Optional: LLM Mode"
+    "llmDesc": "Optional: LLM Mode",
+    "pageSubtitle": "Het levende universum van runbooks",
+    "prefillNote": "Vooraf ingevuld: {q} — kopieer dit naar het invoerveld of klik op een suggestie hieronder.",
+    "voiceTitle": "🎤 Spraak Copilot",
+    "voiceDesc": "Spreek uw probleem in – Web Speech API herkent het, Gemini analyseert het en leest het antwoord voor.",
+    "voiceUpgrade": "🔒 Onbeperkte spraak → Upgrade naar Pro",
+    "sandboxTitle": "🧪 Live Fix Sandbox",
+    "sandboxDesc": "Plak uw configuratie en analyseer deze direct op beveiligingsproblemen – nginx, Docker, Terraform, K8s."
   },
   "live": {
     "title": "Ops Wall",

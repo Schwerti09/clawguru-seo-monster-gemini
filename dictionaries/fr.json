@@ -154,7 +154,14 @@
     "allPlans": "Tous les plans →",
     "links": "Links",
     "llmTitle": "Optional: LLM Mode",
-    "llmDesc": "Optional: LLM Mode"
+    "llmDesc": "Optional: LLM Mode",
+    "pageSubtitle": "L'univers vivant des runbooks",
+    "prefillNote": "Prérempli : {q} — copiez ceci dans le champ de saisie ou cliquez sur une suggestion ci-dessous.",
+    "voiceTitle": "🎤 Copilot Vocal",
+    "voiceDesc": "Parlez de votre problème – Web Speech API le reconnaît, Gemini l'analyse et lit la réponse à voix haute.",
+    "voiceUpgrade": "🔒 Voix illimitée → Passer à Pro",
+    "sandboxTitle": "🧪 Sandbox de Correction en Direct",
+    "sandboxDesc": "Collez votre configuration et analysez-la instantanément pour détecter des problèmes de sécurité – nginx, Docker, Terraform, K8s."
   },
   "live": {
     "title": "Ops Wall",

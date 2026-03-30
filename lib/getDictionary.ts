@@ -53,6 +53,13 @@ export type Dictionary = {
     links: string
     llmTitle: string
     llmDesc: string
+    pageSubtitle: string
+    prefillNote: string
+    voiceTitle: string
+    voiceDesc: string
+    voiceUpgrade: string
+    sandboxTitle: string
+    sandboxDesc: string
   }
   live: {
     title: string

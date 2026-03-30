@@ -43,7 +43,14 @@
     "allPlans": "Tüm planlar →",
     "links": "Links",
     "llmTitle": "Optional: LLM Mode",
-    "llmDesc": "Optional: LLM Mode"
+    "llmDesc": "Optional: LLM Mode",
+    "pageSubtitle": "Runbook'ların canlı evreni",
+    "prefillNote": "Ön doldurulmuş: {q} — bunu giriş alanına kopyalayın veya aşağıdaki bir öneriyi tıklayın.",
+    "voiceTitle": "🎤 Sesli Copilot",
+    "voiceDesc": "Sorununuzu söyleyin – Web Speech API tanır, Gemini analiz eder ve cevabı sesli okur.",
+    "voiceUpgrade": "🔒 Sınırsız Ses → Pro'ya Yükseltin",
+    "sandboxTitle": "🧪 Canlı Düzeltme Sandbox'ı",
+    "sandboxDesc": "Yapılandırmanızı yapıştırın ve güvenlik sorunları için anında analiz edin – nginx, Docker, Terraform, K8s."
   },
   "live": {
     "title": "Ops Wall",

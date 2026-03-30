@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server'
 import { dbQuery } from '@/lib/db'
 
+export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
+
 export async function GET() {
   if (!process.env.DATABASE_URL) {
     return NextResponse.json({ total: 1247, active: 892 })

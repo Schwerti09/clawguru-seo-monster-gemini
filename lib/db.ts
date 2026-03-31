@@ -10,8 +10,13 @@ function createPool(): Pool {
   if (!connectionString) {
     throw new Error("DATABASE_URL is not set")
   }
+  // Strip sslmode from the connection string so that newer versions of pg
+  // (which warn when sslmode is 'prefer', 'require', or 'verify-ca') do not
+  // emit the SECURITY WARNING. SSL is configured programmatically below.
+  const url = new URL(connectionString)
+  url.searchParams.delete("sslmode")
   return new Pool({
-    connectionString,
+    connectionString: url.toString(),
     // Neon requires SSL; rejectUnauthorized=false works with Neon pooler
     ssl: { rejectUnauthorized: false },
     // Vercel functions are short-lived: keep the pool small to avoid

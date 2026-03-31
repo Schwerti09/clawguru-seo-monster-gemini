@@ -69,7 +69,7 @@ export default async function SuccessPage(
           kicker="Checkout"
           title={ok ? "Zugang freigeschaltet" : "Noch nicht bestätigt"}
           subtitle={ok
-            ? "Aktiviere deinen Zugriff und geh in Mission Mode."
+            ? "Aktivierung wird erneut versucht – oder klicke den Button unten."
             : "Zahlung wurde noch nicht bestätigt."}
         />
 

@@ -42,6 +42,7 @@ export function BillingTab({ tier, onUpgrade, data }: BillingTabProps) {
   const currentConfig = TIER_CONFIGS[tier]
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('monthly')
   const [portalLoading, setPortalLoading] = useState(false)
+  const [portalError, setPortalError] = useState(false)
   // Real usage from data
   const realUsage = {
     executions: data.totalExecutions,
@@ -314,6 +315,7 @@ export function BillingTab({ tier, onUpgrade, data }: BillingTabProps) {
             <motion.button
               onClick={async () => {
                 setPortalLoading(true)
+                setPortalError(false)
                 try {
                   const res = await fetch('/api/stripe/portal', { method: 'POST' })
                   const json = await res.json().catch(() => null)
@@ -321,7 +323,10 @@ export function BillingTab({ tier, onUpgrade, data }: BillingTabProps) {
                     window.location.href = json.url
                     return
                   }
-                } catch { /* fall through */ }
+                  setPortalError(true)
+                } catch {
+                  setPortalError(true)
+                }
                 setPortalLoading(false)
               }}
               disabled={portalLoading || tier === 'explorer'}
@@ -333,6 +338,11 @@ export function BillingTab({ tier, onUpgrade, data }: BillingTabProps) {
               <CreditCard className="w-4 h-4" />
               {portalLoading ? 'Wird geladen…' : 'Billing Portal öffnen'}
             </motion.button>
+            {portalError && (
+              <p className="mt-2 text-xs text-red-400 text-center">
+                Billing Portal konnte nicht geöffnet werden. Bitte versuche es später erneut.
+              </p>
+            )}
           </div>
         </div>
       </motion.div>

@@ -211,7 +211,10 @@ async function callGemini(prompt: string): Promise<CallResult> {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             contents: [{ role: "user", parts: [{ text: prompt }] }],
-            generationConfig: { temperature: 0.35, maxOutputTokens: 900 },
+            generationConfig: {
+              temperature: 0.35,
+              maxOutputTokens: parseInt(process.env.GEMINI_MAX_OUTPUT_TOKENS || "2048", 10),
+            },
           }),
         });
         lastStatus = res.status;
@@ -285,7 +288,7 @@ export async function generateOrdered(prompt: string, preferred?: AiProvider): P
         { role: "user", content: prompt },
       ]);
     } else if (p === "gemini") {
-      result = await callGemini(prompt);
+      result = await callGemini(`${systemJson}\n\n${prompt}`);
     }
 
     if (result.text) {

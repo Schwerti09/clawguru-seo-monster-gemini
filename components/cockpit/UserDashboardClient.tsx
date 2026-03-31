@@ -53,7 +53,7 @@ export function UserDashboardClient({ user, tier, initialData }: UserDashboardCl
     const isShadowed = isFeatureShadowed(tier, activeTab as keyof typeof TIER_CONFIGS.explorer.canAccess)
     switch (activeTab) {
       case 'overview':
-        return <OverviewTab data={initialData} isShadowed={isShadowed} />
+        return <OverviewTab data={initialData} tier={tier} onUpgrade={() => setShowUpgradeModal(true)} />
       case 'mycelium':
         return <MyceliumTab isShadowed={isShadowed} nodes={initialData.nodes} />
       case 'tools':

@@ -343,27 +343,21 @@ export default function PerfectionDashboard() {
         )}
 
         {/* Stats */}
-        <div className="mt-12 bg-slate-900 rounded-2xl p-6 text-white">
-          <h3 className="text-xl font-bold mb-4">📊 System Stats</h3>
-          <div className="grid md:grid-cols-4 gap-4">
-            <div>
-              <p className="text-slate-400">Total Pages Generated</p>
-              <p className="text-2xl font-bold">{jobs.length + 42}</p>
-            </div>
-            <div>
-              <p className="text-slate-400">Avg Quality Score</p>
-              <p className="text-2xl font-bold">94/100</p>
-            </div>
-            <div>
-              <p className="text-slate-400">Total Value Created</p>
-              <p className="text-2xl font-bold">€{(jobs.length * selectedTier.sellPrice + 3150).toLocaleString()}</p>
-            </div>
-            <div>
-              <p className="text-slate-400">Avg Generation Cost</p>
-              <p className="text-2xl font-bold">€0.05</p>
+        {jobs.length > 0 && (
+          <div className="mt-12 bg-slate-900 rounded-2xl p-6 text-white">
+            <h3 className="text-xl font-bold mb-4">📊 Session Stats</h3>
+            <div className="grid md:grid-cols-2 gap-4">
+              <div>
+                <p className="text-slate-400">Pages Generated (diese Session)</p>
+                <p className="text-2xl font-bold">{jobs.length}</p>
+              </div>
+              <div>
+                <p className="text-slate-400">Gesamtwert dieser Session</p>
+                <p className="text-2xl font-bold">€{(jobs.length * selectedTier.sellPrice).toLocaleString()}</p>
+              </div>
             </div>
           </div>
-        </div>
+        )}
 
         {/* JSON-LD Product Schema for SEO */}
         <script

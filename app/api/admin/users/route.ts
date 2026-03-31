@@ -3,33 +3,9 @@ import { dbQuery } from '@/lib/db'
 
 export const dynamic = 'force-dynamic'
 
-const MOCK_USERS = [
-  {
-    id: '1',
-    email: 'user1@example.com',
-    tier: 'pro',
-    created_at: '2024-01-15T10:00:00Z',
-    last_active: new Date().toISOString()
-  },
-  {
-    id: '2',
-    email: 'user2@example.com',
-    tier: 'enterprise',
-    created_at: '2024-02-20T14:30:00Z',
-    last_active: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString()
-  },
-  {
-    id: '3',
-    email: 'user3@example.com',
-    tier: 'daypass',
-    created_at: '2024-03-10T09:15:00Z',
-    last_active: null
-  }
-]
-
 export async function GET() {
   if (!process.env.DATABASE_URL) {
-    return NextResponse.json(MOCK_USERS)
+    return NextResponse.json({ error: 'Database not configured' }, { status: 503 })
   }
 
   try {
@@ -56,6 +32,6 @@ export async function GET() {
     return NextResponse.json(result.rows)
   } catch (error) {
     console.error('Users API error:', error)
-    return NextResponse.json(MOCK_USERS)
+    return NextResponse.json({ error: 'Failed to fetch user data' }, { status: 500 })
   }
 }

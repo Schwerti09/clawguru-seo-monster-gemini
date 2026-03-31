@@ -3,42 +3,9 @@ import { dbQuery } from '@/lib/db'
 
 export const dynamic = 'force-dynamic'
 
-const MOCK_EXECUTIONS = [
-  {
-    id: '1',
-    runbook_name: 'SSH Hardening 2026',
-    user_email: 'user1@example.com',
-    status: 'completed',
-    duration: '2m 34s',
-    success_rate: 95,
-    output: 'SSH configuration updated successfully',
-    created_at: '2024-03-29T10:30:00Z'
-  },
-  {
-    id: '2',
-    runbook_name: 'Docker Security Scan',
-    user_email: 'user2@example.com',
-    status: 'running',
-    duration: null,
-    success_rate: 0,
-    output: 'Scanning Docker containers...',
-    created_at: '2024-03-29T09:15:00Z'
-  },
-  {
-    id: '3',
-    runbook_name: 'Nginx CSP Configuration',
-    user_email: 'user3@example.com',
-    status: 'failed',
-    duration: '1m 12s',
-    success_rate: 45,
-    output: 'Failed to apply CSP headers',
-    created_at: '2024-03-29T08:45:00Z'
-  }
-]
-
 export async function GET() {
   if (!process.env.DATABASE_URL) {
-    return NextResponse.json(MOCK_EXECUTIONS)
+    return NextResponse.json({ error: 'Database not configured' }, { status: 503 })
   }
 
   try {
@@ -71,6 +38,6 @@ export async function GET() {
     return NextResponse.json(result.rows)
   } catch (error) {
     console.error('Executions API error:', error)
-    return NextResponse.json(MOCK_EXECUTIONS)
+    return NextResponse.json({ error: 'Failed to fetch execution data' }, { status: 500 })
   }
 }

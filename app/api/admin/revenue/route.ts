@@ -3,36 +3,9 @@ import { dbQuery } from '@/lib/db'
 
 export const dynamic = 'force-dynamic'
 
-const MOCK_REVENUE = [
-  {
-    id: '1',
-    user_email: 'user1@example.com',
-    tier: 'pro',
-    amount: 49.00,
-    status: 'completed',
-    created_at: '2024-03-29T10:30:00Z'
-  },
-  {
-    id: '2',
-    user_email: 'user2@example.com',
-    tier: 'enterprise',
-    amount: 199.00,
-    status: 'completed',
-    created_at: '2024-03-29T09:15:00Z'
-  },
-  {
-    id: '3',
-    user_email: 'user3@example.com',
-    tier: 'daypass',
-    amount: 9.00,
-    status: 'pending',
-    created_at: '2024-03-29T08:45:00Z'
-  }
-]
-
 export async function GET() {
   if (!process.env.DATABASE_URL) {
-    return NextResponse.json(MOCK_REVENUE)
+    return NextResponse.json({ error: 'Database not configured' }, { status: 503 })
   }
 
   try {
@@ -61,6 +34,6 @@ export async function GET() {
     return NextResponse.json(result.rows)
   } catch (error) {
     console.error('Revenue API error:', error)
-    return NextResponse.json(MOCK_REVENUE)
+    return NextResponse.json({ error: 'Failed to fetch revenue data' }, { status: 500 })
   }
 }

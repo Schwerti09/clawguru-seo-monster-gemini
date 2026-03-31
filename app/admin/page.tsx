@@ -7,25 +7,6 @@ import { dbQuery } from '@/lib/db'
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
 
-const MOCK_DATA = {
-  totalUsers: 1247,
-  activeUsers: 892,
-  revenueToday: 342.50,
-  revenueMonth: 12480.00,
-  totalExecutions: 15678,
-  systemHealth: {
-    cpu: 45,
-    memory: 67,
-    storage: 23,
-    uptime: 99.9
-  },
-  geminiUsage: {
-    tokensUsed: 2450000,
-    requestsToday: 1247,
-    costToday: 12.34
-  }
-}
-
 export default async function AdminPage() {
   // Verify admin session via cookie
   const cookieStore = await cookies()
@@ -33,17 +14,15 @@ export default async function AdminPage() {
   const session = token ? verifyAdminToken(token) : null
   if (!session) redirect('/admin/login')
 
-  // If DATABASE_URL is not set, return mock data for development
   if (!process.env.DATABASE_URL) {
     return (
-      <AdminDashboardClient
-        user={{
-          id: 'dev-user',
-          email: 'dev@clawguru.org',
-          name: session.u
-        }}
-        initialData={MOCK_DATA}
-      />
+      <div className="min-h-screen flex items-center justify-center bg-black text-white">
+        <div className="text-center p-8">
+          <div className="text-4xl mb-4">⚠️</div>
+          <h2 className="text-xl font-bold mb-2">Datenbank nicht konfiguriert</h2>
+          <p className="text-gray-400">Bitte DATABASE_URL setzen, um das Admin-Dashboard zu nutzen.</p>
+        </div>
+      </div>
     )
   }
 
@@ -84,16 +63,16 @@ export default async function AdminPage() {
         }}
       />
     )
-  } catch {
+  } catch (err) {
+    console.error('Admin dashboard data fetch failed:', err)
     return (
-      <AdminDashboardClient
-        user={{
-          id: 'admin',
-          email: `${session.u}@clawguru.org`,
-          name: session.u
-        }}
-        initialData={MOCK_DATA}
-      />
+      <div className="min-h-screen flex items-center justify-center bg-black text-white">
+        <div className="text-center p-8">
+          <div className="text-4xl mb-4">❌</div>
+          <h2 className="text-xl font-bold mb-2">Datenbankfehler</h2>
+          <p className="text-gray-400">Die Daten konnten nicht geladen werden. Bitte versuche es erneut.</p>
+        </div>
+      </div>
     )
   }
 }
@@ -141,11 +120,17 @@ async function fetchSystemHealth(): Promise<{
   storage: number
   uptime: number
 }> {
+  const memUsage = process.memoryUsage()
+  const memoryPct = Math.round((memUsage.heapUsed / memUsage.heapTotal) * 100)
+
   return {
-    cpu: 45,
-    memory: 67,
-    storage: 23,
-    uptime: 99.9
+    // CPU: not reliably measurable in a single invocation without a time-interval baseline
+    cpu: 0,
+    memory: memoryPct,
+    // Storage: requires OS-level disk access unavailable in serverless environments
+    storage: 0,
+    // Uptime in seconds, capped at 100 for progress-bar display (100 = stable, running > 100s)
+    uptime: Math.min(100, Math.round(process.uptime())),
   }
 }
 

@@ -147,11 +147,21 @@ test.describe("Activate endpoint – redirect logic", () => {
         await route.continue()
         return
       }
+      // Inject cookie directly into the browser context for reliable cookie setting
+      await page.context().addCookies([{
+        name: "claw_access",
+        value: token,
+        domain: "localhost",
+        path: "/",
+        httpOnly: true,
+        sameSite: "Lax",
+        secure: false,
+        expires: Math.floor(Date.now() / 1000) + 86_400,
+      }])
       await route.fulfill({
         status: 302,
         headers: {
           Location: `${BASE_URL}/dashboard`,
-          "Set-Cookie": `claw_access=${token}; Path=/; HttpOnly; SameSite=Lax; Max-Age=86400`,
         },
         body: "",
       })
@@ -190,11 +200,21 @@ test.describe("Redirect chain integrity", () => {
     await page.route(`**/api/auth/activate*`, async (route) => {
       const url = new URL(route.request().url())
       if (url.searchParams.get("session_id") !== SESSION) return route.continue()
+      // Inject cookie directly into the browser context for reliable cookie setting
+      await page.context().addCookies([{
+        name: "claw_access",
+        value: token,
+        domain: "localhost",
+        path: "/",
+        httpOnly: true,
+        sameSite: "Lax",
+        secure: false,
+        expires: Math.floor(Date.now() / 1000) + 3_600,
+      }])
       await route.fulfill({
         status: 302,
         headers: {
           Location: `${BASE_URL}/dashboard`,
-          "Set-Cookie": `claw_access=${token}; Path=/; HttpOnly; SameSite=Lax; Max-Age=3600`,
         },
         body: "",
       })
@@ -202,8 +222,8 @@ test.describe("Redirect chain integrity", () => {
 
     await page.goto("/pricing")
     const buyBtn = page
-      .getByRole("link", { name: /pro.*kaufen|pro.*buchen|buy.*pro/i })
-      .or(page.getByRole("button", { name: /pro.*kaufen|pro.*buchen|buy.*pro/i }))
+      .getByRole("link", { name: /pro.*(kaufen|buchen|starten)|buy.*pro/i })
+      .or(page.getByRole("button", { name: /pro.*(kaufen|buchen|starten)|buy.*pro/i }))
       .first()
     await expect(buyBtn).toBeVisible({ timeout: 10_000 })
     await buyBtn.click()

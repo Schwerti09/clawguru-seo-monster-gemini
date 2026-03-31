@@ -21,7 +21,7 @@ const TEST_SUBSCRIPTION_ID = "sub_test_pro_playwright"
 const TEST_CUSTOMER_ID = "cus_test_pro_playwright"
 
 test.describe("Pro Subscription Purchase – Full E2E Flow", () => {
-  test.beforeEach(async ({ page }) => {
+  test.beforeEach(async ({ context, page }) => {
     // ── Mock checkout endpoint ────────────────────────────────────────────
     await page.route("**/api/stripe/checkout", async (route) => {
       if (route.request().method() !== "POST") {
@@ -51,11 +51,21 @@ test.describe("Pro Subscription Purchase – Full E2E Flow", () => {
         subscriptionId: TEST_SUBSCRIPTION_ID,
         expiresInSeconds: 30 * 24 * 3_600, // 30 days
       })
+      // Inject cookie directly into the browser context for reliable cookie setting
+      await context.addCookies([{
+        name: "claw_access",
+        value: token,
+        domain: "localhost",
+        path: "/",
+        httpOnly: true,
+        sameSite: "Lax",
+        secure: false,
+        expires: Math.floor(Date.now() / 1000) + 30 * 24 * 3_600,
+      }])
       await route.fulfill({
         status: 302,
         headers: {
           Location: `${BASE_URL}/dashboard`,
-          "Set-Cookie": `claw_access=${token}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${30 * 24 * 3_600}`,
         },
         body: "",
       })
@@ -90,8 +100,8 @@ test.describe("Pro Subscription Purchase – Full E2E Flow", () => {
     await page.goto("/pricing")
 
     const proBtn = page
-      .getByRole("link", { name: /pro.*kaufen|pro.*buchen|buy.*pro/i })
-      .or(page.getByRole("button", { name: /pro.*kaufen|pro.*buchen|buy.*pro/i }))
+      .getByRole("link", { name: /pro.*(kaufen|buchen|starten)|buy.*pro/i })
+      .or(page.getByRole("button", { name: /pro.*(kaufen|buchen|starten)|buy.*pro/i }))
       .first()
     await expect(proBtn).toBeVisible({ timeout: 10_000 })
     await proBtn.click()
@@ -107,8 +117,8 @@ test.describe("Pro Subscription Purchase – Full E2E Flow", () => {
   test("all tabs are accessible for pro tier after purchase", async ({ page }) => {
     await page.goto("/pricing")
     const proBtn = page
-      .getByRole("link", { name: /pro.*kaufen|pro.*buchen|buy.*pro/i })
-      .or(page.getByRole("button", { name: /pro.*kaufen|pro.*buchen|buy.*pro/i }))
+      .getByRole("link", { name: /pro.*(kaufen|buchen|starten)|buy.*pro/i })
+      .or(page.getByRole("button", { name: /pro.*(kaufen|buchen|starten)|buy.*pro/i }))
       .first()
     await proBtn.click()
     await page.waitForURL(/dashboard/, { timeout: 20_000 })
@@ -129,8 +139,8 @@ test.describe("Pro Subscription Purchase – Full E2E Flow", () => {
   test("billing tab shows portal link for pro tier", async ({ page }) => {
     await page.goto("/pricing")
     const proBtn = page
-      .getByRole("link", { name: /pro.*kaufen|pro.*buchen|buy.*pro/i })
-      .or(page.getByRole("button", { name: /pro.*kaufen|pro.*buchen|buy.*pro/i }))
+      .getByRole("link", { name: /pro.*(kaufen|buchen|starten)|buy.*pro/i })
+      .or(page.getByRole("button", { name: /pro.*(kaufen|buchen|starten)|buy.*pro/i }))
       .first()
     await proBtn.click()
     await page.waitForURL(/dashboard/, { timeout: 20_000 })
@@ -173,8 +183,8 @@ test.describe("Pro Subscription Purchase – Full E2E Flow", () => {
 
     await page.goto("/pricing")
     const proBtn = page
-      .getByRole("link", { name: /pro.*kaufen|pro.*buchen|buy.*pro/i })
-      .or(page.getByRole("button", { name: /pro.*kaufen|pro.*buchen|buy.*pro/i }))
+      .getByRole("link", { name: /pro.*(kaufen|buchen|starten)|buy.*pro/i })
+      .or(page.getByRole("button", { name: /pro.*(kaufen|buchen|starten)|buy.*pro/i }))
       .first()
     await proBtn.click()
     await page.waitForURL(/dashboard|activate/, { timeout: 15_000 })

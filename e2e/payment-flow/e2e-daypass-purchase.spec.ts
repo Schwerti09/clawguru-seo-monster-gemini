@@ -54,12 +54,21 @@ test.describe("Day Pass Purchase – Full E2E Flow", () => {
           return
         }
         const token = createTestToken({ plan: "daypass", expiresInSeconds: 86_400 })
-        // Set the cookie and redirect
+        // Inject cookie directly into the browser context for reliable cookie setting
+        await context.addCookies([{
+          name: "claw_access",
+          value: token,
+          domain: "localhost",
+          path: "/",
+          httpOnly: true,
+          sameSite: "Lax",
+          secure: false,
+          expires: Math.floor(Date.now() / 1000) + 86_400,
+        }])
         await route.fulfill({
           status: 302,
           headers: {
             Location: `${BASE_URL}/dashboard`,
-            "Set-Cookie": `claw_access=${token}; Path=/; HttpOnly; SameSite=Lax; Max-Age=86400`,
           },
           body: "",
         })

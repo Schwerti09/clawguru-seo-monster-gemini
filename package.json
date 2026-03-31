@@ -17,7 +17,10 @@
     "lint": "next lint",
     "icons:generate": "node scripts/generate-favicons.mjs",
     "build:data": "node scripts/generate-runbooks-json.js",
-    "post-batch": "powershell -ExecutionPolicy Bypass -File scripts/post-batch-orchestrator.ps1"
+    "post-batch": "powershell -ExecutionPolicy Bypass -File scripts/post-batch-orchestrator.ps1",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:headed": "playwright test --headed --project=chromium"
   },
   "dependencies": {
     "@react-three/drei": "^8.17.0",
@@ -38,6 +41,7 @@
   },
   "devDependencies": {
     "@lhci/cli": "^0.15.1",
+    "@playwright/test": "^1.58.2",
     "@types/pg": "^8.20.0",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",

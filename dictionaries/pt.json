@@ -161,7 +161,9 @@
     "voiceDesc": "Fale sobre o seu problema – Web Speech API reconhece, Gemini analisa e lê a resposta em voz alta.",
     "voiceUpgrade": "🔒 Voz ilimitada → Atualize para Pro",
     "sandboxTitle": "🧪 Sandbox de Correção ao Vivo",
-    "sandboxDesc": "Cole sua configuração e analise-a instantaneamente para problemas de segurança – nginx, Docker, Terraform, K8s."
+    "sandboxDesc": "Cole sua configuração e analise-a instantaneamente para problemas de segurança – nginx, Docker, Terraform, K8s.",
+    "proBadge": "Assinatura · mensal",
+    "teamBadge": "Assinatura · equipes"
   },
   "live": {
     "title": "Ops Wall",
@@ -357,6 +359,17 @@
       "Kubernetes RBAC",
       "SSH Hardening",
       "Nginx TLS 1.3"
+    ],
+    "metrics_runbooks": "Runbooks no índice",
+    "metrics_avg_conf": "Conf. média (ao vivo)",
+    "cta_daypass": "Comprar Day Pass agora",
+    "how_title": "Como o Summon funciona",
+    "how_text": "O Summon pesquisa a base de dados de runbooks, combina tags e calcula uma pontuação de confiança. Isso fornece os guias mais relevantes para o seu problema específico.",
+    "how_diagram": "Diagrama",
+    "upgrade_items": [
+      "Executar runbooks automaticamente",
+      "Exportar como PDF / Markdown",
+      "Recomendações personalizadas"
     ]
   },
   "mycelium": {
@@ -368,7 +381,8 @@
     "pro_tip_text": "Click a node to open the runbook. With a Day Pass you can export the full graph as interactive HTML.",
     "popular_nodes_title": "Popular runbooks in the network",
     "upgrade_title": "More power with Day Pass",
-    "upgrade_button": "Start Day Pass"
+    "upgrade_button": "Start Day Pass",
+    "cta_daypass": "Comprar Day Pass agora"
   },
   "footer": {
     "solutions_title": "Solutions",

@@ -42,7 +42,7 @@ export function UserDashboardClient({ user, tier, initialData }: UserDashboardCl
   }, [])
 
   const tabs = [
-    { id: 'overview', label: 'Command Deck', icon: Target },
+    { id: 'overview', label: 'Overview', icon: Target },
     { id: 'mycelium', label: 'Mycelium', icon: Activity },
     { id: 'tools', label: 'Tools', icon: Zap },
     { id: 'executions', label: 'Executions', icon: Shield },

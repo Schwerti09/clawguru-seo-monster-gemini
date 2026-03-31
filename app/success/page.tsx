@@ -39,19 +39,28 @@ export default async function SuccessPage(
   let product: string | null = null
   let mode: string | null = null
 
-  try {
-    const stripe = getStripe()
-    const session = await stripe.checkout.sessions.retrieve(session_id)
-    ok = session.payment_status === "paid" || session.status === "complete"
-    email = session.customer_details?.email || null
-    product = (session.metadata?.product as string) || null
-    mode = session.mode || null
-  } catch (err) {
-    console.error("[success] stripe checkout.sessions.retrieve failed", {
-      sessionId: session_id,
-      err: err instanceof Error ? err.message : String(err),
-    })
-    ok = false
+  // E2E test mode: treat specific session IDs as paid without calling Stripe
+  const testPaidIds = process.env.E2E_PAID_SESSION_IDS?.split(",").map((s) => s.trim()) ?? []
+  if (testPaidIds.includes(session_id)) {
+    ok = true
+    email = "test@playwright.dev"
+    product = "pro"
+    mode = "subscription"
+  } else {
+    try {
+      const stripe = getStripe()
+      const session = await stripe.checkout.sessions.retrieve(session_id)
+      ok = session.payment_status === "paid" || session.status === "complete"
+      email = session.customer_details?.email || null
+      product = (session.metadata?.product as string) || null
+      mode = session.mode || null
+    } catch (err) {
+      console.error("[success] stripe checkout.sessions.retrieve failed", {
+        sessionId: session_id,
+        err: err instanceof Error ? err.message : String(err),
+      })
+      ok = false
+    }
   }
 
   const activateHref = `/api/auth/activate?session_id=${encodeURIComponent(session_id)}`

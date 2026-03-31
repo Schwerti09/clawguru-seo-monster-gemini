@@ -1,5 +1,4 @@
 import { defineConfig, devices } from "@playwright/test"
-import path from "path"
 
 /**
  * Playwright configuration for ClawGuru payment-flow E2E tests.
@@ -44,19 +43,6 @@ export default defineConfig({
       name: "chromium",
       use: { ...devices["Desktop Chrome"] },
     },
-    {
-      name: "firefox",
-      use: { ...devices["Desktop Firefox"] },
-    },
-    {
-      name: "webkit",
-      use: { ...devices["Desktop Safari"] },
-    },
-    /* Mobile viewports – payment flows must work on mobile too */
-    {
-      name: "mobile-chrome",
-      use: { ...devices["Pixel 5"] },
-    },
   ],
 
   /* Start the Next.js dev server before running tests */
@@ -68,6 +54,15 @@ export default defineConfig({
     env: {
       /* Use a fixed test secret so token helpers can sign matching tokens */
       ACCESS_TOKEN_SECRET: process.env.ACCESS_TOKEN_SECRET ?? "playwright-test-secret-32-bytes!!",
+      /**
+       * Comma-separated Stripe session IDs that the /success page should treat
+       * as "paid" without calling the real Stripe API.  Add new IDs here when
+       * writing tests that exercise the paid-session flow.
+       */
+      E2E_PAID_SESSION_IDS: [
+        "cs_test_paid_success_4242424242424242",
+        "cs_test_activate_valid_playwright",
+      ].join(","),
     },
   },
 

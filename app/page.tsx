@@ -24,6 +24,7 @@ interface HomeProps {
 
 export default function Home({ dict, locale }: HomeProps) {
   const prefix = `/${locale}`
+  const hp = (dict as any)?.homepage ?? {}
   const faq = (dict as any)?.faq ?? {
     kicker: "",
     title: "",
@@ -90,7 +91,7 @@ export default function Home({ dict, locale }: HomeProps) {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
 
-      <HeroSection prefix={prefix} locale={locale} />
+      <HeroSection prefix={prefix} dict={hp} />
 
       <ProblemSection locale={locale} />
 
@@ -103,8 +104,8 @@ export default function Home({ dict, locale }: HomeProps) {
       <section id="live-previews" className="py-14" style={{ background: "var(--surface-0)" }}>
         <Container>
           <div className="max-w-3xl mx-auto text-center mb-8">
-            <h2 className="text-2xl sm:text-3xl font-black text-white">Erlebe ClawGuru live – ohne Registrierung</h2>
-            <p className="mt-2 text-gray-400">Teste die Kern‑Features direkt hier. Sieh, wie wir Probleme lösen, Risiken vorhersagen und Infrastruktur härten.</p>
+            <h2 className="text-2xl sm:text-3xl font-black text-white">{hp.live_title || 'Experience ClawGuru live'}</h2>
+            <p className="mt-2 text-gray-400">{hp.live_sub || ''}</p>
           </div>
           <FeatureShowcase prefix={prefix} />
         </Container>
@@ -112,19 +113,19 @@ export default function Home({ dict, locale }: HomeProps) {
 
       <section className="py-14" style={{ background: "var(--surface-1)" }}>
         <Container>
-          <HowItWorks locale={locale} />
+          <HowItWorks dict={hp} />
         </Container>
       </section>
 
       <section className="py-14" style={{ background: "var(--surface-0)" }}>
         <Container>
-          <TrustSection prefix={prefix} locale={locale} />
+          <TrustSection prefix={prefix} dict={hp} />
         </Container>
       </section>
 
       <section className="py-14" style={{ background: "var(--surface-1)" }}>
         <Container>
-          <PricingSection prefix={prefix} locale={locale} dict={(dict as any)?.pricing} />
+          <PricingSection prefix={prefix} dict={hp} />
         </Container>
       </section>
 

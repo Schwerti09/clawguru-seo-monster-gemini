@@ -1,15 +1,12 @@
 import React from "react"
 
-type Props = { locale?: string }
+type Props = { dict?: Record<string, string> }
 
-export default function HowItWorks({ locale = "de" }: Props) {
-  const isDe = locale?.startsWith("de")
+export default function HowItWorks({ dict = {} }: Props) {
   const steps = [
     {
-      title: isDe ? "Problem erkennen" : "Identify the problem",
-      desc: isDe
-        ? "Beschreibe dein Problem oder wähle deinen Stack – ClawGuru findet präzise Runbooks."
-        : "Describe your issue or select your stack – ClawGuru finds precise runbooks.",
+      title: dict.hiw_step1_title || "Identify the problem",
+      desc: dict.hiw_step1_desc || "Describe your issue or select your stack – ClawGuru finds precise runbooks.",
       icon: (
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M21 21l-4.35-4.35" stroke="#67E8F9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -18,10 +15,8 @@ export default function HowItWorks({ locale = "de" }: Props) {
       ),
     },
     {
-      title: isDe ? "Ausführen (Premium)" : "Execute (Premium)",
-      desc: isDe
-        ? "Mit Daypass/Pro führst du Runbooks direkt in deiner Umgebung aus – sicher und nachvollziehbar."
-        : "With Daypass/Pro, execute runbooks in your environment – safe and auditable.",
+      title: dict.hiw_step2_title || "Execute (Premium)",
+      desc: dict.hiw_step2_desc || "With Daypass/Pro, execute runbooks in your environment – safe and auditable.",
       icon: (
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M5 12h14M12 5v14" stroke="#A78BFA" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -29,10 +24,8 @@ export default function HowItWorks({ locale = "de" }: Props) {
       ),
     },
     {
-      title: isDe ? "Nachweisen" : "Prove & report",
-      desc: isDe
-        ? "Automatischer Report, Git-Commit, Zertifikat – alles auditierbar und beweisbar."
-        : "Automatic report, Git commit, certificate – fully auditable and verifiable.",
+      title: dict.hiw_step3_title || "Prove & report",
+      desc: dict.hiw_step3_desc || "Automatic report, Git commit, certificate – fully auditable and verifiable.",
       icon: (
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M9 11l3 3L22 4" stroke="#34D399" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -45,8 +38,8 @@ export default function HowItWorks({ locale = "de" }: Props) {
   return (
     <div>
       <div className="text-center max-w-2xl mx-auto mb-8">
-        <h2 className="text-2xl sm:text-3xl font-black text-white">{isDe ? "So funktioniert’s" : "How it works"}</h2>
-        <p className="mt-2 text-gray-400">{isDe ? "Vom Problem zur Ausführung – und zum Nachweis. In drei klaren Schritten." : "From problem to execution – and proof. In three clear steps."}</p>
+        <h2 className="text-2xl sm:text-3xl font-black text-white">{dict.hiw_heading || "How it works"}</h2>
+        <p className="mt-2 text-gray-400">{dict.hiw_sub || "From problem to execution – and proof. In three clear steps."}</p>
       </div>
       <div className="grid md:grid-cols-3 gap-4">
         {steps.map((s) => (

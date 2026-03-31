@@ -1,24 +1,15 @@
 import Container from "@/components/shared/Container"
-import BuyButton from "@/components/commerce/BuyButton"
 
-type Props = { prefix?: string; locale?: string }
+type Props = { prefix?: string; dict?: Record<string, string> }
 
-export default function HeroSection({ prefix = "", locale = "de" }: Props) {
-  const t = locale.startsWith("de")
-    ? {
-        badge: "Mycelial Engine · 4,2 Mio. Runbooks · Executable Security Content",
-        title: "Security-Operationen, die wirklich funktionieren.",
-        sub: "ClawGuru ist die KI-gestützte SecOps-Plattform mit über 4,2 Millionen ausführbaren Runbooks – für Incident Response, Hardening und Compliance in Echtzeit. Vom Problem zum Fix in unter 30 Sekunden.",
-        daypass: "Daypass starten – 9 €/24 h",
-        tryNow: "Kostenlos ausprobieren",
-      }
-    : {
-        badge: "Mycelial Engine · 4.2 M Runbooks · Executable Security Content",
-        title: "Security Operations That Actually Work.",
-        sub: "ClawGuru is the AI-powered SecOps platform with 4.2 million executable runbooks – for incident response, hardening, and compliance in real time. From problem to fix in under 30 seconds.",
-        daypass: "Start Daypass – €9/24 h",
-        tryNow: "Try it for free",
-      }
+export default function HeroSection({ prefix = "", dict = {} }: Props) {
+  const t = {
+    badge: dict.hero_badge || "Mycelial Engine · 4.2 M Runbooks · Executable Security Content",
+    title: dict.hero_title || "Security Operations That Actually Work.",
+    sub: dict.hero_sub || "ClawGuru is the AI-powered SecOps platform with 4.2 million executable runbooks – for incident response, hardening, and compliance in real time. From problem to fix in under 30 seconds.",
+    daypass: dict.hero_daypass || "Start Daypass – €9/24 h",
+    tryNow: dict.hero_tryNow || "Try it for free",
+  }
   return (
     <section className="relative overflow-hidden" style={{ background: "var(--surface-0)" }}>
       <div

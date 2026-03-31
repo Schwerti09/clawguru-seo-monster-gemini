@@ -1,35 +1,36 @@
 import React from "react"
 
-type Props = { prefix?: string; locale?: string; dict?: any }
+type Props = { prefix?: string; dict?: Record<string, string> }
 
-export default function PricingSection({ prefix = "", locale = "de", dict }: Props) {
-  const isDe = locale?.startsWith("de")
-  const d = dict || {}
-
+export default function PricingSection({ prefix = "", dict = {} }: Props) {
   const tiers = [
     {
-      name: d.dayPassBadge || "Daypass",
-      price: (isDe ? "9 € / 24h" : "€9 / 24h"),
-      features: (isDe
-        ? ["Voller Zugriff auf alle Runbooks", "Ausführung in eigener Umgebung", "Export & Audit‑Report"]
-        : ["Full access to all runbooks", "Execute in your own environment", "Export & audit report"]),
-      cta: { label: d.dayPassBtn || (isDe ? "Daypass kaufen" : "Buy Daypass"), href: "/api/stripe/checkout?plan=daypass" },
+      name: "Daypass",
+      price: dict.price_daypass_price || "€9 / 24h",
+      features: [
+        dict.price_daypass_f1 || "Full access to all runbooks",
+        dict.price_daypass_f2 || "Execute in your own environment",
+        dict.price_daypass_f3 || "Export & audit report",
+      ],
+      cta: { label: dict.price_daypass_btn || "Buy Daypass", href: "/api/stripe/checkout?plan=daypass" },
     },
     {
-      name: d.proBadge || "Pro",
-      price: (isDe ? "49 € / Monat" : "€49 / month"),
-      features: (isDe
-        ? ["Unlimitierte Ausführungen", "API‑Zugriff & Team‑Support", "Compliance & Reports"]
-        : ["Unlimited executions", "API access & team support", "Compliance & reports"]),
-      cta: { label: d.proBtn || (isDe ? "Angebote ansehen" : "View plans"), href: `${prefix}/pricing` },
+      name: "Pro",
+      price: dict.price_pro_price || "€49 / month",
+      features: [
+        dict.price_pro_f1 || "Unlimited executions",
+        dict.price_pro_f2 || "API access & team support",
+        dict.price_pro_f3 || "Compliance & reports",
+      ],
+      cta: { label: dict.price_pro_btn || "View plans", href: `${prefix}/pricing` },
     },
   ]
 
   return (
     <div>
       <div className="text-center max-w-2xl mx-auto mb-8">
-        <h2 className="text-2xl sm:text-3xl font-black text-white">{d.title || (isDe ? "Starte in 5 Minuten. Kein Commitment." : "Get started in 5 minutes. No commitment.")}</h2>
-        <p className="mt-2 text-gray-400">{d.subtitle || (isDe ? "Interaktive Karten sind kostenlos – Ausführung & Export erfordern Daypass oder Pro." : "Interactive previews are free – execution & export require Daypass or Pro.")}</p>
+        <h2 className="text-2xl sm:text-3xl font-black text-white">{dict.price_title || "Get started in 5 minutes. No commitment."}</h2>
+        <p className="mt-2 text-gray-400">{dict.price_sub || "Interactive previews are free – execution & export require Daypass or Pro."}</p>
       </div>
       <div className="grid md:grid-cols-2 gap-4">
         {tiers.map((t) => (

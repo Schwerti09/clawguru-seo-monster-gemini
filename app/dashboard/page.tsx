@@ -121,7 +121,6 @@ export default async function DashboardPage() {
   const email = session?.email || access?.customerId || 'user'
   const plan = access?.plan || null
   const customerId = access?.customerId || null
-  const tier = getUserTierFromPlan(plan)
   const user = { id: customerId || email, email }
 
   // ── Fetch local DB data (tables created by migration, gracefully empty if missing) ──

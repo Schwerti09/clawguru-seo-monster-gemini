@@ -75,7 +75,7 @@ export function OverviewTab({ data, tier, onUpgrade }: OverviewTabProps) {
       action: `Execution ${e.status}: ${e.runbook_id}`,
       severity: (e.status === 'failed' ? 'high' : e.status === 'completed' ? 'low' : 'medium') as 'low' | 'medium' | 'high'
     }))
-  ].sort(() => 0).slice(0, 5)
+  ].slice(0, 5)
 
   return (
     <div className="h-full overflow-y-auto p-6 space-y-8">

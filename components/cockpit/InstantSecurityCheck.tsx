@@ -277,6 +277,15 @@ function RecommendationCard({ rec, isPremiumLocked }: { rec: SecurityRecommendat
 
 /* ── Main Component ── */
 
+function formatInputTypeLabel(inputType: SecurityCheckResult['inputType']): string {
+  switch (inputType) {
+    case 'ip': return '● IP-Adresse'
+    case 'domain': return '● Domain'
+    case 'url': return '● URL'
+    default: return '● Unbekannter Typ'
+  }
+}
+
 interface InstantSecurityCheckProps {
   tier: UserTier
   onUpgrade?: () => void
@@ -299,7 +308,7 @@ export function InstantSecurityCheck({ tier, onUpgrade }: InstantSecurityCheckPr
         const res = await runSecurityCheck(input.trim())
         setResult(res)
       } catch (e: unknown) {
-        setError((e as Error)?.message ?? 'Unbekannter Fehler')
+        setError((e as Error)?.message ?? 'Fehler beim Ausführen der Sicherheitsprüfung')
       }
     })
   }
@@ -469,7 +478,7 @@ export function InstantSecurityCheck({ tier, onUpgrade }: InstantSecurityCheckPr
                       Geprüft: <span className="text-gray-300 font-mono">{result.input}</span>
                     </p>
                     <p className="text-[11px] text-gray-600 mt-1">
-                      {result.inputType === 'ip' ? '● IP-Adresse' : result.inputType === 'domain' ? '● Domain' : result.inputType === 'url' ? '● URL' : '● Unbekannter Typ'}
+                      {formatInputTypeLabel(result.inputType)}
                       {' · '}
                       {new Date(result.checkedAt).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })} Uhr
                     </p>

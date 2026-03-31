@@ -56,8 +56,8 @@ export default function Header() {
 
   const ALL_NAV = [...PRIMARY_NAV, ...MORE_NAV]
 
-  const accountHref = hasAccess ? `${prefix}/dashboard` : `${prefix}/account`
-  const accountLabel = hasAccess ? ((dict as any).common?.ctaDashboard || "Dashboard") : ((dict as any).nav?.account || "Account")
+  const accountHref = `${prefix}/dashboard`
+  const accountLabel = (dict as any).nav?.account || "Account"
 
   const switchLocale = useCallback(
     (nextLocale: Locale) => {

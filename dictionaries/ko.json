@@ -50,7 +50,9 @@
     "voiceDesc": "문제를 말씀해 주세요 – Web Speech API가 인식하고, Gemini가 분석하여 답변을 읽어드립니다.",
     "voiceUpgrade": "🔒 무제한 음성 → Pro로 업그레이드",
     "sandboxTitle": "🧪 라이브 픽스 샌드박스",
-    "sandboxDesc": "설정을 여기에 붙여넣고 보안 문제를 즉시 분석하세요 – nginx, Docker, Terraform, K8s."
+    "sandboxDesc": "설정을 여기에 붙여넣고 보안 문제를 즉시 분석하세요 – nginx, Docker, Terraform, K8s.",
+    "proBadge": "구독 · 월간",
+    "teamBadge": "구독 · 팀"
   },
   "live": {
     "title": "Ops Wall",
@@ -357,6 +359,17 @@
       "Kubernetes RBAC",
       "SSH Hardening",
       "Nginx TLS 1.3"
+    ],
+    "metrics_runbooks": "인덱스의 Runbook",
+    "metrics_avg_conf": "평균 신뢰도 (실시간)",
+    "cta_daypass": "지금 Day Pass 구매",
+    "how_title": "Summon 작동 방식",
+    "how_text": "Summon은 Runbook 데이터베이스를 검색하고 태그를 매칭하여 신뢰도 점수를 계산합니다. 특정 문제에 가장 적합한 가이드를 제공합니다.",
+    "how_diagram": "다이어그램",
+    "upgrade_items": [
+      "Runbook 자동 실행",
+      "PDF / Markdown으로 내보내기",
+      "개인화된 추천"
     ]
   },
   "mycelium": {
@@ -368,7 +381,8 @@
     "pro_tip_text": "Click a node to open the runbook. With a Day Pass you can export the full graph as interactive HTML.",
     "popular_nodes_title": "Popular runbooks in the network",
     "upgrade_title": "More power with Day Pass",
-    "upgrade_button": "Start Day Pass"
+    "upgrade_button": "Start Day Pass",
+    "cta_daypass": "지금 Day Pass 구매"
   },
   "footer": {
     "solutions_title": "Solutions",

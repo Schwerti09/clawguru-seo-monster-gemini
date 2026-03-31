@@ -161,7 +161,9 @@
     "voiceDesc": "Sprich dein Problem ein – Web Speech API erkennt es, Gemini analysiert es und liest die Antwort vor.",
     "voiceUpgrade": "🔒 Unlimitierter Voice → Upgrade auf Pro",
     "sandboxTitle": "🧪 Live Fix Sandbox",
-    "sandboxDesc": "Config hier einfügen und sofort auf Sicherheitsprobleme analysieren lassen – nginx, Docker, Terraform, K8s."
+    "sandboxDesc": "Config hier einfügen und sofort auf Sicherheitsprobleme analysieren lassen – nginx, Docker, Terraform, K8s.",
+    "proBadge": "Abonnement · monatlich",
+    "teamBadge": "Abonnement · Teams"
   },
   "live": {
     "title": "Ops Wall",

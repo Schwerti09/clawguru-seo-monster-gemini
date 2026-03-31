@@ -54,7 +54,11 @@ export default defineConfig({
     env: {
       /* Use a fixed test secret so token helpers can sign matching tokens */
       ACCESS_TOKEN_SECRET: process.env.ACCESS_TOKEN_SECRET ?? "playwright-test-secret-32-bytes!!",
-      /* Treat these session IDs as paid in E2E tests (no real Stripe call needed) */
+      /**
+       * Comma-separated Stripe session IDs that the /success page should treat
+       * as "paid" without calling the real Stripe API.  Add new IDs here when
+       * writing tests that exercise the paid-session flow.
+       */
       E2E_PAID_SESSION_IDS: [
         "cs_test_paid_success_4242424242424242",
         "cs_test_activate_valid_playwright",

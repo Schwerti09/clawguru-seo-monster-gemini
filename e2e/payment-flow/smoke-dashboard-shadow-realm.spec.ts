@@ -138,11 +138,13 @@ test.describe("Dashboard – Shadow Realm Overlay", () => {
       .first()
     await expect(upgradeBtn).toBeVisible({ timeout: 5_000 })
     await upgradeBtn.click()
-    // After clicking, an upgrade modal or redirect to /pricing should follow
-    // Accept either outcome: modal visible OR navigated to /pricing
-    const isModal = await page
-      .locator('[role="dialog"], [data-testid="upgrade-modal"]')
-      .isVisible()
+    // After clicking, an upgrade modal or redirect to /pricing should follow.
+    // Check DOM attachment (not visual visibility) to avoid false negatives
+    // caused by framer-motion's initial opacity:0 animation state.
+    const modal = page.locator('[data-testid="upgrade-modal"]')
+    const isModal = await modal
+      .waitFor({ state: "attached", timeout: 5_000 })
+      .then(() => true)
       .catch(() => false)
     const isPricingPage = page.url().includes("/pricing")
     expect(isModal || isPricingPage).toBe(true)

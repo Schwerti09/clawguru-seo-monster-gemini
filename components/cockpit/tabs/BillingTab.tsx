@@ -77,10 +77,12 @@ export function BillingTab({ tier, onUpgrade, data }: BillingTabProps) {
   }
 
   const getAdjustedPrice = (basePrice: string) => {
-    const price = parseFloat(basePrice.replace('$', '').replace('/mo', ''))
+    if (!basePrice || basePrice === 'Free' || basePrice === 'Custom') return basePrice
+    const price = parseFloat(basePrice.replace('€', '').trim())
+    if (isNaN(price)) return basePrice
     const discount = getYearlyDiscount()
     const adjustedPrice = price * (1 - discount / 100)
-    return billingCycle === 'yearly' ? `$${adjustedPrice}/mo` : basePrice
+    return billingCycle === 'yearly' ? `€${adjustedPrice.toFixed(2)}/mo` : basePrice
   }
   
   return (
@@ -300,7 +302,7 @@ export function BillingTab({ tier, onUpgrade, data }: BillingTabProps) {
               </div>
               <div className="flex justify-between mb-2">
                 <span className="text-gray-400">Total Spent</span>
-                <span className="text-white font-semibold">€{(data.totalSpent / 100).toFixed(2)}</span>
+                <span className="text-white font-semibold">€{data.totalSpent.toFixed(2)}</span>
               </div>
               <div className="flex justify-between mb-2">
                 <span className="text-gray-400">Zahlungen</span>
@@ -385,9 +387,12 @@ export function BillingTab({ tier, onUpgrade, data }: BillingTabProps) {
                   <div className="text-3xl font-bold text-white mb-1">
                     {getAdjustedPrice(config.price)}
                   </div>
-                  {billingCycle === 'yearly' && tierKey !== 'explorer' && (
+                  {billingCycle === 'yearly' && tierKey !== 'explorer' && tierKey !== 'enterprise' && (
                     <div className="text-sm text-green-400">
-                      Save ${Math.round(parseFloat(config.price.replace('$', '').replace('/mo', '')) * 0.2 * 12)}/year
+                      {(() => {
+                        const base = parseFloat(config.price.replace('€', '').trim())
+                        return isNaN(base) ? null : `Save €${Math.round(base * 0.2 * 12)}/year`
+                      })()}
                     </div>
                   )}
                 </div>

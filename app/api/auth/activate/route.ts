@@ -117,7 +117,8 @@ export async function GET(req: NextRequest) {
       secure: isProduction,
       sameSite: "lax",
       path: "/",
-      maxAge: 60 * 60 * 24 * 30, // 30 Tage
+      // daypass expires in 24 h; subscriptions use a 30-day rolling token
+      maxAge: plan === "daypass" ? 60 * 60 * 24 : 60 * 60 * 24 * 30,
     });
 
     console.info("[auth/activate] set claw_access cookie", {

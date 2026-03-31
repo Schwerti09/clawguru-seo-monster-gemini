@@ -45,7 +45,7 @@ export function UpgradeModal({ currentTier, upgradePath, onClose }: UpgradeModal
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
-          tier,
+          product: tier,
           billingCycle,
           successUrl: `${window.location.origin}/dashboard?success=true`,
           cancelUrl: `${window.location.origin}/dashboard?cancelled=true`

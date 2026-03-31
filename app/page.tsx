@@ -11,6 +11,11 @@ import HeroSection from "@/components/homepage/HeroSection"
 import HowItWorks from "@/components/homepage/HowItWorks"
 import TrustSection from "@/components/homepage/TrustSection"
 import PricingSection from "@/components/homepage/PricingSection"
+import ProblemSection from "@/components/homepage/ProblemSection"
+import SolutionSection from "@/components/homepage/SolutionSection"
+import ToolsSection from "@/components/homepage/ToolsSection"
+import WhySection from "@/components/homepage/WhySection"
+import FinalCTASection from "@/components/homepage/FinalCTASection"
 
 interface HomeProps {
   dict: Dictionary
@@ -87,6 +92,14 @@ export default function Home({ dict, locale }: HomeProps) {
 
       <HeroSection prefix={prefix} locale={locale} />
 
+      <ProblemSection locale={locale} />
+
+      <SolutionSection prefix={prefix} locale={locale} />
+
+      <ToolsSection prefix={prefix} locale={locale} />
+
+      <WhySection locale={locale} />
+
       <section id="live-previews" className="py-14" style={{ background: "var(--surface-0)" }}>
         <Container>
           <div className="max-w-3xl mx-auto text-center mb-8">
@@ -144,6 +157,8 @@ export default function Home({ dict, locale }: HomeProps) {
           </div>
         </Container>
       </section>
+
+      <FinalCTASection prefix={prefix} locale={locale} />
     </>
   )
 }

@@ -14,13 +14,13 @@ import {
   Database,
   Wifi,
   Brain,
-  Eye,
-  ChevronRight,
   Sparkles
 } from 'lucide-react'
 import PremiumMetricCard from '../premium/PremiumMetricCard'
 import PremiumGauge from '../premium/PremiumGauge'
+import { InstantSecurityCheck } from '../InstantSecurityCheck'
 import type { DashboardData } from '@/types/dashboard'
+import type { UserTier } from '@/lib/tier-access'
 
 const ClawScore3D = dynamic(() => import('../premium/ClawScore3D'), {
   ssr: false,
@@ -33,7 +33,8 @@ const ClawScore3D = dynamic(() => import('../premium/ClawScore3D'), {
 
 interface OverviewTabProps {
   data: DashboardData
-  isShadowed: boolean
+  tier: UserTier
+  onUpgrade?: () => void
 }
 
 function timeAgo(dateStr: string): string {
@@ -47,7 +48,7 @@ function timeAgo(dateStr: string): string {
   return `vor ${days} Tag${days > 1 ? 'en' : ''}`
 }
 
-export function OverviewTab({ data, isShadowed }: OverviewTabProps) {
+export function OverviewTab({ data, tier, onUpgrade }: OverviewTabProps) {
   // Derive threat level from real active threats count
   const threatLevel = data.activeThreats === 0 ? 5
     : data.activeThreats <= 3 ? 20
@@ -74,10 +75,13 @@ export function OverviewTab({ data, isShadowed }: OverviewTabProps) {
       action: `Execution ${e.status}: ${e.runbook_id}`,
       severity: (e.status === 'failed' ? 'high' : e.status === 'completed' ? 'low' : 'medium') as 'low' | 'medium' | 'high'
     }))
-  ].sort((a, b) => 0).slice(0, 5)
+  ].sort(() => 0).slice(0, 5)
 
   return (
     <div className="h-full overflow-y-auto p-6 space-y-8">
+
+      {/* ── Instant Security Check ── */}
+      <InstantSecurityCheck tier={tier} onUpgrade={onUpgrade} />
 
       {/* ── Hero Section: 3D ClawScore + Gauge + Live Stats ── */}
       <motion.div

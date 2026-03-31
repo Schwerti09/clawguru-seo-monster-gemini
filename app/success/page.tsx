@@ -1,6 +1,8 @@
 import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
-import { stripe } from "@/lib/stripe"
+import SuccessAutoActivate from "@/components/commerce/SuccessAutoActivate"
+import { redirect } from "next/navigation"
+import { getStripe } from "@/lib/stripe"
 
 export const runtime = "nodejs"
 export const dynamic = "force-dynamic"
@@ -12,6 +14,8 @@ export default async function SuccessPage(
 ) {
   const searchParams = await props.searchParams;
   const session_id = typeof searchParams?.session_id === "string" ? searchParams?.session_id : ""
+  const errorParam = typeof searchParams?.error === "string" ? searchParams?.error : ""
+
   if (!session_id) {
     console.warn("[success] missing session_id")
     return (
@@ -36,6 +40,7 @@ export default async function SuccessPage(
   let mode: string | null = null
 
   try {
+    const stripe = getStripe()
     const session = await stripe.checkout.sessions.retrieve(session_id)
     ok = session.payment_status === "paid" || session.status === "complete"
     email = session.customer_details?.email || null
@@ -51,13 +56,21 @@ export default async function SuccessPage(
 
   const activateHref = `/api/auth/activate?session_id=${encodeURIComponent(session_id)}`
 
+  // Auto-redirect to activation when payment is confirmed and there is no
+  // prior activation error (prevents redirect loops).
+  if (ok && !errorParam) {
+    redirect(activateHref)
+  }
+
   return (
     <Container>
       <div className="py-16 max-w-3xl mx-auto">
         <SectionTitle
           kicker="Checkout"
           title={ok ? "Zugang freigeschaltet" : "Noch nicht bestätigt"}
-          subtitle="Aktiviere deinen Zugriff und geh in Mission Mode."
+          subtitle={ok
+            ? "Aktiviere deinen Zugriff und geh in Mission Mode."
+            : "Zahlung wurde noch nicht bestätigt."}
         />
 
         {ok ? (
@@ -71,15 +84,11 @@ export default async function SuccessPage(
               </div>
             </div>
 
-            <div className="mt-6 grid gap-4">
-              <a
-                className="px-6 py-4 rounded-2xl font-black bg-gradient-to-r from-brand-cyan to-brand-violet hover:opacity-90 text-center"
-                href={activateHref}
-              >
-                Zugriff aktivieren → Dashboard öffnen
-              </a>
+            {/* Auto-activate with JS, fallback link for no-JS */}
+            <SuccessAutoActivate href={activateHref} />
 
-              <div className="mt-4 grid sm:grid-cols-2 gap-3">
+            <div className="mt-6 grid gap-4">
+              <div className="grid sm:grid-cols-2 gap-3">
                 <a
                   className="px-6 py-4 rounded-2xl border border-gray-700 hover:border-gray-500 font-bold text-gray-200 text-center"
                   href={`/api/download?key=sprint-pack&session_id=${encodeURIComponent(session_id)}`}
@@ -93,20 +102,6 @@ export default async function SuccessPage(
                   Direkt-Download Incident Kit (Fallback)
                 </a>
               </div>
-
-              <a
-                className="px-6 py-4 rounded-2xl border border-gray-700 hover:border-gray-500 font-bold text-gray-200 text-center"
-                href="/check"
-              >
-                Direkt Score prüfen →
-              </a>
-
-              <a
-                className="px-6 py-4 rounded-2xl border border-gray-700 hover:border-gray-500 font-bold text-gray-200 text-center"
-                href="/copilot"
-              >
-                Copilot starten → Runbook bauen
-              </a>
             </div>
 
             <div className="mt-8 p-6 rounded-3xl border border-gray-800 bg-black/25 text-gray-300">

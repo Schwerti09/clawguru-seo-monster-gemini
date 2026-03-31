@@ -156,6 +156,20 @@ export function middleware(request: NextRequest) {
     return res
   }
 
+  // Compatibility rewrite: map localized dashboard/success/account paths to root
+  // Example: /de/dashboard -> /dashboard, /de/success -> /success
+  const localizedAuthPath = pathname.match(/^\/([a-z]{2}(?:-[a-z]{2})?)\/(dashboard|success|account)\/?(.*)$/i)
+  if (localizedAuthPath) {
+    const url = request.nextUrl.clone()
+    const rest = localizedAuthPath[3] ? `/${localizedAuthPath[3]}` : ""
+    url.pathname = `/${localizedAuthPath[2].toLowerCase()}${rest}`
+    const res = NextResponse.rewrite(url)
+    res.headers.set("x-claw-locale", localizedAuthPath[1].toLowerCase())
+    res.headers.set("x-claw-dir", localeDir(localizedAuthPath[1].toLowerCase() as any))
+    res.headers.set(getRequestIdHeaderName(), requestId)
+    return res
+  }
+
   // Compatibility rewrite: map localized generator route to root generator route
   // Example: /de/perfection -> /perfection
   const localizedPerfection = pathname.match(/^\/([a-z]{2}(?:-[a-z]{2})?)\/perfection\/?$/i)

@@ -1,4 +1,4 @@
-﻿import { NextRequest, NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
 import { getOrigin } from "@/lib/origin"
 import { isStripeActive, apiUnavailableResponse } from "@/lib/api-guard"
 import { getStripe } from "@/lib/stripe"
@@ -11,8 +11,7 @@ type Product = "daypass" | "pro" | "team" | "msp" | "enterprise"
 
 function getPriceId(product: Product) {
   const teamPriceId =
-    process.env.STRIPE_PRICE_TEAM ||
-    process.env.STRIPE_PRISE_TEAM
+    process.env.STRIPE_PRICE_TEAM
 
   if (product === "daypass") return process.env.STRIPE_PRICE_DAYPASS
   if (product === "pro") return process.env.STRIPE_PRICE_PRO
@@ -160,7 +159,7 @@ export async function POST(req: NextRequest) {
       })
 
       return NextResponse.json(
-        { error: "Checkout fÃ¼r dieses Produkt ist aktuell nicht verfÃ¼gbar." },
+        { error: "Checkout f\u00FCr dieses Produkt ist aktuell nicht verf\u00FCgbar." },
         { status: 503 }
       )
     }

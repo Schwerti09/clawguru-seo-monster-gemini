@@ -12,8 +12,9 @@ function createPool(): Pool {
   }
   return new Pool({
     connectionString,
-    // Neon requires SSL; rejectUnauthorized=false works with Neon pooler
-    ssl: { rejectUnauthorized: false },
+    // Neon enforces certificate validation (verify-full); use ssl:true to enable
+    // proper TLS verification instead of rejectUnauthorized:false.
+    ssl: true,
     max: 5,
     idleTimeoutMillis: 30_000,
   })

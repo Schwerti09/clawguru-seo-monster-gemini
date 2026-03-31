@@ -1,0 +1,7 @@
+{
+  "name": "lodash.pick",
+  "version": "4.4.0",
+  "description": "Safe native replacement for lodash.pick (no prototype pollution)",
+  "main": "index.js",
+  "license": "MIT"
+}

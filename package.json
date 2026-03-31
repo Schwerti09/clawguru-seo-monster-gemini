@@ -51,7 +51,9 @@
     "typescript": "^5.9.3"
   },
   "overrides": {
-    "glob": "^10",
-    "rimraf": "^5"
+    "glob": "^11",
+    "rimraf": "^5",
+    "lodash.omit": "file:./patches/lodash-omit",
+    "lodash.pick": "file:./patches/lodash-pick"
   }
 }

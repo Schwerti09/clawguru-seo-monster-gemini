@@ -545,6 +545,9 @@
     "final_cta_title": "Ready for real security operations?",
     "final_cta_sub": "Start now – risk-free. Productive in 5 minutes.",
     "final_cta_primary": "Get started now",
-    "final_cta_secondary": "View demo"
+    "final_cta_secondary": "View demo",
+    "solution_badge": "The Solution",
+    "tools_badge": "Tools",
+    "why_badge": "Why"
   }
 }

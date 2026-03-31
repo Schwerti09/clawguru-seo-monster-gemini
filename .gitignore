@@ -87,3 +87,8 @@ clawguru-seo-monster-gemini-*/
 *.tar
 clawguru-deploy.tgz
 tsconfig.tsbuildinfo
+
+# Playwright
+test-results/
+playwright-report/
+.playwright-cache/

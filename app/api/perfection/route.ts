@@ -14,38 +14,6 @@ const PRICING = {
   ultra: { name: "Ultra", tokens: 8000, cost: 0.10, quality: "perfection", price: 150 },
 }
 
-function getProviderOrder(): string[] {
-  // Default preference: DeepSeek first (cheapest & no quota issues when Gemini key is absent)
-  let order = (process.env.AI_PREFERRED || "deepseek,openai,gemini")
-    .split(",")
-    .map((s) => s.trim())
-    .filter(Boolean)
-
-  // If explicit deepseek-first is requested
-  if (process.env.AI_FORCE_DEEPSEEK_FIRST === '1') {
-    order = ["deepseek", ...order.filter((p) => p !== "deepseek")]
-  }
-
-  // Prune providers without credentials if env hints exist
-  const hasGemini = !!process.env.GEMINI_API_KEY
-  const hasDeepseek = !!process.env.DEEPSEEK_API_KEY
-  const hasOpenAI = !!process.env.OPENAI_API_KEY
-
-  order = order.filter((p) =>
-    (p === "gemini" && hasGemini) ||
-    (p === "deepseek" && hasDeepseek) ||
-    (p === "openai" && hasOpenAI)
-  )
-
-  // Fallback to a safe minimal order if everything was filtered out
-  if (order.length === 0) {
-    if (hasDeepseek) return ["deepseek"]
-    if (hasGemini) return ["gemini"]
-    if (hasOpenAI) return ["openai"]
-  }
-  return order
-}
-
 const PREMIUM_RULES = {
   minWords: 2000,
   minCodeExamples: 3,
@@ -73,13 +41,11 @@ export async function POST(request: NextRequest) {
     // Build prompt
     const prompt = buildPrompt(body, tier)
 
-    // Provider preference (env-configurable)
-    const providers = getProviderOrder()
-    const preferred = providers[0] as any
+    // Provider order is managed centrally via AI_PROVIDER_ORDER env var
     const system = "You are the ClawGuru Next.js Page Factory. Return ONLY valid Next.js 14 page.tsx JSX, no markdown fences, no explanations. Bilingual (DE+EN). Include SEO metadata, hero, features, real code examples inside <pre>, checklists, CTA, and JSON-LD. Escape any ${} that would conflict inside JSX string literals."
-    const { text, provider } = await generateTextOrdered(system, prompt, preferred)
+    const { text, provider } = await generateTextOrdered(system, prompt)
     if (!text) {
-      return NextResponse.json({ error: "AI generation failed", tried: providers }, { status: 502 })
+      return NextResponse.json({ error: "AI generation failed" }, { status: 502 })
     }
 
     // Validate

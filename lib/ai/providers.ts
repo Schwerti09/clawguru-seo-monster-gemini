@@ -1,7 +1,27 @@
-export type AiProvider = "deepseek" | "openai" | "gemini";
+import { getCircuitBreaker } from "@/lib/circuit-breaker";
 
-const RATE_LIMIT_RETRIES = 2; // up to 3 total attempts (1 initial + 2 retries)
-const RATE_LIMIT_BASE_DELAY_MS = 1000; // 1 s → 2 s → 4 s
+/** Type-safe enum of all supported AI providers. */
+export type AiProvider = "deepseek" | "gemini" | "openai";
+
+/** Human-readable labels used in log output. */
+const PROVIDER_LABEL: Record<AiProvider, string> = {
+  deepseek: "DeepSeek",
+  gemini: "Gemini",
+  openai: "GPT",
+};
+
+/**
+ * Circuit-breaker options per provider.
+ * After 3 consecutive failures the provider is paused for 30 seconds,
+ * then a single probe call is allowed through (HALF_OPEN state).
+ */
+const BREAKER_OPTIONS = { failureThreshold: 3, recoveryTimeoutMs: 30_000 };
+
+/** HTTP status codes that indicate a permanent or quota failure → try next provider. */
+const SKIP_STATUSES = new Set([400, 401, 403, 404, 429, 500, 502, 503, 504]);
+
+const RATE_LIMIT_RETRIES = 2; // up to 3 total attempts per provider (1 initial + 2 retries)
+const RATE_LIMIT_BASE_DELAY_MS = 1_000; // 1 s → 2 s → 4 s
 
 function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -20,24 +40,28 @@ function hasKey(provider: AiProvider): boolean {
  *
  * Priority:
  *  1. The `preferred` argument (if any key is present)
- *  2. Env-specified order via AI_PREFERRED (comma-separated) or AI_PROVIDER (single value)
- *  3. Hard-coded default: deepseek → openai → gemini
+ *  2. AI_PROVIDER_ORDER env var (comma-separated, e.g. "deepseek,gemini,openai")
+ *  3. AI_PREFERRED env var (legacy alias for AI_PROVIDER_ORDER)
+ *  4. Hard-coded default: deepseek → gemini → openai
  *
  * Providers whose API key is empty/absent are always excluded so we never
  * send a request to a provider that cannot authenticate.
  */
 function buildProviderList(preferred?: AiProvider): AiProvider[] {
-  const all: AiProvider[] = ["deepseek", "openai", "gemini"];
-  const envPref = (process.env.AI_PREFERRED || process.env.AI_PROVIDER || "").trim();
+  const all: AiProvider[] = ["deepseek", "gemini", "openai"];
+  const envRaw = (
+    process.env.AI_PROVIDER_ORDER ||
+    process.env.AI_PREFERRED ||
+    process.env.AI_PROVIDER ||
+    ""
+  ).trim();
 
-  // Parse env-specified order, dedup, restrict to known providers
-  const envList = envPref
+  const envList = envRaw
     .split(",")
     .map((s) => s.trim().toLowerCase())
     .filter((s): s is AiProvider => (all as string[]).includes(s))
     .filter((v, i, a) => a.indexOf(v) === i);
 
-  // Start from env list; fall back to default order
   let ordered: AiProvider[] = envList.length ? [...envList] : [...all];
 
   // Append any providers not yet listed (full fallback chain)
@@ -50,13 +74,13 @@ function buildProviderList(preferred?: AiProvider): AiProvider[] {
     ordered = [preferred, ...ordered.filter((p) => p !== preferred)];
   }
 
-  // Remove providers that have no key – never send unauthenticated requests
+  // Remove providers that have no key
   return ordered.filter(hasKey);
 }
 
 /** Logs a 429 retry warning with provider name and attempt context. */
 function logRateLimit(provider: string, attempt: number, delayMs: number): void {
-  console.warn(`[ai/${provider}] Rate-limited (429), retry ${attempt + 1}/${RATE_LIMIT_RETRIES} after ${delayMs}ms`);
+  console.warn(`[AI] ${provider} rate-limited (429), retry ${attempt + 1}/${RATE_LIMIT_RETRIES} after ${delayMs}ms`);
 }
 
 function extractJson(text: string): unknown {
@@ -96,9 +120,12 @@ function extractJson(text: string): unknown {
   }
 }
 
-async function generateWithDeepseek(prompt: string): Promise<string | null> {
+/** Internal call result carrying the HTTP status for circuit-breaker decisions. */
+type CallResult = { text: string | null; status: number };
+
+async function callDeepseek(messages: Array<{ role: string; content: string }>): Promise<CallResult> {
   const apiKey = process.env.DEEPSEEK_API_KEY?.trim();
-  if (!apiKey) return null;
+  if (!apiKey) return { text: null, status: 401 };
   const model = process.env.DEEPSEEK_MODEL || "deepseek-chat";
   const base = (process.env.DEEPSEEK_BASE_URL || "https://api.deepseek.com/v1").replace(/\/$/, "");
   const url = `${base}/chat/completions`;
@@ -106,43 +133,33 @@ async function generateWithDeepseek(prompt: string): Promise<string | null> {
     try {
       const res = await fetch(url, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${apiKey}`,
-        },
-        body: JSON.stringify({
-          model,
-          messages: [
-            { role: "system", content: "Antworte ausschließlich mit validem JSON ohne Markdown." },
-            { role: "user", content: prompt },
-          ],
-          temperature: 0.3,
-          stream: false,
-        }),
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` },
+        body: JSON.stringify({ model, messages, temperature: 0.35, stream: false }),
       });
       if (res.status === 429) {
         if (attempt < RATE_LIMIT_RETRIES) {
-          logRateLimit("deepseek", attempt, RATE_LIMIT_BASE_DELAY_MS * Math.pow(2, attempt));
-          await sleep(RATE_LIMIT_BASE_DELAY_MS * Math.pow(2, attempt));
+          const delay = RATE_LIMIT_BASE_DELAY_MS * Math.pow(2, attempt);
+          logRateLimit("DeepSeek", attempt, delay);
+          await sleep(delay);
           continue;
         }
-        console.error("[ai/deepseek] Rate limit exhausted after all retries.");
-        return null;
+        console.error("[AI] DeepSeek rate limit exhausted after all retries.");
+        return { text: null, status: 429 };
       }
-      if (!res.ok) return null;
+      if (!res.ok) return { text: null, status: res.status };
       const data = await res.json();
       const text = data?.choices?.[0]?.message?.content;
-      return typeof text === "string" && text.trim() ? text.trim() : null;
+      return { text: typeof text === "string" && text.trim() ? text.trim() : null, status: res.status };
     } catch {
-      return null;
+      return { text: null, status: 0 };
     }
   }
-  return null;
+  return { text: null, status: 429 };
 }
 
-async function generateWithOpenAI(prompt: string): Promise<string | null> {
+async function callOpenAI(messages: Array<{ role: string; content: string }>): Promise<CallResult> {
   const apiKey = process.env.OPENAI_API_KEY?.trim();
-  if (!apiKey) return null;
+  if (!apiKey) return { text: null, status: 401 };
   const model = process.env.OPENAI_MODEL || "gpt-4o-mini";
   const base = (process.env.OPENAI_BASE_URL || "https://api.openai.com/v1").replace(/\/$/, "");
   const url = `${base}/chat/completions`;
@@ -150,43 +167,33 @@ async function generateWithOpenAI(prompt: string): Promise<string | null> {
     try {
       const res = await fetch(url, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${apiKey}`,
-        },
-        body: JSON.stringify({
-          model,
-          messages: [
-            { role: "system", content: "Antworte ausschließlich mit validem JSON ohne Markdown." },
-            { role: "user", content: prompt },
-          ],
-          temperature: 0.3,
-          stream: false,
-        }),
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` },
+        body: JSON.stringify({ model, messages, temperature: 0.35, stream: false }),
       });
       if (res.status === 429) {
         if (attempt < RATE_LIMIT_RETRIES) {
-          logRateLimit("openai", attempt, RATE_LIMIT_BASE_DELAY_MS * Math.pow(2, attempt));
-          await sleep(RATE_LIMIT_BASE_DELAY_MS * Math.pow(2, attempt));
+          const delay = RATE_LIMIT_BASE_DELAY_MS * Math.pow(2, attempt);
+          logRateLimit("GPT", attempt, delay);
+          await sleep(delay);
           continue;
         }
-        console.error("[ai/openai] Rate limit exhausted after all retries.");
-        return null;
+        console.error("[AI] GPT rate limit exhausted after all retries.");
+        return { text: null, status: 429 };
       }
-      if (!res.ok) return null;
+      if (!res.ok) return { text: null, status: res.status };
       const data = await res.json();
       const text = data?.choices?.[0]?.message?.content;
-      return typeof text === "string" && text.trim() ? text.trim() : null;
+      return { text: typeof text === "string" && text.trim() ? text.trim() : null, status: res.status };
     } catch {
-      return null;
+      return { text: null, status: 0 };
     }
   }
-  return null;
+  return { text: null, status: 429 };
 }
 
-async function generateWithGemini(prompt: string): Promise<string | null> {
+async function callGemini(prompt: string): Promise<CallResult> {
   const apiKey = process.env.GEMINI_API_KEY?.trim();
-  if (!apiKey) return null;
+  if (!apiKey) return { text: null, status: 401 };
   const base = (process.env.GEMINI_BASE_URL || "https://generativelanguage.googleapis.com/v1beta").replace(/\/$/, "");
   // Try preferred model first, then fallbacks to maximize compatibility
   const candidates = [
@@ -194,6 +201,7 @@ async function generateWithGemini(prompt: string): Promise<string | null> {
     "gemini-1.5-flash",
     "gemini-1.5-pro",
   ].filter(Boolean);
+  let lastStatus = 0;
   for (const model of candidates) {
     const url = `${base}/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(apiKey)}`;
     for (let attempt = 0; attempt <= RATE_LIMIT_RETRIES; attempt++) {
@@ -206,13 +214,15 @@ async function generateWithGemini(prompt: string): Promise<string | null> {
             generationConfig: { temperature: 0.35, maxOutputTokens: 900 },
           }),
         });
+        lastStatus = res.status;
         if (res.status === 429) {
           if (attempt < RATE_LIMIT_RETRIES) {
-            logRateLimit(`gemini/${model}`, attempt, RATE_LIMIT_BASE_DELAY_MS * Math.pow(2, attempt));
-            await sleep(RATE_LIMIT_BASE_DELAY_MS * Math.pow(2, attempt));
+            const delay = RATE_LIMIT_BASE_DELAY_MS * Math.pow(2, attempt);
+            logRateLimit(`Gemini/${model}`, attempt, delay);
+            await sleep(delay);
             continue;
           }
-          console.error(`[ai/gemini/${model}] Rate limit exhausted after all retries.`);
+          console.error(`[AI] Gemini/${model} rate limit exhausted after all retries, trying next model.`);
           break; // try next model
         }
         if (!res.ok) break; // try next model
@@ -220,54 +230,88 @@ async function generateWithGemini(prompt: string): Promise<string | null> {
         const parts = data?.candidates?.[0]?.content?.parts;
         if (!Array.isArray(parts)) break;
         const text = parts.map((p: { text?: string }) => p?.text).filter(Boolean).join("");
-        if (typeof text === "string" && text.trim()) return text.trim();
+        if (typeof text === "string" && text.trim()) return { text: text.trim(), status: res.status };
         break;
       } catch {
-        break; // try next candidate
+        break; // try next model
       }
     }
   }
-  return null;
+  return { text: null, status: lastStatus };
 }
 
 export async function generateOrdered(prompt: string, preferred?: AiProvider): Promise<{ parsed: unknown | null; provider?: AiProvider; raw?: string; }>{
   const providers = buildProviderList(preferred);
 
   if (providers.length === 0) {
-    console.error("[ai] No AI provider with a valid API key is configured. Set DEEPSEEK_API_KEY, OPENAI_API_KEY, or GEMINI_API_KEY.");
+    console.error("[AI] Kein AI-Provider verfügbar. Bitte überprüfe deine API-Keys.");
     return { parsed: null };
   }
 
-  for (const p of providers) {
-    let raw: string | null = null;
-    if (p === "deepseek") raw = await generateWithDeepseek(prompt);
-    else if (p === "openai") raw = await generateWithOpenAI(prompt);
-    else if (p === "gemini") raw = await generateWithGemini(prompt);
-
-    if (!raw) continue;
-    const parsed = extractJson(raw);
-    if (parsed) return { parsed, provider: p, raw };
+  if (providers[0] === "deepseek") {
+    console.info("[AI] DeepSeek is cheapest – using it");
   }
+
+  const systemJson = "Antworte ausschließlich mit validem JSON ohne Markdown.";
+  let lastFail: { provider: AiProvider; status: number } | null = null;
+
+  for (let i = 0; i < providers.length; i++) {
+    const p = providers[i];
+    const label = PROVIDER_LABEL[p];
+    const breaker = getCircuitBreaker(`ai:${p}`, BREAKER_OPTIONS);
+
+    if (!breaker.isCallAllowed()) {
+      console.warn(`[AI] ${label} circuit OPEN – skipping`);
+      continue;
+    }
+
+    const role =
+      i === 0
+        ? "primary"
+        : lastFail
+        ? `fallback after ${lastFail.status} from ${PROVIDER_LABEL[lastFail.provider]}`
+        : "fallback";
+    console.info(`[AI] Provider: ${label} (${role})`);
+
+    let result: CallResult = { text: null, status: 0 };
+    if (p === "deepseek") {
+      result = await callDeepseek([
+        { role: "system", content: systemJson },
+        { role: "user", content: prompt },
+      ]);
+    } else if (p === "openai") {
+      result = await callOpenAI([
+        { role: "system", content: systemJson },
+        { role: "user", content: prompt },
+      ]);
+    } else if (p === "gemini") {
+      result = await callGemini(prompt);
+    }
+
+    if (result.text) {
+      const parsed = extractJson(result.text);
+      if (parsed) {
+        breaker.recordSuccess();
+        return { parsed, provider: p, raw: result.text };
+      }
+    }
+
+    breaker.recordFailure();
+    lastFail = { provider: p, status: result.status };
+    const next = providers[i + 1];
+    if (result.status === 0) {
+      console.warn(`[AI] ${label} network error${next ? `, trying next: ${PROVIDER_LABEL[next]}` : " – no more providers"}`);
+    } else if (SKIP_STATUSES.has(result.status)) {
+      console.error(
+        `[AI] ${label} failed (status: ${result.status})${next ? `, trying next: ${PROVIDER_LABEL[next]}` : " – no more providers"}`
+      );
+    } else if (next) {
+      console.warn(`[AI] ${label} returned no usable output, trying next: ${PROVIDER_LABEL[next]}`);
+    }
+  }
+
+  console.error("[AI] Alle Provider fehlgeschlagen. Kein AI-Provider verfügbar.");
   return { parsed: null };
-}
-
-function extractGeminiText(data: unknown): string {
-  const d = data as { candidates?: Array<{ content?: { parts?: Array<{ text?: string }>; text?: string } }> };
-  const cand = d?.candidates?.[0];
-  const parts = cand?.content?.parts;
-  if (Array.isArray(parts)) {
-    const txt = parts.map((p) => (typeof p?.text === "string" ? p.text : "")).join("").trim();
-    if (txt) return txt;
-  }
-  const t = cand?.content?.text;
-  if (typeof t === "string" && t.trim()) return t.trim();
-  return "";
-}
-
-function extractOpenAIText(data: unknown): string {
-  const d = data as { choices?: Array<{ message?: { content?: string } }> };
-  const cc = d?.choices?.[0]?.message?.content;
-  return typeof cc === "string" ? cc.trim() : "";
 }
 
 export async function generateTextOrdered(system: string, user: string, preferred?: AiProvider, strict?: boolean): Promise<{ text: string | null; provider?: AiProvider }>{
@@ -278,130 +322,79 @@ export async function generateTextOrdered(system: string, user: string, preferre
   }
 
   if (providers.length === 0) {
-    console.error("[ai] No AI provider with a valid API key is configured. Set DEEPSEEK_API_KEY, OPENAI_API_KEY, or GEMINI_API_KEY.");
+    console.error("[AI] Kein AI-Provider verfügbar. Bitte überprüfe deine API-Keys.");
     return { text: null };
   }
 
-  for (const p of providers) {
+  if (providers[0] === "deepseek") {
+    console.info("[AI] DeepSeek is cheapest – using it");
+  }
+
+  let lastFail: { provider: AiProvider; status: number } | null = null;
+
+  for (let i = 0; i < providers.length; i++) {
+    const p = providers[i];
+    const label = PROVIDER_LABEL[p];
+    const breaker = getCircuitBreaker(`ai:${p}`, BREAKER_OPTIONS);
+
+    if (!breaker.isCallAllowed()) {
+      console.warn(`[AI] ${label} circuit OPEN – skipping`);
+      continue;
+    }
+
+    const role =
+      i === 0
+        ? "primary"
+        : lastFail
+        ? `fallback after ${lastFail.status} from ${PROVIDER_LABEL[lastFail.provider]}`
+        : "fallback";
+    console.info(`[AI] Provider: ${label} (${role})`);
+
     try {
+      let result: CallResult = { text: null, status: 0 };
+
       if (p === "deepseek") {
-        const apiKey = process.env.DEEPSEEK_API_KEY?.trim();
-        if (!apiKey) continue;
-        const model = process.env.DEEPSEEK_MODEL || process.env.OPENAI_MODEL || "deepseek-chat";
-        const base = (process.env.DEEPSEEK_BASE_URL || process.env.OPENAI_BASE_URL || "https://api.deepseek.com/v1").replace(/\/$/, "");
-        let res: Response | null = null;
-        for (let attempt = 0; attempt <= RATE_LIMIT_RETRIES; attempt++) {
-          const r = await fetch(`${base}/chat/completions`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` },
-            body: JSON.stringify({
-              model,
-              messages: [
-                { role: "system", content: system },
-                { role: "user", content: user },
-              ],
-              temperature: 0.35,
-              max_tokens: 900,
-            }),
-          });
-          if (r.status === 429) {
-            if (attempt < RATE_LIMIT_RETRIES) {
-              logRateLimit("deepseek", attempt, RATE_LIMIT_BASE_DELAY_MS * Math.pow(2, attempt));
-              await sleep(RATE_LIMIT_BASE_DELAY_MS * Math.pow(2, attempt));
-              continue;
-            }
-            console.error("[ai/deepseek] Rate limit exhausted after all retries.");
-            break;
-          }
-          res = r;
-          break;
-        }
-        if (!res || !res.ok) continue;
-        const data = await res.json();
-        const text = extractOpenAIText(data);
-        if (text) return { text, provider: p };
+        const combined = system
+          ? [{ role: "system", content: system }, { role: "user", content: user }]
+          : [{ role: "user", content: user }];
+        result = await callDeepseek(combined);
       } else if (p === "openai") {
-        const apiKey = process.env.OPENAI_API_KEY?.trim();
-        if (!apiKey) continue;
-        const model = process.env.OPENAI_MODEL || "gpt-4o-mini";
-        const base = (process.env.OPENAI_BASE_URL || "https://api.openai.com/v1").replace(/\/$/, "");
-        let res: Response | null = null;
-        for (let attempt = 0; attempt <= RATE_LIMIT_RETRIES; attempt++) {
-          const r = await fetch(`${base}/chat/completions`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` },
-            body: JSON.stringify({
-              model,
-              messages: [
-                { role: "system", content: system },
-                { role: "user", content: user },
-              ],
-              temperature: 0.35,
-              max_tokens: 900,
-            }),
-          });
-          if (r.status === 429) {
-            if (attempt < RATE_LIMIT_RETRIES) {
-              logRateLimit("openai", attempt, RATE_LIMIT_BASE_DELAY_MS * Math.pow(2, attempt));
-              await sleep(RATE_LIMIT_BASE_DELAY_MS * Math.pow(2, attempt));
-              continue;
-            }
-            console.error("[ai/openai] Rate limit exhausted after all retries.");
-            break;
-          }
-          res = r;
-          break;
-        }
-        if (!res || !res.ok) continue;
-        const data = await res.json();
-        const text = extractOpenAIText(data);
-        if (text) return { text, provider: p };
+        const combined = system
+          ? [{ role: "system", content: system }, { role: "user", content: user }]
+          : [{ role: "user", content: user }];
+        result = await callOpenAI(combined);
       } else if (p === "gemini") {
-        const apiKey = process.env.GEMINI_API_KEY?.trim();
-        if (!apiKey) continue;
-        const base = (process.env.GEMINI_BASE_URL || "https://generativelanguage.googleapis.com/v1beta").replace(/\/$/, "");
-        const candidates = [
-          process.env.GEMINI_MODEL || "gemini-2.0-flash",
-          "gemini-1.5-flash",
-          "gemini-1.5-pro",
-        ].filter(Boolean);
-        let got: string | null = null;
-        for (const model of candidates) {
-          for (let attempt = 0; attempt <= RATE_LIMIT_RETRIES; attempt++) {
-            try {
-              const res = await fetch(`${base}/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(apiKey)}`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                  contents: [{ role: "user", parts: [{ text: `${system}\n\nUSER REQUEST:\n${user}` }] }],
-                  generationConfig: { temperature: 0.35, maxOutputTokens: 900 },
-                }),
-              });
-              if (res.status === 429) {
-                if (attempt < RATE_LIMIT_RETRIES) {
-                  logRateLimit(`gemini/${model}`, attempt, RATE_LIMIT_BASE_DELAY_MS * Math.pow(2, attempt));
-                  await sleep(RATE_LIMIT_BASE_DELAY_MS * Math.pow(2, attempt));
-                  continue;
-                }
-                console.error(`[ai/gemini/${model}] Rate limit exhausted after all retries.`);
-                break; // try next model
-              }
-              if (!res.ok) break;
-              const data = await res.json();
-              const text = extractGeminiText(data);
-              if (text) { got = text; break; }
-              break;
-            } catch {
-              break;
-            }
-          }
-          if (got) break;
-        }
-        if (got) return { text: got, provider: p };
+        const combined = system ? `${system}\n\nUSER REQUEST:\n${user}` : user;
+        result = await callGemini(combined);
+      }
+
+      if (result.text) {
+        breaker.recordSuccess();
+        return { text: result.text, provider: p };
+      }
+
+      breaker.recordFailure();
+      lastFail = { provider: p, status: result.status };
+      const next = providers[i + 1];
+      if (result.status === 0) {
+        console.warn(`[AI] ${label} network error${next ? `, trying next: ${PROVIDER_LABEL[next]}` : " – no more providers"}`);
+      } else if (SKIP_STATUSES.has(result.status)) {
+        console.error(
+          `[AI] ${label} failed (status: ${result.status})${next ? `, trying next: ${PROVIDER_LABEL[next]}` : " – no more providers"}`
+        );
+      } else if (next) {
+        console.warn(`[AI] ${label} returned no usable output, trying next: ${PROVIDER_LABEL[next]}`);
       }
     } catch {
-      // try next
+      breaker.recordFailure();
+      lastFail = { provider: p, status: 0 };
+      const next = providers[i + 1];
+      if (next) {
+        console.warn(`[AI] ${label} threw an error, trying next: ${PROVIDER_LABEL[next]}`);
+      }
     }
   }
+
+  console.error("[AI] Alle Provider fehlgeschlagen. Kein AI-Provider verfügbar.");
   return { text: null };
 }

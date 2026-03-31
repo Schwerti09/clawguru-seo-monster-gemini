@@ -19,7 +19,7 @@ export async function GET(req: Request) {
     }
   }
 
-  const envPref = (process.env.AI_PREFERRED || process.env.AI_PROVIDER || "") as string;
+  const envPref = (process.env.AI_PROVIDER_ORDER || process.env.AI_PREFERRED || process.env.AI_PROVIDER || "") as string;
   const active = envPref.split(",")[0]?.trim() || "";
   return NextResponse.json({ activeProvider: active, results });
 }

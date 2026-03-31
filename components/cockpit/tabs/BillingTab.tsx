@@ -41,6 +41,8 @@ interface BillingTabProps {
 export function BillingTab({ tier, onUpgrade, data }: BillingTabProps) {
   const currentConfig = TIER_CONFIGS[tier]
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('monthly')
+  const [portalLoading, setPortalLoading] = useState(false)
+  const [portalError, setPortalError] = useState(false)
   // Real usage from data
   const realUsage = {
     executions: data.totalExecutions,
@@ -311,14 +313,36 @@ export function BillingTab({ tier, onUpgrade, data }: BillingTabProps) {
             </div>
             
             <motion.button
-              className="w-full px-4 py-2 rounded-xl transition-all flex items-center justify-center gap-2 text-sm font-medium border hover:border-yellow-500/20"
+              onClick={async () => {
+                setPortalLoading(true)
+                setPortalError(false)
+                try {
+                  const res = await fetch('/api/stripe/portal', { method: 'POST' })
+                  const json = await res.json().catch(() => null)
+                  if (json?.url) {
+                    window.location.href = json.url
+                    return
+                  }
+                  setPortalError(true)
+                } catch {
+                  setPortalError(true)
+                }
+                setPortalLoading(false)
+              }}
+              disabled={portalLoading || tier === 'explorer'}
+              className="w-full px-4 py-2 rounded-xl transition-all flex items-center justify-center gap-2 text-sm font-medium border hover:border-yellow-500/20 disabled:opacity-40"
               style={{ background: 'rgba(234,179,8,0.06)', borderColor: 'rgba(255,255,255,0.06)', color: '#EAB308' }}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
               <CreditCard className="w-4 h-4" />
-              Update Payment Method
+              {portalLoading ? 'Wird geladen…' : 'Billing Portal öffnen'}
             </motion.button>
+            {portalError && (
+              <p className="mt-2 text-xs text-red-400 text-center">
+                Billing Portal konnte nicht geöffnet werden. Bitte versuche es später erneut.
+              </p>
+            )}
           </div>
         </div>
       </motion.div>

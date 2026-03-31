@@ -71,21 +71,21 @@ export const TIER_CONFIGS: Record<UserTier, TierConfig> = {
   daypass: {
     name: 'Day Pass',
     price: '€9 / 24h',
-    description: 'Full access for 24 hours - perfect for projects and testing',
+    description: '24 Stunden voller Zugriff – ideal für akute Incidents und schnelle Checks',
     features: [
-      'Full Access 24h',
-      'All Security Tools',
-      'Unlimited Executions',
-      'Advanced Mycelium Network',
-      '100,000 AI Tokens',
-      'Priority Support',
-      'Real-time Threat Detection',
-      'Custom Runbooks'
+      'Voller Zugriff für 24h',
+      'Alle Security Tools',
+      'Unbegrenzte Executions',
+      'Mycelium Network',
+      'OpsWall Live',
+      'ThreatMap Echtzeit',
+      'Mission Control Dashboard',
+      'Incident Playbooks'
     ],
     highlightFeatures: [
-      'Full Access 24h',
-      'All Tools',
-      'Unlimited Executions'
+      'Voller Zugriff für 24h',
+      'Alle Tools',
+      'Unbegrenzte Executions'
     ],
     limits: {
       maxExecutions: Infinity,
@@ -106,22 +106,22 @@ export const TIER_CONFIGS: Record<UserTier, TierConfig> = {
   pro: {
     name: 'Pro',
     price: '€49 / Monat',
-    description: 'For professionals and teams who need advanced security tools',
+    description: 'Unbegrenzter Zugriff per Abo – für kontinuierliches Monitoring und volle Kontrolle',
     features: [
-      'Unlimited Everything',
-      'Advanced AI Analytics',
-      'Team Collaboration (5 users)',
-      'Priority Support',
-      '1,000,000 AI Tokens',
-      'Custom Integrations',
-      'API Access',
-      'Advanced Reporting',
-      'SLA Guarantee'
+      'Unbegrenzter Zugriff (Abo)',
+      'Alle Security Tools',
+      'Unbegrenzte Executions',
+      'Mycelium Network',
+      'OpsWall Live',
+      'ThreatMap Echtzeit',
+      'Mission Control Dashboard',
+      'Incident Playbooks',
+      'Stripe Billing Portal'
     ],
     highlightFeatures: [
-      'Unlimited Everything',
-      'Teams',
-      'Priority Support'
+      'Unbegrenzter Zugriff',
+      'Abo – monatlich kündbar',
+      'Billing Portal'
     ],
     limits: {
       maxExecutions: Infinity,
@@ -142,18 +142,18 @@ export const TIER_CONFIGS: Record<UserTier, TierConfig> = {
   enterprise: {
     name: 'Enterprise',
     price: 'Custom',
-    description: 'For organizations with advanced security and compliance needs',
+    description: 'Für Organisationen mit erweiterten Sicherheits- und Compliance-Anforderungen',
     features: [
       'God Mode Access',
-      'Unlimited Users',
+      'Unbegrenzte Nutzer',
       '99.9% SLA Guarantee',
-      'White-Label Options',
-      'Dedicated Support Team',
+      'White-Label Optionen',
+      'Dedizierter Support',
       'On-Premise Deployment',
       'Custom Integrations',
-      'Advanced Compliance',
+      'Erweiterte Compliance',
       'Audit Logs',
-      'Custom Training'
+      'Admin-Zugang'
     ],
     highlightFeatures: [
       'God Mode',

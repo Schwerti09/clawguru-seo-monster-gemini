@@ -1,6 +1,5 @@
 import type { Metadata } from "next"
 import { cookies } from 'next/headers'
-import { redirect } from 'next/navigation'
 import { UserDashboardClient } from '@/components/cockpit/UserDashboardClient'
 import { getUserTierFromPlan } from '@/lib/tier-access'
 import { verifyAccessToken } from '@/lib/access-token'
@@ -110,7 +109,12 @@ export default async function DashboardPage() {
   const session = sessionToken ? verifySessionToken(sessionToken) : null
 
   if (!access && !session) {
-    redirect('/account')
+    // No auth: show the dashboard as explorer (free) tier with empty data.
+    // Locked features are gated by the Shadow Realm overlay in the client component.
+    // Users can upgrade via the Billing tab or /pricing.
+    const emptyInitialData = emptyData()
+    const guestUser = { id: 'guest', email: 'guest' }
+    return <UserDashboardClient user={guestUser} tier="explorer" initialData={emptyInitialData} />
   }
 
   // Build user object from available tokens

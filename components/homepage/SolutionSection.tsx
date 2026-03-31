@@ -1,96 +1,48 @@
-type Props = { prefix?: string; locale?: string }
+type Props = { prefix?: string; dict?: Record<string, string> }
 
-export default function SolutionSection({ prefix = "", locale = "de" }: Props) {
-  const isDe = locale.startsWith("de")
-
-  const pillars = isDe
-    ? [
-        {
-          icon: "⚡",
-          title: "Sofort ausführbar",
-          desc: "Runbooks sind keine PDFs. Sie laufen direkt in deiner Umgebung – mit Logging, Rollback und Audit-Trail.",
-        },
-        {
-          icon: "🧠",
-          title: "KI-gestützt, kontextsensitiv",
-          desc: "Die Mycelial Engine verbindet über 4,2 Millionen Runbooks semantisch. Du bekommst immer die relevanteste Lösung für deinen exakten Stack.",
-        },
-        {
-          icon: "📐",
-          title: "Standardisiert & nachweisbar",
-          desc: "Jede Aktion erzeugt automatisch einen Nachweis – für Audits, Compliance und interne Reviews. Git-kompatibel, exportierbar, beweisbar.",
-        },
-        {
-          icon: "🌐",
-          title: "Skaliert mit deinem Team",
-          desc: "Vom Solo-Engineer bis zum Enterprise-SOC: ClawGuru bringt strukturiertes Sicherheitswissen dorthin, wo es gebraucht wird – ohne Skalierungsaufwand.",
-        },
-      ]
-    : [
-        {
-          icon: "⚡",
-          title: "Instantly executable",
-          desc: "Runbooks aren't PDFs. They run directly in your environment – with logging, rollback, and audit trail.",
-        },
-        {
-          icon: "🧠",
-          title: "AI-powered, context-aware",
-          desc: "The Mycelial Engine semantically connects 4.2+ million runbooks. You always get the most relevant solution for your exact stack.",
-        },
-        {
-          icon: "📐",
-          title: "Standardised & verifiable",
-          desc: "Every action automatically generates evidence – for audits, compliance, and internal reviews. Git-compatible, exportable, provable.",
-        },
-        {
-          icon: "🌐",
-          title: "Scales with your team",
-          desc: "From solo engineer to enterprise SOC: ClawGuru brings structured security knowledge where it's needed – without scaling overhead.",
-        },
-      ]
+export default function SolutionSection({ prefix = "", dict = {} }: Props) {
+  const pillars = [
+    {
+      title: dict.solution_p1_title || "Mycelial Engine",
+      desc: dict.solution_p1_desc || "Over 4.2 million runbooks, semantically connected. The Engine finds the right path – not just an answer.",
+    },
+    {
+      title: dict.solution_p2_title || "AI-powered execution",
+      desc: dict.solution_p2_desc || "Automated, context-aware, and in your environment. From identification to proof – in seconds.",
+    },
+    {
+      title: dict.solution_p3_title || "Verifiable results",
+      desc: dict.solution_p3_desc || "Git commit, audit report, certificate. Every execution is documented and traceable.",
+    },
+  ]
 
   return (
     <section className="py-16" style={{ background: "var(--surface-0)" }}>
       <div className="max-w-5xl mx-auto px-4 sm:px-6">
         <div className="text-center mb-12">
-          <span className="inline-block mb-3 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-widest bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
-            {isDe ? "Die Lösung" : "The Solution"}
+          <span className="inline-block mb-3 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-widest bg-green-500/10 text-green-400 border border-green-500/20">
+            {dict.solution_badge || "The Solution"}
           </span>
           <h2 className="text-3xl sm:text-4xl font-black text-white leading-tight">
-            {isDe
-              ? "ClawGuru: Von der Frage zum ausführbaren Fix in Sekunden"
-              : "ClawGuru: From Question to Executable Fix in Seconds"}
+            {dict.solution_title || "One Platform – Three Pillars"}
           </h2>
-          <p className="mt-4 text-gray-300 max-w-3xl mx-auto text-base sm:text-lg">
-            {isDe
-              ? "ClawGuru ist kein weiteres Security-Dashboard. Es ist eine operative SecOps-Plattform, die Sicherheitswissen direkt handlungsfähig macht – für Incident Response, Hardening, Compliance und tägliche Security-Operationen."
-              : "ClawGuru isn't another security dashboard. It's an operational SecOps platform that turns security knowledge into immediate action – for incident response, hardening, compliance, and daily security operations."}
+          <p className="mt-4 text-gray-400 max-w-2xl mx-auto text-base sm:text-lg">
+            {dict.solution_sub || "ClawGuru solves the core problem: knowledge where it's needed, in executable form – instantly verifiable."}
           </p>
         </div>
 
-        <div className="grid sm:grid-cols-2 gap-5 mb-10">
-          {pillars.map((p) => (
-            <div
-              key={p.title}
-              className="rounded-2xl p-6 border border-white/10 flex gap-4 items-start"
-              style={{ background: "rgba(255,255,255,0.04)" }}
-            >
-              <span className="text-3xl shrink-0 mt-0.5">{p.icon}</span>
-              <div>
-                <div className="text-white font-bold text-base mb-1">{p.title}</div>
-                <p className="text-gray-400 text-sm leading-relaxed">{p.desc}</p>
+        <div className="grid md:grid-cols-3 gap-6">
+          {pillars.map((p, i) => (
+            <div key={p.title} className="text-center">
+              <div className="mb-4">
+                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-green-500/20 to-emerald-600/20 border border-green-500/30 text-green-400">
+                  <span className="text-2xl font-black">{i + 1}</span>
+                </div>
               </div>
+              <h3 className="text-xl font-bold text-white mb-3">{p.title}</h3>
+              <p className="text-gray-400 leading-relaxed">{p.desc}</p>
             </div>
           ))}
-        </div>
-
-        <div className="text-center">
-          <a
-            href={`${prefix}/daypass`}
-            className="inline-block px-8 py-3 rounded-2xl font-black bg-gradient-to-r from-brand-cyan to-brand-violet hover:opacity-90 text-white transition-all duration-300"
-          >
-            {isDe ? "Jetzt ausprobieren →" : "Try it now →"}
-          </a>
         </div>
       </div>
     </section>

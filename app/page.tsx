@@ -93,13 +93,13 @@ export default function Home({ dict, locale }: HomeProps) {
 
       <HeroSection prefix={prefix} dict={hp} />
 
-      <ProblemSection locale={locale} />
+      <ProblemSection dict={hp} />
 
-      <SolutionSection prefix={prefix} locale={locale} />
+      <SolutionSection prefix={prefix} dict={hp} />
 
-      <ToolsSection prefix={prefix} locale={locale} />
+      <ToolsSection prefix={prefix} dict={hp} />
 
-      <WhySection locale={locale} />
+      <WhySection dict={hp} />
 
       <section id="live-previews" className="py-14" style={{ background: "var(--surface-0)" }}>
         <Container>
@@ -159,7 +159,7 @@ export default function Home({ dict, locale }: HomeProps) {
         </Container>
       </section>
 
-      <FinalCTASection prefix={prefix} locale={locale} />
+      <FinalCTASection prefix={prefix} dict={hp} />
     </>
   )
 }

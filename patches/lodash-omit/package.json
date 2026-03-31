@@ -1,0 +1,7 @@
+{
+  "name": "lodash.omit",
+  "version": "4.5.0",
+  "description": "Safe native replacement for lodash.omit (no prototype pollution)",
+  "main": "index.js",
+  "license": "MIT"
+}

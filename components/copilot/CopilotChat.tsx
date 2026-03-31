@@ -45,6 +45,7 @@ export default function CopilotChat() {
   const [loading, setLoading] = useState(false)
   const [followups, setFollowups] = useState<string[]>(initialFollowups)
   const [actions, setActions] = useState<ServerResp["actions"]>([])
+  const [providerLabel, setProviderLabel] = useState<string | null>(null)
   const messagesEndRef = useRef<HTMLDivElement | null>(null)
   const messagesContainerRef = useRef<HTMLDivElement | null>(null)
 
@@ -67,6 +68,13 @@ export default function CopilotChat() {
     setMsgs(startMsgs)
     setFollowups(initialFollowups)
   }, [locale, startMsgs, initialFollowups])
+
+  useEffect(() => {
+    fetch("/api/ai/health")
+      .then((r) => r.json())
+      .then((d) => setProviderLabel(d.activeLabel ?? "Status unavailable"))
+      .catch(() => setProviderLabel("Status unavailable"))
+  }, [])
 
   // Analytics tracking for user behavior
   async function trackEvent(event: string, data: Record<string, unknown>) {
@@ -225,14 +233,12 @@ export default function CopilotChat() {
         <div className="p-4 rounded-2xl border border-yellow-700/30 bg-yellow-900/10">
           <div className="text-xs font-bold text-yellow-300 mb-1">⚙️ API Status</div>
           <div className="text-xs text-gray-300">
-            {process.env.GEMINI_API_KEY ? (
+            {providerLabel ? (
               <>
-                <span className="text-green-400">✓ Gemini Live</span> — Full AI Mode
+                <span className="text-green-400">✓ {providerLabel}</span> — AI Active
               </>
             ) : (
-              <>
-                <span className="text-blue-400">⊚ Rule-Based</span> — No GEMINI_API_KEY
-              </>
+              <span className="text-gray-400">⟳ Loading...</span>
             )}
           </div>
         </div>

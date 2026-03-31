@@ -15,8 +15,8 @@ const PRICING = {
 }
 
 function getProviderOrder(): string[] {
-  // Default preference
-  let order = (process.env.AI_PREFERRED || "gemini,deepseek,openai")
+  // Default preference: DeepSeek first (cheapest & no quota issues when Gemini key is absent)
+  let order = (process.env.AI_PREFERRED || "deepseek,openai,gemini")
     .split(",")
     .map((s) => s.trim())
     .filter(Boolean)

@@ -14,8 +14,12 @@ function createPool(): Pool {
     connectionString,
     // Neon requires SSL; rejectUnauthorized=false works with Neon pooler
     ssl: { rejectUnauthorized: false },
-    max: 5,
-    idleTimeoutMillis: 30_000,
+    // Vercel functions are short-lived: keep the pool small to avoid
+    // exhausting Neon's connection limit across concurrent invocations.
+    max: 3,
+    idleTimeoutMillis: 10_000,
+    // Allow enough time for Neon cold-starts, especially across regions.
+    connectionTimeoutMillis: 10_000,
   })
 }
 

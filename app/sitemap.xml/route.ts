@@ -50,6 +50,9 @@ export async function GET(req: NextRequest) {
   ])
   const tools = selectedLocales.map((loc) => `${base}/tools-check-${loc}.xml`)
   const solutions = selectedLocales.map((loc) => `${base}/solutions-cve-${loc}.xml`)
+  const geoRunbooks = process.env.GEO_MATRIX_SITEMAP === "1"
+    ? selectedLocales.map((loc) => `${base}/geo-runbooks-${loc}.xml`)
+    : []
   
   // LIMIT tags and runbooks to prevent duplicate content penalty (configurable via SITEMAP_BUCKETS)
   const tags = selectedLocales.flatMap((loc) => bucketsToUse.map((b) => `${base}/tags-${loc}-${b}.xml`))
@@ -75,6 +78,7 @@ export async function GET(req: NextRequest) {
     ...hubs,
     ...tools,
     ...solutions,
+    ...geoRunbooks,
     ...tags,
     ...runbooks,
     ...runbook100k,

@@ -599,6 +599,30 @@ export async function GET(
       return respond(urlset(urls))
     }
 
+    // GEO-LIVING MATRIX: curated geo runbook variants (only when explicitly enabled)
+    if (name === `geo-runbooks-${locale}` && process.env.GEO_MATRIX_SITEMAP === "1") {
+      const citySuffixes = (process.env.GEO_MATRIX_SITEMAP_CITIES || "berlin,munich,frankfurt,vienna,zurich,paris,newyork")
+        .split(",")
+        .map((x) => x.trim().toLowerCase())
+        .filter(Boolean)
+      const seeds = [
+        "aws-ssh-hardening-2026",
+        "aws-nginx-csp-2026",
+        "aws-kubernetes-zero-trust-2026",
+        "cloudflare-nginx-waf-2026",
+        "hetzner-ssh-hardening-2026",
+      ]
+      const urls = seeds.flatMap((slug) =>
+        citySuffixes.map((city) => ({
+          loc: `${base}/${locale}/runbook/${slug}-${city}`,
+          lastmod,
+          changefreq: "weekly",
+          priority: "0.7",
+        }))
+      )
+      return respond(urlset(urls))
+    }
+
     logTelemetry("sitemap.chunk.error", {
       requestId,
       name,

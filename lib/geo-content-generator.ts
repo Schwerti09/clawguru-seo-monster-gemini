@@ -21,6 +21,18 @@ function safeParseJson<T>(text: string): T | null {
   }
 }
 
+function passesQualityGate(v: GeoVariantContent): boolean {
+  if (!v.localTitle || v.localTitle.length < 16) return false
+  if (!v.localSummary || v.localSummary.length < 60) return false
+  if (!Array.isArray(v.localExamples) || v.localExamples.length < 3) return false
+  if (!Array.isArray(v.localProviders) || v.localProviders.length < 2) return false
+  if (!Array.isArray(v.localCompliance) || v.localCompliance.length < 2) return false
+  if (!Array.isArray(v.localSearchIntents) || v.localSearchIntents.length < 3) return false
+  if (!Array.isArray(v.myceliumLinks) || v.myceliumLinks.length < 2) return false
+  if (v.myceliumLinks.some((x) => typeof x !== "string" || !x.startsWith("/"))) return false
+  return true
+}
+
 export const GEO_MATRIX_SYSTEM_PROMPT = `
 You are ClawGuru Geo-Living Matrix, an elite cyber-ops localization engine.
 Return ONLY strict JSON (no markdown) with this exact shape:
@@ -78,7 +90,7 @@ Prioritize:
     const out = await generateTextOrdered(GEO_MATRIX_SYSTEM_PROMPT, userPrompt, "gemini")
     if (!out.text) return null
     const parsed = safeParseJson<GeoVariantContent>(out.text)
-    if (!parsed || !Array.isArray(parsed.localExamples) || !Array.isArray(parsed.myceliumLinks)) return null
+    if (!parsed || !passesQualityGate(parsed)) return null
     return parsed
   },
   ["geo-living-matrix"],

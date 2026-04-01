@@ -152,6 +152,28 @@ function faqJsonLd(faq: RunbookFaqEntry[]) {
   }
 }
 
+function geoServiceJsonLd(opts: {
+  locale: Locale
+  slug: string
+  title: string
+  city: { city: string; region: string; country: string }
+  summary: string
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    headline: `${opts.title} (${opts.city.city})`,
+    description: opts.summary,
+    inLanguage: opts.locale,
+    areaServed: {
+      "@type": "AdministrativeArea",
+      name: `${opts.city.city}, ${opts.city.region}, ${opts.city.country}`,
+    },
+    url: `${BASE_URL}/${opts.locale}/runbook/${opts.slug}`,
+    isPartOf: `${BASE_URL}/${opts.locale}/runbooks`,
+  }
+}
+
 function ClawScoreBadge({ score }: { score: number }) {
   const color =
     score >= 90 ? "text-emerald-400 border-emerald-500/40 bg-emerald-500/10" :
@@ -373,6 +395,22 @@ export default async function RunbookPage(props: { params: { slug: string } }) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd(r.faq)) }}
         />
       )}
+      {geoVariant && geoCity ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(
+              geoServiceJsonLd({
+                locale,
+                slug: params.slug,
+                title: geoVariant.localTitle || r.title,
+                summary: geoVariant.localSummary || r.summary,
+                city: geoCity,
+              })
+            ),
+          }}
+        />
+      ) : null}
       <div className="py-16 max-w-4xl mx-auto">
         <nav className="text-sm text-gray-500 mb-6" aria-label="Breadcrumb">
           <ol className="flex flex-wrap items-center gap-2">

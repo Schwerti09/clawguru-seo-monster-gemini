@@ -13,7 +13,7 @@ import { BASE_URL } from "@/lib/config"
 import { buildLinkEngine } from "@/lib/seo/link-engine"
 import MyceliumShareCard from "@/components/share/MyceliumShareCard"
 import { unstable_cache } from "next/cache"
-import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
+import { DEFAULT_LOCALE, localeAlternates, type Locale } from "@/lib/i18n"
 import { getDictionary } from "@/lib/getDictionary"
 import { parseGeoVariantSlug } from "@/lib/geo-matrix"
 import { generateGeoVariantContent } from "@/lib/geo-content-generator"
@@ -83,15 +83,20 @@ export async function generateMetadata(props: { params: { slug: string } }) {
   const { getRunbook } = await import("@/lib/pseo")
   const locale = DEFAULT_LOCALE as Locale
   const geoParsed = parseGeoVariantSlug(params.slug)
+  const geoCity = geoParsed.citySlug ? await getCityBySlug(geoParsed.citySlug) : null
   const r = getRunbook(params.slug) ?? getRunbook(geoParsed.baseSlug)
   if (!r) return {}
   const title = r.title.length > 60 ? r.title.slice(0, 57) + "..." : r.title
   const description = r.summary.length > 160 ? r.summary.slice(0, 157) + "..." : r.summary
-  const canonicalSlug = geoParsed.citySlug ? params.slug : r.slug
+  const canonicalSlug = geoCity ? `${r.slug}-${geoCity.slug}` : r.slug
+  const alternates = localeAlternates(`/runbook/${canonicalSlug}`)
   return {
     title: `${title} | ClawGuru Runbook`,
     description,
-    alternates: { canonical: `/${locale}/runbook/${canonicalSlug}` },
+    alternates: {
+      canonical: alternates.canonical,
+      languages: alternates.languages,
+    },
     openGraph: {
       title: `${title} | ClawGuru`,
       description,

@@ -1,7 +1,9 @@
 import type { Metadata } from "next"
 
-import { SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
+import { localeAlternates, SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
 import { permanentRedirect } from "next/navigation"
+import { parseGeoVariantSlug } from "@/lib/geo-matrix"
+import { getCityBySlug } from "@/lib/geo-cities"
 
 export const dynamic = "force-static"
 export const revalidate = 86400
@@ -20,11 +22,27 @@ export async function generateStaticParams() {
 export async function generateMetadata(props: {
   params: { lang: string; slug: string }
 }): Promise<Metadata> {
-  const { lang, slug } = props.params
-  const locale = (SUPPORTED_LOCALES.includes(lang as Locale) ? lang : "de") as Locale
+  const { slug } = props.params
+  const { getRunbook } = await import("@/lib/pseo")
+  const geoParsed = parseGeoVariantSlug(slug)
+  const geoCity = geoParsed.citySlug ? await getCityBySlug(geoParsed.citySlug) : null
+  const runbook = getRunbook(slug) ?? getRunbook(geoParsed.baseSlug)
+  const canonicalSlug = runbook ? (geoCity ? `${runbook.slug}-${geoCity.slug}` : runbook.slug) : slug
+  const title = runbook?.title ? `${runbook.title} | ClawGuru Runbook` : undefined
+  const description = runbook?.summary
+    ? runbook.summary.length > 160
+      ? runbook.summary.slice(0, 157) + "..."
+      : runbook.summary
+    : undefined
+  const alternates = localeAlternates(`/runbook/${canonicalSlug}`)
 
   return {
-    alternates: { canonical: `/${locale}/runbook/${slug}` },
+    title,
+    description,
+    alternates: {
+      canonical: alternates.canonical,
+      languages: alternates.languages,
+    },
     robots: {
       index: true,
       follow: true,

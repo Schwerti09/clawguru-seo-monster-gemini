@@ -5,6 +5,7 @@ import { DEFAULT_LOCALE, SUPPORTED_LOCALES, type Locale, getLocaleHrefLang, loca
 import { logTelemetry } from "@/lib/ops/telemetry"
 import { getRequestId } from "@/lib/ops/request-id"
 import { getTopCities } from "@/lib/geo-cities"
+import { getGeoSitemapRuntimeLimits } from "@/lib/geo-runtime-config"
 // lightweight: avoid importing heavy datasets here to keep Edge fast
 
 // IMPORTANT: This route must stay dynamic (Netlify prerender can call it without params)
@@ -60,9 +61,12 @@ function getGeoSeedRunbooks(locale: Locale): string[] {
   return [...base, ...(localeExtra[locale] || [])]
 }
 
-function selectGeoSitemapCities<T extends { slug: string }>(allCities: T[], locale: Locale): T[] {
-  const limit = Math.max(1, Math.min(80, parseInt(process.env.GEO_MATRIX_SITEMAP_CITY_LIMIT || "24", 10) || 24))
-  const poolLimit = Math.max(limit, Math.min(240, parseInt(process.env.GEO_MATRIX_SITEMAP_CITY_POOL || "72", 10) || 72))
+function selectGeoSitemapCities<T extends { slug: string }>(
+  allCities: T[],
+  locale: Locale,
+  limit: number,
+  poolLimit: number
+): T[] {
   const pool = allCities.slice(0, poolLimit)
   if (pool.length <= limit) return pool
 
@@ -655,14 +659,16 @@ export async function GET(
 
     // GEO-LIVING MATRIX: curated geo runbook variants (only when explicitly enabled)
     if (name === `geo-runbooks-${locale}` && process.env.GEO_MATRIX_SITEMAP === "1") {
-      const cityPoolMax = Math.max(
-        parseInt(process.env.GEO_MATRIX_SITEMAP_CITY_LIMIT || "24", 10) || 24,
-        parseInt(process.env.GEO_MATRIX_SITEMAP_CITY_POOL || "72", 10) || 72
-      )
+      const runtimeLimits = await getGeoSitemapRuntimeLimits()
+      const cityPoolMax = Math.max(runtimeLimits.cityLimit, runtimeLimits.cityPool)
       const topCities = await getTopCities(cityPoolMax)
-      const citySelection = selectGeoSitemapCities(topCities, locale)
-      const seedLimit = Math.max(1, Math.min(20, parseInt(process.env.GEO_MATRIX_SITEMAP_SEED_LIMIT || "8", 10) || 8))
-      const seeds = getGeoSeedRunbooks(locale).slice(0, seedLimit)
+      const citySelection = selectGeoSitemapCities(
+        topCities,
+        locale,
+        runtimeLimits.cityLimit,
+        runtimeLimits.cityPool
+      )
+      const seeds = getGeoSeedRunbooks(locale).slice(0, runtimeLimits.seedLimit)
       const urls = seeds.flatMap((slug) =>
         citySelection.map((city) => ({
           loc: `${base}/${locale}/runbook/${slug}-${city.slug}`,

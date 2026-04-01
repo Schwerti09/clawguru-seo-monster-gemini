@@ -63,6 +63,8 @@ function shouldBypassMiddleware(pathname: string): boolean {
   if (pathname === "/perfection") return true
   if (pathname.startsWith("/dashboard")) return true
   if (pathname.startsWith("/account")) return true
+  // Allow root temporal pages to bypass locale enforcement (they are redirect targets for localized temporal URLs)
+  if (/^\/runbook\/[^/]+\/temporal\/?$/.test(pathname)) return true
   if (isPublicFile(pathname)) return true
   return false
 }
@@ -338,14 +340,15 @@ export function middleware(request: NextRequest) {
     }
   }
 
-  // Compatibility rewrite: map localized temporal page to root temporal page
-  // Keeps external URL stable and avoids locale-enforcement redirect loop
+  // Compatibility redirect: map localized temporal page to root temporal page
+  // Use redirect (308) so external checks see a proper redirect status
+  // The root temporal path is bypassed from locale enforcement to avoid a redirect loop
   const localizedTemporal = pathname.match(/^\/([a-z]{2}(?:-[a-z]{2})?)\/runbook\/([^/]+)\/temporal\/?$/i)
   if (localizedTemporal) {
     const slug = localizedTemporal[2]
     const url = request.nextUrl.clone()
     url.pathname = `/runbook/${slug}/temporal`
-    const res = NextResponse.rewrite(url)
+    const res = NextResponse.redirect(url, 308)
     res.headers.set("x-claw-locale", locale)
     res.headers.set("x-claw-dir", localeDir(locale))
     res.headers.set(getRequestIdHeaderName(), requestId)

@@ -7,7 +7,7 @@ const GA_IDS = ["G-1BHBS4FG2Y"]
 
 declare global {
   interface Window {
-    gtag?: (...args: any[]) => void
+    gtag?: (...args: unknown[]) => void
   }
 }
 

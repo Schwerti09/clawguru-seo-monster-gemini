@@ -8,6 +8,7 @@ import { cookies } from "next/headers"
 import { adminCookieName, verifyAdminToken } from "@/lib/admin-auth"
 import { stripe } from "@/lib/stripe"
 import { getEndpointCounts, getTopIps, getActiveBlocks } from "@/lib/api-usage"
+import { getCheckFunnelSnapshot } from "@/lib/check-funnel"
 
 export const runtime = "nodejs"
 
@@ -149,14 +150,13 @@ function computeAlert(totalCostUsd: number, netTodayCents: number) {
 // ---------------------------------------------------------------------------
 // Conversion funnel (server-side placeholder – wire up real DB counters here)
 // ---------------------------------------------------------------------------
-function conversionFunnel() {
-  // In production: read these from your analytics DB / Supabase hourly aggregation.
-  // The shape is intentionally simple so the client component stays thin.
+function conversionFunnel(stripeMetrics: Awaited<ReturnType<typeof fetchStripeMetrics>> | null) {
+  const check = getCheckFunnelSnapshot()
   return {
-    landingPageViews: 0,
-    daypassClicks: 0,
-    checkoutCompleted: 0,
-    note: "Wire up real analytics DB for live funnel data."
+    landingPageViews: check.pageViews24h,
+    daypassClicks: check.pricingClicks24h,
+    checkoutCompleted: stripeMetrics?.daypassToday ?? 0,
+    note: `24h: starts ${check.checkStarts24h}, results ${check.checkResults24h}, shares ${check.shareClicks24h}, methodology clicks ${check.methodikClicks24h}, hardening link clicks ${check.hardeningClicks24h}.`
   }
 }
 
@@ -183,7 +183,7 @@ export async function GET() {
   const margins = computeMargins(endpointCounts)
   const topIps = getTopIps(10)
   const activeBlocks = getActiveBlocks()
-  const funnel = conversionFunnel()
+  const funnel = conversionFunnel(stripeMetrics)
   const alert = stripeMetrics
     ? computeAlert(margins.totalCostUsd, stripeMetrics.netToday)
     : null

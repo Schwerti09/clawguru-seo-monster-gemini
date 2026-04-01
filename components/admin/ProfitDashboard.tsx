@@ -194,9 +194,9 @@ function ConversionFunnel({ funnel }: { funnel: DashData["funnel"] }) {
   const { landingPageViews, daypassClicks, checkoutCompleted } = funnel
 
   const steps = [
-    { label: "Landing Page Views", value: landingPageViews, icon: "👁️" },
-    { label: "Day-Pass geklickt", value: daypassClicks, icon: "🖱️" },
-    { label: "Checkout abgeschlossen", value: checkoutCompleted, icon: "💳" }
+    { label: "Check-Page Views (24h)", value: landingPageViews, icon: "👁️" },
+    { label: "Pricing-Intents (24h)", value: daypassClicks, icon: "🖱️" },
+    { label: "Day-Pass Checkouts (24h)", value: checkoutCompleted, icon: "💳" }
   ]
 
   return (

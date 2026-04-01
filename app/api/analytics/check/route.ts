@@ -1,10 +1,12 @@
 import { NextRequest, NextResponse } from "next/server"
 import { getRequestId } from "@/lib/ops/request-id"
 import { logTelemetry } from "@/lib/ops/telemetry"
+import { recordCheckFunnelEvent } from "@/lib/check-funnel"
 
 export const dynamic = "force-dynamic"
 
 type CheckEvent =
+  | "check_page_view"
   | "check_start"
   | "check_result"
   | "check_error"
@@ -25,9 +27,12 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: false }, { status: 400 })
     }
 
+    const e = body.event as CheckEvent
+    recordCheckFunnelEvent(e)
+
     logTelemetry("check.analytics", {
       requestId,
-      event: body.event,
+      event: e,
       data: JSON.stringify(body.data ?? {}).slice(0, 800),
       timestamp: new Date().toISOString(),
     })

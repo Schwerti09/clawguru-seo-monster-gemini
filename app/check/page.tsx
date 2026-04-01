@@ -63,7 +63,8 @@ export default function CheckPage() {
       setShowOnboarding(true)
       localStorage.setItem("check_visited", "1")
     }
-  }, [])
+    trackEvent("check_page_view", { locale })
+  }, [locale])
 
   if (showOnboarding) {
     return (

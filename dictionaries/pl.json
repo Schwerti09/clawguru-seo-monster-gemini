@@ -442,7 +442,49 @@
         "l": "Resistant"
       }
     ],
-    "finalCta": "Day Pass €9 – Instant access"
+    "finalCta": "Day Pass €9 – Instant access",
+    "guidedTour": {
+      "labels": {
+        "close": "Zamknij tour",
+        "back": "Wstecz",
+        "next": "Dalej",
+        "finish": "Gotowe",
+        "skip": "Pomiń"
+      },
+      "steps": [
+        {
+          "id": "hero",
+          "targetId": "hero",
+          "title": "Witaj w ClawGuru",
+          "value": "W mniej niż minutę: wcześniej wykryj ryzyko i przejdź od insightu do działania.",
+          "hint": "Tu zaczyna się szybki przegląd produktu."
+        },
+        {
+          "id": "features",
+          "targetId": "features",
+          "title": "Kluczowe funkcje na żywo",
+          "value": "Zobacz moduły w akcji i od razu zrozum, gdzie oszczędzasz czas."
+        },
+        {
+          "id": "copilot",
+          "targetId": "copilot",
+          "title": "Copilot AI na realne incydenty",
+          "value": "Opisz scenariusz incydentu i otrzymaj wykonalne kroki, nie ogólniki."
+        },
+        {
+          "id": "proof",
+          "targetId": "proof",
+          "title": "Zaufanie dzięki przejrzystym sygnałom",
+          "value": "Metryki i referencje pokazują, dlaczego zespoły używają ClawGuru w produkcji."
+        },
+        {
+          "id": "cta",
+          "targetId": "cta",
+          "title": "Zacznij od razu",
+          "value": "Start z Day Pass lub flow check — wartość w kilka minut."
+        }
+      ]
+    }
   },
   "homepage": {
     "hero_title": "Operacje bezpieczeństwa, które naprawdę działają.",
@@ -621,6 +663,49 @@
     "transparency_research_desc": "Skondensowane raporty sytuacyjne",
     "section_title_kicker": "",
     "section_title_main": "",
-    "section_title_sub": ""
+    "section_title_sub": "",
+    "check_title_de": "LIVE Security-Check (Heuristik) — 30 Sekunden",
+    "check_sub_de_prefix": "Gib IP/Domain/Bot-URL ein. Du bekommst einen",
+    "check_sub_de_suffix": "+ klare nächste Schritte.",
+    "check_target_label_de": "Ziel (oeffentlich sichtbar): IP, Domain oder URL",
+    "check_risk_high_de": "RISIKO ERHOEHT",
+    "check_risk_ok_de": "BASIS OK",
+    "check_target_chip_de": "Ziel",
+    "check_ask_guru_de": "Frag den Guru",
+    "check_footer_privacy_de": "keine Speicherung von Zielen",
+    "check_footer_heuristic_de": "Score ist heuristisch",
+    "check_footer_validate_de": "Fuer echte Aussagen: Config/Logs pruefen",
+    "transparency_sub_de": "ClawGuru ist kostenlos. Einige Empfehlungen sind Affiliate-Links. Wir kuratieren nach Nutzwert im echten Betrieb.",
+    "transparency_card1_title_de": "1) Affiliate-Erloese",
+    "transparency_card1_desc_de": "Hosting & Security-Tools",
+    "transparency_card2_title_de": "2) Managed Ops",
+    "transparency_card2_desc_de": "Hardening, Monitoring, Wartung",
+    "transparency_card3_title_de": "3) Forschung/Berichte",
+    "transparency_card3_desc_de": "Verdichtete Lageberichte",
+    "live_preview_kicker": "LIVE",
+    "live_preview_title": "Podgląd Intel",
+    "live_preview_empty": "Nie znaleziono incydentów.",
+    "live_stats_checks": "Sprawdzenia dziś",
+    "live_stats_critical": "krytyczne CVE",
+    "live_stats_duration": "śr. czas",
+    "check_title_en": "LIVE Security Check (heurystyka) — 30 sekund",
+    "check_sub_en_prefix": "Podaj IP/domenę/URL bota. Otrzymujesz",
+    "check_sub_en_suffix": "+ jasne kolejne kroki.",
+    "check_score_label": "Claw Security Score",
+    "check_target_label_en": "Cel (publicznie widoczny): IP, domena lub URL",
+    "check_risk_high_en": "WYŻSZE RYZYKO",
+    "check_risk_ok_en": "BAZA OK",
+    "check_target_chip_en": "Cel",
+    "check_ask_guru_en": "Zapytaj Guru",
+    "check_footer_privacy_en": "brak zapisu celów",
+    "check_footer_heuristic_en": "wynik jest heurystyczny",
+    "check_footer_validate_en": "Aby wyciągnąć wnioski: sprawdź config i logi",
+    "transparency_sub_en": "ClawGuru jest darmowy. Część rekomendacji to linki afiliacyjne. Dobieramy według realnej wartości operacyjnej.",
+    "transparency_card1_title_en": "1) Przychody z afiliacji",
+    "transparency_card1_desc_en": "Hosting i narzędzia bezpieczeństwa",
+    "transparency_card2_title_en": "2) Zarządzane ops",
+    "transparency_card2_desc_en": "Hardening, monitoring, utrzymanie",
+    "transparency_card3_title_en": "3) Badania i raporty",
+    "transparency_card3_desc_en": "Skondensowane raporty sytuacyjne"
   }
 }

@@ -442,7 +442,49 @@
         "l": "Resistant"
       }
     ],
-    "finalCta": "Day Pass €9 – Instant access"
+    "finalCta": "Day Pass €9 – Instant access",
+    "guidedTour": {
+      "labels": {
+        "close": "关闭导览",
+        "back": "返回",
+        "next": "下一步",
+        "finish": "完成",
+        "skip": "跳过"
+      },
+      "steps": [
+        {
+          "id": "hero",
+          "targetId": "hero",
+          "title": "欢迎使用 ClawGuru",
+          "value": "不到一分钟：更早发现风险，从洞察走向行动。",
+          "hint": "快速产品导览从这里开始。"
+        },
+        {
+          "id": "features",
+          "targetId": "features",
+          "title": "核心功能实况",
+          "value": "观看模块运行，立刻理解节省时间之处。"
+        },
+        {
+          "id": "copilot",
+          "targetId": "copilot",
+          "title": "面向真实事件的 AI 副驾驶",
+          "value": "描述事件场景，获得可执行步骤而非泛泛建议。"
+        },
+        {
+          "id": "proof",
+          "targetId": "proof",
+          "title": "透明信号带来信任",
+          "value": "指标与参考说明团队为何在生产中使用 ClawGuru。"
+        },
+        {
+          "id": "cta",
+          "targetId": "cta",
+          "title": "立即开始",
+          "value": "通过 Day Pass 或检查流程在数分钟内获得价值。"
+        }
+      ]
+    }
   },
   "homepage": {
     "hero_title": "真正有效的安全运营。",
@@ -621,6 +663,49 @@
     "transparency_research_desc": "浓缩情况报告",
     "section_title_kicker": "",
     "section_title_main": "",
-    "section_title_sub": ""
+    "section_title_sub": "",
+    "check_title_de": "LIVE Security-Check (Heuristik) — 30 Sekunden",
+    "check_sub_de_prefix": "Gib IP/Domain/Bot-URL ein. Du bekommst einen",
+    "check_sub_de_suffix": "+ klare nächste Schritte.",
+    "check_target_label_de": "Ziel (oeffentlich sichtbar): IP, Domain oder URL",
+    "check_risk_high_de": "RISIKO ERHOEHT",
+    "check_risk_ok_de": "BASIS OK",
+    "check_target_chip_de": "Ziel",
+    "check_ask_guru_de": "Frag den Guru",
+    "check_footer_privacy_de": "keine Speicherung von Zielen",
+    "check_footer_heuristic_de": "Score ist heuristisch",
+    "check_footer_validate_de": "Fuer echte Aussagen: Config/Logs pruefen",
+    "transparency_sub_de": "ClawGuru ist kostenlos. Einige Empfehlungen sind Affiliate-Links. Wir kuratieren nach Nutzwert im echten Betrieb.",
+    "transparency_card1_title_de": "1) Affiliate-Erloese",
+    "transparency_card1_desc_de": "Hosting & Security-Tools",
+    "transparency_card2_title_de": "2) Managed Ops",
+    "transparency_card2_desc_de": "Hardening, Monitoring, Wartung",
+    "transparency_card3_title_de": "3) Forschung/Berichte",
+    "transparency_card3_desc_de": "Verdichtete Lageberichte",
+    "live_preview_kicker": "直播",
+    "live_preview_title": "Intel 预览",
+    "live_preview_empty": "未找到事件。",
+    "live_stats_checks": "今日检查",
+    "live_stats_critical": "严重 CVE",
+    "live_stats_duration": "平均耗时",
+    "check_title_en": "实时安全检查（启发式）— 30 秒",
+    "check_sub_en_prefix": "输入 IP/域名/机器人 URL。你将获得",
+    "check_sub_en_suffix": "+ 清晰的下一步。",
+    "check_score_label": "Claw Security Score",
+    "check_target_label_en": "目标（公开可见）：IP、域名或 URL",
+    "check_risk_high_en": "风险较高",
+    "check_risk_ok_en": "基础 OK",
+    "check_target_chip_en": "目标",
+    "check_ask_guru_en": "询问 Guru",
+    "check_footer_privacy_en": "不存储目标",
+    "check_footer_heuristic_en": "分数为启发式",
+    "check_footer_validate_en": "要得出可靠结论：检查配置与日志",
+    "transparency_sub_en": "ClawGuru 免费。部分推荐为联盟链接。我们按真实运营价值筛选。",
+    "transparency_card1_title_en": "1) 联盟收入",
+    "transparency_card1_desc_en": "托管与安全工具",
+    "transparency_card2_title_en": "2) 托管运维",
+    "transparency_card2_desc_en": "加固、监控、维护",
+    "transparency_card3_title_en": "3) 研究与报告",
+    "transparency_card3_desc_en": "精炼态势报告"
   }
 }

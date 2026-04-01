@@ -442,7 +442,49 @@
         "l": "Resistant"
       }
     ],
-    "finalCta": "Day Pass €9 – Instant access"
+    "finalCta": "Day Pass €9 – Instant access",
+    "guidedTour": {
+      "labels": {
+        "close": "Закрыть тур",
+        "back": "Назад",
+        "next": "Далее",
+        "finish": "Готово",
+        "skip": "Пропустить"
+      },
+      "steps": [
+        {
+          "id": "hero",
+          "targetId": "hero",
+          "title": "Добро пожаловать в ClawGuru",
+          "value": "Меньше минуты: раньше видеть риск и переходить от инсайта к действию.",
+          "hint": "Здесь начинается быстрый обзор продукта."
+        },
+        {
+          "id": "features",
+          "targetId": "features",
+          "title": "Ключевые функции вживую",
+          "value": "Смотрите модули в работе и сразу понимайте, где экономите время."
+        },
+        {
+          "id": "copilot",
+          "targetId": "copilot",
+          "title": "ИИ‑копилот для реальных инцидентов",
+          "value": "Опишите сценарий инцидента — получите исполнимые шаги, а не общие советы."
+        },
+        {
+          "id": "proof",
+          "targetId": "proof",
+          "title": "Доверие через прозрачные сигналы",
+          "value": "Метрики и ссылки показывают, почему команды используют ClawGuru в проде."
+        },
+        {
+          "id": "cta",
+          "targetId": "cta",
+          "title": "Начать сразу",
+          "value": "Старт с Day Pass или проверкой — ценность за минуты."
+        }
+      ]
+    }
   },
   "homepage": {
     "hero_title": "Операции безопасности, которые действительно работают.",
@@ -621,6 +663,49 @@
     "transparency_research_desc": "Сжатые отчеты о ситуации",
     "section_title_kicker": "",
     "section_title_main": "",
-    "section_title_sub": ""
+    "section_title_sub": "",
+    "check_title_de": "LIVE Security-Check (Heuristik) — 30 Sekunden",
+    "check_sub_de_prefix": "Gib IP/Domain/Bot-URL ein. Du bekommst einen",
+    "check_sub_de_suffix": "+ klare nächste Schritte.",
+    "check_target_label_de": "Ziel (oeffentlich sichtbar): IP, Domain oder URL",
+    "check_risk_high_de": "RISIKO ERHOEHT",
+    "check_risk_ok_de": "BASIS OK",
+    "check_target_chip_de": "Ziel",
+    "check_ask_guru_de": "Frag den Guru",
+    "check_footer_privacy_de": "keine Speicherung von Zielen",
+    "check_footer_heuristic_de": "Score ist heuristisch",
+    "check_footer_validate_de": "Fuer echte Aussagen: Config/Logs pruefen",
+    "transparency_sub_de": "ClawGuru ist kostenlos. Einige Empfehlungen sind Affiliate-Links. Wir kuratieren nach Nutzwert im echten Betrieb.",
+    "transparency_card1_title_de": "1) Affiliate-Erloese",
+    "transparency_card1_desc_de": "Hosting & Security-Tools",
+    "transparency_card2_title_de": "2) Managed Ops",
+    "transparency_card2_desc_de": "Hardening, Monitoring, Wartung",
+    "transparency_card3_title_de": "3) Forschung/Berichte",
+    "transparency_card3_desc_de": "Verdichtete Lageberichte",
+    "live_preview_kicker": "LIVE",
+    "live_preview_title": "Превью Intel",
+    "live_preview_empty": "Инциденты не найдены.",
+    "live_stats_checks": "Проверок сегодня",
+    "live_stats_critical": "критич. CVE",
+    "live_stats_duration": "сред. время",
+    "check_title_en": "LIVE проверка безопасности (эвристика) — 30 секунд",
+    "check_sub_en_prefix": "Введите IP/домен/URL бота. Вы получаете",
+    "check_sub_en_suffix": "+ четкие следующие шаги.",
+    "check_score_label": "Claw Security Score",
+    "check_target_label_en": "Цель (публично видна): IP, домен или URL",
+    "check_risk_high_en": "ПОВЫШЕННЫЙ РИСК",
+    "check_risk_ok_en": "БАЗА OK",
+    "check_target_chip_en": "Цель",
+    "check_ask_guru_en": "Спросить Guru",
+    "check_footer_privacy_en": "цели не сохраняются",
+    "check_footer_heuristic_en": "оценка эвристическая",
+    "check_footer_validate_en": "Для выводов: проверьте конфиг и логи",
+    "transparency_sub_en": "ClawGuru бесплатен. Часть рекомендаций — партнёрские ссылки. Отбираем по реальной операционной ценности.",
+    "transparency_card1_title_en": "1) Доход от партнёрок",
+    "transparency_card1_desc_en": "Хостинг и инструменты безопасности",
+    "transparency_card2_title_en": "2) Управляемые ops",
+    "transparency_card2_desc_en": "Укрепление, мониторинг, обслуживание",
+    "transparency_card3_title_en": "3) Исследования и отчёты",
+    "transparency_card3_desc_en": "Сжатые сводные отчёты"
   }
 }

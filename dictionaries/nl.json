@@ -442,7 +442,49 @@
         "l": "Resistant"
       }
     ],
-    "finalCta": "Day Pass €9 – Instant access"
+    "finalCta": "Day Pass €9 – Instant access",
+    "guidedTour": {
+      "labels": {
+        "close": "Tour sluiten",
+        "back": "Terug",
+        "next": "Volgende",
+        "finish": "Klaar",
+        "skip": "Overslaan"
+      },
+      "steps": [
+        {
+          "id": "hero",
+          "targetId": "hero",
+          "title": "Welkom bij ClawGuru",
+          "value": "Binnen een minuut: risico eerder zien en van inzicht naar actie gaan.",
+          "hint": "Hier start je snelle productrondleiding."
+        },
+        {
+          "id": "features",
+          "targetId": "features",
+          "title": "Kernfuncties live",
+          "value": "Bekijk de belangrijkste modules live en zie waar je tijd wint."
+        },
+        {
+          "id": "copilot",
+          "targetId": "copilot",
+          "title": "AI-copilot voor echte incidenten",
+          "value": "Beschrijf je incident en krijg uitvoerbare stappen, geen generiek advies."
+        },
+        {
+          "id": "proof",
+          "targetId": "proof",
+          "title": "Vertrouwen door transparante signalen",
+          "value": "Metrics en referenties tonen waarom teams ClawGuru in productie gebruiken."
+        },
+        {
+          "id": "cta",
+          "targetId": "cta",
+          "title": "Direct beginnen",
+          "value": "Start met Day Pass of de check-flow voor waarde binnen minuten."
+        }
+      ]
+    }
   },
   "homepage": {
     "hero_title": "Beveiligingsoperaties die echt werken.",
@@ -621,6 +663,49 @@
     "transparency_research_desc": "Gecomprimeerde situatierapporten",
     "section_title_kicker": "",
     "section_title_main": "",
-    "section_title_sub": ""
+    "section_title_sub": "",
+    "check_title_de": "LIVE Security-Check (Heuristik) — 30 Sekunden",
+    "check_sub_de_prefix": "Gib IP/Domain/Bot-URL ein. Du bekommst einen",
+    "check_sub_de_suffix": "+ klare nächste Schritte.",
+    "check_target_label_de": "Ziel (oeffentlich sichtbar): IP, Domain oder URL",
+    "check_risk_high_de": "RISIKO ERHOEHT",
+    "check_risk_ok_de": "BASIS OK",
+    "check_target_chip_de": "Ziel",
+    "check_ask_guru_de": "Frag den Guru",
+    "check_footer_privacy_de": "keine Speicherung von Zielen",
+    "check_footer_heuristic_de": "Score ist heuristisch",
+    "check_footer_validate_de": "Fuer echte Aussagen: Config/Logs pruefen",
+    "transparency_sub_de": "ClawGuru ist kostenlos. Einige Empfehlungen sind Affiliate-Links. Wir kuratieren nach Nutzwert im echten Betrieb.",
+    "transparency_card1_title_de": "1) Affiliate-Erloese",
+    "transparency_card1_desc_de": "Hosting & Security-Tools",
+    "transparency_card2_title_de": "2) Managed Ops",
+    "transparency_card2_desc_de": "Hardening, Monitoring, Wartung",
+    "transparency_card3_title_de": "3) Forschung/Berichte",
+    "transparency_card3_desc_de": "Verdichtete Lageberichte",
+    "live_preview_kicker": "LIVE",
+    "live_preview_title": "Intel-voorbeeld",
+    "live_preview_empty": "Geen incidenten gevonden.",
+    "live_stats_checks": "Checks vandaag",
+    "live_stats_critical": "kritieke CVE's",
+    "live_stats_duration": "gem. duur",
+    "check_title_en": "LIVE security check (heuristiek) — 30 seconden",
+    "check_sub_en_prefix": "Voer IP/domein/bot-URL in. Je krijgt een",
+    "check_sub_en_suffix": "+ duidelijke vervolgstappen.",
+    "check_score_label": "Claw Security Score",
+    "check_target_label_en": "Doel (openbaar zichtbaar): IP, domein of URL",
+    "check_risk_high_en": "HOGER RISICO",
+    "check_risk_ok_en": "BASIS OK",
+    "check_target_chip_en": "Doel",
+    "check_ask_guru_en": "Vraag de Guru",
+    "check_footer_privacy_en": "geen opslag van doelen",
+    "check_footer_heuristic_en": "score is heuristisch",
+    "check_footer_validate_en": "Voor echte conclusies: controleer config en logs",
+    "transparency_sub_en": "ClawGuru is gratis. Sommige aanbevelingen zijn affiliate-links. We cureren op echte operationele waarde.",
+    "transparency_card1_title_en": "1) Affiliate-inkomsten",
+    "transparency_card1_desc_en": "Hosting en security-tools",
+    "transparency_card2_title_en": "2) Beheerde ops",
+    "transparency_card2_desc_en": "Hardening, monitoring, onderhoud",
+    "transparency_card3_title_en": "3) Onderzoek en rapporten",
+    "transparency_card3_desc_en": "Verdichte situatierapporten"
   }
 }

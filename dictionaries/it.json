@@ -442,7 +442,49 @@
         "l": "Resistant"
       }
     ],
-    "finalCta": "Day Pass €9 – Instant access"
+    "finalCta": "Day Pass €9 – Instant access",
+    "guidedTour": {
+      "labels": {
+        "close": "Chiudi tour",
+        "back": "Indietro",
+        "next": "Avanti",
+        "finish": "Fatto",
+        "skip": "Salta"
+      },
+      "steps": [
+        {
+          "id": "hero",
+          "targetId": "hero",
+          "title": "Benvenuto in ClawGuru",
+          "value": "In meno di un minuto: rilevare il rischio prima e passare dagli insight all'azione.",
+          "hint": "Inizia qui la visita rapida al prodotto."
+        },
+        {
+          "id": "features",
+          "targetId": "features",
+          "title": "Funzioni principali dal vivo",
+          "value": "Guarda i moduli in azione e capisci subito dove risparmi tempo."
+        },
+        {
+          "id": "copilot",
+          "targetId": "copilot",
+          "title": "Copilot IA per incidenti concreti",
+          "value": "Descrivi lo scenario d'incidente e ottieni passi eseguibili, non consigli generici."
+        },
+        {
+          "id": "proof",
+          "targetId": "proof",
+          "title": "Fiducia con segnali trasparenti",
+          "value": "Metriche e riferimenti mostrano perché i team usano ClawGuru in produzione."
+        },
+        {
+          "id": "cta",
+          "targetId": "cta",
+          "title": "Inizia subito",
+          "value": "Parti con Day Pass o il flusso di check per valore in pochi minuti."
+        }
+      ]
+    }
   },
   "homepage": {
     "hero_title": "Operazioni di sicurezza che funzionano davvero.",
@@ -621,6 +663,49 @@
     "transparency_research_desc": "Report di situazione condensati",
     "section_title_kicker": "",
     "section_title_main": "",
-    "section_title_sub": ""
+    "section_title_sub": "",
+    "check_title_de": "LIVE Security-Check (Heuristik) — 30 Sekunden",
+    "check_sub_de_prefix": "Gib IP/Domain/Bot-URL ein. Du bekommst einen",
+    "check_sub_de_suffix": "+ klare nächste Schritte.",
+    "check_target_label_de": "Ziel (oeffentlich sichtbar): IP, Domain oder URL",
+    "check_risk_high_de": "RISIKO ERHOEHT",
+    "check_risk_ok_de": "BASIS OK",
+    "check_target_chip_de": "Ziel",
+    "check_ask_guru_de": "Frag den Guru",
+    "check_footer_privacy_de": "keine Speicherung von Zielen",
+    "check_footer_heuristic_de": "Score ist heuristisch",
+    "check_footer_validate_de": "Fuer echte Aussagen: Config/Logs pruefen",
+    "transparency_sub_de": "ClawGuru ist kostenlos. Einige Empfehlungen sind Affiliate-Links. Wir kuratieren nach Nutzwert im echten Betrieb.",
+    "transparency_card1_title_de": "1) Affiliate-Erloese",
+    "transparency_card1_desc_de": "Hosting & Security-Tools",
+    "transparency_card2_title_de": "2) Managed Ops",
+    "transparency_card2_desc_de": "Hardening, Monitoring, Wartung",
+    "transparency_card3_title_de": "3) Forschung/Berichte",
+    "transparency_card3_desc_de": "Verdichtete Lageberichte",
+    "live_preview_kicker": "LIVE",
+    "live_preview_title": "Anteprima Intel",
+    "live_preview_empty": "Nessun incidente trovato.",
+    "live_stats_checks": "Controlli oggi",
+    "live_stats_critical": "CVE critici",
+    "live_stats_duration": "durata media",
+    "check_title_en": "Security check LIVE (euristica) — 30 secondi",
+    "check_sub_en_prefix": "Inserisci IP/dominio/URL del bot. Ottieni un",
+    "check_sub_en_suffix": "+ prossimi passi chiari.",
+    "check_score_label": "Claw Security Score",
+    "check_target_label_en": "Target (visibile pubblicamente): IP, dominio o URL",
+    "check_risk_high_en": "RISCHIO ALTO",
+    "check_risk_ok_en": "BASE OK",
+    "check_target_chip_en": "Target",
+    "check_ask_guru_en": "Chiedi al Guru",
+    "check_footer_privacy_en": "nessun salvataggio dei target",
+    "check_footer_heuristic_en": "il punteggio è euristico",
+    "check_footer_validate_en": "Per conclusioni reali: verifica config e log",
+    "transparency_sub_en": "ClawGuru è gratuito. Alcune raccomandazioni sono link di affiliazione. Selezioniamo in base al valore operativo reale.",
+    "transparency_card1_title_en": "1) Ricavi da affiliazione",
+    "transparency_card1_desc_en": "Hosting e strumenti di sicurezza",
+    "transparency_card2_title_en": "2) Ops gestite",
+    "transparency_card2_desc_en": "Hardening, monitoraggio, manutenzione",
+    "transparency_card3_title_en": "3) Ricerca e report",
+    "transparency_card3_desc_en": "Report di situazione condensati"
   }
 }

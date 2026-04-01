@@ -442,7 +442,49 @@
         "l": "Resistant"
       }
     ],
-    "finalCta": "Day Pass €9 – Instant access"
+    "finalCta": "Day Pass €9 – Instant access",
+    "guidedTour": {
+      "labels": {
+        "close": "Cerrar tour",
+        "back": "Atrás",
+        "next": "Siguiente",
+        "finish": "Listo",
+        "skip": "Omitir"
+      },
+      "steps": [
+        {
+          "id": "hero",
+          "targetId": "hero",
+          "title": "Bienvenido a ClawGuru",
+          "value": "En menos de un minuto verás cómo detectar riesgos antes y pasar de insights a acción.",
+          "hint": "Aquí empieza tu recorrido rápido por el producto."
+        },
+        {
+          "id": "features",
+          "targetId": "features",
+          "title": "Funciones principales en vivo",
+          "value": "Mira los módulos clave en acción y entiende al instante dónde ahorras tiempo cada día."
+        },
+        {
+          "id": "copilot",
+          "targetId": "copilot",
+          "title": "Copiloto de IA para incidentes reales",
+          "value": "Describe tu escenario de incidente y obtén pasos ejecutables, no consejos genéricos."
+        },
+        {
+          "id": "proof",
+          "targetId": "proof",
+          "title": "Confianza con señales transparentes",
+          "value": "Métricas y referencias muestran por qué los equipos usan ClawGuru en producción."
+        },
+        {
+          "id": "cta",
+          "targetId": "cta",
+          "title": "Empieza ya",
+          "value": "Activa con Day Pass o prueba el flujo de check para ver valor en minutos."
+        }
+      ]
+    }
   },
   "homepage": {
     "hero_title": "Operaciones de seguridad que realmente funcionan.",
@@ -621,6 +663,49 @@
     "transparency_research_desc": "Informes de situación condensados",
     "section_title_kicker": "",
     "section_title_main": "",
-    "section_title_sub": ""
+    "section_title_sub": "",
+    "check_title_de": "LIVE Security-Check (Heuristik) — 30 Sekunden",
+    "check_sub_de_prefix": "Gib IP/Domain/Bot-URL ein. Du bekommst einen",
+    "check_sub_de_suffix": "+ klare nächste Schritte.",
+    "check_target_label_de": "Ziel (oeffentlich sichtbar): IP, Domain oder URL",
+    "check_risk_high_de": "RISIKO ERHOEHT",
+    "check_risk_ok_de": "BASIS OK",
+    "check_target_chip_de": "Ziel",
+    "check_ask_guru_de": "Frag den Guru",
+    "check_footer_privacy_de": "keine Speicherung von Zielen",
+    "check_footer_heuristic_de": "Score ist heuristisch",
+    "check_footer_validate_de": "Fuer echte Aussagen: Config/Logs pruefen",
+    "transparency_sub_de": "ClawGuru ist kostenlos. Einige Empfehlungen sind Affiliate-Links. Wir kuratieren nach Nutzwert im echten Betrieb.",
+    "transparency_card1_title_de": "1) Affiliate-Erloese",
+    "transparency_card1_desc_de": "Hosting & Security-Tools",
+    "transparency_card2_title_de": "2) Managed Ops",
+    "transparency_card2_desc_de": "Hardening, Monitoring, Wartung",
+    "transparency_card3_title_de": "3) Forschung/Berichte",
+    "transparency_card3_desc_de": "Verdichtete Lageberichte",
+    "live_preview_kicker": "LIVE",
+    "live_preview_title": "Vista previa Intel",
+    "live_preview_empty": "No se encontraron incidentes.",
+    "live_stats_checks": "Comprobaciones hoy",
+    "live_stats_critical": "CVE críticos",
+    "live_stats_duration": "duración media",
+    "check_title_en": "Security Check LIVE (heurística) — 30 segundos",
+    "check_sub_en_prefix": "Introduce IP/dominio/URL del bot. Obtienes una",
+    "check_sub_en_suffix": "+ próximos pasos claros.",
+    "check_score_label": "Claw Security Score",
+    "check_target_label_en": "Objetivo (visible públicamente): IP, dominio o URL",
+    "check_risk_high_en": "RIESGO ALTO",
+    "check_risk_ok_en": "BASE OK",
+    "check_target_chip_en": "Objetivo",
+    "check_ask_guru_en": "Pregunta al Guru",
+    "check_footer_privacy_en": "sin almacenar objetivos",
+    "check_footer_heuristic_en": "la puntuación es heurística",
+    "check_footer_validate_en": "Para conclusiones reales: revisa config y registros",
+    "transparency_sub_en": "ClawGuru es gratuito. Algunas recomendaciones son enlaces de afiliados. Curamos según valor operativo real.",
+    "transparency_card1_title_en": "1) Ingresos por afiliados",
+    "transparency_card1_desc_en": "Hosting y herramientas de seguridad",
+    "transparency_card2_title_en": "2) Ops gestionado",
+    "transparency_card2_desc_en": "Hardening, monitorización, mantenimiento",
+    "transparency_card3_title_en": "3) Investigación e informes",
+    "transparency_card3_desc_en": "Informes de situación condensados"
   }
 }

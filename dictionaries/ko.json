@@ -442,7 +442,49 @@
         "l": "Resistant"
       }
     ],
-    "finalCta": "Day Pass €9 – Instant access"
+    "finalCta": "Day Pass €9 – Instant access",
+    "guidedTour": {
+      "labels": {
+        "close": "투어 닫기",
+        "back": "뒤로",
+        "next": "다음",
+        "finish": "완료",
+        "skip": "건너뛰기"
+      },
+      "steps": [
+        {
+          "id": "hero",
+          "targetId": "hero",
+          "title": "ClawGuru에 오신 것을 환영합니다",
+          "value": "1분 이내에 위험을 더 일찍 감지하고 인사이트에서 실행으로.",
+          "hint": "빠른 제품 둘러보기가 여기서 시작됩니다."
+        },
+        {
+          "id": "features",
+          "targetId": "features",
+          "title": "핵심 기능 라이브",
+          "value": "모듈을 라이브로 보고 시간 절약 지점을 바로 이해."
+        },
+        {
+          "id": "copilot",
+          "targetId": "copilot",
+          "title": "실제 인시던트용 AI 코파일럿",
+          "value": "인시던트 시나리오를 설명하고 일반 조언이 아닌 실행 가능한 단계를 받으세요."
+        },
+        {
+          "id": "proof",
+          "targetId": "proof",
+          "title": "투명한 신호로 신뢰",
+          "value": "지표와 참고 자료가 프로덕션에서 ClawGuru를 쓰는 이유를 보여줍니다."
+        },
+        {
+          "id": "cta",
+          "targetId": "cta",
+          "title": "지금 시작",
+          "value": "Day Pass 또는 점검 흐름으로 몇 분 안에 가치를."
+        }
+      ]
+    }
   },
   "homepage": {
     "hero_title": "실제로 작동하는 보안 운영.",
@@ -621,6 +663,49 @@
     "transparency_research_desc": "압축된 상황 보고서",
     "section_title_kicker": "",
     "section_title_main": "",
-    "section_title_sub": ""
+    "section_title_sub": "",
+    "check_title_de": "LIVE Security-Check (Heuristik) — 30 Sekunden",
+    "check_sub_de_prefix": "Gib IP/Domain/Bot-URL ein. Du bekommst einen",
+    "check_sub_de_suffix": "+ klare nächste Schritte.",
+    "check_target_label_de": "Ziel (oeffentlich sichtbar): IP, Domain oder URL",
+    "check_risk_high_de": "RISIKO ERHOEHT",
+    "check_risk_ok_de": "BASIS OK",
+    "check_target_chip_de": "Ziel",
+    "check_ask_guru_de": "Frag den Guru",
+    "check_footer_privacy_de": "keine Speicherung von Zielen",
+    "check_footer_heuristic_de": "Score ist heuristisch",
+    "check_footer_validate_de": "Fuer echte Aussagen: Config/Logs pruefen",
+    "transparency_sub_de": "ClawGuru ist kostenlos. Einige Empfehlungen sind Affiliate-Links. Wir kuratieren nach Nutzwert im echten Betrieb.",
+    "transparency_card1_title_de": "1) Affiliate-Erloese",
+    "transparency_card1_desc_de": "Hosting & Security-Tools",
+    "transparency_card2_title_de": "2) Managed Ops",
+    "transparency_card2_desc_de": "Hardening, Monitoring, Wartung",
+    "transparency_card3_title_de": "3) Forschung/Berichte",
+    "transparency_card3_desc_de": "Verdichtete Lageberichte",
+    "live_preview_kicker": "LIVE",
+    "live_preview_title": "Intel 미리보기",
+    "live_preview_empty": "인시던트가 없습니다.",
+    "live_stats_checks": "오늘 검사",
+    "live_stats_critical": "심각 CVE",
+    "live_stats_duration": "평균 시간",
+    "check_title_en": "LIVE 보안 점검(휴리스틱) — 30초",
+    "check_sub_en_prefix": "IP/도메인/봇 URL을 입력하세요. 다음을 받습니다:",
+    "check_sub_en_suffix": "+ 명확한 다음 단계.",
+    "check_score_label": "Claw Security Score",
+    "check_target_label_en": "대상(공개): IP, 도메인 또는 URL",
+    "check_risk_high_en": "위험 높음",
+    "check_risk_ok_en": "기본 OK",
+    "check_target_chip_en": "대상",
+    "check_ask_guru_en": "Guru에게 물어보기",
+    "check_footer_privacy_en": "대상 저장 없음",
+    "check_footer_heuristic_en": "점수는 휴리스틱",
+    "check_footer_validate_en": "실제 결론: 설정과 로그 확인",
+    "transparency_sub_en": "ClawGuru는 무료입니다. 일부 추천은 제휴 링크입니다. 실제 운영 가치로 선별합니다.",
+    "transparency_card1_title_en": "1) 제휴 수익",
+    "transparency_card1_desc_en": "호스팅 및 보안 도구",
+    "transparency_card2_title_en": "2) 관리형 Ops",
+    "transparency_card2_desc_en": "하드닝, 모니터링, 유지보수",
+    "transparency_card3_title_en": "3) 연구 및 보고서",
+    "transparency_card3_desc_en": "압축된 상황 보고서"
   }
 }

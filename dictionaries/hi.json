@@ -442,7 +442,49 @@
         "l": "Resistant"
       }
     ],
-    "finalCta": "Day Pass €9 – Instant access"
+    "finalCta": "Day Pass €9 – Instant access",
+    "guidedTour": {
+      "labels": {
+        "close": "टूर बंद करें",
+        "back": "पीछे",
+        "next": "आगे",
+        "finish": "पूर्ण",
+        "skip": "छोड़ें"
+      },
+      "steps": [
+        {
+          "id": "hero",
+          "targetId": "hero",
+          "title": "ClawGuru में आपका स्वागत है",
+          "value": "एक मिनट से कम में: जोखिम पहले पहचानें और अंतर्दृष्टि से कार्रवाई पर जाएँ।",
+          "hint": "यहाँ आपका त्वरित उत्पाद दौर शुरू होता है।"
+        },
+        {
+          "id": "features",
+          "targetId": "features",
+          "title": "मुख्य सुविधाएँ लाइव",
+          "value": "मॉड्यूल लाइव देखें और तुरंत समझें कहाँ समय बचता है।"
+        },
+        {
+          "id": "copilot",
+          "targetId": "copilot",
+          "title": "वास्तविक घटनाओं के लिए AI सह-पायलट",
+          "value": "घटना परिदृश्य लिखें और निष्पादनीय चरण पाएँ, सामान्य सलाह नहीं।"
+        },
+        {
+          "id": "proof",
+          "targetId": "proof",
+          "title": "पारदर्शी संकेतों से विश्वास",
+          "value": "मेट्रिक्स और संदर्भ दिखाते हैं कि टीमें उत्पादन में ClawGuru क्यों चलाती हैं।"
+        },
+        {
+          "id": "cta",
+          "targetId": "cta",
+          "title": "तुरंत शुरू करें",
+          "value": "Day Pass या चेक फ़्लो से मिनटों में मूल्य।"
+        }
+      ]
+    }
   },
   "homepage": {
     "hero_title": "सुरक्षा संचालन जो वास्तव में काम करते हैं।",
@@ -621,6 +663,49 @@
     "transparency_research_desc": "संक्षिप्त स्थिति रिपोर्ट",
     "section_title_kicker": "",
     "section_title_main": "",
-    "section_title_sub": ""
+    "section_title_sub": "",
+    "check_title_de": "LIVE Security-Check (Heuristik) — 30 Sekunden",
+    "check_sub_de_prefix": "Gib IP/Domain/Bot-URL ein. Du bekommst einen",
+    "check_sub_de_suffix": "+ klare nächste Schritte.",
+    "check_target_label_de": "Ziel (oeffentlich sichtbar): IP, Domain oder URL",
+    "check_risk_high_de": "RISIKO ERHOEHT",
+    "check_risk_ok_de": "BASIS OK",
+    "check_target_chip_de": "Ziel",
+    "check_ask_guru_de": "Frag den Guru",
+    "check_footer_privacy_de": "keine Speicherung von Zielen",
+    "check_footer_heuristic_de": "Score ist heuristisch",
+    "check_footer_validate_de": "Fuer echte Aussagen: Config/Logs pruefen",
+    "transparency_sub_de": "ClawGuru ist kostenlos. Einige Empfehlungen sind Affiliate-Links. Wir kuratieren nach Nutzwert im echten Betrieb.",
+    "transparency_card1_title_de": "1) Affiliate-Erloese",
+    "transparency_card1_desc_de": "Hosting & Security-Tools",
+    "transparency_card2_title_de": "2) Managed Ops",
+    "transparency_card2_desc_de": "Hardening, Monitoring, Wartung",
+    "transparency_card3_title_de": "3) Forschung/Berichte",
+    "transparency_card3_desc_de": "Verdichtete Lageberichte",
+    "live_preview_kicker": "LIVE",
+    "live_preview_title": "Intel पूर्वावलोकन",
+    "live_preview_empty": "कोई घटना नहीं मिली।",
+    "live_stats_checks": "आज की जाँच",
+    "live_stats_critical": "गंभीर CVE",
+    "live_stats_duration": "औसत अवधि",
+    "check_title_en": "LIVE सुरक्षा जाँच (ह्यूरिस्टिक) — 30 सेकंड",
+    "check_sub_en_prefix": "IP/डोमेन/बॉट URL दर्ज करें। आपको मिलता है",
+    "check_sub_en_suffix": "+ स्पष्ट अगले कदम।",
+    "check_score_label": "Claw Security Score",
+    "check_target_label_en": "लक्ष्य (सार्वजनिक रूप से दिखाई देने वाला): IP, डोमेन या URL",
+    "check_risk_high_en": "उच्च जोखिम",
+    "check_risk_ok_en": "आधार OK",
+    "check_target_chip_en": "लक्ष्य",
+    "check_ask_guru_en": "Guru से पूछें",
+    "check_footer_privacy_en": "लक्ष्य संग्रहीत नहीं",
+    "check_footer_heuristic_en": "स्कोर ह्यूरिस्टिक है",
+    "check_footer_validate_en": "वास्तविक निष्कर्ष: कॉन्फ़िग और लॉग जाँचें",
+    "transparency_sub_en": "ClawGuru मुफ्त है। कुछ सिफारिशें सहयोगी लिंक हैं। हम वास्तविक परिचालन मूल्य के अनुसार चुनते हैं।",
+    "transparency_card1_title_en": "1) सहयोगी आय",
+    "transparency_card1_desc_en": "होस्टिंग और सुरक्षा उपकरण",
+    "transparency_card2_title_en": "2) प्रबंधित ऑप्स",
+    "transparency_card2_desc_en": "हार्डनिंग, निगरानी, रखरखाव",
+    "transparency_card3_title_en": "3) अनुसंधान और रिपोर्ट",
+    "transparency_card3_desc_en": "संक्षिप्त स्थिति रिपोर्ट"
   }
 }

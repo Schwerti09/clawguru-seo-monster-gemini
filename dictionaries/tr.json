@@ -442,7 +442,49 @@
         "l": "Resistant"
       }
     ],
-    "finalCta": "Day Pass €9 – Instant access"
+    "finalCta": "Day Pass €9 – Instant access",
+    "guidedTour": {
+      "labels": {
+        "close": "Tur kapat",
+        "back": "Geri",
+        "next": "İleri",
+        "finish": "Bitti",
+        "skip": "Atla"
+      },
+      "steps": [
+        {
+          "id": "hero",
+          "targetId": "hero",
+          "title": "ClawGuru'ya hoş geldiniz",
+          "value": "Bir dakikadan kısa sürede riski daha erken görün ve içgörüden aksiyona geçin.",
+          "hint": "Hızlı ürün turunuz burada başlar."
+        },
+        {
+          "id": "features",
+          "targetId": "features",
+          "title": "Canlı temel özellikler",
+          "value": "Modülleri canlı izleyin, zaman kazandığınız yeri anında görün."
+        },
+        {
+          "id": "copilot",
+          "targetId": "copilot",
+          "title": "Gerçek olaylar için yapay zekâ copilot",
+          "value": "Olay senaryonuzu yazın; genel tavsiye değil, uygulanabilir adımlar alın."
+        },
+        {
+          "id": "proof",
+          "targetId": "proof",
+          "title": "Şeffaf sinyallerle güven",
+          "value": "Metrikler ve referanslar ekiplerin neden ClawGuru kullandığını gösterir."
+        },
+        {
+          "id": "cta",
+          "targetId": "cta",
+          "title": "Hemen başlayın",
+          "value": "Day Pass veya kontrol akışıyla dakikalar içinde değer görün."
+        }
+      ]
+    }
   },
   "homepage": {
     "hero_title": "Gerçekten işe yarayan güvenlik operasyonları.",
@@ -621,6 +663,49 @@
     "transparency_research_desc": "Yoğunlaştırılmış durum raporları",
     "section_title_kicker": "",
     "section_title_main": "",
-    "section_title_sub": ""
+    "section_title_sub": "",
+    "check_title_de": "LIVE Security-Check (Heuristik) — 30 Sekunden",
+    "check_sub_de_prefix": "Gib IP/Domain/Bot-URL ein. Du bekommst einen",
+    "check_sub_de_suffix": "+ klare nächste Schritte.",
+    "check_target_label_de": "Ziel (oeffentlich sichtbar): IP, Domain oder URL",
+    "check_risk_high_de": "RISIKO ERHOEHT",
+    "check_risk_ok_de": "BASIS OK",
+    "check_target_chip_de": "Ziel",
+    "check_ask_guru_de": "Frag den Guru",
+    "check_footer_privacy_de": "keine Speicherung von Zielen",
+    "check_footer_heuristic_de": "Score ist heuristisch",
+    "check_footer_validate_de": "Fuer echte Aussagen: Config/Logs pruefen",
+    "transparency_sub_de": "ClawGuru ist kostenlos. Einige Empfehlungen sind Affiliate-Links. Wir kuratieren nach Nutzwert im echten Betrieb.",
+    "transparency_card1_title_de": "1) Affiliate-Erloese",
+    "transparency_card1_desc_de": "Hosting & Security-Tools",
+    "transparency_card2_title_de": "2) Managed Ops",
+    "transparency_card2_desc_de": "Hardening, Monitoring, Wartung",
+    "transparency_card3_title_de": "3) Forschung/Berichte",
+    "transparency_card3_desc_de": "Verdichtete Lageberichte",
+    "live_preview_kicker": "LIVE",
+    "live_preview_title": "Intel önizleme",
+    "live_preview_empty": "Olay bulunamadı.",
+    "live_stats_checks": "Bugünkü kontroller",
+    "live_stats_critical": "kritik CVE",
+    "live_stats_duration": "ort. süre",
+    "check_title_en": "CANLI Güvenlik Kontrolü (heuristik) — 30 saniye",
+    "check_sub_en_prefix": "IP/alan adı/bot URL'si girin. Bir",
+    "check_sub_en_suffix": "+ net sonraki adımlar alırsınız.",
+    "check_score_label": "Claw Security Score",
+    "check_target_label_en": "Hedef (herkese açık): IP, alan adı veya URL",
+    "check_risk_high_en": "YÜKSEK RİSK",
+    "check_risk_ok_en": "TEMEL OK",
+    "check_target_chip_en": "Hedef",
+    "check_ask_guru_en": "Guru'ya sor",
+    "check_footer_privacy_en": "hedefler saklanmaz",
+    "check_footer_heuristic_en": "skor heuristik",
+    "check_footer_validate_en": "Gerçek sonuç için: config ve logları kontrol edin",
+    "transparency_sub_en": "ClawGuru ücretsizdir. Bazı öneriler ortaklık bağlantılarıdır. Gerçek operasyonel değere göre seçiyoruz.",
+    "transparency_card1_title_en": "1) Ortaklık geliri",
+    "transparency_card1_desc_en": "Hosting ve güvenlik araçları",
+    "transparency_card2_title_en": "2) Yönetilen ops",
+    "transparency_card2_desc_en": "Sertleştirme, izleme, bakım",
+    "transparency_card3_title_en": "3) Araştırma ve raporlar",
+    "transparency_card3_desc_en": "Özet durum raporları"
   }
 }

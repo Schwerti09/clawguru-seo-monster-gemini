@@ -9,6 +9,7 @@
     "dev": "next dev",
     "db:migrate": "node scripts/db/migrate.js",
     "check:i18n": "node scripts/check-i18n.js",
+    "check:geo-surface": "node scripts/check-geo-surface.js",
     "check:sitemap-redirects": "node scripts/check-sitemap-redirects.js",
     "check:prod-smoke": "node scripts/check-production-smoke.js",
     "i18n:sync-dictionaries": "node scripts/sync-dictionaries.js",

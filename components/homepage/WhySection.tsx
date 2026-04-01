@@ -48,7 +48,7 @@ export default function WhySection({ dict = {} }: Props) {
 
         <div className="grid md:grid-cols-2 gap-8 mb-12">
           <div>
-            <h3 className="text-xl font-bold text-white mb-6">Key Benefits</h3>
+            <h3 className="text-xl font-bold text-white mb-6">{dict.why_benefits_heading || "Key Benefits"}</h3>
             <div className="space-y-4">
               {reasons.map((r) => (
                 <div key={r.title} className="flex gap-3">
@@ -63,7 +63,7 @@ export default function WhySection({ dict = {} }: Props) {
           </div>
 
           <div>
-            <h3 className="text-xl font-bold text-white mb-6">Differentiators</h3>
+            <h3 className="text-xl font-bold text-white mb-6">{dict.why_diff_heading || "Differentiators"}</h3>
             <div className="space-y-4">
               {differentiators.map((d) => (
                 <div key={d.title} className="flex gap-3">

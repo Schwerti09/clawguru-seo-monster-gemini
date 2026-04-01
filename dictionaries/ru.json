@@ -548,6 +548,8 @@
     "final_cta_secondary": "Посмотреть демо",
     "solution_badge": "Решение",
     "tools_badge": "Инструменты",
-    "why_badge": "Почему"
+    "why_badge": "Почему",
+    "why_benefits_heading": "Ключевые преимущества",
+    "why_diff_heading": "Отличительные черты"
   }
 }

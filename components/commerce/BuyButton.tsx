@@ -1,21 +1,25 @@
 "use client"
 
 import { useState } from "react"
+import { trackEvent } from "@/lib/analytics"
 
 export default function BuyButton({
   product,
   label,
   className,
-  style
+  style,
+  analyticsSource,
 }: {
   product: "daypass" | "pro" | "team" | "msp"
   label: string
   className?: string
   style?: React.CSSProperties
+  analyticsSource?: string
 }) {
   const [loading, setLoading] = useState(false)
 
   async function go() {
+    trackEvent("pricing_click", { product, source: analyticsSource ?? "buy_button" })
     setLoading(true)
     try {
       const res = await fetch("/api/stripe/checkout", {

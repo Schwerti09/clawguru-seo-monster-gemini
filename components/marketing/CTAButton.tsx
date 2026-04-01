@@ -2,12 +2,14 @@ export default function CTAButton({
   href,
   label,
   variant = "primary",
-  size = "md"
+  size = "md",
+  onClick,
 }: {
   href: string
   label: string
   variant?: "primary" | "outline"
   size?: "sm" | "md" | "lg"
+  onClick?: () => void
 }) {
   const sizeCls =
     size === "lg"
@@ -22,7 +24,7 @@ export default function CTAButton({
       : `inline-flex items-center justify-center font-bold text-gray-200 border border-gray-700 hover:border-gray-500 bg-black/20 transition-colors ${sizeCls}`
 
   return (
-    <a href={href} className={cls} rel={href.startsWith("http") ? "nofollow" : undefined}>
+    <a href={href} onClick={onClick} className={cls} rel={href.startsWith("http") ? "nofollow" : undefined}>
       {label}
     </a>
   )

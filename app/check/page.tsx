@@ -7,6 +7,7 @@ import MyceliumShareCard from "@/components/share/MyceliumShareCard"
 import PageOnboarding from "@/components/onboarding/PageOnboarding"
 import { useI18n } from "@/components/i18n/I18nProvider"
 import { useState, useEffect } from "react"
+import { trackEvent } from "@/lib/analytics"
 
 export default function CheckPage() {
   const [showOnboarding, setShowOnboarding] = useState(false)
@@ -119,6 +120,7 @@ export default function CheckPage() {
           </ul>
           <a
             href={`${prefix}/methodik`}
+            onClick={() => trackEvent("methodik_click", { locale, source: "check_methodology_block" })}
             className="mt-4 inline-flex text-sm text-cyan-300 hover:text-cyan-200 underline underline-offset-4"
           >
             {isGerman ? "Vollstaendige Methodik ansehen" : "View full methodology"}
@@ -134,22 +136,46 @@ export default function CheckPage() {
               : "Most common follow-ups after the check: concrete hardening guides for common stack components."}
           </p>
           <div className="mt-4 grid gap-2 sm:grid-cols-2">
-            <a href={`${prefix}/nginx-hardening`} className="rounded-lg border border-white/10 px-3 py-2 text-sm text-cyan-300 hover:border-cyan-500/40 hover:text-cyan-200">
+            <a
+              href={`${prefix}/nginx-hardening`}
+              onClick={() => trackEvent("hardening_link_click", { locale, target: "nginx-hardening", source: "check_link_hub" })}
+              className="rounded-lg border border-white/10 px-3 py-2 text-sm text-cyan-300 hover:border-cyan-500/40 hover:text-cyan-200"
+            >
               Nginx Hardening
             </a>
-            <a href={`${prefix}/kubernetes-network-policies`} className="rounded-lg border border-white/10 px-3 py-2 text-sm text-cyan-300 hover:border-cyan-500/40 hover:text-cyan-200">
+            <a
+              href={`${prefix}/kubernetes-network-policies`}
+              onClick={() => trackEvent("hardening_link_click", { locale, target: "kubernetes-network-policies", source: "check_link_hub" })}
+              className="rounded-lg border border-white/10 px-3 py-2 text-sm text-cyan-300 hover:border-cyan-500/40 hover:text-cyan-200"
+            >
               Kubernetes Network Policies
             </a>
-            <a href={`${prefix}/vault-hardening`} className="rounded-lg border border-white/10 px-3 py-2 text-sm text-cyan-300 hover:border-cyan-500/40 hover:text-cyan-200">
+            <a
+              href={`${prefix}/vault-hardening`}
+              onClick={() => trackEvent("hardening_link_click", { locale, target: "vault-hardening", source: "check_link_hub" })}
+              className="rounded-lg border border-white/10 px-3 py-2 text-sm text-cyan-300 hover:border-cyan-500/40 hover:text-cyan-200"
+            >
               Vault Hardening
             </a>
-            <a href={`${prefix}/aws-iam-security`} className="rounded-lg border border-white/10 px-3 py-2 text-sm text-cyan-300 hover:border-cyan-500/40 hover:text-cyan-200">
+            <a
+              href={`${prefix}/aws-iam-security`}
+              onClick={() => trackEvent("hardening_link_click", { locale, target: "aws-iam-security", source: "check_link_hub" })}
+              className="rounded-lg border border-white/10 px-3 py-2 text-sm text-cyan-300 hover:border-cyan-500/40 hover:text-cyan-200"
+            >
               AWS IAM Security
             </a>
-            <a href={`${prefix}/postgresql-security`} className="rounded-lg border border-white/10 px-3 py-2 text-sm text-cyan-300 hover:border-cyan-500/40 hover:text-cyan-200">
+            <a
+              href={`${prefix}/postgresql-security`}
+              onClick={() => trackEvent("hardening_link_click", { locale, target: "postgresql-security", source: "check_link_hub" })}
+              className="rounded-lg border border-white/10 px-3 py-2 text-sm text-cyan-300 hover:border-cyan-500/40 hover:text-cyan-200"
+            >
               PostgreSQL Security
             </a>
-            <a href={`${prefix}/docker-security-hardening`} className="rounded-lg border border-white/10 px-3 py-2 text-sm text-cyan-300 hover:border-cyan-500/40 hover:text-cyan-200">
+            <a
+              href={`${prefix}/docker-security-hardening`}
+              onClick={() => trackEvent("hardening_link_click", { locale, target: "docker-security-hardening", source: "check_link_hub" })}
+              className="rounded-lg border border-white/10 px-3 py-2 text-sm text-cyan-300 hover:border-cyan-500/40 hover:text-cyan-200"
+            >
               Docker Security Hardening
             </a>
           </div>

@@ -8,6 +8,7 @@ import { ClawguruAvatar } from "@/components/ui/ClawguruAvatar"
 import dynamic from "next/dynamic"
 import { useI18n } from "@/components/i18n/I18nProvider"
 import Image from "next/image"
+import { trackEvent } from "@/lib/analytics"
 
 // WORLD BEAST FINAL LAUNCH: lazy-load upsell modal
 const UpsellModal = dynamic(() => import("@/components/onboarding/UpsellModal"), { ssr: false })
@@ -24,6 +25,14 @@ function scoreHint(score: number) {
   if (score >= 75) return "Nicht schlecht. Ein paar Defaults können dich trotzdem grillen."
   if (score >= 60) return "Hier reicht ein dummer Zufall. Hardening jetzt."
   return "Stop. Rotieren. Schließen. Stabilisieren."
+}
+
+function classifyTarget(input: string): "ip" | "domain" | "url" | "other" {
+  const v = input.trim().toLowerCase()
+  if (/^\d{1,3}(\.\d{1,3}){3}(\/\d{1,2})?$/.test(v)) return "ip"
+  if (/^https?:\/\//.test(v)) return "url"
+  if (/^[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?(\.[a-z0-9-]+)+$/.test(v)) return "domain"
+  return "other"
 }
 
 export default function HeroSecurityCheck({ dict = {} }: { dict?: Record<string, string> }) {
@@ -74,12 +83,20 @@ export default function HeroSecurityCheck({ dict = {} }: { dict?: Record<string,
 
   async function handleCheck() {
     if (!input.trim()) return
+    const targetType = classifyTarget(input)
+    trackEvent("check_start", { locale, target_type: targetType })
     setLoading(true)
     setError(null)
     setResult(null)
     try {
       const res = await performSecurityCheck(input.trim())
       setResult(res)
+      trackEvent("check_result", {
+        locale,
+        score: res.score,
+        vulnerable: res.vulnerable,
+        target_type: targetType,
+      })
       if (typeof window !== "undefined") {
         const current = parseInt(localStorage.getItem("cg_check_count") ?? "0", 10)
         const next = current + 1
@@ -88,6 +105,10 @@ export default function HeroSecurityCheck({ dict = {} }: { dict?: Record<string,
       }
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : isGerman ? "Prüfung fehlgeschlagen. Bitte versuche es erneut." : "Check failed. Please try again.")
+      trackEvent("check_error", {
+        locale,
+        target_type: targetType,
+      })
     } finally {
       setLoading(false)
     }
@@ -97,6 +118,7 @@ export default function HeroSecurityCheck({ dict = {} }: { dict?: Record<string,
     if (!shareUrl) return
     try {
       await navigator.clipboard.writeText(`${window.location.origin}${shareUrl}`)
+      trackEvent("share_click", { locale, method: "copy_link", score: result?.score ?? null })
     } catch {}
   }
 
@@ -109,6 +131,7 @@ export default function HeroSecurityCheck({ dict = {} }: { dict?: Record<string,
     if (navigator.share) {
       try {
         await navigator.share({ title: "Claw Security Score", text, url })
+        trackEvent("share_click", { locale, method: "native_share", score: result?.score ?? null })
       } catch {}
     } else {
       await copyLink()
@@ -298,9 +321,25 @@ export default function HeroSecurityCheck({ dict = {} }: { dict?: Record<string,
                           : "Pro: permanent full access from €49/month. Day Pass: 24h full access for €9."}
                       </div>
                       <div className="flex flex-col sm:flex-row gap-3">
-                        <BuyButton product="pro" label={isGerman ? "Pro 49 € / Monat" : "Pro €49 / month"} className="px-5 py-3 rounded-2xl font-black bg-gradient-to-r from-cyan-500 to-blue-600 hover:opacity-90" />
-                        <BuyButton product="daypass" label={isGerman ? "Day Pass (9€ / 24h)" : "Day Pass (€9 / 24h)"} className="px-5 py-3 rounded-2xl font-black bg-gradient-to-r from-orange-500 to-red-600 hover:opacity-90" />
-                        <CTAButton href={`${prefix}/pricing`} label={isGerman ? "Alle Pläne" : "All plans"} variant="outline" size="md" />
+                        <BuyButton
+                          product="pro"
+                          label={isGerman ? "Pro 49 € / Monat" : "Pro €49 / month"}
+                          className="px-5 py-3 rounded-2xl font-black bg-gradient-to-r from-cyan-500 to-blue-600 hover:opacity-90"
+                          analyticsSource="check_vulnerable_card"
+                        />
+                        <BuyButton
+                          product="daypass"
+                          label={isGerman ? "Day Pass (9€ / 24h)" : "Day Pass (€9 / 24h)"}
+                          className="px-5 py-3 rounded-2xl font-black bg-gradient-to-r from-orange-500 to-red-600 hover:opacity-90"
+                          analyticsSource="check_vulnerable_card"
+                        />
+                        <CTAButton
+                          href={`${prefix}/pricing`}
+                          label={isGerman ? "Alle Pläne" : "All plans"}
+                          variant="outline"
+                          size="md"
+                          onClick={() => trackEvent("pricing_click", { locale, source: "check_vulnerable_card" })}
+                        />
                       </div>
                     </div>
                   ) : (
@@ -309,7 +348,13 @@ export default function HeroSecurityCheck({ dict = {} }: { dict?: Record<string,
                       <div className="text-gray-300 mb-3">{improveText}</div>
                       <div className="flex flex-col sm:flex-row gap-3">
                         <CTAButton href={`${prefix}/dashboard`} label={isGerman ? "Dashboard öffnen" : "Open dashboard"} variant="primary" size="md" />
-                        <CTAButton href={`${prefix}/pricing`} label={isGerman ? "Pro/Team ansehen" : "See Pro/Team"} variant="outline" size="md" />
+                        <CTAButton
+                          href={`${prefix}/pricing`}
+                          label={isGerman ? "Pro/Team ansehen" : "See Pro/Team"}
+                          variant="outline"
+                          size="md"
+                          onClick={() => trackEvent("pricing_click", { locale, source: "check_safe_card" })}
+                        />
                       </div>
                     </div>
                   )}

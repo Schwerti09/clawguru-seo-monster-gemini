@@ -548,6 +548,8 @@
     "final_cta_secondary": "데모 보기",
     "solution_badge": "해결책",
     "tools_badge": "도구",
-    "why_badge": "왜"
+    "why_badge": "왜",
+    "why_benefits_heading": "주요 이점",
+    "why_diff_heading": "차별화 요소"
   }
 }

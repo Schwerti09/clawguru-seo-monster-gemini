@@ -548,6 +548,8 @@
     "final_cta_secondary": "デモを見る",
     "solution_badge": "解決策",
     "tools_badge": "ツール",
-    "why_badge": "なぜ"
+    "why_badge": "なぜ",
+    "why_benefits_heading": "主なメリット",
+    "why_diff_heading": "差別化要因"
   }
 }

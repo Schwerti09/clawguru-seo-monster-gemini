@@ -547,6 +547,8 @@
     "final_cta_secondary": "عرض العرض التوضيحي",
     "solution_badge": "الحل",
     "tools_badge": "الأدوات",
-    "why_badge": "لماذا"
+    "why_badge": "لماذا",
+    "why_benefits_heading": "المزايا الرئيسية",
+    "why_diff_heading": "عوامل التمييز"
   }
 }

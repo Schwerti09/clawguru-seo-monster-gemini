@@ -9,9 +9,10 @@ const UPSELL_SHOWN_KEY = "cg_upsell_shown"
 
 type Props = {
   score?: number
+  onClose?: () => void
 }
 
-export default function UpsellModal({ score }: Props) {
+export default function UpsellModal({ score, onClose }: Props) {
   const { locale } = useI18n()
   const prefix = `/${locale}`
   const [open, setOpen] = useState(false)

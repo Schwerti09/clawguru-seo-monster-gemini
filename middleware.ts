@@ -191,6 +191,47 @@ export function middleware(request: NextRequest) {
     return res
   }
 
+  // Compatibility rewrite: localized share pages map to root share route
+  // Example: /de/share/foo -> /share/foo
+  const localizedShare = pathname.match(/^\/([a-z]{2}(?:-[a-z]{2})?)\/share\/([^/]+)\/?$/i)
+  if (localizedShare) {
+    const url = request.nextUrl.clone()
+    url.pathname = `/share/${localizedShare[2]}`
+    const res = NextResponse.rewrite(url)
+    res.headers.set("x-claw-locale", localizedShare[1].toLowerCase())
+    res.headers.set("x-claw-dir", localeDir(localizedShare[1].toLowerCase() as any))
+    res.headers.set(getRequestIdHeaderName(), requestId)
+    return res
+  }
+
+  // Normalize uppercase CVE slug pattern to canonical lowercase URL.
+  // Example: /solutions/fix-CVE-2025-29927 -> /de/solutions/fix-cve-2025-29927
+  const rootFixCveUpper = pathname.match(/^\/solutions\/fix-CVE-(.+)$/)
+  if (rootFixCveUpper) {
+    const normalized = `fix-cve-${rootFixCveUpper[1]}`.toLowerCase()
+    const url = request.nextUrl.clone()
+    url.pathname = `/${DEFAULT_LOCALE}/solutions/${normalized}`
+    const res = NextResponse.redirect(url, 308)
+    res.headers.set("x-claw-locale", DEFAULT_LOCALE)
+    res.headers.set("x-claw-dir", localeDir(DEFAULT_LOCALE))
+    res.headers.set(getRequestIdHeaderName(), requestId)
+    return res
+  }
+
+  const localizedFixCveUpper = pathname.match(/^\/([a-z]{2}(?:-[a-z]{2})?)\/solutions\/fix-CVE-(.+)$/)
+  if (localizedFixCveUpper) {
+    const localeFromPath = localizedFixCveUpper[1].toLowerCase() as Locale
+    const targetLocale = SUPPORTED_LOCALES.includes(localeFromPath) ? localeFromPath : DEFAULT_LOCALE
+    const normalized = `fix-cve-${localizedFixCveUpper[2]}`.toLowerCase()
+    const url = request.nextUrl.clone()
+    url.pathname = `/${targetLocale}/solutions/${normalized}`
+    const res = NextResponse.redirect(url, 308)
+    res.headers.set("x-claw-locale", targetLocale)
+    res.headers.set("x-claw-dir", localeDir(targetLocale))
+    res.headers.set(getRequestIdHeaderName(), requestId)
+    return res
+  }
+
   // Apply per-IP rate limiting for hot routes (env-gated to reduce Edge CPU when not needed)
   if (process.env.MW_RL_ENABLED === '1') {
     const bucket = routeBucket(pathname)
@@ -243,7 +284,13 @@ export function middleware(request: NextRequest) {
     const isTagDetail = new RegExp(`^/${locale}/tag/`, "i").test(pathname)
     const isRunbooksIndex = new RegExp(`^/${locale}/runbooks(?:/|$)`, "i").test(pathname)
     if (isRunbookDetail || isTagDetail || isRunbooksIndex) {
-      const res = NextResponse.json({}, { status: 404 })
+      const fallbackLocale = (allowedLocales[0] as Locale) ?? DEFAULT_LOCALE
+      const targetPath = pathname.replace(new RegExp(`^/${locale}`), `/${fallbackLocale}`)
+      const url = request.nextUrl.clone()
+      url.pathname = targetPath
+      const res = NextResponse.redirect(url, 308)
+      res.headers.set("x-claw-locale", fallbackLocale)
+      res.headers.set("x-claw-dir", localeDir(fallbackLocale))
       res.headers.set(getRequestIdHeaderName(), requestId)
       return res
     }

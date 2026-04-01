@@ -107,7 +107,7 @@ export default function Home({ dict, locale }: HomeProps) {
             <h2 className="text-2xl sm:text-3xl font-black text-white">{hp.live_title || 'Experience ClawGuru live'}</h2>
             <p className="mt-2 text-gray-400">{hp.live_sub || ''}</p>
           </div>
-          <FeatureShowcase prefix={prefix} />
+          <FeatureShowcase prefix={prefix} dict={hp} />
         </Container>
       </section>
 
@@ -135,8 +135,8 @@ export default function Home({ dict, locale }: HomeProps) {
         <div className="pointer-events-none absolute inset-0 bg-vault-gradient opacity-60" aria-hidden="true" />
         <Container>
           <div className="grid md:grid-cols-2 gap-8 items-stretch">
-            <HeroSecurityCheck />
-            <LivePreview />
+            <HeroSecurityCheck dict={hp} />
+            <LivePreview dict={hp} />
           </div>
         </Container>
       </section>
@@ -153,7 +153,7 @@ export default function Home({ dict, locale }: HomeProps) {
               <FAQ dict={faq} />
             </div>
             <div>
-              <TransparencyWidget />
+              <TransparencyWidget dict={hp} />
             </div>
           </div>
         </Container>

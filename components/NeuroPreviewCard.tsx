@@ -2,159 +2,124 @@
 
 import React, { useEffect, useMemo, useRef, useState } from "react"
 import FeaturePreviewCard from "./FeaturePreviewCard"
-import Skeleton from "./ui/Skeleton"
+import { motion } from "framer-motion"
 
-function useInView<T extends HTMLElement>(opts?: IntersectionObserverInit) {
-  const ref = useRef<T | null>(null)
-  const [inView, setInView] = useState(false)
-  useEffect(() => {
-    if (!ref.current || inView) return
-    const el = ref.current
-    const io = new IntersectionObserver(([e]) => {
-      if (e.isIntersecting) { setInView(true); io.disconnect() }
-    }, opts)
-    io.observe(el)
-    return () => io.disconnect()
-  }, [opts, inView])
-  return { ref, inView }
+type Threat = {
+  id: string
+  title: string
+  severity: "Critical" | "High" | "Medium" | "Low"
+  cvss: number
+  clawScore: number
 }
 
-const ALL_TAGS = [
-  "AWS","GCP","Azure","Nginx","Postgres","Kubernetes","Docker","SSH","Terraform"
-]
+type Props = { prefix?: string; dict?: Record<string, string> }
 
-type Props = { prefix?: string }
-
-export default function NeuroPreviewCard({ prefix = "" }: Props) {
-  const { ref, inView } = useInView<HTMLDivElement>({ rootMargin: "200px" })
-  const [selected, setSelected] = useState<string[]>(["AWS","Nginx","Postgres"]) 
-  const [data, setData] = useState<any | null>(null)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-
-  // debounce tags
-  const [debounced, setDebounced] = useState(selected)
-  useEffect(() => {
-    const t = setTimeout(() => setDebounced(selected), 400)
-    return () => clearTimeout(t)
-  }, [selected])
+export default function NeuroPreviewCard({ prefix = "", dict = {} }: Props) {
+  const [threats, setThreats] = useState<Threat[]>([])
+  const [loading, setLoading] = useState(true)
+  const [inView, setInView] = useState(false)
 
   useEffect(() => {
     if (!inView) return
-    if (!debounced.length) return
-    let canceled = false
+    // Simulate AI analysis
     setLoading(true)
-    setError(null)
-    const stack = debounced.join(",")
-    fetch(`/api/neuro?stack=${encodeURIComponent(stack)}&preview=1`)
-      .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
-      .then((j) => { if (!canceled) setData(j) })
-      .catch(() => { if (!canceled) setError("Fehler beim Laden") })
-      .finally(() => { if (!canceled) setLoading(false) })
-    return () => { canceled = true }
-  }, [inView, debounced])
+    const timer = setTimeout(() => {
+      setThreats([
+        {
+          id: "threat-1",
+          title: "SQL Injection in Auth Service",
+          severity: "High",
+          cvss: 8.1,
+          clawScore: 87,
+        },
+        {
+          id: "threat-2", 
+          title: "Outdated OpenSSL Version",
+          severity: "Medium",
+          cvss: 6.5,
+          clawScore: 72,
+        },
+        {
+          id: "threat-3",
+          title: "Weak Password Policy",
+          severity: "Low",
+          cvss: 3.1,
+          clawScore: 45,
+        },
+      ])
+      setLoading(false)
+    }, 1500)
+    return () => clearTimeout(timer)
+  }, [inView])
 
-  const top = useMemo(() => (data?.recommended_runbooks || []).slice(0, 4), [data])
+  const containerRef = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    if (!containerRef.current) return
+    const observer = new IntersectionObserver(
+      ([e]) => setInView(e.isIntersecting),
+      { threshold: 0.1 }
+    )
+    observer.observe(containerRef.current)
+    return () => observer.disconnect()
+  }, [])
 
-  function toggle(tag: string) {
-    setSelected((prev) => prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag])
-  }
-
-  function benefitFor(rb: any) {
-    if (selected.includes("AWS")) return "Schützt vor 10+ AWS‑spezifischen Angriffen"
-    if (selected.includes("Nginx")) return "Erhöht Nginx‑Sicherheits‑Score um 30%"
-    if (selected.includes("Postgres")) return "Verschlüsselt Daten & reduziert Exfiltration"
-    return "Reduziert Angriffsfläche deutlich"
-  }
-
-  function parsePlan(plan: string): string[] {
-    if (!plan) return []
-    const parts = plan
-      .split(/\n|->|•|\u2022|;|\||,|\./)
-      .map((s) => s.trim())
-      .filter(Boolean)
-    return parts.length > 1 ? parts.slice(0, 5) : [plan]
+  const severityColor = (s: string) => {
+    switch (s) {
+      case "Critical": return "text-red-400"
+      case "High": return "text-orange-400"
+      case "Medium": return "text-yellow-400"
+      default: return "text-green-400"
+    }
   }
 
   return (
-    <div ref={ref}>
-      <FeaturePreviewCard
-        title="Neuro"
-        description="Wähle deine Technologien – ich erstelle einen maßgeschneiderten Sicherheitsplan."
-        link={`${prefix}/neuro`}
-      >
-        <div className="text-xs text-gray-400 mb-2">Wähle deinen Tech‑Stack – ich zeige dir, was du jetzt sichern solltest.</div>
-        <div className="flex flex-wrap gap-2">
-          {ALL_TAGS.map((t) => {
-            const active = selected.includes(t)
-            return (
-              <button
-                key={t}
-                onClick={() => toggle(t)}
-                className={`px-2.5 py-1 rounded-md text-[12px] border transition-all ${active?"bg-cyan-500/10 border-cyan-400/30 text-cyan-200":"bg-white/5 border-white/10 text-gray-300 hover:border-white/20"}`}
+    <FeaturePreviewCard
+      title={dict.neuro_title || "AI Vulnerability Analysis"}
+      description={`${dict.neuro_desc1 || "Proactive risk identification"} – ${dict.neuro_desc2 || "Code & infrastructure"}`}
+      link={`${prefix}/features/neuro`}
+    >
+      <div ref={containerRef} className="transition-all duration-700">
+        {loading ? (
+          <div className="space-y-3">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="bg-black/40 rounded-xl p-4 border border-white/10">
+                <div className="h-4 bg-gray-700 rounded w-3/4 mb-2"></div>
+                <div className="h-3 bg-gray-700 rounded w-1/2"></div>
+              </div>
+            ))}
+          </div>
+        ) : threats.length === 0 ? (
+          <div className="text-center py-8 text-gray-400">
+            {dict.neuro_no_threats || "No threats found"}
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {threats.map((threat) => (
+              <motion.div
+                key={threat.id}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                className="bg-black/40 rounded-xl p-4 border border-white/10"
               >
-                {t}
-              </button>
-            )
-          })}
-        </div>
-        <div className="mt-2 text-[11px] text-gray-500">98% personalisierte Passgenauigkeit</div>
-        <div className="mt-4">
-          {loading && (
-            <div className="space-y-3">
-              <div className="text-xs text-gray-400">Erstelle deinen persönlichen Sicherheitsplan…</div>
-              <Skeleton className="h-4 w-1/2" />
-              {[0,1,2,3].map((k) => (
-                <div key={k} className="p-3 rounded-lg bg-black/30 border border-white/10">
-                  <Skeleton className="h-4 w-3/4" />
-                  <div className="w-full bg-gray-800 rounded-full h-1 mt-2">
-                    <div className="bg-cyan-500 h-1 rounded-full w-1/2" />
-                  </div>
+                <div className="flex items-center justify-between mb-2">
+                  <h4 className="text-white font-medium">{threat.title}</h4>
+                  <span className={`text-xs px-2 py-1 rounded-full border ${severityColor(threat.severity)} border-current`}>
+                    {dict[`neuro_${threat.severity.toLowerCase()}`] || threat.severity}
+                  </span>
                 </div>
-              ))}
-            </div>
-          )}
-          {!loading && error && <div className="text-sm text-red-400">{error}</div>}
-          {!loading && !error && data && (
-            <>
-              <div className="text-sm text-cyan-400 mb-2">Dein Plan:</div>
-              {parsePlan(data.execution_plan || "").length > 0 && (
-                <ul className="mb-2 pl-4 list-disc text-xs text-gray-300 space-y-1">
-                  {parsePlan(data.execution_plan || "").map((step, i) => (
-                    <li key={i}>{step}</li>
-                  ))}
-                </ul>
-              )}
-              <div className="space-y-2">
-                {top.length === 0 && (
-                  <div className="text-sm text-gray-400">Keine passenden Empfehlungen. Wähle mehr oder andere Technologien aus.</div>
-                )}
-                {top.map((rb: any, i: number) => (
-                  <a key={i} href={`${prefix}/runbook/${encodeURIComponent(rb.slug)}`} target="_blank" rel="noreferrer"
-                     className="block p-3 rounded-lg bg-black/30 border border-white/10 hover:border-cyan-400/30 transition-colors">
-                    <div className="flex justify-between items-center gap-3">
-                      <div className="text-sm font-mono text-gray-200 line-clamp-1">{rb.title}</div>
-                      <div className="text-xs text-gray-400">{rb.relevance}%</div>
-                    </div>
-                    <div className="w-full bg-gray-800 rounded-full h-1 mt-2">
-                      <div className="bg-cyan-500 h-1 rounded-full" style={{ width: `${rb.relevance}%` }} />
-                    </div>
-                    <div className="mt-1 text-[11px] text-gray-400">{benefitFor(rb)}</div>
-                    <div className="mt-0.5 text-[11px] text-gray-500">ClawScore: {rb.clawScore}%</div>
-                  </a>
-                ))}
-              </div>
-              <div className="mt-2 text-[11px] text-gray-400 flex items-center gap-2">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="opacity-80">
-                  <path d="M12 8v5l3 2" stroke="#9CA3AF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                  <circle cx="12" cy="12" r="9" stroke="#9CA3AF" strokeWidth="2" />
-                </svg>
-                In {data.estimated_time} sicherer
-              </div>
-            </>
-          )}
-        </div>
-      </FeaturePreviewCard>
-    </div>
+                <div className="flex gap-4 text-xs">
+                  <span className="text-gray-400">
+                    {dict.neuro_cvss || "CVSS"}: {threat.cvss}
+                  </span>
+                  <span className="text-cyan-400">
+                    {dict.neuro_clawscore || "ClawScore"}: {threat.clawScore}
+                  </span>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        )}
+      </div>
+    </FeaturePreviewCard>
   )
 }

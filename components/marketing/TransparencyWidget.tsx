@@ -3,7 +3,7 @@
 import Container from "@/components/shared/Container"
 import { useI18n } from "@/components/i18n/I18nProvider"
 
-export default function TransparencyWidget() {
+export default function TransparencyWidget({ dict = {} }: { dict?: Record<string, string> }) {
   const { locale } = useI18n()
   const isGerman = locale === "de"
   return (

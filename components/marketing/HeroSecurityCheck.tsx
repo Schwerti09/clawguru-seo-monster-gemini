@@ -26,7 +26,7 @@ function scoreHint(score: number) {
   return "Stop. Rotieren. Schließen. Stabilisieren."
 }
 
-export default function HeroSecurityCheck() {
+export default function HeroSecurityCheck({ dict = {} }: { dict?: Record<string, string> }) {
   const { locale } = useI18n()
   const prefix = `/${locale}`
   const isGerman = locale === "de"

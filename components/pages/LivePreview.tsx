@@ -12,7 +12,7 @@ type Incident = {
   actions: string[]
 }
 
-export default function LivePreview() {
+export default function LivePreview({ dict = {} }: { dict?: Record<string, string> }) {
   const [items, setItems] = useState<Incident[] | null>(null)
   const [loading, setLoading] = useState(true)
 

@@ -21,9 +21,9 @@ function useInView<T extends HTMLElement>(opts?: IntersectionObserverInit) {
   return { ref, inView }
 }
 
-type Props = { prefix?: string }
+type Props = { prefix?: string; dict?: Record<string, string> }
 
-export default function MyceliumPreviewCard({ prefix = "" }: Props) {
+export default function MyceliumPreviewCard({ prefix = "", dict = {} }: Props) {
   const { ref, inView } = useInView<HTMLDivElement>({ rootMargin: "200px" })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)

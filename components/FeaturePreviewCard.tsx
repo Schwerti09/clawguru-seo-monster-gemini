@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion"
 import React from "react"
+import { useI18n } from "@/components/i18n/I18nProvider"
 
 type Props = {
   title: string
@@ -11,6 +12,9 @@ type Props = {
 }
 
 export default function FeaturePreviewCard({ title, description, link, children }: Props) {
+  const { dict } = useI18n()
+  const p = (dict as any)?.previews ?? {}
+  const learnMore = p.learnMore || "Learn more →"
   return (
     <motion.div
       initial={{ opacity: 0, y: 8 }}
@@ -27,7 +31,7 @@ export default function FeaturePreviewCard({ title, description, link, children 
       <div className="mt-4">{children}</div>
       <div className="mt-6 flex justify-end">
         <a href={link} className="text-sm text-cyan-400 hover:text-cyan-300 transition">
-          Mehr erfahren →
+          {learnMore}
         </a>
       </div>
     </motion.div>

@@ -3,6 +3,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react"
 import FeaturePreviewCard from "./FeaturePreviewCard"
 import Skeleton from "./ui/Skeleton"
+import { useI18n } from "@/components/i18n/I18nProvider"
 
 function useInView<T extends HTMLElement>(opts?: IntersectionObserverInit) {
   const ref = useRef<T | null>(null)
@@ -26,17 +27,34 @@ const ALL_TAGS = [
 type Props = { prefix?: string }
 
 export default function NeuroPreviewCard({ prefix = "" }: Props) {
+  const { dict } = useI18n()
+  const p = (dict as any)?.previews ?? {}
+  const t = {
+    desc: p.neuroDesc || "Choose your technologies – I'll create a tailored security plan.",
+    stackLabel: p.neuroStackLabel || "Choose your tech stack – I'll show you what to secure now.",
+    accuracy: p.neuroAccuracy || "98% personalized accuracy",
+    error: p.neuroError || "Error loading",
+    loading: p.neuroLoading || "Creating your personal security plan…",
+    planLabel: p.neuroPlanLabel || "Your plan:",
+    noResults: p.neuroNoResults || "No matching recommendations. Select more or different technologies.",
+    benefitAws: p.neuroBenefitAws || "Protects against 10+ AWS-specific attacks",
+    benefitNginx: p.neuroBenefitNginx || "Increases Nginx security score by 30%",
+    benefitPostgres: p.neuroBenefitPostgres || "Encrypts data & reduces exfiltration",
+    benefitDefault: p.neuroBenefitDefault || "Significantly reduces attack surface",
+    secureIn: p.neuroSecureIn || "Secure in {time}",
+  }
+
   const { ref, inView } = useInView<HTMLDivElement>({ rootMargin: "200px" })
   const [selected, setSelected] = useState<string[]>(["AWS","Nginx","Postgres"]) 
   const [data, setData] = useState<any | null>(null)
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [errorMsg, setErrorMsg] = useState<string | null>(null)
 
   // debounce tags
   const [debounced, setDebounced] = useState(selected)
   useEffect(() => {
-    const t = setTimeout(() => setDebounced(selected), 400)
-    return () => clearTimeout(t)
+    const timer = setTimeout(() => setDebounced(selected), 400)
+    return () => clearTimeout(timer)
   }, [selected])
 
   useEffect(() => {
@@ -44,12 +62,12 @@ export default function NeuroPreviewCard({ prefix = "" }: Props) {
     if (!debounced.length) return
     let canceled = false
     setLoading(true)
-    setError(null)
+    setErrorMsg(null)
     const stack = debounced.join(",")
     fetch(`/api/neuro?stack=${encodeURIComponent(stack)}&preview=1`)
       .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
       .then((j) => { if (!canceled) setData(j) })
-      .catch(() => { if (!canceled) setError("Fehler beim Laden") })
+      .catch(() => { if (!canceled) setErrorMsg(t.error) })
       .finally(() => { if (!canceled) setLoading(false) })
     return () => { canceled = true }
   }, [inView, debounced])
@@ -57,14 +75,14 @@ export default function NeuroPreviewCard({ prefix = "" }: Props) {
   const top = useMemo(() => (data?.recommended_runbooks || []).slice(0, 4), [data])
 
   function toggle(tag: string) {
-    setSelected((prev) => prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag])
+    setSelected((prev) => prev.includes(tag) ? prev.filter((tg) => tg !== tag) : [...prev, tag])
   }
 
   function benefitFor(rb: any) {
-    if (selected.includes("AWS")) return "Schützt vor 10+ AWS‑spezifischen Angriffen"
-    if (selected.includes("Nginx")) return "Erhöht Nginx‑Sicherheits‑Score um 30%"
-    if (selected.includes("Postgres")) return "Verschlüsselt Daten & reduziert Exfiltration"
-    return "Reduziert Angriffsfläche deutlich"
+    if (selected.includes("AWS")) return t.benefitAws
+    if (selected.includes("Nginx")) return t.benefitNginx
+    if (selected.includes("Postgres")) return t.benefitPostgres
+    return t.benefitDefault
   }
 
   function parsePlan(plan: string): string[] {
@@ -80,29 +98,29 @@ export default function NeuroPreviewCard({ prefix = "" }: Props) {
     <div ref={ref}>
       <FeaturePreviewCard
         title="Neuro"
-        description="Wähle deine Technologien – ich erstelle einen maßgeschneiderten Sicherheitsplan."
+        description={t.desc}
         link={`${prefix}/neuro`}
       >
-        <div className="text-xs text-gray-400 mb-2">Wähle deinen Tech‑Stack – ich zeige dir, was du jetzt sichern solltest.</div>
+        <div className="text-xs text-gray-400 mb-2">{t.stackLabel}</div>
         <div className="flex flex-wrap gap-2">
-          {ALL_TAGS.map((t) => {
-            const active = selected.includes(t)
+          {ALL_TAGS.map((tag) => {
+            const active = selected.includes(tag)
             return (
               <button
-                key={t}
-                onClick={() => toggle(t)}
+                key={tag}
+                onClick={() => toggle(tag)}
                 className={`px-2.5 py-1 rounded-md text-[12px] border transition-all ${active?"bg-cyan-500/10 border-cyan-400/30 text-cyan-200":"bg-white/5 border-white/10 text-gray-300 hover:border-white/20"}`}
               >
-                {t}
+                {tag}
               </button>
             )
           })}
         </div>
-        <div className="mt-2 text-[11px] text-gray-500">98% personalisierte Passgenauigkeit</div>
+        <div className="mt-2 text-[11px] text-gray-500">{t.accuracy}</div>
         <div className="mt-4">
           {loading && (
             <div className="space-y-3">
-              <div className="text-xs text-gray-400">Erstelle deinen persönlichen Sicherheitsplan…</div>
+              <div className="text-xs text-gray-400">{t.loading}</div>
               <Skeleton className="h-4 w-1/2" />
               {[0,1,2,3].map((k) => (
                 <div key={k} className="p-3 rounded-lg bg-black/30 border border-white/10">
@@ -114,10 +132,10 @@ export default function NeuroPreviewCard({ prefix = "" }: Props) {
               ))}
             </div>
           )}
-          {!loading && error && <div className="text-sm text-red-400">{error}</div>}
-          {!loading && !error && data && (
+          {!loading && errorMsg && <div className="text-sm text-red-400">{errorMsg}</div>}
+          {!loading && !errorMsg && data && (
             <>
-              <div className="text-sm text-cyan-400 mb-2">Dein Plan:</div>
+              <div className="text-sm text-cyan-400 mb-2">{t.planLabel}</div>
               {parsePlan(data.execution_plan || "").length > 0 && (
                 <ul className="mb-2 pl-4 list-disc text-xs text-gray-300 space-y-1">
                   {parsePlan(data.execution_plan || "").map((step, i) => (
@@ -127,7 +145,7 @@ export default function NeuroPreviewCard({ prefix = "" }: Props) {
               )}
               <div className="space-y-2">
                 {top.length === 0 && (
-                  <div className="text-sm text-gray-400">Keine passenden Empfehlungen. Wähle mehr oder andere Technologien aus.</div>
+                  <div className="text-sm text-gray-400">{t.noResults}</div>
                 )}
                 {top.map((rb: any, i: number) => (
                   <a key={i} href={`${prefix}/runbook/${encodeURIComponent(rb.slug)}`} target="_blank" rel="noreferrer"
@@ -149,7 +167,7 @@ export default function NeuroPreviewCard({ prefix = "" }: Props) {
                   <path d="M12 8v5l3 2" stroke="#9CA3AF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                   <circle cx="12" cy="12" r="9" stroke="#9CA3AF" strokeWidth="2" />
                 </svg>
-                In {data.estimated_time} sicherer
+                {t.secureIn.replace("{time}", data.estimated_time)}
               </div>
             </>
           )}

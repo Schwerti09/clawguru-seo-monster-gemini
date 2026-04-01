@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useState } from "react"
+import { useI18n } from "@/components/i18n/I18nProvider"
 
 type Incident = {
   id: string
@@ -13,6 +14,15 @@ type Incident = {
 }
 
 export default function LivePreview() {
+  const { dict } = useI18n()
+  const p = (dict as any)?.previews ?? {}
+  const t = {
+    noIncidents: p.noIncidents || "No incidents found.",
+    checksToday: p.checksToday || "Checks today",
+    criticalCves: p.criticalCves || "critical CVEs",
+    avgDuration: p.avgDuration || "avg. duration",
+  }
+
   const [items, setItems] = useState<Incident[] | null>(null)
   const [loading, setLoading] = useState(true)
 
@@ -58,7 +68,7 @@ export default function LivePreview() {
               </div>
             )}
             {!loading && (items?.length ?? 0) === 0 && (
-              <div className="text-gray-400 text-sm">Keine Vorfälle gefunden.</div>
+              <div className="text-gray-400 text-sm">{t.noIncidents}</div>
             )}
             {!loading && items && items.map((i) => (
               <div key={i.id} className="p-3 rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 transition-colors">
@@ -77,15 +87,15 @@ export default function LivePreview() {
         <div className="grid grid-cols-3 gap-3 text-center">
           <div>
             <div className="text-2xl font-black text-white">{(checksToday || 0).toLocaleString()}</div>
-            <div className="text-[11px] text-gray-400">Checks heute</div>
+            <div className="text-[11px] text-gray-400">{t.checksToday}</div>
           </div>
           <div>
             <div className="text-2xl font-black text-white">3</div>
-            <div className="text-[11px] text-gray-400">kritische CVEs</div>
+            <div className="text-[11px] text-gray-400">{t.criticalCves}</div>
           </div>
           <div>
             <div className="text-2xl font-black text-white">30s</div>
-            <div className="text-[11px] text-gray-400">durchschn. Dauer</div>
+            <div className="text-[11px] text-gray-400">{t.avgDuration}</div>
           </div>
         </div>
       </div>

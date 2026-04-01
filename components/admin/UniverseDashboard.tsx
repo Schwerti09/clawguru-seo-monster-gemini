@@ -56,6 +56,7 @@ type Overview = {
     tokens7dBurnRate?: number
     monthlyTokensUsed?: number
     monthlyTokensLimit?: number
+    requestsToday?: number
   }
   indexStatus?: {
     indexedPages: number
@@ -67,6 +68,26 @@ type Overview = {
     executedLast24h: number
     trend7d: number[]
     myceliumHealth: number
+    activeNodes?: number
+    totalNodes?: number
+  }
+  affiliateStats?: {
+    activePartners: number
+    pendingPayoutEur: number
+  }
+  geoStatus?: {
+    activeStable: number
+    activeCanary: number
+    topCanary: Array<{ slug: string; priority: number }>
+    topStable: Array<{ slug: string; priority: number }>
+    sitemapRuntimeLimits?: {
+      mode: "normal" | "conservative"
+      cityLimit: number
+      cityPool: number
+      seedLimit: number
+      reason: string
+      updatedAt?: string
+    }
   }
 }
 
@@ -438,6 +459,8 @@ function ModuleCard({
   const stripe = overview?.stripe
   const env = overview?.env
   const indexStatus = overview?.indexStatus
+  const geoStatus = overview?.geoStatus
+  const affiliateStats = overview?.affiliateStats
 
   function renderContent() {
     if (module.id === "seo") {
@@ -470,6 +493,18 @@ function ModuleCard({
                 className="h-full rounded-full bg-gradient-to-r from-cyan-500 to-blue-500"
                 style={{ width: `${indexStatus.progressPct}%` }}
               />
+            </div>
+          )}
+          {geoStatus && (
+            <div className="grid grid-cols-2 gap-2">
+              <div className="p-2 rounded-xl bg-black/30 border border-white/5">
+                <div className="text-[11px] text-gray-400">Geo Stable</div>
+                <div className="text-sm font-black text-cyan-300">{geoStatus.activeStable}</div>
+              </div>
+              <div className="p-2 rounded-xl bg-black/30 border border-white/5">
+                <div className="text-[11px] text-gray-400">Geo Canary</div>
+                <div className="text-sm font-black text-yellow-300">{geoStatus.activeCanary}</div>
+              </div>
             </div>
           )}
           <div className="flex items-center gap-1.5 text-xs text-gray-500">
@@ -539,11 +574,15 @@ function ModuleCard({
           <div className="grid grid-cols-2 gap-2">
             <div className="p-3 rounded-xl bg-black/30 border border-white/5">
               <div className="text-xs text-gray-400">Partner</div>
-              <div className="text-lg font-black text-yellow-300 mt-0.5">—</div>
+              <div className="text-lg font-black text-yellow-300 mt-0.5">
+                {affiliateStats ? affiliateStats.activePartners : "—"}
+              </div>
             </div>
             <div className="p-3 rounded-xl bg-black/30 border border-white/5">
               <div className="text-xs text-gray-400">Ausstehend</div>
-              <div className="text-lg font-black text-yellow-300 mt-0.5">—</div>
+              <div className="text-lg font-black text-yellow-300 mt-0.5">
+                {affiliateStats ? `${affiliateStats.pendingPayoutEur.toFixed(2)} €` : "—"}
+              </div>
             </div>
           </div>
           <div className="flex items-center gap-1.5 text-xs text-gray-500">

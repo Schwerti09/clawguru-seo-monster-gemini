@@ -6,32 +6,15 @@ export type GeoProfile = {
   source: "edge" | "accept-language" | "default"
 }
 
-const CITY_ALIASES: Record<string, { city: string; region: string; country: string }> = {
-  berlin: { city: "Berlin", region: "Berlin", country: "DE" },
-  munich: { city: "Munich", region: "Bavaria", country: "DE" },
-  frankfurt: { city: "Frankfurt", region: "Hesse", country: "DE" },
-  vienna: { city: "Vienna", region: "Vienna", country: "AT" },
-  zurich: { city: "Zurich", region: "Zurich", country: "CH" },
-  paris: { city: "Paris", region: "Ile-de-France", country: "FR" },
-  london: { city: "London", region: "England", country: "GB" },
-  newyork: { city: "New York", region: "New York", country: "US" },
-  singapore: { city: "Singapore", region: "Singapore", country: "SG" },
-  tokyo: { city: "Tokyo", region: "Tokyo", country: "JP" },
-}
-
 export function slugifyCity(input: string): string {
   return input.toLowerCase().replace(/[^a-z0-9]/g, "")
-}
-
-export function resolveCity(cityLike: string) {
-  return CITY_ALIASES[slugifyCity(cityLike)] ?? null
 }
 
 export function parseGeoVariantSlug(slug: string): { baseSlug: string; citySlug: string | null } {
   const parts = slug.split("-")
   if (parts.length < 3) return { baseSlug: slug, citySlug: null }
   const tail = parts[parts.length - 1]
-  if (!resolveCity(tail)) return { baseSlug: slug, citySlug: null }
+  if (!/^[a-z]{3,20}$/i.test(tail)) return { baseSlug: slug, citySlug: null }
   return { baseSlug: parts.slice(0, -1).join("-"), citySlug: tail }
 }
 
@@ -41,16 +24,6 @@ export function getGeoProfileFromHeaders(headers: Headers): GeoProfile {
   const edgeRegion = headers.get("x-claw-geo-region") ?? headers.get("x-vercel-ip-country-region") ?? ""
 
   if (edgeCity) {
-    const resolved = resolveCity(edgeCity)
-    if (resolved) {
-      return {
-        city: resolved.city,
-        citySlug: slugifyCity(resolved.city),
-        region: resolved.region,
-        country: resolved.country,
-        source: "edge",
-      }
-    }
     return {
       city: edgeCity,
       citySlug: slugifyCity(edgeCity),

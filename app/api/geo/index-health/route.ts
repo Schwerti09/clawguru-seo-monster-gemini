@@ -1,19 +1,12 @@
 import { NextRequest, NextResponse } from "next/server"
 import { BASE_URL } from "@/lib/config"
 import { DEFAULT_LOCALE } from "@/lib/i18n"
+import { getTopCities } from "@/lib/geo-cities"
 
 export const runtime = "nodejs"
 export const dynamic = "force-dynamic"
 
 type Probe = { city: string; url: string; status: number; ok: boolean; finalUrl?: string }
-
-function parseCities() {
-  return (process.env.GEO_MATRIX_SITEMAP_CITIES || "berlin,munich,frankfurt,vienna,zurich,paris,newyork")
-    .split(",")
-    .map((x) => x.trim().toLowerCase())
-    .filter(Boolean)
-    .slice(0, 12)
-}
 
 async function probeUrl(url: string): Promise<{ status: number; finalUrl?: string }> {
   const res = await fetch(url, { redirect: "manual", cache: "no-store" })
@@ -35,7 +28,8 @@ export async function GET(req: NextRequest) {
   const format = (req.nextUrl.searchParams.get("format") || "json").toLowerCase()
   const locale = (req.nextUrl.searchParams.get("locale") || DEFAULT_LOCALE).toLowerCase()
   const slug = req.nextUrl.searchParams.get("slug") || "aws-ssh-hardening-2026"
-  const cities = parseCities()
+  const cityLimit = parseInt(req.nextUrl.searchParams.get("limit") || process.env.GEO_INDEX_HEALTH_CITY_LIMIT || "12", 10) || 12
+  const cities = (await getTopCities(cityLimit)).map((city) => city.slug)
 
   const probes: Probe[] = []
   for (const city of cities) {

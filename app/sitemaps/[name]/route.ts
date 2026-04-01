@@ -4,6 +4,7 @@ import { BASE_URL } from "@/lib/config"
 import { DEFAULT_LOCALE, SUPPORTED_LOCALES, type Locale, getLocaleHrefLang, localizePath, stripLocalePrefix } from "@/lib/i18n"
 import { logTelemetry } from "@/lib/ops/telemetry"
 import { getRequestId } from "@/lib/ops/request-id"
+import { getTopCities } from "@/lib/geo-cities"
 // lightweight: avoid importing heavy datasets here to keep Edge fast
 
 // IMPORTANT: This route must stay dynamic (Netlify prerender can call it without params)
@@ -601,10 +602,8 @@ export async function GET(
 
     // GEO-LIVING MATRIX: curated geo runbook variants (only when explicitly enabled)
     if (name === `geo-runbooks-${locale}` && process.env.GEO_MATRIX_SITEMAP === "1") {
-      const citySuffixes = (process.env.GEO_MATRIX_SITEMAP_CITIES || "berlin,munich,frankfurt,vienna,zurich,paris,newyork")
-        .split(",")
-        .map((x) => x.trim().toLowerCase())
-        .filter(Boolean)
+      const topCities = await getTopCities(parseInt(process.env.GEO_MATRIX_SITEMAP_CITY_LIMIT || "24", 10) || 24)
+      const citySuffixes = topCities.map((city) => city.slug)
       const seeds = [
         "aws-ssh-hardening-2026",
         "aws-nginx-csp-2026",

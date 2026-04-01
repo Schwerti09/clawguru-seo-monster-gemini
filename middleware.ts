@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { DEFAULT_LOCALE, SUPPORTED_LOCALES, type Locale, localeDir } from "@/lib/i18n"
 import { getRequestId, getRequestIdHeaderName } from "@/lib/ops/request-id"
-import { buildGeoSlug, parseGeoVariantSlug, resolveCity, slugifyCity } from "@/lib/geo-matrix"
+import { buildGeoSlug, parseGeoVariantSlug, slugifyCity } from "@/lib/geo-matrix"
 
 const LOCALE_COOKIE_NAME = "cg_locale"
 const LOCALE_COOKIE_MAX_AGE_SECONDS = 60 * 60 * 24 * 365
@@ -320,17 +320,17 @@ export function middleware(request: NextRequest) {
       const slug = decodeURIComponent(m[2])
       const parsed = parseGeoVariantSlug(slug)
       if (!parsed.citySlug) {
-        const resolved = resolveCity(edgeGeo.city)
-        if (resolved) {
-          const geoSlug = buildGeoSlug(parsed.baseSlug, slugifyCity(resolved.city))
+        const citySlug = slugifyCity(edgeGeo.city)
+        if (citySlug) {
+          const geoSlug = buildGeoSlug(parsed.baseSlug, citySlug)
           const url = request.nextUrl.clone()
           url.pathname = `/${lang}/runbook/${geoSlug}`
           const res = NextResponse.rewrite(url)
           res.headers.set("x-claw-locale", lang.toLowerCase())
           res.headers.set("x-claw-dir", localeDir(lang.toLowerCase() as any))
-          res.headers.set("x-claw-geo-city", resolved.city)
-          res.headers.set("x-claw-geo-region", resolved.region)
-          res.headers.set("x-claw-geo-country", resolved.country)
+          if (edgeGeo.city) res.headers.set("x-claw-geo-city", edgeGeo.city)
+          if (edgeGeo.region) res.headers.set("x-claw-geo-region", edgeGeo.region)
+          if (edgeGeo.country) res.headers.set("x-claw-geo-country", edgeGeo.country)
           res.headers.set(getRequestIdHeaderName(), requestId)
           return res
         }

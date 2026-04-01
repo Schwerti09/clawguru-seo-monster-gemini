@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 
 import { SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
-import { notFound, permanentRedirect } from "next/navigation"
+import { permanentRedirect } from "next/navigation"
 
 export const dynamic = "force-static"
 export const revalidate = 86400
@@ -53,7 +53,14 @@ export default async function LocaleRunbookPage(props: {
     const RootRunbookPage = Mod.default
     return <RootRunbookPage params={{ slug }} />
   } catch (err) {
-    console.error(`[sitemap-health] locale runbook generation failed for lang=${lang}, slug=${slug}:`, err instanceof Error ? err.message : String(err))
+    const anyErr = err as any
+    const message = err instanceof Error ? err.message : String(err)
+    const digest = typeof anyErr?.digest === "string" ? anyErr.digest : ""
+    // Next.js throws NEXT_REDIRECT as control flow signal; this is expected.
+    if (message === "NEXT_REDIRECT" || digest.includes("NEXT_REDIRECT") || String(err).includes("NEXT_REDIRECT")) {
+      throw err
+    }
+    // Keep logs clean: stale/synthetic slugs should silently redirect to search hub.
     permanentRedirect(`/${lang}/runbooks?q=${encodeURIComponent(slug)}`)
   }
 }

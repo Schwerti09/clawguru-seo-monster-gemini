@@ -5,7 +5,7 @@ import Container from "../../../../../components/shared/Container"
 import { getRunbook, RUNBOOKS } from "../../../../../lib/pseo"
 import { validateRunbook } from "../../../../../lib/quality-gate"
 import { getTemporalHistory, findVersionByQuarter } from "../../../../../lib/temporal-mycelium"
-import { notFound } from "next/navigation"
+import { permanentRedirect } from "next/navigation"
 import { type Locale, SUPPORTED_LOCALES } from "../../../../../lib/i18n"
 
 export const revalidate = 86400
@@ -34,10 +34,12 @@ export default async function LocaleTemporalRunbookPage(props: {
   params: { lang: string; slug: string }
 }) {
   const { slug, lang } = props.params
-  void ((SUPPORTED_LOCALES.includes(lang as Locale) ? lang : "de") as Locale)
+  const locale = (SUPPORTED_LOCALES.includes(lang as Locale) ? lang : "de") as Locale
 
   const runbook = getRunbook(slug)
-  if (!runbook) notFound()
+  if (!runbook) {
+    permanentRedirect(`/${locale}/runbooks?q=${encodeURIComponent(slug)}`)
+  }
 
   const history = getTemporalHistory(runbook)
   const currentQuarter = `${new Date().getFullYear()}-Q${Math.floor(new Date().getMonth() / 3) + 1}`

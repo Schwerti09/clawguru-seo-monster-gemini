@@ -6,7 +6,7 @@ import { validateRunbook, type ClawCertifiedTier } from "@/lib/quality-gate"
 import { getTemporalHistory } from "@/lib/temporal-mycelium"
 import NextDynamic from "next/dynamic"
 import { Suspense } from "react"
-import { notFound, permanentRedirect } from "next/navigation"
+import { permanentRedirect } from "next/navigation"
 import { CopyLinkButton } from "./CopyLinkButton"
 import { ActivateSwarmButton } from "@/components/shared/ActivateSwarmButton"
 import { BASE_URL } from "@/lib/config"
@@ -15,8 +15,9 @@ import MyceliumShareCard from "@/components/share/MyceliumShareCard"
 import { unstable_cache } from "next/cache"
 import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
 import { getDictionary } from "@/lib/getDictionary"
-import { parseGeoVariantSlug, resolveCity } from "@/lib/geo-matrix"
+import { parseGeoVariantSlug } from "@/lib/geo-matrix"
 import { generateGeoVariantContent } from "@/lib/geo-content-generator"
+import { getCityBySlug } from "@/lib/geo-cities"
 const RunbookMiniTabs = NextDynamic(() => import("@/components/runbook/RunbookMiniTabs"))
 
 const TemporalTimelineLazy = NextDynamic(() => import("@/components/visual/TemporalTimeline"), {
@@ -156,18 +157,18 @@ function geoServiceJsonLd(opts: {
   locale: Locale
   slug: string
   title: string
-  city: { city: string; region: string; country: string }
+  city: { name_en: string; country_code: string }
   summary: string
 }) {
   return {
     "@context": "https://schema.org",
     "@type": "TechArticle",
-    headline: `${opts.title} (${opts.city.city})`,
+    headline: `${opts.title} (${opts.city.name_en})`,
     description: opts.summary,
     inLanguage: opts.locale,
     areaServed: {
       "@type": "AdministrativeArea",
-      name: `${opts.city.city}, ${opts.city.region}, ${opts.city.country}`,
+      name: `${opts.city.name_en}, ${opts.city.country_code}`,
     },
     url: `${BASE_URL}/${opts.locale}/runbook/${opts.slug}`,
     isPartOf: `${BASE_URL}/${opts.locale}/runbooks`,
@@ -310,14 +311,21 @@ export default async function RunbookPage(props: { params: { slug: string } }) {
   // PHASE 1 Fix #1: Graceful error handling – prevent 5xx errors during runbook generation
   let r: any
   const geoParsed = parseGeoVariantSlug(params.slug)
-  const geoCity = geoParsed.citySlug ? resolveCity(geoParsed.citySlug) : null
+  const geoCity = geoParsed.citySlug ? await getCityBySlug(geoParsed.citySlug) : null
   try {
     r = getRunbook(params.slug) ?? getRunbook(geoParsed.baseSlug)
     if (!r) {
       permanentRedirect(`/${locale}/runbooks?q=${encodeURIComponent(params.slug)}`)
     }
   } catch (err) {
-    console.error(`[sitemap-health] runbook generation failed for slug ${params.slug}:`, err instanceof Error ? err.message : String(err))
+    const anyErr = err as any
+    const message = err instanceof Error ? err.message : String(err)
+    const digest = typeof anyErr?.digest === "string" ? anyErr.digest : ""
+    // Next.js throws NEXT_REDIRECT as control flow signal; this is expected.
+    if (message === "NEXT_REDIRECT" || digest.includes("NEXT_REDIRECT") || String(err).includes("NEXT_REDIRECT")) {
+      throw err
+    }
+    // Keep logs clean: stale/synthetic slugs should silently redirect to search hub.
     permanentRedirect(`/${locale}/runbooks?q=${encodeURIComponent(params.slug)}`)
   }
 
@@ -326,9 +334,9 @@ export default async function RunbookPage(props: { params: { slug: string } }) {
       ? await generateGeoVariantContent({
           slug: r.slug,
           locale,
-          city: geoCity.city,
-          region: geoCity.region,
-          country: geoCity.country,
+          city: geoCity.name_en,
+          region: geoCity.name_en,
+          country: geoCity.country_code,
           title: r.title,
           summary: r.summary,
         })

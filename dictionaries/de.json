@@ -435,7 +435,49 @@
         "l": "Resistant"
       }
     ],
-    "finalCta": "Day Pass 9€ – Sofortzugang"
+    "finalCta": "Day Pass 9€ – Sofortzugang",
+    "guidedTour": {
+      "labels": {
+        "close": "Tour schließen",
+        "back": "Zurück",
+        "next": "Weiter",
+        "finish": "Fertig",
+        "skip": "Überspringen"
+      },
+      "steps": [
+        {
+          "id": "hero",
+          "targetId": "hero",
+          "title": "Willkommen bei ClawGuru",
+          "value": "In weniger als einer Minute siehst du, wie du Risiken schneller erkennst und direkt in Maßnahmen übersetzt.",
+          "hint": "Hier startet dein schneller Produkt-Überblick."
+        },
+        {
+          "id": "features",
+          "targetId": "features",
+          "title": "Kernfunktionen live",
+          "value": "Sieh die wichtigsten Module in Aktion und verstehe sofort, was dir im Alltag Zeit spart."
+        },
+        {
+          "id": "copilot",
+          "targetId": "copilot",
+          "title": "KI-Copilot für konkrete Probleme",
+          "value": "Beschreibe dein Incident-Szenario und erhalte umsetzbare Schritte statt generischer Theorie."
+        },
+        {
+          "id": "proof",
+          "targetId": "proof",
+          "title": "Vertrauen durch klare Signale",
+          "value": "Metriken und Referenzen zeigen dir transparent, warum Teams ClawGuru produktiv einsetzen."
+        },
+        {
+          "id": "cta",
+          "targetId": "cta",
+          "title": "Direkter Einstieg",
+          "value": "Starte sofort mit dem Day Pass oder teste den Check-Flow, um in Minuten einen Mehrwert zu sehen."
+        }
+      ]
+    }
   },
   "footer": {
     "solutions_title": "Solutions",

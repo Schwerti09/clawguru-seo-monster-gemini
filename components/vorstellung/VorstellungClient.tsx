@@ -7,6 +7,7 @@ import React, { Suspense, useEffect, useMemo, useRef, useState } from "react"
 import { usePathname } from "next/navigation"
 import { motion, useReducedMotion } from "framer-motion"
 import { STATS } from "@/lib/stats"
+import GuidedSpotlightTour, { type GuidedTourStep } from "@/components/onboarding/GuidedSpotlightTour"
 
 class ErrorBoundary extends React.Component<{ fallback?: React.ReactNode; children?: React.ReactNode }, { hasError: boolean }> {
   constructor(props: { fallback?: React.ReactNode }) {
@@ -64,6 +65,8 @@ const HeroPreview = dynamic(() => import("@/components/home/HeroPreview"), {
     </div>
   ),
 })
+
+const TOUR_SEEN_KEY = "cg_vorstellung_tour_seen_v1"
 
 function MiniCopilot() {
   const [len, setLen] = useState(0)
@@ -194,7 +197,6 @@ export default function VorstellungClient({ dict }: { dict?: any }) {
   const reduce = useReducedMotion()
   const [fx, setFx] = useState(false)
   const [showTour, setShowTour] = useState(false)
-  const [tourStep, setTourStep] = useState(0)
   const heroRef = useRef<HTMLDivElement | null>(null)
   const featureRef = useRef<HTMLDivElement | null>(null)
   const timelineItems = Array.isArray((dict as any)?.timelineItems)
@@ -221,6 +223,64 @@ export default function VorstellungClient({ dict }: { dict?: any }) {
     { v: nf.format(STATS.checksTotal), l: (dict as any)?.stats?.[2]?.l ?? "Checks" },
     { v: (dict as any)?.stats?.[3]?.v ?? "Quantum", l: (dict as any)?.stats?.[3]?.l ?? "Resistant" },
   ]
+  const tourSteps = useMemo<GuidedTourStep[]>(() => {
+    const fromDict = (dict as any)?.guidedTour?.steps
+    if (Array.isArray(fromDict) && fromDict.length > 0) {
+      return fromDict
+        .filter((x: any) => x?.targetId && x?.title && x?.value)
+        .map((x: any, i: number) => ({
+          id: x?.id || `step-${i + 1}`,
+          targetId: x.targetId,
+          title: x.title,
+          value: x.value,
+          hint: x.hint,
+        }))
+    }
+    return [
+      {
+        id: "hero",
+        targetId: "hero",
+        title: "Willkommen bei ClawGuru",
+        value: "In weniger als einer Minute siehst du, wie du Risiken schneller erkennst und direkt in Maßnahmen übersetzt.",
+        hint: "Hier startet dein schneller Produkt-Überblick.",
+      },
+      {
+        id: "features",
+        targetId: "features",
+        title: "Kernfunktionen live",
+        value: "Sieh die wichtigsten Module in Aktion und verstehe sofort, was dir im Alltag Zeit spart.",
+      },
+      {
+        id: "copilot",
+        targetId: "copilot",
+        title: "KI-Copilot für konkrete Probleme",
+        value: "Beschreibe dein Incident-Szenario und erhalte umsetzbare Steps statt generischer Theorie.",
+      },
+      {
+        id: "proof",
+        targetId: "proof",
+        title: "Vertrauen durch klare Signale",
+        value: "Metriken und Referenzen zeigen dir transparent, warum Teams ClawGuru produktiv einsetzen.",
+      },
+      {
+        id: "cta",
+        targetId: "cta",
+        title: "Direkter Einstieg",
+        value: "Starte sofort mit dem Day Pass oder teste den Check-Flow, um in Minuten einen Mehrwert zu sehen.",
+      },
+    ]
+  }, [dict])
+
+  const tourLabels = useMemo(() => {
+    const base = (dict as any)?.guidedTour?.labels || {}
+    return {
+      close: base.close || "Tour schließen",
+      back: base.back || "Zurück",
+      next: base.next || "Weiter",
+      finish: base.finish || "Fertig",
+      skip: base.skip || "Überspringen",
+    }
+  }, [dict])
   useEffect(() => {
     let canceled = false
     let idleId: number | null = null
@@ -257,10 +317,30 @@ export default function VorstellungClient({ dict }: { dict?: any }) {
       if (tForce) clearTimeout(tForce)
     }
   }, [])
+  useEffect(() => {
+    if (typeof window === "undefined") return
+    if (window.localStorage.getItem(TOUR_SEEN_KEY) === "1") return
+    const timer = window.setTimeout(() => setShowTour(true), 900)
+    return () => window.clearTimeout(timer)
+  }, [])
+
+  const closeTour = () => {
+    if (typeof window !== "undefined") window.localStorage.setItem(TOUR_SEEN_KEY, "1")
+    setShowTour(false)
+  }
+
+  const completeTour = () => {
+    if (typeof window !== "undefined") window.localStorage.setItem(TOUR_SEEN_KEY, "1")
+    setShowTour(false)
+  }
+
+  const restartTour = () => {
+    setShowTour(true)
+  }
   return (
     <main className="min-h-screen" style={{ background: "var(--surface-0, #0a0a0a)" }}>
       {/* Fullscreen Hero with orbiting logo */}
-      <section ref={heroRef} className="relative overflow-hidden pt-24 pb-16 px-4">
+      <section ref={heroRef} data-tour-id="hero" className="relative overflow-hidden pt-24 pb-16 px-4">
         {/* Desktop particle field (very light), masked and lazy */}
         <div className="hidden md:block absolute inset-0" aria-hidden>
           <ErrorBoundary fallback={<div className="absolute inset-0" aria-hidden /> }>
@@ -302,7 +382,7 @@ export default function VorstellungClient({ dict }: { dict?: any }) {
             <GlowButton variant="outline" href={`${prefix}/pricing`}>{dict?.ctaSecondary ?? "Pläne"}</GlowButton>
           </motion.div>
           <div className="mt-3">
-            <button onClick={() => { setTourStep(0); setShowTour(true) }} className="text-xs text-cyan-300 hover:text-cyan-200 underline">
+            <button onClick={restartTour} className="text-xs text-cyan-300 hover:text-cyan-200 underline">
               {dict?.tourStart ?? "Tour starten"}
             </button>
           </div>
@@ -330,7 +410,7 @@ export default function VorstellungClient({ dict }: { dict?: any }) {
           </motion.div>
 
           {/* Feature Live Previews */}
-          <motion.div ref={featureRef} initial={reduce ? undefined : { opacity: 0, y: 16 }} whileInView={reduce ? undefined : { opacity: 1, y: 0 }} viewport={{ once: true }} transition={reduce ? undefined : { duration: 0.55 }}>
+          <motion.div data-tour-id="features" ref={featureRef} initial={reduce ? undefined : { opacity: 0, y: 16 }} whileInView={reduce ? undefined : { opacity: 1, y: 0 }} viewport={{ once: true }} transition={reduce ? undefined : { duration: 0.55 }}>
             <ErrorBoundary fallback={<div className="h-96 bg-white/5 rounded-2xl border border-white/10" /> }>
               <FeatureShowcase prefix={prefix} />
             </ErrorBoundary>
@@ -352,7 +432,7 @@ export default function VorstellungClient({ dict }: { dict?: any }) {
           </motion.div>
 
           {/* Copilot live demo teaser */}
-          <motion.div initial={reduce ? undefined : { opacity: 0, y: 14 }} whileInView={reduce ? undefined : { opacity: 1, y: 0 }} viewport={{ once: true }} transition={reduce ? undefined : { duration: 0.55 }} className="rounded-2xl border border-white/10 bg-black/30 p-4" style={{ contentVisibility: "auto", containIntrinsicSize: "220px" }}>
+          <motion.div data-tour-id="copilot" initial={reduce ? undefined : { opacity: 0, y: 14 }} whileInView={reduce ? undefined : { opacity: 1, y: 0 }} viewport={{ once: true }} transition={reduce ? undefined : { duration: 0.55 }} className="rounded-2xl border border-white/10 bg-black/30 p-4" style={{ contentVisibility: "auto", containIntrinsicSize: "220px" }}>
             <Suspense fallback={<div className="text-xs text-gray-400">{dict?.copilotInit ?? "Initialisiere Copilot…"}</div>}>
               <ErrorBoundary fallback={<div className="rounded-2xl border border-white/10 bg-black/30 p-4 text-sm text-gray-400">{dict?.copilotFallback ?? "Copilot nicht verfügbar"}</div>}>
                 <CopilotTeaser />
@@ -361,7 +441,7 @@ export default function VorstellungClient({ dict }: { dict?: any }) {
           </motion.div>
 
           {/* Trusted logos + stats */}
-          <motion.div initial={reduce ? undefined : { opacity: 0, y: 12 }} whileInView={reduce ? undefined : { opacity: 1, y: 0 }} viewport={{ once: true }} transition={reduce ? undefined : { duration: 0.55 }} className="rounded-2xl border border-white/10 bg-black/30 p-6" style={{ contentVisibility: "auto", containIntrinsicSize: "480px" }}>
+          <motion.div data-tour-id="proof" initial={reduce ? undefined : { opacity: 0, y: 12 }} whileInView={reduce ? undefined : { opacity: 1, y: 0 }} viewport={{ once: true }} transition={reduce ? undefined : { duration: 0.55 }} className="rounded-2xl border border-white/10 bg-black/30 p-6" style={{ contentVisibility: "auto", containIntrinsicSize: "480px" }}>
             <div className="text-xs font-mono tracking-[0.3em] uppercase text-gray-400">{dict?.trustedBy ?? "Trusted by SecOps Leaders"}</div>
             <div className="mt-3 grid grid-cols-2 md:grid-cols-4 gap-3">
               {trustedLogos.map((n, i) => (
@@ -379,35 +459,18 @@ export default function VorstellungClient({ dict }: { dict?: any }) {
           </motion.div>
 
           {/* Final CTA */}
-          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="text-center pt-6">
+          <motion.div data-tour-id="cta" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="text-center pt-6">
             <GlowButton variant="primary" href={`${prefix}/daypass`}>{dict?.finalCta ?? "Day Pass 9€ – Sofortzugang"}</GlowButton>
           </motion.div>
         </div>
       </Container>
-      {showTour && (
-        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4">
-          <div className="absolute inset-0 bg-black/60" onClick={() => setShowTour(false)} />
-          <div className="relative w-full max-w-lg rounded-2xl border border-white/10 bg-black/80 text-white p-4 shadow-2xl">
-            <div className="text-sm text-gray-300">
-              {[
-                dict?.tourS1 ?? "Überblick: Sieh die Kern‑Features in Aktion.",
-                dict?.tourS2 ?? "Intel: Live‑Feed und CVE‑Radar.",
-                dict?.tourS3 ?? "Oracle: Risiko‑Radar nach Scope.",
-                dict?.tourS4 ?? "Neuro: Empfehlungen für deinen Stack.",
-                dict?.tourS5 ?? "Summon: Problem beschreiben, Fix erhalten.",
-                dict?.tourS6 ?? "Mycelium & Live: Realtime‑Netz & Zahlen.",
-              ][tourStep]}
-            </div>
-            <div className="mt-4 flex justify-between gap-3">
-              <button onClick={() => setShowTour(false)} className="px-3 py-1.5 rounded-lg border border-white/10 text-xs text-gray-200 hover:bg-white/10">{dict?.tourEnd ?? "Beenden"}</button>
-              <div className="flex items-center gap-2">
-                <div className="text-xs text-gray-400">{tourStep + 1}/6</div>
-                <button onClick={() => setTourStep((s) => (s + 1) % 6)} className="px-3 py-1.5 rounded-lg bg-cyan-500/20 border border-cyan-400/30 text-xs text-cyan-100 hover:bg-cyan-500/30">{dict?.tourNext ?? "Weiter"}</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      <GuidedSpotlightTour
+        open={showTour}
+        steps={tourSteps}
+        onClose={closeTour}
+        onComplete={completeTour}
+        labels={tourLabels}
+      />
     </main>
   )
 }

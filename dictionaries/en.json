@@ -442,7 +442,49 @@
         "l": "Resistant"
       }
     ],
-    "finalCta": "Day Pass €9 – Instant access"
+    "finalCta": "Day Pass €9 – Instant access",
+    "guidedTour": {
+      "labels": {
+        "close": "Close tour",
+        "back": "Back",
+        "next": "Next",
+        "finish": "Finish",
+        "skip": "Skip"
+      },
+      "steps": [
+        {
+          "id": "hero",
+          "targetId": "hero",
+          "title": "Welcome to ClawGuru",
+          "value": "In under a minute, see how to detect risk earlier and turn insights into action faster.",
+          "hint": "This is your fast product walkthrough."
+        },
+        {
+          "id": "features",
+          "targetId": "features",
+          "title": "Core features in motion",
+          "value": "See the key modules live and understand immediately where the day-to-day time savings come from."
+        },
+        {
+          "id": "copilot",
+          "targetId": "copilot",
+          "title": "AI copilot for concrete incidents",
+          "value": "Describe your incident scenario and get executable steps instead of generic advice."
+        },
+        {
+          "id": "proof",
+          "targetId": "proof",
+          "title": "Trust through transparent signals",
+          "value": "Metrics and references make it clear why teams run ClawGuru in production."
+        },
+        {
+          "id": "cta",
+          "targetId": "cta",
+          "title": "Start immediately",
+          "value": "Launch with a Day Pass or run the check flow to get value within minutes."
+        }
+      ]
+    }
   },
   "homepage": {
     "hero_title": "Security Operations That Actually Work.",

@@ -15,6 +15,8 @@ import MyceliumShareCard from "@/components/share/MyceliumShareCard"
 import { unstable_cache } from "next/cache"
 import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
 import { getDictionary } from "@/lib/getDictionary"
+import { parseGeoVariantSlug, resolveCity } from "@/lib/geo-matrix"
+import { generateGeoVariantContent } from "@/lib/geo-content-generator"
 const RunbookMiniTabs = NextDynamic(() => import("@/components/runbook/RunbookMiniTabs"))
 
 const TemporalTimelineLazy = NextDynamic(() => import("@/components/visual/TemporalTimeline"), {
@@ -79,14 +81,16 @@ export async function generateMetadata(props: { params: { slug: string } }) {
   const params = props.params
   const { getRunbook } = await import("@/lib/pseo")
   const locale = DEFAULT_LOCALE as Locale
-  const r = getRunbook(params.slug)
+  const geoParsed = parseGeoVariantSlug(params.slug)
+  const r = getRunbook(params.slug) ?? getRunbook(geoParsed.baseSlug)
   if (!r) return {}
   const title = r.title.length > 60 ? r.title.slice(0, 57) + "..." : r.title
   const description = r.summary.length > 160 ? r.summary.slice(0, 157) + "..." : r.summary
+  const canonicalSlug = geoParsed.citySlug ? params.slug : r.slug
   return {
     title: `${title} | ClawGuru Runbook`,
     description,
-    alternates: { canonical: `/${locale}/runbook/${r.slug}` },
+    alternates: { canonical: `/${locale}/runbook/${canonicalSlug}` },
     openGraph: {
       title: `${title} | ClawGuru`,
       description,
@@ -283,8 +287,10 @@ export default async function RunbookPage(props: { params: { slug: string } }) {
   
   // PHASE 1 Fix #1: Graceful error handling – prevent 5xx errors during runbook generation
   let r: any
+  const geoParsed = parseGeoVariantSlug(params.slug)
+  const geoCity = geoParsed.citySlug ? resolveCity(geoParsed.citySlug) : null
   try {
-    r = getRunbook(params.slug)
+    r = getRunbook(params.slug) ?? getRunbook(geoParsed.baseSlug)
     if (!r) {
       permanentRedirect(`/${locale}/runbooks?q=${encodeURIComponent(params.slug)}`)
     }
@@ -292,6 +298,19 @@ export default async function RunbookPage(props: { params: { slug: string } }) {
     console.error(`[sitemap-health] runbook generation failed for slug ${params.slug}:`, err instanceof Error ? err.message : String(err))
     permanentRedirect(`/${locale}/runbooks?q=${encodeURIComponent(params.slug)}`)
   }
+
+  const geoVariant =
+    process.env.GEO_MATRIX_ENABLED === "1" && geoCity
+      ? await generateGeoVariantContent({
+          slug: r.slug,
+          locale,
+          city: geoCity.city,
+          region: geoCity.region,
+          country: geoCity.country,
+          title: r.title,
+          summary: r.summary,
+        })
+      : null
 
   // Quality Gate: reject thin content before serving (ClawGuru 2026 Standard)
   const quality = validateRunbook(r)
@@ -386,6 +405,23 @@ export default async function RunbookPage(props: { params: { slug: string } }) {
         </p>
 
         <SectionTitle kicker="Runbook" title={r.title} subtitle={r.summary} />
+
+        {geoVariant ? (
+          <div className="mt-6 rounded-2xl border border-cyan-500/30 bg-cyan-500/10 p-4">
+            <div className="text-xs font-black tracking-wider uppercase text-cyan-300">
+              Mycelium Geo-Living Matrix
+            </div>
+            <h3 className="mt-2 text-base font-bold text-cyan-100">{geoVariant.localTitle}</h3>
+            <p className="mt-2 text-sm text-cyan-50/90">{geoVariant.localSummary}</p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {geoVariant.localCompliance.slice(0, 3).map((item) => (
+                <span key={item} className="rounded-full border border-cyan-400/30 px-2 py-0.5 text-xs text-cyan-100">
+                  {item}
+                </span>
+              ))}
+            </div>
+          </div>
+        ) : null}
 
         {/* Sticky Glass Mini-Tabs + Progress Tracker */}
         <RunbookMiniTabs />
@@ -530,6 +566,23 @@ export default async function RunbookPage(props: { params: { slug: string } }) {
                   </div>
                   <div className="mt-1 text-sm text-gray-400">{x.summary}</div>
                   <div className="mt-3 text-sm text-cyan-300 underline">Öffnen →</div>
+                </a>
+              ))}
+            </div>
+          </div>
+        ) : null}
+
+        {geoVariant?.myceliumLinks?.length ? (
+          <div className="mt-8">
+            <h3 className="text-sm font-black uppercase tracking-widest text-cyan-300">Geo-Mycelium Links</h3>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {geoVariant.myceliumLinks.slice(0, 6).map((path) => (
+                <a
+                  key={path}
+                  href={path}
+                  className="rounded-xl border border-cyan-500/30 bg-cyan-500/10 px-3 py-1.5 text-xs text-cyan-100 hover:bg-cyan-500/20"
+                >
+                  {path}
                 </a>
               ))}
             </div>

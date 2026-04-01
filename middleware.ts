@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { DEFAULT_LOCALE, SUPPORTED_LOCALES, type Locale, localeDir } from "@/lib/i18n"
 import { getRequestId, getRequestIdHeaderName } from "@/lib/ops/request-id"
+import { buildGeoSlug, parseGeoVariantSlug, resolveCity, slugifyCity } from "@/lib/geo-matrix"
 
 const LOCALE_COOKIE_NAME = "cg_locale"
 const LOCALE_COOKIE_MAX_AGE_SECONDS = 60 * 60 * 24 * 365
@@ -99,10 +100,18 @@ function preferredLocale(request: NextRequest): Locale {
   return localeFromCookie(request) ?? localeFromAcceptLanguage(request) ?? DEFAULT_LOCALE
 }
 
+function edgeGeoFromRequest(request: NextRequest) {
+  const city = request.headers.get("x-vercel-ip-city") || ""
+  const region = request.headers.get("x-vercel-ip-country-region") || ""
+  const country = request.headers.get("x-vercel-ip-country") || ""
+  return { city, region, country }
+}
+
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
   const requestId = getRequestId(request.headers)
   const method = request.method
+  const edgeGeo = edgeGeoFromRequest(request)
 
   // EARLY BYPASS: minimize Edge CPU for most API/static routes, keep only required API rewrites
   const isApi = pathname.startsWith("/api/")
@@ -264,6 +273,9 @@ export function middleware(request: NextRequest) {
     const res = NextResponse.redirect(url, 308)
     res.headers.set("x-claw-locale", targetLocale)
     res.headers.set("x-claw-dir", localeDir(targetLocale))
+    if (edgeGeo.city) res.headers.set("x-claw-geo-city", edgeGeo.city)
+    if (edgeGeo.region) res.headers.set("x-claw-geo-region", edgeGeo.region)
+    if (edgeGeo.country) res.headers.set("x-claw-geo-country", edgeGeo.country)
     res.headers.set(getRequestIdHeaderName(), requestId)
     res.cookies.set(LOCALE_COOKIE_NAME, targetLocale, {
       path: "/",
@@ -291,8 +303,38 @@ export function middleware(request: NextRequest) {
       const res = NextResponse.redirect(url, 308)
       res.headers.set("x-claw-locale", fallbackLocale)
       res.headers.set("x-claw-dir", localeDir(fallbackLocale))
+      if (edgeGeo.city) res.headers.set("x-claw-geo-city", edgeGeo.city)
+      if (edgeGeo.region) res.headers.set("x-claw-geo-region", edgeGeo.region)
+      if (edgeGeo.country) res.headers.set("x-claw-geo-country", edgeGeo.country)
       res.headers.set(getRequestIdHeaderName(), requestId)
       return res
+    }
+  }
+
+  // Geo-Living Matrix: optionally rewrite base runbook slug to geo-variant slug on demand.
+  // Example: /de/runbook/kubernetes-hardening -> /de/runbook/kubernetes-hardening-berlin
+  if (process.env.GEO_MATRIX_ENABLED === "1" && process.env.GEO_MATRIX_AUTO_REWRITE === "1") {
+    const m = pathname.match(/^\/([a-z]{2}(?:-[a-z]{2})?)\/runbook\/([^/]+)\/?$/i)
+    if (m) {
+      const lang = m[1]
+      const slug = decodeURIComponent(m[2])
+      const parsed = parseGeoVariantSlug(slug)
+      if (!parsed.citySlug) {
+        const resolved = resolveCity(edgeGeo.city)
+        if (resolved) {
+          const geoSlug = buildGeoSlug(parsed.baseSlug, slugifyCity(resolved.city))
+          const url = request.nextUrl.clone()
+          url.pathname = `/${lang}/runbook/${geoSlug}`
+          const res = NextResponse.rewrite(url)
+          res.headers.set("x-claw-locale", lang.toLowerCase())
+          res.headers.set("x-claw-dir", localeDir(lang.toLowerCase() as any))
+          res.headers.set("x-claw-geo-city", resolved.city)
+          res.headers.set("x-claw-geo-region", resolved.region)
+          res.headers.set("x-claw-geo-country", resolved.country)
+          res.headers.set(getRequestIdHeaderName(), requestId)
+          return res
+        }
+      }
     }
   }
 
@@ -328,6 +370,9 @@ export function middleware(request: NextRequest) {
   const res = NextResponse.next()
   res.headers.set("x-claw-locale", locale)
   res.headers.set("x-claw-dir", localeDir(locale))
+  if (edgeGeo.city) res.headers.set("x-claw-geo-city", edgeGeo.city)
+  if (edgeGeo.region) res.headers.set("x-claw-geo-region", edgeGeo.region)
+  if (edgeGeo.country) res.headers.set("x-claw-geo-country", edgeGeo.country)
   res.headers.set(getRequestIdHeaderName(), requestId)
   // Light CDN caching for Tag pages to lower CPU
   if (method === "GET") {

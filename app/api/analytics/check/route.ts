@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { getRequestId } from "@/lib/ops/request-id"
 import { logTelemetry } from "@/lib/ops/telemetry"
-import { recordCheckFunnelEvent } from "@/lib/check-funnel"
+import { recordCheckFunnelEventPersistent } from "@/lib/check-funnel"
 
 export const dynamic = "force-dynamic"
 
@@ -28,7 +28,16 @@ export async function POST(req: NextRequest) {
     }
 
     const e = body.event as CheckEvent
-    recordCheckFunnelEvent(e)
+    const meta: Record<string, string | number | boolean | null> = {}
+    if (body?.data && typeof body.data === "object") {
+      const data = body.data as Record<string, unknown>
+      for (const [k, v] of Object.entries(data)) {
+        if (typeof v === "string" || typeof v === "number" || typeof v === "boolean" || v === null) {
+          meta[k] = v
+        }
+      }
+    }
+    await recordCheckFunnelEventPersistent(e, meta)
 
     logTelemetry("check.analytics", {
       requestId,

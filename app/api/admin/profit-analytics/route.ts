@@ -8,7 +8,7 @@ import { cookies } from "next/headers"
 import { adminCookieName, verifyAdminToken } from "@/lib/admin-auth"
 import { stripe } from "@/lib/stripe"
 import { getEndpointCounts, getTopIps, getActiveBlocks } from "@/lib/api-usage"
-import { getCheckFunnelSnapshot } from "@/lib/check-funnel"
+import { getCheckFunnelSnapshotPersistent } from "@/lib/check-funnel"
 
 export const runtime = "nodejs"
 
@@ -150,8 +150,8 @@ function computeAlert(totalCostUsd: number, netTodayCents: number) {
 // ---------------------------------------------------------------------------
 // Conversion funnel (server-side placeholder – wire up real DB counters here)
 // ---------------------------------------------------------------------------
-function conversionFunnel(stripeMetrics: Awaited<ReturnType<typeof fetchStripeMetrics>> | null) {
-  const check = getCheckFunnelSnapshot()
+async function conversionFunnel(stripeMetrics: Awaited<ReturnType<typeof fetchStripeMetrics>> | null) {
+  const check = await getCheckFunnelSnapshotPersistent()
   return {
     landingPageViews: check.pageViews24h,
     daypassClicks: check.pricingClicks24h,
@@ -183,7 +183,7 @@ export async function GET() {
   const margins = computeMargins(endpointCounts)
   const topIps = getTopIps(10)
   const activeBlocks = getActiveBlocks()
-  const funnel = conversionFunnel(stripeMetrics)
+  const funnel = await conversionFunnel(stripeMetrics)
   const alert = stripeMetrics
     ? computeAlert(margins.totalCostUsd, stripeMetrics.netToday)
     : null

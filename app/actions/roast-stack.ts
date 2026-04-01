@@ -1,10 +1,12 @@
 "use server"
 
 import { z } from "zod"
+import { headers } from "next/headers"
 import { generateOrdered } from "@/lib/ai/providers"
 import type { Locale } from "@/lib/i18n"
 import { SUPPORTED_LOCALES } from "@/lib/i18n"
 import { buildRoastUserPrompt, type RoastLevel } from "@/lib/roast/prompt"
+import { checkRoastServerRateLimit } from "@/lib/roast/server-rate-limit"
 
 const roastLevelSchema = z.enum(["mild", "medium", "spicy"])
 
@@ -30,6 +32,13 @@ export type RoastStackActionState =
   | { ok: true; data: RoastStackResult }
   | { ok: false; error: string }
 
+function clientKeyFromHeaders(): string {
+  const h = headers()
+  const fwd = h.get("x-forwarded-for")?.split(",")[0]?.trim()
+  const real = h.get("x-real-ip")?.trim()
+  return fwd || real || "unknown"
+}
+
 export async function roastMyStackAction(form: {
   input: string
   roastLevel: RoastLevel
@@ -46,6 +55,11 @@ export async function roastMyStackAction(form: {
   const levelParsed = roastLevelSchema.safeParse(form.roastLevel)
   if (!levelParsed.success) {
     return { ok: false, error: "invalid_level" }
+  }
+
+  const rl = checkRoastServerRateLimit(clientKeyFromHeaders())
+  if (!rl.ok) {
+    return { ok: false, error: "rate_limited" }
   }
 
   const locale = normalizeLocale(form.locale)

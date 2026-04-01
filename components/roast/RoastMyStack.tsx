@@ -1,6 +1,7 @@
 "use client"
 
 import { useCallback, useMemo, useState, useTransition } from "react"
+import Link from "next/link"
 import { motion, AnimatePresence } from "framer-motion"
 import { Sparkles, Loader2 } from "lucide-react"
 import { roastMyStackAction, type RoastStackResult } from "@/app/actions/roast-stack"
@@ -26,6 +27,8 @@ export type RoastUiDict = RoastShareDict & {
   error_invalid_level: string
   error_ai_unavailable: string
   error_parse: string
+  error_rate_limited: string
+  page_link: string
 }
 
 const EN_FALLBACK: RoastUiDict = {
@@ -56,6 +59,8 @@ const EN_FALLBACK: RoastUiDict = {
   error_invalid_level: "Pick a roast level.",
   error_ai_unavailable: "AI is offline. Configure GEMINI_API_KEY (or your AI_PROVIDER_ORDER chain).",
   error_parse: "The model returned junk. Try again with a shorter description.",
+  error_rate_limited: "Too many roasts from this connection. Wait a few minutes and try again.",
+  page_link: "Open full-page roast (shareable URL)",
 }
 
 function mergeDict(raw?: Partial<Record<string, string>>): RoastUiDict {
@@ -67,9 +72,20 @@ type Props = {
   prefix: string
   dict?: Partial<Record<string, string>>
   variant?: "full" | "compact"
+  /** When false, hides the link to `/[lang]/roast-my-stack` (e.g. on that page). */
+  showDedicatedPageLink?: boolean
+  /** When false, hides kicker/title/subtitle (use page-level H1). */
+  showTitleBlock?: boolean
 }
 
-function RoastMyStack({ locale, prefix, dict: dictProp, variant = "full" }: Props) {
+function RoastMyStack({
+  locale,
+  prefix,
+  dict: dictProp,
+  variant = "full",
+  showDedicatedPageLink = true,
+  showTitleBlock = true,
+}: Props) {
   const t = useMemo(() => mergeDict(dictProp), [dictProp])
   const [input, setInput] = useState("")
   const [level, setLevel] = useState<RoastLevel>("medium")
@@ -82,7 +98,7 @@ function RoastMyStack({ locale, prefix, dict: dictProp, variant = "full" }: Prop
     typeof window !== "undefined"
       ? window.location.origin
       : (process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BASE_URL || "").replace(/\/$/, "")
-  const shareUrl = `${shareBase}${prefix || ""}/#roast-my-stack`
+  const shareUrl = `${shareBase}${prefix || ""}/roast-my-stack`
 
   const onCopy = useCallback(async () => {
     const text = `ClawGuru Roast · ${t.score_label} ${result?.score ?? ""}/100\n${result?.top_roasts?.[0] ?? ""}\n${shareUrl}`
@@ -107,6 +123,7 @@ function RoastMyStack({ locale, prefix, dict: dictProp, variant = "full" }: Prop
           invalid_level: t.error_invalid_level,
           ai_unavailable: t.error_ai_unavailable,
           parse_error: t.error_parse,
+          rate_limited: t.error_rate_limited,
         }
         setErr(map[res.error] ?? t.error_parse)
         return
@@ -132,26 +149,38 @@ function RoastMyStack({ locale, prefix, dict: dictProp, variant = "full" }: Prop
       )}
 
       <div className={compact ? "" : "relative"}>
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          className={compact ? "" : "text-center mb-10"}
-        >
-          <p
-            className="text-xs font-bold uppercase tracking-[0.25em] text-cyan-400/90 mb-2"
-            style={{ letterSpacing: "0.2em" }}
+        {showTitleBlock && (
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            className={compact ? "" : "text-center mb-10"}
           >
-            {t.kicker}
-          </p>
-          <h2
-            className={`font-black text-white ${compact ? "text-xl sm:text-2xl" : "text-3xl sm:text-4xl"} tracking-tight`}
-          >
-            <span className="bg-gradient-to-r from-amber-200 via-amber-400 to-cyan-300 bg-clip-text text-transparent">
-              {t.title}
-            </span>
-          </h2>
-          {!compact && <p className="mt-3 text-zinc-400 max-w-2xl mx-auto text-sm sm:text-base">{t.subtitle}</p>}
-        </motion.div>
+            <p
+              className="text-xs font-bold uppercase tracking-[0.25em] text-cyan-400/90 mb-2"
+              style={{ letterSpacing: "0.2em" }}
+            >
+              {t.kicker}
+            </p>
+            <h2
+              className={`font-black text-white ${compact ? "text-xl sm:text-2xl" : "text-3xl sm:text-4xl"} tracking-tight`}
+            >
+              <span className="bg-gradient-to-r from-amber-200 via-amber-400 to-cyan-300 bg-clip-text text-transparent">
+                {t.title}
+              </span>
+            </h2>
+            {!compact && <p className="mt-3 text-zinc-400 max-w-2xl mx-auto text-sm sm:text-base">{t.subtitle}</p>}
+            {!compact && showDedicatedPageLink && (
+              <p className="mt-4">
+                <Link
+                  href={`${prefix}/roast-my-stack`}
+                  className="text-sm font-medium text-cyan-400/90 underline-offset-4 hover:text-cyan-300 hover:underline"
+                >
+                  {t.page_link}
+                </Link>
+              </p>
+            )}
+          </motion.div>
+        )}
 
         <motion.div
           initial={{ opacity: 0, y: 10 }}

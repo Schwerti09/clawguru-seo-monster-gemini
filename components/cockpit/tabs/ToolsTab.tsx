@@ -1,8 +1,9 @@
 'use client'
 
 import { useState } from 'react'
+import { usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
-import { DEFAULT_LOCALE } from '@/lib/i18n'
+import { DEFAULT_LOCALE, SUPPORTED_LOCALES, type Locale } from '@/lib/i18n'
 import { RoastMyStack } from '@/components/roast/RoastMyStack'
 import {
   Zap,
@@ -36,6 +37,12 @@ const glass = {
   boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.03)'
 } as const
 
+function localeFromPathname(pathname: string | null): Locale {
+  if (!pathname) return DEFAULT_LOCALE
+  const first = pathname.split("/").filter(Boolean)[0]
+  return first && SUPPORTED_LOCALES.includes(first as Locale) ? (first as Locale) : DEFAULT_LOCALE
+}
+
 function timeAgo(dateStr: string): string {
   const diff = Date.now() - new Date(dateStr).getTime()
   const mins = Math.floor(diff / 60000)
@@ -48,6 +55,10 @@ function timeAgo(dateStr: string): string {
 }
 
 export function ToolsTab({ isShadowed, executions }: ToolsTabProps) {
+  const pathname = usePathname()
+  const dashLocale = localeFromPathname(pathname)
+  const dashPrefix = `/${dashLocale}`
+
   const [activeTool, setActiveTool] = useState<string | null>(null)
   const [executionProgress, setExecutionProgress] = useState(0)
   const [executionStatus, setExecutionStatus] = useState<'idle' | 'running' | 'completed' | 'error'>('idle')
@@ -87,7 +98,7 @@ export function ToolsTab({ isShadowed, executions }: ToolsTabProps) {
         className="mb-10 rounded-2xl border p-5"
         style={{ ...glass, borderColor: 'rgba(34,211,238,0.15)' }}
       >
-        <RoastMyStack locale={DEFAULT_LOCALE} prefix={`/${DEFAULT_LOCALE}`} variant="compact" />
+        <RoastMyStack locale={dashLocale} prefix={dashPrefix} variant="compact" />
       </motion.div>
 
       {/* Header */}

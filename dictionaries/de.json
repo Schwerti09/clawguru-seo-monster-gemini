@@ -733,6 +733,11 @@
     "error_input_too_long": "Maximal 400 Zeichen.",
     "error_invalid_level": "Roast-Level wählen.",
     "error_ai_unavailable": "KI offline. GEMINI_API_KEY (oder AI_PROVIDER_ORDER-Kette) prüfen.",
-    "error_parse": "Antwort unbrauchbar. Kürzeren Stack probieren."
+    "error_parse": "Antwort unbrauchbar. Kürzeren Stack probieren.",
+    "error_rate_limited": "Zu viele Roasts von dieser Verbindung. Ein paar Minuten warten.",
+    "page_link": "Vollseiten-Roast öffnen (teilbare URL)",
+    "meta_title": "Roast My Stack — Kostenloser KI-Security-Roast | ClawGuru",
+    "meta_description": "Roaste deinen Tech-Stack mit ClawGuru: scharfer Humor, echte SecOps-Insights, Claw Score und teilbare Karten — danach Runbooks und Fixes.",
+    "page_intro": "Zum Teilen gemacht: ein Link, ein Roast, konkrete Schwachstellen und nächste Schritte. Kein Pentest — alles in deiner Umgebung verifizieren."
   }
 }

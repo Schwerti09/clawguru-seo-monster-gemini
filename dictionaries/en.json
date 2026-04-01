@@ -733,6 +733,11 @@
     "error_input_too_long": "Keep it under 400 characters.",
     "error_invalid_level": "Pick a roast level.",
     "error_ai_unavailable": "AI is offline. Configure GEMINI_API_KEY (or your AI_PROVIDER_ORDER chain).",
-    "error_parse": "The model returned junk. Try again with a shorter description."
+    "error_parse": "The model returned junk. Try again with a shorter description.",
+    "error_rate_limited": "Too many roasts from this connection. Wait a few minutes and try again.",
+    "page_link": "Open full-page roast (shareable URL)",
+    "meta_title": "Roast My Stack — Free AI security roast | ClawGuru",
+    "meta_description": "Roast your tech stack with ClawGuru: sharp humor, real SecOps insights, Claw Score, and shareable results — then jump into runbooks and fixes.",
+    "page_intro": "Built for sharing: one link, one roast, concrete weaknesses and next steps. Not a pentest — verify everything in your environment."
   }
 }

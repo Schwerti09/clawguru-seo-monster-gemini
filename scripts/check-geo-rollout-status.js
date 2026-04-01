@@ -28,10 +28,12 @@ async function main() {
 
   const locale = getArg("locale", "de")
   const slug = getArg("slug", "aws-ssh-hardening-2026")
+  const verbose = getArg("verbose", "0") === "1"
   const url =
     `${base}/api/geo/rollout-status` +
     `?locale=${encodeURIComponent(locale)}` +
-    `&slug=${encodeURIComponent(slug)}`
+    `&slug=${encodeURIComponent(slug)}` +
+    `&verbose=${verbose ? "1" : "0"}`
 
   const res = await fetch(url, {
     headers: {
@@ -46,6 +48,7 @@ async function main() {
   }
 
   const r = json.rollout || {}
+  console.log(`rollout-status mode=${json.mode || "fast"}`)
   console.log(
     `rollout total=${r.total || 0} activeStable=${r.activeStable || 0} activeCanary=${r.activeCanary || 0} inactiveStable=${r.inactiveStable || 0} inactiveCanary=${r.inactiveCanary || 0}`
   )

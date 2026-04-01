@@ -38,7 +38,8 @@ export async function GET(req: NextRequest) {
   if (!hasSecret(req)) return unauthorized()
 
   const sampleLimit = toInt(req.nextUrl.searchParams.get("sampleLimit"), 8, 1, 30)
-  const includeRanking = req.nextUrl.searchParams.get("includeRanking") !== "0"
+  const verbose = req.nextUrl.searchParams.get("verbose") === "1"
+  const includeRanking = req.nextUrl.searchParams.get("includeRanking") === "1" || verbose
   const locale = (req.nextUrl.searchParams.get("locale") || "de").toLowerCase()
   const slug = req.nextUrl.searchParams.get("slug") || "aws-ssh-hardening-2026"
   const rankingLimit = toInt(req.nextUrl.searchParams.get("rankingLimit"), 24, 1, 120)
@@ -69,35 +70,51 @@ export async function GET(req: NextRequest) {
     if (!row.is_active && row.rollout_stage === "canary") counters.inactiveCanary += n
   }
 
-  const activeCanaryRes = await dbQuery<{
+  let activeCanaryRows: Array<{
     slug: string
     priority: number
     population: number
     updated_at: string
-  }>(
-    `SELECT slug, priority, population, updated_at
-     FROM geo_cities
-     WHERE is_active = true
-       AND rollout_stage = 'canary'
-     ORDER BY priority DESC, population DESC, updated_at DESC
-     LIMIT $1`,
-    [sampleLimit]
-  )
+  }> = []
+  let activeStableRows: Array<{
+    slug: string
+    priority: number
+    population: number
+    updated_at: string
+  }> = []
+  if (verbose) {
+    const activeCanaryRes = await dbQuery<{
+      slug: string
+      priority: number
+      population: number
+      updated_at: string
+    }>(
+      `SELECT slug, priority, population, updated_at
+       FROM geo_cities
+       WHERE is_active = true
+         AND rollout_stage = 'canary'
+       ORDER BY priority DESC, population DESC, updated_at DESC
+       LIMIT $1`,
+      [sampleLimit]
+    )
 
-  const activeStableRes = await dbQuery<{
-    slug: string
-    priority: number
-    population: number
-    updated_at: string
-  }>(
-    `SELECT slug, priority, population, updated_at
-     FROM geo_cities
-     WHERE is_active = true
-       AND rollout_stage = 'stable'
-     ORDER BY priority DESC, population DESC, updated_at DESC
-     LIMIT $1`,
-    [sampleLimit]
-  )
+    const activeStableRes = await dbQuery<{
+      slug: string
+      priority: number
+      population: number
+      updated_at: string
+    }>(
+      `SELECT slug, priority, population, updated_at
+       FROM geo_cities
+       WHERE is_active = true
+         AND rollout_stage = 'stable'
+       ORDER BY priority DESC, population DESC, updated_at DESC
+       LIMIT $1`,
+      [sampleLimit]
+    )
+    activeCanaryRows = activeCanaryRes.rows
+    activeStableRows = activeStableRes.rows
+  }
 
   let ranking: any = null
   if (includeRanking) {
@@ -123,11 +140,14 @@ export async function GET(req: NextRequest) {
   return NextResponse.json({
     ok: true,
     generatedAt: new Date().toISOString(),
+    mode: verbose ? "verbose" : "fast",
     rollout: counters,
-    sample: {
-      activeCanary: activeCanaryRes.rows,
-      activeStable: activeStableRes.rows,
-    },
+    sample: verbose
+      ? {
+          activeCanary: activeCanaryRows,
+          activeStable: activeStableRows,
+        }
+      : undefined,
     sitemapRuntimeLimits: runtimeLimits,
     sitemapDefaultLimits: defaultLimits,
     rankingSnapshot: ranking

@@ -55,13 +55,16 @@ export async function GET(req: NextRequest) {
   const tags = selectedLocales.flatMap((loc) => bucketsToUse.map((b) => `${base}/tags-${loc}-${b}.xml`))
   const runbooks = selectedLocales.flatMap((loc) => bucketsToUse.map((b) => `${base}/runbooks-${loc}-${b}.xml`))
   
+  const includeSynthetic100k = process.env.SITEMAP_INCLUDE_SYNTHETIC_100K === "1"
   const SITEMAP_PAGE_SIZE_100K = 50000
   const count100kSlugs = () => {
     const P = 30, S = 38, I = 30, Y = 7
     return P * S * I * Y
   }
   const pages100k = Math.ceil(count100kSlugs() / SITEMAP_PAGE_SIZE_100K)
-  const runbook100k = selectedLocales.flatMap((loc) => Array.from({ length: pages100k }, (_, page) => `${base}/runbook100k-${loc}-${page}.xml`))
+  const runbook100k = includeSynthetic100k
+    ? selectedLocales.flatMap((loc) => Array.from({ length: pages100k }, (_, page) => `${base}/runbook100k-${loc}-${page}.xml`))
+    : []
 
   const legacyCompat: string[] = [
     `${base}/main.xml`,

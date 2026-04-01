@@ -22,9 +22,6 @@ function getClientIp(request: NextRequest): string {
 
 function routeBucket(pathname: string): string | null {
   if (pathname === "/api/live-wall") return "live-wall"
-  if (/^\/(?:[a-z]{2}(?:-[a-z]{2})?)\/runbook\//i.test(pathname) || /^\/runbook\//i.test(pathname)) return "runbook-detail"
-  if (/^\/(?:[a-z]{2}(?:-[a-z]{2})?)\/tag\//i.test(pathname) || /^\/tag\//i.test(pathname)) return "tag-detail"
-  if (/^\/(?:[a-z]{2}(?:-[a-z]{2})?)\/runbooks\/?$/i.test(pathname) || /^\/runbooks\/?$/i.test(pathname)) return "runbooks-index"
   return null
 }
 

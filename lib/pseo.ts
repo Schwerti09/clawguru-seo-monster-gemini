@@ -1735,9 +1735,15 @@ export function getRunbook(slug: string): Runbook | null {
       return _buildDummyRunbook(slug)
     }
   }
+  const list = _getRunbooks()
+  const found = list.find((r) => r.slug === slug) ?? null
+  if (found) return found
+
   const meta = parseRunbookSlug100k(slug)
-  if (meta) return _buildDummyRunbook(slug)
-  return _buildDummyRunbook(slug)
+  if (meta && process.env.PSEO_ALLOW_SYNTHETIC_100K === "1") {
+    return _buildDummyRunbook(slug)
+  }
+  return null
 }
 
 export function bucketsAF() {

@@ -6,7 +6,7 @@ import { validateRunbook, type ClawCertifiedTier } from "@/lib/quality-gate"
 import { getTemporalHistory } from "@/lib/temporal-mycelium"
 import NextDynamic from "next/dynamic"
 import { Suspense } from "react"
-import { notFound } from "next/navigation"
+import { notFound, permanentRedirect } from "next/navigation"
 import { CopyLinkButton } from "./CopyLinkButton"
 import { ActivateSwarmButton } from "@/components/shared/ActivateSwarmButton"
 import { BASE_URL } from "@/lib/config"
@@ -27,7 +27,7 @@ const VersionsAndForksTabLazy = NextDynamic(() => import("@/components/runbook/V
 
 export const dynamic = "force-static"
 export const revalidate = 86400 // reduce rebuild frequency to cut CPU
-export const dynamicParams = false // CRITICAL: Prevent 50k+ placeholder pages from being indexed
+export const dynamicParams = true // Recovery mode: catch stale indexed slugs and redirect instead of 404
 export const runtime = "nodejs"
 export const maxDuration = 180
 export const preferredRegion = "iad1"
@@ -285,11 +285,12 @@ export default async function RunbookPage(props: { params: { slug: string } }) {
   let r: any
   try {
     r = getRunbook(params.slug)
-    if (!r) return notFound()
+    if (!r) {
+      permanentRedirect(`/${locale}/runbooks?q=${encodeURIComponent(params.slug)}`)
+    }
   } catch (err) {
     console.error(`[sitemap-health] runbook generation failed for slug ${params.slug}:`, err instanceof Error ? err.message : String(err))
-    // Return 404 instead of 500 – broken/orphaned runbooks should not crash the site
-    return notFound()
+    permanentRedirect(`/${locale}/runbooks?q=${encodeURIComponent(params.slug)}`)
   }
 
   // Quality Gate: reject thin content before serving (ClawGuru 2026 Standard)

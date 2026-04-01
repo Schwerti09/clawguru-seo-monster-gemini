@@ -1,0 +1,208 @@
+{
+  "updated": "2026-04-01",
+  "scope": "Top-20 priorities for next 14 days (impact-first).",
+  "owner": "growth+seo",
+  "notes": "Each entry has one concrete action and one primary KPI. Do not start low-priority queries before top-10 is shipped.",
+  "priorities": [
+    {
+      "priority": 1,
+      "q": "security check tool",
+      "intent": "tool",
+      "primaryPath": "/de/check",
+      "whyNow": "Highest conversion intent and already central in product flow.",
+      "nextAction": "Rewrite above-the-fold copy for intent match + add 3 proof bullets + tighten CTA text.",
+      "kpi": "check_start_rate",
+      "target14d": "+20%"
+    },
+    {
+      "priority": 2,
+      "q": "free security score",
+      "intent": "tool",
+      "primaryPath": "/de/check",
+      "whyNow": "Direct overlap with scoring UX and low content rewrite cost.",
+      "nextAction": "Add dedicated section for score methodology and limitations.",
+      "kpi": "organic_clicks_to_check",
+      "target14d": "+15%"
+    },
+    {
+      "priority": 3,
+      "q": "roast my stack",
+      "intent": "tool",
+      "primaryPath": "/de/roast-my-stack",
+      "whyNow": "Viral loop plus branded demand growth.",
+      "nextAction": "Add FAQ + examples block with 3 realistic stack inputs and outputs.",
+      "kpi": "share_click_rate",
+      "target14d": "+25%"
+    },
+    {
+      "priority": 4,
+      "q": "kubernetes security hardening",
+      "intent": "info",
+      "primaryPath": "/de/runbooks/kubernetes",
+      "whyNow": "Large demand cluster and strong pillar potential.",
+      "nextAction": "Turn page into pillar format: TL;DR, checklist, common misconfigs, linked runbooks.",
+      "kpi": "organic_sessions",
+      "target14d": "+12%"
+    },
+    {
+      "priority": 5,
+      "q": "docker security hardening",
+      "intent": "info",
+      "primaryPath": "/de/runbooks/docker",
+      "whyNow": "High-fit with existing hardening content set.",
+      "nextAction": "Add side-by-side 'bad vs good' config snippets and internal links to check + daypass.",
+      "kpi": "avg_engagement_time",
+      "target14d": "+15%"
+    },
+    {
+      "priority": 6,
+      "q": "nginx hardening",
+      "intent": "info",
+      "primaryPath": "/de/nginx-hardening",
+      "whyNow": "Strong standalone query with practical intent.",
+      "nextAction": "Improve snippet potential: concise H2 blocks, explicit outcomes, and command examples.",
+      "kpi": "ctr_gsc",
+      "target14d": "+2pp"
+    },
+    {
+      "priority": 7,
+      "q": "vault hardening",
+      "intent": "info",
+      "primaryPath": "/de/vault-hardening",
+      "whyNow": "High-value security audience and enterprise relevance.",
+      "nextAction": "Add audit-oriented section (controls, evidence, rollback notes).",
+      "kpi": "organic_sessions",
+      "target14d": "+10%"
+    },
+    {
+      "priority": 8,
+      "q": "aws iam security",
+      "intent": "info",
+      "primaryPath": "/de/aws-iam-security",
+      "whyNow": "Core cloud security query with recurring demand.",
+      "nextAction": "Add policy anti-pattern examples and quick remediation table.",
+      "kpi": "avg_position_gsc",
+      "target14d": "-2"
+    },
+    {
+      "priority": 9,
+      "q": "kubernetes network policy",
+      "intent": "info",
+      "primaryPath": "/de/kubernetes-network-policies",
+      "whyNow": "Narrow problem query with strong solution alignment.",
+      "nextAction": "Add copy-paste policy templates and testing workflow.",
+      "kpi": "organic_sessions",
+      "target14d": "+10%"
+    },
+    {
+      "priority": 10,
+      "q": "keycloak hardening",
+      "intent": "info",
+      "primaryPath": "/de/keycloak-hardening",
+      "whyNow": "Identity-security niche with conversion opportunity.",
+      "nextAction": "Add 'incident stories' and config checklist for MFA/session controls.",
+      "kpi": "scroll_depth_75",
+      "target14d": "+15%"
+    },
+    {
+      "priority": 11,
+      "q": "postgresql security",
+      "intent": "info",
+      "primaryPath": "/de/postgresql-security",
+      "whyNow": "Strong practical demand, can capture long-tail quickly.",
+      "nextAction": "Add hardening matrix by environment (dev/stage/prod).",
+      "kpi": "organic_sessions",
+      "target14d": "+8%"
+    },
+    {
+      "priority": 12,
+      "q": "redis security",
+      "intent": "info",
+      "primaryPath": "/de/redis-security",
+      "whyNow": "Frequent breach topic and actionable fixes.",
+      "nextAction": "Add 'public exposure playbook' with immediate mitigation steps.",
+      "kpi": "ctr_gsc",
+      "target14d": "+1.5pp"
+    },
+    {
+      "priority": 13,
+      "q": "linux server hardening",
+      "intent": "info",
+      "primaryPath": "/de/linux-hardening",
+      "whyNow": "Broad query with high top-funnel reach.",
+      "nextAction": "Split into baseline checks + advanced checks; tighten internal linking.",
+      "kpi": "organic_sessions",
+      "target14d": "+8%"
+    },
+    {
+      "priority": 14,
+      "q": "elasticsearch security",
+      "intent": "info",
+      "primaryPath": "/de/elasticsearch-security",
+      "whyNow": "Known attack surface with concrete intent.",
+      "nextAction": "Add explicit auth/TLS/role config checklist with command snippets.",
+      "kpi": "avg_position_gsc",
+      "target14d": "-1.5"
+    },
+    {
+      "priority": 15,
+      "q": "docker security checklist",
+      "intent": "info",
+      "primaryPath": "/de/docker-security-hardening",
+      "whyNow": "Checklist query maps to high-CTR list format.",
+      "nextAction": "Reformat into numbered checklist with downloadable variant.",
+      "kpi": "ctr_gsc",
+      "target14d": "+2pp"
+    },
+    {
+      "priority": 16,
+      "q": "threat intelligence feed",
+      "intent": "tool",
+      "primaryPath": "/de/intel",
+      "whyNow": "Supports daily-return behavior and brand recall.",
+      "nextAction": "Improve freshness signals (timestamps, update frequency copy, latest highlights).",
+      "kpi": "returning_users",
+      "target14d": "+12%"
+    },
+    {
+      "priority": 17,
+      "q": "clawguru pricing",
+      "intent": "commercial",
+      "primaryPath": "/de/pricing",
+      "whyNow": "Bottom-funnel branded intent.",
+      "nextAction": "Tighten plan comparison and social proof near CTA.",
+      "kpi": "pricing_to_checkout_rate",
+      "target14d": "+10%"
+    },
+    {
+      "priority": 18,
+      "q": "security day pass",
+      "intent": "commercial",
+      "primaryPath": "/de/daypass",
+      "whyNow": "Direct monetization query.",
+      "nextAction": "Add use-case based purchase triggers and urgency framing.",
+      "kpi": "daypass_purchase_rate",
+      "target14d": "+10%"
+    },
+    {
+      "priority": 19,
+      "q": "security runbooks",
+      "intent": "tool",
+      "primaryPath": "/de/runbooks",
+      "whyNow": "Hub query with broad semantic coverage.",
+      "nextAction": "Add curated categories and best-first navigation for new users.",
+      "kpi": "hub_to_detail_click_rate",
+      "target14d": "+10%"
+    },
+    {
+      "priority": 20,
+      "q": "nis2 compliance runbook",
+      "intent": "info",
+      "primaryPath": "/de/runbooks/security",
+      "whyNow": "Trust/EEAT support query for enterprise fit.",
+      "nextAction": "Add compliance mapping table and evidence artifacts references.",
+      "kpi": "organic_sessions",
+      "target14d": "+8%"
+    }
+  ]
+}

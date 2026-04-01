@@ -54,6 +54,8 @@ export default async function WindowsSecurityPage({
 }: {
   params: { lang: string };
 }) {
+  const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale;
+  const prefix = `/${locale}`;
   return (
     <main className="min-h-screen bg-white">
       <section className="relative overflow-hidden bg-gradient-to-br from-blue-700 via-blue-800 to-indigo-900 py-20">
@@ -384,7 +386,7 @@ Set-NetFirewallProfile -DefaultInboundAction Block -DefaultOutboundAction Allow`
 
           <section className="bg-gradient-to-r from-blue-700 to-indigo-700 rounded-2xl p-8 text-center text-white">
             <h2 className="text-2xl font-bold mb-4">Windows Security Assessment</h2>
-            <a href="/check" className="inline-block px-6 py-3 bg-white text-blue-700 rounded-lg font-semibold">Assessment Starten</a>
+            <a href={`${prefix}/check`} className="inline-block px-6 py-3 bg-white text-blue-700 rounded-lg font-semibold">Assessment Starten</a>
           </section>
         </div>
       </div>

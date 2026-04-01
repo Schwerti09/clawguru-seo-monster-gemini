@@ -60,6 +60,7 @@ export default async function GrafanaHardeningPage({
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale)
     ? params.lang
     : "de") as Locale;
+  const prefix = `/${locale}`;
 
   const isGerman = locale === "de";
 
@@ -454,7 +455,7 @@ log_data_source_queries = true`}
                 : "Check your Grafana configuration for security vulnerabilities."}
             </p>
             <a 
-              href="/check" 
+              href={`${prefix}/check`} 
               className="inline-block px-6 py-3 bg-white text-orange-600 rounded-lg font-semibold hover:bg-slate-100 transition-colors"
             >
               {isGerman ? "Assessment Starten" : "Start Assessment"}

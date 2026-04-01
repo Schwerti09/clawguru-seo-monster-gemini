@@ -60,6 +60,7 @@ export default async function MongoDBSecurityPage({
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale)
     ? params.lang
     : "de") as Locale;
+  const prefix = `/${locale}`;
 
   return (
     <main className="min-h-screen bg-white">
@@ -615,7 +616,7 @@ net:
             <p className="mb-6 max-w-2xl mx-auto">
               Validieren Sie Ihre MongoDB-Installation gegen Enterprise Security Best Practices und Compliance-Standards.
             </p>
-            <a href="/check" className="inline-block px-6 py-3 bg-white text-green-700 rounded-lg font-semibold hover:bg-slate-100 transition-colors">
+            <a href={`${prefix}/check`} className="inline-block px-6 py-3 bg-white text-green-700 rounded-lg font-semibold hover:bg-slate-100 transition-colors">
               Security Assessment Starten
             </a>
           </section>

@@ -57,6 +57,7 @@ export default function AWSVPCFlowLogsPage({
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale)
     ? params.lang
     : "de") as Locale;
+  const prefix = `/${locale}`;
 
   const isGerman = locale === "de";
 
@@ -258,7 +259,7 @@ ORDER BY numbytes DESC;`}
           <section className="bg-gradient-to-r from-orange-500 to-amber-600 rounded-2xl p-8 text-center text-white">
             <h2 className="text-2xl font-bold mb-4">VPC Flow Logs Analysis</h2>
             <p className="mb-6">Automatisieren Sie Ihre Netzwerk-Security Analyse.</p>
-            <a href="/check" className="inline-block px-6 py-3 bg-white text-orange-600 rounded-lg font-semibold">
+            <a href={`${prefix}/check`} className="inline-block px-6 py-3 bg-white text-orange-600 rounded-lg font-semibold">
               Flow Logs Assessment
             </a>
           </section>

@@ -57,6 +57,7 @@ export default async function PrometheusVPNPage({
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale)
     ? params.lang
     : "de") as Locale;
+  const prefix = `/${locale}`;
 
   const isGerman = locale === "de";
 
@@ -272,7 +273,7 @@ tls_config:
           <section className="bg-gradient-to-r from-orange-600 to-red-600 rounded-2xl p-8 text-center text-white">
             <h2 className="text-2xl font-bold mb-4">VPN Monitoring Setup</h2>
             <p className="mb-6">Implementieren Sie sichere Prometheus-Monitoring über VPN.</p>
-            <a href="/check" className="inline-block px-6 py-3 bg-white text-orange-600 rounded-lg font-semibold">
+            <a href={`${prefix}/check`} className="inline-block px-6 py-3 bg-white text-orange-600 rounded-lg font-semibold">
               Setup Assessment
             </a>
           </section>

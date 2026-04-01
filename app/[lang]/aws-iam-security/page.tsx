@@ -24,6 +24,7 @@ export async function generateMetadata({ params }: { params: { lang: string } })
 
 export default function AWSIAMPage({ params }: { params: { lang: string } }) {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale;
+  const prefix = `/${locale}`;
 
   return (
     <main className="min-h-screen bg-white">
@@ -158,7 +159,7 @@ resource "aws_iam_role_policy" "s3" {
 
           <section className="bg-gradient-to-r from-orange-500 to-amber-600 rounded-2xl p-8 text-center text-white">
             <h2 className="text-2xl font-bold mb-4">AWS IAM Security Assessment</h2>
-            <a href="/check" className="inline-block px-6 py-3 bg-white text-orange-600 rounded-lg font-semibold">Assessment Starten</a>
+            <a href={`${prefix}/check`} className="inline-block px-6 py-3 bg-white text-orange-600 rounded-lg font-semibold">Assessment Starten</a>
           </section>
         </div>
       </div>

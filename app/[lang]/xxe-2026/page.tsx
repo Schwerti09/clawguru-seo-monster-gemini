@@ -177,6 +177,7 @@ export default async function XXE2026Page({
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale)
     ? params.lang
     : "de") as Locale;
+  const prefix = `/${locale}`;
 
   const content =
     locale === "de" ? (
@@ -890,10 +891,10 @@ using (XmlReader reader = XmlReader.Create(inputStream, settings))
                 und Echtzeit-Threat-Intelligence.
               </p>
               <div className="flex flex-wrap justify-center gap-4">
-                <a href="/check" className="px-6 py-3 bg-white text-slate-900 rounded-lg font-semibold hover:bg-slate-100 transition-colors">
+                <a href={`${prefix}/check`} className="px-6 py-3 bg-white text-slate-900 rounded-lg font-semibold hover:bg-slate-100 transition-colors">
                   Security Check Starten
                 </a>
-                <a href="/intel" className="px-6 py-3 bg-slate-700 text-white rounded-lg font-semibold hover:bg-slate-600 transition-colors">
+                <a href={`${prefix}/intel`} className="px-6 py-3 bg-slate-700 text-white rounded-lg font-semibold hover:bg-slate-600 transition-colors">
                   Intel Feed Ansehen
                 </a>
               </div>

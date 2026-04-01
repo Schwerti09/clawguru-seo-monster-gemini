@@ -61,6 +61,7 @@ export default async function WAF2027Page({
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale)
     ? params.lang
     : "de") as Locale;
+  const prefix = `/${locale}`;
 
   const isGerman = locale === "de";
 
@@ -481,7 +482,7 @@ SecAction \\
                 : "Use ClawGuru for automated WAF tuning and threat monitoring."}
             </p>
             <a 
-              href="/check" 
+              href={`${prefix}/check`} 
               className="inline-block px-6 py-3 bg-white text-orange-700 rounded-lg font-semibold hover:bg-slate-100 transition-colors"
             >
               {isGerman ? "WAF Assessment Starten" : "Start WAF Assessment"}

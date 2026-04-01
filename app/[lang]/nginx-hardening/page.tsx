@@ -57,6 +57,7 @@ export default async function NginxHardeningPage({
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale)
     ? params.lang
     : "de") as Locale;
+  const prefix = `/${locale}`;
 
   const isGerman = locale === "de";
 
@@ -274,7 +275,7 @@ location ~ \\.(css|js)$ {
           <section className="bg-gradient-to-r from-green-600 to-emerald-600 rounded-2xl p-8 text-center text-white">
             <h2 className="text-2xl font-bold mb-4">Nginx Security Assessment</h2>
             <p className="mb-6">Validieren Sie Ihre Nginx-Konfiguration gegen CIS Benchmarks.</p>
-            <a href="/check" className="inline-block px-6 py-3 bg-white text-green-600 rounded-lg font-semibold">
+            <a href={`${prefix}/check`} className="inline-block px-6 py-3 bg-white text-green-600 rounded-lg font-semibold">
               Security Check
             </a>
           </section>

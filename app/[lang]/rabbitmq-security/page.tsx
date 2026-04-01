@@ -54,6 +54,8 @@ export default async function RabbitMQSecurityPage({
 }: {
   params: { lang: string };
 }) {
+  const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale;
+  const prefix = `/${locale}`;
   return (
     <main className="min-h-screen bg-white">
       <section className="relative overflow-hidden bg-gradient-to-br from-orange-600 via-orange-700 to-amber-800 py-20">
@@ -408,7 +410,7 @@ ssl_options.keyfile = /etc/rabbitmq/ssl/federation.key`}
 
           <section className="bg-gradient-to-r from-orange-600 to-amber-600 rounded-2xl p-8 text-center text-white">
             <h2 className="text-2xl font-bold mb-4">RabbitMQ Security Assessment</h2>
-            <a href="/check" className="inline-block px-6 py-3 bg-white text-orange-600 rounded-lg font-semibold">Assessment Starten</a>
+            <a href={`${prefix}/check`} className="inline-block px-6 py-3 bg-white text-orange-600 rounded-lg font-semibold">Assessment Starten</a>
           </section>
         </div>
       </div>

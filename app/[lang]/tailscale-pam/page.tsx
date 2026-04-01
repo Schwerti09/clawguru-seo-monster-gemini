@@ -61,6 +61,7 @@ export default async function TailscalePAMPage({
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale)
     ? params.lang
     : "de") as Locale;
+  const prefix = `/${locale}`;
 
   const isGerman = locale === "de";
 
@@ -558,7 +559,7 @@ export default async function TailscalePAMPage({
                 : "Start your Tailscale PAM migration with ClawGuru's security assessment."}
             </p>
             <a 
-              href="/check" 
+              href={`${prefix}/check`} 
               className="inline-block px-6 py-3 bg-white text-blue-800 rounded-lg font-semibold hover:bg-slate-100 transition-colors"
             >
               {isGerman ? "Security Assessment Starten" : "Start Security Assessment"}

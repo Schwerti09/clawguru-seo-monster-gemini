@@ -5,7 +5,7 @@ import FeaturePreviewCard from "./FeaturePreviewCard"
 import { motion } from "framer-motion"
 import Skeleton from "./ui/Skeleton"
 
-function useInView<T extends HTMLElement>(opts?: IntersectionObserverInit) {
+function useInView<T extends HTMLElement = HTMLDivElement>(opts?: IntersectionObserverInit) {
   const ref = useRef<T | null>(null)
   const [inView, setInView] = useState(false)
   useEffect(() => {

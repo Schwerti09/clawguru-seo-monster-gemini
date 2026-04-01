@@ -1,0 +1,131 @@
+name: Geo Guardian
+
+on:
+  schedule:
+    - cron: "17 */6 * * *"
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "dry-run or live auto-prune"
+        required: false
+        default: "dry-run"
+      expansion_mode:
+        description: "dry-run or live top-city expansion"
+        required: false
+        default: "dry-run"
+      guardrail_mode:
+        description: "dry-run or live sitemap guardrail"
+        required: false
+        default: "dry-run"
+
+jobs:
+  monitor-and-prune:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+      - run: npm install --legacy-peer-deps --no-audit --no-fund
+
+      - name: Check geo index health
+        run: npm run check:geo-index-health -- --base="${{ secrets.GEO_INDEX_HEALTH_BASE }}"
+        env:
+          GEO_INDEX_HEALTH_BASE: ${{ secrets.GEO_INDEX_HEALTH_BASE }}
+
+      - name: Check city ranking
+        run: npm run check:geo-city-ranking -- --base="${{ secrets.GEO_INDEX_HEALTH_BASE }}"
+        env:
+          GEO_INDEX_HEALTH_BASE: ${{ secrets.GEO_INDEX_HEALTH_BASE }}
+          GEO_MATRIX_SITEMAP_CITY_LIMIT: ${{ secrets.GEO_MATRIX_SITEMAP_CITY_LIMIT }}
+
+      - name: Auto-prune dry run (scheduled)
+        if: github.event_name == 'schedule'
+        run: npm run geo:auto-prune:dry-run -- --base="${{ secrets.GEO_INDEX_HEALTH_BASE }}"
+        env:
+          GEO_INDEX_HEALTH_BASE: ${{ secrets.GEO_INDEX_HEALTH_BASE }}
+          GEO_AUTO_PRUNE_SECRET: ${{ secrets.GEO_AUTO_PRUNE_SECRET }}
+          GEO_AUTO_PRUNE_MIN_HEALTH: ${{ secrets.GEO_AUTO_PRUNE_MIN_HEALTH }}
+          GEO_AUTO_PRUNE_MAX_PRIORITY: ${{ secrets.GEO_AUTO_PRUNE_MAX_PRIORITY }}
+          GEO_MATRIX_SITEMAP_CITY_LIMIT: ${{ secrets.GEO_MATRIX_SITEMAP_CITY_LIMIT }}
+
+      - name: Top-city expansion dry run (scheduled)
+        if: github.event_name == 'schedule'
+        run: npm run geo:top-city-expansion:dry-run -- --base="${{ secrets.GEO_INDEX_HEALTH_BASE }}"
+        env:
+          GEO_INDEX_HEALTH_BASE: ${{ secrets.GEO_INDEX_HEALTH_BASE }}
+          GEO_EXPANSION_SECRET: ${{ secrets.GEO_EXPANSION_SECRET }}
+          GEO_EXPANSION_MIN_HEALTH: ${{ secrets.GEO_EXPANSION_MIN_HEALTH }}
+          GEO_EXPANSION_MAX_ACTIVATE: ${{ secrets.GEO_EXPANSION_MAX_ACTIVATE }}
+          GEO_EXPANSION_MIN_PRIORITY: ${{ secrets.GEO_EXPANSION_MIN_PRIORITY }}
+          GEO_EXPANSION_MIN_POPULATION: ${{ secrets.GEO_EXPANSION_MIN_POPULATION }}
+          GEO_MATRIX_SITEMAP_CITY_LIMIT: ${{ secrets.GEO_MATRIX_SITEMAP_CITY_LIMIT }}
+
+      - name: Sitemap guardrail dry run (scheduled)
+        if: github.event_name == 'schedule'
+        run: npm run geo:sitemap-guardrail:dry-run -- --base="${{ secrets.GEO_INDEX_HEALTH_BASE }}"
+        env:
+          GEO_INDEX_HEALTH_BASE: ${{ secrets.GEO_INDEX_HEALTH_BASE }}
+          GEO_SITEMAP_GUARDRAIL_SECRET: ${{ secrets.GEO_SITEMAP_GUARDRAIL_SECRET }}
+          GEO_SITEMAP_GUARDRAIL_MIN_SCORE: ${{ secrets.GEO_SITEMAP_GUARDRAIL_MIN_SCORE }}
+          GEO_SITEMAP_GUARDRAIL_RECOVERY_SCORE: ${{ secrets.GEO_SITEMAP_GUARDRAIL_RECOVERY_SCORE }}
+          GEO_SITEMAP_GUARDRAIL_CONSERVATIVE_CITY_LIMIT: ${{ secrets.GEO_SITEMAP_GUARDRAIL_CONSERVATIVE_CITY_LIMIT }}
+          GEO_SITEMAP_GUARDRAIL_CONSERVATIVE_CITY_POOL: ${{ secrets.GEO_SITEMAP_GUARDRAIL_CONSERVATIVE_CITY_POOL }}
+          GEO_SITEMAP_GUARDRAIL_CONSERVATIVE_SEED_LIMIT: ${{ secrets.GEO_SITEMAP_GUARDRAIL_CONSERVATIVE_SEED_LIMIT }}
+          GEO_SITEMAP_GUARDRAIL_LOCALE: ${{ secrets.GEO_SITEMAP_GUARDRAIL_LOCALE }}
+          GEO_SITEMAP_GUARDRAIL_SLUG: ${{ secrets.GEO_SITEMAP_GUARDRAIL_SLUG }}
+
+      - name: Auto-prune by manual mode
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          if [ "${{ github.event.inputs.mode }}" = "live" ]; then
+            npm run geo:auto-prune:live -- --base="${{ secrets.GEO_INDEX_HEALTH_BASE }}"
+          else
+            npm run geo:auto-prune:dry-run -- --base="${{ secrets.GEO_INDEX_HEALTH_BASE }}"
+          fi
+        env:
+          GEO_INDEX_HEALTH_BASE: ${{ secrets.GEO_INDEX_HEALTH_BASE }}
+          GEO_AUTO_PRUNE_SECRET: ${{ secrets.GEO_AUTO_PRUNE_SECRET }}
+          GEO_AUTO_PRUNE_MIN_HEALTH: ${{ secrets.GEO_AUTO_PRUNE_MIN_HEALTH }}
+          GEO_AUTO_PRUNE_MAX_PRIORITY: ${{ secrets.GEO_AUTO_PRUNE_MAX_PRIORITY }}
+          GEO_MATRIX_SITEMAP_CITY_LIMIT: ${{ secrets.GEO_MATRIX_SITEMAP_CITY_LIMIT }}
+
+      - name: Top-city expansion by manual mode
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          if [ "${{ github.event.inputs.expansion_mode }}" = "live" ]; then
+            npm run geo:top-city-expansion:live -- --base="${{ secrets.GEO_INDEX_HEALTH_BASE }}"
+          else
+            npm run geo:top-city-expansion:dry-run -- --base="${{ secrets.GEO_INDEX_HEALTH_BASE }}"
+          fi
+        env:
+          GEO_INDEX_HEALTH_BASE: ${{ secrets.GEO_INDEX_HEALTH_BASE }}
+          GEO_EXPANSION_SECRET: ${{ secrets.GEO_EXPANSION_SECRET }}
+          GEO_EXPANSION_MIN_HEALTH: ${{ secrets.GEO_EXPANSION_MIN_HEALTH }}
+          GEO_EXPANSION_MAX_ACTIVATE: ${{ secrets.GEO_EXPANSION_MAX_ACTIVATE }}
+          GEO_EXPANSION_MIN_PRIORITY: ${{ secrets.GEO_EXPANSION_MIN_PRIORITY }}
+          GEO_EXPANSION_MIN_POPULATION: ${{ secrets.GEO_EXPANSION_MIN_POPULATION }}
+          GEO_MATRIX_SITEMAP_CITY_LIMIT: ${{ secrets.GEO_MATRIX_SITEMAP_CITY_LIMIT }}
+
+      - name: Sitemap guardrail by manual mode
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          if [ "${{ github.event.inputs.guardrail_mode }}" = "live" ]; then
+            npm run geo:sitemap-guardrail:live -- --base="${{ secrets.GEO_INDEX_HEALTH_BASE }}"
+          else
+            npm run geo:sitemap-guardrail:dry-run -- --base="${{ secrets.GEO_INDEX_HEALTH_BASE }}"
+          fi
+        env:
+          GEO_INDEX_HEALTH_BASE: ${{ secrets.GEO_INDEX_HEALTH_BASE }}
+          GEO_SITEMAP_GUARDRAIL_SECRET: ${{ secrets.GEO_SITEMAP_GUARDRAIL_SECRET }}
+          GEO_SITEMAP_GUARDRAIL_MIN_SCORE: ${{ secrets.GEO_SITEMAP_GUARDRAIL_MIN_SCORE }}
+          GEO_SITEMAP_GUARDRAIL_RECOVERY_SCORE: ${{ secrets.GEO_SITEMAP_GUARDRAIL_RECOVERY_SCORE }}
+          GEO_SITEMAP_GUARDRAIL_CONSERVATIVE_CITY_LIMIT: ${{ secrets.GEO_SITEMAP_GUARDRAIL_CONSERVATIVE_CITY_LIMIT }}
+          GEO_SITEMAP_GUARDRAIL_CONSERVATIVE_CITY_POOL: ${{ secrets.GEO_SITEMAP_GUARDRAIL_CONSERVATIVE_CITY_POOL }}
+          GEO_SITEMAP_GUARDRAIL_CONSERVATIVE_SEED_LIMIT: ${{ secrets.GEO_SITEMAP_GUARDRAIL_CONSERVATIVE_SEED_LIMIT }}
+          GEO_SITEMAP_GUARDRAIL_LOCALE: ${{ secrets.GEO_SITEMAP_GUARDRAIL_LOCALE }}
+          GEO_SITEMAP_GUARDRAIL_SLUG: ${{ secrets.GEO_SITEMAP_GUARDRAIL_SLUG }}
+

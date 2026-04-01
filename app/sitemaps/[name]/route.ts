@@ -60,15 +60,22 @@ function getGeoSeedRunbooks(locale: Locale): string[] {
   return [...base, ...(localeExtra[locale] || [])]
 }
 
-function selectGeoSitemapCities(allCities: Array<{ slug: string }>, locale: Locale): string[] {
+function selectGeoSitemapCities<T extends { slug: string }>(allCities: T[], locale: Locale): T[] {
   const limit = Math.max(1, Math.min(80, parseInt(process.env.GEO_MATRIX_SITEMAP_CITY_LIMIT || "24", 10) || 24))
   const poolLimit = Math.max(limit, Math.min(240, parseInt(process.env.GEO_MATRIX_SITEMAP_CITY_POOL || "72", 10) || 72))
-  const pool = allCities.slice(0, poolLimit).map((c) => c.slug)
+  const pool = allCities.slice(0, poolLimit)
   if (pool.length <= limit) return pool
 
   const dayStamp = isoDate().replace(/-/g, "")
   const offset = hashString(`${locale}:${dayStamp}`)
   return rotateList(pool, offset).slice(0, limit)
+}
+
+function geoPriorityFromCity(cityPriority: number): string {
+  const normalized = Math.max(1, Math.min(100, cityPriority || 1))
+  // Maps 1..100 to roughly 0.55..0.90 to nudge crawl budget toward top cities.
+  const p = 0.55 + (normalized / 100) * 0.35
+  return p.toFixed(2)
 }
 
 function buildAlternateLinks(loc: string): string[] {
@@ -653,15 +660,15 @@ export async function GET(
         parseInt(process.env.GEO_MATRIX_SITEMAP_CITY_POOL || "72", 10) || 72
       )
       const topCities = await getTopCities(cityPoolMax)
-      const citySuffixes = selectGeoSitemapCities(topCities, locale)
+      const citySelection = selectGeoSitemapCities(topCities, locale)
       const seedLimit = Math.max(1, Math.min(20, parseInt(process.env.GEO_MATRIX_SITEMAP_SEED_LIMIT || "8", 10) || 8))
       const seeds = getGeoSeedRunbooks(locale).slice(0, seedLimit)
       const urls = seeds.flatMap((slug) =>
-        citySuffixes.map((city) => ({
-          loc: `${base}/${locale}/runbook/${slug}-${city}`,
+        citySelection.map((city) => ({
+          loc: `${base}/${locale}/runbook/${slug}-${city.slug}`,
           lastmod,
           changefreq: "weekly",
-          priority: "0.7",
+          priority: geoPriorityFromCity(city.priority),
         }))
       )
       return respond(urlset(urls))

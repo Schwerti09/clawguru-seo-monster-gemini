@@ -12,30 +12,74 @@ import Image from "next/image"
 // WORLD BEAST FINAL LAUNCH: lazy-load upsell modal
 const UpsellModal = dynamic(() => import("@/components/onboarding/UpsellModal"), { ssr: false })
 
-function scoreLabel(score: number) {
-  if (score >= 90) return "EXZELLENT"
-  if (score >= 75) return "SOLIDE"
-  if (score >= 60) return "ANGREIFBAR"
-  return "KRITISCH"
-}
-
-function scoreHint(score: number) {
-  if (score >= 90) return "Gute Baseline. Jetzt Monitoring & Rotation automatisieren."
-  if (score >= 75) return "Nicht schlecht. Ein paar Defaults können dich trotzdem grillen."
-  if (score >= 60) return "Hier reicht ein dummer Zufall. Hardening jetzt."
-  return "Stop. Rotieren. Schließen. Stabilisieren."
-}
-
 export default function HeroSecurityCheck() {
-  const { locale } = useI18n()
+  const { locale, dict } = useI18n()
   const prefix = `/${locale}`
-  const isGerman = locale === "de"
+  const p = (dict as any)?.previews ?? {}
+  const t = {
+    title: p.checkTitle || "LIVE Security Check (Heuristic) — 30 Seconds",
+    desc: p.checkDesc || "Enter an IP/domain/bot URL. You get a Claw Security Score + clear next steps.",
+    targetLabel: p.checkTargetLabel || "Target (publicly visible): IP, domain or URL",
+    placeholder: p.checkPlaceholder || "e.g. 203.0.113.10 or yourbot.example.com",
+    btn: p.checkBtn || "CHECK FOR FREE",
+    btnLoading: p.checkBtnLoading || "Checking...",
+    scoreExcellent: p.checkScoreExcellent || "EXCELLENT",
+    scoreSolid: p.checkScoreSolid || "SOLID",
+    scoreVulnerable: p.checkScoreVulnerable || "VULNERABLE",
+    scoreCritical: p.checkScoreCritical || "CRITICAL",
+    hintExcellent: p.checkHintExcellent || "Good baseline. Now automate monitoring & rotation.",
+    hintSolid: p.checkHintSolid || "Not bad. A few defaults can still get you burned.",
+    hintVulnerable: p.checkHintVulnerable || "One dumb coincidence is enough. Harden now.",
+    hintCritical: p.checkHintCritical || "Stop. Rotate. Close. Stabilize.",
+    higherRisk: p.checkHigherRisk || "HIGHER RISK",
+    nextSteps: p.checkNextSteps || "Your top next steps",
+    shareBadge: p.checkShareBadge || "Share badge",
+    copyLink: p.checkCopyLink || "Copy link",
+    sharePreview: p.checkSharePreview || "Share badge preview",
+    downloadSvg: p.checkDownloadSvg || "Download SVG",
+    error: p.checkError || "Something went wrong. Please try again.",
+    retry: p.checkRetry || "Retry",
+    noStorage: p.checkNoStorage || "no storage of targets",
+    heuristic: p.checkHeuristic || "score is heuristic",
+    configHint: p.checkConfigHint || "For real conclusions: check config/logs",
+    riskImmediate: p.checkRiskImmediate || "Want out of the risk immediately?",
+    riskDesc: p.checkRiskDesc || "Pro: permanent full access from €49/month. Day Pass: 24h full access for €9.",
+    btnPro: p.checkBtnPro || "Pro €49 / month",
+    btnDayPass: p.checkBtnDayPass || "Day Pass (€9 / 24h)",
+    btnAllPlans: p.checkBtnAllPlans || "All plans",
+    openDashboard: p.checkOpenDashboard || "Open dashboard",
+    seeProTeam: p.checkSeeProTeam || "See Pro/Team",
+    shareMsg: p.checkShareMsg || "My Claw Security Score: {score}/100 — checked via ClawGuru",
+    improveTitle90: p.checkImproveTitle90 || "Excellent – add monitoring & rotation",
+    improveTitle75: p.checkImproveTitle75 || "Upgrade to excellent in 30 minutes",
+    improveTitle: p.checkImproveTitle || "Improve in 30 minutes",
+    improveDesc90: p.checkImproveDesc90 || "Stay excellent: automate rotation, alerts & baselines.",
+    improveDesc75: p.checkImproveDesc75 || "Take the Academy sprint and go safe by default.",
+    improveDesc: p.checkImproveDesc || "Harden quickly and make defaults safe.",
+    copilotExposed: p.checkCopilotExposed || "I think my instance is exposed. Target: {target}. Score: {score}/100. What are the next 5 steps?",
+    copilotHarden: p.checkCopilotHarden || "I want to harden my baseline. Target: {target}. Score: {score}/100. Give me a runbook.",
+  }
+
   const [input, setInput] = useState("")
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState<SecurityCheckResult | null>(null)
   const [error, setError] = useState<string | null>(null)
   // WORLD BEAST FINAL LAUNCH: upsell modal state
   const [showUpsell, setShowUpsell] = useState(false)
+
+  function scoreLabel(score: number) {
+    if (score >= 90) return t.scoreExcellent
+    if (score >= 75) return t.scoreSolid
+    if (score >= 60) return t.scoreVulnerable
+    return t.scoreCritical
+  }
+
+  function scoreHint(score: number) {
+    if (score >= 90) return t.hintExcellent
+    if (score >= 75) return t.hintSolid
+    if (score >= 60) return t.hintVulnerable
+    return t.hintCritical
+  }
 
   const shareUrl = useMemo(() => {
     if (!result) return ""
@@ -59,17 +103,17 @@ export default function HeroSecurityCheck() {
 
   const improveTitle = useMemo(() => {
     if (!result) return ""
-    if (result.score >= 90) return isGerman ? "Exzellent – jetzt Monitoring & Rotation" : "Excellent – add monitoring & rotation"
-    if (result.score >= 75) return isGerman ? "Auf „exzellent“ in 30 Minuten" : "Upgrade to “excellent” in 30 minutes"
-    return isGerman ? "Verbessern in 30 Minuten" : "Improve in 30 minutes"
-  }, [result, isGerman])
+    if (result.score >= 90) return t.improveTitle90
+    if (result.score >= 75) return t.improveTitle75
+    return t.improveTitle
+  }, [result, t.improveTitle90, t.improveTitle75, t.improveTitle])
 
   const improveText = useMemo(() => {
     if (!result) return ""
-    if (result.score >= 90) return isGerman ? "Bleib exzellent: Automatisiere Rotation, Alerts & Baselines." : "Stay excellent: automate rotation, alerts & baselines."
-    if (result.score >= 75) return isGerman ? "Nimm den Academy‑Sprint und geh auf „safe by default“." : "Take the Academy sprint and go “safe by default”."
-    return isGerman ? "Jetzt schnell härten und Defaults sicher machen." : "Harden quickly and make defaults safe."
-  }, [result, isGerman])
+    if (result.score >= 90) return t.improveDesc90
+    if (result.score >= 75) return t.improveDesc75
+    return t.improveDesc
+  }, [result, t.improveDesc90, t.improveDesc75, t.improveDesc])
 
   async function handleCheck() {
     if (!input.trim()) return
@@ -86,7 +130,7 @@ export default function HeroSecurityCheck() {
         if (next >= 3) setShowUpsell(true)
       }
     } catch (e: unknown) {
-      setError(e instanceof Error ? e.message : isGerman ? "Prüfung fehlgeschlagen. Bitte versuche es erneut." : "Check failed. Please try again.")
+      setError(e instanceof Error ? e.message : t.error)
     } finally {
       setLoading(false)
     }
@@ -102,9 +146,7 @@ export default function HeroSecurityCheck() {
   async function nativeShare() {
     if (!shareUrl) return
     const url = `${window.location.origin}${shareUrl}`
-    const text = isGerman
-      ? `Mein Claw Security Score: ${result?.score}/100 — geprüft via ClawGuru`
-      : `My Claw Security Score: ${result?.score}/100 — checked via ClawGuru`
+    const text = t.shareMsg.replace("{score}", String(result?.score))
     if (navigator.share) {
       try {
         await navigator.share({ title: "Claw Security Score", text, url })
@@ -117,14 +159,10 @@ export default function HeroSecurityCheck() {
   const copilotPrefill = useMemo(() => {
     if (!result) return ""
     const base = result.vulnerable
-      ? isGerman
-        ? `Ich glaube meine Instanz ist exposed. Target: ${result.target}. Score: ${result.score}/100. Was sind die nächsten 5 Schritte?`
-        : `I think my instance is exposed. Target: ${result.target}. Score: ${result.score}/100. What are the next 5 steps?`
-      : isGerman
-        ? `Ich will meine Baseline härten. Target: ${result.target}. Score: ${result.score}/100. Gib mir ein Runbook.`
-        : `I want to harden my baseline. Target: ${result.target}. Score: ${result.score}/100. Give me a runbook.`
+      ? t.copilotExposed.replace("{target}", result.target).replace("{score}", String(result.score))
+      : t.copilotHarden.replace("{target}", result.target).replace("{score}", String(result.score))
     return `${prefix}/copilot?q=${encodeURIComponent(base)}`
-  }, [isGerman, result, prefix])
+  }, [result, prefix, t.copilotExposed, t.copilotHarden])
 
   return (
     <div className="bg-gradient-to-br from-gray-900/60 to-blue-950/30 border border-gray-800 rounded-3xl p-6 md:p-8 backdrop-blur-sm">
@@ -134,22 +172,18 @@ export default function HeroSecurityCheck() {
             <ClawguruAvatar className="w-12 h-12 md:w-16 md:h-16" />
           </div>
           <h2 className="text-xl sm:text-2xl md:text-3xl font-black mb-2">
-            {isGerman ? "LIVE Security-Check (Heuristik) — 30 Sekunden" : "LIVE Security Check (Heuristic) — 30 Seconds"}
+            {t.title}
           </h2>
           <p className="text-gray-300 mb-4">
-            {isGerman ? (
+            {t.desc.includes("Claw Security Score") ? (
               <>
-                Gib IP/Domain/Bot-URL ein. Du bekommst einen <span className="font-semibold">Claw Security Score</span> + klare nächste Schritte.
+                {t.desc.split("Claw Security Score")[0]}<span className="font-semibold">Claw Security Score</span>{t.desc.split("Claw Security Score")[1]}
               </>
-            ) : (
-              <>
-                Enter an IP/domain/bot URL. You get a <span className="font-semibold">Claw Security Score</span> + clear next steps.
-              </>
-            )}
+            ) : t.desc}
           </p>
 
           <label htmlFor="security-target" className="block text-sm font-medium mb-2 text-gray-200">
-            {isGerman ? "Ziel (öffentlich sichtbar): IP, Domain oder URL" : "Target (publicly visible): IP, domain or URL"}
+            {t.targetLabel}
           </label>
           <input
             id="security-target"
@@ -157,7 +191,7 @@ export default function HeroSecurityCheck() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleCheck()}
-            placeholder={isGerman ? "z.B. 203.0.113.10 oder deinbot.example.com" : "e.g. 203.0.113.10 or yourbot.example.com"}
+            placeholder={t.placeholder}
             className="w-full p-4 rounded-2xl bg-black/40 border border-gray-700 text-white placeholder-gray-500 focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all"
           />
         </div>
@@ -168,7 +202,7 @@ export default function HeroSecurityCheck() {
           aria-disabled={loading || !input.trim()}
           className={`w-full md:w-auto px-8 py-4 rounded-2xl font-black text-white bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 transition-all shadow-lg hover:shadow-xl hover:shadow-red-900/30 ${loading || !input.trim() ? "opacity-50 pointer-events-none" : ""}`}
         >
-          {loading ? (isGerman ? "Prüfe..." : "Checking...") : isGerman ? "KOSTENLOS PRÜFEN" : "CHECK FOR FREE"}
+          {loading ? t.btnLoading : t.btn}
         </a>
       </div>
 
@@ -195,12 +229,12 @@ export default function HeroSecurityCheck() {
 
       {error ? (
         <div className="mt-6 p-4 rounded-2xl border border-red-800 bg-red-950/30 text-red-200 flex items-center justify-between gap-3">
-          <span>{isGerman ? "Etwas ist schiefgelaufen. Bitte versuche es erneut." : "Something went wrong. Please try again."}</span>
+          <span>{t.error}</span>
           <button
             onClick={handleCheck}
             className="px-3 py-1.5 rounded-xl border border-red-500/50 hover:border-red-400 text-red-200 hover:text-white transition-colors"
           >
-            {isGerman ? "Nochmal" : "Retry"}
+            {t.retry}
           </button>
         </div>
       ) : null}
@@ -211,7 +245,7 @@ export default function HeroSecurityCheck() {
             <div className="flex-grow">
               <div className="flex items-center gap-3 mb-3">
                 <div className={`px-3 py-1 rounded-full text-xs font-bold ${result.vulnerable ? "bg-red-900/60 text-red-200" : "bg-green-900/60 text-green-200"}`}>
-                  {result.vulnerable ? (isGerman ? "RISIKO ERHÖHT" : "HIGHER RISK") : "BASIC OK"}
+                  {result.vulnerable ? t.higherRisk : "BASIC OK"}
                 </div>
                 <div className="text-sm text-gray-300">
                   Target: <span className="font-mono text-gray-100">{result.target}</span>
@@ -231,10 +265,10 @@ export default function HeroSecurityCheck() {
 
                   <div className="mt-4 flex flex-wrap gap-3">
                     <button onClick={nativeShare} className="px-4 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-700 font-bold text-white transition-colors">
-                      {isGerman ? "Badge teilen" : "Share badge"}
+                      {t.shareBadge}
                     </button>
                     <button onClick={copyLink} className="px-4 py-2 rounded-xl border border-gray-700 hover:border-gray-500 font-bold text-gray-200 transition-colors">
-                      {isGerman ? "Link kopieren" : "Copy link"}
+                      {t.copyLink}
                     </button>
                     <a
                       href={copilotPrefill}
@@ -254,7 +288,7 @@ export default function HeroSecurityCheck() {
                 </div>
 
                 <div className="p-4 rounded-2xl border border-gray-800 bg-black/30">
-                  <div className="text-sm text-gray-400 mb-2">{isGerman ? "Deine Top-Nächsten Schritte" : "Your top next steps"}</div>
+                  <div className="text-sm text-gray-400 mb-2">{t.nextSteps}</div>
                   <ul className="space-y-2 text-sm">
                     {result.recommendations.slice(0, 4).map((x) => (
                       <li key={x} className="flex items-start gap-2">
@@ -266,16 +300,14 @@ export default function HeroSecurityCheck() {
 
                   {result.vulnerable ? (
                     <div className="mt-5 p-4 rounded-2xl border border-cyan-900 bg-gradient-to-br from-cyan-950/30 to-blue-950/20">
-                      <div className="text-sm text-cyan-200 font-bold mb-2">{isGerman ? "Sofort raus aus dem Risiko?" : "Want out of the risk immediately?"}</div>
+                      <div className="text-sm text-cyan-200 font-bold mb-2">{t.riskImmediate}</div>
                       <div className="text-gray-200 mb-3">
-                        {isGerman
-                          ? "Pro: dauerhafter Vollzugriff ab 49€/Monat. Day Pass: 24h Vollzugriff für 9€."
-                          : "Pro: permanent full access from €49/month. Day Pass: 24h full access for €9."}
+                        {t.riskDesc}
                       </div>
                       <div className="flex flex-col sm:flex-row gap-3">
-                        <BuyButton product="pro" label={isGerman ? "Pro 49 € / Monat" : "Pro €49 / month"} className="px-5 py-3 rounded-2xl font-black bg-gradient-to-r from-cyan-500 to-blue-600 hover:opacity-90" />
-                        <BuyButton product="daypass" label={isGerman ? "Day Pass (9€ / 24h)" : "Day Pass (€9 / 24h)"} className="px-5 py-3 rounded-2xl font-black bg-gradient-to-r from-orange-500 to-red-600 hover:opacity-90" />
-                        <CTAButton href={`${prefix}/pricing`} label={isGerman ? "Alle Pläne" : "All plans"} variant="outline" size="md" />
+                        <BuyButton product="pro" label={t.btnPro} className="px-5 py-3 rounded-2xl font-black bg-gradient-to-r from-cyan-500 to-blue-600 hover:opacity-90" />
+                        <BuyButton product="daypass" label={t.btnDayPass} className="px-5 py-3 rounded-2xl font-black bg-gradient-to-r from-orange-500 to-red-600 hover:opacity-90" />
+                        <CTAButton href={`${prefix}/pricing`} label={t.btnAllPlans} variant="outline" size="md" />
                       </div>
                     </div>
                   ) : (
@@ -283,8 +315,8 @@ export default function HeroSecurityCheck() {
                       <div className="text-sm font-bold text-gray-100 mb-2">{improveTitle}</div>
                       <div className="text-gray-300 mb-3">{improveText}</div>
                       <div className="flex flex-col sm:flex-row gap-3">
-                        <CTAButton href={`${prefix}/dashboard`} label={isGerman ? "Dashboard öffnen" : "Open dashboard"} variant="primary" size="md" />
-                        <CTAButton href={`${prefix}/pricing`} label={isGerman ? "Pro/Team ansehen" : "See Pro/Team"} variant="outline" size="md" />
+                        <CTAButton href={`${prefix}/dashboard`} label={t.openDashboard} variant="primary" size="md" />
+                        <CTAButton href={`${prefix}/pricing`} label={t.seeProTeam} variant="outline" size="md" />
                       </div>
                     </div>
                   )}
@@ -293,7 +325,7 @@ export default function HeroSecurityCheck() {
             </div>
 
             <div className="lg:w-[240px]">
-              <div className="text-sm text-gray-400 mb-2">{isGerman ? "Share-Badge Preview" : "Share badge preview"}</div>
+              <div className="text-sm text-gray-400 mb-2">{t.sharePreview}</div>
               <div className="rounded-2xl overflow-hidden border border-gray-800 bg-black/30">
                 <div className="relative w-full aspect-[16/9]">
                   <Image
@@ -310,7 +342,7 @@ export default function HeroSecurityCheck() {
                 href={badgeUrl}
                 download
               >
-                {isGerman ? "SVG herunterladen" : "Download SVG"}
+                {t.downloadSvg}
               </a>
             </div>
           </div>
@@ -320,15 +352,15 @@ export default function HeroSecurityCheck() {
       <div className="mt-6 flex flex-wrap items-center gap-4 text-xs text-gray-500">
         <div className="flex items-center gap-2">
           <span className="inline-block w-2 h-2 rounded-full bg-green-500" />
-          {isGerman ? "keine Speicherung von Targets" : "no storage of targets"}
+          {t.noStorage}
         </div>
         <div className="flex items-center gap-2">
           <span className="inline-block w-2 h-2 rounded-full bg-blue-500" />
-          {isGerman ? "Score ist heuristisch" : "score is heuristic"}
+          {t.heuristic}
         </div>
         <div className="flex items-center gap-2">
           <span className="inline-block w-2 h-2 rounded-full bg-purple-500" />
-          {isGerman ? "Für echte Aussagen: Config/Logs checken" : "For real conclusions: check config/logs"}
+          {t.configHint}
         </div>
       </div>
 

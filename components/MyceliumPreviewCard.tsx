@@ -5,6 +5,7 @@ import dynamic from "next/dynamic"
 import FeaturePreviewCard from "./FeaturePreviewCard"
 import Skeleton from "./ui/Skeleton"
 import { STATS } from "@/lib/stats"
+import { useI18n } from "@/components/i18n/I18nProvider"
 
 function useInView<T extends HTMLElement>(opts?: IntersectionObserverInit) {
   const ref = useRef<T | null>(null)
@@ -24,6 +25,17 @@ function useInView<T extends HTMLElement>(opts?: IntersectionObserverInit) {
 type Props = { prefix?: string }
 
 export default function MyceliumPreviewCard({ prefix = "" }: Props) {
+  const { dict } = useI18n()
+  const p = (dict as any)?.previews ?? {}
+  const t = {
+    desc: p.myceliumDesc || "Live graph of your knowledge – now as a neon embed.",
+    init: p.myceliumInit || "Initializing live graph…",
+    counter: p.myceliumCounter || "{count} runbooks connected",
+    fullscreen: p.myceliumFullscreen || "Open fullscreen ↗",
+    caption: p.myceliumCaption || "Real data · Canvas graph · Evolving",
+    explore: p.myceliumExplore || "Explore the Mycelium →",
+  }
+
   const { ref, inView } = useInView<HTMLDivElement>({ rootMargin: "200px" })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -62,12 +74,12 @@ export default function MyceliumPreviewCard({ prefix = "" }: Props) {
     let raf: number
     const start = performance.now()
     const dur = 1200
-    const ease = (t: number) => 0.5 - 0.5 * Math.cos(Math.PI * t)
+    const ease = (time: number) => 0.5 - 0.5 * Math.cos(Math.PI * time)
     const tick = (now: number) => {
-      const p = Math.min(1, (now - start) / dur)
-      const v = Math.round(target * ease(p))
+      const prog = Math.min(1, (now - start) / dur)
+      const v = Math.round(target * ease(prog))
       setCounter(v)
-      if (p < 1) raf = requestAnimationFrame(tick)
+      if (prog < 1) raf = requestAnimationFrame(tick)
     }
     raf = requestAnimationFrame(tick)
     return () => cancelAnimationFrame(raf)
@@ -77,7 +89,7 @@ export default function MyceliumPreviewCard({ prefix = "" }: Props) {
     <div ref={ref}>
       <FeaturePreviewCard
         title="Mycelium"
-        description="Live‑Graph deines Wissens – jetzt als Neon‑Embed."
+        description={t.desc}
         link={`${prefix}/mycelium`}
       >
         <div
@@ -112,7 +124,7 @@ export default function MyceliumPreviewCard({ prefix = "" }: Props) {
             <div className="absolute inset-0 p-4">
               <div className="h-full w-full rounded-2xl border border-white/10 bg-black/35">
                 <div className="p-4 space-y-2">
-                  <div className="text-xs text-gray-400">Initialisiere Live‑Graph…</div>
+                  <div className="text-xs text-gray-400">{t.init}</div>
                   <Skeleton className="h-3 w-1/3" />
                   <Skeleton className="h-3 w-2/3" />
                   <Skeleton className="h-3 w-1/2" />
@@ -133,7 +145,7 @@ export default function MyceliumPreviewCard({ prefix = "" }: Props) {
             LIVE MYCELIUM
           </div>
           <div className="absolute top-2 right-2 text-[11px] text-gray-300 bg-black/40 border border-white/10 rounded px-2 py-0.5">
-            {new Intl.NumberFormat("de-DE").format(counter)} Runbooks vernetzt
+            {t.counter.replace("{count}", new Intl.NumberFormat().format(counter))}
           </div>
           <a
             href={`${prefix}/mycelium`}
@@ -143,7 +155,7 @@ export default function MyceliumPreviewCard({ prefix = "" }: Props) {
               boxShadow: `0 0 ${6 + tilt.glow * 8}px rgba(0,184,255,0.45)`
             }}
           >
-            Vollbild öffnen ↗
+            {t.fullscreen}
           </a>
 
           {/* Top Nodes ticker */}
@@ -164,8 +176,8 @@ export default function MyceliumPreviewCard({ prefix = "" }: Props) {
           <style>{`@keyframes mycelTicker { from { transform: translateX(0); } to { transform: translateX(-50%); } }`}</style>
         </div>
         <div className="mt-3 flex justify-between items-center">
-          <div className="text-[11px] text-gray-500">Echte Daten · Canvas‑Graph · Evolvierend</div>
-          <a href={`${prefix}/mycelium`} className="text-sm text-cyan-400 hover:text-cyan-300 transition">Das Mycelium erkunden →</a>
+          <div className="text-[11px] text-gray-500">{t.caption}</div>
+          <a href={`${prefix}/mycelium`} className="text-sm text-cyan-400 hover:text-cyan-300 transition">{t.explore}</a>
         </div>
       </FeaturePreviewCard>
     </div>

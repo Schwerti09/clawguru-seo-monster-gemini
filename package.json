@@ -10,6 +10,7 @@
     "db:migrate": "node scripts/db/migrate.js",
     "check:i18n": "node scripts/check-i18n.js",
     "check:geo-surface": "node scripts/check-geo-surface.js",
+    "check:geo-index-health": "node scripts/check-geo-index-health.js",
     "check:sitemap-redirects": "node scripts/check-sitemap-redirects.js",
     "check:prod-smoke": "node scripts/check-production-smoke.js",
     "i18n:sync-dictionaries": "node scripts/sync-dictionaries.js",

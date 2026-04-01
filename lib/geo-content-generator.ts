@@ -13,6 +13,19 @@ export type GeoVariantContent = {
   myceliumLinks: string[]
 }
 
+export function geoVariantQualityScore(v: GeoVariantContent): number {
+  let score = 0
+  if (v.localTitle?.length >= 20) score += 15
+  if (v.localSummary?.length >= 90) score += 20
+  if (Array.isArray(v.localExamples) && v.localExamples.length >= 3) score += 15
+  if (Array.isArray(v.localProviders) && v.localProviders.length >= 3) score += 10
+  if (Array.isArray(v.localCompliance) && v.localCompliance.length >= 3) score += 10
+  if (Array.isArray(v.localSearchIntents) && v.localSearchIntents.length >= 4) score += 15
+  if (Array.isArray(v.myceliumLinks) && v.myceliumLinks.length >= 4) score += 10
+  if (v.myceliumLinks?.every((x) => typeof x === "string" && x.startsWith("/"))) score += 5
+  return Math.min(100, score)
+}
+
 function safeParseJson<T>(text: string): T | null {
   try {
     return JSON.parse(text) as T
@@ -22,6 +35,8 @@ function safeParseJson<T>(text: string): T | null {
 }
 
 function passesQualityGate(v: GeoVariantContent): boolean {
+  const min = Math.max(55, Math.min(95, parseInt(process.env.GEO_MATRIX_MIN_QUALITY || "72", 10) || 72))
+  if (geoVariantQualityScore(v) < min) return false
   if (!v.localTitle || v.localTitle.length < 16) return false
   if (!v.localSummary || v.localSummary.length < 60) return false
   if (!Array.isArray(v.localExamples) || v.localExamples.length < 3) return false

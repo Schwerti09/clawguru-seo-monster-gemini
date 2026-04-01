@@ -95,7 +95,7 @@ export async function POST(req: NextRequest) {
          RETURNING slug, priority`,
         [item.slug, item.target]
       )
-      if (updated.rowCount > 0) {
+      if ((updated.rowCount ?? 0) > 0) {
         priorityChanged.push({
           slug: item.slug,
           from: item.current,

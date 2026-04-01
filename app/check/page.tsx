@@ -12,6 +12,48 @@ export default function CheckPage() {
   const [showOnboarding, setShowOnboarding] = useState(false)
   const { locale } = useI18n()
   const isGerman = locale === "de"
+  const prefix = `/${locale}`
+  const faqItems = isGerman
+    ? [
+        {
+          q: "Speichert ClawGuru meine Eingaben?",
+          a: "Nein. Der Check speichert keine Targets dauerhaft. Technisch notwendige Request-Metadaten koennen in Server-Logs auftauchen.",
+        },
+        {
+          q: "Ist das ein Penetrationstest?",
+          a: "Nein. Es ist eine schnelle heuristische Bewertung oeffentlich sichtbarer Signale. Fuer verbindliche Aussagen braucht es interne Validierung.",
+        },
+        {
+          q: "Was mache ich nach dem Score?",
+          a: "Die Top-Empfehlungen direkt umsetzen, danach mit Runbooks nachhaerten und erneut pruefen.",
+        },
+      ]
+    : [
+        {
+          q: "Does ClawGuru store my inputs?",
+          a: "No. The check does not persist targets. Technically required request metadata can appear in server logs.",
+        },
+        {
+          q: "Is this a penetration test?",
+          a: "No. It is a fast heuristic evaluation of publicly visible signals. For binding conclusions, validate internally.",
+        },
+        {
+          q: "What should I do after the score?",
+          a: "Execute the top recommendations, harden with runbooks, then re-check for improvement.",
+        },
+      ]
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqItems.map((item) => ({
+      "@type": "Question",
+      name: item.q,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.a,
+      },
+    })),
+  }
 
   useEffect(() => {
     // Show onboarding if first visit
@@ -76,12 +118,56 @@ export default function CheckPage() {
             <li>{isGerman ? "• Empfehlungen sind auf schnelle Hardening-Umsetzung mit Runbooks ausgerichtet." : "• Recommendations are designed for fast hardening execution via runbooks."}</li>
           </ul>
         </section>
+        <section className="mt-8 rounded-2xl border border-white/10 bg-black/20 p-6 max-w-4xl">
+          <h3 className="text-lg font-bold text-white">
+            {isGerman ? "Direkt weiter haerten" : "Harden further right away"}
+          </h3>
+          <p className="mt-2 text-sm text-gray-300">
+            {isGerman
+              ? "Die haeufigsten Folgefragen nach dem Check: konkrete Hardening-Anleitungen fuer typische Stack-Bausteine."
+              : "Most common follow-ups after the check: concrete hardening guides for common stack components."}
+          </p>
+          <div className="mt-4 grid gap-2 sm:grid-cols-2">
+            <a href={`${prefix}/nginx-hardening`} className="rounded-lg border border-white/10 px-3 py-2 text-sm text-cyan-300 hover:border-cyan-500/40 hover:text-cyan-200">
+              Nginx Hardening
+            </a>
+            <a href={`${prefix}/kubernetes-network-policies`} className="rounded-lg border border-white/10 px-3 py-2 text-sm text-cyan-300 hover:border-cyan-500/40 hover:text-cyan-200">
+              Kubernetes Network Policies
+            </a>
+            <a href={`${prefix}/vault-hardening`} className="rounded-lg border border-white/10 px-3 py-2 text-sm text-cyan-300 hover:border-cyan-500/40 hover:text-cyan-200">
+              Vault Hardening
+            </a>
+            <a href={`${prefix}/aws-iam-security`} className="rounded-lg border border-white/10 px-3 py-2 text-sm text-cyan-300 hover:border-cyan-500/40 hover:text-cyan-200">
+              AWS IAM Security
+            </a>
+            <a href={`${prefix}/postgresql-security`} className="rounded-lg border border-white/10 px-3 py-2 text-sm text-cyan-300 hover:border-cyan-500/40 hover:text-cyan-200">
+              PostgreSQL Security
+            </a>
+            <a href={`${prefix}/docker-security-hardening`} className="rounded-lg border border-white/10 px-3 py-2 text-sm text-cyan-300 hover:border-cyan-500/40 hover:text-cyan-200">
+              Docker Security Hardening
+            </a>
+          </div>
+        </section>
+        <section className="mt-8 rounded-2xl border border-white/10 bg-black/20 p-6 max-w-4xl">
+          <h3 className="text-lg font-bold text-white">
+            {isGerman ? "FAQ zum Security-Check" : "Security Check FAQ"}
+          </h3>
+          <div className="mt-4 space-y-3">
+            {faqItems.map((item) => (
+              <div key={item.q} className="rounded-xl border border-white/10 px-4 py-3">
+                <p className="font-semibold text-white">{item.q}</p>
+                <p className="mt-1 text-sm text-gray-300">{item.a}</p>
+              </div>
+            ))}
+          </div>
+        </section>
         <div className="mt-8 max-w-2xl">
           <MyceliumShareCard
             title="Security-Check · ClawGuru"
             pageUrl="/check"
           />
         </div>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
       </div>
     </Container>
   )

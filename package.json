@@ -18,6 +18,8 @@
     "geo:top-city-expansion:live": "node scripts/trigger-geo-top-city-expansion.js --mode=live",
     "geo:sitemap-guardrail:dry-run": "node scripts/trigger-geo-sitemap-guardrail.js --mode=dry-run",
     "geo:sitemap-guardrail:live": "node scripts/trigger-geo-sitemap-guardrail.js --mode=live",
+    "geo:canary-rollout:dry-run": "node scripts/trigger-geo-canary-rollout.js --mode=dry-run",
+    "geo:canary-rollout:live": "node scripts/trigger-geo-canary-rollout.js --mode=live",
     "check:sitemap-redirects": "node scripts/check-sitemap-redirects.js",
     "check:prod-smoke": "node scripts/check-production-smoke.js",
     "i18n:sync-dictionaries": "node scripts/sync-dictionaries.js",

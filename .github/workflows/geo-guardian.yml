@@ -17,6 +17,10 @@ on:
         description: "dry-run or live sitemap guardrail"
         required: false
         default: "dry-run"
+      canary_mode:
+        description: "dry-run or live canary rollout"
+        required: false
+        default: "dry-run"
 
 jobs:
   monitor-and-prune:
@@ -78,6 +82,15 @@ jobs:
           GEO_SITEMAP_GUARDRAIL_LOCALE: ${{ secrets.GEO_SITEMAP_GUARDRAIL_LOCALE }}
           GEO_SITEMAP_GUARDRAIL_SLUG: ${{ secrets.GEO_SITEMAP_GUARDRAIL_SLUG }}
 
+      - name: Canary rollout dry run (scheduled)
+        if: github.event_name == 'schedule'
+        run: npm run geo:canary-rollout:dry-run -- --base="${{ secrets.GEO_INDEX_HEALTH_BASE }}"
+        env:
+          GEO_INDEX_HEALTH_BASE: ${{ secrets.GEO_INDEX_HEALTH_BASE }}
+          GEO_CANARY_ROLLOUT_SECRET: ${{ secrets.GEO_CANARY_ROLLOUT_SECRET }}
+          GEO_CANARY_ROLLOUT_LIMIT: ${{ secrets.GEO_CANARY_ROLLOUT_LIMIT }}
+          GEO_CANARY_PROMOTE_MIN_RANKING_SCORE: ${{ secrets.GEO_CANARY_PROMOTE_MIN_RANKING_SCORE }}
+
       - name: Auto-prune by manual mode
         if: github.event_name == 'workflow_dispatch'
         run: |
@@ -128,4 +141,18 @@ jobs:
           GEO_SITEMAP_GUARDRAIL_CONSERVATIVE_SEED_LIMIT: ${{ secrets.GEO_SITEMAP_GUARDRAIL_CONSERVATIVE_SEED_LIMIT }}
           GEO_SITEMAP_GUARDRAIL_LOCALE: ${{ secrets.GEO_SITEMAP_GUARDRAIL_LOCALE }}
           GEO_SITEMAP_GUARDRAIL_SLUG: ${{ secrets.GEO_SITEMAP_GUARDRAIL_SLUG }}
+
+      - name: Canary rollout by manual mode
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          if [ "${{ github.event.inputs.canary_mode }}" = "live" ]; then
+            npm run geo:canary-rollout:live -- --base="${{ secrets.GEO_INDEX_HEALTH_BASE }}"
+          else
+            npm run geo:canary-rollout:dry-run -- --base="${{ secrets.GEO_INDEX_HEALTH_BASE }}"
+          fi
+        env:
+          GEO_INDEX_HEALTH_BASE: ${{ secrets.GEO_INDEX_HEALTH_BASE }}
+          GEO_CANARY_ROLLOUT_SECRET: ${{ secrets.GEO_CANARY_ROLLOUT_SECRET }}
+          GEO_CANARY_ROLLOUT_LIMIT: ${{ secrets.GEO_CANARY_ROLLOUT_LIMIT }}
+          GEO_CANARY_PROMOTE_MIN_RANKING_SCORE: ${{ secrets.GEO_CANARY_PROMOTE_MIN_RANKING_SCORE }}
 

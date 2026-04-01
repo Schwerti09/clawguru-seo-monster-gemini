@@ -61,7 +61,7 @@ function getGeoSeedRunbooks(locale: Locale): string[] {
   return [...base, ...(localeExtra[locale] || [])]
 }
 
-function selectGeoSitemapCities<T extends { slug: string }>(
+function selectGeoSitemapCities<T extends { slug: string; rollout_stage?: string }>(
   allCities: T[],
   locale: Locale,
   limit: number,
@@ -72,13 +72,25 @@ function selectGeoSitemapCities<T extends { slug: string }>(
 
   const dayStamp = isoDate().replace(/-/g, "")
   const offset = hashString(`${locale}:${dayStamp}`)
-  return rotateList(pool, offset).slice(0, limit)
+  const rotated = rotateList(pool, offset).slice(0, limit)
+  const canaryShare = Math.max(
+    0,
+    Math.min(100, parseInt(process.env.GEO_CANARY_SITEMAP_SHARE || "35", 10) || 35)
+  )
+  const stable = rotated.filter((c) => (c.rollout_stage || "stable") !== "canary")
+  const canary = rotated.filter((c) => c.rollout_stage === "canary")
+  if (canary.length === 0 || canaryShare >= 100) return rotated
+  if (canaryShare <= 0) return stable.slice(0, limit)
+  const maxCanary = Math.max(1, Math.floor((limit * canaryShare) / 100))
+  return [...stable, ...canary.slice(0, maxCanary)].slice(0, limit)
 }
 
-function geoPriorityFromCity(cityPriority: number): string {
+function geoPriorityFromCity(cityPriority: number, rolloutStage?: string): string {
   const normalized = Math.max(1, Math.min(100, cityPriority || 1))
   // Maps 1..100 to roughly 0.55..0.90 to nudge crawl budget toward top cities.
-  const p = 0.55 + (normalized / 100) * 0.35
+  let p = 0.55 + (normalized / 100) * 0.35
+  // Canary URLs get a lower crawl signal until they prove stability.
+  if (rolloutStage === "canary") p = Math.min(p, 0.66)
   return p.toFixed(2)
 }
 
@@ -674,7 +686,7 @@ export async function GET(
           loc: `${base}/${locale}/runbook/${slug}-${city.slug}`,
           lastmod,
           changefreq: "weekly",
-          priority: geoPriorityFromCity(city.priority),
+          priority: geoPriorityFromCity(city.priority, city.rollout_stage),
         }))
       )
       return respond(urlset(urls))

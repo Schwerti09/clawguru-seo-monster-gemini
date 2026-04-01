@@ -10,6 +10,7 @@ export type GeoCity = {
   priority: number
   population: number
   is_active: boolean
+  rollout_stage: "canary" | "stable"
   created_at: string
   updated_at: string
 }
@@ -159,7 +160,7 @@ const queryAllActiveCities = unstable_cache(
     if (fromRedis && fromRedis.length > 0) return fromRedis
 
     const rows = await dbQuery<GeoCity>(
-      `SELECT id, slug, name_de, name_en, country_code, priority, population, is_active, created_at, updated_at
+      `SELECT id, slug, name_de, name_en, country_code, priority, population, is_active, rollout_stage, created_at, updated_at
        FROM geo_cities
        WHERE is_active = true
        ORDER BY priority DESC, population DESC, slug ASC`

@@ -12,6 +12,7 @@ function unauthorized() {
 
 function hasSecret(req: NextRequest) {
   const expected =
+    process.env.GEO_CANARY_ROLLOUT_SECRET ||
     process.env.GEO_EXPANSION_SECRET ||
     process.env.GEO_AUTO_PRUNE_SECRET ||
     process.env.GEO_REVALIDATE_SECRET ||
@@ -19,7 +20,7 @@ function hasSecret(req: NextRequest) {
   if (!expected) return false
   const auth = req.headers.get("authorization") || ""
   const bearer = auth.startsWith("Bearer ") ? auth.slice(7) : ""
-  const header = req.headers.get("x-geo-expansion-secret") || ""
+  const header = req.headers.get("x-geo-canary-secret") || ""
   const query = req.nextUrl.searchParams.get("secret") || ""
   const provided = bearer || header || query
   return provided === expected
@@ -31,68 +32,61 @@ export async function POST(req: NextRequest) {
   const dryRun = req.nextUrl.searchParams.get("dryRun") !== "0"
   const locale = (req.nextUrl.searchParams.get("locale") || "de").toLowerCase()
   const slug = req.nextUrl.searchParams.get("slug") || "aws-ssh-hardening-2026"
-  const limit = parseInt(req.nextUrl.searchParams.get("limit") || process.env.GEO_MATRIX_SITEMAP_CITY_LIMIT || "24", 10) || 24
-  const minHealth = parseInt(req.nextUrl.searchParams.get("minHealth") || process.env.GEO_EXPANSION_MIN_HEALTH || "88", 10) || 88
-  const maxActivate = Math.max(1, Math.min(10, parseInt(req.nextUrl.searchParams.get("maxActivate") || process.env.GEO_EXPANSION_MAX_ACTIVATE || "3", 10) || 3))
-  const minPriority = Math.max(1, Math.min(100, parseInt(req.nextUrl.searchParams.get("minPriority") || process.env.GEO_EXPANSION_MIN_PRIORITY || "60", 10) || 60))
-  const minPopulation = Math.max(0, parseInt(req.nextUrl.searchParams.get("minPopulation") || process.env.GEO_EXPANSION_MIN_POPULATION || "500000", 10) || 500000)
+  const limit = Math.max(
+    1,
+    Math.min(120, parseInt(req.nextUrl.searchParams.get("limit") || process.env.GEO_CANARY_ROLLOUT_LIMIT || "80", 10) || 80)
+  )
+  const minRankingScore = Math.max(
+    1,
+    Math.min(100, parseInt(req.nextUrl.searchParams.get("minRankingScore") || process.env.GEO_CANARY_PROMOTE_MIN_RANKING_SCORE || "86", 10) || 86)
+  )
 
   const rankingUrl = new URL(req.url)
   rankingUrl.pathname = "/api/geo/city-ranking"
   rankingUrl.searchParams.set("locale", locale)
   rankingUrl.searchParams.set("slug", slug)
   rankingUrl.searchParams.set("limit", String(limit))
-
   const rankingRes = await fetch(rankingUrl.toString(), {
     cache: "no-store",
     signal: AbortSignal.timeout(12_000),
   })
   const ranking = await rankingRes.json().catch(() => null)
-  const healthScore = Number(ranking?.healthScore ?? 0)
+  const rankedCities = Array.isArray(ranking?.cities) ? ranking.cities : []
 
-  const candidatesRes = await dbQuery<{
-    slug: string
-    name_de: string
-    name_en: string
-    country_code: string
-    priority: number
-    population: number
-  }>(
-    `SELECT slug, name_de, name_en, country_code, priority, population
+  const canaryRes = await dbQuery<{ slug: string }>(
+    `SELECT slug
      FROM geo_cities
-     WHERE is_active = false
-       AND priority >= $1
-       AND population >= $2
-     ORDER BY priority DESC, population DESC, slug ASC
-     LIMIT $3`,
-    [minPriority, minPopulation, maxActivate]
+     WHERE is_active = true
+       AND rollout_stage = 'canary'
+     ORDER BY priority DESC, population DESC, slug ASC`
   )
-  const candidates = candidatesRes.rows
+  const canarySet = new Set(canaryRes.rows.map((r) => r.slug))
+  const promote = rankedCities
+    .filter((city: any) => canarySet.has(String(city.slug || "")))
+    .filter((city: any) => city.status === 200 && Number(city.rankingScore || 0) >= minRankingScore)
+    .map((city: any) => String(city.slug))
 
-  if (dryRun || healthScore < minHealth || candidates.length === 0) {
+  if (dryRun || promote.length === 0) {
     return NextResponse.json({
       ok: true,
       dryRun: true,
-      healthScore,
-      minHealth,
-      maxActivate,
-      minPriority,
-      minPopulation,
-      wouldActivate: candidates,
-      activated: [],
+      locale,
+      slug,
+      minRankingScore,
+      canaryCount: canarySet.size,
+      wouldPromote: promote,
+      promoted: [],
     })
   }
 
-  const slugs = candidates.map((c) => c.slug)
   const updated = await dbQuery<{ slug: string }>(
     `UPDATE geo_cities
-     SET is_active = true,
-         rollout_stage = 'canary',
-         updated_at = NOW()
+     SET rollout_stage = 'stable', updated_at = NOW()
      WHERE slug = ANY($1::text[])
-       AND is_active = false
+       AND rollout_stage = 'canary'
+       AND is_active = true
      RETURNING slug`,
-    [slugs]
+    [promote]
   )
 
   await invalidateGeoCitiesCache()
@@ -101,12 +95,10 @@ export async function POST(req: NextRequest) {
   return NextResponse.json({
     ok: true,
     dryRun: false,
-    healthScore,
-    minHealth,
-    maxActivate,
-    minPriority,
-    minPopulation,
-    wouldActivate: candidates,
-    activated: updated.rows.map((r) => r.slug),
+    locale,
+    slug,
+    minRankingScore,
+    canaryCount: canarySet.size,
+    promoted: updated.rows.map((r) => r.slug),
   })
 }

@@ -22,7 +22,7 @@ export async function GET(req: Request) {
   const url = new URL(req.url)
   const includeInactive = url.searchParams.get("includeInactive") === "1"
   const rows = await dbQuery(
-    `SELECT id, slug, name_de, name_en, country_code, priority, population, is_active, created_at, updated_at
+    `SELECT id, slug, name_de, name_en, country_code, priority, population, is_active, rollout_stage, created_at, updated_at
      FROM geo_cities
      ${includeInactive ? "" : "WHERE is_active = true"}
      ORDER BY priority DESC, population DESC, slug ASC`
@@ -42,10 +42,11 @@ export async function POST(req: Request) {
   const priority = Math.max(1, Math.min(100, Number(body.priority ?? 50)))
   const population = Math.max(0, Number(body.population ?? 0))
   const isActive = body.is_active !== false
+  const rolloutStage = body.rollout_stage === "canary" ? "canary" : "stable"
 
   const result = await dbQuery(
-    `INSERT INTO geo_cities (slug, name_de, name_en, country_code, priority, population, is_active)
-     VALUES ($1, $2, $3, UPPER($4), $5, $6, $7)
+    `INSERT INTO geo_cities (slug, name_de, name_en, country_code, priority, population, is_active, rollout_stage)
+     VALUES ($1, $2, $3, UPPER($4), $5, $6, $7, $8)
      ON CONFLICT (slug) DO UPDATE SET
        name_de = EXCLUDED.name_de,
        name_en = EXCLUDED.name_en,
@@ -53,8 +54,9 @@ export async function POST(req: Request) {
        priority = EXCLUDED.priority,
        population = EXCLUDED.population,
        is_active = EXCLUDED.is_active,
+       rollout_stage = EXCLUDED.rollout_stage,
        updated_at = NOW()
-     RETURNING id, slug, name_de, name_en, country_code, priority, population, is_active, created_at, updated_at`,
+     RETURNING id, slug, name_de, name_en, country_code, priority, population, is_active, rollout_stage, created_at, updated_at`,
     [
       String(body.slug).toLowerCase().replace(/[^a-z0-9]/g, ""),
       String(body.name_de),
@@ -63,6 +65,7 @@ export async function POST(req: Request) {
       priority,
       population,
       isActive,
+      rolloutStage,
     ]
   )
 
@@ -93,6 +96,7 @@ export async function PATCH(req: Request) {
   if (typeof body.priority !== "undefined") add("priority", Math.max(1, Math.min(100, Number(body.priority))))
   if (typeof body.population !== "undefined") add("population", Math.max(0, Number(body.population)))
   if (typeof body.is_active === "boolean") add("is_active", body.is_active)
+  if (body.rollout_stage === "canary" || body.rollout_stage === "stable") add("rollout_stage", body.rollout_stage)
 
   if (!updates.length) {
     return NextResponse.json({ error: "no updatable fields provided" }, { status: 400 })
@@ -105,7 +109,7 @@ export async function PATCH(req: Request) {
     `UPDATE geo_cities
      SET ${updates.join(", ")}
      WHERE slug = $${idx}
-     RETURNING id, slug, name_de, name_en, country_code, priority, population, is_active, created_at, updated_at`,
+     RETURNING id, slug, name_de, name_en, country_code, priority, population, is_active, rollout_stage, created_at, updated_at`,
     values
   )
 

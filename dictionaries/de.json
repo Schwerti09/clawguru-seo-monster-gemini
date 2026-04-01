@@ -707,5 +707,32 @@
     "section_title_main": "",
     "section_title_sub": "",
     "check_title_en": "LIVE Security Check (Heuristic) — 30 Seconds"
+  },
+  "roast": {
+    "kicker": "Viral · KI · Teilen",
+    "title": "Roast My Stack",
+    "subtitle": "Tech-Stack oder Domain reinwerfen. Ein fies-witziger, aber nützlicher Security-Roast — danach Fixes mit ClawGuru-Runbooks umsetzen.",
+    "placeholder": "Kubernetes + Nginx + AWS + Terraform + Postgres — oder app.beispiel.de",
+    "level_mild": "Mild",
+    "level_medium": "Medium",
+    "level_spicy": "Spicy",
+    "cta": "Roast mich",
+    "loading": "Roast Master wird beschworen…",
+    "disclosure": "KI-generierte Orientierung, kein Penetrationstest. Bedrohungsmodell und Verifikation gehören in deine Umgebung.",
+    "score_label": "Claw Score",
+    "score_hint": "Erzähl-Score für diesen Roast — in Prod trotzdem verifizieren.",
+    "top_roasts": "Top 3 Roasts",
+    "weaknesses": "Schwachstellen",
+    "fixes": "Nächste Schritte",
+    "fix_cta": "Mit ClawGuru fixen",
+    "share_x": "Auf X teilen",
+    "share_li": "LinkedIn",
+    "copy_link": "Link kopieren",
+    "copied": "Kopiert!",
+    "error_empty_input": "Erst Stack oder Domain eingeben.",
+    "error_input_too_long": "Maximal 400 Zeichen.",
+    "error_invalid_level": "Roast-Level wählen.",
+    "error_ai_unavailable": "KI offline. GEMINI_API_KEY (oder AI_PROVIDER_ORDER-Kette) prüfen.",
+    "error_parse": "Antwort unbrauchbar. Kürzeren Stack probieren."
   }
 }

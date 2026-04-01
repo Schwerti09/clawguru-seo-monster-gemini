@@ -2,6 +2,8 @@
 
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { DEFAULT_LOCALE } from '@/lib/i18n'
+import { RoastMyStack } from '@/components/roast/RoastMyStack'
 import {
   Zap,
   Brain,
@@ -79,6 +81,15 @@ export function ToolsTab({ isShadowed, executions }: ToolsTabProps) {
 
   return (
     <div className="p-8 h-full overflow-y-auto">
+      <motion.div
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="mb-10 rounded-2xl border p-5"
+        style={{ ...glass, borderColor: 'rgba(34,211,238,0.15)' }}
+      >
+        <RoastMyStack locale={DEFAULT_LOCALE} prefix={`/${DEFAULT_LOCALE}`} variant="compact" />
+      </motion.div>
+
       {/* Header */}
       <motion.div initial={{ opacity: 0, y: -15 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
         <div className="flex items-center gap-4 mb-5">

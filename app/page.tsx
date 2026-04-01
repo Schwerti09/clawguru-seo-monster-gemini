@@ -16,6 +16,7 @@ import SolutionSection from "@/components/homepage/SolutionSection"
 import ToolsSection from "@/components/homepage/ToolsSection"
 import WhySection from "@/components/homepage/WhySection"
 import FinalCTASection from "@/components/homepage/FinalCTASection"
+import RoastMyStack from "@/components/roast/RoastMyStack"
 
 interface HomeProps {
   dict: Dictionary
@@ -92,6 +93,12 @@ export default function Home({ dict, locale }: HomeProps) {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
 
       <HeroSection prefix={prefix} dict={hp} />
+
+      <section id="roast-my-stack" className="relative py-16 border-b border-white/5" style={{ background: "var(--surface-0)" }}>
+        <Container>
+          <RoastMyStack locale={locale} prefix={prefix} dict={(dict as { roast?: Record<string, string> }).roast} />
+        </Container>
+      </section>
 
       <ProblemSection dict={hp} />
 

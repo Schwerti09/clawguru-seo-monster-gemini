@@ -18,9 +18,28 @@ const MEM_TTL_MS = 5 * 60 * 1000
 let memCache: { cities: GeoCity[]; expiresAt: number } | null = null
 const REDIS_KEY = "geo:cities:active:v1"
 const REDIS_TTL_SECONDS = 60 * 30
+const REDIS_OP_TIMEOUT_MS = 1200
 let redisClientPromise: Promise<any | null> | null = null
+let redisUnavailable = false
+
+function withTimeout<T>(promise: Promise<T>, timeoutMs: number): Promise<T> {
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => reject(new Error("timeout")), timeoutMs)
+    promise.then(
+      (value) => {
+        clearTimeout(timer)
+        resolve(value)
+      },
+      (err) => {
+        clearTimeout(timer)
+        reject(err)
+      }
+    )
+  })
+}
 
 async function getRedisClient() {
+  if (redisUnavailable) return null
   if (redisClientPromise) return redisClientPromise
   redisClientPromise = (async () => {
     const redisUrl = process.env.REDIS_URL || ""
@@ -31,9 +50,10 @@ async function getRedisClient() {
       client.on("error", () => {
         // best-effort cache layer: swallow redis errors
       })
-      await client.connect()
+      await withTimeout(client.connect(), REDIS_OP_TIMEOUT_MS)
       return client
     } catch {
+      redisUnavailable = true
       return null
     }
   })()
@@ -50,7 +70,7 @@ async function redisGetCities(): Promise<GeoCity[] | null> {
   const redis = await getRedisClient()
   if (redis) {
     try {
-      const raw = await redis.get(REDIS_KEY)
+      const raw = await withTimeout(redis.get(REDIS_KEY), REDIS_OP_TIMEOUT_MS)
       if (raw && typeof raw === "string") {
         const parsed = JSON.parse(raw)
         if (Array.isArray(parsed)) return parsed
@@ -66,6 +86,7 @@ async function redisGetCities(): Promise<GeoCity[] | null> {
     const res = await fetch(`${url}/get/${REDIS_KEY}`, {
       headers: { Authorization: `Bearer ${token}` },
       cache: "no-store",
+      signal: AbortSignal.timeout(REDIS_OP_TIMEOUT_MS),
     })
     if (!res.ok) return null
     const json = await res.json()
@@ -82,7 +103,10 @@ async function redisSetCities(cities: GeoCity[]) {
   const redis = await getRedisClient()
   if (redis) {
     try {
-      await redis.set(REDIS_KEY, JSON.stringify(cities), { EX: REDIS_TTL_SECONDS })
+      await withTimeout(
+        redis.set(REDIS_KEY, JSON.stringify(cities), { EX: REDIS_TTL_SECONDS }),
+        REDIS_OP_TIMEOUT_MS
+      )
       return
     } catch {
       // continue with REST fallback
@@ -97,6 +121,7 @@ async function redisSetCities(cities: GeoCity[]) {
       method: "POST",
       headers: { Authorization: `Bearer ${token}` },
       cache: "no-store",
+      signal: AbortSignal.timeout(REDIS_OP_TIMEOUT_MS),
     })
   } catch {
     // best effort
@@ -107,7 +132,7 @@ async function redisDeleteCitiesCache() {
   const redis = await getRedisClient()
   if (redis) {
     try {
-      await redis.del(REDIS_KEY)
+      await withTimeout(redis.del(REDIS_KEY), REDIS_OP_TIMEOUT_MS)
       return
     } catch {
       // continue with REST fallback
@@ -121,6 +146,7 @@ async function redisDeleteCitiesCache() {
       method: "POST",
       headers: { Authorization: `Bearer ${token}` },
       cache: "no-store",
+      signal: AbortSignal.timeout(REDIS_OP_TIMEOUT_MS),
     })
   } catch {
     // best effort

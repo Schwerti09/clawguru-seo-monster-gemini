@@ -117,6 +117,12 @@ export default function CheckPage() {
             <li>{isGerman ? "• Fuer belastbare Aussagen immer Konfiguration, Logs und interne Scans verifizieren." : "• For reliable conclusions, always verify config, logs, and internal scans."}</li>
             <li>{isGerman ? "• Empfehlungen sind auf schnelle Hardening-Umsetzung mit Runbooks ausgerichtet." : "• Recommendations are designed for fast hardening execution via runbooks."}</li>
           </ul>
+          <a
+            href={`${prefix}/methodik`}
+            className="mt-4 inline-flex text-sm text-cyan-300 hover:text-cyan-200 underline underline-offset-4"
+          >
+            {isGerman ? "Vollstaendige Methodik ansehen" : "View full methodology"}
+          </a>
         </section>
         <section className="mt-8 rounded-2xl border border-white/10 bg-black/20 p-6 max-w-4xl">
           <h3 className="text-lg font-bold text-white">

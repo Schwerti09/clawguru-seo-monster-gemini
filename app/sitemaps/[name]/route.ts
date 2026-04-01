@@ -25,6 +25,52 @@ function isoDate(d = new Date()) {
   return d.toISOString().slice(0, 10)
 }
 
+function hashString(input: string): number {
+  let h = 2166136261
+  for (let i = 0; i < input.length; i++) {
+    h ^= input.charCodeAt(i)
+    h = Math.imul(h, 16777619)
+  }
+  return Math.abs(h >>> 0)
+}
+
+function rotateList<T>(arr: T[], offset: number): T[] {
+  if (!arr.length) return arr
+  const start = ((offset % arr.length) + arr.length) % arr.length
+  return arr.slice(start).concat(arr.slice(0, start))
+}
+
+function getGeoSeedRunbooks(locale: Locale): string[] {
+  const base = [
+    "aws-ssh-hardening-2026",
+    "aws-nginx-csp-2026",
+    "aws-kubernetes-zero-trust-2026",
+    "cloudflare-nginx-waf-2026",
+    "hetzner-ssh-hardening-2026",
+    "gcp-kubernetes-rbac-misconfig-2026",
+    "azure-docker-hardening-2026",
+    "digitalocean-nginx-rate-limiting-2026",
+  ]
+  const localeExtra: Record<string, string[]> = {
+    de: ["hetzner-nginx-firewall-rules-2026", "netlify-oidc-least-privilege-iam-2029"],
+    en: ["aws-github-actions-secrets-management-2026", "cloudflare-nginx-hsts-2026"],
+    fr: ["ovhcloud-firewall-origin-lockdown-2025", "scaleway-queue-incident-communication-2028"],
+    es: ["azure-kubernetes-mfa-enforcement-2026", "gcp-docker-image-signing-2026"],
+  }
+  return [...base, ...(localeExtra[locale] || [])]
+}
+
+function selectGeoSitemapCities(allCities: Array<{ slug: string }>, locale: Locale): string[] {
+  const limit = Math.max(1, Math.min(80, parseInt(process.env.GEO_MATRIX_SITEMAP_CITY_LIMIT || "24", 10) || 24))
+  const poolLimit = Math.max(limit, Math.min(240, parseInt(process.env.GEO_MATRIX_SITEMAP_CITY_POOL || "72", 10) || 72))
+  const pool = allCities.slice(0, poolLimit).map((c) => c.slug)
+  if (pool.length <= limit) return pool
+
+  const dayStamp = isoDate().replace(/-/g, "")
+  const offset = hashString(`${locale}:${dayStamp}`)
+  return rotateList(pool, offset).slice(0, limit)
+}
+
 function buildAlternateLinks(loc: string): string[] {
   let pathname = "/"
   try {
@@ -602,15 +648,14 @@ export async function GET(
 
     // GEO-LIVING MATRIX: curated geo runbook variants (only when explicitly enabled)
     if (name === `geo-runbooks-${locale}` && process.env.GEO_MATRIX_SITEMAP === "1") {
-      const topCities = await getTopCities(parseInt(process.env.GEO_MATRIX_SITEMAP_CITY_LIMIT || "24", 10) || 24)
-      const citySuffixes = topCities.map((city) => city.slug)
-      const seeds = [
-        "aws-ssh-hardening-2026",
-        "aws-nginx-csp-2026",
-        "aws-kubernetes-zero-trust-2026",
-        "cloudflare-nginx-waf-2026",
-        "hetzner-ssh-hardening-2026",
-      ]
+      const cityPoolMax = Math.max(
+        parseInt(process.env.GEO_MATRIX_SITEMAP_CITY_LIMIT || "24", 10) || 24,
+        parseInt(process.env.GEO_MATRIX_SITEMAP_CITY_POOL || "72", 10) || 72
+      )
+      const topCities = await getTopCities(cityPoolMax)
+      const citySuffixes = selectGeoSitemapCities(topCities, locale)
+      const seedLimit = Math.max(1, Math.min(20, parseInt(process.env.GEO_MATRIX_SITEMAP_SEED_LIMIT || "8", 10) || 8))
+      const seeds = getGeoSeedRunbooks(locale).slice(0, seedLimit)
       const urls = seeds.flatMap((slug) =>
         citySuffixes.map((city) => ({
           loc: `${base}/${locale}/runbook/${slug}-${city}`,

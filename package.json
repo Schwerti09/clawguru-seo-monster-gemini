@@ -14,6 +14,8 @@
     "check:geo-city-ranking": "node scripts/check-geo-city-ranking.js",
     "geo:auto-prune:dry-run": "node scripts/trigger-geo-auto-prune.js --mode=dry-run",
     "geo:auto-prune:live": "node scripts/trigger-geo-auto-prune.js --mode=live",
+    "geo:top-city-expansion:dry-run": "node scripts/trigger-geo-top-city-expansion.js --mode=dry-run",
+    "geo:top-city-expansion:live": "node scripts/trigger-geo-top-city-expansion.js --mode=live",
     "check:sitemap-redirects": "node scripts/check-sitemap-redirects.js",
     "check:prod-smoke": "node scripts/check-production-smoke.js",
     "i18n:sync-dictionaries": "node scripts/sync-dictionaries.js",

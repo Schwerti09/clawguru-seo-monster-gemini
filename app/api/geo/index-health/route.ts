@@ -1,18 +1,28 @@
 import { NextRequest, NextResponse } from "next/server"
 import { BASE_URL } from "@/lib/config"
-import { DEFAULT_LOCALE } from "@/lib/i18n"
+import { DEFAULT_LOCALE, SUPPORTED_LOCALES } from "@/lib/i18n"
 import { getTopCities } from "@/lib/geo-cities"
 
 export const runtime = "nodejs"
 export const dynamic = "force-dynamic"
+export const maxDuration = 60
 
 type Probe = { city: string; url: string; status: number; ok: boolean; finalUrl?: string }
 
+const PROBE_TIMEOUT_MS = 8_000
+/** Safe slug pattern: only lowercase alphanumerics and hyphens, no path traversal. */
+const SAFE_SLUG_RE = /^[a-z0-9-]+$/i
+
 async function probeUrl(url: string): Promise<{ status: number; finalUrl?: string }> {
-  const res = await fetch(url, { redirect: "manual", cache: "no-store" })
+  const res = await fetch(url, { redirect: "manual", cache: "no-store", signal: AbortSignal.timeout(PROBE_TIMEOUT_MS) })
   if ((res.status === 307 || res.status === 308) && res.headers.get("location")) {
-    const nextUrl = new URL(res.headers.get("location") || "", url).toString()
-    const second = await fetch(nextUrl, { redirect: "manual", cache: "no-store" })
+    const rawLocation = res.headers.get("location") || ""
+    const nextUrl = new URL(rawLocation, url).toString()
+    // Only follow redirects that stay within our own origin to prevent open redirects.
+    if (!nextUrl.startsWith(BASE_URL)) {
+      return { status: res.status, finalUrl: url }
+    }
+    const second = await fetch(nextUrl, { redirect: "manual", cache: "no-store", signal: AbortSignal.timeout(PROBE_TIMEOUT_MS) })
     return { status: second.status, finalUrl: nextUrl }
   }
   return { status: res.status, finalUrl: url }
@@ -26,19 +36,27 @@ function toCsv(rows: Probe[]) {
 
 export async function GET(req: NextRequest) {
   const format = (req.nextUrl.searchParams.get("format") || "json").toLowerCase()
-  const locale = (req.nextUrl.searchParams.get("locale") || DEFAULT_LOCALE).toLowerCase()
-  const slug = req.nextUrl.searchParams.get("slug") || "aws-ssh-hardening-2026"
+  const rawLocale = (req.nextUrl.searchParams.get("locale") || DEFAULT_LOCALE).toLowerCase()
+  const locale = SUPPORTED_LOCALES.includes(rawLocale as any) ? rawLocale : DEFAULT_LOCALE
+  const rawSlug = req.nextUrl.searchParams.get("slug") || "aws-ssh-hardening-2026"
+  const slug = SAFE_SLUG_RE.test(rawSlug) ? rawSlug : "aws-ssh-hardening-2026"
   const cityLimit = parseInt(req.nextUrl.searchParams.get("limit") || process.env.GEO_INDEX_HEALTH_CITY_LIMIT || "12", 10) || 12
   const cities = (await getTopCities(cityLimit)).map((city) => city.slug)
 
   const probes: Probe[] = []
-  for (const city of cities) {
-    const url = `${BASE_URL}/${locale}/runbook/${slug}-${city}`
-    try {
+  const results = await Promise.allSettled(
+    cities.map(async (city) => {
+      const url = `${BASE_URL}/${locale}/runbook/${slug}-${city}`
       const p = await probeUrl(url)
-      probes.push({ city, url, status: p.status, ok: p.status === 200, finalUrl: p.finalUrl })
-    } catch {
-      probes.push({ city, url, status: 0, ok: false })
+      return { city, url, status: p.status, ok: p.status === 200, finalUrl: p.finalUrl } as Probe
+    })
+  )
+  for (const [i, result] of results.entries()) {
+    if (result.status === "fulfilled") {
+      probes.push(result.value)
+    } else {
+      const city = cities[i]
+      probes.push({ city, url: `${BASE_URL}/${locale}/runbook/${slug}-${city}`, status: 0, ok: false })
     }
   }
 

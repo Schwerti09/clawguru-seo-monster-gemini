@@ -4,6 +4,7 @@
 
 import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
+import ProvenanceLiveChecks, { type LiveCheckSample } from "@/components/provenance/ProvenanceLiveChecks"
 import { BASE_URL } from "@/lib/config"
 
 export const dynamic = "force-static"
@@ -17,6 +18,26 @@ export const metadata = {
 
 export default async function ProvenanceIndexPage() {
   const { RUNBOOKS } = await import("@/lib/pseo")
+  const { generateProvenanceChain, verifyProvenanceChain } = await import("@/lib/provenance")
+
+  // Generate live-check sample data from the first 3 runbooks (guard: need at least 3)
+  const sampleRunbooks = RUNBOOKS.slice(0, 3)
+  const liveCheckSamples: LiveCheckSample[] = sampleRunbooks.map((r) => {
+    const chain = generateProvenanceChain(r)
+    const verification = verifyProvenanceChain(chain)
+    const lastEvent = chain.events.length > 0 ? chain.events[chain.events.length - 1] : undefined
+    return {
+      slug: r.slug,
+      title: r.title,
+      totalSignatures: chain.totalSignatures,
+      totalEvents: verification.totalEvents,
+      verifiedLinks: verification.verifiedLinks,
+      merkleRootVerified: verification.merkleRootVerified,
+      merkleRootPreview: chain.merkleRoot.slice(0, 16),
+      lastSigPreview: lastEvent?.signature?.slice(0, 16) ?? "0000000000000000",
+    }
+  })
+
   const itemListLd = {
     "@context": "https://schema.org",
     "@type": "ItemList",
@@ -79,6 +100,8 @@ export default async function ProvenanceIndexPage() {
             </a>
           ))}
         </div>
+
+        <ProvenanceLiveChecks samples={liveCheckSamples} />
 
         <div className="mt-12 p-5 rounded-3xl border border-gray-800 bg-black/20 text-xs text-gray-500 leading-relaxed">
           <div className="font-black text-gray-400 mb-1">⚖ Compliance Note</div>

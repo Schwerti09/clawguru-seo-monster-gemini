@@ -3,7 +3,9 @@
 
 import Container from "@/components/shared/Container"
 import { getRunbook } from "@/lib/pseo"
-import { notFound } from "next/navigation"
+import { headers } from "next/headers"
+import { DEFAULT_LOCALE } from "@/lib/i18n"
+import { permanentRedirect } from "next/navigation"
 import { ShareButtons } from "./ShareButtons"
 
 export const revalidate = 60
@@ -24,8 +26,12 @@ export async function generateMetadata(props: { params: { slug: string } }) {
 
 export default async function SharePage(props: { params: { slug: string } }) {
   const params = props.params;
+  const h = headers()
+  const locale = h.get("x-claw-locale") ?? DEFAULT_LOCALE
   const r = getRunbook(params.slug)
-  if (!r) notFound()
+  if (!r) {
+    permanentRedirect(`/${locale}/runbooks?q=${encodeURIComponent(params.slug)}`)
+  }
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
   const runbookUrl = `${siteUrl}/runbook/${r.slug}`

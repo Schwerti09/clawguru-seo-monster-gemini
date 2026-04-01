@@ -6,7 +6,7 @@
 // H3: "Impact and Risks for your Infrastructure"
 
 import type { Metadata } from "next"
-import { notFound } from "next/navigation"
+import { notFound, permanentRedirect } from "next/navigation"
 import Container from "@/components/shared/Container"
 import { getCveEntry, KNOWN_CVES, parseCveId } from "@/lib/cve-pseo"
 import { generateCveContent } from "@/lib/agents/cve-agent"
@@ -58,10 +58,14 @@ export default async function CveFixPage(props: Props) {
   const locale = (h.get("x-claw-locale") ?? DEFAULT_LOCALE) as Locale
   const prefix = `/${locale}`
   const cveId = parseCveId(decodeURIComponent(params.cve_id))
-  if (!cveId) return notFound()
+  if (!cveId) {
+    permanentRedirect(`/${locale}/solutions?q=${encodeURIComponent(params.cve_id)}`)
+  }
 
   const entry = getCveEntry(cveId)
-  if (!entry) return notFound()
+  if (!entry) {
+    permanentRedirect(`/${locale}/solutions?q=${encodeURIComponent(cveId)}`)
+  }
 
   // AI-generated unique content via Gemini (with static fallback)
   const aiContent = await generateCveContent(entry).catch(() => null)

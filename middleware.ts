@@ -204,13 +204,13 @@ export function middleware(request: NextRequest) {
     return res
   }
 
-  // Normalize uppercase CVE slug pattern to canonical lowercase URL.
-  // Example: /solutions/fix-CVE-2025-29927 -> /de/solutions/fix-cve-2025-29927
+  // Recovery redirect for stale CVE solution URLs from search engines.
+  // Example: /solutions/fix-CVE-2025-29927 -> /de/solutions?q=CVE-2025-29927
   const rootFixCveUpper = pathname.match(/^\/solutions\/fix-CVE-(.+)$/)
   if (rootFixCveUpper) {
-    const normalized = `fix-cve-${rootFixCveUpper[1]}`.toLowerCase()
     const url = request.nextUrl.clone()
-    url.pathname = `/${DEFAULT_LOCALE}/solutions/${normalized}`
+    url.pathname = `/${DEFAULT_LOCALE}/solutions`
+    url.searchParams.set("q", `CVE-${rootFixCveUpper[1]}`)
     const res = NextResponse.redirect(url, 308)
     res.headers.set("x-claw-locale", DEFAULT_LOCALE)
     res.headers.set("x-claw-dir", localeDir(DEFAULT_LOCALE))
@@ -222,9 +222,9 @@ export function middleware(request: NextRequest) {
   if (localizedFixCveUpper) {
     const localeFromPath = localizedFixCveUpper[1].toLowerCase() as Locale
     const targetLocale = SUPPORTED_LOCALES.includes(localeFromPath) ? localeFromPath : DEFAULT_LOCALE
-    const normalized = `fix-cve-${localizedFixCveUpper[2]}`.toLowerCase()
     const url = request.nextUrl.clone()
-    url.pathname = `/${targetLocale}/solutions/${normalized}`
+    url.pathname = `/${targetLocale}/solutions`
+    url.searchParams.set("q", `CVE-${localizedFixCveUpper[2]}`)
     const res = NextResponse.redirect(url, 308)
     res.headers.set("x-claw-locale", targetLocale)
     res.headers.set("x-claw-dir", localeDir(targetLocale))

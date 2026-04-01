@@ -134,22 +134,30 @@ export default function HeroSecurityCheck({ dict = {} }: { dict?: Record<string,
             <ClawguruAvatar className="w-12 h-12 md:w-16 md:h-16" />
           </div>
           <h2 className="text-xl sm:text-2xl md:text-3xl font-black mb-2">
-            {isGerman ? "LIVE Security-Check (Heuristik) — 30 Sekunden" : "LIVE Security Check (Heuristic) — 30 Seconds"}
+            {isGerman
+              ? (dict.check_title_de || "LIVE Security-Check (Heuristik) — 30 Sekunden")
+              : (dict.check_title_en || "LIVE Security Check (Heuristic) — 30 Seconds")}
           </h2>
           <p className="text-gray-300 mb-4">
             {isGerman ? (
               <>
-                Gib IP/Domain/Bot-URL ein. Du bekommst einen <span className="font-semibold">Claw Security Score</span> + klare nächste Schritte.
+                {(dict.check_sub_de_prefix || "Gib IP/Domain/Bot-URL ein. Du bekommst einen")}{" "}
+                <span className="font-semibold">{dict.check_score_label || "Claw Security Score"}</span>{" "}
+                {(dict.check_sub_de_suffix || "+ klare nächste Schritte.")}
               </>
             ) : (
               <>
-                Enter an IP/domain/bot URL. You get a <span className="font-semibold">Claw Security Score</span> + clear next steps.
+                {(dict.check_sub_en_prefix || "Enter an IP/domain/bot URL. You get a")}{" "}
+                <span className="font-semibold">{dict.check_score_label || "Claw Security Score"}</span>{" "}
+                {(dict.check_sub_en_suffix || "+ clear next steps.")}
               </>
             )}
           </p>
 
           <label htmlFor="security-target" className="block text-sm font-medium mb-2 text-gray-200">
-            {isGerman ? "Ziel (öffentlich sichtbar): IP, Domain oder URL" : "Target (publicly visible): IP, domain or URL"}
+            {isGerman
+              ? (dict.check_target_label_de || "Ziel (oeffentlich sichtbar): IP, Domain oder URL")
+              : (dict.check_target_label_en || "Target (publicly visible): IP, domain or URL")}
           </label>
           <input
             id="security-target"
@@ -211,10 +219,13 @@ export default function HeroSecurityCheck({ dict = {} }: { dict?: Record<string,
             <div className="flex-grow">
               <div className="flex items-center gap-3 mb-3">
                 <div className={`px-3 py-1 rounded-full text-xs font-bold ${result.vulnerable ? "bg-red-900/60 text-red-200" : "bg-green-900/60 text-green-200"}`}>
-                  {result.vulnerable ? (isGerman ? "RISIKO ERHÖHT" : "HIGHER RISK") : "BASIC OK"}
+                  {result.vulnerable
+                    ? (isGerman ? (dict.check_risk_high_de || "RISIKO ERHOEHT") : (dict.check_risk_high_en || "HIGHER RISK"))
+                    : (isGerman ? (dict.check_risk_ok_de || "BASIS OK") : (dict.check_risk_ok_en || "BASIC OK"))}
                 </div>
                 <div className="text-sm text-gray-300">
-                  Target: <span className="font-mono text-gray-100">{result.target}</span>
+                  {(isGerman ? (dict.check_target_chip_de || "Ziel") : (dict.check_target_chip_en || "Target"))}:{" "}
+                  <span className="font-mono text-gray-100">{result.target}</span>
                 </div>
               </div>
 
@@ -244,7 +255,9 @@ export default function HeroSecurityCheck({ dict = {} }: { dict?: Record<string,
                         boxShadow: "0 6px 24px rgba(212,175,55,0.22)",
                       }}
                     >
-                      Ask the Guru →
+                      {isGerman
+                        ? (dict.check_ask_guru_de || "Frag den Guru")
+                        : (dict.check_ask_guru_en || "Ask the Guru")} →
                     </a>
                   </div>
 
@@ -320,15 +333,17 @@ export default function HeroSecurityCheck({ dict = {} }: { dict?: Record<string,
       <div className="mt-6 flex flex-wrap items-center gap-4 text-xs text-gray-500">
         <div className="flex items-center gap-2">
           <span className="inline-block w-2 h-2 rounded-full bg-green-500" />
-          {isGerman ? "keine Speicherung von Targets" : "no storage of targets"}
+          {isGerman ? (dict.check_footer_privacy_de || "keine Speicherung von Zielen") : (dict.check_footer_privacy_en || "no storage of targets")}
         </div>
         <div className="flex items-center gap-2">
           <span className="inline-block w-2 h-2 rounded-full bg-blue-500" />
-          {isGerman ? "Score ist heuristisch" : "score is heuristic"}
+          {isGerman ? (dict.check_footer_heuristic_de || "Score ist heuristisch") : (dict.check_footer_heuristic_en || "score is heuristic")}
         </div>
         <div className="flex items-center gap-2">
           <span className="inline-block w-2 h-2 rounded-full bg-purple-500" />
-          {isGerman ? "Für echte Aussagen: Config/Logs checken" : "For real conclusions: check config/logs"}
+          {isGerman
+            ? (dict.check_footer_validate_de || "Fuer echte Aussagen: Config/Logs pruefen")
+            : (dict.check_footer_validate_en || "For real conclusions: check config/logs")}
         </div>
       </div>
 

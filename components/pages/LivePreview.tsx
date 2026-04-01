@@ -47,8 +47,8 @@ export default function LivePreview({ dict = {} }: { dict?: Record<string, strin
       <div className="relative p-5 rounded-3xl border border-white/10 bg-gradient-to-br from-gray-900/60 to-black overflow-hidden">
         <div className="absolute -inset-1 opacity-40 blur-2xl" style={{ background: "radial-gradient(600px 200px at 30% 20%, rgba(0,255,164,0.06), transparent 60%)" }} />
         <div className="relative z-10">
-          <div className="text-sm font-mono tracking-widest text-cyan-300">LIVE</div>
-          <div className="text-2xl font-black mt-1">Intel Preview</div>
+          <div className="text-sm font-mono tracking-widest text-cyan-300">{dict.live_preview_kicker || "LIVE"}</div>
+          <div className="text-2xl font-black mt-1">{dict.live_preview_title || "Intel Preview"}</div>
           <div className="mt-3 space-y-3">
             {loading && (
               <div className="space-y-2">
@@ -58,7 +58,7 @@ export default function LivePreview({ dict = {} }: { dict?: Record<string, strin
               </div>
             )}
             {!loading && (items?.length ?? 0) === 0 && (
-              <div className="text-gray-400 text-sm">Keine Vorfälle gefunden.</div>
+              <div className="text-gray-400 text-sm">{dict.live_preview_empty || "No incidents found."}</div>
             )}
             {!loading && items && items.map((i) => (
               <div key={i.id} className="p-3 rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 transition-colors">
@@ -77,15 +77,15 @@ export default function LivePreview({ dict = {} }: { dict?: Record<string, strin
         <div className="grid grid-cols-3 gap-3 text-center">
           <div>
             <div className="text-2xl font-black text-white">{(checksToday || 0).toLocaleString()}</div>
-            <div className="text-[11px] text-gray-400">Checks heute</div>
+            <div className="text-[11px] text-gray-400">{dict.live_stats_checks || "Checks today"}</div>
           </div>
           <div>
             <div className="text-2xl font-black text-white">3</div>
-            <div className="text-[11px] text-gray-400">kritische CVEs</div>
+            <div className="text-[11px] text-gray-400">{dict.live_stats_critical || "critical CVEs"}</div>
           </div>
           <div>
             <div className="text-2xl font-black text-white">30s</div>
-            <div className="text-[11px] text-gray-400">durchschn. Dauer</div>
+            <div className="text-[11px] text-gray-400">{dict.live_stats_duration || "avg. duration"}</div>
           </div>
         </div>
       </div>

@@ -36,6 +36,7 @@ export default function HeroSecurityCheck({ dict = {} }: { dict?: Record<string,
   const [error, setError] = useState<string | null>(null)
   // WORLD BEAST FINAL LAUNCH: upsell modal state
   const [showUpsell, setShowUpsell] = useState(false)
+  const ctaLabel = isGerman ? "JETZT KOSTENLOS ANALYSIEREN" : "ANALYZE FOR FREE NOW"
 
   const shareUrl = useMemo(() => {
     if (!result) return ""
@@ -153,6 +154,17 @@ export default function HeroSecurityCheck({ dict = {} }: { dict?: Record<string,
               </>
             )}
           </p>
+          <div className="mb-4 flex flex-wrap gap-2 text-xs">
+            <span className="rounded-full border border-cyan-900/50 bg-cyan-950/25 px-2.5 py-1 text-cyan-200">
+              {isGerman ? "No-Signup Start" : "No-signup start"}
+            </span>
+            <span className="rounded-full border border-emerald-900/50 bg-emerald-950/25 px-2.5 py-1 text-emerald-200">
+              {isGerman ? "<30 Sek. Analyse" : "<30 sec analysis"}
+            </span>
+            <span className="rounded-full border border-violet-900/50 bg-violet-950/25 px-2.5 py-1 text-violet-200">
+              {isGerman ? "Direkte Fix-Schritte" : "Direct fix steps"}
+            </span>
+          </div>
 
           <label htmlFor="security-target" className="block text-sm font-medium mb-2 text-gray-200">
             {isGerman
@@ -176,7 +188,7 @@ export default function HeroSecurityCheck({ dict = {} }: { dict?: Record<string,
           aria-disabled={loading || !input.trim()}
           className={`w-full md:w-auto px-8 py-4 rounded-2xl font-black text-white bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 transition-all shadow-lg hover:shadow-xl hover:shadow-red-900/30 ${loading || !input.trim() ? "opacity-50 pointer-events-none" : ""}`}
         >
-          {loading ? (isGerman ? "Prüfe..." : "Checking...") : isGerman ? "KOSTENLOS PRÜFEN" : "CHECK FOR FREE"}
+          {loading ? (isGerman ? "Pruefe..." : "Checking...") : ctaLabel}
         </a>
       </div>
 

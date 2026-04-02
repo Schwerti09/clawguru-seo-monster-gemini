@@ -40,6 +40,7 @@
 - P2 Off-Page operationalisiert: `docs/offpage-playbook-2026.md` mit kanal-spezifischen Templates (Reddit/X/GitHub/Discord), Cadence, Tracking-Regeln und Auto-Reject-Guardrails angelegt.
 - P2 erste Delivery live: `/[lang]/check-methodology-30-seconds` als indexierbare Artikel-Seite mit `buildLocalizedAlternates`, Article-Schema und internen Links auf `/check`, `/methodik`, `/openclaw-security-check`, `/ai-agent-security`.
 - P2 zweite Delivery live: `/[lang]/openclaw-top-5-exposure-misconfigs` als indexierbare Artikel-Seite mit Meta/Schema und internen Links auf `/openclaw`, `/moltbot-hardening`, `/check`, `/methodik`.
+- P2 dritte Delivery live: `/[lang]/gateway-auth-10-steps` als indexierbare Runbook-Artikel-Seite mit 10-Schritte-Flow, Verifikationskriterien und internen Links auf `/moltbot-hardening`, `/openclaw`, `/check`, `/methodik`.
 
 **Bewusst offen / nächste Engineering-Schritte (SEO-Plan):**
 

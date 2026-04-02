@@ -1,7 +1,7 @@
 // Localized solutions index: /de/solutions, /en/solutions, etc.
 // Delegates to the base solutions page so all locales resolve without 404.
 
-import { SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
+import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
 import SolutionsPage from "@/app/solutions/page"
 
 export const revalidate = 60
@@ -17,7 +17,7 @@ export async function generateMetadata(props: {
   const locale = (SUPPORTED_LOCALES.includes(lang as Locale) ? lang : "de") as Locale
   return {
     title: "CVE Fix Solutions | ClawGuru",
-    alternates: { canonical: `/solutions/page` }
+    alternates: buildLocalizedAlternates(locale, "/solutions")
   }
 }
 

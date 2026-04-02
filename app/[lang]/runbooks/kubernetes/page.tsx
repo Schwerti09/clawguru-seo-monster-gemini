@@ -2,7 +2,7 @@
 // Strong hub for Kubernetes runbooks
 
 import Container from "@/components/shared/Container"
-import { type Locale, SUPPORTED_LOCALES } from "@/lib/i18n"
+import { type Locale, SUPPORTED_LOCALES, buildLocalizedAlternates } from "@/lib/i18n"
 import Link from "next/link"
 
 export const revalidate = 60
@@ -17,7 +17,7 @@ export async function generateMetadata(props: { params: { lang: string } }) {
   return {
     title: `Kubernetes Runbooks – RBAC, Networking, Security 2026 | ClawGuru`,
     description: `Alle ClawGuru Kubernetes-Runbooks: RBAC, NetworkPolicy, Pod Security, Incident Response, Monitoring. Ops-Guides für K8s 2026.`,
-    alternates: { canonical: `/runbooks/kubernetes/page` }
+    alternates: buildLocalizedAlternates(locale, "/runbooks/kubernetes")
   }
 }
 

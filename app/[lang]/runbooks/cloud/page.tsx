@@ -3,7 +3,7 @@
 
 import Container from "../../../../components/shared/Container"
 import { RUNBOOKS } from "../../../../lib/pseo"
-import { type Locale, SUPPORTED_LOCALES } from "../../../../lib/i18n"
+import { type Locale, SUPPORTED_LOCALES, buildLocalizedAlternates } from "../../../../lib/i18n"
 import Link from "next/link"
 
 export const revalidate = 60
@@ -27,7 +27,7 @@ export async function generateMetadata(props: { params: { lang: string } }) {
   return {
     title: `Cloud Runbooks – Hetzner, AWS, GCP, Azure & mehr | ClawGuru`,
     description: `Alle ClawGuru Cloud-Runbooks: Firewall, SSH, Sicherheits-Härtung für Hetzner, DigitalOcean, AWS, GCP, Azure und mehr. Ops-Guides für 2026.`,
-    alternates: { canonical: `/runbooks/cloud/page` }
+    alternates: buildLocalizedAlternates(locale, "/runbooks/cloud")
   }
 }
 

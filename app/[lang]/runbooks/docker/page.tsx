@@ -2,7 +2,7 @@
 // Strong hub for Docker runbooks
 
 import Container from "@/components/shared/Container"
-import { type Locale, SUPPORTED_LOCALES } from "@/lib/i18n"
+import { type Locale, SUPPORTED_LOCALES, buildLocalizedAlternates } from "@/lib/i18n"
 import Link from "next/link"
 
 export const revalidate = 60
@@ -17,7 +17,7 @@ export async function generateMetadata(props: { params: { lang: string } }) {
   return {
     title: `Docker Runbooks – Container Security & Ops 2026 | ClawGuru`,
     description: `Alle ClawGuru Docker-Runbooks: Container Hardening, Secrets, Compose, Registry, Netzwerk. Ops-Guides für Docker 2026.`,
-    alternates: { canonical: `/runbooks/docker/page` }
+    alternates: buildLocalizedAlternates(locale, "/runbooks/docker")
   }
 }
 

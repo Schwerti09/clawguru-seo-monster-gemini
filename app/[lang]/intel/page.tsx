@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import dynamic from "next/dynamic"
-import { SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
+import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
 import { getDictionary } from "@/lib/getDictionary"
 import IntelHero from "@/components/intel/IntelHero"
 import LiveThreatFeed from "@/components/intel/LiveThreatFeed"
@@ -25,7 +25,7 @@ export async function generateStaticParams() {
 export async function generateMetadata(props: { params: { lang: string } }): Promise<Metadata> {
   const params = props.params
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
-  return { alternates: { canonical: `/${locale}/intel` } }
+  return { alternates: buildLocalizedAlternates(locale, "/intel") }
 }
 
 export default async function LocaleIntelPage(props: { params: { lang: string } }) {

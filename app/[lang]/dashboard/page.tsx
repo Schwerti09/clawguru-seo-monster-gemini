@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 
-import { SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
+import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
 import DashboardRootPage from "@/app/dashboard/page"
 
 const TITLES: Record<string, string> = {
@@ -26,7 +26,7 @@ export async function generateMetadata(props: { params: { lang: string } }): Pro
   return {
     title: TITLES[locale] ?? TITLES.en,
     description: DESCRIPTIONS[locale] ?? DESCRIPTIONS.en,
-    alternates: { canonical: `/dashboard` },
+    alternates: buildLocalizedAlternates(locale, "/dashboard"),
   }
 }
 

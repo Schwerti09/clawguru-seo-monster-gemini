@@ -2,7 +2,7 @@
 // Strong hub for security topic runbooks
 
 import Container from "@/components/shared/Container"
-import { type Locale, SUPPORTED_LOCALES } from "@/lib/i18n"
+import { type Locale, SUPPORTED_LOCALES, buildLocalizedAlternates } from "@/lib/i18n"
 import Link from "next/link"
 
 export const revalidate = 60
@@ -24,7 +24,7 @@ export async function generateMetadata(props: { params: { lang: string } }) {
   return {
     title: `Security Runbooks – Firewall, SSH, Secrets, Zero Trust 2026 | ClawGuru`,
     description: `Alle ClawGuru Security-Runbooks: SSH Hardening, Firewall, CSP, Secrets Management, Zero Trust, Container Security. Aktuell für 2026.`,
-    alternates: { canonical: `/runbooks/security/page` }
+    alternates: buildLocalizedAlternates(locale, "/runbooks/security")
   }
 }
 

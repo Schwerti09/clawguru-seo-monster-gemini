@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 
-import { SUPPORTED_LOCALES, type Locale, localeAlternates } from "@/lib/i18n"
+import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
 
 export const revalidate = 3600
 
@@ -22,9 +22,7 @@ export async function generateMetadata(props: { params: { lang: string } }): Pro
   return {
     title,
     description,
-    alternates: {
-      ...localeAlternates(`/${locale}/methodik`),
-    },
+    alternates: buildLocalizedAlternates(locale, "/methodik"),
     openGraph: {
       title,
       description,

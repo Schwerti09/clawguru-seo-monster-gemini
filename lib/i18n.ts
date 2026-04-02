@@ -122,6 +122,18 @@ export function localeAlternates(pathname: string): {
   return { canonical, languages }
 }
 
+/** Absolute canonical for the active locale plus full hreflang map. `pathname` has no locale prefix (e.g. "/copilot"). */
+export function buildLocalizedAlternates(locale: Locale, pathname: string) {
+  const normalized = pathname.startsWith("/") ? pathname : `/${pathname}`
+  const alt = localeAlternates(normalized)
+  const localeHrefLang = getLocaleHrefLang(locale)
+  const canonical = alt.languages[localeHrefLang] ?? alt.canonical
+  return {
+    canonical,
+    languages: alt.languages,
+  }
+}
+
 // ---------------------------------------------------------------------------
 // Locale UI strings
 // ---------------------------------------------------------------------------

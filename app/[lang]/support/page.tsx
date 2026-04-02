@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
+import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
 import RootPage from "@/app/support/page"
 
 export const revalidate = 60
@@ -13,7 +13,7 @@ export async function generateMetadata(props: { params: { lang: string } }): Pro
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
 
   return {
-    alternates: { canonical: `/support/page` }
+    alternates: buildLocalizedAlternates(locale, "/support")
   }
 }
 

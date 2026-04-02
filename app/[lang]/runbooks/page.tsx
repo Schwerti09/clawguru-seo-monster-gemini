@@ -1,7 +1,7 @@
 // Locale runbooks listing pages: /en/runbooks, /es/runbooks, etc.
 // Renders the same runbooks listing so locale navigation doesn't 404.
 
-import { SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
+import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
 import RunbooksPageContent from "@/components/pages/RunbooksPageContent"
 import { getDictionary } from "@/lib/getDictionary"
 
@@ -22,7 +22,7 @@ export async function generateMetadata(props: { params: { lang: string } }) {
     title: "Runbooks | ClawGuru",
     description:
       "ClawGuru Runbooks: Security, Ops, Incident Response, Setup & Fix guides. Score → Runbook → Fix → Re-Check.",
-    alternates: { canonical: `/runbooks/page` }
+    alternates: buildLocalizedAlternates(locale, "/runbooks")
   }
 }
 

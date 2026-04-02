@@ -5,7 +5,7 @@ import type { Metadata } from "next"
 import NextDynamic from "next/dynamic"
 import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
-import { SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
+import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
 import { getDictionary } from "@/lib/getDictionary"
 import { notFound } from "next/navigation"
 
@@ -35,9 +35,9 @@ export async function generateMetadata(props: { params: { lang: string; tag: str
       list = (pseo.RUNBOOKS ?? [])
     }
     const items = Array.isArray(list) ? list.filter((r: any) => (r?.tags || []).includes(decodedTag)) : []
-    if (!items.length) return { alternates: { canonical: `/${locale}/tag/${encodeURIComponent(decodedTag)}` } }
+    if (!items.length) return { alternates: buildLocalizedAlternates(locale, `/tag/${encodeURIComponent(decodedTag)}`) }
   } catch {}
-  return { title: `${decodedTag} Runbooks | ClawGuru Tag-Hub`, alternates: { canonical: `/${locale}/tag/${encodeURIComponent(decodedTag)}` } }
+  return { title: `${decodedTag} Runbooks | ClawGuru Tag-Hub`, alternates: buildLocalizedAlternates(locale, `/tag/${encodeURIComponent(decodedTag)}`) }
 }
 
 export default async function LocaleTagPage(props: { params: { lang: string; tag: string } }) {

@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 
-import { SUPPORTED_LOCALES, type Locale, localeAlternates } from "@/lib/i18n"
+import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
 import RootPage from "@/app/check/page"
 
 export const revalidate = 60
@@ -24,9 +24,7 @@ export async function generateMetadata(props: { params: { lang: string } }): Pro
   return {
     title,
     description,
-    alternates: {
-      ...localeAlternates(`/${locale}/check`),
-    },
+    alternates: buildLocalizedAlternates(locale, "/check"),
     openGraph: {
       title,
       description,

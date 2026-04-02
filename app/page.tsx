@@ -5,8 +5,9 @@ import SectionTitle from "@/components/shared/SectionTitle"
 import LivePreview from "@/components/pages/LivePreview"
 import FAQ from "@/components/marketing/FAQ"
 import TransparencyWidget from "@/components/marketing/TransparencyWidget"
+import { getDictionary } from "@/lib/getDictionary"
 import type { Dictionary } from "@/lib/getDictionary"
-import type { Locale } from "@/lib/i18n"
+import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
 import HeroSection from "@/components/homepage/HeroSection"
 import HowItWorks from "@/components/homepage/HowItWorks"
 import TrustSection from "@/components/homepage/TrustSection"
@@ -19,14 +20,16 @@ import FinalCTASection from "@/components/homepage/FinalCTASection"
 import RoastMyStack from "@/components/roast/RoastMyStack"
 
 interface HomeProps {
-  dict: Dictionary
-  locale: Locale
+  dict?: Dictionary
+  locale?: Locale
 }
 
-export default function Home({ dict, locale }: HomeProps) {
-  const prefix = `/${locale}`
-  const hp = (dict as any)?.homepage ?? {}
-  const faq = (dict as any)?.faq ?? {
+export default async function Home({ dict, locale }: HomeProps = {}) {
+  const safeLocale = locale ?? DEFAULT_LOCALE
+  const safeDict = dict ?? (await getDictionary(safeLocale))
+  const prefix = `/${safeLocale}`
+  const hp = (safeDict as any)?.homepage ?? {}
+  const faq = (safeDict as any)?.faq ?? {
     kicker: "",
     title: "",
     subtitle: "",
@@ -96,7 +99,7 @@ export default function Home({ dict, locale }: HomeProps) {
 
       <section id="roast-my-stack" className="relative py-16 border-b border-white/5" style={{ background: "var(--surface-0)" }}>
         <Container>
-          <RoastMyStack locale={locale} prefix={prefix} dict={(dict as { roast?: Record<string, string> }).roast} />
+          <RoastMyStack locale={safeLocale} prefix={prefix} dict={(safeDict as { roast?: Record<string, string> } | undefined)?.roast} />
         </Container>
       </section>
 

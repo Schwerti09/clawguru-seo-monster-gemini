@@ -43,6 +43,24 @@ export async function GET(req: NextRequest) {
   const locale = (req.nextUrl.searchParams.get("locale") || "de").toLowerCase()
   const slug = req.nextUrl.searchParams.get("slug") || "aws-ssh-hardening-2026"
   const rankingLimit = toInt(req.nextUrl.searchParams.get("rankingLimit"), 24, 1, 120)
+  const autoPromoteMinQuality = toInt(
+    req.nextUrl.searchParams.get("autoPromoteMinQuality") || process.env.GEO_AUTO_PROMOTE_MIN_AVG_QUALITY || "84",
+    84,
+    1,
+    100
+  )
+  const autoPromoteMinVariants = toInt(
+    req.nextUrl.searchParams.get("autoPromoteMinVariants") || process.env.GEO_AUTO_PROMOTE_MIN_VARIANTS || "3",
+    3,
+    1,
+    100
+  )
+  const autoPromoteLookbackDays = toInt(
+    req.nextUrl.searchParams.get("autoPromoteLookbackDays") || process.env.GEO_AUTO_PROMOTE_LOOKBACK_DAYS || "7",
+    7,
+    1,
+    30
+  )
 
   const countRes = await dbQuery<{
     is_active: boolean
@@ -134,6 +152,29 @@ export async function GET(req: NextRequest) {
     }
   }
 
+  const autoPromotePreviewRes = await dbQuery<{
+    city_slug: string
+    avg_quality: string
+    variants: string
+  }>(
+    `SELECT
+       g.city_slug,
+       ROUND(AVG(g.quality_score))::text AS avg_quality,
+       COUNT(*)::text AS variants
+     FROM geo_variant_matrix g
+     JOIN geo_cities c ON c.slug = g.city_slug
+     WHERE g.locale = $1
+       AND g.updated_at >= NOW() - ($2::text || ' days')::interval
+       AND c.is_active = true
+       AND c.rollout_stage = 'canary'
+     GROUP BY g.city_slug
+     HAVING COUNT(*) >= $3
+       AND AVG(g.quality_score) >= $4
+     ORDER BY AVG(g.quality_score) DESC, COUNT(*) DESC
+     LIMIT 12`,
+    [locale, String(autoPromoteLookbackDays), autoPromoteMinVariants, autoPromoteMinQuality]
+  )
+
   const runtimeLimits = await getGeoSitemapRuntimeLimits()
   const defaultLimits = getDefaultGeoSitemapRuntimeLimits()
 
@@ -160,5 +201,16 @@ export async function GET(req: NextRequest) {
           durationMs: ranking.durationMs,
         }
       : null,
+    autoPromotionPreview: {
+      locale,
+      lookbackDays: autoPromoteLookbackDays,
+      minAvgQuality: autoPromoteMinQuality,
+      minVariants: autoPromoteMinVariants,
+      readyCities: autoPromotePreviewRes.rows.map((r) => ({
+        slug: r.city_slug,
+        avgQuality: Number(r.avg_quality || 0),
+        variants: Number(r.variants || 0),
+      })),
+    },
   })
 }

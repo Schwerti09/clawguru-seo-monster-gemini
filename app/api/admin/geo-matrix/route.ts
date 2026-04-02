@@ -45,7 +45,7 @@ export async function GET(req: Request) {
   params.push(limit)
   const where = filters.length ? `WHERE ${filters.join(" AND ")}` : ""
 
-  const [itemsRes, aggRes] = await Promise.all([
+  const [itemsRes, aggRes, trendRes, cityRes] = await Promise.all([
     dbQuery(
       `SELECT id, locale, base_slug, city_slug, variant_slug, city_name, region_name, country_code,
               local_title, local_summary, links_json, quality_score, model, updated_at, created_at
@@ -69,6 +69,37 @@ export async function GET(req: Request) {
        FROM geo_variant_matrix
        WHERE updated_at >= NOW() - INTERVAL '24 hours'`
     ),
+    dbQuery<{
+      day: string
+      variants: string
+      avg_quality: string
+    }>(
+      `SELECT
+         TO_CHAR(DATE_TRUNC('day', updated_at), 'YYYY-MM-DD') AS day,
+         COUNT(*)::text AS variants,
+         COALESCE(ROUND(AVG(quality_score))::text, '0') AS avg_quality
+       FROM geo_variant_matrix
+       WHERE updated_at >= NOW() - INTERVAL '7 days'
+       GROUP BY 1
+       ORDER BY 1 ASC`
+    ),
+    dbQuery<{
+      city_slug: string
+      city_name: string
+      variants_7d: string
+      avg_quality_7d: string
+    }>(
+      `SELECT
+         city_slug,
+         MIN(city_name) AS city_name,
+         COUNT(*)::text AS variants_7d,
+         COALESCE(ROUND(AVG(quality_score))::text, '0') AS avg_quality_7d
+       FROM geo_variant_matrix
+       WHERE updated_at >= NOW() - INTERVAL '7 days'
+       GROUP BY city_slug
+       ORDER BY COUNT(*) DESC, AVG(quality_score) DESC
+       LIMIT 20`
+    ),
   ])
 
   return NextResponse.json({
@@ -79,6 +110,8 @@ export async function GET(req: Request) {
       distinct_cities_24h: "0",
       distinct_bases_24h: "0",
     },
+    trend7d: trendRes.rows,
+    cityQuality7d: cityRes.rows,
   })
 }
 

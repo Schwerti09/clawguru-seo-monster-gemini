@@ -50,6 +50,17 @@ type GeoMatrixData = {
     distinct_cities_24h: string
     distinct_bases_24h: string
   }
+  trend7d: Array<{
+    day: string
+    variants: string
+    avg_quality: string
+  }>
+  cityQuality7d: Array<{
+    city_slug: string
+    city_name: string
+    variants_7d: string
+    avg_quality_7d: string
+  }>
 }
 
 type DashData = {
@@ -275,26 +286,21 @@ function GeoMatrixPanel({ geo }: { geo: GeoMatrixData | null }) {
     )
   }
 
-  const byCity = new Map<string, { city: string; count: number; qualitySum: number }>()
-  for (const row of geo.items) {
-    const key = row.city_slug || row.city_name
-    const prev = byCity.get(key)
-    if (prev) {
-      prev.count += 1
-      prev.qualitySum += Number(row.quality_score || 0)
-    } else {
-      byCity.set(key, {
-        city: row.city_name || row.city_slug,
-        count: 1,
-        qualitySum: Number(row.quality_score || 0),
-      })
-    }
-  }
-
-  const topCities = Array.from(byCity.values())
-    .map((x) => ({ ...x, avgQuality: Math.round(x.qualitySum / Math.max(1, x.count)) }))
-    .sort((a, b) => b.count - a.count)
-    .slice(0, 8)
+  const topCities = geo.cityQuality7d.slice(0, 10).map((c) => ({
+    city: c.city_name || c.city_slug,
+    count: Number(c.variants_7d || 0),
+    avgQuality: Number(c.avg_quality_7d || 0),
+  }))
+  const trendBars = geo.trend7d.map((d) => ({
+    label: d.day.slice(5),
+    value: Number(d.variants || 0),
+    color: "bg-cyan-500",
+  }))
+  const qualityBars = geo.trend7d.map((d) => ({
+    label: d.day.slice(5),
+    value: Number(d.avg_quality || 0),
+    color: "bg-violet-500",
+  }))
 
   return (
     <div className="rounded-2xl border border-gray-800 bg-black/30 p-5">
@@ -305,7 +311,18 @@ function GeoMatrixPanel({ geo }: { geo: GeoMatrixData | null }) {
         <StatCard label="Distinct Base Slugs (24h)" value={Number(geo.stats24h.distinct_bases_24h || 0).toLocaleString()} />
       </div>
 
-      <div className="text-xs text-gray-500 uppercase tracking-widest mb-3">Top Cities by Variant Volume</div>
+      <div className="grid lg:grid-cols-2 gap-4 mb-4">
+        <div className="rounded-xl border border-gray-800 bg-black/20 p-3">
+          <div className="text-xs text-gray-500 uppercase tracking-widest mb-2">7d Variant Volume</div>
+          <MiniBarChart data={trendBars.length ? trendBars : [{ label: "—", value: 0 }]} />
+        </div>
+        <div className="rounded-xl border border-gray-800 bg-black/20 p-3">
+          <div className="text-xs text-gray-500 uppercase tracking-widest mb-2">7d Avg Quality</div>
+          <MiniBarChart data={qualityBars.length ? qualityBars : [{ label: "—", value: 0 }]} />
+        </div>
+      </div>
+
+      <div className="text-xs text-gray-500 uppercase tracking-widest mb-3">Top Cities by Variant Volume (7d)</div>
       {topCities.length > 0 ? (
         <div className="space-y-2">
           {topCities.map((c) => (

@@ -2,7 +2,7 @@ import { ImageResponse } from "next/og"
 
 import { SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
 
-export const runtime = "edge"
+export const runtime = "nodejs"
 
 export const alt = "Roast My Stack — ClawGuru"
 export const size = { width: 1200, height: 630 }

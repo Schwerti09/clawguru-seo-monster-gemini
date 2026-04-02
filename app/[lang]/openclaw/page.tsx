@@ -3,6 +3,7 @@ import Link from "next/link"
 
 import Container from "@/components/shared/Container"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { getCoreSecurityLinks } from "@/lib/core-security-links"
 import { getOpenClawCopy } from "@/lib/landing-pages-i18n"
 
 export const revalidate = 60
@@ -26,6 +27,7 @@ export default function OpenClawPage(props: { params: { lang: string } }) {
   const locale = (SUPPORTED_LOCALES.includes(props.params.lang as Locale) ? props.params.lang : "de") as Locale
   const copy = getOpenClawCopy(locale)
   const prefix = `/${locale}`
+  const coreLinks = getCoreSecurityLinks(locale)
   const pageUrl = `${prefix}/openclaw`
   const webPageJsonLd = {
     "@context": "https://schema.org",
@@ -69,7 +71,7 @@ export default function OpenClawPage(props: { params: { lang: string } }) {
             <h1 className="text-3xl sm:text-4xl font-black text-white tracking-tight">{copy.h1}</h1>
             <p className="text-zinc-300 max-w-3xl">{copy.sub}</p>
             <div className="flex flex-wrap gap-3 pt-2">
-              <Link href={`${prefix}/check`} className="rounded-xl bg-cyan-500 px-5 py-3 text-sm font-bold text-black">
+              <Link href={coreLinks.check} className="rounded-xl bg-cyan-500 px-5 py-3 text-sm font-bold text-black">
                 {copy.ctaPrimary}
               </Link>
               <Link href={`${prefix}/runbooks/security`} className="rounded-xl border border-white/15 px-5 py-3 text-sm font-semibold text-white">
@@ -98,7 +100,7 @@ export default function OpenClawPage(props: { params: { lang: string } }) {
           </section>
 
           <nav className="text-sm text-zinc-400 flex flex-wrap gap-4">
-            <Link href={`${prefix}/methodik`} className="hover:text-cyan-300">
+            <Link href={coreLinks.methodology} className="hover:text-cyan-300">
               {copy.methodologyLabel}
             </Link>
             <Link href={`${prefix}/runbooks/cloud`} className="hover:text-cyan-300">

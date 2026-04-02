@@ -35,6 +35,9 @@
 - Redirects aktiv: `/moltbot` und `/clawbot` (inkl. lokalisierter Varianten) per Middleware auf die neuen Zielseiten.
 - Homepage-CRO-i18n: neue CTA-/LP-Hub-Texte per zentralem Fallback (`lib/homepage-cro-i18n.ts`) für alle 15 Locales verdrahtet (`HeroSection`, `FinalCTASection`, `app/page.tsx`).
 - Homepage-CRO (Flow): Problem-Sektion auf 3-Schritt-Story (Exposition → Signal → Fix) umgestellt; Hero/Trust mit klaren „kein Pentest“-Hinweisen ergänzt; mobile sticky CTA-Leiste (`/check`, `/runbooks`) eingebaut.
+- Homepage-CRO (Locale-Qualität): neue Hero-Notiz, Trust-Disclaimer und mobile Sticky-CTA-Labels in den zentralen Locale-Fallback (`lib/homepage-cro-i18n.ts`) überführt; `TrustSection` auf locale-aware Copy umgestellt.
+- P2-Operationalisierung gestartet: ausführbarer Content-Kalender in `docs/seo-content-calendar-2026.md` mit 8-Wochen-Queue, LP-Link-Regeln und KPI-Tracking angelegt.
+- P2 Off-Page operationalisiert: `docs/offpage-playbook-2026.md` mit kanal-spezifischen Templates (Reddit/X/GitHub/Discord), Cadence, Tracking-Regeln und Auto-Reject-Guardrails angelegt.
 
 **Bewusst offen / nächste Engineering-Schritte (SEO-Plan):**
 

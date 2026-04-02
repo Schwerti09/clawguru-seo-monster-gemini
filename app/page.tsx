@@ -163,7 +163,7 @@ export default async function Home({ dict, locale }: HomeProps = {}) {
 
       <section className="py-14" style={{ background: "var(--surface-0)" }}>
         <Container>
-          <TrustSection prefix={prefix} dict={hp} />
+          <TrustSection locale={safeLocale} prefix={prefix} dict={hp} />
         </Container>
       </section>
 
@@ -211,13 +211,13 @@ export default async function Home({ dict, locale }: HomeProps = {}) {
             href={`${prefix}/check`}
             className="flex-1 rounded-xl bg-cyan-500 px-4 py-2.5 text-center text-sm font-bold text-black"
           >
-            {hp.sticky_check_cta || "Check starten"}
+            {hp.sticky_check_cta || cro.stickyCheckCta}
           </a>
           <a
             href={`${prefix}/runbooks`}
             className="flex-1 rounded-xl border border-white/20 px-4 py-2.5 text-center text-sm font-semibold text-white"
           >
-            {hp.sticky_runbooks_cta || "Runbooks"}
+            {hp.sticky_runbooks_cta || cro.stickyRunbooksCta}
           </a>
         </div>
       </div>

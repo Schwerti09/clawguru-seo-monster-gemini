@@ -1,10 +1,13 @@
 "use client"
 
 import { motion } from "framer-motion"
+import type { Locale } from "@/lib/i18n"
+import { getHomepageCroCopy } from "@/lib/homepage-cro-i18n"
 
-type Props = { prefix?: string; dict?: Record<string, string> }
+type Props = { locale: Locale; prefix?: string; dict?: Record<string, string> }
 
-export default function TrustSection({ prefix = "", dict = {} }: Props) {
+export default function TrustSection({ locale, prefix = "", dict = {} }: Props) {
+  const cro = getHomepageCroCopy(locale)
   const points = [
     {
       title: dict.trust_p1_title || "Open & verifiable",
@@ -75,7 +78,7 @@ export default function TrustSection({ prefix = "", dict = {} }: Props) {
           {dict.trust_honesty || "Honesty over glamour: no fake logos, no fabricated references."}
         </div>
         <div className="mb-6 text-center text-xs text-gray-500">
-          {dict.trust_disclaimer || "ClawGuru is not a penetration test. Treat results as a fast signal, then verify in your own environment."}
+          {dict.trust_disclaimer || cro.trustDisclaimer}
         </div>
 
         <div className="rounded-2xl border border-white/10 bg-white/5 p-6">

@@ -4,10 +4,14 @@ type HomepageCroCopy = {
   heroPrimary: string
   heroSecondary: string
   heroTertiary: string
+  heroNote: string
   finalTitle: string
   finalSub: string
   finalPrimary: string
   finalSecondary: string
+  trustDisclaimer: string
+  stickyCheckCta: string
+  stickyRunbooksCta: string
   lpHubTitle: string
   lpHubSub: string
   lpOpenclawTitle: string
@@ -24,10 +28,14 @@ const EN: HomepageCroCopy = {
   heroPrimary: "Start security check",
   heroSecondary: "Browse runbooks",
   heroTertiary: "Roast my stack",
+  heroNote: "Free check, no signup. Heuristic signal - verify in your own environment.",
   finalTitle: "Ready for real security operations?",
   finalSub: "Start now - risk-free. Productive in 5 minutes.",
   finalPrimary: "Start security check",
   finalSecondary: "Open OpenClaw landing page",
+  trustDisclaimer: "ClawGuru is not a penetration test. Treat results as a fast signal, then verify in your own environment.",
+  stickyCheckCta: "Start check",
+  stickyRunbooksCta: "Runbooks",
   lpHubTitle: "OpenClaw and AI-agent security landing pages",
   lpHubSub: "Go directly to intent-specific pages for checks, hardening, and guided fix paths.",
   lpOpenclawTitle: "OpenClaw",
@@ -45,10 +53,14 @@ const COPY: Partial<Record<Locale, Partial<HomepageCroCopy>>> = {
     heroPrimary: "Security Check starten",
     heroSecondary: "Runbooks durchsuchen",
     heroTertiary: "Roast my stack",
+    heroNote: "Kostenloser Check ohne Signup. Heuristisches Signal - bitte in der eigenen Umgebung verifizieren.",
     finalTitle: "Bereit für echte Security Operations?",
     finalSub: "Jetzt starten - risikofrei. In 5 Minuten produktiv.",
     finalPrimary: "Security Check starten",
     finalSecondary: "OpenClaw Landingpage öffnen",
+    trustDisclaimer: "ClawGuru ist kein Penetrationstest. Ergebnisse als schnelles Signal nutzen und im eigenen Umfeld verifizieren.",
+    stickyCheckCta: "Check starten",
+    stickyRunbooksCta: "Runbooks",
     lpHubTitle: "Landingpages für OpenClaw und AI-Agent-Security",
     lpHubSub: "Direkt zu intent-starken Seiten für Checks, Hardening und geführte Fix-Pfade.",
     lpOpenclawTitle: "OpenClaw",
@@ -64,6 +76,7 @@ const COPY: Partial<Record<Locale, Partial<HomepageCroCopy>>> = {
     heroPrimary: "Iniciar security check",
     heroSecondary: "Ver runbooks",
     heroTertiary: "Roast my stack",
+    heroNote: "Check gratis sin registro. Señal heurística: verifica en tu propio entorno.",
     finalTitle: "¿Listo para operaciones de seguridad reales?",
     finalSub: "Empieza ahora - sin riesgo. Productivo en 5 minutos.",
     finalPrimary: "Iniciar security check",
@@ -75,6 +88,7 @@ const COPY: Partial<Record<Locale, Partial<HomepageCroCopy>>> = {
     heroPrimary: "Démarrer security check",
     heroSecondary: "Voir runbooks",
     heroTertiary: "Roast my stack",
+    heroNote: "Check gratuit sans inscription. Signal heuristique: vérifiez dans votre environnement.",
     finalTitle: "Prêt pour des opérations sécurité réelles ?",
     finalSub: "Démarrez maintenant - sans risque. Productif en 5 minutes.",
     finalPrimary: "Démarrer security check",
@@ -86,6 +100,7 @@ const COPY: Partial<Record<Locale, Partial<HomepageCroCopy>>> = {
     heroPrimary: "Iniciar security check",
     heroSecondary: "Explorar runbooks",
     heroTertiary: "Roast my stack",
+    heroNote: "Check grátis sem cadastro. Sinal heurístico: valide no seu ambiente.",
     finalTitle: "Pronto para operações de segurança reais?",
     finalSub: "Comece agora - sem risco. Produtivo em 5 minutos.",
     finalPrimary: "Iniciar security check",
@@ -97,6 +112,7 @@ const COPY: Partial<Record<Locale, Partial<HomepageCroCopy>>> = {
     heroPrimary: "Avvia security check",
     heroSecondary: "Sfoglia runbook",
     heroTertiary: "Roast my stack",
+    heroNote: "Check gratuito senza registrazione. Segnale euristico: verifica nel tuo ambiente.",
     finalTitle: "Pronto per security operations reali?",
     finalSub: "Inizia ora - senza rischio. Produttivo in 5 minuti.",
     finalPrimary: "Avvia security check",
@@ -108,6 +124,7 @@ const COPY: Partial<Record<Locale, Partial<HomepageCroCopy>>> = {
     heroPrimary: "Запустить security check",
     heroSecondary: "Открыть runbooks",
     heroTertiary: "Roast my stack",
+    heroNote: "Бесплатный check без регистрации. Эвристический сигнал: проверяйте в своей среде.",
     finalTitle: "Готовы к реальным security operations?",
     finalSub: "Начните сейчас - без риска. Продуктивно за 5 минут.",
     finalPrimary: "Запустить security check",
@@ -119,6 +136,7 @@ const COPY: Partial<Record<Locale, Partial<HomepageCroCopy>>> = {
     heroPrimary: "开始安全检查",
     heroSecondary: "浏览 Runbooks",
     heroTertiary: "Roast 我的栈",
+    heroNote: "免费检查，无需注册。启发式信号，请在你的环境中自行验证。",
     finalTitle: "准备好进行真正的安全运营了吗？",
     finalSub: "现在开始 - 零风险。5 分钟进入可执行状态。",
     finalPrimary: "开始安全检查",
@@ -130,6 +148,7 @@ const COPY: Partial<Record<Locale, Partial<HomepageCroCopy>>> = {
     heroPrimary: "security check を開始",
     heroSecondary: "runbooks を見る",
     heroTertiary: "Roast my stack",
+    heroNote: "無料チェック、登録不要。ヒューリスティック信号のため自環境で検証してください。",
     finalTitle: "実運用の security operations を始めますか？",
     finalSub: "今すぐ開始 - リスクなし。5分で実行可能。",
     finalPrimary: "security check を開始",
@@ -141,6 +160,7 @@ const COPY: Partial<Record<Locale, Partial<HomepageCroCopy>>> = {
     heroPrimary: "بدء security check",
     heroSecondary: "تصفح runbooks",
     heroTertiary: "Roast my stack",
+    heroNote: "فحص مجاني بدون تسجيل. إشارة استدلالية - تحقّق داخل بيئتك.",
     finalTitle: "جاهز لعمليات أمن حقيقية؟",
     finalSub: "ابدأ الآن - بلا مخاطرة. إنتاجي خلال 5 دقائق.",
     finalPrimary: "بدء security check",
@@ -152,6 +172,7 @@ const COPY: Partial<Record<Locale, Partial<HomepageCroCopy>>> = {
     heroPrimary: "Start security check",
     heroSecondary: "Bekijk runbooks",
     heroTertiary: "Roast my stack",
+    heroNote: "Gratis check zonder aanmelding. Heuristisch signaal: verifieer in je eigen omgeving.",
     finalTitle: "Klaar voor echte security operations?",
     finalSub: "Start nu - zonder risico. In 5 minuten productief.",
     finalPrimary: "Start security check",
@@ -163,6 +184,7 @@ const COPY: Partial<Record<Locale, Partial<HomepageCroCopy>>> = {
     heroPrimary: "security check शुरू करें",
     heroSecondary: "runbooks देखें",
     heroTertiary: "Roast my stack",
+    heroNote: "मुफ्त check, बिना साइनअप। यह heuristic signal है - अपने वातावरण में सत्यापित करें।",
     finalTitle: "क्या आप वास्तविक security operations के लिए तैयार हैं?",
     finalSub: "अभी शुरू करें - बिना जोखिम। 5 मिनट में प्रोडक्टिव।",
     finalPrimary: "security check शुरू करें",
@@ -174,6 +196,7 @@ const COPY: Partial<Record<Locale, Partial<HomepageCroCopy>>> = {
     heroPrimary: "security check başlat",
     heroSecondary: "runbooks görüntüle",
     heroTertiary: "Roast my stack",
+    heroNote: "Ücretsiz check, kayıt yok. Sezgisel sinyal - kendi ortamında doğrula.",
     finalTitle: "Gerçek security operations için hazır mısın?",
     finalSub: "Hemen başla - risksiz. 5 dakikada üretken.",
     finalPrimary: "security check başlat",
@@ -185,6 +208,7 @@ const COPY: Partial<Record<Locale, Partial<HomepageCroCopy>>> = {
     heroPrimary: "Uruchom security check",
     heroSecondary: "Przeglądaj runbooks",
     heroTertiary: "Roast my stack",
+    heroNote: "Darmowy check bez rejestracji. Sygnał heurystyczny - zweryfikuj we własnym środowisku.",
     finalTitle: "Gotowy na prawdziwe security operations?",
     finalSub: "Zacznij teraz - bez ryzyka. Produktywnie w 5 minut.",
     finalPrimary: "Uruchom security check",
@@ -196,6 +220,7 @@ const COPY: Partial<Record<Locale, Partial<HomepageCroCopy>>> = {
     heroPrimary: "security check 시작",
     heroSecondary: "runbooks 보기",
     heroTertiary: "Roast my stack",
+    heroNote: "무료 check, 가입 불필요. 휴리스틱 신호이므로 자체 환경에서 검증하세요.",
     finalTitle: "실전 security operations를 시작할 준비가 되었나요?",
     finalSub: "지금 시작하세요 - 무위험. 5분 안에 실행 가능.",
     finalPrimary: "security check 시작",

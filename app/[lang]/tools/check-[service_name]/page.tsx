@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 
-import { SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
+import { localeAlternates, SUPPORTED_LOCALES } from "@/lib/i18n"
 import RootPage from "@/app/tools/check-[service_name]/page"
 
 export const dynamic = "force-dynamic"
@@ -13,10 +13,13 @@ export async function generateMetadata(
   props: { params: { lang: string; service_name: string } }
 ): Promise<Metadata> {
   const params = props.params
-  const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
+  const alternates = localeAlternates(`/tools/check-${encodeURIComponent(params.service_name)}`)
 
   return {
-    alternates: { canonical: `/tools/check-:service_name/page` }
+    alternates: {
+      canonical: alternates.canonical,
+      languages: alternates.languages,
+    },
   }
 }
 

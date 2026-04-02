@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 
-import { SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
+import { localeAlternates, SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
 import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
 import { notFound } from "next/navigation"
@@ -22,14 +22,17 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const params = props.params
   const { allIssues100k } = await import("@/lib/pseo")
-  const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const issue = allIssues100k().find((i) => i.slug === params.slug)
   if (!issue) return {}
+  const alternates = localeAlternates(`/issue/${encodeURIComponent(params.slug)}`)
 
   return {
     title: `${issue.name} Runbooks | ClawGuru Issue Hub`,
     description: `${issue.name} Runbooks mit Fixes, Hardening und Incident Response für alle Provider und Services.`,
-    alternates: { canonical: `/issue/:slug/page` }
+    alternates: {
+      canonical: alternates.canonical,
+      languages: alternates.languages,
+    },
   }
 }
 

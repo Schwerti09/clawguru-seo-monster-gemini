@@ -2,7 +2,7 @@
 // Delegates to the base provider page so all locales resolve without 404.
 
 // Korrekte relative Imports für app/[lang]/provider/[slug]/page.tsx
-import { SUPPORTED_LOCALES, type Locale } from "../../../../lib/i18n"
+import { localeAlternates, SUPPORTED_LOCALES, type Locale } from "../../../../lib/i18n"
 import ProviderPage from "../../../../app/provider/[slug]/page"
 
 export const revalidate = 60
@@ -23,10 +23,14 @@ export async function generateMetadata(props: {
   const locale = (SUPPORTED_LOCALES.includes(lang as Locale) ? lang : "de") as Locale
   const p = allProviders().find((x) => x.slug === slug.toLowerCase())
   if (!p) return {}
+  const alternates = localeAlternates(`/provider/${encodeURIComponent(slug)}`)
 
   return {
     title: `${p.name} Runbooks | ClawGuru`,
-    alternates: { canonical: `/provider/:slug/page` }
+    alternates: {
+      canonical: alternates.canonical,
+      languages: alternates.languages,
+    },
   }
 }
 

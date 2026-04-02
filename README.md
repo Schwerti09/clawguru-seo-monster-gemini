@@ -1,122 +1,152 @@
-# 🐾 ClawGuru • Mycelial Singularity Engine v4.0
+# ClawGuru - Mycelial Singularity Engine v4.0
 
-**The Operational Security Platform.**  
-**AI-powered. Executable. Verifiable.**
+AI-native security operations platform with executable runbooks, localization-first SEO architecture, and a geo-adaptive content matrix.
 
 [![Live Demo](https://img.shields.io/badge/Live_Demo-clawguru.org-FF0033?style=for-the-badge&logo=next.js)](https://clawguru.org)
-[![Stars](https://img.shields.io/github/stars/Schwerti09/clawguru-seo-monster-gemini?style=for-the-badge)](https://github.com/Schwerti09/clawguru-seo-monster-gemini)
-[![Next.js](https://img.shields.io/badge/Next.js-14/15-000000?style=for-the-badge&logo=next.js)](https://nextjs.org)
-[![Neon](https://img.shields.io/badge/Neon-Postgres-00D4FF?style=for-the-badge&logo=neon)](https://neon.tech)
+[![Next.js](https://img.shields.io/badge/Next.js-14-000000?style=for-the-badge&logo=next.js)](https://nextjs.org)
+[![Database](https://img.shields.io/badge/Postgres-Neon-00D4FF?style=for-the-badge)](https://neon.tech)
 
 ---
 
-### Das krasseste Security-Cockpit der Welt.
+## What is in this repo
 
-ClawGuru ist **kein** weiteres AI-Tool.  
-Es ist ein **lebendiges, intelligentes Security-Universum** – mit 4,2 Millionen täglich validierten Runbooks, einem interaktiven Mycelium-Graphen und einem Command-Cockpit, das sich anfühlt wie Porsche × Ferrari × NASA × Elon Musk Neural Interface.
+ClawGuru combines:
 
-Du gibst ein Problem ein → **Summon** findet die Lösung.  
-**Oracle** warnt dich vor Threats, bevor sie explodieren.  
-**Neuro** baut dir deinen persönlichen Security-Plan.  
-**Mycelium** zeigt dir das gesamte Wissen als lebendiges Netz.
-
-Und das alles in einem Dashboard, bei dem du beim ersten Öffnen nur noch „Holy shit…“ denkst.
+- an executable runbook system for cloud/security incidents,
+- AI-assisted tools and assistants (`/check`, `/copilot`, `/oracle`, `/summon`, `/neuro`),
+- multi-locale pages and metadata for international discovery,
+- programmatic SEO infrastructure with quality guardrails,
+- a Geo-Living Matrix pipeline for city-aware runbook variants.
 
 ---
 
-## ✨ Features
+## Core capabilities
 
-- **4,2 Millionen executable Runbooks** – täglich mit Gemini 2.5 Pro frisch generiert & validiert
-- **Command Cockpit Dashboard** – das absolute Herzstück (Porsche-Style HUD, Mycelium 3D-Graph, Live Threat Gauge)
-- **Mycelium Shadow Realm** – geniale Paywall: Alles sieht immer premium aus, gesperrte Features sind verlockend „im Schatten“ mit echten Live-Teasern
-- **5 Live Tools**
-  - **Summon** → Incident → Fix in Sekunden
-  - **Oracle** → Predictive Threat Radar
-  - **Neuro** → Personal Intelligence (Tech-Stack-basiert)
-  - **Mycelium** → Der lebende Wissens-Graph
-  - **LIVE Security Check** → Heuristischer Scan (IP/Domain)
-- **4 echte Tiers** (Explorer → Day Pass → Pro → Enterprise)
-- **Full Control** – User hat im Dashboard echte Ausführung von Runbooks, Executions, Scheduling
-- **Neon Postgres + Drizzle** – ultraschnell, edge-ready, zero Supabase-Drama
-- **Stripe Payments** – Day Pass (€9/24h) + Pro (€49/Monat) mit Webhooks & Server Actions
-- **E-E-A-T auf Steroiden** – transparente AI-Generierung, öffentlicher Code, Zero Breaches
-- **10 Sprachen** – inkl. Deutsch
+### Product
 
----
+- Command-center style dashboard and admin analytics surfaces.
+- Viral feature: `Roast My Stack` with share-focused output and OG support.
+- Persistent funnel analytics for `/check` events in Postgres.
 
-## 🎮 Das Command Cockpit (User Dashboard)
+### SEO and content system
 
-Das **Herzstück** von ClawGuru.  
-Öffne [https://clawguru.org/de/dashboard](https://clawguru.org/de/dashboard) und spüre die Power.
+- 15 supported locales (`de`, `en`, `es`, `fr`, `pt`, `it`, `ru`, `zh`, `ja`, `ar`, `nl`, `hi`, `tr`, `pl`, `ko`).
+- Locale-aware canonical/hreflang alternates through shared i18n utilities.
+- Modular sitemap architecture with geo expansion controls.
+- Canonical regression guard: `npm run check:seo-canonicals`.
 
-- **Overview** → ClawScore-Ring, Live Threats, Security Horizon Forecast
-- **Mycelium** → Interaktiver 3D-Force-Graph (pulsierend, zoombar, klickbar)
-- **Tools Command Center** → One-Click Execute für alle Tools
-- **Executions** → Timeline aller Runbooks mit Status & Duration
-- **Billing** → Tier-Vergleich + Upgrade
+### Geo-Living Matrix
 
-**Admin Dashboard** unter `/admin` – nur für Enterprise (Global Metrics, Revenue Live-Feed, God Mode).
+- Geo profile detection in middleware (edge headers + accept-language fallback).
+- Geo variant slug handling (`/de/runbook/<base>-<city>`).
+- AI-generated localized runbook overlays (provider/compliance/local intent aware).
+- Persistence to `geo_variant_matrix` for quality tracking and ops automation.
+- Canary-to-stable rollout controls, guarded live automation, and revalidation hooks.
 
 ---
 
-## 🛠 Tech Stack
+## Stack
 
-| Layer              | Technologie                          |
-|--------------------|--------------------------------------|
-| Framework          | Next.js 15 (App Router)             |
-| Database           | Neon Postgres + Drizzle ORM         |
-| Auth               | Auth.js v5 + Neon Adapter           |
-| Payments           | Stripe Server Actions + Webhooks    |
-| AI                 | Gemini 2.5 Pro (Runbook & Content)  |
-| UI                 | Tailwind + shadcn/ui + Framer Motion + @react-three/fiber |
-| Real-time          | Server Actions + Optimistic UI      |
-| Deployment         | Vercel / Netlify (Edge)             |
+- **Framework:** Next.js App Router
+- **Language:** TypeScript
+- **AI:** Gemini (provider orchestration in `lib/ai/providers.ts`)
+- **Database:** PostgreSQL (`pg`) + SQL migration runner in `scripts/db/migrate.js`
+- **Cache:** Next cache + optional Redis/Upstash for geo city data
+- **UI:** React, Tailwind, Framer Motion, Three.js/R3F
+- **Payments:** Stripe
+- **E2E tests:** Playwright
 
 ---
 
-## 🚀 Quick Start (lokal)
+## Quick start
+
+### 1) Install
 
 ```bash
 git clone https://github.com/Schwerti09/clawguru-seo-monster-gemini.git
 cd clawguru-seo-monster-gemini
-
-# Abhängigkeiten
 npm install
+```
 
-# .env Datei anlegen (siehe .env.example)
+### 2) Configure env
+
+```bash
 cp .env.example .env.local
+```
 
-# Datenbank migrieren
-npx drizzle-kit migrate
+Set at least:
 
-# Dev Server
+- `DATABASE_URL`
+- AI provider key(s) used by your environment
+- optional cache/ops secrets as needed
+
+### 3) Migrate database
+
+```bash
+npm run db:migrate
+```
+
+### 4) Run locally
+
+```bash
 npm run dev
-Öffne http://localhost:3000/de/dashboard – fertig.
+```
 
-📸 Screenshots
-(Hier kommen die geilen Screenshots – am besten 4–5 GIFs/Video-Previews hochladen)
-<img src="https://via.placeholder.com/800x500/FF0033/ffffff?text=Command+Cockpit+Overview" alt="Command Cockpit Overview">
-<img src="https://via.placeholder.com/800x500/00FF9F/000000?text=Mycelium+Live+Graph" alt="Mycelium Graph">
-<img src="https://via.placeholder.com/800x500/000000/FF0033?text=Shadow+Realm+IGNITE" alt="Shadow Realm Paywall">
+App starts on [http://localhost:3000](http://localhost:3000).
 
-🗺 Roadmap 2026
+---
 
- Voice Control im Cockpit
- AR-Preview für Runbook-Execution
- API für Enterprise (Self-Host)
- Holographic Mycelium Mode
- SOC 2 Type II Zertifizierung (Q3 2026)
+## Important scripts
 
+### Quality and SEO checks
 
-🤝 Contributing
-Jeder Pull-Request ist willkommen!
-Besonders willkommen: neue Runbook-Templates, UI-Verbesserungen am Cockpit und Performance-Optimierungen.
-Siehe CONTRIBUTING.md
+- `npm run check:i18n`
+- `npm run check:seo-canonicals`
+- `npm run check:sitemap-redirects`
+- `npm run check:prod-smoke`
 
-📜 License
-MIT © 2026 Schwerti09 & ClawGuru Team
+### Geo operations
 
-Made with 🔥 in Germany
-Das Security-Universum, das du immer wolltest.
-clawguru.org • Discord • Twitter/X
-text
+- `npm run check:geo-ops-readiness`
+- `npm run geo:sitemap-guardrail:dry-run`
+- `npm run geo:canary-rollout:dry-run`
+- `npm run geo:auto-promotion:dry-run`
+- `npm run geo:ops-cycle:dry-run`
+- `npm run geo:ops-live-guard`
+
+Detailed runbook: `docs/geo-ops-runbook.md`.
+
+---
+
+## Deployment notes
+
+- Netlify and CI pipelines are active.
+- Vercel workflow now safely skips deploy when `VERCEL_TOKEN` is not configured.
+- If you want Vercel production deploys, add `VERCEL_TOKEN` in GitHub secrets.
+
+---
+
+## Project structure (high-level)
+
+- `app/` - routes, metadata, API handlers
+- `components/` - UI and feature components
+- `lib/` - domain logic (AI, i18n, geo, SEO, analytics)
+- `scripts/` - checks, ops triggers, migrations
+- `docs/` - operational runbooks and project docs
+
+---
+
+## Contributing
+
+PRs are welcome. Focus areas:
+
+- runbook quality and factual accuracy,
+- SEO/index quality and metadata integrity,
+- geo rollout safety and observability,
+- performance and UX improvements.
+
+---
+
+## License
+
+MIT - 2026 ClawGuru contributors

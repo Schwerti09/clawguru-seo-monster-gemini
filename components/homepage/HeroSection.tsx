@@ -53,6 +53,9 @@ export default function HeroSection({ locale, prefix = "", dict = {} }: Props) {
               {t.tertiary}
             </a>
           </div>
+          <p className="mt-4 text-xs text-gray-500">
+            {dict.hero_note || "Free check, no signup. Heuristic signal - verify in your own environment."}
+          </p>
         </div>
       </Container>
     </section>

@@ -204,6 +204,23 @@ export default async function Home({ dict, locale }: HomeProps = {}) {
       </section>
 
       <FinalCTASection locale={safeLocale} prefix={prefix} dict={hp} />
+
+      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-black/80 px-3 py-3 backdrop-blur md:hidden">
+        <div className="mx-auto flex max-w-xl items-center gap-2">
+          <a
+            href={`${prefix}/check`}
+            className="flex-1 rounded-xl bg-cyan-500 px-4 py-2.5 text-center text-sm font-bold text-black"
+          >
+            {hp.sticky_check_cta || "Check starten"}
+          </a>
+          <a
+            href={`${prefix}/runbooks`}
+            className="flex-1 rounded-xl border border-white/20 px-4 py-2.5 text-center text-sm font-semibold text-white"
+          >
+            {hp.sticky_runbooks_cta || "Runbooks"}
+          </a>
+        </div>
+      </div>
     </>
   )
 }

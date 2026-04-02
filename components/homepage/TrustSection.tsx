@@ -74,6 +74,9 @@ export default function TrustSection({ prefix = "", dict = {} }: Props) {
         <div className="mb-4 text-center text-sm text-gray-400">
           {dict.trust_honesty || "Honesty over glamour: no fake logos, no fabricated references."}
         </div>
+        <div className="mb-6 text-center text-xs text-gray-500">
+          {dict.trust_disclaimer || "ClawGuru is not a penetration test. Treat results as a fast signal, then verify in your own environment."}
+        </div>
 
         <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">

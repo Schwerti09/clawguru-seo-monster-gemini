@@ -34,6 +34,7 @@
 - P1 LP-Routen: `/[lang]/openclaw`, `/[lang]/openclaw-security-check`, `/[lang]/moltbot-hardening`, `/[lang]/ai-agent-security` live mit `buildLocalizedAlternates`, Metadata, Basis-Schema und internen Links.
 - Redirects aktiv: `/moltbot` und `/clawbot` (inkl. lokalisierter Varianten) per Middleware auf die neuen Zielseiten.
 - Homepage-CRO-i18n: neue CTA-/LP-Hub-Texte per zentralem Fallback (`lib/homepage-cro-i18n.ts`) für alle 15 Locales verdrahtet (`HeroSection`, `FinalCTASection`, `app/page.tsx`).
+- Homepage-CRO (Flow): Problem-Sektion auf 3-Schritt-Story (Exposition → Signal → Fix) umgestellt; Hero/Trust mit klaren „kein Pentest“-Hinweisen ergänzt; mobile sticky CTA-Leiste (`/check`, `/runbooks`) eingebaut.
 
 **Bewusst offen / nächste Engineering-Schritte (SEO-Plan):**
 

@@ -13,6 +13,7 @@
     "check:geo-index-health": "node scripts/check-geo-index-health.js",
     "check:geo-city-ranking": "node scripts/check-geo-city-ranking.js",
     "check:geo-rollout-status": "node scripts/check-geo-rollout-status.js",
+    "check:geo-ops-readiness": "node scripts/check-geo-ops-readiness.js",
     "geo:auto-prune:dry-run": "node scripts/trigger-geo-auto-prune.js --mode=dry-run",
     "geo:auto-prune:live": "node scripts/trigger-geo-auto-prune.js --mode=live",
     "geo:top-city-expansion:dry-run": "node scripts/trigger-geo-top-city-expansion.js --mode=dry-run",

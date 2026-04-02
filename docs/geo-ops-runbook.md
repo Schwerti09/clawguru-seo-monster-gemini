@@ -14,6 +14,10 @@ Operational schedule for the Geo Living Matrix rollout loop.
 
 ## Step-by-step execution
 
+0) Readiness check (before any cron/live run)
+
+- `npm run check:geo-ops-readiness`
+
 1) Guardrail (protect index quality)
 
 - Dry-run: `npm run geo:sitemap-guardrail:dry-run`

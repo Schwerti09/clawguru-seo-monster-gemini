@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { SUPPORTED_LOCALES, type Locale, localeAlternates } from "@/lib/i18n";
 import { BASE_URL } from "@/lib/config";
+import { getCoreSecurityLinks } from "@/lib/core-security-links";
 
 export const dynamic = "force-static";
 export const revalidate = 86400;
@@ -58,6 +59,7 @@ export default function AWSVPCFlowLogsPage({
     ? params.lang
     : "de") as Locale;
   const prefix = `/${locale}`;
+  const coreLinks = getCoreSecurityLinks(locale);
 
   const isGerman = locale === "de";
 
@@ -259,7 +261,7 @@ ORDER BY numbytes DESC;`}
           <section className="bg-gradient-to-r from-orange-500 to-amber-600 rounded-2xl p-8 text-center text-white">
             <h2 className="text-2xl font-bold mb-4">VPC Flow Logs Analysis</h2>
             <p className="mb-6">Automatisieren Sie Ihre Netzwerk-Security Analyse.</p>
-            <a href={`${prefix}/check`} className="inline-block px-6 py-3 bg-white text-orange-600 rounded-lg font-semibold">
+            <a href={coreLinks.check} className="inline-block px-6 py-3 bg-white text-orange-600 rounded-lg font-semibold">
               Flow Logs Assessment
             </a>
           </section>

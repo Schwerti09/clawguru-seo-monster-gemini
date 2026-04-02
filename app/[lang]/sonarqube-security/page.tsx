@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { SUPPORTED_LOCALES, type Locale, localeAlternates } from "@/lib/i18n";
 import { BASE_URL } from "@/lib/config";
+import { getCoreSecurityLinks } from "@/lib/core-security-links";
 
 export const dynamic = "force-static";
 export const revalidate = 86400;
@@ -56,6 +57,7 @@ export default async function SonarQubeSecurityPage({
 }) {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale;
   const prefix = `/${locale}`;
+  const coreLinks = getCoreSecurityLinks(locale);
   return (
     <main className="min-h-screen bg-white">
       <section className="relative overflow-hidden bg-gradient-to-br from-sky-500 via-blue-600 to-indigo-700 py-20">
@@ -508,7 +510,7 @@ steps:
 
           <section className="bg-gradient-to-r from-sky-500 to-blue-600 rounded-2xl p-8 text-center text-white">
             <h2 className="text-2xl font-bold mb-4">SonarQube Security Assessment</h2>
-            <a href={`${prefix}/check`} className="inline-block px-6 py-3 bg-white text-sky-600 rounded-lg font-semibold">Assessment Starten</a>
+            <a href={coreLinks.check} className="inline-block px-6 py-3 bg-white text-sky-600 rounded-lg font-semibold">Assessment Starten</a>
           </section>
         </div>
       </div>

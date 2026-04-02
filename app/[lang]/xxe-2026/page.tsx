@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { SUPPORTED_LOCALES, type Locale, localeAlternates } from "@/lib/i18n";
 import { notFound } from "next/navigation";
 import { BASE_URL } from "@/lib/config";
+import { getCoreSecurityLinks } from "@/lib/core-security-links";
 
 export const dynamic = "force-static";
 export const revalidate = 86400;
@@ -178,6 +179,7 @@ export default async function XXE2026Page({
     ? params.lang
     : "de") as Locale;
   const prefix = `/${locale}`;
+  const coreLinks = getCoreSecurityLinks(locale);
 
   const content =
     locale === "de" ? (
@@ -891,7 +893,7 @@ using (XmlReader reader = XmlReader.Create(inputStream, settings))
                 und Echtzeit-Threat-Intelligence.
               </p>
               <div className="flex flex-wrap justify-center gap-4">
-                <a href={`${prefix}/check`} className="px-6 py-3 bg-white text-slate-900 rounded-lg font-semibold hover:bg-slate-100 transition-colors">
+                <a href={coreLinks.check} className="px-6 py-3 bg-white text-slate-900 rounded-lg font-semibold hover:bg-slate-100 transition-colors">
                   Security Check Starten
                 </a>
                 <a href={`${prefix}/intel`} className="px-6 py-3 bg-slate-700 text-white rounded-lg font-semibold hover:bg-slate-600 transition-colors">

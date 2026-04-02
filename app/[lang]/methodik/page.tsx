@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { getCoreSecurityLinks } from "@/lib/core-security-links"
 
 export const revalidate = 3600
 
@@ -41,6 +42,7 @@ export default function MethodikPage(props: { params: { lang: string } }) {
   const locale = (SUPPORTED_LOCALES.includes(props.params.lang as Locale) ? props.params.lang : "de") as Locale
   const isGerman = locale === "de"
   const prefix = `/${locale}`
+  const coreLinks = getCoreSecurityLinks(locale)
 
   return (
     <main className="min-h-screen bg-black text-white">
@@ -103,7 +105,7 @@ export default function MethodikPage(props: { params: { lang: string } }) {
         <div className="rounded-2xl border border-cyan-900/40 bg-cyan-950/20 p-6">
           <h2 className="text-lg font-bold">{isGerman ? "Naechster Schritt" : "Next step"}</h2>
           <div className="mt-4 flex flex-wrap gap-3">
-            <Link href={`${prefix}/check`} className="px-4 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-700 text-black font-semibold">
+            <Link href={coreLinks.check} className="px-4 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-700 text-black font-semibold">
               {isGerman ? "Security-Check starten" : "Start Security Check"}
             </Link>
             <Link href={`${prefix}/runbooks`} className="px-4 py-2 rounded-lg border border-white/20 hover:border-white/40 text-white">

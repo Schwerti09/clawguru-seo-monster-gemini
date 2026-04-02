@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { SUPPORTED_LOCALES, type Locale, localeAlternates } from "@/lib/i18n";
 import { BASE_URL } from "@/lib/config";
+import { getCoreSecurityLinks } from "@/lib/core-security-links";
 
 export const dynamic = "force-static";
 export const revalidate = 86400;
@@ -62,6 +63,7 @@ export default async function TailscalePAMPage({
     ? params.lang
     : "de") as Locale;
   const prefix = `/${locale}`;
+  const coreLinks = getCoreSecurityLinks(locale);
 
   const isGerman = locale === "de";
 
@@ -559,7 +561,7 @@ export default async function TailscalePAMPage({
                 : "Start your Tailscale PAM migration with ClawGuru's security assessment."}
             </p>
             <a 
-              href={`${prefix}/check`} 
+              href={coreLinks.check} 
               className="inline-block px-6 py-3 bg-white text-blue-800 rounded-lg font-semibold hover:bg-slate-100 transition-colors"
             >
               {isGerman ? "Security Assessment Starten" : "Start Security Assessment"}

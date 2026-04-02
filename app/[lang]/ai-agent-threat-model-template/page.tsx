@@ -3,6 +3,7 @@ import Link from "next/link"
 
 import Container from "@/components/shared/Container"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { getCoreSecurityLinks } from "@/lib/core-security-links"
 import { getAiThreatModelCopy } from "@/lib/content-ai-agent-threat-model-i18n"
 
 export const revalidate = 60
@@ -29,6 +30,7 @@ export async function generateMetadata(props: { params: { lang: string } }): Pro
 export default function AiThreatModelTemplatePage(props: { params: { lang: string } }) {
   const locale = (SUPPORTED_LOCALES.includes(props.params.lang as Locale) ? props.params.lang : "de") as Locale
   const copy = getAiThreatModelCopy(locale)
+  const coreLinks = getCoreSecurityLinks(locale)
   const prefix = `/${locale}`
 
   const articleJsonLd = {
@@ -80,7 +82,7 @@ export default function AiThreatModelTemplatePage(props: { params: { lang: strin
           </section>
 
           <div className="flex flex-wrap gap-3">
-            <Link href={`${prefix}/check`} className="rounded-xl bg-cyan-500 px-5 py-3 text-sm font-bold text-black">
+            <Link href={coreLinks.check} className="rounded-xl bg-cyan-500 px-5 py-3 text-sm font-bold text-black">
               {copy.ctaCheck}
             </Link>
             <Link href={`${prefix}/ai-agent-security`} className="rounded-xl border border-white/15 px-5 py-3 text-sm font-semibold text-white">
@@ -89,7 +91,7 @@ export default function AiThreatModelTemplatePage(props: { params: { lang: strin
             <Link href={`${prefix}/openclaw-security-check`} className="rounded-xl border border-white/15 px-5 py-3 text-sm font-semibold text-white">
               {copy.ctaOpenclawCheck}
             </Link>
-            <Link href={`${prefix}/methodik`} className="rounded-xl border border-white/15 px-5 py-3 text-sm font-semibold text-white">
+            <Link href={coreLinks.methodology} className="rounded-xl border border-white/15 px-5 py-3 text-sm font-semibold text-white">
               {copy.ctaMethodik}
             </Link>
           </div>

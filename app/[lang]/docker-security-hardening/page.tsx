@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { SUPPORTED_LOCALES, type Locale, localeAlternates } from "@/lib/i18n";
 import { BASE_URL } from "@/lib/config";
+import { getCoreSecurityLinks } from "@/lib/core-security-links";
 
 export const dynamic = "force-static";
 export const revalidate = 86400;
@@ -58,6 +59,7 @@ export default function DockerSecurityPage({
     ? params.lang
     : "de") as Locale;
   const prefix = `/${locale}`;
+  const coreLinks = getCoreSecurityLinks(locale);
 
   const isGerman = locale === "de";
 
@@ -301,7 +303,7 @@ jobs:
           <section className="bg-gradient-to-r from-blue-600 to-cyan-600 rounded-2xl p-8 text-center text-white">
             <h2 className="text-2xl font-bold mb-4">Docker Security Assessment</h2>
             <p className="mb-6">Validieren Sie Ihre Container-Konfiguration gegen CIS Benchmarks.</p>
-            <a href={`${prefix}/check`} className="inline-block px-6 py-3 bg-white text-blue-600 rounded-lg font-semibold">
+            <a href={coreLinks.check} className="inline-block px-6 py-3 bg-white text-blue-600 rounded-lg font-semibold">
               Security Assessment
             </a>
           </section>

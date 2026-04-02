@@ -19,7 +19,7 @@ Purpose: turn Strategy Block 5 into an executable publishing queue with clear in
 | 2 | API key leak response playbook | Incident response | `/ai-agent-security` | `/openclaw-security-check` | shipped (`/[lang]/api-key-leak-response-playbook`) |
 | 3 | NIS2 technical controls for self-hosted teams | Compliance intent | `/ai-agent-security` | `/openclaw` | shipped (`/[lang]/nis2-technical-controls-self-hosted`) |
 | 4 | Hetzner vs DO security baseline (2026) | Infra hardening | `/moltbot-hardening` | `/openclaw-security-check` | shipped (`/[lang]/hetzner-vs-do-security-baseline-2026`) |
-| 5 | Docker + reverse proxy hardening cheatsheet | Tactical implementation | `/moltbot-hardening` | `/openclaw` | backlog |
+| 5 | Docker + reverse proxy hardening cheatsheet | Tactical implementation | `/moltbot-hardening` | `/openclaw` | shipped (`/[lang]/docker-reverse-proxy-hardening-cheatsheet`) |
 | 6 | Security check vs pentest: expectation guide | Conversion clarity | `/openclaw-security-check` | `/ai-agent-security` | backlog |
 | 7 | Executable runbook vs static blog post | Product differentiation | `/openclaw` | `/ai-agent-security` | backlog |
 | 8 | AI-agent threat model template for operators | Category authority | `/ai-agent-security` | `/openclaw-security-check` | backlog |

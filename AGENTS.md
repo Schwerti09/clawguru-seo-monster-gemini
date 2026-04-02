@@ -45,6 +45,7 @@
 - P2 fünfte Delivery live: `/[lang]/nis2-technical-controls-self-hosted` als indexierbare Compliance-Artikel-Seite mit technischer Control-Baseline, Evidence-Block und internen Links auf `/ai-agent-security`, `/openclaw`, `/check`, `/methodik`.
 - P2 sechste Delivery live: `/[lang]/hetzner-vs-do-security-baseline-2026` als indexierbare Infra-Hardening-Seite mit Provider-Vergleich, Baseline-Checkliste und internen Links auf `/moltbot-hardening`, `/openclaw-security-check`, `/check`, `/methodik`.
 - P2 siebte Delivery live: `/[lang]/docker-reverse-proxy-hardening-cheatsheet` als indexierbare Tactical-Hardening-Seite mit Docker/Proxy-Checkliste, Config-Sanity-Checks und internen Links auf `/moltbot-hardening`, `/openclaw`, `/check`, `/methodik`.
+- P2 achte Delivery live: `/[lang]/security-check-vs-pentest-guide` als indexierbare Conversion-Artikel-Seite mit klarer Abgrenzung Check vs Pentest, Kombinations-Workflow und internen Links auf `/openclaw-security-check`, `/ai-agent-security`, `/check`, `/methodik`.
 
 **Bewusst offen / nächste Engineering-Schritte (SEO-Plan):**
 

@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 
-import { localeAlternates, SUPPORTED_LOCALES } from "@/lib/i18n"
+import { localeAlternates, SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
 import RootPage from "@/app/service/[slug]/page"
 
 export const revalidate = 60

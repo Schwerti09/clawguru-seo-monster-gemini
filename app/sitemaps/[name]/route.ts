@@ -75,7 +75,7 @@ function selectGeoSitemapCities<T extends { slug: string; rollout_stage?: string
   const rotated = rotateList(pool, offset).slice(0, limit)
   const canaryShare = Math.max(
     0,
-    Math.min(100, parseInt(process.env.GEO_CANARY_SITEMAP_SHARE || "35", 10) || 35)
+    Math.min(100, parseInt(process.env.GEO_CANARY_SITEMAP_SHARE || "0", 10) || 0)
   )
   const stable = rotated.filter((c) => (c.rollout_stage || "stable") !== "canary")
   const canary = rotated.filter((c) => c.rollout_stage === "canary")

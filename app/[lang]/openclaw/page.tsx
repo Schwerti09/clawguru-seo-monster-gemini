@@ -13,7 +13,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata(props: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(props.params.lang as Locale) ? props.params.lang : "de") as Locale
-  const copy = getCopy(locale)
+  const copy = getOpenClawCopy(locale)
   return {
     title: copy.title,
     description: copy.description,
@@ -24,7 +24,7 @@ export async function generateMetadata(props: { params: { lang: string } }): Pro
 
 export default function OpenClawPage(props: { params: { lang: string } }) {
   const locale = (SUPPORTED_LOCALES.includes(props.params.lang as Locale) ? props.params.lang : "de") as Locale
-  const copy = getCopy(locale)
+  const copy = getOpenClawCopy(locale)
   const prefix = `/${locale}`
   const pageUrl = `${prefix}/openclaw`
   const webPageJsonLd = {

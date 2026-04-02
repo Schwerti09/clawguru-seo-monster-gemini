@@ -6,6 +6,47 @@ export type GeoProfile = {
   source: "edge" | "accept-language" | "default"
 }
 
+// Keep this list in sync with seeded geo city slugs from DB migrations.
+const SEEDED_CITY_SLUGS = new Set([
+  "berlin",
+  "munich",
+  "hamburg",
+  "frankfurt",
+  "cologne",
+  "stuttgart",
+  "dusseldorf",
+  "dortmund",
+  "essen",
+  "leipzig",
+  "bremen",
+  "dresden",
+  "hanover",
+  "nuremberg",
+  "duisburg",
+  "bochum",
+  "wuppertal",
+  "bonn",
+  "mannheim",
+  "karlsruhe",
+  "vienna",
+  "zurich",
+  "geneva",
+  "basel",
+  "paris",
+  "lyon",
+  "marseille",
+  "london",
+  "amsterdam",
+  "brussels",
+  "madrid",
+  "barcelona",
+  "milan",
+  "rome",
+  "warsaw",
+  "prague",
+  "newyork",
+])
+
 export function slugifyCity(input: string): string {
   return input.toLowerCase().replace(/[^a-z0-9]/g, "")
 }
@@ -15,6 +56,7 @@ export function parseGeoVariantSlug(slug: string): { baseSlug: string; citySlug:
   if (parts.length < 3) return { baseSlug: slug, citySlug: null }
   const tail = parts[parts.length - 1]
   if (!/^[a-z]{3,20}$/i.test(tail)) return { baseSlug: slug, citySlug: null }
+  if (!SEEDED_CITY_SLUGS.has(tail.toLowerCase())) return { baseSlug: slug, citySlug: null }
   return { baseSlug: parts.slice(0, -1).join("-"), citySlug: tail }
 }
 

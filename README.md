@@ -45,6 +45,31 @@ ClawGuru combines:
 
 ---
 
+## Current SEO/Geo Execution Status (Apr 2026)
+
+### Done
+
+- `Roast My Stack` i18n pass shipped across all 15 locales; hardcoded EN UI remnants removed.
+- Dedicated localized landing routes live: `/[lang]/openclaw`, `/[lang]/openclaw-security-check`, `/[lang]/moltbot-hardening`, `/[lang]/ai-agent-security`.
+- Legacy intent redirects active in middleware: `/moltbot` and `/clawbot` (including localized variants) to canonical landing targets.
+- Homepage CRO updates shipped (3-step exposure-to-fix narrative, locale-aware CTA copy, sticky mobile CTA, explicit "not a pentest" trust framing).
+- Canonical/hreflang standardization and SEO guardrails operational (`npm run check:seo-canonicals`).
+- 8-week content queue operationalized with shipped indexable pages under `/[lang]/...` and enforced internal-link patterning.
+
+### In progress
+
+- Editorial premium-quality pass for locale copy (especially `roast` and landing-page nuance by market).
+- Internal link graph refinement between LPs, content pages, and runbook hubs.
+
+### Open
+
+- Final consistency hardening for the `/methodik` + `/check` linking pattern.
+- Geo/SEO operations "traffic-light" view (daily/weekly) as a compact operational dashboard section.
+
+Reference source of truth for strategy and rollout state: `AGENTS.md`.
+
+---
+
 ## Stack
 
 - **Framework:** Next.js App Router

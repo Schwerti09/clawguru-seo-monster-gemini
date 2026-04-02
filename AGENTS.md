@@ -63,6 +63,28 @@
 
 ---
 
+## 2.1 Geo/SEO Status (Kompakt)
+
+### Fertig
+
+- Geo-Living-Matrix mit Qualitätslogik, Canary-to-Stable-Prozess und Indexierungsregeln implementiert.
+- Canonical-/hreflang-Setup auf `buildLocalizedAlternates` standardisiert.
+- Redirect-/Routing-Basis für locale-first SEO stabil (inkl. `/moltbot` und `/clawbot` Zielrouten).
+- SEO-Guardrails aktiv (`check:seo-canonicals`) und in den letzten Rollouts grün.
+- Content-Queue aus dem 8-Wochen-Plan als indexierbare `/[lang]/...` Seiten ausgeliefert.
+
+### In Arbeit
+
+- Sprachliche Premium-Qualität der bestehenden i18n-Copy (insb. Roast + LP-Copy) pro Locale redaktionell angleichen.
+- Feinschliff interner Linkgraph zwischen neuen LPs, Content-Pages und Runbook-Hubs.
+
+### Offen
+
+- Optionales Final-Hardening: `methodik`/`check` Pattern vollständig konsolidieren.
+- Geo/SEO Operations View als klare Ampel-Sicht (Daily/Weekly) in einem dedizierten Abschnitt oder Dashboard dokumentieren.
+
+---
+
 ## 3. Strategieblock 1 — Buyer-Personas (6–8, sofort nutzbar)
 
 Gemeinsamer **Aha-Moment** für alle: **Kostenloser LIVE Check in ~30 s** zeigt konkrete Risiko-Lücken + nächster Klick = **Runbook / Fix-Pfad** (ohne Account-Zwang).

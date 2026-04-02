@@ -89,6 +89,7 @@ export async function generateMetadata(props: { params: { slug: string } }) {
   const title = r.title.length > 60 ? r.title.slice(0, 57) + "..." : r.title
   const description = r.summary.length > 160 ? r.summary.slice(0, 157) + "..." : r.summary
   const canonicalSlug = geoCity ? `${r.slug}-${geoCity.slug}` : r.slug
+  const isIndexableGeoVariant = !geoCity || geoCity.rollout_stage === "stable"
   const alternates = localeAlternates(`/runbook/${canonicalSlug}`)
   return {
     title: `${title} | ClawGuru Runbook`,
@@ -101,6 +102,12 @@ export async function generateMetadata(props: { params: { slug: string } }) {
       title: `${title} | ClawGuru`,
       description,
       type: "article",
+    },
+    robots: {
+      index: isIndexableGeoVariant,
+      follow: true,
+      // Keep canary geo variants crawlable for discovery but out of index until stable.
+      nocache: false,
     },
   }
 }

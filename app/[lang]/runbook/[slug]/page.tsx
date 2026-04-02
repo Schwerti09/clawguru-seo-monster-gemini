@@ -28,6 +28,7 @@ export async function generateMetadata(props: {
   const geoCity = geoParsed.citySlug ? await getCityBySlug(geoParsed.citySlug) : null
   const runbook = getRunbook(slug) ?? getRunbook(geoParsed.baseSlug)
   const canonicalSlug = runbook ? (geoCity ? `${runbook.slug}-${geoCity.slug}` : runbook.slug) : slug
+  const isIndexableGeoVariant = !geoCity || geoCity.rollout_stage === "stable"
   const citySuffix = geoCity ? ` (${geoCity.name_en})` : ""
   const title = runbook?.title ? `${runbook.title}${citySuffix} | ClawGuru Runbook` : undefined
   const baseDescription = runbook?.summary ?? ""
@@ -58,9 +59,9 @@ export async function generateMetadata(props: {
       description,
     },
     robots: {
-      index: true,
+      index: isIndexableGeoVariant,
       follow: true,
-      // If content is too short, Google may still choose not to index
+      // Keep canary geo variants crawlable for discovery but out of index until stable.
       nocache: false,
     },
   }

@@ -23,6 +23,8 @@
     "geo:canary-rollout:live": "node scripts/trigger-geo-canary-rollout.js --mode=live",
     "geo:auto-promotion:dry-run": "node scripts/trigger-geo-auto-promotion.js --mode=dry-run",
     "geo:auto-promotion:live": "node scripts/trigger-geo-auto-promotion.js --mode=live",
+    "geo:ops-cycle:dry-run": "node scripts/trigger-geo-ops-cycle.js --mode=dry-run",
+    "geo:ops-cycle:live": "node scripts/trigger-geo-ops-cycle.js --mode=live",
     "check:sitemap-redirects": "node scripts/check-sitemap-redirects.js",
     "check:prod-smoke": "node scripts/check-production-smoke.js",
     "i18n:sync-dictionaries": "node scripts/sync-dictionaries.js",

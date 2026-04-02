@@ -109,14 +109,15 @@ export function localeAlternates(pathname: string): {
 } {
   const base = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
   const canonicalPath = stripLocalePrefix(pathname)
-  const canonical = `${base}${localizePath(DEFAULT_LOCALE, canonicalPath)}`
+  const isRoot = canonicalPath === "/"
+  const canonical = isRoot ? `${base}/` : `${base}${localizePath(DEFAULT_LOCALE, canonicalPath)}`
   const languages = Object.fromEntries(
     SUPPORTED_LOCALES.map((locale) => [
       getLocaleHrefLang(locale),
       `${base}${localizePath(locale, canonicalPath)}`,
     ])
   ) as Record<string, string>
-  languages["x-default"] = `${base}${localizePath(DEFAULT_LOCALE, canonicalPath)}`
+  languages["x-default"] = isRoot ? `${base}/` : `${base}${localizePath(DEFAULT_LOCALE, canonicalPath)}`
 
   return { canonical, languages }
 }

@@ -16,6 +16,30 @@ function modeFromCli() {
   return mode === "live" ? "live" : "dry-run"
 }
 
+function resolveEndpointSecrets() {
+  return {
+    guardrail:
+      process.env.GEO_SITEMAP_GUARDRAIL_SECRET ||
+      process.env.GEO_EXPANSION_SECRET ||
+      process.env.GEO_AUTO_PRUNE_SECRET ||
+      process.env.GEO_REVALIDATE_SECRET ||
+      "",
+    canary:
+      process.env.GEO_CANARY_ROLLOUT_SECRET ||
+      process.env.GEO_EXPANSION_SECRET ||
+      process.env.GEO_AUTO_PRUNE_SECRET ||
+      process.env.GEO_REVALIDATE_SECRET ||
+      "",
+    autoPromotion:
+      process.env.GEO_AUTO_PROMOTION_SECRET ||
+      process.env.GEO_CANARY_ROLLOUT_SECRET ||
+      process.env.GEO_EXPANSION_SECRET ||
+      process.env.GEO_REVALIDATE_SECRET ||
+      "",
+    revalidate: process.env.GEO_REVALIDATE_SECRET || "",
+  }
+}
+
 async function call(base, path, secret) {
   const url = `${base}${path}`
   const res = await fetch(url, {
@@ -60,36 +84,29 @@ async function main() {
     .split(",")
     .map((x) => x.trim())
     .filter(Boolean)
-  const secret =
-    process.env.GEO_AUTO_PROMOTION_SECRET ||
-    process.env.GEO_CANARY_ROLLOUT_SECRET ||
-    process.env.GEO_SITEMAP_GUARDRAIL_SECRET ||
-    process.env.GEO_EXPANSION_SECRET ||
-    process.env.GEO_REVALIDATE_SECRET ||
-    ""
-
-  if (!secret) {
-    console.error("missing geo secret for ops cycle")
+  const secrets = resolveEndpointSecrets()
+  if (!secrets.guardrail || !secrets.canary || !secrets.autoPromotion) {
+    console.error("missing endpoint-specific geo secrets for ops cycle")
     process.exit(1)
   }
-  const revalidateSecret = process.env.GEO_REVALIDATE_SECRET || ""
+  const revalidateSecret = secrets.revalidate
 
   console.log(`geo-ops-cycle mode=${mode} locale=${locale}`)
 
-  const guardrail = await call(base, `/api/geo/sitemap-guardrail?dryRun=${dryRun ? "1" : "0"}`, secret)
+  const guardrail = await call(base, `/api/geo/sitemap-guardrail?dryRun=${dryRun ? "1" : "0"}`, secrets.guardrail)
   console.log(`guardrail mode=${guardrail.mode || "-"} health=${guardrail.healthScore ?? "-"}`)
 
   const canary = await call(
     base,
     `/api/geo/canary-rollout?dryRun=${dryRun ? "1" : "0"}&locale=${encodeURIComponent(locale)}&slug=${encodeURIComponent(slug)}`,
-    secret
+    secrets.canary
   )
   console.log(`canary promoted=${(canary.promoted || []).join(",") || "-"} wouldPromote=${(canary.wouldPromote || []).join(",") || "-"}`)
 
   const autoPromotion = await call(
     base,
     `/api/geo/auto-promotion?dryRun=${dryRun ? "1" : "0"}&locale=${encodeURIComponent(locale)}`,
-    secret
+    secrets.autoPromotion
   )
   console.log(`auto-promotion promoted=${(autoPromotion.promoted || []).join(",") || "-"} candidates=${(autoPromotion.candidates || []).length || 0}`)
 

@@ -16,6 +16,30 @@ function isSet(key) {
   return Boolean((process.env[key] || "").trim())
 }
 
+function resolveEndpointSecrets() {
+  return {
+    guardrail:
+      process.env.GEO_SITEMAP_GUARDRAIL_SECRET ||
+      process.env.GEO_EXPANSION_SECRET ||
+      process.env.GEO_AUTO_PRUNE_SECRET ||
+      process.env.GEO_REVALIDATE_SECRET ||
+      "",
+    canary:
+      process.env.GEO_CANARY_ROLLOUT_SECRET ||
+      process.env.GEO_EXPANSION_SECRET ||
+      process.env.GEO_AUTO_PRUNE_SECRET ||
+      process.env.GEO_REVALIDATE_SECRET ||
+      "",
+    autoPromotion:
+      process.env.GEO_AUTO_PROMOTION_SECRET ||
+      process.env.GEO_CANARY_ROLLOUT_SECRET ||
+      process.env.GEO_EXPANSION_SECRET ||
+      process.env.GEO_REVALIDATE_SECRET ||
+      "",
+    revalidate: process.env.GEO_REVALIDATE_SECRET || "",
+  }
+}
+
 async function call(base, path, secret) {
   const url = `${base}${path}`
   const res = await fetch(url, {
@@ -39,13 +63,7 @@ async function main() {
   const maxCandidates = parseInt(getArg("maxCandidates", process.env.GEO_LIVE_GUARD_MAX_CANDIDATES || "20"), 10) || 20
   const maxHealthDrop = parseInt(getArg("maxHealthDrop", process.env.GEO_LIVE_GUARD_MAX_HEALTH_DROP || "10"), 10) || 10
 
-  const secret =
-    process.env.GEO_AUTO_PROMOTION_SECRET ||
-    process.env.GEO_CANARY_ROLLOUT_SECRET ||
-    process.env.GEO_SITEMAP_GUARDRAIL_SECRET ||
-    process.env.GEO_EXPANSION_SECRET ||
-    process.env.GEO_REVALIDATE_SECRET ||
-    ""
+  const secrets = resolveEndpointSecrets()
 
   const required = ["GEO_AUTO_PROMOTION_SECRET", "GEO_REVALIDATE_SECRET", "GEO_REVALIDATE_SLUGS"]
   const missing = required.filter((k) => !isSet(k))
@@ -53,23 +71,23 @@ async function main() {
     console.error(`live-guard blocked: missing required keys: ${missing.join(", ")}`)
     process.exit(1)
   }
-  if (!secret) {
-    console.error("live-guard blocked: no geo secret available")
+  if (!secrets.guardrail || !secrets.canary || !secrets.autoPromotion || !secrets.revalidate) {
+    console.error("live-guard blocked: missing endpoint-specific secrets")
     process.exit(1)
   }
 
   console.log(`live-guard start locale=${locale} slug=${slug}`)
 
-  const guardrail = await call(base, `/api/geo/sitemap-guardrail?dryRun=1`, secret)
+  const guardrail = await call(base, `/api/geo/sitemap-guardrail?dryRun=1`, secrets.guardrail)
   const canary = await call(
     base,
     `/api/geo/canary-rollout?dryRun=1&locale=${encodeURIComponent(locale)}&slug=${encodeURIComponent(slug)}`,
-    secret
+    secrets.canary
   )
   const autoPromotion = await call(
     base,
     `/api/geo/auto-promotion?dryRun=1&locale=${encodeURIComponent(locale)}`,
-    secret
+    secrets.autoPromotion
   )
 
   const healthScore = Number(guardrail.healthScore ?? 100)

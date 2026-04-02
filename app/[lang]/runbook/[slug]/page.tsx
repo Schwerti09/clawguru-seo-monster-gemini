@@ -4,6 +4,7 @@ import { localeAlternates, SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
 import { permanentRedirect } from "next/navigation"
 import { parseGeoVariantSlug } from "@/lib/geo-matrix"
 import { getCityBySlug } from "@/lib/geo-cities"
+import { isGeoVariantIndexable } from "@/lib/geo-mycelium"
 
 export const dynamic = "force-static"
 export const revalidate = 86400
@@ -28,7 +29,13 @@ export async function generateMetadata(props: {
   const geoCity = geoParsed.citySlug ? await getCityBySlug(geoParsed.citySlug) : null
   const runbook = getRunbook(slug) ?? getRunbook(geoParsed.baseSlug)
   const canonicalSlug = runbook ? (geoCity ? `${runbook.slug}-${geoCity.slug}` : runbook.slug) : slug
-  const isIndexableGeoVariant = !geoCity || geoCity.rollout_stage === "stable"
+  const isIndexableGeoVariant = geoCity
+    ? await isGeoVariantIndexable({
+        locale: lang,
+        variantSlug: canonicalSlug,
+        rolloutStage: geoCity.rollout_stage,
+      })
+    : true
   const citySuffix = geoCity ? ` (${geoCity.name_en})` : ""
   const title = runbook?.title ? `${runbook.title}${citySuffix} | ClawGuru Runbook` : undefined
   const baseDescription = runbook?.summary ?? ""

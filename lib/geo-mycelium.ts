@@ -59,3 +59,41 @@ export async function persistGeoVariantNode(input: PersistGeoVariantInput) {
   }
 }
 
+function safeInt(input: string | undefined, fallback: number) {
+  const parsed = Number.parseInt(input || "", 10)
+  if (!Number.isFinite(parsed)) return fallback
+  return parsed
+}
+
+export async function isGeoVariantIndexable(input: {
+  locale: string
+  variantSlug: string
+  rolloutStage?: "canary" | "stable" | string
+}) {
+  // Canary should never be indexable.
+  if ((input.rolloutStage || "stable") !== "stable") return false
+  // Preserve behavior when DB is not configured.
+  if (!hasDatabase()) return true
+
+  const minQuality = Math.max(
+    55,
+    Math.min(100, safeInt(process.env.GEO_AUTO_PROMOTE_MIN_AVG_QUALITY, 84))
+  )
+
+  try {
+    const res = await dbQuery<{ quality_score: number }>(
+      `SELECT quality_score
+       FROM geo_variant_matrix
+       WHERE locale = $1 AND variant_slug = $2
+       ORDER BY updated_at DESC
+       LIMIT 1`,
+      [input.locale, input.variantSlug]
+    )
+    if (!res.rows[0]) return false
+    return (res.rows[0].quality_score || 0) >= minQuality
+  } catch {
+    // Fail-open for availability: keep prior behavior on transient DB errors.
+    return true
+  }
+}
+

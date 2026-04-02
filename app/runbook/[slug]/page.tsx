@@ -18,6 +18,7 @@ import { getDictionary } from "@/lib/getDictionary"
 import { parseGeoVariantSlug } from "@/lib/geo-matrix"
 import { generateGeoVariantContent } from "@/lib/geo-content-generator"
 import { getCityBySlug } from "@/lib/geo-cities"
+import { isGeoVariantIndexable } from "@/lib/geo-mycelium"
 const RunbookMiniTabs = NextDynamic(() => import("@/components/runbook/RunbookMiniTabs"))
 
 const TemporalTimelineLazy = NextDynamic(() => import("@/components/visual/TemporalTimeline"), {
@@ -89,7 +90,13 @@ export async function generateMetadata(props: { params: { slug: string } }) {
   const title = r.title.length > 60 ? r.title.slice(0, 57) + "..." : r.title
   const description = r.summary.length > 160 ? r.summary.slice(0, 157) + "..." : r.summary
   const canonicalSlug = geoCity ? `${r.slug}-${geoCity.slug}` : r.slug
-  const isIndexableGeoVariant = !geoCity || geoCity.rollout_stage === "stable"
+  const isIndexableGeoVariant = geoCity
+    ? await isGeoVariantIndexable({
+        locale,
+        variantSlug: canonicalSlug,
+        rolloutStage: geoCity.rollout_stage,
+      })
+    : true
   const alternates = localeAlternates(`/runbook/${canonicalSlug}`)
   return {
     title: `${title} | ClawGuru Runbook`,

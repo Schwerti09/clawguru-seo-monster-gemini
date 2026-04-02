@@ -37,6 +37,7 @@ Operational schedule for the Geo Living Matrix rollout loop.
 
 - Dry-run: `npm run geo:ops-cycle:dry-run`
 - Live: `npm run geo:ops-cycle:live`
+- Guarded live: `npm run geo:ops-live-guard`
 
 This runs:
 
@@ -44,6 +45,21 @@ This runs:
 2. `/api/geo/canary-rollout`
 3. `/api/geo/auto-promotion`
 4. `/api/geo/revalidate` for each promoted city + configured seed slug(s) (live mode only)
+
+## Safe live guard
+
+Use `npm run geo:ops-live-guard` for production rollouts.
+
+It enforces:
+
+- Required key presence (`GEO_AUTO_PROMOTION_SECRET`, `GEO_REVALIDATE_SECRET`, `GEO_REVALIDATE_SLUGS`)
+- Dry-run health score safety
+- Candidate-count safety cap before live execution
+
+Tunable guardrails:
+
+- `GEO_LIVE_GUARD_MAX_CANDIDATES` (default `20`)
+- `GEO_LIVE_GUARD_MAX_HEALTH_DROP` (default `10`)
 
 ## Recommended cron cadence
 

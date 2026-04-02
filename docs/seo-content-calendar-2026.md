@@ -13,8 +13,8 @@ Purpose: turn Strategy Block 5 into an executable publishing queue with clear in
 
 | Week | Topic | Primary Intent | Primary LP Link | Secondary LP Link | Status |
 |---|---|---|---|---|---|
-| 1 | 30-second check: what we measure and what we do not | Tool trust | `/openclaw-security-check` | `/ai-agent-security` | draft |
-| 1 | OpenClaw top-5 exposure misconfigs | Community pain | `/openclaw` | `/moltbot-hardening` | backlog |
+| 1 | 30-second check: what we measure and what we do not | Tool trust | `/openclaw-security-check` | `/ai-agent-security` | shipped (`/[lang]/check-methodology-30-seconds`) |
+| 1 | OpenClaw top-5 exposure misconfigs | Community pain | `/openclaw` | `/moltbot-hardening` | shipped (`/[lang]/openclaw-top-5-exposure-misconfigs`) |
 | 2 | Gateway auth in 10 steps (operator runbook) | Hardening | `/moltbot-hardening` | `/openclaw` | backlog |
 | 2 | API key leak response playbook | Incident response | `/ai-agent-security` | `/openclaw-security-check` | backlog |
 | 3 | NIS2 technical controls for self-hosted teams | Compliance intent | `/ai-agent-security` | `/openclaw` | backlog |

@@ -38,6 +38,8 @@
 - Homepage-CRO (Locale-Qualität): neue Hero-Notiz, Trust-Disclaimer und mobile Sticky-CTA-Labels in den zentralen Locale-Fallback (`lib/homepage-cro-i18n.ts`) überführt; `TrustSection` auf locale-aware Copy umgestellt.
 - P2-Operationalisierung gestartet: ausführbarer Content-Kalender in `docs/seo-content-calendar-2026.md` mit 8-Wochen-Queue, LP-Link-Regeln und KPI-Tracking angelegt.
 - P2 Off-Page operationalisiert: `docs/offpage-playbook-2026.md` mit kanal-spezifischen Templates (Reddit/X/GitHub/Discord), Cadence, Tracking-Regeln und Auto-Reject-Guardrails angelegt.
+- P2 erste Delivery live: `/[lang]/check-methodology-30-seconds` als indexierbare Artikel-Seite mit `buildLocalizedAlternates`, Article-Schema und internen Links auf `/check`, `/methodik`, `/openclaw-security-check`, `/ai-agent-security`.
+- P2 zweite Delivery live: `/[lang]/openclaw-top-5-exposure-misconfigs` als indexierbare Artikel-Seite mit Meta/Schema und internen Links auf `/openclaw`, `/moltbot-hardening`, `/check`, `/methodik`.
 
 **Bewusst offen / nächste Engineering-Schritte (SEO-Plan):**
 

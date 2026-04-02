@@ -18,6 +18,7 @@ import ToolsSection from "@/components/homepage/ToolsSection"
 import WhySection from "@/components/homepage/WhySection"
 import FinalCTASection from "@/components/homepage/FinalCTASection"
 import RoastMyStack from "@/components/roast/RoastMyStack"
+import { getHomepageCroCopy } from "@/lib/homepage-cro-i18n"
 
 interface HomeProps {
   dict?: Dictionary
@@ -29,6 +30,7 @@ export default async function Home({ dict, locale }: HomeProps = {}) {
   const safeDict = dict ?? (await getDictionary(safeLocale))
   const prefix = `/${safeLocale}`
   const hp = (safeDict as any)?.homepage ?? {}
+  const cro = getHomepageCroCopy(safeLocale)
   const faq = (safeDict as any)?.faq ?? {
     kicker: "",
     title: "",
@@ -95,7 +97,39 @@ export default async function Home({ dict, locale }: HomeProps = {}) {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
 
-      <HeroSection prefix={prefix} dict={hp} />
+      <HeroSection locale={safeLocale} prefix={prefix} dict={hp} />
+
+      <section className="py-12 border-b border-white/5" style={{ background: "var(--surface-1)" }}>
+        <Container>
+          <div className="max-w-5xl mx-auto">
+            <div className="text-center mb-8">
+              <h2 className="text-2xl sm:text-3xl font-black text-white">
+                {hp.lp_hub_title || cro.lpHubTitle}
+              </h2>
+              <p className="mt-2 text-gray-400 text-sm sm:text-base">
+                {hp.lp_hub_sub || cro.lpHubSub}
+              </p>
+            </div>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {[
+                { href: `${prefix}/openclaw`, title: hp.lp_openclaw_title || cro.lpOpenclawTitle, desc: hp.lp_openclaw_desc || cro.lpOpenclawDesc },
+                { href: `${prefix}/openclaw-security-check`, title: hp.lp_openclaw_check_title || cro.lpCheckTitle, desc: hp.lp_openclaw_check_desc || cro.lpCheckDesc },
+                { href: `${prefix}/moltbot-hardening`, title: hp.lp_moltbot_title || cro.lpMoltbotTitle, desc: hp.lp_moltbot_desc || cro.lpMoltbotDesc },
+                { href: `${prefix}/ai-agent-security`, title: hp.lp_ai_title || cro.lpAiTitle, desc: hp.lp_ai_desc || cro.lpAiDesc },
+              ].map((item) => (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  className="rounded-2xl border border-white/10 bg-white/5 p-5 hover:border-cyan-400/40 transition-colors"
+                >
+                  <h3 className="text-white font-bold">{item.title}</h3>
+                  <p className="mt-1 text-sm text-gray-400">{item.desc}</p>
+                </a>
+              ))}
+            </div>
+          </div>
+        </Container>
+      </section>
 
       <section id="roast-my-stack" className="relative py-16 border-b border-white/5" style={{ background: "var(--surface-0)" }}>
         <Container>
@@ -169,7 +203,7 @@ export default async function Home({ dict, locale }: HomeProps = {}) {
         </Container>
       </section>
 
-      <FinalCTASection prefix={prefix} dict={hp} />
+      <FinalCTASection locale={safeLocale} prefix={prefix} dict={hp} />
     </>
   )
 }

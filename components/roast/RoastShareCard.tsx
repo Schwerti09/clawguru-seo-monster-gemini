@@ -33,7 +33,7 @@ function scoreColor(score: number): string {
 
 export function RoastShareCard({ result, dict, prefix, shareUrl, onCopy, copied }: Props) {
   const text = `${dict.score_label}: ${result.score}/100 — ${result.top_roasts[0]}`
-  const tweet = `🔥 ClawGuru roasted my stack.\n${text}\n`
+  const tweet = `🔥 ${text}\n`
   const xHref = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweet)}&url=${encodeURIComponent(shareUrl)}`
   const liHref = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`
 

@@ -269,6 +269,33 @@ export function middleware(request: NextRequest) {
     return res
   }
 
+  // SEO redirects: legacy short slugs -> dedicated landing pages.
+  // Keep locale-specific targets so users and crawlers land on canonical intent pages.
+  if (pathname === "/moltbot" || pathname === "/clawbot") {
+    const targetLocale = preferredLocale(request)
+    const url = request.nextUrl.clone()
+    url.pathname = pathname === "/moltbot" ? `/${targetLocale}/moltbot-hardening` : `/${targetLocale}/ai-agent-security`
+    const res = NextResponse.redirect(url, 308)
+    res.headers.set("x-claw-locale", targetLocale)
+    res.headers.set("x-claw-dir", localeDir(targetLocale))
+    res.headers.set(getRequestIdHeaderName(), requestId)
+    return res
+  }
+
+  const localizedLegacyLanding = pathname.match(/^\/([a-z]{2}(?:-[a-z]{2})?)\/(moltbot|clawbot)\/?$/i)
+  if (localizedLegacyLanding) {
+    const localeFromPath = localizedLegacyLanding[1].toLowerCase() as Locale
+    const targetLocale = SUPPORTED_LOCALES.includes(localeFromPath) ? localeFromPath : DEFAULT_LOCALE
+    const targetSlug = localizedLegacyLanding[2].toLowerCase() === "moltbot" ? "moltbot-hardening" : "ai-agent-security"
+    const url = request.nextUrl.clone()
+    url.pathname = `/${targetLocale}/${targetSlug}`
+    const res = NextResponse.redirect(url, 308)
+    res.headers.set("x-claw-locale", targetLocale)
+    res.headers.set("x-claw-dir", localeDir(targetLocale))
+    res.headers.set(getRequestIdHeaderName(), requestId)
+    return res
+  }
+
   const locale = localeFromPathname(pathname)
 
   // Enforce locale-prefix-only routing:

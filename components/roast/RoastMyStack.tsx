@@ -195,7 +195,7 @@ function RoastMyStack({
           }}
         >
           <label className="block text-sm font-medium text-zinc-300 mb-2 sr-only" htmlFor="roast-stack-input">
-            Stack or domain
+            {t.placeholder}
           </label>
           <textarea
             id="roast-stack-input"
@@ -208,7 +208,7 @@ function RoastMyStack({
           />
 
           <div className="mt-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <div className="flex flex-wrap gap-2" role="group" aria-label="Roast level">
+            <div className="flex flex-wrap gap-2" role="group" aria-label={t.title}>
               {(
                 [
                   ["mild", t.level_mild],

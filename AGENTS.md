@@ -30,11 +30,15 @@
 - SEO-Guard: `npm run check:seo-canonicals`.
 - CI: Build + Netlify; Vercel-Workflow skippt ohne Token.
 - README auf aktuellen Stand gebracht.
+- P0 Roast-i18n: `roast`-Blöcke in allen 15 Dictionaries lokalisiert; verbleibende hardcodierte EN-Texte in `RoastMyStack`/`RoastShareCard` entfernt.
+- P1 LP-Routen: `/[lang]/openclaw`, `/[lang]/openclaw-security-check`, `/[lang]/moltbot-hardening`, `/[lang]/ai-agent-security` live mit `buildLocalizedAlternates`, Metadata, Basis-Schema und internen Links.
+- Redirects aktiv: `/moltbot` und `/clawbot` (inkl. lokalisierter Varianten) per Middleware auf die neuen Zielseiten.
+- Homepage-CRO-i18n: neue CTA-/LP-Hub-Texte per zentralem Fallback (`lib/homepage-cro-i18n.ts`) für alle 15 Locales verdrahtet (`HeroSection`, `FinalCTASection`, `app/page.tsx`).
 
 **Bewusst offen / nächste Engineering-Schritte (SEO-Plan):**
 
 - Roast: **Inhalte** in allen Sprachen auf **Premium-Niveau** prüfen/ersetzen (Keys können existieren, Qualität nicht).
-- Dedizierte LP-Routen aus Strategieblock 2 implementieren.
+- LP-Copy für `/openclaw`, `/openclaw-security-check`, `/moltbot-hardening`, `/ai-agent-security` zentral in `lib/landing-pages-i18n.ts` für alle 15 Locales hinterlegt und in Seiten verdrahtet.
 - Optional: `methodik`/`check`-Pattern überall konsistent (bereits teilweise `buildLocalizedAlternates`).
 
 **Wichtige Dateien für i18n (Roast):**

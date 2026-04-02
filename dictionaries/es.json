@@ -720,7 +720,7 @@
     "loading": "Invocando al Roast Master…",
     "disclosure": "Orientación generada por IA, no un pentest. Modela amenazas y verifica todo en tu entorno.",
     "score_label": "Claw Score",
-    "score_hint": "Puntuación narrativa de este roast — en prod sigue verificando.",
+    "score_hint": "Puntuación narrativa de este roast — en producción siempre verifica por separado.",
     "top_roasts": "Top 3 roasts",
     "weaknesses": "Puntos débiles",
     "fixes": "Próximos pasos",
@@ -737,7 +737,7 @@
     "error_rate_limited": "Demasiados roasts desde esta conexión. Espera unos minutos.",
     "page_link": "Abrir roast a página completa (URL compartible)",
     "meta_title": "Roast My Stack — Roast de seguridad con IA gratis | ClawGuru",
-    "meta_description": "Roastea tu stack con ClawGuru: humor afilado, insights SecOps reales, Claw Score y tarjetas para compartir — luego runbooks y fixes.",
+    "meta_description": "Roastea tu stack con ClawGuru: humor afilado, insights SecOps reales, Claw Score y tarjetas para compartir — después runbooks y fixes.",
     "page_intro": "Pensado para compartir: un enlace, un roast, vulnerabilidades concretas y pasos siguientes. No es un pentest — verifica todo en tu entorno."
   }
 }

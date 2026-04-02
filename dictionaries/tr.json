@@ -711,7 +711,7 @@
   "roast": {
     "kicker": "Viral · Yapay zeka · Paylaşılabilir",
     "title": "Roast My Stack",
-    "subtitle": "Stack'ini veya bir alan adını yaz. Acımasız ama faydalı bir güvenlik roast'i — ardından ClawGuru runbook'larıyla düzelt.",
+    "subtitle": "Stack ya da alan adını gir. Keskin ama işe yarar bir güvenlik roast al — ardından ClawGuru runbooklarıyla doğrudan düzeltmelere geç.",
     "placeholder": "Kubernetes + Nginx + AWS + Terraform + Postgres — veya app.ornek.com",
     "level_mild": "Hafif",
     "level_medium": "Orta",

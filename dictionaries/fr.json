@@ -711,7 +711,7 @@
   "roast": {
     "kicker": "Viral · IA · Partage",
     "title": "Roast My Stack",
-    "subtitle": "Indique ton stack ou un domaine. Un roast sécu cinglant mais utile — puis des correctifs avec les runbooks ClawGuru.",
+    "subtitle": "Indique ton stack ou un domaine. Un roast sécu mordant mais utile — puis passe aux correctifs avec les runbooks ClawGuru.",
     "placeholder": "Kubernetes + Nginx + AWS + Terraform + Postgres — ou app.exemple.fr",
     "level_mild": "Doux",
     "level_medium": "Moyen",
@@ -720,7 +720,7 @@
     "loading": "Invocation du Roast Master…",
     "disclosure": "Orientation générée par l'IA, pas un test d'intrusion. Modélise les menaces et vérifie dans ton environnement.",
     "score_label": "Claw Score",
-    "score_hint": "Score narratif pour ce roast — en prod, vérifie toujours.",
+    "score_hint": "Score narratif de ce roast — en production, vérifie toujours séparément.",
     "top_roasts": "Top 3 roasts",
     "weaknesses": "Points faibles",
     "fixes": "Prochaines étapes",

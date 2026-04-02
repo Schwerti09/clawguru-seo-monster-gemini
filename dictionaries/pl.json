@@ -711,7 +711,7 @@
   "roast": {
     "kicker": "Wirusowe · AI · Do udostępniania",
     "title": "Roast My Stack",
-    "subtitle": "Podaj swój stack lub domenę. Ostry, ale użyteczny roast bezpieczeństwa — potem naprawy z runbookami ClawGuru.",
+    "subtitle": "Podaj swój stack lub domenę. Ostry, ale użyteczny roast bezpieczeństwa — a potem przejdź do napraw z runbookami ClawGuru.",
     "placeholder": "Kubernetes + Nginx + AWS + Terraform + Postgres — lub app.przyklad.pl",
     "level_mild": "Łagodny",
     "level_medium": "Średni",

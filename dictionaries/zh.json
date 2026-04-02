@@ -711,7 +711,7 @@
   "roast": {
     "kicker": "传播 · AI · 可分享",
     "title": "Roast My Stack",
-    "subtitle": "输入技术栈或域名。获得犀利但有用的安全吐槽——随后用 ClawGuru 手顺落实修复。",
+    "subtitle": "输入技术栈或域名。获得犀利但实用的安全吐槽——随后用 ClawGuru runbooks 直接推进修复。",
     "placeholder": "Kubernetes + Nginx + AWS + Terraform + Postgres — 或 app.example.com",
     "level_mild": "温和",
     "level_medium": "中等",
@@ -721,7 +721,7 @@
     "disclosure": "由 AI 生成指引，并非渗透测试。威胁建模与验证须在你自有环境中完成。",
     "score_label": "Claw Score",
     "score_hint": "本次吐槽的叙事评分——生产环境仍需自行验证。",
-    "top_roasts": "三条最佳吐槽",
+    "top_roasts": "Top 3 吐槽",
     "weaknesses": "薄弱点",
     "fixes": "下一步",
     "fix_cta": "用 ClawGuru 修复",

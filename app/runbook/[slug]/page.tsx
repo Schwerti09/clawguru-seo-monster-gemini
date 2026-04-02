@@ -347,8 +347,6 @@ function FaqSection({ faq }: { faq: RunbookFaqEntry[] }) {
 
 export default async function RunbookPage(props: { params: { slug: string; lang?: string } }) {
   const params = props.params
-  const __label = `runbook:${params.slug}`
-  console.time(__label)
   const { getRunbook } = await import("@/lib/pseo")
   const locale = ((params.lang as Locale | undefined) ?? DEFAULT_LOCALE) as Locale
   const dict = await getDictionary(locale)
@@ -400,18 +398,10 @@ export default async function RunbookPage(props: { params: { slug: string; lang?
   }
 
   // TEMPORAL MYCELIUM v3.1 – Overlord AI: compute deterministic evolution history
-  console.time(`${__label}:temporalHistory`)
   const temporalHistory = null as any
-  console.timeEnd(`${__label}:temporalHistory`)
-
-  console.count("pseo.runbook_request")
 
   // Embedding-driven internal links (Spider-Web) with relatedSlugs as seed hints
-  console.time(`${__label}:linkEngine`)
   const linkEngine = null as any
-  console.timeEnd(`${__label}:linkEngine`)
-
-  console.time(`${__label}:related`)
   const engineList = (linkEngine && typeof (linkEngine as any).linksForSlug === "function")
     ? linkEngine.linksForSlug(r.slug)
     : []
@@ -426,9 +416,6 @@ export default async function RunbookPage(props: { params: { slug: string; lang?
         .map((s) => getRunbook(s))
         .filter(Boolean) as Runbook[])
     : []
-  console.timeEnd(`${__label}:related`)
-
-  console.timeEnd(__label)
   return (
       <Container>
       <script

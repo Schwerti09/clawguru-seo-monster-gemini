@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 
-import { SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
+import { localeAlternates, SUPPORTED_LOCALES } from "@/lib/i18n"
 import { permanentRedirect } from "next/navigation"
 
 export const revalidate = 0
@@ -15,10 +15,15 @@ export async function generateMetadata(
   props: { params: { lang: string; "runbook-slug": string } }
 ): Promise<Metadata> {
   const params = props.params
-  const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
+  const alternates = localeAlternates(
+    `/provenance/${encodeURIComponent(params["runbook-slug"])}`
+  )
 
   return {
-    alternates: { canonical: `/provenance/:runbook-slug/page` }
+    alternates: {
+      canonical: alternates.canonical,
+      languages: alternates.languages,
+    },
   }
 }
 

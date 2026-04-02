@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 
-import { SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
+import { localeAlternates, SUPPORTED_LOCALES } from "@/lib/i18n"
 import RootPage from "@/app/swarm/[deployment-id]/page"
 
 export const revalidate = 60
@@ -13,10 +13,13 @@ export async function generateMetadata(
   props: { params: { lang: string; "deployment-id": string } }
 ): Promise<Metadata> {
   const params = props.params
-  const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
+  const alternates = localeAlternates(`/swarm/${encodeURIComponent(params["deployment-id"])}`)
 
   return {
-    alternates: { canonical: `/swarm/:deployment-id/page` }
+    alternates: {
+      canonical: alternates.canonical,
+      languages: alternates.languages,
+    },
   }
 }
 

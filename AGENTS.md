@@ -32,6 +32,7 @@
 - README auf aktuellen Stand gebracht.
 - P0 Roast-i18n: `roast`-Blöcke in allen 15 Dictionaries lokalisiert; verbleibende hardcodierte EN-Texte in `RoastMyStack`/`RoastShareCard` entfernt.
 - P0 Roast-Qualität (Pass #1): redaktionelle Copy-Politur für `roast` in `ar`, `hi`, `ja`, `ko`, `nl`, `ru`, `es`, `fr`, `it`, `pt`, `pl`, `tr`, `zh` (Ton, Verständlichkeit, CTA-/Error-Wording) durchgeführt; `npm run check:i18n` weiterhin grün.
+- P0 Roast-Qualität (Pass #2): finale Label-/Wording-Feinpolitur in `de`, `es`, `ru`, `ja`, `ko`, `hi`, `ar` (u. a. `top_roasts`, Level-Wording) nachgezogen.
 - P1 LP-Qualität (Pass #1): redaktionelle Copy-Politur in `lib/landing-pages-i18n.ts` für `openclaw-security-check`, `moltbot-hardening`, `ai-agent-security` in `ar`, `hi`, `ja`, `ko`, `nl`, `ru` (weniger Denglisch, klarere CTAs/Claims).
 - P1 LP-Qualität (Pass #2): verbleibende Locales `es`, `fr`, `it`, `pt`, `pl`, `tr`, `zh` ebenfalls redaktionell nachgezogen (klarere Risiko→Fix-Formulierungen, konsistentere Terminologie).
 - Pattern-Konsolidierung gestartet: zentrale Helper-Funktion `lib/core-security-links.ts` für locale-sichere Kernlinks (`/check`, `/methodik`) eingeführt und auf den 4 SEO-LPs verdrahtet.
@@ -61,8 +62,7 @@
 - Roast: finaler Native QA-Pass (Muttersprachler-Review + Terminologie-Konsistenz) als letzter Qualitätsfilter offen.
 - LP-Copy für `/openclaw`, `/openclaw-security-check`, `/moltbot-hardening`, `/ai-agent-security` zentral in `lib/landing-pages-i18n.ts` für alle 15 Locales hinterlegt und in Seiten verdrahtet.
 - LP-Copy: finaler Native-Review (Muttersprachler + Terminologie-Feinschliff) als letzter Qualitätsschritt offen.
-- Optional: `methodik`/`check`-Pattern überall konsistent (bereits teilweise `buildLocalizedAlternates`).
-- Optional: `methodik`/`check`-Pattern auf restliche Content-/Runbook-Seiten ausrollen (Helper bereits auf LPs aktiv).
+- `methodik`/`check`-Pattern: Konsolidierung via `core-security-links` auf LPs und `[lang]`-Content-/Runbook-Seiten ausgerollt.
 
 **Wichtige Dateien für i18n (Roast):**
 

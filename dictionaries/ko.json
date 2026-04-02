@@ -721,7 +721,7 @@
     "disclosure": "AI가 생성한 가이드이며 침투 테스트가 아닙니다. 위협 모델링과 검증은 반드시 자체 환경에서 수행하세요.",
     "score_label": "Claw Score",
     "score_hint": "이번 roast의 내러티브 점수입니다 — 프로덕션에서는 반드시 별도로 검증하세요.",
-    "top_roasts": "Top 3 roast",
+    "top_roasts": "상위 3개 roast",
     "weaknesses": "약한 지점",
     "fixes": "다음 단계",
     "fix_cta": "ClawGuru로 수정",

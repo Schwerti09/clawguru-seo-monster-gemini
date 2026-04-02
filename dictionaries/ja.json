@@ -721,7 +721,7 @@
     "disclosure": "AI 生成の参考情報であり、ペネトレーションテストではありません。脅威モデリングと検証は必ず自社環境で行ってください。",
     "score_label": "Claw Score",
     "score_hint": "この roast のナラティブスコアです — 本番環境では必ず検証してください。",
-    "top_roasts": "トップ3の roast",
+    "top_roasts": "トップ3 roast",
     "weaknesses": "弱点",
     "fixes": "次にやること",
     "fix_cta": "ClawGuru で修正",

@@ -721,7 +721,7 @@
     "disclosure": "Orientación generada por IA, no un pentest. Modela amenazas y verifica todo en tu entorno.",
     "score_label": "Claw Score",
     "score_hint": "Puntuación narrativa de este roast — en producción siempre verifica por separado.",
-    "top_roasts": "Top 3 roasts",
+    "top_roasts": "Top 3 roast",
     "weaknesses": "Puntos débiles",
     "fixes": "Próximos pasos",
     "fix_cta": "Arreglar con ClawGuru",

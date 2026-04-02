@@ -721,7 +721,7 @@
     "disclosure": "यह AI-जनित मार्गदर्शन है, penetration test नहीं। थ्रेट मॉडलिंग और सत्यापन अपने वातावरण में करें।",
     "score_label": "Claw Score",
     "score_hint": "यह इस roast का नैरेटिव स्कोर है — प्रोडक्शन में हमेशा अलग से सत्यापित करें।",
-    "top_roasts": "टॉप 3 roasts",
+    "top_roasts": "टॉप 3 roast",
     "weaknesses": "कमजोर बिंदु",
     "fixes": "अगले कदम",
     "fix_cta": "ClawGuru से ठीक करें",

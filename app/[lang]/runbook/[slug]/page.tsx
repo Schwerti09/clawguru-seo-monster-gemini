@@ -22,17 +22,20 @@ export async function generateStaticParams() {
 export async function generateMetadata(props: {
   params: { lang: string; slug: string }
 }): Promise<Metadata> {
-  const { slug } = props.params
+  const { slug, lang } = props.params
   const { getRunbook } = await import("@/lib/pseo")
   const geoParsed = parseGeoVariantSlug(slug)
   const geoCity = geoParsed.citySlug ? await getCityBySlug(geoParsed.citySlug) : null
   const runbook = getRunbook(slug) ?? getRunbook(geoParsed.baseSlug)
   const canonicalSlug = runbook ? (geoCity ? `${runbook.slug}-${geoCity.slug}` : runbook.slug) : slug
-  const title = runbook?.title ? `${runbook.title} | ClawGuru Runbook` : undefined
-  const description = runbook?.summary
-    ? runbook.summary.length > 160
-      ? runbook.summary.slice(0, 157) + "..."
-      : runbook.summary
+  const citySuffix = geoCity ? ` (${geoCity.name_en})` : ""
+  const title = runbook?.title ? `${runbook.title}${citySuffix} | ClawGuru Runbook` : undefined
+  const baseDescription = runbook?.summary ?? ""
+  const geoDescription = geoCity ? `${baseDescription} Lokalisiert fuer ${geoCity.name_en}, ${geoCity.country_code}.` : baseDescription
+  const description = geoDescription
+    ? geoDescription.length > 160
+      ? geoDescription.slice(0, 157) + "..."
+      : geoDescription
     : undefined
   const alternates = localeAlternates(`/runbook/${canonicalSlug}`)
 
@@ -42,6 +45,17 @@ export async function generateMetadata(props: {
     alternates: {
       canonical: alternates.canonical,
       languages: alternates.languages,
+    },
+    openGraph: {
+      title,
+      description,
+      type: "article",
+      url: `/${lang}/runbook/${canonicalSlug}`,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
     },
     robots: {
       index: true,
@@ -69,7 +83,7 @@ export default async function LocaleRunbookPage(props: {
     }
     const Mod = await import("@/app/runbook/[slug]/page")
     const RootRunbookPage = Mod.default
-    return <RootRunbookPage params={{ slug }} />
+    return <RootRunbookPage params={{ lang, slug }} />
   } catch (err) {
     const anyErr = err as any
     const message = err instanceof Error ? err.message : String(err)

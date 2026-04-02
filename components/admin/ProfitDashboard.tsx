@@ -36,6 +36,22 @@ type ApiMargins = {
 
 type IpEntry = { ip: string; count: number; blocked: boolean }
 
+type GeoMatrixItem = {
+  city_slug: string
+  city_name: string
+  quality_score: number
+}
+
+type GeoMatrixData = {
+  items: GeoMatrixItem[]
+  stats24h: {
+    variants_24h: string
+    avg_quality_24h: string
+    distinct_cities_24h: string
+    distinct_bases_24h: string
+  }
+}
+
 type DashData = {
   generatedAt: string
   stripe: StripeMetrics | null
@@ -250,11 +266,68 @@ function MiniBarChart({ data }: { data: Array<{ label: string; value: number; co
   )
 }
 
+function GeoMatrixPanel({ geo }: { geo: GeoMatrixData | null }) {
+  if (!geo) {
+    return (
+      <div className="rounded-2xl border border-gray-800 bg-black/30 p-5 text-sm text-gray-500">
+        Keine Geo-Matrix-Daten verfügbar.
+      </div>
+    )
+  }
+
+  const byCity = new Map<string, { city: string; count: number; qualitySum: number }>()
+  for (const row of geo.items) {
+    const key = row.city_slug || row.city_name
+    const prev = byCity.get(key)
+    if (prev) {
+      prev.count += 1
+      prev.qualitySum += Number(row.quality_score || 0)
+    } else {
+      byCity.set(key, {
+        city: row.city_name || row.city_slug,
+        count: 1,
+        qualitySum: Number(row.quality_score || 0),
+      })
+    }
+  }
+
+  const topCities = Array.from(byCity.values())
+    .map((x) => ({ ...x, avgQuality: Math.round(x.qualitySum / Math.max(1, x.count)) }))
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 8)
+
+  return (
+    <div className="rounded-2xl border border-gray-800 bg-black/30 p-5">
+      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+        <StatCard label="Geo Variants (24h)" value={Number(geo.stats24h.variants_24h || 0).toLocaleString()} accent="cyan" />
+        <StatCard label="Avg Quality (24h)" value={`${Number(geo.stats24h.avg_quality_24h || 0)} / 100`} accent="green" />
+        <StatCard label="Distinct Cities (24h)" value={Number(geo.stats24h.distinct_cities_24h || 0).toLocaleString()} />
+        <StatCard label="Distinct Base Slugs (24h)" value={Number(geo.stats24h.distinct_bases_24h || 0).toLocaleString()} />
+      </div>
+
+      <div className="text-xs text-gray-500 uppercase tracking-widest mb-3">Top Cities by Variant Volume</div>
+      {topCities.length > 0 ? (
+        <div className="space-y-2">
+          {topCities.map((c) => (
+            <div key={c.city} className="flex items-center justify-between rounded-xl border border-gray-800 bg-black/20 px-3 py-2 text-sm">
+              <span className="text-gray-200">{c.city}</span>
+              <span className="text-gray-400">Variants: <b className="text-white">{c.count}</b> · Quality: <b className="text-cyan-300">{c.avgQuality}</b></span>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="text-sm text-gray-500">Noch keine Varianten vorhanden.</div>
+      )}
+    </div>
+  )
+}
+
 // ---------------------------------------------------------------------------
 // Main dashboard
 // ---------------------------------------------------------------------------
 export default function ProfitDashboard() {
   const [data, setData] = useState<DashData | null>(null)
+  const [geo, setGeo] = useState<GeoMatrixData | null>(null)
   const [err, setErr] = useState<string | null>(null)
   const [busy, setBusy] = useState(true)
   const [blockMsg, setBlockMsg] = useState<string | null>(null)
@@ -263,16 +336,24 @@ export default function ProfitDashboard() {
     setBusy(true)
     setErr(null)
     try {
-      const res = await fetch("/api/admin/profit-analytics", { cache: "no-store" })
-      if (res.status === 401) {
+      const [profitRes, geoRes] = await Promise.all([
+        fetch("/api/admin/profit-analytics", { cache: "no-store" }),
+        fetch("/api/admin/geo-matrix?limit=200", { cache: "no-store" }),
+      ])
+      if (profitRes.status === 401 || geoRes.status === 401) {
         window.location.href = "/admin"
         return
       }
-      if (!res.ok) {
+      if (!profitRes.ok) {
         setErr("Fehler beim Laden des Dashboards")
         return
       }
-      setData((await res.json()) as DashData)
+      setData((await profitRes.json()) as DashData)
+      if (geoRes.ok) {
+        setGeo((await geoRes.json()) as GeoMatrixData)
+      } else {
+        setGeo(null)
+      }
     } catch {
       setErr("Netzwerkfehler")
     } finally {
@@ -535,6 +616,12 @@ export default function ProfitDashboard() {
           <section>
             <SectionHeader title="Conversion Funnel" icon="🔄" />
             <ConversionFunnel funnel={data.funnel} />
+          </section>
+
+          {/* ── 5. Geo Matrix ── */}
+          <section>
+            <SectionHeader title="Geo Living Matrix" icon="🕸️" />
+            <GeoMatrixPanel geo={geo} />
           </section>
         </>
       )}

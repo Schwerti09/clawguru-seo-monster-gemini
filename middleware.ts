@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { DEFAULT_LOCALE, SUPPORTED_LOCALES, type Locale, localeDir } from "@/lib/i18n"
 import { getRequestId, getRequestIdHeaderName } from "@/lib/ops/request-id"
-import { buildGeoSlug, parseGeoVariantSlug, slugifyCity } from "@/lib/geo-matrix"
+import { buildGeoSlug, getGeoProfileFromHeaders, parseGeoVariantSlug, slugifyCity } from "@/lib/geo-matrix"
 
 const LOCALE_COOKIE_NAME = "cg_locale"
 const LOCALE_COOKIE_MAX_AGE_SECONDS = 60 * 60 * 24 * 365
@@ -109,7 +109,9 @@ function edgeGeoFromRequest(request: NextRequest) {
   const city = request.headers.get("x-vercel-ip-city") || ""
   const region = request.headers.get("x-vercel-ip-country-region") || ""
   const country = request.headers.get("x-vercel-ip-country") || ""
-  return { city, region, country }
+  if (city || region || country) return { city, region, country }
+  const fallback = getGeoProfileFromHeaders(request.headers)
+  return { city: fallback.city, region: fallback.region, country: fallback.country }
 }
 
 export function middleware(request: NextRequest) {

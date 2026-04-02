@@ -1,5 +1,7 @@
 import { unstable_cache } from "next/cache"
 import { generateTextOrdered } from "@/lib/ai/providers"
+import { parseGeoVariantSlug } from "@/lib/geo-matrix"
+import { persistGeoVariantNode } from "@/lib/geo-mycelium"
 
 export type GeoVariantContent = {
   localTitle: string
@@ -66,10 +68,18 @@ Return ONLY strict JSON (no markdown) with this exact shape:
 Rules:
 - Highly specific to the provided city/region/country and locale.
 - Include realistic regional provider references and compliance context.
-- Keep all claims practical and non-fabricated; avoid fake legal certainty.
+- Explicitly mention region-relevant compliance domains (for example GDPR, NIS2, ISO 27001, SOC 2) only when contextually correct.
+- Include local buying reality (SMB vs enterprise, managed services, cloud spend sensitivity, local labor market).
+- Keep all claims practical and non-fabricated; avoid fake legal certainty and avoid naming fake laws.
 - localExamples must be operational scenarios, not marketing fluff.
+- localCaseStudy must read like a plausible mini post-incident recap with one measurable outcome.
 - localSearchIntents must reflect likely long-tail queries from local teams.
 - myceliumLinks must be internal relative paths starting with "/".
+- myceliumLinks should include at least:
+  1) one related runbook,
+  2) one tools/check intent page,
+  3) one trust/method page,
+  4) one adjacent stack hardening page.
 - concise, high-signal, actionable.
 `.trim()
 
@@ -121,7 +131,7 @@ export async function generateGeoVariantContent(input: {
   title: string
   summary: string
 }) {
-  return buildGeoVariantCached(
+  const variant = await buildGeoVariantCached(
     input.slug,
     input.locale,
     input.city,
@@ -130,4 +140,25 @@ export async function generateGeoVariantContent(input: {
     input.title,
     input.summary
   )
+  if (!variant) return null
+
+  const parsed = parseGeoVariantSlug(input.slug)
+  if (parsed.citySlug) {
+    await persistGeoVariantNode({
+      locale: input.locale,
+      baseSlug: parsed.baseSlug,
+      citySlug: parsed.citySlug,
+      variantSlug: input.slug,
+      cityName: input.city,
+      regionName: input.region,
+      countryCode: input.country,
+      localTitle: variant.localTitle,
+      localSummary: variant.localSummary,
+      myceliumLinks: variant.myceliumLinks,
+      qualityScore: geoVariantQualityScore(variant),
+      model: "gemini",
+    })
+  }
+
+  return variant
 }

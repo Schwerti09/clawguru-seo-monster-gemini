@@ -180,6 +180,47 @@ function geoServiceJsonLd(opts: {
   }
 }
 
+function geoSecurityServiceJsonLd(opts: {
+  locale: Locale
+  slug: string
+  title: string
+  city: { name_en: string; country_code: string }
+  summary: string
+  pricingNote?: string
+  compliance?: string[]
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: `${opts.title} Security Hardening (${opts.city.name_en})`,
+    serviceType: "Security hardening runbook",
+    description: opts.summary,
+    areaServed: {
+      "@type": "AdministrativeArea",
+      name: `${opts.city.name_en}, ${opts.city.country_code}`,
+    },
+    provider: {
+      "@type": "Organization",
+      name: "ClawGuru",
+      url: BASE_URL,
+    },
+    category: "Cybersecurity",
+    termsOfService: `${BASE_URL}/${opts.locale}/methodik`,
+    offers: {
+      "@type": "Offer",
+      availability: "https://schema.org/InStock",
+      url: `${BASE_URL}/${opts.locale}/check`,
+      description: opts.pricingNote || "Operational security check and hardening guidance.",
+    },
+    additionalProperty: (opts.compliance || []).slice(0, 4).map((c) => ({
+      "@type": "PropertyValue",
+      name: "Compliance Context",
+      value: c,
+    })),
+    mainEntityOfPage: `${BASE_URL}/${opts.locale}/runbook/${opts.slug}`,
+  }
+}
+
 function ClawScoreBadge({ score }: { score: number }) {
   const color =
     score >= 90 ? "text-emerald-400 border-emerald-500/40 bg-emerald-500/10" :
@@ -304,12 +345,12 @@ function FaqSection({ faq }: { faq: RunbookFaqEntry[] }) {
   )
 }
 
-export default async function RunbookPage(props: { params: { slug: string } }) {
+export default async function RunbookPage(props: { params: { slug: string; lang?: string } }) {
   const params = props.params
   const __label = `runbook:${params.slug}`
   console.time(__label)
   const { getRunbook } = await import("@/lib/pseo")
-  const locale = DEFAULT_LOCALE as Locale
+  const locale = ((params.lang as Locale | undefined) ?? DEFAULT_LOCALE) as Locale
   const dict = await getDictionary(locale)
   const prefix = `/${locale}`
   
@@ -337,7 +378,7 @@ export default async function RunbookPage(props: { params: { slug: string } }) {
   const geoVariant =
     process.env.GEO_MATRIX_ENABLED === "1" && geoCity
       ? await generateGeoVariantContent({
-          slug: r.slug,
+          slug: params.slug,
           locale,
           city: geoCity.name_en,
           region: geoCity.name_en,
@@ -346,6 +387,8 @@ export default async function RunbookPage(props: { params: { slug: string } }) {
           summary: r.summary,
         })
       : null
+  const displayTitle = geoVariant?.localTitle || r.title
+  const displaySummary = geoVariant?.localSummary || r.summary
 
   // Quality Gate: reject thin content before serving (ClawGuru 2026 Standard)
   const quality = validateRunbook(r)
@@ -391,16 +434,16 @@ export default async function RunbookPage(props: { params: { slug: string } }) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(howToJsonLd({ title: r.title, summary: r.summary, slug: r.slug, steps: r.howto.steps, locale })),
+          __html: JSON.stringify(howToJsonLd({ title: displayTitle, summary: displaySummary, slug: params.slug, steps: r.howto.steps, locale })),
         }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd({ title: r.title, slug: r.slug, locale, runbooksLabel: dict.nav.runbooks })) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd({ title: displayTitle, slug: params.slug, locale, runbooksLabel: dict.nav.runbooks })) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(techArticleJsonLd({ title: r.title, summary: r.summary, slug: r.slug, lastmod: r.lastmod, locale })) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(techArticleJsonLd({ title: displayTitle, summary: displaySummary, slug: params.slug, lastmod: r.lastmod, locale })) }}
       />
       {r.faq?.length > 0 && (
         <script
@@ -409,20 +452,38 @@ export default async function RunbookPage(props: { params: { slug: string } }) {
         />
       )}
       {geoVariant && geoCity ? (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(
-              geoServiceJsonLd({
-                locale,
-                slug: params.slug,
-                title: geoVariant.localTitle || r.title,
-                summary: geoVariant.localSummary || r.summary,
-                city: geoCity,
-              })
-            ),
-          }}
-        />
+        <>
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify(
+                geoServiceJsonLd({
+                  locale,
+                  slug: params.slug,
+                  title: displayTitle,
+                  summary: displaySummary,
+                  city: geoCity,
+                })
+              ),
+            }}
+          />
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify(
+                geoSecurityServiceJsonLd({
+                  locale,
+                  slug: params.slug,
+                  title: displayTitle,
+                  summary: displaySummary,
+                  city: geoCity,
+                  pricingNote: geoVariant.localPricingNote,
+                  compliance: geoVariant.localCompliance,
+                })
+              ),
+            }}
+          />
+        </>
       ) : null}
       <div className="py-16 max-w-4xl mx-auto">
         <nav className="text-sm text-gray-500 mb-6" aria-label="Breadcrumb">
@@ -455,15 +516,15 @@ export default async function RunbookPage(props: { params: { slug: string } }) {
           Claw Security Score: {r.clawScore}/100 – {r.title}
         </p>
 
-        <SectionTitle kicker="Runbook" title={r.title} subtitle={r.summary} />
+        <SectionTitle kicker="Runbook" title={displayTitle} subtitle={displaySummary} />
 
         {geoVariant ? (
           <div className="mt-6 rounded-2xl border border-cyan-500/30 bg-cyan-500/10 p-4">
             <div className="text-xs font-black tracking-wider uppercase text-cyan-300">
               Mycelium Geo-Living Matrix
             </div>
-            <h3 className="mt-2 text-base font-bold text-cyan-100">{geoVariant.localTitle}</h3>
-            <p className="mt-2 text-sm text-cyan-50/90">{geoVariant.localSummary}</p>
+            <h3 className="mt-2 text-base font-bold text-cyan-100">{displayTitle}</h3>
+            <p className="mt-2 text-sm text-cyan-50/90">{displaySummary}</p>
             <div className="mt-3 flex flex-wrap gap-2">
               {geoVariant.localCompliance.slice(0, 3).map((item) => (
                 <span key={item} className="rounded-full border border-cyan-400/30 px-2 py-0.5 text-xs text-cyan-100">
@@ -477,7 +538,7 @@ export default async function RunbookPage(props: { params: { slug: string } }) {
         {/* Sticky Glass Mini-Tabs + Progress Tracker */}
         <RunbookMiniTabs />
 
-        <ShareButtons title={r.title} slug={r.slug} locale={locale} />
+        <ShareButtons title={displayTitle} slug={params.slug} locale={locale} />
 
         <div
           id="overview"
@@ -517,13 +578,13 @@ export default async function RunbookPage(props: { params: { slug: string } }) {
               <span className="text-white/60 group-hover:text-white transition-colors">→</span>
             </a>
             <a
-              href="/check"
+              href={`${prefix}/check`}
               className="px-6 py-3 rounded-2xl font-black bg-gradient-to-r from-orange-500 to-red-600 hover:opacity-90"
             >
               Re-Check starten →
             </a>
             <a
-              href="/copilot"
+              href={`${prefix}/copilot`}
               className="px-6 py-3 rounded-2xl border border-gray-700 hover:border-gray-500 font-bold text-gray-200"
             >
               Copilot Runbook Builder →
@@ -589,7 +650,7 @@ export default async function RunbookPage(props: { params: { slug: string } }) {
             This runbook is cryptographically signed and immutably recorded.
           </p>
           <a
-            href={`/provenance/${r.slug}`}
+            href={`${prefix}/provenance/${r.slug}`}
             className="ml-auto shrink-0 text-xs text-cyan-400 hover:text-cyan-200 underline underline-offset-2 transition-colors"
           >
             View Provenance Chain →

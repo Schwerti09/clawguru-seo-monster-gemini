@@ -9,6 +9,8 @@ Operational schedule for the Geo Living Matrix rollout loop.
 - `GEO_AUTO_PROMOTE_MIN_AVG_QUALITY` (default `84`)
 - `GEO_AUTO_PROMOTE_MIN_VARIANTS` (default `3`)
 - `GEO_AUTO_PROMOTE_MAX_PROMOTIONS` (default `10`)
+- `GEO_REVALIDATE_SECRET` (required for live revalidate calls)
+- `GEO_REVALIDATE_SLUGS` (comma-separated seed slugs, default `aws-ssh-hardening-2026`)
 
 ## Step-by-step execution
 
@@ -37,6 +39,7 @@ This runs:
 1. `/api/geo/sitemap-guardrail`
 2. `/api/geo/canary-rollout`
 3. `/api/geo/auto-promotion`
+4. `/api/geo/revalidate` for each promoted city + configured seed slug(s) (live mode only)
 
 ## Recommended cron cadence
 

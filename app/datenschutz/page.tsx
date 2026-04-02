@@ -227,8 +227,9 @@ export default function DatenschutzPage() {
               </table>
             </div>
             <p className="mt-3 text-gray-500 text-sm">
-              Kein Tracking, keine Werbe-Cookies, kein Google Analytics. Falls sich das ändert, wird diese Seite
-              aktualisiert und ggf. eine Consent-Abfrage ergänzt.
+              Keine Werbe-Cookies. Wir nutzen technische Reichweitenmessung (z. B. Google Analytics 4 und optional Umami),
+              um Nutzung, Funnel und Produktqualitaet zu verbessern. Falls sich Art oder Umfang der Messung aendern,
+              wird diese Seite aktualisiert und ggf. eine Consent-Abfrage ergaenzt.
             </p>
           </section>
 

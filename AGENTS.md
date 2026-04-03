@@ -366,7 +366,7 @@ Wer mitmacht, bekommt einen Mycelium-Badge + Credits.“
 
 ### Status-Tracking HEUTE (in AGENTS.md updaten)
 - [x] Roast My Moltbot live in allen 15 Locales
-- [ ] 5 Geo-Cities live + Heatmaps
+- [x] 5 Geo-Cities live + Heatmaps
 - [ ] Community-Posts veröffentlicht (Links hier einfügen)
 - [ ] npm-Scripts alle durchgelaufen
 - [ ] Erste Traffic-Zahlen um 20 Uhr checken

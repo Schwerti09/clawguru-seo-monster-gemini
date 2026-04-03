@@ -61,10 +61,18 @@ export async function POST(req: NextRequest) {
      ORDER BY priority DESC, population DESC, slug ASC`
   )
   const canarySet = new Set(canaryRes.rows.map((r) => r.slug))
-  const promote = rankedCities
-    .filter((city: any) => canarySet.has(String(city.slug || "")))
-    .filter((city: any) => city.status === 200 && Number(city.rankingScore || 0) >= minRankingScore)
-    .map((city: any) => String(city.slug))
+  const canaryRanked = rankedCities.filter((city: any) => canarySet.has(String(city.slug || "")))
+  const withStatus200 = canaryRanked.filter((city: any) => city.status === 200)
+  const withRanking = withStatus200.filter((city: any) => Number(city.rankingScore || 0) >= minRankingScore)
+  const promote = withRanking.map((city: any) => String(city.slug))
+
+  const debug = {
+    totalRanked: rankedCities.length,
+    canaryRanked: canaryRanked.length,
+    belowStatus200: canaryRanked.length - withStatus200.length,
+    belowMinRankingScore: withStatus200.length - withRanking.length,
+    selected: promote.length,
+  }
 
   if (dryRun || promote.length === 0) {
     return NextResponse.json({
@@ -74,6 +82,7 @@ export async function POST(req: NextRequest) {
       slug,
       minRankingScore,
       canaryCount: canarySet.size,
+      debug,
       wouldPromote: promote,
       promoted: [],
     })
@@ -99,6 +108,7 @@ export async function POST(req: NextRequest) {
     slug,
     minRankingScore,
     canaryCount: canarySet.size,
+    debug,
     promoted: updated.rows.map((r) => r.slug),
   })
 }

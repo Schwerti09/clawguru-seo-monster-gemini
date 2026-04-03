@@ -69,6 +69,27 @@ export async function POST(req: NextRequest) {
   )
   const candidates = candidatesRes.rows
 
+  const totalsRes = await dbQuery<{
+    inactive_total: string
+    priority_pass: string
+    population_pass: string
+  }>(
+    `SELECT
+       COUNT(*) FILTER (WHERE is_active = false)::text AS inactive_total,
+       COUNT(*) FILTER (WHERE is_active = false AND priority >= $1)::text AS priority_pass,
+       COUNT(*) FILTER (WHERE is_active = false AND priority >= $1 AND population >= $2)::text AS population_pass
+     FROM geo_cities`,
+    [minPriority, minPopulation]
+  )
+  const totals = totalsRes.rows[0] || { inactive_total: "0", priority_pass: "0", population_pass: "0" }
+  const debug = {
+    inactiveTotal: Number(totals.inactive_total || 0),
+    passPriority: Number(totals.priority_pass || 0),
+    passPopulation: Number(totals.population_pass || 0),
+    selected: candidates.length,
+    blockedByHealth: healthScore < minHealth,
+  }
+
   if (dryRun || healthScore < minHealth || candidates.length === 0) {
     return NextResponse.json({
       ok: true,
@@ -78,6 +99,7 @@ export async function POST(req: NextRequest) {
       maxActivate,
       minPriority,
       minPopulation,
+      debug,
       wouldActivate: candidates,
       activated: [],
     })
@@ -106,6 +128,7 @@ export async function POST(req: NextRequest) {
     maxActivate,
     minPriority,
     minPopulation,
+    debug,
     wouldActivate: candidates,
     activated: updated.rows.map((r) => r.slug),
   })

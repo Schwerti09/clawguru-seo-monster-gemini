@@ -65,6 +65,11 @@ async function main() {
   }
 
   console.log(`top-city-expansion mode=${dryRun ? "dry-run" : "live"} healthScore=${json.healthScore}`)
+  if (json.debug) {
+    console.log(
+      `debug inactiveTotal=${json.debug.inactiveTotal} passPriority=${json.debug.passPriority} passPopulation=${json.debug.passPopulation} selected=${json.debug.selected} blockedByHealth=${json.debug.blockedByHealth}`
+    )
+  }
   console.log(`activated=${(json.activated || []).join(",") || "-"}`)
   const preview = Array.isArray(json.wouldActivate) ? json.wouldActivate.map((x) => x.slug).join(",") : "-"
   console.log(`wouldActivate=${preview || "-"}`)

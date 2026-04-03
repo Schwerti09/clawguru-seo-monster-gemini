@@ -63,6 +63,11 @@ async function main() {
   console.log(
     `canary-rollout mode=${dryRun ? "dry-run" : "live"} locale=${locale} cities=${cities || "-"} minRankingScore=${json.minRankingScore}`
   )
+  if (json.debug) {
+    console.log(
+      `debug totalRanked=${json.debug.totalRanked} canaryRanked=${json.debug.canaryRanked} belowStatus200=${json.debug.belowStatus200} belowMinRankingScore=${json.debug.belowMinRankingScore} selected=${json.debug.selected}`
+    )
+  }
   console.log(`promoted=${(json.promoted || []).join(",") || "-"}`)
   console.log(`wouldPromote=${(json.wouldPromote || []).join(",") || "-"}`)
 }

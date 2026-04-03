@@ -621,6 +621,13 @@ net:
             <a href={coreLinks.check} className="inline-block px-6 py-3 bg-white text-green-700 rounded-lg font-semibold hover:bg-slate-100 transition-colors">
               Security Assessment Starten
             </a>
+            <div className="mt-6 flex flex-wrap justify-center gap-3 text-sm">
+              <a href={`${prefix}/openclaw-security-check`} className="rounded-lg border border-white/30 px-3 py-2 text-white hover:bg-white/10">OpenClaw Security Hub</a>
+              <a href={`${prefix}/ai-agent-security`} className="rounded-lg border border-white/30 px-3 py-2 text-white hover:bg-white/10">AI Agent Security</a>
+              <a href={`${prefix}/runbooks/security`} className="rounded-lg border border-white/30 px-3 py-2 text-white hover:bg-white/10">Security Runbooks</a>
+              <a href={coreLinks.methodology} className="rounded-lg border border-white/30 px-3 py-2 text-white hover:bg-white/10">Methodology</a>
+            </div>
+
           </section>
         </div>
       </div>

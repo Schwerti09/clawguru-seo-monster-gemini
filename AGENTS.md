@@ -39,6 +39,7 @@
 - Pattern-Konsolidierung gestartet: zentrale Helper-Funktion `lib/core-security-links.ts` für locale-sichere Kernlinks (`/check`, `/methodik`) eingeführt und auf den 4 SEO-LPs verdrahtet.
 - Pattern-Konsolidierung erweitert: Helper-Rollout zusätzlich auf 10 strategische Content-Seiten (`check-methodology`, `openclaw-top-5`, `gateway-auth-10-steps`, `api-key-leak-response`, `nis2-controls`, `hetzner-vs-do`, `docker-proxy-cheatsheet`, `check-vs-pentest`, `runbook-vs-blog`, `ai-agent-threat-model`) ausgedehnt.
 - Pattern-Konsolidierung (Premium-Rollout): Helper auf restliche `[lang]`-Runbook-/Security-Seiten ausgerollt (u. a. `aws-*`, `azure-ad`, `argocd`, `nginx`, `postgresql`, `redis`, `terraform`, `vault`, `waf`, `xxe`), sodass `check`-Links locale-sicher zentral über `core-security-links` laufen.
+- Interner Linkgraph (Pass #1): zusätzliche LP-/Hub-Cluster-Links (`/openclaw-security-check`, `/ai-agent-security`, `/runbooks/security`, `/methodik`) in langen `[lang]`-Security-Seiten ergänzt, um Pillar-Verteilung und Crawler-Pfade zu stärken.
 - P1 LP-Routen: `/[lang]/openclaw`, `/[lang]/openclaw-security-check`, `/[lang]/moltbot-hardening`, `/[lang]/ai-agent-security` live mit `buildLocalizedAlternates`, Metadata, Basis-Schema und internen Links.
 - Redirects aktiv: `/moltbot` und `/clawbot` (inkl. lokalisierter Varianten) per Middleware auf die neuen Zielseiten.
 - Homepage-CRO-i18n: neue CTA-/LP-Hub-Texte per zentralem Fallback (`lib/homepage-cro-i18n.ts`) für alle 15 Locales verdrahtet (`HeroSection`, `FinalCTASection`, `app/page.tsx`).

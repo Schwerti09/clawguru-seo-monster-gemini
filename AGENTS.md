@@ -374,6 +374,8 @@ Wer mitmacht, bekommt einen Mycelium-Badge + Credits.“
 - [ ] npm-Scripts alle durchgelaufen
 - [ ] Erste Traffic-Zahlen um 20 Uhr checken
 
+Community-Launch-Kit (Copy + Tracking-Slots): `docs/community-launch-kit-2026-04-03.md`
+
 Hinweis (lokal): `geo:sitemap-guardrail:dry-run` und `geo:ops-live-guard` benötigen gesetzte Geo-Secrets (`GEO_SITEMAP_GUARDRAIL_SECRET`, `GEO_AUTO_PROMOTION_SECRET`, `GEO_REVALIDATE_SECRET`, `GEO_REVALIDATE_SLUGS`).
 
 **Endziel HEUTE ABEND:**  

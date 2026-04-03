@@ -50,21 +50,23 @@ ClawGuru combines:
 ### Done
 
 - `Roast My Stack` i18n pass shipped across all 15 locales; hardcoded EN UI remnants removed.
+- Dedicated `Roast My Moltbot` landing route live at `/[lang]/roast-my-moltbot`, wired into homepage/openclaw link flows.
 - Dedicated localized landing routes live: `/[lang]/openclaw`, `/[lang]/openclaw-security-check`, `/[lang]/moltbot-hardening`, `/[lang]/ai-agent-security`.
 - Legacy intent redirects active in middleware: `/moltbot` and `/clawbot` (including localized variants) to canonical landing targets.
 - Homepage CRO updates shipped (3-step exposure-to-fix narrative, locale-aware CTA copy, sticky mobile CTA, explicit "not a pentest" trust framing).
 - Canonical/hreflang standardization and SEO guardrails operational (`npm run check:seo-canonicals`).
 - 8-week content queue operationalized with shipped indexable pages under `/[lang]/...` and enforced internal-link patterning.
+- Geo auth + dry-run/live trigger path validated for canary/guardrail scripts; 500-limit rollout tests executed safely.
 
 ### In progress
 
 - Editorial premium-quality pass for locale copy (especially `roast` and landing-page nuance by market).
-- Internal link graph refinement between LPs, content pages, and runbook hubs.
+- Candidate eligibility debugging for geo promotion (`wouldPromote`/`wouldActivate` currently empty despite healthy runtime state).
 
 ### Open
 
-- Final consistency hardening for the `/methodik` + `/check` linking pattern.
-- Geo/SEO operations "traffic-light" view (daily/weekly) as a compact operational dashboard section.
+- First non-empty geo promotion wave with human-reviewed candidate list (see `AGENTS.md` §10).
+- Daily report loop automation in CI based on Killermachine v1 template (see `AGENTS.md` §9).
 
 Reference source of truth for strategy and rollout state: `AGENTS.md`.
 
@@ -102,8 +104,17 @@ cp .env.example .env.local
 Set at least:
 
 - `DATABASE_URL`
-- AI provider key(s) used by your environment
-- optional cache/ops secrets as needed
+- AI provider key(s) used by your environment (for example `GEMINI_API_KEY`)
+- Geo ops secrets for rollout/guardrails:
+  - `GEO_CANARY_ROLLOUT_SECRET`
+  - `GEO_SITEMAP_GUARDRAIL_SECRET`
+  - `GEO_AUTO_PROMOTION_SECRET`
+  - `GEO_REVALIDATE_SECRET`
+  - `GEO_REVALIDATE_SLUGS`
+  - `GEO_EXPANSION_SECRET` (needed for top-city-expansion endpoint auth)
+- `ANALYTICS_WRITE_KEY` (if analytics write path is enabled)
+
+On Windows, `.env.local` may be hidden in Explorer; use terminal (`dir /a`) or your editor's file list to open it.
 
 ### 3) Migrate database
 
@@ -133,13 +144,22 @@ App starts on [http://localhost:3000](http://localhost:3000).
 ### Geo operations
 
 - `npm run check:geo-ops-readiness`
+- `npm run check:geo-rollout-status`
 - `npm run geo:sitemap-guardrail:dry-run`
 - `npm run geo:canary-rollout:dry-run`
+- `npm run geo:top-city-expansion:dry-run`
 - `npm run geo:auto-promotion:dry-run`
 - `npm run geo:ops-cycle:dry-run`
 - `npm run geo:ops-live-guard`
 
 Detailed runbook: `docs/geo-ops-runbook.md`.
+
+Typical high-volume dry-run pattern (all locales, score-threshold tuning) is documented in `AGENTS.md` §10.
+
+### Autonomous daily loop
+
+Killermachine v1 orchestration spec (agents, safeguards, daily loop, CI template) is documented in `AGENTS.md` §9.
+Use it as the operational blueprint before enabling unattended daily automation.
 
 ### Embeddable Moltbot widget
 

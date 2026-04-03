@@ -64,6 +64,7 @@
 - LP-Copy für `/openclaw`, `/openclaw-security-check`, `/moltbot-hardening`, `/ai-agent-security` zentral in `lib/landing-pages-i18n.ts` für alle 15 Locales hinterlegt und in Seiten verdrahtet.
 - LP-Copy: finaler Native-Review (Muttersprachler + Terminologie-Feinschliff) als letzter Qualitätsschritt offen.
 - `methodik`/`check`-Pattern: Konsolidierung via `core-security-links` auf LPs und `[lang]`-Content-/Runbook-Seiten ausgerollt.
+- Nächster Umsetzungsblock: interner Linkgraph-Feinschliff (feste Link-Matrix LP ↔ Content ↔ Runbook-Hubs) + Geo/SEO Ops View.
 
 **Wichtige Dateien für i18n (Roast):**
 
@@ -90,7 +91,7 @@
 
 ### Offen
 
-- Optionales Final-Hardening: `methodik`/`check` Pattern vollständig konsolidieren.
+- Native QA Sign-off für Roast + LP-Copy pro Locale dokumentieren (Abnahme-Checkliste je Sprache).
 - Geo/SEO Operations View als klare Ampel-Sicht (Daily/Weekly) in einem dedizierten Abschnitt oder Dashboard dokumentieren.
 
 ---

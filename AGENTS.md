@@ -58,6 +58,7 @@
 - P2 achte Delivery live: `/[lang]/security-check-vs-pentest-guide` als indexierbare Conversion-Artikel-Seite mit klarer Abgrenzung Check vs Pentest, Kombinations-Workflow und internen Links auf `/openclaw-security-check`, `/ai-agent-security`, `/check`, `/methodik`.
 - P2 neunte Delivery live: `/[lang]/executable-runbook-vs-static-blog` als indexierbare Product-Differentiation-Seite mit Vergleich Blog vs Runbook, Transition-Flow und internen Links auf `/runbooks`, `/openclaw`, `/check`, `/methodik`.
 - P2 zehnte Delivery live: `/[lang]/ai-agent-threat-model-template` als indexierbare Category-Seite mit Threat-Model-Bausteinen, Operator-Prompts und internen Links auf `/ai-agent-security`, `/openclaw-security-check`, `/check`, `/methodik`.
+- Debug-Stufe 1 (Re-Run, 03.04.2026): `check:geo-ops-readiness`, `check-geo-rollout-status` (DE/EN, verbose), `check:geo-city-ranking`, `check:geo-index-health` sowie Canary-/Expansion-Dry-Runs (Score 75/70/65/60) ausgeführt; System healthy, aber `wouldPromote`/`wouldActivate` weiterhin leer.
 
 **Bewusst offen / nächste Engineering-Schritte (SEO-Plan):**
 
@@ -602,6 +603,7 @@ ANALYTICS_WRITE_KEY=
 - [x] 500er Live-Run über 15 Locales ausgeführt.
 - [x] Guardrail-Check nach Rollout grün.
 - [x] Secrets und Auth-Endpunkte stabilisiert.
+- [x] Debug-Stufe-1-Re-Run abgeschlossen (Readiness/Ranking/Health + Canary-/Expansion-Dry-Runs).
 - [ ] Erste nicht-leere `wouldPromote`-Liste erzeugen (Debug-Stufe 1).
 - [ ] Konservative Aktivierung DE/EN mit manueller Review abschließen.
 
@@ -741,5 +743,132 @@ npm run check:geo-rollout-status
 - **Human-in-the-loop** bei Live-Promotion von >500 Seiten.
 - Keine Massenpromotion ohne Review der `wouldPromote`/`wouldActivate`-Liste.
 - Qualität vor Quantität: lieber weniger, aber klar differenzierte City-Seiten.
+
+---
+
+## §11 – Operative Blockade: wouldPromote bleibt leer trotz gelockerter Schwellen (03.04.2026)
+
+### Operative Ausgangslage
+
+- Alle Guardrails und Dry-Runs sind technisch gesund (`readiness`, `ranking`, `index health`, API-Auth, Build).
+- Trotz Schwellen-Lockerung (`minRankingScore`, `minHealth`, `minPriority`, `minPopulation`) bleiben `wouldPromote` und `wouldActivate` leer.
+- Operative Diagnose: aktuell fehlen **promotable Kandidaten** mit stabiler Daten- und Eligibility-Lage.
+
+### 11.1 Detaillierte Ursachen-Analyse
+
+1. **Datenlücken pro Geo-Cluster**  
+   Pro Stadt fehlen belastbare oder ausreichend frische Signale (Exposure, Gateway/Auth-Fehler, Runbook-Fit), sodass keine Stadt die Qualitätsfilter nachhaltig erfüllt.
+
+2. **Ranking-Score ist zu global, zu wenig city-spezifisch**  
+   Der Score kann technisch hoch wirken, ohne dass die Kombination `city + locale + slug` einen klaren lokalen Mehrwert zeigt.
+
+3. **Eligibility-Filter vor Promotion-Gate**  
+   Kandidaten fallen ggf. bereits vor Ranking-/Health-Gates raus (Rollout-Stage, Aktivstatus, Prioritäts-/Population-Constraints, Qualitätshistorie).
+
+4. **Unzureichende lokale Unique Value Density**  
+   Seiten sind potenziell zu ähnlich; das System blockt zurecht, um austauschbare City-Pages zu vermeiden.
+
+5. **Thin-Content-Schutz greift korrekt**  
+   Die aktuelle Blockade ist wahrscheinlich ein Sicherheitsmechanismus gegen Low-Signal-Rollouts, nicht primär ein technischer Defekt.
+
+6. **Signal-Freshness/Lookback nicht ausreichend**  
+   Relevante Events sind entweder zu alt, zu dünn oder nicht granular genug pro Stadt und Slug.
+
+### 11.2 Risiko-Bewertung bei erzwungener Massenpromotion
+
+- **Thin-Content-Risiko:** viele Seiten ohne differenzierenden Nutzen -> schwache Engagement-Signale.
+- **Algorithmische Abwertung:** erhöhte Wahrscheinlichkeit für Qualitäts-/Spam-Filter bei programmatischer Skalierung ohne Mehrwert.
+- **Traffic ohne Conversion:** mehr Impressionen, aber geringe Check-Starts/Runbook-Klicks.
+- **Crawl-Budget-Verlust:** Suchmaschinen crawlen Seiten mit niedriger Priorität statt starker Core-Seiten.
+- **Langfristiger Trust-Schaden:** E-E-A-T-/Brand-Wirkung leidet, Erholung dauert deutlich länger als konservativer Ausbau.
+
+### 11.3 Konkreter 4-Stufen-Action-Plan
+
+#### Stufe 1 – Maximaler Debug (nur dry-run, volle Transparenz)
+
+Ziel: je Gate sichtbar machen, **wo** Kandidaten ausfallen.
+
+- Verbose-Checks für Rollout-/Ranking-/Health-Layer ausführen.
+- Canary-/Expansion-Dry-Runs über Schwellenstufen fahren.
+- Neue Debug-Ausgaben (`debug.*`) auswerten und pro Lauf in Log-Tabelle/Report festhalten.
+- Ergebnisformat standardisieren: `total -> eligible -> selected -> wouldPromote/wouldActivate`.
+
+#### Stufe 2 – Daten-Anreicherung (city-spezifisch, nicht generisch)
+
+Pro Zielstadt ergänzen:
+
+- **Exposure-Signale:** offene Ports, unsichere Gateways, Auth-Lücken, TLS-/Proxy-Misconfigs.
+- **Runbook-Fit-Signale:** Mapping `city -> top risks -> passende Slugs`.
+- **Freshness-Signale:** Zeitfenster und Recency-Gewichtung, damit alte Daten nicht dominieren.
+- **Intent-Signale:** lokale Such-/Community-Hinweise (OpenClaw/Moltbot-spezifische Schmerzpunkte).
+- **Evidence-Metadaten:** Quelle, Zeitstempel, Qualitätsscore, Confidence.
+
+#### Stufe 3 – Konservative Promotion (manuell reviewed)
+
+- Start nur mit **Top-20 Städten** (DE/EN), jeweils klarer Unique Value.
+- Erst Dry-Run, dann manuelle Review-Liste (`wouldPromote`/`wouldActivate`) freigeben.
+- Live nur in kleinen Wellen (z. B. 10/20/30 Seiten), danach KPI-Check.
+- Rollback-Pfad vorbereiten (deactivate/prune), falls Engagement-/Quality-Signale abfallen.
+
+#### Stufe 4 – System-Verbesserung (Killermachine v1 -> v2)
+
+- Auto-Diagnose bei leerem `wouldPromote`: Gate-Fail-Reason maschinenlesbar ausgeben.
+- Täglicher Gap-Report: fehlende Datenfelder je Stadt/Slug priorisieren.
+- Vorschlags-Engine: konkrete "next best data actions" pro Cluster ausgeben.
+- Selbstheilender Loop: erst Datenlücken schließen, dann automatisiert erneuten Dry-Run triggern.
+
+### 11.4 Fertige Befehle (Stufe 1 Debug + sicherer Einstieg Stufe 3)
+
+```powershell
+# Stufe 1A: Systemzustand + verbose Status
+npm run check:geo-ops-readiness
+node scripts/check-geo-rollout-status.js --locale=de --slug=openclaw-risk-2026 --verbose=1
+node scripts/check-geo-rollout-status.js --locale=en --slug=openclaw-exposed --verbose=1
+npm run check:geo-city-ranking
+npm run check:geo-index-health
+```
+
+```powershell
+# Stufe 1B: Canary-Debug über Schwellen (nur dry-run)
+$locales = @("de","en")
+$scores = @(75,70,65,60)
+foreach ($locale in $locales) {
+  if ($locale -eq "de") { $slug = "openclaw-risk-2026" } else { $slug = "openclaw-exposed" }
+  foreach ($score in $scores) {
+    node scripts/trigger-geo-canary-rollout.js --mode=dry-run --locale=$locale --slug=$slug --limit=500 --minRankingScore=$score
+  }
+}
+```
+
+```powershell
+# Stufe 1C: Expansion-Debug in Stufen (nur dry-run)
+node scripts/trigger-geo-top-city-expansion.js --mode=dry-run --locale=de --slug=openclaw-risk-2026 --limit=120 --minHealth=88 --maxActivate=20 --minPriority=60 --minPopulation=500000
+node scripts/trigger-geo-top-city-expansion.js --mode=dry-run --locale=de --slug=openclaw-risk-2026 --limit=200 --minHealth=80 --maxActivate=40 --minPriority=50 --minPopulation=250000
+node scripts/trigger-geo-top-city-expansion.js --mode=dry-run --locale=de --slug=openclaw-risk-2026 --limit=300 --minHealth=70 --maxActivate=80 --minPriority=40 --minPopulation=100000
+```
+
+```powershell
+# Stufe 3 Einstieg (sicher): Top-20 Städte erst dry-run, dann nur nach Review live
+node scripts/trigger-geo-canary-rollout.js --mode=dry-run --locale=de --slug=openclaw-risk-2026 --cities=berlin,munich,hamburg,frankfurt,cologne,vienna,madrid,paris,london,newyork --limit=20 --minRankingScore=65
+node scripts/trigger-geo-canary-rollout.js --mode=dry-run --locale=en --slug=openclaw-exposed --cities=berlin,munich,hamburg,frankfurt,cologne,vienna,madrid,paris,london,newyork --limit=20 --minRankingScore=65
+npm run geo:sitemap-guardrail:dry-run
+# erst nach Human-Review:
+# node scripts/trigger-geo-canary-rollout.js --mode=live --locale=de --slug=openclaw-risk-2026 --cities=berlin,munich,hamburg,frankfurt,cologne,vienna,madrid,paris,london,newyork --limit=20 --minRankingScore=65
+# node scripts/trigger-geo-canary-rollout.js --mode=live --locale=en --slug=openclaw-exposed --cities=berlin,munich,hamburg,frankfurt,cologne,vienna,madrid,paris,london,newyork --limit=20 --minRankingScore=65
+```
+
+### 11.5 Langfristige Lösung (Auto-Fill von Datenlücken)
+
+- **Gap-Scanner täglich:** erkennt pro `city + slug + locale` fehlende Pflichtsignale (Exposure, Fit, Freshness, Evidence).
+- **Priority Queue:** rankt Lücken nach erwarteter SEO-/Conversion-Wirkung.
+- **Data Enrichment Layer:** zieht validierte externe Signale (Threat-Intel, Provider-Events, Community-Issues) mit Source-Confidence ein.
+- **Guided Content Generation:** erstellt nur dann City-Content, wenn Mindestdaten und Differenzierungs-Score erreicht sind.
+- **Closed Loop:** nach jedem Enrichment automatisch Dry-Run, danach Vorschlag "promote now / enrich first".
+
+### Safeguards (verbindlich)
+
+- Immer zuerst **dry-run**.
+- **Human Review** bei jeder Live-Promotion >30 Seiten.
+- **Qualität > Quantität**.
 
 *Letzte große Strategie-Aktualisierung in diesem Dokument: April 2026 (Projektstand speichern).*

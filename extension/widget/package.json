@@ -1,0 +1,14 @@
+{
+  "name": "clawguru-moltbot-hardener",
+  "version": "0.1.0",
+  "description": "Embeddable ClawGuru Moltbot hardener widget",
+  "main": "index.js",
+  "type": "commonjs",
+  "license": "MIT",
+  "keywords": [
+    "clawguru",
+    "moltbot",
+    "security",
+    "widget"
+  ]
+}

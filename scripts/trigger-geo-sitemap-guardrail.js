@@ -1,3 +1,9 @@
+try {
+  // Load env for CLI usage; no-op in prod if files are missing.
+  require("dotenv").config()
+  require("dotenv").config({ path: ".env.local" })
+} catch {}
+
 const DEFAULT_BASE = "https://clawguru.org"
 
 function getArg(name, fallback = "") {

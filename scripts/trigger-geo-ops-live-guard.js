@@ -1,3 +1,8 @@
+try {
+  require("dotenv").config()
+  require("dotenv").config({ path: ".env.local" })
+} catch {}
+
 const DEFAULT_BASE = "https://clawguru.org"
 const { spawnSync } = require("node:child_process")
 

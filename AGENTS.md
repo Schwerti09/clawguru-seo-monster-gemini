@@ -86,6 +86,8 @@
 - Content-Queue aus dem 8-Wochen-Plan als indexierbare `/[lang]/...` Seiten ausgeliefert.
 - Geo/SEO Operations View als Daily/Weekly-Ampel dokumentiert: `docs/geo-seo-ops-view.md`.
 - `/[lang]/roast-my-moltbot` als neue, indexierbare Landingpage live; Homepage-Hero + `/openclaw` verlinken darauf.
+- Kompakte ENV-Operations-Checkliste dokumentiert: `docs/env-checklist.md` (Pflicht-/Optional-Keys + Pre-Rollout-Checks).
+- Embeddable Moltbot-Hardener Widget als Paket-Grundlage angelegt: `extension/widget` (`clawguru-moltbot-hardener`).
 
 ### In Arbeit
 

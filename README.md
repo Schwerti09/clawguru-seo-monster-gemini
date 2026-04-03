@@ -141,6 +141,14 @@ App starts on [http://localhost:3000](http://localhost:3000).
 
 Detailed runbook: `docs/geo-ops-runbook.md`.
 
+### Embeddable Moltbot widget
+
+- Package source: `extension/widget`
+- Package name: `clawguru-moltbot-hardener`
+- Quick embed:
+  - `<script src="https://unpkg.com/clawguru-moltbot-hardener/index.js"></script>`
+  - `<div data-clawguru-moltbot-widget data-locale="en"></div>`
+
 ---
 
 ## Deployment notes

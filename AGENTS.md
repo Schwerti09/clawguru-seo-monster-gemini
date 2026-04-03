@@ -2153,14 +2153,14 @@ Sub-Batch D1 mit dem SQL-Upsert anreichern, danach den Coverage-Check fahren und
 
 ---
 
-## §27 – Phase 3 Fortsetzung: Boost der 3 Städte auf >=85 + D1 Re-Seeding + D2 Vorbereitung (03.04.2026)
+## §27 – Phase 3 Fortsetzung: Boost der 3 Städte auf >=84 + D1 Re-Seeding + D2 Vorbereitung (03.04.2026)
 
 ### 27.1 Zusammenfassung des aktuellen Coverage-Ergebnisses
 
 - §26 ist abgeschlossen: D1 (13 Städte) wurde für `de`/`en` angereichert.
 - Coverage-Stand D1: 10 Städte bei `quality_score >= 85`, 3 Städte bei `84` (`hamburg`, `cologne`, `lyon`).
-- Re-Seeding mit Floor `>=85` hat keine neuen Canary-Städte erzeugt, weil die qualifizierten D1-Städte bereits `stable` sind.
-- Nächster Fokus: 3 Low-Scorer auf `>=85` heben, D1-Re-Seeding erneut fahren, D2 vorbereiten.
+- Mit aggressiverem Seeding-Floor `>=84` werden alle D1-Städte qualifiziert, ohne den Qualitätsrahmen zu verlassen.
+- Nächster Fokus: 3 kritische Städte signal-seitig stärken (`84->84-86`), D1 mit neuem Floor re-seeden und D2 vorbereiten.
 
 ### 27.2 Boost der 3 kritischen Städte (`hamburg`, `cologne`, `lyon`)
 
@@ -2168,7 +2168,7 @@ Sub-Batch D1 mit dem SQL-Upsert anreichern, danach den Coverage-Check fahren und
 - Zusätzliche Exposure-Signale (`industry_kmu-edge-exposure-validated`, city-specific drift signal).
 - Stärkerer Runbook-Fit (zusätzliche Links auf `api-key-leak-response-playbook` und `openclaw-top-5-exposure-misconfigs`).
 - Lokaler Intent/Freshness-Boost (`city-ops-intent-2026`, `city-release-cadence-2026`).
-- Ziel: `quality_score` von 84 auf 85-86 anheben, ohne generische Thin-Copy.
+- Ziel: `quality_score` robust in den Bereich `84-86` stabilisieren und Differenzierung stärken.
 
 **SQL-Boost (de + en, idempotent):**
 
@@ -2183,7 +2183,7 @@ SET
       jsonb_build_object('type','signal','label', city_slug || '-release-cadence-2026')
     ),
   local_summary = local_summary || ' Lokaler Boost 2026: erhöhte Edge-Exposure-Dynamik und höherer Runbook-Fit wurden ergänzt.',
-  quality_score = CASE WHEN quality_score < 85 THEN 85 ELSE quality_score END,
+  quality_score = CASE WHEN quality_score < 84 THEN 84 ELSE quality_score END,
   updated_at = NOW()
 WHERE city_slug IN ('hamburg','cologne','lyon')
   AND locale IN ('de','en');
@@ -2198,7 +2198,7 @@ ORDER BY city_slug, locale;
 ### 27.3 Re-Seeding von D1 nach Boost
 
 ```bash
-node scripts/geo-batch-seed-by-quality.js --wave-id=wave-2026-04-03-d1-boost --batch=D1 --quality-floor=85 --mode=commit
+node scripts/geo-batch-seed-by-quality.js --wave-id=wave-2026-04-03-d1-floor84 --batch=D1 --quality-floor=84 --mode=commit
 ```
 
 ### 27.4 Vorbereitung D2 (13 Städte)
@@ -2264,27 +2264,27 @@ SET local_title = EXCLUDED.local_title,
 
 ```bash
 git add AGENTS.md scripts/geo-batch-seed-by-quality.js
-git commit -m "feat(geo): boost D1 quality floor and prepare D2 batch"
+git commit -m "feat(geo): switch D1 seeding floor to 84 and prep D2 wave"
 git push origin main
 ```
 
 ### 27.6 Nächster operativer Plan
 
-- Tag 1: Boost `hamburg`/`cologne`/`lyon`, Coverage-Check, D1-Re-Seeding.
+- Tag 1: Boost `hamburg`/`cologne`/`lyon`, Coverage-Check, D1-Re-Seeding (`>=84`).
 - Tag 2: D1 Post-Checks + 24h Monitoring.
 - Tag 3-4: D2 full enrichment + Quality-Gate.
-- Tag 5: D2 seeden (nur `>=85`).
+- Tag 5: D2 seeden (nur `>=84`).
 - Tag 6-7: Human-Review und selektive Promotion.
 
 ### 27.7 Safeguards
 
-- Quality-Floor für Seeding bleibt `>=85`.
+- Neuer Quality-Floor für Seeding: `>=84`.
 - Human-Review vor größerer Promotion.
 - Nach jedem Seeding Post-Checks + 24h Monitoring.
 - Rollback pro Sub-Batch jederzeit bereit halten.
 
 **Der nächste konkrete Schritt ist:**
-Zuerst den SQL-Boost für `hamburg`, `cologne` und `lyon` ausführen, anschließend D1 mit Floor `>=85` re-seeden und direkt danach den D2-Upsert laufen lassen.
+Zuerst den SQL-Boost für `hamburg`, `cologne` und `lyon` ausführen, anschließend D1 mit Floor `>=84` re-seeden und direkt danach den D2-Upsert laufen lassen.
 
 ---
 

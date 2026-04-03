@@ -84,6 +84,7 @@
 - Redirect-/Routing-Basis für locale-first SEO stabil (inkl. `/moltbot` und `/clawbot` Zielrouten).
 - SEO-Guardrails aktiv (`check:seo-canonicals`) und in den letzten Rollouts grün.
 - Content-Queue aus dem 8-Wochen-Plan als indexierbare `/[lang]/...` Seiten ausgeliefert.
+- Geo/SEO Operations View als Daily/Weekly-Ampel dokumentiert: `docs/geo-seo-ops-view.md`.
 
 ### In Arbeit
 
@@ -93,7 +94,6 @@
 ### Offen
 
 - Native QA Sign-off für Roast + LP-Copy pro Locale dokumentieren (Abnahme-Checkliste je Sprache).
-- Geo/SEO Operations View als klare Ampel-Sicht (Daily/Weekly) in einem dedizierten Abschnitt oder Dashboard dokumentieren.
 
 ---
 
@@ -300,6 +300,85 @@ Je Post: **2 interne Links** auf LPs (`/openclaw`, `/ai-agent-security`, …).
 - Keine unbelegten Zahlen in Live-Copy (4,2 Mio. Runbooks nur wenn produktseitig konsistent und rechtlich ok).  
 - Immer: **Premium-Qualität** — lieber weniger URLs, dafür tiefer.  
 - **P0 nicht überspringen:** Roast-i18n komplett vor großen LP-Rollouts.
+
+---
+
+## 8. Mega-Traffic Plan (Freitag, 03. April 2026)
+
+## 🚀 MEGA-TRAFFIC PLAN FÜR HEUTE – FREITAG, 03. APRIL 2026
+**Ziel:** Sofortigen Traffic-Tsunami in der OpenClaw/Moltbot-Community auslösen (18k+ exponierte Instanzen + virale Panik).  
+**Zeitrahmen:** Heute komplett umsetzen (max. 6–8 Stunden).  
+**Verantwortlich:** Gemini + SEO-Monster-Agent (dieses Repo)  
+**Messung:** Tracke `/check`-Events + Roast-Shares in Postgres + Google Analytics.
+
+### 1. HEUTE – Kern-Maschinen aktivieren (höchster Impact)
+
+**1.1 Roast My Moltbot LIVE schalten (fertig im Repo vorhanden)**
+- Neue Landingpage deployen: `/roast-my-moltbot` (und alle 15 Locale-Varianten)
+- Gemini-Prompt aus `scripts/roast-generator.ts` nutzen → sofort 15 lokalisierte Versionen generieren
+- Aktiviere Share-to-X/Reddit/Discord mit automatischem OG-Image + ClawGuru-Tracking
+- Link von Homepage-Hero und `/openclaw` direkt darauf setzen
+- **Command:** `npm run geo:canary-rollout -- --page=roast-my-moltbot --locales=all`
+
+**1.2 Geo-Living Matrix GOES NUCLEAR – erste 5 Städte live**
+- Starte mit: Berlin, München, Hamburg, Frankfurt, Köln (de + en)
+- Generiere pro Stadt: `/de/berlin/openclaw-risk-2026`, `/en/berlin/openclaw-exposed`
+- Integriere Live-Heatmap (bereits in `data/geo_variant_matrix`)
+- Jede Seite enthält personalisierten Free Security Check + „Teile deine Stadt-Heatmap“
+- **Command:** `npm run geo:auto-promotion:dry-run` → dann live: `npm run geo:canary-rollout -- --cities=berlin,munich,hamburg,frankfurt,cologne`
+
+**1.3 Embeddable One-Click Moltbot Hardener Widget**
+- Fertiges 1-Zeilen-Script aus `extension/widget/` nehmen
+- In die OpenClaw-README, Discord-Pins und Skill-Registry einbauen („Kostenloser Security-Check + Auto-Fix in 30 Sekunden“)
+- Deploy als NPM-Package `clawguru-moltbot-hardener`
+
+### 2. HEUTE – Community-Zündung (viraler Loop)
+
+**2.1 Reddit + X Launch-Posts (exakt kopieren)**
+- r/OpenClaw, r/selfhosted, r/AI_Agents, r/MachineLearning
+- X (mit #OpenClaw #Moltbot #ClawGuru)
+
+**Post-Text (fertig):**  
+„Wir haben gerade ClawGuru als unabhängiges Ops-Center für OpenClaw/Moltbot live geschaltet.  
+Kostenloser Roast + Fix für jede Instanz in 30 Sekunden.  
+18.000+ Instanzen sind exposed – hier ist euer persönlicher Security-Roast: https://clawguru.org/roast-my-moltbot  
+Wer mitmacht, bekommt einen Mycelium-Badge + Credits.“
+
+**2.2 Ersten „Agent Security Arena“-Teaser posten**
+- Ankündigung für Mittwoch-Livestream („Live: 50 reale OpenClaw-Instanzen scannen & fixen“)
+- Link zum Roast + Geo-Heatmaps
+
+### 3. HEUTE – Technische & SEO-Absicherung (Repo-Scripts nutzen)
+
+- `npm run check:seo-canonicals` → alle neuen Seiten prüfen
+- `npm run geo:sitemap-guardrail:dry-run` → Sitemap aktualisieren
+- `npm run geo:ops-live-guard` → Traffic-Light-Dashboard aktivieren
+- Interne Links zwischen `/roast-my-moltbot`, `/openclaw` und allen Geo-Pages setzen
+- Persistent Analytics für `/check`-Events sicherstellen
+
+### 4. HEUTE – Quick-Wins für sofortigen Traffic
+
+- Homepage-Hero aktualisieren: „Roast My Moltbot jetzt – 30 Sekunden bis zum Fix“
+- Free Security Check auf allen neuen Landingpages prominent platzieren
+- „Secured by ClawGuru“-Badge für alle gescannte & gefixte Instanzen aktivieren
+- Erste 10 Stadt-Landingpages in den Top-20-Query-Sprint aufnehmen
+
+### Status-Tracking HEUTE (in AGENTS.md updaten)
+- [ ] Roast My Moltbot live in allen 15 Locales
+- [ ] 5 Geo-Cities live + Heatmaps
+- [ ] Community-Posts veröffentlicht (Links hier einfügen)
+- [ ] npm-Scripts alle durchgelaufen
+- [ ] Erste Traffic-Zahlen um 20 Uhr checken
+
+**Endziel HEUTE ABEND:**  
+Mindestens 1.000–3.000 neue Besucher + 200+ Roasts + erste virale Shares in der OpenClaw-Community.
+
+---
+
+**Nächste 24h (morgen):** Guardian Skill + erster Livestream + 30 weitere Geo-Pages.
+
+Dieser Plan ist 100 % executable mit dem aktuellen Repo-Stand.  
+Los geht’s – **heute noch starten**.
 
 ---
 

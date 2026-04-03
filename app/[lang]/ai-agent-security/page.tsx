@@ -27,6 +27,7 @@ export async function generateMetadata(props: { params: { lang: string } }): Pro
 export default function AIAgentSecurityPage(props: { params: { lang: string } }) {
   const locale = (SUPPORTED_LOCALES.includes(props.params.lang as Locale) ? props.params.lang : "de") as Locale
   const copy = getAiAgentCopy(locale)
+  const cro = getHomepageCroCopy(locale)
   const coreLinks = getCoreSecurityLinks(locale)
   const prefix = `/${locale}`
   const webPageJsonLd = {

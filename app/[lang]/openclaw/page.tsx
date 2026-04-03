@@ -4,6 +4,7 @@ import Link from "next/link"
 import Container from "@/components/shared/Container"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
 import { getCoreSecurityLinks } from "@/lib/core-security-links"
+import { getHomepageCroCopy } from "@/lib/homepage-cro-i18n"
 import {
   GEO_OPENCLAW_SPRINT_CITIES,
   GEO_OPENCLAW_SPRINT_CITY_LABELS,

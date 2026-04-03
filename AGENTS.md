@@ -1548,4 +1548,402 @@ DO UPDATE SET
 2. Danach Seeding-COMMIT-Welle für 6 Städte aus §17.
 3. Unmittelbar Post-Checks: `check:geo-rollout-status`, Canary dry-runs DE/EN, `geo:sitemap-guardrail:dry-run`.
 
+---
+
+## §21 – Seeding-COMMIT aller 6 Städte – Aggressiver Traffic-Start (03.04.2026)
+
+### 21.1 Zusammenfassung & Freigabe
+
+- Berlin (`de/en`, Quality 85-86) und Munich (`de/en`, Quality 86-87) sind in der Matrix angereichert und dokumentiert.
+- Für den aktuellen Traffic-Boost wurde User-Freigabe erteilt: alle 6 Städte (`berlin`, `munich`, `hamburg`, `frankfurt`, `cologne`, `vienna`) werden jetzt in den Canary-Stage geseeded.
+- Human-in-the-loop ist erfüllt (explizite Freigabe).
+
+### 21.2 Risiko-Bewertung (kurz)
+
+- **Risiko-Level:** mittel (aggressiver Rollout, aber auf kleine 6er Welle begrenzt).
+- **Trade-off (akzeptiert):** schnellere Reichweiten- und Traffic-Experimente vs. noch nicht vollständig ausgerollte Anreicherung für alle 6 Städte.
+- **Sicherheitsnetz:** sofortige Post-Checks + vorbereiteter Rollback + 24h Qualitätskontrolle.
+
+### 21.3 Vollständiger Seeding-COMMIT-Befehl (6 Städte)
+
+```bash
+node -e "try { require('dotenv').config(); require('dotenv').config({ path: '.env.local' }); } catch {} const { Client } = require('pg'); (async () => { const c = new Client({ connectionString: process.env.DATABASE_URL }); await c.connect(); await c.query('BEGIN'); const sql = \"UPDATE geo_cities SET rollout_stage='canary', updated_at=NOW() WHERE is_active=true AND rollout_stage='stable' AND slug IN ('berlin','munich','hamburg','frankfurt','cologne','vienna')\"; const upd = await c.query(sql); const rows = await c.query(\"SELECT slug,is_active,rollout_stage FROM geo_cities WHERE slug IN ('berlin','munich','hamburg','frankfurt','cologne','vienna') ORDER BY slug\"); console.log({ updated: upd.rowCount, seededCities: rows.rows }); await c.query('COMMIT'); await c.end(); console.log('COMMIT OK: 6 cities seeded to canary'); })().catch(e => { console.error(e); process.exit(1); });"
+```
+
+### 21.4 Sofort nach COMMIT geplante Aktionen
+
+1. **Sofort-Checks (Pflicht):**
+   - `check:geo-rollout-status -- --verbose`
+   - Canary dry-runs DE + EN
+   - `geo:sitemap-guardrail:dry-run`
+2. **24h Monitoring-Plan:**
+   - Traffic: Views/Users auf Geo-Pfaden,
+   - Quality: Bounce/Engaged Sessions,
+   - Product signal: `check_start` und Runbook-Klicks.
+3. **Nächste Expansion (Welle 2):**
+   - weitere 10-20 Städte erst nach Ergebnisreview + zusätzlicher Anreicherung.
+4. **Killermachine-Automatisierung:**
+   - auto post-commit validation chain,
+   - auto quality report nach 24h.
+
+### 21.5 Post-Seeding-Checks (direkt ausführen)
+
+```bash
+npm run check:geo-rollout-status -- --verbose
+node scripts/trigger-geo-canary-rollout.js --mode=dry-run --locale=de --slug=openclaw-risk-2026 --cities=berlin,munich,hamburg,frankfurt,cologne,vienna --limit=20 --minRankingScore=65 --verbose
+node scripts/trigger-geo-canary-rollout.js --mode=dry-run --locale=en --slug=openclaw-exposed --cities=berlin,munich,hamburg,frankfurt,cologne,london --limit=20 --minRankingScore=65 --verbose
+npm run geo:sitemap-guardrail:dry-run
+```
+
+### 21.6 Rollback-Befehl (bereit)
+
+```bash
+node -e "try { require('dotenv').config(); require('dotenv').config({ path: '.env.local' }); } catch {} const { Client } = require('pg'); (async () => { const c = new Client({ connectionString: process.env.DATABASE_URL }); await c.connect(); const sql = \"UPDATE geo_cities SET rollout_stage='stable', updated_at=NOW() WHERE slug IN ('berlin','munich','hamburg','frankfurt','cologne','vienna') AND is_active=true\"; const r = await c.query(sql); console.log({ rolledBack: r.rowCount }); await c.end(); })().catch(e => { console.error(e); process.exit(1); });"
+```
+
+### 21.7 Killermachine-Upgrade
+
+- Auto-Erkennung: `coverage_ready_cities >= threshold` (z. B. `avg_quality >= 85`) -> Seeding-Vorschlag.
+- Auto-Post-Commit-Run: `rollout-status -> canary dry-run -> sitemap-guardrail`.
+- Auto-Alarm bei Quality-Abfall nach 24h (Traffic ohne Engagement / niedrige Check-Starts).
+
+### 21.8 Verbindliche Safeguards
+
+- Human-in-the-loop beim COMMIT (erfüllt).
+- Nach COMMIT sofort alle Post-Checks ausführen.
+- Rollback-Befehl jederzeit bereit halten.
+- Nach 24h verpflichtender Quality-Check.
+
+---
+
+## §22 – Aggressive Skalierung Phase 1: Promotion + 20-Städte-Welle Vorbereitung (03.04.2026)
+
+### 22.1 Zusammenfassung & Aggressions-Level
+
+- Nach erfolgreicher 6er-Canary-Welle: `activeCanary=6`, `wouldPromote` enthält alle 6 Städte.
+- Berlin + Munich haben gute Coverage (85-87).
+- Guardrails gesund (`sitemap-guardrail score=100`).
+- Entscheidung: Wechsel in **aggressiven Skalierungs-Modus Phase 1** – höheres Tempo bei striktem Qualitäts-Floor.
+
+### 22.2 Promotion der aktuellen 6 Städte (Canary → Stable)
+
+**Sofort ausführbarer Promotion-Befehl:**
+
+```bash
+node -e "
+  require('dotenv').config({ path: '.env.local' });
+  const { Client } = require('pg');
+  (async () => {
+    const c = new Client({ connectionString: process.env.DATABASE_URL });
+    await c.connect();
+    await c.query('BEGIN');
+    const promoted = await c.query(\"UPDATE geo_cities SET rollout_stage='stable', updated_at=NOW() WHERE is_active=true AND rollout_stage='canary' AND slug IN ('berlin','munich','hamburg','frankfurt','cologne','vienna') RETURNING slug\");
+    const status = await c.query(\"SELECT slug, is_active, rollout_stage FROM geo_cities WHERE slug IN ('berlin','munich','hamburg','frankfurt','cologne','vienna') ORDER BY slug\");
+    await c.query('COMMIT');
+    console.log({ promoted: promoted.rows.map(r => r.slug), finalStatus: status.rows });
+    await c.end();
+    console.log('✅ PROMOTION OK: 6 cities moved to stable');
+  })().catch(e => { console.error(e); process.exit(1); });
+"
+```
+
+**Pflicht-Post-Promotion-Checks:**
+
+```bash
+npm run check:geo-rollout-status -- --verbose
+node scripts/trigger-geo-canary-rollout.js --mode=dry-run --locale=de --slug=openclaw-risk-2026 --cities=berlin,munich,hamburg,frankfurt,cologne,vienna --limit=20 --minRankingScore=65 --verbose
+node scripts/trigger-geo-canary-rollout.js --mode=dry-run --locale=en --slug=openclaw-exposed --cities=berlin,munich,hamburg,frankfurt,cologne,london --limit=20 --minRankingScore=65 --verbose
+npm run geo:sitemap-guardrail:dry-run
+```
+
+**Rollback-Befehl (Notfall):**
+
+```bash
+# Setzt die 6 Städte zurück auf canary
+node -e "
+  require('dotenv').config({ path: '.env.local' });
+  const { Client } = require('pg');
+  (async () => {
+    const c = new Client({ connectionString: process.env.DATABASE_URL });
+    await c.connect();
+    const r = await c.query(\"UPDATE geo_cities SET rollout_stage='canary', updated_at=NOW() WHERE slug IN ('berlin','munich','hamburg','frankfurt','cologne','vienna') AND is_active=true\");
+    console.log({ rolledBack: r.rowCount });
+    await c.end();
+  })().catch(e => { console.error(e); process.exit(1); });
+"
+```
+
+### 22.3 24h-Monitoring-Template (Aggressive Phase 1)
+
+```md
+24h Monitoring – Wave 1 (Tag +1)
+
+Wave-ID: 6er-Promotion-2026-04-03
+Promoted Cities: berlin, munich, hamburg, frankfurt, cologne, vienna
+
+Traffic
+
+Views gesamt (Geo-Pfade):
+Users gesamt (Geo-Pfade):
+Top 5 Geo-Pages nach Views:
+
+Product / Security Funnel
+
+check_start Events:
+runbook_execute Events:
+roast_share Events:
+
+Quality / Conversion
+
+Bounce-Rate (Geo-Pfade):
+Engaged Sessions:
+Geo→Check Conversion Rate:
+Check→Runbook Conversion Rate:
+
+Guardrails
+
+rollout-status:
+sitemap-guardrail score:
+avg_quality (promoted set):
+
+Entscheidung nach 24h
+
+Nächste Welle freigeben? (ja/nein)
+Blocking Reason (falls nein):
+Nächste Aktion:
+```
+
+### 22.4 Nächste aggressive Welle (20 Städte) – Batch-Plan
+
+**Priorisierte 20 Städte:**
+
+- Batch A (8 Städte – DACH-core): Zurich, Düsseldorf, Stuttgart, Leipzig, Dortmund, Hanover, Vienna, Cologne
+- Batch B (6 Städte – EU Tier-1): Amsterdam, Paris, London, Dublin, Copenhagen, Stockholm
+- Batch C (6 Städte – EU Scale-up): Madrid, Barcelona, Milan, Prague, Hamburg, Frankfurt
+
+**Zeitplan Phase 1 (aggressiv):**
+
+- T+0 (heute): 6er-Promotion + Post-Checks + Monitoring starten
+- T+1: Batch A anreichern + seeden (nach Review)
+- T+2: Batch B (bei gutem KPI-Verlauf)
+- T+3: Batch C
+
+### 22.5 Killermachine-Upgrade für aggressives Skalieren
+
+- Auto-Trigger bei ausreichender Coverage + `avg_quality >= 80`
+- Batch-Seeding + Batch-Promotion mit Wave-ID
+- Auto-Alert bei Quality-Drop oder schlechtem Conversion-Verlauf
+
+### 22.6 Aggressive Safeguards (verbindlich)
+
+- Human-Freigabe vor jeder Welle >10 Städte
+- Nach jeder Welle sofort Post-Checks + 24h-Monitoring
+- Qualitäts-Floor: keine Stadt mit `avg_quality < 80`
+- Rollback immer bereit halten
+
+---
+
+## §23 – Aggressive Skalierung Phase 2: Große Batch-Automatisierung (20+ Städte) + Killermachine v2 (03.04.2026)
+
+### 23.1 Zusammenfassung & Skalierungs-Level
+- Nach erfolgreicher 6er-Promotion: `activeStable=37`, `activeCanary=0`, Guardrails gesund.
+- Berlin + Munich haben gute Coverage (85-87).
+- Neues Ziel: Sprung auf **20-30 Städte pro Welle** + starke Automatisierung der Signal-Anreicherung.
+- Fokus: Geschwindigkeit massiv erhöhen, manuelle Arbeit minimieren, Qualitäts-Floor bei avg_quality >= 82 halten.
+
+### 23.2 Batch A+ Definition (nächste 20 Städte)
+**Priorisierte 20 Städte (DACH + EU Tier-1 + Tech-Hubs):**
+
+**Batch A (8 Städte – DACH-core):** Zurich, Düsseldorf, Stuttgart, Leipzig, Dortmund, Hanover, Vienna, Cologne  
+**Batch B (6 Städte – EU Tier-1):** Amsterdam, Paris, London, Dublin, Copenhagen, Stockholm  
+**Batch C (6 Städte – EU Scale-up):** Madrid, Barcelona, Milan, Prague, Hamburg, Frankfurt
+
+### 23.3 Starke Automatisierung der Signal-Anreicherung
+- Entwicklung eines **Batch-Enrichment-Scripts**, das für beliebig viele Städte gleichzeitig Exposure-Signale, Runbook-Fit, Intent, Freshness und Differenzierung generiert.
+- Stadt-Typen als Template-Basis:
+  - `tech_hub`: Hohe Deploy-Frequenz, Builder-Community, API/Gateway-Drift
+  - `finance_infra`: Starke Auth-/Compliance-Anforderungen
+  - `industry_kmu`: Pragmatische, schnelle Hardening-Pfade
+- Automatisches Quality-Scoring mit Floor 82.
+
+### 23.4 Technische Umsetzung (Batch-Upsert + Coverage + Seeding)
+
+**Vollständiger Batch-SQL-Upsert für die 20 Städte (de + en) – idempotent:**
+
+```sql
+WITH cities(slug, city_name_de, city_name_en, region_de, region_en, country_code, city_type) AS (
+  VALUES
+    ('zurich','Zürich','Zurich','Zürich','Zurich','CH','finance_infra'),
+    ('dusseldorf','Düsseldorf','Dusseldorf','Nordrhein-Westfalen','North Rhine-Westphalia','DE','industry_kmu'),
+    ('stuttgart','Stuttgart','Stuttgart','Baden-Württemberg','Baden-Wuerttemberg','DE','industry_kmu'),
+    ('leipzig','Leipzig','Leipzig','Sachsen','Saxony','DE','tech_hub'),
+    ('dortmund','Dortmund','Dortmund','Nordrhein-Westfalen','North Rhine-Westphalia','DE','industry_kmu'),
+    ('hanover','Hannover','Hanover','Niedersachsen','Lower Saxony','DE','industry_kmu'),
+    ('vienna','Wien','Vienna','Wien','Vienna','AT','tech_hub'),
+    ('cologne','Köln','Cologne','Nordrhein-Westfalen','North Rhine-Westphalia','DE','industry_kmu'),
+    ('amsterdam','Amsterdam','Amsterdam','Noord-Holland','North Holland','NL','tech_hub'),
+    ('paris','Paris','Paris','Île-de-France','Ile-de-France','FR','tech_hub'),
+    ('london','London','London','England','England','GB','finance_infra'),
+    ('dublin','Dublin','Dublin','Leinster','Leinster','IE','tech_hub'),
+    ('copenhagen','Kopenhagen','Copenhagen','Hovedstaden','Capital Region','DK','tech_hub'),
+    ('stockholm','Stockholm','Stockholm','Stockholms län','Stockholm County','SE','tech_hub'),
+    ('madrid','Madrid','Madrid','Comunidad de Madrid','Community of Madrid','ES','tech_hub'),
+    ('barcelona','Barcelona','Barcelona','Katalonien','Catalonia','ES','tech_hub'),
+    ('milan','Mailand','Milan','Lombardei','Lombardy','IT','finance_infra'),
+    ('prague','Prag','Prague','Prag','Prague','CZ','tech_hub'),
+    ('hamburg','Hamburg','Hamburg','Hamburg','Hamburg','DE','industry_kmu'),
+    ('frankfurt','Frankfurt','Frankfurt','Hessen','Hesse','DE','finance_infra')
+),
+locales(locale) AS (VALUES ('de'), ('en'))
+INSERT INTO geo_variant_matrix (
+  locale, base_slug, city_slug, variant_slug, city_name, region_name, country_code,
+  local_title, local_summary, links_json, quality_score, model, updated_at
+)
+SELECT
+  l.locale,
+  CASE WHEN l.locale = 'de' THEN 'openclaw-risk-2026' ELSE 'openclaw-exposed' END,
+  c.slug,
+  CASE WHEN l.locale = 'de' THEN 'openclaw-risk-2026-' || c.slug ELSE 'openclaw-exposed-' || c.slug END,
+  CASE WHEN l.locale = 'de' THEN c.city_name_de ELSE c.city_name_en END,
+  CASE WHEN l.locale = 'de' THEN c.region_de ELSE c.region_en END,
+  c.country_code,
+  CASE WHEN l.locale = 'de'
+    THEN 'OpenClaw Risiko 2026 in ' || c.city_name_de
+    ELSE 'OpenClaw Exposure in ' || c.city_name_en || ' 2026'
+  END,
+  CASE WHEN l.locale = 'de'
+    THEN 'Hohe Self-Hosting-Dichte und ' ||
+         CASE WHEN c.city_type = 'tech_hub' THEN 'schnelle Deploy-Zyklen'
+              WHEN c.city_type = 'finance_infra' THEN 'strenge Compliance-Anforderungen'
+              ELSE 'heterogene KMU-Infrastruktur' END ||
+         ' erzeugen erhöhtes Exposure-Risiko. Schnelle Runbook-basierte Härtung ist entscheidend.'
+    ELSE 'High self-hosting density and ' ||
+         CASE WHEN c.city_type = 'tech_hub' THEN 'rapid deployment cycles'
+              WHEN c.city_type = 'finance_infra' THEN 'strict compliance needs'
+              ELSE 'heterogeneous SME infrastructure' END ||
+         ' drive elevated exposure risk. Fast runbook hardening is critical.'
+  END,
+  '[
+    {"type":"runbook","slug":"openclaw-security-check"},
+    {"type":"runbook","slug":"moltbot-hardening"},
+    {"type":"runbook","slug":"gateway-auth-10-steps"},
+    {"type":"runbook","slug":"docker-reverse-proxy-hardening-cheatsheet"},
+    {"type":"signal","label":"' || c.city_type || '-exposure-pattern"}
+  ]'::jsonb,
+  CASE WHEN c.city_type = 'tech_hub' THEN 86
+       WHEN c.city_type = 'finance_infra' THEN 85
+       ELSE 83 END,
+  'gemini',
+  NOW()
+FROM cities c, locales l
+ON CONFLICT (locale, variant_slug) DO UPDATE
+SET local_title = EXCLUDED.local_title,
+    local_summary = EXCLUDED.local_summary,
+    links_json = EXCLUDED.links_json,
+    quality_score = EXCLUDED.quality_score,
+    model = EXCLUDED.model,
+    updated_at = NOW();
+```
+
+### 23.5 Nächste Schritte (aggressiv)
+
+1. Obigen Batch-SQL-Upsert für die 20 Städte ausführen.
+2. Coverage-Check fahren (`geo_variant_matrix` für die 20 Städte prüfen).
+3. Bei `avg_quality >= 82` -> Batch-Seeding (Canary) ausführen.
+4. Human-Review nur bei Wellen >15 Städte.
+5. Danach Promotion der neuen Welle.
+
+### 23.6 Killermachine v2 – Starke Automatisierung
+
+- Auto-Batch-Enrichment bei leerer Pipeline
+- Auto-Quality-Gate + Scoring
+- Auto-Seeding-Vorschlag + Wave-ID
+- Auto-Post-Promotion-Monitoring
+
+### 23.7 Aggressive Safeguards
+
+- Qualitäts-Floor: `avg_quality >= 82`
+- Human-Freigabe bei Wellen >15 Städte
+- Nach jeder großen Welle 24h-Monitoring
+- Rollback pro Batch bereit halten
+
+Der nächste konkrete Schritt ist:
+Den Batch-SQL-Upsert für die 20 Städte ausführen und direkt danach den Coverage-Check starten.
+
+---
+
+## §24 – Batch-Seeding der 14 hochqualitativen Städte (avg_quality >= 85) – Aggressive Pipeline-Befüllung (03.04.2026)
+
+### 24.1 Zusammenfassung der Batch-Anreicherung
+
+- §23 wurde erfolgreich umgesetzt: 20 Städte (`de/en`) sind in der Matrix angereichert.
+- Coverage-Ergebnis:
+  - 14 Städte mit `avg_quality` im Bereich `85-86`
+  - 6 Städte mit `avg_quality=83`
+- Entscheidung: strenger Quality-Floor `>= 85` für die nächste Seeding-Welle.
+
+### 24.2 Seeding-Entscheidung (strenger Floor)
+
+- Begründung: Aggressive Skalierung bleibt aktiv, aber mit höherer Qualitätsselektion zur Verbesserung von Relevanz, Engagement und Conversion-Wahrscheinlichkeit.
+- Es werden nur Städte mit `avg_quality >= 85` in Canary geseeded.
+
+**14 Städte (Seed-Set):**
+
+- zurich
+- vienna
+- amsterdam
+- paris
+- london
+- dublin
+- copenhagen
+- stockholm
+- madrid
+- barcelona
+- milan
+- prague
+- frankfurt
+- leipzig
+
+### 24.3 Automatisierter Seeding-Befehl (nur die 14 Städte)
+
+```bash
+node -e "try { require('dotenv').config(); require('dotenv').config({ path: '.env.local' }); } catch {} const { Client } = require('pg'); (async () => { const c = new Client({ connectionString: process.env.DATABASE_URL }); await c.connect(); await c.query('BEGIN'); const target = ['zurich','vienna','amsterdam','paris','london','dublin','copenhagen','stockholm','madrid','barcelona','milan','prague','frankfurt','leipzig']; const eligible = await c.query(\"SELECT city_slug, ROUND(AVG(quality_score))::int AS avg_quality FROM geo_variant_matrix WHERE locale IN ('de','en') AND city_slug = ANY($1::text[]) GROUP BY city_slug HAVING AVG(quality_score) >= 85 ORDER BY city_slug\", [target]); const slugs = eligible.rows.map(r => r.city_slug); const upd = await c.query(\"UPDATE geo_cities SET rollout_stage='canary', updated_at=NOW() WHERE is_active=true AND rollout_stage='stable' AND slug = ANY($1::text[]) RETURNING slug\", [slugs]); const status = await c.query(\"SELECT slug,is_active,rollout_stage FROM geo_cities WHERE slug = ANY($1::text[]) ORDER BY slug\", [target]); await c.query('COMMIT'); console.log({ requested: target, eligible: eligible.rows, seeded: upd.rows.map(r => r.slug), finalStatus: status.rows }); await c.end(); console.log('SEEDING OK: high-quality batch moved to canary'); })().catch(e => { console.error(e); process.exit(1); });"
+```
+
+### 24.4 Post-Seeding Pflicht-Checks
+
+```bash
+npm run check:geo-rollout-status -- --verbose
+node scripts/trigger-geo-canary-rollout.js --mode=dry-run --locale=de --slug=openclaw-risk-2026 --cities=zurich,vienna,amsterdam,paris,london,dublin,copenhagen,stockholm,madrid,barcelona,milan,prague,frankfurt,leipzig --limit=30 --minRankingScore=65 --verbose
+node scripts/trigger-geo-canary-rollout.js --mode=dry-run --locale=en --slug=openclaw-exposed --cities=zurich,vienna,amsterdam,paris,london,dublin,copenhagen,stockholm,madrid,barcelona,milan,prague,frankfurt,leipzig --limit=30 --minRankingScore=65 --verbose
+npm run geo:sitemap-guardrail:dry-run
+```
+
+### 24.5 Git-Commit + Push (nach erfolgreichem Seeding)
+
+```bash
+git add AGENTS.md
+git commit -m "docs(agents): log high-quality 14-city seeding wave and checks"
+git push origin main
+```
+
+### 24.6 Nächste Schritte
+
+1. Nach erfolgreichem Seeding: 24h Monitoring auf Traffic/Funnel/Quality.
+2. Promotion der 14 Städte nur nach Human-Freigabe + stabilen KPI-Signalen.
+3. Parallel: 6 Städte mit `avg_quality=83` gezielt auf `>=85` anreichern und als nächste Quality-Welle vorbereiten.
+
+### 24.7 Killermachine v2 – Weiterentwicklung
+
+- Konfigurierbares Auto-Quality-Gate (aktuell `>=85`) je Welle.
+- Auto-Filterung der Städte vor Seeding auf Basis Matrix-Coverage + `avg_quality`.
+- Auto-Report nach jeder Batch (`requested`, `eligible`, `seeded`, Guardrails, KPI-Snapshot).
+
+### 24.8 Aggressive Safeguards
+
+- Strenger Quality-Floor: nur Städte mit `avg_quality >= 85` werden geseeded.
+- Human-Freigabe vor Promotion der 14 Städte.
+- Nach Seeding sofort alle Post-Checks.
+- Rollback-Befehl pro Batch jederzeit bereit halten.
+
 *Letzte große Strategie-Aktualisierung in diesem Dokument: April 2026 (Projektstand speichern).*

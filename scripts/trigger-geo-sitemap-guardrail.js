@@ -2,6 +2,9 @@ try {
   // Load env for CLI usage; no-op in prod if files are missing.
   require("dotenv").config()
   require("dotenv").config({ path: ".env.local" })
+  // Netlify import template often holds the same keys as dashboard deploy env.
+  // Later calls do not override already-set process.env (dotenv default).
+  require("dotenv").config({ path: "netlify.env.import.template" })
 } catch {}
 
 const DEFAULT_BASE = "https://clawguru.org"

@@ -83,3 +83,9 @@ Before major SEO/Geo deploy:
 - `npm run geo:ops-live-guard`
 
 If one fails due missing env, set required keys first and rerun.
+
+## 9) CLI vs hosting (Netlify/CI)
+
+- **Redeploy / dashboard env** updates the **live** app. It does not automatically change files on your laptop.
+- Geo trigger scripts load, in order: `.env`, `.env.local`, then `netlify.env.import.template` (same keys as a typical Netlify import file).
+- If `geo:*` returns **401 unauthorized** against `https://clawguru.org`, the Bearer token in your local files **does not match** the value configured on the deployed site for `GEO_SITEMAP_GUARDRAIL_SECRET` (or the accepted fallbacks on the server: `GEO_EXPANSION_SECRET`, `GEO_AUTO_PRUNE_SECRET`, `GEO_REVALIDATE_SECRET`). Align the live env with your CLI source of truth and redeploy once.

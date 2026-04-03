@@ -1,6 +1,7 @@
 try {
   require("dotenv").config()
   require("dotenv").config({ path: ".env.local" })
+  require("dotenv").config({ path: "netlify.env.import.template" })
 } catch {}
 
 const DEFAULT_BASE = "https://clawguru.org"

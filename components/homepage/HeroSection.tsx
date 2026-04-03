@@ -6,13 +6,14 @@ type Props = { locale: Locale; prefix?: string; dict?: Record<string, string> }
 
 export default function HeroSection({ locale, prefix = "", dict = {} }: Props) {
   const cro = getHomepageCroCopy(locale)
+  const defaultRoastLabel = cro.heroTertiary.replace(/stack/i, "Moltbot")
   const t = {
     badge: dict.hero_badge || "Mycelial Engine · 4.2 M Runbooks · Executable Security Content",
     title: dict.hero_title || "Security Operations That Actually Work.",
     sub: dict.hero_sub || "ClawGuru is the AI-powered SecOps platform with 4.2 million executable runbooks – for incident response, hardening, and compliance in real time. From problem to fix in under 30 seconds.",
     primary: dict.hero_primary || cro.heroPrimary,
     secondary: dict.hero_secondary || cro.heroSecondary,
-    tertiary: dict.hero_tertiary || cro.heroTertiary,
+    tertiary: dict.hero_tertiary || defaultRoastLabel,
   }
   return (
     <section className="relative overflow-hidden" style={{ background: "var(--surface-0)" }}>
@@ -47,7 +48,7 @@ export default function HeroSection({ locale, prefix = "", dict = {} }: Props) {
               {t.secondary}
             </a>
             <a
-              href={`${prefix}/roast-my-stack`}
+              href={`${prefix}/roast-my-moltbot`}
               className="px-6 py-3 rounded-2xl border border-white/10 hover:border-white/20 font-bold text-gray-200 transition-all duration-300"
             >
               {t.tertiary}

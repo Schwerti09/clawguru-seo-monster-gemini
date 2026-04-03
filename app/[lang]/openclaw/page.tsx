@@ -77,6 +77,9 @@ export default function OpenClawPage(props: { params: { lang: string } }) {
               <Link href={`${prefix}/runbooks/security`} className="rounded-xl border border-white/15 px-5 py-3 text-sm font-semibold text-white">
                 {copy.ctaSecondary}
               </Link>
+              <Link href={`${prefix}/roast-my-moltbot`} className="rounded-xl border border-white/15 px-5 py-3 text-sm font-semibold text-white">
+                Roast My Moltbot
+              </Link>
             </div>
           </header>
 

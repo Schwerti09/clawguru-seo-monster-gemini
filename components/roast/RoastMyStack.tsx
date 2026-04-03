@@ -72,6 +72,8 @@ type Props = {
   prefix: string
   dict?: Partial<Record<string, string>>
   variant?: "full" | "compact"
+  /** Target page path for dedicated roast page links and share URL. */
+  pagePath?: "/roast-my-stack" | "/roast-my-moltbot"
   /** When false, hides the link to `/[lang]/roast-my-stack` (e.g. on that page). */
   showDedicatedPageLink?: boolean
   /** When false, hides kicker/title/subtitle (use page-level H1). */
@@ -83,6 +85,7 @@ function RoastMyStack({
   prefix,
   dict: dictProp,
   variant = "full",
+  pagePath = "/roast-my-stack",
   showDedicatedPageLink = true,
   showTitleBlock = true,
 }: Props) {
@@ -98,7 +101,7 @@ function RoastMyStack({
     typeof window !== "undefined"
       ? window.location.origin
       : (process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BASE_URL || "").replace(/\/$/, "")
-  const shareUrl = `${shareBase}${prefix || ""}/roast-my-stack`
+  const shareUrl = `${shareBase}${prefix || ""}${pagePath}`
 
   const onCopy = useCallback(async () => {
     const text = `ClawGuru Roast · ${t.score_label} ${result?.score ?? ""}/100\n${result?.top_roasts?.[0] ?? ""}\n${shareUrl}`
@@ -172,7 +175,7 @@ function RoastMyStack({
             {!compact && showDedicatedPageLink && (
               <p className="mt-4">
                 <Link
-                  href={`${prefix}/roast-my-stack`}
+                  href={`${prefix}${pagePath}`}
                   className="text-sm font-medium text-cyan-400/90 underline-offset-4 hover:text-cyan-300 hover:underline"
                 >
                   {t.page_link}

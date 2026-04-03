@@ -366,6 +366,7 @@ export async function GET(
         { loc: `${base}/${locale}/check`, lastmod, changefreq: "daily", priority: "0.9" },
         { loc: `${base}/${locale}/methodik`, lastmod, changefreq: "monthly", priority: "0.72" },
         { loc: `${base}/${locale}/roast-my-stack`, lastmod, changefreq: "weekly", priority: "0.88" },
+        { loc: `${base}/${locale}/roast-my-moltbot`, lastmod, changefreq: "daily", priority: "0.9" },
         { loc: `${base}/${locale}/emergency`, lastmod, changefreq: "weekly", priority: "0.85" },
         { loc: `${base}/${locale}/copilot`, lastmod, changefreq: "weekly", priority: "0.85" },
         { loc: `${base}/${locale}/runbooks`, lastmod, changefreq: "daily", priority: "0.9" },

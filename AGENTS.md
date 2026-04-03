@@ -85,6 +85,7 @@
 - SEO-Guardrails aktiv (`check:seo-canonicals`) und in den letzten Rollouts grün.
 - Content-Queue aus dem 8-Wochen-Plan als indexierbare `/[lang]/...` Seiten ausgeliefert.
 - Geo/SEO Operations View als Daily/Weekly-Ampel dokumentiert: `docs/geo-seo-ops-view.md`.
+- `/[lang]/roast-my-moltbot` als neue, indexierbare Landingpage live; Homepage-Hero + `/openclaw` verlinken darauf.
 
 ### In Arbeit
 
@@ -364,11 +365,13 @@ Wer mitmacht, bekommt einen Mycelium-Badge + Credits.“
 - Erste 10 Stadt-Landingpages in den Top-20-Query-Sprint aufnehmen
 
 ### Status-Tracking HEUTE (in AGENTS.md updaten)
-- [ ] Roast My Moltbot live in allen 15 Locales
+- [x] Roast My Moltbot live in allen 15 Locales
 - [ ] 5 Geo-Cities live + Heatmaps
 - [ ] Community-Posts veröffentlicht (Links hier einfügen)
 - [ ] npm-Scripts alle durchgelaufen
 - [ ] Erste Traffic-Zahlen um 20 Uhr checken
+
+Hinweis (lokal): `geo:sitemap-guardrail:dry-run` und `geo:ops-live-guard` benötigen gesetzte Geo-Secrets (`GEO_SITEMAP_GUARDRAIL_SECRET`, `GEO_AUTO_PROMOTION_SECRET`, `GEO_REVALIDATE_SECRET`, `GEO_REVALIDATE_SLUGS`).
 
 **Endziel HEUTE ABEND:**  
 Mindestens 1.000–3.000 neue Besucher + 200+ Roasts + erste virale Shares in der OpenClaw-Community.

@@ -1,8 +1,11 @@
 import type { Metadata } from "next"
+import Link from "next/link"
 
 import RoastMyStack from "@/components/roast/RoastMyStack"
 import Container from "@/components/shared/Container"
+import { getCoreSecurityLinks } from "@/lib/core-security-links"
 import { getDictionary } from "@/lib/getDictionary"
+import { geoOpenClawSprintPath } from "@/lib/geo-openclaw-city-sprint"
 import { SUPPORTED_LOCALES, getLocaleHrefLang, localeAlternates, type Locale } from "@/lib/i18n"
 
 export const revalidate = 60
@@ -77,6 +80,11 @@ export default async function RoastMyMoltbotPage(props: { params: { lang: string
     title: m.title,
     subtitle: m.subtitle,
   }
+  const coreLinks = getCoreSecurityLinks(locale)
+  const geoBerlinHref =
+    locale === "de" || locale === "en"
+      ? (geoOpenClawSprintPath(locale, "berlin") ?? `${prefix}/openclaw`)
+      : "/en/berlin/openclaw-exposed"
 
   return (
     <main className="py-14 border-b border-white/5" style={{ background: "var(--surface-0)" }}>
@@ -97,6 +105,24 @@ export default async function RoastMyMoltbotPage(props: { params: { lang: string
           showDedicatedPageLink={false}
           showTitleBlock={false}
         />
+
+        <nav
+          className="mx-auto max-w-3xl mt-12 pt-8 border-t border-white/10 text-sm text-zinc-400 flex flex-col sm:flex-row flex-wrap gap-4 justify-center"
+          aria-label={locale === "de" ? "Weiterführende Links" : "Related links"}
+        >
+          <Link href={`${prefix}/openclaw`} className="hover:text-cyan-300 font-medium">
+            OpenClaw
+          </Link>
+          <Link href={coreLinks.check} className="hover:text-cyan-300 font-medium">
+            {locale === "de" ? "Security-Check" : "Security check"}
+          </Link>
+          <Link href={`${prefix}/moltbot-hardening`} className="hover:text-cyan-300 font-medium">
+            {locale === "de" ? "Moltbot Hardening" : "Moltbot hardening"}
+          </Link>
+          <Link href={geoBerlinHref} className="hover:text-cyan-300 font-medium">
+            {locale === "de" ? "Geo: Berlin Risk" : "Geo: Berlin exposure"}
+          </Link>
+        </nav>
       </Container>
     </main>
   )

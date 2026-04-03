@@ -4,6 +4,7 @@ import Link from "next/link"
 import Container from "@/components/shared/Container"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
 import { getCoreSecurityLinks } from "@/lib/core-security-links"
+import { getHomepageCroCopy } from "@/lib/homepage-cro-i18n"
 import { getOpenClawCheckCopy } from "@/lib/landing-pages-i18n"
 
 export const revalidate = 60
@@ -26,6 +27,7 @@ export async function generateMetadata(props: { params: { lang: string } }): Pro
 export default function OpenClawSecurityCheckPage(props: { params: { lang: string } }) {
   const locale = (SUPPORTED_LOCALES.includes(props.params.lang as Locale) ? props.params.lang : "de") as Locale
   const copy = getOpenClawCheckCopy(locale)
+  const cro = getHomepageCroCopy(locale)
   const prefix = `/${locale}`
   const coreLinks = getCoreSecurityLinks(locale)
   const webPageJsonLd = {
@@ -65,8 +67,17 @@ export default function OpenClawSecurityCheckPage(props: { params: { lang: strin
             <Link href={coreLinks.methodology} className="hover:text-cyan-300">
               {copy.methodologyLabel}
             </Link>
-            <Link href={`${prefix}/openclaw`} className="hover:text-cyan-300">
+            <Link href={coreLinks.openclaw} className="hover:text-cyan-300">
               {copy.secondaryLabel}
+            </Link>
+            <Link href={coreLinks.moltbotHardening} className="hover:text-cyan-300">
+              {cro.lpMoltbotTitle}
+            </Link>
+            <Link href={coreLinks.aiAgentSecurity} className="hover:text-cyan-300">
+              {cro.lpAiTitle}
+            </Link>
+            <Link href={coreLinks.roastMyMoltbot} className="hover:text-cyan-300">
+              {cro.heroTertiary}
             </Link>
           </nav>
         </div>

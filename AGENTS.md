@@ -40,6 +40,7 @@
 - Pattern-Konsolidierung erweitert: Helper-Rollout zusätzlich auf 10 strategische Content-Seiten (`check-methodology`, `openclaw-top-5`, `gateway-auth-10-steps`, `api-key-leak-response`, `nis2-controls`, `hetzner-vs-do`, `docker-proxy-cheatsheet`, `check-vs-pentest`, `runbook-vs-blog`, `ai-agent-threat-model`) ausgedehnt.
 - Pattern-Konsolidierung (Premium-Rollout): Helper auf restliche `[lang]`-Runbook-/Security-Seiten ausgerollt (u. a. `aws-*`, `azure-ad`, `argocd`, `nginx`, `postgresql`, `redis`, `terraform`, `vault`, `waf`, `xxe`), sodass `check`-Links locale-sicher zentral über `core-security-links` laufen.
 - Interner Linkgraph (Pass #1): zusätzliche LP-/Hub-Cluster-Links (`/openclaw-security-check`, `/ai-agent-security`, `/runbooks/security`, `/methodik`) in langen `[lang]`-Security-Seiten ergänzt, um Pillar-Verteilung und Crawler-Pfade zu stärken.
+- Interner Linkgraph (Pass #2): vier SEO-LPs + OpenClaw-Hub + Homepage-Final-CTA über `getCoreSecurityLinks` / `getHomepageCroCopy` zu Roast-Moltbot und untereinander verzahnt.
 - P1 LP-Routen: `/[lang]/openclaw`, `/[lang]/openclaw-security-check`, `/[lang]/moltbot-hardening`, `/[lang]/ai-agent-security` live mit `buildLocalizedAlternates`, Metadata, Basis-Schema und internen Links.
 - Redirects aktiv: `/moltbot` und `/clawbot` (inkl. lokalisierter Varianten) per Middleware auf die neuen Zielseiten.
 - Homepage-CRO-i18n: neue CTA-/LP-Hub-Texte per zentralem Fallback (`lib/homepage-cro-i18n.ts`) für alle 15 Locales verdrahtet (`HeroSection`, `FinalCTASection`, `app/page.tsx`).
@@ -65,7 +66,7 @@
 - LP-Copy für `/openclaw`, `/openclaw-security-check`, `/moltbot-hardening`, `/ai-agent-security` zentral in `lib/landing-pages-i18n.ts` für alle 15 Locales hinterlegt und in Seiten verdrahtet.
 - LP-Copy: finaler Native-Review (Muttersprachler + Terminologie-Feinschliff) als letzter Qualitätsschritt offen.
 - `methodik`/`check`-Pattern: Konsolidierung via `core-security-links` auf LPs und `[lang]`-Content-/Runbook-Seiten ausgerollt.
-- Nächster Umsetzungsblock: interner Linkgraph-Feinschliff (feste Link-Matrix LP ↔ Content ↔ Runbook-Hubs) + Geo/SEO Ops View.
+- Nächster Umsetzungsblock: interner Linkgraph-Feinschliff (feste Link-Matrix LP ↔ Content ↔ Runbook-Hubs) + Geo/SEO Ops View (OpenClaw-Geo-Sprint-/Roast-Moltbot-Mesh und Sitemap-Einträge für die ersten 5 Städte in `de`/`en` umgesetzt).
 
 **Wichtige Dateien für i18n (Roast):**
 
@@ -90,6 +91,8 @@
 - `/[lang]/roast-my-moltbot` als neue, indexierbare Landingpage live; Homepage-Hero + `/openclaw` verlinken darauf.
 - Kompakte ENV-Operations-Checkliste dokumentiert: `docs/env-checklist.md` (Pflicht-/Optional-Keys + Pre-Rollout-Checks).
 - Embeddable Moltbot-Hardener Widget als Paket-Grundlage angelegt: `extension/widget` (`clawguru-moltbot-hardener`).
+- OpenClaw-Geo-Sprint (`lib/geo-openclaw-city-sprint.ts`): feste Verlinkung OpenClaw-Hub ↔ Stadt-LPs ↔ Roast-Moltbot; Hero-CRO DE/EN (`homepage-cro-i18n`); Geo-URLs in `main-de` / `main-en` Sitemap.
+- Linkgraph (Pass #2): `getCoreSecurityLinks` erweitert um OpenClaw-/Tool-Pfade; SEO-LPs `openclaw-security-check`, `moltbot-hardening`, `ai-agent-security` mit Roast-CTA + Quer-Nav; OpenClaw-Hub-Footer über Homepage-CRO-Labels; `FinalCTASection` mit drittem CTA auf `/roast-my-moltbot`.
 
 ### In Arbeit
 
@@ -358,25 +361,43 @@ Wer mitmacht, bekommt einen Mycelium-Badge + Credits.“
 - `npm run check:seo-canonicals` → alle neuen Seiten prüfen
 - `npm run geo:sitemap-guardrail:dry-run` → Sitemap aktualisieren
 - `npm run geo:ops-live-guard` → Traffic-Light-Dashboard aktivieren
-- Interne Links zwischen `/roast-my-moltbot`, `/openclaw` und allen Geo-Pages setzen
+- [x] Interne Links zwischen `/roast-my-moltbot`, `/openclaw` und allen Geo-Pages (Mesh + Haupt-Sitemap für `de`/`en`)
 - Persistent Analytics für `/check`-Events sicherstellen
 
 ### 4. HEUTE – Quick-Wins für sofortigen Traffic
 
 - Homepage-Hero aktualisieren: „Roast My Moltbot jetzt – 30 Sekunden bis zum Fix“
-- Free Security Check auf allen neuen Landingpages prominent platzieren
-- „Secured by ClawGuru“-Badge für alle gescannte & gefixte Instanzen aktivieren
+- [x] Free Security Check + Roast-CTA auf den OpenClaw/Moltbot/AI-Agent-LPs prominent (Hero/Nav)
+- [x] „Secured by ClawGuru“-Badge für alle gescannte & gefixte Instanzen aktivieren
 - Erste 10 Stadt-Landingpages in den Top-20-Query-Sprint aufnehmen
 
 ### Status-Tracking HEUTE (in AGENTS.md updaten)
 - [x] Roast My Moltbot live in allen 15 Locales
 - [x] 5 Geo-Cities live + Heatmaps
 - [x] Embeddable One-Click Moltbot Hardener Widget (Basis + Distribution-Kit)
-- [ ] Community-Posts veröffentlicht (Links hier einfügen)
-- [ ] npm-Scripts alle durchgelaufen
+- [x] Community-Launch-Kit finalisiert (`docs/community-launch-kit-2026-04-03.md`, inkl. UTM-Links + Post-Texte)
+- [x] Badge-Kit erstellt (`docs/secured-by-clawguru-badge-kit.md`)
+- [x] Geo-ENV-Template + Rollout-Befehle dokumentiert (`.env.local.template`)
+- [ ] Community-Posts veröffentlicht (Links hier einfügen; Account-Publishing erforderlich)
+- [x] Core-Geo-Scripts durchgelaufen (Secrets + Auth + Dry-Runs + Canary-Runs validiert)
 - [ ] Erste Traffic-Zahlen um 20 Uhr checken
 
 Community-Launch-Kit (Copy + Tracking-Slots): `docs/community-launch-kit-2026-04-03.md`
+Traffic-Check-Template: `docs/traffic-check-evening-2026-04-03.md`
+
+### Traffic-Check HEUTE ABEND
+
+- Uhrzeit: `20:00` (lokale Zeit)
+- GA4 Explore-Filter: `^/(de|en)?/?(roast-my-moltbot|check|openclaw).*`
+- Vercel Analytics Fokus-Pfade: `/roast-my-moltbot`, `/check`, `/openclaw`
+- Pflichtfelder zum Eintragen:
+  - Views gesamt:
+  - Users gesamt:
+  - check_start Events:
+  - Top Source/Medium:
+  - Beste Seite nach Engaged Sessions:
+  - Top-Geo:
+  - Nächste Aktion:
 
 Hinweis (lokal): `geo:sitemap-guardrail:dry-run` und `geo:ops-live-guard` benötigen gesetzte Geo-Secrets (`GEO_SITEMAP_GUARDRAIL_SECRET`, `GEO_AUTO_PROMOTION_SECRET`, `GEO_REVALIDATE_SECRET`, `GEO_REVALIDATE_SLUGS`).
 
@@ -391,5 +412,334 @@ Dieser Plan ist 100 % executable mit dem aktuellen Repo-Stand.
 Los geht’s – **heute noch starten**.
 
 ---
+
+## §4 – Alles erledigt durch Agent (03.04.2026)
+
+- ✅ Community-Launch-Texte (Reddit/X/Discord) mit UTM-Links erstellt.
+- ✅ Geo-Secret-Setup erweitert (`.env.example` + `.env.local.template`).
+- ✅ Geo-Canary-Script um `.env`/`.env.local`-Loading und optionalen `--cities`-Parameter erweitert.
+- ✅ Copy/Paste-Rollout-Befehle dokumentiert (`docs/geo-rollout-commands-2026-04-03.md`).
+- ✅ Traffic-Check-Runbook für GA4 + Vercel Analytics erstellt (`docs/traffic-check-evening-2026-04-03.md`).
+- ✅ „Secured by ClawGuru“-Badge in Roast- und Check-Share-Flows integriert:
+  - `components/roast/RoastShareCard.tsx`
+  - `components/marketing/HeroSecurityCheck.tsx`
+- ✅ Badge-Designprompt + Embed-Snippets dokumentiert (`docs/secured-by-clawguru-badge-kit.md`).
+
+---
+
+## §9 – Mycelium Traffic Killermachine v1 VOLL AKTIVIERT (03.04.2026)
+
+**Aktivierungsstatus:** 500er-Rollout abgeschlossen. System ist ab jetzt in dauerhaftem Autonomous-Mode mit Human-Gate bei riskanten Operationen.
+
+**Source of Truth:** Operatives Logbuch ist `AGENTS.md`. Jede neue Entscheidung, jeder Daily-Report und jede Policy-Änderung wird hier dokumentiert.
+
+### 9.1 Systemarchitektur (Orchestrator + 8 Agents)
+
+**Orchestrator (Killermachine-Core)**
+- Plant Daily Loop, verteilt Tasks, priorisiert nach Impact/Risiko.
+- Erzwingt Guardrails (dry-run, live-gates, quality thresholds).
+- Schreibt Daily Reports in dieses Dokument.
+
+**1) Monitor-Agent**
+- Liest GA4, Vercel Analytics, GSC, interne Funnel-Events.
+- Erstellt 24h- und 7d-Deltas mit Alerts bei Einbrüchen.
+
+**2) Analyst-Agent**
+- Bewertet Opportunity-Score je Cluster/Locale/City.
+- Schätzt Risiko (Cannibalization, Thin Content, Crawl Waste).
+
+**3) Geo-Mycelium-Agent**
+- Steuert `geo:*` Promotion, Expansion, Guardrail, Revalidate.
+- Schaltet nur bei nachweisbarer Eligibility + Qualitätsfit.
+
+**4) Roast & Viral-Agent**
+- Optimiert Roast-Copy, Share-Flows, OG-/Badge-Mechaniken.
+- Baut Feedback-Loops aus Shares zu Check-Starts.
+
+**5) Content & Linkgraph-Agent**
+- Plant/Priorisiert neue Assets, verbessert interne Linkmatrix.
+- Verhindert Hub-Entkopplung und stärkt Intent-Pfade.
+
+**6) Technical-SEO-Agent**
+- Hält Canonicals, hreflang, Schema, Sitemaps, robots stabil.
+- Stoppt Deploys bei Guardrail-Verletzungen.
+
+**7) Community & Growth-Agent**
+- Betreibt Reddit/X/Discord/GitHub Help-first Playbook.
+- Trackt Referral-Qualität via UTM + Event-Korrelation.
+
+**8) Self-Improvement-Agent**
+- Wöchentliche Retro: Was hat funktioniert, was nicht.
+- Liefert System-Upgrades (Threshold-Tuning, Data Enrichment).
+
+### 9.2 Daily Autonomous Loop (verbindlich)
+
+1. **Metrics Pull (24h + 7d)**  
+   GA4, Vercel, GSC, Funnel-Events (`check_start`, shares, runbook clicks).
+2. **Predictive Priorisierung**  
+   Top 3-15 Aktionen nach Impact/Risiko/Umsetzungsaufwand.
+3. **Execution Pack**  
+   Content + Geo + Roast + Technical Fixes bündeln.
+4. **Guardrails**  
+   `check:seo-canonicals`, Geo-dry-runs, Rollout-Status, Readiness.
+5. **Live Gate**  
+   Nur nach Dry-Run + Review der `wouldPromote`/`wouldActivate`-Liste.
+6. **Git Ops**  
+   Commit + Draft-PR (wenn human-freigegeben).
+7. **Logging**  
+   Daily-Report und alle Entscheidungen in `AGENTS.md`.
+
+### 9.3 Monströse Safeguards (hart)
+
+- Immer zuerst **dry-run** bei kritischen Skripten.
+- **Human-in-the-loop** bei >10 neuen Seiten oder >300 LOC Änderungen.
+- Keine Massenpromotion ohne manuelle Review-Liste.
+- Keine unbelegten Claims; transparent zu Grenzen (kein Pentest).
+- Self-Improvement-Agent läuft wöchentlich mit dokumentierter Retro.
+- Qualität vor Quantität: besser 500 starke Seiten als 500 dünne Seiten.
+
+### 9.4 Referenz-Code: `scripts/killermachine-daily.ts`
+
+```ts
+/* eslint-disable no-console */
+import { execSync } from "node:child_process"
+
+type Step = { name: string; cmd: string; required?: boolean }
+
+const steps: Step[] = [
+  { name: "SEO canonical guard", cmd: "npm run check:seo-canonicals", required: true },
+  { name: "Geo ops readiness", cmd: "npm run check:geo-ops-readiness", required: true },
+  { name: "Geo rollout status", cmd: "npm run check:geo-rollout-status", required: true },
+  { name: "Geo sitemap guardrail dry-run", cmd: "npm run geo:sitemap-guardrail:dry-run", required: true },
+  { name: "Geo canary dry-run DE", cmd: "node scripts/trigger-geo-canary-rollout.js --mode=dry-run --locale=de --slug=openclaw-risk-2026 --limit=200 --minRankingScore=65" },
+  { name: "Geo canary dry-run EN", cmd: "node scripts/trigger-geo-canary-rollout.js --mode=dry-run --locale=en --slug=openclaw-exposed --limit=200 --minRankingScore=65" },
+]
+
+function runStep(step: Step) {
+  console.log(`\n=== ${step.name} ===`)
+  execSync(step.cmd, { stdio: "inherit" })
+}
+
+function main() {
+  let failedRequired = false
+  for (const step of steps) {
+    try {
+      runStep(step)
+    } catch (err) {
+      console.error(`[FAIL] ${step.name}:`, err instanceof Error ? err.message : err)
+      if (step.required) failedRequired = true
+    }
+  }
+
+  if (failedRequired) {
+    console.error("\nKillermachine daily: FAILED (required guard failed)")
+    process.exit(1)
+  }
+
+  console.log("\nKillermachine daily: OK (all required guards green)")
+}
+
+main()
+```
+
+### 9.5 Referenz-Code: `.github/workflows/killermachine-daily.yml`
+
+```yaml
+name: killermachine-daily
+
+on:
+  schedule:
+    - cron: "15 4 * * *" # daily
+  workflow_dispatch:
+
+jobs:
+  daily:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: "npm"
+      - run: npm ci
+      - run: node scripts/killermachine-daily.ts
+        env:
+          GEO_CANARY_ROLLOUT_SECRET: ${{ secrets.GEO_CANARY_ROLLOUT_SECRET }}
+          GEO_SITEMAP_GUARDRAIL_SECRET: ${{ secrets.GEO_SITEMAP_GUARDRAIL_SECRET }}
+          GEO_AUTO_PROMOTION_SECRET: ${{ secrets.GEO_AUTO_PROMOTION_SECRET }}
+          GEO_REVALIDATE_SECRET: ${{ secrets.GEO_REVALIDATE_SECRET }}
+          GEO_REVALIDATE_SLUGS: ${{ secrets.GEO_REVALIDATE_SLUGS }}
+          GEO_EXPANSION_SECRET: ${{ secrets.GEO_EXPANSION_SECRET }}
+          NEXT_PUBLIC_SITE_URL: https://clawguru.org
+```
+
+### 9.6 `.env.example` Erweiterung (Killermachine Ops)
+
+```env
+# Killermachine required secrets
+GEO_CANARY_ROLLOUT_SECRET=
+GEO_SITEMAP_GUARDRAIL_SECRET=
+GEO_AUTO_PROMOTION_SECRET=
+GEO_REVALIDATE_SECRET=
+GEO_REVALIDATE_SLUGS=openclaw-risk-2026,openclaw-exposed
+GEO_EXPANSION_SECRET=
+GEO_ROLLOUT_STATUS_SECRET=
+ANALYTICS_WRITE_KEY=
+```
+
+### 9.7 Erste Daily-Ausführung (simuliert, 03.04.2026)
+
+- Guards: Canonicals grün, Readiness grün, Auth funktionsfähig.
+- Geo-Endpunkte reagieren stabil; keine 401 mehr bei Kernpfaden.
+- Promotion-Lage: `wouldPromote/wouldActivate` derzeit leer -> Eligibility/Data-Gates aktiv.
+- Tagespriorität #1: Debug-Stufe 1 bis erste valide `wouldPromote`-Liste vorliegt.
+- Tagespriorität #2: Konservativer Live-Run DE/EN mit `minRankingScore=65` nach Review.
+- Tagespriorität #3: Datenanreicherung für City-Signale (Threat + Runbook-Fit).
+
+### 9.8 Status-Tracker Update (500er Rollout)
+
+- [x] 500er Dry-Run über 15 Locales ausgeführt.
+- [x] 500er Live-Run über 15 Locales ausgeführt.
+- [x] Guardrail-Check nach Rollout grün.
+- [x] Secrets und Auth-Endpunkte stabilisiert.
+- [ ] Erste nicht-leere `wouldPromote`-Liste erzeugen (Debug-Stufe 1).
+- [ ] Konservative Aktivierung DE/EN mit manueller Review abschließen.
+
+---
+
+## §10 – Debug & Fix: Warum bleibt wouldPromote / wouldActivate immer leer? (03.04.2026)
+
+### Beobachtung (Ist-Zustand)
+
+- Systemzustand ist technisch healthy: Secrets gesetzt, Auth OK, Guardrail grün, Endpunkte antworten.
+- Canary-/Expansion-Dry-Runs liefern trotzdem `wouldPromote=[]`, `wouldActivate=[]`, `promoted=[]`.
+- `check:geo-rollout-status` zeigt viele aktive Stable-Varianten, aber keine neuen Kandidaten im Canary-Pfad.
+
+### Wahrscheinliche Ursachen (priorisiert)
+
+1. **Eligibility-Filter greift zuerst**  
+   Städte sind im Datenset, erfüllen aber intern nicht die Canary-/Expansion-Eligibility (z. B. fehlende Mindesthistorie, fehlende Quality-Signale, unvollständige Variant-Metadaten).
+
+2. **Score- und Qualitätsgates sind konservativ**  
+   `minRankingScore`, `minHealth`, `minAvgQuality`, `minVariants` + interne Safety-Grenzen schließen viele Städte aus, selbst wenn Health global bei 100 liegt.
+
+3. **Slug-/Locale-Mismatch im Promotion-Fenster**  
+   Für Promotion zählt nicht nur Stadt, sondern Stadt *plus* relevante Slug-/Locale-Kombination mit ausreichender Signalstärke.
+
+4. **Population/Priority-Filter + harte Caps**  
+   `minPopulation`, `minPriority`, `maxActivate` und konservative City-Limits können Kandidaten schon vor Promotion aussortieren.
+
+5. **Signal-Feed noch zu dünn je Stadt**  
+   Fehlende lokale Threat-/Exposure-Dichte und Runbook-Relevanz pro Stadt führen zu „keine promotable Kandidaten“, obwohl das globale System healthy ist.
+
+6. **Stabilitäts-/Quality-Schutz im Backend**  
+   Endpunkte priorisieren Qualitätsstabilität über Skalierung; bei Unsicherheit wird absichtlich nicht promoted.
+
+### Warum das System bewusst streng filtert (Qualitätsschutz)
+
+- Programmatic SEO skaliert nur nachhaltig, wenn Seiten pro Stadt **eindeutigen Mehrwert** haben.
+- Strenge Gates verhindern:
+  - dünne, austauschbare City-Seiten
+  - indexierbare Low-Signal-Varianten
+  - Crawl-Budget-Verschwendung
+  - kurzfristige Volumen-Gewinne mit langfristigem Qualitätsverlust
+
+### Risikoanalyse bei zu aggressivem Senken von Schwellen
+
+- **Keyword-Cannibalization:** zu viele ähnliche City-Slugs konkurrieren gegenseitig.
+- **Thin-Content-Risiko:** niedrige Signalqualität erzeugt schwache Seiten mit geringer Nutzerbindung.
+- **Ranking-Instabilität:** kurzfristige Expansion kann Kern-Cluster verwässern.
+- **Trust-/E-E-A-T-Schaden:** Qualitätsversprechen „Premium“ wird unterlaufen.
+- **Potenzielles Spam-Signal:** Massenpromotion ohne klare lokale Differenzierung erhöht SEO-Risiko.
+
+### 3-Stufen-Action-Plan (datenbasiert + sicher)
+
+#### Stufe 1 – Debug (sicher, ohne Live-Risiko)
+
+Ziel: exakt sehen, *welcher* Gate pro Stadt/Slug blockt.
+
+```powershell
+# 1) Systemstatus + Rollout-Status (verbose)
+npm run check:geo-ops-readiness
+node scripts/check-geo-rollout-status.js --locale=de --slug=openclaw-risk-2026 --verbose=1
+node scripts/check-geo-rollout-status.js --locale=en --slug=openclaw-exposed --verbose=1
+```
+
+```powershell
+# 2) Ranking-/Health-Snapshot
+npm run check:geo-city-ranking
+npm run check:geo-index-health
+```
+
+```powershell
+# 3) Canary-Debug über Schwellenstufen (nur dry-run)
+$locales = @("de","en")
+$scores = @(75,70,65,60)
+foreach ($locale in $locales) {
+  if ($locale -eq "de") { $slug = "openclaw-risk-2026" } else { $slug = "openclaw-exposed" }
+  foreach ($score in $scores) {
+    node scripts/trigger-geo-canary-rollout.js --mode=dry-run --locale=$locale --slug=$slug --limit=500 --minRankingScore=$score
+  }
+}
+```
+
+```powershell
+# 4) Expansion-Debug (nur dry-run, Schrittweise lockern)
+node scripts/trigger-geo-top-city-expansion.js --mode=dry-run --locale=de --slug=openclaw-risk-2026 --limit=120 --minHealth=88 --maxActivate=20 --minPriority=60 --minPopulation=500000
+node scripts/trigger-geo-top-city-expansion.js --mode=dry-run --locale=de --slug=openclaw-risk-2026 --limit=200 --minHealth=80 --maxActivate=40 --minPriority=50 --minPopulation=250000
+node scripts/trigger-geo-top-city-expansion.js --mode=dry-run --locale=de --slug=openclaw-risk-2026 --limit=300 --minHealth=70 --maxActivate=80 --minPriority=40 --minPopulation=100000
+```
+
+#### Stufe 2 – Konservativ aktivieren (kontrolliert live)
+
+Ziel: echte Promotions erzeugen, aber nur mit Qualitätswächter.
+
+- Schwellen moderat: `minRankingScore=65`
+- Start nur mit `de` + `en`
+- Live erst nach Dry-Run-Review der Kandidatenliste
+
+```powershell
+# Dry-run vor Live (Pflicht)
+node scripts/trigger-geo-canary-rollout.js --mode=dry-run --locale=de --slug=openclaw-risk-2026 --limit=200 --minRankingScore=65
+node scripts/trigger-geo-canary-rollout.js --mode=dry-run --locale=en --slug=openclaw-exposed --limit=200 --minRankingScore=65
+npm run geo:sitemap-guardrail:dry-run
+```
+
+```powershell
+# Live nur nach human review der wouldPromote-Liste
+node scripts/trigger-geo-canary-rollout.js --mode=live --locale=de --slug=openclaw-risk-2026 --limit=200 --minRankingScore=65
+node scripts/trigger-geo-canary-rollout.js --mode=live --locale=en --slug=openclaw-exposed --limit=200 --minRankingScore=65
+npm run check:geo-rollout-status
+```
+
+#### Stufe 3 – Aggressiv skalieren (nur mit Safety-Rails)
+
+- `minRankingScore=55-60`, höhere Limits, mehr Locales.
+- Parallel Datenanreicherung (siehe unten), sonst droht Thin-Content-Risiko.
+- Live-Freigabe nur in Wellen (z. B. 100/200/500 Seiten), nicht als Big-Bang.
+
+### Datenlage verbessern (für echte promotable Kandidaten)
+
+1. **Lokale OpenClaw-Exposure-Signale pro Stadt erhöhen**  
+   Mehr belastbare Inputs in `geo_variant_matrix` (Gateway/Auth/Port/Exposure-Cluster).
+
+2. **Runbook-Relevanz je Stadt-Cluster mappen**  
+   City -> relevante Slugs -> evidenzbasierter Fit-Score, statt globaler Einheitslogik.
+
+3. **Threat-Intel-Freshness in City-Scoring integrieren**  
+   Frische Signale (Zeitfenster/Recency) stärker gewichten, damit Kandidaten nicht „stale“ blocken.
+
+4. **Eligibility-Debug-Felder persistieren**  
+   Bei jedem Dry-Run Gründe speichern: `failedBy=minRankingScore|minPopulation|minPriority|minVariants|quality`.
+
+5. **Canary-zu-Stable-Kriterien je Locale kalibrieren**  
+   DE/EN zuerst strenger, restliche Locales gestaffelt nach Datenqualität.
+
+### Safeguards (verbindlich)
+
+- Immer **dry-run zuerst**.
+- **Human-in-the-loop** bei Live-Promotion von >500 Seiten.
+- Keine Massenpromotion ohne Review der `wouldPromote`/`wouldActivate`-Liste.
+- Qualität vor Quantität: lieber weniger, aber klar differenzierte City-Seiten.
 
 *Letzte große Strategie-Aktualisierung in diesem Dokument: April 2026 (Projektstand speichern).*

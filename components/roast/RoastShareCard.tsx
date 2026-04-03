@@ -1,8 +1,9 @@
 "use client"
 
+import { useState } from "react"
 import { motion } from "framer-motion"
 import Link from "next/link"
-import { Flame, Share2 } from "lucide-react"
+import { Flame, Share2, ShieldCheck } from "lucide-react"
 import type { RoastStackResult } from "@/app/actions/roast-stack"
 
 export type RoastShareDict = {
@@ -32,10 +33,22 @@ function scoreColor(score: number): string {
 }
 
 export function RoastShareCard({ result, dict, prefix, shareUrl, onCopy, copied }: Props) {
+  const [badgeCopied, setBadgeCopied] = useState(false)
   const text = `${dict.score_label}: ${result.score}/100 — ${result.top_roasts[0]}`
   const tweet = `🔥 ${text}\n`
   const xHref = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweet)}&url=${encodeURIComponent(shareUrl)}`
   const liHref = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`
+  const badgeSnippet = `<a href="${shareUrl}?utm_source=community-launch&utm_medium=badge&utm_campaign=secured-by-clawguru" class="inline-flex items-center gap-2 rounded-full border border-cyan-400/40 bg-cyan-500/10 px-4 py-1.5 text-xs font-bold uppercase tracking-wide text-cyan-200"><span>Secured by ClawGuru</span></a>`
+
+  async function copyBadgeSnippet() {
+    try {
+      await navigator.clipboard.writeText(badgeSnippet)
+      setBadgeCopied(true)
+      setTimeout(() => setBadgeCopied(false), 1800)
+    } catch {
+      setBadgeCopied(false)
+    }
+  }
 
   return (
     <motion.div
@@ -142,6 +155,26 @@ export function RoastShareCard({ result, dict, prefix, shareUrl, onCopy, copied 
         >
           {dict.fix_cta}
         </Link>
+      </div>
+
+      <div className="relative mt-6 rounded-xl border border-cyan-400/25 bg-cyan-500/5 p-4">
+        <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-cyan-200">
+          <ShieldCheck className="h-4 w-4" />
+          Secured by ClawGuru
+        </p>
+        <p className="mt-2 text-xs text-zinc-400">
+          Embed this trust-badge snippet in status pages, changelogs, or incident notes.
+        </p>
+        <pre className="mt-3 overflow-x-auto rounded-lg border border-white/10 bg-black/40 p-3 text-[11px] text-zinc-300">
+          {badgeSnippet}
+        </pre>
+        <button
+          type="button"
+          onClick={copyBadgeSnippet}
+          className="mt-3 inline-flex items-center gap-2 rounded-lg border border-cyan-400/35 bg-cyan-500/10 px-3 py-2 text-xs font-semibold text-cyan-100 hover:bg-cyan-500/20"
+        >
+          {badgeCopied ? "Badge snippet copied" : "Copy badge snippet"}
+        </button>
       </div>
     </motion.div>
   )

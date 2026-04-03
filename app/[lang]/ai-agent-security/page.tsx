@@ -4,6 +4,7 @@ import Link from "next/link"
 import Container from "@/components/shared/Container"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
 import { getCoreSecurityLinks } from "@/lib/core-security-links"
+import { getHomepageCroCopy } from "@/lib/homepage-cro-i18n"
 import { getAiAgentCopy } from "@/lib/landing-pages-i18n"
 
 export const revalidate = 60
@@ -59,13 +60,31 @@ export default function AIAgentSecurityPage(props: { params: { lang: string } })
             <Link href={coreLinks.check} className="rounded-xl bg-cyan-500 px-5 py-3 text-sm font-bold text-black">
               {copy.ctaPrimary}
             </Link>
-            <Link href={`${prefix}/runbooks/security`} className="rounded-xl border border-white/15 px-5 py-3 text-sm font-semibold text-white">
+            <Link href={coreLinks.runbooksSecurity} className="rounded-xl border border-white/15 px-5 py-3 text-sm font-semibold text-white">
               {copy.ctaSecondary}
+            </Link>
+            <Link href={coreLinks.roastMyMoltbot} className="rounded-xl border border-amber-400/40 px-5 py-3 text-sm font-semibold text-amber-100">
+              {cro.heroTertiary}
             </Link>
             <Link href={coreLinks.methodology} className="rounded-xl border border-white/15 px-5 py-3 text-sm font-semibold text-white">
               {copy.methodologyLabel}
             </Link>
           </div>
+
+          <nav className="text-sm text-zinc-400 flex flex-wrap gap-4 pt-2 border-t border-white/5">
+            <Link href={coreLinks.openclaw} className="hover:text-cyan-300">
+              {cro.lpOpenclawTitle}
+            </Link>
+            <Link href={coreLinks.openclawSecurityCheck} className="hover:text-cyan-300">
+              {cro.lpCheckTitle}
+            </Link>
+            <Link href={coreLinks.moltbotHardening} className="hover:text-cyan-300">
+              {cro.lpMoltbotTitle}
+            </Link>
+            <Link href={coreLinks.roastMyMoltbot} className="hover:text-cyan-300">
+              {cro.heroTertiary}
+            </Link>
+          </nav>
         </div>
       </Container>
     </main>

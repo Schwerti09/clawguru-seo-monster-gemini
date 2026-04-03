@@ -1,3 +1,10 @@
+try {
+  require("dotenv").config()
+  require("dotenv").config({ path: ".env.local" })
+  const extra = (process.env.GEO_CLI_EXTRA_DOTENV || "").trim()
+  if (extra) require("dotenv").config({ path: extra })
+} catch {}
+
 const DEFAULT_BASE = "https://clawguru.org"
 
 function getArg(name, fallback = "") {
@@ -28,6 +35,7 @@ async function main() {
 
   const locale = getArg("locale", "de")
   const slug = getArg("slug", "aws-ssh-hardening-2026")
+  const cities = getArg("cities", "")
   const limit = getArg("limit", process.env.GEO_CANARY_ROLLOUT_LIMIT || "80")
   const minRankingScore = getArg("minRankingScore", process.env.GEO_CANARY_PROMOTE_MIN_RANKING_SCORE || "86")
   const url =
@@ -35,6 +43,7 @@ async function main() {
     `?dryRun=${dryRun ? "1" : "0"}` +
     `&locale=${encodeURIComponent(locale)}` +
     `&slug=${encodeURIComponent(slug)}` +
+    (cities ? `&cities=${encodeURIComponent(cities)}` : "") +
     `&limit=${encodeURIComponent(limit)}` +
     `&minRankingScore=${encodeURIComponent(minRankingScore)}`
 
@@ -51,7 +60,9 @@ async function main() {
     process.exit(1)
   }
 
-  console.log(`canary-rollout mode=${dryRun ? "dry-run" : "live"} minRankingScore=${json.minRankingScore}`)
+  console.log(
+    `canary-rollout mode=${dryRun ? "dry-run" : "live"} locale=${locale} cities=${cities || "-"} minRankingScore=${json.minRankingScore}`
+  )
   console.log(`promoted=${(json.promoted || []).join(",") || "-"}`)
   console.log(`wouldPromote=${(json.wouldPromote || []).join(",") || "-"}`)
 }

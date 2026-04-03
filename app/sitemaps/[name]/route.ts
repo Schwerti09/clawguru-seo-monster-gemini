@@ -5,6 +5,7 @@ import { DEFAULT_LOCALE, SUPPORTED_LOCALES, type Locale, getLocaleHrefLang, loca
 import { logTelemetry } from "@/lib/ops/telemetry"
 import { getRequestId } from "@/lib/ops/request-id"
 import { getTopCities } from "@/lib/geo-cities"
+import { GEO_OPENCLAW_SPRINT_CITIES, geoOpenClawSprintPath } from "@/lib/geo-openclaw-city-sprint"
 import { getGeoSitemapRuntimeLimits } from "@/lib/geo-runtime-config"
 // lightweight: avoid importing heavy datasets here to keep Edge fast
 
@@ -360,6 +361,18 @@ export async function GET(
         changefreq: "weekly",
         priority: "0.85",
       }))
+      const geoOpenClawSprintUrls =
+        locale === "de" || locale === "en"
+          ? GEO_OPENCLAW_SPRINT_CITIES.map((city) => {
+              const path = geoOpenClawSprintPath(locale, city)
+              return {
+                loc: `${base}${path}`,
+                lastmod,
+                changefreq: "weekly" as const,
+                priority: "0.86",
+              }
+            })
+          : []
       const urls = [
         { loc: `${base}/${locale}`, lastmod, changefreq: "daily", priority: "0.9" },
         { loc: `${base}/${locale}/live`, lastmod, changefreq: "daily", priority: "0.9" },
@@ -385,6 +398,7 @@ export async function GET(
         { loc: `${base}/${locale}/temporal`, lastmod, changefreq: "weekly", priority: "0.85" },
         { loc: `${base}/${locale}/clawlink`, lastmod, changefreq: "weekly", priority: "0.85" },
         ...hubUrls,
+        ...geoOpenClawSprintUrls,
       ]
       return respond(urlset(urls))
     }

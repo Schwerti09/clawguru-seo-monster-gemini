@@ -1,8 +1,15 @@
 {
-  "updated": "2026-04-01",
+  "updated": "2026-04-03",
   "scope": "Top-20 priorities for next 14 days (impact-first).",
   "owner": "growth+seo",
-  "notes": "Each entry has one concrete action and one primary KPI. Do not start low-priority queries before top-10 is shipped.",
+  "notes": "Each entry has one concrete action and one primary KPI. Do not start low-priority queries before top-10 is shipped. Geo sprint (first 5 DE+EN city LPs) is tracked under geoCitySprint; keep shipping top-10 content first.",
+  "geoCitySprint": [
+    { "city": "berlin", "de": "/de/berlin/openclaw-risk-2026", "en": "/en/berlin/openclaw-exposed" },
+    { "city": "munich", "de": "/de/munich/openclaw-risk-2026", "en": "/en/munich/openclaw-exposed" },
+    { "city": "hamburg", "de": "/de/hamburg/openclaw-risk-2026", "en": "/en/hamburg/openclaw-exposed" },
+    { "city": "frankfurt", "de": "/de/frankfurt/openclaw-risk-2026", "en": "/en/frankfurt/openclaw-exposed" },
+    { "city": "cologne", "de": "/de/cologne/openclaw-risk-2026", "en": "/en/cologne/openclaw-exposed" }
+  ],
   "priorities": [
     {
       "priority": 1,

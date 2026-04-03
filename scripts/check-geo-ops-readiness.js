@@ -1,3 +1,10 @@
+try {
+  require("dotenv").config()
+  require("dotenv").config({ path: ".env.local" })
+  const extra = (process.env.GEO_CLI_EXTRA_DOTENV || "").trim()
+  if (extra) require("dotenv").config({ path: extra })
+} catch {}
+
 const REQUIRED_KEYS = [
   "GEO_AUTO_PROMOTION_SECRET",
   "GEO_REVALIDATE_SECRET",

@@ -27,8 +27,9 @@ type HomepageCroCopy = {
 const EN: HomepageCroCopy = {
   heroPrimary: "Start security check",
   heroSecondary: "Browse runbooks",
-  heroTertiary: "Roast my stack",
-  heroNote: "Free check, no signup. Heuristic signal - verify in your own environment.",
+  heroTertiary: "Roast My Moltbot — fix path in ~30s",
+  heroNote:
+    "Free check, no signup. Roast surfaces weak spots fast—then verify in your own environment. Not a penetration test.",
   finalTitle: "Ready for real security operations?",
   finalSub: "Start now - risk-free. Productive in 5 minutes.",
   finalPrimary: "Start security check",
@@ -52,8 +53,9 @@ const COPY: Partial<Record<Locale, Partial<HomepageCroCopy>>> = {
   de: {
     heroPrimary: "Security Check starten",
     heroSecondary: "Runbooks durchsuchen",
-    heroTertiary: "Roast my stack",
-    heroNote: "Kostenloser Check ohne Signup. Heuristisches Signal - bitte in der eigenen Umgebung verifizieren.",
+    heroTertiary: "Roast My Moltbot — in ~30 s zum Fix-Pfad",
+    heroNote:
+      "Kostenloser Check ohne Signup. Roast zeigt Schwachstellen schnell—danach im eigenen Umfeld verifizieren. Kein Penetrationstest.",
     finalTitle: "Bereit für echte Security Operations?",
     finalSub: "Jetzt starten - risikofrei. In 5 Minuten produktiv.",
     finalPrimary: "Security Check starten",

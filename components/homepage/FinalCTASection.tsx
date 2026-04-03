@@ -14,7 +14,7 @@ export default function FinalCTASection({ locale, prefix = "", dict = {} }: Prop
         <p className="text-lg text-gray-400 mb-8">
           {dict.final_cta_sub || cro.finalSub}
         </p>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+        <div className="flex flex-col sm:flex-row flex-wrap gap-4 justify-center">
           <a
             href={`${prefix}/check`}
             className="px-8 py-3 rounded-2xl font-black bg-gradient-to-r from-brand-cyan to-brand-violet hover:opacity-90 text-white text-center"
@@ -26,6 +26,12 @@ export default function FinalCTASection({ locale, prefix = "", dict = {} }: Prop
             className="px-8 py-3 rounded-2xl border border-white/10 hover:border-white/20 font-bold text-gray-200 transition-all duration-300"
           >
             {dict.final_cta_secondary || cro.finalSecondary}
+          </a>
+          <a
+            href={`${prefix}/roast-my-moltbot`}
+            className="px-8 py-3 rounded-2xl border border-amber-400/35 hover:border-amber-300/55 font-bold text-amber-100 transition-all duration-300 text-center"
+          >
+            {dict.final_cta_tertiary || cro.heroTertiary}
           </a>
         </div>
       </div>

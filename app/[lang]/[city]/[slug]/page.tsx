@@ -2,16 +2,22 @@ import type { Metadata } from "next"
 
 import Container from "@/components/shared/Container"
 import { getCoreSecurityLinks } from "@/lib/core-security-links"
+import {
+  GEO_OPENCLAW_SPRINT_CITIES,
+  GEO_OPENCLAW_SPRINT_SLUGS,
+  type GeoOpenClawSprintCity,
+  type GeoOpenClawSprintPageSlug,
+  geoOpenClawSprintPageSlugForLocale,
+  geoOpenClawSprintPath,
+  isGeoOpenClawSprintCity,
+} from "@/lib/geo-openclaw-city-sprint"
 import { SUPPORTED_LOCALES, type Locale, getLocaleHrefLang } from "@/lib/i18n"
 import { notFound } from "next/navigation"
 
 export const revalidate = 300
 
-const SUPPORTED_CITIES = ["berlin", "munich", "hamburg", "frankfurt", "cologne"] as const
-type CitySlug = (typeof SUPPORTED_CITIES)[number]
-
-const SUPPORTED_SLUGS = ["openclaw-risk-2026", "openclaw-exposed"] as const
-type PageSlug = (typeof SUPPORTED_SLUGS)[number]
+type CitySlug = GeoOpenClawSprintCity
+type PageSlug = GeoOpenClawSprintPageSlug
 
 type CityCopy = {
   name: string
@@ -96,9 +102,13 @@ function normalizeParams(params: { lang: string; city: string; slug: string }): 
   slug: PageSlug
 } {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
-  const cityNorm = params.city.toLowerCase() as CitySlug
+  const cityNorm = params.city.toLowerCase()
   const slugNorm = params.slug.toLowerCase() as PageSlug
-  if (!SUPPORTED_CITIES.includes(cityNorm) || !SUPPORTED_SLUGS.includes(slugNorm)) {
+  if (!isGeoOpenClawSprintCity(cityNorm) || !(GEO_OPENCLAW_SPRINT_SLUGS as readonly string[]).includes(slugNorm)) {
+    notFound()
+  }
+  const expected = geoOpenClawSprintPageSlugForLocale(locale)
+  if (!expected || expected !== slugNorm) {
     notFound()
   }
   return { locale, city: cityNorm, slug: slugNorm }
@@ -106,7 +116,7 @@ function normalizeParams(params: { lang: string; city: string; slug: string }): 
 
 export async function generateStaticParams() {
   const out: { lang: Locale; city: CitySlug; slug: PageSlug }[] = []
-  const cities: CitySlug[] = ["berlin", "munich", "hamburg", "frankfurt", "cologne"]
+  const cities = [...GEO_OPENCLAW_SPRINT_CITIES]
   for (const city of cities) {
     out.push({ lang: "de", city, slug: "openclaw-risk-2026" })
     out.push({ lang: "en", city, slug: "openclaw-exposed" })
@@ -118,7 +128,7 @@ export async function generateMetadata(props: { params: { lang: string; city: st
   const { locale, city } = normalizeParams(props.params)
   const { localeCopy, cityCopy } = getCopy(locale, city)
   const base = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
-  const cityPath = `/${locale}/${city}/${locale === "de" ? "openclaw-risk-2026" : "openclaw-exposed"}`
+  const cityPath = geoOpenClawSprintPath(locale, city) ?? `/${locale}/${city}/openclaw-exposed`
   const canonical = `${base}${cityPath}`
 
   return {
@@ -174,6 +184,12 @@ export default function GeoOpenClawCityPage(props: { params: { lang: string; cit
                 className="rounded-xl border border-white/15 px-5 py-3 text-sm font-semibold text-white hover:border-cyan-400/60"
               >
                 {localeCopy.ctaSecondary}
+              </a>
+              <a
+                href={`${prefix}/roast-my-moltbot`}
+                className="rounded-xl border border-amber-400/40 px-5 py-3 text-sm font-semibold text-amber-100 hover:border-amber-300/70"
+              >
+                Roast My Moltbot
               </a>
             </div>
           </header>
@@ -251,11 +267,20 @@ export default function GeoOpenClawCityPage(props: { params: { lang: string; cit
             <a href={coreLinks.methodology} className="hover:text-cyan-300">
               {locale === "de" ? "Methodik & Grenzen" : "Methodology & limits"}
             </a>
-            <a href={`${prefix}/runbooks/security`} className="hover:text-cyan-300">
+            <a href={coreLinks.runbooksSecurity} className="hover:text-cyan-300">
               {locale === "de" ? "Security-Runbooks" : "Security runbooks"}
             </a>
             <a href={`${prefix}/openclaw-security-check`} className="hover:text-cyan-300">
               {locale === "de" ? "OpenClaw Security Check" : "OpenClaw security check"}
+            </a>
+            <a href={`${prefix}/moltbot-hardening`} className="hover:text-cyan-300">
+              {locale === "de" ? "Moltbot Hardening" : "Moltbot hardening"}
+            </a>
+            <a href={`${prefix}/roast-my-moltbot`} className="hover:text-cyan-300">
+              Roast My Moltbot
+            </a>
+            <a href={`${prefix}/openclaw`} className="hover:text-cyan-300">
+              OpenClaw
             </a>
           </nav>
         </div>

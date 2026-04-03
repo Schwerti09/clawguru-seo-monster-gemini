@@ -43,6 +43,7 @@ export default function HeroSecurityCheck({ dict = {} }: { dict?: Record<string,
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState<SecurityCheckResult | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [badgeCopied, setBadgeCopied] = useState(false)
   // WORLD BEAST FINAL LAUNCH: upsell modal state
   const [showUpsell, setShowUpsell] = useState(false)
   const ctaLabel = isGerman ? "JETZT KOSTENLOS ANALYSIEREN" : "ANALYZE FOR FREE NOW"
@@ -135,6 +136,21 @@ export default function HeroSecurityCheck({ dict = {} }: { dict?: Record<string,
       } catch {}
     } else {
       await copyLink()
+    }
+  }
+
+  async function copyBadgeEmbedSnippet() {
+    if (!result || !shareUrl || !badgeUrl || typeof window === "undefined") return
+    const fullShareUrl = `${window.location.origin}${shareUrl}`
+    const fullBadgeUrl = `${window.location.origin}${badgeUrl}`
+    const html = `<a href="${fullShareUrl}?utm_source=community-launch&utm_medium=badge&utm_campaign=secured-by-clawguru" class="inline-flex items-center gap-2 rounded-full border border-cyan-400/40 bg-cyan-500/10 px-4 py-2 text-xs font-bold uppercase tracking-wide text-cyan-200"><img src="${fullBadgeUrl}" alt="Secured by ClawGuru" width="220" height="124" loading="lazy" /></a>`
+    try {
+      await navigator.clipboard.writeText(html)
+      setBadgeCopied(true)
+      trackEvent("share_click", { locale, method: "copy_badge_snippet", score: result.score })
+      setTimeout(() => setBadgeCopied(false), 1800)
+    } catch {
+      setBadgeCopied(false)
     }
   }
 
@@ -382,6 +398,23 @@ export default function HeroSecurityCheck({ dict = {} }: { dict?: Record<string,
               >
                 {isGerman ? "SVG herunterladen" : "Download SVG"}
               </a>
+              <button
+                type="button"
+                onClick={copyBadgeEmbedSnippet}
+                className="mt-3 w-full rounded-xl border border-cyan-400/35 bg-cyan-500/10 px-3 py-2 text-xs font-semibold text-cyan-100 hover:bg-cyan-500/20"
+              >
+                {badgeCopied
+                  ? (isGerman ? "Badge-Snippet kopiert" : "Badge snippet copied")
+                  : (isGerman ? "Badge-Snippet kopieren" : "Copy badge snippet")}
+              </button>
+              <div className="mt-3 rounded-xl border border-white/10 bg-black/40 p-3">
+                <div className="text-[11px] text-gray-400">
+                  {isGerman ? "Empfohlenes HTML + Tailwind Snippet" : "Recommended HTML + Tailwind snippet"}
+                </div>
+                <pre className="mt-2 overflow-x-auto whitespace-pre-wrap break-all text-[10px] text-gray-300">
+                  {`<a href="${shareUrl || "/check"}" class="inline-flex items-center gap-2 rounded-full border border-cyan-400/40 bg-cyan-500/10 px-4 py-2 text-xs font-bold uppercase tracking-wide text-cyan-200">Secured by ClawGuru</a>`}
+                </pre>
+              </div>
             </div>
           </div>
         </div>

@@ -871,4 +871,681 @@ npm run geo:sitemap-guardrail:dry-run
 - **Human Review** bei jeder Live-Promotion >30 Seiten.
 - **Qualität > Quantität**.
 
+---
+
+## §12 – Kombinierter Full-System-Test & Debug-Run: wouldPromote-Blockade (03.04.2026)
+
+### 12.1 Vollständiger Test-Plan (kombiniert, logisch geordnet)
+
+1. **Readiness & Health**
+   - `check:geo-ops-readiness` (Secrets/Operational Readiness)
+   - `check:geo-city-ranking`, `check:geo-index-health` (Signal-/Index-Gesundheit)
+2. **Rollout-Status**
+   - `check:geo-rollout-status --verbose` (aktive Canary/Stable-Verteilung)
+3. **Top-City-Expansion in drei Schärfen**
+   - streng -> mittel -> aggressiv (nur dry-run)
+4. **Geo-Canary-Rollout mit Top-Städten (DE/EN)**
+   - gezielte city-Liste, dry-run, Ranking-Schwelle
+5. **Gate-Debug auswerten**
+   - Eligibility/Stage, Ranking, Health, Population/Priority, Freshness/Unique-Value-Density
+
+### 12.2 Kombinierte Befehle (vorgeschlagen + analysiert)
+
+```bash
+# 1. Basis-Readiness & Status
+npm run check:geo-ops-readiness -- --verbose
+npm run check:geo-rollout-status -- --verbose
+npm run check:geo-city-ranking -- --verbose
+npm run check:geo-index-health -- --verbose
+
+# 2. Strenger Debug-Run (hohe Qualität)
+node scripts/trigger-geo-top-city-expansion.js --mode=dry-run --locale=de --slug=openclaw-risk-2026 --limit=30 --minRankingScore=75 --minHealth=90 --minPriority=70 --minPopulation=500000 --verbose
+
+# 3. Mittlerer Debug-Run
+node scripts/trigger-geo-top-city-expansion.js --mode=dry-run --locale=de --slug=openclaw-risk-2026 --limit=50 --minRankingScore=65 --minHealth=80 --minPriority=50 --minPopulation=250000 --verbose
+
+# 4. Aggressiver Debug-Run (um Blockade zu provozieren)
+node scripts/trigger-geo-top-city-expansion.js --mode=dry-run --locale=de --slug=openclaw-risk-2026 --limit=100 --minRankingScore=55 --minHealth=70 --minPriority=30 --minPopulation=100000 --verbose
+
+# 5. Top-Städte Canary-Test (DE + EN)
+node scripts/trigger-geo-canary-rollout.js --mode=dry-run --locale=de --slug=openclaw-risk-2026 --cities=berlin,munich,hamburg,frankfurt,cologne,vienna --limit=20 --minRankingScore=65 --verbose
+node scripts/trigger-geo-canary-rollout.js --mode=dry-run --locale=en --slug=openclaw-exposed --cities=berlin,munich,hamburg,frankfurt,cologne,london --limit=20 --minRankingScore=65 --verbose
+```
+
+### 12.3 Beobachtete/erwartete Analyse pro Befehl
+
+#### A) Basis-Readiness & Status
+
+- Beobachtet: `Geo Ops readiness: READY`, `healthScore=100`, `index-health=100`.
+- Beobachtet: Rollout zeigt `activeStable=37`, `activeCanary=0`, `inactiveCanary=0`.
+- Interpretation: Infrastruktur ist gesund; Blockade liegt **nicht** an Secrets/Auth/Health.
+
+#### B) Top-City-Expansion (streng -> mittel -> aggressiv)
+
+- Beobachtet in allen drei Läufen:
+  - `inactiveTotal=0`
+  - `passPriority=0`
+  - `passPopulation=0`
+  - `selected=0`
+  - `blockedByHealth=false`
+- Gate-Fail: Expansion scheitert primär am **Eligibility-Zustand** (keine inaktiven Kandidaten mehr), nicht an Health/Ranking.
+- Zusatz: `minRankingScore` wird beim Expansion-Skript nicht als primärer Filter genutzt; maßgeblich sind `is_active=false`, `priority`, `population`, `minHealth`.
+
+#### C) Canary-Test Top-Städte (DE/EN)
+
+- Beobachtet:
+  - `totalRanked=20`, aber `canaryRanked=0`, `selected=0`, `wouldPromote=-`
+- Gate-Fail: Promotion scheitert am Stage-Gate (**keine Cities im Canary-Stage**), nicht an Score/HTTP-Status.
+- Folge: Selbst aggressive Ranking-Lockerung kann nichts promoten, solange die Kandidatenbasis (`rollout_stage='canary'`) leer ist.
+
+### 12.4 Gesamtauswertung (Haupt-Blockade)
+
+- Hauptblockade ist **Eligibility/Stage-Verteilung**, nicht technische Gesundheit:
+  - Expansion: 100 % scheitert aktuell an `inactiveTotal=0` (keine aktivierbaren Cities).
+  - Canary-Promotion: 100 % scheitert aktuell an `canaryRanked=0` (keine promotebaren Canary-Cities).
+- Sekundäre Blockade bleibt Datenqualität/Unique-Value-Density: selbst bei wieder aktivierten Kandidaten dürfen nur Cities mit klar differenzierenden lokalen Signalen live gehen.
+
+### 12.5 Nächste Schritte & priorisierte Empfehlung
+
+1. **Zuerst Stufe 2 (Datenanreicherung) vorbereiten**, parallel mit kleinem Eligibility-Backfill:
+   - pro Stadt lokale Exposure-Signale (Gateway/Auth/Port/TLS/Proxy),
+   - Runbook-Mapping `city -> risk cluster -> slug`,
+   - Freshness-/Recency-Signale,
+   - Intent-/Community-Signale,
+   - Evidence-Felder (Quelle, Zeitstempel, Confidence).
+2. **Dann Stufe 3 konservativ**:
+   - Top-10/Top-20 Städte mit manuellem Unique-Value-Review,
+   - ausschließlich dry-run bis Review abgeschlossen,
+   - Live nur in kleinen Wellen.
+3. **Killermachine-Verbesserung**:
+   - bei `wouldPromote=0` automatisch Gate-Root-Cause reporten (`stage_empty`, `inactive_empty`, `quality_insufficient`),
+   - automatische "next best action"-Liste je Gate.
+
+### 12.6 Safeguards (streng)
+
+- Alles bleibt **dry-run**, keine Live-Promotion ohne explizite Human-Review.
+- **Qualität vor Quantität**, keine Massen-Rollouts mit dünnem Content.
+- **Human-in-the-loop** bei jeder Entscheidung >20 Seiten.
+
+---
+
+## §15 – Pipeline-Leer-Analyse & Seeding-Plan nach rollout-status Log (03.04.2026)
+
+### 15.1 Status-Abgleich mit AGENTS.md
+
+- §11 hat die operative Blockade sauber benannt: `wouldPromote`/`wouldActivate` bleiben leer trotz gelockerter Schwellen.
+- §12 hat den Full-System-Debug bestätigt: Health/Readiness sind grün, aber Gate-Debug zeigt fehlende Kandidatenbasis.
+- Neuester Log ist konsistent dokumentiert: `rollout total=37, activeStable=37, activeCanary=0, inactiveStable=0, inactiveCanary=0`.
+- Interpretation: Die Pipeline ist nicht "kaputt", sondern **leer** (kein Canary-Pool, kein Inactive-Pool), daher greifen Promotion-/Expansion-Mechaniken ins Leere.
+
+### 15.2 Detaillierte Root-Cause-Analyse
+
+1. **Warum ist Canary leer?**  
+   Der Canary-Rollout kann nur `rollout_stage='canary'` nach `stable` promoten. Bei `activeCanary=0` fehlt die komplette Eingangsmenge.
+
+2. **Warum gibt es keine inaktiven Kandidaten mehr?**  
+   Top-City-Expansion aktiviert ausschließlich `is_active=false` Städte. Bei `inactive*=0` gibt es nichts zu aktivieren.
+
+3. **Unterschied Expansion vs. Canary-Rollout**  
+   - Expansion: `inactive -> canary` (gated über Health/Priority/Population).  
+   - Canary: `canary -> stable` (gated über Ranking/Status/Locale/Slug).  
+   Wenn beide Input-Pools leer sind, liefern beide Skripte legitimerweise leere Resultate.
+
+4. **Rolle von Eligibility und Unique-Value-Density**  
+   Selbst nach Re-Seeding dürfen nur Städte in Canary, die lokale Differenzierung tragen (Exposure + Runbook-Fit + Freshness + Intent). Sonst entsteht Thin-Content-Risiko trotz technischer Aktivierbarkeit.
+
+### 15.3 Vollständiger Test- & Änderungs-Plan (heute umsetzbar)
+
+#### Stufe A – Weitere Diagnose (nur dry-run, verbose)
+
+- Confirm Pipeline-Leerzustand über Rollout-Status + Gate-Debug erneut.
+- API-Debug (Canary/Expansion) für DE/EN fahren, um Stage- und Candidate-Gates transparent zu halten.
+
+#### Stufe B – Seeding neuer Canary-Kandidaten
+
+- Ziel: kleine, kontrollierte Canary-Basis (z. B. 6-12 Städte) schaffen.
+- Vorgehen: ausgewählte Stable-Städte temporär auf `canary` umstellen (oder optional neue inaktive City-Records einspielen).
+- Nur Städte seeden, für die bereits Mindestsignale vorhanden sind.
+
+#### Stufe C – Daten-Anreicherung
+
+- Pro Seed-Stadt strukturierte Signale ergänzen:
+  - lokale Exposure-Cluster (Gateway/Auth/Port/TLS/Proxy),
+  - Runbook-Fit-Mapping (`city -> risk cluster -> slug`),
+  - Freshness-/Recency-Signale,
+  - Intent-/Community-Signale,
+  - Evidence-Qualität (Quelle/Zeitstempel/Confidence).
+
+#### Stufe D – Konservative Promotion (nach Review)
+
+- Erst dry-run Canary-Rollout für die Seed-Städte.
+- Human-Review auf Unique-Value-Density je Stadt.
+- Live nur in kleinen Wellen; danach Health + Engagement prüfen.
+
+### 15.4 Fertige Befehle (Diagnose + Seeding, in Reihenfolge)
+
+```bash
+# 0) Pflicht: Pipeline-Status verifizieren (dry-run Kontext)
+npm run check:geo-rollout-status -- --verbose
+
+# 1) Basisdiagnose
+npm run check:geo-ops-readiness -- --verbose
+npm run check:geo-city-ranking -- --verbose
+npm run check:geo-index-health -- --verbose
+
+# 2) Expansion/Canary-Dry-Run mit Debug-Signalen
+node scripts/trigger-geo-top-city-expansion.js --mode=dry-run --locale=de --slug=openclaw-risk-2026 --limit=30 --minHealth=88 --minPriority=60 --minPopulation=500000 --verbose
+node scripts/trigger-geo-canary-rollout.js --mode=dry-run --locale=de --slug=openclaw-risk-2026 --cities=berlin,munich,hamburg,frankfurt,cologne,vienna --limit=20 --minRankingScore=65 --verbose
+node scripts/trigger-geo-canary-rollout.js --mode=dry-run --locale=en --slug=openclaw-exposed --cities=berlin,munich,hamburg,frankfurt,cologne,london --limit=20 --minRankingScore=65 --verbose
+```
+
+```bash
+# 3) Seeding-Vorschlag A (manuell, SQL; kleine Canary-Basis)
+# Hinweis: zuerst TRANSACTION + ROLLBACK testen, dann COMMIT nach Human-Review.
+# Beispiel (Postgres):
+# BEGIN;
+# UPDATE geo_cities
+#   SET rollout_stage = 'canary', updated_at = NOW()
+# WHERE slug = ANY(ARRAY['berlin','munich','hamburg','frankfurt','cologne','vienna'])
+#   AND is_active = true
+#   AND rollout_stage = 'stable';
+# SELECT slug, is_active, rollout_stage FROM geo_cities WHERE slug = ANY(ARRAY['berlin','munich','hamburg','frankfurt','cologne','vienna']) ORDER BY slug;
+# ROLLBACK;
+```
+
+```bash
+# 4) Seeding-Vorschlag B (script-basiert via node/pg, falls psql nicht verfügbar)
+# Voraussetzungen: DATABASE_URL gesetzt
+node -e "const { Client } = require('pg'); (async () => { const c = new Client({ connectionString: process.env.DATABASE_URL }); await c.connect(); await c.query('BEGIN'); const slugs=['berlin','munich','hamburg','frankfurt','cologne','vienna']; await c.query('UPDATE geo_cities SET rollout_stage=\\'canary\\', updated_at=NOW() WHERE slug = ANY($1::text[]) AND is_active=true AND rollout_stage=\\'stable\\'', [slugs]); const r = await c.query('SELECT slug,is_active,rollout_stage FROM geo_cities WHERE slug = ANY($1::text[]) ORDER BY slug', [slugs]); console.log(r.rows); await c.query('ROLLBACK'); await c.end(); })().catch(e => { console.error(e); process.exit(1); });"
+```
+
+```bash
+# 5) Nach Seeding: erneut nur dry-run
+npm run check:geo-rollout-status -- --verbose
+node scripts/trigger-geo-canary-rollout.js --mode=dry-run --locale=de --slug=openclaw-risk-2026 --cities=berlin,munich,hamburg,frankfurt,cologne,vienna --limit=20 --minRankingScore=65 --verbose
+npm run geo:sitemap-guardrail:dry-run
+```
+
+### 15.5 Killermachine-Upgrade (Self-Healing bei leerer Pipeline)
+
+- **Pipeline-Leer-Detektor:** Daily-Check auf `activeCanary==0 && inactive==0` als kritischer Zustand.
+- **Auto-Report:** maschinenlesbar `rootCause=pipeline_empty` plus Gate-Metriken (`inactiveTotal`, `canaryRanked`, `selected`).
+- **Seeding-Recommender:** schlägt Top-Städte mit vorhandenen Mindestsignalen (Exposure/Fit/Freshness/Intent) vor.
+- **Self-Healing-Runbook:** erzeugt eine sichere, reviewbare Seeding-Liste + dry-run Sequenz.
+- **Promotion-Guard:** blockiert Live-Runs ohne vorherigen "non-empty dry-run evidence" Nachweis.
+
+### 15.6 Safeguards (streng)
+
+- Alles zuerst **dry-run**.
+- **Human-Review** bei jeder Live-Promotion >15 Seiten.
+- **Qualität vor Quantität**: keine dünnen Geo-Pages.
+- Nur dokumentierte Änderungen, die in `AGENTS.md` und den Ops-Guardrails konsistent sind.
+
+---
+
+## §16 – Pipeline leer + DB-Connection-Blockade nach vollständigem Test-Run (03.04.2026)
+
+### 16.1 Zusammenfassung & Status-Abgleich
+
+- §11: Blockade identifiziert (`wouldPromote`/`wouldActivate` leer trotz gelockerter Schwellen).
+- §12: Full-Debug bestätigt: technische Gesundheit grün, aber keine promotebaren Kandidaten.
+- §15: Pipeline-Leerzustand + Seeding-Plan dokumentiert (Canary-/Inactive-Pool als kritischer Engpass).
+- Neuester Log bestätigt:
+  - `rollout total=37, activeStable=37, activeCanary=0, inactiveStable=0, inactiveCanary=0`
+  - `check:geo-ops-readiness`, `check:geo-city-ranking`, `check:geo-index-health` gesund (100%/READY)
+  - Seeding-Test lokal geblockt durch `ECONNREFUSED ::1:5432`
+- Interpretation: Doppelte Blockade aus **leerer Pipeline** + **fehlender lokaler DB-Verbindung**.
+
+### 16.2 Root-Cause-Analyse (erweitert)
+
+1. **Warum ist die Pipeline leer?**
+   - Alle aktuellen Städte stehen bereits auf `stable`.
+   - Kein `canary`-Nachschub (`activeCanary=0`) => Canary-Rollout hat keine Eingangsmenge.
+   - Kein `inactive`-Pool (`inactive*=0`) => Top-City-Expansion kann nichts aktivieren.
+
+2. **DB-Connection-Problem (`ECONNREFUSED ::1:5432`)**
+   - Mögliche Ursachen:
+     - lokaler Postgres-Service nicht gestartet,
+     - `DATABASE_URL` zeigt auf `localhost`/`127.0.0.1`, aber dort läuft kein DB-Server,
+     - Docker-DB-Container nicht gestartet oder Port nicht gemappt,
+     - `.env.local` enthält lokale URL statt Cloud/Vercel-DB (oder umgekehrt falsch konfiguriert),
+     - IPv6 `::1`/IPv4 `127.0.0.1` Mismatch bei lokalem Listener.
+
+3. **Auswirkung auf Seeding**
+   - Ohne erreichbare DB kann weder manuelles SQL-Seeding noch script-basiertes Seeding validiert werden.
+   - Damit bleibt `canary` leer und alle Promotion-Dry-Runs bleiben erwartbar leer.
+
+4. **Eligibility / Unique-Value-Density**
+   - Selbst nach DB-Fix + Seeding muss jede City lokale Differenzierung liefern (Exposure/Fit/Freshness/Intent), sonst erhöht sich Thin-Content-Risiko.
+
+### 16.3 Sofort-Action-Plan (heute umsetzbar)
+
+#### Stufe A – DB-Connection fixen (lokal)
+
+- Prüfen, ob `DATABASE_URL` gesetzt ist und auf erreichbare Instanz zeigt.
+- Lokalen DB-Server oder Docker-Container starten.
+- Connectivity-Test per `node -e` (kurzer SELECT) erfolgreich machen.
+
+#### Stufe B – Seeding neuer Canary-Kandidaten (nach DB-Fix)
+
+- Kleine Seeding-Welle (6-10 Städte) aus Stable -> Canary, zuerst in `BEGIN ... ROLLBACK`.
+- Danach erst `COMMIT` nach Human-Review.
+
+#### Stufe C – Mini-Unique-Value-Anreicherung (Top-10)
+
+- Für jede Seed-Stadt minimalen Signal-Block ergänzen:
+  - Exposure (Gateway/Auth/TLS/Port),
+  - Runbook-Fit (`city -> slug`),
+  - Freshness (letztes Update),
+  - Intent-Hinweis (lokale Relevanz).
+
+#### Stufe D – Erneuter Dry-Run + Review
+
+- Rollout-Status prüfen (`activeCanary > 0` muss sichtbar sein).
+- Canary-Dry-Run DE/EN fahren.
+- Erst danach Entscheidung über kleine Live-Welle.
+
+### 16.4 Fertige Befehle & Anleitungen (kopierbar)
+
+```bash
+# A1) DATABASE_URL prüfen (PowerShell)
+echo $env:DATABASE_URL
+```
+
+```bash
+# A2) Lokale Port-Erreichbarkeit prüfen (Postgres 5432)
+Test-NetConnection -ComputerName 127.0.0.1 -Port 5432
+Test-NetConnection -ComputerName ::1 -Port 5432
+```
+
+```bash
+# A3) Optional Docker-DB prüfen/starten
+docker ps
+# falls Container vorhanden aber gestoppt:
+# docker start <postgres-container-name>
+```
+
+```bash
+# A4) DB-Connectivity per Node/pg testen
+node -e "const { Client } = require('pg'); (async () => { const c = new Client({ connectionString: process.env.DATABASE_URL }); await c.connect(); const r = await c.query('select now() as now'); console.log(r.rows[0]); await c.end(); })().catch(e => { console.error(e); process.exit(1); });"
+```
+
+```bash
+# B1) Seeding-Test (sicher): BEGIN + ROLLBACK
+node -e "const { Client } = require('pg'); (async () => { const c = new Client({ connectionString: process.env.DATABASE_URL }); await c.connect(); await c.query('BEGIN'); const slugs=['berlin','munich','hamburg','frankfurt','cologne','vienna']; await c.query(\"UPDATE geo_cities SET rollout_stage='canary', updated_at=NOW() WHERE slug = ANY($1::text[]) AND is_active=true AND rollout_stage='stable'\", [slugs]); const r = await c.query('SELECT slug,is_active,rollout_stage FROM geo_cities WHERE slug = ANY($1::text[]) ORDER BY slug', [slugs]); console.log(r.rows); await c.query('ROLLBACK'); await c.end(); })().catch(e => { console.error(e); process.exit(1); });"
+```
+
+```bash
+# B2) Erst nach Human-Review: gleiches Statement mit COMMIT statt ROLLBACK
+# (bewusst kein Auto-Live-Command; nur manuell freigegeben)
+```
+
+```bash
+# D1) Nach Seeding: Dry-Run-Checks
+npm run check:geo-rollout-status -- --verbose
+node scripts/trigger-geo-canary-rollout.js --mode=dry-run --locale=de --slug=openclaw-risk-2026 --cities=berlin,munich,hamburg,frankfurt,cologne,vienna --limit=20 --minRankingScore=65 --verbose
+node scripts/trigger-geo-canary-rollout.js --mode=dry-run --locale=en --slug=openclaw-exposed --cities=berlin,munich,hamburg,frankfurt,cologne,london --limit=20 --minRankingScore=65 --verbose
+npm run geo:sitemap-guardrail:dry-run
+```
+
+### 16.5 Killermachine-Verbesserung
+
+- **Pipeline-Empty Detector:** Wenn `activeCanary=0` und `inactive=0`, Status `pipeline_empty`.
+- **DB-Connection Detector:** Wenn `ECONNREFUSED` bei Seeding/DB-Checks, Status `db_unreachable`.
+- **Self-Healing Report:** Automatisch kombinierter Bericht `pipeline_empty + db_unreachable` mit konkreter Befehlsliste (DB fix -> seeding rollback-test -> dry-run).
+- **Auto-Gate für Live:** Live-Promotion nur wenn:
+  - DB stabil erreichbar,
+  - Dry-Run liefert nicht-leere `wouldPromote`-Liste,
+  - Human-Review gesetzt.
+
+### 16.6 Safeguards (streng)
+
+- DB-Fix und Seeding zuerst nur lokal / dry-run.
+- Keine Live-Promotion ohne Human-Review und stabile DB-Verbindung.
+- Qualität vor Quantität, keine dünnen Geo-Pages.
+
+---
+
+## §17 – DB-Fix abgeschlossen + Seeding-Readiness: Nächster Schritt zur Canary-Befüllung (03.04.2026)
+
+### 17.1 Zusammenfassung des aktuellen Status
+
+- §§11-15 haben die Blockade konsistent eingegrenzt: technische Guards grün, aber Pipeline leer (`wouldPromote`/`wouldActivate` leer).
+- Neuester Lauf bestätigt:
+  - DB-Connection zur Neon-DB ist funktionsfähig.
+  - Seeding-Test mit `BEGIN + ROLLBACK` war erfolgreich.
+  - 6 Städte wurden im Test korrekt auf `rollout_stage='canary'` gesetzt (nur transaktional).
+  - Nach `ROLLBACK` bleibt `check:geo-rollout-status`: `activeStable=37`, `activeCanary=0`, `inactive*=0`.
+- Interpretation: System ist operativ bereit, aber weiterhin leer; der nächste echte Schritt ist ein **kontrollierter Seeding-COMMIT** (oder vorherige Micro-Anreicherung).
+
+### 17.2 Risiko-Bewertung & Safeguards
+
+- Risiken bei Commit der 6 Test-Städte:
+  - zu generische City-Seiten -> schwache Unique-Value-Density,
+  - Thin-Content-Risiko bei fehlenden lokalen Unterschieden,
+  - mögliche Promotion ohne belastbare lokale Evidenz.
+- Mindestanforderungen je Stadt vor Live-Promotion:
+  1. mind. 1-2 belastbare lokale Exposure-Signale (Gateway/Auth/Port/TLS/Proxy),
+  2. klares Runbook-Fit-Mapping (`city -> risk -> slug`),
+  3. Freshness-Nachweis (aktualisierte Signale/Zeitfenster),
+  4. lokaler Intent-Hinweis (Community-/Suchmuster),
+  5. kurze Differenzierungs-Notiz, warum die Stadt/Region priorisiert wird.
+
+### 17.3 Konkreter Next-Step-Plan
+
+#### Option A – Kleines Seeding mit COMMIT (6-10 Städte) + sofortiger Post-Check
+
+- 6 Städte aus Stable nach Canary verschieben (kleine, kontrollierte Welle).
+- Direkt danach Dry-Runs und Guardrail ausführen.
+- Empfohlen, wenn die 6 Städte bereits minimale lokale Signalqualität haben.
+
+#### Option B – Erst manuelle Unique-Value-Anreicherung
+
+- Vor COMMIT pro Stadt 4-5 differenzierende Signale ergänzen.
+- Danach Seeding-COMMIT in derselben kleinen Welle.
+- Empfohlen, wenn Inhalte aktuell noch zu generisch sind.
+
+#### Option C – Größeres Seeding (Top-20) nach Review
+
+- Nur nach erfolgreicher kleiner Welle und sauberem KPI-/Quality-Check.
+- Human-in-the-loop verpflichtend, in mehreren Teilwellen.
+
+### 17.4 Fertige, sichere Befehle (kopierbar)
+
+```bash
+# 0) Vorab: letzter Dry-Run-Status
+npm run check:geo-rollout-status -- --verbose
+```
+
+```bash
+# 1) Seeding-COMMIT (kleine Welle: 6 Städte)
+# Voraussetzung: DATABASE_URL erreichbar, Human-Freigabe erteilt
+node -e "try { require('dotenv').config(); require('dotenv').config({ path: '.env.local' }); } catch {} const { Client } = require('pg'); (async () => { const c = new Client({ connectionString: process.env.DATABASE_URL }); await c.connect(); await c.query('BEGIN'); const sql = \"UPDATE geo_cities SET rollout_stage='canary', updated_at=NOW() WHERE is_active=true AND rollout_stage='stable' AND slug IN ('berlin','munich','hamburg','frankfurt','cologne','vienna')\"; const upd = await c.query(sql); const rows = await c.query(\"SELECT slug,is_active,rollout_stage FROM geo_cities WHERE slug IN ('berlin','munich','hamburg','frankfurt','cologne','vienna') ORDER BY slug\"); console.log({ updated: upd.rowCount, seeded: rows.rows }); await c.query('COMMIT'); await c.end(); })().catch(async (e) => { console.error(e); process.exit(1); });"
+```
+
+```bash
+# 2) Post-Seeding Pflicht-Checks (sofort)
+npm run check:geo-rollout-status -- --verbose
+node scripts/trigger-geo-canary-rollout.js --mode=dry-run --locale=de --slug=openclaw-risk-2026 --cities=berlin,munich,hamburg,frankfurt,cologne,vienna --limit=20 --minRankingScore=65 --verbose
+node scripts/trigger-geo-canary-rollout.js --mode=dry-run --locale=en --slug=openclaw-exposed --cities=berlin,munich,hamburg,frankfurt,cologne,london --limit=20 --minRankingScore=65 --verbose
+npm run geo:sitemap-guardrail:dry-run
+```
+
+```bash
+# 3) Rollback-Befehl (falls nötig, manuell und bewusst)
+# setzt die 6 Seed-Städte zurück auf stable
+node -e "try { require('dotenv').config(); require('dotenv').config({ path: '.env.local' }); } catch {} const { Client } = require('pg'); (async () => { const c = new Client({ connectionString: process.env.DATABASE_URL }); await c.connect(); const sql = \"UPDATE geo_cities SET rollout_stage='stable', updated_at=NOW() WHERE slug IN ('berlin','munich','hamburg','frankfurt','cologne','vienna') AND is_active=true\"; const r = await c.query(sql); console.log({ rolledBack: r.rowCount }); await c.end(); })().catch(e => { console.error(e); process.exit(1); });"
+```
+
+### 17.5 Killermachine-Verbesserung
+
+- Auto-Detektor für leeren Canary-Pool (`activeCanary=0`) plus Alert-Level.
+- Auto-Seeding-Vorschlag mit kleiner Welle (6-10 Städte) inkl. Required-Signal-Checklist.
+- Quality-Gate vor Seeding-COMMIT: pro Stadt Mindestscore aus Exposure/Fit/Freshness/Intent.
+- Auto-Runbook nach COMMIT: `rollout-status -> canary dry-run -> sitemap-guardrail`, dann Report.
+
+### 17.6 Verbindliche Safeguards
+
+- Immer zuerst Dry-Run + Review der `wouldPromote`-Liste.
+- Human-in-the-Loop bei COMMIT >10 Städte.
+- Qualität vor Quantität: jede neue Canary-Stadt benötigt mind. 4-5 lokale Differenzierungs-Signale.
+- Nach COMMIT sofort `sitemap-guardrail` + Dry-Run-Checks ausführen.
+
+---
+
+## §18 – Unique-Value-Anreicherung für erste 6 Städte (Option B) – Start der Datenbefüllung (03.04.2026)
+
+### 18.1 Zusammenfassung & Begründung
+
+- Die bisherigen Abschnitte (§§11-17) zeigen konsistent: Plattform/Gates technisch gesund, aber operative Pipeline leer (`activeCanary=0`, `inactive*=0`).
+- Der letzte DB-Lauf hat bewiesen, dass Seeding technisch funktioniert (`BEGIN + ROLLBACK` erfolgreich), aber **nicht persistiert** wurde.
+- Gleichzeitig ist `geo_variant_matrix` für die 6 Seed-Städte (`berlin`, `munich`, `hamburg`, `frankfurt`, `cologne`, `vienna`) in `de/en` aktuell leer.
+- Deshalb wurde Option B gewählt: **erst lokale Unique-Value-Signale anreichern**, dann erst Seeding-COMMIT. Ziel ist Thin-Content-Risiko vermeiden und Promotion-Qualität sichern.
+
+### 18.2 Konkreter Anreicherungs-Plan pro Stadt (6er Start-Cluster)
+
+**Referenzrahmen (2026):** OpenClaw-Exposure-Reports zeigen >40.000 exponierte Instanzen weltweit; Europa/Deutschland ist ein priorisierter Cluster für Self-Hosted Ops-Risiken.
+
+| Stadt | Exposure-Signale (lokal) | Runbook-Fit (priorisiert) | Intent / Community | Freshness-Hinweis | Differenzierungs-Notiz |
+|------|-----------------------------|-----------------------------|--------------------|-------------------|------------------------|
+| **Berlin** | Hoher Anteil Self-Hosted SaaS/Startup-Stacks; häufig Reverse-Proxy + Gateway-Fehlkonfigurationen | `openclaw-security-check`, `moltbot-hardening`, `gateway-auth-10-steps`, `docker-reverse-proxy-hardening-cheatsheet` | Tech-Hub mit starker Builder-/Meetup-Dichte, schnelle Deploy-Zyklen | 2026 Exposure-Welle in EU aktiv; Security-Härtung oft nachgelagert | Berlin priorisieren wegen hoher Innovationsgeschwindigkeit + Konfig-Drift-Risiko |
+| **Munich** | Viele B2B-/Industrie-nahe Deployments, oft striktere Compliance-Anforderungen | `ai-agent-security`, `nis2-technical-controls-self-hosted`, `gateway-auth-10-steps`, `api-key-leak-response-playbook` | Enterprise/Scaleup-Mix, stärker compliance-getrieben | 2026: steigender Druck auf nachweisbare technische Controls | München fokussieren auf Compliance + kontrollierte Agent-Deployments |
+| **Hamburg** | Logistik-/E-Com-nahe Systeme, erhöhte API-/Integrationsexposition | `api-key-leak-response-playbook`, `openclaw-top-5-exposure-misconfigs`, `moltbot-hardening`, `security-check-vs-pentest-guide` | Viele Integrations-Workloads mit externen Schnittstellen | 2026: API-Key/Token-Leak-Muster weiterhin Top-Risiko | Hamburg differenzieren über Integrations- und API-Risikoprofil |
+| **Frankfurt** | Hohe Dichte infra-/finance-naher Workloads, Fokus auf Netzwerkhärtung | `gateway-auth-10-steps`, `hetzner-vs-do-security-baseline-2026`, `docker-reverse-proxy-hardening-cheatsheet`, `ai-agent-threat-model-template` | Infrastruktur-/Ops-heavy Nutzer mit Fokus auf Verfügbarkeit + Sicherheit | 2026: verstärkte Sensibilität für Gateway/Auth-Schutz | Frankfurt priorisieren für infra-zentrierte Hardening-Playbooks |
+| **Cologne** | Viele KMU-/Agency-Setups, oft heterogene VPS-/Docker-Landschaften | `check-methodology-30-seconds`, `openclaw-security-check`, `moltbot-hardening`, `executable-runbook-vs-static-blog` | Self-Hoster-/SMB-nahe Community, hoher Bedarf an schnellen, klaren Fixes | 2026: Nachfrage nach pragmatischen “check -> fix”-Flows steigt | Köln differenzieren über operativen Quick-Win-Charakter |
+| **Vienna** | DACH-ähnlicher Self-Hosted-Mix, häufig kleine Teams mit begrenzter SecOps-Kapazität | `security-check-vs-pentest-guide`, `ai-agent-security`, `gateway-auth-10-steps`, `openclaw-security-check` | Hoher Bedarf an verständlicher Risiko-zu-Fix-Navigation | 2026: steigendes Interesse an sofort umsetzbaren Security-Baselines | Wien differenzieren über “small-team efficiency” und klare Priorisierung |
+
+**Mindestziel je Stadt (Gate):** mindestens 4-5 differenzierende Signale (Exposure, Runbook-Fit, Intent, Freshness, Differenzierungsnotiz) vor Seeding-COMMIT.
+
+### 18.3 Technische Umsetzung (Datenbefüllung)
+
+1. **Zieltabellen/-felder**
+   - Primär: `geo_variant_matrix` (city + locale + slug + quality/signal fields).
+   - Optional ergänzend: city-spezifische Mapping-/Evidence-Felder in verwandten Tabellen (falls vorhanden).
+
+2. **Einpflege-Strategie**
+   - Start mit manuellem Seed für 6 Städte in `de` und `en` mit priorisierten Slugs.
+   - Für jede City mind. 4-5 Signale als strukturierte Felder hinterlegen (nicht nur Freitext).
+   - Qualitätswerte (`quality_score`) konservativ setzen und nach Review anpassen.
+
+3. **Umsetzungsvorschlag**
+   - Kurzfristig: SQL-Insert/Upsert für initiale Signale.
+   - Danach: kleines Enrichment-Skript (idempotent), das city/locale/slug-Kombinationen aktualisiert.
+   - Nach Einpflege: Seeding-COMMIT in `geo_cities` + Pflicht-Post-Checks.
+
+### 18.4 Fertige nächste Befehle
+
+```bash
+# 1) Matrix nach Anreicherung prüfen (6 Städte, de/en)
+node -e "try { require('dotenv').config(); require('dotenv').config({ path: '.env.local' }); } catch {} const { Client } = require('pg'); (async () => { const c = new Client({ connectionString: process.env.DATABASE_URL }); await c.connect(); const q = \"SELECT city_slug, locale, COUNT(*)::int AS variants, ROUND(AVG(quality_score))::int AS avg_quality, MAX(updated_at) AS last_update FROM geo_variant_matrix WHERE city_slug IN ('berlin','munich','hamburg','frankfurt','cologne','vienna') AND locale IN ('de','en') GROUP BY city_slug, locale ORDER BY city_slug, locale\"; const r = await c.query(q); console.log(r.rows); await c.end(); })().catch(e => { console.error(e); process.exit(1); });"
+```
+
+```bash
+# 2) Seeding-COMMIT (nach erfolgreicher Anreicherung + Human-Review)
+node -e "try { require('dotenv').config(); require('dotenv').config({ path: '.env.local' }); } catch {} const { Client } = require('pg'); (async () => { const c = new Client({ connectionString: process.env.DATABASE_URL }); await c.connect(); await c.query('BEGIN'); const sql = \"UPDATE geo_cities SET rollout_stage='canary', updated_at=NOW() WHERE is_active=true AND rollout_stage='stable' AND slug IN ('berlin','munich','hamburg','frankfurt','cologne','vienna')\"; const upd = await c.query(sql); const rows = await c.query(\"SELECT slug,is_active,rollout_stage FROM geo_cities WHERE slug IN ('berlin','munich','hamburg','frankfurt','cologne','vienna') ORDER BY slug\"); console.log({ updated: upd.rowCount, seededCities: rows.rows }); await c.query('COMMIT'); await c.end(); })().catch(e => { console.error(e); process.exit(1); });"
+```
+
+```bash
+# 3) Post-Checks nach COMMIT (Pflicht)
+npm run check:geo-rollout-status -- --verbose
+node scripts/trigger-geo-canary-rollout.js --mode=dry-run --locale=de --slug=openclaw-risk-2026 --cities=berlin,munich,hamburg,frankfurt,cologne,vienna --limit=20 --minRankingScore=65 --verbose
+node scripts/trigger-geo-canary-rollout.js --mode=dry-run --locale=en --slug=openclaw-exposed --cities=berlin,munich,hamburg,frankfurt,cologne,london --limit=20 --minRankingScore=65 --verbose
+npm run geo:sitemap-guardrail:dry-run
+```
+
+### 18.5 Killermachine-Upgrade
+
+- Vor Seeding automatisch Matrix-Coverage prüfen (`city+locale` Mindestmenge in `geo_variant_matrix`).
+- Wenn Coverage fehlt: Status `insufficient_city_signals` + konkrete To-Do-Liste je Stadt.
+- Seeding-Vorschlag erst freigeben, wenn pro Stadt Mindestsignal-Set erreicht ist.
+- Nach jedem COMMIT auto-run: `rollout-status -> canary dry-run -> sitemap-guardrail` + Report.
+
+### 18.6 Verbindliche Safeguards
+
+- Jede Stadt braucht mindestens 4-5 differenzierende Signale vor COMMIT.
+- Human-Review der angereicherten Daten vor Seeding.
+- Qualität vor Quantität.
+
+---
+
+## §19 – Signal-Anreicherung Start: Berlin (de + en) – Erste City-Befüllung (03.04.2026)
+
+### 19.1 Ziel der Anreicherung
+
+- Erste operative Befüllung für `berlin` in `de` und `en` mit mindestens 5 starken lokalen Differenzierungssignalen je Locale.
+- Ziel: belastbare Unique-Value-Density in `geo_variant_matrix`, damit Seeding später nicht auf generischen City-Varianten basiert.
+- Reihenfolge bleibt: `berlin` zuerst, danach `munich`, erst dann Seeding-COMMIT diskutieren.
+
+### 19.2 Konkrete Signal-Vorschläge für Berlin (de + en)
+
+#### Locale: `de` (Berlin)
+
+1. **Exposure-Signal (Provider/Surface):** Berliner Self-Hosting-Stacks nutzen häufig VPS-/Root-Infra in DACH/EU (u. a. Hetzner/Contabo), dadurch erhöhtes Risiko für öffentlich erreichbare Reverse-Proxy/Gateway-Endpunkte ohne konsistente Auth-Härtung.  
+   **Qualitätsscore-Vorschlag:** `high`
+2. **Exposure-Signal (Ops-Muster):** Hohe Deploy-Frequenz in Startup-Teams erhöht Konfig-Drift (z. B. offene Ports, inkonsistente TLS-/Header-Policies, unsaubere API-Key-Handhabung).  
+   **Qualitätsscore-Vorschlag:** `high`
+3. **Runbook-Fit:** Priorität auf `openclaw-security-check`, `moltbot-hardening`, `gateway-auth-10-steps`, `docker-reverse-proxy-hardening-cheatsheet`, `api-key-leak-response-playbook`.  
+   **Qualitätsscore-Vorschlag:** `high`
+4. **Lokaler Intent/Community:** Berlin als Tech-Hub (viele Builder-/Meetup-/OSS-Communities) mit starkem “ship fast”-Mindset erzeugt hohe Nachfrage nach schnellen, ausführbaren Security-Fixes statt rein theoretischer Guidelines.  
+   **Qualitätsscore-Vorschlag:** `medium-high`
+5. **Freshness (2026):** OpenClaw-Exposure-Lage 2026 (>40k exposed weltweit, hoher EU-/DE-Anteil) macht “check -> harden -> re-check” für Berlin besonders zeitkritisch.  
+   **Qualitätsscore-Vorschlag:** `high`
+6. **Differenzierungs-Notiz (de):** Berlin-Varianten sollten den Fokus auf schnelle Incident-Prävention in hochdynamischen Deploy-Umgebungen legen; zentrale Botschaft: Konfig-Drift früh erkennen und direkt mit Runbooks schließen.  
+   **Qualitätsscore-Vorschlag:** `high`
+
+#### Locale: `en` (Berlin)
+
+1. **Exposure signal (provider/surface):** Berlin self-hosted teams often run on DACH/EU VPS footprints (including Hetzner/Contabo), increasing exposure risk on gateway/proxy edges when auth hardening is inconsistent.  
+   **Suggested quality score:** `high`
+2. **Exposure signal (delivery cadence):** Fast release cycles in startup-heavy environments raise config drift probability (open ports, weak proxy headers, key leakage patterns).  
+   **Suggested quality score:** `high`
+3. **Runbook fit:** Prioritize `openclaw-security-check`, `moltbot-hardening`, `gateway-auth-10-steps`, `docker-reverse-proxy-hardening-cheatsheet`, `api-key-leak-response-playbook`.  
+   **Suggested quality score:** `high`
+4. **Local intent/community:** Berlin has high builder density and strong self-hosting/operator communities, so actionable “problem -> fix” runbook paths outperform generic security copy.  
+   **Suggested quality score:** `medium-high`
+5. **Freshness (2026):** With OpenClaw exposure pressure in 2026 (>40k globally, strong EU/DE share), Berlin pages need explicit urgency around immediate hardening workflows.  
+   **Suggested quality score:** `high`
+6. **Differentiation note (en):** Berlin content should emphasize “high-speed shipping with controlled risk”: detect edge exposure quickly, apply runbook fixes, and re-check with measurable controls.  
+   **Suggested quality score:** `high`
+
+### 19.3 Technische Umsetzung
+
+- Eintrag in `geo_variant_matrix` über `INSERT ... ON CONFLICT (locale, variant_slug) DO UPDATE`.
+- Nutzung bestehender Felder:
+  - `local_title` + `local_summary` für narrative Signale,
+  - `links_json` für strukturierte Runbook-Fit-/Intent-/Evidence-Links,
+  - `quality_score` als numerisches Qualitätsgating.
+- Für Berlin zuerst zwei Varianten (`de`, `en`) mit `base_slug='openclaw-risk-2026'` (de) und `base_slug='openclaw-exposed'` (en).
+- Nach Persistierung: Coverage-Check laufen lassen; erst danach `munich` analog befüllen.
+
+**Beispiel-SQL (Berlin de/en, Upsert):**
+
+```sql
+INSERT INTO geo_variant_matrix (
+  locale,
+  base_slug,
+  city_slug,
+  variant_slug,
+  city_name,
+  region_name,
+  country_code,
+  local_title,
+  local_summary,
+  links_json,
+  quality_score,
+  model,
+  updated_at
+)
+VALUES
+(
+  'de',
+  'openclaw-risk-2026',
+  'berlin',
+  'openclaw-risk-2026-berlin',
+  'Berlin',
+  'Berlin',
+  'DE',
+  'OpenClaw Risiko 2026 in Berlin: Gateway- und Proxy-Exposures schnell schließen',
+  'Berlin zeigt als Tech-Hub mit hoher Self-Hosting-Dichte ein erhöhtes Risiko für Konfig-Drift an Gateway/Proxy-Kanten. Fokus: schnelle Härtung (Auth, TLS, Header, API-Key-Hygiene) mit direkt ausführbaren Runbooks; 2026 bleibt Exposure in EU/DE zeitkritisch.',
+  '[
+    {"type":"runbook","slug":"openclaw-security-check","label":"OpenClaw Security Check"},
+    {"type":"runbook","slug":"moltbot-hardening","label":"Moltbot Hardening"},
+    {"type":"runbook","slug":"gateway-auth-10-steps","label":"Gateway Auth 10 Steps"},
+    {"type":"runbook","slug":"docker-reverse-proxy-hardening-cheatsheet","label":"Docker Reverse Proxy Hardening"},
+    {"type":"runbook","slug":"api-key-leak-response-playbook","label":"API Key Leak Response"},
+    {"type":"signal","label":"berlin-tech-hub-selfhosted-density"},
+    {"type":"signal","label":"dach-vps-footprint-hetzner-contabo"},
+    {"type":"signal","label":"openclaw-exposure-2026-eu-de-share"}
+  ]'::jsonb,
+  86,
+  'gemini',
+  NOW()
+),
+(
+  'en',
+  'openclaw-exposed',
+  'berlin',
+  'openclaw-exposed-berlin',
+  'Berlin',
+  'Berlin',
+  'DE',
+  'OpenClaw Exposure in Berlin 2026: from exposed edge to verified fix',
+  'Berlin combines high shipping velocity with dense self-hosted operations, which increases edge misconfiguration risk (gateway auth, reverse proxy, TLS, secret handling). Prioritize rapid check-to-runbook execution while 2026 exposure pressure in EU/DE stays elevated.',
+  '[
+    {"type":"runbook","slug":"openclaw-security-check","label":"OpenClaw Security Check"},
+    {"type":"runbook","slug":"moltbot-hardening","label":"Moltbot Hardening"},
+    {"type":"runbook","slug":"gateway-auth-10-steps","label":"Gateway Auth 10 Steps"},
+    {"type":"runbook","slug":"docker-reverse-proxy-hardening-cheatsheet","label":"Docker Reverse Proxy Hardening"},
+    {"type":"runbook","slug":"api-key-leak-response-playbook","label":"API Key Leak Response"},
+    {"type":"signal","label":"berlin-builder-community-fast-release-cycles"},
+    {"type":"signal","label":"eu-selfhosting-exposure-cluster-2026"},
+    {"type":"signal","label":"local-intent-problem-to-fix-under-30-seconds"}
+  ]'::jsonb,
+  85,
+  'gemini',
+  NOW()
+)
+ON CONFLICT (locale, variant_slug)
+DO UPDATE SET
+  local_title = EXCLUDED.local_title,
+  local_summary = EXCLUDED.local_summary,
+  links_json = EXCLUDED.links_json,
+  quality_score = EXCLUDED.quality_score,
+  model = EXCLUDED.model,
+  updated_at = NOW();
+```
+
+### 19.4 Nächste Schritte nach Berlin
+
+1. Coverage-Check für Berlin (`de/en`) direkt nach Eintrag.
+2. Danach `munich` (`de/en`) mit identischem Signalmuster (lokal differenziert) befüllen.
+3. Human-Review der Signale (Berlin + Munich) vor jedem Seeding-COMMIT.
+4. Kein Seeding-COMMIT, bevor beide Städte vollständig und reviewed sind.
+
+### 19.5 Killermachine-Upgrade
+
+- Automatische Matrix-Coverage-Prüfung pro Stadt+Locale vor Seeding (`variants >= min`, `avg_quality >= threshold`).
+- Signal-Qualitäts-Scoring aus fünf Kategorien: Exposure, Runbook-Fit, Intent, Freshness, Differenzierung.
+- Bei fehlender Abdeckung: Auto-Status `needs_enrichment` + konkrete Feld-/Signal-Lücke je Stadt.
+- Seeding-Empfehlung nur bei bestandener Coverage + Human-Review-Flag.
+
+### 19.6 Verbindliche Safeguards
+
+- Mindestens 5 differenzierende Signale pro Stadt und Locale.
+- Alle Signale faktenbasiert, nachvollziehbar und reviewbar.
+- Kein COMMIT, bevor mindestens Berlin + Munich fertig und reviewed sind.
+
+---
+
+## §20 – Munich Anreicherung abgeschlossen + Berlin/Munich Coverage bestätigt (03.04.2026)
+
+### Ergebnis
+
+- `munich` (`de` + `en`) wurde in `geo_variant_matrix` per Upsert erfolgreich befüllt.
+- Bestehende `berlin`-Einträge bleiben intakt; gemeinsame Coverage für beide Städte ist jetzt vorhanden.
+
+### Coverage-Output (DB-Check)
+
+- `munich`:
+  - `de`: `openclaw-risk-2026-munich`, `quality_score=87`
+  - `en`: `openclaw-exposed-munich`, `quality_score=86`
+- `berlin`:
+  - `de`: `variants=1`, `avg_quality=86`
+  - `en`: `variants=1`, `avg_quality=85`
+- `munich`:
+  - `de`: `variants=1`, `avg_quality=87`
+  - `en`: `variants=1`, `avg_quality=86`
+
+### Operative Bewertung
+
+- Option B ist für die ersten 2 Städte erfolgreich umgesetzt (Berlin + Munich).
+- Mindestsignale und Qualitätswerte sind für beide Städte/Locales vorhanden.
+- Nächster Gate bleibt unverändert: Human-Review der Inhalte, danach erst Seeding-COMMIT für 6 Städte.
+
+### Nächster Schritt (verbindlich)
+
+1. Human-Review Berlin+Munich (`de/en`) auf Signalqualität/Faktenkonsistenz.
+2. Danach Seeding-COMMIT-Welle für 6 Städte aus §17.
+3. Unmittelbar Post-Checks: `check:geo-rollout-status`, Canary dry-runs DE/EN, `geo:sitemap-guardrail:dry-run`.
+
 *Letzte große Strategie-Aktualisierung in diesem Dokument: April 2026 (Projektstand speichern).*

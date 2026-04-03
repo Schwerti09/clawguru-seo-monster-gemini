@@ -157,9 +157,10 @@ Detailed runbook: `docs/geo-ops-runbook.md`.
 
 ## Deployment notes
 
-- Netlify and CI pipelines are active.
-- Vercel workflow now safely skips deploy when `VERCEL_TOKEN` is not configured.
-- If you want Vercel production deploys, add `VERCEL_TOKEN` in GitHub secrets.
+- **Primary hosting:** Vercel (production env vars live in the Vercel project).
+- Netlify-related artifacts (e.g. `netlify.env.import.template`) are **optional** — for CI or a possible future Netlify migration, not the default secret source.
+- Vercel workflow safely skips deploy when `VERCEL_TOKEN` is not configured.
+- For GitHub-driven Vercel deploys, add `VERCEL_TOKEN` in GitHub secrets when needed.
 
 ---
 

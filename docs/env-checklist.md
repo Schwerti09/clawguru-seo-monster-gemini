@@ -4,7 +4,7 @@ Purpose: keep environment setup operational and short, especially before SEO/Geo
 
 How to use:
 - Fill `.env.local` for local dev.
-- Fill deployment secrets separately (Netlify/Vercel/GitHub Actions).
+- Fill deployment secrets separately (**primary: Vercel** project env; CI/GitHub as needed).
 - Never commit real secrets.
 
 ## 1) Required for local development
@@ -84,8 +84,9 @@ Before major SEO/Geo deploy:
 
 If one fails due missing env, set required keys first and rerun.
 
-## 9) CLI vs hosting (Netlify/CI)
+## 9) CLI vs hosting (Vercel)
 
-- **Redeploy / dashboard env** updates the **live** app. It does not automatically change files on your laptop.
-- Geo trigger scripts load, in order: `.env`, `.env.local`, then `netlify.env.import.template` (same keys as a typical Netlify import file).
-- If `geo:*` returns **401 unauthorized** against `https://clawguru.org`, the Bearer token in your local files **does not match** the value configured on the deployed site for `GEO_SITEMAP_GUARDRAIL_SECRET` (or the accepted fallbacks on the server: `GEO_EXPANSION_SECRET`, `GEO_AUTO_PRUNE_SECRET`, `GEO_REVALIDATE_SECRET`). Align the live env with your CLI source of truth and redeploy once.
+- **Vercel** holds production/preview environment variables. Redeploy applies them to the live app; that does **not** update files on your laptop.
+- Geo trigger scripts load: `.env`, then `.env.local`. Optionally a third file if you set `GEO_CLI_EXTRA_DOTENV` (path relative to repo root), e.g. only when testing a Netlify-style import file.
+- **`netlify.env.import.template`** in this repo is a **migration/reference** artifact for a possible future Netlify deploy — it is **not** loaded automatically. Sync real secrets via Vercel dashboard + local `.env.local`.
+- If `geo:*` returns **401 unauthorized** against `https://clawguru.org`, the Bearer token you send locally **does not match** the value on the deployed Vercel build for `GEO_SITEMAP_GUARDRAIL_SECRET` (or server fallbacks: `GEO_EXPANSION_SECRET`, `GEO_AUTO_PRUNE_SECRET`, `GEO_REVALIDATE_SECRET`). Copy the same values from Vercel → `.env.local` and rerun.

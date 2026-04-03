@@ -1,10 +1,10 @@
 try {
-  // Load env for CLI usage; no-op in prod if files are missing.
+  // Local CLI: .env then .env.local. Production secrets live in Vercel project env.
+  // Optional: GEO_CLI_EXTRA_DOTENV=path/to/extra.env (e.g. Netlify import during migration).
   require("dotenv").config()
   require("dotenv").config({ path: ".env.local" })
-  // Netlify import template often holds the same keys as dashboard deploy env.
-  // Later calls do not override already-set process.env (dotenv default).
-  require("dotenv").config({ path: "netlify.env.import.template" })
+  const extra = (process.env.GEO_CLI_EXTRA_DOTENV || "").trim()
+  if (extra) require("dotenv").config({ path: extra })
 } catch {}
 
 const DEFAULT_BASE = "https://clawguru.org"

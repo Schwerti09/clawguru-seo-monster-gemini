@@ -77,6 +77,8 @@
 
 ## 2.1 Geo/SEO Status (Kompakt)
 
+**Hosting / Secrets (Stand):** Produktion läuft auf **Vercel** — alle Deploy-Secrets (`GEO_*`, AI, DB, …) dort pflegen. Die Datei `netlify.env.import.template` ist **nur** für einen möglichen **Umzug nach Netlify** bzw. als Referenz; sie wird von den Geo-CLI-Skripten **nicht** automatisch geladen. Optional: `GEO_CLI_EXTRA_DOTENV=<pfad>` für ein zusätzliches Env-File lokal. Details: `docs/env-checklist.md`.
+
 ### Fertig
 
 - Geo-Living-Matrix mit Qualitätslogik, Canary-to-Stable-Prozess und Indexierungsregeln implementiert.

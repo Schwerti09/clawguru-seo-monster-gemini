@@ -14,6 +14,12 @@ npm install clawguru-moltbot-hardener
 <script src="https://unpkg.com/clawguru-moltbot-hardener/index.js"></script>
 ```
 
+Local hosted option (no npm publish required):
+
+```html
+<script src="https://clawguru.org/widgets/clawguru-moltbot-hardener.js"></script>
+```
+
 Then place a target node anywhere:
 
 ```html
@@ -39,4 +45,12 @@ Optional attributes:
     cta: "Kostenlosen Check starten"
   })
 </script>
+```
+
+## Release
+
+```bash
+cd extension/widget
+npm version patch
+npm publish --access public
 ```

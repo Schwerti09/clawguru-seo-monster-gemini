@@ -3,6 +3,12 @@
   "version": "0.1.0",
   "description": "Embeddable ClawGuru Moltbot hardener widget",
   "main": "index.js",
+  "unpkg": "index.js",
+  "jsdelivr": "index.js",
+  "files": [
+    "index.js",
+    "README.md"
+  ],
   "type": "commonjs",
   "license": "MIT",
   "keywords": [

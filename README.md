@@ -148,6 +148,10 @@ Detailed runbook: `docs/geo-ops-runbook.md`.
 - Quick embed:
   - `<script src="https://unpkg.com/clawguru-moltbot-hardener/index.js"></script>`
   - `<div data-clawguru-moltbot-widget data-locale="en"></div>`
+- Local hosted embed (immediate):
+  - `<script src="https://clawguru.org/widgets/clawguru-moltbot-hardener.js"></script>`
+- Distribution kit (OpenClaw README / Discord / skill registry snippets):
+  - `docs/moltbot-widget-distribution.md`
 
 ---
 

@@ -1947,3 +1947,108 @@ git push origin main
 - Rollback-Befehl pro Batch jederzeit bereit halten.
 
 *Letzte große Strategie-Aktualisierung in diesem Dokument: April 2026 (Projektstand speichern).*
+
+---
+
+## §25 – Nachziehen der 3 fehlenden Städte + Promotion der 14 Canary-Städte – Phase 2 Abschluss (03.04.2026)
+
+### 25.1 Zusammenfassung des aktuellen Status
+- Nach der 20-Städte-Anreicherung und dem Seeding der 14 High-Quality-Städte (>=85) sind aktuell 11 Städte im Canary-Stage.
+- 3 Städte aus dem 14er-Set fehlen noch in `geo_cities` (dublin, copenhagen, stockholm), obwohl Matrix-Signale vorhanden sind.
+- Ziel: Die 3 Städte nachziehen, dann alle 14 Canary-Städte promotieren (Canary -> Stable).
+
+### 25.2 Nachziehen der 3 fehlenden Städte
+**Fehlende Städte:** dublin, copenhagen, stockholm
+
+**SQL zum Nachziehen (geo_cities + Matrix-Sync – idempotent):**
+
+```sql
+BEGIN;
+
+-- 1) Fehlende Städte in geo_cities nachziehen / aktualisieren
+INSERT INTO geo_cities (slug, name_de, name_en, country_code, priority, population, is_active, rollout_stage, updated_at)
+VALUES
+  ('dublin', 'Dublin', 'Dublin', 'IE', 78, 592000, TRUE, 'canary', NOW()),
+  ('copenhagen', 'Kopenhagen', 'Copenhagen', 'DK', 77, 660000, TRUE, 'canary', NOW()),
+  ('stockholm', 'Stockholm', 'Stockholm', 'SE', 79, 975000, TRUE, 'canary', NOW())
+ON CONFLICT (slug) DO UPDATE 
+SET name_de = EXCLUDED.name_de,
+    name_en = EXCLUDED.name_en,
+    country_code = EXCLUDED.country_code,
+    priority = EXCLUDED.priority,
+    population = EXCLUDED.population,
+    is_active = TRUE,
+    rollout_stage = 'canary',
+    updated_at = NOW();
+
+-- 2) Matrix-Coverage für die 3 Städte prüfen
+SELECT city_slug, locale, COUNT(*)::int AS variants, ROUND(AVG(quality_score))::int AS avg_quality
+FROM geo_variant_matrix
+WHERE city_slug IN ('dublin', 'copenhagen', 'stockholm')
+  AND locale IN ('de','en')
+GROUP BY city_slug, locale
+ORDER BY city_slug, locale;
+
+COMMIT;
+```
+
+### 25.3 Promotion der 14 Canary-Städte (Canary -> Stable)
+Sofort ausführbarer Promotion-Befehl (alle 14 Städte):
+
+```bash
+node -e "
+  require('dotenv').config({ path: '.env.local' });
+  const { Client } = require('pg');
+  (async () => {
+    const c = new Client({ connectionString: process.env.DATABASE_URL });
+    await c.connect();
+    await c.query('BEGIN');
+    const promoted = await c.query(\"UPDATE geo_cities SET rollout_stage='stable', updated_at=NOW() 
+                                    WHERE is_active=true AND rollout_stage='canary' 
+                                    AND slug IN ('amsterdam','barcelona','copenhagen','dublin','frankfurt','leipzig','london','madrid','milan','paris','prague','stockholm','vienna','zurich') 
+                                    RETURNING slug\");
+    const status = await c.query(\"SELECT slug, is_active, rollout_stage 
+                                  FROM geo_cities 
+                                  WHERE slug IN ('amsterdam','barcelona','copenhagen','dublin','frankfurt','leipzig','london','madrid','milan','paris','prague','stockholm','vienna','zurich') 
+                                  ORDER BY slug\");
+    await c.query('COMMIT');
+    console.log({ promoted: promoted.rows.map(r => r.slug), finalStatus: status.rows });
+    await c.end();
+    console.log('✅ PROMOTION OK: 14 cities moved to stable');
+  })().catch(e => { console.error(e); process.exit(1); });
+"
+```
+### 25.4 Post-Promotion Pflicht-Checks
+```bash
+npm run check:geo-rollout-status -- --verbose
+
+node scripts/trigger-geo-canary-rollout.js --mode=dry-run --locale=de --slug=openclaw-risk-2026 --limit=30 --minRankingScore=65 --verbose
+
+node scripts/trigger-geo-canary-rollout.js --mode=dry-run --locale=en --slug=openclaw-exposed --limit=30 --minRankingScore=65 --verbose
+
+npm run geo:sitemap-guardrail:dry-run
+```
+### 25.5 Git-Commit + Push (nach erfolgreichem Lauf)
+```bash
+git add AGENTS.md
+git commit -m "docs(agents): phase2 complete - backfill missing cities + promote 14-city wave"
+git push origin main
+```
+### 25.6 Nächste Schritte
+
+3 fehlende Städte per SQL nachziehen + Coverage prüfen.
+Human-Freigabe bestätigen -> 14er-Promotion ausführen.
+Post-Checks + 24h-Monitoring starten.
+Parallel die 6 Städte mit 83 auf >=85 anheben und nächste große Welle vorbereiten.
+
+### 25.7 Safeguards
+
+Human-Freigabe vor der Promotion der 14 Städte.
+Nach Promotion sofort alle Post-Checks.
+Rollback-Befehl pro Batch jederzeit bereit halten.
+Qualitäts-Floor bleibt bei >= 85 für neue Wellen.
+
+Der nächste konkrete Schritt ist:
+Zuerst das SQL zum Nachziehen von dublin, copenhagen und stockholm ausführen, dann die 14er-Promotion starten und sofort die Post-Checks laufen lassen.
+
+*Letzte große Strategie-Aktualisierung in diesem Dokument: April 2026 (Projektstand speichern).*

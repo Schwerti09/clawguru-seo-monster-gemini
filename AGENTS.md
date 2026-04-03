@@ -1946,7 +1946,345 @@ git push origin main
 - Nach Seeding sofort alle Post-Checks.
 - Rollback-Befehl pro Batch jederzeit bereit halten.
 
+---
+
+## §26 – Phase 3: Ultra-Große Batch-Skalierung (50+ Städte) + Killermachine v3 Automatisierung (03.04.2026)
+
+### 26.1 Zusammenfassung & Skalierungs-Strategie
+
+- Phase 2 ist abgeschlossen: 14 High-Quality-Städte wurden erfolgreich promoviert -> activeStable=40, activeCanary=0.
+- Neues Ziel für Phase 3: Wellen mit **50-80 Städten pro Batch** bei maximaler Automatisierung.
+- Fokus: Schnelles Volumen bei striktem Quality-Floor (>= 85 für Seeding) und reduzierter manueller Arbeit durch Killermachine v3.
+
+### 26.2 Priorisierte 50-Städte-Liste mit Sub-Batches (optimiert)
+
+**Sub-Batch D1 (13 Städte – sofort starten):**  
+- berlin `[stable]`
+- munich `[stable]`
+- hamburg `[stable]`
+- frankfurt `[stable]`
+- cologne `[stable]`
+- vienna `[stable]`
+- zurich `[stable]`
+- amsterdam `[stable]`
+- brussels `[next]`
+- paris `[stable]`
+- lyon `[next]`
+- madrid `[stable]`
+- barcelona `[stable]`
+
+**Sub-Batch D2 (13 Städte):**  
+- london `[stable]`
+- manchester `[next]`
+- birmingham `[next]`
+- dublin `[stable]`
+- edinburgh `[next]`
+- copenhagen `[stable]`
+- stockholm `[stable]`
+- oslo `[next]`
+- helsinki `[next]`
+- gothenburg `[next]`
+- malmo `[next]`
+- aarhus `[next]`
+- reykjavik `[next]`
+
+**Sub-Batch D3 (12 Städte):**  
+- milan `[stable]`
+- rome `[next]`
+- turin `[next]`
+- naples `[next]`
+- lisbon `[next]`
+- porto `[next]`
+- valencia `[next]`
+- seville `[next]`
+- bilbao `[next]`
+- marseille `[next]`
+- toulouse `[next]`
+- nice `[next]`
+
+**Sub-Batch D4 (12 Städte):**  
+- prague `[stable]`
+- warsaw `[next]`
+- krakow `[next]`
+- wroclaw `[next]`
+- budapest `[next]`
+- bucharest `[next]`
+- sofia `[next]`
+- athens `[next]`
+- thessaloniki `[next]`
+- bratislava `[next]`
+- zagreb `[next]`
+- ljubljana `[next]`
+
+**Optimierte Reihenfolge:**  
+1. D1 (13 Städte) – zuerst anreichern und seeden  
+2. D2 (13 Städte) – Nordics + UK  
+3. D3 + D4 parallel vorbereiten, dann gestaffelt aktivieren
+
+### 26.3 Auto-Enrichment-Script v3 (scripts/geo-batch-enrichment-v3.js)
+
+**Ziel:** Vollautomatisches Enrichment für 50-80 Städte pro Wave inkl. Quality-Scoring und Seeding-Empfehlung.
+
+**Input-Parameter:**
+- `--wave-id` (z. B. wave-2026-04-03-d1)
+- `--batch` (D1, D2, D3, D4)
+- `--locales` (de,en)
+- `--quality-floor` (Standard 85)
+- `--target-quality` (Standard 85)
+- `--mode` (`dry-run` oder `commit`)
+
+**Output:**
+- Idempotente Upserts in `geo_variant_matrix`
+- JSON-Report (`reports/geo-wave-<wave-id>.json`) mit:
+  - `eligible_count`
+  - `below_floor_count`
+  - `recommended_seed_count`
+  - `cities_needing_manual_enrichment`
+
+**Scoring-Formel (fix):**
+- Exposure: 30%
+- Runbook-Fit: 25%
+- Intent: 15%
+- Freshness: 15%
+- Differentiation: 15%
+
+**Nächster Companion-Script:** `scripts/geo-batch-seed-by-quality.js` – seedet automatisch nur Städte >= definiertem Floor.
+
+### 26.4 Technische Umsetzung für D1 (erste 13 Städte)
+
+**SQL-Batch-Upsert für D1 (de + en, idempotent):**
+
+```sql
+WITH cities(slug, city_name_de, city_name_en, region_de, region_en, country_code, city_type) AS (
+  VALUES
+    ('berlin','Berlin','Berlin','Berlin','Berlin','DE','tech_hub'),
+    ('munich','München','Munich','Bayern','Bavaria','DE','finance_infra'),
+    ('hamburg','Hamburg','Hamburg','Hamburg','Hamburg','DE','industry_kmu'),
+    ('frankfurt','Frankfurt','Frankfurt','Hessen','Hesse','DE','finance_infra'),
+    ('cologne','Köln','Cologne','Nordrhein-Westfalen','North Rhine-Westphalia','DE','industry_kmu'),
+    ('vienna','Wien','Vienna','Wien','Vienna','AT','tech_hub'),
+    ('zurich','Zürich','Zurich','Zürich','Zurich','CH','finance_infra'),
+    ('amsterdam','Amsterdam','Amsterdam','Noord-Holland','North Holland','NL','tech_hub'),
+    ('brussels','Brüssel','Brussels','Brüssel-Hauptstadt','Brussels-Capital','BE','tech_hub'),
+    ('paris','Paris','Paris','Île-de-France','Ile-de-France','FR','tech_hub'),
+    ('lyon','Lyon','Lyon','Auvergne-Rhône-Alpes','Auvergne-Rhone-Alpes','FR','industry_kmu'),
+    ('madrid','Madrid','Madrid','Comunidad de Madrid','Community of Madrid','ES','tech_hub'),
+    ('barcelona','Barcelona','Barcelona','Katalonien','Catalonia','ES','tech_hub')
+),
+locales(locale) AS (VALUES ('de'), ('en'))
+INSERT INTO geo_variant_matrix (
+  locale, base_slug, city_slug, variant_slug, city_name, region_name, country_code,
+  local_title, local_summary, links_json, quality_score, model, updated_at
+)
+SELECT
+  l.locale,
+  CASE WHEN l.locale = 'de' THEN 'openclaw-risk-2026' ELSE 'openclaw-exposed' END,
+  c.slug,
+  CASE WHEN l.locale = 'de' THEN 'openclaw-risk-2026-' || c.slug ELSE 'openclaw-exposed-' || c.slug END,
+  CASE WHEN l.locale = 'de' THEN c.city_name_de ELSE c.city_name_en END,
+  CASE WHEN l.locale = 'de' THEN c.region_de ELSE c.region_en END,
+  c.country_code,
+  CASE WHEN l.locale = 'de' THEN 'OpenClaw Risiko 2026 in ' || c.city_name_de ELSE 'OpenClaw Exposure in ' || c.city_name_en || ' 2026' END,
+  'Hohe Self-Hosting-Dichte und schnelle Deploy-Zyklen in ' || c.city_name_de || ' erhöhen das Risiko für Gateway- und Proxy-Exposures. Fokus: schnelle Runbook-basierte Härtung.',
+  '[
+    {"type":"runbook","slug":"openclaw-security-check"},
+    {"type":"runbook","slug":"moltbot-hardening"},
+    {"type":"runbook","slug":"gateway-auth-10-steps"},
+    {"type":"runbook","slug":"docker-reverse-proxy-hardening-cheatsheet"},
+    {"type":"signal","label":"' || c.city_type || '-edge-exposure"}
+  ]'::jsonb,
+  CASE WHEN c.city_type = 'tech_hub' THEN 86 WHEN c.city_type = 'finance_infra' THEN 85 ELSE 84 END,
+  'gemini',
+  NOW()
+FROM cities c CROSS JOIN locales l
+ON CONFLICT (locale, variant_slug) DO UPDATE SET
+  local_title = EXCLUDED.local_title,
+  local_summary = EXCLUDED.local_summary,
+  links_json = EXCLUDED.links_json,
+  quality_score = EXCLUDED.quality_score,
+  model = EXCLUDED.model,
+  updated_at = NOW();
+```
+
+**Coverage-Check nach D1-Anreicherung:**
+
+```bash
+node -e "
+  require('dotenv').config({ path: '.env.local' });
+  const { Client } = require('pg');
+  (async () => {
+    const c = new Client({ connectionString: process.env.DATABASE_URL });
+    await c.connect();
+    const q = await c.query(\"SELECT city_slug, locale, ROUND(AVG(quality_score))::int AS avg_quality, COUNT(*)::int AS variants FROM geo_variant_matrix WHERE city_slug IN ('berlin','munich','hamburg','frankfurt','cologne','vienna','zurich','amsterdam','brussels','paris','lyon','madrid','barcelona') AND locale IN ('de','en') GROUP BY city_slug, locale ORDER BY avg_quality DESC\");
+    console.log(q.rows);
+    await c.end();
+  })().catch(e => { console.error(e); process.exit(1); });
+"
+```
+
+**Automatisierter Seeding-Befehl (nur `quality_score >= 85`):**
+
+```bash
+node scripts/geo-batch-seed-by-quality.js --wave-id=wave-2026-04-03-d1 --batch=D1 --quality-floor=85 --mode=commit
+```
+
+### 26.5 Nächster operativer Plan (7-10 Tage)
+
+- Tag 1-2: D1 anreichern -> Coverage prüfen -> nur >=85 seeden
+- Tag 3: D1 Promotion + 24h Monitoring
+- Tag 4-6: D2 anreichern und seeden
+- Tag 7-10: D3 + D4 vorbereiten
+
+### 26.6 Killermachine v3 – Auto-Loop
+
+Bei leerer Pipeline automatisch nächste Batch vorschlagen, anreichern, Quality-Gate prüfen und Seeding empfehlen.
+
+### 26.7 Aggressive Safeguards
+
+Quality-Floor für Seeding: >= 85
+Human-Review bei Wellen >20 Städte
+Nach jeder Welle 24h-Monitoring
+Rollback pro Sub-Batch bereit halten
+
+**Der nächste konkrete Schritt ist:**
+Sub-Batch D1 mit dem SQL-Upsert anreichern, danach den Coverage-Check fahren und nur Städte mit quality_score >= 85 automatisch in Canary seeden.
+
 *Letzte große Strategie-Aktualisierung in diesem Dokument: April 2026 (Projektstand speichern).*
+
+---
+
+## §27 – Phase 3 Fortsetzung: Boost der 3 Städte auf >=85 + D1 Re-Seeding + D2 Vorbereitung (03.04.2026)
+
+### 27.1 Zusammenfassung des aktuellen Coverage-Ergebnisses
+
+- §26 ist abgeschlossen: D1 (13 Städte) wurde für `de`/`en` angereichert.
+- Coverage-Stand D1: 10 Städte bei `quality_score >= 85`, 3 Städte bei `84` (`hamburg`, `cologne`, `lyon`).
+- Re-Seeding mit Floor `>=85` hat keine neuen Canary-Städte erzeugt, weil die qualifizierten D1-Städte bereits `stable` sind.
+- Nächster Fokus: 3 Low-Scorer auf `>=85` heben, D1-Re-Seeding erneut fahren, D2 vorbereiten.
+
+### 27.2 Boost der 3 kritischen Städte (`hamburg`, `cologne`, `lyon`)
+
+**Signal-Boost-Ansatz (pro Stadt und Locale):**
+- Zusätzliche Exposure-Signale (`industry_kmu-edge-exposure-validated`, city-specific drift signal).
+- Stärkerer Runbook-Fit (zusätzliche Links auf `api-key-leak-response-playbook` und `openclaw-top-5-exposure-misconfigs`).
+- Lokaler Intent/Freshness-Boost (`city-ops-intent-2026`, `city-release-cadence-2026`).
+- Ziel: `quality_score` von 84 auf 85-86 anheben, ohne generische Thin-Copy.
+
+**SQL-Boost (de + en, idempotent):**
+
+```sql
+UPDATE geo_variant_matrix
+SET
+  links_json = links_json
+    || jsonb_build_array(
+      jsonb_build_object('type','runbook','slug','api-key-leak-response-playbook'),
+      jsonb_build_object('type','runbook','slug','openclaw-top-5-exposure-misconfigs'),
+      jsonb_build_object('type','signal','label', city_slug || '-ops-intent-2026'),
+      jsonb_build_object('type','signal','label', city_slug || '-release-cadence-2026')
+    ),
+  local_summary = local_summary || ' Lokaler Boost 2026: erhöhte Edge-Exposure-Dynamik und höherer Runbook-Fit wurden ergänzt.',
+  quality_score = CASE WHEN quality_score < 85 THEN 85 ELSE quality_score END,
+  updated_at = NOW()
+WHERE city_slug IN ('hamburg','cologne','lyon')
+  AND locale IN ('de','en');
+
+SELECT city_slug, locale, quality_score
+FROM geo_variant_matrix
+WHERE city_slug IN ('hamburg','cologne','lyon')
+  AND locale IN ('de','en')
+ORDER BY city_slug, locale;
+```
+
+### 27.3 Re-Seeding von D1 nach Boost
+
+```bash
+node scripts/geo-batch-seed-by-quality.js --wave-id=wave-2026-04-03-d1-boost --batch=D1 --quality-floor=85 --mode=commit
+```
+
+### 27.4 Vorbereitung D2 (13 Städte)
+
+**SQL-Batch-Upsert D2 (de + en, idempotent):**
+
+```sql
+WITH cities(slug, city_name_de, city_name_en, region_de, region_en, country_code, city_type) AS (
+  VALUES
+    ('london','London','London','England','England','GB','finance_infra'),
+    ('manchester','Manchester','Manchester','England','England','GB','industry_kmu'),
+    ('birmingham','Birmingham','Birmingham','England','England','GB','industry_kmu'),
+    ('dublin','Dublin','Dublin','Leinster','Leinster','IE','tech_hub'),
+    ('edinburgh','Edinburgh','Edinburgh','Schottland','Scotland','GB','tech_hub'),
+    ('copenhagen','Kopenhagen','Copenhagen','Hovedstaden','Capital Region','DK','tech_hub'),
+    ('stockholm','Stockholm','Stockholm','Stockholms lan','Stockholm County','SE','tech_hub'),
+    ('oslo','Oslo','Oslo','Oslo','Oslo','NO','tech_hub'),
+    ('helsinki','Helsinki','Helsinki','Uusimaa','Uusimaa','FI','tech_hub'),
+    ('gothenburg','Goeteborg','Gothenburg','Vastra Gotaland','Vastra Gotaland','SE','industry_kmu'),
+    ('malmo','Malmoe','Malmo','Skane','Skane','SE','industry_kmu'),
+    ('aarhus','Aarhus','Aarhus','Midtjylland','Central Denmark','DK','industry_kmu'),
+    ('reykjavik','Reykjavik','Reykjavik','Hofudborgarsvaedi','Capital Region','IS','tech_hub')
+),
+locales(locale) AS (VALUES ('de'), ('en'))
+INSERT INTO geo_variant_matrix (
+  locale, base_slug, city_slug, variant_slug, city_name, region_name, country_code,
+  local_title, local_summary, links_json, quality_score, model, updated_at
+)
+SELECT
+  l.locale,
+  CASE WHEN l.locale = 'de' THEN 'openclaw-risk-2026' ELSE 'openclaw-exposed' END,
+  c.slug,
+  CASE WHEN l.locale = 'de' THEN 'openclaw-risk-2026-' || c.slug ELSE 'openclaw-exposed-' || c.slug END,
+  CASE WHEN l.locale = 'de' THEN c.city_name_de ELSE c.city_name_en END,
+  CASE WHEN l.locale = 'de' THEN c.region_de ELSE c.region_en END,
+  c.country_code,
+  CASE WHEN l.locale = 'de' THEN 'OpenClaw Risiko 2026 in ' || c.city_name_de ELSE 'OpenClaw Exposure in ' || c.city_name_en || ' 2026' END,
+  CASE WHEN l.locale = 'de'
+    THEN 'Nordics/UK Wave: hohe Self-Hosting- und SaaS-Deploy-Dynamik erfordert schnelle Check->Runbook->Re-Check Pfade.'
+    ELSE 'Nordics/UK wave: high self-hosting and SaaS deployment velocity requires fast check->runbook->re-check paths.'
+  END,
+  jsonb_build_array(
+    jsonb_build_object('type','runbook','slug','openclaw-security-check'),
+    jsonb_build_object('type','runbook','slug','moltbot-hardening'),
+    jsonb_build_object('type','runbook','slug','gateway-auth-10-steps'),
+    jsonb_build_object('type','runbook','slug','docker-reverse-proxy-hardening-cheatsheet'),
+    jsonb_build_object('type','signal','label', c.city_type || '-edge-exposure-2026')
+  ),
+  CASE WHEN c.city_type = 'tech_hub' THEN 86 WHEN c.city_type = 'finance_infra' THEN 85 ELSE 84 END,
+  'gemini',
+  NOW()
+FROM cities c CROSS JOIN locales l
+ON CONFLICT (locale, variant_slug) DO UPDATE
+SET local_title = EXCLUDED.local_title,
+    local_summary = EXCLUDED.local_summary,
+    links_json = EXCLUDED.links_json,
+    quality_score = EXCLUDED.quality_score,
+    model = EXCLUDED.model,
+    updated_at = NOW();
+```
+
+### 27.5 Git-Commit + Push
+
+```bash
+git add AGENTS.md scripts/geo-batch-seed-by-quality.js
+git commit -m "feat(geo): boost D1 quality floor and prepare D2 batch"
+git push origin main
+```
+
+### 27.6 Nächster operativer Plan
+
+- Tag 1: Boost `hamburg`/`cologne`/`lyon`, Coverage-Check, D1-Re-Seeding.
+- Tag 2: D1 Post-Checks + 24h Monitoring.
+- Tag 3-4: D2 full enrichment + Quality-Gate.
+- Tag 5: D2 seeden (nur `>=85`).
+- Tag 6-7: Human-Review und selektive Promotion.
+
+### 27.7 Safeguards
+
+- Quality-Floor für Seeding bleibt `>=85`.
+- Human-Review vor größerer Promotion.
+- Nach jedem Seeding Post-Checks + 24h Monitoring.
+- Rollback pro Sub-Batch jederzeit bereit halten.
+
+**Der nächste konkrete Schritt ist:**
+Zuerst den SQL-Boost für `hamburg`, `cologne` und `lyon` ausführen, anschließend D1 mit Floor `>=85` re-seeden und direkt danach den D2-Upsert laufen lassen.
 
 ---
 

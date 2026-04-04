@@ -5350,7 +5350,7 @@ Notizen: _______________________________________________________________________
 
 ### 47.4 D4 Preparation — SQL-Batch-Upsert (`BATCHES.D4`)
 
-**Städte** (1:1 mit `scripts/geo-batch-seed-by-quality.js` → **`BATCHES.D4`):**  
+**Städte** (1:1 mit `scripts/geo-batch-seed-by-quality.js` → **`BATCHES.D4`**):  
 `warsaw`, `krakow`, `wroclaw`, `budapest`, `bucharest`, `sofia`, `athens`, `thessaloniki`, `bratislava`, `zagreb`, `ljubljana`, `belgrade`
 
 **Qualität:** `city_type` **tech_hub** → **`quality_score=87`**, **industry_kmu** → **`85`** (alles **≥85**).

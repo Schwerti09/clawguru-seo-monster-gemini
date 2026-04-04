@@ -1,6 +1,7 @@
 import { createHash } from "node:crypto"
 import { NextRequest, NextResponse } from "next/server"
 import { BASE_URL } from "@/lib/config"
+import { dbQuery } from "@/lib/db"
 import { DEFAULT_LOCALE, SUPPORTED_LOCALES } from "@/lib/i18n"
 import { getAllActiveCities, mergeTopCitiesWithCanary, type GeoCity } from "@/lib/geo-cities"
 
@@ -65,23 +66,33 @@ export async function GET(req: NextRequest) {
   const slugRaw = req.nextUrl.searchParams.get("slug") || "aws-ssh-hardening-2026"
   const slug = SAFE_SLUG_RE.test(slugRaw) ? slugRaw : "aws-ssh-hardening-2026"
 
+  const forceRefresh = req.nextUrl.searchParams.get("forceRefresh") === "1"
+  if (forceRefresh) {
+    responseCache.clear()
+  }
+
   const parsedLimit = parseInt(req.nextUrl.searchParams.get("limit") || process.env.GEO_MATRIX_SITEMAP_CITY_LIMIT || "24", 10) || 24
   const limit = Math.max(1, Math.min(MAX_CITY_LIMIT, parsedLimit))
 
   const all = await getAllActiveCities()
+  const canarySlugRes = await dbQuery<{ slug: string }>(
+    `SELECT slug
+     FROM geo_cities
+     WHERE is_active = true
+       AND rollout_stage = 'canary'
+     ORDER BY priority DESC, population DESC, slug ASC`
+  )
+  const dbCanarySlugs = canarySlugRes.rows
+    .map((r) => String(r.slug || "").trim())
+    .filter((s): s is string => Boolean(s))
+  const memCanarySlugs = all.filter((c) => c.rollout_stage === "canary").map((c) => c.slug)
   const canaryFinger = createHash("sha256")
-    .update(
-      all
-        .filter((c) => c.rollout_stage === "canary")
-        .map((c) => c.slug)
-        .sort()
-        .join("\0")
-    )
+    .update([...new Set([...memCanarySlugs, ...dbCanarySlugs])].sort().join("\0"))
     .digest("hex")
     .slice(0, 16)
   const cacheKey = `${locale}:${slug}:${limit}:u${canaryFinger}`
   const cached = responseCache.get(cacheKey)
-  if (cached && cached.expiresAt > Date.now()) {
+  if (!forceRefresh && cached && cached.expiresAt > Date.now()) {
     return NextResponse.json(cached.payload, {
       status: 200,
       headers: {
@@ -90,13 +101,22 @@ export async function GET(req: NextRequest) {
     })
   }
 
-  const cities = mergeTopCitiesWithCanary(all, limit)
+  let citiesForRanking = mergeTopCitiesWithCanary(all, limit)
+  const seenSlugs = new Set(citiesForRanking.map((c) => c.slug))
+  for (const s of dbCanarySlugs) {
+    if (!s || seenSlugs.has(s)) continue
+    const match = all.find((c) => c.slug === s)
+    if (!match) continue
+    citiesForRanking.push(match)
+    seenSlugs.add(s)
+  }
+
   const topSliceLen = Math.min(limit, all.length)
-  const canaryUnionExtras = cities.length - topSliceLen
-  const maxPopulation = Math.max(1, ...cities.map((c) => c.population || 0))
+  const canaryUnionExtras = citiesForRanking.length - topSliceLen
+  const maxPopulation = Math.max(1, ...citiesForRanking.map((c) => c.population || 0))
 
   const rankedResults = await Promise.allSettled(
-    cities.map(async (city): Promise<RankedCity> => {
+    citiesForRanking.map(async (city): Promise<RankedCity> => {
       const url = `${BASE_URL}/${locale}/runbook/${slug}-${city.slug}`
       try {
         const probe = await probeUrl(url)
@@ -120,7 +140,7 @@ export async function GET(req: NextRequest) {
 
   const ranked: RankedCity[] = rankedResults.map((result, idx) => {
     if (result.status === "fulfilled") return result.value
-    const city = cities[idx]
+    const city = citiesForRanking[idx]
     return {
       ...city,
       status: 0,
@@ -146,7 +166,7 @@ export async function GET(req: NextRequest) {
     generatedAt: new Date().toISOString(),
     cities: ranked,
   }
-  responseCache.set(cacheKey, { expiresAt: Date.now() + CACHE_TTL_MS, payload })
+  if (!forceRefresh) responseCache.set(cacheKey, { expiresAt: Date.now() + CACHE_TTL_MS, payload })
 
   return NextResponse.json(payload, {
     status: 200,

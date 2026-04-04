@@ -1,8 +1,7 @@
 #!/usr/bin/env node
 /* eslint-disable no-console */
 /**
- * Killermachine v3.1 — batch-aware auto-loop (see AGENTS.md §30).
- * Uses rollout-status API for activeCanary; runs quality-gated seed dry-run when pipeline is low.
+ * Killermachine v3.3 — batch-aware loop + post-seed ranking sync + promotion gate (see AGENTS.md §37).
  */
 try {
   require("dotenv").config()
@@ -18,6 +17,8 @@ const path = require("node:path")
 const DEFAULT_BASE = "https://clawguru.org"
 const STATE_FILE = path.join("reports", "killermachine-batch-state.json")
 const BATCH_ORDER = ["D3", "D4"]
+const RANK_LIMIT = 200
+const CANARY_LIMIT = 120
 
 function getArg(name, fallback = "") {
   const arg = process.argv.find((x) => x.startsWith(`--${name}=`))
@@ -47,6 +48,28 @@ function run(cmd) {
   execSync(cmd, { stdio: "inherit", shell: true })
 }
 
+function runCapture(cmd) {
+  console.log(`\n>>> ${cmd}`)
+  return execSync(cmd, { stdio: "pipe", shell: true, encoding: "utf8" })
+}
+
+function parseCanaryDryRun(output) {
+  const canaryRanked = Number((output.match(/canaryRanked=(\d+)/) || [0, 0])[1])
+  const totalRanked = Number((output.match(/totalRanked=(\d+)/) || [0, 0])[1])
+  const rawWould = (output.match(/wouldPromote=([^\n\r]+)/) || ["", "-"])[1].trim()
+  const wouldPromoteCount = rawWould && rawWould !== "-" ? rawWould.split(",").filter(Boolean).length : 0
+  return { totalRanked, canaryRanked, wouldPromote: rawWould, wouldPromoteCount }
+}
+
+function parseEligibleFromSeed(output) {
+  const m = output.match(/eligible_count["\s:]+(\d+)/i) || output.match(/"eligible_count"\s*:\s*(\d+)/)
+  return m ? Number(m[1]) : null
+}
+
+function localePromotionReady(parsed) {
+  return parsed.canaryRanked > 0 && parsed.wouldPromoteCount > 0
+}
+
 function readBatchState() {
   const p = path.join(process.cwd(), STATE_FILE)
   try {
@@ -66,10 +89,14 @@ function writeBatchState(nextBatch) {
   const p = path.join(dir, "killermachine-batch-state.json")
   fs.writeFileSync(
     p,
-    JSON.stringify({ nextBatch, updatedAt: new Date().toISOString(), note: "v3.1 batch pointer — advance after successful D3/D4 wave" }, null, 2),
+    JSON.stringify(
+      { nextBatch, updatedAt: new Date().toISOString(), note: "v3.3 batch pointer — advance after successful D3/D4 wave" },
+      null,
+      2
+    ),
     "utf8"
   )
-  console.log(`\n[killermachine-v3.1] wrote batch state → nextBatch=${nextBatch} (${p})`)
+  console.log(`\n[killermachine-v3.3] wrote batch state → nextBatch=${nextBatch} (${p})`)
 }
 
 function pickNextBatchAfter(current) {
@@ -80,12 +107,11 @@ function pickNextBatchAfter(current) {
 
 async function fetchRollout(base, secret) {
   const url =
-    `${base}/api/geo/rollout-status` +
-    `?locale=de&slug=openclaw-risk-2026&verbose=1&includeRanking=1`
+    `${base}/api/geo/rollout-status` + `?locale=de&slug=openclaw-risk-2026&verbose=1&includeRanking=1`
   const res = await fetch(url, {
     headers: {
       Authorization: `Bearer ${secret}`,
-      "user-agent": "clawguru-killermachine-v3.1/1.0",
+      "user-agent": "clawguru-killermachine-v3.3/1.0",
     },
   })
   const json = await res.json().catch(() => null)
@@ -104,10 +130,11 @@ async function main() {
   const secret = getRolloutSecret()
   const canaryLow = Number(process.env.KILLERMACHINE_CANARY_LOW_THRESHOLD || 10)
   const qualityFloor = Number(process.env.KILLERMACHINE_QUALITY_FLOOR || 84)
-  const waveId = getArg("wave-id", `km-v31-${started.slice(0, 10)}`)
+  const minRankingScore = Number(process.env.KILLERMACHINE_MIN_RANKING_SCORE || 65)
+  const waveId = getArg("wave-id", `km-v33-${started.slice(0, 10)}`)
 
   if (dryOnly && seedLive) {
-    console.warn("[killermachine-v3.1] --dry-only gesetzt: --with-seed-live wird für DB-Commit ignoriert")
+    console.warn("[killermachine-v3.3] --dry-only gesetzt: --with-seed-live wird für DB-Commit ignoriert")
   }
 
   if (bumpState && BATCH_ORDER.includes(bumpState)) {
@@ -116,11 +143,13 @@ async function main() {
   }
 
   if (!secret) {
-    console.error("[killermachine-v3.1] missing GEO_ROLLOUT_STATUS_SECRET (or fallback geo secret)")
+    console.error("[killermachine-v3.3] missing GEO_ROLLOUT_STATUS_SECRET (or fallback geo secret)")
     process.exit(1)
   }
 
-  console.log(`[killermachine-v3.1] base=${base} canaryLowThreshold=${canaryLow} qualityFloor=${qualityFloor} dryOnly=${dryOnly}`)
+  console.log(
+    `[killermachine-v3.3] base=${base} canaryLowThreshold=${canaryLow} qualityFloor=${qualityFloor} minRankingScore=${minRankingScore} dryOnly=${dryOnly}`
+  )
 
   run("npm run check:geo-ops-readiness")
 
@@ -129,44 +158,41 @@ async function main() {
   const activeCanary = Number(r.activeCanary || 0)
   const activeStable = Number(r.activeStable || 0)
   console.log(
-    `[killermachine-v3.1] rollout snapshot: activeCanary=${activeCanary} activeStable=${activeStable} total=${r.total || 0}`
+    `[killermachine-v3.3] rollout snapshot: activeCanary=${activeCanary} activeStable=${activeStable} total=${r.total || 0}`
   )
   if (rolloutJson.rankingSnapshot) {
     const s = rolloutJson.rankingSnapshot
-    console.log(`[killermachine-v3.1] ranking snapshot: healthy=${s.healthyCities}/${s.totalCities} healthScore=${s.healthScore}`)
+    console.log(`[killermachine-v3.3] ranking snapshot: healthy=${s.healthyCities}/${s.totalCities} healthScore=${s.healthScore}`)
   }
 
   run("npm run check:geo-rollout-status -- --verbose")
-  run("node scripts/check-geo-city-ranking.js --locale=de --slug=openclaw-risk-2026 --limit=120")
-  run("node scripts/check-geo-city-ranking.js --locale=en --slug=openclaw-exposed --limit=120")
-  run(
-    "node scripts/trigger-geo-canary-rollout.js --mode=dry-run --locale=de --slug=openclaw-risk-2026 --limit=120 --minRankingScore=60 --verbose"
-  )
-  run(
-    "node scripts/trigger-geo-canary-rollout.js --mode=dry-run --locale=en --slug=openclaw-exposed --limit=120 --minRankingScore=60 --verbose"
-  )
+
+  run(`node scripts/check-geo-city-ranking.js --locale=de --slug=openclaw-risk-2026 --limit=${RANK_LIMIT}`)
+  run(`node scripts/check-geo-city-ranking.js --locale=en --slug=openclaw-exposed --limit=${RANK_LIMIT}`)
 
   let selectedBatch = null
   let seedAction = "skipped"
+  let seedOut = ""
 
   if (activeCanary < canaryLow) {
     selectedBatch = getArg("batch", process.env.KILLERMACHINE_BATCH || readBatchState().nextBatch)
     if (!BATCH_ORDER.includes(selectedBatch) && !["D1", "D2"].includes(selectedBatch)) {
-      console.warn(`[killermachine-v3.1] unknown batch ${selectedBatch}, defaulting to D3`)
+      console.warn(`[killermachine-v3.3] unknown batch ${selectedBatch}, defaulting to D3`)
       selectedBatch = "D3"
     }
     console.log(
-      `\n[killermachine-v3.1] activeCanary (${activeCanary}) < threshold (${canaryLow}) → quality-gated seed for batch **${selectedBatch}** (dry-run unless --with-seed-live)`
+      `\n[killermachine-v3.3] activeCanary (${activeCanary}) < threshold (${canaryLow}) → quality-gated seed for batch **${selectedBatch}** (dry-run unless --with-seed-live)`
     )
 
     const seedCmd = `node scripts/geo-batch-seed-by-quality.js --wave-id=${waveId} --batch=${selectedBatch} --quality-floor=${qualityFloor} --mode=dry-run`
     if (dryOnly || !seedLive) {
-      run(seedCmd)
+      seedOut = runCapture(seedCmd)
+      process.stdout.write(seedOut)
       seedAction = "dry-run"
     }
 
     if (seedLive && !dryOnly) {
-      console.warn("[killermachine-v3.1] LIVE seed — human review required; Quality-Floor >= " + qualityFloor)
+      console.warn("[killermachine-v3.3] LIVE seed — human review required; Quality-Floor >= " + qualityFloor)
       run(
         `node scripts/geo-batch-seed-by-quality.js --wave-id=${waveId} --batch=${selectedBatch} --quality-floor=${qualityFloor} --mode=commit`
       )
@@ -178,18 +204,55 @@ async function main() {
       }
     }
   } else {
-    console.log(`\n[killermachine-v3.1] activeCanary (${activeCanary}) >= threshold (${canaryLow}) → skip auto-seed (focus on promotion / monitoring)`)
+    console.log(
+      `\n[killermachine-v3.3] activeCanary (${activeCanary}) >= threshold (${canaryLow}) → skip auto-seed (focus on promotion / monitoring)`
+    )
+  }
+
+  run(`node scripts/check-geo-city-ranking.js --locale=de --slug=openclaw-risk-2026 --limit=${RANK_LIMIT}`)
+  run(`node scripts/check-geo-city-ranking.js --locale=en --slug=openclaw-exposed --limit=${RANK_LIMIT}`)
+
+  const outDe = runCapture(
+    `node scripts/trigger-geo-canary-rollout.js --mode=dry-run --locale=de --slug=openclaw-risk-2026 --limit=${CANARY_LIMIT} --minRankingScore=${minRankingScore} --verbose`
+  )
+  process.stdout.write(outDe)
+  const outEn = runCapture(
+    `node scripts/trigger-geo-canary-rollout.js --mode=dry-run --locale=en --slug=openclaw-exposed --limit=${CANARY_LIMIT} --minRankingScore=${minRankingScore} --verbose`
+  )
+  process.stdout.write(outEn)
+
+  const de = parseCanaryDryRun(outDe)
+  const en = parseCanaryDryRun(outEn)
+  const promotionReadyDe = localePromotionReady(de)
+  const promotionReadyEn = localePromotionReady(en)
+  const promotionReady = promotionReadyDe && promotionReadyEn
+  const warningCanaryNotInRanking = activeCanary > 0 && de.canaryRanked === 0 && en.canaryRanked === 0
+
+  if (warningCanaryNotInRanking) {
+    console.warn(
+      "[killermachine-v3.3][WARN] activeCanary>0 but canaryRanked=0 on both locales — deploy city-ranking union, forceRefresh, runbook URLs prüfen."
+    )
+  } else if (de.canaryRanked === 0 && en.canaryRanked === 0) {
+    console.warn("[killermachine-v3.3][WARN] canaryRanked=0 on both locales after sync.")
+  }
+
+  let suggestedNextAction = "hold: eligibility not met on one or both locales (review dry-run)."
+  if (promotionReady) {
+    suggestedNextAction =
+      "Human-Review OK + count ≤15 per locale (or extended gate): run trigger-geo-canary-rollout --mode=live DE then EN (see AGENTS.md §37)."
+    console.log("\n[killermachine-v3.3] PROMOTION SUGGESTED (Human-Gate required):\n", suggestedNextAction)
   }
 
   run("npm run geo:sitemap-guardrail:dry-run")
 
+  const eligible_count = seedOut ? parseEligibleFromSeed(seedOut) : null
   const reportDir = path.join(process.cwd(), "reports")
   if (!fs.existsSync(reportDir)) fs.mkdirSync(reportDir, { recursive: true })
   const safeTs = started.replace(/[:.]/g, "-")
-  const reportPath = path.join(reportDir, `killermachine-v31-${safeTs}.json`)
+  const reportPath = path.join(reportDir, `killermachine-v33-${safeTs}.json`)
   const report = {
     ok: true,
-    version: "v3.1",
+    version: "v3.3",
     mode: dryOnly ? "dry-only" : seedLive ? "with-seed-live" : "observe-plus-seed-dry-run",
     startedAt: started,
     finishedAt: new Date().toISOString(),
@@ -197,13 +260,24 @@ async function main() {
     activeStable,
     canaryLowThreshold: canaryLow,
     qualityFloor,
+    minRankingScore,
     selectedBatch,
     seedAction,
     waveId,
-    note: "Human-Gate: promotion >15 cities. Append AGENTS optional — see §30",
+    eligible_count,
+    de,
+    en,
+    promotionReadyDe,
+    promotionReadyEn,
+    promotionReady,
+    canaryRanked: Math.max(de.canaryRanked, en.canaryRanked),
+    wouldPromoteCount: de.wouldPromoteCount + en.wouldPromoteCount,
+    warningCanaryNotInRanking,
+    suggestedNextAction,
+    note: "No automatic --mode=live. Human-Gate: promotion >15 cities.",
   }
   fs.writeFileSync(reportPath, JSON.stringify(report, null, 2), "utf8")
-  console.log(`\n[killermachine-v3.1] report written: ${reportPath}`)
+  console.log(`\n[killermachine-v3.3] report written: ${reportPath}`)
 }
 
 main().catch((err) => {

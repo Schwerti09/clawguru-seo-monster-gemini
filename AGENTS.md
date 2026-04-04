@@ -60,6 +60,7 @@
 - P2 zehnte Delivery live: `/[lang]/ai-agent-threat-model-template` als indexierbare Category-Seite mit Threat-Model-Bausteinen, Operator-Prompts und internen Links auf `/ai-agent-security`, `/openclaw-security-check`, `/check`, `/methodik`.
 - Debug-Stufe 1 (Re-Run, 03.04.2026): `check:geo-ops-readiness`, `check-geo-rollout-status` (DE/EN, verbose), `check:geo-city-ranking`, `check:geo-index-health` sowie Canary-/Expansion-Dry-Runs (Score 75/70/65/60) ausgeführt; System healthy, aber `wouldPromote`/`wouldActivate` weiterhin leer.
 - Geo Ranking-Pool-Fix (04.04.2026): `app/api/geo/city-ranking` — `MAX_CITY_LIMIT` auf **200**, **`mergeTopCitiesWithCanary`** in `lib/geo-cities.ts` (Union aller `rollout_stage=canary` mit Top-N), Canary-Fingerprint im Response-Cache-Key; Payload-Felder `rankingTopN`, `canaryUnionExtras`. Kurzreferenz **§29.0** in AGENTS.md.
+- Killermachine **v3.1** (04.04.2026): `scripts/killermachine-auto-scale-v3.js` liest **`/api/geo/rollout-status`** (Canary-Count), wählt bei **`activeCanary < 10`** automatisch Sub-Batch **D3 → D4** (State-Datei `reports/killermachine-batch-state.json`), führt **`geo-batch-seed-by-quality`** mit **Quality-Floor ≥ 84** aus (Dry-Run standard, Live nur `--with-seed-live`). **`geo-batch-seed-by-quality.js`:** neue **`BATCHES` D3/D4** + `CITY_META`. Details **§30**.
 
 **Bewusst offen / nächste Engineering-Schritte (SEO-Plan):**
 
@@ -2447,7 +2448,7 @@ git push origin main
 2. **Batch wählen:** nächste Welle **D3 → D4** oder **50er-Liste** (siehe **29.6**) — Reihenfolge: CEE / Südeuropa / UK-Rest gemäß Priorität.
 3. **Auto-Anreicherung:** Batch-SQL oder (wenn vorhanden) `scripts/geo-batch-enrichment-v3.js` — idempotent; sonst manuelle SQL-Blöcke aus **§23/§26** als Vorlage.
 4. **Quality-Gate:** nur Städte mit `avg_quality >= 84` (Matrix) in die Seed-Menge.
-5. **Auto-Seeding (Canary):** `node scripts/geo-batch-seed-by-quality.js --wave-id=... --batch=D1|D2 --quality-floor=84 --mode=dry-run` → Review → `--mode=commit` — für **D3/D4** zuerst `BATCHES` in diesem Skript um die **29.6**-Slugs erweitern (oder separates Seed-SQL).
+5. **Auto-Seeding (Canary):** `node scripts/geo-batch-seed-by-quality.js --wave-id=... --batch=D1|D2|D3|D4 --quality-floor=84 --mode=dry-run` → Review → `--mode=commit` — **D3/D4** sind im Skript hinterlegt; weitere Slugs aus **29.6** bei Bedarf ergänzen (oder separates Seed-SQL).
 6. **Post-Seeding:** `check:geo-rollout-status`, `check-geo-city-ranking` (DE/EN, `limit=120`), **Canary dry-run** DE+EN.
 7. **Promotion:** nur bei non-empty `wouldPromote`; Live nur mit Secret; **>20 Städte → Human-Gate**.
 8. **Sitemap:** `npm run geo:sitemap-guardrail:dry-run` → bei Freigabe `npm run geo:sitemap-guardrail`.
@@ -2553,7 +2554,97 @@ Siehe Repo-Datei — inhaltlich: `execSync`-Kette wie in **29.3**, Schalter `--d
 50. debrecen  
 
 **Der nächste konkrete Schritt ist:**  
-**`npm run killermachine:v3 -- --dry-only`** ausführen, Ergebnis prüfen, dann **nächste Welle** (Matrix-Anreicherung für die **29.6**-Liste oder D3/D4-Batch) + **`geo-batch-seed-by-quality` zuerst im Dry-Run** — erst bei non-empty Canary und grünem Canary-Dry-Run Live-Promotion.
+**`npm run killermachine:v3 -- --dry-only`** ausführen (oder **§30** v3.1 mit automatischer D3/D4-Auswahl), Ergebnis prüfen, dann Matrix-Anreicherung + **`geo-batch-seed-by-quality` Dry-Run** — erst bei non-empty Canary und grünem Canary-Dry-Run Live-Promotion.
+
+---
+
+## §30 – Killermachine v3.1: Intelligenter Auto-Loop mit Batch-Auswahl + Quality-Gate (03.04.2026)
+
+### 30.1 Zusammenfassung
+
+- **Seit §29:** Ranking-Union + Cap **deployt** (`healthy≈49/49`, `totalRanked≈49`); `killermachine-auto-scale-v3.js` lief zunächst nur eine **feste** Befehlskette ohne Entscheidungslogik.
+- **Jetzt (v3.1):** dasselbe Skript ist **API-gestützt**: es liest **`GET /api/geo/rollout-status`** (Bearer-Secret wie `check-geo-rollout-status`) und ermittelt **`activeCanary`**. Liegt die Pipeline unter dem Schwellenwert, wird **automatisch** die nächste Sub-Batch-Kette **D3 → D4** für den **Quality-Gated Seed** gewählt (State-Datei + Override per Env/CLI).
+- **`scripts/geo-batch-seed-by-quality.js`:** **`BATCHES.D3`** (Südeuropa/Iberia/FR) und **`BATCHES.D4`** (CEE/Balkan) inkl. **`CITY_META`** ergänzt — Dry-Run/Commit wie bisher über `--mode`.
+- **Operativ:** Viele Städte sind **stable**, **`activeCanary=0`** ist **normal** — genau dann soll v3.1 **D3-Anreicherung + Matrix** vorbereiten und **Seed Dry-Run** fahren, bis `eligible_count > 0`.
+
+### 30.2 Verbesserter Auto-Loop (v3.1)
+
+**Trigger**
+
+- Wenn **`activeCanary < KILLERMACHINE_CANARY_LOW_THRESHOLD`** (Default **10**) → **Seed-Pfad** aktivieren.
+- Wenn **`activeCanary ≥ threshold`** → kein Auto-Seed; Fokus **Promotion** (Canary dry-run/live), Monitoring, Sitemap.
+
+**Batch-Auswahl (Sub-Batches D3 → D4)**
+
+1. **`KILLERMACHINE_BATCH=D3|D4|D1|D2`** oder **`--batch=D3`** erzwingt eine Welle.
+2. Sonst: **`reports/killermachine-batch-state.json`** Feld **`nextBatch`** (Default **`D3`**).
+3. Nach **erfolgreichem Live-Seed** (`--with-seed-live`, ohne `--dry-only`): State automatisch auf **nächstes** Glied in **`[D3,D4]`** setzen (sofern **`--advance-state-after-live=1`**, Default).
+
+**Ablauf pro Lauf**
+
+1. `check:geo-ops-readiness`
+2. **Rollout-JSON** (intern) + `check:geo-rollout-status --verbose`
+3. `check-geo-city-ranking` DE/EN (OpenClaw-Slugs, `limit=120`)
+4. Canary **dry-run** DE/EN
+5. **Wenn** `activeCanary < threshold`:  
+   `geo-batch-seed-by-quality.js --batch=<selected> --quality-floor=84` — **`mode=dry-run`** (Standard) oder **`commit`** nur mit **`--with-seed-live`**
+6. `geo:sitemap-guardrail:dry-run`
+7. **Report:** `reports/killermachine-v31-<timestamp>.json`
+
+**Auto-Report in AGENTS.md**
+
+- Standard: **nur JSON-Report** (kein blindes Append). Optional später: `--append-agents-summary=1` mit Rate-Limit und Wave-ID.
+
+**Aggressive Safeguards**
+
+- **Quality-Floor ≥ 84** für Seeding (`KILLERMACHINE_QUALITY_FLOOR`).
+- **Human-Gate** bei **Live-Promotion > 15** Städte (manuell im Canary-Rollout-CLI/API).
+- Nach jeder Welle **24h Monitoring** (Traffic, Check-Starts, Ranking-Health).
+
+### 30.3 Technische Umsetzung
+
+- **Skript:** `scripts/killermachine-auto-scale-v3.js` (v3.1-Logik integriert).
+- **Seed-Batches:** `scripts/geo-batch-seed-by-quality.js` — **`D3`:** rome, milan, turin, naples, lisbon, porto, valencia, seville, bilbao, marseille, toulouse, nice — **`D4`:** warsaw, krakow, wroclaw, budapest, bucharest, sofia, athens, thessaloniki, bratislava, zagreb, ljubljana, belgrade.
+- **State:** `reports/killermachine-batch-state.json` — manuell: `node scripts/killermachine-auto-scale-v3.js --write-next-batch=D4`
+
+**Test (empfohlen, nur Dry-Run + Seed-Dry-Run):**
+
+```bash
+npm run killermachine:v3 -- --dry-only
+```
+
+**Live-Seed (nur nach Matrix-Review):**
+
+```bash
+npm run killermachine:v3 -- --with-seed-live
+```
+
+**Umgebungsvariablen (optional)**
+
+- `KILLERMACHINE_CANARY_LOW_THRESHOLD` (default `10`)
+- `KILLERMACHINE_QUALITY_FLOOR` (default `84`)
+- `KILLERMACHINE_BATCH` — erzwingt `D3`/`D4`/…
+
+### 30.4 Nächster operativer Plan
+
+| Schritt | Aktion |
+|---------|--------|
+| 1 | **`npm run killermachine:v3 -- --dry-only`** — prüfen: `eligible_count` für D3; wenn `0` → **Matrix-Anreicherung** für D3-Städte (`geo_variant_matrix`), dann erneut. |
+| 2 | **`npm run killermachine:v3 -- --with-seed-live`** — nur wenn Schritt 1 `eligible_count > 0` und Human-OK. |
+| 3 | Canary **dry-run** → bei non-empty **`wouldPromote`:** **Live-Promotion** in Teilwellen (**≤15** ohne erweiterte Freigabe). |
+| 4 | **24h** KPI → State ggf. **`--write-next-batch=D4`** oder automatisch nach Live-Seed. |
+| 5 | D4 wiederholen (Anreicherung → Dry-Run → Seed → Promotion). |
+
+**Git**
+
+```bash
+git add AGENTS.md scripts/killermachine-auto-scale-v3.js scripts/geo-batch-seed-by-quality.js package.json
+git commit -m "feat(geo): killermachine v3.1 batch-aware loop + D3/D4 seed batches"
+git push origin main
+```
+
+**Der nächste konkrete Schritt ist:**  
+**`npm run killermachine:v3 -- --dry-only`** ausführen und im Output von **`geo-batch-seed-by-quality`** **`eligible_count`** / **`cities_needing_manual_enrichment`** lesen — wenn leer, **D3 zuerst in der Matrix anreichern**, dann erneut Dry-Run, erst danach **`--with-seed-live`**.
 
 ---
 

@@ -59,7 +59,7 @@
 - P2 neunte Delivery live: `/[lang]/executable-runbook-vs-static-blog` als indexierbare Product-Differentiation-Seite mit Vergleich Blog vs Runbook, Transition-Flow und internen Links auf `/runbooks`, `/openclaw`, `/check`, `/methodik`.
 - P2 zehnte Delivery live: `/[lang]/ai-agent-threat-model-template` als indexierbare Category-Seite mit Threat-Model-Bausteinen, Operator-Prompts und internen Links auf `/ai-agent-security`, `/openclaw-security-check`, `/check`, `/methodik`.
 - Debug-Stufe 1 (Re-Run, 03.04.2026): `check:geo-ops-readiness`, `check-geo-rollout-status` (DE/EN, verbose), `check:geo-city-ranking`, `check:geo-index-health` sowie Canary-/Expansion-Dry-Runs (Score 75/70/65/60) ausgeführt; System healthy, aber `wouldPromote`/`wouldActivate` weiterhin leer.
-- Geo Ranking-Pool-Fix (04.04.2026): `app/api/geo/city-ranking` — `MAX_CITY_LIMIT` auf **200**, **`mergeTopCitiesWithCanary`** in `lib/geo-cities.ts` (Union aller `rollout_stage=canary` mit Top-N), Canary-Fingerprint im Response-Cache-Key; Payload-Felder `rankingTopN`, `canaryUnionExtras`. Siehe **AGENTS.md §29**.
+- Geo Ranking-Pool-Fix (04.04.2026): `app/api/geo/city-ranking` — `MAX_CITY_LIMIT` auf **200**, **`mergeTopCitiesWithCanary`** in `lib/geo-cities.ts` (Union aller `rollout_stage=canary` mit Top-N), Canary-Fingerprint im Response-Cache-Key; Payload-Felder `rankingTopN`, `canaryUnionExtras`. Kurzreferenz **§29.0** in AGENTS.md.
 
 **Bewusst offen / nächste Engineering-Schritte (SEO-Plan):**
 
@@ -2415,108 +2415,145 @@ git commit -m "fix(geo): ranking pool includes canary cities + killermachine v3 
 git push origin main
 ```
 
-**Stand §28:** Ursachenanalyse und v3-Spezifikation bleiben Referenz; **die Umsetzung Union + Cap** ist in **§29** dokumentiert und im Code umgesetzt.
+**Stand §28:** Ursachenanalyse (24er-Cap + fehlende Canary-Union) bleibt Referenz; **Umsetzung im Code:** `mergeTopCitiesWithCanary` + Cap 200 — Kurz **§29.0**. **Vollautomatischer Scaling-Loop:** **§29.1 ff.**
 
 ---
 
-## §29 – Ranking-Pool-Fix + Killermachine v3 Auto-Loop (03.04.2026)
+## §29 – Killermachine v3: Vollautomatischer Scaling-Loop (50+ Städte) (03.04.2026)
 
-### 29.1 Exakte Root-Cause-Analyse
+### 29.0 Referenz: Ranking-Pool-Fix (deployt)
 
-1. **`MAX_CITY_LIMIT = 24`** in `app/api/geo/city-ranking/route.ts` — die API kürzte jedes `limit` auf maximal **24** Städte für Runbook-URL-Probes. CLI-Flags wie `--limit=500` wirkten **nicht** auf die tatsächliche Poolgröße.
-2. **Keine Union mit Canary:** `app/api/geo/canary-rollout/route.ts` lädt die Ranking-JSON und schneidet mit `geo_cities` (`rollout_stage = 'canary'`). Standen Canary-Städte **nicht** in den globalen Top-24 (Priority/Population), fehlten sie in `rankedCities` vollständig → **`canaryRanked = 0`**, **`wouldPromote = []`** — unabhängig von Matrix/Seeding.
-3. **`scripts/check-geo-city-ranking.js`** ist nur ein **GET-Diagnostic**; es gibt keinen separaten „Ranking-Refresh“-Pfad außerhalb der API-Logik.
+- **`lib/geo-cities.ts`:** `mergeTopCitiesWithCanary(all, topN)` — Top-N ∪ alle `rollout_stage = 'canary'`.
+- **`app/api/geo/city-ranking/route.ts`:** `MAX_CITY_LIMIT = 200`, Canary-Fingerprint im In-Memory-Cache-Key, Payload `rankingTopN`, `canaryUnionExtras`.
+- **Prod-Signal:** `healthy=49/49`, `totalRanked=49` bei ausreichendem `limit` — Ranking-Pfad für Promotion ist **offen**.
+- Detail-Diff / Historie: Git-Commits `fix(geo): city-ranking union canaries…` + **§28** in diesem Dokument.
 
-### 29.2 Code-Fix `city-ranking` (umgesetzt)
+### 29.1 Zusammenfassung des aktuellen Status
 
-**`lib/geo-cities.ts`**
+- **Ranking:** Union + Cap aktiv → großer Probe-Pool; Canary-Städte werden im Schnitt mit `canary-rollout` sichtbar, sobald sie in der DB auf **canary** stehen und Runbook-URLs **200** liefern.
+- **Pipeline:** typisch **`activeCanary=0`** nach Promotionswellen — **kein Fehler**, sondern idealer Startpunkt für die **nächste Seeding-Welle** (frischer Canary-Pool).
+- **Ziel:** Wellen **50+** Städte mit **Killermachine v3** — Anreicherung → Quality-Gate → Canary-Seeding → Dry-Run → (Human-Gate) Promotion → Monitoring.
 
-- Neue Export-Funktion **`mergeTopCitiesWithCanary(all, topN)`**: liefert `all.slice(0, topN)` plus alle aktiven Einträge mit **`rollout_stage === 'canary'`**, deren `slug` noch nicht in der Slice vorkommt (stabile Reihenfolge: Top-N zuerst, dann Canary-Extras).
+### 29.2 Killermachine v3 – Auto-Loop (Spezifikation)
 
-**`app/api/geo/city-ranking/route.ts`**
+**Trigger (konfigurierbar):**
 
-- **`MAX_CITY_LIMIT`:** `24` → **`200`**.
-- **`getTopCities`** ersetzt durch **`getAllActiveCities()`** + **`mergeTopCitiesWithCanary(all, limit)`**.
-- **Cache-Key:** Suffix `:u` + **SHA-256-Fingerprint** (sortierte Canary-Slugs), damit nach Canary-Seeding nicht eine veraltete 30s-In-Memory-Antwort ohne neue Städte ausgeliefert wird.
-- **Response:** zusätzliche Felder **`rankingTopN`** (effektives Limit), **`canaryUnionExtras`** (Anzahl Städte, die **nur** über die Canary-Union hinzukamen).
+- `activeCanary < 10` **oder**
+- nach Seeding: `wouldPromote` in **zwei** aufeinanderfolgenden Dry-Runs leer bei `activeCanary > 0` → **Stop / Diagnose** (Runbook-HTTP, `minRankingScore`, Matrix), kein blindes Live.
 
-### 29.3 Diff / Patch (Referenz)
+**Ablauf pro Zyklus:**
 
-```diff
---- a/lib/geo-cities.ts
-+++ b/lib/geo-cities.ts
-@@
-+export function mergeTopCitiesWithCanary(all: GeoCity[], topN: number): GeoCity[] {
-+  const n = Math.max(1, Math.min(500, topN))
-+  const top = all.slice(0, n)
-+  const seen = new Set(top.map((c) => c.slug))
-+  const extras = all.filter((c) => c.rollout_stage === "canary" && !seen.has(c.slug))
-+  return [...top, ...extras]
-+}
+1. **Observe:** `check:geo-ops-readiness`, `check:geo-rollout-status --verbose`, optional `check:geo-index-health`.
+2. **Batch wählen:** nächste Welle **D3 → D4** oder **50er-Liste** (siehe **29.6**) — Reihenfolge: CEE / Südeuropa / UK-Rest gemäß Priorität.
+3. **Auto-Anreicherung:** Batch-SQL oder (wenn vorhanden) `scripts/geo-batch-enrichment-v3.js` — idempotent; sonst manuelle SQL-Blöcke aus **§23/§26** als Vorlage.
+4. **Quality-Gate:** nur Städte mit `avg_quality >= 84` (Matrix) in die Seed-Menge.
+5. **Auto-Seeding (Canary):** `node scripts/geo-batch-seed-by-quality.js --wave-id=... --batch=D3|D4|CUSTOM --quality-floor=84 --mode=dry-run` → Review → `--mode=commit`.
+6. **Post-Seeding:** `check:geo-rollout-status`, `check-geo-city-ranking` (DE/EN, `limit=120`), **Canary dry-run** DE+EN.
+7. **Promotion:** nur bei non-empty `wouldPromote`; Live nur mit Secret; **>20 Städte → Human-Gate**.
+8. **Sitemap:** `npm run geo:sitemap-guardrail:dry-run` → bei Freigabe `npm run geo:sitemap-guardrail`.
+9. **Report:** JSON unter `reports/killermachine-v3-<ISO>.json`; optional Kurzblock in AGENTS.md mit `--write-agents=1` (Rate-Limit).
 
---- a/app/api/geo/city-ranking/route.ts
-+++ b/app/api/geo/city-ranking/route.ts
-+import { createHash } from "node:crypto"
--import { getTopCities, type GeoCity } from "@/lib/geo-cities"
-+import { getAllActiveCities, mergeTopCitiesWithCanary, type GeoCity } from "@/lib/geo-cities"
--const MAX_CITY_LIMIT = 24
-+const MAX_CITY_LIMIT = 200
--  const cacheKey = `${locale}:${slug}:${limit}`
-+  const all = await getAllActiveCities()
-+  const canaryFinger = createHash("sha256")
-+    .update(all.filter((c) => c.rollout_stage === "canary").map((c) => c.slug).sort().join("\0"))
-+    .digest("hex").slice(0, 16)
-+  const cacheKey = `${locale}:${slug}:${limit}:u${canaryFinger}`
--  const cities = await getTopCities(limit)
-+  const cities = mergeTopCitiesWithCanary(all, limit)
-+  const canaryUnionExtras = cities.length - Math.min(limit, all.length)
-+  // payload: rankingTopN, canaryUnionExtras
-```
+**Aggressive Safeguards**
 
-### 29.4 Killermachine v3 – Auto-Loop (Spezifikation)
+- Quality-Floor **>= 84** für Seeding.
+- **Human-Gate** bei Live-Promotion **> 20** Städte.
+- Nach jeder Welle **24h Monitoring** (Traffic, Check-Starts, Bounce).
+- **Auto-Stop** bei Quality-Drop (Health-Score, massenhaft `status!=200` in Ranking) — kein weiteres Live-Seeding bis Root-Cause.
 
-- **Trigger:** z. B. `activeCanary < 10` → nächste Batch-Anreicherung + Quality-Gate (`>= 84`) + **Dry-Run-Seeding**; bei wiederholt leerem `wouldPromote` bei `activeCanary > 0` → **kein** blindes Live-Seeding, sondern Ranking/Runbook-HTTP prüfen.
-- **Schritte:** Readiness → Rollout-Status → City-Ranking (jetzt Union+Cap) → Canary **dry-run** → optional `geo-batch-seed-by-quality` → Sitemap-Guardrail → Report (`reports/killermachine-v3-<iso>.json`).
-- **Grundgerüst:** siehe **§28.4** — Datei `scripts/killermachine-auto-scale-v3.js` / `.ts` anlegen, stdout der Checks parsen, `--dry-only` als Default für CI.
+### 29.3 Technische Umsetzung
 
-```js
-/* eslint-disable no-console */
-import { execSync } from "node:child_process"
-function run(cmd) {
-  console.log(`\n>>> ${cmd}`)
-  execSync(cmd, { stdio: "inherit" })
-}
-function main() {
-  const dryOnly = process.argv.includes("--dry-only")
-  run("npm run check:geo-ops-readiness")
-  run("npm run check:geo-rollout-status -- --verbose")
-  run("node scripts/check-geo-city-ranking.js --locale=de --slug=openclaw-risk-2026 --limit=120")
-  run("node scripts/check-geo-city-ranking.js --locale=en --slug=openclaw-exposed --limit=120")
-  run("node scripts/trigger-geo-canary-rollout.js --mode=dry-run --locale=de --slug=openclaw-risk-2026 --limit=120 --minRankingScore=60 --verbose")
-  run("node scripts/trigger-geo-canary-rollout.js --mode=dry-run --locale=en --slug=openclaw-exposed --limit=120 --minRankingScore=60 --verbose")
-  if (dryOnly) return
-  run("npm run geo:sitemap-guardrail:dry-run")
-}
-main()
-```
+**Skript:** `scripts/killermachine-auto-scale-v3.js` (im Repo; siehe unten identisch).
 
-### 29.5 Nächster operativer Plan
+**npm:**
 
-1. **Code-Fix deployen** (Vercel `main`).
-2. **Ranking erneut prüfen** (Prod): `check-geo-city-ranking` mit `--limit=120` — `totalCities`, `canaryUnionExtras` und `healthyCities` lesen.
-3. **Canary dry-run → bei non-empty `wouldPromote`:** Live-Promotion (Secret) in kleinen Wellen; **D1/D2** wie in den Geo-Runbooks.
-4. **v3-Orchestrator** implementieren (Parse + Gates), zunächst nur **Dry-Run** im Cron.
+- `npm run killermachine:v3 -- --dry-only` — nur Guards + Ranking + Canary **dry-run** + Sitemap **dry-run** (Standard für Tests).
+- `npm run killermachine:v3` — wie oben; **ohne** `--dry-only` werden optional **keine** Live-DB-Schritte ausgeführt, bis im Skript `--with-seed-live` gesetzt (explizites Opt-in).
 
-**Git (empfohlener Commit für diesen Fix):**
+**Manueller Start (nur Diagnose, empfohlen):**
 
 ```bash
-git add AGENTS.md lib/geo-cities.ts app/api/geo/city-ranking/route.ts
-git commit -m "fix(geo): city-ranking union canaries + cap 200 for promotion path"
+npm run killermachine:v3 -- --dry-only
+```
+
+### 29.4 Nächster operativer Plan
+
+| Schritt | Aktion |
+|---------|--------|
+| 1 | **Loop dry-only** fahren (`npm run killermachine:v3 -- --dry-only`). |
+| 2 | Nächste **50er-/D3-D4-Anreicherung** (SQL oder Enrichment-Skript) + Matrix-Quality **>= 84**. |
+| 3 | `geo-batch-seed-by-quality` **dry-run** → Review → **commit** (kleine Welle zuerst). |
+| 4 | Canary **dry-run** → bei grün: **Live-Promotion** in Teilwellen; **24h** KPI beobachten. |
+| 5 | Orchestrator erweitern: stdout/JSON parsen, Trigger `activeCanary < 10` automatisch **nur** Dry-Run-Seeding vorschlagen. |
+
+**Git nach Erweiterung:**
+
+```bash
+git add AGENTS.md scripts/killermachine-auto-scale-v3.js package.json
+git commit -m "docs(geo): killermachine v3 scaling loop + auto-scale script"
 git push origin main
 ```
 
+### 29.5 Grundgerüst `scripts/killermachine-auto-scale-v3.js`
+
+Siehe Repo-Datei — inhaltlich: `execSync`-Kette wie in **29.3**, Schalter `--dry-only`, TODO für `reports/`-JSON.
+
+### 29.6 Nächste **50 Städte** (optimierte Reihenfolge, Slugs)
+
+*Priorität: CEE → Südeuropa/IBER → WEU-Rest → Balkan — nur Städte, die typischerweise **noch nicht** in `geo_cities` stehen oder für Wave-2 gedacht sind; vor Seeding gegen DB abgleichen.*
+
+1. warsaw  
+2. krakow  
+3. wroclaw  
+4. lodz  
+5. poznan  
+6. gdansk  
+7. budapest  
+8. bucharest  
+9. sofia  
+10. plovdiv  
+11. athens  
+12. thessaloniki  
+13. rome  
+14. turin  
+15. naples  
+16. bologna  
+17. genoa  
+18. florence  
+19. lisbon  
+20. porto  
+21. valencia  
+22. seville  
+23. malaga  
+24. bilbao  
+25. marseille  
+26. toulouse  
+27. nice  
+28. nantes  
+29. strasbourg  
+30. riga  
+31. tallinn  
+32. vilnius  
+33. bratislava  
+34. zagreb  
+35. ljubljana  
+36. belgrade  
+37. skopje  
+38. sarajevo  
+39. podgorica  
+40. cork  
+41. belfast  
+42. cardiff  
+43. glasgow  
+44. liverpool  
+45. leeds  
+46. bristol  
+47. newcastle  
+48. nottingham  
+49. sheffield  
+50. debrecen  
+
 **Der nächste konkrete Schritt ist:**  
-**Deploy nach Produktion**, dann gegen `https://clawguru.org` die Diagnose mit **`--limit=120`** und OpenClaw-Slugs fahren und **`canaryRanked` / `wouldPromote`** im Canary-Dry-Run verifizieren.
+**`npm run killermachine:v3 -- --dry-only`** ausführen, Ergebnis prüfen, dann **nächste Welle** (Matrix-Anreicherung für die **29.6**-Liste oder D3/D4-Batch) + **`geo-batch-seed-by-quality` zuerst im Dry-Run** — erst bei non-empty Canary und grünem Canary-Dry-Run Live-Promotion.
 
 ---
 

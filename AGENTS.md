@@ -6320,7 +6320,7 @@ Am **T24** **§52.2** mit **Human-Gate** abschließen — **nur bei OK** **§52.
 
 ### 53.1 Zusammenfassung
 
-- **24h** Monitoring **läuft**; **D4** **`eligible_count=0`** bei Seed-**dry-run**, solange die **Matrix** nicht committed ist — **erwartbar**. **Post-Promotion Lock** **aktiv**; **58**/**0** stable/canary; **Vercel** **grün**; **`main`** mind. **`7bc553bed`**.
+- **24h** Monitoring **läuft**; **D4** **`eligible_count=0`** bei Seed-**dry-run**, solange die **Matrix** nicht committed ist — **erwartbar**. **Post-Promotion Lock** **aktiv**; **58**/**0** stable/canary; **Vercel** **grün**; **`main`** mind. **`ce00bb8e6`** (§53-Doku; vorher **`7bc553bed`**).
 - **§53** bündelt die **finale** operatorseitige **Review-Ausführung** (**T24**), die **Entscheidung** über den **D4**-Matrix-**Commit**, und — nach **Coverage** — den **Seed dry-run** sowie eine **explizite Entscheidung**, ob ein Seed-**`--mode=commit`** (separates Gate) sinnvoll ist.
 - **Live** **`--mode=live`** bleibt **ohne** neuen **§46**-**GO** **tabu**.
 

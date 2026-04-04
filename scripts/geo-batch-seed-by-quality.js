@@ -25,6 +25,21 @@ const BATCHES = {
     "madrid",
     "barcelona",
   ],
+  D2: [
+    "london",
+    "manchester",
+    "birmingham",
+    "dublin",
+    "edinburgh",
+    "copenhagen",
+    "stockholm",
+    "oslo",
+    "helsinki",
+    "gothenburg",
+    "malmo",
+    "aarhus",
+    "reykjavik",
+  ],
 }
 
 const CITY_META = {
@@ -41,6 +56,19 @@ const CITY_META = {
   lyon: { name_de: "Lyon", name_en: "Lyon", country_code: "FR", priority: 74, population: 522000 },
   madrid: { name_de: "Madrid", name_en: "Madrid", country_code: "ES", priority: 83, population: 3223000 },
   barcelona: { name_de: "Barcelona", name_en: "Barcelona", country_code: "ES", priority: 81, population: 1620000 },
+  london: { name_de: "London", name_en: "London", country_code: "GB", priority: 96, population: 8980000 },
+  manchester: { name_de: "Manchester", name_en: "Manchester", country_code: "GB", priority: 78, population: 553000 },
+  birmingham: { name_de: "Birmingham", name_en: "Birmingham", country_code: "GB", priority: 76, population: 1150000 },
+  dublin: { name_de: "Dublin", name_en: "Dublin", country_code: "IE", priority: 78, population: 592000 },
+  edinburgh: { name_de: "Edinburgh", name_en: "Edinburgh", country_code: "GB", priority: 74, population: 548000 },
+  copenhagen: { name_de: "Kopenhagen", name_en: "Copenhagen", country_code: "DK", priority: 77, population: 660000 },
+  stockholm: { name_de: "Stockholm", name_en: "Stockholm", country_code: "SE", priority: 79, population: 975000 },
+  oslo: { name_de: "Oslo", name_en: "Oslo", country_code: "NO", priority: 73, population: 709000 },
+  helsinki: { name_de: "Helsinki", name_en: "Helsinki", country_code: "FI", priority: 72, population: 664000 },
+  gothenburg: { name_de: "Goeteborg", name_en: "Gothenburg", country_code: "SE", priority: 68, population: 590000 },
+  malmo: { name_de: "Malmoe", name_en: "Malmo", country_code: "SE", priority: 66, population: 362000 },
+  aarhus: { name_de: "Aarhus", name_en: "Aarhus", country_code: "DK", priority: 64, population: 290000 },
+  reykjavik: { name_de: "Reykjavik", name_en: "Reykjavik", country_code: "IS", priority: 62, population: 140000 },
 }
 
 function parseArgs(argv) {

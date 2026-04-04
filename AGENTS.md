@@ -2288,6 +2288,100 @@ Zuerst den SQL-Boost für `hamburg`, `cologne` und `lyon` ausführen, anschließ
 
 ---
 
+## §28 – Übergang zur vollen Automatisierung: Ranking-Sync + Killermachine v3 Auto-Loop (03.04.2026)
+
+### 28.1 Zusammenfassung des aktuellen Problems
+
+- D2-Seeding mit `floor=84` hat `9` neue Städte erfolgreich in `canary` gesetzt (`activeCanary=9`).
+- Canary-Dry-Runs liefern trotzdem `canaryRanked=0` und `wouldPromote=-`.
+- `geo-city-ranking` zeigt weiterhin den alten 24er-Pool; neue Canary-Städte sind noch nicht im Ranking/Eligibility-Pfad sichtbar.
+- Root-Cause-Hypothese: Ranking-Surface/Eligibility-Recalc läuft nicht automatisch synchron zur DB-Seeding-Welle.
+
+### 28.2 Automatischer Ranking-Sync & Eligibility-Trigger
+
+**Ranking-Sync + Eligibility-Recalc (jetzt ausführen):**
+
+```bash
+node scripts/check-geo-city-ranking.js --locale=de --slug=openclaw-risk-2026 --limit=200
+node scripts/check-geo-city-ranking.js --locale=en --slug=openclaw-exposed --limit=200
+node scripts/trigger-geo-canary-rollout.js --mode=dry-run --locale=de --slug=openclaw-risk-2026 --cities=manchester,birmingham,edinburgh,oslo,helsinki,gothenburg,malmo,aarhus,reykjavik --limit=200 --minRankingScore=65 --verbose
+node scripts/trigger-geo-canary-rollout.js --mode=dry-run --locale=en --slug=openclaw-exposed --cities=manchester,birmingham,edinburgh,oslo,helsinki,gothenburg,malmo,aarhus,reykjavik --limit=200 --minRankingScore=65 --verbose
+```
+
+### 28.3 Killermachine v3 Auto-Loop
+
+**Auto-Reaktionslogik bei kleiner Canary-Pipeline:**
+1. **Erkennung**  
+   Trigger, wenn `activeCanary < 10` oder `wouldPromote == 0` in zwei aufeinanderfolgenden Zyklen.
+2. **Auto-Anreicherung**  
+   Nächste Batch (D1->D2->D3->D4) automatisch per Enrichment-Engine vorbereiten.
+3. **Auto-Quality-Gate**  
+   Nur Städte mit `quality_score >= 84` für Seeding zulassen.
+4. **Auto-Seeding**  
+   Eligible Städte automatisch in `canary` setzen.
+5. **Auto-Post-Seeding-Checks**  
+   `rollout-status`, DE/EN canary dry-run, `sitemap-guardrail` sofort ausführen.
+6. **Auto-Report in AGENTS.md**  
+   Standard-Reportblock mit `eligible_count`, `seeded`, `wouldPromote`, Guardrails, KPI-Delta.
+
+### 28.4 Technische Umsetzung
+
+**Manueller Ranking-Sync-Befehl (Sofortmaßnahme):**
+
+```bash
+node scripts/check-geo-city-ranking.js --locale=de --slug=openclaw-risk-2026 --limit=200 && node scripts/check-geo-city-ranking.js --locale=en --slug=openclaw-exposed --limit=200
+```
+
+**Grundgerüst Orchestrator (`scripts/killermachine-auto-scale.js`):**
+
+```js
+/* eslint-disable no-console */
+import { execSync } from "node:child_process"
+
+function run(cmd) {
+  console.log(`\n>>> ${cmd}`)
+  execSync(cmd, { stdio: "inherit" })
+}
+
+function main() {
+  // 1) Observe current state
+  run("npm run check:geo-rollout-status -- --verbose")
+
+  // 2) Detect small/empty canary pipeline
+  // (real implementation: parse JSON output and thresholds)
+  const shouldScale = true
+  if (!shouldScale) return
+
+  // 3) Ranking sync + eligibility recalc
+  run("node scripts/check-geo-city-ranking.js --locale=de --slug=openclaw-risk-2026 --limit=200")
+  run("node scripts/check-geo-city-ranking.js --locale=en --slug=openclaw-exposed --limit=200")
+
+  // 4) Auto-seed next batch with quality floor >=84
+  run("node scripts/geo-batch-seed-by-quality.js --wave-id=auto-wave-d2 --batch=D2 --quality-floor=84 --mode=commit")
+
+  // 5) Post-checks
+  run("npm run check:geo-rollout-status -- --verbose")
+  run("node scripts/trigger-geo-canary-rollout.js --mode=dry-run --locale=de --slug=openclaw-risk-2026 --limit=200 --minRankingScore=65 --verbose")
+  run("node scripts/trigger-geo-canary-rollout.js --mode=dry-run --locale=en --slug=openclaw-exposed --limit=200 --minRankingScore=65 --verbose")
+  run("npm run geo:sitemap-guardrail:dry-run")
+
+  // 6) TODO: append report section to AGENTS.md automatically
+}
+
+main()
+```
+
+### 28.5 Nächster operativer Plan
+
+- Sofort: Ranking-Sync laufen lassen und Eligibility für die 9 Canary-Städte neu berechnen.
+- Danach: Canary-Städte re-seeden/revalidate und Promotion-Readiness prüfen.
+- Anschließend: Killermachine Auto-Loop aktivieren, um zukünftige Batch-Schritte ohne manuellen Eingriff auszulösen.
+
+**Der nächste konkrete Schritt ist:**
+Jetzt den Ranking-Sync (DE+EN mit `limit=200`) ausführen und direkt danach die Eligibility-Dry-Runs für die 9 Canary-Städte starten.
+
+---
+
 ## §25 – Nachziehen der 3 fehlenden Städte + Promotion der 14 Canary-Städte – Phase 2 Abschluss (03.04.2026)
 
 ### 25.1 Zusammenfassung des aktuellen Status

@@ -2447,7 +2447,7 @@ git push origin main
 2. **Batch wählen:** nächste Welle **D3 → D4** oder **50er-Liste** (siehe **29.6**) — Reihenfolge: CEE / Südeuropa / UK-Rest gemäß Priorität.
 3. **Auto-Anreicherung:** Batch-SQL oder (wenn vorhanden) `scripts/geo-batch-enrichment-v3.js` — idempotent; sonst manuelle SQL-Blöcke aus **§23/§26** als Vorlage.
 4. **Quality-Gate:** nur Städte mit `avg_quality >= 84` (Matrix) in die Seed-Menge.
-5. **Auto-Seeding (Canary):** `node scripts/geo-batch-seed-by-quality.js --wave-id=... --batch=D3|D4|CUSTOM --quality-floor=84 --mode=dry-run` → Review → `--mode=commit`.
+5. **Auto-Seeding (Canary):** `node scripts/geo-batch-seed-by-quality.js --wave-id=... --batch=D1|D2 --quality-floor=84 --mode=dry-run` → Review → `--mode=commit` — für **D3/D4** zuerst `BATCHES` in diesem Skript um die **29.6**-Slugs erweitern (oder separates Seed-SQL).
 6. **Post-Seeding:** `check:geo-rollout-status`, `check-geo-city-ranking` (DE/EN, `limit=120`), **Canary dry-run** DE+EN.
 7. **Promotion:** nur bei non-empty `wouldPromote`; Live nur mit Secret; **>20 Städte → Human-Gate**.
 8. **Sitemap:** `npm run geo:sitemap-guardrail:dry-run` → bei Freigabe `npm run geo:sitemap-guardrail`.

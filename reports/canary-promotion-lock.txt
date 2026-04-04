@@ -1,0 +1,14 @@
+POST-PROMOTION LOCK — ClawGuru geo canary
+==========================================
+Active: YES
+Set: 2026-04-04 (after GO Live)
+Operator: chat-confirmed GO Live
+
+Summary:
+- DE live: promoted turin, naples, lisbon, porto, valencia, seville, bilbao, toulouse, nice (9 cities -> stable)
+- EN live: no-op (global rollout_stage; cities already stable after DE)
+- Post rollout: total=58 activeStable=58 activeCanary=0
+
+Rule: No further --mode=live until full AGENTS.md §46.2–46.3 re-run + Human-Gate.
+
+AGENTS.md: §46.8

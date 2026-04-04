@@ -77,6 +77,7 @@
 - **§44 – Production GO/NO-GO Execution + First Live Canary + Post-Promotion Lock:** Ein Block für **Validation → Decision-Log → Live (GO)** oder **Debug (NO-GO)**; danach **Post-Promotion Lock** (kein zweites Live ohne neuen Lauf), Checks, **24h**, D4/50er. Siehe **AGENTS.md §44**.
 - **§45 – Production GO/NO-GO Execution Log + First Live Canary + Post-Promotion Lock:** **Finale** Execution mit ausführlichem **Decision-Log-Template**, Live bei **GO**, **Lock** dokumentieren; **24h** Monitoring, D4/50er. Siehe **AGENTS.md §45**.
 - **§46 – Final Execution Log + Live Promotion + Post-Promotion Lock & D4 Transition:** Letzter **kanonischer** Runbook-Block für erste Live-Welle + **Lock** + strukturierter Übergang **D4** / **50er** + **24h** Monitoring. Siehe **AGENTS.md §46**.
+- **§46.8 / Post-Promotion Lock (04.04.2026):** Erste **Live**-Canary-Promotion **ausgeführt** (Human-Gate **GO Live**): **DE** `--mode=live` → **9** Städte **`promoted`** → **`stable`**; **EN** zweiter Lauf **0** Promotions (erwartbar: `geo_cities.rollout_stage` ist **global** pro Stadt — nach DE war kein Canary mehr). Endstand **`activeStable=58`**, **`activeCanary=0`**; **LOCK aktiv**; **D4-Transition** + **24h** Monitoring. Siehe **AGENTS.md §46.8**.
 
 **Bewusst offen / nächste Engineering-Schritte (SEO-Plan):**
 
@@ -5261,12 +5262,35 @@ git log -2 --oneline
 # §46.2 … §46.3 … bei GO §46.4 … Lock §46.5 …
 
 git add AGENTS.md
-git commit -m "docs(agents): §46 final execution log + lock + D4 transition"
+git commit -m "docs(agents): §46.8 post-promotion lock + live promotion record 2026-04-04"
 git push origin main
 ```
 
 **Der nächste konkrete Schritt ist:**  
-**Vercel Production grün** abwarten, **§46.2** bis zum Guardrail ausführen, **§46.3** **vollständig** ausfüllen — **nur bei GO** und **Human-Gate** **§46.4**, Post-Checks aus **§46.2**, **§46.5 Lock** setzen und **24h** Monitoring starten, dann **D4** / **50er** laut Tabelle **§46.5**; **§46.7** für **AGENTS**-Push.
+Nach **§46.8** (Lock gesetzt): **24h** Monitoring laufen lassen, dann **D4** (`BATCHES.D4`, Floor **≥85**) laut **§46.5** / **§29.6** — **kein** weiteres **`--mode=live`**, bevor **§46.2**–**§46.3** **neu** durchlaufen und **Human-Gate** erneut liegt.
+
+### 46.8 Post-Promotion Lock — Ausführungsprotokoll (04.04.2026)
+
+**Status: LOCK AKTIV** — kein weiteres Canary-**`--mode=live`** ohne neuen vollständigen **§46.2**-Lauf + **§46.3 GO** + **Human-Gate**.
+
+| Feld | Wert |
+|------|------|
+| **Zeit (UTC)** | `2026-04-04` (Live-Lauf unmittelbar nach Operator-**GO Live**) |
+| **Operator-Gate** | **GO Live** (chat-bestätigt) |
+| **Production** | Vercel **grün**, Base `https://clawguru.org` |
+| **Live DE** | `node scripts/trigger-geo-canary-rollout.js --mode=live --locale=de --slug=openclaw-risk-2026 --limit=120 --minRankingScore=65 --verbose` |
+| **stdout DE** | `promoted=turin,naples,lisbon,porto,valencia,seville,bilbao,toulouse,nice` — **9** Städte |
+| **Live EN** | `node scripts/trigger-geo-canary-rollout.js --mode=live --locale=en --slug=openclaw-exposed --limit=120 --minRankingScore=65 --verbose` |
+| **stdout EN** | `canaryRanked=0`, `promoted=-`, `selected=0` (**ok:** Städte waren nach DE bereits **`stable`**) |
+| **Post `check:geo-rollout-status -- --verbose`** | `rollout total=58 activeStable=58 activeCanary=0 inactiveStable=0 inactiveCanary=0` |
+| **Post `geo:sitemap-guardrail:dry-run`** | `score=100`, `changed=false` |
+| **Technische Notiz** | Canary-Promotion schreibt **`rollout_stage`** in **`geo_cities`** **ohne Locale-Split**; **ein** erfolgreicher **DE**-Live genügt für die **9** Städte — **EN**-Live danach ist **idempotent leer**. |
+
+**D4-Transition (gestartet):**
+
+- [x] **24h** Monitoring-Fenster planen (Traffic, `check_start`, Geo-Routen).
+- [ ] **D4:** Matrix **`BATCHES.D4`** + **`geo-batch-seed-by-quality`** nur **dry-run → commit** nach Review, Floor **≥85** (`scripts/geo-batch-seed-by-quality.js`, **§29.6**).
+- [ ] Nächste **50er**-Staffel nur nach KPI-Check der ersten **24h**.
 
 ---
 

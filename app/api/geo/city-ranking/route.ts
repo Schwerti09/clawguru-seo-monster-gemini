@@ -1,14 +1,16 @@
+import { createHash } from "node:crypto"
 import { NextRequest, NextResponse } from "next/server"
 import { BASE_URL } from "@/lib/config"
 import { DEFAULT_LOCALE, SUPPORTED_LOCALES } from "@/lib/i18n"
-import { getTopCities, type GeoCity } from "@/lib/geo-cities"
+import { getAllActiveCities, mergeTopCitiesWithCanary, type GeoCity } from "@/lib/geo-cities"
 
 export const runtime = "nodejs"
 export const dynamic = "force-dynamic"
 export const maxDuration = 60
 
 const PROBE_TIMEOUT_MS = 8_000
-const MAX_CITY_LIMIT = 24
+/** Hard cap for ranking probes (URL health checks). Canary cities are always unioned in addition to top-N. */
+const MAX_CITY_LIMIT = 200
 const CACHE_TTL_MS = 30_000
 const SAFE_SLUG_RE = /^[a-z0-9-]+$/i
 const responseCache = new Map<string, { expiresAt: number; payload: any }>()
@@ -65,7 +67,19 @@ export async function GET(req: NextRequest) {
 
   const parsedLimit = parseInt(req.nextUrl.searchParams.get("limit") || process.env.GEO_MATRIX_SITEMAP_CITY_LIMIT || "24", 10) || 24
   const limit = Math.max(1, Math.min(MAX_CITY_LIMIT, parsedLimit))
-  const cacheKey = `${locale}:${slug}:${limit}`
+
+  const all = await getAllActiveCities()
+  const canaryFinger = createHash("sha256")
+    .update(
+      all
+        .filter((c) => c.rollout_stage === "canary")
+        .map((c) => c.slug)
+        .sort()
+        .join("\0")
+    )
+    .digest("hex")
+    .slice(0, 16)
+  const cacheKey = `${locale}:${slug}:${limit}:u${canaryFinger}`
   const cached = responseCache.get(cacheKey)
   if (cached && cached.expiresAt > Date.now()) {
     return NextResponse.json(cached.payload, {
@@ -76,7 +90,9 @@ export async function GET(req: NextRequest) {
     })
   }
 
-  const cities = await getTopCities(limit)
+  const cities = mergeTopCitiesWithCanary(all, limit)
+  const topSliceLen = Math.min(limit, all.length)
+  const canaryUnionExtras = cities.length - topSliceLen
   const maxPopulation = Math.max(1, ...cities.map((c) => c.population || 0))
 
   const rankedResults = await Promise.allSettled(
@@ -121,6 +137,8 @@ export async function GET(req: NextRequest) {
     ok: true,
     locale,
     slug,
+    rankingTopN: limit,
+    canaryUnionExtras,
     totalCities: ranked.length,
     healthyCities: healthy,
     healthScore: Math.round((healthy / Math.max(1, ranked.length)) * 100),

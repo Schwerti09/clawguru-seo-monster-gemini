@@ -192,6 +192,19 @@ export async function getTopCities(limit: number): Promise<GeoCity[]> {
   return all.slice(0, safe)
 }
 
+/**
+ * Top-N slice (same order as DB: priority, population) plus every active city in
+ * `rollout_stage = 'canary'` not already in that slice — so `/api/geo/city-ranking` and
+ * canary promotion can see canaries below the global top-N.
+ */
+export function mergeTopCitiesWithCanary(all: GeoCity[], topN: number): GeoCity[] {
+  const n = Math.max(1, Math.min(500, topN))
+  const top = all.slice(0, n)
+  const seen = new Set(top.map((c) => c.slug))
+  const extras = all.filter((c) => c.rollout_stage === "canary" && !seen.has(c.slug))
+  return [...top, ...extras]
+}
+
 export async function invalidateGeoCitiesCache() {
   memCache = null
   await redisDeleteCitiesCache()

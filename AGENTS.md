@@ -81,6 +81,7 @@
 - **§47 – Post-Promotion Lock Confirmation + 24h Monitoring + D4 Preparation:** Lock-Bestätigung, **24h**-KPI-Template, **D4**-SQL (`BATCHES.D4`), Operator-Sequenz Dry→Commit→Promotion nach Monitoring. Siehe **AGENTS.md §47**.
 - **§48 – 24h Monitoring Kickoff + D4 Dry-Run Preparation + Lock Enforcement:** Operativer **Kickoff** nach **§47**: **T0**/KPI unter Lock, **D4** nur **dry-run**/SQL-Bereitschaft, **Lock**-Regeln kompakt; nach **24h**+Review → Matrix-**Commit** → **§46** neu für **live**. Siehe **AGENTS.md §48**.
 - **§49 – 24h Monitoring Active + D4 Dry-Run Execution + Lock Status Report:** Monitoring-**Betriebsphase**, **D4** strikt **nur Dry-Run** + SQL-Vorbereitung, **Lock**-Status — **kein** `commit`/`live` ohne **24h**-KPI-Review und neuen **§46**-**GO**. Siehe **AGENTS.md §49**.
+- **§50 – 24h Monitoring Review + D4 Matrix Commit + Lock Status Update:** Nach **T0→T24** Review-Template; bei **GO** **D4**-Matrix-SQL + Coverage + Seed **dry-run**/**commit**; **Lock** unverändert bis **§46**-**GO** für **live**. Siehe **AGENTS.md §50**.
 
 **Bewusst offen / nächste Engineering-Schritte (SEO-Plan):**
 
@@ -5803,7 +5804,174 @@ git push origin main
 ```
 
 **Der nächste konkrete Schritt ist:**  
-**§49.2** (**T0** + **erste** KPI-Messung) **ausfüllen** und das **24h**-Fenster **bedienen**; bis zum Review-**OK** höchstens **§49.3** **Dry-Run** + Read-Checks — **kein** SQL-**Commit**, **kein** Seed-**commit**, **kein** **live**; danach **§49.7** für **AGENTS**-Push nach Doc-Updates.
+**§49.2** (**T0** + **erste** KPI-Messung) **ausfüllen** und das **24h**-Fenster **bedienen**; bis zum Review-**OK** höchstens **§49.3** **Dry-Run** + Read-Checks — **kein** SQL-**Commit**, **kein** Seed-**commit**, **kein** **live**; danach **§49.7** für **AGENTS**-Push nach Doc-Updates. *(Nach **T24**: **§50** Review + **D4**-Matrix nur bei **OK**.)*
+
+---
+
+## §50 – 24h Monitoring Review + D4 Matrix Commit + Lock Status Update (04.04.2026)
+
+### 50.1 Zusammenfassung
+
+- **24h** Monitoring läuft (**T0** gesetzt, **§49**); **Post-Promotion Lock** **aktiv** (**§46.8**); **`activeStable=58`**, **`activeCanary=0`**; **Vercel** **grün**.
+- **D4**-Seed **dry-run ohne Matrix:** `eligible_count=0` ist **erwartbar**, solange **`geo_variant_matrix`** für **`BATCHES.D4`** noch **leer** ist — kein Indikator für fehlerhaftes Skript.
+- **Jetzt (nach T24):** **§50.2** **Review** ausfüllen — **nur** bei **KPI OK** den **§50.3** Matrix-**Upsert** gegen die DB **committen**, danach **Coverage** + Seed **dry-run** (und erst nach erneutem Gate **`--mode=commit`**). **Live-Promotion** weiterhin **nur** nach **neuem** **§46**-**GO**.
+
+### 50.2 24h Monitoring Review Template (T0 / T24)
+
+```text
+=== §50 — 24h Monitoring REVIEW (T0 vs T24) ===
+Operator: ________________   Review-Datum/Zeit (T24): ________________
+
+--- Rollout-Baseline (Lock) ---
+Erwartung: activeStable=58 activeCanary=0
+T0-Snapshot:  activeStable=_____  activeCanary=_____
+T24-Snapshot: activeStable=_____  activeCanary=_____
+
+--- Traffic ---
+Metrik                    | T0           | T24          | Δ / Kommentar
+--------------------------+--------------+--------------+------------------
+Sessions gesamt           | ____________ | ____________ | ____________
+Sessions Geo-Segment      | ____________ | ____________ | ____________
+Top-3 Pfade               | ____________ | ____________ | ____________
+
+--- Engagement ---
+Bounce %                  | ____________ | ____________ | ____________
+Engaged sessions          | ____________ | ____________ | ____________
+
+--- Funnel ---
+check_start               | ____________ | ____________ | ____________
+runbook-Klicks            | ____________ | ____________ | ____________
+
+--- Geo/Ops city-ranking ---
+T0:  healthy/total = ____________
+T24: healthy/total = ____________
+
+--- ENTSCHEIDUNG ---
+[ ] OK — D4 Matrix-SQL darf nach Human-Review gegen Prod (COMMIT)
+[ ] PROBLEM — STOP: kein D4 Matrix-Commit, kein Seed-commit, Root-Cause: ________________
+
+Human-Gate Review bestätigt: [ ] ja   Initialen: ______   Zeit: ______
+
+Notizen: _________________________________________________________________________
+```
+
+### 50.3 D4 Matrix Commit Block
+
+**Vor dem Commit:** **§50.2** muss **OK** + **Human-Gate** **ja** sein. Optional: in Postgres `BEGIN` → SQL ausführen → `SELECT` Stichprobe → `ROLLBACK` testen → dann erneut **`COMMIT`**.
+
+**D4 SQL-Batch-Upsert** (`BATCHES.D4`, **de**/**en**, **quality ≥85**, idempotent):
+
+```sql
+WITH cities(slug, city_name_de, city_name_en, region_de, region_en, country_code, city_type) AS (
+  VALUES
+    ('warsaw','Warschau','Warsaw','Masowien','Masovia','PL','tech_hub'),
+    ('krakow','Krakau','Krakow','Kleinpolen','Lesser Poland','PL','tech_hub'),
+    ('wroclaw','Breslau','Wroclaw','Niederschlesien','Lower Silesia','PL','industry_kmu'),
+    ('budapest','Budapest','Budapest','Mittelungarn','Central Hungary','HU','tech_hub'),
+    ('bucharest','Bukarest','Bucharest','Bukarest','Bucharest','RO','tech_hub'),
+    ('sofia','Sofia','Sofia','Sofia','Sofia','BG','industry_kmu'),
+    ('athens','Athen','Athens','Attika','Attica','GR','tech_hub'),
+    ('thessaloniki','Thessaloniki','Thessaloniki','Zentralmakedonien','Central Macedonia','GR','industry_kmu'),
+    ('bratislava','Pressburg','Bratislava','Slowakei','Slovakia','SK','industry_kmu'),
+    ('zagreb','Zagreb','Zagreb','Kroatien','Croatia','HR','industry_kmu'),
+    ('ljubljana','Laibach','Ljubljana','Slowenien','Slovenia','SI','industry_kmu'),
+    ('belgrade','Belgrad','Belgrade','Serbien','Serbia','RS','tech_hub')
+),
+locales(locale) AS (VALUES ('de'), ('en'))
+INSERT INTO geo_variant_matrix (
+  locale, base_slug, city_slug, variant_slug, city_name, region_name, country_code,
+  local_title, local_summary, links_json, quality_score, model, updated_at
+)
+SELECT
+  l.locale,
+  CASE WHEN l.locale = 'de' THEN 'openclaw-risk-2026' ELSE 'openclaw-exposed' END,
+  c.slug,
+  CASE WHEN l.locale = 'de' THEN 'openclaw-risk-2026-' || c.slug ELSE 'openclaw-exposed-' || c.slug END,
+  CASE WHEN l.locale = 'de' THEN c.city_name_de ELSE c.city_name_en END,
+  CASE WHEN l.locale = 'de' THEN c.region_de ELSE c.region_en END,
+  c.country_code,
+  CASE WHEN l.locale = 'de' THEN 'OpenClaw Risiko 2026 in ' || c.city_name_de ELSE 'OpenClaw Exposure in ' || c.city_name_en || ' 2026' END,
+  CASE WHEN l.locale = 'de'
+    THEN 'CEE-/Balkan-Welle: wachsende Self-Hosting- und Integrationsflächen — schnelle Check→Runbook→Re-Check-Pfade reduzieren Gateway- und Proxy-Exposures.'
+    ELSE 'CEE / Balkan wave: growing self-hosting and integration surfaces — fast check→runbook→re-check paths reduce gateway and proxy exposures.'
+  END,
+  jsonb_build_array(
+    jsonb_build_object('type','runbook','slug','openclaw-security-check'),
+    jsonb_build_object('type','runbook','slug','moltbot-hardening'),
+    jsonb_build_object('type','runbook','slug','gateway-auth-10-steps'),
+    jsonb_build_object('type','runbook','slug','docker-reverse-proxy-hardening-cheatsheet'),
+    jsonb_build_object('type','runbook','slug','api-key-leak-response-playbook'),
+    jsonb_build_object('type','signal','label', 'd4-cee-' || c.city_type || '-2026')
+  ),
+  CASE WHEN c.city_type = 'tech_hub' THEN 87 ELSE 85 END,
+  'gemini',
+  NOW()
+FROM cities c CROSS JOIN locales l
+ON CONFLICT (locale, variant_slug) DO UPDATE
+SET local_title = EXCLUDED.local_title,
+    local_summary = EXCLUDED.local_summary,
+    links_json = EXCLUDED.links_json,
+    quality_score = EXCLUDED.quality_score,
+    model = EXCLUDED.model,
+    updated_at = NOW();
+```
+
+**Coverage nach Matrix-Commit** (erwartung pro Stadt **de**/**en** je **1** Zeile, **`avg_quality` ≥85**):
+
+```bash
+node -e "try { require('dotenv').config(); require('dotenv').config({ path: '.env.local' }); } catch {} const { Client } = require('pg'); (async () => { const c = new Client({ connectionString: process.env.DATABASE_URL }); await c.connect(); const slugs = ['warsaw','krakow','wroclaw','budapest','bucharest','sofia','athens','thessaloniki','bratislava','zagreb','ljubljana','belgrade']; const q = \"SELECT city_slug, locale, COUNT(*)::int AS variants, ROUND(AVG(quality_score))::int AS avg_quality FROM geo_variant_matrix WHERE city_slug = ANY($1::text[]) AND locale IN ('de','en') GROUP BY city_slug, locale ORDER BY city_slug, locale\"; const r = await c.query(q, [slugs]); console.table(r.rows); await c.end(); })().catch(e => { console.error(e); process.exit(1); });"
+```
+
+**Seed nach Matrix-Commit** (zuerst **dry-run**, dann bei **`eligible_count`** passend + Gate **`--mode=commit`**):
+
+```bash
+node scripts/geo-batch-seed-by-quality.js --wave-id=wave-2026-04-04-d50-d4 --batch=D4 --quality-floor=85 --mode=dry-run
+# bei OK + Human-Gate:
+# node scripts/geo-batch-seed-by-quality.js --wave-id=wave-2026-04-04-d50-d4 --batch=D4 --quality-floor=85 --mode=commit
+```
+
+### 50.4 Lock Status Update
+
+| Feld | Stand |
+|------|--------|
+| **Lock** | **AKTIV** — unverändert (**§46.8**, `reports/canary-promotion-lock.txt`) |
+| **Matrix-/Seed-Commit** | **Erlaubt** nur nach **§50.2 OK** + **Human-Gate** (kein Widerspruch zum Lock) |
+| **`--mode=live`** | **Weiter verboten** ohne **kompletten neuen §46-Zyklus** + dokumentiertes **GO** |
+| **Hinweis** | **D4**-Daten in der Matrix **promotieren** Städte nicht automatisch — **Canary Live** bleibt separat gegated |
+
+### 50.5 Nächster operativer Plan
+
+| Schritt | Aktion |
+|---------|--------|
+| **1** | **T24:** **§50.2** vollständig ausfüllen; **PROBLEM** → **Stop** (kein SQL-Commit). |
+| **2** | Bei **OK:** **§50.3** SQL **COMMIT** → **Coverage**-Node → **Seed** **dry-run**. |
+| **3** | **`eligible_count`** plausibel (typ. **12** Städte) → **`--mode=commit`** nur mit **Human-Gate**. |
+| **4** | **`killermachine:v3 -- --dry-only`**, Canary **dry-run** DE/EN, **`geo:sitemap-guardrail:dry-run`**. |
+| **5** | **Neuer §46** → **GO** → **`--mode=live`** (≤**15**/Locale); danach **50er** (**§29.6**). |
+
+### 50.6 Safeguards
+
+- **Quality-Floor ≥85** (**D4**).  
+- **Human-Gate** bei **>15** Städte **Promotion**.  
+- **Lock** bleibt aktiv; **kein** **`--mode=commit`** (Seed) / **`--mode=live`** (Canary) ohne **24h** **KPI-Review** + (bei **live**) **§46**-**GO**.  
+
+### 50.7 Nächste konkrete Befehle (inkl. Git für §50)
+
+```bash
+# Nach T24 + §50.2 OK — Matrix manuell in DB; dann:
+node -e "try { require('dotenv').config(); require('dotenv').config({ path: '.env.local' }); } catch {} const { Client } = require('pg'); (async () => { const c = new Client({ connectionString: process.env.DATABASE_URL }); await c.connect(); const slugs = ['warsaw','krakow','wroclaw','budapest','bucharest','sofia','athens','thessaloniki','bratislava','zagreb','ljubljana','belgrade']; const q = \"SELECT city_slug, locale, COUNT(*)::int AS variants, ROUND(AVG(quality_score))::int AS avg_quality FROM geo_variant_matrix WHERE city_slug = ANY($1::text[]) AND locale IN ('de','en') GROUP BY city_slug, locale ORDER BY city_slug, locale\"; const r = await c.query(q, [slugs]); console.table(r.rows); await c.end(); })().catch(e => { console.error(e); process.exit(1); });"
+
+node scripts/geo-batch-seed-by-quality.js --wave-id=wave-2026-04-04-d50-d4 --batch=D4 --quality-floor=85 --mode=dry-run
+
+git fetch origin
+git status
+git add AGENTS.md
+git commit -m "docs(agents): §50 monitoring review + D4 matrix + lock update"
+git push origin main
+```
+
+**Der nächste konkrete Schritt ist:**  
+Nach **T24** das **§50.2**-Review **vollständig** ausfüllen — **nur bei OK + Human-Gate** den **§50.3**-**Upsert** in der DB ausführen, **Coverage** prüfen, **Seed** **dry-run** → bei passender **`eligible_count`** **`commit`**; **kein** **`--mode=live`**, bis ein **neuer §46-GO** liegt; **§50.7** für Doku-Push.
 
 ---
 

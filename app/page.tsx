@@ -19,6 +19,7 @@ import WhySection from "@/components/homepage/WhySection"
 import FinalCTASection from "@/components/homepage/FinalCTASection"
 import RoastMyStack from "@/components/roast/RoastMyStack"
 import { getHomepageCroCopy } from "@/lib/homepage-cro-i18n"
+import GeoOpenClawSprintHubSection from "@/components/marketing/GeoOpenClawSprintHubSection"
 
 interface HomeProps {
   dict?: Dictionary
@@ -127,6 +128,11 @@ export default async function Home({ dict, locale }: HomeProps = {}) {
                 </a>
               ))}
             </div>
+            {(safeLocale === "de" || safeLocale === "en") && (
+              <div className="mt-10">
+                <GeoOpenClawSprintHubSection locale={safeLocale} prefix={prefix} />
+              </div>
+            )}
           </div>
         </Container>
       </section>

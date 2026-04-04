@@ -6,6 +6,7 @@ import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/
 import { getCoreSecurityLinks } from "@/lib/core-security-links"
 import { getHomepageCroCopy } from "@/lib/homepage-cro-i18n"
 import { getMoltbotCopy } from "@/lib/landing-pages-i18n"
+import GeoOpenClawSprintHubSection from "@/components/marketing/GeoOpenClawSprintHubSection"
 
 export const revalidate = 60
 
@@ -71,6 +72,8 @@ export default function MoltbotHardeningPage(props: { params: { lang: string } }
               {copy.methodologyLabel}
             </Link>
           </div>
+
+          <GeoOpenClawSprintHubSection locale={locale} prefix={prefix} />
 
           <nav className="text-sm text-zinc-400 flex flex-wrap gap-4 pt-2 border-t border-white/5">
             <Link href={coreLinks.openclaw} className="hover:text-cyan-300">

@@ -6,6 +6,7 @@ import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/
 import { getCoreSecurityLinks } from "@/lib/core-security-links"
 import { getHomepageCroCopy } from "@/lib/homepage-cro-i18n"
 import { getOpenClawCheckCopy } from "@/lib/landing-pages-i18n"
+import GeoOpenClawSprintHubSection from "@/components/marketing/GeoOpenClawSprintHubSection"
 
 export const revalidate = 60
 
@@ -62,6 +63,8 @@ export default function OpenClawSecurityCheckPage(props: { params: { lang: strin
             <p>{copy.sectionBodyA}</p>
             <p>{copy.sectionBodyB}</p>
           </section>
+
+          <GeoOpenClawSprintHubSection locale={locale} prefix={prefix} />
 
           <nav className="text-sm text-zinc-400 flex flex-wrap justify-center gap-4">
             <Link href={coreLinks.methodology} className="hover:text-cyan-300">

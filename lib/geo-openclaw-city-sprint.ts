@@ -31,3 +31,14 @@ export const GEO_OPENCLAW_SPRINT_CITY_LABELS: Record<GeoOpenClawSprintCity, { de
   frankfurt: { de: "Frankfurt am Main", en: "Frankfurt" },
   cologne: { de: "Köln", en: "Cologne" },
 }
+
+/** Crawlable hub links for static geo LPs (`/[lang]/[city]/…`); empty outside `de`/`en`. */
+export function geoOpenClawSprintNavLinks(locale: Locale): { href: string; label: string }[] {
+  if (locale !== "de" && locale !== "en") return []
+  const lang = locale === "de" ? "de" : "en"
+  return GEO_OPENCLAW_SPRINT_CITIES.map((city) => {
+    const href = geoOpenClawSprintPath(locale, city)
+    if (!href) return null
+    return { href, label: GEO_OPENCLAW_SPRINT_CITY_LABELS[city][lang] }
+  }).filter((row): row is { href: string; label: string } => row !== null)
+}

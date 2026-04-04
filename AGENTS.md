@@ -69,6 +69,9 @@
 - **§36 – Union-Fix + v3.2 Live-Validation & Promotion:** Deploy, Ranking-Sync, Eligibility (`canaryRanked`/`wouldPromote`), **danach** kontrollierte Canary→Stable-Promotion (Human-Gate >15), D4/50er-Welle. Siehe **AGENTS.md §36**.
 - **§37 – Live-Deploy Union-Fix + Controlled Promotion + Killermachine v3.3:** Production-Deploy des DB-Canary-Union-Fix, Ranking-Sync, **Promotion-Ready-Flag** im Report, Vorschlag Live-Promotion nur nach Human-Gate; D4/50er-Welle. Siehe **AGENTS.md §37**.
 - **§38 – Live-Deploy + Git Commit/Push + First Controlled Promotion:** Code-Stand festziehen (route + v3.3), Push, Deploy, Ranking-Sync, Dry-Run, Live-Promotion 9er-Canary unter Human-Gate; D4/50er. Siehe **AGENTS.md §38**.
+- **§39 – Post-Deploy Validation + First Live Canary Promotion:** Nach Push **`15ef25b91`** — Vercel-Deploy, Ranking-Sync, v3.3 + Canary-Dry-Run, **`promotionReady`**, Live-Promotion 9 Canary-Städte, D4/50er. Siehe **AGENTS.md §39**.
+- **§40 – Deploy-Wait + Full Validation + First Live Promotion Decision:** Nach **`15ef25b91`** — bewusstes **Deploy-Warten**, vollständige Production-Validierung der **DB-Canary-Union**, **Decision-Gate** (`promotionReady`), dann Live-Promotion oder Abbruch; D4/50er. Siehe **AGENTS.md §40**.
+- **§41 – Vercel-Deploy Validation + GO/NO-GO First Live Promotion:** Production-Check nach Vercel-Rollout **`15ef25b91`**, strikte GO/NO-GO-Kriterien, Live nur bei **GO**; NO-GO → Union/Cache/Runbook-Debug; D4/50er. Siehe **AGENTS.md §41**.
 
 **Bewusst offen / nächste Engineering-Schritte (SEO-Plan):**
 
@@ -4193,7 +4196,356 @@ npm run geo:sitemap-guardrail:dry-run
 - Nach jeder Welle **24h-Monitoring**.
 
 **Der nächste konkrete Schritt ist:**  
-**§38.4** — **`git add` / `commit` / `push`** der drei Dateien ausführen, dann **Deploy abwarten**, **§38.5** + **Dry-Runs** bis **`promotionReady: true`**, danach **§38.7 Schritt 5** (Live-Promotion mit Human-Gate); anschließend **D4** und **50er-Welle**.
+**§38.4** — **`git add` / `commit` / `push`** der drei Dateien ausführen, dann **Deploy abwarten**, **§38.5** + **Dry-Runs** bis **`promotionReady: true`**, danach **§38.7 Schritt 5** (Live-Promotion mit Human-Gate); anschließend **D4** und **50er-Welle**. *(Push erledigt — weiter mit **§39**.)*
+
+---
+
+## §39 – Post-Deploy Validation + First Live Canary Promotion (03.04.2026)
+
+### 39.1 Zusammenfassung
+
+- **Git:** Commit **`15ef25b91`** auf **`main`** ist durch — **`app/api/geo/city-ranking/route.ts`**, **`scripts/killermachine-auto-scale-v3.js`**, **`AGENTS.md`** (Union-Fix + Killermachine **v3.3**).
+- **DB:** **`activeCanary≈9`** nach D3-Seeding (Floor **85**); Production wartet auf **frisches** Ranking mit **DB-Canary-Union** aus dem Deploy.
+- **Ablauf jetzt:** **Vercel-Deploy** des Stands `15ef25b91` abwarten → **Post-Deploy Checks** (Ranking, v3.3 Dry-Run, Canary-Dry-Runs) → **`promotionReady`** prüfen → **Human-Gate** → **`--mode=live`** DE/EN → Post-Checks → **24h** Monitoring → **D4** / **50er-Welle**.
+
+### 39.2 Post-Deploy Checks (vollständige Befehlsliste)
+
+```bash
+# 0) Optional: lokaler Stand = main, keine offenen Geo-Änderungen
+git fetch origin
+git status
+git log -1 --oneline
+
+# 1) Ops-Readiness + Rollout-Snapshot
+npm run check:geo-ops-readiness
+npm run check:geo-rollout-status -- --verbose
+
+# 2) Ranking-Sync (Production-API via Scripts; Secrets wie bisher)
+node scripts/check-geo-city-ranking.js --locale=de --slug=openclaw-risk-2026 --limit=200
+node scripts/check-geo-city-ranking.js --locale=en --slug=openclaw-exposed --limit=200
+
+# 3) Killermachine v3.3 — Dry-Only (schreibt reports/killermachine-v33-*.json)
+npm run killermachine:v3 -- --dry-only
+
+# 4) Canary-Dry-Runs (Eligibility / wouldPromote)
+node scripts/trigger-geo-canary-rollout.js --mode=dry-run --locale=de --slug=openclaw-risk-2026 --limit=120 --minRankingScore=65 --verbose
+node scripts/trigger-geo-canary-rollout.js --mode=dry-run --locale=en --slug=openclaw-exposed --limit=120 --minRankingScore=65 --verbose
+
+# 5) Guardrail (vor Live-Promotion)
+npm run geo:sitemap-guardrail:dry-run
+```
+
+### 39.3 Promotion-Gate (v3.3)
+
+1. **`reports/killermachine-v33-*.json`** (neuester Timestamp) öffnen: **`promotionReady`** muss **`true`** sein (**`promotionReadyDe`** und **`promotionReadyEn`** je **`canaryRanked > 0`** und **`wouldPromoteCount > 0`**).
+2. **Konsolen-Output** der Canary-Dry-Runs: **`canaryRanked`** > 0, **`wouldPromote`** enthält Slugs (kein **`wouldPromote=-`**), konsistent mit den **9** D3-Canary-Städten.
+3. **`warningCanaryNotInRanking`:** Wenn **`true`** bei **`activeCanary > 0`** — **keine** Live-Promotion; Deploy/Runbook-URLs/`forceRefresh` prüfen.
+4. **Human-Gate:** Anzahl Städte in **`wouldPromote`** pro Locale **≤ 15** (oder **explizite** erweiterte Freigabe dokumentieren).
+5. **Erst dann** **`§39.4`** ausführen.
+
+### 39.4 Live-Promotion Befehle (`--mode=live`, Human-Gate)
+
+*Voraussetzung: **`GEO_CANARY_ROLLOUT_SECRET`** (o. ä.) gesetzt, siehe `docs/env-checklist.md`. Kein Live ohne Freigabe nach **§39.3**.*
+
+```bash
+node scripts/trigger-geo-canary-rollout.js --mode=live --locale=de --slug=openclaw-risk-2026 --limit=120 --minRankingScore=65 --verbose
+node scripts/trigger-geo-canary-rollout.js --mode=live --locale=en --slug=openclaw-exposed --limit=120 --minRankingScore=65 --verbose
+```
+
+### 39.5 Nach Live-Promotion (Pflicht)
+
+```bash
+npm run check:geo-rollout-status -- --verbose
+npm run geo:sitemap-guardrail:dry-run
+# Bei Freigabe: live Guardrail wie in docs/geo-seo-ops-view.md
+```
+
+### 39.6 Nächster operativer Plan
+
+| Phase | Aktion |
+|--------|--------|
+| **A** | Vercel-Deploy zu **`15ef25b91`** / aktuellem **`main`** abwarten. |
+| **B** | **§39.2** vollständig ausführen. |
+| **C** | **§39.3** Promotion-Gate bestanden → **§39.4** Live DE/EN. |
+| **D** | **§39.5** Post-Checks + **24h** Monitoring (Traffic, `check_start`, Bounce). |
+| **E** | **D4** Matrix + Seeding Floor **≥85**, **50er-Welle** (§29.6 / `BATCHES.D4`). |
+
+### 39.7 Safeguards
+
+- **Quality-Floor ≥ 85** für neue Seed-Wellen.
+- **Human-Gate** bei Live-Promotion **> 15** Städte (pro Locale dokumentieren).
+- **Kein** Live bei **`promotionReady: false`**, **`warningCanaryNotInRanking`** mit aktivem Canary-Pool, oder leerem **`wouldPromote`**.
+- Nach jeder Welle **24h-Monitoring**.
+
+### 39.8 Nächste konkrete Befehle (inkl. Git-Status)
+
+```bash
+git fetch origin
+git status
+git log -1 --oneline
+
+npm run check:geo-ops-readiness
+npm run check:geo-rollout-status -- --verbose
+node scripts/check-geo-city-ranking.js --locale=de --slug=openclaw-risk-2026 --limit=200
+node scripts/check-geo-city-ranking.js --locale=en --slug=openclaw-exposed --limit=200
+npm run killermachine:v3 -- --dry-only
+node scripts/trigger-geo-canary-rollout.js --mode=dry-run --locale=de --slug=openclaw-risk-2026 --limit=120 --minRankingScore=65 --verbose
+node scripts/trigger-geo-canary-rollout.js --mode=dry-run --locale=en --slug=openclaw-exposed --limit=120 --minRankingScore=65 --verbose
+npm run geo:sitemap-guardrail:dry-run
+
+# Nach Human-Gate nur wenn §39.3 erfüllt:
+node scripts/trigger-geo-canary-rollout.js --mode=live --locale=de --slug=openclaw-risk-2026 --limit=120 --minRankingScore=65 --verbose
+node scripts/trigger-geo-canary-rollout.js --mode=live --locale=en --slug=openclaw-exposed --limit=120 --minRankingScore=65 --verbose
+
+npm run check:geo-rollout-status -- --verbose
+npm run geo:sitemap-guardrail:dry-run
+
+# AGENTS.md §39 dokumentieren nach erfolgreicher Validation:
+git add AGENTS.md
+git commit -m "docs(agents): §39 post-deploy validation + first live canary promotion runbook"
+git push origin main
+```
+
+**Der nächste konkrete Schritt ist:**  
+**Vercel-Deploy** zum Stand **`15ef25b91`** abwarten, dann **§39.2** ausführen; im neuesten **`killermachine-v33-*.json`** und in den Canary-Dry-Runs **`promotionReady`** und **`wouldPromote`** verifizieren — **erst danach** **§39.4** (Live DE/EN) mit **Human-Gate**; abschließend **§39.5** und Planung **D4** / **50er-Welle**. *(Detaillierte **Deploy-Wait / Decision**-Reihenfolge: **§40**.)*
+
+---
+
+## §40 – Deploy-Wait + Full Validation + First Live Promotion Decision (03.04.2026)
+
+### 40.1 Zusammenfassung
+
+- **Git:** **`15ef25b91`** ist auf **`main`** — Union-Fix (**`city-ranking`**) und **Killermachine v3.3** sind ausgeliefert.
+- **Jetzt:** **Vercel** baut und rolled **Production** aus; das ist die **Deploy-Wait-Phase**. Ohne grünen Deploy ist die Validierung gegen die **neue** Union wirkungslos.
+- **Danach:** **Full Validation** gegen Production — prüfen, ob **`ranking.cities`** die **9** Canary-Städten (`activeCanary≈9`) enthält und **`canary-rollout`** **`canaryRanked` > 0** / **`wouldPromote`** liefert.
+- **Decision:** Nur wenn **`promotionReady: true`** (v3.3-Report) **und** Dry-Run-Output plausibel **und** Human-Gate — **Live-Promotion** DE/EN; sonst **STOP** (Diagnose, kein Live).
+
+### 40.2 Post-Deploy Validation Block (vollständig, kopierbar)
+
+*Erst ausführen, wenn das Vercel-Deployment des Commits **`15ef25b91`** (oder aktuelles **`main`**) **„Ready“** ist. Lokale Geo-Secrets wie gewohnt setzen.*
+
+```bash
+# --- Git / Kontext ---
+git fetch origin
+git status
+git log -1 --oneline
+# Erwartung: HEAD entspricht main mit Union-Fix (z. B. 15ef25b91 oder Nachfolger)
+
+# --- Readiness & Rollout ---
+npm run check:geo-ops-readiness
+npm run check:geo-rollout-status -- --verbose
+
+# --- Ranking-Sync (Production; limit=200) ---
+node scripts/check-geo-city-ranking.js --locale=de --slug=openclaw-risk-2026 --limit=200
+node scripts/check-geo-city-ranking.js --locale=en --slug=openclaw-exposed --limit=200
+
+# --- Killermachine v3.3 (Dry-Only; Report unter reports/killermachine-v33-*.json) ---
+npm run killermachine:v3 -- --dry-only
+
+# --- Canary-Dry-Runs (Eligibility) ---
+node scripts/trigger-geo-canary-rollout.js --mode=dry-run --locale=de --slug=openclaw-risk-2026 --limit=120 --minRankingScore=65 --verbose
+node scripts/trigger-geo-canary-rollout.js --mode=dry-run --locale=en --slug=openclaw-exposed --limit=120 --minRankingScore=65 --verbose
+
+# --- Sitemap-Guardrail (vor Live) ---
+npm run geo:sitemap-guardrail:dry-run
+```
+
+### 40.3 Promotion Decision Gate (v3.3)
+
+**Checkliste (alle Punkte = GO; ein FAIL = kein Live):**
+
+| # | Prüfung |
+|---|--------|
+| **1** | Neuester **`reports/killermachine-v33-*.json`**: **`promotionReady === true`** (also **`promotionReadyDe`** und **`promotionReadyEn`** jeweils **true**). |
+| **2** | **`warningCanaryNotInRanking`**: bei **`activeCanary > 0`** muss **`false`** sein — sonst Union/Deploy/Runbook-URLs nachziehen. |
+| **3** | Terminal: **DE**-Dry-Run **`canaryRanked`** > 0, **`wouldPromote`** mit Slugs (nicht `-`). |
+| **4** | Terminal: **EN**-Dry-Run analog. |
+| **5** | Städteanzahl in **`wouldPromote`** pro Locale **≤ 15** **oder** dokumentierte **erweiterte Human-Freigabe**. |
+| **6** | **`suggestedNextAction`** im Report entspricht Promotion-Pfad (optionaler Plausibilitätscheck). |
+
+**Freigabe:** Operativ **„First Live Promotion — APPROVED“** mit Zeitstempel + Initiale dokumentieren (intern/Ticket), dann **§40.4**.
+
+### 40.4 Live-Promotion Befehle (`--mode=live`)
+
+**Human-Gate:** Nur mit gesetztem **`GEO_CANARY_ROLLOUT_SECRET`** (bzw. konfiguriertem Auth laut `docs/env-checklist.md`). **Nicht** ausführen, wenn **§40.3** nicht erfüllt ist.
+
+```bash
+node scripts/trigger-geo-canary-rollout.js --mode=live --locale=de --slug=openclaw-risk-2026 --limit=120 --minRankingScore=65 --verbose
+node scripts/trigger-geo-canary-rollout.js --mode=live --locale=en --slug=openclaw-exposed --limit=120 --minRankingScore=65 --verbose
+```
+
+### 40.5 Nach Live (Pflicht)
+
+```bash
+npm run check:geo-rollout-status -- --verbose
+npm run geo:sitemap-guardrail:dry-run
+```
+
+### 40.6 Nächster operativer Plan
+
+| Phase | Aktion |
+|--------|--------|
+| **Warten** | Vercel-Deploy **grün** (Commit **`15ef25b91`** / aktuelles **`main`**). |
+| **Validieren** | **§40.2** komplett durchlaufen. |
+| **Entscheiden** | **§40.3** — bei **GO** → **§40.4**; bei **NO-GO** → Diagnose (Ranking-JSON, DB Canary, Runbook-200, `forceRefresh`). |
+| **Nach Live** | **§40.5** + **24h** Monitoring. |
+| **Scale** | **D4** + **50er-Welle** (Floor **≥85**, §29.6). |
+
+### 40.7 Safeguards
+
+- **Quality-Floor ≥ 85** für neue Seed-Wellen.
+- **Human-Gate** bei Live-Promotion **> 15** Städte (pro Locale oder gesamt — in der Freigabe festhalten).
+- **Kein** Live ohne erfülltes **§40.3**.
+- Nach jeder Welle **24h-Monitoring**.
+
+### 40.8 Nächste konkrete Befehle (kurz, inkl. Git + Docs)
+
+```bash
+git fetch origin
+git status
+git log -1 --oneline
+
+# … dann kompletten Block aus §40.2 …
+
+# Nach erfolgreicher Promotion / Abschluss der Decision-Phase — §40 in Repo festhalten:
+git add AGENTS.md
+git commit -m "docs(agents): §40 deploy-wait, full validation, first live promotion decision"
+git push origin main
+```
+
+**Der nächste konkrete Schritt ist:**  
+**Vercel-Deploy** abwarten bis Production den Stand **`15ef25b91`** (bzw. aktuelles **`main`**) fährt, dann den **kompletten Block §40.2** ausführen und **§40.3** als **GO/NO-GO** bewerten — **nur bei GO** **§40.4** Live DE/EN; danach **§40.5**, **24h** Monitoring und **D4** / **50er-Welle**. *(Präzise **Vercel / GO-NO-GO**: **§41**.)*
+
+---
+
+## §41 – Vercel-Deploy Validation + GO/NO-GO for First Live Promotion (03.04.2026)
+
+### 41.1 Zusammenfassung
+
+- **Stand:** **`15ef25b91`** ist auf **`main`** (Union-Fix in **`city-ranking`**, **Killermachine v3.3**). **`activeCanary≈9`** (D3-Seeding) liegt in der DB.
+- **Vercel:** **Production-Deploy** dieses Commits läuft oder steht an — bis das Deployment **grün** ist, ist die **DB-Canary-Union** in **`city-ranking`** auf Production **nicht verlässlich** aktiv.
+- **Jetzt:** Nach Deploy **strikte Validation** gegen Production: Ranking enthält Canary-Slugs, **`canaryRanked` / `wouldPromote`** im Dry-Run plausibel (≈ **9** Städte).
+- **Entscheidung:** **GO** → Human-Gate → **Live-Promotion** DE/EN. **NO-GO** → **Union / Response-Cache / Runbook-200 / Deploy-Version** debuggen — **kein** `--mode=live`.
+
+### 41.2 Vollständiger Post-Deploy Validation Block (kopierbar)
+
+*Nur ausführen, wenn **Vercel-Production** den Stand **`15ef25b91`** (oder aktuelles **`main`**) **live** hat. Geo-Secrets wie bei den übrigen Geo-Scripts.*
+
+```bash
+# --- Git / Kontext ---
+git fetch origin
+git status
+git log -1 --oneline
+
+# --- Readiness & Rollout ---
+npm run check:geo-ops-readiness
+npm run check:geo-rollout-status -- --verbose
+
+# --- Ranking-Sync (Production-API, limit=200) ---
+node scripts/check-geo-city-ranking.js --locale=de --slug=openclaw-risk-2026 --limit=200
+node scripts/check-geo-city-ranking.js --locale=en --slug=openclaw-exposed --limit=200
+
+# --- Killermachine v3.3 (Dry-Only → reports/killermachine-v33-*.json) ---
+npm run killermachine:v3 -- --dry-only
+
+# --- Canary-Dry-Runs ---
+node scripts/trigger-geo-canary-rollout.js --mode=dry-run --locale=de --slug=openclaw-risk-2026 --limit=120 --minRankingScore=65 --verbose
+node scripts/trigger-geo-canary-rollout.js --mode=dry-run --locale=en --slug=openclaw-exposed --limit=120 --minRankingScore=65 --verbose
+
+# --- Guardrail vor Live ---
+npm run geo:sitemap-guardrail:dry-run
+```
+
+### 41.3 Promotion Decision Gate (v3.3) — exakte GO/NO-GO Kriterien
+
+**GO** — *alle* unten erfüllt; dann **§41.4** erst nach dokumentiertem **Human-Gate** (≤ **15** Städte pro Locale oder Freigabe):
+
+| ID | Kriterium | Erwartung |
+|----|-----------|-----------|
+| **G1** | Neuestes **`reports/killermachine-v33-*.json`**: **`promotionReady`** | **`true`** |
+| **G2** | **`promotionReadyDe`** | **`true`** |
+| **G3** | **`promotionReadyEn`** | **`true`** |
+| **G4** | **`warningCanaryNotInRanking`** bei **`activeCanary > 0`** (laut Rollout-JSON/`check-geo-rollout-status`) | **`false`** |
+| **G5** | Stdout Canary-Dry-Run **DE**: **`canaryRanked`** | **> 0** |
+| **G6** | Stdout Canary-Dry-Run **DE**: **`wouldPromote`** | nicht **`-`**, nicht leer (Slug-Liste) |
+| **G7** | Stdout Canary-Dry-Run **EN**: **`canaryRanked`** | **> 0** |
+| **G8** | Stdout Canary-Dry-Run **EN**: **`wouldPromote`** | nicht **`-`**, nicht leer |
+
+**NO-GO** — *mindestens eine* dieser Bedingungen:
+
+| ID | Auslöser |
+|----|-----------|
+| **N1** | **`promotionReady !== true`** oder **`promotionReadyDe`** / **`promotionReadyEn`** fehlt bzw. **`false`** |
+| **N2** | **`activeCanary > 0`** **und** **`warningCanaryNotInRanking === true`** |
+| **N3** | **DE** oder **EN**: **`canaryRanked === 0`** **oder** **`wouldPromote === '-'`** / leer |
+| **N4** | **`wouldPromoteCount`** pro Locale **> 15** ohne **explizite** dokumentierte Freigabe |
+| **N5** | Ops-Readiness / Guardrail **rot** oder Server-**5xx** bei Ranking/Canary-API |
+
+**NO-GO — typische Debug-Reihenfolge (ohne Live):**
+
+1. Vercel: **tatsächlich** **`15ef25b91`** / neuer **`main`** auf Production?  
+2. **`city-ranking`** Response: Canary-Slugs in **`cities`**? Optional **`forceRefresh=1`** (wenn vom Client unterstützt).  
+3. Runbook-URLs **`/…/runbook/openclaw-risk-2026-{city}`** / **`openclaw-exposed-{city}`** → **200** für Canary-Städte?  
+4. DB: **`geo_cities.rollout_stage = 'canary'`** für die erwarteten Slugs?  
+5. **`getAllActiveCities`**. Mem-TTL (**`MEM_TTL_MS`**) — bei Zweifel Zeit abwarten oder Deploy; Union kommt zusätzlich aus **DB-Query** in der Route.
+
+### 41.4 Live-Promotion Befehle (`--mode=live`)
+
+**Human-Gate:** **`GEO_CANARY_ROLLOUT_SECRET`** (bzw. Auth laut `docs/env-checklist.md`) **muss** gesetzt sein. **Nur bei GO laut §41.3.** Kein Live bei **NO-GO**.
+
+```bash
+node scripts/trigger-geo-canary-rollout.js --mode=live --locale=de --slug=openclaw-risk-2026 --limit=120 --minRankingScore=65 --verbose
+node scripts/trigger-geo-canary-rollout.js --mode=live --locale=en --slug=openclaw-exposed --limit=120 --minRankingScore=65 --verbose
+```
+
+### 41.5 Nach Live (Pflicht)
+
+```bash
+npm run check:geo-rollout-status -- --verbose
+npm run geo:sitemap-guardrail:dry-run
+```
+
+### 41.6 Nächster operativer Plan
+
+| Schritt | Aktion |
+|---------|--------|
+| **1** | **Vercel-Deploy** abwarten (**Production = grün**). |
+| **2** | **§41.2** vollständig ausführen. |
+| **3** | **§41.3** — **GO** oder **NO-GO** dokumentieren. |
+| **4** | **GO** → **Human-Gate** → **§41.4**. **NO-GO** → **§41.3** Debug-Liste, **kein** Live. |
+| **5** | **§41.5** + **24h** Monitoring. |
+| **6** | **D4** / **50er-Welle** (Floor **≥85**). |
+
+### 41.7 Safeguards
+
+- **Quality-Floor ≥ 85** für neue Seed-Wellen.
+- **Human-Gate** bei Live-Promotion **> 15** Städte (pro Locale oder gesamt — schriftlich festhalten).
+- **Kein** Live ohne **GO** laut **§41.3**.
+- Nach jeder Welle **24h-Monitoring**.
+
+### 41.8 Nächste konkrete Befehle (inkl. Git-Status)
+
+```bash
+git fetch origin
+git status
+git log -1 --oneline
+
+# vollständiger Block §41.2, dann GO/NO-GO laut §41.3
+
+# Nur bei GO + Human-Gate:
+node scripts/trigger-geo-canary-rollout.js --mode=live --locale=de --slug=openclaw-risk-2026 --limit=120 --minRankingScore=65 --verbose
+node scripts/trigger-geo-canary-rollout.js --mode=live --locale=en --slug=openclaw-exposed --limit=120 --minRankingScore=65 --verbose
+
+npm run check:geo-rollout-status -- --verbose
+npm run geo:sitemap-guardrail:dry-run
+
+git add AGENTS.md
+git commit -m "docs(agents): §41 vercel validation + GO-NO-GO first live promotion"
+git push origin main
+```
+
+**Der nächste konkrete Schritt ist:**  
+**Vercel-Production** bis **grünen** Deploy von **`15ef25b91`** bringen, dann **§41.2** laufen lassen und **§41.3** strikt auswerten — **nur bei vollständigem GO** nach **Human-Gate** **§41.4** ausführen; bei **NO-GO** die Debug-Kette in **§41.3** abarbeiten **ohne** Live; danach **§41.5** und **D4** / **50er-Welle**.
 
 ---
 

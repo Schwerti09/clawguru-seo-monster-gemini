@@ -46,6 +46,7 @@ export async function POST(req: NextRequest) {
   rankingUrl.searchParams.set("locale", locale)
   rankingUrl.searchParams.set("slug", slug)
   rankingUrl.searchParams.set("limit", String(limit))
+  rankingUrl.searchParams.set("forceRefresh", "1")
   const rankingRes = await fetch(rankingUrl.toString(), {
     cache: "no-store",
     signal: AbortSignal.timeout(12_000),

@@ -111,6 +111,7 @@
 - **§77 – 24h Monitoring Review Execution + D4 Matrix Commit + Seed Dry-Run Decision:** Fortlaufendes Runbook; Wave **d77**; gleiche Gates wie **§53**/**§54**/**§55**/**§56**/**§57**/**§58**/**§59**/**§60**/**§61**/**§62**/**§63**/**§64**/**§65**/**§66**/**§67**/**§68**/**§69**/**§70**/**§71**/**§72**/**§73**/**§74**/**§75**/**§76**. Siehe **AGENTS.md §77**.
 - **§78 – 24h Monitoring Review Execution + D4 Matrix Commit + Seed Dry-Run Decision:** Fortlaufendes Runbook; Wave **d78**; gleiche Gates wie **§53**/**§54**/**§55**/**§56**/**§57**/**§58**/**§59**/**§60**/**§61**/**§62**/**§63**/**§64**/**§65**/**§66**/**§67**/**§68**/**§69**/**§70**/**§71**/**§72**/**§73**/**§74**/**§75**/**§76**/**§77**. Siehe **AGENTS.md §78**.
 - **§79 – 24h Monitoring Review Execution + D4 Matrix Commit + Seed Dry-Run Decision:** Fortlaufendes Runbook; Wave **d79**; gleiche Gates wie **§53**/**§54**/**§55**/**§56**/**§57**/**§58**/**§59**/**§60**/**§61**/**§62**/**§63**/**§64**/**§65**/**§66**/**§67**/**§68**/**§69**/**§70**/**§71**/**§72**/**§73**/**§74**/**§75**/**§76**/**§77**/**§78**. Siehe **AGENTS.md §79**.
+- **§80 – Killermachine v2: Self-Healing + Trust-Anchor + D4 Matrix Commit Decision:** Wave **d80**; erweitertes Review mit Self-Healing-/Trust-Gates; D4-SQL mit **city-aware-compliance**-Signal; Handoff D4 + v2-Blueprint. Siehe **AGENTS.md §80**.
 
 **Bewusst offen / nächste Engineering-Schritte (SEO-Plan):**
 
@@ -10611,6 +10612,7 @@ node scripts/geo-batch-seed-by-quality.js --wave-id=wave-2026-04-04-d79-d4 --bat
 5. Seed-commit-Entscheidung im Template dokumentieren
 6. Bei PROBLEM → Debug + kein Write
 7. Git-Doku-Push (§79.7)
+8. **Killermachine v2 / d80 / Self-Healing-Gate:** **§80** (SQL mit City-Aware + Trust-Anchor, Wave `d80`)
 
 ### 79.6 Safeguards
 
@@ -10633,7 +10635,166 @@ git push origin main
 ```
 
 Der nächste konkrete Schritt ist:
-T24: §79.2 vollständig ausfüllen — bei Matrix-OK §79.3 (SQL → Coverage via ops-d4-coverage-check.js → Seed dry-run mit wave-2026-04-04-d79-d4), Seed-commit-Entscheidung im Template; bei PROBLEM kein Write; --mode=live nur nach §46-GO; nach Doc-Änderung §79.7 (AGENTS-Push).
+T24: §80.2 vollständig ausfüllen (inkl. Self-Healing Checks) — bei OK §80.3 (SQL → Coverage → Seed dry-run `wave-2026-04-04-d80-d4`), Seed-commit-Entscheidung; bei PROBLEM kein Write; `--mode=live` nur nach neuem §46-GO; nach Doc-Änderung §80.7 (AGENTS-Push).
+
+---
+
+## §80 – Killermachine v2: Self-Healing + Trust-Anchor Integration + D4 Matrix Commit Decision (05.04.2026)
+
+### 80.1 Zusammenfassung
+
+24h Monitoring läuft; D4 Seed dry-run (`wave-2026-04-04-d79-d4`) zeigt weiterhin `eligible_count: 0` (Matrix-Commit in Prod noch ausstehend, sofern nicht separat erledigt).  
+Post-Promotion Lock (**§46.8**) bleibt aktiv.  
+`activeStable=58`, `activeCanary=0`, Vercel grün, Git-HEAD mit `git log -1 --oneline` prüfen.
+
+Dieser Block verdichtet **Killermachine v2**-Richtung mit der laufenden **D4**-Entscheidung:
+
+- **Self-Healing Guardrails:** Qualitäts- und Konsistenz-Checks der Matrix vor Commit (Checkliste **§80.2**; Ausbaustufe: Skript-/Agenten-Automatisierung im Repo).
+- **Trust-Anchor Framing:** „Kein Pentest“, ausführbare Runbooks, klare Erwartungshaltung in **local_summary** / Review-Gate.
+- **City-Aware Intelligence:** Zusätzliches **`links_json`**-Signal `city-aware-compliance-{country_code}-2026` pro D4-Stadt.
+
+### 80.2 24h Monitoring Review Execution
+
+Review-Template (T0 vs T24 + Self-Healing Gate):
+
+```text
+=== §80 — 24h REVIEW + Self-Healing Gate ===
+Operator: ________________ T24 (ISO): ________________
+--- Rollout (Lock) ---
+T0 activeStable / Canaries: _____ / _____
+T24 activeStable / Canaries: _____ / _____
+--- Traffic & Funnel ---
+Sessions gesamt | T0: _____ | T24: _____
+Geo-Segment     | T0: _____ | T24: _____
+check_start / runbook-Klicks: _____ / _____
+--- Self-Healing Checks (neu) ---
+Matrix-Qualität ≥85 für alle D4-Städte: [ ] Ja [ ] Nein
+Runbook-URLs 200 OK: [ ] Ja [ ] Nein
+Trust-Anchor Framing vorhanden: [ ] Ja [ ] Nein
+--- Entscheidung ---
+Gesamt: OK / PROBLEM _______________
+Human-Gate (GO / NO-GO): _______________
+```
+
+### 80.3 D4 Matrix Commit Block + v2 Guardrails
+
+Fertiger D4 SQL-Batch-Upsert (idempotent, **BATCHES.D4**, quality ≥85) mit **City-Aware**-Signal und **Trust-Anchor** in `local_summary` (DE/EN):
+
+```sql
+BEGIN;
+WITH cities(slug, city_name_de, city_name_en, region_de, region_en, country_code, city_type) AS (
+  VALUES
+    ('warsaw','Warschau','Warsaw','Masowien','Masovia','PL','tech_hub'),
+    ('krakow','Krakau','Krakow','Kleinpolen','Lesser Poland','PL','tech_hub'),
+    ('wroclaw','Breslau','Wroclaw','Niederschlesien','Lower Silesia','PL','industry_kmu'),
+    ('budapest','Budapest','Budapest','Budapest','Budapest','HU','tech_hub'),
+    ('bucharest','Bukarest','Bucharest','Bukarest','Bucharest','RO','tech_hub'),
+    ('sofia','Sofia','Sofia','Sofia','Sofia','BG','tech_hub'),
+    ('athens','Athen','Athens','Attika','Attica','GR','tech_hub'),
+    ('thessaloniki','Thessaloniki','Thessaloniki','Zentralmakedonien','Central Macedonia','GR','industry_kmu'),
+    ('bratislava','Bratislava','Bratislava','Bratislava','Bratislava','SK','tech_hub'),
+    ('zagreb','Zagreb','Zagreb','Zagreb','Zagreb','HR','tech_hub'),
+    ('ljubljana','Ljubljana','Ljubljana','Ljubljana','Ljubljana','SI','tech_hub'),
+    ('belgrade','Belgrad','Belgrade','Belgrad','Belgrade','RS','tech_hub')
+),
+locales(locale) AS (VALUES ('de'), ('en'))
+INSERT INTO geo_variant_matrix (
+  locale, base_slug, city_slug, variant_slug, city_name, region_name, country_code,
+  local_title, local_summary, links_json, quality_score, model, updated_at
+)
+SELECT
+  l.locale,
+  CASE WHEN l.locale = 'de' THEN 'openclaw-risk-2026' ELSE 'openclaw-exposed' END,
+  c.slug,
+  CASE WHEN l.locale = 'de' THEN 'openclaw-risk-2026-' || c.slug ELSE 'openclaw-exposed-' || c.slug END,
+  CASE WHEN l.locale = 'de' THEN c.city_name_de ELSE c.city_name_en END,
+  CASE WHEN l.locale = 'de' THEN c.region_de ELSE c.region_en END,
+  c.country_code,
+  CASE WHEN l.locale = 'de'
+    THEN 'OpenClaw Risiko 2026 in ' || c.city_name_de || ': Exposures priorisieren und direkt härten'
+    ELSE 'OpenClaw Exposure in ' || c.city_name_en || ' 2026: prioritize edge risk and harden fast'
+  END,
+  CASE WHEN l.locale = 'de'
+    THEN 'D4-CEE-Balkan-Welle: hohe Self-Hosting-Dichte + schnelle Deploy-Cadence → Edge-Exposure. Runbooks: OpenClaw Check, Moltbot Hardening, Gateway Auth, Docker Proxy, API-Key Leak Response. Hinweis: kein Pentest — Check und Runbooks liefern heuristische, ausführbare nächste Schritte.'
+    ELSE 'D4 CEE/Balkan wave: high self-hosting density + fast deploy cadence → edge exposure. Runbooks: OpenClaw check, Moltbot hardening, gateway auth, Docker proxy, API key leak response. Not a pentest — check and runbooks give heuristic, executable next steps.'
+  END,
+  '[
+    {"type":"runbook","slug":"openclaw-security-check","label":"OpenClaw Security Check"},
+    {"type":"runbook","slug":"moltbot-hardening","label":"Moltbot Hardening"},
+    {"type":"runbook","slug":"gateway-auth-10-steps","label":"Gateway Auth 10 Steps"},
+    {"type":"runbook","slug":"docker-reverse-proxy-hardening-cheatsheet","label":"Docker Reverse Proxy Hardening"},
+    {"type":"runbook","slug":"api-key-leak-response-playbook","label":"API Key Leak Response"},
+    {"type":"signal","label":"d4-cee-' || c.city_type || '-2026"},
+    {"type":"signal","label":"city-aware-compliance-' || c.country_code || '-2026"}
+  ]'::jsonb,
+  CASE WHEN c.city_type = 'tech_hub' THEN 87 ELSE 85 END,
+  'gemini',
+  NOW()
+FROM cities c CROSS JOIN locales l
+ON CONFLICT (locale, variant_slug) DO UPDATE
+SET local_title = EXCLUDED.local_title,
+    local_summary = EXCLUDED.local_summary,
+    links_json = EXCLUDED.links_json,
+    quality_score = EXCLUDED.quality_score,
+    model = EXCLUDED.model,
+    updated_at = NOW();
+COMMIT;
+```
+
+Coverage + Self-Healing Check (bestehendes Script):
+
+```bash
+node scripts/ops-d4-coverage-check.js
+```
+
+Seed dry-run (Wave **d80**):
+
+```bash
+node scripts/geo-batch-seed-by-quality.js --wave-id=wave-2026-04-04-d80-d4 --batch=D4 --quality-floor=85 --mode=dry-run
+```
+
+### 80.4 Lock Status Reminder & v2 Upgrade
+
+| Regel | Inhalt |
+|---|---|
+| Lock | AKTIV — **§46.8** |
+| Matrix / Seed commit | Nur nach **§80.2** Review + Human-Gate + Self-Healing-Checks (soweit anwendbar) |
+| Live-Promotion | Nur nach neuem **§46**-GO |
+
+**v2:** Ab **§80** ist das **Self-Healing Gate** fester Bestandteil der D4-Commit-Kette (operativ: **§80.2**; Zielbild: ergänzende Automatisierung in Skripten/Orchestrator, ohne Live-Promotion ohne **§46**).
+
+### 80.5 Nächster operativer Plan
+
+1. **§80.2** Review + Self-Healing Checks ausfüllen  
+2. Bei OK + Human-Gate → D4-Matrix-SQL **COMMIT** in Prod-DB  
+3. **Coverage** (`ops-d4-coverage-check.js`)  
+4. Seed dry-run (**d80**)  
+5. Seed-commit-Entscheidung dokumentieren  
+6. Git-Push (**§80.7**)  
+7. Danach: Killermachine **v2**-Blueprint in **AGENTS.md** und Skripten weiter ausarbeiten (Self-Healing-/Trust-Checks als maschinenlesbare Gates)
+
+### 80.6 Safeguards (erweitert)
+
+- Quality-Floor **≥ 85** + neues **city-aware-compliance**-Signal in **links_json**  
+- Human-Gate + **Self-Healing Check** vor Matrix-/Seed-Commit  
+- Post-Promotion Lock aktiv  
+- **„Not a Pentest“**-Framing in neuen/aktualisierten Matrix-Texten und Runbook-Positionierung beibehalten  
+- Kein `--mode=commit` / `--mode=live` ohne vollständiges Review + **§46**-GO für Live-Promotion  
+
+### 80.7 Nächste konkrete Befehle (inkl. Git für §80)
+
+```bash
+node scripts/ops-d4-coverage-check.js
+node scripts/geo-batch-seed-by-quality.js --wave-id=wave-2026-04-04-d80-d4 --batch=D4 --quality-floor=85 --mode=dry-run
+git fetch origin
+git status
+git add AGENTS.md
+git commit -m "docs(agents): §80 killermachine v2 self-healing trust-anchor D4 d80"
+git push origin main
+```
+
+Der nächste konkrete Schritt ist:
+T24: **§80.2** vollständig ausfüllen (inkl. neuer Self-Healing Checks) — bei OK **§80.3** (SQL → Coverage → Seed dry-run **d80**), dann Seed-commit-Entscheidung; bei PROBLEM kein Write; `--mode=live` nur nach neuem **§46**-GO; nach Doc-Änderung **§80.7** (AGENTS-Push).
 
 ---
 

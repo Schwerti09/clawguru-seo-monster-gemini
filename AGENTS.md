@@ -10488,7 +10488,7 @@ T24: §79.2 vollständig ausfüllen — bei Matrix-OK §79.3 (SQL → Coverage v
 
 24h Monitoring läuft weiter; D4 Seed dry-run (`wave-2026-04-04-d78-d4`) zeigt `eligible_count: 0`, `below_floor_count: 12` – alle 12 D4-Städte benötigen noch Matrix-Anreicherung (erwartet, solange kein COMMIT erfolgt).  
 Post-Promotion Lock (§46.8) bleibt aktiv.  
-`activeStable=58`, `activeCanary=0`, Vercel grün, Git HEAD = `1c576164d` (bzw. aktueller Stand nach letztem Push, z. B. `e7e945cdc`).  
+`activeStable=58`, `activeCanary=0`, Vercel grün, Git-HEAD lokal mit `git log -1 --oneline` prüfen (Referenz vor §79: `1c576164d`).  
 §79 ist die nächste T24-Iteration derselben Runbook-Kette.  
 Ohne 24h KPI-Review + Human-Gate kein Matrix/Seed-Commit; ohne neuen §46-GO kein `--mode=live`.  
 **Hinweis:** Untracked Artefakte unter `reports/` und ältere `ops-*`-Skripte sind operativ harmlos und können später in einem separaten Cleanup-Commit mitgenommen werden; **AGENTS.md** bleibt die Single Source of Truth für das Runbook.

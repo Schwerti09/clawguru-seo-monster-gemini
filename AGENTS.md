@@ -25,7 +25,7 @@
 **Bereits stark umgesetzt (nicht erschöpfend):**
 
 - Redirect-Härtung abgeschlossen: Legacy-Runbook-URLs `/runbook/openclaw-risk-2026-{city}` und `/{lang}/runbook/openclaw-risk-2026-{city}` werden früh in der Middleware per **301** locale-aware auf `/{locale}/{city}/openclaw-risk-2026` konsolidiert (Loop-Protection + lowercase city normalisierung).
-- D4 ist in **Final Activation**: letzter manueller Gate-Block ist **§106**; ab danach gilt automatisierter Wellenmodus (siehe „Killermachine v3 – Automated Wave Processing“).
+- D4 ist in **Final Activation**: letzter manueller Gate-Block ist **§106**; für **D5+** ist der automatisierte Wellenmodus aktiv (siehe „Killermachine v3 – Automated Wave Processing“).
 
 - Next.js App Router, **15 Locales** (`lib/i18n.ts`), Middleware, `localeAlternates` / **`buildLocalizedAlternates`** für korrekte Canonicals + hreflang.
 - Geo-Living Matrix (Geo-Varianten, Qualität, DB `geo_variant_matrix`, Ops-Skripte, Canary → Stable, `noindex`/Sitemap-Logik wo definiert).
@@ -6412,7 +6412,7 @@ Ab diesem Punkt ist der Standardmodus fuer Geo-Wellen automatisiert; manuelle En
 - Pipeline:
   1. Matrix/Coverage check
   2. Seed dry-run (`geo-batch-seed-by-quality`)
-  3. **Wenn `eligible_count > 0` -> auto seed commit** fuer die Welle
+  3. **Wenn Dry-Run erfolgreich ist und `eligible_count > 0` bei `quality >= 85` -> automatischer Seed-Commit** fuer die Welle
 - Wenn `eligible_count == 0`: kein commit, nur Report mit fehlenden Signalen.
 
 ### 2) Automatic Coverage + Seed Dry-Run
@@ -6436,6 +6436,7 @@ Ab diesem Punkt ist der Standardmodus fuer Geo-Wellen automatisiert; manuelle En
   - canary/promotion readiness
 - Bei roten Checks: auto-create follow-up task mit Root-Cause-Hinweis, kein Live.
 - Bei grünen Checks: Vorschlag für `§46-GO` mit begründeter Promotion-Liste.
+- Wenn `eligible_count` länger als **24h** bei `0` bleibt: automatischer Alert/Incident-Eintrag (Root-Cause nötig, kein Seed-Commit).
 
 ### 5) Legacy Manual Loop Archive
 

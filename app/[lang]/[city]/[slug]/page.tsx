@@ -58,6 +58,54 @@ const CITY_COPY: Record<CitySlug, { de: CityCopy; en: CityCopy }> = {
     de: { name: "Köln", region: "Nordrhein-Westfalen", country: "DE" },
     en: { name: "Cologne", region: "North Rhine-Westphalia", country: "DE" },
   },
+  warsaw: {
+    de: { name: "Warschau", region: "Masowien", country: "PL" },
+    en: { name: "Warsaw", region: "Masovia", country: "PL" },
+  },
+  krakow: {
+    de: { name: "Krakau", region: "Kleinpolen", country: "PL" },
+    en: { name: "Krakow", region: "Lesser Poland", country: "PL" },
+  },
+  wroclaw: {
+    de: { name: "Breslau", region: "Niederschlesien", country: "PL" },
+    en: { name: "Wroclaw", region: "Lower Silesia", country: "PL" },
+  },
+  budapest: {
+    de: { name: "Budapest", region: "Budapest", country: "HU" },
+    en: { name: "Budapest", region: "Budapest", country: "HU" },
+  },
+  bucharest: {
+    de: { name: "Bukarest", region: "Bukarest", country: "RO" },
+    en: { name: "Bucharest", region: "Bucharest", country: "RO" },
+  },
+  sofia: {
+    de: { name: "Sofia", region: "Sofia", country: "BG" },
+    en: { name: "Sofia", region: "Sofia", country: "BG" },
+  },
+  athens: {
+    de: { name: "Athen", region: "Attika", country: "GR" },
+    en: { name: "Athens", region: "Attica", country: "GR" },
+  },
+  thessaloniki: {
+    de: { name: "Thessaloniki", region: "Zentralmakedonien", country: "GR" },
+    en: { name: "Thessaloniki", region: "Central Macedonia", country: "GR" },
+  },
+  bratislava: {
+    de: { name: "Bratislava", region: "Bratislava", country: "SK" },
+    en: { name: "Bratislava", region: "Bratislava", country: "SK" },
+  },
+  zagreb: {
+    de: { name: "Zagreb", region: "Zagreb", country: "HR" },
+    en: { name: "Zagreb", region: "Zagreb", country: "HR" },
+  },
+  ljubljana: {
+    de: { name: "Ljubljana", region: "Ljubljana", country: "SI" },
+    en: { name: "Ljubljana", region: "Ljubljana", country: "SI" },
+  },
+  belgrade: {
+    de: { name: "Belgrad", region: "Belgrad", country: "RS" },
+    en: { name: "Belgrade", region: "Belgrade", country: "RS" },
+  },
 }
 
 const DE_COPY: LocaleCopy = {

@@ -46,6 +46,22 @@ Optional high-volume tuning:
 - Dry-run: `npm run geo:auto-promotion:dry-run`
 - Live: `npm run geo:auto-promotion:live`
 
+## D4 activation note (Apr 2026)
+
+- D4 matrix coverage uses the 12-city CEE/Balkan set: `warsaw`, `krakow`, `wroclaw`, `budapest`, `bucharest`, `sofia`, `athens`, `thessaloniki`, `bratislava`, `zagreb`, `ljubljana`, `belgrade`.
+- Canonical geo LP targets for D4 are `/{locale}/{city}/openclaw-risk-2026` (`de`) and `/{locale}/{city}/openclaw-exposed` (`en`).
+- Legacy runbook URLs must 301 to those canonical city targets before seed/promotion is considered green.
+- `scripts/ops-d4-final-decision-snapshot.js` now validates both gates separately:
+  - legacy redirect -> canonical city URL
+  - canonical target -> `200 OK`
+- Recommended D4 sequence:
+  1. `node scripts/ops-d4-coverage-check.js`
+  2. `node scripts/ops-d4-final-decision-snapshot.js`
+  3. `node scripts/geo-batch-seed-by-quality.js --wave-id=<wave> --batch=D4 --quality-floor=85 --mode=dry-run`
+  4. if all self-healing checks are green: rerun with `--mode=commit`
+  5. `node scripts/trigger-geo-canary-rollout.js --mode=dry-run --locale=de --slug=openclaw-risk-2026`
+  6. `node scripts/trigger-geo-canary-rollout.js --mode=dry-run --locale=en --slug=openclaw-exposed`
+
 ## Combined cycle command
 
 - Dry-run: `npm run geo:ops-cycle:dry-run`

@@ -296,6 +296,29 @@ export function middleware(request: NextRequest) {
     }
   }
 
+  const canonicalOpenclawExposedPath = pathname.match(/^\/([a-z]{2}(?:-[a-z]{2})?)\/([a-z0-9-]+)\/openclaw-exposed\/?$/i)
+  const legacyOpenclawExposedPath = pathname.match(/^\/(?:([a-z]{2}(?:-[a-z]{2})?)\/)?runbook\/openclaw-exposed-([^/]+)\/?$/i)
+  if (!canonicalOpenclawExposedPath && legacyOpenclawExposedPath) {
+    const localeFromPath = legacyOpenclawExposedPath[1]?.toLowerCase() as Locale | undefined
+    const targetLocale = localeFromPath && SUPPORTED_LOCALES.includes(localeFromPath) ? localeFromPath : "en"
+    const rawCity = decodeURIComponent(legacyOpenclawExposedPath[2] ?? "").trim().toLowerCase()
+    const city = slugifyCity(rawCity)
+    if (city) {
+      const targetPath = `/${targetLocale}/${city}/openclaw-exposed`
+      const normalizedPath = pathname.replace(/\/+$/, "").toLowerCase()
+      const normalizedTargetPath = targetPath.toLowerCase()
+      if (normalizedPath !== normalizedTargetPath) {
+        const url = request.nextUrl.clone()
+        url.pathname = targetPath
+        const res = NextResponse.redirect(url, 301)
+        res.headers.set("x-claw-locale", targetLocale)
+        res.headers.set("x-claw-dir", localeDir(targetLocale))
+        res.headers.set(getRequestIdHeaderName(), requestId)
+        return res
+      }
+    }
+  }
+
   // SEO redirects: legacy short slugs -> dedicated landing pages.
   // Keep locale-specific targets so users and crawlers land on canonical intent pages.
   if (pathname === "/moltbot" || pathname === "/clawbot") {

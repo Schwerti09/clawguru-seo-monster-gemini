@@ -1,7 +1,25 @@
 import type { Locale } from "@/lib/i18n"
 
 /** First-wave DE+EN geo LPs (OpenClaw / Moltbot risk context). */
-export const GEO_OPENCLAW_SPRINT_CITIES = ["berlin", "munich", "hamburg", "frankfurt", "cologne"] as const
+export const GEO_OPENCLAW_SPRINT_CITIES = [
+  "berlin",
+  "munich",
+  "hamburg",
+  "frankfurt",
+  "cologne",
+  "warsaw",
+  "krakow",
+  "wroclaw",
+  "budapest",
+  "bucharest",
+  "sofia",
+  "athens",
+  "thessaloniki",
+  "bratislava",
+  "zagreb",
+  "ljubljana",
+  "belgrade",
+] as const
 export type GeoOpenClawSprintCity = (typeof GEO_OPENCLAW_SPRINT_CITIES)[number]
 
 export const GEO_OPENCLAW_SPRINT_SLUGS = ["openclaw-risk-2026", "openclaw-exposed"] as const
@@ -30,6 +48,18 @@ export const GEO_OPENCLAW_SPRINT_CITY_LABELS: Record<GeoOpenClawSprintCity, { de
   hamburg: { de: "Hamburg", en: "Hamburg" },
   frankfurt: { de: "Frankfurt am Main", en: "Frankfurt" },
   cologne: { de: "Köln", en: "Cologne" },
+  warsaw: { de: "Warschau", en: "Warsaw" },
+  krakow: { de: "Krakau", en: "Krakow" },
+  wroclaw: { de: "Breslau", en: "Wroclaw" },
+  budapest: { de: "Budapest", en: "Budapest" },
+  bucharest: { de: "Bukarest", en: "Bucharest" },
+  sofia: { de: "Sofia", en: "Sofia" },
+  athens: { de: "Athen", en: "Athens" },
+  thessaloniki: { de: "Thessaloniki", en: "Thessaloniki" },
+  bratislava: { de: "Bratislava", en: "Bratislava" },
+  zagreb: { de: "Zagreb", en: "Zagreb" },
+  ljubljana: { de: "Ljubljana", en: "Ljubljana" },
+  belgrade: { de: "Belgrad", en: "Belgrade" },
 }
 
 /** Crawlable hub links for static geo LPs (`/[lang]/[city]/…`); empty outside `de`/`en`. */

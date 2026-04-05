@@ -10972,7 +10972,7 @@ T24: **§82.2** vollständig ausfüllen (inkl. Self-Healing Checks) — bei Matr
 24h Monitoring läuft weiter; D4 Seed dry-run (`wave-2026-04-04-d81-d4`) zeigt typischerweise **`eligible_count: 0`**, **`below_floor_count: 12`** — alle **12** D4-Städte benötigen noch Matrix-Anreicherung (**erwartbar**, solange kein **COMMIT** gegen Prod erfolgt).  
 Post-Promotion Lock (**§46.8**) bleibt aktiv.  
 **Killermachine v2** (Self-Healing + Trust-Anchor + City-Aware) ist aktiv und in den Review-Checks integriert.  
-`activeStable=58`, `activeCanary=0`, Vercel grün, Git HEAD = **`1f2660637`** (nach Doc-Push ggf. neueren SHA prüfen).  
+`activeStable=58`, `activeCanary=0`, Vercel grün, Git HEAD = **`66ca400bd`** (Doc-Push **§82.7**; Vorversion vor §82: **`1f2660637`**).  
 **§82** ist die nächste **T24**-Iteration derselben Runbook-Kette mit **v2**-Guardrails.
 
 ### 82.2 24h Monitoring Review Execution

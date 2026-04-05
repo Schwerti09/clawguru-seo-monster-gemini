@@ -269,6 +269,33 @@ export function middleware(request: NextRequest) {
     return res
   }
 
+  // SEO migration (301): permanently consolidate legacy OpenClaw city runbook URLs
+  // (/runbook/openclaw-risk-2026-{city} and /{lang}/runbook/openclaw-risk-2026-{city})
+  // to canonical city pages /{locale}/{city}/openclaw-risk-2026 so crawlers pass signals
+  // to one stable URL and stop indexing legacy/search detours.
+  const canonicalOpenclawRiskPath = pathname.match(/^\/([a-z]{2}(?:-[a-z]{2})?)\/([a-z0-9-]+)\/openclaw-risk-2026\/?$/i)
+  const legacyOpenclawRiskPath = pathname.match(/^\/(?:([a-z]{2}(?:-[a-z]{2})?)\/)?runbook\/openclaw-risk-2026-([^/]+)\/?$/i)
+  if (!canonicalOpenclawRiskPath && legacyOpenclawRiskPath) {
+    const localeFromPath = legacyOpenclawRiskPath[1]?.toLowerCase() as Locale | undefined
+    const targetLocale = localeFromPath && SUPPORTED_LOCALES.includes(localeFromPath) ? localeFromPath : DEFAULT_LOCALE
+    const rawCity = decodeURIComponent(legacyOpenclawRiskPath[2] ?? "").trim().toLowerCase()
+    const city = slugifyCity(rawCity)
+    if (city) {
+      const targetPath = `/${targetLocale}/${city}/openclaw-risk-2026`
+      const normalizedPath = pathname.replace(/\/+$/, "").toLowerCase()
+      const normalizedTargetPath = targetPath.toLowerCase()
+      if (normalizedPath !== normalizedTargetPath) {
+        const url = request.nextUrl.clone()
+        url.pathname = targetPath
+        const res = NextResponse.redirect(url, 301)
+        res.headers.set("x-claw-locale", targetLocale)
+        res.headers.set("x-claw-dir", localeDir(targetLocale))
+        res.headers.set(getRequestIdHeaderName(), requestId)
+        return res
+      }
+    }
+  }
+
   // SEO redirects: legacy short slugs -> dedicated landing pages.
   // Keep locale-specific targets so users and crawlers land on canonical intent pages.
   if (pathname === "/moltbot" || pathname === "/clawbot") {
@@ -294,30 +321,6 @@ export function middleware(request: NextRequest) {
     res.headers.set("x-claw-dir", localeDir(targetLocale))
     res.headers.set(getRequestIdHeaderName(), requestId)
     return res
-  }
-
-  // Permanent SEO migration (301): move legacy OpenClaw runbook URLs
-  // (/runbook/openclaw-risk-2026-{city} and /{lang}/runbook/openclaw-risk-2026-{city})
-  // to canonical city pages (/{locale}/{city}/openclaw-risk-2026) while preserving locale
-  // when present/valid, defaulting to de, and skipping already-canonical URLs to avoid loops.
-  const canonicalOpenclawRiskPath = pathname.match(/^\/([a-z]{2}(?:-[a-z]{2})?)\/([a-z0-9-]+)\/openclaw-risk-2026\/?$/i)
-  if (!canonicalOpenclawRiskPath) {
-    const legacyOpenclawRiskPath = pathname.match(/^\/(?:([a-z]{2}(?:-[a-z]{2})?)\/)?runbook\/openclaw-risk-2026-([a-z0-9-]+)\/?$/i)
-    if (legacyOpenclawRiskPath) {
-      const localeFromPath = legacyOpenclawRiskPath[1]?.toLowerCase() as Locale | undefined
-      const targetLocale = localeFromPath && SUPPORTED_LOCALES.includes(localeFromPath) ? localeFromPath : DEFAULT_LOCALE
-      const city = legacyOpenclawRiskPath[2].toLowerCase()
-      const targetPath = `/${targetLocale}/${city}/openclaw-risk-2026`
-      if (pathname !== targetPath) {
-        const url = request.nextUrl.clone()
-        url.pathname = targetPath
-        const res = NextResponse.redirect(url, 301)
-        res.headers.set("x-claw-locale", targetLocale)
-        res.headers.set("x-claw-dir", localeDir(targetLocale))
-        res.headers.set(getRequestIdHeaderName(), requestId)
-        return res
-      }
-    }
   }
 
   const locale = localeFromPathname(pathname)

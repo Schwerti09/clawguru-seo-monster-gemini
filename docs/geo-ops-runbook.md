@@ -51,6 +51,7 @@ Optional high-volume tuning:
 - D4 matrix coverage uses the 12-city CEE/Balkan set: `warsaw`, `krakow`, `wroclaw`, `budapest`, `bucharest`, `sofia`, `athens`, `thessaloniki`, `bratislava`, `zagreb`, `ljubljana`, `belgrade`.
 - Canonical geo LP targets for D4 are `/{locale}/{city}/openclaw-risk-2026` (`de`) and `/{locale}/{city}/openclaw-exposed` (`en`).
 - Legacy runbook URLs must 301 to those canonical city targets before seed/promotion is considered green.
+- `app/api/geo/city-ranking/route.ts` follows same-origin `301/302/307/308` redirects so legacy runbook probes count as healthy when the canonical city page answers `200 OK`.
 - `scripts/ops-d4-final-decision-snapshot.js` now validates both gates separately:
   - legacy redirect -> canonical city URL
   - canonical target -> `200 OK`

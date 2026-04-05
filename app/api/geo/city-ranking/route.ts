@@ -35,7 +35,7 @@ async function probeUrl(url: string): Promise<{ status: number; finalUrl?: strin
     cache: "no-store",
     signal: AbortSignal.timeout(PROBE_TIMEOUT_MS),
   })
-  if ((res.status === 307 || res.status === 308) && res.headers.get("location")) {
+  if ((res.status === 301 || res.status === 302 || res.status === 307 || res.status === 308) && res.headers.get("location")) {
     const nextUrl = new URL(res.headers.get("location") || "", url)
     // Security hardening: only follow redirects on our own domain.
     if (nextUrl.origin !== BASE_URL) {

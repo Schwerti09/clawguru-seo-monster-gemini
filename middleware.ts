@@ -296,6 +296,32 @@ export function middleware(request: NextRequest) {
     return res
   }
 
+  // SEO redirect: legacy OpenClaw geo runbook path -> canonical geo city page.
+  // Example: /runbook/openclaw-risk-2026-berlin -> /de/berlin/openclaw-risk-2026
+  const legacyOpenclawRiskRoot = pathname.match(/^\/runbook\/openclaw-risk-2026-([a-z0-9-]+)\/?$/i)
+  if (legacyOpenclawRiskRoot) {
+    const city = legacyOpenclawRiskRoot[1].toLowerCase()
+    const url = request.nextUrl.clone()
+    url.pathname = `/de/${city}/openclaw-risk-2026`
+    const res = NextResponse.redirect(url, 308)
+    res.headers.set("x-claw-locale", "de")
+    res.headers.set("x-claw-dir", localeDir("de"))
+    res.headers.set(getRequestIdHeaderName(), requestId)
+    return res
+  }
+
+  const legacyOpenclawRiskLocalized = pathname.match(/^\/([a-z]{2}(?:-[a-z]{2})?)\/runbook\/openclaw-risk-2026-([a-z0-9-]+)\/?$/i)
+  if (legacyOpenclawRiskLocalized) {
+    const city = legacyOpenclawRiskLocalized[2].toLowerCase()
+    const url = request.nextUrl.clone()
+    url.pathname = `/de/${city}/openclaw-risk-2026`
+    const res = NextResponse.redirect(url, 308)
+    res.headers.set("x-claw-locale", "de")
+    res.headers.set("x-claw-dir", localeDir("de"))
+    res.headers.set(getRequestIdHeaderName(), requestId)
+    return res
+  }
+
   const locale = localeFromPathname(pathname)
 
   // Enforce locale-prefix-only routing:

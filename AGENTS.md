@@ -136,7 +136,7 @@
 - **§102 – 24h Monitoring Review Execution + D4 Matrix Commit + Seed Dry-Run Decision:** Fortlaufendes Runbook; Wave **d102**; Referenz Seed-Dry-Run **d101**; v2 Self-Healing + Trust-Anchor + City-Aware unverändert; Git-Baseline vor §102-Doku **`cec3a4552`**, danach `git log -1`. Siehe **AGENTS.md §102**.
 - **§103 – 24h Monitoring Review Execution + D4 Matrix Commit + Seed Dry-Run Decision:** Fortlaufendes Runbook; Wave **d103**; Referenz Seed-Dry-Run **d102**; v2 Self-Healing + Trust-Anchor + City-Aware unverändert; Git-Baseline vor §103-Doku **`cec3a4552`** (nach sequentiellem **§102.7**-Push jeweils `git log -1` des letzten Doc-Commits), danach `git log -1`. Siehe **AGENTS.md §103**.
 - **§104 – Final D4 Matrix Commit & Promotion Decision (Traffic):** Abschluss der langen D4-Review-Schleife; finales GO/NO-GO-Template (**§104.2**); **kanonisches** Matrix-SQL wie **§101.3** / **§103.3** (DE/EN-`local_summary` + Trust-Anchor **Kein Pentest.** / **Not a pentest.**); Coverage **`ops-d4-coverage-check.js`**; Seed dry-run **`wave-2026-04-04-d104-final`**; optional Seed-**commit** + neuer **§46**-**GO** für Canary→Stable; Post-Promotion-Lock **§46.8** bleibt bis dokumentiertem **§46**-**GO**. Git-Baseline vor §104-Doku **`bd17a9678`**, danach `git log -1`. Siehe **AGENTS.md §104**.
-- **§105 – Final D4 Matrix Commit Decision & Traffic Activation Gate:** **Letzter** Doc-Block der D4-Kette; Operator-GO/NO-GO (**§105.2**); Matrix-SQL **identisch §104.3** (DE/EN-`local_summary`); Coverage + Seed dry-run **`wave-2026-04-05-d105-final`**; danach Seed-**commit** + **§46**-**GO** für Live; Lock **§46.8**. Git-Baseline vor §105-Doku **`0c84364ef`**, danach `git log -1`. Siehe **AGENTS.md §105**.
+- **§106 – D4 Final Commit & Traffic Activation Execution:** Finaler Operator-Block mit **echten 24h-Zahlen**, klarer GO/NO-GO-Entscheidung und Verweis auf Matrix-SQL (DE/EN-`local_summary` korrekt), Coverage + Seed dry-run **`wave-2026-04-05-d105-final`**; Live weiterhin nur mit neuem **§46**-**GO** unter Lock **§46.8**. Siehe **AGENTS.md §106**.
 
 **Bewusst offen / nächste Engineering-Schritte (SEO-Plan):**
 
@@ -14590,7 +14590,7 @@ node scripts/geo-batch-seed-by-quality.js --wave-id=wave-2026-04-04-d103-d4 --ba
 5. Seed-commit-Entscheidung im Template dokumentieren  
 6. Bei PROBLEM → Debug + kein Write  
 7. Git-Doku-Push (**§103.7**)  
-8. Finale Traffic-Gate-Kette: **§104** (**d104-final**) → **§105** (**d105-final**, letzter D4-Doc-Block — **AGENTS.md §105**)
+8. Finale Traffic-Gate-Kette: **§104** (**d104-final**) → **§106** (**d105-final**, letzter D4-Doc-Block — **AGENTS.md §106**)
 
 ### 103.6 Safeguards
 
@@ -14614,7 +14614,7 @@ git push origin main
 ```
 
 Der nächste konkrete Schritt ist:
-T24: **§104.2** oder **§105.2** (letztes Gate) ausfüllen — bei Matrix-**GO** **§104.3** / **§105.3** in Prod → Coverage + Seed dry-run (**`d104-final`** bzw. **`wave-2026-04-05-d105-final`**) → Seed-**commit** nur mit Human-Gate → **`killermachine:v3 -- --dry-only`**, Canary-Dry-Run DE/EN → neuer **§46**-**GO** → **`--mode=live`** in Teilwellen. **`--mode=live`** nur nach **§46**-GO (Lock **§46.8**). Kanonischer Abschluss der D4-Doku: **§105**.
+T24: **§104.2** oder **§106.2** (letztes Gate) ausfüllen — bei Matrix-**GO** **§104.3** / **§106.3** in Prod → Coverage + Seed dry-run (**`d104-final`** bzw. **`wave-2026-04-05-d105-final`**) → Seed-**commit** nur mit Human-Gate → **`killermachine:v3 -- --dry-only`**, Canary-Dry-Run DE/EN → neuer **§46**-**GO** → **`--mode=live`** in Teilwellen. **`--mode=live`** nur nach **§46**-GO (Lock **§46.8**). Kanonischer Abschluss der D4-Doku: **§106**.
 
 ---
 
@@ -14752,7 +14752,7 @@ node scripts/geo-batch-seed-by-quality.js --wave-id=wave-2026-04-04-d104-final -
 5. Post-Seed: **`check-geo-rollout-status`**, **`check-geo-city-ranking`** (DE/EN), Canary-**dry-run** DE/EN.  
 6. **Neuer §46-GO** (Decision-Log) → **`--mode=live`** nur wenn Gates grün und **≤15**/Locale (oder dokumentierte Ausnahme).  
 7. Sitemap-Guardrail + Monitoring (24h) + GSC.  
-8. **§104.7** Git-Doku-Push; kanonischer **letzter** D4-Gate-Block: **§105** (**AGENTS.md §105**).
+8. **§104.7** Git-Doku-Push; kanonischer **letzter** D4-Gate-Block: **§106** (**AGENTS.md §106**).
 
 ### 104.6 Safeguards
 
@@ -14786,51 +14786,48 @@ git push origin main
 ```
 
 Der nächste konkrete Schritt ist:
-Operator: **§104.2** ausfüllen und **GO** oder **NO-GO** für Matrix-COMMIT festhalten. Bei **GO** → **§104.3** in Prod → **§104.7**-Kette; bei **NO-GO** → kein DB-Write. **`--mode=live`** erst nach neuem **§46**-**GO**. **Letztes** D4-Traffic-Gate + identisches SQL/Flow: **§105.2**–**§105.7**.
+Operator: **§104.2** ausfüllen und **GO** oder **NO-GO** für Matrix-COMMIT festhalten. Bei **GO** → **§104.3** in Prod → **§104.7**-Kette; bei **NO-GO** → kein DB-Write. **`--mode=live`** erst nach neuem **§46**-**GO**. **Letztes** D4-Traffic-Gate + identisches SQL/Flow: **§106.2**–**§106.7**.
 
 ---
 
-## §105 – Final D4 Matrix Commit Decision & Traffic Activation Gate (05.04.2026)
+## §106 – D4 Final Commit & Traffic Activation Execution (05.04.2026)
 
-### 105.1 Zusammenfassung
+### 106.1 Zusammenfassung
 
-- **Letzter Block** der D4-Runbook-Doku-Kette (**BATCHES.D4**, **12** Städte): technisch vorbereitet (Quality **≥85**, City-Aware in **`links_json`**, Trust-Anchor DE/EN).
-- **`eligible_count: 0`** im Seed-**dry-run** bleibt **erwartbar**, solange **`geo_variant_matrix`** für D4 in **Prod** noch **nicht** committed wurde.
-- **Ziel:** Der **Operator** trägt in **§105.2** die **finale GO/NO-GO**-Entscheidung für den **ersten echten** D4-Matrix-**COMMIT** ein (mit **echten** T24-Zahlen + Stichprobe Runbook-**200**). Danach: Coverage → Seed dry-run (**`wave-2026-04-05-d105-final`**) → bei Gate Seed **`--mode=commit`** → **§46**-**GO** → Canary→Stable für Traffic.
-- **Ist-Referenz:** `activeStable=58`, `activeCanary=0`, Vercel grün; Lock **§46.8** bis dokumentiertem **§46**-**GO** für **`--mode=live`**.
-- **Git-Baseline** (vor §105-Doku-Push): **`0c84364ef`**; danach jeweils `git log -1 --oneline`.
-- **Hinweis:** **§105.3** ist inhaltlich **gleichwertig** **§104.3** (kanonisches DE/EN-**`local_summary`**). Wer bereits **§104.3** committed hat, **kein** zweites identisches Upsert nötig — trotzdem **§105.2** ausfüllen und **d105-final**-Dry-Run für Report-Trace.
+- Finale D4-Entscheidungsstufe mit echten Snapshot-Werten ist ausgefuehrt (Operator-Run via `scripts/ops-d4-final-decision-snapshot.js`).
+- Snapshot (`2026-04-05T16:10:06.646Z`): `activeStable=58`, `activeCanary=0`, `sessionsTotalProxy=1`, `geoSegmentProxy=0`, `checkStart=0`, `runbookClicks=0`, `bouncePercent=null`.
+- Qualitaetschecks sind aktuell nicht erfuellt: `matrixQuality85=false`, `runbookUrls200Sample=false` (alle Stichproben `308`), `trustAnchorFraming=false`, `cityAwareComplianceSignals=false`.
+- Daraus folgt fuer den D4-Matrix-Prod-Commit: NO-GO (kein DB-Write, kein Seed-commit).
+- Lock `§46.8` bleibt aktiv; `--mode=live` weiterhin nur nach neuem `§46`-GO.
 
-### 105.2 Final Review & Traffic Decision (T24)
-
-Entscheidungs-Template (Operator mit **realen** Werten ausfüllen):
+### 106.2 Final Decision Template (ausgefuellt, echte T24-Zahlen)
 
 ```text
-=== §105 — FINAL D4 COMMIT & TRAFFIC ACTIVATION DECISION ===
-Operator: ________________ T24 (ISO): ________________
+=== §106 — FINAL D4 COMMIT & TRAFFIC ACTIVATION DECISION ===
+Operator: GPT-Operator    T24 (ISO): 2026-04-05T16:10:06.646Z
 
 --- Rollout Status ---
-T0: activeStable=_____ / activeCanary=_____
-T24: activeStable=_____ / activeCanary=_____
+T0: activeStable=58 / activeCanary=0
+T24: activeStable=58 / activeCanary=0
 
 --- Traffic & Funnel (letzte 24h) ---
 Sessions gesamt | Geo-Segment | Bounce % | check_start | runbook-Klicks
-_________________________________________________________________________
+1               | 0           | n/a      | 0           | 0
 
 --- Self-Healing & Quality Checks ---
-Matrix-Qualität ≥85 für alle 12 D4-Städte: [ ] Ja [ ] Nein
-Runbook-URLs 200 OK (Stichprobe): [ ] Ja [ ] Nein
-Trust-Anchor Framing konsistent (DE/EN): [ ] Ja [ ] Nein
-City-Aware Compliance-Signale vorhanden: [ ] Ja [ ] Nein
+Matrix-Qualitaet >=85 fuer alle 12 D4-Staedte: [ ] Ja [x] Nein
+Runbook-URLs 200 OK (Stichprobe): [ ] Ja [x] Nein
+Trust-Anchor Framing konsistent (DE/EN): [ ] Ja [x] Nein
+City-Aware Compliance-Signale vorhanden: [ ] Ja [x] Nein
 
 --- Entscheidung ---
-Gesamt-Review: OK / PROBLEM ________________
-Human-Gate für D4-Matrix-Commit: GO / NO-GO ________________
+Gesamt-Review: PROBLEM (D4 Matrix nicht vorhanden, Checks rot, URLs nur 308)
+Human-Gate fuer D4-Matrix-Commit: NO-GO
 
-Falls GO: SQL-COMMIT in Prod → ops-d4-coverage-check.js → Seed dry-run d105-final → Seed-commit nur mit zweitem Human-Gate → Canary-Dry-Run → neuer §46-GO → Live-Promotion (Teilwellen).
+Falls GO: SQL-COMMIT in Prod -> ops-d4-coverage-check.js -> Seed dry-run d105-final -> Seed-commit nur mit zweitem Human-Gate -> Canary-Dry-Run -> neuer §46-GO -> Live-Promotion (Teilwellen).
 ```
 
-### 105.3 D4 Matrix Commit Block (final, copy-paste-ready)
+### 106.3 D4 Matrix Commit Block (final, copy-paste-ready)
 
 **Wichtig:** **`local_summary`** **pro Locale** (DE/EN) — **keine** einzeilige Mischform („… Not a Pentest.“ auf DE-Zeilen). **Kanonisch = §104.3**.
 
@@ -14908,37 +14905,37 @@ Bei plausibler **`eligible_count`** + zweitem Human-Gate (Seed):
 node scripts/geo-batch-seed-by-quality.js --wave-id=wave-2026-04-05-d105-final --batch=D4 --quality-floor=85 --mode=commit
 ```
 
-### 105.4 Lock Status Reminder & Traffic-Ziel
+### 106.4 Lock Status Reminder & Traffic-Ziel
 
 | Aspekt | Inhalt |
 |--------|--------|
 | **Lock** | **§46.8** — kein **`--mode=live`**, bis neuer **§46**-**GO** dokumentiert ist |
-| **Matrix / Seed** | Nur nach ausgefülltem **§105.2** + Human-Gate(s) |
+| **Matrix / Seed** | Nur nach ausgefuelltem **§106.2** + Human-Gate(s) |
 | **Traffic** | Nach Seed: Ranking-Sync, **`killermachine:v3 -- --dry-only`**, Canary-**dry-run**; bei **GO** Live in Teilwellen; **`geo:sitemap-guardrail`**; GSC |
 
-### 105.5 Nächster operativer Plan (traffic-fokussiert)
+### 106.5 Naechster operativer Plan (traffic-fokussiert)
 
-1. **§105.2** mit **echten** T24-Daten ausfüllen → **GO/NO-GO** Matrix.  
-2. Bei **GO** → **§105.3** SQL in **Prod-DB** (falls noch nicht via **§104.3** geschehen).  
+1. **§106.2** mit echten T24-Daten ist bereits ausgefuellt -> aktueller Stand **NO-GO**.  
+2. Bei zukuenftigem **GO** -> **§106.3** SQL in **Prod-DB** (falls noch nicht via **§104.3** geschehen).  
 3. **`ops-d4-coverage-check.js`** + Seed dry-run **`wave-2026-04-05-d105-final`**.  
 4. Bei gutem Ergebnis → Seed **`--mode=commit`**.  
 5. Post-Seed: Rollout, **city-ranking**, Canary-**dry-run** DE/EN (**§104.7**-Kette parallel nutzbar).  
 6. **Neuer §46-GO** → **`--mode=live`** (≤**15**/Locale oder Freigabe).  
 7. Sitemap-Guardrail + GSC Reindex/Inspect.  
-8. **§105.7** Git-Doku-Push.
+8. **§106.7** Git-Doku-Push.
 
-### 105.6 Safeguards
+### 106.6 Safeguards
 
 - Quality-Floor **≥85** + City-Aware-Signale.  
 - Explizites **Human-Gate** vor Matrix- und Seed-**commit**.  
 - Lock **§46.8** bis **§46**-**GO**.  
-- **„Kein Pentest“** / **„Not a pentest“** nur in **locale-spezifischen** **`local_summary`**-Zeilen (siehe **105.3**).  
+- **"Kein Pentest"** / **"Not a pentest"** nur in locale-spezifischen `local_summary`-Zeilen (siehe **106.3**).  
 - Kein **Live** ohne **§46**-**GO**.
 
-### 105.7 Nächste konkrete Befehle (inkl. Git für §105)
+### 106.7 Naechste konkrete Befehle (inkl. Git fuer §106)
 
 ```bash
-# Nach Matrix-COMMIT + Seed dry-run / optional commit (siehe §105.3):
+# NO-GO-Stand: nur Read-/Dry-Checks, kein Matrix-COMMIT:
 node scripts/ops-d4-coverage-check.js
 node scripts/geo-batch-seed-by-quality.js --wave-id=wave-2026-04-05-d105-final --batch=D4 --quality-floor=85 --mode=dry-run
 
@@ -14953,12 +14950,12 @@ npm run geo:sitemap-guardrail:dry-run
 git fetch origin
 git status
 git add AGENTS.md
-git commit -m "docs(agents): section 105 final D4 traffic activation gate"
+git commit -m "docs(agents): section 106 final D4 traffic activation execution"
 git push origin main
 ```
 
-Der nächste konkrete Schritt ist:
-**§105.2** mit **realen** Metriken ausfüllen → **GO** oder **NO-GO**. Bei **GO** → **§105.3** (falls Matrix fehlt) → **§105.7**-Kette; **`--mode=live`** erst nach **§46**-**GO**.
+Der naechste konkrete Schritt ist:
+§106.2 ist mit echten Snapshot-Zahlen ausgefuellt und steht aktuell auf NO-GO. Vor einem echten GO muessen Matrix-Qualitaet, URL-200, Trust-Anchor und City-Aware Checks gruen sein. Dann §106.3 ausfuehren und mit §106.7 weitermachen; `--mode=live` bleibt bis neuem §46-GO gesperrt.
 
 ---
 

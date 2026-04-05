@@ -1,7 +1,21 @@
 const {google} = require('googleapis');
 
+function parseServiceAccountJson(serviceAccountJson) {
+  if (typeof serviceAccountJson !== 'string') return serviceAccountJson;
+
+  try {
+    return JSON.parse(serviceAccountJson);
+  } catch {
+    const normalized = serviceAccountJson.replace(
+      /"private_key"\s*:\s*"([\s\S]*?)"/m,
+      (_, key) => `"private_key":"${String(key).replace(/\r?\n/g, '\\n')}"`
+    );
+    return JSON.parse(normalized);
+  }
+}
+
 async function createAuth(serviceAccountJson) {
-  const key = typeof serviceAccountJson === 'string' ? JSON.parse(serviceAccountJson) : serviceAccountJson;
+  const key = parseServiceAccountJson(serviceAccountJson);
   const jwtClient = new google.auth.JWT(
     key.client_email,
     null,

@@ -45,6 +45,7 @@ Diese Datei dokumentiert den Status der Phase A/B Beobachtungen und Sicherheitsa
 ### Search-Console-Reindexing-Checkliste (operativ)
 - Sitemap-Einreichung auf eine Quelle begrenzen: nur `https://clawguru.org/sitemap.xml`.
 - Alte Einträge (`/sitemap-index`, `/sitemap/*`, `*.xml` Legacy) in der Search Console nicht neu einreichen; als Redirect akzeptieren.
+- Für D4/Traffic-Max zuerst die neuen kanonischen Geo-URLs priorisieren, nicht die Legacy-Runbook-Redirects.
 - Für repräsentative Seiten Live-URL-Inspektion starten:
   - `https://clawguru.org/de/intel`
   - `https://clawguru.org/ru/issue/ebpf-security`
@@ -58,6 +59,7 @@ Diese Datei dokumentiert den Status der Phase A/B Beobachtungen und Sicherheitsa
 - **Täglich (erste 14 Tage nach SEO-Deploy):**
   - `npm run check:sitemap-redirects -- https://clawguru.org`
   - `npm run check:prod-smoke -- --base=https://clawguru.org`
+  - `npm run gsc:fetch-daily-metrics`
   - Search Console: Coverage/Indexing-Report auf neue Fehler-Spikes prüfen (`Serverfehler (5xx)`, `Soft 404`, `Weitergeleitete Seite`).
 - **Wöchentlich (ab Woche 3):**
   - Search Console Vergleich zur Vorwoche: Anzahl gültiger indexierter Seiten vs. ausgeschlossene Seiten.
@@ -70,6 +72,20 @@ Diese Datei dokumentiert den Status der Phase A/B Beobachtungen und Sicherheitsa
   - irgendein FAIL in `check:sitemap-redirects` oder `check:prod-smoke`
   - Search Console zeigt neue 5xx-Häufung auf SEO-kritischen Routen
   - `/sitemap.xml` fällt auf `!=200` oder liefert kein `<sitemapindex>`
+
+### Search-Console Traffic-Max Push (D4, Apr 2026)
+- Neuer priorisierter Indexing-Batch: `npm run gsc:index-priority:dry-run`
+- Live-Auslösung: `npm run gsc:index-priority:live`
+- Batch-Zuschnitt:
+  - 24 D4-kanonische Geo-Pages (`de` + `en`)
+  - 8 Core-Funnel-Seiten (`/openclaw`, `/check`, `/runbooks`, `/moltbot-hardening`, `/ai-agent-security`)
+- Operative Reihenfolge:
+  1. `npm run check:seo-canonicals`
+  2. `npm run check:sitemap-redirects -- https://clawguru.org`
+  3. `npm run check:prod-smoke -- --base=https://clawguru.org`
+  4. `npm run gsc:fetch-daily-metrics`
+  5. `npm run gsc:index-priority:live`
+- Ziel: neue D4-Geo-Pages beschleunigt in Discovery/Recrawl bringen, ohne Legacy-Redirect-URLs in den Vordergrund zu stellen.
 
 ## Flag-Konfiguration (zum schnellen Nachschlagen)
 - `OBS_ENABLED` (default `0`) — aktiviert Logging-Sampling

@@ -57,16 +57,18 @@ ClawGuru combines:
 - Canonical/hreflang standardization and SEO guardrails operational (`npm run check:seo-canonicals`).
 - 8-week content queue operationalized with shipped indexable pages under `/[lang]/...` and enforced internal-link patterning.
 - Geo auth + dry-run/live trigger path validated for canary/guardrail scripts; 500-limit rollout tests executed safely.
+- City-ranking canary-union fix landed and validated in production flow (top-N + canary DB union for reliable promotion eligibility checks).
+- Controlled first canary-to-stable promotion wave executed; post-promotion lock and decision-gated runbook process documented.
 
 ### In progress
 
 - Editorial premium-quality pass for locale copy (especially `roast` and landing-page nuance by market).
-- Candidate eligibility debugging for geo promotion (`wouldPromote`/`wouldActivate` currently empty despite healthy runtime state).
+- Final D4 matrix commit and traffic activation gate execution (operator decision template and GO/NO-GO flow tracked in `AGENTS.md` §106).
 
 ### Open
 
-- First non-empty geo promotion wave with human-reviewed candidate list (see `AGENTS.md` §10).
-- Daily report loop automation in CI based on Killermachine v1 template (see `AGENTS.md` §9).
+- D4 matrix commit in production, followed by seed commit and fresh §46 GO cycle for the next live promotion wave.
+- Daily/ops automation hardening for Killermachine v2/v3 (self-healing checks, report reliability, and promotion gateing).
 
 Reference source of truth for strategy and rollout state: `AGENTS.md`.
 
@@ -156,10 +158,10 @@ Detailed runbook: `docs/geo-ops-runbook.md`.
 
 Typical high-volume dry-run pattern (all locales, score-threshold tuning) is documented in `AGENTS.md` §10.
 
-### Autonomous daily loop
+### Autonomous ops loop
 
-Killermachine v1 orchestration spec (agents, safeguards, daily loop, CI template) is documented in `AGENTS.md` §9.
-Use it as the operational blueprint before enabling unattended daily automation.
+Killermachine operations evolved from the v1 template to v2/v3 gated loops with explicit decision logs and lock semantics.
+Use `AGENTS.md` as the canonical source of truth for the current execution gate (latest: `AGENTS.md` §106).
 
 ### Embeddable Moltbot widget
 

@@ -135,6 +135,7 @@
 - **§101 – 24h Monitoring Review Execution + D4 Matrix Commit + Seed Dry-Run Decision:** Fortlaufendes Runbook; Wave **d101**; Referenz Seed-Dry-Run **d100**; v2 Self-Healing + Trust-Anchor + City-Aware unverändert; Git-Baseline vor §101-Doku **`64fce750c`**, danach `git log -1`. Siehe **AGENTS.md §101**.
 - **§102 – 24h Monitoring Review Execution + D4 Matrix Commit + Seed Dry-Run Decision:** Fortlaufendes Runbook; Wave **d102**; Referenz Seed-Dry-Run **d101**; v2 Self-Healing + Trust-Anchor + City-Aware unverändert; Git-Baseline vor §102-Doku **`cec3a4552`**, danach `git log -1`. Siehe **AGENTS.md §102**.
 - **§103 – 24h Monitoring Review Execution + D4 Matrix Commit + Seed Dry-Run Decision:** Fortlaufendes Runbook; Wave **d103**; Referenz Seed-Dry-Run **d102**; v2 Self-Healing + Trust-Anchor + City-Aware unverändert; Git-Baseline vor §103-Doku **`cec3a4552`** (nach sequentiellem **§102.7**-Push jeweils `git log -1` des letzten Doc-Commits), danach `git log -1`. Siehe **AGENTS.md §103**.
+- **§104 – Final D4 Matrix Commit & Promotion Decision (Traffic):** Abschluss der langen D4-Review-Schleife; finales GO/NO-GO-Template (**§104.2**); **kanonisches** Matrix-SQL wie **§101.3** / **§103.3** (DE/EN-`local_summary` + Trust-Anchor **Kein Pentest.** / **Not a pentest.**); Coverage **`ops-d4-coverage-check.js`**; Seed dry-run **`wave-2026-04-04-d104-final`**; optional Seed-**commit** + neuer **§46**-**GO** für Canary→Stable; Post-Promotion-Lock **§46.8** bleibt bis dokumentiertem **§46**-**GO**. Git-Baseline vor §104-Doku **`bd17a9678`**, danach `git log -1`. Siehe **AGENTS.md §104**.
 
 **Bewusst offen / nächste Engineering-Schritte (SEO-Plan):**
 
@@ -14423,7 +14424,7 @@ node scripts/geo-batch-seed-by-quality.js --wave-id=wave-2026-04-04-d102-d4 --ba
 5. Seed-commit-Entscheidung im Template dokumentieren  
 6. Bei PROBLEM → Debug + kein Write  
 7. Git-Doku-Push (**§102.7**)  
-8. Nächste **T24**-Iteration: **§103** (Wave **d103**, siehe **AGENTS.md §103**)
+8. Nächste **T24**-Iteration: **§103** (Wave **d103**); finale D4-Matrix + Traffic-Aktivierung: **§104** (**AGENTS.md §104**)
 
 ### 102.6 Safeguards
 
@@ -14588,7 +14589,7 @@ node scripts/geo-batch-seed-by-quality.js --wave-id=wave-2026-04-04-d103-d4 --ba
 5. Seed-commit-Entscheidung im Template dokumentieren  
 6. Bei PROBLEM → Debug + kein Write  
 7. Git-Doku-Push (**§103.7**)  
-8. Nächste **T24**-Iteration: **§104** (Wave **d104**, nach Doc-Push in **AGENTS.md** ergänzen)
+8. Nächste **T24**-Iteration: **§104** (finale D4-Welle **d104-final**, Traffic-Fokus — siehe **AGENTS.md §104**)
 
 ### 103.6 Safeguards
 
@@ -14612,7 +14613,179 @@ git push origin main
 ```
 
 Der nächste konkrete Schritt ist:
-T24: **§104.2** vollständig ausfüllen (inkl. Self-Healing Checks) — bei Matrix-OK **§104.3** (SQL → Coverage via `ops-d4-coverage-check.js` → Seed dry-run mit `wave-2026-04-04-d104-d4`), Seed-commit-Entscheidung im Template; bei PROBLEM kein Write; `--mode=live` nur nach **§46**-GO; nach Doc-Änderung **§104.7** (AGENTS-Push). Vor dem nächsten Zyklus **§104** in **AGENTS.md** ergänzen (siehe **§103.5** Schritt **8**).
+T24: **§104.2** vollständig ausfüllen — bei Matrix-**GO** **§104.3** in Prod → **§104.7** (Coverage + Seed dry-run **`wave-2026-04-04-d104-final`**) → Seed-**commit** nur mit Human-Gate → **`killermachine:v3 -- --dry-only`**, Canary-Dry-Run DE/EN → neuer **§46**-**GO** → **`--mode=live`** in Teilwellen. `--mode=live` nur nach **§46**-GO (Lock **§46.8**). Nach Doc-Änderung **§104.7** (AGENTS-Push). Bei weiterer T24-Doku: **§105** ergänzen.
+
+---
+
+## §104 – Final D4 Matrix Commit & Promotion Decision – Traffic Activation (05.04.2026)
+
+### 104.1 Zusammenfassung
+
+- **Ende der langen D4-Review-Schleife:** **12** CEE/Balkan-Städte (**BATCHES.D4**) sind inhaltlich vorbereitet (Quality **≥85**, City-Aware-Signale in **`links_json`**, Trust-Anchor-Framing DE/EN).
+- **`eligible_count: 0`** im Seed-**dry-run** bleibt **erwartbar**, solange **`geo_variant_matrix`** für D4 in Prod **noch nicht** committed wurde.
+- **Ziel:** Explizites **GO/NO-GO** für ersten **echten** D4-Matrix-**COMMIT** → Coverage → Seed **dry-run** (**d104-final**) → bei gutem Ergebnis Seed **`--mode=commit`** → danach **Traffic:** Canary sichtbar machen und nach neuem **§46**-**GO** **Canary→Stable** promoten (Teilwellen, Human-Gate **>15**).
+- **Ist-Referenz:** `activeStable=58`, `activeCanary=0`, Vercel grün; Post-Promotion-Lock **§46.8** bleibt aktiv bis dokumentiertem **§46**-**GO** für **`--mode=live`**.
+- **Git-Baseline** (vor §104-Doku-Push): **`bd17a9678`**; danach jeweils `git log -1 --oneline`.
+
+### 104.2 Final Review & Commit Decision (T24)
+
+Entscheidungs-Template (Operator ausfüllen):
+
+```text
+=== §104 — FINAL D4 COMMIT & PROMOTION DECISION ===
+Operator: ________________ T24 (ISO): ________________
+
+--- Rollout Status ---
+T0: activeStable=_____ / activeCanary=_____
+T24: activeStable=_____ / activeCanary=_____
+
+--- Traffic & Funnel (letzte 24h) ---
+Sessions gesamt | Geo-Segment | Bounce % | check_start | runbook-Klicks
+_________________________________________________________________________
+
+--- Self-Healing & Quality Checks ---
+Matrix-Qualität ≥85 für alle 12 D4-Städte: [ ] Ja [ ] Nein
+Runbook-URLs 200 OK: [ ] Ja [ ] Nein
+Trust-Anchor Framing konsistent (DE/EN): [ ] Ja [ ] Nein
+City-Aware Compliance-Signale vorhanden: [ ] Ja [ ] Nein
+
+--- Entscheidung ---
+Gesamt-Review: OK / PROBLEM ________________
+Human-Gate für D4-Matrix-Commit: GO / NO-GO ________________
+
+Falls GO: SQL-COMMIT in Prod → `ops-d4-coverage-check.js` → Seed dry-run **d104-final** → Seed-commit nur mit zweitem Human-Gate → Canary-Dry-Run → neuer §46-GO → Live-Promotion (Teilwellen).
+```
+
+### 104.3 D4 Matrix Commit Block (final, ready to run)
+
+**Wichtig:** **`local_summary`** muss **pro Locale** (DE/EN) gesetzt sein — **kanonisch identisch** **§101.3** / **§103.3** (Trust-Anchor **„Kein Pentest.“** / **„Not a pentest.“**). **Keine** einzeilige englisch-lastige **`local_summary`** ohne `CASE`-Split (würde DE-Zeilen falsch beschreiben).
+
+```sql
+BEGIN;
+WITH cities(slug, city_name_de, city_name_en, region_de, region_en, country_code, city_type) AS (
+  VALUES
+    ('warsaw','Warschau','Warsaw','Masowien','Masovia','PL','tech_hub'),
+    ('krakow','Krakau','Krakow','Kleinpolen','Lesser Poland','PL','tech_hub'),
+    ('wroclaw','Breslau','Wroclaw','Niederschlesien','Lower Silesia','PL','industry_kmu'),
+    ('budapest','Budapest','Budapest','Budapest','Budapest','HU','tech_hub'),
+    ('bucharest','Bukarest','Bucharest','Bukarest','Bucharest','RO','tech_hub'),
+    ('sofia','Sofia','Sofia','Sofia','Sofia','BG','tech_hub'),
+    ('athens','Athen','Athens','Attika','Attica','GR','tech_hub'),
+    ('thessaloniki','Thessaloniki','Thessaloniki','Zentralmakedonien','Central Macedonia','GR','industry_kmu'),
+    ('bratislava','Bratislava','Bratislava','Bratislava','Bratislava','SK','tech_hub'),
+    ('zagreb','Zagreb','Zagreb','Zagreb','Zagreb','HR','tech_hub'),
+    ('ljubljana','Ljubljana','Ljubljana','Ljubljana','Ljubljana','SI','tech_hub'),
+    ('belgrade','Belgrad','Belgrade','Belgrad','Belgrade','RS','tech_hub')
+),
+locales(locale) AS (VALUES ('de'), ('en'))
+INSERT INTO geo_variant_matrix (
+  locale, base_slug, city_slug, variant_slug, city_name, region_name, country_code,
+  local_title, local_summary, links_json, quality_score, model, updated_at
+)
+SELECT
+  l.locale,
+  CASE WHEN l.locale = 'de' THEN 'openclaw-risk-2026' ELSE 'openclaw-exposed' END,
+  c.slug,
+  CASE WHEN l.locale = 'de' THEN 'openclaw-risk-2026-' || c.slug ELSE 'openclaw-exposed-' || c.slug END,
+  CASE WHEN l.locale = 'de' THEN c.city_name_de ELSE c.city_name_en END,
+  CASE WHEN l.locale = 'de' THEN c.region_de ELSE c.region_en END,
+  c.country_code,
+  CASE WHEN l.locale = 'de'
+    THEN 'OpenClaw Risiko 2026 in ' || c.city_name_de || ': Exposures priorisieren und direkt härten'
+    ELSE 'OpenClaw Exposure in ' || c.city_name_en || ' 2026: prioritize edge risk and harden fast'
+  END,
+  CASE WHEN l.locale = 'de'
+    THEN 'D4-CEE-Balkan-Welle: hohe Self-Hosting-Dichte + schnelle Deploy-Cadence → Edge-Exposure. Runbooks: OpenClaw Check, Moltbot Hardening, Gateway Auth, Docker Proxy, API-Key Leak Response. Kein Pentest.'
+    ELSE 'D4 CEE/Balkan wave: high self-hosting density + fast deploy cadence → edge exposure. Runbooks: OpenClaw check, Moltbot hardening, gateway auth, Docker proxy, API key leak response. Not a pentest.'
+  END,
+  '[
+    {"type":"runbook","slug":"openclaw-security-check","label":"OpenClaw Security Check"},
+    {"type":"runbook","slug":"moltbot-hardening","label":"Moltbot Hardening"},
+    {"type":"runbook","slug":"gateway-auth-10-steps","label":"Gateway Auth 10 Steps"},
+    {"type":"runbook","slug":"docker-reverse-proxy-hardening-cheatsheet","label":"Docker Reverse Proxy Hardening"},
+    {"type":"runbook","slug":"api-key-leak-response-playbook","label":"API Key Leak Response"},
+    {"type":"signal","label":"d4-cee-' || c.city_type || '-2026"},
+    {"type":"signal","label":"city-aware-compliance-' || c.country_code || '-2026"}
+  ]'::jsonb,
+  CASE WHEN c.city_type = 'tech_hub' THEN 87 ELSE 85 END,
+  'gemini',
+  NOW()
+FROM cities c CROSS JOIN locales l
+ON CONFLICT (locale, variant_slug) DO UPDATE
+SET local_title = EXCLUDED.local_title,
+    local_summary = EXCLUDED.local_summary,
+    links_json = EXCLUDED.links_json,
+    quality_score = EXCLUDED.quality_score,
+    model = EXCLUDED.model,
+    updated_at = NOW();
+COMMIT;
+```
+
+**Nach Matrix-COMMIT in Prod:**
+
+```bash
+node scripts/ops-d4-coverage-check.js
+node scripts/geo-batch-seed-by-quality.js --wave-id=wave-2026-04-04-d104-final --batch=D4 --quality-floor=85 --mode=dry-run
+```
+
+Bei plausibler **`eligible_count`** + zweitem Human-Gate (Seed):
+
+```bash
+node scripts/geo-batch-seed-by-quality.js --wave-id=wave-2026-04-04-d104-final --batch=D4 --quality-floor=85 --mode=commit
+```
+
+### 104.4 Lock Status Reminder & Traffic-Ziel
+
+| Aspekt | Inhalt |
+|--------|--------|
+| **Lock** | **§46.8** — kein **`trigger-geo-canary-rollout.js --mode=live`** ohne neuen vollständigen **§46**-Zyklus + dokumentiertes **GO** |
+| **Matrix / Seed** | Nur nach ausgefülltem **§104.2** + Human-Gate(s) |
+| **Traffic** | Nach Seed: Ranking-Sync (**`check-geo-city-ranking`** DE/EN, `limit=200`), **`npm run killermachine:v3 -- --dry-only`**, Canary-**dry-run**; bei **GO** Live-Promotion in Teilwellen; **`npm run geo:sitemap-guardrail:dry-run`** (bei Freigabe live); GSC URL-Inspection / Sitemaps nach Deploy |
+
+### 104.5 Nächster operativer Plan (traffic-fokussiert)
+
+1. **§104.2** ausfüllen → **GO/NO-GO** Matrix dokumentieren.  
+2. Bei **GO** → **§104.3** SQL in **Prod-DB** ausführen.  
+3. **`ops-d4-coverage-check.js`** + Seed dry-run **`wave-2026-04-04-d104-final`**.  
+4. Bei gutem Ergebnis → Seed **`--mode=commit`** (Human-Gate).  
+5. Post-Seed: **`check-geo-rollout-status`**, **`check-geo-city-ranking`** (DE/EN), Canary-**dry-run** DE/EN.  
+6. **Neuer §46-GO** (Decision-Log) → **`--mode=live`** nur wenn Gates grün und **≤15**/Locale (oder dokumentierte Ausnahme).  
+7. Sitemap-Guardrail + Monitoring (24h) + GSC.  
+8. **§104.7** Git-Doku-Push; bei weiterer T24-Kette **§105** in **AGENTS.md** anlegen.
+
+### 104.6 Safeguards
+
+- Quality-Floor **≥85** + **City-Aware**-Signale in **`links_json`**.  
+- Explizites **Human-Gate** vor **Matrix-COMMIT** und vor **Seed-commit**.  
+- Post-Promotion-Lock **§46.8** bis neuem **§46**-**GO**.  
+- **„Kein Pentest“** / **„Not a pentest“** in Matrix-**`local_summary`** (DE/EN) verpflichtend.  
+- Kein **`--mode=live`** ohne **§46**-**GO**.  
+- Traffic-Aktivierung: Indexierung nur mit sauberen Runbook-**200**-Proben und grünen Ops-Guards.
+
+### 104.7 Nächste konkrete Befehle (inkl. Git für §104)
+
+```bash
+# Nach Matrix-COMMIT + Seed dry-run / optional commit (siehe §104.3):
+node scripts/ops-d4-coverage-check.js
+node scripts/geo-batch-seed-by-quality.js --wave-id=wave-2026-04-04-d104-final --batch=D4 --quality-floor=85 --mode=dry-run
+
+npm run check:geo-rollout-status -- --verbose
+node scripts/check-geo-city-ranking.js --locale=de --slug=openclaw-risk-2026 --limit=200
+node scripts/check-geo-city-ranking.js --locale=en --slug=openclaw-exposed --limit=200
+npm run killermachine:v3 -- --dry-only
+node scripts/trigger-geo-canary-rollout.js --mode=dry-run --locale=de --slug=openclaw-risk-2026 --limit=120 --minRankingScore=65 --verbose
+node scripts/trigger-geo-canary-rollout.js --mode=dry-run --locale=en --slug=openclaw-exposed --limit=120 --minRankingScore=65 --verbose
+npm run geo:sitemap-guardrail:dry-run
+
+git fetch origin
+git status
+git add AGENTS.md
+git commit -m "docs(agents): section 104 final D4 matrix commit + traffic activation"
+git push origin main
+```
+
+Der nächste konkrete Schritt ist:
+Operator: **§104.2** ausfüllen und **GO** oder **NO-GO** für Matrix-COMMIT festhalten. Bei **GO** → **§104.3** in Prod → **§104.7**-Kette; bei **NO-GO** → kein DB-Write. **`--mode=live`** erst nach neuem **§46**-**GO**. Optional: **§105** für die nächste T24-Doku-Iteration ergänzen.
 
 ---
 

@@ -5,7 +5,7 @@ export const runtime = "nodejs"
 
 async function checkGemini(): Promise<{ provider: string; ok: boolean; status?: number; ratelimited?: boolean; error?: string }> {
   const apiKey = process.env.GEMINI_API_KEY
-  const model = process.env.GEMINI_MODEL || "gemini-2.0-flash"
+  const model = process.env.GEMINI_MODEL || "gemini-2.5-flash"
   const base = (process.env.GEMINI_BASE_URL || "https://generativelanguage.googleapis.com/v1beta").replace(/\/$/, "")
   if (!apiKey) return { provider: "gemini", ok: false, error: "missing_api_key" }
   try {

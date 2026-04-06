@@ -233,7 +233,7 @@ export async function GET() {
     env,
     stripe: stripe || undefined,
     geminiUsage: {
-      model: process.env.GEMINI_MODEL || "gemini-2.0-flash",
+      model: process.env.GEMINI_MODEL || "gemini-2.5-flash",
       hasKey: env.hasGemini,
       endpoint: process.env.GEMINI_BASE_URL || "https://generativelanguage.googleapis.com/v1beta",
       tokensInputToday: inputToday,

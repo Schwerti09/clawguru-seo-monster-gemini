@@ -204,7 +204,7 @@ function buildFallbackDoc(type: LegalDocumentType, locale: Locale, region: Legal
 
 async function callGemini(prompt: string): Promise<string | null> {
   const geminiKey = process.env.GEMINI_API_KEY
-  const geminiModel = process.env.GEMINI_MODEL || "gemini-1.5-flash"
+  const geminiModel = process.env.GEMINI_MODEL || "gemini-2.5-flash"
   const geminiBase = (
     process.env.GEMINI_BASE_URL || "https://generativelanguage.googleapis.com/v1beta"
   ).replace(/\/$/, "")

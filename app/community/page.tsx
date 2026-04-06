@@ -188,7 +188,7 @@ export default function CommunityPage({ dict, locale = "de" }: CommunityPageProp
         </TabsList>
 
         {/* AI Agents Tab */}
-        <TabsContent value="agents" id="agents" className="space-y-6">
+        <TabsContent value="agents" className="space-y-6">
           <div className="text-center mb-8">
             <h2 className="text-3xl font-bold mb-4">ClawBot & MoltBot Agents</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
@@ -254,7 +254,7 @@ export default function CommunityPage({ dict, locale = "de" }: CommunityPageProp
         </TabsContent>
 
         {/* Integration Guides Tab */}
-        <TabsContent value="guides" id="guides" className="space-y-6">
+        <TabsContent value="guides" className="space-y-6">
           <div className="text-center mb-8">
             <h2 className="text-3xl font-bold mb-4">Integration Guides</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">

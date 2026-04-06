@@ -1,6 +1,5 @@
 // 100/100 OPTIMIZATION 2026: Self-hosted fonts via next/font (non-render-blocking, font-display:swap)
 import type { Metadata, Viewport } from "next"
-import { Inter, Space_Grotesk } from "next/font/google"
 import Script from "next/script"
 import "./globals.css"
 import TrustBadge from "@/components/layout/TrustBadge"
@@ -30,20 +29,7 @@ import CommandK from "@/components/search/CommandK"
 const GlobalMagnetics = dynamic(() => import("@/components/visual/GlobalMagnetics"))
 const FirstVisitPageGuide = dynamic(() => import("@/components/onboarding/FirstVisitPageGuide"), { ssr: false })
 
-// 100/100 OPTIMIZATION: next/font self-hosted with font-display:swap
-const inter = Inter({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-inter",
-  weight: ["400", "500", "600", "700", "900"],
-})
-
-const spaceGrotesk = Space_Grotesk({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-space-grotesk",
-  weight: ["500", "600", "700"],
-})
+// 100/100 OPTIMIZATION: Fonts loaded via CSS @import in globals.css (avoids build-time fetch failures)
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 
@@ -111,7 +97,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const dict = await getDictionary(locale)
 
   return (
-    <html lang={locale} dir={dir} className={`${inter.variable} ${spaceGrotesk.variable}`}>
+    <html lang={locale} dir={dir}>
       <head>
         {/* WORLD BEAST FINAL LAUNCH: Umami analytics */}
         <UmamiAnalytics />

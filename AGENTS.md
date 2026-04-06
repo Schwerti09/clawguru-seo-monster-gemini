@@ -96,7 +96,7 @@ Aktueller Stand:
 | A2 | Done | `lib/dashboard-identity.ts` (`parseDashboardPrincipal`) — eine Quelle für Kunden-Key + Plan |
 | A3 | Done | `POST /api/dashboard/tool-execution`: Auth via Cookie, Limits (Explorer), Rate-Burst, Inserts |
 | A4 | Todo | **Prod:** `npm run db:migrate` auf allen Umgebungen; ohne Migration bleiben Spalten leer / Writes fehlerhaft |
-| A5 | Todo | Rate-Limit **verteilt** (Redis/Upstash) statt In-Memory-Map pro Serverless-Instanz |
+| A5 | **Done** | Rate-Limit **verteilt**: `lib/rate-limit.ts` + Upstash Redis REST (INCR/EXPIRE); In-Memory-Fallback wenn env vars fehlen |
 
 ### Phase B — Cockpit-UX (einheitlich echt)
 
@@ -134,9 +134,9 @@ Aktueller Stand:
 | Step | Status | Beschreibung |
 |------|--------|--------------|
 | D1 | Todo | Playwright: Happy-Path „Cookie gesetzt → POST tool-execution → 200 → Dashboard zeigt neue Zeile“ (Mock DB oder Test-DB) |
-| D2 | Todo | Monitoring/Alert wenn `tool-execution` 5xx-Rate steigt |
+| D2 | **Done** | `logTelemetry` bei rate_limited (429) + db_error (500) in `tool-execution`; strukturiert für Datadog/Axiom/CloudWatch |
 
-**Aktueller Umsetzungsstand (Kurz):** A1–A3, B1–B5, C1–C4 abgeschlossen. Offen: A4 (Prod-Migration 009+010), A5 (Redis Rate-Limit), Phase D (Playwright Tests).
+**Aktueller Umsetzungsstand (Kurz):** A1–A3, A5, B1–B5, C1–C4, D2 abgeschlossen. Offen: A4 (Prod-Migration 009+010), D1 (Playwright Tests).
 
 ---
 

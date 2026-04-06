@@ -228,7 +228,11 @@ async function callGemini(prompt: string): Promise<CallResult> {
           console.error(`[AI] Gemini/${model} rate limit exhausted after all retries, trying next model.`);
           break; // try next model
         }
-        if (!res.ok) break; // try next model
+        if (!res.ok) {
+          const errBody = await res.text().catch(() => "(unreadable)");
+          console.error(`[AI] Gemini/${model} error ${res.status}: ${errBody.slice(0, 300)}`);
+          break; // try next model
+        }
         const data = await res.json();
         const parts = data?.candidates?.[0]?.content?.parts;
         if (!Array.isArray(parts)) break;

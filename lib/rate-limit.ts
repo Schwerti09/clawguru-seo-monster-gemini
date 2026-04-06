@@ -1,5 +1,5 @@
 /**
- * Smart Rate Limiting – Token Bucket implementation
+ * Smart Rate Limiting – Token Bucket (in-memory) + Upstash Redis (distributed).
  *
  * Two-tier protection:
  *  - Soft limit: per authenticated user/token (configurable, default 30 req/min)
@@ -8,8 +8,77 @@
  * Each bucket refills continuously at `rate` tokens per second.
  * A request consumes 1 token. If the bucket is empty the request is rejected.
  *
- * In production swap the in-memory Maps for Redis with the same interface.
+ * When UPSTASH_REDIS_REST_URL + UPSTASH_REDIS_REST_TOKEN are set, a fixed-window
+ * counter in Redis is used instead of the in-memory Map so all serverless instances
+ * share the same state. Falls back to in-memory when env vars are absent.
  */
+
+// ---------------------------------------------------------------------------
+// Upstash Redis fixed-window rate limiter
+// ---------------------------------------------------------------------------
+
+async function redisIncr(key: string, windowSecs: number): Promise<number> {
+  const url  = process.env.UPSTASH_REDIS_REST_URL
+  const token = process.env.UPSTASH_REDIS_REST_TOKEN
+  if (!url || !token) throw new Error("no_redis")
+
+  // INCR key
+  const incrRes = await fetch(`${url}/incr/${encodeURIComponent(key)}`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${token}` },
+  })
+  const { result: count } = await incrRes.json() as { result: number }
+
+  // Set expiry only on first request in the window
+  if (count === 1) {
+    await fetch(`${url}/expire/${encodeURIComponent(key)}/${windowSecs}`, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${token}` },
+    })
+  }
+  return count
+}
+
+/**
+ * Distributed fixed-window rate check via Upstash Redis.
+ * Returns { allowed, remaining } or throws if Redis is unavailable.
+ */
+async function checkRedisLimit(key: string, limit: number, windowSecs = 60): Promise<{ allowed: boolean; remaining: number }> {
+  const count = await redisIncr(`rl:${key}`, windowSecs)
+  return { allowed: count <= limit, remaining: Math.max(0, limit - count) }
+}
+
+/**
+ * High-level distributed burst check.
+ * Uses Upstash when configured, falls back to the in-memory burst logic below.
+ */
+export async function allowBurstDistributed(key: string, limit: number, windowSecs = 60): Promise<boolean> {
+  try {
+    const { allowed } = await checkRedisLimit(key, limit, windowSecs)
+    return allowed
+  } catch {
+    // Redis not configured or unreachable → fall back to in-memory
+    return allowBurstInMemory(key, limit, windowSecs * 1000)
+  }
+}
+
+// ---------------------------------------------------------------------------
+// In-memory fallback (existing logic, extracted as named function)
+// ---------------------------------------------------------------------------
+
+const _burstStore = new Map<string, { count: number; windowStart: number }>()
+
+export function allowBurstInMemory(key: string, limit: number, windowMs: number): boolean {
+  const now = Date.now()
+  const row = _burstStore.get(key)
+  if (!row || now - row.windowStart > windowMs) {
+    _burstStore.set(key, { count: 1, windowStart: now })
+    return true
+  }
+  if (row.count >= limit) return false
+  row.count++
+  return true
+}
 
 export interface RateLimitResult {
   /** Whether the request is allowed */

@@ -3,6 +3,8 @@ import { parseDashboardPrincipal } from "@/lib/dashboard-identity"
 import { dbQuery } from "@/lib/db"
 import { canExecuteMore, getUserTierFromPlan, type UserTier } from "@/lib/tier-access"
 import { runSecurityHeaderCheck } from "@/lib/security-check-core"
+import { allowBurstDistributed } from "@/lib/rate-limit"
+import { logTelemetry } from "@/lib/ops/telemetry"
 
 export const runtime = "nodejs"
 
@@ -121,9 +123,8 @@ async function runNeuroTool(customerKey: string): Promise<Record<string, unknown
   }
 }
 
-const RUN_WINDOW_MS = 60_000
 const RUN_MAX_PER_WINDOW = 20
-const runBurst = new Map<string, { count: number; windowStart: number }>()
+const RUN_WINDOW_SECS = 60
 
 function burstKey(req: NextRequest, customerKey: string): string {
   const ip =
@@ -131,18 +132,6 @@ function burstKey(req: NextRequest, customerKey: string): string {
     req.headers.get("x-real-ip") ||
     "unknown"
   return `${ip}:${customerKey}`
-}
-
-function allowBurst(key: string): boolean {
-  const now = Date.now()
-  const row = runBurst.get(key)
-  if (!row || now - row.windowStart > RUN_WINDOW_MS) {
-    runBurst.set(key, { count: 1, windowStart: now })
-    return true
-  }
-  if (row.count >= RUN_MAX_PER_WINDOW) return false
-  row.count++
-  return true
 }
 
 async function executionCountThisMonth(customerKey: string): Promise<number> {
@@ -164,7 +153,9 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: false, error: "unauthorized" }, { status: 401 })
   }
 
-  if (!allowBurst(burstKey(req, principal.customerKey))) {
+  const bKey = burstKey(req, principal.customerKey)
+  if (!(await allowBurstDistributed(bKey, RUN_MAX_PER_WINDOW, RUN_WINDOW_SECS))) {
+    logTelemetry("tool_execution.rate_limited", { customerKey: principal.customerKey })
     return NextResponse.json({ ok: false, error: "rate_limited" }, { status: 429 })
   }
 
@@ -266,6 +257,11 @@ export async function POST(req: NextRequest) {
       },
     })
   } catch (e) {
+    logTelemetry("tool_execution.error", {
+      customerKey: principal.customerKey,
+      toolId,
+      error: e instanceof Error ? e.message : String(e),
+    })
     console.error("[tool-execution]", e)
     return NextResponse.json({ ok: false, error: "db_error" }, { status: 500 })
   }

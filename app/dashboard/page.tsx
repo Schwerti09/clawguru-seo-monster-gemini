@@ -3,7 +3,7 @@ import { cookies } from 'next/headers'
 import { UserDashboardClient } from '@/components/cockpit/UserDashboardClient'
 import { getUserTierFromPlan } from '@/lib/tier-access'
 import { verifyAccessToken } from '@/lib/access-token'
-import { verifySessionToken, USER_SESSION_COOKIE } from '@/lib/auth'
+import { parseDashboardPrincipal } from '@/lib/dashboard-identity'
 import { stripe } from '@/lib/stripe'
 import { dbQuery } from '@/lib/db'
 import type { QueryResultRow } from 'pg'
@@ -100,15 +100,9 @@ async function fetchStripePayments(customerId: string): Promise<{
 
 export default async function DashboardPage() {
   const jar = await cookies()
+  const principal = parseDashboardPrincipal(jar)
 
-  // ── Auth: check claw_access token first, then session cookie ──
-  const accessToken = jar.get('claw_access')?.value
-  const sessionToken = jar.get(USER_SESSION_COOKIE)?.value
-
-  const access = accessToken ? verifyAccessToken(accessToken) : null
-  const session = sessionToken ? verifySessionToken(sessionToken) : null
-
-  if (!access && !session) {
+  if (!principal) {
     // No auth: show the dashboard as explorer (free) tier with empty data.
     // Locked features are gated by the Shadow Realm overlay in the client component.
     // Users can upgrade via the Billing tab or /pricing.
@@ -117,11 +111,11 @@ export default async function DashboardPage() {
     return <UserDashboardClient user={guestUser} tier="explorer" initialData={emptyInitialData} />
   }
 
-  // Build user object from available tokens
-  const email = session?.email || access?.customerId || 'user'
-  const plan = access?.plan || null
-  const customerId = access?.customerId || null
-  const user = { id: customerId || email, email }
+  const { customerKey, plan, email } = principal
+  const accessToken = jar.get('claw_access')?.value
+  const access = accessToken ? verifyAccessToken(accessToken) : null
+  const customerId = access?.customerId ?? null
+  const user = { id: customerKey, email }
 
   // ── Fetch local DB data (tables created by migration, gracefully empty if missing) ──
   const today = new Date().toISOString().split('T')[0]
@@ -131,9 +125,11 @@ export default async function DashboardPage() {
                FROM runbook_executions WHERE customer_id = $1
                ORDER BY created_at DESC LIMIT 50`, [user.id]),
     safeQuery(`SELECT id, title, description, severity, status, created_at
-               FROM threats ORDER BY created_at DESC LIMIT 50`),
+               FROM threats WHERE customer_id = $1
+               ORDER BY created_at DESC LIMIT 50`, [user.id]),
     safeQuery(`SELECT id, type, status, connections, metadata
-               FROM mycelium_nodes`)
+               FROM mycelium_nodes WHERE customer_id = $1
+               ORDER BY created_at DESC LIMIT 50`, [user.id])
   ])
 
   // ── Fetch Stripe data (payments, subscription) ──

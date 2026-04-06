@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { DEFAULT_LOCALE, SUPPORTED_LOCALES, type Locale } from '@/lib/i18n'
 import { RoastMyStack } from '@/components/roast/RoastMyStack'
@@ -56,12 +56,15 @@ function timeAgo(dateStr: string): string {
 
 export function ToolsTab({ isShadowed, executions }: ToolsTabProps) {
   const pathname = usePathname()
+  const router = useRouter()
   const dashLocale = localeFromPathname(pathname)
   const dashPrefix = `/${dashLocale}`
 
   const [activeTool, setActiveTool] = useState<string | null>(null)
   const [executionProgress, setExecutionProgress] = useState(0)
   const [executionStatus, setExecutionStatus] = useState<'idle' | 'running' | 'completed' | 'error'>('idle')
+  const [executionError, setExecutionError] = useState<string | null>(null)
+  const [lastRunSummary, setLastRunSummary] = useState<string | null>(null)
 
   // Derive tool stats from real executions
   const totalRuns = executions.length
@@ -76,18 +79,59 @@ export function ToolsTab({ isShadowed, executions }: ToolsTabProps) {
     { id: 'check', name: 'Security Check', description: 'Umfassende Sicherheitsaudits und Schwachstellenbewertung', icon: Shield, features: ['Full Audit', 'Compliance Check', 'Remediation Guide'], status: 'ready', category: 'Audit' }
   ]
 
-  const handleToolExecute = (toolId: string) => {
+  const handleToolExecute = async (toolId: string) => {
     if (isShadowed) return
+    setExecutionError(null)
+    setLastRunSummary(null)
     setActiveTool(toolId)
     setExecutionStatus('running')
-    setExecutionProgress(0)
-    const interval = setInterval(() => {
-      setExecutionProgress(prev => {
-        if (prev >= 100) { clearInterval(interval); setExecutionStatus('completed'); return 100 }
-        return prev + Math.random() * 15
+    setExecutionProgress(4)
+
+    const tick = setInterval(() => {
+      setExecutionProgress((prev) => (prev >= 90 ? prev : prev + Math.random() * 14))
+    }, 350)
+
+    try {
+      const res = await fetch('/api/dashboard/tool-execution', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ toolId }),
+        credentials: 'include',
       })
-    }, 500)
-    setTimeout(() => { setExecutionStatus('completed'); setExecutionProgress(100); clearInterval(interval) }, 3000)
+      const data = (await res.json().catch(() => ({}))) as {
+        ok?: boolean
+        error?: string
+        execution?: { id?: string }
+      }
+      clearInterval(tick)
+      if (!res.ok) {
+        setExecutionStatus('error')
+        setExecutionProgress(0)
+        const code = data.error
+        setExecutionError(
+          code === 'execution_limit'
+            ? 'Monatliches Ausführungslimit erreicht (Explorer).'
+            : code === 'unauthorized'
+              ? 'Nicht angemeldet — bitte zuerst kaufen und aktivieren.'
+              : code === 'database_unconfigured'
+                ? 'Datenbank nicht konfiguriert (ADMIN: DATABASE_URL).'
+                : code === 'rate_limited'
+                  ? 'Zu viele Anfragen. Bitte kurz warten.'
+                  : 'Ausführung fehlgeschlagen.'
+        )
+        return
+      }
+      setExecutionProgress(100)
+      setExecutionStatus('completed')
+      const id = data.execution?.id
+      setLastRunSummary(id ? `Lauf serverseitig protokolliert. Execution-ID: ${id}` : 'Lauf serverseitig protokolliert.')
+      router.refresh()
+    } catch {
+      clearInterval(tick)
+      setExecutionStatus('error')
+      setExecutionProgress(0)
+      setExecutionError('Netzwerkfehler.')
+    }
   }
 
   return (
@@ -141,8 +185,11 @@ export function ToolsTab({ isShadowed, executions }: ToolsTabProps) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1, duration: 0.5 }}
             className={`relative group ${isShadowed ? 'pointer-events-none' : 'cursor-pointer'}`}
-            onClick={() => handleToolExecute(tool.id)}
-            whileHover={!isShadowed ? { y: -4, transition: { duration: 0.3 } } : {}}
+            onClick={() => {
+              if (isShadowed || executionStatus === 'running') return
+              void handleToolExecute(tool.id)
+            }}
+            whileHover={!isShadowed && executionStatus !== 'running' ? { y: -4, transition: { duration: 0.3 } } : {}}
           >
             <div
               className="relative p-6 rounded-2xl border overflow-hidden transition-all duration-500 group-hover:border-yellow-500/20"
@@ -283,13 +330,18 @@ export function ToolsTab({ isShadowed, executions }: ToolsTabProps) {
               ))}
             </div>
 
-            {executionStatus === 'completed' && (
+            {executionStatus === 'completed' && lastRunSummary && (
               <motion.div initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} className="mt-4 p-4 rounded-xl border" style={{ background: 'rgba(234,179,8,0.04)', borderColor: 'rgba(234,179,8,0.12)' }}>
                 <div className="flex items-center gap-2 mb-1">
                   <CheckCircle className="w-4 h-4" style={{ color: '#EAB308' }} />
                   <span className="text-sm font-semibold" style={{ color: '#EAB308' }}>Ausführung erfolgreich</span>
                 </div>
-                <p className="text-xs text-gray-500">3 potenzielle Bedrohungen und 2 Optimierungsmöglichkeiten gefunden.</p>
+                <p className="text-xs text-gray-500">{lastRunSummary}</p>
+              </motion.div>
+            )}
+            {executionStatus === 'error' && executionError && (
+              <motion.div initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} className="mt-4 p-4 rounded-xl border" style={{ background: 'rgba(239,68,68,0.06)', borderColor: 'rgba(239,68,68,0.2)' }}>
+                <p className="text-xs text-red-300">{executionError}</p>
               </motion.div>
             )}
           </motion.div>

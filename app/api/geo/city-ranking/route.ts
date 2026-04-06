@@ -9,7 +9,7 @@ export const runtime = "nodejs"
 export const dynamic = "force-dynamic"
 export const maxDuration = 60
 
-const PROBE_TIMEOUT_MS = 8_000
+const PROBE_TIMEOUT_MS = 15_000
 /** Hard cap for ranking probes (URL health checks). Canary cities are always unioned in addition to top-N. */
 const MAX_CITY_LIMIT = 200
 const CACHE_TTL_MS = 30_000

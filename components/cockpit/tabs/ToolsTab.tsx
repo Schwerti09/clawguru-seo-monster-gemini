@@ -284,10 +284,10 @@ export function ToolsTab({ isShadowed, executions }: ToolsTabProps) {
                   <h3 className="text-base font-semibold text-white">{tools.find(t => t.id === activeTool)?.name}</h3>
                   <div className="flex items-center gap-2 mt-0.5">
                     <div className="w-1.5 h-1.5 rounded-full" style={{
-                      background: executionStatus === 'running' ? '#EAB308' : executionStatus === 'completed' ? '#22C55E' : '#EF4444',
+                      background: executionStatus === 'running' ? '#EAB308' : executionStatus === 'completed' ? '#22C55E' : executionStatus === 'error' ? '#EF4444' : '#52525B',
                       boxShadow: executionStatus === 'running' ? '0 0 6px rgba(234,179,8,0.5)' : 'none'
                     }} />
-                    <span className="text-xs capitalize" style={{ color: executionStatus === 'running' ? '#EAB308' : executionStatus === 'completed' ? '#22C55E' : '#A1A1AA' }}>{executionStatus}</span>
+                    <span className="text-xs capitalize" style={{ color: executionStatus === 'running' ? '#EAB308' : executionStatus === 'completed' ? '#22C55E' : executionStatus === 'error' ? '#F87171' : '#A1A1AA' }}>{executionStatus}</span>
                   </div>
                 </div>
               </div>

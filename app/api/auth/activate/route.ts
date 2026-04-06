@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getStripe } from "@/lib/stripe";
 import { signAccessToken, type AccessPlan } from "@/lib/access-token";
+import { signSessionToken, USER_SESSION_COOKIE } from "@/lib/auth";
 import { logTelemetry } from "@/lib/ops/telemetry";
 import { getRequestId } from "@/lib/ops/request-id";
 
@@ -112,14 +113,26 @@ export async function GET(req: NextRequest) {
 
     const res = NextResponse.redirect(new URL("/dashboard", req.url));
 
+    const cookieMaxAge = plan === "daypass" ? 60 * 60 * 24 : 60 * 60 * 24 * 30
+
     res.cookies.set("claw_access", token, {
       httpOnly: true,
       secure: isProduction,
       sameSite: "lax",
       path: "/",
-      // daypass expires in 24 h; subscriptions use a 30-day rolling token
-      maxAge: plan === "daypass" ? 60 * 60 * 24 : 60 * 60 * 24 * 30,
+      maxAge: cookieMaxAge,
     });
+
+    const buyerEmail = session.customer_details?.email?.trim()
+    if (buyerEmail) {
+      res.cookies.set(USER_SESSION_COOKIE, signSessionToken(buyerEmail, cookieMaxAge), {
+        httpOnly: true,
+        secure: isProduction,
+        sameSite: "lax",
+        path: "/",
+        maxAge: cookieMaxAge,
+      })
+    }
 
     console.info("[auth/activate] set claw_access cookie", {
       sessionId,

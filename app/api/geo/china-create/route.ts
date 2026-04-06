@@ -1,156 +1,79 @@
-// China Mega Expansion - Simple GET endpoint
+// China Mega Expansion - Correct schema version
+// geo_cities: slug, name_de, name_en, country_code, priority, population, is_active, rollout_stage
+// geo_variant_matrix: locale, base_slug, city_slug, variant_slug, city_name, region_name, country_code, local_title, local_summary, quality_score
 import { NextRequest, NextResponse } from "next/server"
 import { dbQuery } from "@/lib/db"
 
+export const dynamic = "force-dynamic"
+export const runtime = "nodejs"
+
+const CHINA_CITIES = [
+  { slug: "beijing",   name_de: "Peking",   name_en: "Beijing",   country_code: "CN", priority: 95, population: 21540000, quality: 88 },
+  { slug: "shanghai",  name_de: "Shanghai",  name_en: "Shanghai",  country_code: "CN", priority: 94, population: 24280000, quality: 89 },
+  { slug: "guangzhou", name_de: "Kanton",    name_en: "Guangzhou", country_code: "CN", priority: 88, population: 15300000, quality: 87 },
+  { slug: "shenzhen",  name_de: "Shenzhen",  name_en: "Shenzhen",  country_code: "CN", priority: 89, population: 17560000, quality: 90 },
+]
+
+const BASE_SLUGS = ["aws-nginx-hardening-2026", "aws-ssh-hardening-2026", "gcp-kubernetes-rbac-misconfig-2026"]
+const LOCALES = ["de", "en"]
+
 export async function GET(request: NextRequest) {
   try {
-    console.log("🚀 China Mega Expansion starting...")
-    
-    const CHINA_CITIES = [
-      {
-        city_slug: "beijing",
-        name_de: "Peking", 
-        name_en: "Beijing",
-        country_code: "CN",
-        priority: 95,
-        population: 21540000,
-        title: "Beijing Security Operations Center",
-        summary: "Leading cybersecurity solutions for Beijing's financial district and tech enterprises. Specialized in Chinese compliance and regulatory frameworks.",
-        tags: ["china", "beijing", "cybersecurity", "compliance", "financial-services", "tech-hub"],
-        clawScore: 88,
-        content_depth: 85,
-        local_relevance: 90,
-        technical_accuracy: 88
-      },
-      {
-        city_slug: "shanghai",
-        name_de: "Shanghai",
-        name_en: "Shanghai", 
-        country_code: "CN",
-        priority: 94,
-        population: 24280000,
-        title: "Shanghai Security Operations Center",
-        summary: "Advanced security operations for Shanghai's international business district and fintech companies. Expert in cross-border data protection.",
-        tags: ["china", "shanghai", "cybersecurity", "fintech", "international-business", "data-protection"],
-        clawScore: 89,
-        content_depth: 86,
-        local_relevance: 91,
-        technical_accuracy: 89
-      },
-      {
-        city_slug: "guangzhou",
-        name_de: "Kanton",
-        name_en: "Guangzhou",
-        country_code: "CN", 
-        priority: 88,
-        population: 15300000,
-        title: "Guangzhou Security Operations Center",
-        summary: "Comprehensive security solutions for Guangzhou's manufacturing and logistics sectors. Specialized in industrial cybersecurity and supply chain protection.",
-        tags: ["china", "guangzhou", "cybersecurity", "manufacturing", "logistics", "industrial-security"],
-        clawScore: 87,
-        content_depth: 84,
-        local_relevance: 89,
-        technical_accuracy: 87
-      },
-      {
-        city_slug: "shenzhen",
-        name_de: "Shenzhen",
-        name_en: "Shenzhen",
-        country_code: "CN",
-        priority: 89,
-        population: 17560000,
-        title: "Shenzhen Security Operations Center", 
-        summary: "Cutting-edge security operations for Shenzhen's tech innovation hub and startup ecosystem. Expert in cloud security and emerging technologies.",
-        tags: ["china", "shenzhen", "cybersecurity", "tech-hub", "startups", "cloud-security", "innovation"],
-        clawScore: 90,
-        content_depth: 87,
-        local_relevance: 92,
-        technical_accuracy: 90
-      }
-    ]
-    
     const results = []
-    
+
     for (const city of CHINA_CITIES) {
-      console.log(`🔧 Processing ${city.city_slug}...`)
-      
-      // Insert city
-      const upsertCityQuery = `
-        INSERT INTO geo_cities (city_slug, name_de, name_en, country_code, priority, population, title, summary, tags, claw_score, lastmod, rollout_stage, is_active)
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, 'canary', true)
-        ON CONFLICT (city_slug) DO UPDATE SET
-          title = EXCLUDED.title,
-          summary = EXCLUDED.summary,
-          tags = EXCLUDED.tags,
-          claw_score = EXCLUDED.claw_score,
-          lastmod = EXCLUDED.lastmod,
-          rollout_stage = EXCLUDED.rollout_stage,
-          is_active = EXCLUDED.is_active
-        RETURNING city_slug, claw_score, title
-      `
-      
-      const cityResult = await dbQuery(upsertCityQuery, [
-        city.city_slug,
-        city.name_de,
-        city.name_en,
-        city.country_code,
-        city.priority,
-        city.population,
-        city.title,
-        city.summary,
-        JSON.stringify(city.tags),
-        city.clawScore,
-        new Date().toISOString().split('T')[0]
-      ])
-      
-      // Insert quality metrics
-      const qualityScore = Math.min(95, city.clawScore - 2)
-      const upsertQualityQuery = `
-        INSERT INTO geo_city_quality_metrics (city_slug, quality_score, content_depth, local_relevance, technical_accuracy, last_updated)
-        VALUES ($1, $2, $3, $4, $5, $6)
-        ON CONFLICT (city_slug) DO UPDATE SET
-          quality_score = EXCLUDED.quality_score,
-          content_depth = EXCLUDED.content_depth,
-          local_relevance = EXCLUDED.local_relevance,
-          technical_accuracy = EXCLUDED.technical_accuracy,
-          last_updated = EXCLUDED.last_updated
-        RETURNING city_slug, quality_score
-      `
-      
-      const qualityResult = await dbQuery(upsertQualityQuery, [
-        city.city_slug,
-        qualityScore,
-        city.content_depth,
-        city.local_relevance,
-        city.technical_accuracy,
-        new Date().toISOString()
-      ])
-      
-      results.push({
-        city: cityResult[0],
-        quality: qualityResult[0],
-        overall_quality: Math.min(qualityScore, city.content_depth, city.local_relevance, city.technical_accuracy)
-      })
-      
-      console.log(`✅ ${city.city_slug} completed`)
+      // 1. Insert into geo_cities with correct schema
+      await dbQuery(
+        `INSERT INTO geo_cities (slug, name_de, name_en, country_code, priority, population, is_active, rollout_stage)
+         VALUES ($1, $2, $3, $4, $5, $6, TRUE, 'canary')
+         ON CONFLICT (slug) DO UPDATE SET
+           name_de = EXCLUDED.name_de,
+           name_en = EXCLUDED.name_en,
+           country_code = EXCLUDED.country_code,
+           priority = EXCLUDED.priority,
+           population = EXCLUDED.population,
+           is_active = TRUE,
+           rollout_stage = 'canary',
+           updated_at = NOW()`,
+        [city.slug, city.name_de, city.name_en, city.country_code, city.priority, city.population]
+      )
+
+      // 2. Insert quality into geo_variant_matrix (needed for seed eligibility check)
+      for (const locale of LOCALES) {
+        for (const baseSlug of BASE_SLUGS) {
+          const variantSlug = `${baseSlug}-${city.slug}`
+          const localTitle = `${city.name_en} Security Hardening – ${baseSlug.replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase())}`
+          const localSummary = `Security hardening runbook for ${city.name_en}, China. Compliance-ready guide for ${baseSlug} environments in ${city.name_en}.`
+
+          await dbQuery(
+            `INSERT INTO geo_variant_matrix (locale, base_slug, city_slug, variant_slug, city_name, region_name, country_code, local_title, local_summary, quality_score)
+             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+             ON CONFLICT (locale, variant_slug) DO UPDATE SET
+               quality_score = EXCLUDED.quality_score,
+               local_title = EXCLUDED.local_title,
+               local_summary = EXCLUDED.local_summary,
+               updated_at = NOW()`,
+            [locale, baseSlug, city.slug, variantSlug, city.name_en, city.name_en, city.country_code, localTitle, localSummary, city.quality]
+          )
+        }
+      }
+
+      results.push({ slug: city.slug, name_en: city.name_en, quality: city.quality, status: city.quality >= 85 ? "READY" : "NEEDS_WORK" })
+      console.log(`✅ ${city.slug} seeded`)
     }
-    
+
     return NextResponse.json({
       success: true,
-      message: "China Mega Expansion completed successfully",
+      message: "China Mega Expansion completed",
       results,
       summary: {
-        total_cities: results.length,
-        ready_for_traffic: results.filter(r => r.overall_quality >= 85).length,
-        needs_work: results.filter(r => r.overall_quality < 85).length
+        total: results.length,
+        ready: results.filter(r => r.status === "READY").length,
       }
     })
 
-  } catch (error) {
-    console.error("Error in China Mega Expansion:", error)
-    return NextResponse.json(
-      { error: "Internal server error", details: error.message },
-      { status: 500 }
-    )
+  } catch (error: any) {
+    console.error("China Mega Expansion error:", error)
+    return NextResponse.json({ error: "Failed", details: error.message }, { status: 500 })
   }
 }

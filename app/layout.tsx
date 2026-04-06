@@ -30,7 +30,6 @@ const GlobalMagnetics = dynamic(() => import("@/components/visual/GlobalMagnetic
 const FirstVisitPageGuide = dynamic(() => import("@/components/onboarding/FirstVisitPageGuide"), { ssr: false })
 
 // 100/100 OPTIMIZATION: Fonts loaded via CSS @import in globals.css (avoids build-time fetch failures)
-const fontVariables = "font-inter font-space-grotesk"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 
@@ -98,7 +97,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const dict = await getDictionary(locale)
 
   return (
-    <html lang={locale} dir={dir} className={fontVariables}>
+    <html lang={locale} dir={dir}>
       <head>
         {/* WORLD BEAST FINAL LAUNCH: Umami analytics */}
         <UmamiAnalytics />

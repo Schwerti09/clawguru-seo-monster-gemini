@@ -196,6 +196,14 @@ Session 3 Abschluss: A4 (`npm run db:migrate`) ausgeführt – 009 + 010 applied
 | `shouldBypassMiddleware` Bug | Alle `/api/*` Routes bypasssen jetzt Locale-Enforcement; vorher redirectete `/api/live-wall` → `/de/api/live-wall` (404) |
 | `RunbookNexus` stale closure | `useRef(latestParams)` Pattern – Pagination verlor vorher Search-Query (stale `q`/`tags` in `useEffect([page])`) |
 
+### Geo-Expansion Auth Fix (Session 4 – Commit `d5b64c9eb`)
+
+| Fix | Beschreibung |
+|-----|-------------|
+| `china-create` Auth | `hasSecret` + `GEO_EXPANSION_SECRET` hinzugefügt – war öffentlich erreichbar (DB-Write ohne Auth) |
+| `global-expansion` Auth | `hasSecret` + `GEO_EXPANSION_SECRET` hinzugefügt – war öffentlich erreichbar |
+| Debug-Logs entfernt | `console.log(✅ ...)` aus beiden Geo-Expansion Routes entfernt |
+
 ### Noch offen (kein akuter Fix notwendig)
 
 - **Affiliate Stats**: `affiliateData()` in `admin/cockpit` gibt `clicks: 0, sales: 0` – kein Tracking-System vorhanden

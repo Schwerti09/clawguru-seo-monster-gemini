@@ -1,14 +1,15 @@
 import { cn } from "@/lib/utils"
-import { forwardRef } from "react"
+import { forwardRef, isValidElement, cloneElement } from "react"
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link"
   size?: "default" | "sm" | "lg" | "icon"
+  asChild?: boolean
 }
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant = "default", size = "default", ...props }, ref) => {
+  ({ className, variant = "default", size = "default", asChild = false, ...props }, ref) => {
     const variants = {
       default: "bg-primary text-primary-foreground hover:bg-primary/90",
       destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
@@ -25,14 +26,27 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       icon: "h-10 w-10",
     }
 
+    const classes = cn(
+      "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+      variants[variant],
+      sizes[size],
+      className
+    )
+
+    if (asChild && isValidElement(props.children)) {
+      const child = props.children as React.ReactElement<Record<string, unknown>>;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { children: _, ...rest } = props;
+      return cloneElement(child, {
+        ...rest,
+        className: cn(classes, (child.props as { className?: string }).className),
+        ref,
+      });
+    }
+
     return (
       <button
-        className={cn(
-          "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
-          variants[variant],
-          sizes[size],
-          className
-        )}
+        className={classes}
         ref={ref}
         {...props}
       />

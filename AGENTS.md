@@ -70,6 +70,71 @@ Manual §-blocks end here. From D5+ only Killermachine v3.
 **Ziel bis Ende April:**  
 > 5.000 monatliche organische Sessions aus Geo-Pages + steigende Check-Start-Rate.
 
+## 5.1 Vollautomatische D5+ Wellen-Strategie (keine Rückfragen nötig)
+
+### Quality-Floor Abstufung pro Welle
+- **D5**: Quality ≥82 (ca. 20-30 Städte)
+- **D6**: Quality ≥80 (ca. 30-50 Städte)
+- **D7**: Quality ≥78 (ca. 50-80 Städte)
+- **D8**: Quality ≥75 (alle verbleibenden Städte)
+
+### Automatischer Ablauf pro Welle (kein Human-Gate nötig)
+1. **Killermachine v3 starten**: `npm run killermachine:v3`
+2. **Seed-Commit bei eligible_count > 0**: Automatisch bei `--with-seed-live`
+3. **Sitemap-Guardrail erweitern**: `npm run geo:sitemap-guardrail:live` (falls cityLimit < 50)
+4. **Auto-Promotion mit hohem Limit**: `npm run geo:ops-cycle:live` (maxPromotions=100)
+5. **Finaler Status-Check**: `npm run check:geo-rollout-status -- --verbose`
+
+### Forced Activation Commands (falls Städte als "skippedStable" hängen)
+```bash
+# Sitemap-Limit temporär erweitern
+node scripts/trigger-geo-sitemap-guardrail.js --mode=live --action=expand --cityLimit=48
+
+# Auto-Promotion mit maximalem Limit
+node scripts/trigger-geo-auto-promotion.js --mode=live --locale=de --slug=openclaw-risk-2026 --minRankingScore=60 --maxPromotions=100
+node scripts/trigger-geo-auto-promotion.js --mode=live --locale=en --slug=openclaw-exposed --minRankingScore=60 --maxPromotions=100
+
+# Ops-Zyklus durchlaufen
+npm run geo:ops-cycle:live
+
+# Finaler Status
+npm run check:geo-rollout-status -- --verbose
+```
+
+### GSC + Indexing pro Welle
+```bash
+# Vor jeder Welle
+npm run check:seo-canonicals
+npm run check:sitemap-redirects -- https://clawguru.org
+npm run check:prod-smoke -- --base=https://clawguru.org
+
+# Nach jeder Welle
+npm run gsc:index-priority:live  # 32 URLs (D4+Core)
+npm run gsc:fetch-daily-metrics  # Daily Metrics (wenn Credentials da)
+```
+
+### Wellen-Status (aktuell)
+- **D4**: 12 Städte (CEE/Balkan) – aktiv, Indexing API fulfilled
+- **D3**: 12 Städte (Südeuropa) – im System, Promotion pending
+- **D5**: Nächste Welle – Quality ≥82, ca. 20-30 Städte
+- **D6+**: Folgewellen – Quality ≥80/78/75, Rest-Städte
+
+### Agent-Kommandos (immer verfügbar)
+```bash
+# Killermachine v3 (vollautomatisch)
+npm run killermachine:v3
+
+# Forced Seed (wenn nötig)
+node scripts/killermachine-auto-scale-v3.js --with-seed-live
+
+# Live-Guard (finaler Check)
+npm run geo:ops-live-guard
+
+# GSC-Operativ
+npm run gsc:index-priority:dry-run
+npm run gsc:index-priority:live
+```
+
 ## 6. Agent Instructions für Windsurf / Cursor (ab sofort)
 
 Du bist jetzt der **Mycelium Traffic Killermachine Agent v3**.

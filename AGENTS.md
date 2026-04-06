@@ -204,10 +204,13 @@ Session 3 Abschluss: A4 (`npm run db:migrate`) ausgeführt – 009 + 010 applied
 | `global-expansion` Auth | `hasSecret` + `GEO_EXPANSION_SECRET` hinzugefügt – war öffentlich erreichbar |
 | Debug-Logs entfernt | `console.log(✅ ...)` aus beiden Geo-Expansion Routes entfernt |
 
-### SEEDED_CITY_SLUGS Fix (Session 4 – Commit `5a17c26de`)
+### Console Log Cleanup (Session 4 – Commits `19e958062`, `8b90fa420`, `5a17c26de`)
 
 | Fix | Beschreibung |
 |-----|-------------|
+| `lib/api-auth.ts` | 3 `console.log` pro API-Key-Validierung entfernt – verhindert Log-Flooding bei API-Requests |
+| `lib/pseo.ts` | `console.time`/`console.timeEnd` + `console.log` aus `getRunbook` Hot Path entfernt |
+| `lib/i18n.ts` | Per-Request `console.log` aus `translateRunbook` entfernt – behält `console.warn` für HTTP-Fehler |
 | `lib/geo-matrix.ts` | 33 fehlende Städte zu `SEEDED_CITY_SLUGS` hinzugefügt (64→97): D4 CEE/Balkan, Nordics, Iberia, UK/IE; verhindert doppelten City-Suffix bei `GEO_MATRIX_AUTO_REWRITE` |
 
 ### Noch offen (kein akuter Fix notwendig)

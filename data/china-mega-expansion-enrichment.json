@@ -1,0 +1,87 @@
+{
+  "updated": "2026-04-06",
+  "scope": "China Mega Expansion - Priority #1 Content Enrichment",
+  "target_markets": ["beijing", "shanghai", "guangzhou", "shenzhen"],
+  "quality_target": 85+,
+  "languages": ["de", "en", "zh", "ja", "ko"],
+  "cities": [
+    {
+      "city_slug": "beijing",
+      "title": "Beijing Security Operations Center",
+      "summary": "Leading cybersecurity solutions for Beijing's financial district and tech enterprises. Specialized in Chinese compliance and regulatory frameworks including Cybersecurity Law and Data Security Law.",
+      "tags": ["china", "beijing", "cybersecurity", "compliance", "financial-services", "tech-hub", "cybersecurity-law", "data-security-law"],
+      "clawScore": 88,
+      "content_depth": 85,
+      "local_relevance": 90,
+      "technical_accuracy": 88,
+      "market_focus": "Financial District + Zhongguancun Tech Hub",
+      "compliance_frameworks": ["Cybersecurity Law of PRC", "Data Security Law", "Personal Information Protection Law"],
+      "target_audience": ["Banks", "FinTech", "Tech Companies", "Government Agencies"],
+      "lastmod": "2026-04-06"
+    },
+    {
+      "city_slug": "shanghai", 
+      "title": "Shanghai Security Operations Center",
+      "summary": "Advanced security operations for Shanghai's international business district and fintech companies. Expert in cross-border data protection and Shanghai Free Trade Zone compliance.",
+      "tags": ["china", "shanghai", "cybersecurity", "fintech", "international-business", "data-protection", "free-trade-zone"],
+      "clawScore": 89,
+      "content_depth": 86,
+      "local_relevance": 91,
+      "technical_accuracy": 89,
+      "market_focus": "Lujiazui Financial District + Shanghai FTZ",
+      "compliance_frameworks": ["Shanghai Data Regulations", "Cross-border Data Transfer Rules", "FTZ Security Standards"],
+      "target_audience": ["International Banks", "FinTech", "Multinationals", "Trading Companies"],
+      "lastmod": "2026-04-06"
+    },
+    {
+      "city_slug": "guangzhou",
+      "title": "Guangzhou Security Operations Center", 
+      "summary": "Comprehensive security solutions for Guangzhou's manufacturing and logistics sectors. Specialized in industrial cybersecurity and supply chain protection for Pearl River Delta enterprises.",
+      "tags": ["china", "guangzhou", "cybersecurity", "manufacturing", "logistics", "industrial-security", "pearl-river-delta"],
+      "clawScore": 87,
+      "content_depth": 84,
+      "local_relevance": 89,
+      "technical_accuracy": 87,
+      "market_focus": "Manufacturing Hubs + Logistics Centers",
+      "compliance_frameworks": ["Industrial Control Systems Security", "Supply Chain Security Standards", "Guangdong Data Regulations"],
+      "target_audience": ["Manufacturers", "Logistics Companies", "Trading Companies", "Industrial Parks"],
+      "lastmod": "2026-04-06"
+    },
+    {
+      "city_slug": "shenzhen",
+      "title": "Shenzhen Security Operations Center",
+      "summary": "Cutting-edge security operations for Shenzhen's tech innovation hub and startup ecosystem. Expert in cloud security, AI security, and emerging technology protection for Qianhai cooperation zone.",
+      "tags": ["china", "shenzhen", "cybersecurity", "tech-hub", "startups", "cloud-security", "innovation", "qianhai", "ai-security"],
+      "clawScore": 90,
+      "content_depth": 87,
+      "local_relevance": 92,
+      "technical_accuracy": 90,
+      "market_focus": "Qianhai + Nanshan Tech District + Startup Ecosystem",
+      "compliance_frameworks": ["Shenzhen Innovation Security Standards", "AI Security Guidelines", "Qianhai Data Regulations"],
+      "target_audience": ["Tech Startups", "AI Companies", "Cloud Providers", "Innovation Labs", "Venture Capital"],
+      "lastmod": "2026-04-06"
+    }
+  ],
+  "expansion_strategy": {
+    "phase_1": ["beijing", "shanghai", "guangzhou", "shenzhen"],
+    "phase_2": ["chongqing", "tianjin", "wuhan", "chengdu"],
+    "phase_3": ["xian", "harbin", "nanjing", "hangzhou"],
+    "phase_4": ["shenyang", "guilin", "kunming", "urumqi"],
+    "phase_5": ["dalian", "qingdao", "ningbo", "xiamen"]
+  },
+  "traffic_potential": {
+    "target_languages": 5,
+    "urls_per_city": 5,
+    "total_urls_phase_1": 20,
+    "estimated_traffic_monthly": "50,000+ sessions",
+    "primary_markets": ["Financial Services", "Technology", "Manufacturing", "Logistics"],
+    "secondary_markets": ["Government", "Healthcare", "Education", "Retail"]
+  },
+  "next_actions": [
+    "Deploy enrichment API endpoints",
+    "Execute content enrichment for phase 1 cities",
+    "Launch CHINA-MEGA-EXPANSION wave with quality 85+",
+    "Monitor Chinese traffic and conversion rates",
+    "Prepare phase 2 cities based on performance metrics"
+  ]
+}

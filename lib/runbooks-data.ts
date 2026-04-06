@@ -2,6 +2,33 @@ import fs from 'fs'
 import path from 'path'
 import { SITE_URL } from './config'
 
+// Paths to try for the runbooks JSON file on different environments
+const FS_PATHS = [
+  'public/runbooks.json',
+  '.next/server/public/runbooks.json',
+  '.next/server/app/runbooks.json',
+  '../public/runbooks.json',
+]
+
+function tryReadFromMultiplePaths(): MinimalRunbook[] | null {
+  for (const rel of FS_PATHS) {
+    try {
+      const abs = path.isAbsolute(rel) ? rel : path.join(process.cwd(), rel)
+      const buf = fs.readFileSync(abs)
+      const arr = JSON.parse(buf.toString('utf8')) as MinimalRunbook[]
+      if (Array.isArray(arr) && arr.length >= 5) return arr
+    } catch { /* try next path */ }
+  }
+  // Also try __dirname-relative (works when bundled by Vercel)
+  try {
+    const abs = path.join(__dirname, '..', 'public', 'runbooks.json')
+    const buf = fs.readFileSync(abs)
+    const arr = JSON.parse(buf.toString('utf8')) as MinimalRunbook[]
+    if (Array.isArray(arr) && arr.length >= 5) return arr
+  } catch { /* ignore */ }
+  return null
+}
+
 export type MinimalRunbook = {
   slug: string
   title: string
@@ -19,14 +46,15 @@ export async function loadRunbooks(jsonRelPath: string = 'public/runbooks.json')
   const st: CacheState = g.__RUNBOOKS_DATA__
 
   async function loadFromFs(): Promise<MinimalRunbook[] | null> {
+    // Try the specified path first
     const abs = path.isAbsolute(jsonRelPath) ? jsonRelPath : path.join(process.cwd(), jsonRelPath)
     try {
       const buf = fs.readFileSync(abs)
       const arr = JSON.parse(buf.toString('utf8')) as MinimalRunbook[]
-      return Array.isArray(arr) ? arr : []
-    } catch {
-      return null
-    }
+      if (Array.isArray(arr) && arr.length >= 5) return arr
+    } catch { /* ignore */ }
+    // Try multiple known paths (Vercel, local dev, etc.)
+    return tryReadFromMultiplePaths()
   }
 
   async function loadFromHttp(): Promise<MinimalRunbook[] | null> {
@@ -41,14 +69,22 @@ export async function loadRunbooks(jsonRelPath: string = 'public/runbooks.json')
     }
   }
 
-  // If cache exists and looks healthy (>= 10 items), return it.
-  if (st.data && Array.isArray(st.data) && st.data.length >= 10) return st.data
+  // If cache exists and looks healthy (>= 5 items), return it.
+  if (st.data && Array.isArray(st.data) && st.data.length >= 5) return st.data
 
   const preferHttp = process.env.NODE_ENV === 'production' || process.env.PREFER_HTTP_RUNBOOKS === '1'
 
-  // Try preferred source first
-  const primary = preferHttp ? await loadFromHttp() : await loadFromFs()
-  if (primary && primary.length >= 10) {
+  // Always try FS first — it's faster and avoids self-referencing HTTP issues on Vercel cold starts
+  const fsData = await loadFromFs()
+  if (fsData && fsData.length >= 5) {
+    st.data = fsData
+    st.ts = Date.now()
+    return st.data
+  }
+
+  // Try preferred source next
+  const primary = preferHttp ? await loadFromHttp() : null
+  if (primary && primary.length >= 5) {
     st.data = primary
     st.ts = Date.now()
     return st.data

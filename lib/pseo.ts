@@ -1740,8 +1740,12 @@ export function getRunbook(slug: string): Runbook | null {
   if (found) return found
 
   const meta = parseRunbookSlug100k(slug)
-  if (meta && process.env.PSEO_ALLOW_SYNTHETIC_100K === "1") {
-    return _buildDummyRunbook(slug)
+  if (meta) {
+    try {
+      return generateRunbook100k(meta)
+    } catch {
+      return _buildDummyRunbook(slug)
+    }
   }
   return null
 }

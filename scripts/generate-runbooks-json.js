@@ -35,7 +35,7 @@ const ISSUES = [
   { slug: 'sbom' },
 ]
 
-const YEARS = ['2023', '2024', '2025', '2026']
+const YEARS = ['2024', '2025', '2026', '2027']
 
 function toTitle(slug) {
   return slug

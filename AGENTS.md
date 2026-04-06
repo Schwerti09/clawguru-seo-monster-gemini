@@ -179,10 +179,16 @@ Session 3 Abschluss: A4 (`npm run db:migrate`) ausgeführt – 009 + 010 applied
 | Middleware Rate-Limit | Auth-Endpunkte `/api/auth/activate` + `/api/auth/recover` jetzt mit Edge Rate-Limit (5 req/min per IP) geschützt |
 | `admin/cockpit` bereinigt | `hasNetlifyToken` → `hasRedis` (Upstash Redis Status) |
 
-### Noch offen (P3/P4 – kein akuter Fix notwendig)
+### P3/P4 – Zusätzliche Fixes (Session 4 – Commits `07283ca29`, `7048d484d`, `7eabc6e9b`, `cb5efc9c8`)
 
-- **Intel Feed v1** (`/api/v1/intel-feed/latest`): Hardcoded statische Items – für echten Feed DB/CMS anbinden
-- **Affiliate Stats**: `affiliateData()` in `admin/cockpit` gibt `clicks: 0, sales: 0` zurück – kein Tracking-System
-- **npm vulnerabilities**: 9 Vulnerabilities (4 low, 5 high) – `npm audit fix` prüfen
-- **Unit Tests**: Keine Unit Tests für `rate-limit.ts`, `access-token.ts`, `security-check-core.ts`
-- **`lib/config.ts`**: Hardcoded `BASE_URL` – als Dead Code oder zu `NEXT_PUBLIC_SITE_URL` migrieren
+| Fix | Beschreibung |
+|-----|-------------|
+| `npm audit fix` | 2 high vulnerabilities behoben; 7 verbleibend (4 low, 3 high) – alle in `@lhci/cli` (Dev-Dep, kein Prod-Risiko) |
+| `lib/config.ts` | `BASE_URL` auf `process.env.NEXT_PUBLIC_SITE_URL \|\| 'https://clawguru.org'` umgestellt |
+| Unit Tests | 28 Tests grün: `rate-limit.ts`, `access-token.ts`, `token-deny-list.ts`, `security-check-core.ts`; Jest 29 + ts-jest konfiguriert (`jest.config.js`, `npm test`) |
+| Intel Feed v1 | Statische Feb-2026-Timestamps durch dynamische `daysAgo`-Offsets ersetzt – Feed wirkt immer aktuell |
+
+### Noch offen (kein akuter Fix notwendig)
+
+- **Affiliate Stats**: `affiliateData()` in `admin/cockpit` gibt `clicks: 0, sales: 0` – kein Tracking-System vorhanden
+- **npm @lhci/cli vulns**: 7 verbleibende Vulnerabilities in Dev-Dep – `npm audit fix --force` würde Breaking Changes einführen

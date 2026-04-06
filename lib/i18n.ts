@@ -52,6 +52,8 @@ export function localeDir(locale: Locale): "rtl" | "ltr" {
   return isRTL(locale) ? "rtl" : "ltr"
 }
 
+import { generateTextOrdered } from "@/lib/ai/providers"
+
 /** Maps locale code to BCP-47 language tag for hreflang */
 export const LOCALE_HREFLANG: Partial<Record<Locale, string>> = {
   de: "de",
@@ -2251,7 +2253,7 @@ export async function translateRunbook(opts: {
     return { title, summary, locale: "de" as const }
   }
 
-  // NEXT-LEVEL UPGRADE 2026: All 14 locale names for Gemini translation
+  // NEXT-LEVEL UPGRADE 2026: All 14 locale names for AI translation
   const localeNames: Record<Locale, string> = {
     de: "German",
     en: "English",
@@ -2270,16 +2272,6 @@ export async function translateRunbook(opts: {
     ko: "Korean",
   }
 
-  const geminiKey = process.env.GEMINI_API_KEY
-  const geminiModel = process.env.GEMINI_MODEL || "gemini-1.5-flash"
-  const geminiBase = (
-    process.env.GEMINI_BASE_URL || "https://generativelanguage.googleapis.com/v1beta"
-  ).replace(/\/$/, "")
-
-  if (!geminiKey) {
-    return { title, summary, locale: targetLocale }
-  }
-
   const prompt = [
     `Translate the following runbook title and summary from German to ${localeNames[targetLocale]}.`,
     "Keep technical terms (e.g. SSH, TLS, CORS, CVE, runbook) as-is.",
@@ -2291,29 +2283,19 @@ export async function translateRunbook(opts: {
   ].join("\n")
 
   try {
-    const url = `${geminiBase}/models/${encodeURIComponent(geminiModel)}:generateContent?key=${encodeURIComponent(geminiKey)}`
-    const res = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        contents: [{ role: "user", parts: [{ text: prompt }] }],
-        generationConfig: { temperature: 0.2, maxOutputTokens: 300 },
-      }),
-      signal: AbortSignal.timeout(15_000),
-    })
-    if (!res.ok) {
-      console.warn("translateRunbook", { slug, status: res.status, result: "fallback:http" })
-      return { title, summary, locale: targetLocale }
-    }
-    const data = await res.json()
-    const text: string =
-      data?.candidates?.[0]?.content?.parts
-        ?.map((p: { text?: string }) => p?.text ?? "")
-        .join("") ?? ""
-    const jsonStr = text.replace(/```json|```/g, "").trim()
-    const parsed = JSON.parse(jsonStr) as { title?: string; summary?: string }
-    if (parsed.title && parsed.summary) {
-      return { title: parsed.title, summary: parsed.summary, locale: targetLocale as Locale }
+    const result = await generateTextOrdered(
+      "You are a professional translator. Always respond with valid JSON only.",
+      prompt,
+      "deepseek", // prefer DeepSeek for cost efficiency
+      false // allow fallback to other providers
+    )
+
+    if (result.text) {
+      const jsonStr = result.text.replace(/```json|```/g, "").trim()
+      const parsed = JSON.parse(jsonStr) as { title?: string; summary?: string }
+      if (parsed.title && parsed.summary) {
+        return { title: parsed.title, summary: parsed.summary, locale: targetLocale as Locale }
+      }
     }
   } catch (e: unknown) {
     console.error("translateRunbook error", { slug, error: e instanceof Error ? e.message : String(e) })

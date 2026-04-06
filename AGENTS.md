@@ -95,7 +95,7 @@ Aktueller Stand:
 | A1 | Done | Migration `009_dashboard_customer_scoping.sql`: `customer_id` auf `threats` + `mycelium_nodes`; Dashboard-Queries nur noch tenant-scoped |
 | A2 | Done | `lib/dashboard-identity.ts` (`parseDashboardPrincipal`) — eine Quelle für Kunden-Key + Plan |
 | A3 | Done | `POST /api/dashboard/tool-execution`: Auth via Cookie, Limits (Explorer), Rate-Burst, Inserts |
-| A4 | Todo | **Prod:** `npm run db:migrate` auf allen Umgebungen; ohne Migration bleiben Spalten leer / Writes fehlerhaft |
+| A4 | **Done** | `npm run db:migrate` ausgeführt – 009 + 010 applied; `customer_id` auf threats/mycelium_nodes, `customer_entitlements` Tabelle live |
 | A5 | **Done** | Rate-Limit **verteilt**: `lib/rate-limit.ts` + Upstash Redis REST (INCR/EXPIRE); In-Memory-Fallback wenn env vars fehlen |
 
 ### Phase B — Cockpit-UX (einheitlich echt)
@@ -136,7 +136,7 @@ Aktueller Stand:
 | D1 | **Done** | Playwright: Happy-Path `tool-execution-happy-path.spec.ts` – 401/400/200/503 Contracts, deliverable shape, UI-Smoke skippable ohne DB |
 | D2 | **Done** | `logTelemetry` bei rate_limited (429) + db_error (500) in `tool-execution`; strukturiert für Datadog/Axiom/CloudWatch |
 
-**Aktueller Umsetzungsstand (Kurz):** A1–A3, A5, B1–B5, C1–C4, D1–D2 abgeschlossen. **Einzig offener Punkt: A4** – Prod-DB-Migration ausführen (`npm run db:migrate` oder direkt `psql`).
+**Aktueller Umsetzungsstand (Kurz):** A1–A5, B1–B5, C1–C4, D1–D2 abgeschlossen. **Alle Phasen vollständig.** Cockpit 100 % real – keine Mock-Daten, echte Deliverables, Entitlements-Tabelle live.
 
 ---
 
@@ -144,3 +144,4 @@ Manual §-blocks end here. From now on: Killermachine v3.
 
 Letzte manuelle Änderung: 06.04.2026 (Phase C komplett – echte Deliverables, Entitlements-Tabelle, Schema-Fixes)
 Session 3 – 06.04.2026: Phase C vollständig, A5+D1+D2 done. Einzig offen: A4 (Prod-Migration 009+010).
+Session 3 Abschluss: A4 (`npm run db:migrate`) ausgeführt – 009 + 010 applied. Cockpit Realism Roadmap **vollständig abgeschlossen**.

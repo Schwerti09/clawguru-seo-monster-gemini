@@ -45,6 +45,11 @@ const SEEDED_CITY_SLUGS = new Set([
   "warsaw",
   "prague",
   "newyork",
+  // China Mega Expansion
+  "beijing",
+  "shanghai",
+  "guangzhou",
+  "shenzhen",
 ])
 
 export function slugifyCity(input: string): string {

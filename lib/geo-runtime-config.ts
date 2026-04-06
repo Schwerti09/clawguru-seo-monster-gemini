@@ -27,7 +27,7 @@ function clamp(value: number, min: number, max: number): number {
 }
 
 export function getDefaultGeoSitemapRuntimeLimits(): GeoSitemapRuntimeLimits {
-  const cityLimit = toInt(process.env.GEO_MATRIX_SITEMAP_CITY_LIMIT, 24, 1, 80)
+  const cityLimit = toInt(process.env.GEO_MATRIX_SITEMAP_CITY_LIMIT, 50, 1, 80)
   const cityPool = toInt(process.env.GEO_MATRIX_SITEMAP_CITY_POOL, 150, cityLimit, 240)
   const seedLimit = toInt(process.env.GEO_MATRIX_SITEMAP_SEED_LIMIT, 8, 1, 20)
   return {

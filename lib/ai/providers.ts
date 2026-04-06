@@ -196,10 +196,11 @@ async function callGemini(prompt: string): Promise<CallResult> {
   if (!apiKey) return { text: null, status: 401 };
   const base = (process.env.GEMINI_BASE_URL || "https://generativelanguage.googleapis.com/v1beta").replace(/\/$/, "");
   // Try preferred model first, then fallbacks to maximize compatibility
+  // Note: gemini-2.0-flash deprecated June 2026 → use 2.5 models
   const candidates = [
-    process.env.GEMINI_MODEL || "gemini-2.0-flash",
-    "gemini-1.5-flash",
-    "gemini-1.5-pro",
+    process.env.GEMINI_MODEL || "gemini-2.5-flash",
+    "gemini-2.5-flash-lite",
+    "gemini-2.0-flash",
   ].filter(Boolean);
   let lastStatus = 0;
   for (const model of candidates) {

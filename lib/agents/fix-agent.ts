@@ -5,7 +5,7 @@
 // WORLD BEAST UPGRADE: Gemini helper (self-contained)
 async function callGeminiFix(prompt: string): Promise<string | null> {
   const geminiKey = process.env.GEMINI_API_KEY
-  const geminiModel = process.env.GEMINI_MODEL || "gemini-1.5-flash"
+  const geminiModel = process.env.GEMINI_MODEL || "gemini-2.5-flash"
   const geminiBase = (
     process.env.GEMINI_BASE_URL || "https://generativelanguage.googleapis.com/v1beta"
   ).replace(/\/$/, "")

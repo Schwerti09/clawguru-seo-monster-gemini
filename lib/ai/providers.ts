@@ -195,29 +195,16 @@ async function callGemini(prompt: string): Promise<CallResult> {
   const apiKey = process.env.GEMINI_API_KEY?.trim();
   if (!apiKey) return { text: null, status: 401 };
   const base = (process.env.GEMINI_BASE_URL || "https://generativelanguage.googleapis.com/v1beta").replace(/\/$/, "");
-  // Try preferred model first, then fallbacks to maximize compatibility
-  // Note: gemini-2.0-flash deprecated June 2026 → use 2.5 models
+  // Try preferred model first, then fallback.
+  // gemini-2.0-flash removed: deprecated June 2026, doesn't support thinkingConfig.
   const candidates = [
     process.env.GEMINI_MODEL || "gemini-2.5-flash",
     "gemini-2.5-flash-lite",
-    "gemini-2.0-flash",
   ].filter(Boolean);
   let lastStatus = 0;
   for (const model of candidates) {
     const url = `${base}/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(apiKey)}`;
-    // Gemini 2.5+ models have "thinking" enabled by default; thinking tokens
-    // count against maxOutputTokens and can cause 400 errors when the budget
-    // is too small. Disable thinking for straightforward JSON generation.
-    // IMPORTANT: gemini-2.0-flash does NOT support thinkingConfig – sending it
-    // causes a 400 INVALID_ARGUMENT error.
-    const supportsThinking = /^gemini-(2\.5|[3-9]|[1-9]\d)/.test(model);
-    const generationConfig: Record<string, unknown> = {
-      temperature: 0.35,
-      maxOutputTokens: parseInt(process.env.GEMINI_MAX_OUTPUT_TOKENS || "8192", 10),
-    };
-    if (supportsThinking) {
-      generationConfig.thinkingConfig = { thinkingBudget: 0 };
-    }
+    const maxOutputTokens = parseInt(process.env.GEMINI_MAX_OUTPUT_TOKENS || "8192", 10);
     for (let attempt = 0; attempt <= RATE_LIMIT_RETRIES; attempt++) {
       try {
         const res = await fetch(url, {
@@ -225,7 +212,10 @@ async function callGemini(prompt: string): Promise<CallResult> {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             contents: [{ role: "user", parts: [{ text: prompt }] }],
-            generationConfig,
+            generationConfig: { temperature: 0.35, maxOutputTokens },
+            // thinkingConfig is a top-level field (NOT inside generationConfig).
+            // Disable thinking for straightforward JSON generation to save tokens.
+            thinkingConfig: { thinkingBudget: 0 },
           }),
         });
         lastStatus = res.status;
@@ -247,7 +237,12 @@ async function callGemini(prompt: string): Promise<CallResult> {
         const data = await res.json();
         const parts = data?.candidates?.[0]?.content?.parts;
         if (!Array.isArray(parts)) break;
-        const text = parts.map((p: { text?: string }) => p?.text).filter(Boolean).join("");
+        // Filter out thinking tokens (thought: true) that 2.5 models may include
+        const text = parts
+          .filter((p: { thought?: boolean }) => !p.thought)
+          .map((p: { text?: string }) => p?.text)
+          .filter(Boolean)
+          .join("");
         if (typeof text === "string" && text.trim()) return { text: text.trim(), status: res.status };
         break;
       } catch {

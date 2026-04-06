@@ -76,6 +76,45 @@ const SEEDED_CITY_SLUGS = new Set([
   "novosibirsk",
   "yekaterinburg",
   "kazan",
+  // UK / Ireland
+  "manchester",
+  "birmingham",
+  "dublin",
+  "edinburgh",
+  // Nordics
+  "copenhagen",
+  "aarhus",
+  "stockholm",
+  "gothenburg",
+  "malmo",
+  "oslo",
+  "helsinki",
+  "reykjavik",
+  // Italy (additional)
+  "turin",
+  "naples",
+  // Iberia (additional)
+  "lisbon",
+  "porto",
+  "valencia",
+  "seville",
+  "bilbao",
+  // France (additional)
+  "toulouse",
+  "nice",
+  // Poland (additional)
+  "krakow",
+  "wroclaw",
+  // CEE / Balkan (D4)
+  "budapest",
+  "bucharest",
+  "sofia",
+  "athens",
+  "thessaloniki",
+  "bratislava",
+  "zagreb",
+  "ljubljana",
+  "belgrade",
 ])
 
 export function slugifyCity(input: string): string {

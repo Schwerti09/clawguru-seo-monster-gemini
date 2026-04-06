@@ -86,12 +86,16 @@ export default async function LocaleRunbookPage(props: {
   // PHASE 1 Fix #1: Graceful error handling for broken runbook generation
   try {
     const { getRunbook } = await import("@/lib/pseo")
-    if (!getRunbook(slug)) {
-      permanentRedirect(`/${lang}/runbooks?q=${encodeURIComponent(slug)}`)
+    const { parseGeoVariantSlug } = await import("@/lib/geo-matrix")
+    // Try the slug as-is first, then strip geo-variant city suffix as fallback
+    const geoParsed = parseGeoVariantSlug(slug)
+    const resolvedSlug = getRunbook(slug) ? slug : (getRunbook(geoParsed.baseSlug) ? geoParsed.baseSlug : null)
+    if (!resolvedSlug) {
+      permanentRedirect(`/${lang}/runbooks?q=${encodeURIComponent(geoParsed.baseSlug || slug)}`)
     }
     const Mod = await import("@/app/runbook/[slug]/page")
     const RootRunbookPage = Mod.default
-    return <RootRunbookPage params={{ lang, slug }} />
+    return <RootRunbookPage params={{ lang, slug: resolvedSlug }} />
   } catch (err) {
     const anyErr = err as any
     const message = err instanceof Error ? err.message : String(err)

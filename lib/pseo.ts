@@ -1719,7 +1719,7 @@ export function getRunbook(slug: string): Runbook | null {
   if (IS_BUILD_PHASE) {
     // During build, generate on-demand only (no static RUNBOOKS lookup)
     try {
-      const meta = parseRunbookSlug100k(slug)
+      const meta = _tryParse100kWithGeoStrip(slug)
       if (meta) {
         const __label = `gen100k:${slug}`
         console.time(__label)
@@ -1739,13 +1739,30 @@ export function getRunbook(slug: string): Runbook | null {
   const found = list.find((r) => r.slug === slug) ?? null
   if (found) return found
 
-  const meta = parseRunbookSlug100k(slug)
+  const meta = _tryParse100kWithGeoStrip(slug)
   if (meta) {
     try {
       return generateRunbook100k(meta)
     } catch {
       return _buildDummyRunbook(slug)
     }
+  }
+  return null
+}
+
+/** Try parsing as 100k slug; if it fails, progressively strip trailing segments
+ *  to handle geo-variant suffixes appended by the middleware (e.g. -berlin, -groc39fheide). */
+function _tryParse100kWithGeoStrip(slug: string): RunbookMeta100k | null {
+  const direct = parseRunbookSlug100k(slug)
+  if (direct) return direct
+  // Strip trailing segments one at a time (max 3 to avoid over-stripping)
+  let current = slug
+  for (let i = 0; i < 3; i++) {
+    const lastDash = current.lastIndexOf("-")
+    if (lastDash < 1) break
+    current = current.slice(0, lastDash)
+    const meta = parseRunbookSlug100k(current)
+    if (meta) return meta
   }
   return null
 }

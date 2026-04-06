@@ -19,13 +19,15 @@ const LOCALES = ["de", "en"]
 
 export async function GET(request: NextRequest) {
   try {
+    const stable = request.nextUrl.searchParams.get("stable") === "1"
+    const rolloutStage = stable ? "stable" : "canary"
     const results = []
 
     for (const city of CHINA_CITIES) {
       // 1. Insert into geo_cities with correct schema
       await dbQuery(
         `INSERT INTO geo_cities (slug, name_de, name_en, country_code, priority, population, is_active, rollout_stage)
-         VALUES ($1, $2, $3, $4, $5, $6, TRUE, 'canary')
+         VALUES ($1, $2, $3, $4, $5, $6, TRUE, $7)
          ON CONFLICT (slug) DO UPDATE SET
            name_de = EXCLUDED.name_de,
            name_en = EXCLUDED.name_en,
@@ -33,9 +35,9 @@ export async function GET(request: NextRequest) {
            priority = EXCLUDED.priority,
            population = EXCLUDED.population,
            is_active = TRUE,
-           rollout_stage = 'canary',
+           rollout_stage = $7,
            updated_at = NOW()`,
-        [city.slug, city.name_de, city.name_en, city.country_code, city.priority, city.population]
+        [city.slug, city.name_de, city.name_en, city.country_code, city.priority, city.population, rolloutStage]
       )
 
       // 2. Insert quality into geo_variant_matrix (needed for seed eligibility check)

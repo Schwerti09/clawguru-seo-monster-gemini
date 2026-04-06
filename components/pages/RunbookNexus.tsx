@@ -39,6 +39,12 @@ export default function RunbookNexus() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
+  // Keep a ref to the latest search params so the page-change effect never sees stale values
+  const latestParams = useRef({ q, tags, limit })
+  useEffect(() => {
+    latestParams.current = { q, tags, limit }
+  })
+
   const fetchData = useCallback(async (params: { q: string; tags: string[]; page: number; limit: number }) => {
     setLoading(true)
     setError(null)
@@ -78,7 +84,8 @@ export default function RunbookNexus() {
   }, 300)
 
   useEffect(() => {
-    fetchData({ q, tags, page, limit })
+    const { q: currentQ, tags: currentTags, limit: currentLimit } = latestParams.current
+    fetchData({ q: currentQ, tags: currentTags, page, limit: currentLimit })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page])
 

@@ -62,7 +62,8 @@ function isPublicFile(pathname: string): boolean {
 const RATE_LIMITED_API_PATHS = new Set(["/api/live-wall", "/api/auth/activate", "/api/auth/recover"])
 
 function shouldBypassMiddleware(pathname: string): boolean {
-  if (pathname.startsWith("/api/") && !RATE_LIMITED_API_PATHS.has(pathname)) return true
+  // All API routes bypass locale-enforcement (rate limiting already ran before this check)
+  if (pathname.startsWith("/api/")) return true
   if (pathname.startsWith("/admin")) return true
   if (pathname.startsWith("/_next/")) return true
   if (pathname === "/favicon.ico") return true
@@ -140,6 +141,7 @@ export function middleware(request: NextRequest) {
   const isApi = pathname.startsWith("/api/")
   if (isApi) {
     const keep = pathname === "/api/live-wall" || pathname === "/api/runbooks/search" || pathname === "/api/clawlink.js"
+      || RATE_LIMITED_API_PATHS.has(pathname)
     if (!keep) {
       const res = NextResponse.next()
       res.headers.set(getRequestIdHeaderName(), requestId)
@@ -445,5 +447,11 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|.*\\..*).*)", "/api/live-wall", "/api/runbooks/search"],
+  matcher: [
+    "/((?!api|_next/static|_next/image|.*\\..*).*)",
+    "/api/live-wall",
+    "/api/runbooks/search",
+    "/api/auth/activate",
+    "/api/auth/recover",
+  ],
 }

@@ -26,7 +26,7 @@ export const metadata = {
   alternates: { canonical: "/pricing" }
 }
 
-type Feature = { label: string; isNew?: boolean }
+type Feature = { label: string; isNew?: boolean; isComing?: boolean }
 type FeatureGroup = { heading: string; items: Feature[] }
 
 function FeatureList({ groups, newBadge }: { groups: FeatureGroup[]; newBadge: string }) {
@@ -41,13 +41,21 @@ function FeatureList({ groups, newBadge }: { groups: FeatureGroup[]; newBadge: s
             {g.items.map((item) => (
               <li key={item.label} className="flex items-start gap-2 text-sm text-gray-200">
                 <span className="mt-[2px] shrink-0 size-[18px] rounded-full flex items-center justify-center text-[9px] font-bold"
-                  style={{ background: "rgba(0,255,157,0.12)", color: "#00ff9d" }} aria-hidden="true">✓</span>
-                <span className="leading-snug">
+                  style={{ background: item.isComing ? "rgba(255,165,0,0.10)" : "rgba(0,255,157,0.12)", color: item.isComing ? "#ffaa00" : "#00ff9d" }} aria-hidden="true">
+                  {item.isComing ? "▷" : "✓"}
+                </span>
+                <span className="leading-snug" style={{ color: item.isComing ? "#9ca3af" : undefined }}>
                   {item.label}
-                  {item.isNew && (
+                  {item.isNew && !item.isComing && (
                     <span className="ml-2 text-[9px] font-black uppercase tracking-widest px-[6px] py-[2px] rounded-full align-middle"
                       style={{ background: "rgba(0,184,255,0.18)", color: "#00b8ff" }}>
                       {newBadge}
+                    </span>
+                  )}
+                  {item.isComing && (
+                    <span className="ml-2 text-[9px] font-black uppercase tracking-widest px-[6px] py-[2px] rounded-full align-middle"
+                      style={{ background: "rgba(255,165,0,0.15)", color: "#ffaa00" }}>
+                      Soon
                     </span>
                   )}
                 </span>
@@ -92,7 +100,7 @@ function getDayPassGroups(dict: Awaited<ReturnType<typeof getDictionary>>): Feat
       heading: dict.pricing.grpLimits,
       items: [
         { label: `Max. ${TIER_LIMITS.daypass.maxSavedChecks} Saved Security Checks` },
-        { label: `Voice Copilot: ${dict.pricing.voiceCopilotLimited}` },
+        { label: `Voice Copilot: ${dict.pricing.voiceCopilotLimited}`, isComing: true },
         { label: "No Private Nodes / Private Forks" },
       ]
     },
@@ -112,8 +120,8 @@ function getProGroups(dict: Awaited<ReturnType<typeof getDictionary>>): FeatureG
       heading: dict.pricing.grpFeatureUnlocks,
       items: [
         { label: "Unlimited Saved Security Checks", isNew: true },
-        { label: "Private Nodes & Private Forks", isNew: true },
-        { label: "Voice Copilot – unlimited", isNew: true },
+        { label: "Private Nodes & Private Forks", isComing: true },
+        { label: "Voice Copilot – unlimited", isComing: true },
         { label: "Darwinian Feed – personalised Intel Feed", isNew: true },
       ]
     },
@@ -129,7 +137,7 @@ function getProGroups(dict: Awaited<ReturnType<typeof getDictionary>>): FeatureG
     {
       heading: dict.pricing.grpDeployment,
       items: [
-        { label: "SWARM Deployment Simulator", isNew: true },
+        { label: "SWARM Deployment Simulator", isComing: true },
         { label: "Provenance Chain – Source Tracking", isNew: true },
         { label: "Issue Tracker + Fix Repository", isNew: true },
       ]
@@ -157,15 +165,15 @@ function getTeamGroups(dict: Awaited<ReturnType<typeof getDictionary>>): Feature
     {
       heading: dict.pricing.grpTeamCollab,
       items: [
-        { label: "Shared Runbook Links & Playbooks", isNew: true },
-        { label: "Shared Mission Control (Team Dashboard)", isNew: true },
+        { label: "Shared Runbook Links & Playbooks", isComing: true },
+        { label: "Shared Mission Control (Team Dashboard)", isComing: true },
         { label: "Higher limits for all members (fair-use)" },
       ]
     },
     {
       heading: dict.pricing.grpRoadmap,
       items: [
-        { label: "Roadmap Votes – determines what gets built next" },
+        { label: "Roadmap Votes – determines what gets built next", isComing: true },
         { label: "Early Access to new features" },
       ]
     },
@@ -183,9 +191,9 @@ function getEnterpriseGroups(dict: Awaited<ReturnType<typeof getDictionary>>): F
     {
       heading: dict.pricing.grpEnterpriseUnlocks,
       items: [
-        { label: "SSO / SAML Integration", isNew: true },
-        { label: "Team Sharing & Shared Dashboards", isNew: true },
-        { label: "Custom Runbooks – own Runbook Builder", isNew: true },
+        { label: "SSO / SAML Integration", isComing: true },
+        { label: "Team Sharing & Shared Dashboards", isComing: true },
+        { label: "Custom Runbooks – own Runbook Builder", isComing: true },
       ]
     },
     {

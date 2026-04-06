@@ -22,7 +22,7 @@ async function callGeminiVideo(prompt: string): Promise<string | null> {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         contents: [{ role: "user", parts: [{ text: prompt }] }],
-        generationConfig: { temperature: 0.6, maxOutputTokens: 2000 },
+        generationConfig: { temperature: 0.6, maxOutputTokens: 2000, thinkingConfig: { thinkingBudget: 0 } },
       }),
       signal: AbortSignal.timeout(30_000),
     })

@@ -214,7 +214,11 @@ async function callGemini(prompt: string): Promise<CallResult> {
             contents: [{ role: "user", parts: [{ text: prompt }] }],
             generationConfig: {
               temperature: 0.35,
-              maxOutputTokens: parseInt(process.env.GEMINI_MAX_OUTPUT_TOKENS || "2048", 10),
+              maxOutputTokens: parseInt(process.env.GEMINI_MAX_OUTPUT_TOKENS || "8192", 10),
+              // Gemini 2.5 models have "thinking" enabled by default; thinking tokens
+              // count against maxOutputTokens and can cause 400 errors when the budget
+              // is too small. Disable thinking for straightforward JSON generation.
+              thinkingConfig: { thinkingBudget: 0 },
             },
           }),
         });

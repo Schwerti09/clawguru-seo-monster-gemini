@@ -157,7 +157,13 @@ export default async function DashboardPage() {
     ? Math.round(finished.filter((e: any) => e.status === 'completed').length / finished.length * 100)
     : 0
 
-  const effectiveTier = stripeData.subscriptionTier || plan || null
+  // If the user has a subscription plan (pro/team) but Stripe reports no active subscription,
+  // downgrade to null (explorer) so access is revoked cleanly.
+  // Day Pass is exempt: it expires via cookie maxAge (24h), no Stripe subscription involved.
+  const isSubscriptionPlan = plan === 'pro' || plan === 'team'
+  const hasActiveStripeSubscription = Boolean(stripeData.subscriptionTier)
+  const revokedSubscription = isSubscriptionPlan && customerId && !hasActiveStripeSubscription
+  const effectiveTier = revokedSubscription ? null : (stripeData.subscriptionTier || plan || null)
 
   const initialData: DashboardData = {
     clawScore,

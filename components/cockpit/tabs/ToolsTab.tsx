@@ -74,10 +74,10 @@ export function ToolsTab({ isShadowed, executions }: ToolsTabProps) {
   const lastRun = executions.length > 0 ? timeAgo(executions[0].created_at) : '–'
 
   const tools = [
-    { id: 'summon', name: 'ClawGuru Summon', description: 'KI-gesteuerte Echtzeit-Bedrohungserkennung', icon: Zap, features: ['Echtzeit-Analyse', 'Threat Intelligence', 'Automated Response'], status: 'ready', category: 'Offensive' },
-    { id: 'oracle', name: 'Security Oracle', description: 'Prädiktive Sicherheitsanalyse mit ML-Modellen', icon: Brain, features: ['72h Forecast', 'Risk Assessment', 'Strategic Planning'], status: 'ready', category: 'Intelligence' },
-    { id: 'neuro', name: 'Neuro Security', description: 'Neuronale Mustererkennung für Sicherheitsanomalien', icon: Activity, features: ['Pattern Detection', 'Anomaly Recognition', 'Learning System'], status: 'ready', category: 'Defensive' },
-    { id: 'check', name: 'Security Check', description: 'Umfassende Sicherheitsaudits und Schwachstellenbewertung', icon: Shield, features: ['Full Audit', 'Compliance Check', 'Remediation Guide'], status: 'ready', category: 'Audit' }
+    { id: 'summon', name: 'ClawGuru Summon', description: 'Runbook-Execution starten – Lauf wird protokolliert und im Audit Trail gespeichert', icon: Zap, features: ['Audit Trail Eintrag', 'Execution Log', 'Mycelium Node'], status: 'ready', category: 'Offensive' },
+    { id: 'oracle', name: 'Security Oracle', description: 'Sicherheits-Analyse initiieren – Ergebnis wird in Executions und Threats gespeichert', icon: Brain, features: ['Execution Log', 'Threat Record', 'Audit Trail'], status: 'ready', category: 'Intelligence' },
+    { id: 'neuro', name: 'Neuro Security', description: 'Runbook-Lauf protokollieren – persistenter Eintrag in Mycelium und Executions', icon: Activity, features: ['Execution Log', 'Mycelium Node', 'Audit Trail'], status: 'ready', category: 'Defensive' },
+    { id: 'check', name: 'Security Check', description: 'Security Audit starten – protokolliert in Executions, auditierbar via Mycelium', icon: Shield, features: ['Execution Log', 'Compliance Record', 'Audit Trail'], status: 'ready', category: 'Audit' }
   ]
 
   const handleToolExecute = async (toolId: string) => {
@@ -295,15 +295,18 @@ export function ToolsTab({ isShadowed, executions }: ToolsTabProps) {
               </div>
             </div>
 
-            {/* Resource stats */}
-            <div className="grid grid-cols-3 gap-3">
-              {[{ label: 'CPU', icon: Cpu, val: 45 }, { label: 'Memory', icon: Database, val: 60 }, { label: 'Network', icon: Wifi, val: 35 }].map(r => (
+            {/* Execution info */}
+            <div className="grid grid-cols-2 gap-3">
+              {[
+                { label: 'Runs gesamt', icon: Target, val: String(totalRuns) },
+                { label: 'Erfolgsrate', icon: CheckCircle, val: avgSuccess > 0 ? `${avgSuccess}%` : '–' }
+              ].map(r => (
                 <div key={r.label} className="rounded-lg p-3 border" style={{ background: 'rgba(255,255,255,0.015)', borderColor: 'rgba(255,255,255,0.04)' }}>
                   <div className="flex items-center gap-1.5 mb-1">
                     <r.icon className="w-3 h-3 text-gray-600" />
                     <span className="text-[10px] text-gray-600">{r.label}</span>
                   </div>
-                  <div className="text-base font-bold text-white">{r.val}%</div>
+                  <div className="text-base font-bold text-white">{r.val}</div>
                 </div>
               ))}
             </div>

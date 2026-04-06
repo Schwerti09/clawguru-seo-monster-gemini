@@ -40,7 +40,6 @@ interface BillingTabProps {
 
 export function BillingTab({ tier, onUpgrade, data }: BillingTabProps) {
   const currentConfig = TIER_CONFIGS[tier]
-  const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('monthly')
   const [portalLoading, setPortalLoading] = useState(false)
   const [portalError, setPortalError] = useState(false)
   // Real usage from data
@@ -70,22 +69,7 @@ export function BillingTab({ tier, onUpgrade, data }: BillingTabProps) {
     }
   }
 
-  const getYearlyDiscount = () => {
-    switch (billingCycle) {
-      case 'yearly': return 20
-      case 'monthly': return 0
-      default: return 0
-    }
-  }
-
-  const getAdjustedPrice = (basePrice: string) => {
-    if (!basePrice || basePrice === 'Free' || basePrice === 'Custom') return basePrice
-    const price = parseFloat(basePrice.replace('€', '').trim())
-    if (isNaN(price)) return basePrice
-    const discount = getYearlyDiscount()
-    const adjustedPrice = price * (1 - discount / 100)
-    return billingCycle === 'yearly' ? `€${adjustedPrice.toFixed(2)}/mo` : basePrice
-  }
+  const getAdjustedPrice = (basePrice: string) => basePrice
   
   return (
     <div className="p-8">
@@ -107,38 +91,6 @@ export function BillingTab({ tier, onUpgrade, data }: BillingTabProps) {
           </div>
         </div>
         
-        {/* Billing Cycle Toggle */}
-        <div className="flex items-center justify-center mb-6">
-          <div className="rounded-xl border p-1 flex" style={{ background: 'rgba(255,255,255,0.02)', borderColor: 'rgba(255,255,255,0.06)' }}>
-            <motion.button
-              onClick={() => setBillingCycle('monthly')}
-              className="px-6 py-2 rounded-md text-sm font-medium transition-all"
-              style={billingCycle === 'monthly' ? { background: 'rgba(234,179,8,0.15)', color: '#EAB308' } : { color: '#71717A' }}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              Monthly
-            </motion.button>
-            <motion.button
-              onClick={() => setBillingCycle('yearly')}
-              className="px-6 py-2 rounded-md text-sm font-medium transition-all relative"
-              style={billingCycle === 'yearly' ? { background: 'rgba(234,179,8,0.15)', color: '#EAB308' } : { color: '#71717A' }}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              Yearly
-              {billingCycle === 'yearly' && (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  className="absolute -top-2 -right-2 px-2 py-1 text-xs rounded-full font-bold" style={{ background: '#EAB308', color: '#0A0A0A' }}
-                >
-                  -20%
-                </motion.div>
-              )}
-            </motion.button>
-          </div>
-        </div>
       </motion.div>
 
       {/* Current Plan Overview */}
@@ -277,18 +229,12 @@ export function BillingTab({ tier, onUpgrade, data }: BillingTabProps) {
               </div>
               <div className="flex justify-between mb-2">
                 <span className="text-gray-400">Billing Cycle</span>
-                <span className="text-white font-semibold capitalize">{billingCycle}</span>
+                <span className="text-white font-semibold">Monthly</span>
               </div>
               <div className="flex justify-between mb-2">
                 <span className="text-gray-400">Monthly Cost</span>
                 <span className="text-white font-semibold">{getAdjustedPrice(currentConfig.price)}</span>
               </div>
-              {billingCycle === 'yearly' && (
-                <div className="flex justify-between mb-2">
-                  <span className="text-gray-400">Yearly Discount</span>
-                  <span className="text-green-400 font-semibold">-{getYearlyDiscount()}%</span>
-                </div>
-              )}
             </div>
             
             <div className="bg-white/5 rounded-lg p-4">
@@ -411,14 +357,6 @@ export function BillingTab({ tier, onUpgrade, data }: BillingTabProps) {
                   <div className="text-3xl font-bold text-white mb-1">
                     {getAdjustedPrice(config.price)}
                   </div>
-                  {billingCycle === 'yearly' && tierKey !== 'explorer' && tierKey !== 'enterprise' && (
-                    <div className="text-sm text-green-400">
-                      {(() => {
-                        const base = parseFloat(config.price.replace('€', '').trim())
-                        return isNaN(base) ? null : `Save €${Math.round(base * 0.2 * 12)}/year`
-                      })()}
-                    </div>
-                  )}
                 </div>
                 
                 <div className="space-y-3 mb-6">

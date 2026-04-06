@@ -57,10 +57,10 @@ export function OverviewTab({ data, tier, onUpgrade }: OverviewTabProps) {
     : 90
 
   const systemStatus = [
-    { name: 'Global Network', status: data.myceliumNodes > 0 ? 'Operational' : 'Offline', icon: Globe, ok: data.myceliumNodes > 0 },
-    { name: 'AI Engine', status: 'Optimal', icon: Cpu, ok: true },
+    { name: 'Global Network', status: data.myceliumNodes > 0 ? 'Operational' : 'Standby', icon: Globe, ok: data.myceliumNodes > 0 },
     { name: 'Executions', status: data.totalExecutions > 0 ? `${data.totalExecutions} Runs` : 'Keine', icon: Database, ok: data.totalExecutions > 0 },
-    { name: 'Threats', status: data.activeThreats > 0 ? `${data.activeThreats} Aktiv` : 'Keine', icon: Wifi, ok: data.activeThreats === 0 }
+    { name: 'Threats', status: data.activeThreats > 0 ? `${data.activeThreats} Aktiv` : 'Keine', icon: Wifi, ok: data.activeThreats === 0 },
+    { name: 'Success Rate', status: data.successRate > 0 ? `${data.successRate}%` : 'Noch keine', icon: Cpu, ok: data.successRate >= 80 }
   ]
 
   // Build recent activity from real threats + executions

@@ -16,7 +16,17 @@ async function readRawBody(req: NextRequest) {
 }
 
 // ---------------------------------------------------------------------------
-// invoice.paid – send finalized PDF invoice + self-service billing-portal link
+// Derive AccessPlan from a Stripe subscription (for renewal token issuance)
+// ---------------------------------------------------------------------------
+function planFromSubscription(subscription: Stripe.Subscription): AccessPlan {
+  const priceId = subscription.items.data[0]?.price?.id || ""
+  if (priceId === process.env.STRIPE_PRICE_TEAM) return "team"
+  if (priceId === process.env.STRIPE_PRICE_PRO) return "pro"
+  return "pro"
+}
+
+// ---------------------------------------------------------------------------
+// invoice.paid – send finalized PDF invoice + renew access token on subscription_cycle
 // ---------------------------------------------------------------------------
 async function handleInvoicePaid(invoice: Stripe.Invoice) {
   const email = invoice.customer_email
@@ -25,6 +35,51 @@ async function handleInvoicePaid(invoice: Stripe.Invoice) {
   const customerId =
     typeof invoice.customer === "string" ? invoice.customer : (invoice.customer as { id: string } | null)?.id
   if (!customerId) return
+
+  // On subscription renewal: issue a fresh access token and send a new Magic Link
+  // so the user's 30-day cookie can be refreshed without manual re-login.
+  if (invoice.billing_reason === "subscription_cycle") {
+    const subscriptionId =
+      typeof invoice.subscription === "string"
+        ? invoice.subscription
+        : (invoice.subscription as { id: string } | null)?.id
+    if (subscriptionId) {
+      try {
+        const sub = await stripe.subscriptions.retrieve(subscriptionId)
+        const plan = planFromSubscription(sub)
+        const now = Math.floor(Date.now() / 1000)
+        const token = signAccessToken({
+          v: 1,
+          plan,
+          customerId,
+          subscriptionId,
+          iat: now,
+          exp: now + 60 * 60 * 24 * 30,
+        })
+        const base2 = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
+        const magicUrl = `${base2}/api/auth/recover?token=${encodeURIComponent(token)}`
+        const support2 = process.env.SUPPORT_EMAIL || process.env.EMAIL_REPLY_TO || process.env.EMAIL_FROM || "support@clawguru.org"
+        await sendEmail({
+          to: email,
+          subject: "ClawGuru – Abo verlängert: Zugang erneuern",
+          html: `
+          <div style="font-family: Inter, system-ui, Arial; line-height:1.5; color:#111;">
+            <h2 style="margin:0 0 10px 0;">Dein ClawGuru Abo wurde verlängert</h2>
+            <p style="margin:0 0 14px 0;">Dein <b>${plan}</b>-Plan wurde erfolgreich verlängert.</p>
+            <p style="margin:0 0 18px 0;">Klicke auf den Button um deinen Zugang zu erneuern (setzt ein frisches Cookie für 30 Tage):</p>
+            <p style="margin:18px 0;">
+              <a href="${magicUrl}" style="display:inline-block; padding:12px 18px; background:#111827; color:#fff; text-decoration:none; border-radius:12px; font-weight:800;">
+                Zugang erneuern &#8594; Dashboard
+              </a>
+            </p>
+            <p style="margin:0; font-size:12px; color:#555;">Support: ${support2}</p>
+          </div>`
+        })
+      } catch (err) {
+        console.error("[webhook] Failed to issue renewal token", err)
+      }
+    }
+  }
 
   const base = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
 

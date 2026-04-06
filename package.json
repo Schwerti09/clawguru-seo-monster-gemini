@@ -39,6 +39,8 @@
     "icons:generate": "node scripts/generate-favicons.mjs",
     "build:data": "node scripts/generate-runbooks-json.js",
     "post-batch": "powershell -ExecutionPolicy Bypass -File scripts/post-batch-orchestrator.ps1",
+    "test": "jest",
+    "test:coverage": "jest --coverage",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "test:e2e:headed": "playwright test --headed --project=chromium"
@@ -71,10 +73,12 @@
     "@types/three": "0.151.0",
     "eslint": "^8.57.0",
     "eslint-config-next": "^14.2.21",
+    "jest": "^29.7.0",
     "playwright": "^1.58.2",
     "png-to-ico": "^2.1.8",
     "postcss": "^8.4.0",
     "sharp": "^0.33.5",
+    "ts-jest": "^29.4.9",
     "typescript": "^5.9.3"
   },
   "overrides": {

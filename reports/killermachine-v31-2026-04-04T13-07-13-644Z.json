@@ -1,0 +1,15 @@
+{
+  "ok": true,
+  "version": "v3.1",
+  "mode": "dry-only",
+  "startedAt": "2026-04-04T13:07:13.644Z",
+  "finishedAt": "2026-04-04T13:07:38.111Z",
+  "activeCanary": 0,
+  "activeStable": 49,
+  "canaryLowThreshold": 10,
+  "qualityFloor": 84,
+  "selectedBatch": "D3",
+  "seedAction": "dry-run",
+  "waveId": "km-v31-2026-04-04",
+  "note": "Human-Gate: promotion >15 cities. Append AGENTS optional — see §30"
+}

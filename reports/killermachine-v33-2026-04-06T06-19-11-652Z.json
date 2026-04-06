@@ -1,0 +1,36 @@
+{
+  "ok": true,
+  "version": "v3.3",
+  "mode": "with-seed-live",
+  "startedAt": "2026-04-06T06:19:11.652Z",
+  "finishedAt": "2026-04-06T06:19:19.748Z",
+  "activeCanary": 0,
+  "activeStable": 69,
+  "canaryLowThreshold": 10,
+  "qualityFloor": 84,
+  "minRankingScore": 65,
+  "selectedBatch": "D3",
+  "seedAction": "commit",
+  "waveId": "km-v33-2026-04-06",
+  "eligible_count": null,
+  "de": {
+    "totalRanked": 69,
+    "canaryRanked": 0,
+    "wouldPromote": "-",
+    "wouldPromoteCount": 0
+  },
+  "en": {
+    "totalRanked": 69,
+    "canaryRanked": 0,
+    "wouldPromote": "-",
+    "wouldPromoteCount": 0
+  },
+  "promotionReadyDe": false,
+  "promotionReadyEn": false,
+  "promotionReady": false,
+  "canaryRanked": 0,
+  "wouldPromoteCount": 0,
+  "warningCanaryNotInRanking": false,
+  "suggestedNextAction": "hold: eligibility not met on one or both locales (review dry-run).",
+  "note": "No automatic --mode=live. Human-Gate: promotion >15 cities."
+}

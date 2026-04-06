@@ -1,0 +1,36 @@
+{
+  "ok": true,
+  "version": "v3.3",
+  "mode": "dry-only",
+  "startedAt": "2026-04-04T15:38:09.539Z",
+  "finishedAt": "2026-04-04T15:38:22.578Z",
+  "activeCanary": 9,
+  "activeStable": 49,
+  "canaryLowThreshold": 10,
+  "qualityFloor": 84,
+  "minRankingScore": 65,
+  "selectedBatch": "D3",
+  "seedAction": "dry-run",
+  "waveId": "km-v33-2026-04-04",
+  "eligible_count": 12,
+  "de": {
+    "totalRanked": 58,
+    "canaryRanked": 9,
+    "wouldPromote": "naples,turin,lisbon,valencia,toulouse,seville,nice,porto,bilbao",
+    "wouldPromoteCount": 9
+  },
+  "en": {
+    "totalRanked": 58,
+    "canaryRanked": 9,
+    "wouldPromote": "naples,turin,lisbon,valencia,toulouse,seville,nice,porto,bilbao",
+    "wouldPromoteCount": 9
+  },
+  "promotionReadyDe": true,
+  "promotionReadyEn": true,
+  "promotionReady": true,
+  "canaryRanked": 9,
+  "wouldPromoteCount": 18,
+  "warningCanaryNotInRanking": false,
+  "suggestedNextAction": "Human-Review OK + count ≤15 per locale (or extended gate): run trigger-geo-canary-rollout --mode=live DE then EN (see AGENTS.md §37).",
+  "note": "No automatic --mode=live. Human-Gate: promotion >15 cities."
+}

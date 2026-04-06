@@ -105,15 +105,41 @@ cp .env.example .env.local
 
 Set at least:
 
-- `DATABASE_URL`
-- AI provider key(s) used by your environment (for example `GEMINI_API_KEY`)
-- Geo ops secrets for rollout/guardrails:
-  - `GEO_CANARY_ROLLOUT_SECRET`
-  - `GEO_SITEMAP_GUARDRAIL_SECRET`
-  - `GEO_AUTO_PROMOTION_SECRET`
-  - `GEO_REVALIDATE_SECRET`
-  - `GEO_REVALIDATE_SLUGS`
-  - `GEO_EXPANSION_SECRET` (needed for top-city-expansion endpoint auth)
+**Core**
+- `DATABASE_URL` – PostgreSQL connection string (Neon recommended)
+- `NEXT_PUBLIC_SITE_URL` – full URL incl. protocol, e.g. `https://clawguru.org`
+
+**Payments (Stripe)**
+- `STRIPE_SECRET_KEY` – Stripe secret key (`sk_live_...` / `sk_test_...`)
+- `STRIPE_PUBLISHABLE_KEY` – Stripe publishable key
+- `STRIPE_WEBHOOK_SECRET` – Stripe webhook signing secret (`whsec_...`)
+- `STRIPE_PRICE_PRO` – Stripe Price ID for Pro plan
+- `STRIPE_PRICE_TEAM` – Stripe Price ID for Team plan
+- `STRIPE_PRICE_DAYPASS` – Stripe Price ID for Day Pass
+- `STRIPE_PRICE_ENTERPRISE` – (optional) Enterprise Price ID
+
+**Dashboard auth**
+- `ACCESS_TOKEN_SECRET` – min. 32 bytes, used to sign `claw_access` JWT cookies
+
+**Rate limiting (optional – falls back to in-memory)**
+- `UPSTASH_REDIS_REST_URL` – Upstash Redis REST URL
+- `UPSTASH_REDIS_REST_TOKEN` – Upstash Redis REST token
+
+**Email**
+- `EMAIL_FROM` – sender address for transactional emails
+- `RESEND_API_KEY` or `SMTP_*` – depending on email provider
+
+**AI**
+- `GEMINI_API_KEY` – or other provider key(s) used by `lib/ai/providers.ts`
+
+**Geo ops secrets**
+- `GEO_CANARY_ROLLOUT_SECRET`
+- `GEO_SITEMAP_GUARDRAIL_SECRET`
+- `GEO_AUTO_PROMOTION_SECRET`
+- `GEO_REVALIDATE_SECRET`
+- `GEO_REVALIDATE_SLUGS`
+- `GEO_EXPANSION_SECRET`
+
 - `ANALYTICS_WRITE_KEY` (if analytics write path is enabled)
 
 On Windows, `.env.local` may be hidden in Explorer; use terminal (`dir /a`) or your editor's file list to open it.
@@ -124,6 +150,18 @@ On Windows, `.env.local` may be hidden in Explorer; use terminal (`dir /a`) or y
 npm run db:migrate
 ```
 
+Applies all pending migrations from `scripts/db/migrations/` in order.
+Already-applied migrations are skipped (idempotent). Current migrations:
+
+| File | What it does |
+|------|--------------|
+| `001_init.sql` | Base schema |
+| `002_gsc_metrics.sql` | GSC metrics |
+| `003_dashboard.sql` | `runbook_executions`, `threats`, `mycelium_nodes` |
+| `004–008` | Geo pipeline tables |
+| `009_dashboard_customer_scoping.sql` | Adds `customer_id` to `threats` + `mycelium_nodes` |
+| `010_customer_entitlements.sql` | `customer_entitlements` table (Stripe → DB entitlement sync) |
+
 ### 4) Run locally
 
 ```bash
@@ -131,6 +169,60 @@ npm run dev
 ```
 
 App starts on [http://localhost:3000](http://localhost:3000).
+
+---
+
+## Dashboard / Cockpit
+
+The paid dashboard at `/dashboard` is the customer-facing Mission Control.
+
+### Payment → access flow
+
+1. User visits `/pricing` → clicks **Buy** → Stripe Checkout
+2. On success → `/api/auth/activate?session_id=…` verifies payment, signs a JWT, sets `claw_access` cookie
+3. Cookie expiry: **24 h** (Day Pass) / **30 days** (Pro / Team)
+4. Stripe webhook (`checkout.session.completed`) additionally sends a **Magic Link** email with a fresh token
+5. On monthly renewal (`invoice.paid` + `billing_reason=subscription_cycle`): new Magic Link + DB entitlement refreshed
+6. On cancellation (`customer.subscription.deleted`): DB entitlement revoked immediately; cookie expires naturally
+
+### Tiers
+
+| Tier | Plan value | Features |
+|------|-----------|----------|
+| Explorer | – (no cookie) | Read-only, locked tabs |
+| Day Pass | `daypass` | All tools, 24 h |
+| Pro | `pro` | All tools, unlimited, 30 d renewable |
+| Team | `team` | Pro + team features (sharing coming soon) |
+
+### Dashboard tools (real deliverables)
+
+| Tool ID | What it actually does |
+|---------|----------------------|
+| `check` | HTTP header security scan via `lib/security-check-core.ts`; returns score 0–100, findings, recommendations |
+| `oracle` | Queries top-5 runbooks by quality score from `geo_variant_matrix` |
+| `summon` | Reads user's own execution history; returns posture summary (success rate, active threats) |
+| `neuro` | Analyzes execution patterns from DB; returns dominant tool + insight |
+
+Each tool run inserts one row in `runbook_executions`, one in `mycelium_nodes`, and one audit `threat` (severity: low).
+
+### Tier priority (effectiveTier resolution)
+
+```
+Stripe active subscription → customer_entitlements DB → JWT cookie plan
+```
+
+### Rate limiting
+
+20 requests / 60 s per `IP:customerKey`. Uses Upstash Redis when `UPSTASH_REDIS_REST_URL` + `UPSTASH_REDIS_REST_TOKEN` are set; falls back to in-memory (not shared across serverless instances).
+
+### E2E tests
+
+```bash
+npm run test:e2e           # headless Chromium
+npm run test:e2e:ui        # Playwright UI
+```
+
+Key spec: `e2e/payment-flow/tool-execution-happy-path.spec.ts` — tests 401/400/200/503 API contracts + UI smoke (skipped if `DATABASE_URL` absent).
 
 ---
 

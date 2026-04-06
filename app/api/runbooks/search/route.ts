@@ -3,6 +3,9 @@ import { loadRunbooks } from '@/lib/runbooks-data'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
+const MIN_RUNBOOKS_FOR_HEALTHY_INDEX = 10
+const DEFAULT_LIMIT = 24
+const EMPTY_INDEX: any[] = []
 
 function normalize(str: string) {
   return (str || '').toLowerCase()
@@ -55,17 +58,22 @@ export async function GET(req: NextRequest) {
     const q = sp.get('q') || ''
     const tags = parseTags(sp)
     const page = Math.max(1, parseInt(sp.get('page') || '1', 10) || 1)
-    const rawLimit = Math.max(1, parseInt(sp.get('limit') || '24', 10) || 24)
+    const rawLimit = Math.max(1, parseInt(sp.get('limit') || String(DEFAULT_LIMIT), 10) || DEFAULT_LIMIT)
     const limit = Math.min(100, rawLimit)
 
-    // Load materialized runbooks (FS/HTTP with internal caching + fallback) so
-    // result slugs resolve to real runbook detail pages instead of redirecting
-    // back to the runbooks hub.
-    const base = await loadRunbooks()
+    // loadRunbooks() uses global in-process caching and FS/HTTP fallback chaining.
+    // Load materialized runbooks so result slugs resolve to real runbook detail pages
+    // instead of redirecting back to the runbooks hub.
+    let base = EMPTY_INDEX
+    try {
+      base = await loadRunbooks()
+    } catch (loadError) {
+      console.error('runbooks/search loadRunbooks failed', loadError)
+    }
     const { total, items } = searchRunbooks(base, q, tags, page, limit)
 
     const payload: Record<string, any> = { q, tags, page, limit, total, items }
-    if (base.length < 10) {
+    if (base.length < MIN_RUNBOOKS_FOR_HEALTHY_INDEX) {
       payload.warning = 'Degraded mode: using lightweight fallback index to ensure fast responses'
     }
 

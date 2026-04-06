@@ -39,18 +39,21 @@ Aktueller Stand:
 
 **ZIEL: 1.000.000 veröffentlichte Seiten weltweit mit Quality 85+**
 
-**Aktueller Stand (06.04.2026):**
-- **765 URLs** mit Quality 85+ aktiviert
-- **15 Sprachen** voll ausgenutzt
-- **405 URLs** aus Premium/High-End/Standard Wellen
-- **360 URLs** aus Europe-Capitals Welle
-- **China Mega Expansion** vorbereitet (20+ URLs)
+**Aktueller Stand (06.04.2026 – Session 2):**
+- **96 aktive Städte** in geo_cities (stable, Q85+)
+- **4 China-Städte**: Beijing(95), Shanghai(94), Guangzhou(88), Shenzhen(89) – stabil
+- **10 US-Städte**: LA(93), Chicago(91), Houston(88), Dallas(85), Seattle(86), Austin(82), Phoenix(84), Philadelphia(83), San Diego(81), San Antonio(80)
+- **8 India-Städte**: Mumbai(94), Delhi(93), Bangalore(92), Hyderabad(88), Chennai(87), Kolkata(85), Pune(84), Ahmedabad(82)
+- **5 Russia-Städte**: Moscow(92), StPetersburg(88), Novosibirsk(78), Yekaterinburg(76), Kazan(74)
+- **City-Ranking**: 96/96 healthy, Batch-Probing ~2s (fix: Connection-Pool-Exhaustion behoben)
+- **Sitemap-Pool**: 150 Städte (war: 72), tägliche Rotation 24/150
+- **Endpoints live**: `/api/geo/china-create`, `/api/geo/global-expansion`
+- **SEEDED_CITY_SLUGS**: 96 Slugs in `lib/geo-matrix.ts`
 
 **Nächste 30 Tage Target:**
-- **China Mega Expansion**: 100+ URLs (Quality 85+)
-- **USA Expansion**: 500+ URLs (Quality 75+ → Enrichment auf 85+)
-- **India Expansion**: 500+ URLs (Quality 75+ → Enrichment auf 85+)
-- **Russia Expansion**: 500+ URLs (Quality 75+ → Enrichment auf 85+)
+- **Weitere Expansion**: Japan, Brazil, Mexico, South Korea, Southeast Asia
+- **Sitemap-Limit erhöhen**: GEO_MATRIX_SITEMAP_CITY_LIMIT 24 → 50
+- **Quality-Enrichment**: Locale-spezifische Inhalte für Top-50-Städte
 - **Additional Europe**: 200+ URLs (Quality 75+ → Enrichment auf 85+)
 
 **Strategie:**

@@ -27,95 +27,103 @@ export const metadata: Metadata = {
 
 const COMMUNITY_AGENTS = [
   {
-    name: "ClawBot Sentinel",
-    description: "Autonomer Security-Agent für 24/7 Threat Detection",
+    name: "ClawBot Security Sentinel",
+    description: "Autonomer Security-Agent für 24/7 Threat Detection mit SIEM Integration",
     category: "Security",
-    difficulty: "Advanced",
-    downloads: "2.5K",
-    rating: 4.8,
-    tags: ["security", "monitoring", "ai", "autonomous"],
+    difficulty: "Intermediate",
+    downloads: "1.2K",
+    rating: 4.7,
+    tags: ["security", "monitoring", "siem", "threat-detection"],
     features: [
       "Real-time Threat Detection",
       "Automated Incident Response", 
-      "Integration mit SIEM",
+      "SIEM Integration (Splunk, ELK)",
       "Custom Rule Engine"
-    ]
+    ],
+    link: "/securitycheck"
   },
   {
-    name: "MoltBot OpsMaster",
-    description: "Operations-Agent für Infrastructure Automation",
+    name: "MoltBot Infrastructure Manager",
+    description: "Operations-Agent für Infrastructure Automation und Auto-Healing",
     category: "Operations", 
-    difficulty: "Intermediate",
-    downloads: "1.8K",
-    rating: 4.6,
+    difficulty: "Advanced",
+    downloads: "890",
+    rating: 4.5,
     tags: ["ops", "automation", "infrastructure", "devops"],
     features: [
       "Infrastructure-as-Code",
       "Auto-Healing Systems",
       "Performance Monitoring",
       "Cost Optimization"
-    ]
+    ],
+    link: "/solutions/infrastructure"
   },
   {
-    name: "ClawBot Auditor",
-    description: "Compliance & Audit Agent für Security Posture",
+    name: "ClawBot Compliance Auditor",
+    description: "Automated Compliance & Audit Agent für Security Posture Management",
     category: "Compliance",
     difficulty: "Expert",
-    downloads: "980",
-    rating: 4.9,
+    downloads: "567",
+    rating: 4.8,
     tags: ["compliance", "audit", "security", "reporting"],
     features: [
-      "CIS Benchmarks",
+      "CIS Benchmarks Validation",
       "Automated Reporting",
       "Policy Enforcement",
       "Evidence Collection"
-    ]
+    ],
+    link: "/solutions/compliance"
   },
   {
-    name: "MoltBot Deployer",
-    description: "Zero-Touch Deployment Agent",
+    name: "MoltBot Deployment Engine",
+    description: "Zero-Touch Deployment Agent mit GitOps Integration",
     category: "Deployment",
     difficulty: "Intermediate", 
-    downloads: "1.2K",
-    rating: 4.5,
-    tags: ["deployment", "cicd", "automation", "devops"],
+    downloads: "734",
+    rating: 4.6,
+    tags: ["deployment", "cicd", "gitops", "automation"],
     features: [
       "GitOps Integration",
-      "Rollback Safety",
+      "Automated Rollback",
       "Multi-Cloud Support",
       "Blue-Green Deployments"
-    ]
+    ],
+    link: "/solutions/deployment"
   }
 ]
 
 const INTEGRATION_GUIDES = [
   {
-    title: "ClawBot mit Kubernetes integrieren",
-    description: "Schritt-für-Schritt Anleitung für ClawBot Deployment in K8s",
-    difficulty: "Intermediate",
-    readTime: "15 min",
-    category: "Kubernetes"
-  },
-  {
-    title: "MoltBot für AWS Security Hub",
-    description: "Security Hub Integration mit MoltOps",
-    difficulty: "Advanced", 
-    readTime: "20 min",
-    category: "AWS"
-  },
-  {
-    title: "OpenClaw + Prometheus Monitoring",
-    description: "Monitoring Setup für OpenClaw Agents",
+    title: "Security Check mit ClawBot",
+    description: "Komplette Anleitung für Security Hardening Checks und Compliance",
     difficulty: "Beginner",
-    readTime: "10 min", 
-    category: "Monitoring"
+    readTime: "10 min",
+    category: "Security",
+    link: "/securitycheck"
   },
   {
-    title: "MoltBot CI/CD Pipeline",
-    description: "Automatisierte Deployment Pipelines",
+    title: "Runbook Generator Setup",
+    description: "Automatisierte Runbook-Erstellung mit AI Integration",
+    difficulty: "Intermediate", 
+    readTime: "12 min",
+    category: "Automation",
+    link: "/runbooks"
+  },
+  {
+    title: "Neuro AI Threat Intelligence",
+    description: "AI-gestützte Threat Detection und Pattern Recognition",
+    difficulty: "Advanced",
+    readTime: "15 min", 
+    category: "AI/ML",
+    link: "/neuro"
+  },
+  {
+    title: "Oracle Security Intelligence",
+    description: "Security Oracle für Threat Intelligence Integration",
     difficulty: "Intermediate",
-    readTime: "18 min",
-    category: "CI/CD"
+    readTime: "8 min",
+    category: "Intelligence",
+    link: "/oracle"
   }
 ]
 
@@ -228,11 +236,15 @@ export default function CommunityPage({ dict, locale = "de" }: CommunityPageProp
                   </div>
 
                   <div className="flex gap-2">
-                    <Button size="sm" className="flex-1">
-                      Download Agent
+                    <Button size="sm" className="flex-1" asChild>
+                      <Link href={agent.link}>
+                        {agent.category === "Security" ? "Security Check" : 
+                         agent.category === "Operations" ? "Infrastructure" :
+                         agent.category === "Compliance" ? "Compliance" : "Deployment"}
+                      </Link>
                     </Button>
-                    <Button variant="outline" size="sm">
-                      Docs
+                    <Button variant="outline" size="sm" asChild>
+                      <Link href="/docs">Docs</Link>
                     </Button>
                   </div>
                 </CardContent>
@@ -269,11 +281,11 @@ export default function CommunityPage({ dict, locale = "de" }: CommunityPageProp
                   </div>
                   
                   <div className="flex gap-2">
-                    <Button size="sm" className="flex-1">
-                      Guide lesen
+                    <Button size="sm" className="flex-1" asChild>
+                      <Link href={guide.link}>Guide starten</Link>
                     </Button>
-                    <Button variant="outline" size="sm">
-                      Code
+                    <Button variant="outline" size="sm" asChild>
+                      <Link href="/docs">Dokumentation</Link>
                     </Button>
                   </div>
                 </CardContent>
@@ -285,40 +297,84 @@ export default function CommunityPage({ dict, locale = "de" }: CommunityPageProp
         {/* Resources Tab */}
         <TabsContent value="resources" className="space-y-6">
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold mb-4">Community Ressourcen</h2>
+            <h2 className="text-3xl font-bold mb-4">ClawBot & MoltBot Ressourcen</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              Tools, Templates und Ressourcen für die ClawBot & MoltBot Entwicklung.
+              Offizielle Tools, Dokumentation und Ressourcen für die ClawBot & MoltBot Entwicklung.
             </p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-6">
             <Card>
               <CardHeader>
-                <CardTitle>📚 Dokumentation</CardTitle>
+                <CardTitle>� Security Tools</CardTitle>
+                <CardDescription>Security Check Tools und Hardening Utilities</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Button className="w-full" asChild>
+                  <Link href="/securitycheck">Security Check</Link>
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>📚 Runbook Library</CardTitle>
+                <CardDescription>AI-generierte Security Runbooks und Best Practices</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Button className="w-full" asChild>
+                  <Link href="/runbooks">Runbooks</Link>
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>🧠 Neuro AI Engine</CardTitle>
+                <CardDescription>AI-gestützte Threat Intelligence und Pattern Recognition</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Button className="w-full" asChild>
+                  <Link href="/neuro">Neuro AI</Link>
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6 mt-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>🔮 Oracle Intelligence</CardTitle>
+                <CardDescription>Security Oracle für Threat Intelligence Integration</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Button className="w-full" asChild>
+                  <Link href="/oracle">Oracle</Link>
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>🛡️ Enterprise Solutions</CardTitle>
+                <CardDescription>Enterprise-grade Security und Compliance Lösungen</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Button className="w-full" asChild>
+                  <Link href="/solutions">Solutions</Link>
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>📖 Documentation</CardTitle>
                 <CardDescription>Komplette API-Dokumentation und Architecture Guides</CardDescription>
               </CardHeader>
               <CardContent>
-                <Button className="w-full">Docs öffnen</Button>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>🔧 Dev Tools</CardTitle>
-                <CardDescription>CLI Tools, Debugging Utilities und Testing Frameworks</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Button className="w-full">Tools download</Button>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>🎯 Templates</CardTitle>
-                <CardDescription>Agent Templates, Config Files und Deployment Manifests</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Button className="w-full">Templates</Button>
+                <Button className="w-full" asChild>
+                  <Link href="/docs">Docs</Link>
+                </Button>
               </CardContent>
             </Card>
           </div>
@@ -338,35 +394,39 @@ export default function CommunityPage({ dict, locale = "de" }: CommunityPageProp
               <CardHeader>
                 <CardTitle>🚀 Agent entwickeln</CardTitle>
                 <CardDescription>
-                  Entwickle deinen eigenen AI Agent und teile ihn mit der Community.
+                  Entwickle deinen eigenen AI Agent mit unseren Security Tools und Best Practices.
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <ul className="text-sm space-y-2">
-                  <li>• Agent Development Kit</li>
-                  <li>• Testing Framework</li>
-                  <li>• Deployment Guidelines</li>
-                  <li>• Code Review Process</li>
+                  <li>• Security Check Framework</li>
+                  <li>• AI Integration mit Neuro Engine</li>
+                  <li>• Runbook Generator Templates</li>
+                  <li>• Oracle Intelligence Integration</li>
                 </ul>
-                <Button className="w-full">Agent entwickeln</Button>
+                <Button className="w-full" asChild>
+                  <Link href="/securitycheck">Agent entwickeln</Link>
+                </Button>
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader>
-                <CardTitle>📖 Guides schreiben</CardTitle>
+                <CardTitle>📖 Security Guides erstellen</CardTitle>
                 <CardDescription>
-                  Teile dein Wissen mit Integration Guides und Tutorials.
+                  Teile dein Wissen mit Security Hardening Guides und Best Practices.
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <ul className="text-sm space-y-2">
-                  <li>• Guide Templates</li>
-                  <li>• Code Examples</li>
-                  <li>• Best Practices</li>
+                  <li>• Runbook Templates</li>
+                  <li>• Security Check Examples</li>
+                  <li>• Best Practice Guides</li>
                   <li>• Community Review</li>
                 </ul>
-                <Button className="w-full">Guide schreiben</Button>
+                <Button className="w-full" asChild>
+                  <Link href="/runbooks">Guide erstellen</Link>
+                </Button>
               </CardContent>
             </Card>
           </div>
@@ -375,17 +435,16 @@ export default function CommunityPage({ dict, locale = "de" }: CommunityPageProp
 
       {/* CTA Section */}
       <div className="text-center mt-16 p-8 bg-gradient-to-r from-primary/10 to-primary/5 rounded-lg">
-        <h2 className="text-2xl font-bold mb-4">Bereit für die Zukunft autonomer Ops?</h2>
+        <h2 className="text-2xl font-bold mb-4">Bereit für autonomes Security Management?</h2>
         <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
-          Tritt der ClawBot Community bei und baue mit uns die nächste Generation 
-          von AI-gestützten Operations-Tools.
+          Starte jetzt mit unseren Security Tools und entdecke die Zukunft der automatisierten Security-Checks.
         </p>
         <div className="flex gap-4 justify-center">
-          <Button size="lg">
-            Discord beitreten
+          <Button size="lg" asChild>
+            <Link href="/securitycheck">Security Check starten</Link>
           </Button>
-          <Button variant="outline" size="lg">
-            GitHub Repository
+          <Button variant="outline" size="lg" asChild>
+            <Link href="/runbooks">Runbooks entdecken</Link>
           </Button>
         </div>
       </div>

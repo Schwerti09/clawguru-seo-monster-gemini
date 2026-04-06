@@ -105,7 +105,7 @@ Aktueller Stand:
 | B1 | Done | Tools-Tab: API + `router.refresh()`, keine Fake-„Success“-Story ohne Server |
 | B2 | Done | QuickTools-Sidebar: gleicher Lauf via `hooks/useDashboardToolRun.ts` |
 | B3 | Done | Pro Lauf: `runbook_executions` + `mycelium_nodes` + **eine** `threats`-Zeile (low, audit trail) |
-| B4 | Todo | Fake-„CPU/Memory/Network“-Tiles im Tool-Panel: ersetzen durch echte Metriken oder entfernen |
+| B4 | Done | Fake-„CPU/Memory/Network“-Tiles entfernt; Tool-Beschreibungen ehrlich (Audit Trail, kein „KI-Echtzeit") |
 | B5 | Todo | **Roast / Security-Check:** optional dieselbe Execution-Kette (ein gemeinsames `source` im `result` JSON) |
 
 ### Phase C — Produkt-Leistung (nicht nur Protokoll)

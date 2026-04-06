@@ -188,6 +188,14 @@ Session 3 Abschluss: A4 (`npm run db:migrate`) ausgeführt – 009 + 010 applied
 | Unit Tests | 28 Tests grün: `rate-limit.ts`, `access-token.ts`, `token-deny-list.ts`, `security-check-core.ts`; Jest 29 + ts-jest konfiguriert (`jest.config.js`, `npm test`) |
 | Intel Feed v1 | Statische Feb-2026-Timestamps durch dynamische `daysAgo`-Offsets ersetzt – Feed wirkt immer aktuell |
 
+### Middleware + Runbooks Fix (Session 4 – Commit `2794a8c55`)
+
+| Fix | Beschreibung |
+|-----|-------------|
+| `middleware.ts` Matcher | `/api/auth/activate` + `/api/auth/recover` zum Matcher hinzugefügt – vorher lief Middleware für diese Routes gar nicht |
+| `shouldBypassMiddleware` Bug | Alle `/api/*` Routes bypasssen jetzt Locale-Enforcement; vorher redirectete `/api/live-wall` → `/de/api/live-wall` (404) |
+| `RunbookNexus` stale closure | `useRef(latestParams)` Pattern – Pagination verlor vorher Search-Query (stale `q`/`tags` in `useEffect([page])`) |
+
 ### Noch offen (kein akuter Fix notwendig)
 
 - **Affiliate Stats**: `affiliateData()` in `admin/cockpit` gibt `clicks: 0, sales: 0` – kein Tracking-System vorhanden

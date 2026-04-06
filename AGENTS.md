@@ -145,3 +145,44 @@ Manual §-blocks end here. From now on: Killermachine v3.
 Letzte manuelle Änderung: 06.04.2026 (Phase C komplett – echte Deliverables, Entitlements-Tabelle, Schema-Fixes)
 Session 3 – 06.04.2026: Phase C vollständig, A5+D1+D2 done. Einzig offen: A4 (Prod-Migration 009+010).
 Session 3 Abschluss: A4 (`npm run db:migrate`) ausgeführt – 009 + 010 applied. Cockpit Realism Roadmap **vollständig abgeschlossen**.
+
+---
+
+## 8. Security Audit Session – 06.04.2026 (Session 4)
+
+**Tiefenanalyse + Priorisierter Fix-Plan vollständig umgesetzt.**
+
+### P1 – KRITISCH (behoben, Commit `9cafde821`)
+
+| Fix | Beschreibung |
+|-----|-------------|
+| `admin/executions` Auth | `verifyAdminToken` hinzugefügt – war öffentlich erreichbar |
+| `admin/revenue` Auth + Schema | Auth hinzugefügt + Join auf nicht-existente Tabellen (`payments`, `users`) durch echtes Schema (`customer_entitlements`, `runbook_executions`) ersetzt |
+| `admin/users` Auth + Schema | Auth hinzugefügt + Join auf `user_tier`, `user_metrics` durch echtes Schema ersetzt |
+| `admin/system-health` Auth | `verifyAdminToken` hinzugefügt – war öffentlich erreichbar |
+| Dead Code entfernt | `lib/clawguru_runbooks_tier2_patch.zip`, `deno.lock`, `fix-broken.js`, `test-gemini.js`, `lib/kb.ts` aus git entfernt |
+
+### P2 – HOCH (behoben, Commit `9cafde821`)
+
+| Fix | Beschreibung |
+|-----|-------------|
+| Token Deny-List verdrahtet | `lib/access-token.ts`: `isTokenDenied()` wird jetzt in `verifyAccessToken` geprüft – Sofort-Revoke möglich |
+| Copilot Rate Limiting | `/api/copilot` hat jetzt 10 req/min per IP (via `checkRateLimit`) – AI-Kosten-Schutz |
+| Netlify → Vercel | `lib/netlify-api.ts` + `admin/kill-switch` komplett auf Upstash Redis umgestellt – keine Netlify-Abhängigkeit mehr |
+| `@types/jest` installiert | Commit `561703add` – TypeScript-Fehler in `__tests__/batch-generate.test.ts` behoben |
+
+### P3 – MITTEL (behoben, Commits `9cafde821` + `561703add`)
+
+| Fix | Beschreibung |
+|-----|-------------|
+| `.gitignore` repariert | Kaputte Globs `(` und `({` entfernt (brachen ripgrep/grep Tools); neue Einträge: `DEPLOY_ID.txt`, `deno.lock`, `test-gemini.js`, `fix-broken.js` |
+| Middleware Rate-Limit | Auth-Endpunkte `/api/auth/activate` + `/api/auth/recover` jetzt mit Edge Rate-Limit (5 req/min per IP) geschützt |
+| `admin/cockpit` bereinigt | `hasNetlifyToken` → `hasRedis` (Upstash Redis Status) |
+
+### Noch offen (P3/P4 – kein akuter Fix notwendig)
+
+- **Intel Feed v1** (`/api/v1/intel-feed/latest`): Hardcoded statische Items – für echten Feed DB/CMS anbinden
+- **Affiliate Stats**: `affiliateData()` in `admin/cockpit` gibt `clicks: 0, sales: 0` zurück – kein Tracking-System
+- **npm vulnerabilities**: 9 Vulnerabilities (4 low, 5 high) – `npm audit fix` prüfen
+- **Unit Tests**: Keine Unit Tests für `rate-limit.ts`, `access-token.ts`, `security-check-core.ts`
+- **`lib/config.ts`**: Hardcoded `BASE_URL` – als Dead Code oder zu `NEXT_PUBLIC_SITE_URL` migrieren

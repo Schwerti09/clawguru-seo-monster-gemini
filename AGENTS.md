@@ -77,6 +77,54 @@ Aktueller Stand:
 5. **Quality-Gates** strikt bei 85+ für alle neuen URLs
 6. **Global Scaling** auf 50+ Länder, 200+ Städte
 
+## 7. Cockpit Realism Roadmap (Zahlung → echte Leistung, 100 % nachvollziehbar)
+
+**Ziel:** Nach Checkout sieht der Kunde nur **seine** Daten; jede Tool-Aktion erzeugt **persistente**, auditable Spuren (Executions, Mycelium, Threats); keine reine UI-Deko.
+
+### Release-Disziplin (Git)
+
+- Änderungen an diesem Plan: **erst committen und pushen, wenn der Owner ausdrücklich „Go“ schreibt.**
+
+### Phase A — Daten & Isolation (Fundament)
+
+| Step | Status | Beschreibung |
+|------|--------|--------------|
+| A1 | Done | Migration `009_dashboard_customer_scoping.sql`: `customer_id` auf `threats` + `mycelium_nodes`; Dashboard-Queries nur noch tenant-scoped |
+| A2 | Done | `lib/dashboard-identity.ts` (`parseDashboardPrincipal`) — eine Quelle für Kunden-Key + Plan |
+| A3 | Done | `POST /api/dashboard/tool-execution`: Auth via Cookie, Limits (Explorer), Rate-Burst, Inserts |
+| A4 | Todo | **Prod:** `npm run db:migrate` auf allen Umgebungen; ohne Migration bleiben Spalten leer / Writes fehlerhaft |
+| A5 | Todo | Rate-Limit **verteilt** (Redis/Upstash) statt In-Memory-Map pro Serverless-Instanz |
+
+### Phase B — Cockpit-UX (einheitlich echt)
+
+| Step | Status | Beschreibung |
+|------|--------|--------------|
+| B1 | Done | Tools-Tab: API + `router.refresh()`, keine Fake-„Success“-Story ohne Server |
+| B2 | Done | QuickTools-Sidebar: gleicher Lauf via `hooks/useDashboardToolRun.ts` |
+| B3 | Done | Pro Lauf: `runbook_executions` + `mycelium_nodes` + **eine** `threats`-Zeile (low, audit trail) |
+| B4 | Todo | Fake-„CPU/Memory/Network“-Tiles im Tool-Panel: ersetzen durch echte Metriken oder entfernen |
+| B5 | Todo | **Roast / Security-Check:** optional dieselbe Execution-Kette (ein gemeinsames `source` im `result` JSON) |
+
+### Phase C — Produkt-Leistung (nicht nur Protokoll)
+
+| Step | Status | Beschreibung |
+|------|--------|--------------|
+| C1 | Todo | Pro Tool ein **konkretes Deliverable** definieren (Report-JSON, PDF, Link, API-Payload) und im `result` speichern |
+| C2 | Todo | Wo möglich: bestehende APIs (Oracle, Check-Funnel, Roast) **serverseitig** im `tool-execution` Handler anbinden statt Stub |
+| C3 | Todo | Stripe **Webhook → Entitlements-Tabelle** (Fallback wenn Cookie fehlt / Re-Login) — optional zweite Zeile der Wahrheit |
+| C4 | Todo | `app/api/admin/executions` Schema mit `003_dashboard.sql` (`customer_id`) angleichen oder separate Admin-View |
+
+### Phase D — Qualitätssicherung
+
+| Step | Status | Beschreibung |
+|------|--------|--------------|
+| D1 | Todo | Playwright: Happy-Path „Cookie gesetzt → POST tool-execution → 200 → Dashboard zeigt neue Zeile“ (Mock DB oder Test-DB) |
+| D2 | Todo | Monitoring/Alert wenn `tool-execution` 5xx-Rate steigt |
+
+**Aktueller Umsetzungsstand (Kurz):** A1–A3, B1–B3 im Code; A4/A5 und Phase C/D offen bis „100 % Produkt-real“ (echte Analyse-Ergebnisse pro Tool).
+
+---
+
 Manual §-blocks end here. From now on: Killermachine v3.
 
-Letzte manuelle Änderung: 05.04.2026
+Letzte manuelle Änderung: 06.04.2026 (Cockpit-Roadmap + Realism-Steps)

@@ -3,14 +3,18 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { UserTier } from '@/lib/tier-access'
-import { Lock } from 'lucide-react'
+import { Lock, Loader2 } from 'lucide-react'
+import { useDashboardToolRun } from '@/hooks/useDashboardToolRun'
 
 interface QuickToolsProps {
   tier: UserTier
 }
 
 export function QuickTools({ tier }: QuickToolsProps) {
+  const { runTool, runningToolId } = useDashboardToolRun()
   const [activeTool, setActiveTool] = useState<string | null>(null)
+  const [lastError, setLastError] = useState<string | null>(null)
+  const [lastOkId, setLastOkId] = useState<string | null>(null)
 
   const tools = [
     { id: 'summon', icon: '⚡', label: 'Summon' },
@@ -37,6 +41,7 @@ export function QuickTools({ tier }: QuickToolsProps) {
         {tools.map((tool) => {
           const isAccessible = canAccessTool(tool.id)
           const isActive = activeTool === tool.id
+          const isBusy = runningToolId === tool.id
 
           return (
             <motion.button
@@ -55,12 +60,30 @@ export function QuickTools({ tier }: QuickToolsProps) {
                       color: '#3F3F46'
                     }
               }
-              whileHover={isAccessible ? { scale: 1.05, borderColor: 'rgba(234,179,8,0.2)' } : {}}
-              whileTap={isAccessible ? { scale: 0.95 } : {}}
-              onClick={() => isAccessible && setActiveTool(isActive ? null : tool.id)}
-              disabled={!isAccessible}
+              whileHover={isAccessible && !isBusy ? { scale: 1.05, borderColor: 'rgba(234,179,8,0.2)' } : {}}
+              whileTap={isAccessible && !isBusy ? { scale: 0.95 } : {}}
+              onClick={() => {
+                if (!isAccessible || isBusy) return
+                setLastError(null)
+                setLastOkId(null)
+                void (async () => {
+                  const r = await runTool(tool.id)
+                  if (r.ok) {
+                    setActiveTool(tool.id)
+                    setLastOkId(r.executionId)
+                  } else {
+                    setActiveTool(null)
+                    setLastError(r.message)
+                  }
+                })()
+              }}
+              disabled={!isAccessible || !!runningToolId}
             >
-              <span className="text-lg mb-0.5">{tool.icon}</span>
+              {isBusy ? (
+                <Loader2 className="w-5 h-5 animate-spin mb-0.5" style={{ color: '#EAB308' }} />
+              ) : (
+                <span className="text-lg mb-0.5">{tool.icon}</span>
+              )}
               <span className="text-[9px] font-medium">{tool.label}</span>
 
               {isActive && isAccessible && (
@@ -96,11 +119,20 @@ export function QuickTools({ tier }: QuickToolsProps) {
             <div className="text-center">
               <div className="text-xl mb-1">{tools.find(t => t.id === activeTool)?.icon}</div>
               <div className="text-[11px] font-medium text-white mb-0.5">{tools.find(t => t.id === activeTool)?.label}</div>
-              <div className="text-[10px] text-gray-600">Klicken zum Aktivieren</div>
+              <div className="text-[10px] text-gray-600">Klicken — wird serverseitig ausgeführt</div>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
+
+      {(lastError || lastOkId) && (
+        <div className="px-3 mt-2 text-[10px] leading-snug">
+          {lastError && <p className="text-red-400/90">{lastError}</p>}
+          {lastOkId && !lastError && (
+            <p className="text-gray-500">Run gespeichert · <span className="font-mono text-gray-600">{lastOkId.slice(0, 8)}…</span></p>
+          )}
+        </div>
+      )}
 
       <div className="h-4" />
     </div>

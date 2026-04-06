@@ -1,7 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
+import { useDashboardToolRun } from '@/hooks/useDashboardToolRun'
 import { motion, AnimatePresence } from 'framer-motion'
 import { DEFAULT_LOCALE, SUPPORTED_LOCALES, type Locale } from '@/lib/i18n'
 import { RoastMyStack } from '@/components/roast/RoastMyStack'
@@ -56,7 +57,7 @@ function timeAgo(dateStr: string): string {
 
 export function ToolsTab({ isShadowed, executions }: ToolsTabProps) {
   const pathname = usePathname()
-  const router = useRouter()
+  const { runTool, runningToolId } = useDashboardToolRun()
   const dashLocale = localeFromPathname(pathname)
   const dashPrefix = `/${dashLocale}`
 
@@ -92,40 +93,17 @@ export function ToolsTab({ isShadowed, executions }: ToolsTabProps) {
     }, 350)
 
     try {
-      const res = await fetch('/api/dashboard/tool-execution', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ toolId }),
-        credentials: 'include',
-      })
-      const data = (await res.json().catch(() => ({}))) as {
-        ok?: boolean
-        error?: string
-        execution?: { id?: string }
-      }
+      const result = await runTool(toolId)
       clearInterval(tick)
-      if (!res.ok) {
+      if (!result.ok) {
         setExecutionStatus('error')
         setExecutionProgress(0)
-        const code = data.error
-        setExecutionError(
-          code === 'execution_limit'
-            ? 'Monatliches Ausführungslimit erreicht (Explorer).'
-            : code === 'unauthorized'
-              ? 'Nicht angemeldet — bitte zuerst kaufen und aktivieren.'
-              : code === 'database_unconfigured'
-                ? 'Datenbank nicht konfiguriert (ADMIN: DATABASE_URL).'
-                : code === 'rate_limited'
-                  ? 'Zu viele Anfragen. Bitte kurz warten.'
-                  : 'Ausführung fehlgeschlagen.'
-        )
+        setExecutionError(result.message)
         return
       }
       setExecutionProgress(100)
       setExecutionStatus('completed')
-      const id = data.execution?.id
-      setLastRunSummary(id ? `Lauf serverseitig protokolliert. Execution-ID: ${id}` : 'Lauf serverseitig protokolliert.')
-      router.refresh()
+      setLastRunSummary(`Lauf serverseitig protokolliert. Execution-ID: ${result.executionId}`)
     } catch {
       clearInterval(tick)
       setExecutionStatus('error')
@@ -186,10 +164,10 @@ export function ToolsTab({ isShadowed, executions }: ToolsTabProps) {
             transition={{ delay: index * 0.1, duration: 0.5 }}
             className={`relative group ${isShadowed ? 'pointer-events-none' : 'cursor-pointer'}`}
             onClick={() => {
-              if (isShadowed || executionStatus === 'running') return
+              if (isShadowed || runningToolId) return
               void handleToolExecute(tool.id)
             }}
-            whileHover={!isShadowed && executionStatus !== 'running' ? { y: -4, transition: { duration: 0.3 } } : {}}
+            whileHover={!isShadowed && !runningToolId ? { y: -4, transition: { duration: 0.3 } } : {}}
           >
             <div
               className="relative p-6 rounded-2xl border overflow-hidden transition-all duration-500 group-hover:border-yellow-500/20"

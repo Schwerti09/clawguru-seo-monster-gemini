@@ -7,6 +7,13 @@ export const runtime = "nodejs"
 
 const ALLOWED_TOOLS = new Set(["summon", "oracle", "neuro", "check"])
 
+const TOOL_THREAT_COPY: Record<string, { title: string }> = {
+  summon: { title: "ClawGuru Summon — Lauf abgeschlossen" },
+  oracle: { title: "Security Oracle — Analyse protokolliert" },
+  neuro: { title: "Neuro Security — Musterlauf protokolliert" },
+  check: { title: "Security Check — Audit-Lauf protokolliert" },
+}
+
 const RUN_WINDOW_MS = 60_000
 const RUN_MAX_PER_WINDOW = 20
 const runBurst = new Map<string, { count: number; windowStart: number }>()
@@ -107,6 +114,17 @@ export async function POST(req: NextRequest) {
           label: toolId,
           lastRun: finishedAt,
         }),
+        principal.customerKey,
+      ]
+    )
+
+    const threatTitle = TOOL_THREAT_COPY[toolId]?.title ?? `Tool-Lauf abgeschlossen (${toolId})`
+    await dbQuery(
+      `INSERT INTO threats (title, description, severity, status, customer_id)
+       VALUES ($1, $2, 'low', 'active', $3)`,
+      [
+        threatTitle,
+        `Ausführung ${execution.id} um ${finishedAt}. Details unter Executions / Mycelium.`,
         principal.customerKey,
       ]
     )

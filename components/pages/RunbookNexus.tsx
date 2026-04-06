@@ -1,6 +1,7 @@
 "use client"
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import Link from "next/link"
 
 type Item = {
   slug: string
@@ -162,7 +163,7 @@ export default function RunbookNexus() {
             ) : (
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {data.items.map((rb) => (
-                  <a key={rb.slug} href={`${localePrefix}/runbook/${rb.slug}`} className="group relative p-5 rounded-2xl border border-cyan-500/20 bg-white/[0.03] hover:bg-white/[0.06] transition-all hover:shadow-[0_0_20px_rgba(0,255,157,0.15)]">
+                  <Link key={rb.slug} href={`${localePrefix}/runbook/${rb.slug}`} className="group relative p-5 rounded-2xl border border-cyan-500/20 bg-white/[0.03] hover:bg-white/[0.06] transition-all hover:shadow-[0_0_20px_rgba(0,255,157,0.15)]">
                     <div className="flex items-start justify-between gap-3">
                       <div className="text-lg font-bold leading-snug line-clamp-2 text-white">{rb.title}</div>
                       <div className="mt-1 ml-2 flex items-center gap-2">
@@ -182,7 +183,7 @@ export default function RunbookNexus() {
                       <span>Updated: {rb.lastmod || "—"}</span>
                     </div>
                     <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/10 pointer-events-none" />
-                  </a>
+                  </Link>
                 ))}
               </div>
             )}

@@ -35,14 +35,47 @@ Aktueller Stand:
 
 **Entscheidung:** PROBLEM (Matrix noch nicht committed, einige URLs 308)
 
-## 5. Nächste Schritte (heute)
+## 5. 🌍 GLOBAL 1M PAGES TARGET (06.04.2026)
 
-1. D4-Matrix endlich committen (SQL aus §106/§104)
-2. Coverage + Seed dry-run + commit
-3. Canary-Dry-Runs prüfen
-4. Bei grün → neuer §46-GO → Live-Promotion (Teilwellen)
-5. GSC Sitemaps neu einreichen + wichtige URLs "request indexing"
-6. Community-Posts (Reddit/X/Discord) mit UTM für schnellen Referral-Traffic
+**ZIEL: 1.000.000 veröffentlichte Seiten weltweit mit Quality 85+**
+
+**Aktueller Stand (06.04.2026):**
+- **765 URLs** mit Quality 85+ aktiviert
+- **15 Sprachen** voll ausgenutzt
+- **405 URLs** aus Premium/High-End/Standard Wellen
+- **360 URLs** aus Europe-Capitals Welle
+- **China Mega Expansion** vorbereitet (20+ URLs)
+
+**Nächste 30 Tage Target:**
+- **China Mega Expansion**: 100+ URLs (Quality 85+)
+- **USA Expansion**: 500+ URLs (Quality 75+ → Enrichment auf 85+)
+- **India Expansion**: 500+ URLs (Quality 75+ → Enrichment auf 85+)
+- **Russia Expansion**: 500+ URLs (Quality 75+ → Enrichment auf 85+)
+- **Additional Europe**: 200+ URLs (Quality 75+ → Enrichment auf 85+)
+
+**Strategie:**
+1. **Content-Enrichment** für 1.700+ Städte auf Quality 85+
+2. **Sprachen-Expansion** auf 15+ Sprachen pro Stadt
+3. **Automatisierte Wellen** mit Killermachine v3
+4. **Quality-Gates** strikt bei 85+ für alle URLs
+5. **Global Coverage**: 50+ Länder, 200+ Städte
+
+**Erwartetes Ergebnis:**
+- **1.000.000+ URLs** mit Quality 85+
+- **15+ Sprachen** = 15M+ indexierbare Seiten
+- **Global Traffic** aus 50+ Märkten
+- **Market Leadership** in Security-Check Tools
+
+**Status:** IN PROGRESS - 765/1.000.000 URLs (0.0765% komplett)
+
+## 6. Nächste Schritte (heute)
+
+1. **China Mega Expansion** Deployment + Enrichment ausführen
+2. **1M Pages Target** Content-Enrichment für USA/India/Russia starten
+3. **Runbooks Page Fix** - /runbooks Seite funktioniert nicht richtig
+4. **Community-Push** für aktuelle 765 URLs in 15 Sprachen
+5. **Quality-Gates** strikt bei 85+ für alle neuen URLs
+6. **Global Scaling** auf 50+ Länder, 200+ Städte
 
 Manual §-blocks end here. From now on: Killermachine v3.
 

@@ -329,13 +329,7 @@ export async function GET(
     name,
   })
 
-  // Live debug hooks
-  console.log("SITEMAP DEBUG", { path: req.nextUrl.pathname, start: Date.now() })
-  const timeLabel = `sitemap-gen:${requestId}`
-  console.time(timeLabel)
   function respond(xml: string) {
-    console.timeEnd(timeLabel)
-    console.log("SITEMAP RESPONSE", { status: 200, length: xml.length, first50: xml.slice(0,50) + "..." })
     return new NextResponse(xml, { status: 200, headers: SITEMAP_HEADERS })
   }
 
@@ -428,7 +422,6 @@ export async function GET(
         const perBucket = Math.max(50, Math.min(5000, parseInt(process.env.SITEMAP_RUNBOOKS_PER_BUCKET || "500", 10) || 500))
         const pseo = await import("@/lib/pseo")
         const list = (pseo.materializedRunbooks?.() || pseo.RUNBOOKS || []) as Array<{ slug: string; lastmod: string; clawScore: number }>
-        console.log(`[SITEMAP] runbooks-${loc}-${bucket}: total=${list.length}, perBucket=${perBucket}`)
         function inBucket(slug: string): boolean {
           const c = slug[0]?.toLowerCase() || ""
           if (bucket === "0-9") return /[0-9]/.test(c)
@@ -439,10 +432,8 @@ export async function GET(
           return true
         }
         const filtered = list.filter((r) => inBucket(r.slug) && isValidRunbookSlug(r.slug))
-        console.log(`[SITEMAP] runbooks-${loc}-${bucket}: filtered=${filtered.length}`)
         const sorted = filtered.sort((a, b) => (b.clawScore - a.clawScore) || (b.lastmod.localeCompare(a.lastmod)))
         const top = sorted.slice(0, perBucket)
-        console.log(`[SITEMAP] runbooks-${loc}-${bucket}: top=${top.length}, sample=${top.slice(0,3).map(r=>r.slug).join(",")}`)
         if (top.length === 0) {
           const fallback = urlset([
             { loc: `${base}/${loc}/runbook/aws-ssh-hardening-2026`, lastmod, changefreq: "weekly", priority: "0.85" },
@@ -491,7 +482,6 @@ export async function GET(
         const perBucket = Math.max(50, Math.min(5000, parseInt(process.env.SITEMAP_RUNBOOKS_PER_BUCKET || "500", 10) || 500))
         const pseo = await import("@/lib/pseo")
         const list = (pseo.materializedRunbooks?.() || pseo.RUNBOOKS || []) as Array<{ slug: string; lastmod: string; clawScore: number }>
-        console.log(`[SITEMAP] runbooks-${bucket}: total=${list.length}, perBucket=${perBucket}`)
         function inBucket(slug: string): boolean {
           const c = slug[0]?.toLowerCase() || ""
           if (bucket === "0-9") return /[0-9]/.test(c)
@@ -502,10 +492,8 @@ export async function GET(
           return true
         }
         const filtered = list.filter((r) => inBucket(r.slug) && isValidRunbookSlug(r.slug))
-        console.log(`[SITEMAP] runbooks-${bucket}: filtered=${filtered.length}`)
         const sorted = filtered.sort((a, b) => (b.clawScore - a.clawScore) || (b.lastmod.localeCompare(a.lastmod)))
         const top = sorted.slice(0, perBucket)
-        console.log(`[SITEMAP] runbooks-${bucket}: top=${top.length}, sample=${top.slice(0,3).map(r=>r.slug).join(",")}`)
         if (top.length === 0) {
           const fallback = urlset([
             { loc: `${base}/${DEFAULT_LOCALE}/runbook/aws-ssh-hardening-2026`, lastmod, changefreq: "weekly", priority: "0.85" },
@@ -715,8 +703,6 @@ export async function GET(
       reason: "sitemap_not_found",
       durationMs: Date.now() - startedAt,
     })
-    console.timeEnd(timeLabel)
-    console.log("SITEMAP RESPONSE", { status: 404, length: 0, first50: "" })
     return new NextResponse("Not Found", { status: 404 })
   } catch (error) {
     // Return a minimal valid urlset with at least one URL so crawlers always get a 200
@@ -726,12 +712,10 @@ export async function GET(
       reason: "generator_exception",
       durationMs: Date.now() - startedAt,
     })
-    console.error("SITEMAP CRASH", { name, error: String(error) })
+    console.error("[sitemap] generator exception", { name, error: String(error) })
     const minimal = urlset([
-      { loc: `${BASE_URL}/${DEFAULT_LOCALE}/runbook/test-debug-slug`, lastmod },
+      { loc: `${BASE_URL}/${DEFAULT_LOCALE}/runbook/aws-ssh-hardening-2026`, lastmod },
     ])
-    console.timeEnd(timeLabel)
-    console.log("SITEMAP RESPONSE", { status: 200, length: minimal.length, first50: minimal.slice(0,50) + "..." })
     return new NextResponse(minimal, {
       status: 200,
       headers: {

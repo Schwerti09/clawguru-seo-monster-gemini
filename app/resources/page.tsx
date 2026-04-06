@@ -299,7 +299,7 @@ export default function ResourcesPage({ dict, locale = "de" }: ResourcesPageProp
         </TabsList>
 
         {/* Downloads Tab */}
-        <TabsContent value="downloads" id="downloads" className="space-y-6">
+        <TabsContent value="downloads" className="space-y-6">
           <div className="text-center mb-8">
             <h2 className="text-3xl font-bold mb-4">Agent Downloads</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
@@ -391,7 +391,7 @@ export default function ResourcesPage({ dict, locale = "de" }: ResourcesPageProp
         </TabsContent>
 
         {/* Dev Tools Tab */}
-        <TabsContent value="tools" id="tools" className="space-y-6">
+        <TabsContent value="tools" className="space-y-6">
           <div className="text-center mb-8">
             <h2 className="text-3xl font-bold mb-4">Development Tools</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">

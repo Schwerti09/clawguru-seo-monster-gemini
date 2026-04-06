@@ -216,7 +216,12 @@ const ALL_AGENTS = [
   }
 ]
 
-export default function AgentsPage() {
+interface AgentsPageProps {
+  dict?: any
+  locale?: string
+}
+
+export default function AgentsPage({ dict, locale = "de" }: AgentsPageProps = {}) {
   return (
     <div className="container mx-auto px-4 py-8 max-w-7xl">
       {/* Hero Section */}

@@ -126,7 +126,12 @@ const COMMUNITY_STATS = [
   { label: "Integrations", value: "156", change: "+8%" }
 ]
 
-export default function CommunityPage() {
+interface CommunityPageProps {
+  dict?: any
+  locale?: string
+}
+
+export default function CommunityPage({ dict, locale = "de" }: CommunityPageProps = {}) {
   return (
     <div className="container mx-auto px-4 py-8 max-w-7xl">
       {/* Hero Section */}

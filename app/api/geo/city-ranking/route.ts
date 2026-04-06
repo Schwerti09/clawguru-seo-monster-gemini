@@ -9,7 +9,8 @@ export const runtime = "nodejs"
 export const dynamic = "force-dynamic"
 export const maxDuration = 60
 
-const PROBE_TIMEOUT_MS = 15_000
+const PROBE_TIMEOUT_MS = 8_000
+const PROBE_BATCH_SIZE = 20
 /** Hard cap for ranking probes (URL health checks). Canary cities are always unioned in addition to top-N. */
 const MAX_CITY_LIMIT = 200
 const CACHE_TTL_MS = 30_000
@@ -115,28 +116,28 @@ export async function GET(req: NextRequest) {
   const canaryUnionExtras = citiesForRanking.length - topSliceLen
   const maxPopulation = Math.max(1, ...citiesForRanking.map((c) => c.population || 0))
 
-  const rankedResults = await Promise.allSettled(
-    citiesForRanking.map(async (city): Promise<RankedCity> => {
-      const url = `${BASE_URL}/${locale}/runbook/${slug}-${city.slug}`
-      try {
-        const probe = await probeUrl(url)
-        return {
-          ...city,
-          status: probe.status,
-          healthy: probe.status === 200,
-          finalUrl: probe.finalUrl,
-          rankingScore: scoreCity(city, probe.status, maxPopulation),
-        }
-      } catch {
-        return {
-          ...city,
-          status: 0,
-          healthy: false,
-          rankingScore: scoreCity(city, 0, maxPopulation),
-        }
+  const probeOne = async (city: GeoCity): Promise<RankedCity> => {
+    const url = `${BASE_URL}/${locale}/runbook/${slug}-${city.slug}`
+    try {
+      const probe = await probeUrl(url)
+      return {
+        ...city,
+        status: probe.status,
+        healthy: probe.status === 200,
+        finalUrl: probe.finalUrl,
+        rankingScore: scoreCity(city, probe.status, maxPopulation),
       }
-    })
-  )
+    } catch {
+      return { ...city, status: 0, healthy: false, rankingScore: scoreCity(city, 0, maxPopulation) }
+    }
+  }
+
+  const rankedResults: PromiseSettledResult<RankedCity>[] = []
+  for (let i = 0; i < citiesForRanking.length; i += PROBE_BATCH_SIZE) {
+    const batch = citiesForRanking.slice(i, i + PROBE_BATCH_SIZE)
+    const batchResults = await Promise.allSettled(batch.map(probeOne))
+    rankedResults.push(...batchResults)
+  }
 
   const ranked: RankedCity[] = rankedResults.map((result, idx) => {
     if (result.status === "fulfilled") return result.value

@@ -20,10 +20,12 @@ const nextConfig = {
       },
     ]
   },
-  outputFileTracingIncludes: {
-    '/api/runbooks/search': ['./public/runbooks.json'],
-    '/runbooks': ['./public/runbooks.json'],
-    '/\\[lang\\]/runbooks': ['./public/runbooks.json'],
+  experimental: {
+    outputFileTracingIncludes: {
+      '/api/runbooks/search': ['./public/runbooks.json'],
+      '/runbooks': ['./public/runbooks.json'],
+      '/\\[lang\\]/runbooks': ['./public/runbooks.json'],
+    },
   },
   webpack: (config) => {
     config.resolve.alias = {

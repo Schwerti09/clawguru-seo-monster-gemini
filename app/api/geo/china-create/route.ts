@@ -1,8 +1,10 @@
 // China Mega Expansion - Correct schema version
 // geo_cities: slug, name_de, name_en, country_code, priority, population, is_active, rollout_stage
 // geo_variant_matrix: locale, base_slug, city_slug, variant_slug, city_name, region_name, country_code, local_title, local_summary, quality_score
+import { revalidateTag } from "next/cache"
 import { NextRequest, NextResponse } from "next/server"
 import { dbQuery } from "@/lib/db"
+import { invalidateGeoCitiesCache } from "@/lib/geo-cities"
 
 export const dynamic = "force-dynamic"
 export const runtime = "nodejs"
@@ -63,6 +65,9 @@ export async function GET(request: NextRequest) {
       results.push({ slug: city.slug, name_en: city.name_en, quality: city.quality, status: city.quality >= 85 ? "READY" : "NEEDS_WORK" })
       console.log(`✅ ${city.slug} seeded`)
     }
+
+    await invalidateGeoCitiesCache()
+    revalidateTag("geo-cities-active")
 
     return NextResponse.json({
       success: true,

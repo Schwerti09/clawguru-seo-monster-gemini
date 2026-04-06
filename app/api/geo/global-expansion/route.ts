@@ -1,8 +1,10 @@
 // Global Expansion - USA, India, Russia
 // Schema: geo_cities (slug, name_de, name_en, country_code, priority, population, is_active, rollout_stage)
 //         geo_variant_matrix (locale, base_slug, city_slug, variant_slug, city_name, region_name, country_code, local_title, local_summary, quality_score)
+import { revalidateTag } from "next/cache"
 import { NextRequest, NextResponse } from "next/server"
 import { dbQuery } from "@/lib/db"
+import { invalidateGeoCitiesCache } from "@/lib/geo-cities"
 
 export const dynamic = "force-dynamic"
 export const runtime = "nodejs"
@@ -97,6 +99,10 @@ export async function GET(request: NextRequest) {
       acc[r.country] = (acc[r.country] ?? 0) + 1
       return acc
     }, {})
+
+    // Invalidate all geo-cities cache layers so new cities appear immediately
+    await invalidateGeoCitiesCache()
+    revalidateTag("geo-cities-active")
 
     return NextResponse.json({
       success: true,

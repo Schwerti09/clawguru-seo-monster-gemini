@@ -1721,14 +1721,9 @@ export function getRunbook(slug: string): Runbook | null {
     try {
       const meta = _tryParse100kWithGeoStrip(slug)
       if (meta) {
-        const __label = `gen100k:${slug}`
-        console.time(__label)
         const rb = generateRunbook100k(meta)
-        console.timeEnd(__label)
-        console.log("getRunbook", { slug, result: rb ? "found:on_demand(build)" : "null" })
         return rb ?? _buildDummyRunbook(slug)
       }
-      console.log("getRunbook", { slug, result: "null(build)" })
       return _buildDummyRunbook(slug)
     } catch (e: unknown) {
       console.error("gen100k error(build)", { slug, error: e instanceof Error ? e.message : String(e) })

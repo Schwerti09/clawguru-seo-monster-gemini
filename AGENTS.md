@@ -1,86 +1,181 @@
-# ClawGuru SEO Monster – AGENTS.md (Clean Reset – 05.04.2026)
+# ClawGuru SEO Monster – AGENTS.md (Audit-Update – 06.04.2026)
 
 ## 1. Projekt-Überblick
+
 ClawGuru ist ein spezialisierter Security-Check + executable Runbook Tool für Self-Hosting / OpenClaw / Moltbot / AI-Agents.  
-Ziel: Mega-Traffic über lokale Geo-Pages (DACH + EU + CEE) mit starkem "Not a Pentest" Trust-Anchor + City-Aware Compliance.
+Ziel: Organischer Traffic über hochwertige Security-Runbooks mit lokaler Geo-Relevanz (DACH + EU + CEE + Global).
 
-Aktueller Stand:
-- D4 (12 CEE/Balkan-Städte) in finaler Aktivierungsphase
-- Post-Promotion Lock (§46.8) aktiv
-- Legacy Runbook-URLs werden per 301 auf kanonische City-Pages umgeleitet (middleware.ts fix deployed)
-- Killermachine v3 ist der neue Standard
+**"Not a Pentest" Trust-Anchor + City-Aware Compliance.**
 
-## 2. Technischer Umsetzungsstand
-- D4 final activation complete
-- Killermachine v3 active → automatische Wave-Verarbeitung
-- Ready for traffic (GSC + Community + Canonical Routing)
+Aktueller Stand (06.04.2026):
+- D4 (12 CEE/Balkan-Städte) aktiviert
+- Legacy Runbook-URLs werden per 301 auf kanonische City-Pages umgeleitet (middleware.ts)
+- Killermachine v3 Infrastruktur bereit (Automatisierung in Vorbereitung)
 
-## 3. Killermachine v3 – Automated Wave Processing (ab sofort Standard)
+## 2. Technischer Umsetzungsstand (verifiziert 06.04.2026)
 
-**Regeln:**
-- Automatischer Seed-Commit, sobald `eligible_count > 0` UND alle Self-Healing Checks grün sind (Matrix-Qualität ≥85, Runbook-URLs 200 OK, Trust-Anchor + City-Aware Signale vorhanden).
-- Human-Gate nur noch bei finaler Canary → Stable Promotion (neuer §46-GO).
-- Täglicher Report + automatische Alerts bei roten Checks.
-- Alle zukünftigen Wellen (D5+) laufen vollautomatisch. Manuelle §-Blöcke sind deprecated.
+| Komponente | Status | Verifiziert |
+|-----------|--------|-------------|
+| D4 CEE/Balkan Aktivierung | ✅ Done | Städte in SEEDED_CITY_SLUGS |
+| Admin Auth (alle Routes) | ✅ Done | `verifyAdminToken` auf executions/revenue/users/system-health |
+| Token Deny-List | ✅ Done | `isTokenDenied()` in `verifyAccessToken` aktiv |
+| Rate Limiting (Upstash Redis) | ✅ Done | `lib/rate-limit.ts` + In-Memory-Fallback |
+| Copilot Rate-Limit | ✅ Done | 10 req/min per IP |
+| Geo-Expansion Auth | ✅ Done | `GEO_EXPANSION_SECRET` auf china-create + global-expansion |
+| Middleware Auth Rate-Limit | ✅ Done | 5 req/min auf `/api/auth/*` |
+| Quality Gate (16 Checks) | ✅ Done | `lib/quality-gate.ts` – minPassScore: **92** |
+| Sitemap-Limit | ✅ Done | `GEO_MATRIX_SITEMAP_CITY_LIMIT` default = **50** |
+| Unit Tests | ✅ Done | 57 Tests grün (jest.config.js, `npm test`) |
 
-**Self-Healing Checks (v2):**
-- Matrix-Qualität ≥85 für alle Städte der Welle
-- Runbook-URLs geben 200 OK (kein 308/Redirect auf Search)
-- "Not a Pentest" + Trust-Anchor Framing konsistent
-- City-Aware Compliance-Signale (country_code) vorhanden
+## 3. Killermachine v3 – Wave Processing
 
-## 4. §106 – FINAL MANUAL D4 DECISION BLOCK (letzter manueller Block)
+**Status:** Infrastruktur bereit, Automatisierung noch nicht implementiert.
 
-(Dein letzter ausgefüllter Decision-Block mit T24-Zahlen und NO-GO bleibt hier stehen – kopiere ihn einfach hierher, wenn du willst.)
+**Voraussetzungen für eine neue Welle:**
+1. Neue Städte in `SEEDED_CITY_SLUGS` (lib/geo-matrix.ts) hinzufügen
+2. `npx jest` → alle Tests grün (insbesondere "no duplicate entries" Test)
+3. Geo-Content für neue Städte via `/api/geo/global-expansion` generieren (Auth: `GEO_EXPANSION_SECRET`)
+4. Quality-Gate Check: Alle neuen Runbooks müssen Score ≥ 92 erreichen
+5. Sitemap-Validierung: URLs geben 200 OK
 
-**Entscheidung:** PROBLEM (Matrix noch nicht committed, einige URLs 308)
+**Self-Healing Checks:**
+- Quality-Score ≥ 92 (Gold ≥ 95, Silver 85–94, Hidden < 85)
+- Runbook-URLs geben 200 OK (kein 308/Redirect)
+- "Not a Pentest" Trust-Anchor + City-Aware Signale vorhanden
 
-## 5. 🌍 GLOBAL 1M PAGES TARGET (06.04.2026)
+## 4. 🌍 GEO-EXPANSION STATUS (verifiziert 06.04.2026)
 
-**ZIEL: 1.000.000 veröffentlichte Seiten weltweit mit Quality 85+**
+**SEEDED_CITY_SLUGS: 96 unique Städte** in `lib/geo-matrix.ts`
 
-**Aktueller Stand (06.04.2026 – Session 2):**
-- **96 aktive Städte** in geo_cities (stable, Q85+)
-- **4 China-Städte**: Beijing(95), Shanghai(94), Guangzhou(88), Shenzhen(89) – stabil
-- **10 US-Städte**: LA(93), Chicago(91), Houston(88), Dallas(85), Seattle(86), Austin(82), Phoenix(84), Philadelphia(83), San Diego(81), San Antonio(80)
-- **8 India-Städte**: Mumbai(94), Delhi(93), Bangalore(92), Hyderabad(88), Chennai(87), Kolkata(85), Pune(84), Ahmedabad(82)
-- **5 Russia-Städte**: Moscow(92), StPetersburg(88), Novosibirsk(78), Yekaterinburg(76), Kazan(74)
-- **City-Ranking**: 96/96 healthy, Batch-Probing ~2s (fix: Connection-Pool-Exhaustion behoben)
-- **Sitemap-Pool**: 150 Städte (war: 72), tägliche Rotation 24/150
-- **Endpoints live**: `/api/geo/china-create`, `/api/geo/global-expansion`
-- **SEEDED_CITY_SLUGS**: 96 Slugs in `lib/geo-matrix.ts`
+| Region | Städte | Anzahl |
+|--------|--------|--------|
+| DACH (DE) | Berlin, Munich, Hamburg, Frankfurt, Cologne, Stuttgart, Düsseldorf, Dortmund, Essen, Leipzig, Bremen, Dresden, Hanover, Nuremberg, Duisburg, Bochum, Wuppertal, Bonn, Mannheim, Karlsruhe | 20 |
+| DACH (AT/CH) | Vienna, Zurich, Geneva, Basel | 4 |
+| France | Paris, Lyon, Marseille, Toulouse, Nice | 5 |
+| UK/IE | London, Manchester, Birmingham, Dublin, Edinburgh | 5 |
+| Benelux | Amsterdam, Brussels | 2 |
+| Iberia | Madrid, Barcelona, Lisbon, Porto, Valencia, Seville, Bilbao | 7 |
+| Italy | Milan, Rome, Turin, Naples | 4 |
+| Poland | Warsaw, Prague, Krakow, Wroclaw | 4 |
+| Nordics | Copenhagen, Aarhus, Stockholm, Gothenburg, Malmö, Oslo, Helsinki, Reykjavik | 8 |
+| CEE/Balkan (D4) | Budapest, Bucharest, Sofia, Athens, Thessaloniki, Bratislava, Zagreb, Ljubljana, Belgrade | 9 |
+| China | Beijing, Shanghai, Guangzhou, Shenzhen | 4 |
+| USA | New York, Los Angeles, Chicago, Houston, Phoenix, Philadelphia, San Antonio, San Diego, Dallas, Seattle, Austin | 11 |
+| India | Mumbai, Delhi, Bangalore, Hyderabad, Chennai, Kolkata, Pune, Ahmedabad | 8 |
+| Russia | Moscow, St. Petersburg, Novosibirsk, Yekaterinburg, Kazan | 5 |
+| **TOTAL** | | **96** |
 
-**Nächste 30 Tage Target:**
-- **Weitere Expansion**: Japan, Brazil, Mexico, South Korea, Southeast Asia
-- **Sitemap-Limit erhöhen**: GEO_MATRIX_SITEMAP_CITY_LIMIT 24 → 50
-- **Quality-Enrichment**: Locale-spezifische Inhalte für Top-50-Städte
-- **Additional Europe**: 200+ URLs (Quality 75+ → Enrichment auf 85+)
+**Sitemap-Config:**
+- `GEO_MATRIX_SITEMAP_CITY_LIMIT`: **50** (default, env-override möglich)
+- `GEO_MATRIX_SITEMAP_CITY_POOL`: **150**
+- `GEO_MATRIX_SITEMAP_SEED_LIMIT`: **8** (Basis-Runbooks im Geo-Sitemap)
+- Geo-Sitemap pro Locale: 8 Seeds × 50 Cities = **400 URLs pro Sprache**
 
-**Strategie:**
-1. **Content-Enrichment** für 1.700+ Städte auf Quality 85+
-2. **Sprachen-Expansion** auf 15+ Sprachen pro Stadt
-3. **Automatisierte Wellen** mit Killermachine v3
-4. **Quality-Gates** strikt bei 85+ für alle URLs
-5. **Global Coverage**: 50+ Länder, 200+ Städte
+**Endpoints (Auth-geschützt):**
+- `POST /api/geo/china-create` (benötigt `GEO_EXPANSION_SECRET`)
+- `POST /api/geo/global-expansion` (benötigt `GEO_EXPANSION_SECRET`)
 
-**Erwartetes Ergebnis:**
-- **1.000.000+ URLs** mit Quality 85+
-- **15+ Sprachen** = 15M+ indexierbare Seiten
-- **Global Traffic** aus 50+ Märkten
-- **Market Leadership** in Security-Check Tools
+## 5. Nächste Wellen – Checkliste für D5+
 
-**Status:** IN PROGRESS - 765/1.000.000 URLs (0.0765% komplett)
+**So fährst du eine neue Welle:**
 
-## 6. Nächste Schritte (heute) - MASSIVE WELLE GESTARTET
+```
+1. SEEDED_CITY_SLUGS erweitern
+   → lib/geo-matrix.ts: neue Städte hinzufügen (lowercase, nur a-z0-9)
+   
+2. Tests laufen lassen
+   → npx jest (muss 57+ Tests bestehen, insbesondere "no duplicate entries")
+   
+3. Geo-Content generieren
+   → POST /api/geo/global-expansion mit GEO_EXPANSION_SECRET
+   → Body: { cities: ["tokyo", "osaka", "saopaulo", ...] }
+   
+4. Quality-Gate prüfen
+   → Alle neuen Runbooks brauchen Score ≥ 92
+   → Gold (≥95) = indexiert + Badge, Silver (85–94) = indexiert, Hidden (<85) = noindex
+   
+5. Commit + Push
+   → git commit -m "wave: D5 – Japan/Brazil/... (X Städte)"
+   → git push
 
-1. **China Mega Expansion** ✅ COMPLETED - 4 Städte (Beijing, Shanghai, Guangzhou, Shenzhen) deployed
-2. **Global Expansion** ✅ COMPLETED - 23 Städte (USA/India/Russia) deployed 
-3. **SEEDED_CITY_SLUGS** ✅ UPDATED - 101 Städte (64→97→101) für korrekte Geo-Varianten
-4. **Content-Enrichment** 🔄 IN PROGRESS - Quality 85+ für alle neuen URLs
-5. **Quality-Gates** 🔄 ACTIVE - Strikte 85+ Quality-Checks
-6. **Global Scaling** 🎯 TARGET - 1M Pages Worldwide
+6. Sitemap prüfen
+   → /sitemaps/geo-runbooks-de → neue Städte müssen auftauchen
+   → URLs müssen 200 OK geben
+```
 
-## 7. Cockpit Realism Roadmap (Zahlung → echte Leistung, 100 % nachvollziehbar)
+**Geplante D5+ Wellen:**
+- **D5**: Japan (Tokyo, Osaka, Yokohama, Kyoto, Nagoya) + South Korea (Seoul, Busan)
+- **D6**: Brazil (São Paulo, Rio, Brasília) + Mexico (CDMX, Guadalajara, Monterrey)
+- **D7**: Southeast Asia (Singapore, Bangkok, Jakarta, Ho Chi Minh, Manila)
+
+## 6. ⚠️ SEO-STRATEGIE BEWERTUNG + EMPFEHLUNGEN (Audit 06.04.2026)
+
+### Aktuelle Geo-Page-Strategie: Ehrliche Bewertung
+
+**Was wir machen:** Für jeden Base-Runbook (z.B. `kubernetes-hardening-2026`) erzeugen wir City-Varianten (`...-berlin`, `...-munich`, `...-vienna` etc.) mit:
+- ✅ City-spezifischem Titel + Summary (AI-generiert via Gemini)
+- ✅ Lokale Compliance-Hinweise + Beispiele
+- ❌ **Gleicher technischer Kern-Content** (Steps, Code-Blocks, HOWTOs)
+
+### Risiko-Assessment
+
+| Faktor | Bewertung | Begründung |
+|--------|-----------|------------|
+| **Duplicate Content Risiko** | 🟠 MITTEL-HOCH | 90% des Contents identisch zwischen City-Varianten |
+| **Google Doorway-Page Risiko** | 🟠 MITTEL | City-Suffix allein = "location wrapper" laut Google Spam Policy |
+| **Crawl-Budget Verschwendung** | 🟡 MITTEL | 400 Geo-URLs pro Sprache für 8 Seed-Runbooks |
+| **Unique Value per City** | 🟡 GERING | Nur Titel + Summary + lokale Beispiele sind einzigartig |
+
+### Empfehlungen für bessere SEO-Performance
+
+**STATT 1M identischer Seiten → BESSER: 1.000 hochwertige, wirklich unique Seiten:**
+
+1. **Base-Runbooks stärken** (höchste Priorität)
+   - Fokus auf 50-100 herausragende Base-Runbooks mit echtem Tiefgang
+   - Jeder Runbook = 2.000+ Wörter, unique Code-Beispiele, echte Case Studies
+   - Diese ranken BESSER als 1.000 dünne City-Varianten
+
+2. **City-Varianten nur wenn echter Mehrwert**
+   - ✅ GUT: `/de/runbook/gdpr-audit-berlin` → GDPR ist lokal relevant (Berliner Behörden, Bußgeldstelle)
+   - ❌ SCHLECHT: `/de/runbook/kubernetes-hardening-berlin` → K8s-Hardening ist überall gleich
+   - **Regel:** City-Variante nur erstellen, wenn ≥30% unique Content möglich
+
+3. **Branchen-Varianten statt Stadt-Varianten** (neuer Ansatz)
+   - `/de/runbook/kubernetes-hardening-fintech-2026` (Fintech-spezifisch)
+   - `/de/runbook/kubernetes-hardening-healthcare-2026` (Healthcare + HIPAA)
+   - `/de/runbook/kubernetes-hardening-saas-startup-2026` (SaaS-fokussiert)
+   - **Warum besser:** Jede Branche hat echte Compliance-Unterschiede = unique Content
+
+4. **Compliance-Focused City Pages** (guter Einsatz von Geo)
+   - EU-Städte: GDPR/DSGVO + NIS2 lokale Anforderungen
+   - US-Städte: SOC2 + CCPA (California) + HIPAA
+   - China: GB/T + Cybersecurity Law
+   - **Warum gut:** Echte lokale Compliance-Unterschiede = genuiner Mehrwert
+
+5. **hreflang statt City-Duplication**
+   - Deutsch: `/de/runbook/kubernetes-hardening-2026`
+   - English: `/en/runbook/kubernetes-hardening-2026`
+   - Französisch: `/fr/runbook/kubernetes-hardening-2026`
+   - 15 Sprachen × 100 Runbooks = **1.500 hochwertige URLs** (besser als 100.000 dünne)
+
+### Konkrete Maßnahmen für nächste Wellen
+
+**Kurzfristig (diese Woche):**
+- [ ] Sitemap-Seed-Limit von 8 → 3-4 reduzieren (nur Runbooks mit echtem City-Bezug)
+- [ ] Quality-Gate für City-Varianten: minPassScore bleibt bei 92
+- [ ] Canonical-Tags prüfen: City-Varianten → Base-Runbook canonical (wenn < 30% unique)
+
+**Mittelfristig (Monat 1-2):**
+- [ ] 10 Branchen-spezifische Runbook-Templates erstellen (Fintech, Healthcare, SaaS, etc.)
+- [ ] City-Content-Generator erweitern: echte lokale Compliance-Daten einbetten
+- [ ] Compliance-Mapping: Welche Regulierung gilt wo? (GDPR → EU, CCPA → California, etc.)
+
+**Langfristig (Monat 3+):**
+- [ ] User-Signal-Monitoring: Bounce-Rate per City-Variante vs. Base
+- [ ] A/B-Test: City-Varianten mit noindex vs. indexiert
+- [ ] Community-Content: Lokale User-Beiträge pro Stadt
+
+## 7. Cockpit Realism Roadmap (Vollständig abgeschlossen)
 
 **Ziel:** Nach Checkout sieht der Kunde nur **seine** Daten; jede Tool-Aktion erzeugt **persistente**, auditable Spuren (Executions, Mycelium, Threats); keine reine UI-Deko.
 
@@ -148,7 +243,7 @@ Session 3 Abschluss: A4 (`npm run db:migrate`) ausgeführt – 009 + 010 applied
 
 ---
 
-## 8. Security Audit Session – 06.04.2026 (Session 4)
+## 8. Security Audit (Vollständig abgeschlossen – Session 4, 06.04.2026)
 
 **Tiefenanalyse + Priorisierter Fix-Plan vollständig umgesetzt.**
 
@@ -218,93 +313,82 @@ Session 3 Abschluss: A4 (`npm run db:migrate`) ausgeführt – 009 + 010 applied
 - **Affiliate Stats**: `affiliateData()` in `admin/cockpit` gibt `clicks: 0, sales: 0` – kein Tracking-System vorhanden
 - **npm @lhci/cli vulns**: 7 verbleibende Vulnerabilities in Dev-Dep – `npm audit fix --force` würde Breaking Changes einführen
 
-## 9. 🚀 CONTENT-ENRICHMENT & 1M PAGES SCALING (Session 5)
+## 9. 🚀 CONTENT-ENRICHMENT & SCALING (aktualisiert 06.04.2026)
 
-### Massive Welle Status (06.04.2026)
+### Bisherige Expansions-Wellen
 
-**✅ COMPLETED:**
-- **China Mega Expansion**: 4 Städte (Beijing, Shanghai, Guangzhou, Shenzhen) - Quality 85+
-- **Global Expansion**: 23 Städte (USA/India/Russia) - Quality 85+  
-- **SEEDED_CITY_SLUGS**: 101 Städte für korrekte Geo-Varianten
-- **Quality-Gates**: Strikte 85+ Checks aktiv
+| Welle | Städte | Status |
+|-------|--------|--------|
+| D1-D3 | DACH + EU Core (47 Städte) | ✅ Stabil |
+| D4 | CEE/Balkan (9 Städte) | ✅ Aktiviert |
+| Global | China (4) + USA (11) + India (8) + Russia (5) + UK/IE (4) + Nordics (8) + Iberia (7) + More EU | ✅ In SEEDED_CITY_SLUGS |
+| **Gesamt** | **96 unique Städte** | ✅ Verifiziert (0 Duplikate) |
 
-**📊 CURRENT SCALE:**
-- **27 neue Städte** × 15 Sprachen × 3 Base-Runbooks = **1.215 neue URLs**
-- **Gesamt-URLs**: ~765 (alt) + 1.215 (neu) = **1.980 URLs**
-- **Target**: 1.000.000 URLs (0.198% erreicht)
+### Aktuelle Zahlen (ehrlich)
 
-### Content-Enrichment Strategie (nächste 30 Tage)
+- **SEEDED_CITY_SLUGS**: 96 Städte (verifiziert, Duplikate entfernt)
+- **Geo-Sitemap pro Locale**: max. 400 URLs (8 seeds × 50 cities)
+- **Quality-Gate**: minPassScore = **92** (nicht 85 wie zuvor dokumentiert)
+- **Badge-Tiers**: Gold ≥ 95, Silver 85–94, Hidden < 85
 
-**Phase 1: Locale-Enrichment (Priority: HIGH)**
-- **Target**: Top-50 Städte (DACH + EU + CEE + China + USA/India/Russia)
-- **Action**: `translateRunbook()` mit locale-spezifischen Anpassungen
-- **Quality-Ziel**: 85+ für alle Übersetzungen
-- **Erwartung**: 50 × 15 Sprachen × 3 Runbooks = **2.250 enriched URLs**
+### Realistisches Scaling (statt "1M Pages")
 
-**Phase 2: City-Specific Content (Priority: HIGH)**
-- **Target**: Alle 101 Städte mit city-aware Content
-- **Action**: Geo-Varianten mit lokalen Compliance-Hinweisen
-- **Quality-Ziel**: 85+ mit city-specific signals
-- **Erwartung**: 101 × 15 Sprachen × 3 Runbooks = **4.545 city-aware URLs**
+**Fokus: Qualität > Quantität**
 
-**Phase 3: Runbook-Expansion (Priority: MEDIUM)**
-- **Target**: 10+ neue Runbook-Typen (z.B. PCI-DSS, GDPR, SOC2)
-- **Action**: Neue `generateRunbook100k` Templates
-- **Quality-Ziel**: 85+ mit institutional authority
-- **Erwartung**: 101 × 15 Sprachen × 10 Runbooks = **15.150 expanded URLs**
+Statt 1M dünner Pages → lieber 5.000–10.000 hochwertige URLs:
 
-### 1M Pages Target - Scaling Plan
+| Content-Typ | Anzahl | Quality | SEO-Wert |
+|-------------|--------|---------|----------|
+| Base-Runbooks (100 top) | 100 | Gold (95+) | 🟢 HOCH |
+| Übersetzungen (15 Sprachen) | 1.500 | Silver+ | 🟢 HOCH |
+| Compliance-City-Pages (echte lokale Daten) | 500 | Gold/Silver | 🟢 HOCH |
+| Branchen-Varianten (10 Branchen × 100 Runbooks) | 1.000 | Silver+ | 🟢 MITTEL-HOCH |
+| Geo-Varianten (nur mit ≥30% unique) | 2.000 | Silver+ | 🟡 MITTEL |
+| **TOTAL (realistisches Ziel)** | **~5.000–10.000** | **92+** | **🟢 Gesund** |
 
-**Technical Scaling:**
-- **Sitemap-Limit**: GEO_MATRIX_SITEMAP_CITY_LIMIT 24 → 50 (in progress)
-- **Cache-Strategy**: `unstable_cache` für city-specific content
-- **DB-Optimization**: Geo-Matrix Queries mit Connection-Pooling
-- **CDN-Ready**: Static Generation für alle Locale-Varianten
+### Content Pipeline
 
-**Content Pipeline:**
-- **Automated Generation**: `generateRunbook100k` + `translateRunbook`
-- **Quality-Gates**: `quality-gate.ts` mit 85+ Threshold
-- **Batch-Processing**: 50 Städte pro Wave (Killermachine v3)
-- **Verification**: Automated URL-Checks + Sitemap-Validation
+- **`generateRunbook100k()`**: Generiert Base-Runbooks on-demand (lib/pseo.ts)
+- **`translateRunbook()`**: 15 Locales (de/en/es/fr/pt/it/ru/ja/ko/zh/ar/hi/tr/id/pl) via Gemini API
+- **`generateGeoVariantContent()`**: City-spezifische Wrapper via Gemini
+- **`validateRunbook()`**: 16-Check Quality Gate (lib/quality-gate.ts)
 
-**Geographic Expansion Roadmap:**
-- **Q2 2026**: Japan, Brazil, Mexico, South Korea (50+ Städte)
-- **Q3 2026**: Southeast Asia, Africa, Middle East (100+ Städte)
-- **Q4 2026**: Latin America, Oceania, Eastern Europe (150+ Städte)
-- **2027**: 200+ Städte weltweit, 50+ Länder
+### Nächste Wellen (D5+) Checkliste
 
-### Technical Implementation Tasks
-
-**Immediate (this week):**
-1. **Sitemap-Limit erhöhen**: `GEO_MATRIX_SITEMAP_CITY_LIMIT 24 → 50`
-2. **Content-Enrichment Pipeline**: `translateRunbook` für Top-50 Städte
-3. **Quality-Gates Automation**: Batch-Processing mit 85+ Checks
-4. **npm vulnerabilities**: `npm audit fix` (low prio)
-
-**Next Week:**
-1. **City-Specific Templates**: Local compliance hints per country
-2. **Runbook-Expansion**: 10+ neue institutional templates
-3. **Performance Optimization**: Cache-Strategy für 10K+ URLs
-4. **Monitoring**: URL-Health-Checks + Sitemap-Validation
-
-**Monthly Targets:**
-- **April**: 2.500 enriched URLs (Top-50 Städte)
-- **Mai**: 5.000 city-aware URLs (alle 101 Städte)
-- **Juni**: 10.000 expanded URLs (neue Runbook-Typen)
-- **Juli**: 25.000+ URLs (multi-region expansion)
-
-### Success Metrics
-
-**Technical KPIs:**
-- **URL-Count**: 1.980 → 25.000+ (April → Juli)
-- **Quality-Score**: 85+ für 95% aller URLs
-- **Page-Speed**: <2s LCP für alle Locale-Varianten
-- **Index-Rate**: 90%+ URLs in Google/Suche
-
-**Business KPIs:**
-- **Geo-Traffic**: 50+ Märkte mit organischen Traffic
-- **Conversion**: Runbook-Downloads → Tool-Trials
-- **Authority**: E-E-A-T Signals per Stadt/Land
-- **Community**: User-Generated Content per Region
+Siehe **Abschnitt 5** für die Schritt-für-Schritt-Anleitung.
 
 ---
+
+### Noch offen (kein akuter Fix)
+
+- **Affiliate Stats**: `affiliateData()` gibt `clicks: 0, sales: 0` – kein Tracking-System
+- **npm @lhci/cli vulns**: 7 verbleibende Vulnerabilities in Dev-Dep (kein Prod-Risiko)
+
+---
+
+## 10. Tests & Commands Reference
+
+```bash
+# Unit Tests (57 Tests)
+npm test               # oder: npx jest --no-coverage
+
+# Build
+npx next build --webpack
+
+# E2E Tests (Playwright, benötigt Server)
+npx playwright test e2e/payment-flow/ --project=chromium
+
+# Geo-Matrix Integrity Check
+npx jest __tests__/geo-matrix.test.ts
+```
+
+**Test-Coverage:**
+- `lib/rate-limit.ts` – Rate limiting (Upstash + Fallback)
+- `lib/access-token.ts` – Token verification + deny-list
+- `lib/security-check-core.ts` – HTTP header scanning
+- `lib/token-deny-list.ts` – Token blacklisting
+- `lib/geo-matrix.ts` – City slug parsing, dedup invariant, geo-variant building
+
+---
+
+*Letzte Aktualisierung: 06.04.2026 – Audit-Update (Duplikate entfernt, Quality-Gate korrigiert, SEO-Strategie-Bewertung hinzugefügt)*

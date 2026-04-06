@@ -1,9 +1,9 @@
 import { slugifyCity, parseGeoVariantSlug, buildGeoSlug } from "@/lib/geo-matrix"
+import fs from "fs"
+import path from "path"
 
 // Read SEEDED_CITY_SLUGS from the source to verify no duplicates exist.
 // This test prevents regressions when adding new cities.
-const fs = require("fs")
-const path = require("path")
 
 function extractSeededSlugs(): string[] {
   const src = fs.readFileSync(path.join(__dirname, "..", "lib", "geo-matrix.ts"), "utf8")

@@ -2248,9 +2248,7 @@ export async function translateRunbook(opts: {
   const { slug, title, summary, targetLocale } = opts
 
   if (targetLocale === "de") {
-    const result = { title, summary, locale: "de" as const }
-    console.log("translateRunbook", { slug, result: "bypass:de" })
-    return result
+    return { title, summary, locale: "de" as const }
   }
 
   // NEXT-LEVEL UPGRADE 2026: All 14 locale names for Gemini translation
@@ -2279,9 +2277,7 @@ export async function translateRunbook(opts: {
   ).replace(/\/$/, "")
 
   if (!geminiKey) {
-    const result = { title, summary, locale: targetLocale }
-    console.log("translateRunbook", { slug, result: "fallback:no_key" })
-    return result
+    return { title, summary, locale: targetLocale }
   }
 
   const prompt = [
@@ -2317,15 +2313,11 @@ export async function translateRunbook(opts: {
     const jsonStr = text.replace(/```json|```/g, "").trim()
     const parsed = JSON.parse(jsonStr) as { title?: string; summary?: string }
     if (parsed.title && parsed.summary) {
-      const result = { title: parsed.title, summary: parsed.summary, locale: targetLocale as Locale }
-      console.log("translateRunbook", { slug, result: "ok" })
-      return result
+      return { title: parsed.title, summary: parsed.summary, locale: targetLocale as Locale }
     }
   } catch (e: unknown) {
     console.error("translateRunbook error", { slug, error: e instanceof Error ? e.message : String(e) })
   }
 
-  const result = { title, summary, locale: targetLocale }
-  console.log("translateRunbook", { slug, result: "fallback:parse" })
-  return result
+  return { title, summary, locale: targetLocale }
 }

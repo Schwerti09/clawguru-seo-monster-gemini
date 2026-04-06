@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { loadRunbooks } from '@/lib/runbooks-data'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -116,14 +117,14 @@ export async function GET(req: NextRequest) {
     const rawLimit = Math.max(1, parseInt(sp.get('limit') || '24', 10) || 24)
     const limit = Math.min(100, rawLimit)
 
-    // IMPORTANT: Avoid importing heavy RUNBOOKS here to prevent cold-start timeouts on serverless.
-    // Operate on a curated FALLBACK set for now.
-    const materialized: any[] = []
-    const base = FALLBACK
+    const loaded = await loadRunbooks()
+    const base = Array.isArray(loaded) && loaded.length > 0 ? loaded : FALLBACK
     const { total, items } = searchRunbooks(base, q, tags, page, limit)
 
     const payload: Record<string, any> = { q, tags, page, limit, total, items }
-    payload.warning = 'Degraded mode: using lightweight fallback index to ensure fast responses'
+    if (base === FALLBACK) {
+      payload.warning = 'Degraded mode: using lightweight fallback index to ensure fast responses'
+    }
 
     const res = NextResponse.json(payload)
     res.headers.set('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=30')

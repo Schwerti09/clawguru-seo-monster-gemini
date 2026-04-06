@@ -205,6 +205,19 @@ async function callGemini(prompt: string): Promise<CallResult> {
   let lastStatus = 0;
   for (const model of candidates) {
     const url = `${base}/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(apiKey)}`;
+    // Gemini 2.5+ models have "thinking" enabled by default; thinking tokens
+    // count against maxOutputTokens and can cause 400 errors when the budget
+    // is too small. Disable thinking for straightforward JSON generation.
+    // IMPORTANT: gemini-2.0-flash does NOT support thinkingConfig – sending it
+    // causes a 400 INVALID_ARGUMENT error.
+    const supportsThinking = /^gemini-(2\.5|[3-9]|[1-9]\d)/.test(model);
+    const generationConfig: Record<string, unknown> = {
+      temperature: 0.35,
+      maxOutputTokens: parseInt(process.env.GEMINI_MAX_OUTPUT_TOKENS || "8192", 10),
+    };
+    if (supportsThinking) {
+      generationConfig.thinkingConfig = { thinkingBudget: 0 };
+    }
     for (let attempt = 0; attempt <= RATE_LIMIT_RETRIES; attempt++) {
       try {
         const res = await fetch(url, {
@@ -212,14 +225,7 @@ async function callGemini(prompt: string): Promise<CallResult> {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             contents: [{ role: "user", parts: [{ text: prompt }] }],
-            generationConfig: {
-              temperature: 0.35,
-              maxOutputTokens: parseInt(process.env.GEMINI_MAX_OUTPUT_TOKENS || "8192", 10),
-              // Gemini 2.5 models have "thinking" enabled by default; thinking tokens
-              // count against maxOutputTokens and can cause 400 errors when the budget
-              // is too small. Disable thinking for straightforward JSON generation.
-              thinkingConfig: { thinkingBudget: 0 },
-            },
+            generationConfig,
           }),
         });
         lastStatus = res.status;

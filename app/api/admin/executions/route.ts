@@ -11,28 +11,24 @@ export async function GET() {
   try {
     const result = await dbQuery<{
       id: string
-      runbook_name: string | null
-      user_email: string | null
+      customer_id: string
+      runbook_id: string
       status: string
-      duration: string | null
-      success_rate: number | null
-      output: string | null
+      started_at: string | null
+      completed_at: string | null
       created_at: string
     }>(`
       SELECT
-        e.id,
-        r.name AS runbook_name,
-        u.email AS user_email,
-        e.status,
-        e.duration,
-        e.success_rate,
-        e.output,
-        e.created_at
-      FROM runbook_executions e
-      LEFT JOIN runbooks r ON r.id = e.runbook_id
-      LEFT JOIN users u ON u.id = e.user_id
-      ORDER BY e.created_at DESC
-      LIMIT 50
+        id,
+        customer_id,
+        runbook_id,
+        status,
+        started_at,
+        completed_at,
+        created_at
+      FROM runbook_executions
+      ORDER BY created_at DESC
+      LIMIT 100
     `)
 
     return NextResponse.json(result.rows)

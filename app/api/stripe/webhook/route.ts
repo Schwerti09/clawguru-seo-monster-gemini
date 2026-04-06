@@ -6,6 +6,34 @@ import { sendEmail } from "@/lib/email"
 import { buildSocialProofEventFromStripe, recordSocialProofEvent } from "@/lib/social-proof"
 import { logTelemetry } from "@/lib/ops/telemetry"
 import { getRequestId } from "@/lib/ops/request-id"
+import { dbQuery } from "@/lib/db"
+
+// ---------------------------------------------------------------------------
+// Upsert customer entitlement – keeps customer_entitlements table in sync.
+// validUntilIso = ISO string; pass NOW() to immediately revoke.
+// ---------------------------------------------------------------------------
+async function upsertEntitlement(
+  customerId: string,
+  plan: string,
+  subscriptionId: string | undefined,
+  validUntilIso: string
+): Promise<void> {
+  if (!process.env.DATABASE_URL) return
+  try {
+    await dbQuery(
+      `INSERT INTO customer_entitlements (customer_id, plan, stripe_subscription_id, valid_until, updated_at)
+       VALUES ($1, $2, $3, $4::timestamptz, NOW())
+       ON CONFLICT (customer_id) DO UPDATE SET
+         plan = EXCLUDED.plan,
+         stripe_subscription_id = EXCLUDED.stripe_subscription_id,
+         valid_until = EXCLUDED.valid_until,
+         updated_at = NOW()`,
+      [customerId, plan, subscriptionId ?? null, validUntilIso]
+    )
+  } catch (err) {
+    console.error("[entitlement-upsert] Failed:", err)
+  }
+}
 
 export const runtime = "nodejs"
 
@@ -59,6 +87,10 @@ async function handleInvoicePaid(invoice: Stripe.Invoice) {
         const base2 = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
         const magicUrl = `${base2}/api/auth/recover?token=${encodeURIComponent(token)}`
         const support2 = process.env.SUPPORT_EMAIL || process.env.EMAIL_REPLY_TO || process.env.EMAIL_FROM || "support@clawguru.org"
+        // Refresh entitlement for 30 more days
+        const renewedUntil = new Date((now + 60 * 60 * 24 * 30) * 1000).toISOString()
+        await upsertEntitlement(customerId, plan, subscriptionId, renewedUntil)
+
         await sendEmail({
           to: email,
           subject: "ClawGuru – Abo verlängert: Zugang erneuern",
@@ -276,6 +308,11 @@ async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
     subject: "ClawGuru – Abo gekündigt",
     html
   })
+
+  // Revoke entitlement immediately
+  const subscriptionId =
+    typeof subscription.id === "string" ? subscription.id : undefined
+  await upsertEntitlement(customerId, "explorer", subscriptionId, new Date().toISOString())
 }
 
 function planFromSession(session: Stripe.Checkout.Session): AccessPlan {
@@ -385,6 +422,10 @@ async function sendAccessEmail(session: Stripe.Checkout.Session) {
     subject: "Dein ClawGuru Zugang (Magic Link)",
     html: emailHtml({ url, plan, support, dashboardUrl: dash, base, sessionId: session.id })
   })
+
+  // Persist entitlement so dashboard can use DB as fallback if cookie is absent
+  const validUntil = new Date((tokenExp(plan, now)) * 1000).toISOString()
+  await upsertEntitlement(customerId, plan, subscriptionId, validUntil)
 }
 
 export async function POST(req: NextRequest) {

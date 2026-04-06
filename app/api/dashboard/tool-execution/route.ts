@@ -2,16 +2,123 @@ import { NextRequest, NextResponse } from "next/server"
 import { parseDashboardPrincipal } from "@/lib/dashboard-identity"
 import { dbQuery } from "@/lib/db"
 import { canExecuteMore, getUserTierFromPlan, type UserTier } from "@/lib/tier-access"
+import { runSecurityHeaderCheck } from "@/lib/security-check-core"
 
 export const runtime = "nodejs"
 
 const ALLOWED_TOOLS = new Set(["summon", "oracle", "neuro", "check"])
 
 const TOOL_THREAT_COPY: Record<string, { title: string }> = {
-  summon: { title: "ClawGuru Summon — Lauf abgeschlossen" },
-  oracle: { title: "Security Oracle — Analyse protokolliert" },
-  neuro: { title: "Neuro Security — Musterlauf protokolliert" },
-  check: { title: "Security Check — Audit-Lauf protokolliert" },
+  summon: { title: "ClawGuru Summon — Runbook-Analyse abgeschlossen" },
+  oracle: { title: "Security Oracle — Runbook-Report erstellt" },
+  neuro: { title: "Neuro Security — Pattern-Analyse abgeschlossen" },
+  check: { title: "Security Check — Header-Audit durchgeführt" },
+}
+
+// ── Real tool implementations ─────────────────────────────────────────────────
+
+async function runCheckTool(target: string): Promise<Record<string, unknown>> {
+  const effectiveTarget = target.trim() || "clawguru.org"
+  try {
+    const checkResult = await runSecurityHeaderCheck(effectiveTarget)
+    return {
+      type: "security_header_check",
+      ...checkResult,
+    }
+  } catch {
+    return {
+      type: "security_header_check",
+      target: effectiveTarget,
+      error: "Check failed (timeout or unreachable)",
+      score: 0,
+      vulnerable: true,
+      details: ["Could not reach target"],
+      recommendations: ["Ensure the target is reachable and try again"],
+    }
+  }
+}
+
+async function runOracleTool(customerKey: string): Promise<Record<string, unknown>> {
+  // Return top runbooks by quality from geo_variant_matrix as security intel
+  const rows = await dbQuery<{ base_slug: string; quality_score: number; local_title: string; country_code: string }>(
+    `SELECT DISTINCT ON (base_slug) base_slug, quality_score, local_title, country_code
+     FROM geo_variant_matrix
+     WHERE locale = 'en' AND quality_score >= 85
+     ORDER BY base_slug, quality_score DESC
+     LIMIT 5`
+  ).catch(() => ({ rows: [] }))
+  const execCount = await dbQuery<{ count: string }>(
+    `SELECT COUNT(*)::text AS count FROM runbook_executions WHERE customer_id = $1`,
+    [customerKey]
+  ).catch(() => ({ rows: [{ count: "0" }] }))
+  return {
+    type: "oracle_report",
+    generatedAt: new Date().toISOString(),
+    topRunbooks: rows.rows.map(r => ({
+      slug: r.base_slug,
+      title: r.local_title,
+      score: r.quality_score,
+    })),
+    yourExecutionCount: parseInt(execCount.rows[0]?.count || "0", 10),
+    recommendation: rows.rows.length > 0
+      ? `Top runbook: ${rows.rows[0].base_slug} (Q${rows.rows[0].quality_score})`
+      : "Run your first security check to generate recommendations.",
+  }
+}
+
+async function runSummonTool(customerKey: string): Promise<Record<string, unknown>> {
+  const recent = await dbQuery<{ runbook_id: string; status: string; created_at: string }>(
+    `SELECT runbook_id, status, created_at
+     FROM runbook_executions WHERE customer_id = $1
+     ORDER BY created_at DESC LIMIT 10`,
+    [customerKey]
+  ).catch(() => ({ rows: [] }))
+  const threatCount = await dbQuery<{ count: string }>(
+    `SELECT COUNT(*)::text AS count FROM threats WHERE customer_id = $1 AND status = 'active'`,
+    [customerKey]
+  ).catch(() => ({ rows: [{ count: "0" }] }))
+  const runs = recent.rows
+  const completed = runs.filter(r => r.status === "completed").length
+  const successRate = runs.length > 0 ? Math.round((completed / runs.length) * 100) : 0
+  return {
+    type: "summon_posture",
+    generatedAt: new Date().toISOString(),
+    recentRuns: runs.length,
+    successRate,
+    activeThreats: parseInt(threatCount.rows[0]?.count || "0", 10),
+    lastRunbook: runs[0]?.runbook_id ?? null,
+    posture: successRate >= 80 ? "GOOD" : successRate >= 50 ? "MEDIUM" : runs.length === 0 ? "NO_DATA" : "NEEDS_ATTENTION",
+  }
+}
+
+async function runNeuroTool(customerKey: string): Promise<Record<string, unknown>> {
+  const stats = await dbQuery<{ runbook_id: string; status: string; cnt: string }>(
+    `SELECT runbook_id, status, COUNT(*)::text AS cnt
+     FROM runbook_executions WHERE customer_id = $1
+     GROUP BY runbook_id, status
+     ORDER BY cnt DESC LIMIT 10`,
+    [customerKey]
+  ).catch(() => ({ rows: [] }))
+  const nodeCount = await dbQuery<{ count: string }>(
+    `SELECT COUNT(*)::text AS count FROM mycelium_nodes WHERE customer_id = $1 AND status = 'active'`,
+    [customerKey]
+  ).catch(() => ({ rows: [{ count: "0" }] }))
+  const patterns = stats.rows
+  const topTool = patterns.find(p => p.status === "completed")?.runbook_id ?? null
+  return {
+    type: "neuro_pattern_analysis",
+    generatedAt: new Date().toISOString(),
+    activeNodes: parseInt(nodeCount.rows[0]?.count || "0", 10),
+    patternSummary: patterns.slice(0, 5).map(p => ({
+      tool: p.runbook_id,
+      status: p.status,
+      count: parseInt(p.cnt, 10),
+    })),
+    dominantTool: topTool,
+    insight: topTool
+      ? `Most executed tool: ${topTool}. ${parseInt(patterns[0]?.cnt || "0", 10)} total runs detected.`
+      : "No execution patterns yet. Run your first tool to generate insights.",
+  }
 }
 
 const RUN_WINDOW_MS = 60_000
@@ -61,7 +168,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: false, error: "rate_limited" }, { status: 429 })
   }
 
-  let body: { toolId?: string }
+  let body: { toolId?: string; target?: string }
   try {
     body = await req.json()
   } catch {
@@ -69,6 +176,7 @@ export async function POST(req: NextRequest) {
   }
 
   const toolId = typeof body.toolId === "string" ? body.toolId.trim() : ""
+  const target = typeof body.target === "string" ? body.target.trim().slice(0, 256) : ""
   if (!toolId || !ALLOWED_TOOLS.has(toolId)) {
     return NextResponse.json({ ok: false, error: "invalid_tool" }, { status: 400 })
   }
@@ -82,12 +190,30 @@ export async function POST(req: NextRequest) {
     )
   }
 
+  // ── Run the real tool and collect the deliverable ──────────────────────────
+  const startedAt = new Date().toISOString()
+  let toolResult: Record<string, unknown>
+  try {
+    if (toolId === "check") {
+      toolResult = await runCheckTool(target)
+    } else if (toolId === "oracle") {
+      toolResult = await runOracleTool(principal.customerKey)
+    } else if (toolId === "summon") {
+      toolResult = await runSummonTool(principal.customerKey)
+    } else {
+      toolResult = await runNeuroTool(principal.customerKey)
+    }
+  } catch {
+    toolResult = { type: toolId, error: "Tool execution failed internally" }
+  }
+
   const finishedAt = new Date().toISOString()
   const result = {
     toolId,
+    startedAt,
     finishedAt,
     status: "completed" as const,
-    message: `Tool "${toolId}" completed successfully.`,
+    deliverable: toolResult,
   }
 
   try {

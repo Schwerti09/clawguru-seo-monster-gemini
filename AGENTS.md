@@ -102,19 +102,27 @@ Aktueller Stand:
 
 | Step | Status | Beschreibung |
 |------|--------|--------------|
-| B1 | Done | Tools-Tab: API + `router.refresh()`, keine Fake-„Success“-Story ohne Server |
+| B1 | Done | Tools-Tab: API + `router.refresh()`, keine Fake-„Success"-Story ohne Server |
 | B2 | Done | QuickTools-Sidebar: gleicher Lauf via `hooks/useDashboardToolRun.ts` |
 | B3 | Done | Pro Lauf: `runbook_executions` + `mycelium_nodes` + **eine** `threats`-Zeile (low, audit trail) |
-| B4 | Done | Fake-„CPU/Memory/Network“-Tiles entfernt; Tool-Beschreibungen ehrlich (Audit Trail, kein „KI-Echtzeit") |
-| B5 | Todo | **Roast / Security-Check:** optional dieselbe Execution-Kette (ein gemeinsames `source` im `result` JSON) |
+| B4 | Done | Fake-„CPU/Memory/Network"-Tiles entfernt; Tool-Beschreibungen ehrlich (Audit Trail, kein „KI-Echtzeit") |
+| B5 | Done | Pricing-Page: unimplementierte Features (SSO, Voice Copilot, Private Nodes, SWARM etc.) als „Soon" markiert |
+
+**Dashboard-Audit 06.04.2026 (vollständig):**
+- Fake CPU/Memory/Network Tiles → entfernt
+- AI Engine "Optimal" hardcoded → echte Daten
+- Yearly Billing Toggle → entfernt (kein Stripe Backend)
+- Webhook `invoice.paid` renewal → neuer Magic Link bei Abo-Verlängerung
+- Dashboard-Page: Pro/Team ohne aktives Stripe-Abo → Explorer (kein unbefugter Zugriff)
+- Pricing-Card "Soon" Badges für 7 unimplementierte Features
 
 ### Phase C — Produkt-Leistung (nicht nur Protokoll)
 
 | Step | Status | Beschreibung |
 |------|--------|--------------|
-| C1 | Todo | Pro Tool ein **konkretes Deliverable** definieren (Report-JSON, PDF, Link, API-Payload) und im `result` speichern |
-| C2 | Todo | Wo möglich: bestehende APIs (Oracle, Check-Funnel, Roast) **serverseitig** im `tool-execution` Handler anbinden statt Stub |
-| C3 | Todo | Stripe **Webhook → Entitlements-Tabelle** (Fallback wenn Cookie fehlt / Re-Login) — optional zweite Zeile der Wahrheit |
+| C1 | **In Progress** | Pro Tool ein **konkretes Deliverable** definieren (Report-JSON mit echten Daten) und im `result` speichern |
+| C2 | **In Progress** | Security-Check API serverseitig im `tool-execution` Handler anbinden (`check`-Tool = echter Check-Funnel-Aufruf) |
+| C3 | **In Progress** | Stripe **Webhook → `customer_entitlements`-Tabelle** als zweite Wahrheitsquelle (Fallback wenn Cookie fehlt) |
 | C4 | Todo | `app/api/admin/executions` Schema mit `003_dashboard.sql` (`customer_id`) angleichen oder separate Admin-View |
 
 ### Phase D — Qualitätssicherung

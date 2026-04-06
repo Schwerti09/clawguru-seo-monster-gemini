@@ -157,13 +157,27 @@ export default async function DashboardPage() {
     ? Math.round(finished.filter((e: any) => e.status === 'completed').length / finished.length * 100)
     : 0
 
-  // If the user has a subscription plan (pro/team) but Stripe reports no active subscription,
-  // downgrade to null (explorer) so access is revoked cleanly.
-  // Day Pass is exempt: it expires via cookie maxAge (24h), no Stripe subscription involved.
+  // C3: Check customer_entitlements as second source of truth.
+  // Used as fallback when Stripe API is down or subscription just renewed but cookie not refreshed.
   const isSubscriptionPlan = plan === 'pro' || plan === 'team'
   const hasActiveStripeSubscription = Boolean(stripeData.subscriptionTier)
-  const revokedSubscription = isSubscriptionPlan && customerId && !hasActiveStripeSubscription
-  const effectiveTier = revokedSubscription ? null : (stripeData.subscriptionTier || plan || null)
+
+  let entitlementPlan: string | null = null
+  if (customerId && !hasActiveStripeSubscription) {
+    const ent = await safeQuery<{ plan: string; valid_until: string }>(
+      `SELECT plan, valid_until FROM customer_entitlements
+       WHERE customer_id = $1 AND valid_until > NOW() LIMIT 1`,
+      [customerId]
+    )
+    if (ent.length > 0) entitlementPlan = ent[0].plan
+  }
+
+  // Effective tier priority: Stripe > Entitlements DB > JWT cookie plan
+  // If subscription plan with no Stripe sub AND no valid entitlement → revoke (explorer)
+  const revokedSubscription = isSubscriptionPlan && customerId && !hasActiveStripeSubscription && !entitlementPlan
+  const effectiveTier = revokedSubscription
+    ? null
+    : (stripeData.subscriptionTier || entitlementPlan || plan || null)
 
   const initialData: DashboardData = {
     clawScore,

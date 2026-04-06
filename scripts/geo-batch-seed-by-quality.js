@@ -70,6 +70,13 @@ const BATCHES = {
     "ljubljana",
     "belgrade",
   ],
+  /** China Mega Expansion - Top 4 cities for 2026 */
+  CHINA: [
+    "beijing",
+    "shanghai", 
+    "guangzhou",
+    "shenzhen",
+  ],
 }
 
 const CITY_META = {
@@ -123,6 +130,11 @@ const CITY_META = {
   zagreb: { name_de: "Zagreb", name_en: "Zagreb", country_code: "HR", priority: 73, population: 806000 },
   ljubljana: { name_de: "Laibach", name_en: "Ljubljana", country_code: "SI", priority: 68, population: 284000 },
   belgrade: { name_de: "Belgrad", name_en: "Belgrade", country_code: "RS", priority: 75, population: 1370000 },
+  // China Mega Expansion cities
+  beijing: { name_de: "Peking", name_en: "Beijing", country_code: "CN", priority: 95, population: 21540000 },
+  shanghai: { name_de: "Shanghai", name_en: "Shanghai", country_code: "CN", priority: 94, population: 24280000 },
+  guangzhou: { name_de: "Kanton", name_en: "Guangzhou", country_code: "CN", priority: 88, population: 15300000 },
+  shenzhen: { name_de: "Shenzhen", name_en: "Shenzhen", country_code: "CN", priority: 89, population: 17560000 },
 }
 
 function parseArgs(argv) {

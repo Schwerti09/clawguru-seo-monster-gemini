@@ -120,10 +120,14 @@ Aktueller Stand:
 
 | Step | Status | Beschreibung |
 |------|--------|--------------|
-| C1 | **In Progress** | Pro Tool ein **konkretes Deliverable** definieren (Report-JSON mit echten Daten) und im `result` speichern |
-| C2 | **In Progress** | Security-Check API serverseitig im `tool-execution` Handler anbinden (`check`-Tool = echter Check-Funnel-Aufruf) |
-| C3 | **In Progress** | Stripe **Webhook → `customer_entitlements`-Tabelle** als zweite Wahrheitsquelle (Fallback wenn Cookie fehlt) |
-| C4 | Todo | `app/api/admin/executions` Schema mit `003_dashboard.sql` (`customer_id`) angleichen oder separate Admin-View |
+| C1 | **Done** | Pro Tool konkretes Deliverable im `result.deliverable` JSON: check=Header-Scan, oracle=Top-Runbooks, summon=Posture, neuro=Pattern-Analyse |
+| C2 | **Done** | `lib/security-check-core.ts` geteilt; `check`-Tool ruft echten HTTP-Header-Scan auf (target default: clawguru.org); alle Routes refactored |
+| C3 | **Done** | `010_customer_entitlements.sql`; Webhook upsert bei checkout/renewal/cancel; Dashboard-Fallback: Stripe > Entitlements > JWT |
+| C4 | **Done** | `admin/executions` auf echtes Schema (customer_id, runbook_id, started_at, completed_at) – keine joins auf gelöschte Tabellen mehr |
+
+**Phase-C-Commit:** `5588e030` (06.04.2026)
+
+**Wichtig für Prod:** Migration 010 ausführen: `npm run db:migrate` (oder `psql $DATABASE_URL -f scripts/db/migrations/010_customer_entitlements.sql`)
 
 ### Phase D — Qualitätssicherung
 
@@ -132,10 +136,10 @@ Aktueller Stand:
 | D1 | Todo | Playwright: Happy-Path „Cookie gesetzt → POST tool-execution → 200 → Dashboard zeigt neue Zeile“ (Mock DB oder Test-DB) |
 | D2 | Todo | Monitoring/Alert wenn `tool-execution` 5xx-Rate steigt |
 
-**Aktueller Umsetzungsstand (Kurz):** A1–A3, B1–B3 im Code; A4/A5 und Phase C/D offen bis „100 % Produkt-real“ (echte Analyse-Ergebnisse pro Tool).
+**Aktueller Umsetzungsstand (Kurz):** A1–A3, B1–B5, C1–C4 abgeschlossen. Offen: A4 (Prod-Migration 009+010), A5 (Redis Rate-Limit), Phase D (Playwright Tests).
 
 ---
 
 Manual §-blocks end here. From now on: Killermachine v3.
 
-Letzte manuelle Änderung: 06.04.2026 (Cockpit-Roadmap + Realism-Steps)
+Letzte manuelle Änderung: 06.04.2026 (Phase C komplett – echte Deliverables, Entitlements-Tabelle, Schema-Fixes)

@@ -1,96 +1,47 @@
 // lib/netlify-api.ts
-// Netlify API helpers for admin operations.
-// Uses NETLIFY_API_KEY (personal access token), NETLIFY_SITE_ID, and
-// NETLIFY_ACCOUNT_ID ('rolf-schwertfechter') to toggle the MAINTENANCE_MODE
-// environment variable and trigger a rebuild.
+// Maintenance mode toggle – Vercel-compatible via Upstash Redis.
+// Falls back to MAINTENANCE_MODE env var for read when Redis is unavailable.
+//
+// Renamed from netlify-api.ts to preserve import compatibility.
+// No Netlify dependencies remain.
 
-const NETLIFY_API = "https://api.netlify.com/api/v1"
+const REDIS_KEY = "clawguru:maintenance_mode"
 
-/** The Netlify account slug / team ID – scopes all account-level API calls. */
-function accountId() {
-  const id = process.env.NETLIFY_ACCOUNT_ID
-  if (!id) {
-    console.warn(
-      "[netlify-api] NETLIFY_ACCOUNT_ID is not set – falling back to 'rolf-schwertfechter'. " +
-        "Set this env var in Netlify to avoid misconfiguration."
-    )
-    return "rolf-schwertfechter"
-  }
-  return id
-}
-
-function headers() {
-  const token = process.env.NETLIFY_API_KEY
-  if (!token) throw new Error("NETLIFY_API_KEY environment variable is not set")
-  return {
-    Authorization: `Bearer ${token}`,
-    "Content-Type": "application/json",
+async function redisGet(key: string): Promise<string | null> {
+  const url = process.env.UPSTASH_REDIS_REST_URL
+  const token = process.env.UPSTASH_REDIS_REST_TOKEN
+  if (!url || !token) return null
+  try {
+    const res = await fetch(`${url}/get/${encodeURIComponent(key)}`, {
+      headers: { Authorization: `Bearer ${token}` },
+      cache: "no-store",
+    })
+    const json = (await res.json()) as { result: string | null }
+    return json.result ?? null
+  } catch {
+    return null
   }
 }
 
-function siteId() {
-  const id = process.env.NETLIFY_SITE_ID
-  if (!id) throw new Error("NETLIFY_SITE_ID environment variable is not set")
-  return id
-}
-
-/** Returns the current value of MAINTENANCE_MODE env var from Netlify. */
-export async function getMaintenanceMode(): Promise<boolean> {
-  const res = await fetch(`${NETLIFY_API}/sites/${siteId()}/env/MAINTENANCE_MODE`, {
-    headers: headers(),
+async function redisSet(key: string, value: string): Promise<void> {
+  const url = process.env.UPSTASH_REDIS_REST_URL
+  const token = process.env.UPSTASH_REDIS_REST_TOKEN
+  if (!url || !token) throw new Error("UPSTASH_REDIS_REST_URL / UPSTASH_REDIS_REST_TOKEN not configured")
+  const res = await fetch(`${url}/set/${encodeURIComponent(key)}/${encodeURIComponent(value)}`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${token}` },
   })
-  if (res.status === 404) return false
-  if (!res.ok) throw new Error(`Netlify API error ${res.status}: ${await res.text()}`)
-  const data = (await res.json()) as { values?: Array<{ value: string }> }
-  const val = data.values?.[0]?.value ?? ""
-  return val === "true" || val === "1"
+  if (!res.ok) throw new Error(`Redis SET failed: ${res.status}`)
 }
 
-/** Sets MAINTENANCE_MODE to `enabled` and triggers a new Netlify build. */
+/** Returns the current maintenance mode state (Redis → env var fallback). */
+export async function getMaintenanceMode(): Promise<boolean> {
+  const val = await redisGet(REDIS_KEY)
+  if (val !== null) return val === "true" || val === "1"
+  return process.env.MAINTENANCE_MODE === "true"
+}
+
+/** Sets maintenance mode on/off. Persisted in Upstash Redis. */
 export async function setMaintenanceMode(enabled: boolean): Promise<void> {
-  const site = siteId()
-  const h = headers()
-  const value = enabled ? "true" : "false"
-
-  // Check if the env var already exists (PUT vs POST)
-  const check = await fetch(`${NETLIFY_API}/sites/${site}/env/MAINTENANCE_MODE`, { headers: h })
-
-  const envPayload = [
-    { key: "MAINTENANCE_MODE", scopes: ["builds", "runtime"], values: [{ value, context: "all" }] },
-  ]
-
-  if (check.status === 404) {
-    // Create the env var
-    const createRes = await fetch(`${NETLIFY_API}/sites/${site}/env`, {
-      method: "POST",
-      headers: h,
-      body: JSON.stringify(envPayload),
-    })
-    if (!createRes.ok) {
-      throw new Error(`Netlify env create failed ${createRes.status}: ${await createRes.text()}`)
-    }
-  } else {
-    // Update existing env var (same shape as create, single-item patch)
-    const updateRes = await fetch(`${NETLIFY_API}/sites/${site}/env/MAINTENANCE_MODE`, {
-      method: "PUT",
-      headers: h,
-      body: JSON.stringify({ key: "MAINTENANCE_MODE", scopes: ["builds", "runtime"], values: [{ value, context: "all" }] }),
-    })
-    if (!updateRes.ok) {
-      throw new Error(`Netlify env update failed ${updateRes.status}: ${await updateRes.text()}`)
-    }
-  }
-
-  // Trigger a new build (scoped to account for team plans)
-  const buildRes = await fetch(
-    `${NETLIFY_API}/sites/${site}/builds?account_id=${encodeURIComponent(accountId())}`,
-    {
-      method: "POST",
-      headers: h,
-      body: JSON.stringify({}),
-    }
-  )
-  if (!buildRes.ok) {
-    throw new Error(`Netlify build trigger failed ${buildRes.status}: ${await buildRes.text()}`)
-  }
+  await redisSet(REDIS_KEY, enabled ? "true" : "false")
 }

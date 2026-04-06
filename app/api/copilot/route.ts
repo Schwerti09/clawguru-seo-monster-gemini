@@ -3,6 +3,9 @@ import { ruleBasedCopilot } from "@/lib/copilot";
 import { generateOrdered, type AiProvider } from "@/lib/ai/providers";
 import { logTelemetry } from "@/lib/ops/telemetry";
 import { getRequestId } from "@/lib/ops/request-id";
+import { checkRateLimit } from "@/lib/rate-limit";
+
+export const runtime = "nodejs";
 
 type CopilotAction = { label: string; href: string };
 type CopilotResponse = {
@@ -115,6 +118,18 @@ ${userMessage}`;
 
 export async function POST(req: NextRequest) {
   try {
+    const ip =
+      req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+      req.headers.get("x-real-ip") ||
+      "unknown";
+    const rl = checkRateLimit(ip, undefined, { hardLimitPerMinute: 10 });
+    if (!rl.allowed) {
+      const retryAfter = Math.ceil((rl.resetAt - Date.now()) / 1000);
+      return NextResponse.json(
+        { error: "rate_limited", retryAfter },
+        { status: 429, headers: { "Retry-After": String(retryAfter) } }
+      );
+    }
     const t0 = Date.now();
     const { message } = (await req.json().catch(() => ({}))) as { message?: string };
     const msg = (message || "").toString().slice(0, 6000);

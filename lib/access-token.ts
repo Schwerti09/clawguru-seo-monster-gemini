@@ -1,4 +1,5 @@
 import crypto from "crypto"
+import { isTokenDenied } from "./token-deny-list"
 
 export type AccessPlan = "daypass" | "pro" | "team"
 
@@ -40,6 +41,7 @@ export function signAccessToken(payload: AccessTokenPayload) {
 
 export function verifyAccessToken(token: string): AccessTokenPayload | null {
   try {
+    if (isTokenDenied(token)) return null
     const secret = process.env.ACCESS_TOKEN_SECRET || process.env.NEXTAUTH_SECRET || process.env.SESSION_SECRET
     if (!secret) return null
     const [body, sig] = token.split(".")

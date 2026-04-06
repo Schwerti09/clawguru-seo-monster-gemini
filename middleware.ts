@@ -21,20 +21,34 @@ function getClientIp(request: NextRequest): string {
   )
 }
 
+// Per-IP limits for sensitive auth endpoints (edge isolate – first line of defense)
+const AUTH_RATE_LIMIT_MAX = 5
+const AUTH_RATE_LIMIT_WINDOW_MS = 60 * 1000
+
 function routeBucket(pathname: string): string | null {
   if (pathname === "/api/live-wall") return "live-wall"
+  if (pathname === "/api/auth/activate") return "auth-activate"
+  if (pathname === "/api/auth/recover") return "auth-recover"
   return null
+}
+
+function getBucketConfig(bucket: string): { max: number; windowMs: number } {
+  if (bucket === "auth-activate" || bucket === "auth-recover") {
+    return { max: AUTH_RATE_LIMIT_MAX, windowMs: AUTH_RATE_LIMIT_WINDOW_MS }
+  }
+  return { max: RATE_LIMIT_MAX, windowMs: RATE_LIMIT_WINDOW_MS }
 }
 
 function checkRateLimit(ip: string, bucket: string): { ok: boolean; retryAfter: number } {
   const key = `${bucket}:${ip}`
   const now = Date.now()
+  const { max, windowMs } = getBucketConfig(bucket)
   const entry = RL.get(key)
   if (!entry || now >= entry.resetAt) {
-    RL.set(key, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS })
+    RL.set(key, { count: 1, resetAt: now + windowMs })
     return { ok: true, retryAfter: 0 }
   }
-  if (entry.count < RATE_LIMIT_MAX) {
+  if (entry.count < max) {
     entry.count++
     return { ok: true, retryAfter: 0 }
   }
@@ -45,8 +59,10 @@ function isPublicFile(pathname: string): boolean {
   return pathname.includes(".")
 }
 
+const RATE_LIMITED_API_PATHS = new Set(["/api/live-wall", "/api/auth/activate", "/api/auth/recover"])
+
 function shouldBypassMiddleware(pathname: string): boolean {
-  if (pathname.startsWith("/api/") && pathname !== "/api/live-wall") return true
+  if (pathname.startsWith("/api/") && !RATE_LIMITED_API_PATHS.has(pathname)) return true
   if (pathname.startsWith("/admin")) return true
   if (pathname.startsWith("/_next/")) return true
   if (pathname === "/favicon.ico") return true

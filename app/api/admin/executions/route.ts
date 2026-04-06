@@ -1,9 +1,17 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
+import { cookies } from 'next/headers'
+import { adminCookieName, verifyAdminToken } from '@/lib/admin-auth'
 import { dbQuery } from '@/lib/db'
 
 export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  const token = (await cookies()).get(adminCookieName())?.value ?? ''
+  if (!token || !verifyAdminToken(token)) {
+    return NextResponse.json({ error: 'unauthorized' }, { status: 401 })
+  }
+
   if (!process.env.DATABASE_URL) {
     return NextResponse.json({ error: 'Database not configured' }, { status: 503 })
   }

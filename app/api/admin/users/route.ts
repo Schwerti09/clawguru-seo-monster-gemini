@@ -1,32 +1,42 @@
 import { NextResponse } from 'next/server'
+import { cookies } from 'next/headers'
+import { adminCookieName, verifyAdminToken } from '@/lib/admin-auth'
 import { dbQuery } from '@/lib/db'
 
 export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
 
 export async function GET() {
+  const token = (await cookies()).get(adminCookieName())?.value ?? ''
+  if (!token || !verifyAdminToken(token)) {
+    return NextResponse.json({ error: 'unauthorized' }, { status: 401 })
+  }
+
   if (!process.env.DATABASE_URL) {
     return NextResponse.json({ error: 'Database not configured' }, { status: 503 })
   }
 
   try {
     const result = await dbQuery<{
-      id: string
-      email: string
-      tier: string | null
-      created_at: string
-      last_active: string | null
+      customer_id: string
+      plan: string
+      valid_until: string
+      execution_count: string
+      last_execution: string | null
+      updated_at: string
     }>(`
       SELECT
-        u.id,
-        u.email,
-        ut.tier,
-        u.created_at,
-        um.last_active
-      FROM users u
-      LEFT JOIN user_tier ut ON ut.user_id = u.id
-      LEFT JOIN user_metrics um ON um.user_id = u.id
-      ORDER BY u.created_at DESC
-      LIMIT 50
+        ce.customer_id,
+        ce.plan,
+        ce.valid_until,
+        COUNT(re.id)::text AS execution_count,
+        MAX(re.created_at)::text AS last_execution,
+        ce.updated_at
+      FROM customer_entitlements ce
+      LEFT JOIN runbook_executions re ON re.customer_id = ce.customer_id
+      GROUP BY ce.customer_id, ce.plan, ce.valid_until, ce.updated_at
+      ORDER BY ce.updated_at DESC
+      LIMIT 100
     `)
 
     return NextResponse.json(result.rows)

@@ -28,8 +28,6 @@ env-*.production
 *.bakcmd
 
 # Shell artifacts
-(
-({
 
 # mac / windows junk
 .DS_Store
@@ -92,3 +90,9 @@ tsconfig.tsbuildinfo
 test-results/
 playwright-report/
 .playwright-cache/
+
+# Local deployment artifacts
+DEPLOY_ID.txt
+deno.lock
+test-gemini.js
+fix-broken.js

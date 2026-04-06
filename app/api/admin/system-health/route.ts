@@ -1,6 +1,15 @@
 import { NextResponse } from 'next/server'
+import { cookies } from 'next/headers'
+import { adminCookieName, verifyAdminToken } from '@/lib/admin-auth'
+
+export const runtime = 'nodejs'
+export const dynamic = 'force-dynamic'
 
 export async function GET() {
+  const token = (await cookies()).get(adminCookieName())?.value ?? ''
+  if (!token || !verifyAdminToken(token)) {
+    return NextResponse.json({ error: 'unauthorized' }, { status: 401 })
+  }
   try {
     const health = {
       // CPU: not reliably measurable in a single serverless invocation (no time interval baseline)

@@ -61,6 +61,24 @@ function hashScore(slug) {
   return h % 40
 }
 
+function generateSummary(slug) {
+  const parts = slug.split('-')
+  const provider = parts[0]
+  const service = parts.slice(1, parts.length - 2).join('-')
+  const issue = parts[parts.length - 2]
+  const year = parts[parts.length - 1]
+  
+  const summaries = {
+    'hardening': `Security hardening guide for ${service} on ${provider.toUpperCase()}. Complete configuration, best practices, and compliance checks for ${year}.`,
+    'csp': `Content Security Policy implementation for ${service} on ${provider.toUpperCase()}. CSP headers, directives, and security controls for ${year}.`,
+    'waf': `Web Application Firewall setup for ${service} on ${provider.toUpperCase()}. WAF rules, configuration, and threat protection for ${year}.`,
+    'rbac-misconfig': `RBAC misconfiguration fixes for ${service} on ${provider.toUpperCase()}. Role-based access control security and compliance for ${year}.`,
+    'sbom': `Software Bill of Materials (SBOM) management for ${service} on ${provider.toUpperCase()}. Vulnerability scanning and dependency tracking for ${year}.`
+  }
+  
+  return summaries[issue] || `Security configuration and operations guide for ${service} on ${provider.toUpperCase()}. Best practices and compliance for ${year}.`
+}
+
 function computeClawScoreForJson({ slug, title, summary, tags }) {
   const base = 60 + hashScore(slug)
   const tlen = (title || '').split(/\s+/).filter(Boolean).length
@@ -124,7 +142,7 @@ function main() {
       const item = {
         slug,
         title: toTitle(slug),
-        summary: 'Deterministic 100k entry',
+        summary: generateSummary(slug),
         tags: tagsFromSlug(slug),
         lastmod: '2026-01-01',
       }

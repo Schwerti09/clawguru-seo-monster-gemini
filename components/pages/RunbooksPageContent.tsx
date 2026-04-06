@@ -21,13 +21,17 @@ export default async function RunbooksPageContent({
   locale: Locale
   subtitle: string
 }) {
-  const top20: any[] = []
+  // Load actual runbooks data for structured data
+  const { loadRunbooks } = await import("@/lib/runbooks-data")
+  const runbooks = await loadRunbooks()
+  const top20 = runbooks.slice(0, 20)
+  
   const itemListLd = {
     "@context": "https://schema.org",
     "@type": "ItemList",
     name: "ClawGuru Runbook Library",
     description: "Security- und Ops-Runbooks für DevOps-Teams: SSH-Hardening, Firewall, Incident Response und mehr.",
-    numberOfItems: 0,
+    numberOfItems: top20.length,
     itemListElement: top20.map((r, i) => ({
       "@type": "ListItem",
       position: i + 1,

@@ -204,6 +204,12 @@ Session 3 Abschluss: A4 (`npm run db:migrate`) ausgeführt – 009 + 010 applied
 | `global-expansion` Auth | `hasSecret` + `GEO_EXPANSION_SECRET` hinzugefügt – war öffentlich erreichbar |
 | Debug-Logs entfernt | `console.log(✅ ...)` aus beiden Geo-Expansion Routes entfernt |
 
+### SEEDED_CITY_SLUGS Fix (Session 4 – Commit `5a17c26de`)
+
+| Fix | Beschreibung |
+|-----|-------------|
+| `lib/geo-matrix.ts` | 33 fehlende Städte zu `SEEDED_CITY_SLUGS` hinzugefügt (64→97): D4 CEE/Balkan, Nordics, Iberia, UK/IE; verhindert doppelten City-Suffix bei `GEO_MATRIX_AUTO_REWRITE` |
+
 ### Noch offen (kein akuter Fix notwendig)
 
 - **Affiliate Stats**: `affiliateData()` in `admin/cockpit` gibt `clicks: 0, sales: 0` – kein Tracking-System vorhanden

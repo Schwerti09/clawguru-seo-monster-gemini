@@ -133,13 +133,14 @@ Aktueller Stand:
 
 | Step | Status | Beschreibung |
 |------|--------|--------------|
-| D1 | Todo | Playwright: Happy-Path „Cookie gesetzt → POST tool-execution → 200 → Dashboard zeigt neue Zeile“ (Mock DB oder Test-DB) |
+| D1 | **Done** | Playwright: Happy-Path `tool-execution-happy-path.spec.ts` – 401/400/200/503 Contracts, deliverable shape, UI-Smoke skippable ohne DB |
 | D2 | **Done** | `logTelemetry` bei rate_limited (429) + db_error (500) in `tool-execution`; strukturiert für Datadog/Axiom/CloudWatch |
 
-**Aktueller Umsetzungsstand (Kurz):** A1–A3, A5, B1–B5, C1–C4, D2 abgeschlossen. Offen: A4 (Prod-Migration 009+010), D1 (Playwright Tests).
+**Aktueller Umsetzungsstand (Kurz):** A1–A3, A5, B1–B5, C1–C4, D1–D2 abgeschlossen. **Einzig offener Punkt: A4** – Prod-DB-Migration ausführen (`npm run db:migrate` oder direkt `psql`).
 
 ---
 
 Manual §-blocks end here. From now on: Killermachine v3.
 
 Letzte manuelle Änderung: 06.04.2026 (Phase C komplett – echte Deliverables, Entitlements-Tabelle, Schema-Fixes)
+Session 3 – 06.04.2026: Phase C vollständig, A5+D1+D2 done. Einzig offen: A4 (Prod-Migration 009+010).

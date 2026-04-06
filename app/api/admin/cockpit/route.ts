@@ -138,7 +138,7 @@ export async function GET() {
     system: {
       geminiStatus,
       maintenanceMode: process.env.MAINTENANCE_MODE === "true",
-      hasNetlifyToken: Boolean(process.env.NETLIFY_AUTH_TOKEN && process.env.NETLIFY_SITE_ID),
+      hasRedis: Boolean(process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN),
     },
   })
 }

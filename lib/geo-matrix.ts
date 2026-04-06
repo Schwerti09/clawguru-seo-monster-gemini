@@ -115,37 +115,6 @@ const SEEDED_CITY_SLUGS = new Set([
   "zagreb",
   "ljubljana",
   "belgrade",
-  // China
-  "beijing",
-  "shanghai",
-  "guangzhou",
-  "shenzhen",
-  // USA
-  "losangeles",
-  "chicago",
-  "houston",
-  "dallas",
-  "seattle",
-  "austin",
-  "phoenix",
-  "philadelphia",
-  "sandiego",
-  "sanantonio",
-  // India
-  "mumbai",
-  "delhi",
-  "bangalore",
-  "hyderabad",
-  "chennai",
-  "kolkata",
-  "pune",
-  "ahmedabad",
-  // Russia
-  "moscow",
-  "stpetersburg",
-  "novosibirsk",
-  "yekaterinburg",
-  "kazan",
 ])
 
 export function slugifyCity(input: string): string {

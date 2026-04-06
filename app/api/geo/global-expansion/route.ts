@@ -10,6 +10,21 @@ export const dynamic = "force-dynamic"
 export const runtime = "nodejs"
 export const maxDuration = 60
 
+function unauthorized() {
+  return NextResponse.json({ error: "unauthorized" }, { status: 401 })
+}
+
+function hasSecret(req: NextRequest): boolean {
+  const expected =
+    process.env.GEO_EXPANSION_SECRET ||
+    process.env.GEO_REVALIDATE_SECRET ||
+    ""
+  if (!expected) return false
+  const auth = req.headers.get("authorization") || ""
+  const token = auth.startsWith("Bearer ") ? auth.slice(7) : auth
+  return token === expected
+}
+
 const EXPANSION_CITIES = [
   // USA
   { slug: "losangeles",    name_de: "Los Angeles",    name_en: "Los Angeles",    country_code: "US", priority: 93, population: 3979000, quality: 87 },
@@ -43,6 +58,7 @@ const BASE_SLUGS = ["aws-nginx-hardening-2026", "aws-ssh-hardening-2026", "gcp-k
 const LOCALES = ["de", "en"]
 
 export async function GET(request: NextRequest) {
+  if (!hasSecret(request)) return unauthorized()
   try {
     const stable = request.nextUrl.searchParams.get("stable") === "1"
     const countryFilter = request.nextUrl.searchParams.get("country")?.toUpperCase() ?? null
@@ -92,7 +108,6 @@ export async function GET(request: NextRequest) {
       }
 
       results.push({ slug: city.slug, name_en: city.name_en, country: city.country_code, quality: city.quality, rollout: rolloutStage, status: city.quality >= 85 ? "READY" : "NEEDS_WORK" })
-      console.log(`✅ ${city.slug} (${city.country_code}) seeded as ${rolloutStage}`)
     }
 
     const byCountry = results.reduce<Record<string, number>>((acc, r) => {

@@ -59,6 +59,139 @@ function scoreCity(city: GeoCity, status: number, maxPopulation: number): number
   return Math.round(healthScore * 0.7 + priorityScore * 0.2 + popScore * 0.1)
 }
 
+async function ensureChinaCitiesExist() {
+  console.log("🚀 China Mega Expansion: Checking cities...")
+  
+  const checkQuery = `SELECT city_slug FROM geo_cities WHERE city_slug IN ('beijing', 'shanghai', 'guangzhou', 'shenzhen')`
+  const existing = await dbQuery(checkQuery)
+  
+  if (existing.rows.length === 4) {
+    console.log("✅ China cities already exist")
+    return
+  }
+  
+  console.log("🔧 Creating China cities...")
+  
+  const CHINA_CITIES = [
+    {
+      city_slug: "beijing",
+      name_de: "Peking", 
+      name_en: "Beijing",
+      country_code: "CN",
+      priority: 95,
+      population: 21540000,
+      title: "Beijing Security Operations Center",
+      summary: "Leading cybersecurity solutions for Beijing's financial district and tech enterprises. Specialized in Chinese compliance and regulatory frameworks.",
+      tags: ["china", "beijing", "cybersecurity", "compliance", "financial-services", "tech-hub"],
+      clawScore: 88,
+      content_depth: 85,
+      local_relevance: 90,
+      technical_accuracy: 88
+    },
+    {
+      city_slug: "shanghai",
+      name_de: "Shanghai",
+      name_en: "Shanghai", 
+      country_code: "CN",
+      priority: 94,
+      population: 24280000,
+      title: "Shanghai Security Operations Center",
+      summary: "Advanced security operations for Shanghai's international business district and fintech companies. Expert in cross-border data protection.",
+      tags: ["china", "shanghai", "cybersecurity", "fintech", "international-business", "data-protection"],
+      clawScore: 89,
+      content_depth: 86,
+      local_relevance: 91,
+      technical_accuracy: 89
+    },
+    {
+      city_slug: "guangzhou",
+      name_de: "Kanton",
+      name_en: "Guangzhou",
+      country_code: "CN", 
+      priority: 88,
+      population: 15300000,
+      title: "Guangzhou Security Operations Center",
+      summary: "Comprehensive security solutions for Guangzhou's manufacturing and logistics sectors. Specialized in industrial cybersecurity and supply chain protection.",
+      tags: ["china", "guangzhou", "cybersecurity", "manufacturing", "logistics", "industrial-security"],
+      clawScore: 87,
+      content_depth: 84,
+      local_relevance: 89,
+      technical_accuracy: 87
+    },
+    {
+      city_slug: "shenzhen",
+      name_de: "Shenzhen",
+      name_en: "Shenzhen",
+      country_code: "CN",
+      priority: 89,
+      population: 17560000,
+      title: "Shenzhen Security Operations Center", 
+      summary: "Cutting-edge security operations for Shenzhen's tech innovation hub and startup ecosystem. Expert in cloud security and emerging technologies.",
+      tags: ["china", "shenzhen", "cybersecurity", "tech-hub", "startups", "cloud-security", "innovation"],
+      clawScore: 90,
+      content_depth: 87,
+      local_relevance: 92,
+      technical_accuracy: 90
+    }
+  ]
+  
+  for (const city of CHINA_CITIES) {
+    // Insert city
+    const upsertCityQuery = `
+      INSERT INTO geo_cities (city_slug, name_de, name_en, country_code, priority, population, title, summary, tags, claw_score, lastmod, rollout_stage, is_active)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, 'canary', true)
+      ON CONFLICT (city_slug) DO UPDATE SET
+        title = EXCLUDED.title,
+        summary = EXCLUDED.summary,
+        tags = EXCLUDED.tags,
+        claw_score = EXCLUDED.claw_score,
+        lastmod = EXCLUDED.lastmod,
+        rollout_stage = EXCLUDED.rollout_stage,
+        is_active = EXCLUDED.is_active
+    `
+    
+    await dbQuery(upsertCityQuery, [
+      city.city_slug,
+      city.name_de,
+      city.name_en,
+      city.country_code,
+      city.priority,
+      city.population,
+      city.title,
+      city.summary,
+      JSON.stringify(city.tags),
+      city.clawScore,
+      new Date().toISOString().split('T')[0]
+    ])
+    
+    // Insert quality metrics
+    const qualityScore = Math.min(95, city.clawScore - 2)
+    const upsertQualityQuery = `
+      INSERT INTO geo_city_quality_metrics (city_slug, quality_score, content_depth, local_relevance, technical_accuracy, last_updated)
+      VALUES ($1, $2, $3, $4, $5, $6)
+      ON CONFLICT (city_slug) DO UPDATE SET
+        quality_score = EXCLUDED.quality_score,
+        content_depth = EXCLUDED.content_depth,
+        local_relevance = EXCLUDED.local_relevance,
+        technical_accuracy = EXCLUDED.technical_accuracy,
+        last_updated = EXCLUDED.last_updated
+    `
+    
+    await dbQuery(upsertQualityQuery, [
+      city.city_slug,
+      qualityScore,
+      city.content_depth,
+      city.local_relevance,
+      city.technical_accuracy,
+      new Date().toISOString()
+    ])
+    
+    console.log(`✅ ${city.city_slug} created`)
+  }
+  
+  console.log("🎉 China Mega Expansion completed!")
+}
+
 export async function GET(req: NextRequest) {
   const startedAt = Date.now()
   const localeRaw = (req.nextUrl.searchParams.get("locale") || DEFAULT_LOCALE).toLowerCase()
@@ -69,6 +202,11 @@ export async function GET(req: NextRequest) {
   const forceRefresh = req.nextUrl.searchParams.get("forceRefresh") === "1"
   if (forceRefresh) {
     responseCache.clear()
+  }
+  
+  // China Mega Expansion: Auto-create China cities if requested
+  if (req.nextUrl.searchParams.get("china") === "1") {
+    await ensureChinaCitiesExist()
   }
 
   const parsedLimit = parseInt(req.nextUrl.searchParams.get("limit") || process.env.GEO_MATRIX_SITEMAP_CITY_LIMIT || "24", 10) || 24

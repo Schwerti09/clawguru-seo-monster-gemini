@@ -1,14 +1,11 @@
 import { NextRequest, NextResponse } from "next/server"
+import { sanitizeKey } from "@/lib/ai/providers"
 
 export const dynamic = "force-dynamic"
 export const runtime = "nodejs"
 
 async function checkGemini(): Promise<{ provider: string; ok: boolean; status?: number; ratelimited?: boolean; error?: string; errorBody?: string; model?: string; keyPrefix?: string }> {
-  const apiKey = (process.env.GEMINI_API_KEY || "").trim()
-  // Strip surrounding quotes / accidental "Bearer " prefix
-  let key = apiKey
-  if ((key.startsWith('"') && key.endsWith('"')) || (key.startsWith("'") && key.endsWith("'"))) key = key.slice(1, -1).trim()
-  if (key.toLowerCase().startsWith("bearer ")) key = key.slice(7).trim()
+  const key = sanitizeKey(process.env.GEMINI_API_KEY)
   const model = process.env.GEMINI_MODEL || "gemini-2.5-flash"
   const base = (process.env.GEMINI_BASE_URL || "https://generativelanguage.googleapis.com/v1beta").replace(/\/$/, "")
   if (!key) return { provider: "gemini", ok: false, error: "missing_api_key" }

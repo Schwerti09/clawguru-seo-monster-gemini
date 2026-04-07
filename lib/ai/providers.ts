@@ -31,7 +31,7 @@ function sleep(ms: number): Promise<void> {
  * Sanitize an API key: trim whitespace, strip surrounding quotes,
  * remove accidental "Bearer " prefix (common copy-paste mistake).
  */
-function sanitizeKey(raw: string | undefined): string {
+export function sanitizeKey(raw: string | undefined): string {
   if (!raw) return "";
   let k = raw.trim();
   // Strip surrounding quotes (single or double)

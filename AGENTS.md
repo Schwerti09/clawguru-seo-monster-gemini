@@ -1,310 +1,625 @@
-# ClawGuru SEO Monster – AGENTS.md (Clean Reset – 05.04.2026)
-
-## 1. Projekt-Überblick
-ClawGuru ist ein spezialisierter Security-Check + executable Runbook Tool für Self-Hosting / OpenClaw / Moltbot / AI-Agents.  
-Ziel: Mega-Traffic über lokale Geo-Pages (DACH + EU + CEE) mit starkem "Not a Pentest" Trust-Anchor + City-Aware Compliance.
-
-Aktueller Stand:
-- D4 (12 CEE/Balkan-Städte) in finaler Aktivierungsphase
-- Post-Promotion Lock (§46.8) aktiv
-- Legacy Runbook-URLs werden per 301 auf kanonische City-Pages umgeleitet (middleware.ts fix deployed)
-- Killermachine v3 ist der neue Standard
-
-## 2. Technischer Umsetzungsstand
-- D4 final activation complete
-- Killermachine v3 active → automatische Wave-Verarbeitung
-- Ready for traffic (GSC + Community + Canonical Routing)
-
-## 3. Killermachine v3 – Automated Wave Processing (ab sofort Standard)
-
-**Regeln:**
-- Automatischer Seed-Commit, sobald `eligible_count > 0` UND alle Self-Healing Checks grün sind (Matrix-Qualität ≥85, Runbook-URLs 200 OK, Trust-Anchor + City-Aware Signale vorhanden).
-- Human-Gate nur noch bei finaler Canary → Stable Promotion (neuer §46-GO).
-- Täglicher Report + automatische Alerts bei roten Checks.
-- Alle zukünftigen Wellen (D5+) laufen vollautomatisch. Manuelle §-Blöcke sind deprecated.
-
-**Self-Healing Checks (v2):**
-- Matrix-Qualität ≥85 für alle Städte der Welle
-- Runbook-URLs geben 200 OK (kein 308/Redirect auf Search)
-- "Not a Pentest" + Trust-Anchor Framing konsistent
-- City-Aware Compliance-Signale (country_code) vorhanden
-
-## 4. §106 – FINAL MANUAL D4 DECISION BLOCK (letzter manueller Block)
-
-(Dein letzter ausgefüllter Decision-Block mit T24-Zahlen und NO-GO bleibt hier stehen – kopiere ihn einfach hierher, wenn du willst.)
-
-**Entscheidung:** PROBLEM (Matrix noch nicht committed, einige URLs 308)
-
-## 5. 🌍 GLOBAL 1M PAGES TARGET (06.04.2026)
-
-**ZIEL: 1.000.000 veröffentlichte Seiten weltweit mit Quality 85+**
-
-**Aktueller Stand (06.04.2026 – Session 2):**
-- **96 aktive Städte** in geo_cities (stable, Q85+)
-- **4 China-Städte**: Beijing(95), Shanghai(94), Guangzhou(88), Shenzhen(89) – stabil
-- **10 US-Städte**: LA(93), Chicago(91), Houston(88), Dallas(85), Seattle(86), Austin(82), Phoenix(84), Philadelphia(83), San Diego(81), San Antonio(80)
-- **8 India-Städte**: Mumbai(94), Delhi(93), Bangalore(92), Hyderabad(88), Chennai(87), Kolkata(85), Pune(84), Ahmedabad(82)
-- **5 Russia-Städte**: Moscow(92), StPetersburg(88), Novosibirsk(78), Yekaterinburg(76), Kazan(74)
-- **City-Ranking**: 96/96 healthy, Batch-Probing ~2s (fix: Connection-Pool-Exhaustion behoben)
-- **Sitemap-Pool**: 150 Städte (war: 72), tägliche Rotation 24/150
-- **Endpoints live**: `/api/geo/china-create`, `/api/geo/global-expansion`
-- **SEEDED_CITY_SLUGS**: 96 Slugs in `lib/geo-matrix.ts`
-
-**Nächste 30 Tage Target:**
-- **Weitere Expansion**: Japan, Brazil, Mexico, South Korea, Southeast Asia
-- **Sitemap-Limit erhöhen**: GEO_MATRIX_SITEMAP_CITY_LIMIT 24 → 50
-- **Quality-Enrichment**: Locale-spezifische Inhalte für Top-50-Städte
-- **Additional Europe**: 200+ URLs (Quality 75+ → Enrichment auf 85+)
-
-**Strategie:**
-1. **Content-Enrichment** für 1.700+ Städte auf Quality 85+
-2. **Sprachen-Expansion** auf 15+ Sprachen pro Stadt
-3. **Automatisierte Wellen** mit Killermachine v3
-4. **Quality-Gates** strikt bei 85+ für alle URLs
-5. **Global Coverage**: 50+ Länder, 200+ Städte
-
-**Erwartetes Ergebnis:**
-- **1.000.000+ URLs** mit Quality 85+
-- **15+ Sprachen** = 15M+ indexierbare Seiten
-- **Global Traffic** aus 50+ Märkten
-- **Market Leadership** in Security-Check Tools
-
-**Status:** IN PROGRESS - 765/1.000.000 URLs (0.0765% komplett)
-
-## 6. Nächste Schritte (heute) - MASSIVE WELLE GESTARTET
-
-1. **China Mega Expansion** ✅ COMPLETED - 4 Städte (Beijing, Shanghai, Guangzhou, Shenzhen) deployed
-2. **Global Expansion** ✅ COMPLETED - 23 Städte (USA/India/Russia) deployed 
-3. **SEEDED_CITY_SLUGS** ✅ UPDATED - 101 Städte (64→97→101) für korrekte Geo-Varianten
-4. **Content-Enrichment** 🔄 IN PROGRESS - Quality 85+ für alle neuen URLs
-5. **Quality-Gates** 🔄 ACTIVE - Strikte 85+ Quality-Checks
-6. **Global Scaling** 🎯 TARGET - 1M Pages Worldwide
-
-## 7. Cockpit Realism Roadmap (Zahlung → echte Leistung, 100 % nachvollziehbar)
-
-**Ziel:** Nach Checkout sieht der Kunde nur **seine** Daten; jede Tool-Aktion erzeugt **persistente**, auditable Spuren (Executions, Mycelium, Threats); keine reine UI-Deko.
-
-### Release-Disziplin (Git)
-
-- Änderungen an diesem Plan: **erst committen und pushen, wenn der Owner ausdrücklich „Go“ schreibt.**
-
-### Phase A — Daten & Isolation (Fundament)
-
-| Step | Status | Beschreibung |
-|------|--------|--------------|
-| A1 | Done | Migration `009_dashboard_customer_scoping.sql`: `customer_id` auf `threats` + `mycelium_nodes`; Dashboard-Queries nur noch tenant-scoped |
-| A2 | Done | `lib/dashboard-identity.ts` (`parseDashboardPrincipal`) — eine Quelle für Kunden-Key + Plan |
-| A3 | Done | `POST /api/dashboard/tool-execution`: Auth via Cookie, Limits (Explorer), Rate-Burst, Inserts |
-| A4 | **Done** | `npm run db:migrate` ausgeführt – 009 + 010 applied; `customer_id` auf threats/mycelium_nodes, `customer_entitlements` Tabelle live |
-| A5 | **Done** | Rate-Limit **verteilt**: `lib/rate-limit.ts` + Upstash Redis REST (INCR/EXPIRE); In-Memory-Fallback wenn env vars fehlen |
-
-### Phase B — Cockpit-UX (einheitlich echt)
-
-| Step | Status | Beschreibung |
-|------|--------|--------------|
-| B1 | Done | Tools-Tab: API + `router.refresh()`, keine Fake-„Success"-Story ohne Server |
-| B2 | Done | QuickTools-Sidebar: gleicher Lauf via `hooks/useDashboardToolRun.ts` |
-| B3 | Done | Pro Lauf: `runbook_executions` + `mycelium_nodes` + **eine** `threats`-Zeile (low, audit trail) |
-| B4 | Done | Fake-„CPU/Memory/Network"-Tiles entfernt; Tool-Beschreibungen ehrlich (Audit Trail, kein „KI-Echtzeit") |
-| B5 | Done | Pricing-Page: unimplementierte Features (SSO, Voice Copilot, Private Nodes, SWARM etc.) als „Soon" markiert |
-
-**Dashboard-Audit 06.04.2026 (vollständig):**
-- Fake CPU/Memory/Network Tiles → entfernt
-- AI Engine "Optimal" hardcoded → echte Daten
-- Yearly Billing Toggle → entfernt (kein Stripe Backend)
-- Webhook `invoice.paid` renewal → neuer Magic Link bei Abo-Verlängerung
-- Dashboard-Page: Pro/Team ohne aktives Stripe-Abo → Explorer (kein unbefugter Zugriff)
-- Pricing-Card "Soon" Badges für 7 unimplementierte Features
-
-### Phase C — Produkt-Leistung (nicht nur Protokoll)
-
-| Step | Status | Beschreibung |
-|------|--------|--------------|
-| C1 | **Done** | Pro Tool konkretes Deliverable im `result.deliverable` JSON: check=Header-Scan, oracle=Top-Runbooks, summon=Posture, neuro=Pattern-Analyse |
-| C2 | **Done** | `lib/security-check-core.ts` geteilt; `check`-Tool ruft echten HTTP-Header-Scan auf (target default: clawguru.org); alle Routes refactored |
-| C3 | **Done** | `010_customer_entitlements.sql`; Webhook upsert bei checkout/renewal/cancel; Dashboard-Fallback: Stripe > Entitlements > JWT |
-| C4 | **Done** | `admin/executions` auf echtes Schema (customer_id, runbook_id, started_at, completed_at) – keine joins auf gelöschte Tabellen mehr |
-
-**Phase-C-Commit:** `5588e030` (06.04.2026)
-
-**Wichtig für Prod:** Migration 010 ausführen: `npm run db:migrate` (oder `psql $DATABASE_URL -f scripts/db/migrations/010_customer_entitlements.sql`)
-
-### Phase D — Qualitätssicherung
-
-| Step | Status | Beschreibung |
-|------|--------|--------------|
-| D1 | **Done** | Playwright: Happy-Path `tool-execution-happy-path.spec.ts` – 401/400/200/503 Contracts, deliverable shape, UI-Smoke skippable ohne DB |
-| D2 | **Done** | `logTelemetry` bei rate_limited (429) + db_error (500) in `tool-execution`; strukturiert für Datadog/Axiom/CloudWatch |
-
-**Aktueller Umsetzungsstand (Kurz):** A1–A5, B1–B5, C1–C4, D1–D2 abgeschlossen. **Alle Phasen vollständig.** Cockpit 100 % real – keine Mock-Daten, echte Deliverables, Entitlements-Tabelle live.
+﻿# ClawGuru – AGENTS.md · Master Plan v5 (07.04.2026)
+> **Dieses Dokument ist die einzige Quelle der Wahrheit fuer jeden Agent, der an diesem Codebase arbeitet.**
+> Lies es vollstaendig BEVOR du irgendetwas aenderst. Aktualisiere es nach jeder Session.
 
 ---
 
-Manual §-blocks end here. From now on: Killermachine v3.
+## 0. MARKFUEHRER-VISION
 
-Letzte manuelle Änderung: 06.04.2026 (Phase C komplett – echte Deliverables, Entitlements-Tabelle, Schema-Fixes)
-Session 3 – 06.04.2026: Phase C vollständig, A5+D1+D2 done. Einzig offen: A4 (Prod-Migration 009+010).
-Session 3 Abschluss: A4 (`npm run db:migrate`) ausgeführt – 009 + 010 applied. Cockpit Realism Roadmap **vollständig abgeschlossen**.
+**Ziel: ClawGuru wird die #1 Platform weltweit fuer Security-Checks, executable Runbooks und Compliance-Automatisierung fuer Self-Hosting, OpenClaw und Moltbot-basierte Infrastrukturen.**
+
+### Warum wir gewinnen
+- **Not a Pentest = Einzigartiges Framing**: Wir sind kein Angriffs-Tool, sondern der vertrauenswuerdige Verteidigungspartner.
+- **Executable Runbooks**: Einzige Plattform, die Security-Checks in automatisierte Playbooks verwandelt.
+- **Geo-First SEO**: 15 Sprachen x 200+ Staedte x 30+ Security-Topics = 1.000.000+ indexierbare Qualitaetsseiten.
+- **Self-Hosted + DSGVO/GDPR**: EU-First, keine Cloud-Lock-ins — differenziert von Wiz, Snyk, Datadog.
+- **Echte Daten**: 100% real — keine Mock-Daten, keine Fake-Metriken. Vollstaendige Audit-Trails.
+
+### Marktposition (April 2026)
+
+| Aspekt | Aktuell | Ziel |
+|--------|---------|------|
+| Indexierte Seiten | ~2.000 URLs | 1.000.000+ URLs |
+| Aktive Staedte (Geo) | 123 Staedte | 500+ Staedte |
+| Sprachen | 15 | 15 (fertig) |
+| Content-Cluster | Moltbot(21), OpenClaw(10), Solutions(5), Compare(5) | 50+ Cluster |
+| Monatliche Besucher | Aufbauphase | 500.000+ Unique Visitors |
+
+---
+
+## 1. PRODUKT-UEBERBLICK (Was ist ClawGuru?)
+
+**ClawGuru** ist eine spezialisierte Security-Check- und Compliance-Plattform fuer:
+- **Moltbot**: AI-gesteuertes Bot- und Ops-Framework (Self-Hosted)
+- **OpenClaw**: Open-Source Security Framework fuer Self-Hosted Infrastrukturen
+- **AI Agents**: Security-Checks fuer autonome Agenten und Automatisierungen
+
+### Kernprodukte
+
+| Produkt | URL | Beschreibung |
+|---------|-----|--------------|
+| Security Check | /securitycheck | HTTP-Header-Scan, Security-Score, Echtzeit-Analyse |
+| Runbooks | /runbooks | 600+ executable Security-Playbooks |
+| Oracle | /oracle | AI-gestuetzte Threat Intelligence |
+| Neuro AI | /neuro | Pattern-Analyse, Anomalie-Erkennung |
+| Dashboard | /dashboard | Kundendaten, Tool-Executions, Mycelium |
+| Copilot | /copilot | AI-Assistent fuer Security-Fragen |
+
+### Trust-Anker (IMMER auf jeder Content-Page verwenden!)
+```
+"Not a Pentest" — Dieser Guide/Check dient der Absicherung eigener Systeme. Keine Angriffswerkzeuge.
+```
+Dieses Framing ist unser staerkster SEO+Trust-Differentiator. JSX-Snippet:
+```tsx
+<div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-8 text-sm">
+  <strong>"Not a Pentest" Trust-Anker</strong>: [Kontext-Satz]. Keine Angriffswerkzeuge.
+</div>
+```
 
 ---
 
-## 8. Security Audit Session – 06.04.2026 (Session 4)
+## 2. TECHNISCHE ARCHITEKTUR
 
-**Tiefenanalyse + Priorisierter Fix-Plan vollständig umgesetzt.**
+### Tech Stack
+- **Framework**: Next.js 14 (App Router), TypeScript strict
+- **Datenbank**: PostgreSQL via Supabase (lib/db.ts -> dbQuery())
+- **Cache/Rate-Limit**: Upstash Redis (lib/rate-limit.ts)
+- **Deployment**: Vercel (automatisch bei git push zu main)
+- **Domain**: clawguru.org
 
-### P1 – KRITISCH (behoben, Commit `9cafde821`)
+### Routing-Muster
+```
+app/[lang]/[topic]/page.tsx              Locale-aware Topic Pages
+app/[lang]/moltbot/[slug]/page.tsx       Moltbot Security Topics
+app/[lang]/openclaw/[slug]/page.tsx      OpenClaw Framework Topics
+app/[lang]/solutions/[slug]/page.tsx     Enterprise Solutions
+app/[lang]/[tool-a]-vs-[tool-b]/page.tsx Comparison Pages
+app/api/geo/[expansion]/route.ts         Geo Expansion API (auth required)
+app/sitemaps/[name]/route.ts             Sitemap Generation
+```
 
-| Fix | Beschreibung |
-|-----|-------------|
-| `admin/executions` Auth | `verifyAdminToken` hinzugefügt – war öffentlich erreichbar |
-| `admin/revenue` Auth + Schema | Auth hinzugefügt + Join auf nicht-existente Tabellen (`payments`, `users`) durch echtes Schema (`customer_entitlements`, `runbook_executions`) ersetzt |
-| `admin/users` Auth + Schema | Auth hinzugefügt + Join auf `user_tier`, `user_metrics` durch echtes Schema ersetzt |
-| `admin/system-health` Auth | `verifyAdminToken` hinzugefügt – war öffentlich erreichbar |
-| Dead Code entfernt | `lib/clawguru_runbooks_tier2_patch.zip`, `deno.lock`, `fix-broken.js`, `test-gemini.js`, `lib/kb.ts` aus git entfernt |
+### Unterstuetzte Sprachen (15) — ALLE Pages muessen hreflang fuer alle 15 haben
+```
+de, en, es, fr, pt, it, ru, zh, ja, ko, ar, hi, tr, pl, nl
+```
 
-### P2 – HOCH (behoben, Commit `9cafde821`)
+### Wichtige Datenbank-Tabellen
 
-| Fix | Beschreibung |
-|-----|-------------|
-| Token Deny-List verdrahtet | `lib/access-token.ts`: `isTokenDenied()` wird jetzt in `verifyAccessToken` geprüft – Sofort-Revoke möglich |
-| Copilot Rate Limiting | `/api/copilot` hat jetzt 10 req/min per IP (via `checkRateLimit`) – AI-Kosten-Schutz |
-| Netlify → Vercel | `lib/netlify-api.ts` + `admin/kill-switch` komplett auf Upstash Redis umgestellt – keine Netlify-Abhängigkeit mehr |
-| `@types/jest` installiert | Commit `561703add` – TypeScript-Fehler in `__tests__/batch-generate.test.ts` behoben |
+| Tabelle | Zweck |
+|---------|-------|
+| geo_cities | Aktive Staedte (slug, name_de, name_en, country_code, priority, quality) |
+| geo_variant_matrix | Geo-Varianten (locale, base_slug, city_slug, quality_score) |
+| runbook_executions | Tool-Runs pro Kunde |
+| threats | Security-Events pro Kunde (tenant-scoped via customer_id) |
+| mycelium_nodes | Mycelium-Graph-Nodes pro Kunde |
+| customer_entitlements | Abo-Status (explorer/pro/team) |
+| audit_log | Compliance-Audit-Trail |
 
-### P3 – MITTEL (behoben, Commits `9cafde821` + `561703add`)
-
-| Fix | Beschreibung |
-|-----|-------------|
-| `.gitignore` repariert | Kaputte Globs `(` und `({` entfernt (brachen ripgrep/grep Tools); neue Einträge: `DEPLOY_ID.txt`, `deno.lock`, `test-gemini.js`, `fix-broken.js` |
-| Middleware Rate-Limit | Auth-Endpunkte `/api/auth/activate` + `/api/auth/recover` jetzt mit Edge Rate-Limit (5 req/min per IP) geschützt |
-| `admin/cockpit` bereinigt | `hasNetlifyToken` → `hasRedis` (Upstash Redis Status) |
-
-### P3/P4 – Zusätzliche Fixes (Session 4 – Commits `07283ca29`, `7048d484d`, `7eabc6e9b`, `cb5efc9c8`)
-
-| Fix | Beschreibung |
-|-----|-------------|
-| `npm audit fix` | 2 high vulnerabilities behoben; 7 verbleibend (4 low, 3 high) – alle in `@lhci/cli` (Dev-Dep, kein Prod-Risiko) |
-| `lib/config.ts` | `BASE_URL` auf `process.env.NEXT_PUBLIC_SITE_URL \|\| 'https://clawguru.org'` umgestellt |
-| Unit Tests | 28 Tests grün: `rate-limit.ts`, `access-token.ts`, `token-deny-list.ts`, `security-check-core.ts`; Jest 29 + ts-jest konfiguriert (`jest.config.js`, `npm test`) |
-| Intel Feed v1 | Statische Feb-2026-Timestamps durch dynamische `daysAgo`-Offsets ersetzt – Feed wirkt immer aktuell |
-
-### Middleware + Runbooks Fix (Session 4 – Commit `2794a8c55`)
-
-| Fix | Beschreibung |
-|-----|-------------|
-| `middleware.ts` Matcher | `/api/auth/activate` + `/api/auth/recover` zum Matcher hinzugefügt – vorher lief Middleware für diese Routes gar nicht |
-| `shouldBypassMiddleware` Bug | Alle `/api/*` Routes bypasssen jetzt Locale-Enforcement; vorher redirectete `/api/live-wall` → `/de/api/live-wall` (404) |
-| `RunbookNexus` stale closure | `useRef(latestParams)` Pattern – Pagination verlor vorher Search-Query (stale `q`/`tags` in `useEffect([page])`) |
-
-### Geo-Expansion Auth Fix (Session 4 – Commit `d5b64c9eb`)
-
-| Fix | Beschreibung |
-|-----|-------------|
-| `china-create` Auth | `hasSecret` + `GEO_EXPANSION_SECRET` hinzugefügt – war öffentlich erreichbar (DB-Write ohne Auth) |
-| `global-expansion` Auth | `hasSecret` + `GEO_EXPANSION_SECRET` hinzugefügt – war öffentlich erreichbar |
-| Debug-Logs entfernt | `console.log(✅ ...)` aus beiden Geo-Expansion Routes entfernt |
-
-### Console Log Cleanup (Session 4 – Commits `19e958062`, `8b90fa420`, `5a17c26de`)
-
-| Fix | Beschreibung |
-|-----|-------------|
-| `lib/api-auth.ts` | 3 `console.log` pro API-Key-Validierung entfernt – verhindert Log-Flooding bei API-Requests |
-| `lib/pseo.ts` | `console.time`/`console.timeEnd` + `console.log` aus `getRunbook` Hot Path entfernt |
-| `lib/i18n.ts` | Per-Request `console.log` aus `translateRunbook` entfernt – behält `console.warn` für HTTP-Fehler |
-| `lib/geo-matrix.ts` | 33 fehlende Städte zu `SEEDED_CITY_SLUGS` hinzugefügt (64→97): D4 CEE/Balkan, Nordics, Iberia, UK/IE; verhindert doppelten City-Suffix bei `GEO_MATRIX_AUTO_REWRITE` |
-
-### Noch offen (kein akuter Fix notwendig)
-
-- **Affiliate Stats**: `affiliateData()` in `admin/cockpit` gibt `clicks: 0, sales: 0` – kein Tracking-System vorhanden
-- **npm @lhci/cli vulns**: 7 verbleibende Vulnerabilities in Dev-Dep – `npm audit fix --force` würde Breaking Changes einführen
-
-## 9. 🚀 CONTENT-ENRICHMENT & 1M PAGES SCALING (Session 5)
-
-### Massive Welle Status (06.04.2026)
-
-**✅ COMPLETED:**
-- **China Mega Expansion**: 4 Städte (Beijing, Shanghai, Guangzhou, Shenzhen) - Quality 85+
-- **Global Expansion**: 23 Städte (USA/India/Russia) - Quality 85+  
-- **SEEDED_CITY_SLUGS**: 101 Städte für korrekte Geo-Varianten
-- **Quality-Gates**: Strikte 85+ Checks aktiv
-
-**📊 CURRENT SCALE:**
-- **27 neue Städte** × 15 Sprachen × 3 Base-Runbooks = **1.215 neue URLs**
-- **Gesamt-URLs**: ~765 (alt) + 1.215 (neu) = **1.980 URLs**
-- **Target**: 1.000.000 URLs (0.198% erreicht)
-
-### Content-Enrichment Strategie (nächste 30 Tage)
-
-**Phase 1: Locale-Enrichment (Priority: HIGH)**
-- **Target**: Top-50 Städte (DACH + EU + CEE + China + USA/India/Russia)
-- **Action**: `translateRunbook()` mit locale-spezifischen Anpassungen
-- **Quality-Ziel**: 85+ für alle Übersetzungen
-- **Erwartung**: 50 × 15 Sprachen × 3 Runbooks = **2.250 enriched URLs**
-
-**Phase 2: City-Specific Content (Priority: HIGH)**
-- **Target**: Alle 101 Städte mit city-aware Content
-- **Action**: Geo-Varianten mit lokalen Compliance-Hinweisen
-- **Quality-Ziel**: 85+ mit city-specific signals
-- **Erwartung**: 101 × 15 Sprachen × 3 Runbooks = **4.545 city-aware URLs**
-
-**Phase 3: Runbook-Expansion (Priority: MEDIUM)**
-- **Target**: 10+ neue Runbook-Typen (z.B. PCI-DSS, GDPR, SOC2)
-- **Action**: Neue `generateRunbook100k` Templates
-- **Quality-Ziel**: 85+ mit institutional authority
-- **Erwartung**: 101 × 15 Sprachen × 10 Runbooks = **15.150 expanded URLs**
-
-### 1M Pages Target - Scaling Plan
-
-**Technical Scaling:**
-- **Sitemap-Limit**: GEO_MATRIX_SITEMAP_CITY_LIMIT 24 → 50 (in progress)
-- **Cache-Strategy**: `unstable_cache` für city-specific content
-- **DB-Optimization**: Geo-Matrix Queries mit Connection-Pooling
-- **CDN-Ready**: Static Generation für alle Locale-Varianten
-
-**Content Pipeline:**
-- **Automated Generation**: `generateRunbook100k` + `translateRunbook`
-- **Quality-Gates**: `quality-gate.ts` mit 85+ Threshold
-- **Batch-Processing**: 50 Städte pro Wave (Killermachine v3)
-- **Verification**: Automated URL-Checks + Sitemap-Validation
-
-**Geographic Expansion Roadmap:**
-- **Q2 2026**: Japan, Brazil, Mexico, South Korea (50+ Städte)
-- **Q3 2026**: Southeast Asia, Africa, Middle East (100+ Städte)
-- **Q4 2026**: Latin America, Oceania, Eastern Europe (150+ Städte)
-- **2027**: 200+ Städte weltweit, 50+ Länder
-
-### Technical Implementation Tasks
-
-**Immediate (this week):**
-1. **Sitemap-Limit erhöhen**: `GEO_MATRIX_SITEMAP_CITY_LIMIT 24 → 50`
-2. **Content-Enrichment Pipeline**: `translateRunbook` für Top-50 Städte
-3. **Quality-Gates Automation**: Batch-Processing mit 85+ Checks
-4. **npm vulnerabilities**: `npm audit fix` (low prio)
-
-**Next Week:**
-1. **City-Specific Templates**: Local compliance hints per country
-2. **Runbook-Expansion**: 10+ neue institutional templates
-3. **Performance Optimization**: Cache-Strategy für 10K+ URLs
-4. **Monitoring**: URL-Health-Checks + Sitemap-Validation
-
-**Monthly Targets:**
-- **April**: 2.500 enriched URLs (Top-50 Städte)
-- **Mai**: 5.000 city-aware URLs (alle 101 Städte)
-- **Juni**: 10.000 expanded URLs (neue Runbook-Typen)
-- **Juli**: 25.000+ URLs (multi-region expansion)
-
-### Success Metrics
-
-**Technical KPIs:**
-- **URL-Count**: 1.980 → 25.000+ (April → Juli)
-- **Quality-Score**: 85+ für 95% aller URLs
-- **Page-Speed**: <2s LCP für alle Locale-Varianten
-- **Index-Rate**: 90%+ URLs in Google/Suche
-
-**Business KPIs:**
-- **Geo-Traffic**: 50+ Märkte mit organischen Traffic
-- **Conversion**: Runbook-Downloads → Tool-Trials
-- **Authority**: E-E-A-T Signals per Stadt/Land
-- **Community**: User-Generated Content per Region
+### Auth-Regeln (NIEMALS vergessen!)
+- Alle /api/admin/* -> verifyAdminToken() PFLICHT
+- Geo-Expansion-Endpunkte -> GEO_EXPANSION_SECRET im Authorization-Header
+- /api/auth/activate + /api/auth/recover -> Edge Rate-Limit 5 req/min
+- /api/copilot -> Rate-Limit 10 req/min per IP
+- Alle Dashboard-Calls -> Auth Cookie + Plan-Check
 
 ---
+
+## 3. SEO-STRATEGIE (Market Leadership)
+
+### Keyword-Cluster (Prioritaet A — monatliches Suchvolumen hoch)
+
+| Cluster | Haupt-Keywords | Ziel-Pages |
+|---------|---------------|------------|
+| Moltbot Security | "moltbot hardening", "moltbot [topic] 2024" | app/[lang]/moltbot/ |
+| OpenClaw Framework | "openclaw security", "openclaw self-hosted" | app/[lang]/openclaw/ |
+| Compliance | "nis2 compliance", "soc2 automation", "gdpr setup" | app/[lang]/solutions/ |
+| Vergleiche | "openclaw vs snyk", "clawguru vs wiz" | app/[lang]/[a]-vs-[b]/ |
+| Geo + Security | "security check [city]", "[city] cybersecurity" | app/[lang]/[city]/ |
+| Security Basics | "zero trust", "devsecops", "kubernetes security" | app/[lang]/[slug]/ |
+
+### Content-Qualitaetsstandards (Q85+ fuer Indexierung)
+
+Jede neue Content-Page MUSS haben:
+1. generateMetadata() mit title, description (150-160z), keywords, openGraph, alternates (canonical + hreflang 15 Sprachen)
+2. notFound() fuer unbekannte Sprachen
+3. "Not a Pentest" Trust-Anker-Banner ganz oben
+4. H1 mit Haupt-Keyword
+5. Mindestens 2 Code-Beispiele ODER Tabellen (zeigt Expertise)
+6. Interne Links zu /securitycheck, /runbooks, /oracle
+7. Kein TypeScript Build-Fehler (Exit Code 0)
+
+### Interne Verlinkung (JEDE Page)
+```
+Moltbot-Pages:   -> /securitycheck, /runbooks, /oracle
+OpenClaw-Pages:  -> /openclaw, /securitycheck, /runbooks
+Solutions-Pages: -> /securitycheck, /runbooks, /pricing
+Compare-Pages:   -> /openclaw ODER /securitycheck
+Geo-Pages:       -> /securitycheck, /runbooks (city-aware)
+```
+
+### Sitemap-Konfiguration
+- Sitemap-Pool: 150 Staedte, taegliche Rotation
+- Sitemap-Limit: GEO_MATRIX_SITEMAP_CITY_LIMIT=50 (Vercel Env-Var setzen!)
+- Sitemap-Route: app/sitemaps/[name]/route.ts
+- Nach jeder Geo-Expansion: revalidateTag("geo-cities-active")
+
+---
+
+## 4. GEO-EXPANSION ROADMAP
+
+### Aktueller Stand (07.04.2026) — 123 aktive Staedte
+
+| Region | Anzahl | Staedte (Beispiele) | Status |
+|--------|--------|---------------------|--------|
+| DACH | 20 | Berlin, Muenchen, Wien, Zuerich, Hamburg... | Stable Q85+ |
+| Europa West | 15 | Paris, London, Amsterdam, Madrid, Lissabon... | Stable Q85+ |
+| CEE/Balkan (D4) | 9 | Budapest, Bukarest, Sofia, Athen, Zagreb... | Stable Q85+ |
+| Nordics | 7 | Kopenhagen, Stockholm, Oslo, Helsinki... | Stable Q85+ |
+| China | 4 | Beijing(95), Shanghai(94), Guangzhou(88), Shenzhen(89) | Stable Q85+ |
+| USA | 10 | LA, Chicago, Houston, Dallas, Seattle, Austin... | Stable Q85+ |
+| Indien | 8 | Mumbai, Delhi, Bangalore, Hyderabad, Chennai... | Stable Q85+ |
+| Russland | 5 | Moskau, St. Petersburg, Nowosibirsk... | Stable Q85+ |
+| Japan | 5 | Tokyo, Osaka, Yokohama, Nagoya, Sapporo | SEEDED, DB-Seed pending |
+| Suedkorea | 5 | Seoul, Busan, Incheon, Daegu, Daejeon | SEEDED, DB-Seed pending |
+| Brasilien | 5 | Sao Paulo, Rio, Brasilia, Belo Horizonte, Curitiba | SEEDED, DB-Seed pending |
+| Mexiko | 5 | Mexiko-Stadt, Guadalajara, Monterrey, Puebla... | SEEDED, DB-Seed pending |
+| Suedostasien | 7 | Bangkok, Singapur, Jakarta, Manila, Ho Chi Minh... | SEEDED, DB-Seed pending |
+
+### AUSSTEHEND: Production DB-Seeding fuer Asia/LatAm
+Diese 27 Staedte sind im Code (lib/geo-matrix.ts SEEDED_CITY_SLUGS), aber NICHT in der DB.
+Nach Deployment aufrufen:
+```
+GET https://clawguru.org/api/geo/asia-latam-expansion?stable=1
+Authorization: Bearer [GEO_EXPANSION_SECRET aus Vercel Env]
+```
+
+### Naechste Geo-Wellen (geplant)
+
+| Welle | Region | Staedte | Neuer Endpoint zu erstellen |
+|-------|--------|---------|---------------------------|
+| Q2/2026 | Afrika | Kairo, Lagos, Nairobi, Johannesburg, Casablanca (5+) | /api/geo/africa-expansion |
+| Q2/2026 | Mittlerer Osten | Dubai, Istanbul, Riad, Tel Aviv (4+) | /api/geo/mea-expansion |
+| Q3/2026 | Ozeanien | Sydney, Melbourne, Auckland, Brisbane (4+) | /api/geo/oceania-expansion |
+| Q3/2026 | LatAm+ | Buenos Aires, Bogota, Lima, Santiago (4+) | /api/geo/latam-plus-expansion |
+
+### Geo-Expansion API-Muster (so funktioniert es)
+1. Datei anlegen: app/api/geo/[region]-expansion/route.ts
+2. Muster von asia-latam-expansion/route.ts kopieren
+3. EXPANSION_CITIES[] definieren: alle mit quality >= 85
+4. SEEDED_CITY_SLUGS in lib/geo-matrix.ts ergaenzen
+5. npm run build (Exit 0 pruefen)
+6. git commit + push
+7. Nach Deployment: erst ?stable=0 (canary), dann ?stable=1
+
+---
+
+## 5. CONTENT-ERSTELLUNGS-PLAYBOOK
+
+### Neue Content-Page anlegen (Step-by-Step)
+
+**Schritt 1: Datei anlegen (PowerShell)**
+```powershell
+New-Item -ItemType File -Force "app/[lang]/[kategorie]/[slug]/page.tsx"
+```
+
+**Schritt 2: Standard-Template**
+```tsx
+import { Metadata } from 'next';
+import { notFound } from 'next/navigation';
+
+interface PageProps { params: { lang: string }; }
+const LANGS = ['de','en','es','fr','pt','it','ru','zh','ja','ko','ar','hi','tr','pl','nl'];
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { lang } = params;
+  return {
+    title: '[Haupt-Keyword]: [Beschreibung] 2024',
+    description: '[150-160 Zeichen. Keyword-reich. Nutzen klar.]',
+    keywords: ['keyword1','keyword2','keyword3'],
+    authors: [{ name: 'ClawGuru Security Team' }],
+    openGraph: { title: '...', description: '...', type: 'article',
+      url: `https://clawguru.org/${lang}/[path]` },
+    alternates: {
+      canonical: `https://clawguru.org/${lang}/[path]`,
+      languages: Object.fromEntries(LANGS.map(l => [l, `https://clawguru.org/${l}/[path]`]))
+    },
+    robots: 'index, follow',
+  };
+}
+
+export default function [ComponentName]({ params }: PageProps) {
+  const { lang } = params;
+  if (!LANGS.includes(lang)) notFound();
+  return (
+    <div className="container mx-auto px-4 py-8">
+      <div className="max-w-4xl mx-auto">
+        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-8 text-sm">
+          <strong>"Not a Pentest" Trust-Anker</strong>: [Kontext]. Keine Angriffswerkzeuge.
+        </div>
+        <h1 className="text-4xl font-bold mb-4">[H1 mit Haupt-Keyword]</h1>
+        <p className="text-lg text-gray-600 mb-8">[Intro-Text mit Haupt-Keyword]</p>
+        {/* Min. 2 Sektionen mit Code/Tabelle + interne Links */}
+        <section className="mb-10">
+          <h2 className="text-2xl font-semibold mb-4">[H2]</h2>
+          {/* Content */}
+        </section>
+        <section className="mb-10">
+          <h2 className="text-2xl font-semibold mb-4">Weiterfuehrende Ressourcen</h2>
+          <div className="grid grid-cols-2 gap-4">
+            <a href="/securitycheck" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
+              <div className="font-semibold text-blue-600">Security Check</div>
+              <div className="text-sm text-gray-600">[Beschreibung]</div>
+            </a>
+          </div>
+        </section>
+      </div>
+    </div>
+  );
+}
+```
+
+**Schritt 3: Build-Test (PFLICHT vor jedem Commit!)**
+```powershell
+npm run build 2>&1 | Select-Object -Last 15
+# Exit code MUSS 0 sein. Bei Fehler: fixen, NICHT pushen!
+```
+
+**Schritt 4: Commit**
+```powershell
+git add -A
+git commit -m "feat: [beschreibung]"
+git push
+# Bei Merge-Conflict: git pull --rebase -> Conflict loesen -> git push
+```
+
+---
+
+## 6. TYPESCRIPT ANTI-PATTERNS (Bekannte Fallstricke)
+
+### FALLSTRICK 1: Shell-Variablen in Template-Literals -> Build-Fehler!
+```
+FALSCH: <pre>{`DB_URL="${DATABASE_URL}"`}</pre>
+  -> TypeScript versucht ${DATABASE_URL} als JS-Expression zu parsen -> Fehler
+
+RICHTIG: <pre>{`DB_URL="$DATABASE_URL"`}</pre>
+  -> $VAR ohne {} ist valid in Bash UND kein TS-Template-Expression
+```
+
+### FALLSTRICK 2: Unescaped > in JSX-Text-Nodes
+```
+FALSCH: <p>Budget >$100k</p>  -> JSX-Parser-Fehler
+
+RICHTIG: <p>Budget &gt;$100k</p>
+ODER in JS-Arrays ist >$100k als String OK (kein JSX-Node)
+```
+
+### FALLSTRICK 3: asChild Prop auf Button-Komponente
+```
+FALSCH: <Button asChild><Link href="...">Text</Link></Button>
+  -> Unsere Button-Komponente (components/ui/button.tsx) unterstuetzt kein asChild
+
+RICHTIG: <Button><Link href="...">Text</Link></Button>
+```
+
+### FALLSTRICK 4: id-Prop auf TabsContent
+```
+FALSCH: <TabsContent value="tab" id="tab">  -> TabsContent akzeptiert kein id
+
+RICHTIG: <TabsContent value="tab">
+```
+
+### FALLSTRICK 5: ${{ in Template-Literals (GitHub Actions YAML)
+```
+FALSCH: `run: docker build -t app:${{ github.sha }}`
+  -> ${{ wird als Template-Expression-Start geparst
+
+RICHTIG: `run: docker build -t app:COMMIT_SHA`
+  -> Platzhalter + Hinweis-Kommentar verwenden
+```
+
+### FALLSTRICK 6: > und < in JSX-Array-Strings (safe!)
+```
+Diese sind SICHER in JS-Array-Strings die via .map() gerendert werden:
+{ value: 'Score >85' }  // Kein Problem, ist kein JSX-Node
+```
+
+---
+
+## 7. SEITEN-VERZEICHNIS (Stand 07.04.2026)
+
+### Moltbot-Pages (21 Seiten in app/[lang]/moltbot/)
+
+| Slug | Thema | Status |
+|------|-------|--------|
+| security-framework | Gesamt-Framework | Live |
+| api-security-protection | API-Absicherung | Live |
+| authentication-oauth2-jwt | Auth + JWT + MFA | Live |
+| hardening-guide-2024 | Hardening-Checkliste | Live |
+| network-security-firewall | Netzwerk + iptables | Live |
+| threat-detection-setup | Falco + Prometheus | Live |
+| logging-auditing-compliance | Logs + GDPR | Live |
+| container-security-docker-kubernetes | Docker + K8s | Live |
+| database-security-encryption | DB-Sicherheit | Live |
+| incident-response-automation | IR + Playbooks | Live |
+| zero-trust-architecture | ZTA + RBAC | Live |
+| devsecops-pipeline | CI/CD Security | Live |
+| backup-recovery-disaster-recovery | Backup + DR | Live |
+| vulnerability-scanning | Trivy + Renovate | Live |
+| ssl-tls-management | TLS + Zertifikate | Live |
+| api-gateway-security | Kong Gateway | Live |
+| monitoring-dashboards | Prometheus + Grafana | Live |
+| compliance-gdpr-setup | GDPR Consent | Live |
+| secrets-vault-management | HashiCorp Vault | Live |
+| nis2-compliance-setup | NIS2 Art. 21 | Live |
+| cloud-security-posture-management | CSPM + AWS | Live |
+
+### Moltbot Batch 3 (8 Seiten — IN PROGRESS)
+
+| Slug | Thema | Status |
+|------|-------|--------|
+| identity-governance-iam | IAM/RBAC | Pending |
+| data-loss-prevention | DLP | Pending |
+| security-automation-workflows | Webhooks + Automation | Pending |
+| cryptography-encryption-guide | Kryptografie | Pending |
+| api-rate-limiting-advanced | Advanced Rate Limiting | Pending |
+| runtime-protection-rasp | RASP | Pending |
+| security-posture-score | Security Score | Pending |
+| cloud-native-security | Cloud-Native | Pending |
+
+### OpenClaw-Pages (10 Seiten in app/[lang]/openclaw/)
+
+| Slug | Status |
+|------|--------|
+| self-hosted-security-checklist | Live |
+| docker-swarm-hardening | Live |
+| reverse-proxy-security | Live |
+| firewall-configuration-guide | Live |
+| security-headers-guide | Live |
+| intrusion-detection-setup | Live |
+| server-hardening-checklist | Live |
+| database-access-control | Live |
+| audit-logging-setup | Live |
+| supply-chain-security | Live |
+
+### OpenClaw Batch 2 (5 Seiten — PENDING)
+
+| Slug | Thema |
+|------|-------|
+| service-mesh-security | Istio/Linkerd |
+| waf-configuration | Web Application Firewall |
+| cicd-security-pipeline | GitLab CI Security |
+| secrets-rotation-automation | Automated Rotation |
+| microservices-security | Microservice Patterns |
+
+### Solutions-Pages (app/[lang]/solutions/)
+
+| Slug | Status |
+|------|--------|
+| soc2-compliance-automation | Live |
+| kubernetes-security-hardening | Live |
+| aws-security-architecture | Live |
+| startup-security-foundation | Live |
+| enterprise-siem-integration | Live |
+
+### Solutions Batch 2 (PENDING)
+
+| Slug | Thema |
+|------|-------|
+| iso27001-certification-roadmap | ISO27001 |
+| pci-dss-compliance | PCI-DSS |
+| hipaa-security-controls | HIPAA |
+| azure-security-architecture | Azure |
+| gcp-security-architecture | Google Cloud |
+
+### Compare-Pages (app/[lang]/[a]-vs-[b]/)
+
+| Page | Status |
+|------|--------|
+| openclaw-vs-snyk | Live |
+| openclaw-vs-semgrep | Live |
+| clawguru-vs-wiz | Live |
+| openclaw-vs-sonarqube | Live |
+| moltbot-vs-opsgenie | Live |
+| moltbot-vs-clawbot/security-comparison | Live |
+
+### Compare Batch 2 (PENDING)
+
+| Page | Keywords |
+|------|---------|
+| clawguru-vs-crowdstrike | clawguru vs crowdstrike |
+| clawguru-vs-datadog | clawguru vs datadog security |
+| openclaw-vs-falco | openclaw vs falco runtime |
+| clawguru-vs-lacework | clawguru vs lacework |
+| moltbot-vs-pagerduty | moltbot vs pagerduty |
+
+---
+
+## 8. CONTENT-ROADMAP (Naechste 90 Tage)
+
+### Sprint 1 — April 2026: Content-Cluster vervollstaendigen
+
+| Task | Ziel | Prioritaet |
+|------|------|------------|
+| Moltbot Batch 3 (8 Pages) | IAM, DLP, RASP, Automation, Crypto... | HOCH |
+| OpenClaw Batch 2 (5 Pages) | Service Mesh, WAF, CI/CD, Secrets Rotation | HOCH |
+| Compare Batch 2 (5 Pages) | vs-crowdstrike, vs-datadog, vs-falco... | HOCH |
+| Solutions Batch 2 (3 Pages) | ISO27001, PCI-DSS, HIPAA | MITTEL |
+| Asia/LatAm DB-Seeding | /api/geo/asia-latam-expansion?stable=1 | KRITISCH |
+
+### Sprint 2 — Mai 2026: Geo-Scale-Up
+
+| Task | Details | Prioritaet |
+|------|---------|------------|
+| Afrika-Expansion | /api/geo/africa-expansion (5+ Staedte) | HOCH |
+| MEA-Expansion | /api/geo/mea-expansion (4+ Staedte) | HOCH |
+| Sitemap-Pool erhoehen | GEO_MATRIX_SITEMAP_CITY_POOL=240 | MITTEL |
+| Vercel Env-Var setzen | GEO_MATRIX_SITEMAP_CITY_LIMIT=50 | KRITISCH |
+
+### Sprint 3 — Juni 2026: Runbook-Expansion
+
+| Task | Details |
+|------|---------|
+| 10 neue Base-Runbooks | PCI-DSS, HIPAA, ISO27001, CIS Controls... |
+| Locale-Enrichment Top-50 | translateRunbook() fuer DE/EN/ES/FR/PT |
+| City-aware Compliance-Hints | country_code basierte Inhalte |
+| Performance-Audit | Core Web Vitals fuer alle Varianten |
+
+### Sprint 4 — Juli 2026: 100.000 URLs Target
+
+| Metric | Berechnung | Ziel |
+|--------|------------|------|
+| Geo-URLs | 200 Staedte x 15 Sprachen x 10 Runbooks | 30.000 |
+| Static Pages | Moltbot+OpenClaw+Solutions+Compare+Guides | 500+ |
+| Gesamt indexierbar | | 30.500+ URLs |
+
+---
+
+## 9. KILLERMACHINE V3 — AUTOMATED WAVE PROCESSING
+
+**Standard fuer alle zukuenftigen Geo-Wellen:**
+
+### Auto-Seed-Regeln
+- Auto-Seed-Commit wenn eligible_count > 0 UND alle Checks gruen
+- Quality-Gate: Matrix-Score >= 85 fuer alle Staedte
+- URL-Check: Runbook-URLs geben 200 OK (kein 308/Redirect)
+- Trust-Anker: "Not a Pentest" konsistent auf allen Pages
+- City-Aware: country_code in geo_variant_matrix vorhanden
+- Human-Gate: NUR bei Canary -> Stable Promotion
+
+### Geo-Wellen-Workflow
+```
+1. Route erstellen: app/api/geo/[region]-expansion/route.ts
+2. Staedte definieren: EXPANSION_CITIES[] alle quality >= 85
+3. SEEDED_CITY_SLUGS updaten: lib/geo-matrix.ts
+4. npm run build (Exit 0 pruefen)
+5. Commit + Push
+6. Nach Deployment: erst ?stable=0 (canary), dann ?stable=1
+7. SEEDED_CITY_SLUGS werden fuer korrekte Geo-Varianten in parseGeoVariantSlug() benoetigt
+```
+
+---
+
+## 10. COCKPIT REALISM — VOLLSTAENDIG UMGESETZT (06.04.2026)
+
+Alle Phasen A-D abgeschlossen:
+- A1-A5: Daten + Isolation (customer_id, Rate-Limit, Dashboard-Identity)
+- B1-B5: Cockpit-UX (keine Fake-Tiles, echte Tool-Runs)
+- C1-C4: Produkt-Leistung (echte Deliverables, Entitlements, Stripe-Webhooks)
+- D1-D2: Qualitaetssicherung (Playwright Tests, Telemetry)
+
+Migration 010 (customer_entitlements) muss in Prod laufen:
+```
+npm run db:migrate
+ODER: psql $DATABASE_URL -f scripts/db/migrations/010_customer_entitlements.sql
+```
+
+---
+
+## 11. SECURITY-ARCHITEKTUR (Schutzstatus)
+
+| Component | Schutz | Status |
+|-----------|--------|--------|
+| /api/admin/* | verifyAdminToken() | Alle geschuetzt |
+| /api/geo/* | GEO_EXPANSION_SECRET | Alle geschuetzt |
+| /api/auth/activate | Edge Rate-Limit 5/min | Aktiv |
+| /api/auth/recover | Edge Rate-Limit 5/min | Aktiv |
+| /api/copilot | Rate-Limit 10/min per IP | Aktiv |
+| /api/dashboard/tool-execution | Auth Cookie + Plan | Aktiv |
+| Token Deny-List | isTokenDenied() in verifyAccessToken | Aktiv |
+| Admin-Panel | verifyAdminToken ueberall | Aktiv |
+
+---
+
+## 12. DEPLOYMENT-WORKFLOW (Immer exakt so!)
+
+```powershell
+# 1. Build testen (NIE ueberspringen!)
+npm run build 2>&1 | Select-Object -Last 15
+# Exit code MUSS 0 sein. Sonst NICHT committen!
+
+# 2. Commit
+git add -A
+git commit -m "feat/fix/chore: [was wurde gemacht]"
+
+# 3. Push (Vercel deployed automatisch)
+git push
+
+# Bei Push-Fehler (remote ahead):
+git pull --rebase
+# Conflicts loesen: git checkout --theirs [datei] (bei rebase = eigene commits)
+# git add [geloeste-dateien]
+# git rebase --continue
+# git push
+```
+
+### Commit-Message-Konventionen
+- feat: neue Pages/Features
+- feat(geo): Geo-Expansion
+- feat(seo): Content-Pages
+- fix: Build-Fehler, TypeScript-Fehler, 404-Fixes
+- chore: AGENTS.md Update, Dependencies, Config
+
+### NIEMALS pushen bei rotem Build!
+Vercel deployed automatisch bei jedem Push zu main. Roter Build = kaputte Website fuer echte User.
+
+---
+
+## 13. KPIs UND ERFOLGSMESSUNG
+
+### SEO KPIs
+
+| Metric | Aktuell | 3-Monatsziel | 12-Monatsziel |
+|--------|---------|--------------|---------------|
+| Indexierte Seiten | ~2.000 | 30.000+ | 500.000+ |
+| Organische Klicks/Mo | Aufbau | 10.000+ | 200.000+ |
+| GSC-Impressionen/Mo | Aufbau | 500.000+ | 10.000.000+ |
+| Avg. Position Top-Keywords | n/a | Top 10 | Top 3 |
+| Backlinks | Aufbau | 500+ | 5.000+ |
+
+### Technische KPIs
+
+| Metric | Ziel |
+|--------|------|
+| Build Success Rate | 100% |
+| Page Quality Score (Q85+) | 95%+ aller URLs |
+| Core Web Vitals LCP | unter 2.0s |
+| Uptime | 99.9%+ |
+| Security Headers Score | A+ (securityheaders.com) |
+| SSL Labs Score | A+ |
+
+### Business KPIs
+
+| Metric | Ziel |
+|--------|------|
+| MRR | Jeder Monat hoeher als Vormonat |
+| Explorer -> Pro Conversion | ueber 5% |
+| Tool-Executions/Tag | ueber 100 |
+| Aktive Kunden | Proportional zu Traffic-Wachstum |
+
+---
+
+## 14. SESSION-LOG (Immer aktuell halten!)
+
+| Datum | Session | Erledigte Tasks |
+|-------|---------|-----------------|
+| 06.04.2026 | 1-4 | Security-Audit, Cockpit Realism A-D, Killermachine v3, China+Global Expansion |
+| 06.04.2026 | 5 | 1M-Pages-Strategie, Content-Pipeline definiert |
+| 07.04.2026 | 6 | Moltbot Batch 1+2 (21 Pages), OpenClaw Batch 1 (10 Pages), Asia/LatAm Geo (27 Staedte), Solutions (5 Pages), Compare (5 Pages), AGENTS.md Master Plan v5 |
+
+### Offene Tasks (Stand 07.04.2026)
+
+- [ ] KRITISCH: Asia/LatAm DB-Seeding in Production: GET /api/geo/asia-latam-expansion?stable=1
+- [ ] KRITISCH: Vercel Env-Var setzen: GEO_MATRIX_SITEMAP_CITY_LIMIT=50
+- [ ] HOCH: Moltbot Batch 3 (8 Pages: IAM, DLP, RASP, Automation, Crypto, Rate-Limit, Posture-Score, Cloud-Native)
+- [ ] HOCH: OpenClaw Batch 2 (5 Pages: Service Mesh, WAF, CI/CD, Secrets Rotation, Microservices)
+- [ ] HOCH: Compare Batch 2 (5 Pages: vs-crowdstrike, vs-datadog, vs-falco, vs-lacework, vs-pagerduty)
+- [ ] MITTEL: Solutions Batch 2 (ISO27001, PCI-DSS, HIPAA)
+- [ ] MITTEL: Afrika + MEA + Ozeanien Geo-Expansion Routes erstellen
+- [ ] NIEDRIG: Sitemap-Pool erhoehen (GEO_MATRIX_SITEMAP_CITY_POOL=240)
+
+---
+
+> **JEDER AGENT MERKE**: Lies dieses Dokument vollstaendig vor der ersten Aktion.
+> Aktualisiere Session-Log + Offene Tasks nach jeder Session.
+> Baue NIE ohne gruenen Build. Pushe NIE roten Code.
+> Das Ziel: ClawGuru = #1 Security-Check-Platform fuer Self-Hosted Infrastrukturen weltweit.

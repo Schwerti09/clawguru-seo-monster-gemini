@@ -189,6 +189,17 @@ const SEEDED_CITY_SLUGS = new Set([
   "addis-ababa",
   "dar-es-salaam",
   "kampala",
+  // Middle East Expansion
+  "dubai",
+  "istanbul",
+  "riyadh",
+  "tel-aviv",
+  "doha",
+  "kuwait-city",
+  "manama",
+  "muscat",
+  "amman",
+  "beirut",
 ])
 
 export function slugifyCity(input: string): string {

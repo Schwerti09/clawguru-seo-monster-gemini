@@ -1,0 +1,113 @@
+import { Metadata } from 'next';
+import { notFound } from 'next/navigation';
+
+interface PageProps { params: { lang: string }; }
+const LANGS = ['de','en','es','fr','pt','it','ru','zh','ja','ko','ar','hi','tr','pl','nl'];
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { lang } = params;
+  return {
+    title: 'Moltbot GDPR Compliance Setup: Datenschutz Implementation 2024',
+    description: 'GDPR-konforme Implementierung für Moltbot. Einwilligungsmanagement, Datenschutzerklärung, Right-to-Erasure, Data Minimization und Verzeichnis von Verarbeitungstätigkeiten (VVT).',
+    keywords: ['moltbot gdpr compliance','datenschutz implementation','einwilligungsmanagement','data minimization','right to erasure','vvt'],
+    authors: [{ name: 'ClawGuru Security Team' }],
+    openGraph: { title: 'Moltbot GDPR Compliance Setup: Datenschutz Implementation 2024', description: 'GDPR-konforme Implementierung für Moltbot.', type: 'article', url: `https://clawguru.org/${lang}/moltbot/compliance-gdpr-setup` },
+    alternates: { canonical: `https://clawguru.org/${lang}/moltbot/compliance-gdpr-setup`, languages: Object.fromEntries(LANGS.map(l => [l, `https://clawguru.org/${l}/moltbot/compliance-gdpr-setup`])) },
+    robots: 'index, follow',
+  };
+}
+
+export default function MoltbotGdprCompliancePage({ params }: PageProps) {
+  const { lang } = params;
+  if (!LANGS.includes(lang)) notFound();
+
+  return (
+    <div className="container mx-auto px-4 py-8">
+      <div className="max-w-4xl mx-auto">
+        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-8 text-sm">
+          <strong>"Not a Pentest" Trust-Anker</strong>: GDPR Compliance dient dem Schutz personenbezogener Daten. Keine Angriffswerkzeuge.
+        </div>
+        <h1 className="text-4xl font-bold mb-4">Moltbot GDPR Compliance Setup</h1>
+        <p className="text-lg text-gray-600 mb-8">Datenschutz by Design für Moltbot — GDPR-konforme Implementierung mit Einwilligungsmanagement, Data Minimization und Betroffenenrechten.</p>
+
+        <section className="mb-10">
+          <h2 className="text-2xl font-semibold mb-4">📋 GDPR Compliance Checkliste</h2>
+          <div className="space-y-2">
+            {[
+              { item: 'Verzeichnis von Verarbeitungstätigkeiten (VVT) erstellt', art: 'Art. 30', done: true },
+              { item: 'Datenschutzerklärung aktuell und vollständig', art: 'Art. 13/14', done: true },
+              { item: 'Einwilligungsmanagement implementiert', art: 'Art. 7', done: true },
+              { item: 'Cookie Banner DSGVO-konform', art: 'Art. 5/6', done: true },
+              { item: 'Recht auf Auskunft implementiert', art: 'Art. 15', done: true },
+              { item: 'Recht auf Löschung implementiert', art: 'Art. 17', done: true },
+              { item: 'Recht auf Datenübertragbarkeit', art: 'Art. 20', done: false },
+              { item: 'Data Processing Agreements (DPA) mit Drittanbietern', art: 'Art. 28', done: true },
+              { item: 'Datenpanne Prozess (72h Meldepflicht)', art: 'Art. 33', done: true },
+              { item: 'Datenschutzfolgenabschätzung (DSFA)', art: 'Art. 35', done: false },
+            ].map(({ item, art, done }) => (
+              <div key={item} className={`flex items-start gap-3 p-3 rounded-lg ${done ? 'bg-green-50' : 'bg-yellow-50'}`}>
+                <span className="mt-0.5">{done ? '✅' : '⚠️'}</span>
+                <div className="flex-1">
+                  <span className="text-sm">{item}</span>
+                  <span className="ml-2 text-xs text-gray-400 font-mono">{art}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="mb-10">
+          <h2 className="text-2xl font-semibold mb-4">🔐 Consent Management API</h2>
+          <div className="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm">
+            <pre>{`// moltbot/lib/consent-manager.ts
+import { db } from './db';
+
+type ConsentPurpose = 'analytics' | 'marketing' | 'functional' | 'necessary';
+
+interface ConsentRecord {
+  customerId: string;
+  purposes: Record<ConsentPurpose, boolean>;
+  consentVersion: string;
+  ipAddress: string;
+  userAgent: string;
+  givenAt: Date;
+}
+
+export async function recordConsent(consent: ConsentRecord) {
+  await db.query(
+    'INSERT INTO consent_log (customer_id, purposes, version, ip, user_agent, given_at) VALUES ($1, $2, $3, $4, $5, $6)',
+    [consent.customerId, JSON.stringify(consent.purposes), consent.consentVersion, consent.ipAddress, consent.userAgent, consent.givenAt]
+  );
+}
+
+export async function checkConsent(customerId: string, purpose: ConsentPurpose) {
+  const result = await db.query(
+    'SELECT purposes FROM consent_log WHERE customer_id = $1 ORDER BY given_at DESC LIMIT 1',
+    [customerId]
+  );
+  if (!result.rows[0]) return false;
+  return result.rows[0].purposes[purpose] === true;
+}
+
+export async function withdrawConsent(customerId: string) {
+  await db.query(
+    'INSERT INTO consent_log (customer_id, purposes, version, ip, user_agent, given_at) VALUES ($1, $2, $3, $4, $5, NOW())',
+    [customerId, JSON.stringify({ analytics: false, marketing: false, functional: false, necessary: true }), 'withdrawal', '0.0.0.0', 'system']
+  );
+}`}</pre>
+          </div>
+        </section>
+
+        <section className="mb-10">
+          <h2 className="text-2xl font-semibold mb-4">🔗 Weiterführende Ressourcen</h2>
+          <div className="grid grid-cols-2 gap-4">
+            <a href="/securitycheck" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">🛡️ Security Check</div><div className="text-sm text-gray-600">GDPR Assessment</div></a>
+            <a href="/runbooks" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">📚 Compliance Runbooks</div><div className="text-sm text-gray-600">GDPR Implementation</div></a>
+            <a href="/oracle" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">🔮 Oracle</div><div className="text-sm text-gray-600">Compliance Intelligence</div></a>
+            <a href="/solutions" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">🏢 Enterprise</div><div className="text-sm text-gray-600">Managed GDPR</div></a>
+          </div>
+        </section>
+      </div>
+    </div>
+  );
+}

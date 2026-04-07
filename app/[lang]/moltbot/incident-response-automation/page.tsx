@@ -1,0 +1,140 @@
+import { Metadata } from 'next';
+import { notFound } from 'next/navigation';
+
+interface PageProps { params: { lang: string }; }
+const LANGS = ['de','en','es','fr','pt','it','ru','zh','ja','ko','ar','hi','tr','pl','nl'];
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { lang } = params;
+  return {
+    title: 'Moltbot Incident Response: Automatisierung & Playbooks 2024',
+    description: 'Automatisierte Incident Response für Moltbot. Security Playbooks, Auto-Remediation, PagerDuty-Integration und Post-Mortem-Prozesse. Reaktionszeit von Stunden auf Minuten reduzieren.',
+    keywords: ['moltbot incident response','security automation','playbooks','auto remediation','pagerduty integration','security incidents'],
+    authors: [{ name: 'ClawGuru Security Team' }],
+    openGraph: { title: 'Moltbot Incident Response: Automatisierung & Playbooks 2024', description: 'Automatisierte Incident Response für Moltbot.', type: 'article', url: `https://clawguru.org/${lang}/moltbot/incident-response-automation` },
+    alternates: { canonical: `https://clawguru.org/${lang}/moltbot/incident-response-automation`, languages: Object.fromEntries(LANGS.map(l => [l, `https://clawguru.org/${l}/moltbot/incident-response-automation`])) },
+    robots: 'index, follow',
+  };
+}
+
+export default function MoltbotIncidentResponsePage({ params }: PageProps) {
+  const { lang } = params;
+  if (!LANGS.includes(lang)) notFound();
+
+  return (
+    <div className="container mx-auto px-4 py-8">
+      <div className="max-w-4xl mx-auto">
+        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-8 text-sm">
+          <strong>"Not a Pentest" Trust-Anker</strong>: Dieser Guide dient der Absicherung und schnellen Reaktion auf Sicherheitsvorfälle. Keine Angriffswerkzeuge.
+        </div>
+        <h1 className="text-4xl font-bold mb-4">Moltbot Incident Response: Automatisierung &amp; Playbooks</h1>
+        <p className="text-lg text-gray-600 mb-8">Reduziere die Reaktionszeit auf Security-Incidents von Stunden auf Minuten — mit automatisierten Playbooks, Auto-Remediation und integrierten Alerting-Systemen.</p>
+
+        <section className="mb-10">
+          <h2 className="text-2xl font-semibold mb-4">🚨 Incident Severity Matrix</h2>
+          <div className="overflow-x-auto mb-6">
+            <table className="w-full border-collapse text-sm">
+              <thead>
+                <tr className="bg-gray-800 text-white">
+                  <th className="p-3 text-left">Severity</th>
+                  <th className="p-3 text-left">Beispiel</th>
+                  <th className="p-3 text-left">Response Zeit</th>
+                  <th className="p-3 text-left">Auto-Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  ['P1 Critical', 'Data Breach / RCE', '< 15 Min', 'Auto-Block + Alert CEO'],
+                  ['P2 High', 'Auth Bypass Versuch', '< 1 Std', 'IP-Block + Alert Security'],
+                  ['P3 Medium', 'Brute Force Attack', '< 4 Std', 'Rate Limit + Log'],
+                  ['P4 Low', 'Anomale Log-Aktivität', '< 24 Std', 'Log + Weekly Report'],
+                ].map(([sev, ex, rt, action]) => (
+                  <tr key={sev} className="border-b hover:bg-gray-50">
+                    <td className={`p-3 font-bold ${sev.includes('P1') ? 'text-red-600' : sev.includes('P2') ? 'text-orange-600' : sev.includes('P3') ? 'text-yellow-600' : 'text-green-600'}`}>{sev}</td>
+                    <td className="p-3">{ex}</td>
+                    <td className="p-3 font-mono text-sm">{rt}</td>
+                    <td className="p-3 text-sm">{action}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section className="mb-10">
+          <h2 className="text-2xl font-semibold mb-4">⚡ Auto-Remediation Engine</h2>
+          <div className="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm">
+            <pre>{`// moltbot/lib/auto-remediation.ts
+import { Redis } from '@upstash/redis';
+
+const redis = new Redis({ url: process.env.UPSTASH_REDIS_REST_URL!, token: process.env.UPSTASH_REDIS_REST_TOKEN! });
+
+type IncidentType = 'brute_force' | 'injection_attempt' | 'data_exfiltration' | 'privilege_escalation';
+
+const REMEDIATION_PLAYBOOKS: Record<IncidentType, (ip: string) => Promise<void>> = {
+  brute_force: async (ip) => {
+    await redis.setex(\`block:\${ip}\`, 3600, '1');          // 1h Block
+    await redis.setex(\`rate_strict:\${ip}\`, 7200, '1');    // 2h Strict Rate Limit
+  },
+  injection_attempt: async (ip) => {
+    await redis.setex(\`block:\${ip}\`, 86400, '1');         // 24h Block
+    await notifySlack('injection_attempt', ip, 'P2');
+  },
+  data_exfiltration: async (ip) => {
+    await redis.setex(\`block:\${ip}\`, -1, '1');            // Permanent Block
+    await notifySlack('data_exfiltration', ip, 'P1');
+    await notifyPagerDuty('data_exfiltration', ip);
+  },
+  privilege_escalation: async (ip) => {
+    await redis.setex(\`block:\${ip}\`, -1, '1');
+    await notifyPagerDuty('privilege_escalation', ip);
+    await triggerKubernetesIsolation(ip);
+  },
+};
+
+export async function executePlaybook(type: IncidentType, ip: string) {
+  const playbook = REMEDIATION_PLAYBOOKS[type];
+  await playbook(ip);
+  await redis.lpush('incident_log', JSON.stringify({ type, ip, ts: Date.now(), action: 'auto_remediated' }));
+}`}</pre>
+          </div>
+        </section>
+
+        <section className="mb-10">
+          <h2 className="text-2xl font-semibold mb-4">📋 Post-Mortem Template</h2>
+          <div className="bg-gray-50 border rounded-lg p-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+              {[
+                ['Incident ID', 'INC-2024-XXXX'],
+                ['Severity', 'P1 / P2 / P3'],
+                ['Detection Time', 'YYYY-MM-DD HH:MM UTC'],
+                ['Resolution Time', 'YYYY-MM-DD HH:MM UTC'],
+                ['Total Downtime', 'X Minuten'],
+                ['Affected Users', 'X Kunden'],
+                ['Root Cause', 'Kurze Beschreibung'],
+                ['Contributing Factors', 'Factor 1, Factor 2'],
+                ['Immediate Actions', 'Was wurde sofort getan?'],
+                ['Long-term Fix', 'Was verhindert Wiederholung?'],
+              ].map(([key, val]) => (
+                <div key={key}>
+                  <div className="font-semibold text-gray-700">{key}</div>
+                  <div className="text-gray-500 font-mono text-xs">{val}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="mb-10">
+          <h2 className="text-2xl font-semibold mb-4">🔗 Weiterführende Ressourcen</h2>
+          <div className="grid grid-cols-2 gap-4">
+            <a href="/securitycheck" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">🛡️ Security Check</div><div className="text-sm text-gray-600">Live Incident Detection</div></a>
+            <a href="/neuro" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">🧠 Neuro AI</div><div className="text-sm text-gray-600">AI Threat Detection</div></a>
+            <a href="/runbooks" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">📚 IR Runbooks</div><div className="text-sm text-gray-600">Response Playbooks</div></a>
+            <a href="/oracle" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">🔮 Oracle</div><div className="text-sm text-gray-600">Threat Intelligence</div></a>
+          </div>
+        </section>
+      </div>
+    </div>
+  );
+}

@@ -82,12 +82,13 @@ export async function GET(request: NextRequest) {
         // Insert or update city
         await dbQuery(`
           INSERT INTO geo_cities (slug, name_de, name_en, country_code, priority, population, is_active, rollout_stage, created_at, updated_at)
-          VALUES ($1, $2, $3, $4, $5, 0, true, $6, NOW(), NOW())
+          VALUES ($1, $2, $3, $4, $5, $6, true, $7, NOW(), NOW())
           ON CONFLICT (slug) DO UPDATE SET
             name_de = EXCLUDED.name_de,
             name_en = EXCLUDED.name_en,
             country_code = EXCLUDED.country_code,
             priority = EXCLUDED.priority,
+            population = EXCLUDED.population,
             is_active = EXCLUDED.is_active,
             rollout_stage = EXCLUDED.rollout_stage,
             updated_at = NOW()
@@ -97,6 +98,7 @@ export async function GET(request: NextRequest) {
           city.name_en,
           city.country_code,
           city.priority,
+          city.priority * 100000, // Estimated population based on priority
           stable ? 'stable' : 'canary'
         ]);
 

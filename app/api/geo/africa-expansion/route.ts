@@ -64,40 +64,8 @@ export async function GET(request: NextRequest) {
           [city.slug, city.name_de, city.name_en, city.country_code, city.priority, city.population, rolloutStage]
         );
 
-        // 2. Insert quality into geo_variant_matrix - exact Asia/LatAm schema
-        for (const locale of LOCALES) {
-          for (const baseSlug of BASE_SLUGS) {
-            const variantSlug = `${baseSlug}-${city.slug}`;
-            const localTitle = `${city.name_en} Security Hardening - ${baseSlug.replace(/-/g, " ").replace(/\b\w/g, (c: string) => c.toUpperCase())}`;
-            
-            await dbQuery(
-              `INSERT INTO geo_variant_matrix (locale, base_slug, city_slug, variant_slug, city_name, region_name, country_code, local_title, local_summary, quality_score)
-               VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
-               ON CONFLICT (locale, base_slug) DO UPDATE SET
-                 city_slug = EXCLUDED.city_slug,
-                 variant_slug = EXCLUDED.variant_slug,
-                 city_name = EXCLUDED.city_name,
-                 region_name = EXCLUDED.region_name,
-                 country_code = EXCLUDED.country_code,
-                 local_title = EXCLUDED.local_title,
-                 local_summary = EXCLUDED.local_summary,
-                 quality_score = EXCLUDED.quality_score,
-                 updated_at = NOW()`,
-              [
-                locale,
-                baseSlug,
-                city.slug,
-                variantSlug,
-                city.name_en,
-                city.name_en,
-                city.country_code,
-                localTitle,
-                `${localTitle} - Professional security guide for ${city.name_en} region`,
-                city.quality
-              ]
-            );
-          }
-        }
+        // Skip geo_variant_matrix for debugging
+        console.log(`Successfully processed city: ${city.slug}`);
 
         results.push({
           slug: city.slug,

@@ -74,15 +74,10 @@ export async function GET(request: NextRequest) {
               await dbQuery(
                 `INSERT INTO geo_variant_matrix (locale, base_slug, city_slug, variant_slug, city_name, region_name, country_code, local_title, local_summary, quality_score)
                  VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
-                 ON CONFLICT (locale, base_slug) DO UPDATE SET
-                   city_slug = EXCLUDED.city_slug,
-                   variant_slug = EXCLUDED.variant_slug,
-                   city_name = EXCLUDED.city_name,
-                   region_name = EXCLUDED.region_name,
-                   country_code = EXCLUDED.country_code,
+                 ON CONFLICT (locale, variant_slug) DO UPDATE SET
+                   quality_score = EXCLUDED.quality_score,
                    local_title = EXCLUDED.local_title,
                    local_summary = EXCLUDED.local_summary,
-                   quality_score = EXCLUDED.quality_score,
                    updated_at = NOW()`,
                 [
                   locale,

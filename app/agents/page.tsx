@@ -238,10 +238,10 @@ export default function AgentsPage({ dict, locale = "de" }: AgentsPageProps = {}
           Deployment und Monitoring. Ready-to-use für deine Infrastruktur.
         </p>
         <div className="flex gap-4 justify-center">
-          <Button size="lg" asChild>
+          <Button size="lg">
             <Link href="#featured">Featured Agents</Link>
           </Button>
-          <Button variant="outline" size="lg" asChild>
+          <Button variant="outline" size="lg">
             <Link href="#all">Alle Agents</Link>
           </Button>
         </div>

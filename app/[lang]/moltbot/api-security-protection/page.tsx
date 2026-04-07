@@ -1,280 +1,122 @@
-import type { Metadata } from "next";
-import { SUPPORTED_LOCALES, type Locale, localeAlternates } from "@/lib/i18n";
-import { BASE_URL } from "@/lib/config";
-import { getCoreSecurityLinks } from "@/lib/core-security-links";
+import { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 
-export const dynamic = "force-static";
-export const revalidate = 86400;
+interface PageProps { params: { lang: string }; }
+const LANGS = ['de','en','es','fr','pt','it','ru','zh','ja','ko','ar','hi','tr','pl','nl'];
 
-export async function generateStaticParams() {
-  return SUPPORTED_LOCALES.map((lang) => ({ lang }));
-}
-
-export async function generateMetadata({
-  params,
-}: {
-  params: { lang: string };
-}): Promise<Metadata> {
-  const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale)
-    ? params.lang
-    : "de") as Locale;
-
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { lang } = params;
   return {
-    title: "Moltbot API Security: REST Endpoints Protection",
-    description:
-      "API Security Best Practices und Endpoint Hardening für Moltbot REST APIs. Complete API Protection mit Authentication, Rate Limiting und Input Validation.",
-    keywords: [
-      "moltbot api security",
-      "rest endpoint protection",
-      "api hardening",
-      "rate limiting",
-      "input validation",
-      "api authentication",
-    ],
-    alternates: {
-      ...localeAlternates(`/${locale}/moltbot/api-security-protection`),
-    },
-    openGraph: {
-      title: "Moltbot API Security: REST Endpoints Protection",
-      description:
-        "API Security Best Practices und Endpoint Hardening für Moltbot REST APIs.",
-      type: "article",
-      url: `${BASE_URL}/${locale}/moltbot/api-security-protection`,
-    },
+    title: 'Moltbot API Security: REST Endpoints Absichern 2024',
+    description: 'Komplette API Security für Moltbot REST Endpoints. Authentication, Rate Limiting, Input Validation, JWT Hardening und DDoS-Schutz mit konkreten Code-Beispielen.',
+    keywords: ['moltbot api security','rest endpoint protection','api hardening','rate limiting','input validation','api authentication'],
+    authors: [{ name: 'ClawGuru Security Team' }],
+    openGraph: { title: 'Moltbot API Security: REST Endpoints Absichern 2024', description: 'Komplette API Security für Moltbot REST Endpoints.', type: 'article', url: `https://clawguru.org/${lang}/moltbot/api-security-protection`, images: ['/og-moltbot-api-security.jpg'] },
+    alternates: { canonical: `https://clawguru.org/${lang}/moltbot/api-security-protection`, languages: { de: 'https://clawguru.org/de/moltbot/api-security-protection', en: 'https://clawguru.org/en/moltbot/api-security-protection', es: 'https://clawguru.org/es/moltbot/api-security-protection', fr: 'https://clawguru.org/fr/moltbot/api-security-protection', pt: 'https://clawguru.org/pt/moltbot/api-security-protection', it: 'https://clawguru.org/it/moltbot/api-security-protection', ru: 'https://clawguru.org/ru/moltbot/api-security-protection', zh: 'https://clawguru.org/zh/moltbot/api-security-protection', ja: 'https://clawguru.org/ja/moltbot/api-security-protection', ko: 'https://clawguru.org/ko/moltbot/api-security-protection', ar: 'https://clawguru.org/ar/moltbot/api-security-protection', hi: 'https://clawguru.org/hi/moltbot/api-security-protection', tr: 'https://clawguru.org/tr/moltbot/api-security-protection', pl: 'https://clawguru.org/pl/moltbot/api-security-protection', nl: 'https://clawguru.org/nl/moltbot/api-security-protection' } },
+    robots: 'index, follow',
   };
 }
 
-export default async function MoltbotApiSecurityPage({
-  params,
-}: {
-  params: { lang: string };
-}) {
-  const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale)
-    ? params.lang
-    : "de") as Locale;
-  const prefix = `/${locale}`;
-  const coreLinks = getCoreSecurityLinks(locale);
+export default function MoltbotApiSecurityPage({ params }: PageProps) {
+  const { lang } = params;
+  if (!LANGS.includes(lang)) notFound();
 
   return (
-    <main className="min-h-screen bg-white">
-      <section className="relative overflow-hidden bg-gradient-to-br from-blue-700 via-indigo-700 to-purple-800 py-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 text-white text-sm mb-4">
-              API Security 2024
-            </div>
-            <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">
-              API Security &amp; Protection
-            </h1>
-            <p className="text-2xl text-blue-200 mb-4">
-              REST Endpoints Hardening
-            </p>
-            <p className="text-xl text-white/80 mb-8">
-              Defense in Depth, Zero Trust, Principle of Least Privilege, Secure by Default – vollständige API-Absicherung.
-            </p>
-            <div className="flex flex-wrap gap-3">
-              <span className="px-4 py-2 bg-white/20 text-white rounded-lg text-sm">Auth</span>
-              <span className="px-4 py-2 bg-white/20 text-white rounded-lg text-sm">Rate Limiting</span>
-              <span className="px-4 py-2 bg-white/20 text-white rounded-lg text-sm">Validation</span>
-              <span className="px-4 py-2 bg-white/20 text-white rounded-lg text-sm">Headers</span>
-            </div>
-          </div>
+    <div className="container mx-auto px-4 py-8">
+      <div className="max-w-4xl mx-auto">
+        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-8 text-sm">
+          <strong>"Not a Pentest" Trust-Anker</strong>: Dieser Guide dient ausschließlich zur Absicherung von API-Endpoints. Keine Angriffswerkzeuge, keine illegalen Aktivitäten.
         </div>
-      </section>
+        <h1 className="text-4xl font-bold mb-4">Moltbot API Security: REST Endpoints Protection</h1>
+        <p className="text-lg text-gray-600 mb-8">Vollständige API Security für Moltbot — von JWT-Hardening über Rate Limiting bis hin zu Input Validation und DDoS-Schutz.</p>
 
-      <div className="container mx-auto px-4 py-12">
-        <div className="max-w-4xl mx-auto">
+        <section className="mb-10">
+          <h2 className="text-2xl font-semibold mb-4">🔐 JWT Authentication Hardening</h2>
+          <div className="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm mb-4">
+            <pre>{`// moltbot/middleware/jwt-auth.ts
+import { NextRequest, NextResponse } from 'next/server';
+import { jwtVerify, JWTPayload } from 'jose';
 
-          <div className="bg-amber-50 border border-amber-200 rounded-xl p-6 mb-12">
-            <p className="text-amber-900 font-semibold">
-              🛡️ &quot;Not a Pentest&quot; Trust-Anker: Dieser Guide dient ausschließlich zur Absicherung von REST APIs. Keine Angriffswerkzeuge, keine illegalen Aktivitäten.
-            </p>
-          </div>
+const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET!);
 
-          <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">🎯 Executive Summary</h2>
-            <p className="text-slate-700 text-lg mb-6">
-              Die <strong>Moltbot API Security</strong> stellt einen umfassenden Ansatz für die Absicherung von REST Endpoints dar. In einer Zeit, in der APIs die primäre Angriffsfläche für moderne Anwendungen sind, ist robuste API Security überlebenswichtig.
-            </p>
-          </section>
-
-          <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">🏗️ API Security Architecture</h2>
-            <p className="text-slate-700 text-lg mb-6">
-              Mehrschichtige API Security mit API Gateway, Authentication Layer, Rate Limiter, Input Validator, Business Logic und Audit Layer.
-            </p>
-          </section>
-
-          <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">🔐 Authentication &amp; Authorization</h2>
-            <div className="bg-slate-900 rounded-xl p-6 mb-6">
-              <h4 className="text-white font-semibold mb-4">API Authentication Middleware</h4>
-              <pre className="font-mono text-sm text-green-400 overflow-x-auto">
-{`import { NextRequest, NextResponse } from 'next/server';
-import jwt from 'jsonwebtoken';
-
-interface AuthConfig {
-  publicRoutes: string[];
-  rateLimits: Record<string, number>;
-}
-
-async function authenticateRequest(req: NextRequest, config: AuthConfig) {
-  const path = req.nextUrl.pathname;
-
-  // Skip auth for public routes
-  if (config.publicRoutes.some(r => path.startsWith(r))) {
-    return NextResponse.next();
-  }
-
-  const authHeader = req.headers.get('authorization');
-  if (!authHeader?.startsWith('Bearer ')) {
-    return NextResponse.json(
-      { error: 'Missing or invalid authorization header' },
-      { status: 401 }
-    );
-  }
-
-  const token = authHeader.slice(7);
+export async function verifyJWT(req: NextRequest): Promise<JWTPayload | null> {
+  const token = req.headers.get('Authorization')?.replace('Bearer ', '');
+  if (!token) return null;
   try {
-    const payload = jwt.verify(token, process.env.JWT_SECRET!);
-    // Attach user to request context
-    const response = NextResponse.next();
-    response.headers.set('x-user-id', (payload as any).sub);
-    return response;
+    const { payload } = await jwtVerify(token, JWT_SECRET, {
+      issuer: 'clawguru-moltbot',
+      audience: 'moltbot-api',
+      algorithms: ['HS256'],
+    });
+    return payload;
   } catch {
-    return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
+    return null;
   }
-}`}
-              </pre>
-            </div>
-          </section>
+}`}</pre>
+          </div>
+        </section>
 
-          <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">🚦 Rate Limiting &amp; DDoS Protection</h2>
-            <div className="bg-slate-900 rounded-xl p-6 mb-6">
-              <h4 className="text-white font-semibold mb-4">Sliding Window Rate Limiter</h4>
-              <pre className="font-mono text-sm text-green-400 overflow-x-auto">
-{`class SlidingWindowRateLimiter {
-  private windows: Map<string, number[]> = new Map();
-  private readonly maxRequests: number;
-  private readonly windowMs: number;
+        <section className="mb-10">
+          <h2 className="text-2xl font-semibold mb-4">⚡ Rate Limiting mit Redis</h2>
+          <div className="bg-gray-900 text-blue-400 p-4 rounded-lg font-mono text-sm mb-4">
+            <pre>{`// moltbot/middleware/rate-limit.ts
+import { Redis } from '@upstash/redis';
 
-  constructor(maxRequests: number, windowMs: number) {
-    this.maxRequests = maxRequests;
-    this.windowMs = windowMs;
-  }
-
-  isAllowed(clientId: string): boolean {
-    const now = Date.now();
-    const timestamps = this.windows.get(clientId) || [];
-
-    // Remove expired entries
-    const valid = timestamps.filter(t => now - t < this.windowMs);
-
-    if (valid.length >= this.maxRequests) {
-      return false;
-    }
-
-    valid.push(now);
-    this.windows.set(clientId, valid);
-    return true;
-  }
-}`}
-              </pre>
-            </div>
-          </section>
-
-          <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">🔍 Input Validation &amp; Sanitization</h2>
-            <div className="bg-slate-900 rounded-xl p-6 mb-6">
-              <h4 className="text-white font-semibold mb-4">Zod Schema Validation</h4>
-              <pre className="font-mono text-sm text-green-400 overflow-x-auto">
-{`import { z } from 'zod';
-
-const UserCreateSchema = z.object({
-  email: z.string().email().max(255),
-  name: z.string().min(2).max(100).regex(/^[a-zA-Z\\s]+$/),
-  password: z.string().min(12).max(128)
-    .regex(/[A-Z]/, 'Must contain uppercase')
-    .regex(/[a-z]/, 'Must contain lowercase')
-    .regex(/[0-9]/, 'Must contain number')
-    .regex(/[^a-zA-Z0-9]/, 'Must contain special char'),
-  role: z.enum(['viewer', 'operator', 'admin']),
+const redis = new Redis({
+  url: process.env.UPSTASH_REDIS_REST_URL!,
+  token: process.env.UPSTASH_REDIS_REST_TOKEN!,
 });
 
-// Validate and sanitize
-function validateInput<T>(schema: z.ZodSchema<T>, data: unknown): T {
-  return schema.parse(data);
-}`}
-              </pre>
-            </div>
-          </section>
+export async function rateLimit(ip: string, limit = 100, window = 60) {
+  const key = \`rl:\${ip}\`;
+  const current = await redis.incr(key);
+  if (current === 1) await redis.expire(key, window);
+  return { allowed: current <= limit, remaining: Math.max(0, limit - current) };
+}`}</pre>
+          </div>
+        </section>
 
-          <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">🛡️ API Security Headers</h2>
-            <div className="bg-slate-900 rounded-xl p-6 mb-6">
-              <h4 className="text-white font-semibold mb-4">Security Headers Configuration</h4>
-              <pre className="font-mono text-sm text-green-400 overflow-x-auto">
-{`const securityHeaders = {
-  'Strict-Transport-Security': 'max-age=63072000; includeSubDomains; preload',
-  'X-Content-Type-Options': 'nosniff',
-  'X-Frame-Options': 'DENY',
-  'X-XSS-Protection': '1; mode=block',
-  'Referrer-Policy': 'strict-origin-when-cross-origin',
-  'Content-Security-Policy': "default-src 'self'; script-src 'self'",
-  'Permissions-Policy': 'camera=(), microphone=(), geolocation=()',
-  'X-Request-Id': crypto.randomUUID(),
-};`}
-              </pre>
-            </div>
-          </section>
+        <section className="mb-10">
+          <h2 className="text-2xl font-semibold mb-4">🛡️ Input Validation Schema</h2>
+          <div className="bg-gray-900 text-yellow-400 p-4 rounded-lg font-mono text-sm mb-4">
+            <pre>{`// moltbot/lib/validation.ts
+import { z } from 'zod';
 
-          <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">🔍 API Monitoring &amp; Logging</h2>
-            <p className="text-slate-700 text-lg mb-6">
-              Structured Logging, Request Tracing, Performance Metrics, Error Tracking und Security Event Monitoring für vollständige API Observability.
-            </p>
-          </section>
+export const MoltbotRequestSchema = z.object({
+  target: z.string().url('Muss eine gültige URL sein').max(2048),
+  action: z.enum(['check', 'scan', 'audit']),
+  options: z.object({
+    depth: z.number().int().min(1).max(5).default(2),
+    timeout: z.number().int().min(1000).max(30000).default(5000),
+  }).optional(),
+});
 
-          <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">📋 Implementation Guide</h2>
-            <div className="bg-slate-50 border border-slate-200 rounded-xl p-6">
-              <ul className="space-y-2 text-slate-700">
-                <li>✅ JWT/OAuth2 Authentication</li>
-                <li>✅ Sliding Window Rate Limiting</li>
-                <li>✅ Zod Input Validation</li>
-                <li>✅ Security Headers konfiguriert</li>
-                <li>✅ CORS Policy</li>
-                <li>✅ API Monitoring &amp; Logging</li>
-                <li>✅ DDoS Protection</li>
-                <li>✅ Request Tracing</li>
-              </ul>
-            </div>
-          </section>
+export type MoltbotRequest = z.infer<typeof MoltbotRequestSchema>;`}</pre>
+          </div>
+        </section>
 
-          <section className="bg-gradient-to-r from-blue-700 to-indigo-600 rounded-2xl p-8 text-center text-white">
-            <h2 className="text-2xl font-bold mb-4">API Security Assessment</h2>
-            <p className="mb-6">Validieren Sie Ihre API-Konfiguration mit unserem automatisierten Check.</p>
-            <a href={coreLinks.check} className="inline-block px-6 py-3 bg-white text-blue-700 rounded-lg font-semibold">
-              Security Assessment starten
+        <section className="mb-10">
+          <h2 className="text-2xl font-semibold mb-4">🔗 Weiterführende Ressourcen</h2>
+          <div className="grid grid-cols-2 gap-4">
+            <a href="/securitycheck" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
+              <div className="font-semibold text-blue-600">🛡️ Security Check</div>
+              <div className="text-sm text-gray-600">API live testen</div>
             </a>
-            <div className="mt-6 flex flex-wrap justify-center gap-3 text-sm">
-              <a href={`${prefix}/moltbot/authentication-oauth2-jwt`} className="rounded-lg border border-white/30 px-3 py-2 text-white hover:bg-white/10">Authentication Guide</a>
-              <a href={`${prefix}/moltbot/security-framework`} className="rounded-lg border border-white/30 px-3 py-2 text-white hover:bg-white/10">Security Framework</a>
-              <a href={`${prefix}/runbooks/security`} className="rounded-lg border border-white/30 px-3 py-2 text-white hover:bg-white/10">Security Runbooks</a>
-              <a href={coreLinks.methodology} className="rounded-lg border border-white/30 px-3 py-2 text-white hover:bg-white/10">Methodology</a>
-            </div>
-          </section>
-        </div>
+            <a href="/runbooks" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
+              <div className="font-semibold text-blue-600">📚 Runbooks</div>
+              <div className="text-sm text-gray-600">API Security Playbooks</div>
+            </a>
+            <a href="/openclaw" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
+              <div className="font-semibold text-blue-600">🔓 OpenClaw</div>
+              <div className="text-sm text-gray-600">Open Source Framework</div>
+            </a>
+            <a href="/neuro" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
+              <div className="font-semibold text-blue-600">🧠 Neuro AI</div>
+              <div className="text-sm text-gray-600">AI Threat Detection</div>
+            </a>
+          </div>
+        </section>
       </div>
-
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "TechArticle",
-        headline: "Moltbot API Security: REST Endpoints Protection",
-        author: { "@type": "Organization", name: "ClawGuru", url: BASE_URL },
-        datePublished: "2024-04-06",
-      })}} />
-    </main>
+    </div>
   );
 }

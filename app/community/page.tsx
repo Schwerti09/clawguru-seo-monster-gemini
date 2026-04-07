@@ -156,10 +156,10 @@ export default function CommunityPage({ dict, locale = "de" }: CommunityPageProp
           Teile, lerne und baue die nächste Generation autonomer Ops-Agents.
         </p>
         <div className="flex gap-4 justify-center">
-          <Button size="lg" asChild>
+          <Button size="lg">
             <Link href="#agents">Agents entdecken</Link>
           </Button>
-          <Button variant="outline" size="lg" asChild>
+          <Button variant="outline" size="lg">
             <Link href="#guides">Integration Guides</Link>
           </Button>
         </div>
@@ -236,14 +236,14 @@ export default function CommunityPage({ dict, locale = "de" }: CommunityPageProp
                   </div>
 
                   <div className="flex gap-2">
-                    <Button size="sm" className="flex-1" asChild>
+                    <Button size="sm" className="flex-1">
                       <Link href={agent.link}>
                         {agent.category === "Security" ? "Security Check" : 
                          agent.category === "Operations" ? "Infrastructure" :
                          agent.category === "Compliance" ? "Compliance" : "Deployment"}
                       </Link>
                     </Button>
-                    <Button variant="outline" size="sm" asChild>
+                    <Button variant="outline" size="sm">
                       <Link href="/docs">Docs</Link>
                     </Button>
                   </div>
@@ -281,10 +281,10 @@ export default function CommunityPage({ dict, locale = "de" }: CommunityPageProp
                   </div>
                   
                   <div className="flex gap-2">
-                    <Button size="sm" className="flex-1" asChild>
+                    <Button size="sm" className="flex-1">
                       <Link href={guide.link}>Guide starten</Link>
                     </Button>
-                    <Button variant="outline" size="sm" asChild>
+                    <Button variant="outline" size="sm">
                       <Link href="/docs">Dokumentation</Link>
                     </Button>
                   </div>
@@ -310,7 +310,7 @@ export default function CommunityPage({ dict, locale = "de" }: CommunityPageProp
                 <CardDescription>Security Check Tools und Hardening Utilities</CardDescription>
               </CardHeader>
               <CardContent>
-                <Button className="w-full" asChild>
+                <Button className="w-full">
                   <Link href="/securitycheck">Security Check</Link>
                 </Button>
               </CardContent>
@@ -322,7 +322,7 @@ export default function CommunityPage({ dict, locale = "de" }: CommunityPageProp
                 <CardDescription>AI-generierte Security Runbooks und Best Practices</CardDescription>
               </CardHeader>
               <CardContent>
-                <Button className="w-full" asChild>
+                <Button className="w-full">
                   <Link href="/runbooks">Runbooks</Link>
                 </Button>
               </CardContent>
@@ -334,7 +334,7 @@ export default function CommunityPage({ dict, locale = "de" }: CommunityPageProp
                 <CardDescription>AI-gestützte Threat Intelligence und Pattern Recognition</CardDescription>
               </CardHeader>
               <CardContent>
-                <Button className="w-full" asChild>
+                <Button className="w-full">
                   <Link href="/neuro">Neuro AI</Link>
                 </Button>
               </CardContent>
@@ -348,7 +348,7 @@ export default function CommunityPage({ dict, locale = "de" }: CommunityPageProp
                 <CardDescription>Security Oracle für Threat Intelligence Integration</CardDescription>
               </CardHeader>
               <CardContent>
-                <Button className="w-full" asChild>
+                <Button className="w-full">
                   <Link href="/oracle">Oracle</Link>
                 </Button>
               </CardContent>
@@ -360,7 +360,7 @@ export default function CommunityPage({ dict, locale = "de" }: CommunityPageProp
                 <CardDescription>Enterprise-grade Security und Compliance Lösungen</CardDescription>
               </CardHeader>
               <CardContent>
-                <Button className="w-full" asChild>
+                <Button className="w-full">
                   <Link href="/solutions">Solutions</Link>
                 </Button>
               </CardContent>
@@ -372,7 +372,7 @@ export default function CommunityPage({ dict, locale = "de" }: CommunityPageProp
                 <CardDescription>Komplette API-Dokumentation und Architecture Guides</CardDescription>
               </CardHeader>
               <CardContent>
-                <Button className="w-full" asChild>
+                <Button className="w-full">
                   <Link href="/docs">Docs</Link>
                 </Button>
               </CardContent>
@@ -404,7 +404,7 @@ export default function CommunityPage({ dict, locale = "de" }: CommunityPageProp
                   <li>• Runbook Generator Templates</li>
                   <li>• Oracle Intelligence Integration</li>
                 </ul>
-                <Button className="w-full" asChild>
+                <Button className="w-full">
                   <Link href="/securitycheck">Agent entwickeln</Link>
                 </Button>
               </CardContent>
@@ -424,7 +424,7 @@ export default function CommunityPage({ dict, locale = "de" }: CommunityPageProp
                   <li>• Best Practice Guides</li>
                   <li>• Community Review</li>
                 </ul>
-                <Button className="w-full" asChild>
+                <Button className="w-full">
                   <Link href="/runbooks">Guide erstellen</Link>
                 </Button>
               </CardContent>
@@ -440,10 +440,10 @@ export default function CommunityPage({ dict, locale = "de" }: CommunityPageProp
           Starte jetzt mit unseren Security Tools und entdecke die Zukunft der automatisierten Security-Checks.
         </p>
         <div className="flex gap-4 justify-center">
-          <Button size="lg" asChild>
+          <Button size="lg">
             <Link href="/securitycheck">Security Check starten</Link>
           </Button>
-          <Button variant="outline" size="lg" asChild>
+          <Button variant="outline" size="lg">
             <Link href="/runbooks">Runbooks entdecken</Link>
           </Button>
         </div>

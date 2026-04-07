@@ -1,245 +1,166 @@
-import type { Metadata } from "next";
-import { SUPPORTED_LOCALES, type Locale, localeAlternates } from "@/lib/i18n";
-import { BASE_URL } from "@/lib/config";
-import { getCoreSecurityLinks } from "@/lib/core-security-links";
+import { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 
-export const dynamic = "force-static";
-export const revalidate = 86400;
+interface PageProps { params: { lang: string }; }
+const LANGS = ['de','en','es','fr','pt','it','ru','zh','ja','ko','ar','hi','tr','pl','nl'];
 
-export async function generateStaticParams() {
-  return SUPPORTED_LOCALES.map((lang) => ({ lang }));
-}
-
-export async function generateMetadata({
-  params,
-}: {
-  params: { lang: string };
-}): Promise<Metadata> {
-  const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale)
-    ? params.lang
-    : "de") as Locale;
-
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { lang } = params;
   return {
-    title: "Moltbot Threat Detection: Live Monitoring Setup",
-    description:
-      "Schritt-für-Schritt Anleitung für Threat Detection und Monitoring mit Moltbot. Complete Live Monitoring Setup mit Real-time Alerting und Security Analytics.",
-    keywords: [
-      "moltbot threat detection",
-      "live monitoring",
-      "security monitoring",
-      "threat detection setup",
-      "real-time alerting",
-      "security analytics",
-    ],
-    alternates: {
-      ...localeAlternates(`/${locale}/moltbot/threat-detection-setup`),
-    },
-    openGraph: {
-      title: "Moltbot Threat Detection: Live Monitoring Setup",
-      description:
-        "Schritt-für-Schritt Anleitung für Threat Detection und Monitoring mit Moltbot.",
-      type: "article",
-      url: `${BASE_URL}/${locale}/moltbot/threat-detection-setup`,
-    },
+    title: 'Moltbot Threat Detection: Live Monitoring Setup 2024',
+    description: 'Threat Detection für Moltbot: Echtzeit-Bedrohungserkennung mit Falco, Prometheus Alerting, SIEM-Integration und automatisierter Incident Response. Mit vollständigen Konfigurationsbeispielen.',
+    keywords: ['moltbot threat detection','live monitoring','falco security','prometheus alerting','siem integration','incident response'],
+    authors: [{ name: 'ClawGuru Security Team' }],
+    openGraph: { title: 'Moltbot Threat Detection: Live Monitoring Setup 2024', description: 'Threat Detection für Moltbot mit Falco und Prometheus.', type: 'article', url: `https://clawguru.org/${lang}/moltbot/threat-detection-setup`, images: ['/og-moltbot-threat-detection.jpg'] },
+    alternates: { canonical: `https://clawguru.org/${lang}/moltbot/threat-detection-setup`, languages: { de: 'https://clawguru.org/de/moltbot/threat-detection-setup', en: 'https://clawguru.org/en/moltbot/threat-detection-setup', es: 'https://clawguru.org/es/moltbot/threat-detection-setup', fr: 'https://clawguru.org/fr/moltbot/threat-detection-setup', pt: 'https://clawguru.org/pt/moltbot/threat-detection-setup', it: 'https://clawguru.org/it/moltbot/threat-detection-setup', ru: 'https://clawguru.org/ru/moltbot/threat-detection-setup', zh: 'https://clawguru.org/zh/moltbot/threat-detection-setup', ja: 'https://clawguru.org/ja/moltbot/threat-detection-setup', ko: 'https://clawguru.org/ko/moltbot/threat-detection-setup', ar: 'https://clawguru.org/ar/moltbot/threat-detection-setup', hi: 'https://clawguru.org/hi/moltbot/threat-detection-setup', tr: 'https://clawguru.org/tr/moltbot/threat-detection-setup', pl: 'https://clawguru.org/pl/moltbot/threat-detection-setup', nl: 'https://clawguru.org/nl/moltbot/threat-detection-setup' } },
+    robots: 'index, follow',
   };
 }
 
-export default async function MoltbotThreatDetectionPage({
-  params,
-}: {
-  params: { lang: string };
-}) {
-  const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale)
-    ? params.lang
-    : "de") as Locale;
-  const prefix = `/${locale}`;
-  const coreLinks = getCoreSecurityLinks(locale);
+export default function MoltbotThreatDetectionPage({ params }: PageProps) {
+  const { lang } = params;
+  if (!LANGS.includes(lang)) notFound();
 
   return (
-    <main className="min-h-screen bg-white">
-      <section className="relative overflow-hidden bg-gradient-to-br from-blue-700 via-indigo-700 to-purple-800 py-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 text-white text-sm mb-4">
-              Threat Detection 2024
-            </div>
-            <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">
-              Threat Detection Setup
-            </h1>
-            <p className="text-2xl text-blue-200 mb-4">
-              Live Monitoring &amp; Security Analytics
-            </p>
-            <p className="text-xl text-white/80 mb-8">
-              Real-time Threat Detection, Machine Learning Analytics, Automated Response, Compliance Monitoring – proaktive Security Operations.
-            </p>
-            <div className="flex flex-wrap gap-3">
-              <span className="px-4 py-2 bg-white/20 text-white rounded-lg text-sm">Real-time</span>
-              <span className="px-4 py-2 bg-white/20 text-white rounded-lg text-sm">ML Detection</span>
-              <span className="px-4 py-2 bg-white/20 text-white rounded-lg text-sm">Auto Response</span>
-              <span className="px-4 py-2 bg-white/20 text-white rounded-lg text-sm">SIEM</span>
-            </div>
-          </div>
+    <div className="container mx-auto px-4 py-8">
+      <div className="max-w-4xl mx-auto">
+        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-8 text-sm">
+          <strong>"Not a Pentest" Trust-Anker</strong>: Dieser Guide dient ausschließlich zur Implementierung von Bedrohungserkennungssystemen. Keine Angriffswerkzeuge, keine illegalen Aktivitäten.
         </div>
-      </section>
+        <h1 className="text-4xl font-bold mb-4">Moltbot Threat Detection: Live Monitoring Setup</h1>
+        <p className="text-lg text-gray-600 mb-8">Echtzeit-Bedrohungserkennung für Moltbot — von Falco Runtime Security über Prometheus Alerting bis hin zur automatisierten Incident Response.</p>
 
-      <div className="container mx-auto px-4 py-12">
-        <div className="max-w-4xl mx-auto">
+        <section className="mb-10">
+          <h2 className="text-2xl font-semibold mb-4">🦅 Falco Runtime Security Rules</h2>
+          <div className="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm mb-4">
+            <pre>{`# falco-rules-moltbot.yaml
+- rule: Moltbot Unexpected Network Connection
+  desc: Moltbot container öffnet unerwartete Netzwerkverbindung
+  condition: >
+    evt.type = connect
+    and container.name = "moltbot"
+    and not (fd.sport in (80, 443, 3000, 5432))
+  output: >
+    Unerwartete Verbindung von Moltbot
+    (user=%user.name container=%container.name
+     sport=%fd.sport dport=%fd.dport)
+  priority: WARNING
+  tags: [network, moltbot]
 
-          <div className="bg-amber-50 border border-amber-200 rounded-xl p-6 mb-12">
-            <p className="text-amber-900 font-semibold">
-              🛡️ &quot;Not a Pentest&quot; Trust-Anker: Dieser Guide dient ausschließlich zur Implementierung von Threat Detection und Monitoring Systemen. Keine Angriffswerkzeuge, keine illegalen Aktivitäten.
-            </p>
+- rule: Moltbot Privilege Escalation Attempt
+  desc: Erkenne Privilege-Escalation-Versuche im Moltbot-Container
+  condition: >
+    evt.type in (setuid, setgid)
+    and container.name = "moltbot"
+    and not proc.name in (node)
+  output: >
+    Privilege Escalation in Moltbot-Container
+    (proc=%proc.name user=%user.name)
+  priority: CRITICAL
+  tags: [privilege_escalation, moltbot]`}</pre>
           </div>
+        </section>
 
-          <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">🎯 Executive Summary</h2>
-            <p className="text-slate-700 text-lg mb-6">
-              Das <strong>Moltbot Threat Detection System</strong> bietet eine umfassende Lösung für Echtzeit-Überwachung und Bedrohungserkennung. Mit fortschrittlicher Machine Learning Integration und automatisierter Response Capabilities ermöglicht es proaktive Security Operations.
-            </p>
-          </section>
+        <section className="mb-10">
+          <h2 className="text-2xl font-semibold mb-4">📊 Prometheus Alerting Rules</h2>
+          <div className="bg-gray-900 text-blue-400 p-4 rounded-lg font-mono text-sm mb-4">
+            <pre>{`# prometheus/alerts/moltbot-security.yml
+groups:
+  - name: moltbot-security
+    rules:
+      - alert: MoltbotHighAuthFailureRate
+        expr: |
+          rate(moltbot_auth_failures_total[5m]) > 10
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Hohe Authentifizierungsfehlerrate"
+          description: "{{ $value }} Fehlschläge/s – möglicher Brute-Force-Angriff"
 
-          <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">🏗️ Architecture Overview</h2>
-            <p className="text-slate-700 text-lg mb-6">
-              Mehrschichtige Threat Detection Architecture mit Data Collection Layer, Processing Engine, ML Detection, Alert System und Response Automation.
-            </p>
-          </section>
+      - alert: MoltbotSuspiciousAPIActivity
+        expr: |
+          rate(moltbot_api_requests_total{status="429"}[1m]) > 50
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Verdächtige API-Aktivität erkannt"
+          description: "{{ $value }} Rate-Limited Requests/s"
 
-          <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">📊 Data Collection &amp; Ingestion</h2>
-            <div className="bg-slate-900 rounded-xl p-6 mb-6">
-              <h4 className="text-white font-semibold mb-4">Log Collection Configuration</h4>
-              <pre className="font-mono text-sm text-green-400 overflow-x-auto">
-{`# Moltbot Log Collection Config
-log_collection:
-  sources:
-    - type: syslog
-      port: 514
-      protocol: tcp
-      tls: true
-    - type: filebeat
-      paths:
-        - /var/log/moltbot/*.log
-        - /var/log/auth.log
-    - type: api_gateway
-      endpoint: /api/v1/logs
-      format: json
-  
-  processing:
-    - parse_json
-    - enrich_geoip
-    - normalize_timestamps
-    - extract_security_events
-  
-  output:
-    elasticsearch:
-      hosts: ["https://es-cluster:9200"]
-      index: "moltbot-security-%{+yyyy.MM.dd}"`}
-              </pre>
-            </div>
-          </section>
+      - alert: MoltbotDatabaseQueryAnomaly
+        expr: |
+          histogram_quantile(0.99, rate(moltbot_db_query_duration_seconds_bucket[5m])) > 5
+        for: 3m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Anomale Datenbankabfrage-Latenz"
+          description: "P99 Latenz: {{ $value }}s"}`}</pre>
+          </div>
+        </section>
 
-          <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">🧠 Machine Learning Detection Engine</h2>
-            <div className="bg-slate-900 rounded-xl p-6 mb-6">
-              <h4 className="text-white font-semibold mb-4">Anomaly Detection</h4>
-              <pre className="font-mono text-sm text-green-400 overflow-x-auto">
-{`class AnomalyDetector {
-  private model: IsolationForest;
-  private threshold: number = 0.85;
+        <section className="mb-10">
+          <h2 className="text-2xl font-semibold mb-4">⚡ Automatisierte Incident Response</h2>
+          <div className="bg-gray-900 text-yellow-400 p-4 rounded-lg font-mono text-sm mb-4">
+            <pre>{`// moltbot/lib/incident-response.ts
+import { Redis } from '@upstash/redis';
 
-  async detectAnomalies(events: SecurityEvent[]): Promise<Anomaly[]> {
-    const features = this.extractFeatures(events);
-    const predictions = await this.model.predict(features);
+const redis = new Redis({ url: process.env.UPSTASH_REDIS_REST_URL!, token: process.env.UPSTASH_REDIS_REST_TOKEN! });
 
-    return predictions
-      .filter(p => p.anomalyScore > this.threshold)
-      .map(p => ({
-        event: events[p.index],
-        score: p.anomalyScore,
-        type: this.classifyAnomaly(p),
-        confidence: p.confidence,
-      }));
+export async function handleSecurityIncident(incident: {
+  type: 'brute_force' | 'injection' | 'anomaly';
+  ip: string;
+  severity: 'low' | 'medium' | 'high' | 'critical';
+  details: Record<string, unknown>;
+}) {
+  // 1. IP blockieren bei kritischen Incidents
+  if (incident.severity === 'critical' || incident.severity === 'high') {
+    await redis.setex(\`block:\${incident.ip}\`, 3600, '1');
   }
 
-  private classifyAnomaly(prediction: Prediction): string {
-    if (prediction.features.loginFrequency > 3) return 'BRUTE_FORCE';
-    if (prediction.features.geoDistance > 1000) return 'IMPOSSIBLE_TRAVEL';
-    if (prediction.features.dataVolume > 10) return 'DATA_EXFILTRATION';
-    return 'UNKNOWN_ANOMALY';
+  // 2. Incident loggen
+  await redis.lpush('incidents', JSON.stringify({
+    ...incident,
+    timestamp: new Date().toISOString(),
+  }));
+
+  // 3. Alert senden
+  if (incident.severity === 'critical') {
+    await fetch(process.env.SLACK_WEBHOOK_URL!, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        text: \`🚨 CRITICAL Security Incident: \${incident.type} from \${incident.ip}\`,
+      }),
+    });
   }
-}`}
-              </pre>
-            </div>
-          </section>
+}`}</pre>
+          </div>
+        </section>
 
-          <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">🚨 Real-time Alerting System</h2>
-            <p className="text-slate-700 text-lg mb-6">
-              Multi-Channel Alerting über Slack, PagerDuty, Email und Webhook mit konfigurierbaren Severity-Leveln und Escalation Policies.
-            </p>
-          </section>
-
-          <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">📊 Dashboard &amp; Visualization</h2>
-            <p className="text-slate-700 text-lg mb-6">
-              Security Operations Dashboard mit Echtzeit-Metriken, Threat Heatmaps, Timeline-Views und Compliance-Status für vollständige Visibility.
-            </p>
-          </section>
-
-          <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">🤖 Automated Response System</h2>
-            <p className="text-slate-700 text-lg mb-6">
-              SOAR (Security Orchestration, Automation and Response) mit automatisierten Playbooks, IP-Blocking, Session-Invalidierung und Incident-Ticketing.
-            </p>
-          </section>
-
-          <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">📋 Implementation Guide</h2>
-            <div className="bg-slate-50 border border-slate-200 rounded-xl p-6">
-              <ul className="space-y-2 text-slate-700">
-                <li>✅ Log Collection konfiguriert (Syslog, Filebeat, API)</li>
-                <li>✅ Elasticsearch/OpenSearch Cluster</li>
-                <li>✅ ML Detection Engine trainiert</li>
-                <li>✅ Real-time Alerting aktiv</li>
-                <li>✅ Security Dashboard deployed</li>
-                <li>✅ Automated Response Playbooks</li>
-                <li>✅ Escalation Policies konfiguriert</li>
-                <li>✅ Compliance Monitoring aktiv</li>
-              </ul>
-            </div>
-          </section>
-
-          <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">📈 Performance Optimization</h2>
-            <p className="text-slate-700 text-lg mb-6">
-              Query Optimization, Index Management, Shard-Strategie und Caching für hochperformante Threat Detection auch bei großen Datenmengen.
-            </p>
-          </section>
-
-          <section className="bg-gradient-to-r from-blue-700 to-indigo-600 rounded-2xl p-8 text-center text-white">
-            <h2 className="text-2xl font-bold mb-4">Threat Detection Assessment</h2>
-            <p className="mb-6">Validieren Sie Ihre Monitoring-Konfiguration mit unserem automatisierten Check.</p>
-            <a href={coreLinks.check} className="inline-block px-6 py-3 bg-white text-blue-700 rounded-lg font-semibold">
-              Security Assessment starten
+        <section className="mb-10">
+          <h2 className="text-2xl font-semibold mb-4">🔗 Weiterführende Ressourcen</h2>
+          <div className="grid grid-cols-2 gap-4">
+            <a href="/securitycheck" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
+              <div className="font-semibold text-blue-600">🛡️ Security Check</div>
+              <div className="text-sm text-gray-600">Live Threat Scan</div>
             </a>
-            <div className="mt-6 flex flex-wrap justify-center gap-3 text-sm">
-              <a href={`${prefix}/moltbot/security-framework`} className="rounded-lg border border-white/30 px-3 py-2 text-white hover:bg-white/10">Security Framework</a>
-              <a href={`${prefix}/moltbot/network-security-firewall`} className="rounded-lg border border-white/30 px-3 py-2 text-white hover:bg-white/10">Network Security</a>
-              <a href={`${prefix}/runbooks/security`} className="rounded-lg border border-white/30 px-3 py-2 text-white hover:bg-white/10">Security Runbooks</a>
-              <a href={coreLinks.methodology} className="rounded-lg border border-white/30 px-3 py-2 text-white hover:bg-white/10">Methodology</a>
-            </div>
-          </section>
-        </div>
+            <a href="/neuro" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
+              <div className="font-semibold text-blue-600">🧠 Neuro AI</div>
+              <div className="text-sm text-gray-600">AI-gestützte Erkennung</div>
+            </a>
+            <a href="/runbooks" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
+              <div className="font-semibold text-blue-600">📚 IR Runbooks</div>
+              <div className="text-sm text-gray-600">Incident Response Guides</div>
+            </a>
+            <a href="/oracle" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
+              <div className="font-semibold text-blue-600">🔮 Oracle</div>
+              <div className="text-sm text-gray-600">Threat Intelligence</div>
+            </a>
+          </div>
+        </section>
       </div>
-
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "TechArticle",
-        headline: "Moltbot Threat Detection: Live Monitoring Setup",
-        author: { "@type": "Organization", name: "ClawGuru", url: BASE_URL },
-        datePublished: "2024-04-06",
-      })}} />
-    </main>
+    </div>
   );
 }

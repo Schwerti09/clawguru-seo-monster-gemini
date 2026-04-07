@@ -262,10 +262,10 @@ export default function ResourcesPage({ dict, locale = "de" }: ResourcesPageProp
           Alles was du für deine ClawBot & MoltBot Entwicklung brauchst.
         </p>
         <div className="flex gap-4 justify-center">
-          <Button size="lg" asChild>
+          <Button size="lg">
             <Link href="#downloads">Downloads</Link>
           </Button>
-          <Button variant="outline" size="lg" asChild>
+          <Button variant="outline" size="lg">
             <Link href="#tools">Dev Tools</Link>
           </Button>
         </div>

@@ -1,130 +1,107 @@
-import type { Metadata } from "next";
-import { SUPPORTED_LOCALES, type Locale, localeAlternates } from "@/lib/i18n";
-import { BASE_URL } from "@/lib/config";
-import { getCoreSecurityLinks } from "@/lib/core-security-links";
+import { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 
-export const dynamic = "force-static";
-export const revalidate = 86400;
-
-export async function generateStaticParams() {
-  return SUPPORTED_LOCALES.map((lang) => ({ lang }));
+interface PageProps {
+  params: { lang: string };
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { lang: string };
-}): Promise<Metadata> {
-  const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale)
-    ? params.lang
-    : "de") as Locale;
-
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { lang } = params;
+  
   return {
-    title: "Moltbot Security Framework: Kompletter Überblick 2024",
-    description:
-      "Fundamentale Architektur und Security-Prinzipien von Moltbot mit Best Practices für 2024. Complete Security Framework Guide mit Implementierungsstrategien.",
-    keywords: [
-      "moltbot security framework",
-      "moltbot architecture",
-      "security prinzipien",
-      "bot security",
-      "ai agent security",
-      "security best practices 2024",
-    ],
-    alternates: {
-      ...localeAlternates(`/${locale}/moltbot/security-framework`),
-    },
+    title: "Moltbot Security Framework: Kompletter Überblick",
+    description: "Fundamentale Architektur und Security-Prinzipien von Moltbot mit Best Practices für 2024. Complete Security Framework Guide mit Implementierungsstrategien.",
+    keywords: ["moltbot security framework", "moltbot architecture", "security prinzipien", "bot security", "ai agent security", "security best practices 2024"],
+    authors: [{ name: "ClawGuru Security Team" }],
     openGraph: {
-      title: "Moltbot Security Framework: Kompletter Überblick 2024",
-      description:
-        "Fundamentale Architektur und Security-Prinzipien von Moltbot mit Best Practices für 2024.",
+      title: "Moltbot Security Framework: Kompletter Überblick",
+      description: "Fundamentale Architektur und Security-Prinzipien von Moltbot mit Best Practices für 2024.",
       type: "article",
-      url: `${BASE_URL}/${locale}/moltbot/security-framework`,
+      url: `https://clawguru.org/${lang}/moltbot/security-framework`,
+      images: ["/og-moltbot-security-framework.jpg"]
     },
+    twitter: {
+      card: "summary_large_image",
+      title: "Moltbot Security Framework: Kompletter Überblick",
+      description: "Fundamentale Architektur und Security-Prinzipien von Moltbot mit Best Practices für 2024.",
+      images: ["/og-moltbot-security-framework.jpg"]
+    },
+    alternates: {
+      canonical: `https://clawguru.org/${lang}/moltbot/security-framework`,
+      languages: {
+        de: "https://clawguru.org/de/moltbot/security-framework",
+        en: "https://clawguru.org/en/moltbot/security-framework",
+        es: "https://clawguru.org/es/moltbot/security-framework",
+        fr: "https://clawguru.org/fr/moltbot/security-framework",
+        pt: "https://clawguru.org/pt/moltbot/security-framework",
+        it: "https://clawguru.org/it/moltbot/security-framework",
+        ru: "https://clawguru.org/ru/moltbot/security-framework",
+        zh: "https://clawguru.org/zh/moltbot/security-framework",
+        ja: "https://clawguru.org/ja/moltbot/security-framework",
+        ko: "https://clawguru.org/ko/moltbot/security-framework",
+        ar: "https://clawguru.org/ar/moltbot/security-framework",
+        hi: "https://clawguru.org/hi/moltbot/security-framework",
+        tr: "https://clawguru.org/tr/moltbot/security-framework",
+        pl: "https://clawguru.org/pl/moltbot/security-framework",
+        nl: "https://clawguru.org/nl/moltbot/security-framework"
+      }
+    },
+    robots: "index, follow"
   };
 }
 
-export default async function MoltbotSecurityFrameworkPage({
-  params,
-}: {
-  params: { lang: string };
-}) {
-  const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale)
-    ? params.lang
-    : "de") as Locale;
-  const prefix = `/${locale}`;
-  const coreLinks = getCoreSecurityLinks(locale);
+export default function MoltbotSecurityFrameworkPage({ params }: PageProps) {
+  const { lang } = params;
+  
+  // Validate language
+  const supportedLanguages = ['de', 'en', 'es', 'fr', 'pt', 'it', 'ru', 'zh', 'ja', 'ko', 'ar', 'hi', 'tr', 'pl', 'nl'];
+  if (!supportedLanguages.includes(lang)) {
+    notFound();
+  }
 
   return (
-    <main className="min-h-screen bg-white">
-      <section className="relative overflow-hidden bg-gradient-to-br from-blue-700 via-indigo-700 to-purple-800 py-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 text-white text-sm mb-4">
-              Moltbot Security 2024
-            </div>
-            <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">
-              Moltbot Security Framework
-            </h1>
-            <p className="text-2xl text-blue-200 mb-4">
-              Kompletter Überblick &amp; Implementierungsguide
-            </p>
-            <p className="text-xl text-white/80 mb-8">
-              Zero Trust Architecture, Defense in Depth, Secure by Design, Continuous Monitoring – alles in einem Framework.
-            </p>
-            <div className="flex flex-wrap gap-3">
-              <span className="px-4 py-2 bg-white/20 text-white rounded-lg text-sm">Zero Trust</span>
-              <span className="px-4 py-2 bg-white/20 text-white rounded-lg text-sm">Defense in Depth</span>
-              <span className="px-4 py-2 bg-white/20 text-white rounded-lg text-sm">Secure by Design</span>
-              <span className="px-4 py-2 bg-white/20 text-white rounded-lg text-sm">Monitoring</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <div className="container mx-auto px-4 py-12">
-        <div className="max-w-4xl mx-auto">
-
-          <div className="bg-amber-50 border border-amber-200 rounded-xl p-6 mb-12">
-            <p className="text-amber-900 font-semibold">
-              🛡️ &quot;Not a Pentest&quot; Trust-Anker: Dieser Guide dient ausschließlich zu Bildungs- und Hardening-Zwecken. Keine Angriffswerkzeuge, keine illegalen Aktivitäten.
+    <div className="container mx-auto px-4 py-8">
+      <div className="max-w-4xl mx-auto">
+        <h1 className="text-4xl font-bold mb-6">Moltbot Security Framework: Kompletter Überblick</h1>
+        
+        <div className="prose prose-lg max-w-none">
+          <p className="text-lg text-gray-600 mb-8">
+            Fundamentale Architektur und Security-Prinzipien von Moltbot mit Best Practices für 2024. Complete Security Framework Guide mit Implementierungsstrategien.
+          </p>
+          
+          <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-8">
+            <p className="text-sm">
+              <strong>"Not a Pentest" Trust-Anker</strong>: Dieser Guide dient ausschließlich zu Bildungs- und Hardening-Zwecken. Keine Angriffswerkzeuge, keine illegalen Aktivitäten.
             </p>
           </div>
-
-          <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">🎯 Executive Summary</h2>
-            <p className="text-slate-700 text-lg mb-6">
+          
+          <section className="mb-12">
+            <h2 className="text-2xl font-semibold mb-4">🎯 Executive Summary</h2>
+            <p>
               Das <strong>Moltbot Security Framework</strong> stellt einen umfassenden Ansatz für die Absicherung von autonomen Bot-Systemen dar. In einer Zeit, in der AI-gesteuerte Automatisierung kritische Geschäftsprozesse steuert, ist ein robustes Security Framework überlebenswichtig.
             </p>
-            <div className="grid md:grid-cols-2 gap-4">
-              <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
-                <h3 className="font-semibold text-blue-900 mb-2">Zero Trust Architecture</h3>
-                <p className="text-blue-800 text-sm">Jede Anfrage muss verifiziert werden</p>
-              </div>
-              <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
-                <h3 className="font-semibold text-blue-900 mb-2">Defense in Depth</h3>
-                <p className="text-blue-800 text-sm">Mehrschichtige Sicherheitskontrollen</p>
-              </div>
-              <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
-                <h3 className="font-semibold text-blue-900 mb-2">Secure by Design</h3>
-                <p className="text-blue-800 text-sm">Security von Anfang an integriert</p>
-              </div>
-              <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
-                <h3 className="font-semibold text-blue-900 mb-2">Continuous Monitoring</h3>
-                <p className="text-blue-800 text-sm">Permanente Überwachung und Anpassung</p>
-              </div>
+            
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h3 className="font-semibold mb-2">Kernprinzipien:</h3>
+              <ul className="list-disc list-inside space-y-1">
+                <li><strong>Zero Trust Architecture</strong> - Jede Anfrage muss verifiziert werden</li>
+                <li><strong>Defense in Depth</strong> - Mehrschichtige Sicherheitskontrollen</li>
+                <li><strong>Secure by Design</strong> - Security von Anfang an integriert</li>
+                <li><strong>Continuous Monitoring</strong> - Permanente Überwachung und Anpassung</li>
+              </ul>
             </div>
           </section>
-
-          <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">🏗️ Framework-Architektur</h2>
-
-            <h3 className="text-xl font-semibold text-slate-800 mb-4">Schicht 1: Perimeter Security</h3>
-            <div className="bg-slate-900 rounded-xl p-6 mb-6">
-              <h4 className="text-white font-semibold mb-4">Network Security Konfiguration</h4>
-              <pre className="font-mono text-sm text-green-400 overflow-x-auto">
-{`# Beispiel: Network Security Konfiguration
-network_security:
+          
+          <section className="mb-12">
+            <h2 className="text-2xl font-semibold mb-4">🏗️ Framework-Architektur</h2>
+            
+            <div className="mb-8">
+              <h3 className="text-xl font-semibold mb-3">Schicht 1: Perimeter Security</h3>
+              
+              <div className="mb-6">
+                <h4 className="font-semibold mb-2">Network Level Protection</h4>
+                <div className="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm">
+                  <pre>{`network_security:
   firewall_rules:
     - allow: "10.0.0.0/8"
       ports: [443, 8080]
@@ -135,14 +112,14 @@ network_security:
   ddos_protection:
     rate_limit: "1000 req/min"
     burst_limit: "5000 req"
-    blacklist_duration: "3600s"`}
-              </pre>
-            </div>
-
-            <div className="bg-slate-900 rounded-xl p-6 mb-6">
-              <h4 className="text-white font-semibold mb-4">API Gateway Middleware</h4>
-              <pre className="font-mono text-sm text-green-400 overflow-x-auto">
-{`interface APIGatewayConfig {
+    blacklist_duration: "3600s"`}</pre>
+                </div>
+              </div>
+              
+              <div className="mb-6">
+                <h4 className="font-semibold mb-2">API Gateway Security</h4>
+                <div className="bg-gray-900 text-blue-400 p-4 rounded-lg font-mono text-sm">
+                  <pre>{`interface APIGatewayConfig {
   rateLimiting: {
     requests: number;
     window: string;
@@ -156,23 +133,111 @@ network_security:
     schema: object;
     sanitization: boolean;
   };
-}`}
-              </pre>
+}`}</pre>
+                </div>
+              </div>
             </div>
-
-            <h3 className="text-xl font-semibold text-slate-800 mb-4">Schicht 2: Application Security</h3>
-            <p className="text-slate-700 mb-4">Input Validation, Sanitization und Rate Limiting als zentrale Schutzmechanismen.</p>
+            
+            <div className="mb-8">
+              <h3 className="text-xl font-semibold mb-3">Schicht 2: Application Security</h3>
+              
+              <div className="mb-6">
+                <h4 className="font-semibold mb-2">Input Validation & Sanitization</h4>
+                <div className="bg-gray-900 text-yellow-400 p-4 rounded-lg font-mono text-sm">
+                  <pre>{`// Input Sanitization Middleware
+const sanitizeInput = (input) => {
+  return {
+    data: DOMPurify.sanitize(input),
+    metadata: {
+      length: input.length,
+      type: typeof input,
+      timestamp: Date.now()
+    }
+  };
+};`}</pre>
+                </div>
+              </div>
+              
+              <div className="mb-6">
+                <h4 className="font-semibold mb-2">Session Management</h4>
+                <div className="bg-gray-900 text-purple-400 p-4 rounded-lg font-mono text-sm">
+                  <pre>{`// Rate Limiting Implementation
+const rateLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+  message: 'Too many requests from this IP'
+});`}</pre>
+                </div>
+              </div>
+            </div>
+            
+            <div className="mb-8">
+              <h3 className="text-xl font-semibold mb-3">Schicht 3: Data Security</h3>
+              
+              <div className="mb-6">
+                <h4 className="font-semibold mb-2">Encryption at Rest</h4>
+                <div className="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm">
+                  <pre>{`database_security:
+  encryption:
+    algorithm: "AES-256-GCM"
+    key_rotation: "90d"
+    backup_encryption: true
+  access_control:
+    principle_of_least_privilege: true
+    role_based_access: true
+    audit_logging: true`}</pre>
+                </div>
+              </div>
+              
+              <div className="mb-6">
+                <h4 className="font-semibold mb-2">Data in Transit Protection</h4>
+                <div className="bg-gray-900 text-blue-400 p-4 rounded-lg font-mono text-sm">
+                  <pre>{`// TLS Configuration Best Practices
+const tlsConfig = {
+  minVersion: 'TLSv1.2',
+  ciphers: [
+    'TLS_AES_256_GCM_SHA384',
+    'TLS_CHACHA20_POLY1305_SHA256',
+    'TLS_AES_128_GCM_SHA256'
+  ],
+  hsts: {
+    maxAge: 31536000,
+    includeSubDomains: true,
+    preload: true
+  }
+};`}</pre>
+                </div>
+              </div>
+            </div>
           </section>
-
-          <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">🔐 Authentication &amp; Authorization</h2>
-            <p className="text-slate-700 text-lg mb-6">
-              Multi-Factor Authentication (MFA) und Role-Based Access Control (RBAC) bilden das Rückgrat der Zugriffskontrolle.
-            </p>
-            <div className="bg-slate-900 rounded-xl p-6 mb-6">
-              <h4 className="text-white font-semibold mb-4">RBAC Configuration</h4>
-              <pre className="font-mono text-sm text-green-400 overflow-x-auto">
-{`roles:
+          
+          <section className="mb-12">
+            <h2 className="text-2xl font-semibold mb-4">🔐 Authentication & Authorization</h2>
+            
+            <div className="mb-8">
+              <h3 className="text-xl font-semibold mb-3">Multi-Factor Authentication (MFA)</h3>
+              <div className="bg-gray-900 text-purple-400 p-4 rounded-lg font-mono text-sm">
+                <pre>{`// MFA Implementation
+interface MFAConfig {
+  enabled: boolean;
+  methods: ('TOTP' | 'SMS' | 'Email' | 'Hardware-Key')[];
+  backup_codes: {
+    count: number;
+    expiration: string;
+  };
+  session_management: {
+    max_concurrent: number;
+    timeout: string;
+  };
+}`}</pre>
+              </div>
+            </div>
+            
+            <div className="mb-8">
+              <h3 className="text-xl font-semibold mb-3">Role-Based Access Control (RBAC)</h3>
+              <div className="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm">
+                <pre>{`// RBAC Configuration
+roles:
   admin:
     permissions:
       - "user:*"
@@ -186,103 +251,226 @@ network_security:
   viewer:
     permissions:
       - "bot:read"
-      - "monitoring:read"`}
-              </pre>
+      - "monitoring:read"`}</pre>
+              </div>
             </div>
           </section>
-
-          <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">🛡️ Threat Detection &amp; Response</h2>
-            <p className="text-slate-700 text-lg mb-6">
-              Automatisierte Threat Detection mit SQL-Injection-, XSS-, CSRF- und Anomalie-Erkennung. Incident Response mit automatisierten Playbooks.
-            </p>
-            <div className="bg-slate-900 rounded-xl p-6 mb-6">
-              <h4 className="text-white font-semibold mb-4">Incident Response Playbook</h4>
-              <pre className="font-mono text-sm text-green-400 overflow-x-auto">
-{`incident_response:
-  automated_actions:
-    high_risk_threat:
-      - block_ip: true
-      - invalidate_sessions: true
-      - notify_admin: true
-    medium_risk_threat:
-      - increase_monitoring: true
-      - require_mfa: true
-    low_risk_threat:
-      - log_event: true
-      - update_risk_score: true`}
-              </pre>
+          
+          <section className="mb-12">
+            <h2 className="text-2xl font-semibold mb-4">📊 Monitoring & Logging</h2>
+            
+            <div className="mb-8">
+              <h3 className="text-xl font-semibold mb-3">Security Event Monitoring</h3>
+              <div className="bg-gray-900 text-yellow-400 p-4 rounded-lg font-mono text-sm">
+                <pre>{`// Security Event Monitoring
+interface SecurityEvent {
+  id: string;
+  timestamp: Date;
+  type: 'AUTHENTICATION' | 'AUTHORIZATION' | 'DATA_ACCESS' | 'SYSTEM';
+  severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
+  source: {
+    ip: string;
+    userAgent: string;
+    userId?: string;
+  };
+  details: {
+    action: string;
+    resource: string;
+    result: 'SUCCESS' | 'FAILURE';
+  };
+}`}</pre>
+              </div>
             </div>
           </section>
-
-          <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">📊 Monitoring &amp; Logging</h2>
-            <p className="text-slate-700 text-lg mb-6">
-              Security Event Monitoring, Audit Logging und Real-time Dashboards für vollständige Transparenz.
-            </p>
+          
+          <section className="mb-12">
+            <h2 className="text-2xl font-semibold mb-4">🛡️ Threat Detection & Response</h2>
+            
+            <div className="mb-8">
+              <h3 className="text-xl font-semibold mb-3">Automated Threat Detection</h3>
+              <div className="bg-gray-900 text-red-400 p-4 rounded-lg font-mono text-sm">
+                <pre>{`// Threat Detection Engine
+class ThreatDetectionEngine {
+  private patterns: ThreatPattern[] = [];
+  
+  async analyzeRequest(request: IncomingRequest): Promise<ThreatAssessment> {
+    const threats = await Promise.all([
+      this.detectSQLInjection(request),
+      this.detectXSS(request),
+      this.detectCSRF(request),
+      this.detectRateLimitAbuse(request),
+      this.detectAnomalousBehavior(request)
+    ]);
+    
+    return {
+      riskScore: this.calculateRiskScore(threats),
+      detectedThreats: threats.filter(t => t.confidence > 0.8),
+      recommendations: this.generateRecommendations(threats)
+    };
+  }
+}`}</pre>
+              </div>
+            </div>
           </section>
-
-          <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">🔧 Implementation Guide</h2>
-            <div className="bg-slate-900 rounded-xl p-6 mb-6">
-              <h4 className="text-white font-semibold mb-4">Step 1: Foundation Setup</h4>
-              <pre className="font-mono text-sm text-green-400 overflow-x-auto">
-{`# Security Dependencies Installation
+          
+          <section className="mb-12">
+            <h2 className="text-2xl font-semibold mb-4">🔧 Implementation Guide</h2>
+            
+            <div className="mb-8">
+              <h3 className="text-xl font-semibold mb-3">Step 1: Foundation Setup</h3>
+              <div className="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm">
+                <pre>{`# 1. Security Dependencies Installation
 npm install helmet cors express-rate-limit bcryptjs jsonwebtoken
 npm install @types/bcryptjs @types/jsonwebtoken --save-dev
 
-# Environment Configuration
-cp .env.example .env.local`}
-              </pre>
+# 2. Environment Configuration
+cp .env.example .env.local
+# Configure security variables
+SECURITY_KEY=your-256-bit-secret-key
+JWT_SECRET=your-jwt-secret
+MFA_SECRET=your-mfa-secret`}</pre>
+              </div>
+            </div>
+            
+            <div className="mb-8">
+              <h3 className="text-xl font-semibold mb-3">Step 2: Core Security Middleware</h3>
+              <div className="bg-gray-900 text-blue-400 p-4 rounded-lg font-mono text-sm">
+                <pre>{`// security-middleware.ts
+import helmet from 'helmet';
+import cors from 'cors';
+import rateLimit from 'express-rate-limit';
+
+export const securityMiddleware = [
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", "'unsafe-inline'"],
+        styleSrc: ["'self'", "'unsafe-inline'"],
+        imgSrc: ["'self'", "data:", "https:"],
+      },
+    },
+    hsts: {
+      maxAge: 31536000,
+      includeSubDomains: true,
+      preload: true
+    }
+  }),
+  
+  cors({
+    origin: process.env.ALLOWED_ORIGINS?.split(',') || ['http://localhost:3000'],
+    credentials: true
+  }),
+  
+  rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // limit each IP to 100 requests per windowMs
+    message: 'Too many requests from this IP',
+    standardHeaders: true,
+    legacyHeaders: false
+  })
+];`}</pre>
+              </div>
+            </div>
+            
+            <div className="mb-8">
+              <h3 className="text-xl font-semibold mb-3">Step 3: Authentication Service</h3>
+              <div className="bg-gray-900 text-purple-400 p-4 rounded-lg font-mono text-sm">
+                <pre>{`// auth-service.ts
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+
+export class AuthService {
+  async hashPassword(password: string): Promise<string> {
+    const saltRounds = 12;
+    return await bcrypt.hash(password, saltRounds);
+  }
+  
+  async verifyPassword(password: string, hash: string): Promise<boolean> {
+    return await bcrypt.compare(password, hash);
+  }
+  
+  generateToken(payload: any): string {
+    return jwt.sign(payload, process.env.JWT_SECRET!, {
+      expiresIn: '1h',
+      issuer: 'clawguru-moltbot',
+      audience: 'moltbot-users'
+    });
+  }
+  
+  verifyToken(token: string): any {
+    return jwt.verify(token, process.env.JWT_SECRET!);
+  }
+}`}</pre>
+              </div>
             </div>
           </section>
-
-          <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">📈 Performance &amp; Scalability</h2>
-            <p className="text-slate-700 text-lg mb-6">
-              Security-Maßnahmen optimiert für Performance: Connection Pooling, Caching, Load Balancing und horizontale Skalierung.
-            </p>
+          
+          <section className="mb-12">
+            <h2 className="text-2xl font-semibold mb-4">🔗 Related Resources</h2>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="bg-gray-50 p-6 rounded-lg">
+                <h3 className="text-lg font-semibold mb-3">Internal Links</h3>
+                <ul className="space-y-2">
+                  <li><a href="/securitycheck" className="text-blue-600 hover:text-blue-800">Security Check Tool</a> - Live Security Validation</li>
+                  <li><a href="/runbooks" className="text-blue-600 hover:text-blue-800">AI Runbooks</a> - Security Playbooks und Procedures</li>
+                  <li><a href="/openclaw" className="text-blue-600 hover:text-blue-800">OpenClaw Framework</a> - Open Source Security Framework</li>
+                  <li><a href="/roast-my-moltbot" className="text-blue-600 hover:text-blue-800">Roast My Moltbot</a> - Security Testing Tool</li>
+                  <li><a href="/neuro" className="text-blue-600 hover:text-blue-800">Neuro AI Engine</a> - AI-gestützte Threat Detection</li>
+                  <li><a href="/oracle" className="text-blue-600 hover:text-blue-800">Oracle Intelligence</a> - Security Intelligence Platform</li>
+                </ul>
+              </div>
+              
+              <div className="bg-gray-50 p-6 rounded-lg">
+                <h3 className="text-lg font-semibold mb-3">External Resources</h3>
+                <ul className="space-y-2">
+                  <li><a href="https://owasp.org/www-project-top-ten/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800">OWASP Top 10</a> - Web Application Security Risks</li>
+                  <li><a href="https://www.nist.gov/cyberframework" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800">NIST Cybersecurity Framework</a> - Security Standards</li>
+                  <li><a href="https://www.cisecurity.org/controls/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800">CIS Controls</a> - Security Best Practices</li>
+                </ul>
+              </div>
+            </div>
           </section>
-
-          <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">📋 Security Checklist</h2>
-            <div className="bg-slate-50 border border-slate-200 rounded-xl p-6">
-              <ul className="space-y-2 text-slate-700">
-                <li>✅ Zero Trust Architecture implementiert</li>
-                <li>✅ Multi-Factor Authentication aktiv</li>
-                <li>✅ RBAC konfiguriert</li>
-                <li>✅ Threat Detection &amp; Response aktiv</li>
-                <li>✅ Security Event Monitoring</li>
-                <li>✅ Incident Response Playbooks</li>
-                <li>✅ Regular Security Audits</li>
-                <li>✅ Compliance Monitoring</li>
+          
+          <section className="mb-12">
+            <h2 className="text-2xl font-semibold mb-4">🎯 Conclusion</h2>
+            <p>
+              Das <strong>Moltbot Security Framework</strong> bietet einen umfassenden, mehrschichtigen Ansatz für die Absicherung autonomer Bot-Systeme. Durch die Implementierung der beschriebenen Architektur, Sicherheitskontrollen und Monitoring-Mechanismen können Organisationen sicherstellen, dass ihre Moltbot-Systeme robust, compliant und zukunftssicher sind.
+            </p>
+            
+            <div className="bg-gray-50 p-6 rounded-lg">
+              <h3 className="font-semibold mb-2">Key Takeaways:</h3>
+              <ul className="list-disc list-inside space-y-1">
+                <li><strong>Security by Design</strong> - Von Anfang an integrieren</li>
+                <li><strong>Zero Trust</strong> - Jede Anfrage verifizieren</li>
+                <li><strong>Continuous Monitoring</strong> - Permanente Überwachung</li>
+                <li><strong>Automated Response</strong> - Schnelle Reaktion auf Threats</li>
+                <li><strong>Regular Updates</strong> - Kontinuierliche Verbesserung</li>
               </ul>
             </div>
           </section>
-
-          <section className="bg-gradient-to-r from-blue-700 to-indigo-600 rounded-2xl p-8 text-center text-white">
-            <h2 className="text-2xl font-bold mb-4">Moltbot Security Assessment</h2>
-            <p className="mb-6">Validieren Sie Ihr Moltbot Security Framework mit unserem automatisierten Check.</p>
-            <a href={coreLinks.check} className="inline-block px-6 py-3 bg-white text-blue-700 rounded-lg font-semibold">
-              Security Assessment starten
-            </a>
-            <div className="mt-6 flex flex-wrap justify-center gap-3 text-sm">
-              <a href={`${prefix}/moltbot/hardening-guide-2024`} className="rounded-lg border border-white/30 px-3 py-2 text-white hover:bg-white/10">Hardening Guide</a>
-              <a href={`${prefix}/moltbot/threat-detection-setup`} className="rounded-lg border border-white/30 px-3 py-2 text-white hover:bg-white/10">Threat Detection</a>
-              <a href={`${prefix}/runbooks/security`} className="rounded-lg border border-white/30 px-3 py-2 text-white hover:bg-white/10">Security Runbooks</a>
-              <a href={coreLinks.methodology} className="rounded-lg border border-white/30 px-3 py-2 text-white hover:bg-white/10">Methodology</a>
-            </div>
-          </section>
+          
+          <div className="bg-blue-50 border-l-4 border-blue-400 p-6 mb-8">
+            <h3 className="font-semibold mb-2">🛡️ Ready to implement?</h3>
+            <p>Starte mit unserem <a href="/securitycheck" className="text-blue-600 hover:text-blue-800 font-semibold">Security Check Tool</a> für eine umfassende Analyse deines aktuellen Security-Status.</p>
+          </div>
+          
+          <div className="bg-green-50 border-l-4 border-green-400 p-6 mb-8">
+            <h3 className="font-semibold mb-2">📚 Need more guidance?</h3>
+            <p>Entdecke unsere <a href="/runbooks" className="text-blue-600 hover:text-blue-800 font-semibold">AI Runbooks</a> für detaillierte Implementierungsanleitungen.</p>
+          </div>
+          
+          <div className="bg-purple-50 border-l-4 border-purple-400 p-6">
+            <h3 className="font-semibold mb-2">🤝 Join the community?</h3>
+            <p>Werde Teil der <a href="/community" className="text-blue-600 hover:text-blue-800 font-semibold">ClawBot Community</a> und tausche dich mit anderen Security-Experten aus.</p>
+          </div>
+          
+          <div className="text-center text-sm text-gray-500 mt-12">
+            <p>Dieser Guide wird regelmäßig aktualisiert, um die neuesten Security-Best Practices und Threat-Landscape-Veränderungen zu berücksichtigen. Letzte Aktualisierung: April 2024.</p>
+          </div>
         </div>
       </div>
-
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "TechArticle",
-        headline: "Moltbot Security Framework: Kompletter Überblick 2024",
-        author: { "@type": "Organization", name: "ClawGuru", url: BASE_URL },
-        datePublished: "2024-04-06",
-      })}} />
-    </main>
+    </div>
   );
 }

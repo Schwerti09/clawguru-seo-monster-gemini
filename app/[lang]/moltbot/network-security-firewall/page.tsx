@@ -1,263 +1,161 @@
-import type { Metadata } from "next";
-import { SUPPORTED_LOCALES, type Locale, localeAlternates } from "@/lib/i18n";
-import { BASE_URL } from "@/lib/config";
-import { getCoreSecurityLinks } from "@/lib/core-security-links";
+import { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 
-export const dynamic = "force-static";
-export const revalidate = 86400;
+interface PageProps { params: { lang: string }; }
+const LANGS = ['de','en','es','fr','pt','it','ru','zh','ja','ko','ar','hi','tr','pl','nl'];
 
-export async function generateStaticParams() {
-  return SUPPORTED_LOCALES.map((lang) => ({ lang }));
-}
-
-export async function generateMetadata({
-  params,
-}: {
-  params: { lang: string };
-}): Promise<Metadata> {
-  const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale)
-    ? params.lang
-    : "de") as Locale;
-
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { lang } = params;
   return {
-    title: "Moltbot Network Security: Firewall Konfiguration",
-    description:
-      "Network Security Setup und Firewall Rules für Moltbot. Complete Firewall Configuration mit iptables, UFW und Cloud Security Best Practices.",
-    keywords: [
-      "moltbot network security",
-      "firewall configuration",
-      "iptables",
-      "ufw",
-      "cloud security",
-      "network hardening",
-    ],
-    alternates: {
-      ...localeAlternates(`/${locale}/moltbot/network-security-firewall`),
-    },
-    openGraph: {
-      title: "Moltbot Network Security: Firewall Konfiguration",
-      description:
-        "Network Security Setup und Firewall Rules für Moltbot mit iptables, UFW und Cloud Security.",
-      type: "article",
-      url: `${BASE_URL}/${locale}/moltbot/network-security-firewall`,
-    },
+    title: 'Moltbot Network Security: Firewall & DDoS Protection 2024',
+    description: 'Network Security für Moltbot: Firewall-Konfiguration, DDoS-Schutz, IP-Allowlisting, WAF-Setup und Netzwerk-Segmentierung. Konkrete iptables, nginx und Cloudflare Konfigurationen.',
+    keywords: ['moltbot network security','firewall configuration','ddos protection','waf setup','ip allowlisting','network segmentation'],
+    authors: [{ name: 'ClawGuru Security Team' }],
+    openGraph: { title: 'Moltbot Network Security: Firewall & DDoS Protection 2024', description: 'Network Security für Moltbot mit Firewall, DDoS-Schutz und WAF.', type: 'article', url: `https://clawguru.org/${lang}/moltbot/network-security-firewall`, images: ['/og-moltbot-network.jpg'] },
+    alternates: { canonical: `https://clawguru.org/${lang}/moltbot/network-security-firewall`, languages: { de: 'https://clawguru.org/de/moltbot/network-security-firewall', en: 'https://clawguru.org/en/moltbot/network-security-firewall', es: 'https://clawguru.org/es/moltbot/network-security-firewall', fr: 'https://clawguru.org/fr/moltbot/network-security-firewall', pt: 'https://clawguru.org/pt/moltbot/network-security-firewall', it: 'https://clawguru.org/it/moltbot/network-security-firewall', ru: 'https://clawguru.org/ru/moltbot/network-security-firewall', zh: 'https://clawguru.org/zh/moltbot/network-security-firewall', ja: 'https://clawguru.org/ja/moltbot/network-security-firewall', ko: 'https://clawguru.org/ko/moltbot/network-security-firewall', ar: 'https://clawguru.org/ar/moltbot/network-security-firewall', hi: 'https://clawguru.org/hi/moltbot/network-security-firewall', tr: 'https://clawguru.org/tr/moltbot/network-security-firewall', pl: 'https://clawguru.org/pl/moltbot/network-security-firewall', nl: 'https://clawguru.org/nl/moltbot/network-security-firewall' } },
+    robots: 'index, follow',
   };
 }
 
-export default async function MoltbotNetworkSecurityPage({
-  params,
-}: {
-  params: { lang: string };
-}) {
-  const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale)
-    ? params.lang
-    : "de") as Locale;
-  const prefix = `/${locale}`;
-  const coreLinks = getCoreSecurityLinks(locale);
+export default function MoltbotNetworkSecurityPage({ params }: PageProps) {
+  const { lang } = params;
+  if (!LANGS.includes(lang)) notFound();
 
   return (
-    <main className="min-h-screen bg-white">
-      <section className="relative overflow-hidden bg-gradient-to-br from-blue-700 via-indigo-700 to-purple-800 py-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 text-white text-sm mb-4">
-              Network Security 2024
-            </div>
-            <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">
-              Network Security &amp; Firewall
-            </h1>
-            <p className="text-2xl text-blue-200 mb-4">
-              Moltbot Firewall Konfiguration
-            </p>
-            <p className="text-xl text-white/80 mb-8">
-              Defense in Depth, Principle of Least Privilege, Zero Trust Network, Continuous Monitoring – vollständige Netzwerk-Absicherung.
-            </p>
-            <div className="flex flex-wrap gap-3">
-              <span className="px-4 py-2 bg-white/20 text-white rounded-lg text-sm">UFW</span>
-              <span className="px-4 py-2 bg-white/20 text-white rounded-lg text-sm">iptables</span>
-              <span className="px-4 py-2 bg-white/20 text-white rounded-lg text-sm">Cloud Security</span>
-              <span className="px-4 py-2 bg-white/20 text-white rounded-lg text-sm">IDS/IPS</span>
-            </div>
-          </div>
+    <div className="container mx-auto px-4 py-8">
+      <div className="max-w-4xl mx-auto">
+        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-8 text-sm">
+          <strong>"Not a Pentest" Trust-Anker</strong>: Dieser Guide dient ausschließlich zur Absicherung von Netzwerk-Infrastrukturen. Keine Angriffswerkzeuge, keine illegalen Aktivitäten.
         </div>
-      </section>
+        <h1 className="text-4xl font-bold mb-4">Moltbot Network Security: Firewall &amp; DDoS Protection</h1>
+        <p className="text-lg text-gray-600 mb-8">Netzwerk-Absicherung für Moltbot — von iptables-Regeln über nginx WAF bis hin zu Cloudflare DDoS-Schutz und IP-Allowlisting.</p>
 
-      <div className="container mx-auto px-4 py-12">
-        <div className="max-w-4xl mx-auto">
+        <section className="mb-10">
+          <h2 className="text-2xl font-semibold mb-4">🔥 iptables Firewall Rules</h2>
+          <div className="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm mb-4">
+            <pre>{`#!/bin/bash
+# moltbot-firewall.sh — Produktions-Firewall für Moltbot
 
-          <div className="bg-amber-50 border border-amber-200 rounded-xl p-6 mb-12">
-            <p className="text-amber-900 font-semibold">
-              🛡️ &quot;Not a Pentest&quot; Trust-Anker: Dieser Guide dient ausschließlich zur Konfiguration von Network Security und Firewalls. Keine Angriffswerkzeuge, keine illegalen Aktivitäten.
-            </p>
-          </div>
-
-          <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">🎯 Executive Summary</h2>
-            <p className="text-slate-700 text-lg mb-6">
-              Die <strong>Moltbot Network Security</strong> stellt einen umfassenden Ansatz für die Absicherung von Netzwerk-Infrastrukturen dar. Robuste Firewall-Konfiguration ist überlebenswichtig gegen zunehmend sophistizierte Netzwerk-Angriffe.
-            </p>
-          </section>
-
-          <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">🏗️ Network Security Architecture</h2>
-            <p className="text-slate-700 text-lg mb-6">
-              Mehrschichtige Netzwerk-Sicherheit mit Perimeter Firewall, Application Firewall (WAF), Intrusion Detection/Prevention und Network Monitoring.
-            </p>
-          </section>
-
-          <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">🔥 UFW Firewall Configuration</h2>
-            <div className="bg-slate-900 rounded-xl p-6 mb-6">
-              <h4 className="text-white font-semibold mb-4">Basic UFW Setup</h4>
-              <pre className="font-mono text-sm text-green-400 overflow-x-auto">
-{`#!/bin/bash
-# Moltbot UFW Firewall Configuration
-
-# Reset UFW
-ufw --force reset
-
-# Default policies
-ufw default deny incoming
-ufw default allow outgoing
-
-# Allow SSH (rate-limited)
-ufw limit 22/tcp comment 'Rate-limited SSH'
-
-# Allow HTTPS
-ufw allow 443/tcp comment 'HTTPS'
-
-# Allow Moltbot API
-ufw allow 8080/tcp comment 'Moltbot API'
-
-# Enable UFW
-ufw --force enable
-ufw status verbose`}
-              </pre>
-            </div>
-          </section>
-
-          <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">🛡️ iptables Advanced Configuration</h2>
-            <div className="bg-slate-900 rounded-xl p-6 mb-6">
-              <h4 className="text-white font-semibold mb-4">iptables Security Rules</h4>
-              <pre className="font-mono text-sm text-green-400 overflow-x-auto">
-{`#!/bin/bash
-# Flush existing rules
-iptables -F
-iptables -X
-
-# Default policies
+# Standard-Policy: Alles verweigern
 iptables -P INPUT DROP
 iptables -P FORWARD DROP
 iptables -P OUTPUT ACCEPT
 
-# Allow loopback
+# Bestehende Verbindungen erlauben
+iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+
+# Loopback erlauben
 iptables -A INPUT -i lo -j ACCEPT
 
-# Allow established connections
-iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+# SSH (nur von Management-Netz)
+iptables -A INPUT -p tcp --dport 22 -s 10.0.1.0/24 -j ACCEPT
 
-# SYN flood protection
-iptables -A INPUT -p tcp --syn -m limit --limit 1/s --limit-burst 3 -j ACCEPT
+# HTTP/HTTPS
+iptables -A INPUT -p tcp --dport 80 -j ACCEPT
+iptables -A INPUT -p tcp --dport 443 -j ACCEPT
 
-# Port scanning protection
-iptables -A INPUT -p tcp --tcp-flags ALL NONE -j DROP
-iptables -A INPUT -p tcp --tcp-flags ALL ALL -j DROP`}
-              </pre>
-            </div>
-          </section>
+# Moltbot API (nur intern)
+iptables -A INPUT -p tcp --dport 3000 -s 10.0.0.0/8 -j ACCEPT
 
-          <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">☁️ Cloud Security Configuration</h2>
-            <p className="text-slate-700 text-lg mb-6">
-              AWS Security Groups, Azure NSGs, GCP Firewall Rules – Cloud-native Firewall-Konfiguration für Moltbot Deployments in allen großen Cloud-Providern.
-            </p>
-            <div className="bg-slate-900 rounded-xl p-6 mb-6">
-              <h4 className="text-white font-semibold mb-4">AWS Security Group</h4>
-              <pre className="font-mono text-sm text-green-400 overflow-x-auto">
-{`# Terraform: AWS Security Group
-resource "aws_security_group" "moltbot" {
-  name        = "moltbot-sg"
-  description = "Moltbot Security Group"
+# DDoS Protection: Rate Limiting
+iptables -A INPUT -p tcp --dport 443 -m limit --limit 100/min --limit-burst 200 -j ACCEPT
+iptables -A INPUT -p tcp --dport 443 -j DROP
 
-  ingress {
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+# Logging verdächtiger Pakete
+iptables -A INPUT -j LOG --log-prefix "MOLTBOT-DROP: " --log-level 7`}</pre>
+          </div>
+        </section>
+
+        <section className="mb-10">
+          <h2 className="text-2xl font-semibold mb-4">🌐 nginx WAF Konfiguration</h2>
+          <div className="bg-gray-900 text-blue-400 p-4 rounded-lg font-mono text-sm mb-4">
+            <pre>{`# /etc/nginx/conf.d/moltbot-security.conf
+server {
+    listen 443 ssl http2;
+    server_name clawguru.org;
+
+    # TLS Hardening
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384;
+    ssl_prefer_server_ciphers off;
+    ssl_session_cache shared:SSL:10m;
+    ssl_session_timeout 1d;
+    add_header Strict-Transport-Security "max-age=63072000" always;
+
+    # Rate Limiting
+    limit_req_zone $binary_remote_addr zone=moltbot_api:10m rate=10r/s;
+    limit_req zone=moltbot_api burst=20 nodelay;
+
+    # Block common attacks
+    location ~ \.(git|env|htpasswd|htaccess)$ {
+        deny all;
+    }
+
+    # SQL Injection / XSS basic WAF
+    if ($query_string ~* "(union|select|insert|update|delete|drop|<script)") {
+        return 403;
+    }
+
+    location /api/ {
+        proxy_pass http://moltbot:3000;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+}`}</pre>
+          </div>
+        </section>
+
+        <section className="mb-10">
+          <h2 className="text-2xl font-semibold mb-4">☁️ Cloudflare DDoS Rules</h2>
+          <div className="bg-gray-900 text-yellow-400 p-4 rounded-lg font-mono text-sm mb-4">
+            <pre>{`# Cloudflare Firewall Rules (via API)
+# Block bekannte Bad Bots
+{
+  "expression": "(cf.threat_score gt 50) or (not cf.client.bot)",
+  "action": "challenge"
+}
+
+# Rate Limit für Moltbot API
+{
+  "expression": "http.request.uri.path matches \"^/api/\"",
+  "action": "block",
+  "ratelimit": {
+    "characteristics": ["ip.src"],
+    "period": 60,
+    "requests_per_period": 100
   }
+}
 
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-}`}
-              </pre>
-            </div>
-          </section>
+# Geo-Blocking (optional)
+{
+  "expression": "ip.geoip.country in {\"XX\" \"YY\"}",
+  "action": "block"
+}`}</pre>
+          </div>
+        </section>
 
-          <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">🔍 Intrusion Detection System</h2>
-            <p className="text-slate-700 text-lg mb-6">
-              Snort/Suricata IDS/IPS Setup, Rule Management, Alert-Konfiguration und automatisierte Response für Echtzeit-Netzwerk-Überwachung.
-            </p>
-          </section>
-
-          <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">📊 Network Monitoring</h2>
-            <p className="text-slate-700 text-lg mb-6">
-              Prometheus + Grafana Network Dashboards, NetFlow Analysis, Bandwidth Monitoring und Traffic Anomaly Detection.
-            </p>
-          </section>
-
-          <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">🔧 Automated Security Scripts</h2>
-            <p className="text-slate-700 text-lg mb-6">
-              Automatisierte Firewall-Updates, Security Scans, Compliance Checks und Incident Response Scripts für den operativen Betrieb.
-            </p>
-          </section>
-
-          <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">📋 Implementation Guide</h2>
-            <div className="bg-slate-50 border border-slate-200 rounded-xl p-6">
-              <ul className="space-y-2 text-slate-700">
-                <li>✅ UFW/iptables Firewall konfiguriert</li>
-                <li>✅ Default-Deny Policy aktiv</li>
-                <li>✅ SYN Flood Protection</li>
-                <li>✅ Port Scanning Protection</li>
-                <li>✅ Cloud Security Groups konfiguriert</li>
-                <li>✅ IDS/IPS aktiv (Snort/Suricata)</li>
-                <li>✅ Network Monitoring (Prometheus/Grafana)</li>
-                <li>✅ Automated Security Scripts</li>
-              </ul>
-            </div>
-          </section>
-
-          <section className="bg-gradient-to-r from-blue-700 to-indigo-600 rounded-2xl p-8 text-center text-white">
-            <h2 className="text-2xl font-bold mb-4">Network Security Assessment</h2>
-            <p className="mb-6">Validieren Sie Ihre Firewall-Konfiguration mit unserem automatisierten Check.</p>
-            <a href={coreLinks.check} className="inline-block px-6 py-3 bg-white text-blue-700 rounded-lg font-semibold">
-              Security Assessment starten
+        <section className="mb-10">
+          <h2 className="text-2xl font-semibold mb-4">🔗 Weiterführende Ressourcen</h2>
+          <div className="grid grid-cols-2 gap-4">
+            <a href="/securitycheck" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
+              <div className="font-semibold text-blue-600">🛡️ Security Check</div>
+              <div className="text-sm text-gray-600">Netzwerk live scannen</div>
             </a>
-            <div className="mt-6 flex flex-wrap justify-center gap-3 text-sm">
-              <a href={`${prefix}/moltbot/hardening-guide-2024`} className="rounded-lg border border-white/30 px-3 py-2 text-white hover:bg-white/10">Hardening Guide</a>
-              <a href={`${prefix}/moltbot/security-framework`} className="rounded-lg border border-white/30 px-3 py-2 text-white hover:bg-white/10">Security Framework</a>
-              <a href={`${prefix}/runbooks/security`} className="rounded-lg border border-white/30 px-3 py-2 text-white hover:bg-white/10">Security Runbooks</a>
-              <a href={coreLinks.methodology} className="rounded-lg border border-white/30 px-3 py-2 text-white hover:bg-white/10">Methodology</a>
-            </div>
-          </section>
-        </div>
+            <a href="/runbooks" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
+              <div className="font-semibold text-blue-600">📚 Network Runbooks</div>
+              <div className="text-sm text-gray-600">Firewall Playbooks</div>
+            </a>
+            <a href="/neuro" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
+              <div className="font-semibold text-blue-600">🧠 Neuro AI</div>
+              <div className="text-sm text-gray-600">Anomalie-Erkennung</div>
+            </a>
+            <a href="/solutions" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
+              <div className="font-semibold text-blue-600">🏢 Enterprise</div>
+              <div className="text-sm text-gray-600">Managed Firewall</div>
+            </a>
+          </div>
+        </section>
       </div>
-
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "TechArticle",
-        headline: "Moltbot Network Security: Firewall Konfiguration",
-        author: { "@type": "Organization", name: "ClawGuru", url: BASE_URL },
-        datePublished: "2024-04-06",
-      })}} />
-    </main>
+    </div>
   );
 }

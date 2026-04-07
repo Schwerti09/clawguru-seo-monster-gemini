@@ -280,10 +280,10 @@ export default function GuidesPage({ dict, locale = "de" }: GuidesPageProps = {}
           in deine Infrastruktur. Von Kubernetes bis Cloud Platforms.
         </p>
         <div className="flex gap-4 justify-center">
-          <Button size="lg" asChild>
+          <Button size="lg">
             <Link href="#featured">Featured Guides</Link>
           </Button>
-          <Button variant="outline" size="lg" asChild>
+          <Button variant="outline" size="lg">
             <Link href="#all">Alle Guides</Link>
           </Button>
         </div>

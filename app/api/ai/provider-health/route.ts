@@ -3,22 +3,32 @@ import { NextRequest, NextResponse } from "next/server"
 export const dynamic = "force-dynamic"
 export const runtime = "nodejs"
 
-async function checkGemini(): Promise<{ provider: string; ok: boolean; status?: number; ratelimited?: boolean; error?: string }> {
-  const apiKey = process.env.GEMINI_API_KEY
+async function checkGemini(): Promise<{ provider: string; ok: boolean; status?: number; ratelimited?: boolean; error?: string; errorBody?: string; model?: string; keyPrefix?: string }> {
+  const apiKey = (process.env.GEMINI_API_KEY || "").trim()
+  // Strip surrounding quotes / accidental "Bearer " prefix
+  let key = apiKey
+  if ((key.startsWith('"') && key.endsWith('"')) || (key.startsWith("'") && key.endsWith("'"))) key = key.slice(1, -1).trim()
+  if (key.toLowerCase().startsWith("bearer ")) key = key.slice(7).trim()
   const model = process.env.GEMINI_MODEL || "gemini-2.5-flash"
   const base = (process.env.GEMINI_BASE_URL || "https://generativelanguage.googleapis.com/v1beta").replace(/\/$/, "")
-  if (!apiKey) return { provider: "gemini", ok: false, error: "missing_api_key" }
+  if (!key) return { provider: "gemini", ok: false, error: "missing_api_key" }
+  const keyPrefix = key.slice(0, 8) + "..."
   try {
-    const url = `${base}/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(apiKey)}`
+    const url = `${base}/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(key)}`
     const res = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ contents: [{ role: "user", parts: [{ text: "Return JSON: {\"ok\":true} (no markdown)" }] }], generationConfig: { temperature: 0, maxOutputTokens: 64 } }),
     })
     const ok = res.ok
-    return { provider: "gemini", ok, status: res.status, ratelimited: res.status === 429 }
+    let errorBody: string | undefined
+    if (!ok) {
+      errorBody = await res.text().catch(() => "(unreadable)")
+      errorBody = errorBody.slice(0, 500)
+    }
+    return { provider: "gemini", ok, status: res.status, ratelimited: res.status === 429, model, keyPrefix, errorBody }
   } catch (e) {
-    return { provider: "gemini", ok: false, error: e instanceof Error ? e.message : String(e) }
+    return { provider: "gemini", ok: false, error: e instanceof Error ? e.message : String(e), model, keyPrefix }
   }
 }
 

@@ -178,6 +178,17 @@ const SEEDED_CITY_SLUGS = new Set([
   "hochiminhcity",
   "kualalumpur",
   "hanoi",
+  // Africa Expansion
+  "cairo",
+  "lagos",
+  "nairobi",
+  "johannesburg",
+  "cape-town",
+  "casablanca",
+  "accra",
+  "addis-ababa",
+  "dar-es-salaam",
+  "kampala",
 ])
 
 export function slugifyCity(input: string): string {

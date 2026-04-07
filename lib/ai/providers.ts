@@ -196,7 +196,7 @@ async function callGemini(prompt: string): Promise<CallResult> {
   if (!apiKey) return { text: null, status: 401 };
   const base = (process.env.GEMINI_BASE_URL || "https://generativelanguage.googleapis.com/v1beta").replace(/\/$/, "");
   // Try preferred model first, then fallback.
-  // gemini-2.0-flash removed: deprecated June 2026, doesn't support thinkingConfig.
+  // gemini-2.0-flash removed: deprecated June 2026.
   const candidates = [
     process.env.GEMINI_MODEL || "gemini-2.5-flash",
     "gemini-2.5-flash-lite",
@@ -213,9 +213,6 @@ async function callGemini(prompt: string): Promise<CallResult> {
           body: JSON.stringify({
             contents: [{ role: "user", parts: [{ text: prompt }] }],
             generationConfig: { temperature: 0.35, maxOutputTokens },
-            // thinkingConfig is a top-level field (NOT inside generationConfig).
-            // Disable thinking for straightforward JSON generation to save tokens.
-            thinkingConfig: { thinkingBudget: 0 },
           }),
         });
         lastStatus = res.status;

@@ -13,7 +13,7 @@ async function checkGemini(): Promise<{ provider: string; ok: boolean; status?: 
     const res = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ contents: [{ role: "user", parts: [{ text: "Return JSON: {\"ok\":true} (no markdown)" }] }], generationConfig: { temperature: 0, maxOutputTokens: 64 }, thinkingConfig: { thinkingBudget: 0 } }),
+      body: JSON.stringify({ contents: [{ role: "user", parts: [{ text: "Return JSON: {\"ok\":true} (no markdown)" }] }], generationConfig: { temperature: 0, maxOutputTokens: 64 } }),
     })
     const ok = res.ok
     return { provider: "gemini", ok, status: res.status, ratelimited: res.status === 429 }

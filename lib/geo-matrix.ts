@@ -146,6 +146,38 @@ const SEEDED_CITY_SLUGS = new Set([
   "novosibirsk",
   "yekaterinburg",
   "kazan",
+  // Japan
+  "tokyo",
+  "osaka",
+  "yokohama",
+  "nagoya",
+  "sapporo",
+  // South Korea
+  "seoul",
+  "busan",
+  "incheon",
+  "daegu",
+  "daejeon",
+  // Brazil
+  "saopaulo",
+  "riodejaneiro",
+  "brasilia",
+  "belohorizonte",
+  "curitiba",
+  // Mexico
+  "mexicocity",
+  "guadalajara",
+  "monterrey",
+  "puebla",
+  "tijuana",
+  // Southeast Asia
+  "bangkok",
+  "singapore",
+  "jakarta",
+  "manila",
+  "hochiminhcity",
+  "kualalumpur",
+  "hanoi",
 ])
 
 export function slugifyCity(input: string): string {

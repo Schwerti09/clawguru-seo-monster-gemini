@@ -4,8 +4,8 @@ import { dbQuery } from '@/lib/db';
 
 // Africa Expansion Cities (Quality >= 85)
 const EXPANSION_CITIES = [
-  // Egypt
-  { slug: 'cairo', name_en: 'Cairo', name_de: 'Kairo', country_code: 'EG', quality: 92, priority: 95 },
+  // Egypt - Skip Cairo (already exists)
+  // { slug: 'cairo', name_en: 'Cairo', name_de: 'Kairo', country_code: 'EG', quality: 92, priority: 95 },
   // Nigeria
   { slug: 'lagos', name_en: 'Lagos', name_de: 'Lagos', country_code: 'NG', quality: 90, priority: 94 },
   // Kenya

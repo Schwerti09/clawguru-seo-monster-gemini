@@ -1,0 +1,97 @@
+import { Metadata } from 'next';
+import { notFound } from 'next/navigation';
+
+interface PageProps { params: { lang: string }; }
+const LANGS = ['de','en','es','fr','pt','it','ru','zh','ja','ko','ar','hi','tr','pl','nl'];
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { lang } = params;
+  return {
+    title: 'OpenClaw Linux Server Hardening: Ubuntu & Debian Guide 2024',
+    description: 'Linux Server Hardening für OpenClaw auf Ubuntu und Debian. SSH-Absicherung, Kernel-Parameter, AppArmor, Auditd und CIS Benchmark Compliance. Automated Hardening Script.',
+    keywords: ['openclaw server hardening','linux hardening ubuntu','debian security','ssh hardening','apparmor setup','cis benchmark linux'],
+    authors: [{ name: 'ClawGuru Security Team' }],
+    openGraph: { title: 'OpenClaw Linux Server Hardening 2024', description: 'Linux Server Hardening für OpenClaw.', type: 'article', url: `https://clawguru.org/${lang}/openclaw/server-hardening-checklist` },
+    alternates: { canonical: `https://clawguru.org/${lang}/openclaw/server-hardening-checklist`, languages: Object.fromEntries(LANGS.map(l => [l, `https://clawguru.org/${l}/openclaw/server-hardening-checklist`])) },
+    robots: 'index, follow',
+  };
+}
+
+const HARDENING_STEPS = [
+  { phase: '1. SSH Hardening', steps: ['Port auf 2222 ändern', 'PasswordAuthentication no', 'PermitRootLogin no', 'AllowUsers deploy', 'MaxAuthTries 3', 'ClientAliveInterval 300'] },
+  { phase: '2. Automatische Updates', steps: ['unattended-upgrades installieren', 'Sicherheitsupdates täglich', 'Auto-Reboot bei Kernel-Updates (Wartungsfenster)', 'Notifications konfigurieren'] },
+  { phase: '3. Kernel Hardening', steps: ['net.ipv4.tcp_syncookies = 1', 'net.ipv4.ip_forward = 0', 'net.ipv6.conf.all.disable_ipv6 = 1 (falls nicht genutzt)', 'kernel.randomize_va_space = 2'] },
+  { phase: '4. Audit & Logging', steps: ['auditd installieren', 'Kritische Dateien überwachen (/etc/passwd, /etc/sudoers)', 'Sudo-Befehle loggen', 'Logs remote an Syslog senden'] },
+];
+
+export default function OpenClawServerHardeningPage({ params }: PageProps) {
+  const { lang } = params;
+  if (!LANGS.includes(lang)) notFound();
+
+  return (
+    <div className="container mx-auto px-4 py-8">
+      <div className="max-w-4xl mx-auto">
+        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-8 text-sm">
+          <strong>"Not a Pentest" Trust-Anker</strong>: Server Hardening sichert eigene Systeme ab. Keine Angriffswerkzeuge.
+        </div>
+        <h1 className="text-4xl font-bold mb-4">OpenClaw Linux Server Hardening</h1>
+        <p className="text-lg text-gray-600 mb-8">Systematische Absicherung des Linux-Hosts für OpenClaw — von SSH-Hardening über Kernel-Parameter bis hin zu AppArmor und CIS Benchmark Compliance.</p>
+
+        {HARDENING_STEPS.map(({ phase, steps }) => (
+          <section key={phase} className="mb-8">
+            <h2 className="text-xl font-semibold mb-3">{phase}</h2>
+            <div className="space-y-2">
+              {steps.map(step => (
+                <div key={step} className="flex items-start gap-3 bg-gray-50 p-3 rounded-lg border border-gray-200">
+                  <input type="checkbox" className="mt-0.5 cursor-pointer" />
+                  <span className="text-sm font-mono">{step}</span>
+                </div>
+              ))}
+            </div>
+          </section>
+        ))}
+
+        <section className="mb-10">
+          <h2 className="text-2xl font-semibold mb-4">⚡ Quick Hardening Script</h2>
+          <div className="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm">
+            <pre>{`#!/bin/bash
+# openclaw-harden.sh — Quick Server Hardening
+
+# SSH Config
+sed -i 's/^#*Port .*/Port 2222/' /etc/ssh/sshd_config
+sed -i 's/^#*PasswordAuthentication .*/PasswordAuthentication no/' /etc/ssh/sshd_config
+sed -i 's/^#*PermitRootLogin .*/PermitRootLogin no/' /etc/ssh/sshd_config
+systemctl restart sshd
+
+# Unattended Upgrades
+apt-get install -y unattended-upgrades
+dpkg-reconfigure -plow unattended-upgrades
+
+# Kernel Hardening via sysctl
+cat >> /etc/sysctl.d/99-hardening.conf << 'EOF'
+net.ipv4.tcp_syncookies = 1
+net.ipv4.conf.all.rp_filter = 1
+net.ipv4.conf.default.rp_filter = 1
+net.ipv4.conf.all.accept_redirects = 0
+net.ipv4.conf.default.accept_redirects = 0
+kernel.randomize_va_space = 2
+EOF
+sysctl -p /etc/sysctl.d/99-hardening.conf
+
+echo "[DONE] Basic hardening applied. Reboot recommended."`}</pre>
+          </div>
+        </section>
+
+        <section className="mb-10">
+          <h2 className="text-2xl font-semibold mb-4">🔗 Weiterführende Ressourcen</h2>
+          <div className="grid grid-cols-2 gap-4">
+            <a href="/securitycheck" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">🛡️ Security Check</div><div className="text-sm text-gray-600">Server Assessment</div></a>
+            <a href="/runbooks" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">📚 Hardening Runbooks</div><div className="text-sm text-gray-600">CIS Guides</div></a>
+            <a href="/openclaw" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">🔓 OpenClaw</div><div className="text-sm text-gray-600">Framework</div></a>
+            <a href="/solutions" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">🏢 Enterprise</div><div className="text-sm text-gray-600">Managed Hardening</div></a>
+          </div>
+        </section>
+      </div>
+    </div>
+  );
+}

@@ -105,14 +105,26 @@ export async function GET(request: NextRequest) {
           const cityName = generateCityName(city, lang);
           const citySlug = generateCitySlug(city, lang);
           
-          await dbQuery(`
-            INSERT INTO geo_variant_matrix (locale, base_slug, city_slug, quality_score, created_at, updated_at)
-            VALUES ($1, $2, $3, $4, NOW(), NOW())
-            ON CONFLICT (locale, city_slug) DO UPDATE SET
-              base_slug = EXCLUDED.base_slug,
-              quality_score = EXCLUDED.quality_score,
-              updated_at = NOW()
-          `, [lang, city.slug, citySlug, city.quality]);
+          // Check if entry exists first
+          const existing = await dbQuery(`
+            SELECT id FROM geo_variant_matrix 
+            WHERE locale = $1 AND city_slug = $2
+          `, [lang, citySlug]);
+          
+          if (existing.rows.length === 0) {
+            // Insert new
+            await dbQuery(`
+              INSERT INTO geo_variant_matrix (locale, base_slug, city_slug, quality_score, created_at, updated_at)
+              VALUES ($1, $2, $3, $4, NOW(), NOW())
+            `, [lang, city.slug, citySlug, city.quality]);
+          } else {
+            // Update existing
+            await dbQuery(`
+              UPDATE geo_variant_matrix 
+              SET base_slug = $1, quality_score = $2, updated_at = NOW()
+              WHERE locale = $3 AND city_slug = $4
+            `, [city.slug, city.quality, lang, citySlug]);
+          }
         }
 
         results.push({

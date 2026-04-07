@@ -2,130 +2,100 @@ import { NextRequest, NextResponse } from 'next/server';
 import { revalidateTag } from 'next/cache';
 import { dbQuery } from '@/lib/db';
 
-// Africa Expansion Cities (Quality >= 85)
+// Africa Expansion Cities (Quality >= 85) - matching Asia/LatAm schema
 const EXPANSION_CITIES = [
-  // Egypt - Skip Cairo (already exists)
-  // { slug: 'cairo', name_en: 'Cairo', name_de: 'Kairo', country_code: 'EG', quality: 92, priority: 95 },
   // Nigeria
-  { slug: 'lagos', name_en: 'Lagos', name_de: 'Lagos', country_code: 'NG', quality: 90, priority: 94 },
+  { slug: 'lagos', name_de: 'Lagos', name_en: 'Lagos', country_code: 'NG', priority: 94, population: 14862000, quality: 90 },
   // Kenya
-  { slug: 'nairobi', name_en: 'Nairobi', name_de: 'Nairobi', country_code: 'KE', quality: 88, priority: 93 },
+  { slug: 'nairobi', name_de: 'Nairobi', name_en: 'Nairobi', country_code: 'KE', priority: 93, population: 4397073, quality: 88 },
   // South Africa
-  { slug: 'johannesburg', name_en: 'Johannesburg', name_de: 'Johannesburg', country_code: 'ZA', quality: 91, priority: 92 },
-  { slug: 'cape-town', name_en: 'Cape Town', name_de: 'Kapstadt', country_code: 'ZA', quality: 89, priority: 91 },
+  { slug: 'johannesburg', name_de: 'Johannesburg', name_en: 'Johannesburg', country_code: 'ZA', priority: 92, population: 5635270, quality: 91 },
+  { slug: 'cape-town', name_de: 'Kapstadt', name_en: 'Cape Town', country_code: 'ZA', priority: 91, population: 4618000, quality: 89 },
   // Morocco
-  { slug: 'casablanca', name_en: 'Casablanca', name_de: 'Casablanca', country_code: 'MA', quality: 87, priority: 90 },
+  { slug: 'casablanca', name_de: 'Casablanca', name_en: 'Casablanca', country_code: 'MA', priority: 90, population: 3289000, quality: 87 },
   // Ghana
-  { slug: 'accra', name_en: 'Accra', name_de: 'Accra', country_code: 'GH', quality: 86, priority: 89 },
+  { slug: 'accra', name_de: 'Accra', name_en: 'Accra', country_code: 'GH', priority: 89, population: 2541000, quality: 86 },
   // Ethiopia
-  { slug: 'addis-ababa', name_en: 'Addis Ababa', name_de: 'Addis Abeba', country_code: 'ET', quality: 85, priority: 88 },
+  { slug: 'addis-ababa', name_de: 'Addis Abeba', name_en: 'Addis Ababa', country_code: 'ET', priority: 88, population: 5227000, quality: 85 },
   // Tanzania
-  { slug: 'dar-es-salaam', name_en: 'Dar es Salaam', name_de: 'Daressalam', country_code: 'TZ', quality: 85, priority: 87 },
+  { slug: 'dar-es-salaam', name_de: 'Daressalam', name_en: 'Dar es Salaam', country_code: 'TZ', priority: 87, population: 6739000, quality: 85 },
   // Uganda
-  { slug: 'kampala', name_en: 'Kampala', name_de: 'Kampala', country_code: 'UG', quality: 85, priority: 86 }
+  { slug: 'kampala', name_de: 'Kampala', name_en: 'Kampala', country_code: 'UG', priority: 86, population: 3648000, quality: 85 }
 ];
 
-const LANGS = ['de','en','es','fr','pt','it','ru','zh','ja','ko','ar','hi','tr','pl','nl'];
+const BASE_SLUGS = ["aws-nginx-hardening-2026", "aws-ssh-hardening-2026", "gcp-kubernetes-rbac-misconfig-2026"];
+const LOCALES = ["de", "en"];
 
-function generateCityName(city: any, lang: string): string {
-  if (lang === 'de') return city.name_de;
-  if (lang === 'fr') {
-    const frNames: Record<string, string> = {
-      'cairo': 'Le Caire',
-      'cape-town': 'Le Cap',
-      'addis-ababa': 'Addis-Abeba'
-    };
-    return frNames[city.slug] || city.name_en;
-  }
-  if (lang === 'es') {
-    const esNames: Record<string, string> = {
-      'cairo': 'El Cairo',
-      'cape-town': 'Ciudad del Cabo'
-    };
-    return esNames[city.slug] || city.name_en;
-  }
-  if (lang === 'pt') {
-    const ptNames: Record<string, string> = {
-      'cairo': 'Cairo',
-      'cape-town': 'Cidade do Cabo'
-    };
-    return ptNames[city.slug] || city.name_en;
-  }
-  return city.name_en;
+function unauthorized() {
+  return NextResponse.json({ error: "unauthorized" }, { status: 401 });
 }
 
-function generateCitySlug(city: any, lang: string): string {
-  if (lang === 'en') return city.slug;
-  return city.slug;
+function hasSecret(req: NextRequest): boolean {
+  const expected = process.env.GEO_EXPANSION_SECRET || "";
+  if (!expected) return false;
+  const auth = req.headers.get("authorization") || "";
+  const token = auth.startsWith("Bearer ") ? auth.slice(7) : auth;
+  return token === expected;
 }
 
 export async function GET(request: NextRequest) {
-  // Verify GEO_EXPANSION_SECRET
-  const authHeader = request.headers.get('authorization');
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
-
-  const token = authHeader.substring(7);
-  if (token !== process.env.GEO_EXPANSION_SECRET) {
-    return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
-  }
-
-  const { searchParams } = new URL(request.url);
-  const stable = searchParams.get('stable') === '1';
-
+  if (!hasSecret(request)) return unauthorized();
+  
   try {
+    const stable = request.nextUrl.searchParams.get("stable") === "1";
+    const rolloutStage = stable ? "stable" : "canary";
     const results = [];
-    
+
     for (const city of EXPANSION_CITIES) {
       try {
-        // Insert or update city
-        await dbQuery(`
-          INSERT INTO geo_cities (slug, name_de, name_en, country_code, priority, population, is_active, rollout_stage, created_at, updated_at)
-          VALUES ($1, $2, $3, $4, $5, $6, true, $7, NOW(), NOW())
-          ON CONFLICT (slug) DO UPDATE SET
-            name_de = EXCLUDED.name_de,
-            name_en = EXCLUDED.name_en,
-            country_code = EXCLUDED.country_code,
-            priority = EXCLUDED.priority,
-            population = EXCLUDED.population,
-            is_active = EXCLUDED.is_active,
-            rollout_stage = EXCLUDED.rollout_stage,
-            updated_at = NOW()
-        `, [
-          city.slug,
-          city.name_de,
-          city.name_en,
-          city.country_code,
-          city.priority,
-          city.priority * 100000, // Estimated population based on priority
-          stable ? 'stable' : 'canary'
-        ]);
+        // 1. Insert/update geo_cities - exact Asia/LatAm schema
+        await dbQuery(
+          `INSERT INTO geo_cities (slug, name_de, name_en, country_code, priority, population, is_active, rollout_stage)
+           VALUES ($1, $2, $3, $4, $5, $6, TRUE, $7)
+           ON CONFLICT (slug) DO UPDATE SET
+             name_de = EXCLUDED.name_de,
+             name_en = EXCLUDED.name_en,
+             country_code = EXCLUDED.country_code,
+             priority = EXCLUDED.priority,
+             population = EXCLUDED.population,
+             is_active = TRUE,
+             rollout_stage = $7,
+             updated_at = NOW()`,
+          [city.slug, city.name_de, city.name_en, city.country_code, city.priority, city.population, rolloutStage]
+        );
 
-        // Generate variants for all languages
-        for (const lang of LANGS) {
-          const cityName = generateCityName(city, lang);
-          const citySlug = generateCitySlug(city, lang);
-          
-          // Check if entry exists first
-          const existing = await dbQuery(`
-            SELECT id FROM geo_variant_matrix 
-            WHERE locale = $1 AND city_slug = $2
-          `, [lang, citySlug]);
-          
-          if (existing.rows.length === 0) {
-            // Insert new
-            await dbQuery(`
-              INSERT INTO geo_variant_matrix (locale, base_slug, city_slug, quality_score, created_at, updated_at)
-              VALUES ($1, $2, $3, $4, NOW(), NOW())
-            `, [lang, city.slug, citySlug, city.quality]);
-          } else {
-            // Update existing
-            await dbQuery(`
-              UPDATE geo_variant_matrix 
-              SET base_slug = $1, quality_score = $2, updated_at = NOW()
-              WHERE locale = $3 AND city_slug = $4
-            `, [city.slug, city.quality, lang, citySlug]);
+        // 2. Insert quality into geo_variant_matrix - exact Asia/LatAm schema
+        for (const locale of LOCALES) {
+          for (const baseSlug of BASE_SLUGS) {
+            const variantSlug = `${baseSlug}-${city.slug}`;
+            const localTitle = `${city.name_en} Security Hardening - ${baseSlug.replace(/-/g, " ").replace(/\b\w/g, (c: string) => c.toUpperCase())}`;
+            
+            await dbQuery(
+              `INSERT INTO geo_variant_matrix (locale, base_slug, city_slug, variant_slug, city_name, region_name, country_code, local_title, local_summary, quality_score)
+               VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+               ON CONFLICT (locale, base_slug) DO UPDATE SET
+                 city_slug = EXCLUDED.city_slug,
+                 variant_slug = EXCLUDED.variant_slug,
+                 city_name = EXCLUDED.city_name,
+                 region_name = EXCLUDED.region_name,
+                 country_code = EXCLUDED.country_code,
+                 local_title = EXCLUDED.local_title,
+                 local_summary = EXCLUDED.local_summary,
+                 quality_score = EXCLUDED.quality_score,
+                 updated_at = NOW()`,
+              [
+                locale,
+                baseSlug,
+                city.slug,
+                variantSlug,
+                city.name_en,
+                city.name_en,
+                city.country_code,
+                localTitle,
+                `${localTitle} - Professional security guide for ${city.name_en} region`,
+                city.quality
+              ]
+            );
           }
         }
 
@@ -134,7 +104,7 @@ export async function GET(request: NextRequest) {
           name_en: city.name_en,
           country: city.country_code,
           quality: city.quality,
-          rollout: stable ? 'stable' : 'canary',
+          rollout: rolloutStage,
           status: 'READY'
         });
 
@@ -145,7 +115,7 @@ export async function GET(request: NextRequest) {
           name_en: city.name_en,
           country: city.country_code,
           quality: city.quality,
-          rollout: stable ? 'stable' : 'canary',
+          rollout: rolloutStage,
           status: 'ERROR',
           error: error instanceof Error ? error.message : 'Unknown error'
         });
@@ -157,7 +127,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      message: `Africa Expansion completed (${stable ? 'stable' : 'canary'})`,
+      message: `Africa Expansion completed (${rolloutStage})`,
       results,
       summary: {
         total: EXPANSION_CITIES.length,

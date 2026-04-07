@@ -217,7 +217,7 @@ async function callGemini(prompt: string): Promise<string | null> {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         contents: [{ role: "user", parts: [{ text: prompt }] }],
-        generationConfig: { temperature: 0.2, maxOutputTokens: LEGAL_AI_MAX_TOKENS, thinkingConfig: { thinkingBudget: 0 } },
+        generationConfig: { temperature: 0.2, maxOutputTokens: LEGAL_AI_MAX_TOKENS },
       }),
       signal: AbortSignal.timeout(20_000),
     })
@@ -225,7 +225,7 @@ async function callGemini(prompt: string): Promise<string | null> {
     const data = await res.json()
     const parts = data?.candidates?.[0]?.content?.parts
     if (Array.isArray(parts)) {
-      const text = parts.map((p: { text?: string }) => p?.text ?? "").join("").trim()
+      const text = parts.filter((p: { thought?: boolean }) => !p.thought).map((p: { text?: string }) => p?.text ?? "").join("").trim()
       return text || null
     }
     return null

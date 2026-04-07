@@ -69,7 +69,7 @@ export async function roastMyStackAction(form: {
     roastLevel: levelParsed.data,
   })
 
-  const { parsed } = await generateOrdered(prompt, "gemini")
+  const { parsed } = await generateOrdered(prompt)
 
   if (!parsed || typeof parsed !== "object") {
     return { ok: false, error: "ai_unavailable" }

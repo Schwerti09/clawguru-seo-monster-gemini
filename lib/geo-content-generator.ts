@@ -112,7 +112,7 @@ Prioritize:
 4) strong internal-link suggestions for topical depth
 `.trim()
 
-    const out = await generateTextOrdered(GEO_MATRIX_SYSTEM_PROMPT, userPrompt, "gemini")
+    const out = await generateTextOrdered(GEO_MATRIX_SYSTEM_PROMPT, userPrompt)
     if (!out.text) return null
     const parsed = safeParseJson<GeoVariantContent>(out.text)
     if (!parsed || !passesQualityGate(parsed)) return null
@@ -156,7 +156,7 @@ export async function generateGeoVariantContent(input: {
       localSummary: variant.localSummary,
       myceliumLinks: variant.myceliumLinks,
       qualityScore: geoVariantQualityScore(variant),
-      model: "gemini",
+      model: "auto",
     })
   }
 

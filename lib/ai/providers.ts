@@ -27,11 +27,29 @@ function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+/**
+ * Sanitize an API key: trim whitespace, strip surrounding quotes,
+ * remove accidental "Bearer " prefix (common copy-paste mistake).
+ */
+export function sanitizeKey(raw: string | undefined): string {
+  if (!raw) return "";
+  let k = raw.trim();
+  // Strip surrounding quotes (single or double)
+  if ((k.startsWith('"') && k.endsWith('"')) || (k.startsWith("'") && k.endsWith("'"))) {
+    k = k.slice(1, -1).trim();
+  }
+  // Strip accidental "Bearer " prefix
+  if (k.toLowerCase().startsWith("bearer ")) {
+    k = k.slice(7).trim();
+  }
+  return k;
+}
+
 /** Returns true only when the provider has a non-empty API key configured. */
 function hasKey(provider: AiProvider): boolean {
-  if (provider === "deepseek") return !!process.env.DEEPSEEK_API_KEY?.trim();
-  if (provider === "openai") return !!process.env.OPENAI_API_KEY?.trim();
-  if (provider === "gemini") return !!process.env.GEMINI_API_KEY?.trim();
+  if (provider === "deepseek") return !!sanitizeKey(process.env.DEEPSEEK_API_KEY);
+  if (provider === "openai") return !!sanitizeKey(process.env.OPENAI_API_KEY);
+  if (provider === "gemini") return !!sanitizeKey(process.env.GEMINI_API_KEY);
   return false;
 }
 
@@ -124,7 +142,7 @@ function extractJson(text: string): unknown {
 type CallResult = { text: string | null; status: number };
 
 async function callDeepseek(messages: Array<{ role: string; content: string }>): Promise<CallResult> {
-  const apiKey = process.env.DEEPSEEK_API_KEY?.trim();
+  const apiKey = sanitizeKey(process.env.DEEPSEEK_API_KEY);
   if (!apiKey) return { text: null, status: 401 };
   const model = process.env.DEEPSEEK_MODEL || "deepseek-chat";
   const base = (process.env.DEEPSEEK_BASE_URL || "https://api.deepseek.com/v1").replace(/\/$/, "");
@@ -158,7 +176,7 @@ async function callDeepseek(messages: Array<{ role: string; content: string }>):
 }
 
 async function callOpenAI(messages: Array<{ role: string; content: string }>): Promise<CallResult> {
-  const apiKey = process.env.OPENAI_API_KEY?.trim();
+  const apiKey = sanitizeKey(process.env.OPENAI_API_KEY);
   if (!apiKey) return { text: null, status: 401 };
   const model = process.env.OPENAI_MODEL || "gpt-4o-mini";
   const base = (process.env.OPENAI_BASE_URL || "https://api.openai.com/v1").replace(/\/$/, "");
@@ -192,19 +210,21 @@ async function callOpenAI(messages: Array<{ role: string; content: string }>): P
 }
 
 async function callGemini(prompt: string): Promise<CallResult> {
-  const apiKey = process.env.GEMINI_API_KEY?.trim();
+  const apiKey = sanitizeKey(process.env.GEMINI_API_KEY);
   if (!apiKey) return { text: null, status: 401 };
   const base = (process.env.GEMINI_BASE_URL || "https://generativelanguage.googleapis.com/v1beta").replace(/\/$/, "");
-  // Try preferred model first, then fallbacks to maximize compatibility
-  // Note: gemini-2.0-flash deprecated June 2026 → use 2.5 models
+  // Try preferred model first, then fallback chain.
+  // gemini-2.0-flash-lite kept as last resort (maintenance mode since March 2026).
   const candidates = [
     process.env.GEMINI_MODEL || "gemini-2.5-flash",
     "gemini-2.5-flash-lite",
-    "gemini-2.0-flash",
+    "gemini-2.0-flash-lite",
   ].filter(Boolean);
   let lastStatus = 0;
+  let lastError = "";
   for (const model of candidates) {
     const url = `${base}/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(apiKey)}`;
+    const maxOutputTokens = parseInt(process.env.GEMINI_MAX_OUTPUT_TOKENS || "8192", 10);
     for (let attempt = 0; attempt <= RATE_LIMIT_RETRIES; attempt++) {
       try {
         const res = await fetch(url, {
@@ -212,14 +232,7 @@ async function callGemini(prompt: string): Promise<CallResult> {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             contents: [{ role: "user", parts: [{ text: prompt }] }],
-            generationConfig: {
-              temperature: 0.35,
-              maxOutputTokens: parseInt(process.env.GEMINI_MAX_OUTPUT_TOKENS || "8192", 10),
-              // Gemini 2.5 models have "thinking" enabled by default; thinking tokens
-              // count against maxOutputTokens and can cause 400 errors when the budget
-              // is too small. Disable thinking for straightforward JSON generation.
-              thinkingConfig: { thinkingBudget: 0 },
-            },
+            generationConfig: { temperature: 0.35, maxOutputTokens },
           }),
         });
         lastStatus = res.status;
@@ -235,19 +248,29 @@ async function callGemini(prompt: string): Promise<CallResult> {
         }
         if (!res.ok) {
           const errBody = await res.text().catch(() => "(unreadable)");
-          console.error(`[AI] Gemini/${model} error ${res.status}: ${errBody.slice(0, 300)}`);
+          lastError = errBody.slice(0, 300);
+          console.error(`[AI] Gemini/${model} error ${res.status}: ${lastError}`);
           break; // try next model
         }
         const data = await res.json();
         const parts = data?.candidates?.[0]?.content?.parts;
         if (!Array.isArray(parts)) break;
-        const text = parts.map((p: { text?: string }) => p?.text).filter(Boolean).join("");
+        // Filter out thinking tokens (thought: true) that 2.5 models may include
+        const text = parts
+          .filter((p: { thought?: boolean }) => !p.thought)
+          .map((p: { text?: string }) => p?.text)
+          .filter(Boolean)
+          .join("");
         if (typeof text === "string" && text.trim()) return { text: text.trim(), status: res.status };
         break;
       } catch {
         break; // try next model
       }
     }
+  }
+  // Propagate the last error body so outer callers can log it
+  if (lastError) {
+    console.error(`[AI] Gemini all models exhausted. Last error: ${lastError}`);
   }
   return { text: null, status: lastStatus };
 }

@@ -19,7 +19,7 @@ async function callGeminiFix(prompt: string): Promise<string | null> {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         contents: [{ role: "user", parts: [{ text: prompt }] }],
-        generationConfig: { temperature: 0.3, maxOutputTokens: 2500, thinkingConfig: { thinkingBudget: 0 } },
+        generationConfig: { temperature: 0.3, maxOutputTokens: 2500 },
       }),
       signal: AbortSignal.timeout(30_000),
     })
@@ -27,7 +27,7 @@ async function callGeminiFix(prompt: string): Promise<string | null> {
     const data = await res.json()
     const parts = data?.candidates?.[0]?.content?.parts
     if (Array.isArray(parts)) {
-      return parts.map((p: { text?: string }) => p?.text ?? "").join("").trim() || null
+      return parts.filter((p: { thought?: boolean }) => !p.thought).map((p: { text?: string }) => p?.text ?? "").join("").trim() || null
     }
     return null
   } catch {

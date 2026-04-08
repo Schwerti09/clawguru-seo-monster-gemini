@@ -214,10 +214,10 @@ async function callGemini(prompt: string): Promise<CallResult> {
   if (!apiKey) return { text: null, status: 401 };
   const base = (process.env.GEMINI_BASE_URL || "https://generativelanguage.googleapis.com/v1beta").replace(/\/$/, "");
   // Try preferred model first, then fallback chain.
-  // gemini-2.0-flash-lite kept as last resort (maintenance mode since March 2026).
+  // gemini-2.5-flash is not yet GA in the API (returns 400); use stable models only.
   const candidates = [
-    process.env.GEMINI_MODEL || "gemini-2.5-flash",
-    "gemini-2.5-flash-lite",
+    process.env.GEMINI_MODEL || "gemini-2.0-flash",
+    "gemini-1.5-flash",
     "gemini-2.0-flash-lite",
   ].filter(Boolean);
   let lastStatus = 0;

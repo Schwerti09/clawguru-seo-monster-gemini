@@ -82,7 +82,7 @@
     "typescript": "^5.9.3"
   },
   "overrides": {
-    "glob": "^10",
+    "glob": "^11",
     "rimraf": "^5"
   }
 }

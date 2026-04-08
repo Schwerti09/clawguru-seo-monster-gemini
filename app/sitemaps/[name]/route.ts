@@ -384,7 +384,7 @@ export async function GET(
         "server-hardening-checklist","self-hosted-security-checklist","security-headers-guide",
         "firewall-configuration-guide","reverse-proxy-security","docker-swarm-hardening",
         "audit-logging-setup","database-access-control","intrusion-detection-setup","supply-chain-security",
-        "service-mesh-security","waf-configuration","cicd-security-pipeline",
+        "service-mesh-security","waf-configuration","cicd-security-pipeline","secrets-rotation-automation",
       ]
       // Specialized security + compare pages
       const SECURITY_SLUGS = [

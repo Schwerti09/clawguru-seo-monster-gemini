@@ -48,7 +48,7 @@ export default function ServiceMeshSecurityPage({ params }: PageProps) {
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4">Service Mesh Security Fundamentals</h2>
-          <div className="bg-gray-50 p-4 rounded-lg mb-4">
+          <div className="bg-gray-100 p-4 rounded-lg mb-4">
             <h3 className="font-semibold mb-2">Key Security Components</h3>
             <ul className="list-disc list-inside space-y-1">
               <li>Automatic mTLS encryption between services</li>
@@ -124,19 +124,19 @@ spec:
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4">Security Best Practices</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="bg-blue-50 p-4 rounded-lg">
+            <div className="bg-blue-100 p-4 rounded-lg">
               <h3 className="font-semibold text-blue-800 mb-2">Network Policies</h3>
               <p className="text-sm text-blue-700">Combine service mesh policies with Kubernetes Network Policies for defense-in-depth.</p>
             </div>
-            <div className="bg-green-50 p-4 rounded-lg">
+            <div className="bg-green-100 p-4 rounded-lg">
               <h3 className="font-semibold text-green-800 mb-2">Certificate Management</h3>
               <p className="text-sm text-green-700">Automate certificate rotation and monitor expiration dates.</p>
             </div>
-            <div className="bg-yellow-50 p-4 rounded-lg">
+            <div className="bg-yellow-100 p-4 rounded-lg">
               <h3 className="font-semibold text-yellow-800 mb-2">Observability</h3>
               <p className="text-sm text-yellow-700">Monitor security metrics and audit logs for compliance.</p>
             </div>
-            <div className="bg-red-50 p-4 rounded-lg">
+            <div className="bg-red-100 p-4 rounded-lg">
               <h3 className="font-semibold text-red-800 mb-2">Zero Trust Network</h3>
               <p className="text-sm text-red-700">Implement least privilege access for all service communications.</p>
             </div>
@@ -146,19 +146,19 @@ spec:
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4">Further Resources</h2>
           <div className="grid grid-cols-2 gap-4">
-            <a href={`/${locale}/securitycheck`} className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
+            <a href={`/${locale}/securitycheck`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
               <div className="font-semibold text-blue-600">Security Check</div>
               <div className="text-sm text-gray-600">Scan your system now</div>
             </a>
-            <a href={`/${locale}/runbooks`} className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
+            <a href={`/${locale}/runbooks`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
               <div className="font-semibold text-blue-600">Runbooks</div>
               <div className="text-sm text-gray-600">600+ security playbooks</div>
             </a>
-            <a href={`/${locale}/openclaw`} className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
+            <a href={`/${locale}/openclaw`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
               <div className="font-semibold text-blue-600">OpenClaw Framework</div>
               <div className="text-sm text-gray-600">Self-hosted security</div>
             </a>
-            <a href={`/${locale}/solutions/kubernetes-security-hardening`} className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
+            <a href={`/${locale}/solutions/kubernetes-security-hardening`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
               <div className="font-semibold text-blue-600">Kubernetes Security</div>
               <div className="text-sm text-gray-600">Complete hardening guide</div>
             </a>

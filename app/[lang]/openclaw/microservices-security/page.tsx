@@ -48,7 +48,7 @@ export default function MicroservicesSecurityPage({ params }: PageProps) {
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4">Microservices Security Fundamentals</h2>
-          <div className="bg-gray-50 p-4 rounded-lg mb-4">
+          <div className="bg-gray-100 p-4 rounded-lg mb-4">
             <h3 className="font-semibold mb-2">Core Security Principles</h3>
             <ul className="list-disc list-inside space-y-1">
               <li>Zero-trust network architecture</li>
@@ -346,19 +346,19 @@ spec:
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4">Security Best Practices</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="bg-blue-50 p-4 rounded-lg">
+            <div className="bg-blue-100 p-4 rounded-lg">
               <h3 className="font-semibold text-blue-800 mb-2">Image Security</h3>
               <p className="text-sm text-blue-700">Use minimal base images, scan for vulnerabilities, and sign images with cosign.</p>
             </div>
-            <div className="bg-green-50 p-4 rounded-lg">
+            <div className="bg-green-100 p-4 rounded-lg">
               <h3 className="font-semibold text-green-800 mb-2">Secrets Management</h3>
               <p className="text-sm text-green-700">Never store secrets in containers, use external secret management systems.</p>
             </div>
-            <div className="bg-yellow-50 p-4 rounded-lg">
+            <div className="bg-yellow-100 p-4 rounded-lg">
               <h3 className="font-semibold text-yellow-800 mb-2">Network Segmentation</h3>
               <p className="text-sm text-yellow-700">Implement network policies and service mesh for defense in depth.</p>
             </div>
-            <div className="bg-red-50 p-4 rounded-lg">
+            <div className="bg-red-100 p-4 rounded-lg">
               <h3 className="font-semibold text-red-800 mb-2">Observability</h3>
               <p className="text-sm text-red-700">Comprehensive logging, metrics, and tracing for security monitoring.</p>
             </div>
@@ -368,19 +368,19 @@ spec:
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4">Further Resources</h2>
           <div className="grid grid-cols-2 gap-4">
-            <a href={`/${locale}/securitycheck`} className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
+            <a href={`/${locale}/securitycheck`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
               <div className="font-semibold text-blue-600">Security Check</div>
               <div className="text-sm text-gray-600">Scan your system now</div>
             </a>
-            <a href={`/${locale}/runbooks`} className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
+            <a href={`/${locale}/runbooks`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
               <div className="font-semibold text-blue-600">Runbooks</div>
               <div className="text-sm text-gray-600">600+ security playbooks</div>
             </a>
-            <a href={`/${locale}/openclaw`} className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
+            <a href={`/${locale}/openclaw`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
               <div className="font-semibold text-blue-600">OpenClaw Framework</div>
               <div className="text-sm text-gray-600">Self-hosted security</div>
             </a>
-            <a href={`/${locale}/solutions/kubernetes-security-hardening`} className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
+            <a href={`/${locale}/solutions/kubernetes-security-hardening`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
               <div className="font-semibold text-blue-600">Kubernetes Security</div>
               <div className="text-sm text-gray-600">Complete hardening guide</div>
             </a>

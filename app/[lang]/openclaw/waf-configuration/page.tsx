@@ -48,7 +48,7 @@ export default function WafConfigurationPage({ params }: PageProps) {
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4">WAF Fundamentals</h2>
-          <div className="bg-gray-50 p-4 rounded-lg mb-4">
+          <div className="bg-gray-100 p-4 rounded-lg mb-4">
             <h3 className="font-semibold mb-2">Core Components</h3>
             <ul className="list-disc list-inside space-y-1">
               <li>OWASP Core Rule Set (CRS) integration</li>
@@ -168,19 +168,19 @@ server {
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4">WAF Best Practices</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="bg-blue-50 p-4 rounded-lg">
+            <div className="bg-blue-100 p-4 rounded-lg">
               <h3 className="font-semibold text-blue-800 mb-2">Rule Management</h3>
               <p className="text-sm text-blue-700">Regularly update OWASP CRS and review custom rules for false positives.</p>
             </div>
-            <div className="bg-green-50 p-4 rounded-lg">
+            <div className="bg-green-100 p-4 rounded-lg">
               <h3 className="font-semibold text-green-800 mb-2">Monitoring</h3>
               <p className="text-sm text-green-700">Implement comprehensive logging and alerting for WAF events.</p>
             </div>
-            <div className="bg-yellow-50 p-4 rounded-lg">
+            <div className="bg-yellow-100 p-4 rounded-lg">
               <h3 className="font-semibold text-yellow-800 mb-2">Testing</h3>
               <p className="text-sm text-yellow-700">Test WAF rules in monitoring mode before enabling blocking.</p>
             </div>
-            <div className="bg-red-50 p-4 rounded-lg">
+            <div className="bg-red-100 p-4 rounded-lg">
               <h3 className="font-semibold text-red-800 mb-2">Performance</h3>
               <p className="text-sm text-red-700">Optimize rule sets to balance security with application performance.</p>
             </div>
@@ -190,19 +190,19 @@ server {
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4">Further Resources</h2>
           <div className="grid grid-cols-2 gap-4">
-            <a href={`/${locale}/securitycheck`} className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
+            <a href={`/${locale}/securitycheck`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
               <div className="font-semibold text-blue-600">Security Check</div>
               <div className="text-sm text-gray-600">Scan your system now</div>
             </a>
-            <a href={`/${locale}/runbooks`} className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
+            <a href={`/${locale}/runbooks`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
               <div className="font-semibold text-blue-600">Runbooks</div>
               <div className="text-sm text-gray-600">600+ security playbooks</div>
             </a>
-            <a href={`/${locale}/openclaw`} className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
+            <a href={`/${locale}/openclaw`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
               <div className="font-semibold text-blue-600">OpenClaw Framework</div>
               <div className="text-sm text-gray-600">Self-hosted security</div>
             </a>
-            <a href={`/${locale}/nginx-hardening`} className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
+            <a href={`/${locale}/nginx-hardening`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
               <div className="font-semibold text-blue-600">Nginx Hardening</div>
               <div className="text-sm text-gray-600">Complete security guide</div>
             </a>

@@ -48,7 +48,7 @@ export default function AiAgentThreatModelPage({ params }: PageProps) {
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4">AI Agent Security Overview</h2>
-          <div className="bg-gray-50 p-4 rounded-lg mb-4">
+          <div className="bg-gray-100 p-4 rounded-lg mb-4">
             <h3 className="font-semibold mb-2">Unique AI Agent Challenges</h3>
             <ul className="list-disc list-inside space-y-1">
               <li>Autonomous decision-making capabilities</li>
@@ -62,7 +62,7 @@ export default function AiAgentThreatModelPage({ params }: PageProps) {
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4">AI Agent Threat Categories</h2>
-          <div className="bg-gray-50 p-6 rounded-lg">
+          <div className="bg-gray-100 p-6 rounded-lg">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <h3 className="font-bold text-gray-800 mb-3">External Threats</h3>
@@ -117,7 +117,7 @@ export default function AiAgentThreatModelPage({ params }: PageProps) {
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4">Attack Vector Analysis</h2>
-          <div className="bg-gray-50 p-6 rounded-lg">
+          <div className="bg-gray-100 p-6 rounded-lg">
             <div className="space-y-4">
               <div className="border-l-4 border-red-600 pl-4">
                 <h3 className="font-bold text-red-800 mb-2">Prompt Injection</h3>
@@ -145,7 +145,7 @@ export default function AiAgentThreatModelPage({ params }: PageProps) {
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4">Security Controls Implementation</h2>
-          <div className="bg-gray-50 p-6 rounded-lg">
+          <div className="bg-gray-100 p-6 rounded-lg">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <h3 className="font-bold text-gray-800 mb-3">Preventive Controls</h3>
@@ -231,7 +231,7 @@ export default function AiAgentThreatModelPage({ params }: PageProps) {
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4">Compliance and Governance</h2>
-          <div className="bg-gray-50 p-6 rounded-lg">
+          <div className="bg-gray-100 p-6 rounded-lg">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <h3 className="font-bold text-gray-800 mb-3">Regulatory Compliance</h3>
@@ -259,7 +259,7 @@ export default function AiAgentThreatModelPage({ params }: PageProps) {
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4">Testing and Validation</h2>
-          <div className="bg-gray-50 p-6 rounded-lg">
+          <div className="bg-gray-100 p-6 rounded-lg">
             <div className="space-y-4">
               <div className="flex items-start space-x-4">
                 <div className="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold flex-shrink-0">1</div>
@@ -325,19 +325,19 @@ export default function AiAgentThreatModelPage({ params }: PageProps) {
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4">Best Practices</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-blue-50 p-4 rounded-lg">
+            <div className="bg-blue-100 p-4 rounded-lg">
               <h3 className="font-semibold text-blue-800 mb-2">Design Principles</h3>
               <p className="text-sm text-blue-700">Security by design, defense in depth, least privilege, fail-safe defaults</p>
             </div>
-            <div className="bg-green-50 p-4 rounded-lg">
+            <div className="bg-green-100 p-4 rounded-lg">
               <h3 className="font-semibold text-green-800 mb-2">Development Practices</h3>
               <p className="text-sm text-green-700">Secure coding, code review, automated testing, dependency management</p>
             </div>
-            <div className="bg-yellow-50 p-4 rounded-lg">
+            <div className="bg-yellow-100 p-4 rounded-lg">
               <h3 className="font-semibold text-yellow-800 mb-2">Operational Practices</h3>
               <p className="text-sm text-yellow-700">Regular updates, patch management, backup procedures, disaster recovery</p>
             </div>
-            <div className="bg-red-50 p-4 rounded-lg">
+            <div className="bg-red-100 p-4 rounded-lg">
               <h3 className="font-semibold text-red-800 mb-2">Governance Practices</h3>
               <p className="text-sm text-red-700">Policy enforcement, compliance monitoring, risk management, audit trails</p>
             </div>

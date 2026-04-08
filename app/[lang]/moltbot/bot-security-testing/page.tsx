@@ -48,7 +48,7 @@ export default function BotSecurityTestingPage({ params }: PageProps) {
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4">Bot Security Testing Overview</h2>
-          <div className="bg-gray-50 p-4 rounded-lg mb-4">
+          <div className="bg-gray-100 p-4 rounded-lg mb-4">
             <h3 className="font-semibold mb-2">Testing Objectives</h3>
             <ul className="list-disc list-inside space-y-1">
               <li>Identify security vulnerabilities in bot implementations</li>
@@ -62,7 +62,7 @@ export default function BotSecurityTestingPage({ params }: PageProps) {
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4">Bot Security Testing Framework</h2>
-          <div className="bg-gray-50 p-6 rounded-lg">
+          <div className="bg-gray-100 p-6 rounded-lg">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <h3 className="font-bold text-gray-800 mb-3">Static Analysis</h3>
@@ -119,7 +119,7 @@ export default function BotSecurityTestingPage({ params }: PageProps) {
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4">Automated Testing Tools</h2>
-          <div className="bg-gray-50 p-6 rounded-lg">
+          <div className="bg-gray-100 p-6 rounded-lg">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <h3 className="font-bold text-gray-800 mb-3">Open Source Tools</h3>
@@ -147,7 +147,7 @@ export default function BotSecurityTestingPage({ params }: PageProps) {
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4">Testing Methodology</h2>
-          <div className="bg-gray-50 p-6 rounded-lg">
+          <div className="bg-gray-100 p-6 rounded-lg">
             <div className="space-y-4">
               <div className="flex items-start space-x-4">
                 <div className="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold flex-shrink-0">1</div>
@@ -212,7 +212,7 @@ export default function BotSecurityTestingPage({ params }: PageProps) {
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4">Security Testing Checklist</h2>
-          <div className="bg-gray-50 p-6 rounded-lg">
+          <div className="bg-gray-100 p-6 rounded-lg">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <h3 className="font-bold text-gray-800 mb-3">Input Security</h3>
@@ -260,7 +260,7 @@ export default function BotSecurityTestingPage({ params }: PageProps) {
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4">Continuous Security Testing</h2>
-          <div className="bg-gray-50 p-6 rounded-lg">
+          <div className="bg-gray-100 p-6 rounded-lg">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <h3 className="font-bold text-gray-800 mb-3">CI/CD Integration</h3>
@@ -318,19 +318,19 @@ export default function BotSecurityTestingPage({ params }: PageProps) {
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4">Best Practices</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-blue-50 p-4 rounded-lg">
+            <div className="bg-blue-100 p-4 rounded-lg">
               <h3 className="font-semibold text-blue-800 mb-2">Secure Development</h3>
               <p className="text-sm text-blue-700">Implement secure coding practices, regular code reviews, and security training</p>
             </div>
-            <div className="bg-green-50 p-4 rounded-lg">
+            <div className="bg-green-100 p-4 rounded-lg">
               <h3 className="font-semibold text-green-800 mb-2">Testing Automation</h3>
               <p className="text-sm text-green-700">Automate security testing in CI/CD pipelines for continuous validation</p>
             </div>
-            <div className="bg-yellow-50 p-4 rounded-lg">
+            <div className="bg-yellow-100 p-4 rounded-lg">
               <h3 className="font-semibold text-yellow-800 mb-2">Regular Assessments</h3>
               <p className="text-sm text-yellow-700">Conduct regular security assessments and penetration testing</p>
             </div>
-            <div className="bg-red-50 p-4 rounded-lg">
+            <div className="bg-red-100 p-4 rounded-lg">
               <h3 className="font-semibold text-red-800 mb-2">Incident Response</h3>
               <p className="text-sm text-red-700">Establish incident response procedures and security monitoring</p>
             </div>
@@ -340,19 +340,19 @@ export default function BotSecurityTestingPage({ params }: PageProps) {
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4">Further Resources</h2>
           <div className="grid grid-cols-2 gap-4">
-            <a href={`/${locale}/securitycheck`} className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
+            <a href={`/${locale}/securitycheck`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
               <div className="font-semibold text-blue-600">Security Check</div>
               <div className="text-sm text-gray-600">Scan your system now</div>
             </a>
-            <a href={`/${locale}/runbooks`} className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
+            <a href={`/${locale}/runbooks`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
               <div className="font-semibold text-blue-600">Runbooks</div>
               <div className="text-sm text-gray-600">600+ security playbooks</div>
             </a>
-            <a href={`/${locale}/openclaw`} className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
+            <a href={`/${locale}/openclaw`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
               <div className="font-semibold text-blue-600">OpenClaw Framework</div>
               <div className="text-sm text-gray-600">Self-hosted security</div>
             </a>
-            <a href={`/${locale}/solutions/kubernetes-security-hardening`} className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
+            <a href={`/${locale}/solutions/kubernetes-security-hardening`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
               <div className="font-semibold text-blue-600">Kubernetes Security</div>
               <div className="text-sm text-gray-600">Complete hardening guide</div>
             </a>

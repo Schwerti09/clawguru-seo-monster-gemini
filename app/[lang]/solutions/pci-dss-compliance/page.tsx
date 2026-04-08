@@ -48,7 +48,7 @@ export default function PciDssCompliancePage({ params }: PageProps) {
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4">PCI DSS 4.0 Overview</h2>
-          <div className="bg-gray-50 p-4 rounded-lg mb-4">
+          <div className="bg-gray-100 p-4 rounded-lg mb-4">
             <h3 className="font-semibold mb-2">Key Changes in PCI DSS 4.0</h3>
             <ul className="list-disc list-inside space-y-1">
               <li>Customized security approach based on risk</li>
@@ -62,7 +62,7 @@ export default function PciDssCompliancePage({ params }: PageProps) {
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4">PCI DSS Requirements Overview</h2>
-          <div className="bg-gray-50 p-6 rounded-lg">
+          <div className="bg-gray-100 p-6 rounded-lg">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <h3 className="font-bold text-gray-800 mb-3">Requirements 1-4: Build & Maintain</h3>
@@ -125,7 +125,7 @@ export default function PciDssCompliancePage({ params }: PageProps) {
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4">Phase 2: Security Controls Implementation</h2>
-          <div className="bg-gray-50 p-6 rounded-lg">
+          <div className="bg-gray-100 p-6 rounded-lg">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <h3 className="font-bold text-gray-800 mb-3">Network Security Controls</h3>
@@ -182,7 +182,7 @@ export default function PciDssCompliancePage({ params }: PageProps) {
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4">Phase 4: Monitoring & Testing</h2>
-          <div className="bg-gray-50 p-6 rounded-lg">
+          <div className="bg-gray-100 p-6 rounded-lg">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <h3 className="font-bold text-gray-800 mb-3">Security Monitoring</h3>
@@ -210,7 +210,7 @@ export default function PciDssCompliancePage({ params }: PageProps) {
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4">Phase 5: Documentation & Training</h2>
-          <div className="bg-gray-50 p-6 rounded-lg">
+          <div className="bg-gray-100 p-6 rounded-lg">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <h3 className="font-bold text-gray-800 mb-3">Required Documentation</h3>
@@ -267,7 +267,7 @@ export default function PciDssCompliancePage({ params }: PageProps) {
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4">SAQ Types & Selection</h2>
-          <div className="bg-gray-50 p-6 rounded-lg">
+          <div className="bg-gray-100 p-6 rounded-lg">
             <div className="space-y-4">
               <div className="border-l-4 border-blue-600 pl-4">
                 <h3 className="font-bold text-blue-800 mb-2">SAQ A - Card-not-present merchants</h3>
@@ -292,22 +292,22 @@ export default function PciDssCompliancePage({ params }: PageProps) {
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4">Common Compliance Challenges</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-red-50 p-4 rounded-lg">
+            <div className="bg-red-100 p-4 rounded-lg">
               <h3 className="font-semibold text-red-800 mb-2">Challenge: Scope Creep</h3>
               <p className="text-sm text-red-700 mb-2">Difficulty defining and maintaining CDE boundaries</p>
               <p className="text-sm text-green-600"><strong>Solution:</strong> Regular scope reviews, network segmentation, documentation</p>
             </div>
-            <div className="bg-yellow-50 p-4 rounded-lg">
+            <div className="bg-yellow-100 p-4 rounded-lg">
               <h3 className="font-semibold text-yellow-800 mb-2">Challenge: Third-party Risk</h3>
               <p className="text-sm text-yellow-700 mb-2">Managing compliance with service providers and partners</p>
               <p className="text-sm text-green-600"><strong>Solution:</strong> Due diligence, contractual requirements, monitoring</p>
             </div>
-            <div className="bg-blue-50 p-4 rounded-lg">
+            <div className="bg-blue-100 p-4 rounded-lg">
               <h3 className="font-semibold text-blue-800 mb-2">Challenge: Documentation Burden</h3>
               <p className="text-sm text-blue-700 mb-2">Extensive documentation and evidence requirements</p>
               <p className="text-sm text-green-600"><strong>Solution:</strong> Document management systems, automation, templates</p>
             </div>
-            <div className="bg-purple-50 p-4 rounded-lg">
+            <div className="bg-purple-100 p-4 rounded-lg">
               <h3 className="font-semibold text-purple-800 mb-2">Challenge: Continuous Compliance</h3>
               <p className="text-sm text-purple-700 mb-2">Maintaining compliance between annual assessments</p>
               <p className="text-sm text-green-600"><strong>Solution:</strong> Continuous monitoring, automated controls, regular reviews</p>
@@ -318,19 +318,19 @@ export default function PciDssCompliancePage({ params }: PageProps) {
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4">Further Resources</h2>
           <div className="grid grid-cols-2 gap-4">
-            <a href={`/${locale}/securitycheck`} className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
+            <a href={`/${locale}/securitycheck`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
               <div className="font-semibold text-blue-600">Security Check</div>
               <div className="text-sm text-gray-600">Scan your system now</div>
             </a>
-            <a href={`/${locale}/runbooks`} className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
+            <a href={`/${locale}/runbooks`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
               <div className="font-semibold text-blue-600">Runbooks</div>
               <div className="text-sm text-gray-600">600+ security playbooks</div>
             </a>
-            <a href={`/${locale}/openclaw`} className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
+            <a href={`/${locale}/openclaw`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
               <div className="font-semibold text-blue-600">OpenClaw Framework</div>
               <div className="text-sm text-gray-600">Self-hosted security</div>
             </a>
-            <a href={`/${locale}/solutions/iso27001-certification-roadmap`} className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
+            <a href={`/${locale}/solutions/kubernetes-security-hardening`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
               <div className="font-semibold text-blue-600">ISO 27001 Certification</div>
               <div className="text-sm text-gray-600">Complete certification guide</div>
             </a>

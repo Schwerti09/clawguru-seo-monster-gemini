@@ -49,7 +49,7 @@ export default function ClawGuruVsCrowdstrikePage({ params }: PageProps) {
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4">Quick Comparison Overview</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-blue-50 p-6 rounded-lg">
+            <div className="bg-yellow-100 p-6 rounded-lg">
               <h3 className="font-bold text-blue-800 mb-4">ClawGuru</h3>
               <ul className="space-y-2 text-sm">
                 <li className="flex items-start">
@@ -74,7 +74,7 @@ export default function ClawGuruVsCrowdstrikePage({ params }: PageProps) {
                 </li>
               </ul>
             </div>
-            <div className="bg-red-50 p-6 rounded-lg">
+            <div className="bg-red-100 p-6 rounded-lg">
               <h3 className="font-bold text-red-800 mb-4">CrowdStrike</h3>
               <ul className="space-y-2 text-sm">
                 <li className="flex items-start">
@@ -207,7 +207,7 @@ export default function ClawGuruVsCrowdstrikePage({ params }: PageProps) {
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4">Technical Architecture</h2>
-          <div className="bg-gray-50 p-6 rounded-lg">
+          <div className="bg-gray-100 p-6 rounded-lg">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <h3 className="font-bold text-gray-800 mb-3">ClawGuru Architecture</h3>
@@ -237,7 +237,7 @@ export default function ClawGuruVsCrowdstrikePage({ params }: PageProps) {
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4">Pricing Comparison</h2>
-          <div className="bg-gray-50 p-6 rounded-lg">
+          <div className="bg-gray-100 p-6 rounded-lg">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="bg-white p-4 rounded border">
                 <h3 className="font-bold text-gray-800 mb-3">ClawGuru Pricing</h3>
@@ -266,7 +266,7 @@ export default function ClawGuruVsCrowdstrikePage({ params }: PageProps) {
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4">Integration & Ecosystem</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-blue-50 p-4 rounded-lg">
+            <div className="bg-blue-100 p-4 rounded-lg">
               <h3 className="font-semibold text-blue-800 mb-2">ClawGuru Integrations</h3>
               <ul className="text-sm space-y-1">
                 <li>Open-source tools (Wazuh, Osquery)</li>
@@ -276,7 +276,7 @@ export default function ClawGuruVsCrowdstrikePage({ params }: PageProps) {
                 <li>Cloud providers (AWS, GCP, Azure)</li>
               </ul>
             </div>
-            <div className="bg-red-50 p-4 rounded-lg">
+            <div className="bg-red-100 p-4 rounded-lg">
               <h3 className="font-semibold text-red-800 mb-2">CrowdStrike Integrations</h3>
               <ul className="text-sm space-y-1">
                 <li>Major SIEM platforms</li>
@@ -292,19 +292,19 @@ export default function ClawGuruVsCrowdstrikePage({ params }: PageProps) {
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4">Further Resources</h2>
           <div className="grid grid-cols-2 gap-4">
-            <a href={`/${locale}/securitycheck`} className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
+            <a href={`/${locale}/securitycheck`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
               <div className="font-semibold text-blue-600">Security Check</div>
               <div className="text-sm text-gray-600">Scan your system now</div>
             </a>
-            <a href={`/${locale}/runbooks`} className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
+            <a href={`/${locale}/runbooks`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
               <div className="font-semibold text-blue-600">Runbooks</div>
               <div className="text-sm text-gray-600">600+ security playbooks</div>
             </a>
-            <a href={`/${locale}/openclaw`} className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
+            <a href={`/${locale}/openclaw`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
               <div className="font-semibold text-blue-600">OpenClaw Framework</div>
               <div className="text-sm text-gray-600">Self-hosted security</div>
             </a>
-            <a href={`/${locale}/solutions/enterprise-siem-integration`} className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
+            <a href={`/${locale}/solutions/kubernetes-security-hardening`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
               <div className="font-semibold text-blue-600">SIEM Integration</div>
               <div className="text-sm text-gray-600">Enterprise solutions</div>
             </a>

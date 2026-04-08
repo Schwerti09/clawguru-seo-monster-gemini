@@ -48,7 +48,7 @@ export default function Iso27001CertificationRoadmapPage({ params }: PageProps) 
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4">ISO 27001:2022 Overview</h2>
-          <div className="bg-gray-50 p-4 rounded-lg mb-4">
+          <div className="bg-gray-100 p-4 rounded-lg mb-4">
             <h3 className="font-semibold mb-2">Key Changes in 2022 Version</h3>
             <ul className="list-disc list-inside space-y-1">
               <li>Focus on information security risk management</li>
@@ -62,7 +62,7 @@ export default function Iso27001CertificationRoadmapPage({ params }: PageProps) 
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4">Phase 1: Foundation & Planning</h2>
-          <div className="bg-gray-50 p-6 rounded-lg">
+          <div className="bg-gray-100 p-6 rounded-lg">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <h3 className="font-bold text-gray-800 mb-3">1.1 Management Commitment</h3>
@@ -115,7 +115,7 @@ export default function Iso27001CertificationRoadmapPage({ params }: PageProps) 
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4">Phase 3: Control Implementation</h2>
-          <div className="bg-gray-50 p-6 rounded-lg">
+          <div className="bg-gray-100 p-6 rounded-lg">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <h3 className="font-bold text-gray-800 mb-3">3.1 Organizational Controls</h3>
@@ -143,7 +143,7 @@ export default function Iso27001CertificationRoadmapPage({ params }: PageProps) 
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4">Phase 4: Documentation & Training</h2>
-          <div className="bg-gray-50 p-6 rounded-lg">
+          <div className="bg-gray-100 p-6 rounded-lg">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <h3 className="font-bold text-gray-800 mb-3">4.1 Required Documentation</h3>
@@ -200,7 +200,7 @@ export default function Iso27001CertificationRoadmapPage({ params }: PageProps) 
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4">Phase 6: Certification Audit</h2>
-          <div className="bg-gray-50 p-6 rounded-lg">
+          <div className="bg-gray-100 p-6 rounded-lg">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <h3 className="font-bold text-gray-800 mb-3">6.1 Stage 1 Audit</h3>
@@ -228,7 +228,7 @@ export default function Iso27001CertificationRoadmapPage({ params }: PageProps) 
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4">Implementation Timeline</h2>
-          <div className="bg-gray-50 p-6 rounded-lg">
+          <div className="bg-gray-100 p-6 rounded-lg">
             <div className="space-y-4">
               <div className="flex items-center space-x-4">
                 <div className="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold">1</div>
@@ -272,22 +272,22 @@ export default function Iso27001CertificationRoadmapPage({ params }: PageProps) 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4">Common Challenges & Solutions</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-red-50 p-4 rounded-lg">
+            <div className="bg-red-100 p-4 rounded-lg">
               <h3 className="font-semibold text-red-800 mb-2">Challenge: Resource Constraints</h3>
               <p className="text-sm text-red-700 mb-2">Limited budget and personnel for implementation</p>
               <p className="text-sm text-green-600"><strong>Solution:</strong> Phased implementation, prioritize high-risk areas</p>
             </div>
-            <div className="bg-yellow-50 p-4 rounded-lg">
+            <div className="bg-yellow-100 p-4 rounded-lg">
               <h3 className="font-semibold text-yellow-800 mb-2">Challenge: Documentation Overload</h3>
               <p className="text-sm text-yellow-700 mb-2">Excessive documentation requirements</p>
               <p className="text-sm text-green-600"><strong>Solution:</strong> Use document management systems, automate where possible</p>
             </div>
-            <div className="bg-blue-50 p-4 rounded-lg">
+            <div className="bg-blue-100 p-4 rounded-lg">
               <h3 className="font-semibold text-blue-800 mb-2">Challenge: Employee Resistance</h3>
               <p className="text-sm text-blue-700 mb-2">Staff resistance to new security procedures</p>
               <p className="text-sm text-green-600"><strong>Solution:</strong> Comprehensive training, communication of benefits</p>
             </div>
-            <div className="bg-purple-50 p-4 rounded-lg">
+            <div className="bg-purple-100 p-4 rounded-lg">
               <h3 className="font-semibold text-purple-800 mb-2">Challenge: Maintenance Burden</h3>
               <p className="text-sm text-purple-700 mb-2">Ongoing maintenance and compliance requirements</p>
               <p className="text-sm text-green-600"><strong>Solution:</strong> Automated monitoring, continuous improvement processes</p>
@@ -298,19 +298,19 @@ export default function Iso27001CertificationRoadmapPage({ params }: PageProps) 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4">Further Resources</h2>
           <div className="grid grid-cols-2 gap-4">
-            <a href={`/${locale}/securitycheck`} className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
+            <a href={`/${locale}/securitycheck`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
               <div className="font-semibold text-blue-600">Security Check</div>
               <div className="text-sm text-gray-600">Scan your system now</div>
             </a>
-            <a href={`/${locale}/runbooks`} className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
+            <a href={`/${locale}/runbooks`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
               <div className="font-semibold text-blue-600">Runbooks</div>
               <div className="text-sm text-gray-600">600+ security playbooks</div>
             </a>
-            <a href={`/${locale}/openclaw`} className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
+            <a href={`/${locale}/openclaw`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
               <div className="font-semibold text-blue-600">OpenClaw Framework</div>
               <div className="text-sm text-gray-600">Self-hosted security</div>
             </a>
-            <a href={`/${locale}/solutions/soc2-compliance-automation`} className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
+            <a href={`/${locale}/solutions/kubernetes-security-hardening`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
               <div className="font-semibold text-blue-600">SOC2 Compliance</div>
               <div className="text-sm text-gray-600">Compliance automation</div>
             </a>

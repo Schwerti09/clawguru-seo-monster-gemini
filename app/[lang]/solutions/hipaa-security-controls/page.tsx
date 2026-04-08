@@ -48,7 +48,7 @@ export default function HipaaSecurityControlsPage({ params }: PageProps) {
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4">HIPAA Security Rule Overview</h2>
-          <div className="bg-gray-50 p-4 rounded-lg mb-4">
+          <div className="bg-gray-100 p-4 rounded-lg mb-4">
             <h3 className="font-semibold mb-2">Three Types of Safeguards</h3>
             <ul className="list-disc list-inside space-y-1">
               <li>Administrative Safeguards (164.308)</li>
@@ -61,7 +61,7 @@ export default function HipaaSecurityControlsPage({ params }: PageProps) {
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4">Administrative Safeguards (164.308)</h2>
-          <div className="bg-gray-50 p-6 rounded-lg">
+          <div className="bg-gray-100 p-6 rounded-lg">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <h3 className="font-bold text-gray-800 mb-3">Security Management Process</h3>
@@ -118,7 +118,7 @@ export default function HipaaSecurityControlsPage({ params }: PageProps) {
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4">Technical Safeguards (164.312)</h2>
-          <div className="bg-gray-50 p-6 rounded-lg">
+          <div className="bg-gray-100 p-6 rounded-lg">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <h3 className="font-bold text-gray-800 mb-3">Access Control (164.312(a)(1))</h3>
@@ -197,7 +197,7 @@ export default function HipaaSecurityControlsPage({ params }: PageProps) {
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4">Risk Assessment Process</h2>
-          <div className="bg-gray-50 p-6 rounded-lg">
+          <div className="bg-gray-100 p-6 rounded-lg">
             <div className="space-y-4">
               <div className="flex items-start space-x-4">
                 <div className="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold flex-shrink-0">1</div>
@@ -233,7 +233,7 @@ export default function HipaaSecurityControlsPage({ params }: PageProps) {
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4">Business Associate Management</h2>
-          <div className="bg-gray-50 p-6 rounded-lg">
+          <div className="bg-gray-100 p-6 rounded-lg">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <h3 className="font-bold text-gray-800 mb-3">BA Agreement Requirements</h3>
@@ -290,7 +290,7 @@ export default function HipaaSecurityControlsPage({ params }: PageProps) {
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4">Compliance Monitoring & Auditing</h2>
-          <div className="bg-gray-50 p-6 rounded-lg">
+          <div className="bg-gray-100 p-6 rounded-lg">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <h3 className="font-bold text-gray-800 mb-3">Continuous Monitoring</h3>
@@ -319,22 +319,22 @@ export default function HipaaSecurityControlsPage({ params }: PageProps) {
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4">Common HIPAA Compliance Challenges</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-red-50 p-4 rounded-lg">
+            <div className="bg-red-100 p-4 rounded-lg">
               <h3 className="font-semibold text-red-800 mb-2">Challenge: Cloud Computing</h3>
               <p className="text-sm text-red-700 mb-2">Managing PHI in cloud environments</p>
               <p className="text-sm text-green-600"><strong>Solution:</strong> Business associate agreements, cloud security controls, data encryption</p>
             </div>
-            <div className="bg-yellow-50 p-4 rounded-lg">
+            <div className="bg-yellow-100 p-4 rounded-lg">
               <h3 className="font-semibold text-yellow-800 mb-2">Challenge: Mobile Devices</h3>
               <p className="text-sm text-yellow-700 mb-2">Securing PHI on smartphones and tablets</p>
               <p className="text-sm text-green-600"><strong>Solution:</strong> Mobile device management, encryption, remote wipe capabilities</p>
             </div>
-            <div className="bg-blue-50 p-4 rounded-lg">
+            <div className="bg-blue-100 p-4 rounded-lg">
               <h3 className="font-semibold text-blue-800 mb-2">Challenge: Telemedicine</h3>
               <p className="text-sm text-blue-700 mb-2">Securing remote healthcare communications</p>
               <p className="text-sm text-green-600"><strong>Solution:</strong> Secure video platforms, end-to-end encryption, access controls</p>
             </div>
-            <div className="bg-purple-50 p-4 rounded-lg">
+            <div className="bg-purple-100 p-4 rounded-lg">
               <h3 className="font-semibold text-purple-800 mb-2">Challenge: Third-party Risk</h3>
               <p className="text-sm text-purple-700 mb-2">Managing business associate compliance</p>
               <p className="text-sm text-green-600"><strong>Solution:</strong> Due diligence, contractual requirements, ongoing monitoring</p>
@@ -345,19 +345,19 @@ export default function HipaaSecurityControlsPage({ params }: PageProps) {
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4">Further Resources</h2>
           <div className="grid grid-cols-2 gap-4">
-            <a href={`/${locale}/securitycheck`} className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
+            <a href={`/${locale}/securitycheck`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
               <div className="font-semibold text-blue-600">Security Check</div>
               <div className="text-sm text-gray-600">Scan your system now</div>
             </a>
-            <a href={`/${locale}/runbooks`} className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
+            <a href={`/${locale}/runbooks`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
               <div className="font-semibold text-blue-600">Runbooks</div>
               <div className="text-sm text-gray-600">600+ security playbooks</div>
             </a>
-            <a href={`/${locale}/openclaw`} className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
+            <a href={`/${locale}/openclaw`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
               <div className="font-semibold text-blue-600">OpenClaw Framework</div>
               <div className="text-sm text-gray-600">Self-hosted security</div>
             </a>
-            <a href={`/${locale}/solutions/iso27001-certification-roadmap`} className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
+            <a href={`/${locale}/solutions/kubernetes-security-hardening`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
               <div className="font-semibold text-blue-600">ISO 27001 Certification</div>
               <div className="text-sm text-gray-600">Complete certification guide</div>
             </a>

@@ -402,6 +402,11 @@ export async function GET(
         "clawguru-vs-wiz","openclaw-vs-snyk","openclaw-vs-semgrep","openclaw-vs-sonarqube",
         "moltbot-vs-opsgenie","moltbot-vs-clawbot","clawguru-vs-crowdstrike","clawguru-vs-datadog","openclaw-vs-falco","clawguru-vs-lacework","moltbot-vs-pagerduty",
       ]
+      // Solutions pages
+      const SOLUTIONS_SLUGS = [
+        "soc2-compliance-automation","kubernetes-security-hardening","startup-security-foundation",
+        "enterprise-siem-integration","iso27001-certification-roadmap","pci-dss-compliance","hipaa-security-controls",
+      ]
       // SEO guide pages
       const GUIDE_SLUGS = [
         "executable-runbook-vs-static-blog","security-check-vs-pentest-guide","nis2-technical-controls-self-hosted",
@@ -424,6 +429,9 @@ export async function GET(
       }))
       const guideUrls = GUIDE_SLUGS.map((slug) => ({
         loc: `${base}/${locale}/${slug}`, lastmod, changefreq: "weekly", priority: "0.84",
+      }))
+      const solutionsUrls = SOLUTIONS_SLUGS.map((slug) => ({
+        loc: `${base}/${locale}/solutions/${slug}`, lastmod, changefreq: "weekly", priority: "0.86",
       }))
       const urls = [
         { loc: `${base}/${locale}`, lastmod, changefreq: "daily", priority: "0.9" },
@@ -459,6 +467,7 @@ export async function GET(
         ...securityUrls,
         ...compareUrls,
         ...guideUrls,
+        ...solutionsUrls,
       ]
       return respond(urlset(urls))
     }

@@ -400,7 +400,7 @@ export async function GET(
       // Compare pages
       const COMPARE_SLUGS = [
         "clawguru-vs-wiz","openclaw-vs-snyk","openclaw-vs-semgrep","openclaw-vs-sonarqube",
-        "moltbot-vs-opsgenie","moltbot-vs-clawbot","clawguru-vs-crowdstrike","clawguru-vs-datadog","openclaw-vs-falco",
+        "moltbot-vs-opsgenie","moltbot-vs-clawbot","clawguru-vs-crowdstrike","clawguru-vs-datadog","openclaw-vs-falco","clawguru-vs-lacework",
       ]
       // SEO guide pages
       const GUIDE_SLUGS = [

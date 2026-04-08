@@ -377,7 +377,7 @@ export async function GET(
         "api-gateway-security","identity-governance-iam","nis2-compliance-setup","runtime-protection-rasp",
         "security-automation-workflows","security-posture-score","cloud-native-security",
         "cloud-security-posture-management","cryptography-encryption-guide","data-loss-prevention",
-        "api-rate-limiting-advanced","ai-agent-threat-model","real-time-cve-feed","bot-security-testing",
+        "api-rate-limiting-advanced","ai-agent-threat-model","real-time-cve-feed","bot-security-testing","sbom-generation",
       ]
       // OpenClaw subpages (10 pages × all locales)
       const OPENCLAW_SLUGS = [

@@ -42,6 +42,36 @@ After creating `app/[lang]/moltbot/my-slug/page.tsx`, add `"my-slug"` to `MOLTBO
 `app/robots.txt/route.ts` must NEVER contain `Disallow: */sitemaps/` or `Disallow: */*.xml`.
 The file must explicitly have `Allow: /sitemaps/`.
 
+### Rule 6 — UX Quality Standards for All New Pages
+All new content pages MUST follow these UX standards to ensure readability and user experience:
+
+#### Card Background Colors
+- **NEVER** use `bg-gray-50` for cards - too light, poor contrast
+- **ALWAYS** use `bg-gray-100` for standard cards
+- **ALWAYS** use `bg-gray-200` for hover states
+- **ALWAYS** use `bg-blue-100`, `bg-green-100`, `bg-yellow-100`, `bg-red-100` for colored cards
+
+#### Color Palette Reference
+```tsx
+// Standard cards
+<div className="bg-gray-100 p-4 rounded-lg">
+
+// Hover states
+<a href="#" className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
+
+// Colored cards
+<div className="bg-blue-100 p-4 rounded-lg">
+<div className="bg-green-100 p-4 rounded-lg">
+<div className="bg-yellow-100 p-4 rounded-lg">
+<div className="bg-red-100 p-4 rounded-lg">
+```
+
+#### Testing Requirements
+- Every new page MUST be tested for readability
+- Check contrast ratios on all cards
+- Verify hover states work correctly
+- Test on multiple devices and screen sizes
+
 ---
 
 ## 1. MISSION & MARKET POSITION

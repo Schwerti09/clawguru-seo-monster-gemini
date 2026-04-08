@@ -13,7 +13,26 @@ export const metadata = {
   description:
     "Runbooks für OpenClaw/Moltbot Ops: Security, Setup, Fixes, Incident Response. Score → Runbook → Fix → Re-Check.",
   keywords: SEO_TARGET_KEYWORDS_2026,
-  alternates: { canonical: "/runbooks" }
+  alternates: { 
+    canonical: "/runbooks",
+    languages: {
+      de: "https://clawguru.org/de/runbooks",
+      en: "https://clawguru.org/en/runbooks",
+      es: "https://clawguru.org/es/runbooks",
+      fr: "https://clawguru.org/fr/runbooks",
+      pt: "https://clawguru.org/pt/runbooks",
+      it: "https://clawguru.org/it/runbooks",
+      ru: "https://clawguru.org/ru/runbooks",
+      zh: "https://clawguru.org/zh/runbooks",
+      ja: "https://clawguru.org/ja/runbooks",
+      ko: "https://clawguru.org/ko/runbooks",
+      ar: "https://clawguru.org/ar/runbooks",
+      hi: "https://clawguru.org/hi/runbooks",
+      tr: "https://clawguru.org/tr/runbooks",
+      pl: "https://clawguru.org/pl/runbooks",
+      nl: "https://clawguru.org/nl/runbooks"
+    }
+  }
 }
 
 export default async function RunbooksPage() {

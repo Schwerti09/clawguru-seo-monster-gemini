@@ -64,7 +64,7 @@ export default function SbomGenerationPage({ params }: PageProps) {
           <h2 className="text-2xl font-semibold mb-4">SBOM Standards and Formats</h2>
           <div className="bg-gray-100 p-6 rounded-lg">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
+              <div className="bg-gray-100 p-4 rounded-lg">
                 <h3 className="font-bold text-gray-800 mb-3">SPDX (Software Package Data Exchange)</h3>
                 <ul className="space-y-2 text-sm">
                   <li>Industry standard format</li>
@@ -202,7 +202,7 @@ export default function SbomGenerationPage({ params }: PageProps) {
           </div>
         </section>
 
-        <section className="mb-10">
+        <section className="mb-10 bg-gray-100 p-6 rounded-lg">
           <h2 className="text-2xl font-semibold mb-4">License Compliance</h2>
           <div className="bg-gray-100 p-6 rounded-lg">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -216,7 +216,7 @@ export default function SbomGenerationPage({ params }: PageProps) {
                   <li>Obligation tracking</li>
                 </ul>
               </div>
-              <div>
+              <div className="bg-gray-100 p-4 rounded-lg">
                 <h3 className="font-bold text-gray-800 mb-3">Compliance Management</h3>
                 <ul className="space-y-2 text-sm">
                   <li>License policy enforcement</li>
@@ -230,7 +230,7 @@ export default function SbomGenerationPage({ params }: PageProps) {
           </div>
         </section>
 
-        <section className="mb-10">
+        <section className="mb-10 bg-gray-100 p-6 rounded-lg">
           <h2 className="text-2xl font-semibold mb-4">Supply Chain Security</h2>
           <div className="bg-gray-100 p-6 rounded-lg">
             <div className="space-y-4">
@@ -266,7 +266,7 @@ export default function SbomGenerationPage({ params }: PageProps) {
           </div>
         </section>
 
-        <section className="mb-10">
+        <section className="mb-10 bg-gray-100 p-6 rounded-lg">
           <h2 className="text-2xl font-semibold mb-4">SBOM Analytics and Reporting</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto">
             <pre>
@@ -295,7 +295,7 @@ export default function SbomGenerationPage({ params }: PageProps) {
           </div>
         </section>
 
-        <section className="mb-10">
+        <section className="mb-10 bg-gray-100 p-6 rounded-lg">
           <h2 className="text-2xl font-semibold mb-4">Best Practices</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-blue-100 p-4 rounded-lg">
@@ -317,7 +317,7 @@ export default function SbomGenerationPage({ params }: PageProps) {
           </div>
         </section>
 
-        <section className="mb-10">
+        <section className="mb-10 bg-gray-100 p-6 rounded-lg">
           <h2 className="text-2xl font-semibold mb-4">Implementation Examples</h2>
           <div className="bg-gray-100 p-6 rounded-lg">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

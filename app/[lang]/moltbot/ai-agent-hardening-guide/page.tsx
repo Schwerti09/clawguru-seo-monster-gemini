@@ -60,11 +60,11 @@ export default function AiAgentHardeningGuidePage({ params }: PageProps) {
           </div>
         </section>
 
-        <section className="mb-10">
+        <section className="mb-10 bg-gray-100 p-6 rounded-lg">
           <h2 className="text-2xl font-semibold mb-4">Input Hardening</h2>
           <div className="bg-gray-100 p-6 rounded-lg">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
+              <div className="bg-gray-100 p-4 rounded-lg">
                 <h3 className="font-bold text-gray-800 mb-3">Input Validation</h3>
                 <ul className="space-y-2 text-sm">
                   <li>Strict input type validation</li>
@@ -74,7 +74,7 @@ export default function AiAgentHardeningGuidePage({ params }: PageProps) {
                   <li>Malicious pattern detection</li>
                 </ul>
               </div>
-              <div>
+              <div className="bg-gray-100 p-4 rounded-lg">
                 <h3 className="font-bold text-gray-800 mb-3">Prompt Security</h3>
                 <ul className="space-y-2 text-sm">
                   <li>Prompt injection prevention</li>
@@ -88,7 +88,7 @@ export default function AiAgentHardeningGuidePage({ params }: PageProps) {
           </div>
         </section>
 
-        <section className="mb-10">
+        <section className="mb-10 bg-gray-100 p-6 rounded-lg">
           <h2 className="text-2xl font-semibold mb-4">Processing Hardening</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto">
             <pre>
@@ -117,11 +117,11 @@ export default function AiAgentHardeningGuidePage({ params }: PageProps) {
           </div>
         </section>
 
-        <section className="mb-10">
+        <section className="mb-10 bg-gray-100 p-6 rounded-lg">
           <h2 className="text-2xl font-semibold mb-4">Output Hardening</h2>
           <div className="bg-gray-100 p-6 rounded-lg">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
+              <div className="bg-gray-100 p-4 rounded-lg">
                 <h3 className="font-bold text-gray-800 mb-3">Output Validation</h3>
                 <ul className="space-y-2 text-sm">
                   <li>Output content validation</li>
@@ -131,7 +131,7 @@ export default function AiAgentHardeningGuidePage({ params }: PageProps) {
                   <li>Compliance checking</li>
                 </ul>
               </div>
-              <div>
+              <div className="bg-gray-100 p-4 rounded-lg">
                 <h3 className="font-bold text-gray-800 mb-3">Data Leakage Prevention</h3>
                 <ul className="space-y-2 text-sm">
                   <li>Sensitive data detection</li>
@@ -145,7 +145,7 @@ export default function AiAgentHardeningGuidePage({ params }: PageProps) {
           </div>
         </section>
 
-        <section className="mb-10">
+        <section className="mb-10 bg-gray-100 p-6 rounded-lg">
           <h2 className="text-2xl font-semibold mb-4">Autonomous System Hardening</h2>
           <div className="bg-gray-100 p-6 rounded-lg">
             <div className="space-y-4">
@@ -181,7 +181,7 @@ export default function AiAgentHardeningGuidePage({ params }: PageProps) {
           </div>
         </section>
 
-        <section className="mb-10">
+        <section className="mb-10 bg-gray-100 p-6 rounded-lg">
           <h2 className="text-2xl font-semibold mb-4">Network Hardening</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto">
             <pre>
@@ -210,11 +210,11 @@ export default function AiAgentHardeningGuidePage({ params }: PageProps) {
           </div>
         </section>
 
-        <section className="mb-10">
+        <section className="mb-10 bg-gray-100 p-6 rounded-lg">
           <h2 className="text-2xl font-semibold mb-4">Data Security Hardening</h2>
           <div className="bg-gray-100 p-6 rounded-lg">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
+              <div className="bg-gray-100 p-4 rounded-lg">
                 <h3 className="font-bold text-gray-800 mb-3">Data Protection</h3>
                 <ul className="space-y-2 text-sm">
                   <li>Encryption at rest and in transit</li>
@@ -224,7 +224,7 @@ export default function AiAgentHardeningGuidePage({ params }: PageProps) {
                   <li>Data retention and deletion</li>
                 </ul>
               </div>
-              <div>
+              <div className="bg-gray-100 p-4 rounded-lg">
                 <h3 className="font-bold text-gray-800 mb-3">Privacy Controls</h3>
                 <ul className="space-y-2 text-sm">
                   <li>PII detection and masking</li>
@@ -238,11 +238,11 @@ export default function AiAgentHardeningGuidePage({ params }: PageProps) {
           </div>
         </section>
 
-        <section className="mb-10">
+        <section className="mb-10 bg-gray-100 p-6 rounded-lg">
           <h2 className="text-2xl font-semibold mb-4">Infrastructure Hardening</h2>
           <div className="bg-gray-100 p-6 rounded-lg">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
+              <div className="bg-gray-100 p-4 rounded-lg">
                 <h3 className="font-bold text-gray-800 mb-3">Container Security</h3>
                 <ul className="space-y-2 text-sm">
                   <li>Minimal base images</li>
@@ -252,7 +252,7 @@ export default function AiAgentHardeningGuidePage({ params }: PageProps) {
                   <li>Network isolation policies</li>
                 </ul>
               </div>
-              <div>
+              <div className="bg-gray-100 p-4 rounded-lg">
                 <h3 className="font-bold text-gray-800 mb-3">Cloud Security</h3>
                 <ul className="space-y-2 text-sm">
                   <li>Cloud security posture management</li>
@@ -266,7 +266,7 @@ export default function AiAgentHardeningGuidePage({ params }: PageProps) {
           </div>
         </section>
 
-        <section className="mb-10">
+        <section className="mb-10 bg-gray-100 p-6 rounded-lg">
           <h2 className="text-2xl font-semibold mb-4">Monitoring and Logging Hardening</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto">
             <pre>
@@ -295,11 +295,11 @@ export default function AiAgentHardeningGuidePage({ params }: PageProps) {
           </div>
         </section>
 
-        <section className="mb-10">
+        <section className="mb-10 bg-gray-100 p-6 rounded-lg">
           <h2 className="text-2xl font-semibold mb-4">Hardening Checklist</h2>
           <div className="bg-gray-100 p-6 rounded-lg">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
+              <div className="bg-gray-100 p-4 rounded-lg">
                 <h3 className="font-bold text-gray-800 mb-3">Input Security</h3>
                 <ul className="space-y-2 text-sm">
                   <li>Input validation implemented</li>
@@ -309,7 +309,7 @@ export default function AiAgentHardeningGuidePage({ params }: PageProps) {
                   <li>Input logging enabled</li>
                 </ul>
               </div>
-              <div>
+              <div className="bg-gray-100 p-4 rounded-lg">
                 <h3 className="font-bold text-gray-800 mb-3">Processing Security</h3>
                 <ul className="space-y-2 text-sm">
                   <li>Sandboxed execution environment</li>
@@ -319,7 +319,7 @@ export default function AiAgentHardeningGuidePage({ params }: PageProps) {
                   <li>Process isolation configured</li>
                 </ul>
               </div>
-              <div>
+              <div className="bg-gray-100 p-4 rounded-lg">
                 <h3 className="font-bold text-gray-800 mb-3">Output Security</h3>
                 <ul className="space-y-2 text-sm">
                   <li>Output validation implemented</li>
@@ -340,7 +340,7 @@ export default function AiAgentHardeningGuidePage({ params }: PageProps) {
           </div>
         </section>
 
-        <section className="mb-10">
+        <section className="mb-10 bg-gray-100 p-6 rounded-lg">
           <h2 className="text-2xl font-semibold mb-4">Best Practices</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-gray-100 p-4 rounded-lg">
@@ -362,7 +362,7 @@ export default function AiAgentHardeningGuidePage({ params }: PageProps) {
           </div>
         </section>
 
-        <section className="mb-10">
+        <section className="mb-10 bg-gray-100 p-6 rounded-lg">
           <h2 className="text-2xl font-semibold mb-4">Implementation Examples</h2>
           <div className="bg-gray-100 p-6 rounded-lg">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -376,7 +376,7 @@ export default function AiAgentHardeningGuidePage({ params }: PageProps) {
                   <li>Behavioral analysis</li>
                 </ul>
               </div>
-              <div>
+              <div className="bg-gray-100 p-4 rounded-lg">
                 <h3 className="font-bold text-gray-800 mb-3">Autonomous Agent Hardening</h3>
                 <ul className="space-y-2 text-sm">
                   <li>Decision validation frameworks</li>

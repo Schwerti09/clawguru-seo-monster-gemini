@@ -74,7 +74,7 @@ export default function ComplianceAutomationEnginePage({ params }: PageProps) {
                   <li>Policy lifecycle management</li>
                 </ul>
               </div>
-              <div>
+              <div className="bg-gray-100 p-4 rounded-lg">
                 <h3 className="font-bold text-gray-800 mb-3">Compliance Checking</h3>
                 <ul className="space-y-2 text-sm">
                   <li>Automated compliance scanning</li>
@@ -121,7 +121,7 @@ export default function ComplianceAutomationEnginePage({ params }: PageProps) {
           <h2 className="text-2xl font-semibold mb-4">Automation Engine Components</h2>
           <div className="bg-gray-100 p-6 rounded-lg">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
+              <div className="bg-gray-100 p-4 rounded-lg">
                 <h3 className="font-bold text-gray-800 mb-3">Policy Engine</h3>
                 <ul className="space-y-2 text-sm">
                   <li>Rule-based policy evaluation</li>
@@ -252,9 +252,9 @@ export default function ComplianceAutomationEnginePage({ params }: PageProps) {
                   <li>Risk assessment dashboards</li>
                 </ul>
               </div>
-              <div>
+              <div className="bg-gray-100 p-4 rounded-lg">
                 <h3 className="font-bold text-gray-800 mb-3">Audit Reports</h3>
-                  <ul className="space-y-2 text-sm">
+                <ul className="space-y-2 text-sm">
                   <li>Automated audit evidence collection</li>
                   <li>Compliance certification reports</li>
                   <li>Regulatory submission reports</li>
@@ -321,7 +321,7 @@ export default function ComplianceAutomationEnginePage({ params }: PageProps) {
           <h2 className="text-2xl font-semibold mb-4">Implementation Examples</h2>
           <div className="bg-gray-100 p-6 rounded-lg">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
+              <div className="bg-gray-100 p-4 rounded-lg">
                 <h3 className="font-bold text-gray-800 mb-3">Cloud Compliance</h3>
                 <ul className="space-y-2 text-sm">
                   <li>AWS Config Rules automation</li>

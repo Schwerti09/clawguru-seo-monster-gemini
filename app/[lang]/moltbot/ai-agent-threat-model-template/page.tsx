@@ -64,7 +64,7 @@ export default function AiAgentThreatModelTemplatePage({ params }: PageProps) {
           <h2 className="text-2xl font-semibold mb-4">System Architecture Documentation</h2>
           <div className="bg-gray-100 p-6 rounded-lg">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
+              <div className="bg-gray-100 p-4 rounded-lg">
                 <h3 className="font-bold text-gray-800 mb-3">Architecture Components</h3>
                 <ul className="space-y-2 text-sm">
                   <li>AI model and algorithms</li>
@@ -329,7 +329,7 @@ export default function AiAgentThreatModelTemplatePage({ params }: PageProps) {
           <h2 className="text-2xl font-semibold mb-4">Template Examples</h2>
           <div className="bg-gray-100 p-6 rounded-lg">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
+              <div className="bg-gray-100 p-4 rounded-lg">
                 <h3 className="font-bold text-gray-800 mb-3">Chatbot Threat Model</h3>
                 <ul className="space-y-2 text-sm">
                   <li>Prompt injection threats</li>

@@ -331,8 +331,8 @@ export default function AiAgentSecurityPage({ params }: PageProps) {
                   <li>Behavioral analysis</li>
                 </ul>
               </div>
-              <div>
-                <h3 className="font-bold text-gray-800 mb-3">Autonomous Agent Security</h3>
+              <div className="bg-gray-100 p-4 rounded-lg">
+                <h3 className="font-bold text-gray-800 mb-3">Input Layer Security</h3>
                 <ul className="space-y-2 text-sm">
                   <li>Decision validation frameworks</li>
                   <li>Behavior monitoring systems</li>

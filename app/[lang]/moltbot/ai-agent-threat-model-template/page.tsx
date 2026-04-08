@@ -74,7 +74,7 @@ export default function AiAgentThreatModelTemplatePage({ params }: PageProps) {
                   <li>External integrations</li>
                 </ul>
               </div>
-              <div>
+              <div className="bg-gray-100 p-4 rounded-lg">
                 <h3 className="font-bold text-gray-800 mb-3">Trust Boundaries</h3>
                 <ul className="space-y-2 text-sm">
                   <li>Data flow boundaries</li>
@@ -121,7 +121,7 @@ export default function AiAgentThreatModelTemplatePage({ params }: PageProps) {
           <h2 className="text-2xl font-semibold mb-4">Threat Analysis Framework</h2>
           <div className="bg-gray-100 p-6 rounded-lg">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
+              <div className="bg-gray-100 p-4 rounded-lg">
                 <h3 className="font-bold text-gray-800 mb-3">STRIDE Categories</h3>
                 <ul className="space-y-2 text-sm">
                   <li><strong>S</strong>poofing - Identity impersonation</li>
@@ -132,7 +132,7 @@ export default function AiAgentThreatModelTemplatePage({ params }: PageProps) {
                   <li><strong>E</strong>levation of Privilege - Access escalation</li>
                 </ul>
               </div>
-              <div>
+              <div className="bg-gray-100 p-4 rounded-lg">
                 <h3 className="font-bold text-gray-800 mb-3">AI-Specific Threats</h3>
                 <ul className="space-y-2 text-sm">
                   <li>Prompt injection attacks</li>
@@ -152,28 +152,28 @@ export default function AiAgentThreatModelTemplatePage({ params }: PageProps) {
             <div className="space-y-4">
               <div className="flex items-start space-x-4">
                 <div className="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold flex-shrink-0">1</div>
-                <div>
+                <div className="bg-gray-100 p-4 rounded-lg">
                   <div className="font-semibold">Likelihood Assessment</div>
                   <div className="text-sm text-gray-600">Assess the probability of threat occurrence based on historical data and current conditions</div>
                 </div>
               </div>
               <div className="flex items-start space-x-4">
                 <div className="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold flex-shrink-0">2</div>
-                <div>
+                <div className="bg-gray-100 p-4 rounded-lg">
                   <div className="font-semibold">Impact Analysis</div>
                   <div className="text-sm text-gray-600">Evaluate potential impact on confidentiality, integrity, and availability</div>
                 </div>
               </div>
               <div className="flex items-start space-x-4">
                 <div className="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold flex-shrink-0">3</div>
-                <div>
+                <div className="bg-gray-100 p-4 rounded-lg">
                   <div className="font-semibold">Risk Calculation</div>
                   <div className="text-sm text-gray-600">Calculate risk scores using likelihood x impact methodology</div>
                 </div>
               </div>
               <div className="flex items-start space-x-4">
                 <div className="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold flex-shrink-0">4</div>
-                <div>
+                <div className="bg-gray-100 p-4 rounded-lg">
                   <div className="font-semibold">Risk Prioritization</div>
                   <div className="text-sm text-gray-600">Prioritize risks based on calculated scores and business impact</div>
                 </div>
@@ -222,7 +222,7 @@ export default function AiAgentThreatModelTemplatePage({ params }: PageProps) {
           <h2 className="text-2xl font-semibold mb-4">Threat Model Documentation Template</h2>
           <div className="bg-gray-100 p-6 rounded-lg">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
+              <div className="bg-gray-100 p-4 rounded-lg">
                 <h3 className="font-bold text-gray-800 mb-3">Executive Summary</h3>
                 <ul className="space-y-2 text-sm">
                   <li>System overview and purpose</li>
@@ -232,7 +232,7 @@ export default function AiAgentThreatModelTemplatePage({ params }: PageProps) {
                   <li>Implementation timeline</li>
                 </ul>
               </div>
-              <div>
+              <div className="bg-gray-100 p-4 rounded-lg">
                 <h3 className="font-bold text-gray-800 mb-3">Technical Details</h3>
                 <ul className="space-y-2 text-sm">
                   <li>Architecture diagrams</li>
@@ -250,7 +250,7 @@ export default function AiAgentThreatModelTemplatePage({ params }: PageProps) {
           <h2 className="text-2xl font-semibold mb-4">Implementation Guidelines</h2>
           <div className="bg-gray-100 p-6 rounded-lg">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
+              <div className="bg-gray-100 p-4 rounded-lg">
                 <h3 className="font-bold text-gray-800 mb-3">Development Phase</h3>
                 <ul className="space-y-2 text-sm">
                   <li>Secure development lifecycle</li>
@@ -260,7 +260,7 @@ export default function AiAgentThreatModelTemplatePage({ params }: PageProps) {
                   <li>Documentation maintenance</li>
                 </ul>
               </div>
-              <div>
+              <div className="bg-gray-100 p-4 rounded-lg">
                 <h3 className="font-bold text-gray-800 mb-3">Operational Phase</h3>
                 <ul className="space-y-2 text-sm">
                   <li>Continuous monitoring</li>

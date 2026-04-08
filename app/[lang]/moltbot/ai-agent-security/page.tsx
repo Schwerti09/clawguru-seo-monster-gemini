@@ -64,7 +64,7 @@ export default function AiAgentSecurityPage({ params }: PageProps) {
           <h2 className="text-2xl font-semibold mb-4">Security Architecture</h2>
           <div className="bg-gray-100 p-6 rounded-lg">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
+              <div className="bg-gray-100 p-4 rounded-lg">
                 <h3 className="font-bold text-gray-800 mb-3">Input Layer Security</h3>
                 <ul className="space-y-2 text-sm">
                   <li>Input validation and sanitization</li>
@@ -74,7 +74,7 @@ export default function AiAgentSecurityPage({ params }: PageProps) {
                   <li>Anomaly detection for inputs</li>
                 </ul>
               </div>
-              <div>
+              <div className="bg-gray-100 p-4 rounded-lg">
                 <h3 className="font-bold text-gray-800 mb-3">Processing Layer Security</h3>
                 <ul className="space-y-2 text-sm">
                   <li>Sandboxed execution environments</li>
@@ -121,7 +121,7 @@ export default function AiAgentSecurityPage({ params }: PageProps) {
           <h2 className="text-2xl font-semibold mb-4">Security Controls Implementation</h2>
           <div className="bg-gray-100 p-6 rounded-lg">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
+              <div className="bg-gray-100 p-4 rounded-lg">
                 <h3 className="font-bold text-gray-800 mb-3">Preventive Controls</h3>
                 <ul className="space-y-2 text-sm">
                   <li>Input validation and sanitization</li>
@@ -131,7 +131,7 @@ export default function AiAgentSecurityPage({ params }: PageProps) {
                   <li>Secure development practices</li>
                 </ul>
               </div>
-              <div>
+              <div className="bg-gray-100 p-4 rounded-lg">
                 <h3 className="font-bold text-gray-800 mb-3">Detective Controls</h3>
                 <ul className="space-y-2 text-sm">
                   <li>Behavioral analysis and monitoring</li>
@@ -214,7 +214,7 @@ export default function AiAgentSecurityPage({ params }: PageProps) {
           <h2 className="text-2xl font-semibold mb-4">Compliance and Governance</h2>
           <div className="bg-gray-100 p-6 rounded-lg">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
+              <div className="bg-gray-100 p-4 rounded-lg">
                 <h3 className="font-bold text-gray-800 mb-3">Regulatory Compliance</h3>
                 <ul className="space-y-2 text-sm">
                   <li>GDPR data protection requirements</li>
@@ -224,7 +224,7 @@ export default function AiAgentSecurityPage({ params }: PageProps) {
                   <li>Privacy by design principles</li>
                 </ul>
               </div>
-              <div>
+              <div className="bg-gray-100 p-4 rounded-lg">
                 <h3 className="font-bold text-gray-800 mb-3">Ethical Governance</h3>
                 <ul className="space-y-2 text-sm">
                   <li>Fairness and bias mitigation</li>
@@ -242,7 +242,7 @@ export default function AiAgentSecurityPage({ params }: PageProps) {
           <h2 className="text-2xl font-semibold mb-4">Monitoring and Incident Response</h2>
           <div className="bg-gray-100 p-6 rounded-lg">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
+              <div className="bg-gray-100 p-4 rounded-lg">
                 <h3 className="font-bold text-gray-800 mb-3">Real-time Monitoring</h3>
                 <ul className="space-y-2 text-sm">
                   <li>Agent behavior tracking</li>
@@ -252,7 +252,7 @@ export default function AiAgentSecurityPage({ params }: PageProps) {
                   <li>Anomaly detection systems</li>
                 </ul>
               </div>
-              <div>
+              <div className="bg-gray-100 p-4 rounded-lg">
                 <h3 className="font-bold text-gray-800 mb-3">Incident Response</h3>
                 <ul className="space-y-2 text-sm">
                   <li>Incident identification and classification</li>
@@ -321,7 +321,7 @@ export default function AiAgentSecurityPage({ params }: PageProps) {
           <h2 className="text-2xl font-semibold mb-4">Implementation Examples</h2>
           <div className="bg-gray-100 p-6 rounded-lg">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
+              <div className="bg-gray-100 p-4 rounded-lg">
                 <h3 className="font-bold text-gray-800 mb-3">Chatbot Security</h3>
                 <ul className="space-y-2 text-sm">
                   <li>Input validation and sanitization</li>

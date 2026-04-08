@@ -64,7 +64,7 @@ export default function AiAgentThreatModelPage({ params }: PageProps) {
           <h2 className="text-2xl font-semibold mb-4">AI Agent Threat Categories</h2>
           <div className="bg-gray-100 p-6 rounded-lg">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
+              <div className="bg-gray-100 p-4 rounded-lg">
                 <h3 className="font-bold text-gray-800 mb-3">External Threats</h3>
                 <ul className="space-y-2 text-sm">
                   <li>Prompt injection attacks</li>
@@ -74,7 +74,7 @@ export default function AiAgentThreatModelPage({ params }: PageProps) {
                   <li>Adversarial examples</li>
                 </ul>
               </div>
-              <div>
+              <div className="bg-gray-100 p-4 rounded-lg">
                 <h3 className="font-bold text-gray-800 mb-3">Internal Threats</h3>
                 <ul className="space-y-2 text-sm">
                   <li>Goal misalignment</li>
@@ -147,7 +147,7 @@ export default function AiAgentThreatModelPage({ params }: PageProps) {
           <h2 className="text-2xl font-semibold mb-4">Security Controls Implementation</h2>
           <div className="bg-gray-100 p-6 rounded-lg">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
+              <div className="bg-gray-100 p-4 rounded-lg">
                 <h3 className="font-bold text-gray-800 mb-3">Preventive Controls</h3>
                 <ul className="space-y-2 text-sm">
                   <li>Input validation and sanitization</li>
@@ -157,7 +157,7 @@ export default function AiAgentThreatModelPage({ params }: PageProps) {
                   <li>Secure development practices</li>
                 </ul>
               </div>
-              <div>
+              <div className="bg-gray-100 p-4 rounded-lg">
                 <h3 className="font-bold text-gray-800 mb-3">Detective Controls</h3>
                 <ul className="space-y-2 text-sm">
                   <li>Behavioral analysis and monitoring</li>
@@ -169,7 +169,7 @@ export default function AiAgentThreatModelPage({ params }: PageProps) {
               </div>
             </div>
             <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
+              <div className="bg-gray-100 p-4 rounded-lg">
                 <h3 className="font-bold text-gray-800 mb-3">Corrective Controls</h3>
                 <ul className="space-y-2 text-sm">
                   <li>Incident response procedures</li>
@@ -179,7 +179,7 @@ export default function AiAgentThreatModelPage({ params }: PageProps) {
                   <li>Post-incident analysis</li>
                 </ul>
               </div>
-              <div>
+              <div className="bg-gray-100 p-4 rounded-lg">
                 <h3 className="font-bold text-gray-800 mb-3">Compensating Controls</h3>
                 <ul className="space-y-2 text-sm">
                   <li>Multi-factor authentication</li>

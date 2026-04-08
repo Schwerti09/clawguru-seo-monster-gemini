@@ -74,7 +74,7 @@ export default function BotSecurityTestingPage({ params }: PageProps) {
                   <li>API security analysis</li>
                 </ul>
               </div>
-              <div>
+              <div className="bg-gray-100 p-4 rounded-lg">
                 <h3 className="font-bold text-gray-800 mb-3">Dynamic Testing</h3>
                 <ul className="space-y-2 text-sm">
                   <li>Input validation testing</li>
@@ -121,7 +121,7 @@ export default function BotSecurityTestingPage({ params }: PageProps) {
           <h2 className="text-2xl font-semibold mb-4">Automated Testing Tools</h2>
           <div className="bg-gray-100 p-6 rounded-lg">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
+              <div className="bg-gray-100 p-4 rounded-lg">
                 <h3 className="font-bold text-gray-800 mb-3">Open Source Tools</h3>
                 <ul className="space-y-2 text-sm">
                   <li>OWASP ZAP for API testing</li>
@@ -131,7 +131,7 @@ export default function BotSecurityTestingPage({ params }: PageProps) {
                   <li>Bandit for Python security analysis</li>
                 </ul>
               </div>
-              <div>
+              <div className="bg-gray-100 p-4 rounded-lg">
                 <h3 className="font-bold text-gray-800 mb-3">Commercial Tools</h3>
                 <ul className="space-y-2 text-sm">
                   <li>Checkmarx for static analysis</li>
@@ -214,7 +214,7 @@ export default function BotSecurityTestingPage({ params }: PageProps) {
           <h2 className="text-2xl font-semibold mb-4">Security Testing Checklist</h2>
           <div className="bg-gray-100 p-6 rounded-lg">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
+              <div className="bg-gray-100 p-4 rounded-lg">
                 <h3 className="font-bold text-gray-800 mb-3">Input Security</h3>
                 <ul className="space-y-2 text-sm">
                   <li>Input validation and sanitization</li>
@@ -224,7 +224,7 @@ export default function BotSecurityTestingPage({ params }: PageProps) {
                   <li>Command injection protection</li>
                 </ul>
               </div>
-              <div>
+              <div className="bg-gray-100 p-4 rounded-lg">
                 <h3 className="font-bold text-gray-800 mb-3">Authentication Security</h3>
                 <ul className="space-y-2 text-sm">
                   <li>Strong password policies</li>

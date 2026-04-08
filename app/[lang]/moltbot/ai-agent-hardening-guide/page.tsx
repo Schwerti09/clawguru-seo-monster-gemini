@@ -324,12 +324,9 @@ export default function AiAgentHardeningGuidePage({ params }: PageProps) {
                 <ul className="space-y-2 text-sm">
                   <li>Output validation implemented</li>
                   <li>Data leakage prevention</li>
-                  <li>Content filtering enabled</li>
-                  <li>Output logging configured</li>
-                  <li>Compliance checking active</li>
                 </ul>
               </div>
-              <div>
+              <div className="bg-gray-100 p-4 rounded-lg">
                 <h3 className="font-bold text-gray-800 mb-3">Infrastructure Security</h3>
                 <ul className="space-y-2 text-sm">
                   <li>Container security configured</li>
@@ -346,19 +343,19 @@ export default function AiAgentHardeningGuidePage({ params }: PageProps) {
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4">Best Practices</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-blue-100 p-4 rounded-lg">
+            <div className="bg-gray-100 p-4 rounded-lg">
               <h3 className="font-semibold text-blue-800 mb-2">Defense in Depth</h3>
               <p className="text-sm text-blue-700">Implement multiple layers of security controls for comprehensive protection</p>
             </div>
-            <div className="bg-green-100 p-4 rounded-lg">
+            <div className="bg-gray-100 p-4 rounded-lg">
               <h3 className="font-semibold text-green-800 mb-2">Least Privilege</h3>
               <p className="text-sm text-green-700">Apply principle of least privilege to all system components and access</p>
             </div>
-            <div className="bg-yellow-100 p-4 rounded-lg">
+            <div className="bg-gray-100 p-4 rounded-lg">
               <h3 className="font-semibold text-yellow-800 mb-2">Continuous Monitoring</h3>
               <p className="text-sm text-yellow-700">Maintain continuous monitoring and regular security assessments</p>
             </div>
-            <div className="bg-red-100 p-4 rounded-lg">
+            <div className="bg-gray-100 p-4 rounded-lg">
               <h3 className="font-semibold text-red-800 mb-2">Regular Updates</h3>
               <p className="text-sm text-red-700">Keep all systems and security controls updated and patched</p>
             </div>
@@ -369,7 +366,7 @@ export default function AiAgentHardeningGuidePage({ params }: PageProps) {
           <h2 className="text-2xl font-semibold mb-4">Implementation Examples</h2>
           <div className="bg-gray-100 p-6 rounded-lg">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
+              <div className="bg-gray-100 p-4 rounded-lg">
                 <h3 className="font-bold text-gray-800 mb-3">Chatbot Hardening</h3>
                 <ul className="space-y-2 text-sm">
                   <li>Input validation and sanitization</li>

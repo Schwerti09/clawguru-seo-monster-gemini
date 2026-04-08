@@ -64,7 +64,7 @@ export default function ComplianceAutomationEnginePage({ params }: PageProps) {
           <h2 className="text-2xl font-semibold mb-4">Compliance Framework Architecture</h2>
           <div className="bg-gray-100 p-6 rounded-lg">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
+              <div className="bg-gray-100 p-4 rounded-lg">
                 <h3 className="font-bold text-gray-800 mb-3">Policy Management</h3>
                 <ul className="space-y-2 text-sm">
                   <li>Policy definition and modeling</li>
@@ -131,7 +131,7 @@ export default function ComplianceAutomationEnginePage({ params }: PageProps) {
                   <li>Policy impact analysis</li>
                 </ul>
               </div>
-              <div>
+              <div className="bg-gray-100 p-4 rounded-lg">
                 <h3 className="font-bold text-gray-800 mb-3">Assessment Engine</h3>
                 <ul className="space-y-2 text-sm">
                   <li>Automated compliance assessments</li>
@@ -214,7 +214,7 @@ export default function ComplianceAutomationEnginePage({ params }: PageProps) {
           <h2 className="text-2xl font-semibold mb-4">Automated Remediation</h2>
           <div className="bg-gray-100 p-6 rounded-lg">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
+              <div className="bg-gray-100 p-4 rounded-lg">
                 <h3 className="font-bold text-gray-800 mb-3">Remediation Workflows</h3>
                 <ul className="space-y-2 text-sm">
                   <li>Automated configuration fixes</li>
@@ -224,7 +224,7 @@ export default function ComplianceAutomationEnginePage({ params }: PageProps) {
                   <li>Backup and recovery procedures</li>
                 </ul>
               </div>
-              <div>
+              <div className="bg-gray-100 p-4 rounded-lg">
                 <h3 className="font-bold text-gray-800 mb-3">Integration Capabilities</h3>
                 <ul className="space-y-2 text-sm">
                   <li>Configuration management tools</li>
@@ -242,7 +242,7 @@ export default function ComplianceAutomationEnginePage({ params }: PageProps) {
           <h2 className="text-2xl font-semibold mb-4">Reporting and Analytics</h2>
           <div className="bg-gray-100 p-6 rounded-lg">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
+              <div className="bg-gray-100 p-4 rounded-lg">
                 <h3 className="font-bold text-gray-800 mb-3">Compliance Dashboards</h3>
                 <ul className="space-y-2 text-sm">
                   <li>Real-time compliance status</li>

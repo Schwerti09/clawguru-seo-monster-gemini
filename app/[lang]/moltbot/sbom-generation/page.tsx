@@ -74,7 +74,7 @@ export default function SbomGenerationPage({ params }: PageProps) {
                   <li>Relationship between components</li>
                 </ul>
               </div>
-              <div>
+              <div className="bg-gray-100 p-4 rounded-lg">
                 <h3 className="font-bold text-gray-800 mb-3">CycloneDX</h3>
                 <ul className="space-y-2 text-sm">
                   <li>Lightweight XML/JSON format</li>
@@ -121,7 +121,7 @@ export default function SbomGenerationPage({ params }: PageProps) {
           <h2 className="text-2xl font-semibold mb-4">SBOM Generation Tools</h2>
           <div className="bg-gray-100 p-6 rounded-lg">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
+              <div className="bg-gray-100 p-4 rounded-lg">
                 <h3 className="font-bold text-gray-800 mb-3">Open Source Tools</h3>
                 <ul className="space-y-2 text-sm">
                   <li>Syft (Anchore)</li>
@@ -131,7 +131,7 @@ export default function SbomGenerationPage({ params }: PageProps) {
                   <li>CycloneDX CLI</li>
                 </ul>
               </div>
-              <div>
+              <div className="bg-gray-100 p-4 rounded-lg">
                 <h3 className="font-bold text-gray-800 mb-3">Commercial Solutions</h3>
                 <ul className="space-y-2 text-sm">
                   <li>Snyk Open Source</li>
@@ -149,7 +149,7 @@ export default function SbomGenerationPage({ params }: PageProps) {
           <h2 className="text-2xl font-semibold mb-4">Integration Framework</h2>
           <div className="bg-gray-100 p-6 rounded-lg">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
+              <div className="bg-gray-100 p-4 rounded-lg">
                 <h3 className="font-bold text-gray-800 mb-3">CI/CD Integration</h3>
                 <ul className="space-y-2 text-sm">
                   <li>GitHub Actions workflows</li>
@@ -159,7 +159,7 @@ export default function SbomGenerationPage({ params }: PageProps) {
                   <li>Bitbucket pipelines</li>
                 </ul>
               </div>
-              <div>
+              <div className="bg-gray-100 p-4 rounded-lg">
                 <h3 className="font-bold text-gray-800 mb-3">Container Integration</h3>
                 <ul className="space-y-2 text-sm">
                   <li>Docker image scanning</li>
@@ -206,7 +206,7 @@ export default function SbomGenerationPage({ params }: PageProps) {
           <h2 className="text-2xl font-semibold mb-4">License Compliance</h2>
           <div className="bg-gray-100 p-6 rounded-lg">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
+              <div className="bg-gray-100 p-4 rounded-lg">
                 <h3 className="font-bold text-gray-800 mb-3">License Classification</h3>
                 <ul className="space-y-2 text-sm">
                   <li>Open source license identification</li>

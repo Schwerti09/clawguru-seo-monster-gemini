@@ -274,6 +274,63 @@ git push
 
 ---
 
+## 5. SEO KRISIS-RECOVERY PLAN (08.04.2026)
+
+### **PROBLEM: 0 Views/Klicks in Search Console**
+**Ursache**: Nur 2 von 15 Sprachen in Sitemap Index!
+
+### **Current Status (08.04.2026 - NACH Fix):**
+- **Sitemap Index**: 271 Child-Sitemaps (statt 37!)
+- **Aktive Sprachen**: Alle 15 Sprachen aktiviert! 
+- **Sitemap Sprachen**: `de,en,es,fr,pt,it,ru,zh,ja,ko,ar,hi,tr,pl,nl` 
+- **Main Pages**: 15 × 27 URLs = 405 URLs (statt 64)
+- **Total URLs**: ~4.600+ (statt 2.000)
+- **Hreflang**: 15 Sprachen in HTML (korrekt)
+- **Robots.txt**: Korrekt
+- **Africa Expansion**: Completed (stable) - alle Städte seeded
+
+### **Environment Variables Fix:**
+```env
+# VORHER (nur 2 Sprachen)
+SITEMAP_100K_LOCALES = "de,en"
+
+# NACHHER (alle 15 Sprachen)
+SITEMAP_100K_LOCALES = "de,en,es,fr,pt,it,ru,zh,ja,ko,ar,hi,tr,pl,nl"
+```
+
+### **Erwartete Ergebnisse nach Fix:**
+- **+2.600 URLs** in Sitemap Index
+- **+78 Runbook Buckets** (13 × 6)
+- **+26 Geo-Runbook Sitemaps** (13 × 2)
+- **Total URLs**: ~4.600+ (statt 2.000)
+
+### **Recovery Timeline:**
+- **Day 0**: Deploy + Sitemap Resubmission
+- **Day 1-3**: Google crawlt neue Sitemaps
+- **Day 4-7**: Erste Indexierung neuer URLs
+- **Day 8-14**: Stabile Impressions/Klicks
+
+### **Monitoring KPIs:**
+- **Search Console**: Pages indexed rising from ~2.000 to ~4.600
+- **Impressions**: Should rise from 0 to 100+ within 7 days
+- **Clicks**: Should rise from 0 to 10+ within 14 days
+- **Coverage**: No "Submitted URL not found" errors
+
+### **Rollback Plan:**
+If performance issues occur:
+```env
+# Temporary rollback (top 5 languages only)
+SITEMAP_100K_LOCALES = "de,en,es,fr,pt"
+```
+
+### **Next Steps nach Recovery:**
+1. **Oceania Expansion** (Sydney, Melbourne, Auckland, Brisbane)
+2. **Performance Monitoring** (Sitemap load times < 2s)
+3. **Quality Assurance** (no duplicate/thin content)
+4. **Search Console Optimization** (International Targeting)
+
+---
+
 ## 6. TYPESCRIPT ANTI-PATTERNS (Bekannte Fallstricke)
 
 ### FALLSTRICK 1: Shell-Variablen in Template-Literals -> Build-Fehler!

@@ -8,6 +8,8 @@ import Home from "@/app/page"
 
 export const revalidate = 60
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
+
 export async function generateStaticParams() {
   return SUPPORTED_LOCALES.map((lang) => ({ lang }))
 }
@@ -17,11 +19,17 @@ export async function generateMetadata(props: { params: { lang: string } }) {
   const alternates = localeAlternates("/")
   const localeHrefLang = getLocaleHrefLang(locale)
   const canonical = alternates.languages[localeHrefLang] ?? alternates.canonical
+  const pageUrl = `${SITE_URL}/${locale}`
 
   return {
     alternates: {
       canonical,
       languages: alternates.languages,
+    },
+    openGraph: {
+      type: "website" as const,
+      url: pageUrl,
+      locale: locale === "zh" ? "zh_CN" : locale === "hi" ? "hi_IN" : locale === "ar" ? "ar_SA" : `${locale}_${locale.toUpperCase()}`,
     },
   }
 }

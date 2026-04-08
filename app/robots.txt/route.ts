@@ -27,12 +27,9 @@ export async function GET(req: NextRequest) {
     "Allow: /",
     // Explicitly allow public embed script under /api
     "Allow: /api/clawlink.js",
-    "",
-    // Allow curated sitemap chunks when enabled
-    ...(allowChunk ? [] : [
-      "Disallow: */runbooks-*-*.xml",
-      "Disallow: */tags-*-*.xml",
-    ]),
+    // Explicitly allow all sitemap files
+    "Allow: /sitemap.xml",
+    "Allow: /sitemaps/",
     "",
     "# Blockiere Admin & Backend",
     "Disallow: /admin/",

@@ -367,6 +367,63 @@ export async function GET(
               }
             })
           : []
+      // Moltbot subpages (29 pages × all locales)
+      const MOLTBOT_SLUGS = [
+        "hardening-guide-2024","security-framework","threat-detection-setup","network-security-firewall",
+        "api-security-protection","authentication-oauth2-jwt","database-security-encryption",
+        "container-security-docker-kubernetes","logging-auditing-compliance","incident-response-automation",
+        "devsecops-pipeline","monitoring-dashboards","backup-recovery-disaster-recovery","secrets-vault-management",
+        "ssl-tls-management","vulnerability-scanning","zero-trust-architecture","compliance-gdpr-setup",
+        "api-gateway-security","identity-governance-iam","nis2-compliance-setup","runtime-protection-rasp",
+        "security-automation-workflows","security-posture-score","cloud-native-security",
+        "cloud-security-posture-management","cryptography-encryption-guide","data-loss-prevention",
+        "api-rate-limiting-advanced",
+      ]
+      // OpenClaw subpages (10 pages × all locales)
+      const OPENCLAW_SLUGS = [
+        "server-hardening-checklist","self-hosted-security-checklist","security-headers-guide",
+        "firewall-configuration-guide","reverse-proxy-security","docker-swarm-hardening",
+        "audit-logging-setup","database-access-control","intrusion-detection-setup","supply-chain-security",
+      ]
+      // Specialized security + compare pages
+      const SECURITY_SLUGS = [
+        "linux-hardening","nginx-hardening","docker-security-hardening","kubernetes-network-policies",
+        "terraform-security","postgresql-security","redis-security","mongodb-security","elasticsearch-security",
+        "grafana-hardening","prometheus-vpn","keycloak-hardening","vault-hardening","splunk-security",
+        "datadog-security","jenkins-security","gitlab-cicd-security","circleci-security","argocd-security",
+        "kafka-security","rabbitmq-security","windows-server-security","sonarqube-security",
+        "opentelemetry-security","cloudformation-security","tailscale-pam","aws-iam-security",
+        "aws-vpc-flow-logs","azure-ad-security","cloudflare-tunnel-firewall-rules",
+        "docker-reverse-proxy-hardening-cheatsheet",
+      ]
+      // Compare pages
+      const COMPARE_SLUGS = [
+        "clawguru-vs-wiz","openclaw-vs-snyk","openclaw-vs-semgrep","openclaw-vs-sonarqube",
+        "moltbot-vs-opsgenie","moltbot-vs-clawbot",
+      ]
+      // SEO guide pages
+      const GUIDE_SLUGS = [
+        "executable-runbook-vs-static-blog","security-check-vs-pentest-guide","nis2-technical-controls-self-hosted",
+        "openclaw-top-5-exposure-misconfigs","openclaw-security-2026","moltbot-hardening",
+        "ai-agent-security","ai-agent-threat-model-template","api-key-leak-response-playbook",
+        "gateway-auth-10-steps","waf-2027","xxe-2026","hetzner-vs-do-security-baseline-2026",
+        "check-methodology-30-seconds",
+      ]
+      const moltbotUrls = MOLTBOT_SLUGS.map((slug) => ({
+        loc: `${base}/${locale}/moltbot/${slug}`, lastmod, changefreq: "weekly", priority: "0.88",
+      }))
+      const openclawSubUrls = OPENCLAW_SLUGS.map((slug) => ({
+        loc: `${base}/${locale}/openclaw/${slug}`, lastmod, changefreq: "weekly", priority: "0.87",
+      }))
+      const securityUrls = SECURITY_SLUGS.map((slug) => ({
+        loc: `${base}/${locale}/${slug}`, lastmod, changefreq: "weekly", priority: "0.85",
+      }))
+      const compareUrls = COMPARE_SLUGS.map((slug) => ({
+        loc: `${base}/${locale}/${slug}`, lastmod, changefreq: "monthly", priority: "0.83",
+      }))
+      const guideUrls = GUIDE_SLUGS.map((slug) => ({
+        loc: `${base}/${locale}/${slug}`, lastmod, changefreq: "weekly", priority: "0.84",
+      }))
       const urls = [
         { loc: `${base}/${locale}`, lastmod, changefreq: "daily", priority: "0.9" },
         { loc: `${base}/${locale}/live`, lastmod, changefreq: "daily", priority: "0.9" },
@@ -377,6 +434,9 @@ export async function GET(
         { loc: `${base}/${locale}/emergency`, lastmod, changefreq: "weekly", priority: "0.85" },
         { loc: `${base}/${locale}/copilot`, lastmod, changefreq: "weekly", priority: "0.85" },
         { loc: `${base}/${locale}/runbooks`, lastmod, changefreq: "daily", priority: "0.9" },
+        { loc: `${base}/${locale}/openclaw`, lastmod, changefreq: "weekly", priority: "0.9" },
+        { loc: `${base}/${locale}/oracle`, lastmod, changefreq: "weekly", priority: "0.87" },
+        { loc: `${base}/${locale}/neuro`, lastmod, changefreq: "weekly", priority: "0.87" },
         { loc: `${base}/${locale}/solutions`, lastmod, changefreq: "weekly", priority: "0.85" },
         { loc: `${base}/${locale}/tools`, lastmod, changefreq: "weekly", priority: "0.85" },
         { loc: `${base}/${locale}/tags`, lastmod, changefreq: "weekly", priority: "0.85" },
@@ -393,6 +453,11 @@ export async function GET(
         { loc: `${base}/${locale}/clawlink`, lastmod, changefreq: "weekly", priority: "0.85" },
         ...hubUrls,
         ...geoOpenClawSprintUrls,
+        ...moltbotUrls,
+        ...openclawSubUrls,
+        ...securityUrls,
+        ...compareUrls,
+        ...guideUrls,
       ]
       return respond(urlset(urls))
     }

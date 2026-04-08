@@ -655,6 +655,118 @@ Vercel deployed automatisch bei jedem Push zu main. Roter Build = kaputte Websit
 
 ---
 
+---
+
+## 15. TRAFFIC-MASTERPLAN v6 (08.04.2026) — VOLLGAS
+
+### ROOT CAUSE ANALYSE: Warum 0 Views/Klicks
+
+| Problem | Ursache | Status |
+|---------|---------|--------|
+| Soft 404 `/de/runbooks` | OG-Metadata erbt Root-Layout `og:url=https://clawguru.org` | ✅ GEFIXT 08.04 |
+| Sitemap nur `de` Locale | `allLocales=[DEFAULT_LOCALE]` statt `SUPPORTED_LOCALES` | ✅ GEFIXT 08.04 |
+| robots.txt blockiert Sitemap-Chunks | `Disallow: */runbooks-*-*.xml` → Google konnte 600+ Pages nie sehen | ✅ GEFIXT 08.04 |
+| 435 Moltbot-Pages nicht in Sitemap | `main-{locale}.xml` hatte nur Hub-Pages | ✅ GEFIXT 08.04 |
+| 150 OpenClaw-SubPages nicht in Sitemap | Fehlten in `main-{locale}.xml` | ✅ GEFIXT 08.04 |
+| 750+ Spezial-Pages nicht in Sitemap | linux-hardening, nginx-hardening etc. fehlten | ✅ GEFIXT 08.04 |
+| Locale Home `/de` hatte kein OG | Erbt falsches `og:url=https://clawguru.org` | ✅ GEFIXT 08.04 |
+| Build-Fehler (Badge, truncated JSX) | community/guides/resources konnten nicht builden | ✅ GEFIXT 08.04 |
+
+### SITEMAP COVERAGE NACH FIX
+
+| Sitemap | URLs pro Locale | × 15 Sprachen | Total |
+|---------|----------------|---------------|-------|
+| main-{locale}.xml (Hub-Pages) | 26 | × 15 | 390 |
+| main-{locale}.xml (Moltbot-SubPages) | 29 | × 15 | 435 |
+| main-{locale}.xml (OpenClaw-SubPages) | 10 | × 15 | 150 |
+| main-{locale}.xml (Security-Pages) | 31 | × 15 | 465 |
+| main-{locale}.xml (Compare+Guide) | 20 | × 15 | 300 |
+| runbooks-{locale}-{bucket}.xml | 500/bucket × 3 buckets | × 15 | 22.500 |
+| tags-{locale}-{bucket}.xml | 5 | × 15 | 225 |
+| **GESAMT** | | | **~24.465** |
+
+### NAECHSTE PFLICHT-ACTIONS (Nach Deploy 08.04.2026)
+
+**SOFORT (Manual, Vercel Dashboard):**
+```
+Vercel Env-Vars setzen:
+  GEO_MATRIX_SITEMAP=1              # Geo-Runbooks Sitemap aktivieren
+  GEO_MATRIX_SITEMAP_CITY_LIMIT=50  # 50 Staedte pro Sitemap
+  SITEMAP_ALLOW_CHUNK=1             # robots.txt: Chunks erlauben (redundant nach Fix, aber setzen)
+  SITEMAP_BUCKETS=5                 # Alle 5 Buckets (a-f,g-l,m-r,s-z,0-9)
+```
+
+**SOFORT (Google Search Console):**
+1. `https://clawguru.org/sitemap.xml` → "Testen" + "Neu einreichen"
+2. `https://clawguru.org/de/runbooks` → URL-Inspektion → "Indexierung anfragen"
+3. `https://clawguru.org/de` → URL-Inspektion → "Indexierung anfragen"
+4. `https://clawguru.org/robots.txt` → pruefen ob Sitemap-Chunks nicht mehr geblockt sind
+
+**Asia/LatAm DB-Seeding (Production):**
+```
+GET https://clawguru.org/api/geo/asia-latam-expansion?stable=1
+Authorization: Bearer [GEO_EXPANSION_SECRET aus Vercel Env]
+```
+→ Aktiviert 27 neue Staedte (Japan, Korea, Brasilien, Mexiko, Suedostasien)
+
+---
+
+### TRAFFIC-GROWTH-ROADMAP Q2/Q3 2026
+
+#### Phase 1: Technische SEO-Basis (08.04. — DONE ✅)
+- [x] robots.txt Chunk-Block entfernt
+- [x] Sitemap alle 15 Locales
+- [x] 1.300+ neue URLs in Sitemap (Moltbot/OpenClaw/Security)
+- [x] OG-Metadata Soft-404-Fix
+- [x] Build-Fehler behoben
+
+#### Phase 2: Content-Tiefe (NAECHSTE SESSION)
+- [ ] **OpenClaw Batch 2** (5 neue SubPages: Service Mesh Security, WAF Rules, CI/CD Security Gate, Microservices Auth, Secrets Rotation)
+- [ ] **Moltbot Batch 3** (5 neue SubPages: AI-Agent Threat Model, Real-Time CVE Feed, Bot Security Testing, Compliance Automation, SBOM Generation)
+- [ ] **Compare Batch 2** (5 Pages: vs-crowdstrike, vs-datadog, vs-falco, vs-lacework, vs-pagerduty) — hohe SEO-Intent
+- [ ] **Solutions Batch 2** (ISO27001-Setup, PCI-DSS-Checklist, HIPAA-Controls) — Enterprise-Traffic
+- [ ] Alle Moltbot-Pages: `buildLocalizedAlternates()` statt hardcoded LANGS (x-default hreflang)
+- [ ] Schema Markup (FAQ, HowTo, WebPage) auf alle Moltbot/OpenClaw/Security Pages
+
+#### Phase 3: Geo-Traffic-Explosion (Q2/2026)
+- [ ] GEO_MATRIX_SITEMAP=1 aktivieren (Vercel Env)
+- [ ] Afrika-Expansion: /api/geo/africa-expansion (Kairo, Lagos, Nairobi, Johannesburg, Casablanca)
+- [ ] MEA-Expansion: /api/geo/mea-expansion (Dubai, Istanbul, Riad, Tel Aviv)
+- [ ] Ozeanien: /api/geo/oceania-expansion (Sydney, Melbourne, Auckland)
+- [ ] LatAm+: /api/geo/latam-plus-expansion (Buenos Aires, Bogota, Lima, Santiago)
+- [ ] **Ziel: 500+ Staedte × 15 Locales × 8 Runbooks = 60.000 Geo-URLs**
+
+#### Phase 4: Content-Empire (Q3/2026)
+- [ ] **250 Moltbot/AI-Agent Pages** (lt. Mycelium Content Architect v3 Plan)
+- [ ] Woche 1-4: 25 Seiten/Batch × 10 Batches
+- [ ] Automatisierung: Script der neue Pages aus Template generiert
+- [ ] **Ziel: 1.000.000+ indexierbare Qualitaetsseiten**
+
+---
+
+### KRITISCHE REGELN FUER TRAFFIC-MAXIMIERUNG
+
+1. **JEDE neue Page MUSS** in `MOLTBOT_SLUGS` / `OPENCLAW_SLUGS` / `SECURITY_SLUGS` in `route.ts` eingetragen werden
+2. **JEDE neue Page MUSS** `buildLocalizedAlternates()` verwenden — KEIN hardcoded LANGS Array
+3. **JEDE neue Page MUSS** eigenes `openGraph.url` setzen — NIE Root-Layout OG erben lassen
+4. **robots.txt** darf NIEMALS Sitemap-XML-Files blocken (`/sitemaps/*.xml`)
+5. **Nach jeder Neuen Page**: `npm run build` (Exit 0) → `git push` → Search Console URL pruefen
+
+### SITEMAP-HEALTH-CHECK (Quick-Commands nach Deploy)
+
+```powershell
+# Sitemap-Index pruefen (sollte 100+ Eintraege haben)
+Invoke-WebRequest "https://clawguru.org/sitemap.xml" | Select-Object -ExpandProperty Content | Select-String -Pattern "<sitemap>" | Measure-Object
+
+# robots.txt pruefen (Sitemap-Chunks duerfen NICHT blocked sein)
+Invoke-WebRequest "https://clawguru.org/robots.txt" | Select-Object -ExpandProperty Content
+
+# Einzelne Sitemap pruefen
+Invoke-WebRequest "https://clawguru.org/sitemaps/main-de.xml" | Select-Object -ExpandProperty Content | Select-String "<url>" | Measure-Object
+```
+
+---
+
 ## 14. SESSION-LOG (Immer aktuell halten!)
 
 | Datum | Session | Erledigte Tasks |
@@ -662,17 +774,21 @@ Vercel deployed automatisch bei jedem Push zu main. Roter Build = kaputte Websit
 | 06.04.2026 | 1-4 | Security-Audit, Cockpit Realism A-D, Killermachine v3, China+Global Expansion |
 | 06.04.2026 | 5 | 1M-Pages-Strategie, Content-Pipeline definiert |
 | 07.04.2026 | 6 | Moltbot Batch 1+2 (21 Pages), OpenClaw Batch 1 (10 Pages), Asia/LatAm Geo (27 Staedte), Solutions (5 Pages), Compare (5 Pages), AGENTS.md Master Plan v5 |
+| 08.04.2026 | 7 | VOLLANALYSE + Traffic-Masterplan v6: robots.txt Fix (Chunk-Block entfernt), Sitemap 15 Locales, 1300+ neue URLs in Sitemap, OG-Soft-404-Fix fuer /de/runbooks + alle Locale-Homepages, Badge-Komponente, truncated JSX Fix |
 
-### Offene Tasks (Stand 07.04.2026)
+### Offene Tasks (Stand 08.04.2026)
 
-- [ ] KRITISCH: Asia/LatAm DB-Seeding in Production: GET /api/geo/asia-latam-expansion?stable=1
-- [ ] KRITISCH: Vercel Env-Var setzen: GEO_MATRIX_SITEMAP_CITY_LIMIT=50
-- [ ] HOCH: Moltbot Batch 3 (8 Pages: IAM, DLP, RASP, Automation, Crypto, Rate-Limit, Posture-Score, Cloud-Native)
-- [ ] HOCH: OpenClaw Batch 2 (5 Pages: Service Mesh, WAF, CI/CD, Secrets Rotation, Microservices)
-- [ ] HOCH: Compare Batch 2 (5 Pages: vs-crowdstrike, vs-datadog, vs-falco, vs-lacework, vs-pagerduty)
+- [ ] KRITISCH: Vercel Env setzen: GEO_MATRIX_SITEMAP=1, SITEMAP_BUCKETS=5, GEO_MATRIX_SITEMAP_CITY_LIMIT=50
+- [ ] KRITISCH: Asia/LatAm DB-Seeding: GET /api/geo/asia-latam-expansion?stable=1
+- [ ] KRITISCH: Search Console: sitemap.xml neu einreichen, /de/runbooks + /de Indexierung anfragen
+- [ ] HOCH: Alle Moltbot-Pages auf buildLocalizedAlternates() migrieren (x-default hreflang)
+- [ ] HOCH: Schema Markup (FAQ, HowTo) auf alle Content-Pages
+- [ ] HOCH: OpenClaw Batch 2 (5 neue Pages)
+- [ ] HOCH: Moltbot Batch 3 (5 neue Pages)
+- [ ] HOCH: Compare Batch 2 (5 Pages: vs-crowdstrike, vs-datadog etc.)
 - [ ] MITTEL: Solutions Batch 2 (ISO27001, PCI-DSS, HIPAA)
 - [ ] MITTEL: Afrika + MEA + Ozeanien Geo-Expansion Routes erstellen
-- [ ] NIEDRIG: Sitemap-Pool erhoehen (GEO_MATRIX_SITEMAP_CITY_POOL=240)
+- [ ] MITTEL: 250 AI-Agent/Moltbot Pages (Mycelium Content Architect v3)
 
 ---
 

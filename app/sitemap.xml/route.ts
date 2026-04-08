@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 import { BASE_URL } from '@/lib/config';
-import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
+import { DEFAULT_LOCALE, SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
 import { logTelemetry } from "@/lib/ops/telemetry"
 import { getRequestId } from "@/lib/ops/request-id"
 
@@ -35,8 +35,7 @@ export async function GET(req: NextRequest) {
   const bucketCount = Math.max(1, Math.min(5, parseInt(process.env.SITEMAP_BUCKETS || "3", 10) || 3))
   const bucketsToUse = buckets.slice(0, bucketCount)
   const localesCfg = (process.env.SITEMAP_100K_LOCALES || "").split(",").map((s) => s.trim()).filter(Boolean)
-  const allLocales = [DEFAULT_LOCALE] as Locale[]
-  const selectedLocales = localesCfg.length ? (localesCfg as Locale[]) : allLocales
+  const selectedLocales = localesCfg.length ? (localesCfg as Locale[]) : SUPPORTED_LOCALES
 
   const base = `${BASE_URL}/sitemaps`
 

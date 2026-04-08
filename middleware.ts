@@ -80,6 +80,8 @@ function shouldBypassMiddleware(pathname: string): boolean {
   if (pathname === "/perfection") return true
   if (pathname.startsWith("/dashboard")) return true
   if (pathname.startsWith("/account")) return true
+  // Allow root runbooks page to be served directly without locale prefix
+  if (pathname === "/runbooks") return true
   // Allow root temporal and provenance pages to be served directly so that the
   // localizedTemporal / localizedProvenance 308 redirects don't create a loop
   // with the locale-enforcement section below.

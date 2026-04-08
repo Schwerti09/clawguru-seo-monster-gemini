@@ -81,7 +81,7 @@ export default function MoltbotSecurityFrameworkPage({ params }: PageProps) {
               Das <strong>Moltbot Security Framework</strong> stellt einen umfassenden Ansatz für die Absicherung von autonomen Bot-Systemen dar. In einer Zeit, in der AI-gesteuerte Automatisierung kritische Geschäftsprozesse steuert, ist ein robustes Security Framework überlebenswichtig.
             </p>
             
-            <div className="bg-gray-50 p-4 rounded-lg">
+            <div className="bg-gray-100 p-4 rounded-lg">
               <h3 className="font-semibold mb-2">Kernprinzipien:</h3>
               <ul className="list-disc list-inside space-y-1">
                 <li><strong>Zero Trust Architecture</strong> - Jede Anfrage muss verifiziert werden</li>
@@ -410,7 +410,7 @@ export class AuthService {
             <h2 className="text-2xl font-semibold mb-4">🔗 Related Resources</h2>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-gray-50 p-6 rounded-lg">
+              <div className="bg-gray-100 p-6 rounded-lg">
                 <h3 className="text-lg font-semibold mb-3">Internal Links</h3>
                 <ul className="space-y-2">
                   <li><a href="/securitycheck" className="text-blue-600 hover:text-blue-800">Security Check Tool</a> - Live Security Validation</li>
@@ -422,7 +422,7 @@ export class AuthService {
                 </ul>
               </div>
               
-              <div className="bg-gray-50 p-6 rounded-lg">
+              <div className="bg-gray-100 p-6 rounded-lg">
                 <h3 className="text-lg font-semibold mb-3">External Resources</h3>
                 <ul className="space-y-2">
                   <li><a href="https://owasp.org/www-project-top-ten/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800">OWASP Top 10</a> - Web Application Security Risks</li>
@@ -439,7 +439,7 @@ export class AuthService {
               Das <strong>Moltbot Security Framework</strong> bietet einen umfassenden, mehrschichtigen Ansatz für die Absicherung autonomer Bot-Systeme. Durch die Implementierung der beschriebenen Architektur, Sicherheitskontrollen und Monitoring-Mechanismen können Organisationen sicherstellen, dass ihre Moltbot-Systeme robust, compliant und zukunftssicher sind.
             </p>
             
-            <div className="bg-gray-50 p-6 rounded-lg">
+            <div className="bg-gray-100 p-6 rounded-lg">
               <h3 className="font-semibold mb-2">Key Takeaways:</h3>
               <ul className="list-disc list-inside space-y-1">
                 <li><strong>Security by Design</strong> - Von Anfang an integrieren</li>

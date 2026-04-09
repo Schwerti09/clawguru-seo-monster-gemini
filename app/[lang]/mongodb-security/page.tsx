@@ -104,17 +104,17 @@ export default async function MongoDBSecurityPage({
             </p>
 
             <div className="grid md:grid-cols-4 gap-4 mb-8">
-              <div className="bg-green-50 border border-green-200 rounded-xl p-5 text-center">
+              <div className="bg-green-900 border border-green-700 rounded-xl p-5 text-center">
                 <div className="text-3xl mb-2">🔐</div>
                 <h3 className="font-semibold text-green-900 text-sm mb-1">Transport Encryption</h3>
                 <p className="text-xs text-green-700">TLS 1.3 für alle Verbindungen</p>
               </div>
-              <div className="bg-blue-50 border border-blue-200 rounded-xl p-5 text-center">
+              <div className="bg-blue-900 border border-blue-700 rounded-xl p-5 text-center">
                 <div className="text-3xl mb-2">👤</div>
                 <h3 className="font-semibold text-blue-900 text-sm mb-1">Authentication</h3>
                 <p className="text-xs text-blue-700">SCRAM, x.509, LDAP, Kerberos</p>
               </div>
-              <div className="bg-purple-50 border border-purple-200 rounded-xl p-5 text-center">
+              <div className="bg-purple-50 border border-purple-700 rounded-xl p-5 text-center">
                 <div className="text-3xl mb-2">🛡️</div>
                 <h3 className="font-semibold text-purple-900 text-sm mb-1">Authorization</h3>
                 <p className="text-xs text-purple-700">RBAC mit built-in & custom roles</p>

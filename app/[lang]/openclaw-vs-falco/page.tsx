@@ -40,61 +40,61 @@ export default function OpenClawVsFalcoPage({ params }: PageProps) {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-4xl mx-auto">
-        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-8 text-sm">
-          <strong>"Not a Pentest" Notice</strong>: This comparison is for security architecture decisions. No attack tools.
+        <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: This comparison is for security architecture decisions. No attack tools.
         </div>
-        <h1 className="text-4xl font-bold mb-4">OpenClaw vs Falco: Runtime Security Comparison</h1>
-        <p className="text-lg text-gray-600 mb-8">Comprehensive runtime security platform comparison for container monitoring, threat detection, and Kubernetes security.</p>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">OpenClaw vs Falco: Runtime Security Comparison</h1>
+        <p className="text-lg text-gray-300 mb-8">Comprehensive runtime security platform comparison for container monitoring, threat detection, and Kubernetes security.</p>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Quick Comparison Overview</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Quick Comparison Overview</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-blue-50 p-6 rounded-lg">
+            <div className="bg-blue-900 p-6 rounded-lg">
               <h3 className="font-bold text-blue-800 mb-4">OpenClaw</h3>
-              <ul className="space-y-2 text-sm">
+              <ul className="space-y-2 text-sm text-gray-300">
                 <li className="flex items-start">
-                  <span className="text-green-600 mr-2">+</span>
+                  <span className="text-green-400 mr-2">+</span>
                   Complete security framework
                 </li>
                 <li className="flex items-start">
-                  <span className="text-green-600 mr-2">+</span>
+                  <span className="text-green-400 mr-2">+</span>
                   Self-hosted deployment
                 </li>
                 <li className="flex items-start">
-                  <span className="text-green-600 mr-2">+</span>
+                  <span className="text-green-400 mr-2">+</span>
                   600+ security runbooks
                 </li>
                 <li className="flex items-start">
-                  <span className="text-green-600 mr-2">+</span>
+                  <span className="text-green-400 mr-2">+</span>
                   Multi-cloud support
                 </li>
                 <li className="flex items-start">
-                  <span className="text-green-600 mr-2">+</span>
+                  <span className="text-green-400 mr-2">+</span>
                   No vendor lock-in
                 </li>
               </ul>
             </div>
             <div className="bg-orange-50 p-6 rounded-lg">
               <h3 className="font-bold text-orange-800 mb-4">Falco</h3>
-              <ul className="space-y-2 text-sm">
+              <ul className="space-y-2 text-sm text-gray-300">
                 <li className="flex items-start">
-                  <span className="text-green-600 mr-2">+</span>
+                  <span className="text-green-400 mr-2">+</span>
                   CNCF graduated project
                 </li>
                 <li className="flex items-start">
-                  <span className="text-green-600 mr-2">+</span>
+                  <span className="text-green-400 mr-2">+</span>
                   Real-time threat detection
                 </li>
                 <li className="flex items-start">
-                  <span className="text-green-600 mr-2">+</span>
+                  <span className="text-green-400 mr-2">+</span>
                   Kubernetes-native
                 </li>
                 <li className="flex items-start">
-                  <span className="text-green-600 mr-2">+</span>
+                  <span className="text-green-400 mr-2">+</span>
                   Open-source
                 </li>
                 <li className="flex items-start">
-                  <span className="text-green-600 mr-2">+</span>
+                  <span className="text-green-400 mr-2">+</span>
                   Extensible rule engine
                 </li>
               </ul>
@@ -103,51 +103,51 @@ export default function OpenClawVsFalcoPage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Feature Comparison</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Feature Comparison</h2>
           <div className="overflow-x-auto">
-            <table className="min-w-full bg-white border border-gray-200 rounded-lg">
-              <thead className="bg-gray-50">
+            <table className="min-w-full bg-gray-900 border border-gray-700 rounded-lg">
+              <thead className="bg-gray-800">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Feature</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">OpenClaw</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Falco</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Feature</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">OpenClaw</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Falco</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
                 <tr>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Runtime Security</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-green-600">Complete framework</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-green-600">Advanced runtime monitoring</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-100">Runtime Security</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-green-400">Complete framework</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-green-400">Advanced runtime monitoring</td>
                 </tr>
-                <tr className="bg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Container Security</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-green-600">Full lifecycle security</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-green-600">Runtime container monitoring</td>
-                </tr>
-                <tr>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Rule Engine</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-green-600">Custom security rules</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-green-600">Powerful rule language</td>
-                </tr>
-                <tr className="bg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Deployment</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-green-600">Self-hosted, multi-cloud</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-green-600">Kubernetes-native deployment</td>
+                <tr className="bg-gray-800">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-100">Container Security</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-green-400">Full lifecycle security</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-green-400">Runtime container monitoring</td>
                 </tr>
                 <tr>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Automation</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-green-600">600+ executable runbooks</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-yellow-600">Limited automation</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-100">Rule Engine</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-green-400">Custom security rules</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-green-400">Powerful rule language</td>
                 </tr>
-                <tr className="bg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Integration</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-green-600">Comprehensive ecosystem</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-yellow-600">Security tool integrations</td>
+                <tr className="bg-gray-800">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-100">Deployment</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-green-400">Self-hosted, multi-cloud</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-green-400">Kubernetes-native deployment</td>
                 </tr>
                 <tr>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Pricing Model</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-green-600">Perpetual license + support</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-green-600">Open-source (free)</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-100">Automation</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-green-400">600+ executable runbooks</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-yellow-400">Limited automation</td>
+                </tr>
+                <tr className="bg-gray-800">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-100">Integration</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-green-400">Comprehensive ecosystem</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-yellow-400">Security tool integrations</td>
+                </tr>
+                <tr>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-100">Pricing Model</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-green-400">Perpetual license + support</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-green-400">Open-source (free)</td>
                 </tr>
               </tbody>
             </table>
@@ -155,54 +155,54 @@ export default function OpenClawVsFalcoPage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Use Case Analysis</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Use Case Analysis</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-white border border-gray-200 rounded-lg p-6">
-              <h3 className="font-bold text-gray-800 mb-4">Choose OpenClaw if:</h3>
+            <div className="bg-white border border-gray-700 rounded-lg p-6">
+              <h3 className="font-bold text-cyan-400 mb-4">Choose OpenClaw if:</h3>
               <ul className="space-y-3 text-sm">
                 <li className="flex items-start">
-                  <span className="text-blue-600 mr-2">-</span>
+                  <span className="text-cyan-400 mr-2">-</span>
                   You need a complete security framework
                 </li>
                 <li className="flex items-start">
-                  <span className="text-blue-600 mr-2">-</span>
+                  <span className="text-cyan-400 mr-2">-</span>
                   You want extensive automation
                 </li>
                 <li className="flex items-start">
-                  <span className="text-blue-600 mr-2">-</span>
+                  <span className="text-cyan-400 mr-2">-</span>
                   You need multi-cloud support
                 </li>
                 <li className="flex items-start">
-                  <span className="text-blue-600 mr-2">-</span>
+                  <span className="text-cyan-400 mr-2">-</span>
                   You prefer self-hosted solutions
                 </li>
                 <li className="flex items-start">
-                  <span className="text-blue-600 mr-2">-</span>
+                  <span className="text-cyan-400 mr-2">-</span>
                   You need comprehensive runbooks
                 </li>
               </ul>
             </div>
-            <div className="bg-white border border-gray-200 rounded-lg p-6">
-              <h3 className="font-bold text-gray-800 mb-4">Choose Falco if:</h3>
+            <div className="bg-white border border-gray-700 rounded-lg p-6">
+              <h3 className="font-bold text-cyan-400 mb-4">Choose Falco if:</h3>
               <ul className="space-y-3 text-sm">
                 <li className="flex items-start">
-                  <span className="text-orange-600 mr-2">-</span>
+                  <span className="text-orange-400 mr-2">-</span>
                   You need Kubernetes-native security
                 </li>
                 <li className="flex items-start">
-                  <span className="text-orange-600 mr-2">-</span>
+                  <span className="text-orange-400 mr-2">-</span>
                   You prefer open-source solutions
                 </li>
                 <li className="flex items-start">
-                  <span className="text-orange-600 mr-2">-</span>
+                  <span className="text-orange-400 mr-2">-</span>
                   You need real-time threat detection
                 </li>
                 <li className="flex items-start">
-                  <span className="text-orange-600 mr-2">-</span>
+                  <span className="text-orange-400 mr-2">-</span>
                   You want CNCF-compliant tools
                 </li>
                 <li className="flex items-start">
-                  <span className="text-orange-600 mr-2">-</span>
+                  <span className="text-orange-400 mr-2">-</span>
                   You have budget constraints
                 </li>
               </ul>
@@ -211,12 +211,12 @@ export default function OpenClawVsFalcoPage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Technical Architecture</h2>
-          <div className="bg-gray-100 p-6 rounded-lg">
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Technical Architecture</h2>
+          <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <h3 className="font-bold text-gray-800 mb-3">OpenClaw Architecture</h3>
-                <ul className="space-y-2 text-sm">
+                <h3 className="font-bold text-cyan-400 mb-3">OpenClaw Architecture</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li>PostgreSQL + Supabase backend</li>
                   <li>Next.js 14 frontend</li>
                   <li>Custom security rule engine</li>
@@ -226,8 +226,8 @@ export default function OpenClawVsFalcoPage({ params }: PageProps) {
                 </ul>
               </div>
               <div>
-                <h3 className="font-bold text-gray-800 mb-3">Falco Architecture</h3>
-                <ul className="space-y-2 text-sm">
+                <h3 className="font-bold text-cyan-400 mb-3">Falco Architecture</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li>Kernel-level system calls monitoring</li>
                   <li>Libsinsp for data collection</li>
                   <li>Rule engine with YAML configuration</li>
@@ -241,7 +241,7 @@ export default function OpenClawVsFalcoPage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Rule Configuration Examples</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Rule Configuration Examples</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto">
               <h3 className="text-white font-semibold mb-3">OpenClaw Rule Example</h3>
@@ -289,10 +289,10 @@ spec:
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Integration & Ecosystem</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Integration & Ecosystem</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-blue-50 p-4 rounded-lg">
-              <h3 className="font-semibold text-blue-800 mb-2">OpenClaw Integrations</h3>
+            <div className="bg-blue-900 p-4 rounded-lg border border-blue-700">
+              <h3 className="font-semibold text-blue-300 mb-2">OpenClaw Integrations</h3>
               <ul className="text-sm space-y-1">
                 <li>SIEM systems (ELK, Splunk)</li>
                 <li>Container platforms (K8s, Docker)</li>
@@ -301,8 +301,8 @@ spec:
                 <li>Custom API endpoints</li>
               </ul>
             </div>
-            <div className="bg-orange-50 p-4 rounded-lg">
-              <h3 className="font-semibold text-orange-800 mb-2">Falco Integrations</h3>
+            <div className="bg-orange-900 p-4 rounded-lg border border-orange-700">
+              <h3 className="font-semibold text-orange-300 mb-2">Falco Integrations</h3>
               <ul className="text-sm space-y-1">
                 <li>Kubernetes (native integration)</li>
                 <li>SIEM systems (via syslog, JSON)</li>
@@ -315,27 +315,27 @@ spec:
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Deployment Comparison</h2>
-          <div className="bg-gray-100 p-6 rounded-lg">
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Deployment Comparison</h2>
+          <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="bg-white p-4 rounded border">
-                <h3 className="font-bold text-gray-800 mb-3">OpenClaw Deployment</h3>
-                <ul className="space-y-2 text-sm">
+                <h3 className="font-bold text-cyan-400 mb-3">OpenClaw Deployment</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li><strong>Self-hosted:</strong> Docker Compose</li>
                   <li><strong>Kubernetes:</strong> Helm charts</li>
                   <li><strong>Cloud:</strong> AWS, GCP, Azure</li>
                   <li><strong>On-prem:</strong> Bare metal support</li>
-                  <li className="text-green-600">Complete control over data</li>
+                  <li className="text-green-400">Complete control over data</li>
                 </ul>
               </div>
               <div className="bg-white p-4 rounded border">
-                <h3 className="font-bold text-gray-800 mb-3">Falco Deployment</h3>
-                <ul className="space-y-2 text-sm">
+                <h3 className="font-bold text-cyan-400 mb-3">Falco Deployment</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li><strong>Kubernetes:</strong> DaemonSet deployment</li>
                   <li><strong>Standalone:</strong> Package managers</li>
                   <li><strong>Cloud:</strong> Managed Kubernetes</li>
                   <li><strong>Edge:</strong> IoT and edge devices</li>
-                  <li className="text-green-600">Lightweight footprint</li>
+                  <li className="text-green-400">Lightweight footprint</li>
                 </ul>
               </div>
             </div>
@@ -343,10 +343,10 @@ spec:
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Performance & Resource Requirements</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Performance & Resource Requirements</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-blue-50 p-4 rounded-lg">
-              <h3 className="font-semibold text-blue-800 mb-2">OpenClaw Performance</h3>
+            <div className="bg-blue-900 p-4 rounded-lg border border-blue-700">
+              <h3 className="font-semibold text-blue-300 mb-2">OpenClaw Performance</h3>
               <ul className="text-sm space-y-1">
                 <li>CPU: 2-4 cores recommended</li>
                 <li>Memory: 8-16 GB RAM</li>
@@ -355,8 +355,8 @@ spec:
                 <li>Scalable architecture</li>
               </ul>
             </div>
-            <div className="bg-orange-50 p-4 rounded-lg">
-              <h3 className="font-semibold text-orange-800 mb-2">Falco Performance</h3>
+            <div className="bg-orange-900 p-4 rounded-lg border border-orange-700">
+              <h3 className="font-semibold text-orange-300 mb-2">Falco Performance</h3>
               <ul className="text-sm space-y-1">
                 <li>CPU: 0.5-1 core per node</li>
                 <li>Memory: 512 MB - 1 GB</li>
@@ -369,23 +369,23 @@ spec:
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Further Resources</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Further Resources</h2>
           <div className="grid grid-cols-2 gap-4">
-            <a href={`/${locale}/securitycheck`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
-              <div className="font-semibold text-blue-600">Security Check</div>
-              <div className="text-sm text-gray-600">Scan your system now</div>
+            <a href={`/${locale}/securitycheck`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
+              <div className="font-semibold text-cyan-400">Security Check</div>
+              <div className="text-sm text-gray-300">Scan your system now</div>
             </a>
-            <a href={`/${locale}/runbooks`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
-              <div className="font-semibold text-blue-600">Runbooks</div>
-              <div className="text-sm text-gray-600">600+ security playbooks</div>
+            <a href={`/${locale}/runbooks`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
+              <div className="font-semibold text-cyan-400">Runbooks</div>
+              <div className="text-sm text-gray-300">600+ security playbooks</div>
             </a>
-            <a href={`/${locale}/openclaw`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
-              <div className="font-semibold text-blue-600">OpenClaw Framework</div>
-              <div className="text-sm text-gray-600">Self-hosted security</div>
+            <a href={`/${locale}/openclaw`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
+              <div className="font-semibold text-cyan-400">OpenClaw Framework</div>
+              <div className="text-sm text-gray-300">Self-hosted security</div>
             </a>
-            <a href={`/${locale}/solutions/kubernetes-security-hardening`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
-              <div className="font-semibold text-blue-600">Kubernetes Security</div>
-              <div className="text-sm text-gray-600">Complete hardening guide</div>
+            <a href={`/${locale}/solutions/kubernetes-security-hardening`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
+              <div className="font-semibold text-cyan-400">Kubernetes Security</div>
+              <div className="text-sm text-gray-300">Complete hardening guide</div>
             </a>
           </div>
         </section>

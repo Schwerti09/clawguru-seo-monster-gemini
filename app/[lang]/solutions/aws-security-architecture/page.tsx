@@ -27,11 +27,11 @@ export default function AwsSecurityPage({ params }: PageProps) {
         <div className="bg-orange-50 border-l-4 border-orange-400 p-4 mb-8 text-sm">
           <strong>ClawGuru AWS</strong>: Nicht ein Pentest — sondern automatisiertes AWS Security Assessment und Well-Architected Review.
         </div>
-        <h1 className="text-4xl font-bold mb-4">AWS Security Architecture</h1>
-        <p className="text-lg text-gray-600 mb-8">AWS Well-Architected Security Pillar implementieren — von IAM Least Privilege über CloudTrail bis hin zu Security Hub und GuardDuty.</p>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">AWS Security Architecture</h1>
+        <p className="text-lg text-gray-300 mb-8">AWS Well-Architected Security Pillar implementieren — von IAM Least Privilege über CloudTrail bis hin zu Security Hub und GuardDuty.</p>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">🏗️ AWS Security Pillar: 6 Design-Prinzipien</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">🏗️ AWS Security Pillar: 6 Design-Prinzipien</h2>
           <div className="space-y-3">
             {[
               { principle: 'Implement a strong identity foundation', desc: 'IAM Least Privilege, MFA erzwingen, keine Long-lived Credentials', done: true },
@@ -41,11 +41,11 @@ export default function AwsSecurityPage({ params }: PageProps) {
               { principle: 'Protect data in transit and at rest', desc: 'TLS überall, KMS, S3 Encryption, Secrets Manager', done: true },
               { principle: 'Keep people away from data', desc: 'Minimize direct data access, audit all access', done: false },
             ].map(({ principle, desc, done }) => (
-              <div key={principle} className={`flex items-start gap-3 p-4 rounded-lg border ${done ? 'bg-green-50 border-green-200' : 'bg-yellow-50 border-yellow-200'}`}>
+              <div key={principle} className={`flex items-start gap-3 p-4 rounded-lg border ${done ? 'bg-green-900 border-green-700' : 'bg-amber-900 border-yellow-700'}`}>
                 <span className="text-xl mt-0.5">{done ? '✅' : '⚠️'}</span>
                 <div>
                   <div className="font-semibold text-sm">{principle}</div>
-                  <div className="text-xs text-gray-500 mt-1">{desc}</div>
+                  <div className="text-xs text-gray-400 mt-1">{desc}</div>
                 </div>
               </div>
             ))}
@@ -53,7 +53,7 @@ export default function AwsSecurityPage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">🔧 Empfohlene AWS Services</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">🔧 Empfohlene AWS Services</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
             {[
               { service: 'IAM Access Analyzer', category: 'Identity', critical: true },
@@ -66,22 +66,22 @@ export default function AwsSecurityPage({ params }: PageProps) {
               { service: 'AWS Secrets Manager', category: 'Secrets', critical: true },
               { service: 'AWS WAF', category: 'Network', critical: false },
             ].map(({ service, category, critical }) => (
-              <div key={service} className={`p-3 rounded-lg border text-sm ${critical ? 'bg-orange-50 border-orange-200' : 'bg-gray-50 border-gray-200'}`}>
-                <div className="font-semibold">{service}</div>
-                <div className="text-xs text-gray-500">{category}</div>
-                {critical && <div className="text-xs text-orange-600 font-medium mt-1">Empfohlen</div>}
+              <div key={service} className={`p-3 rounded-lg border text-sm ${critical ? 'bg-orange-50 border-orange-700' : 'bg-gray-800 border-gray-700'}`}>
+                <div className="font-semibold text-gray-100">{service}</div>
+                <div className="text-xs text-gray-400">{category}</div>
+                {critical && <div className="text-xs text-orange-400 font-medium mt-1">Empfohlen</div>}
               </div>
             ))}
           </div>
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">🔗 ClawGuru für AWS</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">🔗 ClawGuru für AWS</h2>
           <div className="grid grid-cols-2 gap-4">
-            <a href="/securitycheck" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">🛡️ Security Check</div><div className="text-sm text-gray-600">AWS Assessment</div></a>
-            <a href="/runbooks" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">📚 AWS Runbooks</div><div className="text-sm text-gray-600">Well-Architected Guides</div></a>
-            <a href="/oracle" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">🔮 Oracle</div><div className="text-sm text-gray-600">AWS Threat Intel</div></a>
-            <a href="/solutions" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">🏢 Enterprise AWS</div><div className="text-sm text-gray-600">Managed Security</div></a>
+            <a href="/securitycheck" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700"><div className="font-semibold text-cyan-400">🛡️ Security Check</div><div className="text-sm text-gray-300">AWS Assessment</div></a>
+            <a href="/runbooks" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700"><div className="font-semibold text-cyan-400">📚 AWS Runbooks</div><div className="text-sm text-gray-300">Well-Architected Guides</div></a>
+            <a href="/oracle" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700"><div className="font-semibold text-cyan-400">🔮 Oracle</div><div className="text-sm text-gray-300">AWS Threat Intel</div></a>
+            <a href="/solutions" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700"><div className="font-semibold text-cyan-400">🏢 Enterprise AWS</div><div className="text-sm text-gray-300">Managed Security</div></a>
           </div>
         </section>
       </div>

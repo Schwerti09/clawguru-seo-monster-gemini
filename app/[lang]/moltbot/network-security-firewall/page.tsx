@@ -24,14 +24,14 @@ export default function MoltbotNetworkSecurityPage({ params }: PageProps) {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-4xl mx-auto">
-        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-8 text-sm">
-          <strong>"Not a Pentest" Trust-Anker</strong>: Dieser Guide dient ausschließlich zur Absicherung von Netzwerk-Infrastrukturen. Keine Angriffswerkzeuge, keine illegalen Aktivitäten.
+        <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
+          <strong className="text-amber-100">"Not a Pentest" Trust-Anker</strong>: Dieser Guide dient ausschließlich zur Absicherung von Netzwerk-Infrastrukturen. Keine Angriffswerkzeuge, keine illegalen Aktivitäten.
         </div>
-        <h1 className="text-4xl font-bold mb-4">Moltbot Network Security: Firewall &amp; DDoS Protection</h1>
-        <p className="text-lg text-gray-600 mb-8">Netzwerk-Absicherung für Moltbot — von iptables-Regeln über nginx WAF bis hin zu Cloudflare DDoS-Schutz und IP-Allowlisting.</p>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">Moltbot Network Security: Firewall &amp; DDoS Protection</h1>
+        <p className="text-lg text-gray-300 mb-8">Netzwerk-Absicherung für Moltbot — von iptables-Regeln über nginx WAF bis hin zu Cloudflare DDoS-Schutz und IP-Allowlisting.</p>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">🔥 iptables Firewall Rules</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">🔥 iptables Firewall Rules</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm mb-4">
             <pre>{`#!/bin/bash
 # moltbot-firewall.sh — Produktions-Firewall für Moltbot
@@ -67,7 +67,7 @@ iptables -A INPUT -j LOG --log-prefix "MOLTBOT-DROP: " --log-level 7`}</pre>
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">🌐 nginx WAF Konfiguration</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">🌐 nginx WAF Konfiguration</h2>
           <div className="bg-gray-900 text-blue-400 p-4 rounded-lg font-mono text-sm mb-4">
             <pre>{`# /etc/nginx/conf.d/moltbot-security.conf
 server {
@@ -106,7 +106,7 @@ server {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">☁️ Cloudflare DDoS Rules</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">☁️ Cloudflare DDoS Rules</h2>
           <div className="bg-gray-900 text-yellow-400 p-4 rounded-lg font-mono text-sm mb-4">
             <pre>{`# Cloudflare Firewall Rules (via API)
 # Block bekannte Bad Bots
@@ -135,23 +135,23 @@ server {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">🔗 Weiterführende Ressourcen</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">🔗 Weiterführende Ressourcen</h2>
           <div className="grid grid-cols-2 gap-4">
-            <a href="/securitycheck" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
-              <div className="font-semibold text-blue-600">🛡️ Security Check</div>
-              <div className="text-sm text-gray-600">Netzwerk live scannen</div>
+            <a href="/securitycheck" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700">
+              <div className="font-semibold text-cyan-400">🛡️ Security Check</div>
+              <div className="text-sm text-gray-300">Netzwerk live scannen</div>
             </a>
-            <a href="/runbooks" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
-              <div className="font-semibold text-blue-600">📚 Network Runbooks</div>
-              <div className="text-sm text-gray-600">Firewall Playbooks</div>
+            <a href="/runbooks" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700">
+              <div className="font-semibold text-cyan-400">📚 Network Runbooks</div>
+              <div className="text-sm text-gray-300">Firewall Playbooks</div>
             </a>
-            <a href="/neuro" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
-              <div className="font-semibold text-blue-600">🧠 Neuro AI</div>
-              <div className="text-sm text-gray-600">Anomalie-Erkennung</div>
+            <a href="/neuro" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700">
+              <div className="font-semibold text-cyan-400">🧠 Neuro AI</div>
+              <div className="text-sm text-gray-300">Anomalie-Erkennung</div>
             </a>
-            <a href="/solutions" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
-              <div className="font-semibold text-blue-600">🏢 Enterprise</div>
-              <div className="text-sm text-gray-600">Managed Firewall</div>
+            <a href="/solutions" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700">
+              <div className="font-semibold text-cyan-400">🏢 Enterprise</div>
+              <div className="text-sm text-gray-300">Managed Firewall</div>
             </a>
           </div>
         </section>

@@ -62,7 +62,7 @@ export default async function SecurityHubPage(props: { params: { lang: string } 
         dangerouslySetInnerHTML={{ __html: JSON.stringify(hubSchema) }}
       />
       <div className="py-16 max-w-5xl mx-auto">
-        <div className="mb-2 text-xs text-gray-500 uppercase tracking-widest">Hub · Security</div>
+        <div className="mb-2 text-xs text-gray-400 uppercase tracking-widest">Hub · Security</div>
         <h1 className="text-3xl md:text-4xl font-black mb-4">🔒 Security Runbooks</h1>
         <p id="direct-answer" className="text-gray-300 text-lg mb-10 max-w-2xl border-l-4 border-brand-cyan pl-4">
           Security-Hardening von SSH bis Zero Trust: praxiserprobte Runbooks für Firewall, TLS, Secrets, Container Security und CI/CD – für Ops-Engineers in 2026.
@@ -86,7 +86,7 @@ export default async function SecurityHubPage(props: { params: { lang: string } 
                   className="p-4 rounded-xl border border-gray-800 hover:border-brand-cyan/40 text-sm"
                 >
                   <div className="font-bold text-white mb-1">{r.title}</div>
-                  <div className="text-gray-500 text-xs line-clamp-2">{r.summary}</div>
+                  <div className="text-gray-400 text-xs line-clamp-2">{r.summary}</div>
                 </Link>
               ))}
             </div>

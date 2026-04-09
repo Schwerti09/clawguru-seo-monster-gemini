@@ -24,14 +24,14 @@ export default function MoltbotAuthPage({ params }: PageProps) {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-4xl mx-auto">
-        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-8 text-sm">
-          <strong>"Not a Pentest" Trust-Anker</strong>: Dieser Guide dient ausschließlich zur Implementierung sicherer Authentication-Systeme. Keine Angriffswerkzeuge.
+        <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
+          <strong className="text-amber-100">"Not a Pentest" Trust-Anker</strong>: Dieser Guide dient ausschließlich zur Implementierung sicherer Authentication-Systeme. Keine Angriffswerkzeuge.
         </div>
-        <h1 className="text-4xl font-bold mb-4">Moltbot Authentication: OAuth2 &amp; JWT Setup</h1>
-        <p className="text-lg text-gray-600 mb-8">Production-ready Authentication für Moltbot mit OAuth2 PKCE Flow, JWT Token Rotation, MFA und sicherem Session Management.</p>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">Moltbot Authentication: OAuth2 &amp; JWT Setup</h1>
+        <p className="text-lg text-gray-300 mb-8">Production-ready Authentication für Moltbot mit OAuth2 PKCE Flow, JWT Token Rotation, MFA und sicherem Session Management.</p>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">🔐 OAuth2 PKCE Flow</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">🔐 OAuth2 PKCE Flow</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm mb-4">
             <pre>{`// moltbot/lib/oauth2.ts
 import crypto from 'crypto';
@@ -61,7 +61,7 @@ export function buildAuthorizationURL(challenge: string) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">🔄 JWT Token Rotation</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">🔄 JWT Token Rotation</h2>
           <div className="bg-gray-900 text-blue-400 p-4 rounded-lg font-mono text-sm mb-4">
             <pre>{`// moltbot/lib/token-rotation.ts
 import { SignJWT, jwtVerify } from 'jose';
@@ -90,7 +90,7 @@ export async function issueTokenPair(userId: string) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">📱 TOTP Multi-Factor Authentication</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">📱 TOTP Multi-Factor Authentication</h2>
           <div className="bg-gray-900 text-yellow-400 p-4 rounded-lg font-mono text-sm mb-4">
             <pre>{`// moltbot/lib/mfa.ts
 import { authenticator } from 'otplib';
@@ -115,23 +115,23 @@ export function verifyMFAToken(token: string, secret: string): boolean {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">🔗 Weiterführende Ressourcen</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">🔗 Weiterführende Ressourcen</h2>
           <div className="grid grid-cols-2 gap-4">
-            <a href="/securitycheck" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
-              <div className="font-semibold text-blue-600">🛡️ Security Check</div>
-              <div className="text-sm text-gray-600">Auth-Setup live prüfen</div>
+            <a href="/securitycheck" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700">
+              <div className="font-semibold text-cyan-400">🛡️ Security Check</div>
+              <div className="text-sm text-gray-300">Auth-Setup live prüfen</div>
             </a>
-            <a href="/runbooks" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
-              <div className="font-semibold text-blue-600">📚 Auth Runbooks</div>
-              <div className="text-sm text-gray-600">Implementierungsguides</div>
+            <a href="/runbooks" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700">
+              <div className="font-semibold text-cyan-400">📚 Auth Runbooks</div>
+              <div className="text-sm text-gray-300">Implementierungsguides</div>
             </a>
-            <a href="/oracle" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
-              <div className="font-semibold text-blue-600">🔮 Oracle</div>
-              <div className="text-sm text-gray-600">Security Intelligence</div>
+            <a href="/oracle" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700">
+              <div className="font-semibold text-cyan-400">🔮 Oracle</div>
+              <div className="text-sm text-gray-300">Security Intelligence</div>
             </a>
-            <a href="/solutions" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
-              <div className="font-semibold text-blue-600">🏢 Enterprise SSO</div>
-              <div className="text-sm text-gray-600">Enterprise Solutions</div>
+            <a href="/solutions" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700">
+              <div className="font-semibold text-cyan-400">🏢 Enterprise SSO</div>
+              <div className="text-sm text-gray-300">Enterprise Solutions</div>
             </a>
           </div>
         </section>

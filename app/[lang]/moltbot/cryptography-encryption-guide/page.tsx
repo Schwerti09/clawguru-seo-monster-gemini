@@ -24,14 +24,14 @@ export default function MoltbotCryptoPage({ params }: PageProps) {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-4xl mx-auto">
-        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-8 text-sm">
-          <strong>"Not a Pentest" Trust-Anker</strong>: Kryptografie schützt eigene Daten. Keine Angriffswerkzeuge.
+        <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
+          <strong className="text-amber-100">"Not a Pentest" Trust-Anker</strong>: Kryptografie schützt eigene Daten. Keine Angriffswerkzeuge.
         </div>
-        <h1 className="text-4xl font-bold mb-4">Moltbot Cryptography &amp; Encryption Guide</h1>
-        <p className="text-lg text-gray-600 mb-8">Schwache Verschlüsselung ist kein Schutz. AES-256, RSA-4096, PBKDF2 und Key Rotation sind heute Minimum-Standards.</p>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">Moltbot Cryptography &amp; Encryption Guide</h1>
+        <p className="text-lg text-gray-300 mb-8">Schwache Verschlüsselung ist kein Schutz. AES-256, RSA-4096, PBKDF2 und Key Rotation sind heute Minimum-Standards.</p>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Verschlüsselungs-Algorithmen</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Verschlüsselungs-Algorithmen</h2>
           <div className="overflow-x-auto">
             <table className="w-full border-collapse text-sm">
               <thead><tr className="bg-gray-800 text-white"><th className="p-3 text-left">Algorithmus</th><th className="p-3 text-left">Use Case</th><th className="p-3 text-left">Schlüsselgröße</th><th className="p-3 text-left">Status</th></tr></thead>
@@ -44,7 +44,7 @@ export default function MoltbotCryptoPage({ params }: PageProps) {
                   ['SHA-256', 'Hashing', '256-bit', 'Empfohlen'],
                   ['SHA-3', 'Hashing (Future)', '256/512-bit', 'Optional'],
                 ].map(([algo, use, key, status]) => (
-                  <tr key={algo} className="border-b hover:bg-gray-50">
+                  <tr key={algo} className="border-b hover:bg-gray-800">
                     <td className="p-3 font-medium">{algo}</td>
                     <td className="p-3 text-sm">{use}</td>
                     <td className="p-3 text-sm">{key}</td>
@@ -57,7 +57,7 @@ export default function MoltbotCryptoPage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">AES-256 Implementation</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">AES-256 Implementation</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm overflow-x-auto">
             <pre>{`// AES-256-GCM Verschlüsselung für Moltbot
 const crypto = require('crypto');
@@ -112,7 +112,7 @@ console.log('Encrypted:', encrypted);`}</pre>
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">RSA Key Management</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">RSA Key Management</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm overflow-x-auto">
             <pre>{`// RSA-4096 Key Generation und Management
 const { generateKeyPair, publicEncrypt, privateDecrypt } = require('crypto');
@@ -182,7 +182,7 @@ class KeyRotationManager {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Secure Hashing</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Secure Hashing</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm overflow-x-auto">
             <pre>{`// Sicheres Hashing mit Salt und Pepper
 const crypto = require('crypto');
@@ -236,7 +236,7 @@ console.log('Verified:', hashing.verify(password, salt, hash));`}</pre>
 </section>
 
 <section className="mb-10">
-  <h2 className="text-2xl font-semibold mb-4">Resources</h2>
+  <h2 className="text-2xl font-semibold mb-4 text-gray-100">Resources</h2>
   <ul className="list-disc pl-4 space-y-2">
     <li><a href="https://clawguru.org/de/security/aes-256-encryption" target="_blank" rel="noopener noreferrer">AES-256 Encryption Guide</a></li>
     <li><a href="https://clawguru.org/de/security/rsa-key-management" target="_blank" rel="noopener noreferrer">RSA Key Management</a></li>

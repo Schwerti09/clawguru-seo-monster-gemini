@@ -189,7 +189,7 @@ export default async function XXE2026Page({
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-red-500/20 via-transparent to-transparent" />
           <div className="container mx-auto px-4 relative z-10">
             <div className="max-w-4xl">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-500/20 text-red-300 text-sm mb-4">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-9000/20 text-red-300 text-sm mb-4">
                 <span className="w-2 h-2 rounded-full bg-red-400 animate-pulse" />
                 Critical Security Advisory 2026
               </div>
@@ -226,14 +226,14 @@ export default async function XXE2026Page({
             <div className="bg-slate-50 rounded-2xl p-6 mb-12 border border-slate-200">
               <h2 className="text-lg font-semibold text-slate-900 mb-4">Inhaltsverzeichnis</h2>
               <ul className="grid md:grid-cols-2 gap-2 text-sm">
-                <li><a href="#was-ist-xxe" className="text-blue-600 hover:underline">→ Was ist XXE?</a></li>
-                <li><a href="#cve-2026" className="text-blue-600 hover:underline">→ CVE-Übersicht 2026</a></li>
-                <li><a href="#exploit-techniken" className="text-blue-600 hover:underline">→ Exploit-Techniken</a></li>
-                <li><a href="#code-beispiele" className="text-blue-600 hover:underline">→ Code-Beispiele</a></li>
-                <li><a href="#prevention" className="text-blue-600 hover:underline">→ Prevention & Mitigation</a></li>
-                <li><a href="#tools" className="text-blue-600 hover:underline">→ Scanner & Tools</a></li>
-                <li><a href="#compliance" className="text-blue-600 hover:underline">→ Compliance (ISO 27001, PCI-DSS)</a></li>
-                <li><a href="#faq" className="text-blue-600 hover:underline">→ FAQ</a></li>
+                <li><a href="#was-ist-xxe" className="text-cyan-400 hover:underline">→ Was ist XXE?</a></li>
+                <li><a href="#cve-2026" className="text-cyan-400 hover:underline">→ CVE-Übersicht 2026</a></li>
+                <li><a href="#exploit-techniken" className="text-cyan-400 hover:underline">→ Exploit-Techniken</a></li>
+                <li><a href="#code-beispiele" className="text-cyan-400 hover:underline">→ Code-Beispiele</a></li>
+                <li><a href="#prevention" className="text-cyan-400 hover:underline">→ Prevention & Mitigation</a></li>
+                <li><a href="#tools" className="text-cyan-400 hover:underline">→ Scanner & Tools</a></li>
+                <li><a href="#compliance" className="text-cyan-400 hover:underline">→ Compliance (ISO 27001, PCI-DSS)</a></li>
+                <li><a href="#faq" className="text-cyan-400 hover:underline">→ FAQ</a></li>
               </ul>
             </div>
 
@@ -249,7 +249,7 @@ export default async function XXE2026Page({
                   (Billion Laughs / XML Bomb).
                 </p>
 
-                <div className="bg-red-50 border-l-4 border-red-500 p-6 rounded-r-lg mb-8">
+                <div className="bg-red-900 border-l-4 border-red-500 p-6 rounded-r-lg mb-8">
                   <h3 className="text-red-900 font-semibold mb-2 flex items-center gap-2">
                     <span>⚠️</span> Warum XXE 2026 besonders kritisch ist
                   </h3>
@@ -313,7 +313,7 @@ export default async function XXE2026Page({
                       <span className="inline-block px-3 py-1 rounded-full bg-red-100 text-red-700 text-sm font-medium mb-2">CRITICAL</span>
                       <h3 className="text-xl font-semibold text-slate-900">CVE-2026-XXXX</h3>
                     </div>
-                    <span className="text-3xl font-bold text-red-600">9.8</span>
+                    <span className="text-3xl font-bold text-red-400">9.8</span>
                   </div>
                   <p className="text-slate-700 mb-4">
                     <strong>LibXML2 XXE via XInclude</strong> - Eine kritische Schwachstelle in LibXML2 ermöglicht 
@@ -332,7 +332,7 @@ export default async function XXE2026Page({
                       <span className="inline-block px-3 py-1 rounded-full bg-orange-100 text-orange-700 text-sm font-medium mb-2">HIGH</span>
                       <h3 className="text-xl font-semibold text-slate-900">CVE-2026-YYYY</h3>
                     </div>
-                    <span className="text-3xl font-bold text-orange-600">8.5</span>
+                    <span className="text-3xl font-bold text-orange-400">8.5</span>
                   </div>
                   <p className="text-slate-700 mb-4">
                     <strong>Java XML Parsers Default XXE</strong> - Mehrere Java XML-Parser (DOM, SAX, StAX) 
@@ -351,7 +351,7 @@ export default async function XXE2026Page({
                       <span className="inline-block px-3 py-1 rounded-full bg-yellow-100 text-yellow-700 text-sm font-medium mb-2">MEDIUM</span>
                       <h3 className="text-xl font-semibold text-slate-900">CVE-2026-ZZZZ</h3>
                     </div>
-                    <span className="text-3xl font-bold text-yellow-600">6.8</span>
+                    <span className="text-3xl font-bold text-yellow-400">6.8</span>
                   </div>
                   <p className="text-slate-700 mb-4">
                     <strong>.NET XmlDocument XXE</strong> - XXE-Schwachstelle in .NET Framework und .NET Core 
@@ -388,7 +388,7 @@ export default async function XXE2026Page({
               <div className="grid md:grid-cols-2 gap-6 mb-8">
                 <div className="bg-white border border-slate-200 rounded-xl p-6">
                   <h3 className="text-lg font-semibold text-slate-900 mb-3 flex items-center gap-2">
-                    <span className="w-8 h-8 rounded-lg bg-red-100 text-red-600 flex items-center justify-center text-sm">1</span>
+                    <span className="w-8 h-8 rounded-lg bg-red-100 text-red-400 flex items-center justify-center text-sm">1</span>
                     File Disclosure
                   </h3>
                   <p className="text-slate-600 text-sm mb-4">
@@ -405,7 +405,7 @@ export default async function XXE2026Page({
 
                 <div className="bg-white border border-slate-200 rounded-xl p-6">
                   <h3 className="text-lg font-semibold text-slate-900 mb-3 flex items-center gap-2">
-                    <span className="w-8 h-8 rounded-lg bg-red-100 text-red-600 flex items-center justify-center text-sm">2</span>
+                    <span className="w-8 h-8 rounded-lg bg-red-100 text-red-400 flex items-center justify-center text-sm">2</span>
                     SSRF
                   </h3>
                   <p className="text-slate-600 text-sm mb-4">
@@ -422,7 +422,7 @@ export default async function XXE2026Page({
 
                 <div className="bg-white border border-slate-200 rounded-xl p-6">
                   <h3 className="text-lg font-semibold text-slate-900 mb-3 flex items-center gap-2">
-                    <span className="w-8 h-8 rounded-lg bg-red-100 text-red-600 flex items-center justify-center text-sm">3</span>
+                    <span className="w-8 h-8 rounded-lg bg-red-100 text-red-400 flex items-center justify-center text-sm">3</span>
                     Billion Laughs
                   </h3>
                   <p className="text-slate-600 text-sm mb-4">
@@ -440,7 +440,7 @@ export default async function XXE2026Page({
 
                 <div className="bg-white border border-slate-200 rounded-xl p-6">
                   <h3 className="text-lg font-semibold text-slate-900 mb-3 flex items-center gap-2">
-                    <span className="w-8 h-8 rounded-lg bg-red-100 text-red-600 flex items-center justify-center text-sm">4</span>
+                    <span className="w-8 h-8 rounded-lg bg-red-100 text-red-400 flex items-center justify-center text-sm">4</span>
                     Error-Based
                   </h3>
                   <p className="text-slate-600 text-sm mb-4">
@@ -585,7 +585,7 @@ using (XmlReader reader = XmlReader.Create(inputStream, settings))
             <section id="prevention" className="mb-16">
               <h2 className="text-3xl font-bold text-slate-900 mb-6">XXE Prevention & Defense-in-Depth</h2>
               
-              <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-8 border border-green-200 mb-8">
+              <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-8 border border-green-700 mb-8">
                 <h3 className="text-xl font-semibold text-green-900 mb-6">Das 5-Layer Defense Model</h3>
                 
                 <div className="space-y-6">
@@ -678,7 +678,7 @@ using (XmlReader reader = XmlReader.Create(inputStream, settings))
               
               <div className="grid md:grid-cols-3 gap-6">
                 <div className="bg-white border border-slate-200 rounded-xl p-6">
-                  <div className="w-12 h-12 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center mb-4 text-2xl">🔍</div>
+                  <div className="w-12 h-12 rounded-lg bg-blue-100 text-cyan-400 flex items-center justify-center mb-4 text-2xl">🔍</div>
                   <h3 className="font-semibold text-slate-900 mb-2">Burp Suite</h3>
                   <p className="text-slate-600 text-sm mb-4">
                     Enterprise-Grade Web Security Testing mit XXE Detection Plugins
@@ -691,7 +691,7 @@ using (XmlReader reader = XmlReader.Create(inputStream, settings))
                 </div>
 
                 <div className="bg-white border border-slate-200 rounded-xl p-6">
-                  <div className="w-12 h-12 rounded-lg bg-orange-100 text-orange-600 flex items-center justify-center mb-4 text-2xl">🛡️</div>
+                  <div className="w-12 h-12 rounded-lg bg-orange-100 text-orange-400 flex items-center justify-center mb-4 text-2xl">🛡️</div>
                   <h3 className="font-semibold text-slate-900 mb-2">OWASP ZAP</h3>
                   <p className="text-slate-600 text-sm mb-4">
                     Open Source Web Application Security Scanner mit XXE Rules
@@ -717,7 +717,7 @@ using (XmlReader reader = XmlReader.Create(inputStream, settings))
                 </div>
 
                 <div className="bg-white border border-slate-200 rounded-xl p-6">
-                  <div className="w-12 h-12 rounded-lg bg-green-100 text-green-600 flex items-center justify-center mb-4 text-2xl">🔎</div>
+                  <div className="w-12 h-12 rounded-lg bg-green-100 text-green-400 flex items-center justify-center mb-4 text-2xl">🔎</div>
                   <h3 className="font-semibold text-slate-900 mb-2">Semgrep</h3>
                   <p className="text-slate-600 text-sm mb-4">
                     Lightweight Static Analysis mit XXE Detection Rules
@@ -743,7 +743,7 @@ using (XmlReader reader = XmlReader.Create(inputStream, settings))
                 </div>
 
                 <div className="bg-white border border-slate-200 rounded-xl p-6">
-                  <div className="w-12 h-12 rounded-lg bg-red-100 text-red-600 flex items-center justify-center mb-4 text-2xl">⚡</div>
+                  <div className="w-12 h-12 rounded-lg bg-red-100 text-red-400 flex items-center justify-center mb-4 text-2xl">⚡</div>
                   <h3 className="font-semibold text-slate-900 mb-2">ClawGuru Intel</h3>
                   <p className="text-slate-600 text-sm mb-4">
                     Real-time XXE Threat Intelligence und CVE-Monitoring
@@ -798,9 +798,9 @@ using (XmlReader reader = XmlReader.Create(inputStream, settings))
                         und muss durch Input Validation verhindert werden.
                       </p>
                       <div className="flex gap-2">
-                        <span className="px-3 py-1 bg-red-100 rounded-full text-xs text-red-600">Req 6.2</span>
-                        <span className="px-3 py-1 bg-red-100 rounded-full text-xs text-red-600">Req 6.5.1</span>
-                        <span className="px-3 py-1 bg-red-100 rounded-full text-xs text-red-600">Req 11.3.2</span>
+                        <span className="px-3 py-1 bg-red-100 rounded-full text-xs text-red-400">Req 6.2</span>
+                        <span className="px-3 py-1 bg-red-100 rounded-full text-xs text-red-400">Req 6.5.1</span>
+                        <span className="px-3 py-1 bg-red-100 rounded-full text-xs text-red-400">Req 11.3.2</span>
                       </div>
                     </div>
                   </div>
@@ -820,9 +820,9 @@ using (XmlReader reader = XmlReader.Create(inputStream, settings))
                         Die spezifische Schwachstellenklasse für XXE.
                       </p>
                       <div className="flex gap-2">
-                        <span className="px-3 py-1 bg-blue-100 rounded-full text-xs text-blue-600">A03:2021</span>
-                        <span className="px-3 py-1 bg-blue-100 rounded-full text-xs text-blue-600">CWE-611</span>
-                        <span className="px-3 py-1 bg-blue-100 rounded-full text-xs text-blue-600">CWE-776</span>
+                        <span className="px-3 py-1 bg-blue-100 rounded-full text-xs text-cyan-400">A03:2021</span>
+                        <span className="px-3 py-1 bg-blue-100 rounded-full text-xs text-cyan-400">CWE-611</span>
+                        <span className="px-3 py-1 bg-blue-100 rounded-full text-xs text-cyan-400">CWE-776</span>
                       </div>
                     </div>
                   </div>
@@ -925,7 +925,7 @@ using (XmlReader reader = XmlReader.Create(inputStream, settings))
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-red-500/20 via-transparent to-transparent" />
           <div className="container mx-auto px-4 relative z-10">
             <div className="max-w-4xl">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-500/20 text-red-300 text-sm mb-4">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-9000/20 text-red-300 text-sm mb-4">
                 <span className="w-2 h-2 rounded-full bg-red-400 animate-pulse" />
                 Critical Security Advisory 2026
               </div>

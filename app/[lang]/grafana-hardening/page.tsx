@@ -114,7 +114,7 @@ export default async function GrafanaHardeningPage({
                 : "Grafana is the central nervous system of your observability infrastructure. It has access to all metrics, logs, and traces. A compromised Grafana means complete visibility into your systems - a goldmine for attackers."}
             </p>
 
-            <div className="bg-red-50 border-l-4 border-red-500 rounded-r-xl p-6 mb-8">
+            <div className="bg-red-900 border-l-4 border-red-500 rounded-r-xl p-6 mb-8">
               <h3 className="text-red-900 font-semibold mb-2">
                 {isGerman ? "⚠️ Risiken eines unsicheren Grafana" : "⚠️ Risks of an Unsecured Grafana"}
               </h3>
@@ -169,7 +169,7 @@ role_attribute_path = role`}
               </div>
             </div>
 
-            <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-6">
+            <div className="bg-amber-900 border border-yellow-700 rounded-xl p-6">
               <h3 className="font-semibold text-yellow-900 mb-4">MFA Enforcement Checklist</h3>
               <div className="grid md:grid-cols-2 gap-4">
                 {[
@@ -229,21 +229,21 @@ customRoles:
             </div>
 
             <div className="grid md:grid-cols-3 gap-4">
-              <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
+              <div className="bg-blue-900 rounded-lg p-4 border border-blue-700">
                 <h4 className="font-semibold text-blue-900 mb-2">Viewer</h4>
-                <p className="text-sm text-blue-800">
+                <p className="text-sm text-blue-300">
                   {isGerman ? "Dashboards ansehen, keine Änderungen" : "View dashboards, no modifications"}
                 </p>
               </div>
-              <div className="bg-green-50 rounded-lg p-4 border border-green-200">
+              <div className="bg-green-900 rounded-lg p-4 border border-green-700">
                 <h4 className="font-semibold text-green-900 mb-2">Editor</h4>
-                <p className="text-sm text-green-800">
+                <p className="text-sm text-green-300">
                   {isGerman ? "Dashboards erstellen/bearbeiten" : "Create/edit dashboards"}
                 </p>
               </div>
-              <div className="bg-red-50 rounded-lg p-4 border border-red-200">
+              <div className="bg-red-900 rounded-lg p-4 border border-red-700">
                 <h4 className="font-semibold text-red-900 mb-2">Admin</h4>
-                <p className="text-sm text-red-800">
+                <p className="text-sm text-red-300">
                   {isGerman ? "Alle Berechtigungen + Benutzerverwaltung" : "All permissions + user management"}
                 </p>
               </div>
@@ -298,7 +298,7 @@ location /grafana/ {
           <section className="mb-16">
             <h2 className="text-3xl font-bold text-slate-900 mb-6">Secrets Management</h2>
             
-            <div className="bg-gradient-to-br from-purple-50 to-indigo-50 border border-purple-200 rounded-xl p-6 mb-6">
+            <div className="bg-gradient-to-br from-purple-50 to-indigo-50 border border-purple-700 rounded-xl p-6 mb-6">
               <h3 className="font-semibold text-purple-900 mb-4">HashiCorp Vault Integration</h3>
               <p className="text-purple-800 text-sm mb-4">
                 {isGerman
@@ -376,25 +376,25 @@ log_data_source_queries = true`}
               </div>
             </div>
 
-            <div className="bg-green-50 border border-green-200 rounded-xl p-6">
+            <div className="bg-green-900 border border-green-700 rounded-xl p-6">
               <h3 className="font-semibold text-green-900 mb-4">Compliance-Mapping</h3>
               <div className="grid md:grid-cols-3 gap-4 text-sm">
                 <div>
-                  <span className="font-medium text-green-800">SOC 2:</span>
+                  <span className="font-medium text-green-300">SOC 2:</span>
                   <ul className="text-green-700 mt-1 space-y-1">
                     <li>• CC6.1 - Access Control</li>
                     <li>• CC7.2 - Monitoring</li>
                   </ul>
                 </div>
                 <div>
-                  <span className="font-medium text-green-800">ISO 27001:</span>
+                  <span className="font-medium text-green-300">ISO 27001:</span>
                   <ul className="text-green-700 mt-1 space-y-1">
                     <li>• A.9.1 - Access Policy</li>
                     <li>• A.12.4 - Logging</li>
                   </ul>
                 </div>
                 <div>
-                  <span className="font-medium text-green-800">GDPR:</span>
+                  <span className="font-medium text-green-300">GDPR:</span>
                   <ul className="text-green-700 mt-1 space-y-1">
                     <li>• Art. 32 - Security</li>
                     <li>• Art. 5 - Access Log</li>
@@ -458,7 +458,7 @@ log_data_source_queries = true`}
             </p>
             <a 
               href={coreLinks.check} 
-              className="inline-block px-6 py-3 bg-white text-orange-600 rounded-lg font-semibold hover:bg-slate-100 transition-colors"
+              className="inline-block px-6 py-3 bg-white text-orange-400 rounded-lg font-semibold hover:bg-slate-100 transition-colors"
             >
               {isGerman ? "Assessment Starten" : "Start Assessment"}
             </a>

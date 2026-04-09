@@ -24,14 +24,14 @@ export default function ClawGuruVsWizPage({ params }: PageProps) {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-4xl mx-auto">
-        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-8 text-sm">
+        <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
           <strong>Vergleichsseite</strong>: ClawGuru und Wiz sind für unterschiedliche Zielgruppen optimiert. Dieser Guide hilft bei der Entscheidung.
         </div>
-        <h1 className="text-4xl font-bold mb-4">ClawGuru vs Wiz: Cloud Security Plattform Vergleich</h1>
-        <p className="text-lg text-gray-600 mb-8">Wiz ist eine Enterprise-Cloud-Security-Plattform (&gt;$100M ARR). ClawGuru ist die Self-Hosted Alternative für SMBs und Tech-Teams mit Datenschutz-Anforderungen.</p>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">ClawGuru vs Wiz: Cloud Security Plattform Vergleich</h1>
+        <p className="text-lg text-gray-300 mb-8">Wiz ist eine Enterprise-Cloud-Security-Plattform (&gt;$100M ARR). ClawGuru ist die Self-Hosted Alternative für SMBs und Tech-Teams mit Datenschutz-Anforderungen.</p>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">⚔️ Direkter Vergleich</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">⚔️ Direkter Vergleich</h2>
           <div className="overflow-x-auto">
             <table className="w-full border-collapse text-sm">
               <thead><tr className="bg-gray-800 text-white"><th className="p-3 text-left">Kriterium</th><th className="p-3 text-center">🛡️ ClawGuru</th><th className="p-3 text-center">⚡ Wiz</th></tr></thead>
@@ -48,7 +48,7 @@ export default function ClawGuruVsWizPage({ params }: PageProps) {
                   ['Compliance Frameworks', '✅ SOC2, ISO27001, GDPR', '✅ 50+ Frameworks'],
                   ['Setup-Aufwand', '✅ < 1 Stunde', '⚠️ Enterprise-Onboarding'],
                 ].map(([criteria, claw, wiz]) => (
-                  <tr key={criteria} className="border-b hover:bg-gray-50">
+                  <tr key={criteria} className="border-b hover:bg-gray-800">
                     <td className="p-3 font-medium">{criteria}</td>
                     <td className="p-3 text-center text-sm">{claw}</td>
                     <td className="p-3 text-center text-sm">{wiz}</td>
@@ -60,11 +60,11 @@ export default function ClawGuruVsWizPage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">🏆 Wann welches Tool?</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">🏆 Wann welches Tool?</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-green-50 border border-green-200 p-5 rounded-lg">
-              <h3 className="font-bold text-green-800 mb-3">🛡️ ClawGuru ist die Wahl wenn...</h3>
-              <ul className="space-y-1.5 text-sm text-green-700">
+            <div className="bg-green-900 border border-green-700 p-5 rounded-lg">
+              <h3 className="font-bold text-green-300 mb-3">🛡️ ClawGuru ist die Wahl wenn...</h3>
+              <ul className="space-y-1.5 text-sm text-green-200">
                 <li>• Budget &lt; $50k/Jahr für Security Tools</li>
                 <li>• Datenschutz / DSGVO zwingend</li>
                 <li>• Self-Hosted oder On-Prem nötig</li>
@@ -72,9 +72,9 @@ export default function ClawGuruVsWizPage({ params }: PageProps) {
                 <li>• Team &lt; 200 Mitarbeiter</li>
               </ul>
             </div>
-            <div className="bg-blue-50 border border-blue-200 p-5 rounded-lg">
-              <h3 className="font-bold text-blue-800 mb-3">⚡ Wiz ist die Wahl wenn...</h3>
-              <ul className="space-y-1.5 text-sm text-blue-700">
+            <div className="bg-blue-900 border border-blue-700 p-5 rounded-lg">
+              <h3 className="font-bold text-blue-300 mb-3">⚡ Wiz ist die Wahl wenn...</h3>
+              <ul className="space-y-1.5 text-sm text-blue-200">
                 <li>• Enterprise mit &gt;$100k Security Budget</li>
                 <li>• Multi-Cloud CSPM als Hauptanforderung</li>
                 <li>• Agentless Scanning über alles</li>
@@ -86,10 +86,10 @@ export default function ClawGuruVsWizPage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">🔗 ClawGuru entdecken</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">🔗 ClawGuru entdecken</h2>
           <div className="grid grid-cols-2 gap-4">
-            <a href="/securitycheck" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">🛡️ Security Check</div><div className="text-sm text-gray-600">Kostenlos starten</div></a>
-            <a href="/pricing" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">💰 Preise</div><div className="text-sm text-gray-600">Ab €0/Monat</div></a>
+            <a href="/securitycheck" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700"><div className="font-semibold text-cyan-400">🛡️ Security Check</div><div className="text-sm text-gray-300">Kostenlos starten</div></a>
+            <a href="/pricing" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700"><div className="font-semibold text-cyan-400">💰 Preise</div><div className="text-sm text-gray-300">Ab €0/Monat</div></a>
           </div>
         </section>
       </div>

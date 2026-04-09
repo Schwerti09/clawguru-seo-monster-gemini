@@ -35,20 +35,20 @@ export default function OpenClawSecurityHeadersPage({ params }: PageProps) {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-4xl mx-auto">
-        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-8 text-sm">
-          <strong>"Not a Pentest" Trust-Anker</strong>: Security Headers schützen Browser-Benutzer. Keine Angriffswerkzeuge.
+        <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
+          <strong className="text-amber-100">"Not a Pentest" Trust-Anker</strong>: Security Headers schützen Browser-Benutzer. Keine Angriffswerkzeuge.
         </div>
-        <h1 className="text-4xl font-bold mb-4">OpenClaw Security Headers Guide</h1>
-        <p className="text-lg text-gray-600 mb-8">Alle Security Headers für OpenClaw — von CSP über HSTS bis hin zu Permissions-Policy. Implementierung in Next.js mit A+ securityheaders.com Rating.</p>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">OpenClaw Security Headers Guide</h1>
+        <p className="text-lg text-gray-300 mb-8">Alle Security Headers für OpenClaw — von CSP über HSTS bis hin zu Permissions-Policy. Implementierung in Next.js mit A+ securityheaders.com Rating.</p>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">📋 Headers Übersicht</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">📋 Headers Übersicht</h2>
           <div className="overflow-x-auto mb-6">
             <table className="w-full border-collapse text-sm">
               <thead><tr className="bg-gray-800 text-white"><th className="p-3 text-left">Header</th><th className="p-3 text-left">Schutz</th><th className="p-3 text-left">Kritisch</th></tr></thead>
               <tbody>
                 {HEADERS.map(({ name, impact, critical }) => (
-                  <tr key={name} className={`border-b hover:bg-gray-50 ${critical ? 'font-medium' : ''}`}>
+                  <tr key={name} className={`border-b hover:bg-gray-800 ${critical ? 'font-medium' : ''}`}>
                     <td className="p-3 font-mono text-xs">{name}</td>
                     <td className="p-3 text-sm">{impact}</td>
                     <td className="p-3">{critical ? '🔴 Ja' : '🟡 Empfohlen'}</td>
@@ -60,7 +60,7 @@ export default function OpenClawSecurityHeadersPage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">⚙️ Next.js Konfiguration</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">⚙️ Next.js Konfiguration</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm">
             <pre>{`// next.config.js — Security Headers für OpenClaw
 const securityHeaders = [
@@ -95,12 +95,12 @@ module.exports = {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">🔗 Weiterführende Ressourcen</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">🔗 Weiterführende Ressourcen</h2>
           <div className="grid grid-cols-2 gap-4">
-            <a href="/securitycheck" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">🛡️ Security Check</div><div className="text-sm text-gray-600">Header live prüfen</div></a>
-            <a href="/runbooks" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">📚 Header Runbooks</div><div className="text-sm text-gray-600">CSP Guides</div></a>
-            <a href="/openclaw" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">🔓 OpenClaw</div><div className="text-sm text-gray-600">Framework</div></a>
-            <a href="/solutions" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">🏢 Enterprise</div><div className="text-sm text-gray-600">Managed Headers</div></a>
+            <a href="/securitycheck" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700"><div className="font-semibold text-cyan-400">🛡️ Security Check</div><div className="text-sm text-gray-300">Header live prüfen</div></a>
+            <a href="/runbooks" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700"><div className="font-semibold text-cyan-400">📚 Header Runbooks</div><div className="text-sm text-gray-300">CSP Guides</div></a>
+            <a href="/openclaw" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700"><div className="font-semibold text-cyan-400">🔓 OpenClaw</div><div className="text-sm text-gray-300">Framework</div></a>
+            <a href="/solutions" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700"><div className="font-semibold text-cyan-400">🏢 Enterprise</div><div className="text-sm text-gray-300">Managed Headers</div></a>
           </div>
         </section>
       </div>

@@ -24,14 +24,14 @@ export default function OpenClawVsSemgrepPage({ params }: PageProps) {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-4xl mx-auto">
-        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-8 text-sm">
+        <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
           <strong>Vergleichsseite</strong>: OpenClaw und Semgrep lösen unterschiedliche Probleme — dieser Guide hilft dir, das richtige Tool zu wählen.
         </div>
-        <h1 className="text-4xl font-bold mb-4">OpenClaw vs Semgrep</h1>
-        <p className="text-lg text-gray-600 mb-8">Semgrep ist ein SAST-Spezialist für Code-Pattern-Matching. OpenClaw ist eine ganzheitliche Security-Plattform mit Executable Runbooks.</p>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">OpenClaw vs Semgrep</h1>
+        <p className="text-lg text-gray-300 mb-8">Semgrep ist ein SAST-Spezialist für Code-Pattern-Matching. OpenClaw ist eine ganzheitliche Security-Plattform mit Executable Runbooks.</p>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">⚔️ Vergleich im Überblick</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">⚔️ Vergleich im Überblick</h2>
           <div className="overflow-x-auto">
             <table className="w-full border-collapse text-sm">
               <thead><tr className="bg-gray-800 text-white"><th className="p-3 text-left">Feature</th><th className="p-3 text-center">🔓 OpenClaw</th><th className="p-3 text-center">🔍 Semgrep</th></tr></thead>
@@ -47,7 +47,7 @@ export default function OpenClawVsSemgrepPage({ params }: PageProps) {
                   ['Runtime Protection', '✅ API + Middleware', '❌ Code-only'],
                   ['Preis', 'Kostenlos bis €99/Mo', 'OSS kostenlos, Pro ab $40'],
                 ].map(([feature, openclaw, semgrep]) => (
-                  <tr key={feature} className="border-b hover:bg-gray-50">
+                  <tr key={feature} className="border-b hover:bg-gray-800">
                     <td className="p-3">{feature}</td>
                     <td className="p-3 text-center">{openclaw}</td>
                     <td className="p-3 text-center">{semgrep}</td>
@@ -59,20 +59,20 @@ export default function OpenClawVsSemgrepPage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">💡 Empfehlung</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">💡 Empfehlung</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-green-50 border border-green-200 p-5 rounded-lg">
-              <h3 className="font-bold text-green-800 mb-2">🔓 Wähle OpenClaw wenn...</h3>
-              <ul className="space-y-1 text-sm text-green-700">
+            <div className="bg-green-900 border border-green-700 p-5 rounded-lg">
+              <h3 className="font-bold text-green-300 mb-2">🔓 Wähle OpenClaw wenn...</h3>
+              <ul className="space-y-1 text-sm text-green-200">
                 <li>• Ganzheitliche Security-Plattform gewünscht</li>
                 <li>• Executable Runbooks essentiell</li>
                 <li>• Runtime + Static Security kombinieren</li>
                 <li>• Compliance-Nachweise benötigt</li>
               </ul>
             </div>
-            <div className="bg-blue-50 border border-blue-200 p-5 rounded-lg">
-              <h3 className="font-bold text-blue-800 mb-2">🔍 Wähle Semgrep wenn...</h3>
-              <ul className="space-y-1 text-sm text-blue-700">
+            <div className="bg-blue-900 border border-blue-700 p-5 rounded-lg">
+              <h3 className="font-bold text-blue-300 mb-2">🔍 Wähle Semgrep wenn...</h3>
+              <ul className="space-y-1 text-sm text-blue-200">
                 <li>• SAST als Hauptfokus</li>
                 <li>• Tiefes Code-Pattern-Matching</li>
                 <li>• Große Dev-Teams mit Code-Review-Focus</li>
@@ -83,10 +83,10 @@ export default function OpenClawVsSemgrepPage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">🔗 Weiterführende Ressourcen</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">🔗 Weiterführende Ressourcen</h2>
           <div className="grid grid-cols-2 gap-4">
-            <a href="/openclaw" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">🔓 OpenClaw</div><div className="text-sm text-gray-600">Framework entdecken</div></a>
-            <a href="/securitycheck" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">🛡️ Security Check</div><div className="text-sm text-gray-600">Kostenlos testen</div></a>
+            <a href="/openclaw" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700"><div className="font-semibold text-cyan-400">🔓 OpenClaw</div><div className="text-sm text-gray-300">Framework entdecken</div></a>
+            <a href="/securitycheck" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700"><div className="font-semibold text-cyan-400">🛡️ Security Check</div><div className="text-sm text-gray-300">Kostenlos testen</div></a>
           </div>
         </section>
       </div>

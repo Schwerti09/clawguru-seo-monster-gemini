@@ -24,14 +24,14 @@ export default function MoltbotIncidentResponsePage({ params }: PageProps) {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-4xl mx-auto">
-        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-8 text-sm">
-          <strong>"Not a Pentest" Trust-Anker</strong>: Dieser Guide dient der Absicherung und schnellen Reaktion auf Sicherheitsvorfälle. Keine Angriffswerkzeuge.
+        <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
+          <strong className="text-amber-100">"Not a Pentest" Trust-Anker</strong>: Dieser Guide dient der Absicherung und schnellen Reaktion auf Sicherheitsvorfälle. Keine Angriffswerkzeuge.
         </div>
-        <h1 className="text-4xl font-bold mb-4">Moltbot Incident Response: Automatisierung &amp; Playbooks</h1>
-        <p className="text-lg text-gray-600 mb-8">Reduziere die Reaktionszeit auf Security-Incidents von Stunden auf Minuten — mit automatisierten Playbooks, Auto-Remediation und integrierten Alerting-Systemen.</p>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">Moltbot Incident Response: Automatisierung &amp; Playbooks</h1>
+        <p className="text-lg text-gray-300 mb-8">Reduziere die Reaktionszeit auf Security-Incidents von Stunden auf Minuten — mit automatisierten Playbooks, Auto-Remediation und integrierten Alerting-Systemen.</p>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">🚨 Incident Severity Matrix</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">🚨 Incident Severity Matrix</h2>
           <div className="overflow-x-auto mb-6">
             <table className="w-full border-collapse text-sm">
               <thead>
@@ -49,8 +49,8 @@ export default function MoltbotIncidentResponsePage({ params }: PageProps) {
                   ['P3 Medium', 'Brute Force Attack', '< 4 Std', 'Rate Limit + Log'],
                   ['P4 Low', 'Anomale Log-Aktivität', '< 24 Std', 'Log + Weekly Report'],
                 ].map(([sev, ex, rt, action]) => (
-                  <tr key={sev} className="border-b hover:bg-gray-50">
-                    <td className={`p-3 font-bold ${sev.includes('P1') ? 'text-red-600' : sev.includes('P2') ? 'text-orange-600' : sev.includes('P3') ? 'text-yellow-600' : 'text-green-600'}`}>{sev}</td>
+                  <tr key={sev} className="border-b hover:bg-gray-800">
+                    <td className={`p-3 font-bold ${sev.includes('P1') ? 'text-red-400' : sev.includes('P2') ? 'text-orange-400' : sev.includes('P3') ? 'text-yellow-400' : 'text-green-400'}`}>{sev}</td>
                     <td className="p-3">{ex}</td>
                     <td className="p-3 font-mono text-sm">{rt}</td>
                     <td className="p-3 text-sm">{action}</td>
@@ -62,7 +62,7 @@ export default function MoltbotIncidentResponsePage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">⚡ Auto-Remediation Engine</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">⚡ Auto-Remediation Engine</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm">
             <pre>{`// moltbot/lib/auto-remediation.ts
 import { Redis } from '@upstash/redis';
@@ -101,8 +101,8 @@ export async function executePlaybook(type: IncidentType, ip: string) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">📋 Post-Mortem Template</h2>
-          <div className="bg-gray-50 border rounded-lg p-6">
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">📋 Post-Mortem Template</h2>
+          <div className="bg-gray-800 border rounded-lg p-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
               {[
                 ['Incident ID', 'INC-2024-XXXX'],
@@ -118,7 +118,7 @@ export async function executePlaybook(type: IncidentType, ip: string) {
               ].map(([key, val]) => (
                 <div key={key}>
                   <div className="font-semibold text-gray-700">{key}</div>
-                  <div className="text-gray-500 font-mono text-xs">{val}</div>
+                  <div className="text-gray-400 font-mono text-xs">{val}</div>
                 </div>
               ))}
             </div>
@@ -126,12 +126,12 @@ export async function executePlaybook(type: IncidentType, ip: string) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">🔗 Weiterführende Ressourcen</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">🔗 Weiterführende Ressourcen</h2>
           <div className="grid grid-cols-2 gap-4">
-            <a href="/securitycheck" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">🛡️ Security Check</div><div className="text-sm text-gray-600">Live Incident Detection</div></a>
-            <a href="/neuro" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">🧠 Neuro AI</div><div className="text-sm text-gray-600">AI Threat Detection</div></a>
-            <a href="/runbooks" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">📚 IR Runbooks</div><div className="text-sm text-gray-600">Response Playbooks</div></a>
-            <a href="/oracle" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">🔮 Oracle</div><div className="text-sm text-gray-600">Threat Intelligence</div></a>
+            <a href="/securitycheck" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700"><div className="font-semibold text-cyan-400">🛡️ Security Check</div><div className="text-sm text-gray-300">Live Incident Detection</div></a>
+            <a href="/neuro" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700"><div className="font-semibold text-cyan-400">🧠 Neuro AI</div><div className="text-sm text-gray-300">AI Threat Detection</div></a>
+            <a href="/runbooks" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700"><div className="font-semibold text-cyan-400">📚 IR Runbooks</div><div className="text-sm text-gray-300">Response Playbooks</div></a>
+            <a href="/oracle" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700"><div className="font-semibold text-cyan-400">🔮 Oracle</div><div className="text-sm text-gray-300">Threat Intelligence</div></a>
           </div>
         </section>
       </div>

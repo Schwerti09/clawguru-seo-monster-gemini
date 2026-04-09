@@ -86,7 +86,7 @@ export default async function DatadogSecurityPage({
             </p>
 
             <div className="grid md:grid-cols-3 gap-6 mb-8">
-              <div className="bg-purple-50 border border-purple-200 rounded-xl p-6">
+              <div className="bg-purple-50 border border-purple-700 rounded-xl p-6">
                 <h3 className="font-semibold text-purple-900 mb-2">Access Control</h3>
                 <ul className="text-sm text-purple-800 space-y-1">
                   <li>• Custom Roles</li>

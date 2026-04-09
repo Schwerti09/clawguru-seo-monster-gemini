@@ -24,14 +24,14 @@ export default function OpenClawAuditLoggingPage({ params }: PageProps) {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-4xl mx-auto">
-        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-8 text-sm">
-          <strong>"Not a Pentest" Trust-Anker</strong>: Audit Logging sichert Compliance und ermöglicht Forensics für eigene Systeme. Keine Angriffswerkzeuge.
+        <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
+          <strong className="text-amber-100">"Not a Pentest" Trust-Anker</strong>: Audit Logging sichert Compliance und ermöglicht Forensics für eigene Systeme. Keine Angriffswerkzeuge.
         </div>
-        <h1 className="text-4xl font-bold mb-4">OpenClaw Audit Logging Setup</h1>
-        <p className="text-lg text-gray-600 mb-8">Lückenloser, manipulationssicherer Audit Trail für OpenClaw — strukturiertes JSON Logging, Compliance-konformes Retention und forensisch verwertbare Logs.</p>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">OpenClaw Audit Logging Setup</h1>
+        <p className="text-lg text-gray-300 mb-8">Lückenloser, manipulationssicherer Audit Trail für OpenClaw — strukturiertes JSON Logging, Compliance-konformes Retention und forensisch verwertbare Logs.</p>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">📝 Strukturiertes Audit Log Schema</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">📝 Strukturiertes Audit Log Schema</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm">
             <pre>{`// moltbot/lib/audit-logger.ts
 import { db } from './db';
@@ -71,7 +71,7 @@ export async function logAuditEvent(event: AuditEvent): Promise<void> {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">📋 Was MUSS geloggt werden?</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">📋 Was MUSS geloggt werden?</h2>
           <div className="overflow-x-auto">
             <table className="w-full border-collapse text-sm">
               <thead><tr className="bg-gray-800 text-white"><th className="p-3 text-left">Event</th><th className="p-3 text-left">Pflicht</th><th className="p-3 text-left">Retention</th></tr></thead>
@@ -86,9 +86,9 @@ export async function logAuditEvent(event: AuditEvent): Promise<void> {
                   ['Security Alerts', 'NIS2', '2 Jahre'],
                   ['System Config Changes', 'ISO 27001', '3 Jahre'],
                 ].map(([event, basis, retention]) => (
-                  <tr key={event} className="border-b hover:bg-gray-50">
+                  <tr key={event} className="border-b hover:bg-gray-800">
                     <td className="p-3">{event}</td>
-                    <td className="p-3 text-sm text-orange-600 font-medium">{basis}</td>
+                    <td className="p-3 text-sm text-orange-400 font-medium">{basis}</td>
                     <td className="p-3 font-mono text-xs">{retention}</td>
                   </tr>
                 ))}
@@ -98,12 +98,12 @@ export async function logAuditEvent(event: AuditEvent): Promise<void> {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">🔗 Weiterführende Ressourcen</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">🔗 Weiterführende Ressourcen</h2>
           <div className="grid grid-cols-2 gap-4">
-            <a href="/securitycheck" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">🛡️ Security Check</div><div className="text-sm text-gray-600">Audit Assessment</div></a>
-            <a href="/runbooks" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">📚 Logging Runbooks</div><div className="text-sm text-gray-600">Compliance Guides</div></a>
-            <a href="/oracle" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">🔮 Oracle</div><div className="text-sm text-gray-600">Threat Intel</div></a>
-            <a href="/solutions" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">🏢 Enterprise SIEM</div><div className="text-sm text-gray-600">Managed Logging</div></a>
+            <a href="/securitycheck" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700"><div className="font-semibold text-cyan-400">🛡️ Security Check</div><div className="text-sm text-gray-300">Audit Assessment</div></a>
+            <a href="/runbooks" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700"><div className="font-semibold text-cyan-400">📚 Logging Runbooks</div><div className="text-sm text-gray-300">Compliance Guides</div></a>
+            <a href="/oracle" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700"><div className="font-semibold text-cyan-400">🔮 Oracle</div><div className="text-sm text-gray-300">Threat Intel</div></a>
+            <a href="/solutions" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700"><div className="font-semibold text-cyan-400">🏢 Enterprise SIEM</div><div className="text-sm text-gray-300">Managed Logging</div></a>
           </div>
         </section>
       </div>

@@ -24,14 +24,14 @@ export default function MoltbotBackupRecoveryPage({ params }: PageProps) {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-4xl mx-auto">
-        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-8 text-sm">
-          <strong>"Not a Pentest" Trust-Anker</strong>: Dieser Guide dient der Absicherung durch zuverlässige Backup- und Recovery-Strategien. Keine Angriffswerkzeuge.
+        <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
+          <strong className="text-amber-100">"Not a Pentest" Trust-Anker</strong>: Dieser Guide dient der Absicherung durch zuverlässige Backup- und Recovery-Strategien. Keine Angriffswerkzeuge.
         </div>
-        <h1 className="text-4xl font-bold mb-4">Moltbot Backup &amp; Disaster Recovery</h1>
-        <p className="text-lg text-gray-600 mb-8">Resilienz gegen Ausfälle, Datenverlust und Ransomware — mit definierten RTO/RPO-Zielen, automatisierten Backups und getesteten DR-Prozessen.</p>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">Moltbot Backup &amp; Disaster Recovery</h1>
+        <p className="text-lg text-gray-300 mb-8">Resilienz gegen Ausfälle, Datenverlust und Ransomware — mit definierten RTO/RPO-Zielen, automatisierten Backups und getesteten DR-Prozessen.</p>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">📊 RTO/RPO Ziele für Moltbot</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">📊 RTO/RPO Ziele für Moltbot</h2>
           <div className="overflow-x-auto">
             <table className="w-full border-collapse text-sm">
               <thead><tr className="bg-gray-800 text-white"><th className="p-3 text-left">Tier</th><th className="p-3 text-left">Service</th><th className="p-3 text-left">RTO</th><th className="p-3 text-left">RPO</th><th className="p-3 text-left">Backup Freq.</th></tr></thead>
@@ -44,8 +44,8 @@ export default function MoltbotBackupRecoveryPage({ params }: PageProps) {
                   ['T3', 'File Storage', '4 Std', '1 Std', 'Stündlich'],
                   ['T3', 'Analytics DB', '24 Std', '24 Std', 'Täglich'],
                 ].map(([tier, svc, rto, rpo, freq]) => (
-                  <tr key={svc} className="border-b hover:bg-gray-50">
-                    <td className={`p-3 font-bold ${tier === 'T1' ? 'text-red-600' : tier === 'T2' ? 'text-yellow-600' : 'text-green-600'}`}>{tier}</td>
+                  <tr key={svc} className="border-b hover:bg-gray-800">
+                    <td className={`p-3 font-bold ${tier === 'T1' ? 'text-red-400' : tier === 'T2' ? 'text-yellow-400' : 'text-green-400'}`}>{tier}</td>
                     <td className="p-3">{svc}</td><td className="p-3 font-mono text-xs">{rto}</td><td className="p-3 font-mono text-xs">{rpo}</td><td className="p-3 text-xs">{freq}</td>
                   </tr>
                 ))}
@@ -55,7 +55,7 @@ export default function MoltbotBackupRecoveryPage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">🗄️ Automatisiertes PostgreSQL Backup</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">🗄️ Automatisiertes PostgreSQL Backup</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm">
             <pre>{`#!/bin/bash
 # moltbot-backup.sh — Automatisiertes PostgreSQL Backup
@@ -94,12 +94,12 @@ echo "[SUCCESS] Backup completed: $BACKUP_FILE"`}</pre>
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">🔗 Weiterführende Ressourcen</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">🔗 Weiterführende Ressourcen</h2>
           <div className="grid grid-cols-2 gap-4">
-            <a href="/securitycheck" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">🛡️ Security Check</div><div className="text-sm text-gray-600">DR Status prüfen</div></a>
-            <a href="/runbooks" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">📚 DR Runbooks</div><div className="text-sm text-gray-600">Recovery Playbooks</div></a>
-            <a href="/neuro" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">🧠 Neuro AI</div><div className="text-sm text-gray-600">Anomalie-Erkennung</div></a>
-            <a href="/solutions" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">🏢 Enterprise</div><div className="text-sm text-gray-600">Managed DR</div></a>
+            <a href="/securitycheck" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700"><div className="font-semibold text-cyan-400">🛡️ Security Check</div><div className="text-sm text-gray-300">DR Status prüfen</div></a>
+            <a href="/runbooks" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700"><div className="font-semibold text-cyan-400">📚 DR Runbooks</div><div className="text-sm text-gray-300">Recovery Playbooks</div></a>
+            <a href="/neuro" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700"><div className="font-semibold text-cyan-400">🧠 Neuro AI</div><div className="text-sm text-gray-300">Anomalie-Erkennung</div></a>
+            <a href="/solutions" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700"><div className="font-semibold text-cyan-400">🏢 Enterprise</div><div className="text-sm text-gray-300">Managed DR</div></a>
           </div>
         </section>
       </div>

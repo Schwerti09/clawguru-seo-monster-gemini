@@ -97,7 +97,7 @@ export default async function KafkaSecurityPage({
                   <li>• Certificate Rotation</li>
                 </ul>
               </div>
-              <div className="bg-blue-50 border border-blue-200 rounded-xl p-6">
+              <div className="bg-blue-900 border border-blue-700 rounded-xl p-6">
                 <h3 className="font-semibold text-blue-900 mb-2">Authentication</h3>
                 <ul className="text-sm text-blue-800 space-y-1">
                   <li>• SASL/SCRAM-SHA-512</li>

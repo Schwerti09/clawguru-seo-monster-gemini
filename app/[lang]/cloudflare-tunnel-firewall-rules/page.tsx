@@ -141,27 +141,27 @@ export default async function CloudflareTunnelPage({
                   </li>
                 </ul>
               </div>
-              <div className="bg-gradient-to-br from-orange-50 to-orange-100 border border-orange-200 rounded-xl p-6">
+              <div className="bg-gradient-to-br from-orange-50 to-orange-100 border border-orange-700 rounded-xl p-6">
                 <h3 className="font-semibold mb-4 text-orange-700">Cloudflare Tunnel (Modern)</h3>
                 <ul className="space-y-3 text-sm text-slate-700">
                   <li className="flex items-start gap-2">
-                    <span className="text-green-600">✓</span>
+                    <span className="text-green-400">✓</span>
                     {isGerman ? "Keine öffentlichen Ports nötig" : "No public ports needed"}
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-green-600">✓</span>
+                    <span className="text-green-400">✓</span>
                     {isGerman ? "Ausgehende Verbindung nur (HTTPS)" : "Outbound connection only (HTTPS)"}
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-green-600">✓</span>
+                    <span className="text-green-400">✓</span>
                     {isGerman ? "Integrierter DDoS-Schutz" : "Integrated DDoS protection"}
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-green-600">✓</span>
+                    <span className="text-green-400">✓</span>
                     {isGerman ? "Identity-basierter Zugriff" : "Identity-based access"}
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-green-600">✓</span>
+                    <span className="text-green-400">✓</span>
                     {isGerman ? "Globale Edge-Performance" : "Global edge performance"}
                   </li>
                 </ul>
@@ -269,7 +269,7 @@ spec:
               </div>
             </div>
 
-            <div className="bg-orange-50 border border-orange-200 rounded-xl p-6">
+            <div className="bg-orange-50 border border-orange-700 rounded-xl p-6">
               <h3 className="font-semibold text-orange-900 mb-3">Token Management</h3>
               <p className="text-orange-800 text-sm mb-4">
                 {isGerman 
@@ -355,7 +355,7 @@ require:
           <section className="mb-16">
             <h2 className="text-3xl font-bold text-slate-900 mb-6">WAF & Security Integration</h2>
             
-            <div className="bg-gradient-to-br from-orange-50 to-red-50 border border-orange-200 rounded-xl p-6 mb-8">
+            <div className="bg-gradient-to-br from-orange-50 to-red-50 border border-orange-700 rounded-xl p-6 mb-8">
               <h3 className="font-semibold text-orange-900 mb-4">Security Layers</h3>
               <div className="space-y-4">
                 <div className="flex items-center gap-4">
@@ -485,7 +485,7 @@ require:
             </p>
             <a 
               href={coreLinks.check} 
-              className="inline-block px-6 py-3 bg-white text-orange-600 rounded-lg font-semibold hover:bg-slate-100 transition-colors"
+              className="inline-block px-6 py-3 bg-white text-orange-400 rounded-lg font-semibold hover:bg-slate-100 transition-colors"
             >
               {isGerman ? "Migration Assessment" : "Migration Assessment"}
             </a>

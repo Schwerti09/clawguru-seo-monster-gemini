@@ -24,14 +24,14 @@ export default function OpenClawSupplyChainPage({ params }: PageProps) {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-4xl mx-auto">
-        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-8 text-sm">
-          <strong>"Not a Pentest" Trust-Anker</strong>: Supply Chain Security schützt eigene Software-Lieferkette. Keine Angriffswerkzeuge.
+        <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
+          <strong className="text-amber-100">"Not a Pentest" Trust-Anker</strong>: Supply Chain Security schützt eigene Software-Lieferkette. Keine Angriffswerkzeuge.
         </div>
-        <h1 className="text-4xl font-bold mb-4">OpenClaw Supply Chain Security</h1>
-        <p className="text-lg text-gray-600 mb-8">Schutz vor kompromittierten Dependencies — SBOM-Generierung, Dependency Pinning, Container-Signierung und Build Provenance für OpenClaw.</p>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">OpenClaw Supply Chain Security</h1>
+        <p className="text-lg text-gray-300 mb-8">Schutz vor kompromittierten Dependencies — SBOM-Generierung, Dependency Pinning, Container-Signierung und Build Provenance für OpenClaw.</p>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">📦 SBOM Generierung</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">📦 SBOM Generierung</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm">
             <pre>{`# Software Bill of Materials (SBOM) für OpenClaw erstellen
 
@@ -62,7 +62,7 @@ cosign verify-attestation \\
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">🛡️ Supply Chain Angriffs-Typen</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">🛡️ Supply Chain Angriffs-Typen</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {[
               { type: 'Typosquatting', example: 'crpyto statt crypto', mitigation: 'Dependency Pinning + Audit' },
@@ -72,22 +72,22 @@ cosign verify-attestation \\
               { type: 'Build System Attack', example: 'Kompromittierter CI/CD', mitigation: 'Hermetic Builds + Provenance' },
               { type: 'Subdependency Attack', example: 'left-pad, colors.js', mitigation: 'Lock Files + Vendoring' },
             ].map(({ type, example, mitigation }) => (
-              <div key={type} className="bg-gray-50 border rounded-lg p-4">
+              <div key={type} className="bg-gray-800 border rounded-lg p-4">
                 <div className="font-bold text-sm text-red-700 mb-1">{type}</div>
-                <div className="text-xs text-gray-500 mb-2">Beispiel: {example}</div>
-                <div className="text-xs bg-green-50 text-green-700 px-2 py-1 rounded">✅ {mitigation}</div>
+                <div className="text-xs text-gray-400 mb-2">Beispiel: {example}</div>
+                <div className="text-xs bg-green-900 text-green-700 px-2 py-1 rounded">✅ {mitigation}</div>
               </div>
             ))}
           </div>
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">🔗 Weiterführende Ressourcen</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">🔗 Weiterführende Ressourcen</h2>
           <div className="grid grid-cols-2 gap-4">
-            <a href="/securitycheck" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">🛡️ Security Check</div><div className="text-sm text-gray-600">Dependency Scan</div></a>
-            <a href="/runbooks" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">📚 Supply Chain Runbooks</div><div className="text-sm text-gray-600">SBOM Guides</div></a>
-            <a href="/oracle" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">🔮 Oracle</div><div className="text-sm text-gray-600">CVE Intelligence</div></a>
-            <a href="/solutions" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">🏢 Enterprise</div><div className="text-sm text-gray-600">Managed Supply Chain</div></a>
+            <a href="/securitycheck" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700"><div className="font-semibold text-cyan-400">🛡️ Security Check</div><div className="text-sm text-gray-300">Dependency Scan</div></a>
+            <a href="/runbooks" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700"><div className="font-semibold text-cyan-400">📚 Supply Chain Runbooks</div><div className="text-sm text-gray-300">SBOM Guides</div></a>
+            <a href="/oracle" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700"><div className="font-semibold text-cyan-400">🔮 Oracle</div><div className="text-sm text-gray-300">CVE Intelligence</div></a>
+            <a href="/solutions" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700"><div className="font-semibold text-cyan-400">🏢 Enterprise</div><div className="text-sm text-gray-300">Managed Supply Chain</div></a>
           </div>
         </section>
       </div>

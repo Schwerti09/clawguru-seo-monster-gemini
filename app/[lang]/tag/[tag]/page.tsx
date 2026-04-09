@@ -94,7 +94,7 @@ export default async function LocaleTagPage(props: { params: { lang: string; tag
   return (
     <Container>
       <div className="py-16 max-w-6xl mx-auto">
-        <nav className="text-sm text-gray-500 mb-6" aria-label="Breadcrumb">
+        <nav className="text-sm text-gray-400 mb-6" aria-label="Breadcrumb">
           <ol className="flex flex-wrap items-center gap-2">
             <li><a href={`${prefix}`} className="hover:text-cyan-400">ClawGuru</a></li>
             <li>/</li>
@@ -120,10 +120,10 @@ export default async function LocaleTagPage(props: { params: { lang: string; tag
                   href={`${prefix}/runbook/${r.slug}`}
                   className="p-4 rounded-2xl border border-gray-800 bg-black/30 hover:bg-black/40 transition-colors flex items-start gap-3"
                 >
-                  <span className="text-lg font-black text-gray-600 w-6 shrink-0">{i + 1}</span>
+                  <span className="text-lg font-black text-gray-400 w-6 shrink-0">{i + 1}</span>
                   <div>
                     <div className="font-bold text-gray-100">{r.title}</div>
-                    <div className="mt-1 text-xs text-gray-500 flex gap-2">
+                    <div className="mt-1 text-xs text-gray-400 flex gap-2">
                       <span>⚡{r.clawScore}</span>
                       <span>·</span>
                       <span className="text-cyan-400 underline">Öffnen →</span>
@@ -163,7 +163,7 @@ export default async function LocaleTagPage(props: { params: { lang: string; tag
               <div className="mt-2 text-sm text-gray-400">{r.summary}</div>
               <div className="mt-3 flex items-center gap-3 text-sm">
                 <span className="text-cyan-300 underline">Runbook öffnen →</span>
-                <span className="text-xs text-gray-600">⚡{r.clawScore}</span>
+                <span className="text-xs text-gray-300">⚡{r.clawScore}</span>
               </div>
             </a>
           ))}

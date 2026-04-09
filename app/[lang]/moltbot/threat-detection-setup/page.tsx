@@ -24,14 +24,14 @@ export default function MoltbotThreatDetectionPage({ params }: PageProps) {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-4xl mx-auto">
-        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-8 text-sm">
-          <strong>"Not a Pentest" Trust-Anker</strong>: Dieser Guide dient ausschließlich zur Implementierung von Bedrohungserkennungssystemen. Keine Angriffswerkzeuge, keine illegalen Aktivitäten.
+        <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
+          <strong className="text-amber-100">"Not a Pentest" Trust-Anker</strong>: Dieser Guide dient ausschließlich zur Implementierung von Bedrohungserkennungssystemen. Keine Angriffswerkzeuge, keine illegalen Aktivitäten.
         </div>
-        <h1 className="text-4xl font-bold mb-4">Moltbot Threat Detection: Live Monitoring Setup</h1>
-        <p className="text-lg text-gray-600 mb-8">Echtzeit-Bedrohungserkennung für Moltbot — von Falco Runtime Security über Prometheus Alerting bis hin zur automatisierten Incident Response.</p>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">Moltbot Threat Detection: Live Monitoring Setup</h1>
+        <p className="text-lg text-gray-300 mb-8">Echtzeit-Bedrohungserkennung für Moltbot — von Falco Runtime Security über Prometheus Alerting bis hin zur automatisierten Incident Response.</p>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">🦅 Falco Runtime Security Rules</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">🦅 Falco Runtime Security Rules</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm mb-4">
             <pre>{`# falco-rules-moltbot.yaml
 - rule: Moltbot Unexpected Network Connection
@@ -62,7 +62,7 @@ export default function MoltbotThreatDetectionPage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">📊 Prometheus Alerting Rules</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">📊 Prometheus Alerting Rules</h2>
           <div className="bg-gray-900 text-blue-400 p-4 rounded-lg font-mono text-sm mb-4">
             <pre>{`# prometheus/alerts/moltbot-security.yml
 groups:
@@ -101,7 +101,7 @@ groups:
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">⚡ Automatisierte Incident Response</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">⚡ Automatisierte Incident Response</h2>
           <div className="bg-gray-900 text-yellow-400 p-4 rounded-lg font-mono text-sm mb-4">
             <pre>{`// moltbot/lib/incident-response.ts
 import { Redis } from '@upstash/redis';
@@ -140,23 +140,23 @@ export async function handleSecurityIncident(incident: {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">🔗 Weiterführende Ressourcen</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">🔗 Weiterführende Ressourcen</h2>
           <div className="grid grid-cols-2 gap-4">
-            <a href="/securitycheck" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
-              <div className="font-semibold text-blue-600">🛡️ Security Check</div>
-              <div className="text-sm text-gray-600">Live Threat Scan</div>
+            <a href="/securitycheck" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700">
+              <div className="font-semibold text-cyan-400">🛡️ Security Check</div>
+              <div className="text-sm text-gray-300">Live Threat Scan</div>
             </a>
-            <a href="/neuro" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
-              <div className="font-semibold text-blue-600">🧠 Neuro AI</div>
-              <div className="text-sm text-gray-600">AI-gestützte Erkennung</div>
+            <a href="/neuro" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700">
+              <div className="font-semibold text-cyan-400">🧠 Neuro AI</div>
+              <div className="text-sm text-gray-300">AI-gestützte Erkennung</div>
             </a>
-            <a href="/runbooks" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
-              <div className="font-semibold text-blue-600">📚 IR Runbooks</div>
-              <div className="text-sm text-gray-600">Incident Response Guides</div>
+            <a href="/runbooks" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700">
+              <div className="font-semibold text-cyan-400">📚 IR Runbooks</div>
+              <div className="text-sm text-gray-300">Incident Response Guides</div>
             </a>
-            <a href="/oracle" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
-              <div className="font-semibold text-blue-600">🔮 Oracle</div>
-              <div className="text-sm text-gray-600">Threat Intelligence</div>
+            <a href="/oracle" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700">
+              <div className="font-semibold text-cyan-400">🔮 Oracle</div>
+              <div className="text-sm text-gray-300">Threat Intelligence</div>
             </a>
           </div>
         </section>

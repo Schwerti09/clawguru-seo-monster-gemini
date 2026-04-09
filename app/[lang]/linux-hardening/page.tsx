@@ -95,7 +95,7 @@ export default async function LinuxHardeningPage({
                 <h3 className="font-semibold text-slate-900 text-sm">Kernel</h3>
                 <p className="text-xs text-slate-600">Sysctl, Modules, ASLR</p>
               </div>
-              <div className="bg-red-50 border border-red-200 rounded-xl p-5 text-center">
+              <div className="bg-red-900 border border-red-700 rounded-xl p-5 text-center">
                 <div className="text-3xl mb-2">🛡️</div>
                 <h3 className="font-semibold text-red-900 text-sm">MAC</h3>
                 <p className="text-xs text-red-700">SELinux/AppArmor</p>
@@ -105,7 +105,7 @@ export default async function LinuxHardeningPage({
                 <h3 className="font-semibold text-amber-900 text-sm">Audit</h3>
                 <p className="text-xs text-amber-700">Auditd, syslog</p>
               </div>
-              <div className="bg-blue-50 border border-blue-200 rounded-xl p-5 text-center">
+              <div className="bg-blue-900 border border-blue-700 rounded-xl p-5 text-center">
                 <div className="text-3xl mb-2">⚙️</div>
                 <h3 className="font-semibold text-blue-900 text-sm">CIS</h3>
                 <p className="text-xs text-blue-700">Benchmarks, SCAP</p>

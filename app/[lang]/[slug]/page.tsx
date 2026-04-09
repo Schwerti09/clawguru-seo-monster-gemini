@@ -255,8 +255,8 @@ export default async function GeoVariantPage({ params }: GeoVariantPageProps) {
       <Container className="py-12">
         <div className="max-w-4xl mx-auto">
           {/* Trust Anchor */}
-          <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-8 text-sm">
-            <strong>"Not a Pentest" Trust-Anker</strong>: {lang === 'de' 
+          <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
+            <strong className="text-amber-100">"Not a Pentest" Trust-Anker</strong>: {lang === 'de' 
               ? `Dieser Guide dient der Absicherung eigener Systeme in ${fallbackCityName}. Keine Angriffswerkzeuge.` 
               : `This guide serves to secure your own systems in ${fallbackCityName}. No attack tools.`
             }
@@ -264,23 +264,23 @@ export default async function GeoVariantPage({ params }: GeoVariantPageProps) {
 
           {/* Header */}
           <div className="mb-12">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">{fallbackTitle}</h1>
-            <p className="text-xl text-gray-600 mb-6">{fallbackDescription}</p>
+            <h1 className="text-4xl font-bold text-gray-100 mb-4">{fallbackTitle}</h1>
+            <p className="text-xl text-gray-300 mb-6">{fallbackDescription}</p>
             
             {/* City Info */}
-            <div className="bg-gray-50 rounded-lg p-6 mb-8">
+            <div className="bg-gray-800 rounded-lg p-6 mb-8">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
-                  <h3 className="font-semibold text-gray-900">{lang === 'de' ? 'Stadt' : 'City'}</h3>
-                  <p className="text-gray-600">{fallbackCityName}</p>
+                  <h3 className="font-semibold text-gray-100">{lang === 'de' ? 'Stadt' : 'City'}</h3>
+                  <p className="text-gray-300">{fallbackCityName}</p>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900">{lang === 'de' ? 'Land' : 'Country'}</h3>
-                  <p className="text-gray-600">{citySlug.toUpperCase()}</p>
+                  <h3 className="font-semibold text-gray-100">{lang === 'de' ? 'Land' : 'Country'}</h3>
+                  <p className="text-gray-300">{citySlug.toUpperCase()}</p>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900">{lang === 'de' ? 'Qualität' : 'Quality'}</h3>
-                  <p className="text-gray-600">85/100</p>
+                  <h3 className="font-semibold text-gray-100">{lang === 'de' ? 'Qualität' : 'Quality'}</h3>
+                  <p className="text-gray-300">85/100</p>
                 </div>
               </div>
             </div>
@@ -288,30 +288,30 @@ export default async function GeoVariantPage({ params }: GeoVariantPageProps) {
 
           {/* Content */}
           <div className="prose prose-lg max-w-none mb-12">
-            <p className="text-lg text-gray-600 mb-8">{content.intro}</p>
+            <p className="text-lg text-gray-300 mb-8">{content.intro}</p>
             
             {content.sections.map((section, index) => (
               <div key={index} className="mb-8">
-                <h2 className="text-2xl font-semibold text-gray-900 mb-4">{section.title}</h2>
-                <p className="text-gray-600 mb-4">{section.content}</p>
+                <h2 className="text-2xl font-semibold text-gray-100 mb-4">{section.title}</h2>
+                <p className="text-gray-300 mb-4">{section.content}</p>
               </div>
             ))}
           </div>
 
           {/* Resources */}
-          <div className="bg-gray-50 rounded-lg p-8">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-6">
+          <div className="bg-gray-800 rounded-lg p-8">
+            <h2 className="text-2xl font-semibold text-gray-100 mb-6">
               {lang === 'de' ? 'Weiterführende Ressourcen' : 'Additional Resources'}
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <a 
                 href={`/${lang}/securitycheck`}
-                className="block bg-white rounded-lg p-6 border border-gray-200 hover:border-gray-300 transition-colors"
+                className="block bg-white rounded-lg p-6 border border-gray-700 hover:border-gray-300 transition-colors"
               >
-                <div className="font-semibold text-blue-600 mb-2">
+                <div className="font-semibold text-cyan-400 mb-2">
                   {lang === 'de' ? 'Security Check' : 'Security Check'}
                 </div>
-                <div className="text-sm text-gray-600">
+                <div className="text-sm text-gray-300">
                   {lang === 'de' 
                     ? `Live Security-Check für deine ${baseSlug.replace(/-/g, ' ').toUpperCase()} Umgebung in ${fallbackCityName}`
                     : `Live security check for your ${baseSlug.replace(/-/g, ' ').toUpperCase()} environment in ${fallbackCityName}`
@@ -321,12 +321,12 @@ export default async function GeoVariantPage({ params }: GeoVariantPageProps) {
               
               <a 
                 href={`/${lang}/runbooks`}
-                className="block bg-white rounded-lg p-6 border border-gray-200 hover:border-gray-300 transition-colors"
+                className="block bg-white rounded-lg p-6 border border-gray-700 hover:border-gray-300 transition-colors"
               >
-                <div className="font-semibold text-blue-600 mb-2">
+                <div className="font-semibold text-cyan-400 mb-2">
                   {lang === 'de' ? 'Security Runbooks' : 'Security Runbooks'}
                 </div>
-                <div className="text-sm text-gray-600">
+                <div className="text-sm text-gray-300">
                   {lang === 'de' 
                     ? `600+ ausführbare Security Playbooks für ${fallbackCityName}`
                     : `600+ executable security playbooks for ${fallbackCityName}`
@@ -350,8 +350,8 @@ export default async function GeoVariantPage({ params }: GeoVariantPageProps) {
     <Container className="py-12">
       <div className="max-w-4xl mx-auto">
         {/* Trust Anchor */}
-        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-8 text-sm">
-          <strong>"Not a Pentest" Trust-Anker</strong>: {lang === 'de' 
+        <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
+          <strong className="text-amber-100">"Not a Pentest" Trust-Anker</strong>: {lang === 'de' 
             ? `Dieser Guide dient der Absicherung eigener Systeme in ${cityName}. Keine Angriffswerkzeuge.` 
             : `This guide serves to secure your own systems in ${cityName}. No attack tools.`
           }
@@ -359,23 +359,23 @@ export default async function GeoVariantPage({ params }: GeoVariantPageProps) {
 
         {/* Header */}
         <div className="mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">{title}</h1>
-          <p className="text-xl text-gray-600 mb-6">{description}</p>
+          <h1 className="text-4xl font-bold text-gray-100 mb-4">{title}</h1>
+          <p className="text-xl text-gray-300 mb-6">{description}</p>
           
           {/* City Info */}
-          <div className="bg-gray-50 rounded-lg p-6 mb-8">
+          <div className="bg-gray-800 rounded-lg p-6 mb-8">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
-                <h3 className="font-semibold text-gray-900">{lang === 'de' ? 'Stadt' : 'City'}</h3>
-                <p className="text-gray-600">{cityName}</p>
+                <h3 className="font-semibold text-gray-100">{lang === 'de' ? 'Stadt' : 'City'}</h3>
+                <p className="text-gray-300">{cityName}</p>
               </div>
               <div>
-                <h3 className="font-semibold text-gray-900">{lang === 'de' ? 'Land' : 'Country'}</h3>
-                <p className="text-gray-600">{cityData.country_code}</p>
+                <h3 className="font-semibold text-gray-100">{lang === 'de' ? 'Land' : 'Country'}</h3>
+                <p className="text-gray-300">{cityData.country_code}</p>
               </div>
               <div>
-                <h3 className="font-semibold text-gray-900">{lang === 'de' ? 'Qualität' : 'Quality'}</h3>
-                <p className="text-gray-600">{variantData.quality_score}/100</p>
+                <h3 className="font-semibold text-gray-100">{lang === 'de' ? 'Qualität' : 'Quality'}</h3>
+                <p className="text-gray-300">{variantData.quality_score}/100</p>
               </div>
             </div>
           </div>
@@ -383,12 +383,12 @@ export default async function GeoVariantPage({ params }: GeoVariantPageProps) {
 
         {/* Content */}
         <div className="prose prose-lg max-w-none mb-12">
-          <p className="text-lg text-gray-600 mb-8">{content.intro}</p>
+          <p className="text-lg text-gray-300 mb-8">{content.intro}</p>
           
           {content.sections.map((section, index) => (
             <div key={index} className="mb-8">
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">{section.title}</h2>
-              <p className="text-gray-600 mb-4">{section.content}</p>
+              <h2 className="text-2xl font-semibold text-gray-100 mb-4">{section.title}</h2>
+              <p className="text-gray-300 mb-4">{section.content}</p>
               
               {/* Code Example */}
               <div className="bg-gray-900 text-gray-100 rounded-lg p-6 mb-6">
@@ -474,19 +474,19 @@ roleRef:
         </div>
 
         {/* Resources */}
-        <div className="bg-gray-50 rounded-lg p-8">
-          <h2 className="text-2xl font-semibold text-gray-900 mb-6">
+        <div className="bg-gray-800 rounded-lg p-8">
+          <h2 className="text-2xl font-semibold text-gray-100 mb-6">
             {lang === 'de' ? 'Weiterführende Ressourcen' : 'Additional Resources'}
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <a 
               href={`/${lang}/securitycheck`}
-              className="block bg-white rounded-lg p-6 border border-gray-200 hover:border-gray-300 transition-colors"
+              className="block bg-white rounded-lg p-6 border border-gray-700 hover:border-gray-300 transition-colors"
             >
-              <div className="font-semibold text-blue-600 mb-2">
+              <div className="font-semibold text-cyan-400 mb-2">
                 {lang === 'de' ? 'Security Check' : 'Security Check'}
               </div>
-              <div className="text-sm text-gray-600">
+              <div className="text-sm text-gray-300">
                 {lang === 'de' 
                   ? `Live Security-Check für deine ${baseSlug.replace(/-/g, ' ').toUpperCase()} Umgebung in ${cityName}`
                   : `Live security check for your ${baseSlug.replace(/-/g, ' ').toUpperCase()} environment in ${cityName}`
@@ -496,12 +496,12 @@ roleRef:
             
             <a 
               href={`/${lang}/runbooks`}
-              className="block bg-white rounded-lg p-6 border border-gray-200 hover:border-gray-300 transition-colors"
+              className="block bg-white rounded-lg p-6 border border-gray-700 hover:border-gray-300 transition-colors"
             >
-              <div className="font-semibold text-blue-600 mb-2">
+              <div className="font-semibold text-cyan-400 mb-2">
                 {lang === 'de' ? 'Security Runbooks' : 'Security Runbooks'}
               </div>
-              <div className="text-sm text-gray-600">
+              <div className="text-sm text-gray-300">
                 {lang === 'de' 
                   ? `600+ ausführbare Security Playbooks für ${cityName}`
                   : `600+ executable security playbooks for ${cityName}`
@@ -511,12 +511,12 @@ roleRef:
             
             <a 
               href={`/${lang}/oracle`}
-              className="block bg-white rounded-lg p-6 border border-gray-200 hover:border-gray-300 transition-colors"
+              className="block bg-white rounded-lg p-6 border border-gray-700 hover:border-gray-300 transition-colors"
             >
-              <div className="font-semibold text-blue-600 mb-2">
+              <div className="font-semibold text-cyan-400 mb-2">
                 {lang === 'de' ? 'Threat Intelligence' : 'Threat Intelligence'}
               </div>
-              <div className="text-sm text-gray-600">
+              <div className="text-sm text-gray-300">
                 {lang === 'de' 
                   ? `KI-gestützte Threat Intelligence für ${cityName}`
                   : `AI-powered threat intelligence for ${cityName}`
@@ -526,12 +526,12 @@ roleRef:
             
             <a 
               href={`/${lang}/openclaw`}
-              className="block bg-white rounded-lg p-6 border border-gray-200 hover:border-gray-300 transition-colors"
+              className="block bg-white rounded-lg p-6 border border-gray-700 hover:border-gray-300 transition-colors"
             >
-              <div className="font-semibold text-blue-600 mb-2">
+              <div className="font-semibold text-cyan-400 mb-2">
                 {lang === 'de' ? 'OpenClaw Framework' : 'OpenClaw Framework'}
               </div>
-              <div className="text-sm text-gray-600">
+              <div className="text-sm text-gray-300">
                 {lang === 'de' 
                   ? `Open-Source Security Framework für Self-Hosting in ${cityName}`
                   : `Open-source security framework for self-hosting in ${cityName}`

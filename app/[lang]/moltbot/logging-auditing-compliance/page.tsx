@@ -24,14 +24,14 @@ export default function MoltbotLoggingAuditingPage({ params }: PageProps) {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-4xl mx-auto">
-        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-8 text-sm">
-          <strong>"Not a Pentest" Trust-Anker</strong>: Dieser Guide dient ausschließlich zur Implementierung von Logging- und Auditing-Systemen. Keine Angriffswerkzeuge, keine illegalen Aktivitäten.
+        <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
+          <strong className="text-amber-100">"Not a Pentest" Trust-Anker</strong>: Dieser Guide dient ausschließlich zur Implementierung von Logging- und Auditing-Systemen. Keine Angriffswerkzeuge, keine illegalen Aktivitäten.
         </div>
-        <h1 className="text-4xl font-bold mb-4">Moltbot Logging &amp; Auditing: Compliance Ready</h1>
-        <p className="text-lg text-gray-600 mb-8">GDPR-, HIPAA- und SOC2-konformes Logging für Moltbot — strukturierte Logs, unveränderliche Audit Trails und automatisierte Compliance-Reports.</p>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">Moltbot Logging &amp; Auditing: Compliance Ready</h1>
+        <p className="text-lg text-gray-300 mb-8">GDPR-, HIPAA- und SOC2-konformes Logging für Moltbot — strukturierte Logs, unveränderliche Audit Trails und automatisierte Compliance-Reports.</p>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">📝 Strukturiertes Security Logging</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">📝 Strukturiertes Security Logging</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm mb-4">
             <pre>{`// moltbot/lib/logger.ts
 import { createLogger, format, transports } from 'winston';
@@ -74,7 +74,7 @@ export function logSecurityEvent(event: {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">🔒 Unveränderlicher Audit Trail (PostgreSQL)</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">🔒 Unveränderlicher Audit Trail (PostgreSQL)</h2>
           <div className="bg-gray-900 text-blue-400 p-4 rounded-lg font-mono text-sm mb-4">
             <pre>{`-- Immutable Audit Log Schema
 CREATE TABLE moltbot_audit_log (
@@ -109,7 +109,7 @@ CREATE INDEX idx_audit_actor ON moltbot_audit_log(actor_id, occurred_at);`}</pre
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">🇪🇺 GDPR Right to Erasure</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">🇪🇺 GDPR Right to Erasure</h2>
           <div className="bg-gray-900 text-yellow-400 p-4 rounded-lg font-mono text-sm mb-4">
             <pre>{`// moltbot/lib/gdpr-erasure.ts
 export async function processErasureRequest(customerId: string) {
@@ -144,7 +144,7 @@ export async function processErasureRequest(customerId: string) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">📊 Compliance Status</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">📊 Compliance Status</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {[
               { name: 'GDPR', status: 'Compliant', color: 'green', items: ['Audit Trail', 'Right to Erasure', 'Data Minimization', 'Consent Management'] },
@@ -170,23 +170,23 @@ export async function processErasureRequest(customerId: string) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">🔗 Weiterführende Ressourcen</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">🔗 Weiterführende Ressourcen</h2>
           <div className="grid grid-cols-2 gap-4">
-            <a href="/securitycheck" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
-              <div className="font-semibold text-blue-600">🛡️ Security Check</div>
-              <div className="text-sm text-gray-600">Compliance live prüfen</div>
+            <a href="/securitycheck" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700">
+              <div className="font-semibold text-cyan-400">🛡️ Security Check</div>
+              <div className="text-sm text-gray-300">Compliance live prüfen</div>
             </a>
-            <a href="/runbooks" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
-              <div className="font-semibold text-blue-600">📚 Compliance Runbooks</div>
-              <div className="text-sm text-gray-600">GDPR/HIPAA Guides</div>
+            <a href="/runbooks" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700">
+              <div className="font-semibold text-cyan-400">📚 Compliance Runbooks</div>
+              <div className="text-sm text-gray-300">GDPR/HIPAA Guides</div>
             </a>
-            <a href="/oracle" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
-              <div className="font-semibold text-blue-600">🔮 Oracle</div>
-              <div className="text-sm text-gray-600">Compliance Intelligence</div>
+            <a href="/oracle" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700">
+              <div className="font-semibold text-cyan-400">🔮 Oracle</div>
+              <div className="text-sm text-gray-300">Compliance Intelligence</div>
             </a>
-            <a href="/solutions" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
-              <div className="font-semibold text-blue-600">🏢 Enterprise</div>
-              <div className="text-sm text-gray-600">Managed Compliance</div>
+            <a href="/solutions" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700">
+              <div className="font-semibold text-cyan-400">🏢 Enterprise</div>
+              <div className="text-sm text-gray-300">Managed Compliance</div>
             </a>
           </div>
         </section>

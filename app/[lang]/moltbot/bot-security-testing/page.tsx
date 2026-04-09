@@ -48,9 +48,9 @@ export default function BotSecurityTestingPage({ params }: PageProps) {
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">Bot Security Testing Overview</h2>
-          <div className="bg-gray-100 p-4 rounded-lg mb-4">
-            <h3 className="font-semibold mb-2">Testing Objectives</h3>
-            <ul className="list-disc list-inside space-y-1">
+          <div className="bg-gray-800 p-4 rounded-lg mb-4 border border-gray-700">
+            <h3 className="font-semibold mb-2 text-gray-100">Testing Objectives</h3>
+            <ul className="list-disc list-inside space-y-1 text-gray-300">
               <li>Identify security vulnerabilities in bot implementations</li>
               <li>Validate input sanitization and output encoding</li>
               <li>Test authentication and authorization mechanisms</li>
@@ -61,12 +61,12 @@ export default function BotSecurityTestingPage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Bot Security Testing Framework</h2>
-          <div className="bg-gray-100 p-6 rounded-lg">
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Bot Security Testing Framework</h2>
+          <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-gray-100 p-4 rounded-lg">
-                <h3 className="font-bold text-gray-800 mb-3">Static Analysis</h3>
-                <ul className="space-y-2 text-sm">
+              <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                <h3 className="font-bold text-cyan-400 mb-3">Static Analysis</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li>Code review and analysis</li>
                   <li>Dependency vulnerability scanning</li>
                   <li>Configuration security assessment</li>
@@ -74,9 +74,9 @@ export default function BotSecurityTestingPage({ params }: PageProps) {
                   <li>API security analysis</li>
                 </ul>
               </div>
-              <div className="bg-gray-100 p-4 rounded-lg">
-                <h3 className="font-bold text-gray-800 mb-3">Dynamic Testing</h3>
-                <ul className="space-y-2 text-sm">
+              <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                <h3 className="font-bold text-cyan-400 mb-3">Dynamic Testing</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li>Input validation testing</li>
                   <li>Authentication bypass testing</li>
                   <li>Authorization testing</li>
@@ -89,7 +89,7 @@ export default function BotSecurityTestingPage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Common Bot Vulnerabilities</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Common Bot Vulnerabilities</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto">
             <pre>
 {`# Bot Vulnerability Categories
@@ -118,12 +118,12 @@ export default function BotSecurityTestingPage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Automated Testing Tools</h2>
-          <div className="bg-gray-100 p-6 rounded-lg">
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Automated Testing Tools</h2>
+          <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-gray-100 p-4 rounded-lg">
-                <h3 className="font-bold text-gray-800 mb-3">Open Source Tools</h3>
-                <ul className="space-y-2 text-sm">
+              <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                <h3 className="font-bold text-cyan-400 mb-3">Open Source Tools</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li>OWASP ZAP for API testing</li>
                   <li>Burp Suite for web application testing</li>
                   <li>Nuclei for vulnerability scanning</li>
@@ -131,9 +131,9 @@ export default function BotSecurityTestingPage({ params }: PageProps) {
                   <li>Bandit for Python security analysis</li>
                 </ul>
               </div>
-              <div className="bg-gray-100 p-4 rounded-lg">
-                <h3 className="font-bold text-gray-800 mb-3">Commercial Tools</h3>
-                <ul className="space-y-2 text-sm">
+              <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                <h3 className="font-bold text-cyan-400 mb-3">Commercial Tools</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li>Checkmarx for static analysis</li>
                   <li>Veracode for application security</li>
                   <li>Fortify for code analysis</li>
@@ -146,35 +146,35 @@ export default function BotSecurityTestingPage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Testing Methodology</h2>
-          <div className="bg-gray-100 p-6 rounded-lg">
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Testing Methodology</h2>
+          <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
             <div className="space-y-4">
               <div className="flex items-start space-x-4">
                 <div className="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold flex-shrink-0">1</div>
                 <div>
-                  <div className="font-semibold">Reconnaissance</div>
-                  <div className="text-sm text-gray-600">Gather information about bot architecture, endpoints, and functionality</div>
+                  <div className="font-semibold text-gray-100">Reconnaissance</div>
+                  <div className="text-sm text-gray-300">Gather information about bot architecture, endpoints, and functionality</div>
                 </div>
               </div>
               <div className="flex items-start space-x-4">
                 <div className="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold flex-shrink-0">2</div>
                 <div>
-                  <div className="font-semibold">Vulnerability Scanning</div>
-                  <div className="text-sm text-gray-600">Automated scanning for known vulnerabilities and misconfigurations</div>
+                  <div className="font-semibold text-gray-100">Vulnerability Scanning</div>
+                  <div className="text-sm text-gray-300">Automated scanning for known vulnerabilities and misconfigurations</div>
                 </div>
               </div>
               <div className="flex items-start space-x-4">
                 <div className="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold flex-shrink-0">3</div>
                 <div>
-                  <div className="font-semibold">Manual Testing</div>
-                  <div className="text-sm text-gray-600">Manual testing for complex vulnerabilities and business logic flaws</div>
+                  <div className="font-semibold text-gray-100">Manual Testing</div>
+                  <div className="text-sm text-gray-300">Manual testing for complex vulnerabilities and business logic flaws</div>
                 </div>
               </div>
               <div className="flex items-start space-x-4">
                 <div className="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold flex-shrink-0">4</div>
                 <div>
-                  <div className="font-semibold">Reporting</div>
-                  <div className="text-sm text-gray-600">Document findings and provide remediation recommendations</div>
+                  <div className="font-semibold text-gray-100">Reporting</div>
+                  <div className="text-sm text-gray-300">Document findings and provide remediation recommendations</div>
                 </div>
               </div>
             </div>
@@ -182,7 +182,7 @@ export default function BotSecurityTestingPage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Test Cases and Scenarios</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Test Cases and Scenarios</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto">
             <pre>
 {`# Bot Security Test Cases
@@ -211,12 +211,12 @@ export default function BotSecurityTestingPage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Security Testing Checklist</h2>
-          <div className="bg-gray-100 p-6 rounded-lg">
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Security Testing Checklist</h2>
+          <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-gray-100 p-4 rounded-lg">
-                <h3 className="font-bold text-gray-800 mb-3">Input Security</h3>
-                <ul className="space-y-2 text-sm">
+              <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                <h3 className="font-bold text-cyan-400 mb-3">Input Security</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li>Input validation and sanitization</li>
                   <li>Output encoding and escaping</li>
                   <li>SQL injection protection</li>
@@ -224,9 +224,9 @@ export default function BotSecurityTestingPage({ params }: PageProps) {
                   <li>Command injection protection</li>
                 </ul>
               </div>
-              <div className="bg-gray-100 p-4 rounded-lg">
-                <h3 className="font-bold text-gray-800 mb-3">Authentication Security</h3>
-                <ul className="space-y-2 text-sm">
+              <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                <h3 className="font-bold text-cyan-400 mb-3">Authentication Security</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li>Strong password policies</li>
                   <li>Multi-factor authentication</li>
                   <li>Session management</li>
@@ -234,9 +234,9 @@ export default function BotSecurityTestingPage({ params }: PageProps) {
                   <li>Rate limiting and throttling</li>
                 </ul>
               </div>
-              <div className="bg-gray-100 p-4 rounded-lg">
-                <h3 className="font-bold text-gray-800 mb-3">Data Security</h3>
-                <ul className="space-y-2 text-sm">
+              <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                <h3 className="font-bold text-cyan-400 mb-3">Data Security</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li>Data encryption at rest</li>
                   <li>Data encryption in transit</li>
                   <li>Data masking and anonymization</li>
@@ -245,8 +245,8 @@ export default function BotSecurityTestingPage({ params }: PageProps) {
                 </ul>
               </div>
               <div>
-                <h3 className="font-bold text-gray-800 mb-3">Infrastructure Security</h3>
-                <ul className="space-y-2 text-sm">
+                <h3 className="font-bold text-cyan-400 mb-3">Infrastructure Security</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li>Network security configuration</li>
                   <li>Container security</li>
                   <li>Cloud security settings</li>
@@ -259,12 +259,12 @@ export default function BotSecurityTestingPage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Continuous Security Testing</h2>
-          <div className="bg-gray-100 p-6 rounded-lg">
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Continuous Security Testing</h2>
+          <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <h3 className="font-bold text-gray-800 mb-3">CI/CD Integration</h3>
-                <ul className="space-y-2 text-sm">
+                <h3 className="font-bold text-cyan-400 mb-3">CI/CD Integration</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li>Automated security testing in pipelines</li>
                   <li>Static analysis integration</li>
                   <li>Dynamic testing automation</li>
@@ -273,8 +273,8 @@ export default function BotSecurityTestingPage({ params }: PageProps) {
                 </ul>
               </div>
               <div>
-                <h3 className="font-bold text-gray-800 mb-3">Monitoring and Alerting</h3>
-                <ul className="space-y-2 text-sm">
+                <h3 className="font-bold text-cyan-400 mb-3">Monitoring and Alerting</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li>Real-time security monitoring</li>
                   <li>Vulnerability alerting</li>
                   <li>Security metrics tracking</li>
@@ -287,7 +287,7 @@ export default function BotSecurityTestingPage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Reporting and Documentation</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Reporting and Documentation</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto">
             <pre>
 {`# Security Testing Report Structure
@@ -316,45 +316,45 @@ export default function BotSecurityTestingPage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Best Practices</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Best Practices</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-blue-100 p-4 rounded-lg">
-              <h3 className="font-semibold text-blue-800 mb-2">Secure Development</h3>
-              <p className="text-sm text-blue-700">Implement secure coding practices, regular code reviews, and security training</p>
+            <div className="bg-blue-900 p-4 rounded-lg border border-blue-700">
+              <h3 className="font-semibold text-blue-300 mb-2">Secure Development</h3>
+              <p className="text-sm text-blue-200">Implement secure coding practices, regular code reviews, and security training</p>
             </div>
-            <div className="bg-green-100 p-4 rounded-lg">
-              <h3 className="font-semibold text-green-800 mb-2">Testing Automation</h3>
-              <p className="text-sm text-green-700">Automate security testing in CI/CD pipelines for continuous validation</p>
+            <div className="bg-green-900 p-4 rounded-lg border border-green-700">
+              <h3 className="font-semibold text-green-300 mb-2">Testing Automation</h3>
+              <p className="text-sm text-green-200">Automate security testing in CI/CD pipelines for continuous validation</p>
             </div>
-            <div className="bg-yellow-100 p-4 rounded-lg">
-              <h3 className="font-semibold text-yellow-800 mb-2">Regular Assessments</h3>
-              <p className="text-sm text-yellow-700">Conduct regular security assessments and penetration testing</p>
+            <div className="bg-yellow-900 p-4 rounded-lg border border-yellow-700">
+              <h3 className="font-semibold text-yellow-300 mb-2">Regular Assessments</h3>
+              <p className="text-sm text-yellow-200">Conduct regular security assessments and penetration testing</p>
             </div>
-            <div className="bg-red-100 p-4 rounded-lg">
-              <h3 className="font-semibold text-red-800 mb-2">Incident Response</h3>
-              <p className="text-sm text-red-700">Establish incident response procedures and security monitoring</p>
+            <div className="bg-red-900 p-4 rounded-lg border border-red-700">
+              <h3 className="font-semibold text-red-300 mb-2">Incident Response</h3>
+              <p className="text-sm text-red-200">Establish incident response procedures and security monitoring</p>
             </div>
           </div>
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Further Resources</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Further Resources</h2>
           <div className="grid grid-cols-2 gap-4">
-            <a href={`/${locale}/securitycheck`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
-              <div className="font-semibold text-blue-600">Security Check</div>
-              <div className="text-sm text-gray-600">Scan your system now</div>
+            <a href={`/${locale}/securitycheck`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
+              <div className="font-semibold text-cyan-400">Security Check</div>
+              <div className="text-sm text-gray-300">Scan your system now</div>
             </a>
-            <a href={`/${locale}/runbooks`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
-              <div className="font-semibold text-blue-600">Runbooks</div>
-              <div className="text-sm text-gray-600">600+ security playbooks</div>
+            <a href={`/${locale}/runbooks`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
+              <div className="font-semibold text-cyan-400">Runbooks</div>
+              <div className="text-sm text-gray-300">600+ security playbooks</div>
             </a>
-            <a href={`/${locale}/openclaw`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
-              <div className="font-semibold text-blue-600">OpenClaw Framework</div>
-              <div className="text-sm text-gray-600">Self-hosted security</div>
+            <a href={`/${locale}/openclaw`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
+              <div className="font-semibold text-cyan-400">OpenClaw Framework</div>
+              <div className="text-sm text-gray-300">Self-hosted security</div>
             </a>
-            <a href={`/${locale}/solutions/kubernetes-security-hardening`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
-              <div className="font-semibold text-blue-600">Kubernetes Security</div>
-              <div className="text-sm text-gray-600">Complete hardening guide</div>
+            <a href={`/${locale}/solutions/kubernetes-security-hardening`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
+              <div className="font-semibold text-cyan-400">Kubernetes Security</div>
+              <div className="text-sm text-gray-300">Complete hardening guide</div>
             </a>
           </div>
         </section>

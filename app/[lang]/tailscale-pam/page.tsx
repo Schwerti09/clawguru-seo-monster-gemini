@@ -74,7 +74,7 @@ export default async function TailscalePAMPage({
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-500/20 via-transparent to-transparent" />
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 text-sm mb-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-9000/20 text-blue-300 text-sm mb-4">
               <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
               {isGerman ? "Zero Trust Security 2026" : "Zero Trust Security 2026"}
             </div>
@@ -108,12 +108,12 @@ export default async function TailscalePAMPage({
           <div className="bg-slate-50 rounded-xl p-6 mb-12 border border-slate-200">
             <h2 className="font-semibold text-slate-900 mb-4">{isGerman ? "Inhaltsverzeichnis" : "Table of Contents"}</h2>
             <div className="grid md:grid-cols-2 gap-2 text-sm">
-              <a href="#overview" className="text-blue-600 hover:underline">→ {isGerman ? "Was ist Tailscale PAM?" : "What is Tailscale PAM?"}</a>
-              <a href="#device-trust" className="text-blue-600 hover:underline">→ Device Trust & Posture</a>
-              <a href="#acl" className="text-blue-600 hover:underline">→ ACL Policies (Zero Trust)</a>
-              <a href="#ssh" className="text-blue-600 hover:underline">→ SSH & Session Recording</a>
-              <a href="#compliance" className="text-blue-600 hover:underline">→ Compliance (SOC 2, ISO 27001)</a>
-              <a href="#setup" className="text-blue-600 hover:underline">→ Enterprise Setup Guide</a>
+              <a href="#overview" className="text-cyan-400 hover:underline">→ {isGerman ? "Was ist Tailscale PAM?" : "What is Tailscale PAM?"}</a>
+              <a href="#device-trust" className="text-cyan-400 hover:underline">→ Device Trust & Posture</a>
+              <a href="#acl" className="text-cyan-400 hover:underline">→ ACL Policies (Zero Trust)</a>
+              <a href="#ssh" className="text-cyan-400 hover:underline">→ SSH & Session Recording</a>
+              <a href="#compliance" className="text-cyan-400 hover:underline">→ Compliance (SOC 2, ISO 27001)</a>
+              <a href="#setup" className="text-cyan-400 hover:underline">→ Enterprise Setup Guide</a>
             </div>
           </div>
 
@@ -130,7 +130,7 @@ export default async function TailscalePAMPage({
             </p>
 
             <div className="grid md:grid-cols-3 gap-6 mb-8">
-              <div className="bg-blue-50 border border-blue-200 rounded-xl p-6">
+              <div className="bg-blue-900 border border-blue-700 rounded-xl p-6">
                 <div className="text-3xl mb-3">🔐</div>
                 <h3 className="font-semibold text-slate-900 mb-2">{isGerman ? "Zero Trust" : "Zero Trust"}</h3>
                 <p className="text-slate-600 text-sm">
@@ -139,7 +139,7 @@ export default async function TailscalePAMPage({
                     : "No implicit trust. Every connection is authenticated and authorized."}
                 </p>
               </div>
-              <div className="bg-green-50 border border-green-200 rounded-xl p-6">
+              <div className="bg-green-900 border border-green-700 rounded-xl p-6">
                 <div className="text-3xl mb-3">⚡</div>
                 <h3 className="font-semibold text-slate-900 mb-2">WireGuard</h3>
                 <p className="text-slate-600 text-sm">
@@ -148,7 +148,7 @@ export default async function TailscalePAMPage({
                     : "Modern, fast VPN protocol. 3-5x faster than OpenVPN/IPsec."}
                 </p>
               </div>
-              <div className="bg-purple-50 border border-purple-200 rounded-xl p-6">
+              <div className="bg-purple-50 border border-purple-700 rounded-xl p-6">
                 <div className="text-3xl mb-3">🛡️</div>
                 <h3 className="font-semibold text-slate-900 mb-2">Device Trust</h3>
                 <p className="text-slate-600 text-sm">
@@ -201,21 +201,21 @@ export default async function TailscalePAMPage({
               <div className="grid md:grid-cols-2 gap-4">
                 <div className="space-y-3">
                   <div className="flex items-start gap-3">
-                    <span className="w-6 h-6 rounded bg-green-100 text-green-600 flex items-center justify-center text-sm">✓</span>
+                    <span className="w-6 h-6 rounded bg-green-100 text-green-400 flex items-center justify-center text-sm">✓</span>
                     <div>
                       <span className="font-medium text-slate-900">OS Version</span>
                       <p className="text-sm text-slate-600">{isGerman ? "Aktuelles Betriebssystem erforderlich" : "Current operating system required"}</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
-                    <span className="w-6 h-6 rounded bg-green-100 text-green-600 flex items-center justify-center text-sm">✓</span>
+                    <span className="w-6 h-6 rounded bg-green-100 text-green-400 flex items-center justify-center text-sm">✓</span>
                     <div>
                       <span className="font-medium text-slate-900">Disk Encryption</span>
                       <p className="text-sm text-slate-600">{isGerman ? "BitLocker/FileVault aktiviert" : "BitLocker/FileVault enabled"}</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
-                    <span className="w-6 h-6 rounded bg-green-100 text-green-600 flex items-center justify-center text-sm">✓</span>
+                    <span className="w-6 h-6 rounded bg-green-100 text-green-400 flex items-center justify-center text-sm">✓</span>
                     <div>
                       <span className="font-medium text-slate-900">Screen Lock</span>
                       <p className="text-sm text-slate-600">{isGerman ? "Automatische Bildschirmsperre" : "Automatic screen lock"}</p>
@@ -224,21 +224,21 @@ export default async function TailscalePAMPage({
                 </div>
                 <div className="space-y-3">
                   <div className="flex items-start gap-3">
-                    <span className="w-6 h-6 rounded bg-green-100 text-green-600 flex items-center justify-center text-sm">✓</span>
+                    <span className="w-6 h-6 rounded bg-green-100 text-green-400 flex items-center justify-center text-sm">✓</span>
                     <div>
                       <span className="font-medium text-slate-900">Anti-Virus</span>
                       <p className="text-sm text-slate-600">{isGerman ? "ESET, CrowdStrike, etc. aktiv" : "ESET, CrowdStrike, etc. active"}</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
-                    <span className="w-6 h-6 rounded bg-green-100 text-green-600 flex items-center justify-center text-sm">✓</span>
+                    <span className="w-6 h-6 rounded bg-green-100 text-green-400 flex items-center justify-center text-sm">✓</span>
                     <div>
                       <span className="font-medium text-slate-900">Firewall</span>
                       <p className="text-sm text-slate-600">{isGerman ? "System-Firewall aktiviert" : "System firewall enabled"}</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
-                    <span className="w-6 h-6 rounded bg-green-100 text-green-600 flex items-center justify-center text-sm">✓</span>
+                    <span className="w-6 h-6 rounded bg-green-100 text-green-400 flex items-center justify-center text-sm">✓</span>
                     <div>
                       <span className="font-medium text-slate-900">Certificate</span>
                       <p className="text-sm text-slate-600">{isGerman ? "MDM-Zertifikat vorhanden" : "MDM certificate present"}</p>
@@ -345,17 +345,17 @@ export default async function TailscalePAMPage({
             </div>
 
             <div className="grid md:grid-cols-3 gap-4 mt-8">
-              <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
+              <div className="bg-blue-900 rounded-lg p-4 border border-blue-700">
                 <h4 className="font-semibold text-blue-900 mb-2">Principle of Least Privilege</h4>
-                <p className="text-sm text-blue-800">{isGerman ? "Nur notwendige Zugriffe erlauben" : "Only allow necessary access"}</p>
+                <p className="text-sm text-blue-300">{isGerman ? "Nur notwendige Zugriffe erlauben" : "Only allow necessary access"}</p>
               </div>
-              <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
+              <div className="bg-blue-900 rounded-lg p-4 border border-blue-700">
                 <h4 className="font-semibold text-blue-900 mb-2">Identity-Based</h4>
-                <p className="text-sm text-blue-800">{isGerman ? "SSO/IdP statt IP-Whitelists" : "SSO/IdP instead of IP whitelists"}</p>
+                <p className="text-sm text-blue-300">{isGerman ? "SSO/IdP statt IP-Whitelists" : "SSO/IdP instead of IP whitelists"}</p>
               </div>
-              <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
+              <div className="bg-blue-900 rounded-lg p-4 border border-blue-700">
                 <h4 className="font-semibold text-blue-900 mb-2">Just-in-Time</h4>
-                <p className="text-sm text-blue-800">{isGerman ? "Temporäre Zugriffsrechte" : "Temporary access rights"}</p>
+                <p className="text-sm text-blue-300">{isGerman ? "Temporäre Zugriffsrechte" : "Temporary access rights"}</p>
               </div>
             </div>
           </section>
@@ -460,7 +460,7 @@ export default async function TailscalePAMPage({
               </div>
             </div>
 
-            <div className="bg-green-50 border border-green-200 rounded-xl p-6 mt-6">
+            <div className="bg-green-900 border border-green-700 rounded-xl p-6 mt-6">
               <h3 className="font-semibold text-green-900 mb-3">{isGerman ? "Audit-Logging für Compliance" : "Audit Logging for Compliance"}</h3>
               <p className="text-green-800 text-sm mb-4">
                 {isGerman

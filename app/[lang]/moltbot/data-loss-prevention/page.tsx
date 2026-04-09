@@ -24,14 +24,14 @@ export default function MoltbotDlpPage({ params }: PageProps) {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-4xl mx-auto">
-        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-8 text-sm">
-          <strong>"Not a Pentest" Trust-Anker</strong>: DLP schützt eigene Daten vor unbeabsichtigter Offenlegung. Keine Angriffswerkzeuge.
+        <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
+          <strong className="text-amber-100">"Not a Pentest" Trust-Anker</strong>: DLP schützt eigene Daten vor unbeabsichtigter Offenlegung. Keine Angriffswerkzeuge.
         </div>
-        <h1 className="text-4xl font-bold mb-4">Moltbot Data Loss Prevention</h1>
-        <p className="text-lg text-gray-600 mb-8">43% aller Security-Vorfälle betreffen Datenlecks. DLP mit automatisierter Klassifizierung und Policy-Enforcement ist Pflicht.</p>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">Moltbot Data Loss Prevention</h1>
+        <p className="text-lg text-gray-300 mb-8">43% aller Security-Vorfälle betreffen Datenlecks. DLP mit automatisierter Klassifizierung und Policy-Enforcement ist Pflicht.</p>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Data Classification Matrix</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Data Classification Matrix</h2>
           <div className="overflow-x-auto">
             <table className="w-full border-collapse text-sm">
               <thead><tr className="bg-gray-800 text-white"><th className="p-3 text-left">Klasse</th><th className="p-3 text-left">Beschreibung</th><th className="p-3 text-left">Beispiele</th><th className="p-3 text-left">Schutzmaßnahmen</th></tr></thead>
@@ -41,7 +41,7 @@ export default function MoltbotDlpPage({ params }: PageProps) {
                   ['Internal', 'Intern vertraulich', 'Dokumente, E-Mails, Reports', 'Verschlüsselung, Logging, Monitoring'],
                   ['Public', 'Öffentlich', 'Marketing, Blog, Dokumentation', 'Keine besonderen Maßnahmen'],
                 ].map(([cls, desc, examples, protection]) => (
-                  <tr key={cls} className="border-b hover:bg-gray-50">
+                  <tr key={cls} className="border-b hover:bg-gray-800">
                     <td className="p-3 font-medium">{cls}</td>
                     <td className="p-3 text-sm">{desc}</td>
                     <td className="p-3 text-sm">{examples}</td>
@@ -54,7 +54,7 @@ export default function MoltbotDlpPage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">DLP Policy Engine</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">DLP Policy Engine</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm overflow-x-auto">
             <pre>{`// DLP Policy Engine für Moltbot
 const DLP_PATTERNS = {
@@ -92,7 +92,7 @@ export function dlpMiddleware(req, res, next) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Endpoint DLP Integration</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Endpoint DLP Integration</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm overflow-x-auto">
             <pre>{`// Endpoint DLP Agent für Moltbot
 class EndpointDLP {
@@ -139,7 +139,7 @@ const dlp = new EndpointDLP();`}</pre>
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Resources</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Resources</h2>
           <ul className="list-disc pl-4">
             <li><a href="https://clawguru.org/de/security/data-loss-prevention" target="_blank" rel="noopener noreferrer">Data Loss Prevention (DLP) - Eine umfassende Anleitung</a></li>
             <li><a href="https://clawguru.org/de/security/data-classification" target="_blank" rel="noopener noreferrer">Data Classification - Eine umfassende Anleitung</a></li>

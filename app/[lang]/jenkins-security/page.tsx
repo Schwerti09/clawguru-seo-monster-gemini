@@ -86,7 +86,7 @@ export default async function JenkinsSecurityPage({
             </p>
 
             <div className="grid md:grid-cols-3 gap-6 mb-8">
-              <div className="bg-red-50 border border-red-200 rounded-xl p-6">
+              <div className="bg-red-900 border border-red-700 rounded-xl p-6">
                 <h3 className="font-semibold text-red-900 mb-2">Authentication</h3>
                 <ul className="text-sm text-red-800 space-y-1">
                   <li>• Matrix Authorization</li>
@@ -95,7 +95,7 @@ export default async function JenkinsSecurityPage({
                   <li>• API Tokens</li>
                 </ul>
               </div>
-              <div className="bg-orange-50 border border-orange-200 rounded-xl p-6">
+              <div className="bg-orange-50 border border-orange-700 rounded-xl p-6">
                 <h3 className="font-semibold text-orange-900 mb-2">Protection</h3>
                 <ul className="text-sm text-orange-800 space-y-1">
                   <li>• CSRF Protection</li>
@@ -370,7 +370,7 @@ pipeline {
 
           <section className="bg-gradient-to-r from-red-600 to-orange-600 rounded-2xl p-8 text-center text-white">
             <h2 className="text-2xl font-bold mb-4">Jenkins Security Assessment</h2>
-            <a href={coreLinks.check} className="inline-block px-6 py-3 bg-white text-red-600 rounded-lg font-semibold">Assessment Starten</a>
+            <a href={coreLinks.check} className="inline-block px-6 py-3 bg-white text-red-400 rounded-lg font-semibold">Assessment Starten</a>
             <div className="mt-6 flex flex-wrap justify-center gap-3 text-sm">
               <a href={`${prefix}/openclaw-security-check`} className="rounded-lg border border-white/30 px-3 py-2 text-white hover:bg-white/10">OpenClaw Security Hub</a>
               <a href={`${prefix}/ai-agent-security`} className="rounded-lg border border-white/30 px-3 py-2 text-white hover:bg-white/10">AI Agent Security</a>

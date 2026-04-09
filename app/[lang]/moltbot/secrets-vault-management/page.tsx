@@ -24,17 +24,17 @@ export default function MoltbotSecretsVaultPage({ params }: PageProps) {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-4xl mx-auto">
-        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-8 text-sm">
-          <strong>"Not a Pentest" Trust-Anker</strong>: Secrets Management schützt kritische Zugangsdaten. Keine Angriffswerkzeuge.
+        <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
+          <strong className="text-amber-100">"Not a Pentest" Trust-Anker</strong>: Secrets Management schützt kritische Zugangsdaten. Keine Angriffswerkzeuge.
         </div>
-        <h1 className="text-4xl font-bold mb-4">Moltbot Secrets &amp; Vault Management</h1>
-        <p className="text-lg text-gray-600 mb-8">Keine Hardcoded Secrets mehr — zentrales, rotierendes Secrets Management für Moltbot mit HashiCorp Vault und dynamischen Credentials.</p>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">Moltbot Secrets &amp; Vault Management</h1>
+        <p className="text-lg text-gray-300 mb-8">Keine Hardcoded Secrets mehr — zentrales, rotierendes Secrets Management für Moltbot mit HashiCorp Vault und dynamischen Credentials.</p>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">🔐 Secrets Anti-Patterns (vermeiden!)</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">🔐 Secrets Anti-Patterns (vermeiden!)</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-            <div className="bg-red-50 border border-red-200 p-4 rounded-lg">
-              <h3 className="font-bold text-red-800 mb-2">❌ NIEMALS SO!</h3>
+            <div className="bg-red-900 border border-red-700 p-4 rounded-lg">
+              <h3 className="font-bold text-red-300 mb-2">❌ NIEMALS SO!</h3>
               <div className="bg-gray-900 text-red-400 p-3 rounded font-mono text-xs">
                 <pre>{`// ❌ Hardcoded secrets
 const db = new Pool({
@@ -48,8 +48,8 @@ const API_KEY = 'sk_live_abc123';
 DATABASE_PASSWORD=mypassword123`}</pre>
               </div>
             </div>
-            <div className="bg-green-50 border border-green-200 p-4 rounded-lg">
-              <h3 className="font-bold text-green-800 mb-2">✅ RICHTIG SO!</h3>
+            <div className="bg-green-900 border border-green-700 p-4 rounded-lg">
+              <h3 className="font-bold text-green-300 mb-2">✅ RICHTIG SO!</h3>
               <div className="bg-gray-900 text-green-400 p-3 rounded font-mono text-xs">
                 <pre>{`// ✅ Aus Environment Variable
 const db = new Pool({
@@ -67,7 +67,7 @@ const db = new Pool({
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">🏛️ HashiCorp Vault Integration</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">🏛️ HashiCorp Vault Integration</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm">
             <pre>{`// moltbot/lib/vault-client.ts
 import vault from 'node-vault';
@@ -104,7 +104,7 @@ export async function rotateAppSecrets() {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">🔄 Secrets Rotation Policy</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">🔄 Secrets Rotation Policy</h2>
           <div className="overflow-x-auto">
             <table className="w-full border-collapse text-sm">
               <thead><tr className="bg-gray-800 text-white"><th className="p-3 text-left">Secret Type</th><th className="p-3 text-left">Rotation Interval</th><th className="p-3 text-left">Methode</th><th className="p-3 text-left">Automation</th></tr></thead>
@@ -117,10 +117,10 @@ export async function rotateAppSecrets() {
                   ['OAuth Client Secret', '180 Tage', 'Provider API', '⚠️ Manuell'],
                   ['Admin Tokens', '7 Tage', 'Vault TTL', '✅ Vollautomatisch'],
                 ].map(([type, interval, method, auto]) => (
-                  <tr key={type} className="border-b hover:bg-gray-50">
+                  <tr key={type} className="border-b hover:bg-gray-800">
                     <td className="p-3 font-medium">{type}</td>
                     <td className="p-3 font-mono text-xs">{interval}</td>
-                    <td className="p-3 text-sm text-gray-600">{method}</td>
+                    <td className="p-3 text-sm text-gray-300">{method}</td>
                     <td className="p-3 text-sm">{auto}</td>
                   </tr>
                 ))}
@@ -130,12 +130,12 @@ export async function rotateAppSecrets() {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">🔗 Weiterführende Ressourcen</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">🔗 Weiterführende Ressourcen</h2>
           <div className="grid grid-cols-2 gap-4">
-            <a href="/securitycheck" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">🛡️ Security Check</div><div className="text-sm text-gray-600">Secrets Scan</div></a>
-            <a href="/runbooks" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">📚 Vault Runbooks</div><div className="text-sm text-gray-600">Secrets Playbooks</div></a>
-            <a href="/openclaw" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">🔓 OpenClaw</div><div className="text-sm text-gray-600">Secrets Framework</div></a>
-            <a href="/solutions" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">🏢 Enterprise</div><div className="text-sm text-gray-600">Managed Vault</div></a>
+            <a href="/securitycheck" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700"><div className="font-semibold text-cyan-400">🛡️ Security Check</div><div className="text-sm text-gray-300">Secrets Scan</div></a>
+            <a href="/runbooks" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700"><div className="font-semibold text-cyan-400">📚 Vault Runbooks</div><div className="text-sm text-gray-300">Secrets Playbooks</div></a>
+            <a href="/openclaw" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700"><div className="font-semibold text-cyan-400">🔓 OpenClaw</div><div className="text-sm text-gray-300">Secrets Framework</div></a>
+            <a href="/solutions" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700"><div className="font-semibold text-cyan-400">🏢 Enterprise</div><div className="text-sm text-gray-300">Managed Vault</div></a>
           </div>
         </section>
       </div>

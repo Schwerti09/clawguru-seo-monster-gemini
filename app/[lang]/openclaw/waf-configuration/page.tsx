@@ -40,17 +40,17 @@ export default function WafConfigurationPage({ params }: PageProps) {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-4xl mx-auto">
-        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-8 text-sm">
-          <strong>"Not a Pentest" Notice</strong>: This guide is for hardening your own systems. No attack tools.
+        <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: This guide is for hardening your own systems. No attack tools.
         </div>
-        <h1 className="text-4xl font-bold mb-4">WAF Configuration: Web Application Firewall Setup</h1>
-        <p className="text-lg text-gray-600 mb-8">Complete guide to configuring web application firewalls with OWASP rules and custom security policies.</p>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">WAF Configuration: Web Application Firewall Setup</h1>
+        <p className="text-lg text-gray-300 mb-8">Complete guide to configuring web application firewalls with OWASP rules and custom security policies.</p>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">WAF Fundamentals</h2>
-          <div className="bg-gray-100 p-4 rounded-lg mb-4">
-            <h3 className="font-semibold mb-2">Core Components</h3>
-            <ul className="list-disc list-inside space-y-1">
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">WAF Fundamentals</h2>
+          <div className="bg-gray-800 p-4 rounded-lg mb-4 border border-gray-700">
+            <h3 className="font-semibold mb-2 text-gray-100">Core Components</h3>
+            <ul className="list-disc list-inside space-y-1 text-gray-300">
               <li>OWASP Core Rule Set (CRS) integration</li>
               <li>Custom rule configuration</li>
               <li>Rate limiting and DDoS protection</li>
@@ -61,7 +61,7 @@ export default function WafConfigurationPage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">ModSecurity Configuration</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">ModSecurity Configuration</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto">
             <pre>
 {`# Enable ModSecurity with OWASP CRS
@@ -90,7 +90,7 @@ SecRule ARGS "@detectSQLi" \
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Cloudflare WAF Setup</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Cloudflare WAF Setup</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto">
             <pre>
 {`# Cloudflare WAF Rules via API
@@ -132,7 +132,7 @@ curl -X POST "https://api.cloudflare.com/client/v4/zones/{zone_id}/rate_limits" 
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Nginx WAF Configuration</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Nginx WAF Configuration</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto">
             <pre>
 {`# Nginx with ModSecurity module
@@ -166,45 +166,45 @@ server {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">WAF Best Practices</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">WAF Best Practices</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="bg-blue-100 p-4 rounded-lg">
-              <h3 className="font-semibold text-blue-800 mb-2">Rule Management</h3>
-              <p className="text-sm text-blue-700">Regularly update OWASP CRS and review custom rules for false positives.</p>
+            <div className="bg-blue-900 p-4 rounded-lg border border-blue-700">
+              <h3 className="font-semibold text-blue-300 mb-2">Rule Management</h3>
+              <p className="text-sm text-blue-200">Regularly update OWASP CRS and review custom rules for false positives.</p>
             </div>
-            <div className="bg-green-100 p-4 rounded-lg">
-              <h3 className="font-semibold text-green-800 mb-2">Monitoring</h3>
-              <p className="text-sm text-green-700">Implement comprehensive logging and alerting for WAF events.</p>
+            <div className="bg-green-900 p-4 rounded-lg border border-green-700">
+              <h3 className="font-semibold text-green-300 mb-2">Monitoring</h3>
+              <p className="text-sm text-green-200">Implement comprehensive logging and alerting for WAF events.</p>
             </div>
-            <div className="bg-yellow-100 p-4 rounded-lg">
-              <h3 className="font-semibold text-yellow-800 mb-2">Testing</h3>
-              <p className="text-sm text-yellow-700">Test WAF rules in monitoring mode before enabling blocking.</p>
+            <div className="bg-yellow-900 p-4 rounded-lg border border-yellow-700">
+              <h3 className="font-semibold text-yellow-300 mb-2">Testing</h3>
+              <p className="text-sm text-yellow-200">Test WAF rules in monitoring mode before enabling blocking.</p>
             </div>
-            <div className="bg-red-100 p-4 rounded-lg">
-              <h3 className="font-semibold text-red-800 mb-2">Performance</h3>
-              <p className="text-sm text-red-700">Optimize rule sets to balance security with application performance.</p>
+            <div className="bg-red-900 p-4 rounded-lg border border-red-700">
+              <h3 className="font-semibold text-red-300 mb-2">Performance</h3>
+              <p className="text-sm text-red-200">Optimize rule sets to balance security with application performance.</p>
             </div>
           </div>
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Further Resources</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Further Resources</h2>
           <div className="grid grid-cols-2 gap-4">
-            <a href={`/${locale}/securitycheck`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
-              <div className="font-semibold text-blue-600">Security Check</div>
-              <div className="text-sm text-gray-600">Scan your system now</div>
+            <a href={`/${locale}/securitycheck`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
+              <div className="font-semibold text-cyan-400">Security Check</div>
+              <div className="text-sm text-gray-300">Scan your system now</div>
             </a>
-            <a href={`/${locale}/runbooks`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
-              <div className="font-semibold text-blue-600">Runbooks</div>
-              <div className="text-sm text-gray-600">600+ security playbooks</div>
+            <a href={`/${locale}/runbooks`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
+              <div className="font-semibold text-cyan-400">Runbooks</div>
+              <div className="text-sm text-gray-300">600+ security playbooks</div>
             </a>
-            <a href={`/${locale}/openclaw`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
-              <div className="font-semibold text-blue-600">OpenClaw Framework</div>
-              <div className="text-sm text-gray-600">Self-hosted security</div>
+            <a href={`/${locale}/openclaw`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
+              <div className="font-semibold text-cyan-400">OpenClaw Framework</div>
+              <div className="text-sm text-gray-300">Self-hosted security</div>
             </a>
-            <a href={`/${locale}/nginx-hardening`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
-              <div className="font-semibold text-blue-600">Nginx Hardening</div>
-              <div className="text-sm text-gray-600">Complete security guide</div>
+            <a href={`/${locale}/nginx-hardening`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
+              <div className="font-semibold text-cyan-400">Nginx Hardening</div>
+              <div className="text-sm text-gray-300">Complete security guide</div>
             </a>
           </div>
         </section>

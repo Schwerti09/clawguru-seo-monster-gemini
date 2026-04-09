@@ -61,7 +61,7 @@ export default function AiAgentThreatModelTemplatePage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">System Architecture Documentation</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">System Architecture Documentation</h2>
           <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="bg-gray-900 p-4 rounded-lg border border-gray-600">
@@ -89,7 +89,7 @@ export default function AiAgentThreatModelTemplatePage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Asset Identification</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Asset Identification</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto">
             <pre>
 {`# Asset Classification Framework
@@ -183,7 +183,7 @@ export default function AiAgentThreatModelTemplatePage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Security Control Recommendations</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Security Control Recommendations</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto">
             <pre>
 {`# Security Control Framework
@@ -219,12 +219,12 @@ export default function AiAgentThreatModelTemplatePage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Threat Model Documentation Template</h2>
-          <div className="bg-gray-100 p-6 rounded-lg">
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Threat Model Documentation Template</h2>
+          <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-gray-100 p-4 rounded-lg">
-                <h3 className="font-bold text-gray-800 mb-3">Executive Summary</h3>
-                <ul className="space-y-2 text-sm">
+              <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                <h3 className="font-bold text-cyan-400 mb-3">Executive Summary</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li>System overview and purpose</li>
                   <li>Key findings and risks</li>
                   <li>Business impact assessment</li>
@@ -232,9 +232,9 @@ export default function AiAgentThreatModelTemplatePage({ params }: PageProps) {
                   <li>Implementation timeline</li>
                 </ul>
               </div>
-              <div className="bg-gray-100 p-4 rounded-lg">
-                <h3 className="font-bold text-gray-800 mb-3">Technical Details</h3>
-                <ul className="space-y-2 text-sm">
+              <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                <h3 className="font-bold text-cyan-400 mb-3">Technical Details</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li>Architecture diagrams</li>
                   <li>Data flow documentation</li>
                   <li>Threat analysis details</li>
@@ -247,12 +247,12 @@ export default function AiAgentThreatModelTemplatePage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Implementation Guidelines</h2>
-          <div className="bg-gray-100 p-6 rounded-lg">
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Implementation Guidelines</h2>
+          <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-gray-100 p-4 rounded-lg">
-                <h3 className="font-bold text-gray-800 mb-3">Development Phase</h3>
-                <ul className="space-y-2 text-sm">
+              <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                <h3 className="font-bold text-cyan-400 mb-3">Development Phase</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li>Secure development lifecycle</li>
                   <li>Code review and analysis</li>
                   <li>Security testing integration</li>
@@ -260,9 +260,9 @@ export default function AiAgentThreatModelTemplatePage({ params }: PageProps) {
                   <li>Documentation maintenance</li>
                 </ul>
               </div>
-              <div className="bg-gray-100 p-4 rounded-lg">
-                <h3 className="font-bold text-gray-800 mb-3">Operational Phase</h3>
-                <ul className="space-y-2 text-sm">
+              <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                <h3 className="font-bold text-cyan-400 mb-3">Operational Phase</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li>Continuous monitoring</li>
                   <li>Regular security assessments</li>
                   <li>Incident response procedures</li>
@@ -275,7 +275,7 @@ export default function AiAgentThreatModelTemplatePage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Review and Maintenance</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Review and Maintenance</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto">
             <pre>
 {`# Threat Model Maintenance Process
@@ -304,34 +304,34 @@ export default function AiAgentThreatModelTemplatePage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Best Practices</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Best Practices</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-blue-100 p-4 rounded-lg">
-              <h3 className="font-semibold text-blue-800 mb-2">Regular Updates</h3>
-              <p className="text-sm text-blue-700">Update threat models regularly to reflect system changes and new threats</p>
+            <div className="bg-blue-900 p-4 rounded-lg border border-blue-700">
+              <h3 className="font-semibold text-blue-300 mb-2">Regular Updates</h3>
+              <p className="text-sm text-blue-200">Update threat models regularly to reflect system changes and new threats</p>
             </div>
-            <div className="bg-green-100 p-4 rounded-lg">
-              <h3 className="font-semibold text-green-800 mb-2">Stakeholder Involvement</h3>
-              <p className="text-sm text-green-700">Involve all relevant stakeholders in threat modeling process</p>
+            <div className="bg-green-900 p-4 rounded-lg border border-green-700">
+              <h3 className="font-semibold text-green-300 mb-2">Stakeholder Involvement</h3>
+              <p className="text-sm text-green-200">Involve all relevant stakeholders in threat modeling process</p>
             </div>
-            <div className="bg-yellow-100 p-4 rounded-lg">
-              <h3 className="font-semibold text-yellow-800 mb-2">Documentation</h3>
-              <p className="text-sm text-yellow-700">Maintain comprehensive documentation for threat models and controls</p>
+            <div className="bg-yellow-900 p-4 rounded-lg border border-yellow-700">
+              <h3 className="font-semibold text-yellow-300 mb-2">Documentation</h3>
+              <p className="text-sm text-yellow-200">Maintain comprehensive documentation for threat models and controls</p>
             </div>
-            <div className="bg-red-100 p-4 rounded-lg">
-              <h3 className="font-semibold text-red-800 mb-2">Continuous Monitoring</h3>
-              <p className="text-sm text-red-700">Continuously monitor for new threats and control effectiveness</p>
+            <div className="bg-red-900 p-4 rounded-lg border border-red-700">
+              <h3 className="font-semibold text-red-300 mb-2">Continuous Monitoring</h3>
+              <p className="text-sm text-red-200">Continuously monitor for new threats and control effectiveness</p>
             </div>
           </div>
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Template Examples</h2>
-          <div className="bg-gray-100 p-6 rounded-lg">
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Template Examples</h2>
+          <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-gray-100 p-4 rounded-lg">
-                <h3 className="font-bold text-gray-800 mb-3">Chatbot Threat Model</h3>
-                <ul className="space-y-2 text-sm">
+              <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                <h3 className="font-bold text-cyan-400 mb-3">Chatbot Threat Model</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li>Prompt injection threats</li>
                   <li>Data leakage risks</li>
                   <li>Unauthorized access controls</li>
@@ -339,9 +339,9 @@ export default function AiAgentThreatModelTemplatePage({ params }: PageProps) {
                   <li>Service availability concerns</li>
                 </ul>
               </div>
-              <div className="bg-gray-100 p-4 rounded-lg">
-                <h3 className="font-bold text-gray-800 mb-3">Autonomous Agent Threat Model</h3>
-                <ul className="space-y-2 text-sm">
+              <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                <h3 className="font-bold text-cyan-400 mb-3">Autonomous Agent Threat Model</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li>Decision manipulation threats</li>
                   <li>Goal hijacking risks</li>
                   <li>Resource exploitation controls</li>
@@ -354,23 +354,23 @@ export default function AiAgentThreatModelTemplatePage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Further Resources</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Further Resources</h2>
           <div className="grid grid-cols-2 gap-4">
-            <a href={`/${locale}/securitycheck`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
-              <div className="font-semibold text-blue-600">Security Check</div>
-              <div className="text-sm text-gray-600">Scan your system now</div>
+            <a href={`/${locale}/securitycheck`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
+              <div className="font-semibold text-cyan-400">Security Check</div>
+              <div className="text-sm text-gray-300">Scan your system now</div>
             </a>
-            <a href={`/${locale}/runbooks`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
-              <div className="font-semibold text-blue-600">Runbooks</div>
-              <div className="text-sm text-gray-600">600+ security playbooks</div>
+            <a href={`/${locale}/runbooks`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
+              <div className="font-semibold text-cyan-400">Runbooks</div>
+              <div className="text-sm text-gray-300">600+ security playbooks</div>
             </a>
-            <a href={`/${locale}/openclaw`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
-              <div className="font-semibold text-blue-600">OpenClaw Framework</div>
-              <div className="text-sm text-gray-600">Self-hosted security</div>
+            <a href={`/${locale}/openclaw`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
+              <div className="font-semibold text-cyan-400">OpenClaw Framework</div>
+              <div className="text-sm text-gray-300">Self-hosted security</div>
             </a>
-            <a href={`/${locale}/solutions/kubernetes-security-hardening`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
-              <div className="font-semibold text-blue-600">Kubernetes Security</div>
-              <div className="text-sm text-gray-600">Complete hardening guide</div>
+            <a href={`/${locale}/solutions/kubernetes-security-hardening`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
+              <div className="font-semibold text-cyan-400">Kubernetes Security</div>
+              <div className="text-sm text-gray-300">Complete hardening guide</div>
             </a>
           </div>
         </section>

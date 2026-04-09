@@ -100,7 +100,7 @@ export default async function NginxHardeningPage({
             </p>
 
             <div className="grid md:grid-cols-3 gap-6 mb-8">
-              <div className="bg-red-50 border border-red-200 rounded-xl p-6">
+              <div className="bg-red-900 border border-red-700 rounded-xl p-6">
                 <h3 className="font-semibold text-red-900 mb-2">Risiken</h3>
                 <ul className="text-sm text-red-700 space-y-1">
                   <li>• Weak TLS/SSL</li>
@@ -109,7 +109,7 @@ export default async function NginxHardeningPage({
                   <li>• Version Leakage</li>
                 </ul>
               </div>
-              <div className="bg-green-50 border border-green-200 rounded-xl p-6">
+              <div className="bg-green-900 border border-green-700 rounded-xl p-6">
                 <h3 className="font-semibold text-green-900 mb-2">Schutz</h3>
                 <ul className="text-sm text-green-700 space-y-1">
                   <li>• TLS 1.3 Only</li>
@@ -118,7 +118,7 @@ export default async function NginxHardeningPage({
                   <li>• WAF Integration</li>
                 </ul>
               </div>
-              <div className="bg-blue-50 border border-blue-200 rounded-xl p-6">
+              <div className="bg-blue-900 border border-blue-700 rounded-xl p-6">
                 <h3 className="font-semibold text-blue-900 mb-2">Compliance</h3>
                 <ul className="text-sm text-blue-700 space-y-1">
                   <li>• PCI DSS</li>
@@ -277,7 +277,7 @@ location ~ \\.(css|js)$ {
           <section className="bg-gradient-to-r from-green-600 to-emerald-600 rounded-2xl p-8 text-center text-white">
             <h2 className="text-2xl font-bold mb-4">Nginx Security Assessment</h2>
             <p className="mb-6">Validieren Sie Ihre Nginx-Konfiguration gegen CIS Benchmarks.</p>
-            <a href={coreLinks.check} className="inline-block px-6 py-3 bg-white text-green-600 rounded-lg font-semibold">
+            <a href={coreLinks.check} className="inline-block px-6 py-3 bg-white text-green-400 rounded-lg font-semibold">
               Security Check
             </a>
             <div className="mt-6 flex flex-wrap justify-center gap-3 text-sm">

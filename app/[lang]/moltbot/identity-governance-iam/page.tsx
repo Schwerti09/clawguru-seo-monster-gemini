@@ -50,23 +50,23 @@ export default function MoltbotIamPage({ params }: PageProps) {
 
       <div className="max-w-4xl mx-auto">
 
-        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-8 text-sm">
+        <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
 
-          <strong>"Not a Pentest" Trust-Anker</strong>: Identity Governance sichert Zugriffe auf eigene Systeme ab. Keine Angriffswerkzeuge.
+          <strong className="text-amber-100">"Not a Pentest" Trust-Anker</strong>: Identity Governance sichert Zugriffe auf eigene Systeme ab. Keine Angriffswerkzeuge.
 
         </div>
 
-        <h1 className="text-4xl font-bold mb-4">Moltbot Identity Governance &amp; IAM</h1>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">Moltbot Identity Governance &amp; IAM</h1>
 
-        <p className="text-lg text-gray-600 mb-8">85% aller Breaches nutzen kompromittierte oder überprivilegierte Identitäten aus. RBAC, Least Privilege und regelmäßige Access Reviews sind Pflicht.</p>
+        <p className="text-lg text-gray-300 mb-8">85% aller Breaches nutzen kompromittierte oder überprivilegierte Identitäten aus. RBAC, Least Privilege und regelmäßige Access Reviews sind Pflicht.</p>
 
 
 
         <section className="mb-10">
 
-          <h2 className="text-2xl font-semibold mb-4">Role-Based Access Control (RBAC)</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Role-Based Access Control (RBAC)</h2>
 
-          <p className="text-lg text-gray-600 mb-8">RBAC ist ein Ansatz zur Zugriffssteuerung, bei dem Benutzerrollen und -berechtigungen anhand von Regeln und Richtlinien zugewiesen werden.</p>
+          <p className="text-lg text-gray-300 mb-8">RBAC ist ein Ansatz zur Zugriffssteuerung, bei dem Benutzerrollen und -berechtigungen anhand von Regeln und Richtlinien zugewiesen werden.</p>
 
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm overflow-x-auto">
 
@@ -116,7 +116,7 @@ export async function GET(req) {
 
 
 
-          <h2 className="text-2xl font-semibold mb-4">Least Privilege Implementation</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Least Privilege Implementation</h2>
 
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm overflow-x-auto">
 
@@ -176,7 +176,7 @@ app.get('/api/executions',
 
 
 
-          <h2 className="text-2xl font-semibold mb-4">Automated Access Reviews</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Automated Access Reviews</h2>
 
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm overflow-x-auto">
 

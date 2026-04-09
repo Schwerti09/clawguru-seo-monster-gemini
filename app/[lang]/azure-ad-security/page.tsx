@@ -82,7 +82,7 @@ export default async function AzureADSecurityPage({
           <section className="mb-16">
             <h2 className="text-3xl font-bold text-slate-900 mb-6">Azure AD Security Architecture</h2>
             <div className="grid md:grid-cols-3 gap-6 mb-8">
-              <div className="bg-blue-50 border border-blue-200 rounded-xl p-6">
+              <div className="bg-blue-900 border border-blue-700 rounded-xl p-6">
                 <h3 className="font-semibold text-blue-900 mb-2">Identity Foundation</h3>
                 <ul className="text-sm text-blue-800 space-y-1">
                   <li>• Cloud-Only vs Hybrid</li>
@@ -439,7 +439,7 @@ GET https://graph.microsoft.com/v1.0/identityProtection/riskDetections
 
           <section className="bg-gradient-to-r from-blue-600 to-sky-600 rounded-2xl p-8 text-center text-white">
             <h2 className="text-2xl font-bold mb-4">Azure AD Security Assessment</h2>
-            <a href={coreLinks.check} className="inline-block px-6 py-3 bg-white text-blue-600 rounded-lg font-semibold">Assessment Starten</a>
+            <a href={coreLinks.check} className="inline-block px-6 py-3 bg-white text-cyan-400 rounded-lg font-semibold">Assessment Starten</a>
             <div className="mt-6 flex flex-wrap justify-center gap-3 text-sm">
               <a href={`${prefix}/openclaw-security-check`} className="rounded-lg border border-white/30 px-3 py-2 text-white hover:bg-white/10">OpenClaw Security Hub</a>
               <a href={`${prefix}/ai-agent-security`} className="rounded-lg border border-white/30 px-3 py-2 text-white hover:bg-white/10">AI Agent Security</a>

@@ -104,15 +104,15 @@ export default async function PrometheusVPNPage({
             </p>
 
             <div className="grid md:grid-cols-3 gap-6 mb-8">
-              <div className="bg-orange-50 border border-orange-200 rounded-xl p-6">
+              <div className="bg-orange-50 border border-orange-700 rounded-xl p-6">
                 <h3 className="font-semibold text-orange-900 mb-2">Tailscale</h3>
                 <p className="text-sm text-orange-700">Zero Trust Mesh VPN. Einfachste Lösung.</p>
               </div>
-              <div className="bg-blue-50 border border-blue-200 rounded-xl p-6">
+              <div className="bg-blue-900 border border-blue-700 rounded-xl p-6">
                 <h3 className="font-semibold text-blue-900 mb-2">WireGuard</h3>
                 <p className="text-sm text-blue-700">Selbst-gehostete VPN. Volle Kontrolle.</p>
               </div>
-              <div className="bg-purple-50 border border-purple-200 rounded-xl p-6">
+              <div className="bg-purple-50 border border-purple-700 rounded-xl p-6">
                 <h3 className="font-semibold text-purple-900 mb-2">Remote Write</h3>
                 <p className="text-sm text-purple-700">Push-basiert zu central Prometheus.</p>
               </div>
@@ -275,7 +275,7 @@ tls_config:
           <section className="bg-gradient-to-r from-orange-600 to-red-600 rounded-2xl p-8 text-center text-white">
             <h2 className="text-2xl font-bold mb-4">VPN Monitoring Setup</h2>
             <p className="mb-6">Implementieren Sie sichere Prometheus-Monitoring über VPN.</p>
-            <a href={coreLinks.check} className="inline-block px-6 py-3 bg-white text-orange-600 rounded-lg font-semibold">
+            <a href={coreLinks.check} className="inline-block px-6 py-3 bg-white text-orange-400 rounded-lg font-semibold">
               Setup Assessment
             </a>
             <div className="mt-6 flex flex-wrap justify-center gap-3 text-sm">

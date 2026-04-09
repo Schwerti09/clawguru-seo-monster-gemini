@@ -24,14 +24,14 @@ export default function MoltbotApiGatewayPage({ params }: PageProps) {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-4xl mx-auto">
-        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-8 text-sm">
-          <strong>"Not a Pentest" Trust-Anker</strong>: API Gateway Security schützt deine Endpoints. Keine Angriffswerkzeuge.
+        <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
+          <strong className="text-amber-100">"Not a Pentest" Trust-Anker</strong>: API Gateway Security schützt deine Endpoints. Keine Angriffswerkzeuge.
         </div>
-        <h1 className="text-4xl font-bold mb-4">Moltbot API Gateway Security</h1>
-        <p className="text-lg text-gray-600 mb-8">Zentralisierte API-Absicherung für Moltbot — Authentication, Rate Limiting, Request Validation und Threat Detection als Gateway-Layer.</p>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">Moltbot API Gateway Security</h1>
+        <p className="text-lg text-gray-300 mb-8">Zentralisierte API-Absicherung für Moltbot — Authentication, Rate Limiting, Request Validation und Threat Detection als Gateway-Layer.</p>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">🚪 Kong Gateway Konfiguration</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">🚪 Kong Gateway Konfiguration</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm">
             <pre>{`# Kong declarative config (deck) für Moltbot
 _format_version: "3.0"
@@ -90,7 +90,7 @@ plugins:
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">🔑 API Key Management</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">🔑 API Key Management</h2>
           <div className="bg-gray-900 text-blue-400 p-4 rounded-lg font-mono text-sm">
             <pre>{`// moltbot/lib/api-key-manager.ts
 import crypto from 'crypto';
@@ -122,12 +122,12 @@ export async function validateApiKey(rawKey: string) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">🔗 Weiterführende Ressourcen</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">🔗 Weiterführende Ressourcen</h2>
           <div className="grid grid-cols-2 gap-4">
-            <a href="/securitycheck" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">🛡️ Security Check</div><div className="text-sm text-gray-600">API Gateway prüfen</div></a>
-            <a href="/runbooks" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">📚 API Runbooks</div><div className="text-sm text-gray-600">Gateway Playbooks</div></a>
-            <a href="/openclaw" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">🔓 OpenClaw</div><div className="text-sm text-gray-600">API Framework</div></a>
-            <a href="/solutions" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">🏢 Enterprise</div><div className="text-sm text-gray-600">Managed API Gateway</div></a>
+            <a href="/securitycheck" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700"><div className="font-semibold text-cyan-400">🛡️ Security Check</div><div className="text-sm text-gray-300">API Gateway prüfen</div></a>
+            <a href="/runbooks" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700"><div className="font-semibold text-cyan-400">📚 API Runbooks</div><div className="text-sm text-gray-300">Gateway Playbooks</div></a>
+            <a href="/openclaw" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700"><div className="font-semibold text-cyan-400">🔓 OpenClaw</div><div className="text-sm text-gray-300">API Framework</div></a>
+            <a href="/solutions" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700"><div className="font-semibold text-cyan-400">🏢 Enterprise</div><div className="text-sm text-gray-300">Managed API Gateway</div></a>
           </div>
         </section>
       </div>

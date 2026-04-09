@@ -64,7 +64,7 @@ export default async function CloudHubPage(props: { params: { lang: string } }) 
         dangerouslySetInnerHTML={{ __html: JSON.stringify(hubSchema) }}
       />
       <div className="py-16 max-w-5xl mx-auto">
-        <div className="mb-2 text-xs text-gray-500 uppercase tracking-widest">Hub · Cloud</div>
+        <div className="mb-2 text-xs text-gray-400 uppercase tracking-widest">Hub · Cloud</div>
         <h1 className="text-3xl md:text-4xl font-black mb-4">☁️ Cloud Runbooks</h1>
         <p id="direct-answer" className="text-gray-300 text-lg mb-10 max-w-2xl border-l-4 border-brand-cyan pl-4">
           Alle Ops- und Security-Runbooks für Cloud-Provider: Hetzner, AWS, GCP, Azure, DigitalOcean und mehr – Firewall, SSH, TLS, Backups, Incident Response.
@@ -88,7 +88,7 @@ export default async function CloudHubPage(props: { params: { lang: string } }) 
                   className="p-4 rounded-xl border border-gray-800 hover:border-brand-cyan/40 text-sm"
                 >
                   <div className="font-bold text-white mb-1">{r.title}</div>
-                  <div className="text-gray-500 text-xs line-clamp-2">{r.summary}</div>
+                  <div className="text-gray-400 text-xs line-clamp-2">{r.summary}</div>
                 </Link>
               ))}
             </div>

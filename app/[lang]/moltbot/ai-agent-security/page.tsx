@@ -48,9 +48,9 @@ export default function AiAgentSecurityPage({ params }: PageProps) {
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">AI Agent Security Overview</h2>
-          <div className="bg-gray-100 p-4 rounded-lg mb-4">
-            <h3 className="font-semibold mb-2">Security Challenges</h3>
-            <ul className="list-disc list-inside space-y-1">
+          <div className="bg-gray-800 p-4 rounded-lg mb-4 border border-gray-700">
+            <h3 className="font-semibold mb-2 text-gray-100">Security Challenges</h3>
+            <ul className="list-disc list-inside space-y-1 text-gray-300">
               <li>Autonomous decision-making security</li>
               <li>Self-modifying code protection</li>
               <li>Complex interaction security</li>
@@ -61,12 +61,12 @@ export default function AiAgentSecurityPage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Security Architecture</h2>
-          <div className="bg-gray-100 p-6 rounded-lg">
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Security Architecture</h2>
+          <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-gray-100 p-4 rounded-lg">
-                <h3 className="font-bold text-gray-800 mb-3">Input Layer Security</h3>
-                <ul className="space-y-2 text-sm">
+              <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                <h3 className="font-bold text-cyan-400 mb-3">Input Layer Security</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li>Input validation and sanitization</li>
                   <li>Prompt injection protection</li>
                   <li>Data poisoning prevention</li>
@@ -74,9 +74,9 @@ export default function AiAgentSecurityPage({ params }: PageProps) {
                   <li>Anomaly detection for inputs</li>
                 </ul>
               </div>
-              <div className="bg-gray-100 p-4 rounded-lg">
-                <h3 className="font-bold text-gray-800 mb-3">Processing Layer Security</h3>
-                <ul className="space-y-2 text-sm">
+              <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                <h3 className="font-bold text-cyan-400 mb-3">Processing Layer Security</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li>Sandboxed execution environments</li>
                   <li>Resource allocation limits</li>
                   <li>Memory and processing constraints</li>
@@ -89,7 +89,7 @@ export default function AiAgentSecurityPage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Threat Protection Mechanisms</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Threat Protection Mechanisms</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto">
             <pre>
 {`# AI Agent Threat Protection
@@ -118,12 +118,12 @@ export default function AiAgentSecurityPage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Security Controls Implementation</h2>
-          <div className="bg-gray-100 p-6 rounded-lg">
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Security Controls Implementation</h2>
+          <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-gray-100 p-4 rounded-lg">
-                <h3 className="font-bold text-gray-800 mb-3">Preventive Controls</h3>
-                <ul className="space-y-2 text-sm">
+              <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                <h3 className="font-bold text-cyan-400 mb-3">Preventive Controls</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li>Input validation and sanitization</li>
                   <li>Prompt engineering and templating</li>
                   <li>Access control and authentication</li>
@@ -131,9 +131,9 @@ export default function AiAgentSecurityPage({ params }: PageProps) {
                   <li>Secure development practices</li>
                 </ul>
               </div>
-              <div className="bg-gray-100 p-4 rounded-lg">
-                <h3 className="font-bold text-gray-800 mb-3">Detective Controls</h3>
-                <ul className="space-y-2 text-sm">
+              <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                <h3 className="font-bold text-cyan-400 mb-3">Detective Controls</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li>Behavioral analysis and monitoring</li>
                   <li>Anomaly detection systems</li>
                   <li>Security logging and auditing</li>
@@ -146,35 +146,35 @@ export default function AiAgentSecurityPage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Autonomous System Security</h2>
-          <div className="bg-gray-100 p-6 rounded-lg">
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Autonomous System Security</h2>
+          <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
             <div className="space-y-4">
               <div className="flex items-start space-x-4">
                 <div className="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold flex-shrink-0">1</div>
                 <div>
-                  <div className="font-semibold">Decision Validation</div>
-                  <div className="text-sm text-gray-600">Validate autonomous decisions against security policies</div>
+                  <div className="font-semibold text-gray-100">Decision Validation</div>
+                  <div className="text-sm text-gray-300">Validate autonomous decisions against security policies</div>
                 </div>
               </div>
               <div className="flex items-start space-x-4">
                 <div className="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold flex-shrink-0">2</div>
                 <div>
-                  <div className="font-semibold">Behavior Monitoring</div>
-                  <div className="text-sm text-gray-600">Monitor agent behavior for anomalies and security violations</div>
+                  <div className="font-semibold text-gray-100">Behavior Monitoring</div>
+                  <div className="text-sm text-gray-300">Monitor agent behavior for anomalies and security violations</div>
                 </div>
               </div>
               <div className="flex items-start space-x-4">
                 <div className="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold flex-shrink-0">3</div>
                 <div>
-                  <div className="font-semibold">Intervention Mechanisms</div>
-                  <div className="text-sm text-gray-600">Implement human intervention and override capabilities</div>
+                  <div className="font-semibold text-gray-100">Intervention Mechanisms</div>
+                  <div className="text-sm text-gray-300">Implement human intervention and override capabilities</div>
                 </div>
               </div>
               <div className="flex items-start space-x-4">
                 <div className="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold flex-shrink-0">4</div>
                 <div>
-                  <div className="font-semibold">Fail-safe Mechanisms</div>
-                  <div className="text-sm text-gray-600">Implement fail-safe mechanisms for security violations</div>
+                  <div className="font-semibold text-gray-100">Fail-safe Mechanisms</div>
+                  <div className="text-sm text-gray-300">Implement fail-safe mechanisms for security violations</div>
                 </div>
               </div>
             </div>
@@ -182,7 +182,7 @@ export default function AiAgentSecurityPage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Machine Learning Security</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Machine Learning Security</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto">
             <pre>
 {`# ML Security Controls
@@ -211,12 +211,12 @@ export default function AiAgentSecurityPage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Compliance and Governance</h2>
-          <div className="bg-gray-100 p-6 rounded-lg">
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Compliance and Governance</h2>
+          <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-gray-100 p-4 rounded-lg">
-                <h3 className="font-bold text-gray-800 mb-3">Regulatory Compliance</h3>
-                <ul className="space-y-2 text-sm">
+              <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                <h3 className="font-bold text-cyan-400 mb-3">Regulatory Compliance</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li>GDPR data protection requirements</li>
                   <li>AI Act compliance (EU)</li>
                   <li>Industry-specific regulations</li>
@@ -224,9 +224,9 @@ export default function AiAgentSecurityPage({ params }: PageProps) {
                   <li>Privacy by design principles</li>
                 </ul>
               </div>
-              <div className="bg-gray-100 p-4 rounded-lg">
-                <h3 className="font-bold text-gray-800 mb-3">Ethical Governance</h3>
-                <ul className="space-y-2 text-sm">
+              <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                <h3 className="font-bold text-cyan-400 mb-3">Ethical Governance</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li>Fairness and bias mitigation</li>
                   <li>Transparency and explainability</li>
                   <li>Human oversight requirements</li>
@@ -239,12 +239,12 @@ export default function AiAgentSecurityPage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Monitoring and Incident Response</h2>
-          <div className="bg-gray-100 p-6 rounded-lg">
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Monitoring and Incident Response</h2>
+          <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-gray-100 p-4 rounded-lg">
-                <h3 className="font-bold text-gray-800 mb-3">Real-time Monitoring</h3>
-                <ul className="space-y-2 text-sm">
+              <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                <h3 className="font-bold text-cyan-400 mb-3">Real-time Monitoring</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li>Agent behavior tracking</li>
                   <li>Performance metrics monitoring</li>
                   <li>Resource utilization tracking</li>
@@ -252,9 +252,9 @@ export default function AiAgentSecurityPage({ params }: PageProps) {
                   <li>Anomaly detection systems</li>
                 </ul>
               </div>
-              <div className="bg-gray-100 p-4 rounded-lg">
-                <h3 className="font-bold text-gray-800 mb-3">Incident Response</h3>
-                <ul className="space-y-2 text-sm">
+              <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                <h3 className="font-bold text-cyan-400 mb-3">Incident Response</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li>Incident identification and classification</li>
                   <li>Immediate containment procedures</li>
                   <li>Investigation and root cause analysis</li>
@@ -267,7 +267,7 @@ export default function AiAgentSecurityPage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Testing and Validation</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Testing and Validation</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto">
             <pre>
 {`# Security Testing Framework
@@ -296,34 +296,34 @@ export default function AiAgentSecurityPage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Best Practices</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Best Practices</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-blue-100 p-4 rounded-lg">
-              <h3 className="font-semibold text-blue-800 mb-2">Security by Design</h3>
-              <p className="text-sm text-blue-700">Implement security controls from the beginning of AI agent development</p>
+            <div className="bg-blue-900 p-4 rounded-lg border border-blue-700">
+              <h3 className="font-semibold text-blue-300 mb-2">Security by Design</h3>
+              <p className="text-sm text-blue-200">Implement security controls from the beginning of AI agent development</p>
             </div>
-            <div className="bg-green-100 p-4 rounded-lg">
-              <h3 className="font-semibold text-green-800 mb-2">Defense in Depth</h3>
-              <p className="text-sm text-green-700">Layer multiple security controls for comprehensive protection</p>
+            <div className="bg-green-900 p-4 rounded-lg border border-green-700">
+              <h3 className="font-semibold text-green-300 mb-2">Defense in Depth</h3>
+              <p className="text-sm text-green-200">Layer multiple security controls for comprehensive protection</p>
             </div>
-            <div className="bg-yellow-100 p-4 rounded-lg">
-              <h3 className="font-semibold text-yellow-800 mb-2">Continuous Monitoring</h3>
-              <p className="text-sm text-yellow-700">Maintain continuous monitoring for security and performance</p>
+            <div className="bg-yellow-900 p-4 rounded-lg border border-yellow-700">
+              <h3 className="font-semibold text-yellow-300 mb-2">Continuous Monitoring</h3>
+              <p className="text-sm text-yellow-200">Maintain continuous monitoring for security and performance</p>
             </div>
-            <div className="bg-red-100 p-4 rounded-lg">
-              <h3 className="font-semibold text-red-800 mb-2">Regular Updates</h3>
-              <p className="text-sm text-red-700">Regularly update security controls and threat models</p>
+            <div className="bg-red-900 p-4 rounded-lg border border-red-700">
+              <h3 className="font-semibold text-red-300 mb-2">Regular Updates</h3>
+              <p className="text-sm text-red-200">Regularly update security controls and threat models</p>
             </div>
           </div>
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Implementation Examples</h2>
-          <div className="bg-gray-100 p-6 rounded-lg">
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Implementation Examples</h2>
+          <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-gray-100 p-4 rounded-lg">
-                <h3 className="font-bold text-gray-800 mb-3">Chatbot Security</h3>
-                <ul className="space-y-2 text-sm">
+              <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                <h3 className="font-bold text-cyan-400 mb-3">Chatbot Security</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li>Input validation and sanitization</li>
                   <li>Prompt injection protection</li>
                   <li>Output filtering and monitoring</li>
@@ -331,9 +331,9 @@ export default function AiAgentSecurityPage({ params }: PageProps) {
                   <li>Behavioral analysis</li>
                 </ul>
               </div>
-              <div className="bg-gray-100 p-4 rounded-lg">
-                <h3 className="font-bold text-gray-800 mb-3">Input Layer Security</h3>
-                <ul className="space-y-2 text-sm">
+              <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                <h3 className="font-bold text-cyan-400 mb-3">Input Layer Security</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li>Decision validation frameworks</li>
                   <li>Behavior monitoring systems</li>
                   <li>Human intervention mechanisms</li>
@@ -346,23 +346,23 @@ export default function AiAgentSecurityPage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Further Resources</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Further Resources</h2>
           <div className="grid grid-cols-2 gap-4">
-            <a href={`/${locale}/securitycheck`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
-              <div className="font-semibold text-blue-600">Security Check</div>
-              <div className="text-sm text-gray-600">Scan your system now</div>
+            <a href={`/${locale}/securitycheck`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
+              <div className="font-semibold text-cyan-400">Security Check</div>
+              <div className="text-sm text-gray-300">Scan your system now</div>
             </a>
-            <a href={`/${locale}/runbooks`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
-              <div className="font-semibold text-blue-600">Runbooks</div>
-              <div className="text-sm text-gray-600">600+ security playbooks</div>
+            <a href={`/${locale}/runbooks`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
+              <div className="font-semibold text-cyan-400">Runbooks</div>
+              <div className="text-sm text-gray-300">600+ security playbooks</div>
             </a>
-            <a href={`/${locale}/openclaw`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
-              <div className="font-semibold text-blue-600">OpenClaw Framework</div>
-              <div className="text-sm text-gray-600">Self-hosted security</div>
+            <a href={`/${locale}/openclaw`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
+              <div className="font-semibold text-cyan-400">OpenClaw Framework</div>
+              <div className="text-sm text-gray-300">Self-hosted security</div>
             </a>
-            <a href={`/${locale}/solutions/kubernetes-security-hardening`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
-              <div className="font-semibold text-blue-600">Kubernetes Security</div>
-              <div className="text-sm text-gray-600">Complete hardening guide</div>
+            <a href={`/${locale}/solutions/kubernetes-security-hardening`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
+              <div className="font-semibold text-cyan-400">Kubernetes Security</div>
+              <div className="text-sm text-gray-300">Complete hardening guide</div>
             </a>
           </div>
         </section>

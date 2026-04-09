@@ -24,14 +24,14 @@ export default function OpenClawIntrusionDetectionPage({ params }: PageProps) {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-4xl mx-auto">
-        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-8 text-sm">
-          <strong>"Not a Pentest" Trust-Anker</strong>: IDS dient der defensiven Erkennung von Angriffen auf eigene Systeme. Keine Angriffswerkzeuge.
+        <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
+          <strong className="text-amber-100">"Not a Pentest" Trust-Anker</strong>: IDS dient der defensiven Erkennung von Angriffen auf eigene Systeme. Keine Angriffswerkzeuge.
         </div>
-        <h1 className="text-4xl font-bold mb-4">OpenClaw Intrusion Detection Setup</h1>
-        <p className="text-lg text-gray-600 mb-8">Früherkennung von Angriffen auf OpenClaw — OSSEC für Log-Analyse, Fail2ban für automatisches IP-Blocking und Suricata für Netzwerk-IDS.</p>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">OpenClaw Intrusion Detection Setup</h1>
+        <p className="text-lg text-gray-300 mb-8">Früherkennung von Angriffen auf OpenClaw — OSSEC für Log-Analyse, Fail2ban für automatisches IP-Blocking und Suricata für Netzwerk-IDS.</p>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">🔐 Fail2ban Konfiguration</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">🔐 Fail2ban Konfiguration</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm">
             <pre>{`# /etc/fail2ban/jail.local — OpenClaw Konfiguration
 
@@ -77,7 +77,7 @@ failregex = ^<HOST> .* POST /api/auth/activate HTTP.* 401
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">📊 IDS Alert Levels</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">📊 IDS Alert Levels</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {[
               { level: 'Level 15 (Critical)', desc: 'Rootkit oder System Compromise', action: 'Sofort-Alert + Auto-Block', color: 'red' },
@@ -85,22 +85,22 @@ failregex = ^<HOST> .* POST /api/auth/activate HTTP.* 401
               { level: 'Level 8 (Medium)', desc: 'Wiederholte Auth-Fehler', action: 'Fail2ban Block + Log', color: 'yellow' },
               { level: 'Level 5 (Low)', desc: 'Einzelne fehlgeschlagene Logins', action: 'Log + Statistik', color: 'green' },
             ].map(({ level, desc, action, color }) => (
-              <div key={level} className={`p-4 rounded-lg border ${color === 'red' ? 'bg-red-50 border-red-200' : color === 'orange' ? 'bg-orange-50 border-orange-200' : color === 'yellow' ? 'bg-yellow-50 border-yellow-200' : 'bg-green-50 border-green-200'}`}>
+              <div key={level} className={`p-4 rounded-lg border ${color === 'red' ? 'bg-red-900 border-red-700' : color === 'orange' ? 'bg-orange-50 border-orange-700' : color === 'yellow' ? 'bg-amber-900 border-yellow-700' : 'bg-green-900 border-green-700'}`}>
                 <div className="font-bold text-sm mb-1">{level}</div>
-                <div className="text-sm text-gray-700 mb-2">{desc}</div>
-                <div className="text-xs text-gray-500 font-mono">{action}</div>
+                <div className="text-sm text-gray-300 mb-2">{desc}</div>
+                <div className="text-xs text-gray-400 font-mono">{action}</div>
               </div>
             ))}
           </div>
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">🔗 Weiterführende Ressourcen</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">🔗 Weiterführende Ressourcen</h2>
           <div className="grid grid-cols-2 gap-4">
-            <a href="/securitycheck" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">🛡️ Security Check</div><div className="text-sm text-gray-600">IDS Assessment</div></a>
-            <a href="/neuro" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">🧠 Neuro AI</div><div className="text-sm text-gray-600">AI Threat Detection</div></a>
-            <a href="/runbooks" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">📚 IDS Runbooks</div><div className="text-sm text-gray-600">Detection Guides</div></a>
-            <a href="/oracle" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">🔮 Oracle</div><div className="text-sm text-gray-600">Threat Intelligence</div></a>
+            <a href="/securitycheck" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700"><div className="font-semibold text-cyan-400">🛡️ Security Check</div><div className="text-sm text-gray-300">IDS Assessment</div></a>
+            <a href="/neuro" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700"><div className="font-semibold text-cyan-400">🧠 Neuro AI</div><div className="text-sm text-gray-300">AI Threat Detection</div></a>
+            <a href="/runbooks" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700"><div className="font-semibold text-cyan-400">📚 IDS Runbooks</div><div className="text-sm text-gray-300">Detection Guides</div></a>
+            <a href="/oracle" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700"><div className="font-semibold text-cyan-400">🔮 Oracle</div><div className="text-sm text-gray-300">Threat Intelligence</div></a>
           </div>
         </section>
       </div>

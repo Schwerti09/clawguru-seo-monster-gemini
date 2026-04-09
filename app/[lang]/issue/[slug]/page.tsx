@@ -81,7 +81,7 @@ export default async function LocaleIssueHubPage(props: { params: { lang: string
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }} />
       <div className="py-16 max-w-6xl mx-auto">
-        <nav className="text-sm text-gray-500 mb-6" aria-label="Breadcrumb">
+        <nav className="text-sm text-gray-400 mb-6" aria-label="Breadcrumb">
           <ol className="flex flex-wrap items-center gap-2">
             <li><a href={prefix} className="hover:text-cyan-400">ClawGuru</a></li>
             <li>/</li>
@@ -108,7 +108,7 @@ export default async function LocaleIssueHubPage(props: { params: { lang: string
               href={`${prefix}/runbook/${r.slug}`}
               className="p-6 rounded-3xl border border-gray-800 bg-black/25 hover:bg-black/35 transition-colors"
             >
-              <div className="text-xs uppercase tracking-widest text-gray-500">Runbook</div>
+              <div className="text-xs uppercase tracking-widest text-gray-400">Runbook</div>
               <div className="text-base font-bold mt-2 line-clamp-2">{r.title}</div>
               <div className="text-sm text-gray-400 mt-2 line-clamp-3">{r.summary}</div>
               <div className="mt-3 flex flex-wrap gap-1">
@@ -122,7 +122,7 @@ export default async function LocaleIssueHubPage(props: { params: { lang: string
           ))}
         </div>
 
-        <div className="mt-12 text-sm text-gray-500">
+        <div className="mt-12 text-sm text-gray-400">
           <a href={`${prefix}/issues`} className="hover:text-cyan-400">← Alle Issues</a> ·{" "}
           <a href={`${prefix}/services`} className="hover:text-cyan-400">Service Hubs</a> ·{" "}
           <a href={`${prefix}/runbooks`} className="hover:text-cyan-400">Runbook Library</a>

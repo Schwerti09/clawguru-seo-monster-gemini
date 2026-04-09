@@ -40,17 +40,17 @@ export default function MicroservicesSecurityPage({ params }: PageProps) {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-4xl mx-auto">
-        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-8 text-sm">
-          <strong>"Not a Pentest" Notice</strong>: This guide is for hardening your own systems. No attack tools.
+        <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: This guide is for hardening your own systems. No attack tools.
         </div>
-        <h1 className="text-4xl font-bold mb-4">Microservices Security: Architecture Patterns</h1>
-        <p className="text-lg text-gray-600 mb-8">Complete microservices security implementation with zero-trust architecture, API gateway security, and service mesh patterns.</p>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">Microservices Security: Architecture Patterns</h1>
+        <p className="text-lg text-gray-300 mb-8">Complete microservices security implementation with zero-trust architecture, API gateway security, and service mesh patterns.</p>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Microservices Security Fundamentals</h2>
-          <div className="bg-gray-100 p-4 rounded-lg mb-4">
-            <h3 className="font-semibold mb-2">Core Security Principles</h3>
-            <ul className="list-disc list-inside space-y-1">
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Microservices Security Fundamentals</h2>
+          <div className="bg-gray-800 p-4 rounded-lg mb-4 border border-gray-700">
+            <h3 className="font-semibold mb-2 text-gray-100">Core Security Principles</h3>
+            <ul className="list-disc list-inside space-y-1 text-gray-300">
               <li>Zero-trust network architecture</li>
               <li>Defense in depth strategy</li>
               <li>Least privilege access controls</li>
@@ -61,7 +61,7 @@ export default function MicroservicesSecurityPage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Zero-Trust Architecture</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Zero-Trust Architecture</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto">
             <pre>
 {`# Zero-Trust Network Policy Example
@@ -133,7 +133,7 @@ roleRef:
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">API Gateway Security</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">API Gateway Security</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto">
             <pre>
 {`# Kong API Gateway Security Configuration
@@ -198,7 +198,7 @@ stringData:
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Container Security Patterns</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Container Security Patterns</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto">
             <pre>
 {`# Secure Container Configuration
@@ -270,7 +270,7 @@ spec:
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Service Mesh Integration</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Service Mesh Integration</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto">
             <pre>
 {`# Istio Service Mesh Security
@@ -344,45 +344,45 @@ spec:
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Security Best Practices</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Security Best Practices</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="bg-blue-100 p-4 rounded-lg">
-              <h3 className="font-semibold text-blue-800 mb-2">Image Security</h3>
-              <p className="text-sm text-blue-700">Use minimal base images, scan for vulnerabilities, and sign images with cosign.</p>
+            <div className="bg-blue-900 p-4 rounded-lg border border-blue-700">
+              <h3 className="font-semibold text-blue-300 mb-2">Image Security</h3>
+              <p className="text-sm text-blue-200">Use minimal base images, scan for vulnerabilities, and sign images with cosign.</p>
             </div>
-            <div className="bg-green-100 p-4 rounded-lg">
-              <h3 className="font-semibold text-green-800 mb-2">Secrets Management</h3>
-              <p className="text-sm text-green-700">Never store secrets in containers, use external secret management systems.</p>
+            <div className="bg-green-900 p-4 rounded-lg border border-green-700">
+              <h3 className="font-semibold text-green-300 mb-2">Secrets Management</h3>
+              <p className="text-sm text-green-200">Never store secrets in containers, use external secret management systems.</p>
             </div>
-            <div className="bg-yellow-100 p-4 rounded-lg">
-              <h3 className="font-semibold text-yellow-800 mb-2">Network Segmentation</h3>
-              <p className="text-sm text-yellow-700">Implement network policies and service mesh for defense in depth.</p>
+            <div className="bg-yellow-900 p-4 rounded-lg border border-yellow-700">
+              <h3 className="font-semibold text-yellow-300 mb-2">Network Segmentation</h3>
+              <p className="text-sm text-yellow-200">Implement network policies and service mesh for defense in depth.</p>
             </div>
-            <div className="bg-red-100 p-4 rounded-lg">
-              <h3 className="font-semibold text-red-800 mb-2">Observability</h3>
-              <p className="text-sm text-red-700">Comprehensive logging, metrics, and tracing for security monitoring.</p>
+            <div className="bg-red-900 p-4 rounded-lg border border-red-700">
+              <h3 className="font-semibold text-red-300 mb-2">Observability</h3>
+              <p className="text-sm text-red-200">Comprehensive logging, metrics, and tracing for security monitoring.</p>
             </div>
           </div>
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Further Resources</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Further Resources</h2>
           <div className="grid grid-cols-2 gap-4">
-            <a href={`/${locale}/securitycheck`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
-              <div className="font-semibold text-blue-600">Security Check</div>
-              <div className="text-sm text-gray-600">Scan your system now</div>
+            <a href={`/${locale}/securitycheck`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
+              <div className="font-semibold text-cyan-400">Security Check</div>
+              <div className="text-sm text-gray-300">Scan your system now</div>
             </a>
-            <a href={`/${locale}/runbooks`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
-              <div className="font-semibold text-blue-600">Runbooks</div>
-              <div className="text-sm text-gray-600">600+ security playbooks</div>
+            <a href={`/${locale}/runbooks`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
+              <div className="font-semibold text-cyan-400">Runbooks</div>
+              <div className="text-sm text-gray-300">600+ security playbooks</div>
             </a>
-            <a href={`/${locale}/openclaw`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
-              <div className="font-semibold text-blue-600">OpenClaw Framework</div>
-              <div className="text-sm text-gray-600">Self-hosted security</div>
+            <a href={`/${locale}/openclaw`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
+              <div className="font-semibold text-cyan-400">OpenClaw Framework</div>
+              <div className="text-sm text-gray-300">Self-hosted security</div>
             </a>
-            <a href={`/${locale}/solutions/kubernetes-security-hardening`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
-              <div className="font-semibold text-blue-600">Kubernetes Security</div>
-              <div className="text-sm text-gray-600">Complete hardening guide</div>
+            <a href={`/${locale}/solutions/kubernetes-security-hardening`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
+              <div className="font-semibold text-cyan-400">Kubernetes Security</div>
+              <div className="text-sm text-gray-300">Complete hardening guide</div>
             </a>
           </div>
         </section>

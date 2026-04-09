@@ -61,12 +61,12 @@ export default function SbomGenerationPage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">SBOM Standards and Formats</h2>
-          <div className="bg-gray-100 p-6 rounded-lg">
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">SBOM Standards and Formats</h2>
+          <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-gray-100 p-4 rounded-lg">
-                <h3 className="font-bold text-gray-800 mb-3">SPDX (Software Package Data Exchange)</h3>
-                <ul className="space-y-2 text-sm">
+              <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                <h3 className="font-bold text-cyan-400 mb-3">SPDX (Software Package Data Exchange)</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li>Industry standard format</li>
                   <li>Human-readable and machine-readable</li>
                   <li>Supports multiple data models</li>
@@ -74,9 +74,9 @@ export default function SbomGenerationPage({ params }: PageProps) {
                   <li>Relationship between components</li>
                 </ul>
               </div>
-              <div className="bg-gray-100 p-4 rounded-lg">
-                <h3 className="font-bold text-gray-800 mb-3">CycloneDX</h3>
-                <ul className="space-y-2 text-sm">
+              <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                <h3 className="font-bold text-cyan-400 mb-3">CycloneDX</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li>Lightweight XML/JSON format</li>
                   <li>Designed for security analysis</li>
                   <li>Vulnerability integration</li>
@@ -89,7 +89,7 @@ export default function SbomGenerationPage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Automated SBOM Generation</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Automated SBOM Generation</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto">
             <pre>
 {`# SBOM Generation Pipeline
@@ -118,12 +118,12 @@ export default function SbomGenerationPage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">SBOM Generation Tools</h2>
-          <div className="bg-gray-100 p-6 rounded-lg">
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">SBOM Generation Tools</h2>
+          <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-gray-100 p-4 rounded-lg">
-                <h3 className="font-bold text-gray-800 mb-3">Open Source Tools</h3>
-                <ul className="space-y-2 text-sm">
+              <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                <h3 className="font-bold text-cyan-400 mb-3">Open Source Tools</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li>Syft (Anchore)</li>
                   <li>Trivy (Aqua Security)</li>
                   <li>OWASP Dependency Check</li>
@@ -131,9 +131,9 @@ export default function SbomGenerationPage({ params }: PageProps) {
                   <li>CycloneDX CLI</li>
                 </ul>
               </div>
-              <div className="bg-gray-100 p-4 rounded-lg">
-                <h3 className="font-bold text-gray-800 mb-3">Commercial Solutions</h3>
-                <ul className="space-y-2 text-sm">
+              <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                <h3 className="font-bold text-cyan-400 mb-3">Commercial Solutions</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li>Snyk Open Source</li>
                   <li>Black Duck (Synopsys)</li>
                   <li>WhiteSource SCA</li>
@@ -146,12 +146,12 @@ export default function SbomGenerationPage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Integration Framework</h2>
-          <div className="bg-gray-100 p-6 rounded-lg">
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Integration Framework</h2>
+          <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-gray-100 p-4 rounded-lg">
-                <h3 className="font-bold text-gray-800 mb-3">CI/CD Integration</h3>
-                <ul className="space-y-2 text-sm">
+              <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                <h3 className="font-bold text-cyan-400 mb-3">CI/CD Integration</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li>GitHub Actions workflows</li>
                   <li>Jenkins pipeline integration</li>
                   <li>GitLab CI/CD pipelines</li>
@@ -159,9 +159,9 @@ export default function SbomGenerationPage({ params }: PageProps) {
                   <li>Bitbucket pipelines</li>
                 </ul>
               </div>
-              <div className="bg-gray-100 p-4 rounded-lg">
-                <h3 className="font-bold text-gray-800 mb-3">Container Integration</h3>
-                <ul className="space-y-2 text-sm">
+              <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                <h3 className="font-bold text-cyan-400 mb-3">Container Integration</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li>Docker image scanning</li>
                   <li>Kubernetes integration</li>
                   <li>Container registry scanning</li>
@@ -174,7 +174,7 @@ export default function SbomGenerationPage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Vulnerability Management</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Vulnerability Management</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto">
             <pre>
 {`# Vulnerability Management Process
@@ -202,13 +202,13 @@ export default function SbomGenerationPage({ params }: PageProps) {
           </div>
         </section>
 
-        <section className="mb-10 bg-gray-100 p-6 rounded-lg">
-          <h2 className="text-2xl font-semibold mb-4">License Compliance</h2>
-          <div className="bg-gray-100 p-6 rounded-lg">
+        <section className="mb-10">
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">License Compliance</h2>
+          <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-gray-100 p-4 rounded-lg">
-                <h3 className="font-bold text-gray-800 mb-3">License Classification</h3>
-                <ul className="space-y-2 text-sm">
+              <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                <h3 className="font-bold text-cyan-400 mb-3">License Classification</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li>Open source license identification</li>
                   <li>Commercial license detection</li>
                   <li>License compatibility analysis</li>
@@ -216,9 +216,9 @@ export default function SbomGenerationPage({ params }: PageProps) {
                   <li>Obligation tracking</li>
                 </ul>
               </div>
-              <div className="bg-gray-100 p-4 rounded-lg">
-                <h3 className="font-bold text-gray-800 mb-3">Compliance Management</h3>
-                <ul className="space-y-2 text-sm">
+              <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                <h3 className="font-bold text-cyan-400 mb-3">Compliance Management</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li>License policy enforcement</li>
                   <li>Automated compliance checking</li>
                   <li>Legal requirement tracking</li>
@@ -230,44 +230,44 @@ export default function SbomGenerationPage({ params }: PageProps) {
           </div>
         </section>
 
-        <section className="mb-10 bg-gray-100 p-6 rounded-lg">
-          <h2 className="text-2xl font-semibold mb-4">Supply Chain Security</h2>
-          <div className="bg-gray-100 p-6 rounded-lg">
+        <section className="mb-10">
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Supply Chain Security</h2>
+          <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
             <div className="space-y-4">
               <div className="flex items-start space-x-4">
                 <div className="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold flex-shrink-0">1</div>
                 <div>
-                  <div className="font-semibold">Component Verification</div>
-                  <div className="text-sm text-gray-600">Verify authenticity and integrity of software components</div>
+                  <div className="font-semibold text-gray-100">Component Verification</div>
+                  <div className="text-sm text-gray-300">Verify authenticity and integrity of software components</div>
                 </div>
               </div>
               <div className="flex items-start space-x-4">
                 <div className="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold flex-shrink-0">2</div>
                 <div>
-                  <div className="font-semibold">Supply Chain Mapping</div>
-                  <div className="text-sm text-gray-600">Map the complete software supply chain and dependencies</div>
+                  <div className="font-semibold text-gray-100">Supply Chain Mapping</div>
+                  <div className="text-sm text-gray-300">Map the complete software supply chain and dependencies</div>
                 </div>
               </div>
               <div className="flex items-start space-x-4">
                 <div className="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold flex-shrink-0">3</div>
                 <div>
-                  <div className="font-semibold">Risk Assessment</div>
-                  <div className="text-sm text-gray-600">Assess risks associated with third-party components</div>
+                  <div className="font-semibold text-gray-100">Risk Assessment</div>
+                  <div className="text-sm text-gray-300">Assess risks associated with third-party components</div>
                 </div>
               </div>
               <div className="flex items-start space-x-4">
                 <div className="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold flex-shrink-0">4</div>
                 <div>
-                  <div className="font-semibold">Continuous Monitoring</div>
-                  <div className="text-sm text-gray-600">Monitor for new vulnerabilities and security issues</div>
+                  <div className="font-semibold text-gray-100">Continuous Monitoring</div>
+                  <div className="text-sm text-gray-300">Monitor for new vulnerabilities and security issues</div>
                 </div>
               </div>
             </div>
           </div>
         </section>
 
-        <section className="mb-10 bg-gray-100 p-6 rounded-lg">
-          <h2 className="text-2xl font-semibold mb-4">SBOM Analytics and Reporting</h2>
+        <section className="mb-10">
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">SBOM Analytics and Reporting</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto">
             <pre>
 {`# SBOM Analytics Dashboard
@@ -295,35 +295,35 @@ export default function SbomGenerationPage({ params }: PageProps) {
           </div>
         </section>
 
-        <section className="mb-10 bg-gray-100 p-6 rounded-lg">
-          <h2 className="text-2xl font-semibold mb-4">Best Practices</h2>
+        <section className="mb-10">
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Best Practices</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-blue-100 p-4 rounded-lg">
-              <h3 className="font-semibold text-blue-800 mb-2">Regular Updates</h3>
-              <p className="text-sm text-blue-700">Generate SBOMs regularly and keep them up-to-date with component changes</p>
+            <div className="bg-blue-900 p-4 rounded-lg border border-blue-700">
+              <h3 className="font-semibold text-blue-300 mb-2">Regular Updates</h3>
+              <p className="text-sm text-blue-200">Generate SBOMs regularly and keep them up-to-date with component changes</p>
             </div>
-            <div className="bg-green-100 p-4 rounded-lg">
-              <h3 className="font-semibold text-green-800 mb-2">Automated Generation</h3>
-              <p className="text-sm text-green-700">Automate SBOM generation in CI/CD pipelines for consistency</p>
+            <div className="bg-green-900 p-4 rounded-lg border border-green-700">
+              <h3 className="font-semibold text-green-300 mb-2">Automated Generation</h3>
+              <p className="text-sm text-green-200">Automate SBOM generation in CI/CD pipelines for consistency</p>
             </div>
-            <div className="bg-yellow-100 p-4 rounded-lg">
-              <h3 className="font-semibold text-yellow-800 mb-2">Standard Formats</h3>
-              <p className="text-sm text-yellow-700">Use industry-standard formats like SPDX and CycloneDX</p>
+            <div className="bg-yellow-900 p-4 rounded-lg border border-yellow-700">
+              <h3 className="font-semibold text-yellow-300 mb-2">Standard Formats</h3>
+              <p className="text-sm text-yellow-200">Use industry-standard formats like SPDX and CycloneDX</p>
             </div>
-            <div className="bg-red-100 p-4 rounded-lg">
-              <h3 className="font-semibold text-red-800 mb-2">Comprehensive Coverage</h3>
-              <p className="text-sm text-red-700">Ensure all components are included in the SBOM generation</p>
+            <div className="bg-red-900 p-4 rounded-lg border border-red-700">
+              <h3 className="font-semibold text-red-300 mb-2">Comprehensive Coverage</h3>
+              <p className="text-sm text-red-200">Ensure all components are included in the SBOM generation</p>
             </div>
           </div>
         </section>
 
-        <section className="mb-10 bg-gray-100 p-6 rounded-lg">
-          <h2 className="text-2xl font-semibold mb-4">Implementation Examples</h2>
-          <div className="bg-gray-100 p-6 rounded-lg">
+        <section className="mb-10">
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Implementation Examples</h2>
+          <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <h3 className="font-bold text-gray-800 mb-3">Web Application SBOM</h3>
-                <ul className="space-y-2 text-sm">
+                <h3 className="font-bold text-cyan-400 mb-3">Web Application SBOM</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li>Frontend dependencies (npm, yarn)</li>
                   <li>Backend dependencies (pip, maven)</li>
                   <li>Container images</li>
@@ -332,8 +332,8 @@ export default function SbomGenerationPage({ params }: PageProps) {
                 </ul>
               </div>
               <div>
-                <h3 className="font-bold text-gray-800 mb-3">Container SBOM</h3>
-                <ul className="space-y-2 text-sm">
+                <h3 className="font-bold text-cyan-400 mb-3">Container SBOM</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li>Base image components</li>
                   <li>Application packages</li>
                   <li>System libraries</li>
@@ -346,23 +346,23 @@ export default function SbomGenerationPage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Further Resources</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Further Resources</h2>
           <div className="grid grid-cols-2 gap-4">
-            <a href={`/${locale}/securitycheck`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
-              <div className="font-semibold text-blue-600">Security Check</div>
-              <div className="text-sm text-gray-600">Scan your system now</div>
+            <a href={`/${locale}/securitycheck`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
+              <div className="font-semibold text-cyan-400">Security Check</div>
+              <div className="text-sm text-gray-300">Scan your system now</div>
             </a>
-            <a href={`/${locale}/runbooks`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
-              <div className="font-semibold text-blue-600">Runbooks</div>
-              <div className="text-sm text-gray-600">600+ security playbooks</div>
+            <a href={`/${locale}/runbooks`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
+              <div className="font-semibold text-cyan-400">Runbooks</div>
+              <div className="text-sm text-gray-300">600+ security playbooks</div>
             </a>
-            <a href={`/${locale}/openclaw`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
-              <div className="font-semibold text-blue-600">OpenClaw Framework</div>
-              <div className="text-sm text-gray-600">Self-hosted security</div>
+            <a href={`/${locale}/openclaw`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
+              <div className="font-semibold text-cyan-400">OpenClaw Framework</div>
+              <div className="text-sm text-gray-300">Self-hosted security</div>
             </a>
-            <a href={`/${locale}/solutions/kubernetes-security-hardening`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
-              <div className="font-semibold text-blue-600">Kubernetes Security</div>
-              <div className="text-sm text-gray-600">Complete hardening guide</div>
+            <a href={`/${locale}/solutions/kubernetes-security-hardening`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
+              <div className="font-semibold text-cyan-400">Kubernetes Security</div>
+              <div className="text-sm text-gray-300">Complete hardening guide</div>
             </a>
           </div>
         </section>

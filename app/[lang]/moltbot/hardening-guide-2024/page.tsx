@@ -24,14 +24,14 @@ export default function MoltbotHardeningGuidePage({ params }: PageProps) {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-4xl mx-auto">
-        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-8 text-sm">
-          <strong>"Not a Pentest" Trust-Anker</strong>: Dieser Guide dient ausschließlich zur Härtung von Moltbot-Systemen. Keine Angriffswerkzeuge, keine illegalen Aktivitäten.
+        <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
+          <strong className="text-amber-100">"Not a Pentest" Trust-Anker</strong>: Dieser Guide dient ausschließlich zur Härtung von Moltbot-Systemen. Keine Angriffswerkzeuge, keine illegalen Aktivitäten.
         </div>
-        <h1 className="text-4xl font-bold mb-4">Moltbot Hardening Guide 2024</h1>
-        <p className="text-lg text-gray-600 mb-8">Production-ready Security Hardening für Moltbot — Security Headers, Environment-Härtung, Secrets Management und TLS-Konfiguration nach CIS Benchmark.</p>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">Moltbot Hardening Guide 2024</h1>
+        <p className="text-lg text-gray-300 mb-8">Production-ready Security Hardening für Moltbot — Security Headers, Environment-Härtung, Secrets Management und TLS-Konfiguration nach CIS Benchmark.</p>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">🛡️ Security Headers (Next.js)</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">🛡️ Security Headers (Next.js)</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm mb-4">
             <pre>{`// next.config.js — Security Headers
 const securityHeaders = [
@@ -63,7 +63,7 @@ module.exports = {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">🔑 Secrets Management</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">🔑 Secrets Management</h2>
           <div className="bg-gray-900 text-blue-400 p-4 rounded-lg font-mono text-sm mb-4">
             <pre>{`# .env.example — Alle Secrets als Environment Variables
 # ⚠️ NIEMALS echte Werte committen!
@@ -96,7 +96,7 @@ node -e "
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">✅ Hardening Checklist</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">✅ Hardening Checklist</h2>
           <div className="space-y-3">
             {[
               ['Security Headers gesetzt (HSTS, CSP, X-Frame-Options)', true],
@@ -110,32 +110,32 @@ node -e "
               ['Secrets Rotation alle 90 Tage', false],
               ['Penetration Test jährlich', false],
             ].map(([item, done]) => (
-              <div key={item as string} className={`flex items-center gap-3 p-3 rounded-lg ${done ? 'bg-green-50' : 'bg-gray-50'}`}>
+              <div key={item as string} className={`flex items-center gap-3 p-3 rounded-lg ${done ? 'bg-green-900' : 'bg-gray-800'}`}>
                 <span className="text-xl">{done ? '✅' : '⬜'}</span>
-                <span className={`text-sm ${done ? 'text-green-800' : 'text-gray-600'}`}>{item as string}</span>
+                <span className={`text-sm ${done ? 'text-green-300' : 'text-gray-300'}`}>{item as string}</span>
               </div>
             ))}
           </div>
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">🔗 Weiterführende Ressourcen</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">🔗 Weiterführende Ressourcen</h2>
           <div className="grid grid-cols-2 gap-4">
-            <a href="/securitycheck" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
-              <div className="font-semibold text-blue-600">🛡️ Security Check</div>
-              <div className="text-sm text-gray-600">Hardening live prüfen</div>
+            <a href="/securitycheck" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700">
+              <div className="font-semibold text-cyan-400">🛡️ Security Check</div>
+              <div className="text-sm text-gray-300">Hardening live prüfen</div>
             </a>
-            <a href="/roast-my-moltbot" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
-              <div className="font-semibold text-blue-600">🔥 Roast My Moltbot</div>
-              <div className="text-sm text-gray-600">Config testen lassen</div>
+            <a href="/roast-my-moltbot" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700">
+              <div className="font-semibold text-cyan-400">🔥 Roast My Moltbot</div>
+              <div className="text-sm text-gray-300">Config testen lassen</div>
             </a>
-            <a href="/runbooks" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
-              <div className="font-semibold text-blue-600">📚 Runbooks</div>
-              <div className="text-sm text-gray-600">Hardening Playbooks</div>
+            <a href="/runbooks" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700">
+              <div className="font-semibold text-cyan-400">📚 Runbooks</div>
+              <div className="text-sm text-gray-300">Hardening Playbooks</div>
             </a>
-            <a href="/solutions" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
-              <div className="font-semibold text-blue-600">🏢 Enterprise</div>
-              <div className="text-sm text-gray-600">Managed Security</div>
+            <a href="/solutions" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700">
+              <div className="font-semibold text-cyan-400">🏢 Enterprise</div>
+              <div className="text-sm text-gray-300">Managed Security</div>
             </a>
           </div>
         </section>

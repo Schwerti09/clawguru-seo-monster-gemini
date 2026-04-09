@@ -52,19 +52,19 @@ export default function MoltbotVsClawbotPage({ params }: PageProps) {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-4xl mx-auto">
-        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-8 text-sm">
-          <strong>"Not a Pentest" Trust-Anker</strong>: Dieser Vergleich dient ausschließlich zur Entscheidungshilfe bei der Wahl des richtigen Security-Frameworks. Keine Angriffswerkzeuge.
+        <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
+          <strong className="text-amber-100">"Not a Pentest" Trust-Anker</strong>: Dieser Vergleich dient ausschließlich zur Entscheidungshilfe bei der Wahl des richtigen Security-Frameworks. Keine Angriffswerkzeuge.
         </div>
 
         <h1 className="text-4xl font-bold mb-4">Moltbot vs. Clawbot: Security Vergleich 2024</h1>
-        <p className="text-lg text-gray-600 mb-8">
+        <p className="text-lg text-gray-300 mb-8">
           Welches Bot-Security-Framework ist das richtige für dein Unternehmen? Dieser detaillierte Vergleich analysiert Security-Architektur, Performance, Compliance und TCO beider Systeme.
         </p>
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4">🎯 Executive Summary</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-blue-50 p-6 rounded-lg border border-blue-200">
+            <div className="bg-blue-900 p-6 rounded-lg border border-blue-700">
               <h3 className="text-xl font-bold text-blue-800 mb-3">Moltbot</h3>
               <ul className="space-y-2 text-sm">
                 <li>✅ Enterprise-Grade Zero Trust Architektur</li>
@@ -74,7 +74,7 @@ export default function MoltbotVsClawbotPage({ params }: PageProps) {
                 <li>✅ Vollständiges Audit Trail</li>
               </ul>
             </div>
-            <div className="bg-green-50 p-6 rounded-lg border border-green-200">
+            <div className="bg-green-900 p-6 rounded-lg border border-green-700 border border-green-700">
               <h3 className="text-xl font-bold text-green-800 mb-3">Clawbot</h3>
               <ul className="space-y-2 text-sm">
                 <li>✅ Open-Source Security Framework</li>
@@ -111,7 +111,7 @@ export default function MoltbotVsClawbotPage({ params }: PageProps) {
                   ['Rate Limiting', '✅ Distributed', '✅ Local'],
                   ['Secret Management', '✅ Vault-Integration', '⚠️ Env-Vars'],
                 ].map(([feature, moltbot, clawbot]) => (
-                  <tr key={feature} className="border-b hover:bg-gray-50">
+                  <tr key={feature} className="border-b hover:bg-gray-700">
                     <td className="p-3 font-medium">{feature}</td>
                     <td className="p-3 text-center">{moltbot}</td>
                     <td className="p-3 text-center">{clawbot}</td>
@@ -125,7 +125,7 @@ export default function MoltbotVsClawbotPage({ params }: PageProps) {
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4">🏆 Wann welches Framework?</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-blue-50 p-6 rounded-lg">
+            <div className="bg-blue-900 p-6 rounded-lg">
               <h3 className="font-bold text-blue-800 mb-3">Wähle Moltbot wenn...</h3>
               <ul className="space-y-2 text-sm list-disc list-inside">
                 <li>Enterprise mit strengen Compliance-Anforderungen</li>
@@ -135,7 +135,7 @@ export default function MoltbotVsClawbotPage({ params }: PageProps) {
                 <li>GDPR/HIPAA/SOC2 Zertifizierung erforderlich</li>
               </ul>
             </div>
-            <div className="bg-green-50 p-6 rounded-lg">
+            <div className="bg-green-900 p-6 rounded-lg border border-green-700">
               <h3 className="font-bold text-green-800 mb-3">Wähle Clawbot wenn...</h3>
               <ul className="space-y-2 text-sm list-disc list-inside">
                 <li>Startup oder kleines Team</li>
@@ -172,21 +172,21 @@ Winner: Moltbot (Threat Detection Accuracy: 97% vs 74%)`}</pre>
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4">🔗 Weiterführende Ressourcen</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <a href="/securitycheck" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
-              <div className="font-semibold text-blue-600">🛡️ Security Check Tool</div>
-              <div className="text-sm text-gray-600">Analysiere dein aktuelles Setup live</div>
+            <a href="/securitycheck" className="block bg-gray-800 p-4 rounded-lg hover:bg-gray-700 transition-colors border border-gray-700">
+              <div className="font-semibold text-cyan-400">🛡️ Security Check Tool</div>
+              <div className="text-sm text-gray-300">Analysiere dein aktuelles Setup live</div>
             </a>
-            <a href="/roast-my-moltbot" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
-              <div className="font-semibold text-blue-600">🔥 Roast My Moltbot</div>
-              <div className="text-sm text-gray-600">Lass deine Moltbot-Konfiguration testen</div>
+            <a href="/roast-my-moltbot" className="block bg-gray-800 p-4 rounded-lg hover:bg-gray-700 transition-colors border border-gray-700">
+              <div className="font-semibold text-cyan-400">🔥 Roast My Moltbot</div>
+              <div className="text-sm text-gray-300">Lass deine Moltbot-Konfiguration testen</div>
             </a>
-            <a href="/runbooks" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
-              <div className="font-semibold text-blue-600">📚 Security Runbooks</div>
-              <div className="text-sm text-gray-600">Schritt-für-Schritt Implementierungsguides</div>
+            <a href="/runbooks" className="block bg-gray-800 p-4 rounded-lg hover:bg-gray-700 transition-colors border border-gray-700">
+              <div className="font-semibold text-cyan-400">📚 Security Runbooks</div>
+              <div className="text-sm text-gray-300">Schritt-für-Schritt Implementierungsguides</div>
             </a>
-            <a href="/solutions" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
-              <div className="font-semibold text-blue-600">🏢 Enterprise Solutions</div>
-              <div className="text-sm text-gray-600">Maßgeschneiderte Security-Pakete</div>
+            <a href="/solutions" className="block bg-gray-800 p-4 rounded-lg hover:bg-gray-700 transition-colors border border-gray-700">
+              <div className="font-semibold text-cyan-400">🏢 Enterprise Solutions</div>
+              <div className="text-sm text-gray-300">Maßgeschneiderte Security-Pakete</div>
             </a>
           </div>
         </section>

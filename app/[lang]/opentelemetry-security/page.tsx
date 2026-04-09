@@ -86,7 +86,7 @@ export default async function OpenTelemetrySecurityPage({
             </p>
 
             <div className="grid md:grid-cols-3 gap-6 mb-8">
-              <div className="bg-purple-50 border border-purple-200 rounded-xl p-6">
+              <div className="bg-purple-50 border border-purple-700 rounded-xl p-6">
                 <h3 className="font-semibold text-purple-900 mb-2">Receiver Security</h3>
                 <ul className="text-sm text-purple-800 space-y-1">
                   <li>• mTLS Authentication</li>
@@ -104,7 +104,7 @@ export default async function OpenTelemetrySecurityPage({
                   <li>• Tail-based Sampling</li>
                 </ul>
               </div>
-              <div className="bg-blue-50 border border-blue-200 rounded-xl p-6">
+              <div className="bg-blue-900 border border-blue-700 rounded-xl p-6">
                 <h3 className="font-semibold text-blue-900 mb-2">Export Security</h3>
                 <ul className="text-sm text-blue-800 space-y-1">
                   <li>• Secure OTLP</li>

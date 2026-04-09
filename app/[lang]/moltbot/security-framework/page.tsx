@@ -65,25 +65,25 @@ export default function MoltbotSecurityFrameworkPage({ params }: PageProps) {
         <h1 className="text-4xl font-bold mb-6">Moltbot Security Framework: Kompletter Überblick</h1>
         
         <div className="prose prose-lg max-w-none">
-          <p className="text-lg text-gray-600 mb-8">
+          <p className="text-lg text-gray-300 mb-8">
             Fundamentale Architektur und Security-Prinzipien von Moltbot mit Best Practices für 2024. Complete Security Framework Guide mit Implementierungsstrategien.
           </p>
           
-          <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-8">
+          <div className="bg-amber-900 border-l-4 border-amber-500 text-amber-100 p-4 mb-8">
             <p className="text-sm">
-              <strong>"Not a Pentest" Trust-Anker</strong>: Dieser Guide dient ausschließlich zu Bildungs- und Hardening-Zwecken. Keine Angriffswerkzeuge, keine illegalen Aktivitäten.
+              <strong className="text-amber-100">"Not a Pentest" Trust-Anker</strong>: Dieser Guide dient ausschließlich zu Bildungs- und Hardening-Zwecken. Keine Angriffswerkzeuge, keine illegalen Aktivitäten.
             </p>
           </div>
           
           <section className="mb-12">
-            <h2 className="text-2xl font-semibold mb-4">🎯 Executive Summary</h2>
+            <h2 className="text-2xl font-semibold mb-4 text-gray-100">🎯 Executive Summary</h2>
             <p>
               Das <strong>Moltbot Security Framework</strong> stellt einen umfassenden Ansatz für die Absicherung von autonomen Bot-Systemen dar. In einer Zeit, in der AI-gesteuerte Automatisierung kritische Geschäftsprozesse steuert, ist ein robustes Security Framework überlebenswichtig.
             </p>
             
-            <div className="bg-gray-100 p-4 rounded-lg">
-              <h3 className="font-semibold mb-2">Kernprinzipien:</h3>
-              <ul className="list-disc list-inside space-y-1">
+            <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+              <h3 className="font-semibold mb-2 text-gray-100">Kernprinzipien:</h3>
+              <ul className="list-disc list-inside space-y-1 text-gray-300">
                 <li><strong>Zero Trust Architecture</strong> - Jede Anfrage muss verifiziert werden</li>
                 <li><strong>Defense in Depth</strong> - Mehrschichtige Sicherheitskontrollen</li>
                 <li><strong>Secure by Design</strong> - Security von Anfang an integriert</li>
@@ -93,7 +93,7 @@ export default function MoltbotSecurityFrameworkPage({ params }: PageProps) {
           </section>
           
           <section className="mb-12">
-            <h2 className="text-2xl font-semibold mb-4">🏗️ Framework-Architektur</h2>
+            <h2 className="text-2xl font-semibold mb-4 text-gray-100">🏗️ Framework-Architektur</h2>
             
             <div className="mb-8">
               <h3 className="text-xl font-semibold mb-3">Schicht 1: Perimeter Security</h3>
@@ -212,7 +212,7 @@ const tlsConfig = {
           </section>
           
           <section className="mb-12">
-            <h2 className="text-2xl font-semibold mb-4">🔐 Authentication & Authorization</h2>
+            <h2 className="text-2xl font-semibold mb-4 text-gray-100">🔐 Authentication & Authorization</h2>
             
             <div className="mb-8">
               <h3 className="text-xl font-semibold mb-3">Multi-Factor Authentication (MFA)</h3>
@@ -257,7 +257,7 @@ roles:
           </section>
           
           <section className="mb-12">
-            <h2 className="text-2xl font-semibold mb-4">📊 Monitoring & Logging</h2>
+            <h2 className="text-2xl font-semibold mb-4 text-gray-100">📊 Monitoring & Logging</h2>
             
             <div className="mb-8">
               <h3 className="text-xl font-semibold mb-3">Security Event Monitoring</h3>
@@ -284,7 +284,7 @@ interface SecurityEvent {
           </section>
           
           <section className="mb-12">
-            <h2 className="text-2xl font-semibold mb-4">🛡️ Threat Detection & Response</h2>
+            <h2 className="text-2xl font-semibold mb-4 text-gray-100">🛡️ Threat Detection & Response</h2>
             
             <div className="mb-8">
               <h3 className="text-xl font-semibold mb-3">Automated Threat Detection</h3>
@@ -314,7 +314,7 @@ class ThreatDetectionEngine {
           </section>
           
           <section className="mb-12">
-            <h2 className="text-2xl font-semibold mb-4">🔧 Implementation Guide</h2>
+            <h2 className="text-2xl font-semibold mb-4 text-gray-100">🔧 Implementation Guide</h2>
             
             <div className="mb-8">
               <h3 className="text-xl font-semibold mb-3">Step 1: Foundation Setup</h3>
@@ -407,41 +407,41 @@ export class AuthService {
           </section>
           
           <section className="mb-12">
-            <h2 className="text-2xl font-semibold mb-4">🔗 Related Resources</h2>
+            <h2 className="text-2xl font-semibold mb-4 text-gray-100">🔗 Related Resources</h2>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-gray-100 p-6 rounded-lg">
+              <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
                 <h3 className="text-lg font-semibold mb-3">Internal Links</h3>
                 <ul className="space-y-2">
-                  <li><a href="/securitycheck" className="text-blue-600 hover:text-blue-800">Security Check Tool</a> - Live Security Validation</li>
-                  <li><a href="/runbooks" className="text-blue-600 hover:text-blue-800">AI Runbooks</a> - Security Playbooks und Procedures</li>
-                  <li><a href="/openclaw" className="text-blue-600 hover:text-blue-800">OpenClaw Framework</a> - Open Source Security Framework</li>
-                  <li><a href="/roast-my-moltbot" className="text-blue-600 hover:text-blue-800">Roast My Moltbot</a> - Security Testing Tool</li>
-                  <li><a href="/neuro" className="text-blue-600 hover:text-blue-800">Neuro AI Engine</a> - AI-gestützte Threat Detection</li>
-                  <li><a href="/oracle" className="text-blue-600 hover:text-blue-800">Oracle Intelligence</a> - Security Intelligence Platform</li>
+                  <li><a href="/securitycheck" className="text-cyan-400 hover:text-blue-300">Security Check Tool</a> - Live Security Validation</li>
+                  <li><a href="/runbooks" className="text-cyan-400 hover:text-blue-300">AI Runbooks</a> - Security Playbooks und Procedures</li>
+                  <li><a href="/openclaw" className="text-cyan-400 hover:text-blue-300">OpenClaw Framework</a> - Open Source Security Framework</li>
+                  <li><a href="/roast-my-moltbot" className="text-cyan-400 hover:text-blue-300">Roast My Moltbot</a> - Security Testing Tool</li>
+                  <li><a href="/neuro" className="text-cyan-400 hover:text-blue-300">Neuro AI Engine</a> - AI-gestützte Threat Detection</li>
+                  <li><a href="/oracle" className="text-cyan-400 hover:text-blue-300">Oracle Intelligence</a> - Security Intelligence Platform</li>
                 </ul>
               </div>
               
-              <div className="bg-gray-100 p-6 rounded-lg">
+              <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
                 <h3 className="text-lg font-semibold mb-3">External Resources</h3>
                 <ul className="space-y-2">
-                  <li><a href="https://owasp.org/www-project-top-ten/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800">OWASP Top 10</a> - Web Application Security Risks</li>
-                  <li><a href="https://www.nist.gov/cyberframework" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800">NIST Cybersecurity Framework</a> - Security Standards</li>
-                  <li><a href="https://www.cisecurity.org/controls/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800">CIS Controls</a> - Security Best Practices</li>
+                  <li><a href="https://owasp.org/www-project-top-ten/" target="_blank" rel="noopener noreferrer" className="text-cyan-400 hover:text-blue-300">OWASP Top 10</a> - Web Application Security Risks</li>
+                  <li><a href="https://www.nist.gov/cyberframework" target="_blank" rel="noopener noreferrer" className="text-cyan-400 hover:text-blue-300">NIST Cybersecurity Framework</a> - Security Standards</li>
+                  <li><a href="https://www.cisecurity.org/controls/" target="_blank" rel="noopener noreferrer" className="text-cyan-400 hover:text-blue-300">CIS Controls</a> - Security Best Practices</li>
                 </ul>
               </div>
             </div>
           </section>
           
           <section className="mb-12">
-            <h2 className="text-2xl font-semibold mb-4">🎯 Conclusion</h2>
+            <h2 className="text-2xl font-semibold mb-4 text-gray-100">🎯 Conclusion</h2>
             <p>
               Das <strong>Moltbot Security Framework</strong> bietet einen umfassenden, mehrschichtigen Ansatz für die Absicherung autonomer Bot-Systeme. Durch die Implementierung der beschriebenen Architektur, Sicherheitskontrollen und Monitoring-Mechanismen können Organisationen sicherstellen, dass ihre Moltbot-Systeme robust, compliant und zukunftssicher sind.
             </p>
             
-            <div className="bg-gray-100 p-6 rounded-lg">
-              <h3 className="font-semibold mb-2">Key Takeaways:</h3>
-              <ul className="list-disc list-inside space-y-1">
+            <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
+              <h3 className="font-semibold mb-2 text-gray-100">Key Takeaways:</h3>
+              <ul className="list-disc list-inside space-y-1 text-gray-300">
                 <li><strong>Security by Design</strong> - Von Anfang an integrieren</li>
                 <li><strong>Zero Trust</strong> - Jede Anfrage verifizieren</li>
                 <li><strong>Continuous Monitoring</strong> - Permanente Überwachung</li>
@@ -451,22 +451,22 @@ export class AuthService {
             </div>
           </section>
           
-          <div className="bg-blue-50 border-l-4 border-blue-400 p-6 mb-8">
-            <h3 className="font-semibold mb-2">🛡️ Ready to implement?</h3>
-            <p>Starte mit unserem <a href="/securitycheck" className="text-blue-600 hover:text-blue-800 font-semibold">Security Check Tool</a> für eine umfassende Analyse deines aktuellen Security-Status.</p>
+          <div className="bg-blue-900 border-l-4 border-blue-400 p-6 mb-8">
+            <h3 className="font-semibold mb-2 text-gray-100">🛡️ Ready to implement?</h3>
+            <p>Starte mit unserem <a href="/securitycheck" className="text-cyan-400 hover:text-blue-800 font-semibold">Security Check Tool</a> für eine umfassende Analyse deines aktuellen Security-Status.</p>
           </div>
           
-          <div className="bg-green-50 border-l-4 border-green-400 p-6 mb-8">
-            <h3 className="font-semibold mb-2">📚 Need more guidance?</h3>
-            <p>Entdecke unsere <a href="/runbooks" className="text-blue-600 hover:text-blue-800 font-semibold">AI Runbooks</a> für detaillierte Implementierungsanleitungen.</p>
+          <div className="bg-green-900 border-l-4 border-green-400 p-6 mb-8">
+            <h3 className="font-semibold mb-2 text-gray-100">📚 Need more guidance?</h3>
+            <p>Entdecke unsere <a href="/runbooks" className="text-cyan-400 hover:text-blue-800 font-semibold">AI Runbooks</a> für detaillierte Implementierungsanleitungen.</p>
           </div>
           
           <div className="bg-purple-50 border-l-4 border-purple-400 p-6">
-            <h3 className="font-semibold mb-2">🤝 Join the community?</h3>
-            <p>Werde Teil der <a href="/community" className="text-blue-600 hover:text-blue-800 font-semibold">ClawBot Community</a> und tausche dich mit anderen Security-Experten aus.</p>
+            <h3 className="font-semibold mb-2 text-gray-100">🤝 Join the community?</h3>
+            <p>Werde Teil der <a href="/community" className="text-cyan-400 hover:text-blue-800 font-semibold">ClawBot Community</a> und tausche dich mit anderen Security-Experten aus.</p>
           </div>
           
-          <div className="text-center text-sm text-gray-500 mt-12">
+          <div className="text-center text-sm text-gray-400 mt-12">
             <p>Dieser Guide wird regelmäßig aktualisiert, um die neuesten Security-Best Practices und Threat-Landscape-Veränderungen zu berücksichtigen. Letzte Aktualisierung: April 2024.</p>
           </div>
         </div>

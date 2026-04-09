@@ -40,17 +40,17 @@ export default function CicdSecurityPipelinePage({ params }: PageProps) {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-4xl mx-auto">
-        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-8 text-sm">
-          <strong>"Not a Pentest" Notice</strong>: This guide is for hardening your own systems. No attack tools.
+        <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: This guide is for hardening your own systems. No attack tools.
         </div>
-        <h1 className="text-4xl font-bold mb-4">CI/CD Security Pipeline: GitLab DevSecOps Setup</h1>
-        <p className="text-lg text-gray-600 mb-8">Complete DevSecOps pipeline implementation with automated security testing, secrets management, and compliance checks.</p>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">CI/CD Security Pipeline: GitLab DevSecOps Setup</h1>
+        <p className="text-lg text-gray-300 mb-8">Complete DevSecOps pipeline implementation with automated security testing, secrets management, and compliance checks.</p>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Pipeline Security Fundamentals</h2>
-          <div className="bg-gray-100 p-4 rounded-lg mb-4">
-            <h3 className="font-semibold mb-2">Security Stages</h3>
-            <ul className="list-disc list-inside space-y-1">
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Pipeline Security Fundamentals</h2>
+          <div className="bg-gray-800 p-4 rounded-lg mb-4 border border-gray-700">
+            <h3 className="font-semibold mb-2 text-gray-100">Security Stages</h3>
+            <ul className="list-disc list-inside space-y-1 text-gray-300">
               <li>Pre-commit hooks and local validation</li>
               <li>Static Application Security Testing (SAST)</li>
               <li>Dependency scanning and vulnerability checks</li>
@@ -62,7 +62,7 @@ export default function CicdSecurityPipelinePage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">GitLab CI/CD Security Configuration</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">GitLab CI/CD Security Configuration</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto">
             <pre>
 {`# .gitlab-ci.yml - Complete Security Pipeline
@@ -132,7 +132,7 @@ secret-detection:
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Advanced Security Pipeline</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Advanced Security Pipeline</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto">
             <pre>
 {`# Advanced security scanning with custom tools
@@ -183,7 +183,7 @@ dast:
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Security Policy Configuration</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Security Policy Configuration</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto">
             <pre>
 {`# .gitlab/security-policy.yml
@@ -224,45 +224,45 @@ approval_policies:
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Security Best Practices</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Security Best Practices</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="bg-blue-100 p-4 rounded-lg">
-              <h3 className="font-semibold text-blue-800 mb-2">Secrets Management</h3>
-              <p className="text-sm text-blue-700">Use GitLab CI/CD variables with masked secrets and integrate with HashiCorp Vault.</p>
+            <div className="bg-blue-900 p-4 rounded-lg border border-blue-700">
+              <h3 className="font-semibold text-blue-300 mb-2">Secrets Management</h3>
+              <p className="text-sm text-blue-200">Use GitLab CI/CD variables with masked secrets and integrate with HashiCorp Vault.</p>
             </div>
-            <div className="bg-green-100 p-4 rounded-lg">
-              <h3 className="font-semibold text-green-800 mb-2">Fail-Fast Security</h3>
-              <p className="text-sm text-green-700">Fail the pipeline on critical security issues to prevent deployment.</p>
+            <div className="bg-green-900 p-4 rounded-lg border border-green-700">
+              <h3 className="font-semibold text-green-300 mb-2">Fail-Fast Security</h3>
+              <p className="text-sm text-green-200">Fail the pipeline on critical security issues to prevent deployment.</p>
             </div>
-            <div className="bg-yellow-100 p-4 rounded-lg">
-              <h3 className="font-semibold text-yellow-800 mb-2">Compliance Integration</h3>
-              <p className="text-sm text-yellow-700">Integrate compliance checks for SOC2, ISO27001, and GDPR requirements.</p>
+            <div className="bg-yellow-900 p-4 rounded-lg border border-yellow-700">
+              <h3 className="font-semibold text-yellow-300 mb-2">Compliance Integration</h3>
+              <p className="text-sm text-yellow-200">Integrate compliance checks for SOC2, ISO27001, and GDPR requirements.</p>
             </div>
-            <div className="bg-red-100 p-4 rounded-lg">
-              <h3 className="font-semibold text-red-800 mb-2">Continuous Monitoring</h3>
-              <p className="text-sm text-red-700">Monitor pipeline security metrics and maintain audit trails.</p>
+            <div className="bg-red-900 p-4 rounded-lg border border-red-700">
+              <h3 className="font-semibold text-red-300 mb-2">Continuous Monitoring</h3>
+              <p className="text-sm text-red-200">Monitor pipeline security metrics and maintain audit trails.</p>
             </div>
           </div>
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Further Resources</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Further Resources</h2>
           <div className="grid grid-cols-2 gap-4">
-            <a href={`/${locale}/securitycheck`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
-              <div className="font-semibold text-blue-600">Security Check</div>
-              <div className="text-sm text-gray-600">Scan your system now</div>
+            <a href={`/${locale}/securitycheck`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
+              <div className="font-semibold text-cyan-400">Security Check</div>
+              <div className="text-sm text-gray-300">Scan your system now</div>
             </a>
-            <a href={`/${locale}/runbooks`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
-              <div className="font-semibold text-blue-600">Runbooks</div>
-              <div className="text-sm text-gray-600">600+ security playbooks</div>
+            <a href={`/${locale}/runbooks`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
+              <div className="font-semibold text-cyan-400">Runbooks</div>
+              <div className="text-sm text-gray-300">600+ security playbooks</div>
             </a>
-            <a href={`/${locale}/openclaw`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
-              <div className="font-semibold text-blue-600">OpenClaw Framework</div>
-              <div className="text-sm text-gray-600">Self-hosted security</div>
+            <a href={`/${locale}/openclaw`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
+              <div className="font-semibold text-cyan-400">OpenClaw Framework</div>
+              <div className="text-sm text-gray-300">Self-hosted security</div>
             </a>
-            <a href={`/${locale}/solutions/kubernetes-security-hardening`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
-              <div className="font-semibold text-blue-600">Kubernetes Security</div>
-              <div className="text-sm text-gray-600">Complete hardening guide</div>
+            <a href={`/${locale}/solutions/kubernetes-security-hardening`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
+              <div className="font-semibold text-cyan-400">Kubernetes Security</div>
+              <div className="text-sm text-gray-300">Complete hardening guide</div>
             </a>
           </div>
         </section>

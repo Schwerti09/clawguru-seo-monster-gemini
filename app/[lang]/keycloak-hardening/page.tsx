@@ -114,7 +114,7 @@ export default async function KeycloakHardeningPage({
                 : "Keycloak is the central Identity Provider (IdP) for your organization. A compromised Keycloak enables access to ALL connected services. IAM security is critical for Zero Trust."}
             </p>
 
-            <div className="bg-red-50 border-l-4 border-red-500 rounded-r-xl p-6 mb-8">
+            <div className="bg-red-900 border-l-4 border-red-500 rounded-r-xl p-6 mb-8">
               <h3 className="text-red-900 font-semibold mb-2">
                 {isGerman ? "⚠️ Risiken eines unsicheren IAM" : "⚠️ Risks of an Unsecure IAM"}
               </h3>
@@ -133,17 +133,17 @@ export default async function KeycloakHardeningPage({
             <h2 className="text-3xl font-bold text-slate-900 mb-6">Multi-Factor Authentication</h2>
             
             <div className="grid md:grid-cols-3 gap-4 mb-8">
-              <div className="bg-blue-50 border border-blue-200 rounded-xl p-5 text-center">
+              <div className="bg-blue-900 border border-blue-700 rounded-xl p-5 text-center">
                 <div className="text-3xl mb-2">📱</div>
                 <h3 className="font-semibold text-blue-900">TOTP</h3>
                 <p className="text-xs text-blue-700 mt-1">Google/Microsoft Authenticator</p>
               </div>
-              <div className="bg-green-50 border border-green-200 rounded-xl p-5 text-center">
+              <div className="bg-green-900 border border-green-700 rounded-xl p-5 text-center">
                 <div className="text-3xl mb-2">🔑</div>
                 <h3 className="font-semibold text-green-900">WebAuthn</h3>
                 <p className="text-xs text-green-700 mt-1">YubiKey/FIDO2</p>
               </div>
-              <div className="bg-purple-50 border border-purple-200 rounded-xl p-5 text-center">
+              <div className="bg-purple-50 border border-purple-700 rounded-xl p-5 text-center">
                 <div className="text-3xl mb-2">📧</div>
                 <h3 className="font-semibold text-purple-900">OTP Email</h3>
                 <p className="text-xs text-purple-700 mt-1">Email-based (fallback)</p>
@@ -240,44 +240,44 @@ export default async function KeycloakHardeningPage({
             <h2 className="text-3xl font-bold text-slate-900 mb-6">Session & Token Management</h2>
             
             <div className="grid md:grid-cols-2 gap-6 mb-8">
-              <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-6">
+              <div className="bg-amber-900 border border-yellow-700 rounded-xl p-6">
                 <h3 className="font-semibold text-yellow-900 mb-3">SSO Session Settings</h3>
                 <div className="space-y-3 text-sm">
                   <div className="flex justify-between">
-                    <span className="text-yellow-800">SSO Session Idle:</span>
+                    <span className="text-yellow-300">SSO Session Idle:</span>
                     <span className="font-medium text-yellow-900">30 Minuten</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-yellow-800">SSO Session Max:</span>
+                    <span className="text-yellow-300">SSO Session Max:</span>
                     <span className="font-medium text-yellow-900">10 Stunden</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-yellow-800">Offline Session Idle:</span>
+                    <span className="text-yellow-300">Offline Session Idle:</span>
                     <span className="font-medium text-yellow-900">7 Tage</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-yellow-800">Login Timeout:</span>
+                    <span className="text-yellow-300">Login Timeout:</span>
                     <span className="font-medium text-yellow-900">30 Minuten</span>
                   </div>
                 </div>
               </div>
-              <div className="bg-green-50 border border-green-200 rounded-xl p-6">
+              <div className="bg-green-900 border border-green-700 rounded-xl p-6">
                 <h3 className="font-semibold text-green-900 mb-3">Token Settings</h3>
                 <div className="space-y-3 text-sm">
                   <div className="flex justify-between">
-                    <span className="text-green-800">Access Token:</span>
+                    <span className="text-green-300">Access Token:</span>
                     <span className="font-medium text-green-900">5 Minuten</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-green-800">Refresh Token:</span>
+                    <span className="text-green-300">Refresh Token:</span>
                     <span className="font-medium text-green-900">30 Tage</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-green-800">ID Token:</span>
+                    <span className="text-green-300">ID Token:</span>
                     <span className="font-medium text-green-900">5 Minuten</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-green-800">Revoke Refresh:</span>
+                    <span className="text-green-300">Revoke Refresh:</span>
                     <span className="font-medium text-green-900">✓ Enabled</span>
                   </div>
                 </div>
@@ -316,11 +316,11 @@ ID Token Signature Algorithm: ES256
                 </div>
               </div>
 
-              <div className="bg-red-50 border border-red-200 rounded-xl p-6">
+              <div className="bg-red-900 border border-red-700 rounded-xl p-6">
                 <h3 className="font-semibold text-red-900 mb-3">Public vs Confidential Clients</h3>
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
-                    <h4 className="font-medium text-red-800 mb-2">Confidential (Backend)</h4>
+                    <h4 className="font-medium text-red-300 mb-2">Confidential (Backend)</h4>
                     <ul className="text-sm text-red-700 space-y-1">
                       <li>• Client Secret required</li>
                       <li>• Authorization Code Flow</li>
@@ -329,7 +329,7 @@ ID Token Signature Algorithm: ES256
                     </ul>
                   </div>
                   <div>
-                    <h4 className="font-medium text-red-800 mb-2">Public (SPA/Mobile)</h4>
+                    <h4 className="font-medium text-red-300 mb-2">Public (SPA/Mobile)</h4>
                     <ul className="text-sm text-red-700 space-y-1">
                       <li>• No client secret</li>
                       <li>• PKCE REQUIRED</li>
@@ -470,7 +470,7 @@ Enabled Event Types:
             </p>
             <a 
               href={coreLinks.check} 
-              className="inline-block px-6 py-3 bg-white text-blue-600 rounded-lg font-semibold hover:bg-slate-100 transition-colors"
+              className="inline-block px-6 py-3 bg-white text-cyan-400 rounded-lg font-semibold hover:bg-slate-100 transition-colors"
             >
               {isGerman ? "Assessment Starten" : "Start Assessment"}
             </a>

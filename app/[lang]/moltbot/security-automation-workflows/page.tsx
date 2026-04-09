@@ -24,14 +24,14 @@ export default function MoltbotAutomationPage({ params }: PageProps) {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-4xl mx-auto">
-        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-8 text-sm">
-          <strong>"Not a Pentest" Trust-Anker</strong>: Security Automation automatisiert Verteidigungsmaßnahmen. Keine Angriffswerkzeuge.
+        <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
+          <strong className="text-amber-100">"Not a Pentest" Trust-Anker</strong>: Security Automation automatisiert Verteidigungsmaßnahmen. Keine Angriffswerkzeuge.
         </div>
-        <h1 className="text-4xl font-bold mb-4">Moltbot Security Automation Workflows</h1>
-        <p className="text-lg text-gray-600 mb-8">Manual Security-Response dauert Stunden. Automatisierte Workflows reduzieren Incident-Response-Zeit von Stunden auf Minuten.</p>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">Moltbot Security Automation Workflows</h1>
+        <p className="text-lg text-gray-300 mb-8">Manual Security-Response dauert Stunden. Automatisierte Workflows reduzieren Incident-Response-Zeit von Stunden auf Minuten.</p>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Workflow-Engine Architektur</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Workflow-Engine Architektur</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm overflow-x-auto">
             <pre>{`// Moltbot Workflow Engine
 class SecurityWorkflow {
@@ -120,7 +120,7 @@ const incidentResponse = new SecurityWorkflow('incident_response', [
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Webhook Integration Patterns</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Webhook Integration Patterns</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm overflow-x-auto">
             <pre>{`// Webhook Handler für Security Events
 export async function handleSecurityWebhook(req, res) {
@@ -163,7 +163,7 @@ app.post('/api/webhooks/github', handleSecurityWebhook);`}</pre>
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Playbook Templates</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Playbook Templates</h2>
           <div className="space-y-4">
             {[
               {
@@ -185,9 +185,9 @@ app.post('/api/webhooks/github', handleSecurityWebhook);`}</pre>
                 duration: '30-60 min'
               },
             ].map((template) => (
-              <div key={template.name} className="bg-gray-50 p-4 rounded-lg border">
+              <div key={template.name} className="bg-gray-800 p-4 rounded-lg border border-gray-700 border">
                 <div className="font-semibold text-lg mb-2">{template.name}</div>
-                <div className="text-sm text-gray-600 mb-2">Trigger: {template.trigger} | Duration: {template.duration}</div>
+                <div className="text-sm text-gray-300 mb-2">Trigger: {template.trigger} | Duration: {template.duration}</div>
                 <div className="flex flex-wrap gap-2">
                   {template.steps.map((step) => (
                     <span key={step} className="bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs">
@@ -201,21 +201,21 @@ app.post('/api/webhooks/github', handleSecurityWebhook);`}</pre>
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Resources</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Resources</h2>
           <div className="space-y-4">
-            <div className="bg-gray-50 p-4 rounded-lg border">
+            <div className="bg-gray-800 p-4 rounded-lg border border-gray-700 border">
               <div className="font-semibold text-lg mb-2">Moltbot Documentation</div>
-              <div className="text-sm text-gray-600 mb-2">Learn more about Moltbot and its features.</div>
+              <div className="text-sm text-gray-300 mb-2">Learn more about Moltbot and its features.</div>
               <a href="https://moltbot.com/docs" target="_blank" rel="noopener noreferrer" className="text-blue-700 hover:text-blue-900">Visit Documentation</a>
             </div>
-            <div className="bg-gray-50 p-4 rounded-lg border">
+            <div className="bg-gray-800 p-4 rounded-lg border border-gray-700 border">
               <div className="font-semibold text-lg mb-2">Moltbot Community</div>
-              <div className="text-sm text-gray-600 mb-2">Join the Moltbot community to connect with other users and get support.</div>
+              <div className="text-sm text-gray-300 mb-2">Join the Moltbot community to connect with other users and get support.</div>
               <a href="https://moltbot.com/community" target="_blank" rel="noopener noreferrer" className="text-blue-700 hover:text-blue-900">Visit Community</a>
             </div>
-            <div className="bg-gray-50 p-4 rounded-lg border">
+            <div className="bg-gray-800 p-4 rounded-lg border border-gray-700 border">
               <div className="font-semibold text-lg mb-2">Moltbot GitHub</div>
-              <div className="text-sm text-gray-600 mb-2">Explore Moltbot's open-source code and contribute to the project.</div>
+              <div className="text-sm text-gray-300 mb-2">Explore Moltbot's open-source code and contribute to the project.</div>
               <a href="https://github.com/moltbot" target="_blank" rel="noopener noreferrer" className="text-blue-700 hover:text-blue-900">Visit GitHub</a>
             </div>
           </div>

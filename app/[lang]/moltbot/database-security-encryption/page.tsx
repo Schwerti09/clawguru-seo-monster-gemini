@@ -24,14 +24,14 @@ export default function MoltbotDatabaseSecurityPage({ params }: PageProps) {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-4xl mx-auto">
-        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-8 text-sm">
-          <strong>"Not a Pentest" Trust-Anker</strong>: Dieser Guide dient ausschließlich zur Absicherung von Datenbanken. Keine Angriffswerkzeuge, keine illegalen Aktivitäten.
+        <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
+          <strong className="text-amber-100">"Not a Pentest" Trust-Anker</strong>: Dieser Guide dient ausschließlich zur Absicherung von Datenbanken. Keine Angriffswerkzeuge, keine illegalen Aktivitäten.
         </div>
-        <h1 className="text-4xl font-bold mb-4">Moltbot Database Security: Encryption &amp; Access Control</h1>
-        <p className="text-lg text-gray-600 mb-8">Vollständige Datenbankabsicherung für Moltbot — Encryption at Rest und in Transit, Row-Level Security, SQL-Injection Prevention und Audit Logging.</p>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">Moltbot Database Security: Encryption &amp; Access Control</h1>
+        <p className="text-lg text-gray-300 mb-8">Vollständige Datenbankabsicherung für Moltbot — Encryption at Rest und in Transit, Row-Level Security, SQL-Injection Prevention und Audit Logging.</p>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">🔒 Encryption at Rest mit pgcrypto</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">🔒 Encryption at Rest mit pgcrypto</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm mb-4">
             <pre>{`-- PostgreSQL: Sensitive data encryption
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
@@ -63,7 +63,7 @@ WHERE customer_id = $1 AND secret_name = $2;`}</pre>
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">🔐 Row-Level Security (RLS)</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">🔐 Row-Level Security (RLS)</h2>
           <div className="bg-gray-900 text-blue-400 p-4 rounded-lg font-mono text-sm mb-4">
             <pre>{`-- Enable RLS for tenant isolation
 ALTER TABLE moltbot_data ENABLE ROW LEVEL SECURITY;
@@ -83,7 +83,7 @@ ALTER TABLE moltbot_data FORCE ROW LEVEL SECURITY;`}</pre>
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">🛡️ SQL-Injection Prevention</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">🛡️ SQL-Injection Prevention</h2>
           <div className="bg-gray-900 text-yellow-400 p-4 rounded-lg font-mono text-sm mb-4">
             <pre>{`// moltbot/lib/db.ts — immer parameterisierte Queries
 import { Pool } from 'pg';
@@ -111,23 +111,23 @@ export async function getCustomerData(customerId: string) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">🔗 Weiterführende Ressourcen</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">🔗 Weiterführende Ressourcen</h2>
           <div className="grid grid-cols-2 gap-4">
-            <a href="/securitycheck" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
-              <div className="font-semibold text-blue-600">🛡️ Security Check</div>
-              <div className="text-sm text-gray-600">Datenbankabsicherung prüfen</div>
+            <a href="/securitycheck" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700">
+              <div className="font-semibold text-cyan-400">🛡️ Security Check</div>
+              <div className="text-sm text-gray-300">Datenbankabsicherung prüfen</div>
             </a>
-            <a href="/runbooks" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
-              <div className="font-semibold text-blue-600">📚 DB Runbooks</div>
-              <div className="text-sm text-gray-600">Database Security Guides</div>
+            <a href="/runbooks" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700">
+              <div className="font-semibold text-cyan-400">📚 DB Runbooks</div>
+              <div className="text-sm text-gray-300">Database Security Guides</div>
             </a>
-            <a href="/oracle" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
-              <div className="font-semibold text-blue-600">🔮 Oracle</div>
-              <div className="text-sm text-gray-600">Security Intelligence</div>
+            <a href="/oracle" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700">
+              <div className="font-semibold text-cyan-400">🔮 Oracle</div>
+              <div className="text-sm text-gray-300">Security Intelligence</div>
             </a>
-            <a href="/solutions" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
-              <div className="font-semibold text-blue-600">🏢 Enterprise</div>
-              <div className="text-sm text-gray-600">GDPR/HIPAA Compliance</div>
+            <a href="/solutions" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700">
+              <div className="font-semibold text-cyan-400">🏢 Enterprise</div>
+              <div className="text-sm text-gray-300">GDPR/HIPAA Compliance</div>
             </a>
           </div>
         </section>

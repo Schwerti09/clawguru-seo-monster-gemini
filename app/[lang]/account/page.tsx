@@ -82,7 +82,7 @@ function AccessRequired({ locale }: { locale: Locale }) {
         <div className="mt-10 flex flex-wrap gap-4 justify-center">
           <Link
             href={`${prefix}/pricing`}
-            className="px-8 py-4 rounded-2xl bg-white text-black font-semibold text-lg hover:bg-gray-200 transition"
+            className="px-8 py-4 rounded-2xl bg-white text-black font-semibold text-lg hover:bg-gray-700 transition"
           >
             Preise ansehen & kaufen
           </Link>

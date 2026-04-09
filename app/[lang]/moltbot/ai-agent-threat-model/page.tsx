@@ -89,7 +89,7 @@ export default function AiAgentThreatModelPage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Threat Modeling Framework</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Threat Modeling Framework</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto">
             <pre>
 {`# AI Agent Threat Modeling Process
@@ -116,28 +116,28 @@ export default function AiAgentThreatModelPage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Attack Vector Analysis</h2>
-          <div className="bg-gray-100 p-6 rounded-lg">
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Attack Vector Analysis</h2>
+          <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
             <div className="space-y-4">
               <div className="border-l-4 border-red-600 pl-4">
-                <h3 className="font-bold text-red-800 mb-2">Prompt Injection</h3>
-                <p className="text-sm text-gray-700 mb-2">Malicious input manipulation to alter agent behavior</p>
-                <p className="text-sm text-green-600"><strong>Mitigation:</strong> Input validation, prompt sanitization, behavior monitoring</p>
+                <h3 className="font-bold text-red-300 mb-2">Prompt Injection</h3>
+                <p className="text-sm text-gray-300 mb-2">Malicious input manipulation to alter agent behavior</p>
+                <p className="text-sm text-green-400"><strong>Mitigation:</strong> Input validation, prompt sanitization, behavior monitoring</p>
               </div>
               <div className="border-l-4 border-orange-600 pl-4">
-                <h3 className="font-bold text-orange-800 mb-2">Data Poisoning</h3>
-                <p className="text-sm text-gray-700 mb-2">Contamination of training data to influence model behavior</p>
-                <p className="text-sm text-green-600"><strong>Mitigation:</strong> Data provenance, anomaly detection, model validation</p>
+                <h3 className="font-bold text-orange-300 mb-2">Data Poisoning</h3>
+                <p className="text-sm text-gray-300 mb-2">Contamination of training data to influence model behavior</p>
+                <p className="text-sm text-green-400"><strong>Mitigation:</strong> Data provenance, anomaly detection, model validation</p>
               </div>
               <div className="border-l-4 border-yellow-600 pl-4">
-                <h3 className="font-bold text-yellow-800 mb-2">Model Extraction</h3>
-                <p className="text-sm text-gray-700 mb-2">Reverse engineering of model parameters and training data</p>
-                <p className="text-sm text-green-600"><strong>Mitigation:</strong> Access controls, query limits, differential privacy</p>
+                <h3 className="font-bold text-yellow-300 mb-2">Model Extraction</h3>
+                <p className="text-sm text-gray-300 mb-2">Reverse engineering of model parameters and training data</p>
+                <p className="text-sm text-green-400"><strong>Mitigation:</strong> Access controls, query limits, differential privacy</p>
               </div>
               <div className="border-l-4 border-blue-600 pl-4">
-                <h3 className="font-bold text-blue-800 mb-2">Goal Hijacking</h3>
-                <p className="text-sm text-gray-700 mb-2">Manipulation of agent objectives to achieve malicious goals</p>
-                <p className="text-sm text-green-600"><strong>Mitigation:</strong> Objective validation, behavior monitoring, safety constraints</p>
+                <h3 className="font-bold text-blue-300 mb-2">Goal Hijacking</h3>
+                <p className="text-sm text-gray-300 mb-2">Manipulation of agent objectives to achieve malicious goals</p>
+                <p className="text-sm text-green-400"><strong>Mitigation:</strong> Objective validation, behavior monitoring, safety constraints</p>
               </div>
             </div>
           </div>
@@ -194,7 +194,7 @@ export default function AiAgentThreatModelPage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">AI Agent Security Architecture</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">AI Agent Security Architecture</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto">
             <pre>
 {`# Secure AI Agent Architecture

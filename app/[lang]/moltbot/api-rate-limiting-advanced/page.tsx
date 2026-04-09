@@ -50,21 +50,21 @@ export default function MoltbotRateLimitPage({ params }: PageProps) {
 
       <div className="max-w-4xl mx-auto">
 
-        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-8 text-sm">
+        <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
 
-          <strong>"Not a Pentest" Trust-Anker</strong>: Rate Limiting schützt eigene APIs vor Überlastung. Keine Angriffswerkzeuge.
+          <strong className="text-amber-100">"Not a Pentest" Trust-Anker</strong>: Rate Limiting schützt eigene APIs vor Überlastung. Keine Angriffswerkzeuge.
 
         </div>
 
-        <h1 className="text-4xl font-bold mb-4">Moltbot API Rate Limiting Advanced</h1>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">Moltbot API Rate Limiting Advanced</h1>
 
-        <p className="text-lg text-gray-600 mb-8">Ohne Rate Limiting sind APIs anfällig für DDoS und Abuse. Redis-basierte Sliding Window Algorithmen sind heute State-of-the-Art.</p>
+        <p className="text-lg text-gray-300 mb-8">Ohne Rate Limiting sind APIs anfällig für DDoS und Abuse. Redis-basierte Sliding Window Algorithmen sind heute State-of-the-Art.</p>
 
 
 
         <section className="mb-10">
 
-          <h2 className="text-2xl font-semibold mb-4">Rate Limiting Strategien</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Rate Limiting Strategien</h2>
 
           <div className="overflow-x-auto">
 
@@ -86,7 +86,7 @@ export default function MoltbotRateLimitPage({ params }: PageProps) {
 
                 ].map(([strategy, use, storage, accuracy]) => (
 
-                  <tr key={strategy} className="border-b hover:bg-gray-50">
+                  <tr key={strategy} className="border-b hover:bg-gray-800">
 
                     <td className="p-3 font-medium">{strategy}</td>
 
@@ -112,7 +112,7 @@ export default function MoltbotRateLimitPage({ params }: PageProps) {
 
         <section className="mb-10">
 
-          <h2 className="text-2xl font-semibold mb-4">Redis Sliding Window Implementation</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Redis Sliding Window Implementation</h2>
 
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm overflow-x-auto">
 
@@ -324,7 +324,7 @@ app.use('/api', rateLimiter.middleware({
 
         <section className="mb-10">
 
-          <h2 className="text-2xl font-semibold mb-4">DDoS Protection Layer</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">DDoS Protection Layer</h2>
 
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm overflow-x-auto">
 
@@ -508,7 +508,7 @@ app.use(async (req, res, next) => {
 
         <section className="mb-10">
 
-          <h2 className="text-2xl font-semibold mb-4">Resources</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Resources</h2>
 
           <ul>
 

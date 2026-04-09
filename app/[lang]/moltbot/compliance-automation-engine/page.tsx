@@ -48,9 +48,9 @@ export default function ComplianceAutomationEnginePage({ params }: PageProps) {
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">Compliance Automation Overview</h2>
-          <div className="bg-gray-100 p-4 rounded-lg mb-4">
-            <h3 className="font-semibold mb-2">Key Benefits</h3>
-            <ul className="list-disc list-inside space-y-1">
+          <div className="bg-gray-800 p-4 rounded-lg mb-4 border border-gray-700">
+            <h3 className="font-semibold mb-2 text-gray-100">Key Benefits</h3>
+            <ul className="list-disc list-inside space-y-1 text-gray-300">
               <li>Automated compliance checking and enforcement</li>
               <li>Real-time policy violation detection</li>
               <li>Continuous compliance monitoring</li>
@@ -61,12 +61,12 @@ export default function ComplianceAutomationEnginePage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Compliance Framework Architecture</h2>
-          <div className="bg-gray-100 p-6 rounded-lg">
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Compliance Framework Architecture</h2>
+          <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-gray-100 p-4 rounded-lg">
-                <h3 className="font-bold text-gray-800 mb-3">Policy Management</h3>
-                <ul className="space-y-2 text-sm">
+              <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                <h3 className="font-bold text-cyan-400 mb-3">Policy Management</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li>Policy definition and modeling</li>
                   <li>Policy version control</li>
                   <li>Policy distribution mechanisms</li>
@@ -74,9 +74,9 @@ export default function ComplianceAutomationEnginePage({ params }: PageProps) {
                   <li>Policy lifecycle management</li>
                 </ul>
               </div>
-              <div className="bg-gray-100 p-4 rounded-lg">
-                <h3 className="font-bold text-gray-800 mb-3">Compliance Checking</h3>
-                <ul className="space-y-2 text-sm">
+              <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                <h3 className="font-bold text-cyan-400 mb-3">Compliance Checking</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li>Automated compliance scanning</li>
                   <li>Real-time compliance monitoring</li>
                   <li>Compliance rule engine</li>
@@ -89,7 +89,7 @@ export default function ComplianceAutomationEnginePage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Regulatory Compliance Standards</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Regulatory Compliance Standards</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto">
             <pre>
 {`# Supported Compliance Standards
@@ -118,12 +118,12 @@ export default function ComplianceAutomationEnginePage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Automation Engine Components</h2>
-          <div className="bg-gray-100 p-6 rounded-lg">
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Automation Engine Components</h2>
+          <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-gray-100 p-4 rounded-lg">
-                <h3 className="font-bold text-gray-800 mb-3">Policy Engine</h3>
-                <ul className="space-y-2 text-sm">
+              <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                <h3 className="font-bold text-cyan-400 mb-3">Policy Engine</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li>Rule-based policy evaluation</li>
                   <li>Policy as Code implementation</li>
                   <li>Dynamic policy updates</li>
@@ -131,9 +131,9 @@ export default function ComplianceAutomationEnginePage({ params }: PageProps) {
                   <li>Policy impact analysis</li>
                 </ul>
               </div>
-              <div className="bg-gray-100 p-4 rounded-lg">
-                <h3 className="font-bold text-gray-800 mb-3">Assessment Engine</h3>
-                <ul className="space-y-2 text-sm">
+              <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                <h3 className="font-bold text-cyan-400 mb-3">Assessment Engine</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li>Automated compliance assessments</li>
                   <li>Evidence collection automation</li>
                   <li>Gap analysis capabilities</li>
@@ -146,35 +146,35 @@ export default function ComplianceAutomationEnginePage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Implementation Framework</h2>
-          <div className="bg-gray-100 p-6 rounded-lg">
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Implementation Framework</h2>
+          <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
             <div className="space-y-4">
               <div className="flex items-start space-x-4">
                 <div className="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold flex-shrink-0">1</div>
                 <div>
-                  <div className="font-semibold">Policy Definition</div>
-                  <div className="text-sm text-gray-600">Define compliance policies and requirements in machine-readable format</div>
+                  <div className="font-semibold text-gray-100">Policy Definition</div>
+                  <div className="text-sm text-gray-300">Define compliance policies and requirements in machine-readable format</div>
                 </div>
               </div>
               <div className="flex items-start space-x-4">
                 <div className="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold flex-shrink-0">2</div>
                 <div>
-                  <div className="font-semibold">Integration Setup</div>
-                  <div className="text-sm text-gray-600">Integrate with existing systems and data sources</div>
+                  <div className="font-semibold text-gray-100">Integration Setup</div>
+                  <div className="text-sm text-gray-300">Integrate with existing systems and data sources</div>
                 </div>
               </div>
               <div className="flex items-start space-x-4">
                 <div className="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold flex-shrink-0">3</div>
                 <div>
-                  <div className="font-semibold">Automation Configuration</div>
-                  <div className="text-sm text-gray-600">Configure automated checks and remediation workflows</div>
+                  <div className="font-semibold text-gray-100">Automation Configuration</div>
+                  <div className="text-sm text-gray-300">Configure automated checks and remediation workflows</div>
                 </div>
               </div>
               <div className="flex items-start space-x-4">
                 <div className="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold flex-shrink-0">4</div>
                 <div>
-                  <div className="font-semibold">Monitoring & Reporting</div>
-                  <div className="text-sm text-gray-600">Set up continuous monitoring and compliance reporting</div>
+                  <div className="font-semibold text-gray-100">Monitoring & Reporting</div>
+                  <div className="text-sm text-gray-300">Set up continuous monitoring and compliance reporting</div>
                 </div>
               </div>
             </div>
@@ -182,7 +182,7 @@ export default function ComplianceAutomationEnginePage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Continuous Monitoring</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Continuous Monitoring</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto">
             <pre>
 {`# Continuous Compliance Monitoring
@@ -211,12 +211,12 @@ export default function ComplianceAutomationEnginePage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Automated Remediation</h2>
-          <div className="bg-gray-100 p-6 rounded-lg">
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Automated Remediation</h2>
+          <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-gray-100 p-4 rounded-lg">
-                <h3 className="font-bold text-gray-800 mb-3">Remediation Workflows</h3>
-                <ul className="space-y-2 text-sm">
+              <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                <h3 className="font-bold text-cyan-400 mb-3">Remediation Workflows</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li>Automated configuration fixes</li>
                   <li>Security policy enforcement</li>
                   <li>Access control adjustments</li>
@@ -224,9 +224,9 @@ export default function ComplianceAutomationEnginePage({ params }: PageProps) {
                   <li>Backup and recovery procedures</li>
                 </ul>
               </div>
-              <div className="bg-gray-100 p-4 rounded-lg">
-                <h3 className="font-bold text-gray-800 mb-3">Integration Capabilities</h3>
-                <ul className="space-y-2 text-sm">
+              <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                <h3 className="font-bold text-cyan-400 mb-3">Integration Capabilities</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li>Configuration management tools</li>
                   <li>Cloud service APIs</li>
                   <li>ITSM system integration</li>
@@ -239,12 +239,12 @@ export default function ComplianceAutomationEnginePage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Reporting and Analytics</h2>
-          <div className="bg-gray-100 p-6 rounded-lg">
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Reporting and Analytics</h2>
+          <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-gray-100 p-4 rounded-lg">
-                <h3 className="font-bold text-gray-800 mb-3">Compliance Dashboards</h3>
-                <ul className="space-y-2 text-sm">
+              <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                <h3 className="font-bold text-cyan-400 mb-3">Compliance Dashboards</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li>Real-time compliance status</li>
                   <li>Compliance score visualization</li>
                   <li>Policy violation tracking</li>
@@ -252,9 +252,9 @@ export default function ComplianceAutomationEnginePage({ params }: PageProps) {
                   <li>Risk assessment dashboards</li>
                 </ul>
               </div>
-              <div className="bg-gray-100 p-4 rounded-lg">
-                <h3 className="font-bold text-gray-800 mb-3">Audit Reports</h3>
-                <ul className="space-y-2 text-sm">
+              <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                <h3 className="font-bold text-cyan-400 mb-3">Audit Reports</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li>Automated audit evidence collection</li>
                   <li>Compliance certification reports</li>
                   <li>Regulatory submission reports</li>
@@ -267,7 +267,7 @@ export default function ComplianceAutomationEnginePage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Integration Framework</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Integration Framework</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto">
             <pre>
 {`# Integration Ecosystem
@@ -296,34 +296,34 @@ export default function ComplianceAutomationEnginePage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Best Practices</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Best Practices</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-blue-100 p-4 rounded-lg">
-              <h3 className="font-semibold text-blue-800 mb-2">Policy as Code</h3>
-              <p className="text-sm text-blue-700">Implement policies as code for version control and automated deployment</p>
+            <div className="bg-blue-900 p-4 rounded-lg border border-blue-700">
+              <h3 className="font-semibold text-blue-300 mb-2">Policy as Code</h3>
+              <p className="text-sm text-blue-200">Implement policies as code for version control and automated deployment</p>
             </div>
-            <div className="bg-green-100 p-4 rounded-lg">
-              <h3 className="font-semibold text-green-800 mb-2">Continuous Monitoring</h3>
-              <p className="text-sm text-green-700">Maintain continuous compliance monitoring for real-time visibility</p>
+            <div className="bg-green-900 p-4 rounded-lg border border-green-700">
+              <h3 className="font-semibold text-green-300 mb-2">Continuous Monitoring</h3>
+              <p className="text-sm text-green-200">Maintain continuous compliance monitoring for real-time visibility</p>
             </div>
-            <div className="bg-yellow-100 p-4 rounded-lg">
-              <h3 className="font-semibold text-yellow-800 mb-2">Automated Remediation</h3>
-              <p className="text-sm text-yellow-700">Automate remediation where possible to reduce manual effort</p>
+            <div className="bg-yellow-900 p-4 rounded-lg border border-yellow-700">
+              <h3 className="font-semibold text-yellow-300 mb-2">Automated Remediation</h3>
+              <p className="text-sm text-yellow-200">Automate remediation where possible to reduce manual effort</p>
             </div>
-            <div className="bg-red-100 p-4 rounded-lg">
-              <h3 className="font-semibold text-red-800 mb-2">Regular Assessments</h3>
-              <p className="text-sm text-red-700">Conduct regular compliance assessments to maintain compliance posture</p>
+            <div className="bg-red-900 p-4 rounded-lg border border-red-700">
+              <h3 className="font-semibold text-red-300 mb-2">Regular Assessments</h3>
+              <p className="text-sm text-red-200">Conduct regular compliance assessments to maintain compliance posture</p>
             </div>
           </div>
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Implementation Examples</h2>
-          <div className="bg-gray-100 p-6 rounded-lg">
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Implementation Examples</h2>
+          <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-gray-100 p-4 rounded-lg">
-                <h3 className="font-bold text-gray-800 mb-3">Cloud Compliance</h3>
-                <ul className="space-y-2 text-sm">
+              <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                <h3 className="font-bold text-cyan-400 mb-3">Cloud Compliance</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li>AWS Config Rules automation</li>
                   <li>Azure Policy integration</li>
                   <li>GCP Organization Policy</li>
@@ -332,8 +332,8 @@ export default function ComplianceAutomationEnginePage({ params }: PageProps) {
                 </ul>
               </div>
               <div>
-                <h3 className="font-bold text-gray-800 mb-3">Infrastructure Compliance</h3>
-                <ul className="space-y-2 text-sm">
+                <h3 className="font-bold text-cyan-400 mb-3">Infrastructure Compliance</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li>Server configuration compliance</li>
                   <li>Network security compliance</li>
                   <li>Database compliance checking</li>
@@ -346,23 +346,23 @@ export default function ComplianceAutomationEnginePage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Further Resources</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Further Resources</h2>
           <div className="grid grid-cols-2 gap-4">
-            <a href={`/${locale}/securitycheck`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
-              <div className="font-semibold text-blue-600">Security Check</div>
-              <div className="text-sm text-gray-600">Scan your system now</div>
+            <a href={`/${locale}/securitycheck`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
+              <div className="font-semibold text-cyan-400">Security Check</div>
+              <div className="text-sm text-gray-300">Scan your system now</div>
             </a>
-            <a href={`/${locale}/runbooks`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
-              <div className="font-semibold text-blue-600">Runbooks</div>
-              <div className="text-sm text-gray-600">600+ security playbooks</div>
+            <a href={`/${locale}/runbooks`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
+              <div className="font-semibold text-cyan-400">Runbooks</div>
+              <div className="text-sm text-gray-300">600+ security playbooks</div>
             </a>
-            <a href={`/${locale}/openclaw`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
-              <div className="font-semibold text-blue-600">OpenClaw Framework</div>
-              <div className="text-sm text-gray-600">Self-hosted security</div>
+            <a href={`/${locale}/openclaw`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
+              <div className="font-semibold text-cyan-400">OpenClaw Framework</div>
+              <div className="text-sm text-gray-300">Self-hosted security</div>
             </a>
-            <a href={`/${locale}/solutions/kubernetes-security-hardening`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
-              <div className="font-semibold text-blue-600">Kubernetes Security</div>
-              <div className="text-sm text-gray-600">Complete hardening guide</div>
+            <a href={`/${locale}/solutions/kubernetes-security-hardening`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
+              <div className="font-semibold text-cyan-400">Kubernetes Security</div>
+              <div className="text-sm text-gray-300">Complete hardening guide</div>
             </a>
           </div>
         </section>

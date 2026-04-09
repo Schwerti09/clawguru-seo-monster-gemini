@@ -24,14 +24,14 @@ export default function MoltbotContainerSecurityPage({ params }: PageProps) {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-4xl mx-auto">
-        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-8 text-sm">
-          <strong>"Not a Pentest" Trust-Anker</strong>: Dieser Guide dient ausschließlich zur Absicherung von Container-Infrastrukturen. Keine Angriffswerkzeuge, keine illegalen Aktivitäten.
+        <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
+          <strong className="text-amber-100">"Not a Pentest" Trust-Anker</strong>: Dieser Guide dient ausschließlich zur Absicherung von Container-Infrastrukturen. Keine Angriffswerkzeuge, keine illegalen Aktivitäten.
         </div>
-        <h1 className="text-4xl font-bold mb-4">Moltbot Container Security: Docker &amp; Kubernetes</h1>
-        <p className="text-lg text-gray-600 mb-8">Umfassende Container Security für Moltbot — von gehärteten Dockerfiles über Kubernetes Network Policies bis hin zu Runtime Protection mit Falco.</p>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">Moltbot Container Security: Docker &amp; Kubernetes</h1>
+        <p className="text-lg text-gray-300 mb-8">Umfassende Container Security für Moltbot — von gehärteten Dockerfiles über Kubernetes Network Policies bis hin zu Runtime Protection mit Falco.</p>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">🐳 Gehärtetes Dockerfile</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">🐳 Gehärtetes Dockerfile</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm mb-4">
             <pre>{`# Moltbot Production Dockerfile (gehärtet)
 FROM node:20-alpine AS builder
@@ -60,7 +60,7 @@ CMD ["node", "server.js"]`}</pre>
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">☸️ Kubernetes Network Policy</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">☸️ Kubernetes Network Policy</h2>
           <div className="bg-gray-900 text-blue-400 p-4 rounded-lg font-mono text-sm mb-4">
             <pre>{`# moltbot-network-policy.yaml
 apiVersion: networking.k8s.io/v1
@@ -102,7 +102,7 @@ spec:
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">🛡️ Pod Security Standards</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">🛡️ Pod Security Standards</h2>
           <div className="bg-gray-900 text-yellow-400 p-4 rounded-lg font-mono text-sm mb-4">
             <pre>{`# moltbot-deployment.yaml (security context)
 apiVersion: apps/v1
@@ -136,23 +136,23 @@ spec:
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">🔗 Weiterführende Ressourcen</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">🔗 Weiterführende Ressourcen</h2>
           <div className="grid grid-cols-2 gap-4">
-            <a href="/securitycheck" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
-              <div className="font-semibold text-blue-600">🛡️ Security Check</div>
-              <div className="text-sm text-gray-600">Container-Setup prüfen</div>
+            <a href="/securitycheck" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700">
+              <div className="font-semibold text-cyan-400">🛡️ Security Check</div>
+              <div className="text-sm text-gray-300">Container-Setup prüfen</div>
             </a>
-            <a href="/runbooks" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
-              <div className="font-semibold text-blue-600">📚 K8s Runbooks</div>
-              <div className="text-sm text-gray-600">Container Security Guides</div>
+            <a href="/runbooks" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700">
+              <div className="font-semibold text-cyan-400">📚 K8s Runbooks</div>
+              <div className="text-sm text-gray-300">Container Security Guides</div>
             </a>
-            <a href="/openclaw" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
-              <div className="font-semibold text-blue-600">🔓 OpenClaw</div>
-              <div className="text-sm text-gray-600">Open Source Framework</div>
+            <a href="/openclaw" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700">
+              <div className="font-semibold text-cyan-400">🔓 OpenClaw</div>
+              <div className="text-sm text-gray-300">Open Source Framework</div>
             </a>
-            <a href="/neuro" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
-              <div className="font-semibold text-blue-600">🧠 Neuro AI</div>
-              <div className="text-sm text-gray-600">Runtime Threat Detection</div>
+            <a href="/neuro" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700">
+              <div className="font-semibold text-cyan-400">🧠 Neuro AI</div>
+              <div className="text-sm text-gray-300">Runtime Threat Detection</div>
             </a>
           </div>
         </section>

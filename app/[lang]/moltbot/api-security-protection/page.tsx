@@ -24,14 +24,14 @@ export default function MoltbotApiSecurityPage({ params }: PageProps) {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-4xl mx-auto">
-        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-8 text-sm">
-          <strong>"Not a Pentest" Trust-Anker</strong>: Dieser Guide dient ausschließlich zur Absicherung von API-Endpoints. Keine Angriffswerkzeuge, keine illegalen Aktivitäten.
+        <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
+          <strong className="text-amber-100">"Not a Pentest" Trust-Anker</strong>: Dieser Guide dient ausschließlich zur Absicherung von API-Endpoints. Keine Angriffswerkzeuge, keine illegalen Aktivitäten.
         </div>
-        <h1 className="text-4xl font-bold mb-4">Moltbot API Security: REST Endpoints Protection</h1>
-        <p className="text-lg text-gray-600 mb-8">Vollständige API Security für Moltbot — von JWT-Hardening über Rate Limiting bis hin zu Input Validation und DDoS-Schutz.</p>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">Moltbot API Security: REST Endpoints Protection</h1>
+        <p className="text-lg text-gray-300 mb-8">Vollständige API Security für Moltbot — von JWT-Hardening über Rate Limiting bis hin zu Input Validation und DDoS-Schutz.</p>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">🔐 JWT Authentication Hardening</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">🔐 JWT Authentication Hardening</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm mb-4">
             <pre>{`// moltbot/middleware/jwt-auth.ts
 import { NextRequest, NextResponse } from 'next/server';
@@ -57,7 +57,7 @@ export async function verifyJWT(req: NextRequest): Promise<JWTPayload | null> {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">⚡ Rate Limiting mit Redis</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">⚡ Rate Limiting mit Redis</h2>
           <div className="bg-gray-900 text-blue-400 p-4 rounded-lg font-mono text-sm mb-4">
             <pre>{`// moltbot/middleware/rate-limit.ts
 import { Redis } from '@upstash/redis';
@@ -77,7 +77,7 @@ export async function rateLimit(ip: string, limit = 100, window = 60) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">🛡️ Input Validation Schema</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">🛡️ Input Validation Schema</h2>
           <div className="bg-gray-900 text-yellow-400 p-4 rounded-lg font-mono text-sm mb-4">
             <pre>{`// moltbot/lib/validation.ts
 import { z } from 'zod';
@@ -96,23 +96,23 @@ export type MoltbotRequest = z.infer<typeof MoltbotRequestSchema>;`}</pre>
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">🔗 Weiterführende Ressourcen</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">🔗 Weiterführende Ressourcen</h2>
           <div className="grid grid-cols-2 gap-4">
-            <a href="/securitycheck" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
-              <div className="font-semibold text-blue-600">🛡️ Security Check</div>
-              <div className="text-sm text-gray-600">API live testen</div>
+            <a href="/securitycheck" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700">
+              <div className="font-semibold text-cyan-400">🛡️ Security Check</div>
+              <div className="text-sm text-gray-300">API live testen</div>
             </a>
-            <a href="/runbooks" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
-              <div className="font-semibold text-blue-600">📚 Runbooks</div>
-              <div className="text-sm text-gray-600">API Security Playbooks</div>
+            <a href="/runbooks" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700">
+              <div className="font-semibold text-cyan-400">📚 Runbooks</div>
+              <div className="text-sm text-gray-300">API Security Playbooks</div>
             </a>
-            <a href="/openclaw" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
-              <div className="font-semibold text-blue-600">🔓 OpenClaw</div>
-              <div className="text-sm text-gray-600">Open Source Framework</div>
+            <a href="/openclaw" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700">
+              <div className="font-semibold text-cyan-400">🔓 OpenClaw</div>
+              <div className="text-sm text-gray-300">Open Source Framework</div>
             </a>
-            <a href="/neuro" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
-              <div className="font-semibold text-blue-600">🧠 Neuro AI</div>
-              <div className="text-sm text-gray-600">AI Threat Detection</div>
+            <a href="/neuro" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700">
+              <div className="font-semibold text-cyan-400">🧠 Neuro AI</div>
+              <div className="text-sm text-gray-300">AI Threat Detection</div>
             </a>
           </div>
         </section>

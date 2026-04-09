@@ -48,9 +48,9 @@ export default function AiAgentHardeningGuidePage({ params }: PageProps) {
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">AI Agent Hardening Overview</h2>
-          <div className="bg-gray-100 p-4 rounded-lg mb-4">
-            <h3 className="font-semibold mb-2">Hardening Objectives</h3>
-            <ul className="list-disc list-inside space-y-1">
+          <div className="bg-gray-800 p-4 rounded-lg mb-4 border border-gray-700">
+            <h3 className="font-semibold mb-2 text-gray-100">Hardening Objectives</h3>
+            <ul className="list-disc list-inside space-y-1 text-gray-300">
               <li>Reduce attack surface and vulnerabilities</li>
               <li>Implement defense-in-depth security</li>
               <li>Secure data handling and processing</li>
@@ -60,13 +60,13 @@ export default function AiAgentHardeningGuidePage({ params }: PageProps) {
           </div>
         </section>
 
-        <section className="mb-10 bg-gray-100 p-6 rounded-lg">
-          <h2 className="text-2xl font-semibold mb-4">Input Hardening</h2>
-          <div className="bg-gray-100 p-6 rounded-lg">
+        <section className="mb-10">
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Input Hardening</h2>
+          <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-gray-100 p-4 rounded-lg">
-                <h3 className="font-bold text-gray-800 mb-3">Input Validation</h3>
-                <ul className="space-y-2 text-sm">
+              <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                <h3 className="font-bold text-cyan-400 mb-3">Input Validation</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li>Strict input type validation</li>
                   <li>Length and format restrictions</li>
                   <li>Character set limitations</li>
@@ -74,9 +74,9 @@ export default function AiAgentHardeningGuidePage({ params }: PageProps) {
                   <li>Malicious pattern detection</li>
                 </ul>
               </div>
-              <div className="bg-gray-100 p-4 rounded-lg">
-                <h3 className="font-bold text-gray-800 mb-3">Prompt Security</h3>
-                <ul className="space-y-2 text-sm">
+              <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                <h3 className="font-bold text-cyan-400 mb-3">Prompt Security</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li>Prompt injection prevention</li>
                   <li>Template-based prompts</li>
                   <li>Input sanitization</li>
@@ -88,8 +88,8 @@ export default function AiAgentHardeningGuidePage({ params }: PageProps) {
           </div>
         </section>
 
-        <section className="mb-10 bg-gray-100 p-6 rounded-lg">
-          <h2 className="text-2xl font-semibold mb-4">Processing Hardening</h2>
+        <section className="mb-10">
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Processing Hardening</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto">
             <pre>
 {`# Processing Security Controls
@@ -117,13 +117,13 @@ export default function AiAgentHardeningGuidePage({ params }: PageProps) {
           </div>
         </section>
 
-        <section className="mb-10 bg-gray-100 p-6 rounded-lg">
-          <h2 className="text-2xl font-semibold mb-4">Output Hardening</h2>
-          <div className="bg-gray-100 p-6 rounded-lg">
+        <section className="mb-10">
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Output Hardening</h2>
+          <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-gray-100 p-4 rounded-lg">
-                <h3 className="font-bold text-gray-800 mb-3">Output Validation</h3>
-                <ul className="space-y-2 text-sm">
+              <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                <h3 className="font-bold text-cyan-400 mb-3">Output Validation</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li>Output content validation</li>
                   <li>Format and structure checks</li>
                   <li>Malicious content filtering</li>
@@ -131,9 +131,9 @@ export default function AiAgentHardeningGuidePage({ params }: PageProps) {
                   <li>Compliance checking</li>
                 </ul>
               </div>
-              <div className="bg-gray-100 p-4 rounded-lg">
-                <h3 className="font-bold text-gray-800 mb-3">Data Leakage Prevention</h3>
-                <ul className="space-y-2 text-sm">
+              <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                <h3 className="font-bold text-cyan-400 mb-3">Data Leakage Prevention</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li>Sensitive data detection</li>
                   <li>PII identification and masking</li>
                   <li>Trade secret protection</li>
@@ -145,44 +145,44 @@ export default function AiAgentHardeningGuidePage({ params }: PageProps) {
           </div>
         </section>
 
-        <section className="mb-10 bg-gray-100 p-6 rounded-lg">
-          <h2 className="text-2xl font-semibold mb-4">Autonomous System Hardening</h2>
-          <div className="bg-gray-100 p-6 rounded-lg">
+        <section className="mb-10">
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Autonomous System Hardening</h2>
+          <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
             <div className="space-y-4">
               <div className="flex items-start space-x-4">
                 <div className="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold flex-shrink-0">1</div>
                 <div>
-                  <div className="font-semibold">Decision Validation</div>
-                  <div className="text-sm text-gray-600">Implement multi-layer validation for autonomous decisions</div>
+                  <div className="font-semibold text-gray-100">Decision Validation</div>
+                  <div className="text-sm text-gray-300">Implement multi-layer validation for autonomous decisions</div>
                 </div>
               </div>
               <div className="flex items-start space-x-4">
                 <div className="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold flex-shrink-0">2</div>
                 <div>
-                  <div className="font-semibold">Behavioral Constraints</div>
-                  <div className="text-sm text-gray-600">Define and enforce behavioral boundaries and limits</div>
+                  <div className="font-semibold text-gray-100">Behavioral Constraints</div>
+                  <div className="text-sm text-gray-300">Define and enforce behavioral boundaries and limits</div>
                 </div>
               </div>
               <div className="flex items-start space-x-4">
                 <div className="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold flex-shrink-0">3</div>
                 <div>
-                  <div className="font-semibold">Human Oversight</div>
-                  <div className="text-sm text-gray-600">Implement human-in-the-loop oversight mechanisms</div>
+                  <div className="font-semibold text-gray-100">Human Oversight</div>
+                  <div className="text-sm text-gray-300">Implement human-in-the-loop oversight mechanisms</div>
                 </div>
               </div>
               <div className="flex items-start space-x-4">
                 <div className="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold flex-shrink-0">4</div>
                 <div>
-                  <div className="font-semibold">Fail-safe Mechanisms</div>
-                  <div className="text-sm text-gray-600">Implement automatic fail-safe and emergency stop</div>
+                  <div className="font-semibold text-gray-100">Fail-safe Mechanisms</div>
+                  <div className="text-sm text-gray-300">Implement automatic fail-safe and emergency stop</div>
                 </div>
               </div>
             </div>
           </div>
         </section>
 
-        <section className="mb-10 bg-gray-100 p-6 rounded-lg">
-          <h2 className="text-2xl font-semibold mb-4">Network Hardening</h2>
+        <section className="mb-10">
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Network Hardening</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto">
             <pre>
 {`# Network Security Controls
@@ -210,13 +210,13 @@ export default function AiAgentHardeningGuidePage({ params }: PageProps) {
           </div>
         </section>
 
-        <section className="mb-10 bg-gray-100 p-6 rounded-lg">
-          <h2 className="text-2xl font-semibold mb-4">Data Security Hardening</h2>
-          <div className="bg-gray-100 p-6 rounded-lg">
+        <section className="mb-10">
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Data Security Hardening</h2>
+          <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-gray-100 p-4 rounded-lg">
-                <h3 className="font-bold text-gray-800 mb-3">Data Protection</h3>
-                <ul className="space-y-2 text-sm">
+              <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                <h3 className="font-bold text-cyan-400 mb-3">Data Protection</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li>Encryption at rest and in transit</li>
                   <li>Key management and rotation</li>
                   <li>Data classification and labeling</li>
@@ -224,9 +224,9 @@ export default function AiAgentHardeningGuidePage({ params }: PageProps) {
                   <li>Data retention and deletion</li>
                 </ul>
               </div>
-              <div className="bg-gray-100 p-4 rounded-lg">
-                <h3 className="font-bold text-gray-800 mb-3">Privacy Controls</h3>
-                <ul className="space-y-2 text-sm">
+              <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                <h3 className="font-bold text-cyan-400 mb-3">Privacy Controls</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li>PII detection and masking</li>
                   <li>Data anonymization techniques</li>
                   <li>Privacy by design principles</li>
@@ -238,13 +238,13 @@ export default function AiAgentHardeningGuidePage({ params }: PageProps) {
           </div>
         </section>
 
-        <section className="mb-10 bg-gray-100 p-6 rounded-lg">
-          <h2 className="text-2xl font-semibold mb-4">Infrastructure Hardening</h2>
-          <div className="bg-gray-100 p-6 rounded-lg">
+        <section className="mb-10">
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Infrastructure Hardening</h2>
+          <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-gray-100 p-4 rounded-lg">
-                <h3 className="font-bold text-gray-800 mb-3">Container Security</h3>
-                <ul className="space-y-2 text-sm">
+              <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                <h3 className="font-bold text-cyan-400 mb-3">Container Security</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li>Minimal base images</li>
                   <li>Container image scanning</li>
                   <li>Runtime security monitoring</li>
@@ -252,9 +252,9 @@ export default function AiAgentHardeningGuidePage({ params }: PageProps) {
                   <li>Network isolation policies</li>
                 </ul>
               </div>
-              <div className="bg-gray-100 p-4 rounded-lg">
-                <h3 className="font-bold text-gray-800 mb-3">Cloud Security</h3>
-                <ul className="space-y-2 text-sm">
+              <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                <h3 className="font-bold text-cyan-400 mb-3">Cloud Security</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li>Cloud security posture management</li>
                   <li>Identity and access management</li>
                   <li>Configuration management</li>
@@ -266,8 +266,8 @@ export default function AiAgentHardeningGuidePage({ params }: PageProps) {
           </div>
         </section>
 
-        <section className="mb-10 bg-gray-100 p-6 rounded-lg">
-          <h2 className="text-2xl font-semibold mb-4">Monitoring and Logging Hardening</h2>
+        <section className="mb-10">
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Monitoring and Logging Hardening</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto">
             <pre>
 {`# Monitoring Security Framework
@@ -295,13 +295,13 @@ export default function AiAgentHardeningGuidePage({ params }: PageProps) {
           </div>
         </section>
 
-        <section className="mb-10 bg-gray-100 p-6 rounded-lg">
-          <h2 className="text-2xl font-semibold mb-4">Hardening Checklist</h2>
-          <div className="bg-gray-100 p-6 rounded-lg">
+        <section className="mb-10">
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Hardening Checklist</h2>
+          <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-gray-100 p-4 rounded-lg">
-                <h3 className="font-bold text-gray-800 mb-3">Input Security</h3>
-                <ul className="space-y-2 text-sm">
+              <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                <h3 className="font-bold text-cyan-400 mb-3">Input Security</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li>Input validation implemented</li>
                   <li>Prompt injection protection</li>
                   <li>Malicious content filtering</li>
@@ -309,9 +309,9 @@ export default function AiAgentHardeningGuidePage({ params }: PageProps) {
                   <li>Input logging enabled</li>
                 </ul>
               </div>
-              <div className="bg-gray-100 p-4 rounded-lg">
-                <h3 className="font-bold text-gray-800 mb-3">Processing Security</h3>
-                <ul className="space-y-2 text-sm">
+              <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                <h3 className="font-bold text-cyan-400 mb-3">Processing Security</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li>Sandboxed execution environment</li>
                   <li>Resource limits enforced</li>
                   <li>Network access restricted</li>
@@ -319,16 +319,16 @@ export default function AiAgentHardeningGuidePage({ params }: PageProps) {
                   <li>Process isolation configured</li>
                 </ul>
               </div>
-              <div className="bg-gray-100 p-4 rounded-lg">
-                <h3 className="font-bold text-gray-800 mb-3">Output Security</h3>
-                <ul className="space-y-2 text-sm">
+              <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                <h3 className="font-bold text-cyan-400 mb-3">Output Security</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li>Output validation implemented</li>
                   <li>Data leakage prevention</li>
                 </ul>
               </div>
-              <div className="bg-gray-100 p-4 rounded-lg">
-                <h3 className="font-bold text-gray-800 mb-3">Infrastructure Security</h3>
-                <ul className="space-y-2 text-sm">
+              <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                <h3 className="font-bold text-cyan-400 mb-3">Infrastructure Security</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li>Container security configured</li>
                   <li>Network segmentation implemented</li>
                   <li>Access control enforced</li>
@@ -340,35 +340,35 @@ export default function AiAgentHardeningGuidePage({ params }: PageProps) {
           </div>
         </section>
 
-        <section className="mb-10 bg-gray-100 p-6 rounded-lg">
-          <h2 className="text-2xl font-semibold mb-4">Best Practices</h2>
+        <section className="mb-10">
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Best Practices</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-gray-100 p-4 rounded-lg">
-              <h3 className="font-semibold text-blue-800 mb-2">Defense in Depth</h3>
-              <p className="text-sm text-blue-700">Implement multiple layers of security controls for comprehensive protection</p>
+            <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+              <h3 className="font-semibold text-blue-300 mb-2">Defense in Depth</h3>
+              <p className="text-sm text-blue-200">Implement multiple layers of security controls for comprehensive protection</p>
             </div>
-            <div className="bg-gray-100 p-4 rounded-lg">
-              <h3 className="font-semibold text-green-800 mb-2">Least Privilege</h3>
-              <p className="text-sm text-green-700">Apply principle of least privilege to all system components and access</p>
+            <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+              <h3 className="font-semibold text-green-300 mb-2">Least Privilege</h3>
+              <p className="text-sm text-green-200">Apply principle of least privilege to all system components and access</p>
             </div>
-            <div className="bg-gray-100 p-4 rounded-lg">
-              <h3 className="font-semibold text-yellow-800 mb-2">Continuous Monitoring</h3>
-              <p className="text-sm text-yellow-700">Maintain continuous monitoring and regular security assessments</p>
+            <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+              <h3 className="font-semibold text-yellow-300 mb-2">Continuous Monitoring</h3>
+              <p className="text-sm text-yellow-200">Maintain continuous monitoring and regular security assessments</p>
             </div>
-            <div className="bg-gray-100 p-4 rounded-lg">
-              <h3 className="font-semibold text-red-800 mb-2">Regular Updates</h3>
-              <p className="text-sm text-red-700">Keep all systems and security controls updated and patched</p>
+            <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+              <h3 className="font-semibold text-red-300 mb-2">Regular Updates</h3>
+              <p className="text-sm text-red-200">Keep all systems and security controls updated and patched</p>
             </div>
           </div>
         </section>
 
-        <section className="mb-10 bg-gray-100 p-6 rounded-lg">
-          <h2 className="text-2xl font-semibold mb-4">Implementation Examples</h2>
-          <div className="bg-gray-100 p-6 rounded-lg">
+        <section className="mb-10">
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Implementation Examples</h2>
+          <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-gray-100 p-4 rounded-lg">
-                <h3 className="font-bold text-gray-800 mb-3">Chatbot Hardening</h3>
-                <ul className="space-y-2 text-sm">
+              <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                <h3 className="font-bold text-cyan-400 mb-3">Chatbot Hardening</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li>Input validation and sanitization</li>
                   <li>Prompt injection protection</li>
                   <li>Output filtering and monitoring</li>
@@ -376,9 +376,9 @@ export default function AiAgentHardeningGuidePage({ params }: PageProps) {
                   <li>Behavioral analysis</li>
                 </ul>
               </div>
-              <div className="bg-gray-100 p-4 rounded-lg">
-                <h3 className="font-bold text-gray-800 mb-3">Autonomous Agent Hardening</h3>
-                <ul className="space-y-2 text-sm">
+              <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                <h3 className="font-bold text-cyan-400 mb-3">Autonomous Agent Hardening</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li>Decision validation frameworks</li>
                   <li>Behavior monitoring systems</li>
                   <li>Human intervention mechanisms</li>
@@ -391,23 +391,23 @@ export default function AiAgentHardeningGuidePage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Further Resources</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Further Resources</h2>
           <div className="grid grid-cols-2 gap-4">
-            <a href={`/${locale}/securitycheck`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
-              <div className="font-semibold text-blue-600">Security Check</div>
-              <div className="text-sm text-gray-600">Scan your system now</div>
+            <a href={`/${locale}/securitycheck`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
+              <div className="font-semibold text-cyan-400">Security Check</div>
+              <div className="text-sm text-gray-300">Scan your system now</div>
             </a>
-            <a href={`/${locale}/runbooks`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
-              <div className="font-semibold text-blue-600">Runbooks</div>
-              <div className="text-sm text-gray-600">600+ security playbooks</div>
+            <a href={`/${locale}/runbooks`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
+              <div className="font-semibold text-cyan-400">Runbooks</div>
+              <div className="text-sm text-gray-300">600+ security playbooks</div>
             </a>
-            <a href={`/${locale}/openclaw`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
-              <div className="font-semibold text-blue-600">OpenClaw Framework</div>
-              <div className="text-sm text-gray-600">Self-hosted security</div>
+            <a href={`/${locale}/openclaw`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
+              <div className="font-semibold text-cyan-400">OpenClaw Framework</div>
+              <div className="text-sm text-gray-300">Self-hosted security</div>
             </a>
-            <a href={`/${locale}/solutions/kubernetes-security-hardening`} className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
-              <div className="font-semibold text-blue-600">Kubernetes Security</div>
-              <div className="text-sm text-gray-600">Complete hardening guide</div>
+            <a href={`/${locale}/solutions/kubernetes-security-hardening`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
+              <div className="font-semibold text-cyan-400">Kubernetes Security</div>
+              <div className="text-sm text-gray-300">Complete hardening guide</div>
             </a>
           </div>
         </section>

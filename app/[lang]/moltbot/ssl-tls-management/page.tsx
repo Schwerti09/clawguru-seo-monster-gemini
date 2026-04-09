@@ -24,14 +24,14 @@ export default function MoltbotSslTlsPage({ params }: PageProps) {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-4xl mx-auto">
-        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-8 text-sm">
-          <strong>"Not a Pentest" Trust-Anker</strong>: SSL/TLS Management sichert Kommunikation ab. Keine Angriffswerkzeuge.
+        <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
+          <strong className="text-amber-100">"Not a Pentest" Trust-Anker</strong>: SSL/TLS Management sichert Kommunikation ab. Keine Angriffswerkzeuge.
         </div>
-        <h1 className="text-4xl font-bold mb-4">Moltbot SSL/TLS Management</h1>
-        <p className="text-lg text-gray-600 mb-8">A+ SSL Labs Rating für Moltbot — automatisierte Zertifikatsverwaltung, TLS 1.3 Enforcement und gehärtete Cipher Suites.</p>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">Moltbot SSL/TLS Management</h1>
+        <p className="text-lg text-gray-300 mb-8">A+ SSL Labs Rating für Moltbot — automatisierte Zertifikatsverwaltung, TLS 1.3 Enforcement und gehärtete Cipher Suites.</p>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">🔒 TLS Hardening Konfiguration</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">🔒 TLS Hardening Konfiguration</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm">
             <pre>{`# nginx TLS Hardening für Moltbot (A+ SSL Labs Rating)
 ssl_protocols TLSv1.2 TLSv1.3;
@@ -58,7 +58,7 @@ add_header Strict-Transport-Security "max-age=63072000; includeSubDomains; prelo
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">🔄 Let's Encrypt Auto-Renewal</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">🔄 Let's Encrypt Auto-Renewal</h2>
           <div className="bg-gray-900 text-blue-400 p-4 rounded-lg font-mono text-sm">
             <pre>{`# Certbot auto-renewal für clawguru.org
 # Installation
@@ -90,7 +90,7 @@ echo "Certificate expires in $DAYS_LEFT days"
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">✅ TLS Configuration Checklist</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">✅ TLS Configuration Checklist</h2>
           <div className="space-y-2">
             {[
               ['TLS 1.0 und 1.1 deaktiviert', true],
@@ -104,7 +104,7 @@ echo "Certificate expires in $DAYS_LEFT days"
               ['Automatische Erneuerung getestet', true],
               ['SSL Labs Score: A+', true],
             ].map(([item, done]) => (
-              <div key={item as string} className={`flex items-center gap-3 p-2 rounded ${done ? 'bg-green-50' : 'bg-gray-50'}`}>
+              <div key={item as string} className={`flex items-center gap-3 p-2 rounded ${done ? 'bg-green-900' : 'bg-gray-800'}`}>
                 <span>{done ? '✅' : '⬜'}</span>
                 <span className="text-sm">{item as string}</span>
               </div>
@@ -113,12 +113,12 @@ echo "Certificate expires in $DAYS_LEFT days"
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">🔗 Weiterführende Ressourcen</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">🔗 Weiterführende Ressourcen</h2>
           <div className="grid grid-cols-2 gap-4">
-            <a href="/securitycheck" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">🛡️ Security Check</div><div className="text-sm text-gray-600">TLS live prüfen</div></a>
-            <a href="/runbooks" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">📚 TLS Runbooks</div><div className="text-sm text-gray-600">Certificate Guides</div></a>
-            <a href="/openclaw" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">🔓 OpenClaw</div><div className="text-sm text-gray-600">TLS Framework</div></a>
-            <a href="/solutions" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">🏢 Enterprise</div><div className="text-sm text-gray-600">Managed PKI</div></a>
+            <a href="/securitycheck" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700"><div className="font-semibold text-cyan-400">🛡️ Security Check</div><div className="text-sm text-gray-300">TLS live prüfen</div></a>
+            <a href="/runbooks" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700"><div className="font-semibold text-cyan-400">📚 TLS Runbooks</div><div className="text-sm text-gray-300">Certificate Guides</div></a>
+            <a href="/openclaw" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700"><div className="font-semibold text-cyan-400">🔓 OpenClaw</div><div className="text-sm text-gray-300">TLS Framework</div></a>
+            <a href="/solutions" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700"><div className="font-semibold text-cyan-400">🏢 Enterprise</div><div className="text-sm text-gray-300">Managed PKI</div></a>
           </div>
         </section>
       </div>

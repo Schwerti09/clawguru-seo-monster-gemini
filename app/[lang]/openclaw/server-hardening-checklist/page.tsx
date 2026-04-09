@@ -31,18 +31,18 @@ export default function OpenClawServerHardeningPage({ params }: PageProps) {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-4xl mx-auto">
-        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-8 text-sm">
-          <strong>"Not a Pentest" Trust-Anker</strong>: Server Hardening sichert eigene Systeme ab. Keine Angriffswerkzeuge.
+        <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
+          <strong className="text-amber-100">"Not a Pentest" Trust-Anker</strong>: Server Hardening sichert eigene Systeme ab. Keine Angriffswerkzeuge.
         </div>
-        <h1 className="text-4xl font-bold mb-4">OpenClaw Linux Server Hardening</h1>
-        <p className="text-lg text-gray-600 mb-8">Systematische Absicherung des Linux-Hosts für OpenClaw — von SSH-Hardening über Kernel-Parameter bis hin zu AppArmor und CIS Benchmark Compliance.</p>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">OpenClaw Linux Server Hardening</h1>
+        <p className="text-lg text-gray-300 mb-8">Systematische Absicherung des Linux-Hosts für OpenClaw — von SSH-Hardening über Kernel-Parameter bis hin zu AppArmor und CIS Benchmark Compliance.</p>
 
         {HARDENING_STEPS.map(({ phase, steps }) => (
           <section key={phase} className="mb-8">
             <h2 className="text-xl font-semibold mb-3">{phase}</h2>
             <div className="space-y-2">
               {steps.map(step => (
-                <div key={step} className="flex items-start gap-3 bg-gray-50 p-3 rounded-lg border border-gray-200">
+                <div key={step} className="flex items-start gap-3 bg-gray-800 p-3 rounded-lg border border-gray-700">
                   <input type="checkbox" className="mt-0.5 cursor-pointer" />
                   <span className="text-sm font-mono">{step}</span>
                 </div>
@@ -52,7 +52,7 @@ export default function OpenClawServerHardeningPage({ params }: PageProps) {
         ))}
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">⚡ Quick Hardening Script</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">⚡ Quick Hardening Script</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm">
             <pre>{`#!/bin/bash
 # openclaw-harden.sh — Quick Server Hardening
@@ -83,12 +83,12 @@ echo "[DONE] Basic hardening applied. Reboot recommended."`}</pre>
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">🔗 Weiterführende Ressourcen</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">🔗 Weiterführende Ressourcen</h2>
           <div className="grid grid-cols-2 gap-4">
-            <a href="/securitycheck" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">🛡️ Security Check</div><div className="text-sm text-gray-600">Server Assessment</div></a>
-            <a href="/runbooks" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">📚 Hardening Runbooks</div><div className="text-sm text-gray-600">CIS Guides</div></a>
-            <a href="/openclaw" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">🔓 OpenClaw</div><div className="text-sm text-gray-600">Framework</div></a>
-            <a href="/solutions" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">🏢 Enterprise</div><div className="text-sm text-gray-600">Managed Hardening</div></a>
+            <a href="/securitycheck" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700"><div className="font-semibold text-cyan-400">🛡️ Security Check</div><div className="text-sm text-gray-300">Server Assessment</div></a>
+            <a href="/runbooks" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700"><div className="font-semibold text-cyan-400">📚 Hardening Runbooks</div><div className="text-sm text-gray-300">CIS Guides</div></a>
+            <a href="/openclaw" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700"><div className="font-semibold text-cyan-400">🔓 OpenClaw</div><div className="text-sm text-gray-300">Framework</div></a>
+            <a href="/solutions" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700"><div className="font-semibold text-cyan-400">🏢 Enterprise</div><div className="text-sm text-gray-300">Managed Hardening</div></a>
           </div>
         </section>
       </div>

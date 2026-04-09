@@ -117,22 +117,22 @@ export default async function WAF2027Page({
             </p>
 
             <div className="grid md:grid-cols-4 gap-4 mb-8">
-              <div className="bg-gradient-to-br from-orange-50 to-orange-100 border border-orange-200 rounded-xl p-5 text-center">
+              <div className="bg-gradient-to-br from-orange-50 to-orange-100 border border-orange-700 rounded-xl p-5 text-center">
                 <div className="text-3xl mb-2">🛡️</div>
                 <h3 className="font-semibold text-slate-900 text-sm">Layer 7 Protection</h3>
                 <p className="text-xs text-slate-600 mt-1">Application Layer Defense</p>
               </div>
-              <div className="bg-gradient-to-br from-red-50 to-red-100 border border-red-200 rounded-xl p-5 text-center">
+              <div className="bg-gradient-to-br from-red-50 to-red-100 border border-red-700 rounded-xl p-5 text-center">
                 <div className="text-3xl mb-2">🤖</div>
                 <h3 className="font-semibold text-slate-900 text-sm">Bot Management</h3>
                 <p className="text-xs text-slate-600 mt-1">Good vs Bad Bots</p>
               </div>
-              <div className="bg-gradient-to-br from-purple-50 to-purple-100 border border-purple-200 rounded-xl p-5 text-center">
+              <div className="bg-gradient-to-br from-purple-50 to-purple-100 border border-purple-700 rounded-xl p-5 text-center">
                 <div className="text-3xl mb-2">⚡</div>
                 <h3 className="font-semibold text-slate-900 text-sm">DDoS Mitigation</h3>
                 <p className="text-xs text-slate-600 mt-1">Volumetric Attacks</p>
               </div>
-              <div className="bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 rounded-xl p-5 text-center">
+              <div className="bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-700 rounded-xl p-5 text-center">
                 <div className="text-3xl mb-2">🔐</div>
                 <h3 className="font-semibold text-slate-900 text-sm">API Protection</h3>
                 <p className="text-xs text-slate-600 mt-1">Schema Validation</p>
@@ -158,7 +158,7 @@ export default async function WAF2027Page({
                 <div className="bg-slate-800 rounded-lg p-4">
                   <div className="flex items-center gap-2 mb-2">
                     <span className="text-yellow-400 font-bold">AWS WAF</span>
-                    <span className="text-xs bg-yellow-500/20 text-yellow-300 px-2 py-0.5 rounded">Native</span>
+                    <span className="text-xs bg-amber-9000/20 text-yellow-300 px-2 py-0.5 rounded">Native</span>
                   </div>
                   <ul className="text-xs space-y-1">
                     <li>• ACL Rules</li>
@@ -170,7 +170,7 @@ export default async function WAF2027Page({
                 <div className="bg-slate-800 rounded-lg p-4">
                   <div className="flex items-center gap-2 mb-2">
                     <span className="text-blue-400 font-bold">ModSecurity</span>
-                    <span className="text-xs bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded">Open</span>
+                    <span className="text-xs bg-blue-9000/20 text-blue-300 px-2 py-0.5 rounded">Open</span>
                   </div>
                   <ul className="text-xs space-y-1">
                     <li>• OWASP CRS</li>
@@ -200,30 +200,30 @@ export default async function WAF2027Page({
               <div className="p-6">
                 <div className="space-y-4">
                   <div className="flex items-center gap-4">
-                    <div className="w-16 text-center font-bold text-green-600">PL 1</div>
+                    <div className="w-16 text-center font-bold text-green-400">PL 1</div>
                     <div className="flex-1 bg-slate-200 rounded-full h-2">
-                      <div className="bg-green-500 h-2 rounded-full" style={{width: "20%"}} />
+                      <div className="bg-green-9000 h-2 rounded-full" style={{width: "20%"}} />
                     </div>
                     <div className="text-sm text-slate-600">Baseline - Low False Positives</div>
                   </div>
                   <div className="flex items-center gap-4">
-                    <div className="w-16 text-center font-bold text-yellow-600">PL 2</div>
+                    <div className="w-16 text-center font-bold text-yellow-400">PL 2</div>
                     <div className="flex-1 bg-slate-200 rounded-full h-2">
-                      <div className="bg-yellow-500 h-2 rounded-full" style={{width: "40%"}} />
+                      <div className="bg-amber-9000 h-2 rounded-full" style={{width: "40%"}} />
                     </div>
                     <div className="text-sm text-slate-600">Enhanced - Balanced Security</div>
                   </div>
                   <div className="flex items-center gap-4">
-                    <div className="w-16 text-center font-bold text-orange-600">PL 3</div>
+                    <div className="w-16 text-center font-bold text-orange-400">PL 3</div>
                     <div className="flex-1 bg-slate-200 rounded-full h-2">
                       <div className="bg-orange-500 h-2 rounded-full" style={{width: "60%"}} />
                     </div>
                     <div className="text-sm text-slate-600">High Security - More False Positives</div>
                   </div>
                   <div className="flex items-center gap-4">
-                    <div className="w-16 text-center font-bold text-red-600">PL 4</div>
+                    <div className="w-16 text-center font-bold text-red-400">PL 4</div>
                     <div className="flex-1 bg-slate-200 rounded-full h-2">
-                      <div className="bg-red-500 h-2 rounded-full" style={{width: "80%"}} />
+                      <div className="bg-red-9000 h-2 rounded-full" style={{width: "80%"}} />
                     </div>
                     <div className="text-sm text-slate-600">Maximum Security - High FPs</div>
                   </div>
@@ -268,7 +268,7 @@ SecAction \\
             <h2 className="text-3xl font-bold text-slate-900 mb-6">Cloudflare WAF 2027</h2>
             
             <div className="grid md:grid-cols-2 gap-6 mb-8">
-              <div className="bg-orange-50 border border-orange-200 rounded-xl p-6">
+              <div className="bg-orange-50 border border-orange-700 rounded-xl p-6">
                 <h3 className="font-semibold text-orange-900 mb-3">Managed Rulesets</h3>
                 <ul className="space-y-2 text-sm text-orange-800">
                   <li className="flex items-center gap-2">
@@ -289,23 +289,23 @@ SecAction \\
                   </li>
                 </ul>
               </div>
-              <div className="bg-red-50 border border-red-200 rounded-xl p-6">
+              <div className="bg-red-900 border border-red-700 rounded-xl p-6">
                 <h3 className="font-semibold text-red-900 mb-3">Bot Management</h3>
-                <ul className="space-y-2 text-sm text-red-800">
+                <ul className="space-y-2 text-sm text-red-300">
                   <li className="flex items-center gap-2">
-                    <span className="w-2 h-2 bg-red-500 rounded-full" />
+                    <span className="w-2 h-2 bg-red-9000 rounded-full" />
                     Static Resource Protection
                   </li>
                   <li className="flex items-center gap-2">
-                    <span className="w-2 h-2 bg-red-500 rounded-full" />
+                    <span className="w-2 h-2 bg-red-9000 rounded-full" />
                     JavaScript Detections
                   </li>
                   <li className="flex items-center gap-2">
-                    <span className="w-2 h-2 bg-red-500 rounded-full" />
+                    <span className="w-2 h-2 bg-red-9000 rounded-full" />
                     ML-based Bot Scoring
                   </li>
                   <li className="flex items-center gap-2">
-                    <span className="w-2 h-2 bg-red-500 rounded-full" />
+                    <span className="w-2 h-2 bg-red-9000 rounded-full" />
                     Browser Integrity Check
                   </li>
                 </ul>

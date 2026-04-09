@@ -24,14 +24,14 @@ export default function OpenClawReverseProxyPage({ params }: PageProps) {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-4xl mx-auto">
-        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-8 text-sm">
-          <strong>"Not a Pentest" Trust-Anker</strong>: Reverse Proxy Hardening schützt eigene Dienste. Keine Angriffswerkzeuge.
+        <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
+          <strong className="text-amber-100">"Not a Pentest" Trust-Anker</strong>: Reverse Proxy Hardening schützt eigene Dienste. Keine Angriffswerkzeuge.
         </div>
-        <h1 className="text-4xl font-bold mb-4">OpenClaw Reverse Proxy Security</h1>
-        <p className="text-lg text-gray-600 mb-8">Gehärteter nginx als Security-Layer vor OpenClaw — Rate Limiting, WAF, Security Headers und DDoS-Schutz.</p>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">OpenClaw Reverse Proxy Security</h1>
+        <p className="text-lg text-gray-300 mb-8">Gehärteter nginx als Security-Layer vor OpenClaw — Rate Limiting, WAF, Security Headers und DDoS-Schutz.</p>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">⚙️ nginx Hardening Konfiguration</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">⚙️ nginx Hardening Konfiguration</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm overflow-x-auto">
             <pre>{`# /etc/nginx/sites-available/openclaw — Gehärtete Konfiguration
 
@@ -89,7 +89,7 @@ server {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">✅ Proxy Security Checklist</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">✅ Proxy Security Checklist</h2>
           <div className="space-y-2">
             {[
               'Rate Limiting auf alle API-Endpoints konfiguriert',
@@ -103,7 +103,7 @@ server {
               'Error Logs auf keine sensiblen Infos geprüft',
               'IP-Blocking für bekannte Angreifer-Ranges',
             ].map(item => (
-              <div key={item} className="flex items-center gap-3 bg-gray-50 p-3 rounded-lg">
+              <div key={item} className="flex items-center gap-3 bg-gray-800 p-3 rounded-lg">
                 <span>✅</span>
                 <span className="text-sm">{item}</span>
               </div>
@@ -112,12 +112,12 @@ server {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">🔗 Weiterführende Ressourcen</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">🔗 Weiterführende Ressourcen</h2>
           <div className="grid grid-cols-2 gap-4">
-            <a href="/securitycheck" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">🛡️ Security Check</div><div className="text-sm text-gray-600">Header Check</div></a>
-            <a href="/runbooks" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">📚 nginx Runbooks</div><div className="text-sm text-gray-600">Proxy Guides</div></a>
-            <a href="/openclaw" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">🔓 OpenClaw</div><div className="text-sm text-gray-600">Framework</div></a>
-            <a href="/solutions" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">🏢 Enterprise WAF</div><div className="text-sm text-gray-600">Managed Proxy</div></a>
+            <a href="/securitycheck" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700"><div className="font-semibold text-cyan-400">🛡️ Security Check</div><div className="text-sm text-gray-300">Header Check</div></a>
+            <a href="/runbooks" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700"><div className="font-semibold text-cyan-400">📚 nginx Runbooks</div><div className="text-sm text-gray-300">Proxy Guides</div></a>
+            <a href="/openclaw" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700"><div className="font-semibold text-cyan-400">🔓 OpenClaw</div><div className="text-sm text-gray-300">Framework</div></a>
+            <a href="/solutions" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700"><div className="font-semibold text-cyan-400">🏢 Enterprise WAF</div><div className="text-sm text-gray-300">Managed Proxy</div></a>
           </div>
         </section>
       </div>

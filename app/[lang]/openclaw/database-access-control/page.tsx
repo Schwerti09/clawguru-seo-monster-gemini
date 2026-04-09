@@ -24,14 +24,14 @@ export default function OpenClawDatabaseAccessPage({ params }: PageProps) {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-4xl mx-auto">
-        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-8 text-sm">
-          <strong>"Not a Pentest" Trust-Anker</strong>: Datenbank-Zugriffskontrolle schützt eigene Daten. Keine Angriffswerkzeuge.
+        <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
+          <strong className="text-amber-100">"Not a Pentest" Trust-Anker</strong>: Datenbank-Zugriffskontrolle schützt eigene Daten. Keine Angriffswerkzeuge.
         </div>
-        <h1 className="text-4xl font-bold mb-4">OpenClaw Database Access Control</h1>
-        <p className="text-lg text-gray-600 mb-8">Minimale Datenbankprivilegien für OpenClaw — RBAC, Row-Level Security, Audit Logging und verschlüsselte Verbindungen.</p>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">OpenClaw Database Access Control</h1>
+        <p className="text-lg text-gray-300 mb-8">Minimale Datenbankprivilegien für OpenClaw — RBAC, Row-Level Security, Audit Logging und verschlüsselte Verbindungen.</p>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">🗄️ PostgreSQL RBAC Setup</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">🗄️ PostgreSQL RBAC Setup</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm">
             <pre>{`-- PostgreSQL Rollen & Rechte für OpenClaw
 
@@ -65,7 +65,7 @@ CREATE EXTENSION IF NOT EXISTS pgcrypto;
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">📊 Datenbank Security Metriken</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">📊 Datenbank Security Metriken</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {[
               { metric: 'Offene DB-Verbindungen', target: '< 100', desc: 'Connection Pool Limit' },
@@ -75,22 +75,22 @@ CREATE EXTENSION IF NOT EXISTS pgcrypto;
               { metric: 'DB Size Growth', target: '< 5% / Woche', desc: 'Retention Policy' },
               { metric: 'Backup Age', target: '< 24h', desc: 'Täglich automatisch' },
             ].map(({ metric, target, desc }) => (
-              <div key={metric} className="bg-gray-50 p-4 rounded-lg border">
+              <div key={metric} className="bg-gray-800 p-4 rounded-lg border border-gray-700 border">
                 <div className="font-semibold text-sm mb-1">{metric}</div>
-                <div className="text-lg font-bold text-blue-600">{target}</div>
-                <div className="text-xs text-gray-500">{desc}</div>
+                <div className="text-lg font-bold text-cyan-400">{target}</div>
+                <div className="text-xs text-gray-400">{desc}</div>
               </div>
             ))}
           </div>
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">🔗 Weiterführende Ressourcen</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">🔗 Weiterführende Ressourcen</h2>
           <div className="grid grid-cols-2 gap-4">
-            <a href="/securitycheck" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">🛡️ Security Check</div><div className="text-sm text-gray-600">DB Assessment</div></a>
-            <a href="/runbooks" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">📚 DB Runbooks</div><div className="text-sm text-gray-600">PostgreSQL Guides</div></a>
-            <a href="/openclaw" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">🔓 OpenClaw</div><div className="text-sm text-gray-600">Framework</div></a>
-            <a href="/solutions" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">🏢 Enterprise</div><div className="text-sm text-gray-600">Managed DB</div></a>
+            <a href="/securitycheck" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700"><div className="font-semibold text-cyan-400">🛡️ Security Check</div><div className="text-sm text-gray-300">DB Assessment</div></a>
+            <a href="/runbooks" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700"><div className="font-semibold text-cyan-400">📚 DB Runbooks</div><div className="text-sm text-gray-300">PostgreSQL Guides</div></a>
+            <a href="/openclaw" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700"><div className="font-semibold text-cyan-400">🔓 OpenClaw</div><div className="text-sm text-gray-300">Framework</div></a>
+            <a href="/solutions" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700"><div className="font-semibold text-cyan-400">🏢 Enterprise</div><div className="text-sm text-gray-300">Managed DB</div></a>
           </div>
         </section>
       </div>

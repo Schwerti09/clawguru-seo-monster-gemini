@@ -24,14 +24,14 @@ export default function MoltbotCspmPage({ params }: PageProps) {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-4xl mx-auto">
-        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-8 text-sm">
-          <strong>"Not a Pentest" Trust-Anker</strong>: CSPM überwacht eigene Cloud-Konfigurationen defensiv. Keine Angriffswerkzeuge.
+        <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
+          <strong className="text-amber-100">"Not a Pentest" Trust-Anker</strong>: CSPM überwacht eigene Cloud-Konfigurationen defensiv. Keine Angriffswerkzeuge.
         </div>
-        <h1 className="text-4xl font-bold mb-4">Moltbot Cloud Security Posture Management</h1>
-        <p className="text-lg text-gray-600 mb-8">70% aller Cloud-Breaches entstehen durch Fehlkonfigurationen. Moltbot erkennt sie automatisch und remediert sie — bevor Angreifer sie finden.</p>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">Moltbot Cloud Security Posture Management</h1>
+        <p className="text-lg text-gray-300 mb-8">70% aller Cloud-Breaches entstehen durch Fehlkonfigurationen. Moltbot erkennt sie automatisch und remediert sie — bevor Angreifer sie finden.</p>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">☁️ Top Cloud Misconfigurations</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">☁️ Top Cloud Misconfigurations</h2>
           <div className="space-y-3">
             {[
               { issue: 'S3-Bucket öffentlich erreichbar', severity: 'CRITICAL', cloud: 'AWS', fix: 'Block Public Access + Bucket Policy' },
@@ -43,11 +43,11 @@ export default function MoltbotCspmPage({ params }: PageProps) {
               { issue: 'GCS-Bucket AllUsers Lesezugriff', severity: 'CRITICAL', cloud: 'GCP', fix: 'IAM-Policy stricter' },
               { issue: 'VM Instance mit externer IP ohne Firewall-Regel', severity: 'HIGH', cloud: 'GCP', fix: 'VPC Firewall + Cloud Armor' },
             ].map(({ issue, severity, cloud, fix }) => (
-              <div key={issue} className={`flex items-start gap-3 p-3 rounded-lg border ${severity === 'CRITICAL' ? 'bg-red-50 border-red-200' : 'bg-orange-50 border-orange-200'}`}>
+              <div key={issue} className={`flex items-start gap-3 p-3 rounded-lg border ${severity === 'CRITICAL' ? 'bg-red-900 border-red-700' : 'bg-orange-50 border-orange-700'}`}>
                 <span className={`text-xs font-bold px-2 py-0.5 rounded flex-shrink-0 ${severity === 'CRITICAL' ? 'bg-red-100 text-red-700' : 'bg-orange-100 text-orange-700'}`}>{severity}</span>
                 <div className="flex-1">
                   <div className="font-medium text-sm">{issue}</div>
-                  <div className="text-xs text-gray-500 mt-0.5">Cloud: {cloud} · Fix: {fix}</div>
+                  <div className="text-xs text-gray-400 mt-0.5">Cloud: {cloud} · Fix: {fix}</div>
                 </div>
               </div>
             ))}
@@ -55,12 +55,12 @@ export default function MoltbotCspmPage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">🔗 Weiterführende Ressourcen</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">🔗 Weiterführende Ressourcen</h2>
           <div className="grid grid-cols-2 gap-4">
-            <a href="/securitycheck" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">🛡️ Security Check</div><div className="text-sm text-gray-600">Cloud Posture prüfen</div></a>
-            <a href="/runbooks" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">📚 Cloud Runbooks</div><div className="text-sm text-gray-600">CSPM Guides</div></a>
-            <a href="/oracle" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">🔮 Oracle</div><div className="text-sm text-gray-600">Cloud Threat Intel</div></a>
-            <a href="/solutions" className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100"><div className="font-semibold text-blue-600">🏢 Enterprise CSPM</div><div className="text-sm text-gray-600">Managed Cloud Security</div></a>
+            <a href="/securitycheck" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700"><div className="font-semibold text-cyan-400">🛡️ Security Check</div><div className="text-sm text-gray-300">Cloud Posture prüfen</div></a>
+            <a href="/runbooks" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700"><div className="font-semibold text-cyan-400">📚 Cloud Runbooks</div><div className="text-sm text-gray-300">CSPM Guides</div></a>
+            <a href="/oracle" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700"><div className="font-semibold text-cyan-400">🔮 Oracle</div><div className="text-sm text-gray-300">Cloud Threat Intel</div></a>
+            <a href="/solutions" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700"><div className="font-semibold text-cyan-400">🏢 Enterprise CSPM</div><div className="text-sm text-gray-300">Managed Cloud Security</div></a>
           </div>
         </section>
       </div>

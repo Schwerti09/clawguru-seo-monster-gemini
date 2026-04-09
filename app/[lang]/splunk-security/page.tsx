@@ -86,7 +86,7 @@ export default async function SplunkSecurityPage({
             </p>
 
             <div className="grid md:grid-cols-3 gap-6 mb-8">
-              <div className="bg-green-50 border border-green-200 rounded-xl p-6">
+              <div className="bg-green-900 border border-green-700 rounded-xl p-6">
                 <h3 className="font-semibold text-green-900 mb-2">Access Control</h3>
                 <ul className="text-sm text-green-800 space-y-1">
                   <li>• Role-Based Access</li>
@@ -445,7 +445,7 @@ whitelist.0 = *  # Or specific allowlist
 
           <section className="bg-gradient-to-r from-green-600 to-emerald-600 rounded-2xl p-8 text-center text-white">
             <h2 className="text-2xl font-bold mb-4">Splunk Security Assessment</h2>
-            <a href={coreLinks.check} className="inline-block px-6 py-3 bg-white text-green-600 rounded-lg font-semibold">Assessment Starten</a>
+            <a href={coreLinks.check} className="inline-block px-6 py-3 bg-white text-green-400 rounded-lg font-semibold">Assessment Starten</a>
             <div className="mt-6 flex flex-wrap justify-center gap-3 text-sm">
               <a href={`${prefix}/openclaw-security-check`} className="rounded-lg border border-white/30 px-3 py-2 text-white hover:bg-white/10">OpenClaw Security Hub</a>
               <a href={`${prefix}/ai-agent-security`} className="rounded-lg border border-white/30 px-3 py-2 text-white hover:bg-white/10">AI Agent Security</a>

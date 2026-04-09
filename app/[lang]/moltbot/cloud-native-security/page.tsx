@@ -24,14 +24,14 @@ export default function MoltbotCloudNativePage({ params }: PageProps) {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-4xl mx-auto">
-        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-8 text-sm">
-          <strong>"Not a Pentest" Trust-Anker</strong>: Cloud Native Security schützt eigene Container-Infrastrukturen. Keine Angriffswerkzeuge.
+        <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
+          <strong className="text-amber-100">"Not a Pentest" Trust-Anker</strong>: Cloud Native Security schützt eigene Container-Infrastrukturen. Keine Angriffswerkzeuge.
         </div>
-        <h1 className="text-4xl font-bold mb-4">Moltbot Cloud Native Security</h1>
-        <p className="text-lg text-gray-600 mb-8">Cloud Native Umgebungen sind komplex. Kubernetes, Container und Microservices benötigen spezialisierte Security-Strategien.</p>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">Moltbot Cloud Native Security</h1>
+        <p className="text-lg text-gray-300 mb-8">Cloud Native Umgebungen sind komplex. Kubernetes, Container und Microservices benötigen spezialisierte Security-Strategien.</p>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Cloud Native Security Layers</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Cloud Native Security Layers</h2>
           <div className="overflow-x-auto">
             <table className="w-full border-collapse text-sm">
               <thead><tr className="bg-gray-800 text-white"><th className="p-3 text-left">Layer</th><th className="p-3 text-left">Schutz vor</th><th className="p-3 text-left">Tools</th><th className="p-3 text-left">Impact</th></tr></thead>
@@ -43,7 +43,7 @@ export default function MoltbotCloudNativePage({ params }: PageProps) {
                   ['Runtime Security', 'Runtime Threats', 'Sysdig, Aqua', 'Hoch'],
                   ['Supply Chain', 'Image Integrity', 'Notary, Cosign', 'Mittel'],
                 ].map(([layer, threat, tools, impact]) => (
-                  <tr key={layer} className="border-b hover:bg-gray-50">
+                  <tr key={layer} className="border-b hover:bg-gray-800">
                     <td className="p-3 font-medium">{layer}</td>
                     <td className="p-3 text-sm">{threat}</td>
                     <td className="p-3 text-sm">{tools}</td>
@@ -56,7 +56,7 @@ export default function MoltbotCloudNativePage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Kubernetes Security Best Practices</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Kubernetes Security Best Practices</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm overflow-x-auto">
             <pre>{`// Kubernetes Security Policy für Moltbot
 apiVersion: policy/v1beta1
@@ -124,7 +124,7 @@ spec:
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Container Security</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Container Security</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm overflow-x-auto">
             <pre>{`# Dockerfile Security Best Practices für Moltbot
 FROM node:18-alpine AS builder
@@ -182,7 +182,7 @@ CMD ["node", "server.js"]
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Resources</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Resources</h2>
           <ul className="list-disc pl-4 space-y-2">
             <li><a href="https://clawguru.org/de/security/kubernetes-security" target="_blank" rel="noopener noreferrer">Kubernetes Security Guide</a></li>
             <li><a href="https://clawguru.org/de/security/container-security" target="_blank" rel="noopener noreferrer">Container Security</a></li>

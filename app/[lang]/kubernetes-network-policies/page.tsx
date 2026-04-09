@@ -120,7 +120,7 @@ spec:
               </pre>
             </div>
 
-            <div className="bg-red-50 border border-red-200 rounded-xl p-6">
+            <div className="bg-red-900 border border-red-700 rounded-xl p-6">
               <h3 className="font-semibold text-red-900 mb-2">⚠️ Wichtig: Reihenfolge</h3>
               <p className="text-red-800 text-sm">
                 Deployen Sie Default-Deny NICHT bevor explizite Allow-Policies existieren! Sonst ist alles offline.

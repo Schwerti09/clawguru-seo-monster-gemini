@@ -6,7 +6,7 @@
   skip_processing = true
 
 [build.environment]
-  # Ensure devDependencies (@types/*, typescript, eslint) are installed during build
+  # Ensure devDependencies (@types/*, typescript) are installed during build
   NPM_CONFIG_PRODUCTION = "false"
   # Build-only variables (not attached to functions, stay under 4KB limit)
   NEXT_PUBLIC_SITE_URL = "https://clawguru.org"

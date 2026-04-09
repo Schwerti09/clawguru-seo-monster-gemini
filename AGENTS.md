@@ -361,6 +361,7 @@ Activates 27 cities: Japan (5), South Korea (5), Brazil (5), Mexico (5), Southea
 | Solutions Batch 2 (3 pages) | ✅ DONE | iso27001-certification-roadmap, pci-dss-compliance, hipaa-security-controls |
 | Moltbot Batch 3 (8 pages) | ✅ DONE | ai-agent-threat-model, ai-agent-threat-model-template, real-time-cve-feed, bot-security-testing, sbom-generation, compliance-automation-engine, ai-agent-security, ai-agent-hardening-guide |
 | Dark Theme Fix (109 files) | ✅ DONE 09.04 | All content pages fixed: bg-gray-100→bg-gray-800, text-gray-600→text-gray-300, tables, badges, notices |
+| Afrikaans Locale Expansion | 📋 PLANNED | Add `af` as 16th locale: homepage, all modules, all content pages |
 
 ---
 
@@ -394,6 +395,30 @@ app/robots.txt/route.ts                      robots.txt (dynamic)
 de, en, es, fr, pt, it, ru, zh, ja, ko, ar, hi, tr, pl, nl
 ```
 Defined in: `lib/i18n.ts` → `SUPPORTED_LOCALES`, `DEFAULT_LOCALE = "de"`
+
+**ABSOLUTE RULE: Every new content page MUST be available in ALL 15 locales.**
+The `[lang]` directory structure ensures this automatically. Never create pages outside `app/[lang]/`.
+Every `generateStaticParams()` MUST return all 15 locales. No exceptions, no “only de/en” shortcuts.
+
+### Planned Locale Expansion: Afrikaans (`af`)
+
+**Status: PLANNED** — Add Afrikaans as the 16th locale.
+
+**Scope:**
+- Homepage (`/af`)
+- All core modules: Security Check, Runbooks, Copilot, Intel Feed, Oracle, Neuro, Dashboard
+- All navigation, headers, footers
+- All content pages (Moltbot, OpenClaw, Solutions, Compare, Security)
+
+**Implementation Steps (when activated):**
+1. Add `"af"` to `SUPPORTED_LOCALES` in `lib/i18n.ts`
+2. Create `dictionaries/af.json` with full UI translations
+3. Add Afrikaans city data to geo_cities table (Johannesburg, Cape Town, Durban, Pretoria, Port Elizabeth)
+4. Update `generateStaticParams()` across all pages (automatic via `SUPPORTED_LOCALES`)
+5. Update sitemap generation to include `af` locale
+6. Add `af` hreflang tags via `buildLocalizedAlternates()`
+7. Test ALL pages render correctly in `/af/` routes
+8. Submit new sitemap to Google Search Console
 
 ### Database Tables
 

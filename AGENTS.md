@@ -336,7 +336,7 @@ npm run build 2>&1 | Select-Object -Last 15
 GEO_MATRIX_SITEMAP=1               # Activates geo-runbook sitemaps
 GEO_MATRIX_SITEMAP_CITY_LIMIT=50   # 50 cities per sitemap
 SITEMAP_BUCKETS=5                  # All 5 buckets (a-f, g-l, m-r, s-z, 0-9)
-GEMINI_MODEL=gemini-2.0-flash      # Stable model (2.5-flash returns 400)
+GEMINI_MODEL=gemini-2.5-flash      # Default model (all Gemini models currently unstable)
 ```
 
 **2. Asia/LatAm DB Seeding — Run Once After Deploy**
@@ -822,35 +822,31 @@ Vercel auto-deploys on every push to `main`. A red build = broken website for re
 ### Provider Order and Fallback Chain
 Configured in `lib/ai/providers.ts`. Order controlled by env var `AI_PROVIDER_ORDER`.
 
-Default order (if no env var set): `deepseek → gemini → openai`
+Default order (if no env var set): `deepseek → openai → gemini`
 
 ```
-AI_PROVIDER_ORDER=deepseek,gemini,openai   # DeepSeek cheapest, use first
+AI_PROVIDER_ORDER=deepseek,openai,gemini   # DeepSeek cheapest; Gemini last (400 errors since Apr 2026)
 ```
 
 ### Provider API Keys (Vercel Env Vars)
 | Variable | Provider | Notes |
 |----------|----------|-------|
 | `DEEPSEEK_API_KEY` | DeepSeek | Cheapest, use as primary |
-| `GEMINI_API_KEY` | Google Gemini | Fast, good quality |
-| `OPENAI_API_KEY` | OpenAI GPT | Fallback, most expensive |
+| `OPENAI_API_KEY` | OpenAI GPT | Stable fallback |
+| `GEMINI_API_KEY` | Google Gemini | Demoted — frequent 400 errors since April 2026 |
 
 ### Gemini Model Configuration
 ```
-GEMINI_MODEL=gemini-2.0-flash    # Default — stable GA since Feb 2025
+GEMINI_MODEL=gemini-2.5-flash    # Default — aligns with .env.example and agent files
 ```
-**Known Issue (fixed 08.04.2026):** `gemini-2.5-flash` and `gemini-2.5-flash-lite` were set as
-defaults but return 400 (model not found / not GA). Fixed in `lib/ai/providers.ts`.
+**Known Issue (09.04.2026):** All Gemini models (`gemini-2.5-flash`, `gemini-2.0-flash`,
+`gemini-1.5-flash`, `gemini-2.0-flash-lite`) are returning 400 errors. Gemini has been demoted
+to last position in the provider chain. DeepSeek and OpenAI are used first.
 
 Fallback chain inside `callGemini()`:
-1. `gemini-2.0-flash` (primary, override with `GEMINI_MODEL`)
-2. `gemini-1.5-flash` (stable fallback)
+1. `gemini-2.5-flash` (primary, override with `GEMINI_MODEL`)
+2. `gemini-2.0-flash` (fallback)
 3. `gemini-2.0-flash-lite` (lightest model, last resort)
-
-If you want to use `gemini-2.5-flash` when it becomes GA, set:
-```
-GEMINI_MODEL=gemini-2.5-flash-preview-04-17   # Use exact preview version name
-```
 
 ### Circuit Breaker Behaviour
 After 3 consecutive failures, a provider is paused for 30 seconds (OPEN state),
@@ -882,7 +878,7 @@ Will be resolved automatically when upgrading to Next.js 15 + eslint 9 (future s
 | Sitemap only `de` locale | `allLocales = [DEFAULT_LOCALE]` instead of `SUPPORTED_LOCALES` | 08.04.2026 |
 | Google blocked from sitemap chunks | `Disallow: */runbooks-*-*.xml` in robots.txt | 08.04.2026 |
 | 1,300+ pages missing from sitemap | Not listed in `MOLTBOT_SLUGS` / `OPENCLAW_SLUGS` | 08.04.2026 |
-| Gemini 400 errors | Model `gemini-2.5-flash` not GA | 08.04.2026 |
+| Gemini 400 errors | All models returning 400 — demoted to last fallback | 09.04.2026 |
 | Build errors (Badge component) | `@/components/ui/badge.tsx` missing | 08.04.2026 |
 | Build error (truncated JSX) | `api-rate-limiting-advanced/page.tsx` missing closing tags | 08.04.2026 |
 

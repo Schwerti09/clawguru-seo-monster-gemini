@@ -60,13 +60,13 @@ function hasKey(provider: AiProvider): boolean {
  *  1. The `preferred` argument (if any key is present)
  *  2. AI_PROVIDER_ORDER env var (comma-separated, e.g. "deepseek,gemini,openai")
  *  3. AI_PREFERRED env var (legacy alias for AI_PROVIDER_ORDER)
- *  4. Hard-coded default: deepseek → gemini → openai
+ *  4. Hard-coded default: deepseek → openai → gemini
  *
  * Providers whose API key is empty/absent are always excluded so we never
  * send a request to a provider that cannot authenticate.
  */
 function buildProviderList(preferred?: AiProvider): AiProvider[] {
-  const all: AiProvider[] = ["deepseek", "gemini", "openai"];
+  const all: AiProvider[] = ["deepseek", "openai", "gemini"];
   const envRaw = (
     process.env.AI_PROVIDER_ORDER ||
     process.env.AI_PREFERRED ||
@@ -214,12 +214,13 @@ async function callGemini(prompt: string): Promise<CallResult> {
   if (!apiKey) return { text: null, status: 401 };
   const base = (process.env.GEMINI_BASE_URL || "https://generativelanguage.googleapis.com/v1beta").replace(/\/$/, "");
   // Try preferred model first, then fallback chain.
-  // gemini-2.5-flash is not yet GA in the API (returns 400); use stable models only.
+  const primary = process.env.GEMINI_MODEL || "gemini-2.5-flash";
   const candidates = [
-    process.env.GEMINI_MODEL || "gemini-2.0-flash",
-    "gemini-1.5-flash",
-    "gemini-2.0-flash-lite",
-  ].filter(Boolean);
+    primary,
+    // Append fallbacks only when they differ from the configured primary
+    ...(primary !== "gemini-2.0-flash" ? ["gemini-2.0-flash"] : []),
+    ...(primary !== "gemini-2.0-flash-lite" ? ["gemini-2.0-flash-lite"] : []),
+  ];
   let lastStatus = 0;
   let lastError = "";
   for (const model of candidates) {

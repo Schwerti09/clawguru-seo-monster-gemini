@@ -1,12 +1,12 @@
-﻿# ClawGuru — AGENTS.md · Master Operating Manual v6 (08.04.2026)
+﻿# ClawGuru — AGENTS.md · Master Operating Manual v7 (09.04.2026)
 
 > **This document is the single source of truth for every agent working in this codebase.**
 > Read it completely BEFORE making any change. Update the Session Log after every session.
-> Last updated: 08.04.2026 | Language: English (maximises AI model compatibility)
+> Last updated: 09.04.2026 | Language: English (maximises AI model compatibility)
 
 ---
 
-## 0. PREAMBLE — FIVE NON-NEGOTIABLES (Read Before Anything Else)
+## 0. PREAMBLE — SIX NON-NEGOTIABLES (Read Before Anything Else)
 
 These rules are absolute. Breaking any one of them costs real traffic, real money, or breaks production.
 
@@ -42,35 +42,145 @@ After creating `app/[lang]/moltbot/my-slug/page.tsx`, add `"my-slug"` to `MOLTBO
 `app/robots.txt/route.ts` must NEVER contain `Disallow: */sitemaps/` or `Disallow: */*.xml`.
 The file must explicitly have `Allow: /sitemaps/`.
 
-### Rule 6 — UX Quality Standards for All New Pages
-All new content pages MUST follow these UX standards to ensure readability and user experience:
+### Rule 6 — MANDATORY Dark Theme Design System (85+ Quality Standard)
 
-#### Card Background Colors
-- **NEVER** use `bg-gray-50` for cards - too light, poor contrast
-- **ALWAYS** use `bg-gray-100` for standard cards
-- **ALWAYS** use `bg-gray-200` for hover states
-- **ALWAYS** use `bg-blue-100`, `bg-green-100`, `bg-yellow-100`, `bg-red-100` for colored cards
+**ClawGuru uses a DARK THEME. The body background is `#0a0a0a` (near-black).**
+**EVERY new page MUST use dark backgrounds with light text. NO EXCEPTIONS.**
+**Violation of these rules makes text UNREADABLE and destroys user experience.**
 
-#### Color Palette Reference
-```tsx
-// Standard cards
-<div className="bg-gray-100 p-4 rounded-lg">
-
-// Hover states
-<a href="#" className="block bg-gray-100 p-4 rounded-lg hover:bg-gray-200">
-
-// Colored cards
-<div className="bg-blue-100 p-4 rounded-lg">
-<div className="bg-green-100 p-4 rounded-lg">
-<div className="bg-yellow-100 p-4 rounded-lg">
-<div className="bg-red-100 p-4 rounded-lg">
+#### FORBIDDEN Classes (NEVER use these — they create white/light elements on dark background)
+```
+BANNED: bg-gray-50, bg-gray-100, bg-gray-200
+BANNED: bg-yellow-50, bg-blue-50, bg-green-50, bg-red-50, bg-purple-50
+BANNED: bg-blue-100, bg-green-100, bg-yellow-100, bg-red-100, bg-purple-100
+BANNED: bg-white
+BANNED: text-gray-600, text-gray-700, text-gray-800, text-gray-900
+BANNED: border-gray-200, border-blue-200, border-green-200
 ```
 
-#### Testing Requirements
-- Every new page MUST be tested for readability
-- Check contrast ratios on all cards
-- Verify hover states work correctly
-- Test on multiple devices and screen sizes
+#### REQUIRED: Card Backgrounds
+```tsx
+// Standard card (outer container)
+<div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
+
+// Standard card (inner/nested)
+<div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+
+// Code block card
+<div className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto">
+```
+
+#### REQUIRED: Colored Cards (accent sections like Best Practices)
+```tsx
+<div className="bg-blue-900 p-4 rounded-lg border border-blue-700">
+  <h3 className="font-semibold text-blue-300 mb-2">Title</h3>
+  <p className="text-sm text-blue-200">Description</p>
+</div>
+<div className="bg-green-900 p-4 rounded-lg border border-green-700">
+  <h3 className="font-semibold text-green-300 mb-2">Title</h3>
+  <p className="text-sm text-green-200">Description</p>
+</div>
+<div className="bg-yellow-900 p-4 rounded-lg border border-yellow-700">
+  <h3 className="font-semibold text-yellow-300 mb-2">Title</h3>
+  <p className="text-sm text-yellow-200">Description</p>
+</div>
+<div className="bg-red-900 p-4 rounded-lg border border-red-700">
+  <h3 className="font-semibold text-red-300 mb-2">Title</h3>
+  <p className="text-sm text-red-200">Description</p>
+</div>
+```
+
+#### REQUIRED: Link Cards (Further Resources section)
+```tsx
+<a href={`/${locale}/securitycheck`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
+  <div className="font-semibold text-cyan-400">Security Check</div>
+  <div className="text-sm text-gray-300">Description text</div>
+</a>
+```
+
+#### REQUIRED: "Not a Pentest" Notice Box (EVERY content page)
+```tsx
+<div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
+  <strong className="text-amber-100">"Not a Pentest" Notice</strong>: This guide is for hardening your own systems. No attack tools.
+</div>
+```
+
+#### REQUIRED: Text Colors
+```
+Headings (h1):    text-gray-100   (class: "text-4xl font-bold mb-4 text-gray-100")
+Headings (h2):    text-gray-100   (class: "text-2xl font-semibold mb-4 text-gray-100")
+Headings (h3):    text-cyan-400   (class: "font-bold text-cyan-400 mb-3")
+Body paragraphs:  text-gray-300   (class: "text-lg text-gray-300 mb-8")
+List items:       text-gray-300   (class: "space-y-2 text-sm text-gray-300")
+Muted/secondary:  text-gray-400
+Link text:        text-cyan-400
+```
+
+#### REQUIRED: Table Styling (for Compare pages)
+```tsx
+<table className="min-w-full bg-gray-900 border border-gray-700 rounded-lg">
+  <thead className="bg-gray-800">
+    <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Header</th>
+  </thead>
+  <tbody>
+    <tr className="border-b border-gray-700">...</tr>           // normal row
+    <tr className="border-b border-gray-700 bg-gray-800/50">... // zebra row
+  </tbody>
+</table>
+```
+
+#### REQUIRED: Status Badges (dynamic conditional classes)
+```tsx
+// Use dark-900 backgrounds with light-300 text
+${status === 'automated' ? 'bg-green-900 text-green-300' : 'bg-gray-700 text-gray-300'}
+// Conditional row backgrounds
+${active ? 'bg-green-900/30 border-green-700' : 'bg-gray-800 border-gray-700'}
+```
+
+#### REQUIRED: Numbered Step Cards
+```tsx
+<div className="flex items-start space-x-4">
+  <div className="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold flex-shrink-0">1</div>
+  <div>
+    <div className="font-semibold text-gray-100">Step Title</div>
+    <div className="text-sm text-gray-300">Step description</div>
+  </div>
+</div>
+```
+
+#### REQUIRED: Section Structure (`<section>` elements)
+```tsx
+// CORRECT — clean section, no background on section itself
+<section className="mb-10">
+  <h2 className="text-2xl font-semibold mb-4 text-gray-100">Section Title</h2>
+  <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
+    {/* content inside */}
+  </div>
+</section>
+
+// WRONG — bg-gray-100 on section creates white block
+<section className="mb-10 bg-gray-100 p-6 rounded-lg">  ❌ NEVER DO THIS
+```
+
+#### Pre-Push Visual Verification Checklist
+Before pushing ANY new content page, run these checks:
+```powershell
+# 1. Zero light backgrounds remaining
+rg "bg-gray-50|bg-gray-100|bg-yellow-50|bg-blue-50|bg-green-50|bg-white" app/[lang]/ --type tsx
+# MUST return 0 results
+
+# 2. Zero light text on dark background
+rg "text-gray-600|text-gray-800" app/[lang]/ --type tsx
+# MUST return 0 results
+
+# 3. Zero light borders
+rg "border-gray-200|border-blue-200" app/[lang]/ --type tsx
+# MUST return 0 results
+
+# 4. Build passes
+npm run build 2>&1 | Select-Object -Last 15
+# Exit code MUST be 0
+```
 
 ---
 
@@ -92,13 +202,13 @@ All new content pages MUST follow these UX standards to ensure readability and u
 | Indexed Pages | ~24,500 URLs | 1,000,000+ URLs |
 | Active Cities (Geo) | 123 cities | 500+ cities |
 | Languages | 15 | 15 (complete) |
-| Content Clusters | Moltbot(29), OpenClaw(10), Solutions(5), Compare(6) | 50+ clusters |
+| Content Clusters | Moltbot(37), OpenClaw(15), Solutions(8), Compare(11) | 50+ clusters |
 | Monthly Visitors | Growth phase | 500,000+ unique visitors |
 
 ### Trust Anchor — Use on Every Content Page
 ```tsx
-<div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-8 text-sm">
-  <strong>"Not a Pentest" Notice</strong>: This guide is for hardening your own systems. No attack tools.
+<div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
+  <strong className="text-amber-100">"Not a Pentest" Notice</strong>: This guide is for hardening your own systems. No attack tools.
 </div>
 ```
 
@@ -115,11 +225,11 @@ All new content pages MUST follow these UX standards to ensure readability and u
 
 ---
 
-## 2. CURRENT STATE (Stand 08.04.2026)
+## 2. CURRENT STATE (Stand 09.04.2026)
 
 ### Live Pages — Full Inventory
 
-**Moltbot Pages (`app/[lang]/moltbot/`) — 29 pages, all live**
+**Moltbot Pages (`app/[lang]/moltbot/`) — 37 pages, all live**
 
 | Slug | Topic |
 |------|-------|
@@ -152,8 +262,16 @@ All new content pages MUST follow these UX standards to ensure readability and u
 | runtime-protection-rasp | RASP |
 | security-posture-score | Security score |
 | cloud-native-security | Cloud-native |
+| ai-agent-threat-model | AI agent threat modeling |
+| ai-agent-threat-model-template | Threat model template |
+| real-time-cve-feed | CVE feed integration |
+| bot-security-testing | Bot security testing |
+| sbom-generation | SBOM generation |
+| compliance-automation-engine | Compliance automation |
+| ai-agent-security | AI agent protection |
+| ai-agent-hardening-guide | AI agent hardening |
 
-**OpenClaw Pages (`app/[lang]/openclaw/`) — 10 pages, all live**
+**OpenClaw Pages (`app/[lang]/openclaw/`) — 15 pages, all live**
 
 | Slug | Topic |
 |------|-------|
@@ -167,16 +285,24 @@ All new content pages MUST follow these UX standards to ensure readability and u
 | database-access-control | DB access control |
 | audit-logging-setup | Audit logging |
 | supply-chain-security | Supply chain |
+| service-mesh-security | Service mesh (Istio/Envoy) |
+| waf-configuration | WAF setup |
+| cicd-security-pipeline | CI/CD security |
+| secrets-rotation-automation | Secrets rotation |
+| microservices-security | Microservices security |
 
-**Solutions Pages (`app/[lang]/solutions/`) — 5 pages, all live**
+**Solutions Pages (`app/[lang]/solutions/`) — 8 pages, all live**
 
 `soc2-compliance-automation`, `kubernetes-security-hardening`, `aws-security-architecture`,
-`startup-security-foundation`, `enterprise-siem-integration`
+`startup-security-foundation`, `enterprise-siem-integration`,
+`iso27001-certification-roadmap`, `pci-dss-compliance`, `hipaa-security-controls`
 
-**Compare Pages — 6 pages, all live**
+**Compare Pages — 11 pages, all live**
 
 `openclaw-vs-snyk`, `openclaw-vs-semgrep`, `clawguru-vs-wiz`, `openclaw-vs-sonarqube`,
-`moltbot-vs-opsgenie`, `moltbot-vs-clawbot`
+`moltbot-vs-opsgenie`, `moltbot-vs-clawbot`,
+`clawguru-vs-crowdstrike`, `clawguru-vs-datadog`, `openclaw-vs-falco`,
+`clawguru-vs-lacework`, `moltbot-vs-pagerduty`
 
 **Specialized Security Pages (in `app/[lang]/`) — 31+ pages, all live**
 
@@ -228,12 +354,13 @@ Activates 27 cities: Japan (5), South Korea (5), Brazil (5), Mexico (5), Southea
 
 **4. Pending Content Batches**
 
-| Batch | Slugs | Priority |
-|-------|-------|----------|
-| OpenClaw Batch 2 (5 pages) | service-mesh-security, waf-configuration, cicd-security-pipeline, secrets-rotation-automation, microservices-security | HIGH |
-| Compare Batch 2 (5 pages) | clawguru-vs-crowdstrike, clawguru-vs-datadog, openclaw-vs-falco, clawguru-vs-lacework, moltbot-vs-pagerduty | HIGH |
-| Solutions Batch 2 (5 pages) | iso27001-certification-roadmap, pci-dss-compliance, hipaa-security-controls, azure-security-architecture, gcp-security-architecture | MEDIUM |
-| Moltbot Batch 4 (5 pages) | ai-agent-threat-model, real-time-cve-feed, bot-security-testing, sbom-generation, compliance-automation-engine | MEDIUM |
+| Batch | Status | Notes |
+|-------|--------|-------|
+| OpenClaw Batch 2 (5 pages) | ✅ DONE | service-mesh-security, waf-configuration, cicd-security-pipeline, secrets-rotation-automation, microservices-security |
+| Compare Batch 2 (5 pages) | ✅ DONE | clawguru-vs-crowdstrike, clawguru-vs-datadog, openclaw-vs-falco, clawguru-vs-lacework, moltbot-vs-pagerduty |
+| Solutions Batch 2 (3 pages) | ✅ DONE | iso27001-certification-roadmap, pci-dss-compliance, hipaa-security-controls |
+| Moltbot Batch 3 (8 pages) | ✅ DONE | ai-agent-threat-model, ai-agent-threat-model-template, real-time-cve-feed, bot-security-testing, sbom-generation, compliance-automation-engine, ai-agent-security, ai-agent-hardening-guide |
+| Dark Theme Fix (109 files) | ✅ DONE 09.04 | All content pages fixed: bg-gray-100→bg-gray-800, text-gray-600→text-gray-300, tables, badges, notices |
 
 ---
 

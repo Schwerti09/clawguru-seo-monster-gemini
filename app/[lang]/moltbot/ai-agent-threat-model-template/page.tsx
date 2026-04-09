@@ -40,17 +40,17 @@ export default function AiAgentThreatModelTemplatePage({ params }: PageProps) {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-4xl mx-auto">
-        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-8 text-sm">
-          <strong>"Not a Pentest" Notice</strong>: This guide is for threat modeling and security architecture. No attack tools.
+        <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: This guide is for threat modeling and security architecture. No attack tools.
         </div>
-        <h1 className="text-4xl font-bold mb-4">AI Agent Threat Model Template: Complete Framework</h1>
-        <p className="text-lg text-gray-600 mb-8">Complete AI agent threat model template with standardized threat assessment, risk analysis, and security control documentation for autonomous systems.</p>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">AI Agent Threat Model Template: Complete Framework</h1>
+        <p className="text-lg text-gray-300 mb-8">Complete AI agent threat model template with standardized threat assessment, risk analysis, and security control documentation for autonomous systems.</p>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Threat Model Template Overview</h2>
-          <div className="bg-gray-100 p-4 rounded-lg mb-4">
-            <h3 className="font-semibold mb-2">Template Components</h3>
-            <ul className="list-disc list-inside space-y-1">
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Threat Model Template Overview</h2>
+          <div className="bg-gray-800 p-4 rounded-lg mb-4 border border-gray-700">
+            <h3 className="font-semibold mb-2 text-gray-100">Template Components</h3>
+            <ul className="list-disc list-inside space-y-1 text-gray-300">
               <li>System architecture documentation</li>
               <li>Asset identification and classification</li>
               <li>Threat analysis and categorization</li>
@@ -62,11 +62,11 @@ export default function AiAgentThreatModelTemplatePage({ params }: PageProps) {
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4">System Architecture Documentation</h2>
-          <div className="bg-gray-100 p-6 rounded-lg">
+          <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-gray-100 p-4 rounded-lg">
-                <h3 className="font-bold text-gray-800 mb-3">Architecture Components</h3>
-                <ul className="space-y-2 text-sm">
+              <div className="bg-gray-900 p-4 rounded-lg border border-gray-600">
+                <h3 className="font-bold text-cyan-400 mb-3">Architecture Components</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li>AI model and algorithms</li>
                   <li>Data processing pipelines</li>
                   <li>Decision-making logic</li>
@@ -74,9 +74,9 @@ export default function AiAgentThreatModelTemplatePage({ params }: PageProps) {
                   <li>External integrations</li>
                 </ul>
               </div>
-              <div className="bg-gray-100 p-4 rounded-lg">
-                <h3 className="font-bold text-gray-800 mb-3">Trust Boundaries</h3>
-                <ul className="space-y-2 text-sm">
+              <div className="bg-gray-900 p-4 rounded-lg border border-gray-600">
+                <h3 className="font-bold text-cyan-400 mb-3">Trust Boundaries</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li>Data flow boundaries</li>
                   <li>Control flow boundaries</li>
                   <li>Network segmentation</li>
@@ -118,12 +118,12 @@ export default function AiAgentThreatModelTemplatePage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Threat Analysis Framework</h2>
-          <div className="bg-gray-100 p-6 rounded-lg">
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Threat Analysis Framework</h2>
+          <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-gray-100 p-4 rounded-lg">
-                <h3 className="font-bold text-gray-800 mb-3">STRIDE Categories</h3>
-                <ul className="space-y-2 text-sm">
+              <div className="bg-gray-900 p-4 rounded-lg border border-gray-600">
+                <h3 className="font-bold text-green-400 mb-3">STRIDE Categories</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li><strong>S</strong>poofing - Identity impersonation</li>
                   <li><strong>T</strong>ampering - Data or system modification</li>
                   <li><strong>R</strong>epudiation - Denial of actions</li>
@@ -132,9 +132,9 @@ export default function AiAgentThreatModelTemplatePage({ params }: PageProps) {
                   <li><strong>E</strong>levation of Privilege - Access escalation</li>
                 </ul>
               </div>
-              <div className="bg-gray-100 p-4 rounded-lg">
-                <h3 className="font-bold text-gray-800 mb-3">AI-Specific Threats</h3>
-                <ul className="space-y-2 text-sm">
+              <div className="bg-gray-900 p-4 rounded-lg border border-gray-600">
+                <h3 className="font-bold text-green-400 mb-3">AI-Specific Threats</h3>
+                <ul className="space-y-2 text-sm text-gray-300">
                   <li>Prompt injection attacks</li>
                   <li>Data poisoning and manipulation</li>
                   <li>Model inversion attacks</li>
@@ -147,35 +147,35 @@ export default function AiAgentThreatModelTemplatePage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Risk Assessment Methodology</h2>
-          <div className="bg-gray-100 p-6 rounded-lg">
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Risk Assessment Methodology</h2>
+          <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
             <div className="space-y-4">
               <div className="flex items-start space-x-4">
                 <div className="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold flex-shrink-0">1</div>
-                <div className="bg-gray-100 p-4 rounded-lg">
-                  <div className="font-semibold">Likelihood Assessment</div>
-                  <div className="text-sm text-gray-600">Assess the probability of threat occurrence based on historical data and current conditions</div>
+                <div className="bg-gray-900 p-4 rounded-lg border border-gray-600 flex-1">
+                  <div className="font-semibold text-gray-100">Likelihood Assessment</div>
+                  <div className="text-sm text-gray-300">Assess the probability of threat occurrence based on historical data and current conditions</div>
                 </div>
               </div>
               <div className="flex items-start space-x-4">
                 <div className="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold flex-shrink-0">2</div>
-                <div className="bg-gray-100 p-4 rounded-lg">
-                  <div className="font-semibold">Impact Analysis</div>
-                  <div className="text-sm text-gray-600">Evaluate potential impact on confidentiality, integrity, and availability</div>
+                <div className="bg-gray-900 p-4 rounded-lg border border-gray-600 flex-1">
+                  <div className="font-semibold text-gray-100">Impact Analysis</div>
+                  <div className="text-sm text-gray-300">Evaluate potential impact on confidentiality, integrity, and availability</div>
                 </div>
               </div>
               <div className="flex items-start space-x-4">
                 <div className="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold flex-shrink-0">3</div>
-                <div className="bg-gray-100 p-4 rounded-lg">
-                  <div className="font-semibold">Risk Calculation</div>
-                  <div className="text-sm text-gray-600">Calculate risk scores using likelihood x impact methodology</div>
+                <div className="bg-gray-900 p-4 rounded-lg border border-gray-600 flex-1">
+                  <div className="font-semibold text-gray-100">Risk Calculation</div>
+                  <div className="text-sm text-gray-300">Calculate risk scores using likelihood x impact methodology</div>
                 </div>
               </div>
               <div className="flex items-start space-x-4">
                 <div className="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold flex-shrink-0">4</div>
-                <div className="bg-gray-100 p-4 rounded-lg">
-                  <div className="font-semibold">Risk Prioritization</div>
-                  <div className="text-sm text-gray-600">Prioritize risks based on calculated scores and business impact</div>
+                <div className="bg-gray-900 p-4 rounded-lg border border-gray-600 flex-1">
+                  <div className="font-semibold text-gray-100">Risk Prioritization</div>
+                  <div className="text-sm text-gray-300">Prioritize risks based on calculated scores and business impact</div>
                 </div>
               </div>
             </div>

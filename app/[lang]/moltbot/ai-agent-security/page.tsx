@@ -40,14 +40,14 @@ export default function AiAgentSecurityPage({ params }: PageProps) {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-4xl mx-auto">
-        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-8 text-sm">
-          <strong>"Not a Pentest" Notice</strong>: This guide is for AI agent security and protection. No attack tools.
+        <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: This guide is for AI agent security and protection. No attack tools.
         </div>
-        <h1 className="text-4xl font-bold mb-4">AI Agent Security: Complete Protection Framework</h1>
-        <p className="text-lg text-gray-600 mb-8">Complete AI agent security framework with threat protection, security controls, and defense mechanisms for autonomous systems and artificial intelligence.</p>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">AI Agent Security: Complete Protection Framework</h1>
+        <p className="text-lg text-gray-300 mb-8">Complete AI agent security framework with threat protection, security controls, and defense mechanisms for autonomous systems and artificial intelligence.</p>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">AI Agent Security Overview</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">AI Agent Security Overview</h2>
           <div className="bg-gray-100 p-4 rounded-lg mb-4">
             <h3 className="font-semibold mb-2">Security Challenges</h3>
             <ul className="list-disc list-inside space-y-1">

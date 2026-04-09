@@ -25,8 +25,8 @@ export default function NeuroPanel() {
       u.searchParams.set("stack", stack)
       u.searchParams.set("limit", String(limit))
       const res = await fetch(u.toString(), { cache: "no-store" })
-      if (!res.ok) throw new Error(String(res.status))
       const j = await res.json()
+      if (!res.ok) throw new Error(j?.message || j?.error || `HTTP ${res.status}`)
       setData(j)
     } catch (e: any) {
       setErr(e?.message || "Fehler")

@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+// Container component for consistent layout
 
 export default function Container({
   children,

@@ -1,3 +1,4 @@
+// Section title component with optional kicker/subtitle
 interface SectionTitleProps {
   children?: React.ReactNode;
   kicker?: string;

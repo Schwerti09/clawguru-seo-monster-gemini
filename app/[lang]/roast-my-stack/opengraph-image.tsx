@@ -25,6 +25,7 @@ const SUB: Partial<Record<Locale, string>> = {
   ja: "ユーモア × 本物のセキュリティ洞察",
   ko: "유머 + 실전 보안 인사이트",
   zh: "毒舌 + 真实安全洞察",
+  af: "Humor + ware sekuriteit-insigte",
 }
 
 export default function Image({ params }: { params: { lang: string } }) {

@@ -43,18 +43,40 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         hi: "https://clawguru.org/hi/moltbot/security-framework",
         tr: "https://clawguru.org/tr/moltbot/security-framework",
         pl: "https://clawguru.org/pl/moltbot/security-framework",
-        nl: "https://clawguru.org/nl/moltbot/security-framework"
+        nl: "https://clawguru.org/nl/moltbot/security-framework",
+        af: "https://clawguru.org/af/moltbot/security-framework"
       }
     },
     robots: "index, follow"
   };
 }
 
+export async function generateStaticParams() {
+  return [
+    { lang: 'de' },
+    { lang: 'en' },
+    { lang: 'es' },
+    { lang: 'fr' },
+    { lang: 'pt' },
+    { lang: 'it' },
+    { lang: 'ru' },
+    { lang: 'zh' },
+    { lang: 'ja' },
+    { lang: 'ko' },
+    { lang: 'ar' },
+    { lang: 'hi' },
+    { lang: 'tr' },
+    { lang: 'pl' },
+    { lang: 'nl' },
+    { lang: 'af' }
+  ];
+}
+
 export default function MoltbotSecurityFrameworkPage({ params }: PageProps) {
   const { lang } = params;
   
   // Validate language
-  const supportedLanguages = ['de', 'en', 'es', 'fr', 'pt', 'it', 'ru', 'zh', 'ja', 'ko', 'ar', 'hi', 'tr', 'pl', 'nl'];
+  const supportedLanguages = ['de', 'en', 'es', 'fr', 'pt', 'it', 'ru', 'zh', 'ja', 'ko', 'ar', 'hi', 'tr', 'pl', 'nl', 'af'];
   if (!supportedLanguages.includes(lang)) {
     notFound();
   }

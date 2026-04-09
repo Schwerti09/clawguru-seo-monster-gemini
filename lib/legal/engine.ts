@@ -61,6 +61,7 @@ const LOCALE_NAMES: Record<Locale, string> = {
   tr: "Turkish",
   pl: "Polish",
   ko: "Korean",
+  af: "Afrikaans",
 }
 
 const DOC_TTL_SECONDS = 60 * 60 * 24

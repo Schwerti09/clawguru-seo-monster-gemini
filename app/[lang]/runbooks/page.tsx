@@ -36,10 +36,12 @@ export async function generateMetadata(props: { params: { lang: string } }) {
     tr: "Güvenlik Runbooks | ClawGuru – Otomatik Playbook'lar",
     pl: "Security Runbooks | ClawGuru – Zautomatyzowane Playbooki",
     nl: "Security Runbooks | ClawGuru – Geautomatiseerde Playbooks",
+    af: "Sekuriteit Runbooks | ClawGuru – Geoutomatiseerde Playbooks",
   }
   const descriptions: Partial<Record<Locale, string>> = {
     de: "600+ ausführbare Security-Playbooks für OpenClaw/Moltbot: SSH Hardening, Kubernetes Zero-Trust, WAF Setup, Incident Response. Score → Runbook → Fix → Re-Check.",
     en: "600+ executable security playbooks for OpenClaw/Moltbot: SSH hardening, Kubernetes zero-trust, WAF setup, incident response. Score → Runbook → Fix → Re-Check.",
+    af: "600+ uitvoerbare sekuriteit-playbooks vir OpenClaw/Moltbot: SSH versterking, Kubernetes zero-trust, WAF opstelling, insident response. Telling → Runbook → Herstel → Herkontrole.",
   }
   const title = titles[locale] ?? titles.en!
   const description = descriptions[locale] ?? descriptions.en!

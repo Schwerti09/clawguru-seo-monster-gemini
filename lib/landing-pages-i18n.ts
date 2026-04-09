@@ -440,6 +440,33 @@ const OPENCLAW: Record<Locale, OpenClawCopy> = {
     faqNextQ: "check 후에는 무엇을 해야 하나요?",
     faqNextA: "runbook을 열고 fixes를 적용한 뒤 re-check를 실행하세요.",
   },
+  af: {
+    title: "Beveilig OpenClaw: check, runbooks, fixes | ClawGuru",
+    description: "Evalueer OpenClaw en Moltbot in ~30 sekondes, prioriteer risiko en versterk met uitvoerbare runbooks.",
+    h1: "Beveilig OpenClaw en Moltbot voordat die volgende draad dit doen.",
+    sub: "Onafhanklike ops-sentrum met 'n 30-sekonde sein, konkrete swaktes en onmiddellike herstel-roete.",
+    problemsTitle: "Tipiese risiko's",
+    problems: [
+      "Blootgestelde gateways, oop poorte en swakke auth word te laat opgemerk.",
+      "API-sleutels lek in logs of skills en blyf aktief ongemerk.",
+      "Insidentrespons verstadig wanneer prioriteite en volgorde onduidelik is.",
+    ],
+    howTitle: "Hoe dit werk",
+    how: [
+      "Loop die check en kry 'n aanvanklike risikosein in sekondes.",
+      "Prioriteer swaktes en begin gepaste runbooks.",
+      "Pas die herstel toe, herkontrole en hou 'n verifieerbare houding.",
+    ],
+    note: "Let wel: Dit is nie 'n pentest nie. Verifieer alle bevindings in jou eie omgewing.",
+    ctaPrimary: "Begin sekuriteit kontrole",
+    ctaSecondary: "Blaai runbooks",
+    methodologyLabel: "Metodologie",
+    runbooksLabel: "Cloud runbooks",
+    faqPentestQ: "Is dit 'n penetrasietoets?",
+    faqPentestA: "Nee. Dit is 'n heuristiese sein met konkrete volgende stappe.",
+    faqNextQ: "Wat moet ek na die kontrole doen?",
+    faqNextA: "Open 'n runbook, pas herstel toe en loop daarna 'n herkontrole.",
+  },
 }
 
 const OPENCLAW_CHECK: Record<Locale, CompactLandingCopy> = {
@@ -638,6 +665,19 @@ const OPENCLAW_CHECK: Record<Locale, CompactLandingCopy> = {
     methodologyLabel: "방법론",
     secondaryLabel: "OpenClaw 랜딩 페이지",
   },
+  af: {
+    title: "OpenClaw sekuriteit kontrole in 30 sekondes | ClawGuru",
+    description: "Vinnige risikosein vir OpenClaw en Moltbot, gevolg deur konkrete runbooks vir herstelaksies.",
+    h1: "OpenClaw sekuriteit kontrole in 30 sekondes",
+    sub: "Vinnige sein op risikohouding - dan runbooks en uitvoerbare volgende stappe.",
+    sectionTitle: "Wat word gekontroleer?",
+    sectionBodyA: "Blootstelling, baseline-hardening en konfigurasie-risiko's in OpenClaw/Moltbot-konteks.",
+    sectionBodyB: "Resultate is heuristies en prioriteer herstel - geen pentest-garantie.",
+    ctaPrimary: "Begin kontrole",
+    ctaSecondary: "Bekyk runbooks",
+    methodologyLabel: "Metodologie",
+    secondaryLabel: "OpenClaw-landingsblad",
+  },
 }
 
 const MOLTBOT: Record<Locale, CompactLandingCopy> = {
@@ -680,6 +720,7 @@ const MOLTBOT: Record<Locale, CompactLandingCopy> = {
   tr: { title: "Moltbot hardening: gateway, auth, exposure | ClawGuru", description: "Moltbot'taki yaygın yapılandırma açıklarını güvenlik kontrolü + runbooks ile hızla kapatın.", h1: "Moltbot hardening - gateway, auth, exposure", sub: "Riskten çözüme hızlı geçiş: kontrol, önceliklendirme, uygulama.", sectionTitle: "Odak alanları", sectionBodyA: "Gateway hardening, erişim ayrımı, token kapsamı ve rotasyon.", sectionBodyB: "Exposure azalt, monitoring güçlendir, ardından re-check yap.", ctaPrimary: "kontrolü başlat", ctaSecondary: "security runbooks", methodologyLabel: "Metodoloji", secondaryLabel: "Runbooks" },
   pl: { title: "Hardening Moltbot: gateway, auth, exposure | ClawGuru", description: "Runbooks + kontrola bezpieczeństwa, aby szybko usuwać najczęstsze luki konfiguracyjne w Moltbot.", h1: "Hardening Moltbot - gateway, auth, exposure", sub: "Szybko przejdź od ryzyka do naprawy: kontrola, priorytetyzacja, wdrożenie.", sectionTitle: "Obszary kluczowe", sectionBodyA: "Hardening gateway, separacja dostępu, zakres tokenów i rotacja.", sectionBodyB: "Zmniejsz exposure, popraw monitoring i wykonaj re-check.", ctaPrimary: "Uruchom kontrolę", ctaSecondary: "Security runbooks", methodologyLabel: "Metodyka", secondaryLabel: "Runbooks" },
   ko: { title: "Moltbot 하드닝: gateway, auth, exposure | ClawGuru", description: "보안 점검 + runbooks로 Moltbot의 흔한 설정 오류를 빠르게 수정하세요.", h1: "Moltbot 하드닝 - gateway, auth, exposure", sub: "리스크에서 해결까지 빠르게: 점검, 우선순위화, 실행.", sectionTitle: "집중 영역", sectionBodyA: "gateway hardening, 접근 분리, token scope 및 rotation.", sectionBodyB: "exposure를 줄이고 monitoring을 강화한 뒤 re-check를 실행하세요.", ctaPrimary: "점검 시작", ctaSecondary: "security runbooks", methodologyLabel: "방법론", secondaryLabel: "Runbooks" },
+  af: { title: "Moltbot hardening: gateway, auth, exposure | ClawGuru", description: "Runbooks + sekuriteitskontrole om algemene Moltbot-konfigurasiefoute vinnig te verhelp.", h1: "Moltbot hardening - gateway, auth, exposure", sub: "Vinnig van risiko na herstel: kontrole, prioriteer en voer uit.", sectionTitle: "Fokusgebiede", sectionBodyA: "Gateway-hardening, toegangskeiding, token-scope en rotasie.", sectionBodyB: "Verminder exposure, verbeter monitoring en voer daarna 'n herkontrole uit.", ctaPrimary: "Begin kontrole", ctaSecondary: "Sekuriteit runbooks", methodologyLabel: "Metodologie", secondaryLabel: "Runbooks" },
 }
 
 const AI_AGENT: Record<Locale, CompactLandingCopy> = {
@@ -722,6 +763,7 @@ const AI_AGENT: Record<Locale, CompactLandingCopy> = {
   tr: { title: "Self-hosted ekipler için AI-agent security | ClawGuru", description: "Exposed agent kurulumlarından ölçülebilir controls'a kontroller, metodoloji ve çalıştırılabilir runbooks ile geçin.", h1: "Self-hosted ekipler için AI-agent security", sub: "Exposed tooling'den ölçülebilir controls'a: kontrol, önceliklendirme ve iyileştirme.", sectionTitle: "Üç çekirdek alan", sectionBodyA: "Gateway auth, session binding, erişim kontrolü, secrets yönetimi ve rotation.", sectionBodyB: "Runbook odaklı incident response, re-check ve doğrulanabilir sonuç.", ctaPrimary: "güvenlik kontrolü başlat", ctaSecondary: "runbooks aç", methodologyLabel: "metodolojiyi oku", secondaryLabel: "Runbooks" },
   pl: { title: "AI-agent security dla zespołów self-hosted | ClawGuru", description: "Przejdź od exposed agent setupów do mierzalnych controls dzięki kontrolom, metodyce i executable runbooks.", h1: "AI-agent security dla zespołów self-hosted", sub: "Od exposed tooling do mierzalnych controls: kontrola, priorytety i remediacja.", sectionTitle: "Trzy kluczowe obszary", sectionBodyA: "Gateway auth, session binding, kontrola dostępu, obsługa secrets i rotacja.", sectionBodyB: "Runbook-driven incident response z re-check i weryfikowalnym wynikiem.", ctaPrimary: "Uruchom kontrolę bezpieczeństwa", ctaSecondary: "Otwórz runbooks", methodologyLabel: "Czytaj metodykę", secondaryLabel: "Runbooks" },
   ko: { title: "Self-hosted 팀을 위한 AI-agent security | ClawGuru", description: "노출된 agent 설정에서 측정 가능한 controls로 전환하세요: 점검, 방법론, 실행 가능한 runbooks 기반으로.", h1: "Self-hosted 팀을 위한 AI-agent security", sub: "노출된 tooling에서 측정 가능한 controls로: 점검, 우선순위화, 수정.", sectionTitle: "세 가지 핵심 영역", sectionBodyA: "Gateway auth, session binding, 접근 제어, secrets 관리와 rotation.", sectionBodyB: "Runbook 기반 incident response, re-check, 검증 가능한 결과.", ctaPrimary: "보안 점검 시작", ctaSecondary: "runbooks 열기", methodologyLabel: "방법론 읽기", secondaryLabel: "Runbooks" },
+  af: { title: "AI-agent sekuriteit vir self-hosted spanne | ClawGuru", description: "Gaan van blootgestelde agent-opstellinge na meetbare kontroles met sekuriteitskontroles, metodologie en uitvoerbare runbooks.", h1: "AI-agent sekuriteit vir self-hosted spanne", sub: "Van blootgestelde tooling na meetbare kontroles: kontrole, prioriteer en voer herstel uit.", sectionTitle: "Drie kerngebiede", sectionBodyA: "Gateway auth, session binding, toegangsbeheer, geheim hantering en rotasie.", sectionBodyB: "Runbook-gedrewe insidentrespons met herkontroles en verifieerbare uitkomste.", ctaPrimary: "Begin sekuriteit kontrole", ctaSecondary: "Open runbooks", methodologyLabel: "Lees metodologie", secondaryLabel: "Runbooks" },
 }
 
 export function getOpenClawCopy(locale: Locale): OpenClawCopy {

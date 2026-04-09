@@ -38,6 +38,7 @@ export async function generateMetadata(
     tr: "Hesap | ClawGuru",
     pl: "Konto | ClawGuru",
     ko: "계정 | ClawGuru",
+    af: "Rekening | ClawGuru",
   }
 
   const descriptions: Record<Locale, string> = {
@@ -56,6 +57,7 @@ export async function generateMetadata(
     tr: "ClawGuru erişiminiz – Dashboard, raporlar, weekly digest, kitler.",
     pl: "Twój dostęp do ClawGuru – Dashboard, raporty, weekly digest, zestawy.",
     ko: "ClawGuru 접근 권한 – Dashboard, 리포트, weekly digest, kits.",
+    af: "Jou ClawGuru toegang – Dashboard, verslae, weekly digest, kits.",
   }
 
   return {

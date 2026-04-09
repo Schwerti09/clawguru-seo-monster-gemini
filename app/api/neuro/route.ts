@@ -15,7 +15,7 @@ declare global {
   // eslint-disable-next-line no-var
   var __NEURO_RL__: Map<string, { count: number; reset: number }> | undefined
 }
-const DAILY_LIMIT = 1
+const DAILY_LIMIT = 5
 const RL = (globalThis as any).__NEURO_RL__ || ((globalThis as any).__NEURO_RL__ = new Map())
 function now() { return Date.now() }
 function getClientKey(req: NextRequest): string {

@@ -1,10 +1,12 @@
-import { Metadata } from 'next';
-import { notFound } from 'next/navigation';
+import type { Metadata } from 'next'
+import { notFound } from 'next/navigation'
+import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
 
-interface PageProps { params: { lang: string }; }
-const LANGS = ['de','en','es','fr','pt','it','ru','zh','ja','ko','ar','hi','tr','pl','nl'];
+export async function generateStaticParams() {
+  return SUPPORTED_LOCALES.map((lang) => ({ lang }))
+}
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const { lang } = params;
   return {
     title: 'OpenClaw vs SonarQube: Code Security & SAST Vergleich 2024',
@@ -12,14 +14,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     keywords: ['openclaw vs sonarqube','sonarqube alternative','code security vergleich','sast tools','sonarqube security','openclaw code quality'],
     authors: [{ name: 'ClawGuru Security Team' }],
     openGraph: { title: 'OpenClaw vs SonarQube Vergleich 2024', description: 'OpenClaw vs SonarQube SAST.', type: 'article', url: `https://clawguru.org/${lang}/openclaw-vs-sonarqube` },
-    alternates: { canonical: `https://clawguru.org/${lang}/openclaw-vs-sonarqube`, languages: Object.fromEntries(LANGS.map(l => [l, `https://clawguru.org/${l}/openclaw-vs-sonarqube`])) },
+    alternates: buildLocalizedAlternates(lang as Locale, '/openclaw-vs-sonarqube'),
     robots: 'index, follow',
   };
 }
 
-export default function OpenClawVsSonarQubePage({ params }: PageProps) {
+export default function OpenClawVsSonarQubePage({ params }: { params: { lang: string } }) {
   const { lang } = params;
-  if (!LANGS.includes(lang)) notFound();
+  if (!SUPPORTED_LOCALES.includes(lang as Locale)) notFound();
 
   return (
     <div className="container mx-auto px-4 py-8">

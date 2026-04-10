@@ -1,10 +1,12 @@
-import { Metadata } from 'next';
-import { notFound } from 'next/navigation';
+import type { Metadata } from 'next'
+import { notFound } from 'next/navigation'
+import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
 
-interface PageProps { params: { lang: string }; }
-const LANGS = ['de','en','es','fr','pt','it','ru','zh','ja','ko','ar','hi','tr','pl','nl'];
+export async function generateStaticParams() {
+  return SUPPORTED_LOCALES.map((lang) => ({ lang }))
+}
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const { lang } = params;
   return {
     title: 'Moltbot Network Security: Firewall & DDoS Protection 2024',
@@ -12,14 +14,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     keywords: ['moltbot network security','firewall configuration','ddos protection','waf setup','ip allowlisting','network segmentation'],
     authors: [{ name: 'ClawGuru Security Team' }],
     openGraph: { title: 'Moltbot Network Security: Firewall & DDoS Protection 2024', description: 'Network Security für Moltbot mit Firewall, DDoS-Schutz und WAF.', type: 'article', url: `https://clawguru.org/${lang}/moltbot/network-security-firewall`, images: ['/og-moltbot-network.jpg'] },
-    alternates: { canonical: `https://clawguru.org/${lang}/moltbot/network-security-firewall`, languages: { de: 'https://clawguru.org/de/moltbot/network-security-firewall', en: 'https://clawguru.org/en/moltbot/network-security-firewall', es: 'https://clawguru.org/es/moltbot/network-security-firewall', fr: 'https://clawguru.org/fr/moltbot/network-security-firewall', pt: 'https://clawguru.org/pt/moltbot/network-security-firewall', it: 'https://clawguru.org/it/moltbot/network-security-firewall', ru: 'https://clawguru.org/ru/moltbot/network-security-firewall', zh: 'https://clawguru.org/zh/moltbot/network-security-firewall', ja: 'https://clawguru.org/ja/moltbot/network-security-firewall', ko: 'https://clawguru.org/ko/moltbot/network-security-firewall', ar: 'https://clawguru.org/ar/moltbot/network-security-firewall', hi: 'https://clawguru.org/hi/moltbot/network-security-firewall', tr: 'https://clawguru.org/tr/moltbot/network-security-firewall', pl: 'https://clawguru.org/pl/moltbot/network-security-firewall', nl: 'https://clawguru.org/nl/moltbot/network-security-firewall' } },
+    alternates: buildLocalizedAlternates(lang as Locale, '/moltbot/network-security-firewall'),
     robots: 'index, follow',
   };
 }
 
-export default function MoltbotNetworkSecurityPage({ params }: PageProps) {
+export default function MoltbotNetworkSecurityPage({ params }: { params: { lang: string } }) {
   const { lang } = params;
-  if (!LANGS.includes(lang)) notFound();
+  if (!SUPPORTED_LOCALES.includes(lang as Locale)) notFound();
 
   return (
     <div className="container mx-auto px-4 py-8">

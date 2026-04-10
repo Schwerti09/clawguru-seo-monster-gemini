@@ -65,7 +65,7 @@ export default async function MongoDBSecurityPage({
   const coreLinks = getCoreSecurityLinks(locale);
 
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-gray-800">
       <section className="relative overflow-hidden bg-gradient-to-br from-green-600 via-green-700 to-emerald-800 py-20">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-green-400/30 via-transparent to-transparent" />
         <div className="container mx-auto px-4 relative z-10">
@@ -98,8 +98,8 @@ export default async function MongoDBSecurityPage({
         <div className="max-w-4xl mx-auto">
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">MongoDB Security Architecture Overview</h2>
-            <p className="text-slate-700 text-lg mb-6 leading-relaxed">
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">MongoDB Security Architecture Overview</h2>
+            <p className="text-gray-200 text-lg mb-6 leading-relaxed">
               MongoDB Enterprise bietet ein mehrschichtiges Sicherheitsmodell: Netzwerkverschlüsselung durch TLS/SSL, starke Authentifizierung über SCRAM-SHA-256 oder x.509-Zertifikate, Autorisierung durch rollenbasierte Zugriffskontrolle (RBAC), und zusätzlich Feld- und dokumentenbasierte Verschlüsselung für sensible Daten. Für Enterprise-Umgebungen unterstützt MongoDB zudem LDAP-Integration und Kerberos-Authentifizierung.
             </p>
 
@@ -128,7 +128,7 @@ export default async function MongoDBSecurityPage({
           </section>
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">TLS/SSL Configuration (mongod.conf)</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">TLS/SSL Configuration (mongod.conf)</h2>
             <div className="bg-slate-900 rounded-xl p-6 overflow-x-auto">
               <pre className="font-mono text-sm text-green-400">
 {`# mongod.conf - Comprehensive TLS/SSL Configuration
@@ -181,8 +181,8 @@ security:
           </section>
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">SCRAM-SHA-256 Authentication Deep Dive</h2>
-            <p className="text-slate-700 mb-6">
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">SCRAM-SHA-256 Authentication Deep Dive</h2>
+            <p className="text-gray-200 mb-6">
               SCRAM (Salted Challenge Response Authentication Mechanism) ist die Standard-Authentifizierung in MongoDB 4.0+. Es bietet Schutz vor Passwort-Abhören und Replay-Attacken durch Challenge-Response mit Salting.
             </p>
             <div className="bg-slate-900 rounded-xl p-6 overflow-x-auto">
@@ -226,8 +226,8 @@ db.runCommand({
           </section>
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">x.509 Certificate Authentication (Enterprise)</h2>
-            <p className="text-slate-700 mb-6">
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">x.509 Certificate Authentication (Enterprise)</h2>
+            <p className="text-gray-200 mb-6">
               x.509-Zertifikate bieten die stärkste Authentifizierung. Keine Passwörter nötig - nur PKI-basierte Identität. Ideal für Service-Accounts und Microservices.
             </p>
             <div className="bg-slate-900 rounded-xl p-6 overflow-x-auto">
@@ -265,7 +265,7 @@ fi`}
           </section>
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">Role-Based Access Control (RBAC) Design</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">Role-Based Access Control (RBAC) Design</h2>
             <div className="bg-slate-900 rounded-xl p-6 overflow-x-auto">
               <pre className="font-mono text-sm text-green-400">
 {`# Create custom roles for application tiers
@@ -331,8 +331,8 @@ db.grantRolesToUser("app-service", [{ role: "dataProcessor", db: "app" }])`}
           </section>
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">Field-Level Encryption (FLE) Implementation</h2>
-            <p className="text-slate-700 mb-6">
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">Field-Level Encryption (FLE) Implementation</h2>
+            <p className="text-gray-200 mb-6">
               Feld-Level-Verschlüsselung schützt sensible Daten auch vor Datenbank-Admins. Die Anwendung verschlüsselt vor dem Senden, MongoDB speichert nur Ciphertext.
             </p>
             <div className="bg-slate-900 rounded-xl p-6 overflow-x-auto">
@@ -411,7 +411,7 @@ const patients = await db.collection('records').find({
           </section>
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">LDAP & Active Directory Integration</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">LDAP & Active Directory Integration</h2>
             <div className="bg-slate-900 rounded-xl p-6 overflow-x-auto">
               <pre className="font-mongo text-sm text-green-400">
 {`# mongod.conf - LDAP Authorization (Enterprise)
@@ -447,7 +447,7 @@ security:
           </section>
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">Auditing & Compliance Logging</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">Auditing & Compliance Logging</h2>
             <div className="bg-slate-900 rounded-xl p-6 overflow-x-auto">
               <pre className="font-mono text-sm text-green-400">
 {`# mongod.conf - Comprehensive Audit Configuration (Enterprise)
@@ -484,7 +484,7 @@ setParameter:
           </section>
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">Enterprise Deployment: Replica Set Security</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">Enterprise Deployment: Replica Set Security</h2>
             <div className="bg-slate-900 rounded-xl p-6 overflow-x-auto">
               <pre className="font-mono text-sm text-green-400">
 {`# Replica Set with Full Security Stack
@@ -541,11 +541,11 @@ net:
           </section>
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">Security Checklist: Production Readiness</h2>
-            <div className="bg-white border border-slate-200 rounded-xl p-6">
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">Security Checklist: Production Readiness</h2>
+            <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
-                  <h3 className="font-semibold text-slate-900 mb-4">Network Security</h3>
+                  <h3 className="font-semibold text-gray-100 mb-4">Network Security</h3>
                   {[
                     "TLS 1.3 enforced for all connections",
                     "Certificate validation enabled (no bypass)",
@@ -556,12 +556,12 @@ net:
                   ].map((item, i) => (
                     <div key={i} className="flex items-center gap-3 py-2 border-b border-slate-100 last:border-0">
                       <span className="w-5 h-5 rounded border-2 border-slate-300 flex items-center justify-center text-xs text-slate-400">☐</span>
-                      <span className="text-slate-700 text-sm">{item}</span>
+                      <span className="text-gray-200 text-sm">{item}</span>
                     </div>
                   ))}
                 </div>
                 <div>
-                  <h3 className="font-semibold text-slate-900 mb-4">Access Control</h3>
+                  <h3 className="font-semibold text-gray-100 mb-4">Access Control</h3>
                   {[
                     "SCRAM-SHA-256 (not SHA-1)",
                     "x.509 for service accounts",
@@ -572,14 +572,14 @@ net:
                   ].map((item, i) => (
                     <div key={i} className="flex items-center gap-3 py-2 border-b border-slate-100 last:border-0">
                       <span className="w-5 h-5 rounded border-2 border-slate-300 flex items-center justify-center text-xs text-slate-400">☐</span>
-                      <span className="text-slate-700 text-sm">{item}</span>
+                      <span className="text-gray-200 text-sm">{item}</span>
                     </div>
                   ))}
                 </div>
               </div>
               <div className="grid md:grid-cols-2 gap-6 mt-6">
                 <div>
-                  <h3 className="font-semibold text-slate-900 mb-4">Encryption</h3>
+                  <h3 className="font-semibold text-gray-100 mb-4">Encryption</h3>
                   {[
                     "Encryption at rest (Enterprise)",
                     "Client-Side Field Level Encryption for PII",
@@ -589,12 +589,12 @@ net:
                   ].map((item, i) => (
                     <div key={i} className="flex items-center gap-3 py-2 border-b border-slate-100 last:border-0">
                       <span className="w-5 h-5 rounded border-2 border-slate-300 flex items-center justify-center text-xs text-slate-400">☐</span>
-                      <span className="text-slate-700 text-sm">{item}</span>
+                      <span className="text-gray-200 text-sm">{item}</span>
                     </div>
                   ))}
                 </div>
                 <div>
-                  <h3 className="font-semibold text-slate-900 mb-4">Monitoring & Compliance</h3>
+                  <h3 className="font-semibold text-gray-100 mb-4">Monitoring & Compliance</h3>
                   {[
                     "Audit logging enabled (Enterprise)",
                     "SIEM integration (Splunk/ELK)",
@@ -605,7 +605,7 @@ net:
                   ].map((item, i) => (
                     <div key={i} className="flex items-center gap-3 py-2 border-b border-slate-100 last:border-0">
                       <span className="w-5 h-5 rounded border-2 border-slate-300 flex items-center justify-center text-xs text-slate-400">☐</span>
-                      <span className="text-slate-700 text-sm">{item}</span>
+                      <span className="text-gray-200 text-sm">{item}</span>
                     </div>
                   ))}
                 </div>
@@ -618,7 +618,7 @@ net:
             <p className="mb-6 max-w-2xl mx-auto">
               Validieren Sie Ihre MongoDB-Installation gegen Enterprise Security Best Practices und Compliance-Standards.
             </p>
-            <a href={coreLinks.check} className="inline-block px-6 py-3 bg-white text-green-700 rounded-lg font-semibold hover:bg-slate-100 transition-colors">
+            <a href={coreLinks.check} className="inline-block px-6 py-3 bg-gray-800 text-green-700 rounded-lg font-semibold hover:bg-slate-100 transition-colors">
               Security Assessment Starten
             </a>
             <div className="mt-6 flex flex-wrap justify-center gap-3 text-sm">

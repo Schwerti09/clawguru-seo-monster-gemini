@@ -428,6 +428,27 @@ export function middleware(request: NextRequest) {
   if (edgeGeo.region) res.headers.set("x-claw-geo-region", edgeGeo.region)
   if (edgeGeo.country) res.headers.set("x-claw-geo-country", edgeGeo.country)
   res.headers.set(getRequestIdHeaderName(), requestId)
+
+  // SEO: noindex for non-primary-locale content pages whose body text is not translated.
+  // Only de and en have real content; other locales show duplicate English text.
+  // Translated pages (homepage, runbooks, tags) are explicitly excluded.
+  const indexableLocales = (process.env.SITEMAP_100K_LOCALES || "de,en").split(",").map((s) => s.trim())
+  if (!indexableLocales.includes(locale)) {
+    // Pages that ARE translated via dictionary system — keep indexable
+    const translatedRoutePatterns = [
+      /^\/[a-z]{2}(?:-[a-z]{2})?\/?$/i,                  // homepage
+      /^\/[a-z]{2}(?:-[a-z]{2})?\/runbooks?\b/i,         // runbooks index + detail
+      /^\/[a-z]{2}(?:-[a-z]{2})?\/tags?\b/i,             // tags index + detail
+      /^\/[a-z]{2}(?:-[a-z]{2})?\/roast-my-/i,           // roast-my-* (dictionary-driven)
+      /^\/[a-z]{2}(?:-[a-z]{2})?\/summon\b/i,            // summon (dictionary-driven)
+      /^\/[a-z]{2}(?:-[a-z]{2})?\/vorstellung\b/i,       // vorstellung (dictionary-driven)
+    ]
+    const isTranslated = translatedRoutePatterns.some((re) => re.test(pathname))
+    if (!isTranslated) {
+      res.headers.set("X-Robots-Tag", "noindex, follow")
+    }
+  }
+
   // Light CDN caching for Tag pages to lower CPU
   if (method === "GET") {
     const isTagDetail = /^\/(?:[a-z]{2}(?:-[a-z]{2})?)\/tag\//i.test(pathname) || /^\/tag\//i.test(pathname)

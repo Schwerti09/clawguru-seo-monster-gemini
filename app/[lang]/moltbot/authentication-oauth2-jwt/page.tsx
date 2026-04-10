@@ -1,10 +1,12 @@
-import { Metadata } from 'next';
-import { notFound } from 'next/navigation';
+import type { Metadata } from 'next'
+import { notFound } from 'next/navigation'
+import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
 
-interface PageProps { params: { lang: string }; }
-const LANGS = ['de','en','es','fr','pt','it','ru','zh','ja','ko','ar','hi','tr','pl','nl'];
+export async function generateStaticParams() {
+  return SUPPORTED_LOCALES.map((lang) => ({ lang }))
+}
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const { lang } = params;
   return {
     title: 'Moltbot Authentication: OAuth2 & JWT Setup Guide 2024',
@@ -12,14 +14,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     keywords: ['moltbot authentication','oauth2 jwt','mfa setup','session management','jwt security','oauth2 pkce'],
     authors: [{ name: 'ClawGuru Security Team' }],
     openGraph: { title: 'Moltbot Authentication: OAuth2 & JWT Setup Guide 2024', description: 'Sichere Authentication mit OAuth2 und JWT für Moltbot.', type: 'article', url: `https://clawguru.org/${lang}/moltbot/authentication-oauth2-jwt`, images: ['/og-moltbot-auth.jpg'] },
-    alternates: { canonical: `https://clawguru.org/${lang}/moltbot/authentication-oauth2-jwt`, languages: { de: 'https://clawguru.org/de/moltbot/authentication-oauth2-jwt', en: 'https://clawguru.org/en/moltbot/authentication-oauth2-jwt', es: 'https://clawguru.org/es/moltbot/authentication-oauth2-jwt', fr: 'https://clawguru.org/fr/moltbot/authentication-oauth2-jwt', pt: 'https://clawguru.org/pt/moltbot/authentication-oauth2-jwt', it: 'https://clawguru.org/it/moltbot/authentication-oauth2-jwt', ru: 'https://clawguru.org/ru/moltbot/authentication-oauth2-jwt', zh: 'https://clawguru.org/zh/moltbot/authentication-oauth2-jwt', ja: 'https://clawguru.org/ja/moltbot/authentication-oauth2-jwt', ko: 'https://clawguru.org/ko/moltbot/authentication-oauth2-jwt', ar: 'https://clawguru.org/ar/moltbot/authentication-oauth2-jwt', hi: 'https://clawguru.org/hi/moltbot/authentication-oauth2-jwt', tr: 'https://clawguru.org/tr/moltbot/authentication-oauth2-jwt', pl: 'https://clawguru.org/pl/moltbot/authentication-oauth2-jwt', nl: 'https://clawguru.org/nl/moltbot/authentication-oauth2-jwt' } },
+    alternates: buildLocalizedAlternates(lang as Locale, '/moltbot/authentication-oauth2-jwt'),
     robots: 'index, follow',
   };
 }
 
-export default function MoltbotAuthPage({ params }: PageProps) {
+export default function MoltbotAuthPage({ params }: { params: { lang: string } }) {
   const { lang } = params;
-  if (!LANGS.includes(lang)) notFound();
+  if (!SUPPORTED_LOCALES.includes(lang as Locale)) notFound();
 
   return (
     <div className="container mx-auto px-4 py-8">

@@ -29,7 +29,7 @@ export default function AWSIAMPage({ params }: { params: { lang: string } }) {
   const coreLinks = getCoreSecurityLinks(locale);
 
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-gray-800">
       <section className="relative overflow-hidden bg-gradient-to-br from-orange-500 via-amber-600 to-yellow-600 py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl">
@@ -49,7 +49,7 @@ export default function AWSIAMPage({ params }: { params: { lang: string } }) {
         <div className="max-w-4xl mx-auto">
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">AWS IAM Security Pillars</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">AWS IAM Security Pillars</h2>
             <div className="grid md:grid-cols-3 gap-6 mb-8">
               <div className="bg-orange-50 border border-orange-700 rounded-xl p-6">
                 <h3 className="font-semibold text-orange-900 mb-2">Identity</h3>
@@ -80,7 +80,7 @@ export default function AWSIAMPage({ params }: { params: { lang: string } }) {
           </section>
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">Terraform IAM Configuration</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">Terraform IAM Configuration</h2>
             <div className="bg-slate-900 rounded-xl p-6 overflow-x-auto">
               <pre className="font-mono text-sm text-green-400">
 {`# Production-Grade IAM Role with OIDC
@@ -118,7 +118,7 @@ resource "aws_iam_role_policy" "s3" {
           </section>
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">Service Control Policies</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">Service Control Policies</h2>
             <div className="bg-slate-900 rounded-xl p-6 overflow-x-auto">
               <pre className="font-mono text-sm text-green-400">
 {`# Deny Root Account Usage
@@ -161,7 +161,7 @@ resource "aws_iam_role_policy" "s3" {
 
           <section className="bg-gradient-to-r from-orange-500 to-amber-600 rounded-2xl p-8 text-center text-white">
             <h2 className="text-2xl font-bold mb-4">AWS IAM Security Assessment</h2>
-            <a href={coreLinks.check} className="inline-block px-6 py-3 bg-white text-orange-400 rounded-lg font-semibold">Assessment Starten</a>
+            <a href={coreLinks.check} className="inline-block px-6 py-3 bg-gray-800 text-orange-400 rounded-lg font-semibold">Assessment Starten</a>
             <div className="mt-6 flex flex-wrap justify-center gap-3 text-sm">
               <a href={`${prefix}/openclaw-security-check`} className="rounded-lg border border-white/30 px-3 py-2 text-white hover:bg-white/10">OpenClaw Security Hub</a>
               <a href={`${prefix}/ai-agent-security`} className="rounded-lg border border-white/30 px-3 py-2 text-white hover:bg-white/10">AI Agent Security</a>

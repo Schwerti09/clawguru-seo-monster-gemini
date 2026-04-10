@@ -1,10 +1,12 @@
-import { Metadata } from 'next';
-import { notFound } from 'next/navigation';
+import type { Metadata } from 'next'
+import { notFound } from 'next/navigation'
+import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
 
-interface PageProps { params: { lang: string }; }
-const LANGS = ['de','en','es','fr','pt','it','ru','zh','ja','ko','ar','hi','tr','pl','nl'];
+export async function generateStaticParams() {
+  return SUPPORTED_LOCALES.map((lang) => ({ lang }))
+}
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const { lang } = params;
   return {
     title: 'Moltbot Threat Detection: Live Monitoring Setup 2024',
@@ -12,14 +14,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     keywords: ['moltbot threat detection','live monitoring','falco security','prometheus alerting','siem integration','incident response'],
     authors: [{ name: 'ClawGuru Security Team' }],
     openGraph: { title: 'Moltbot Threat Detection: Live Monitoring Setup 2024', description: 'Threat Detection für Moltbot mit Falco und Prometheus.', type: 'article', url: `https://clawguru.org/${lang}/moltbot/threat-detection-setup`, images: ['/og-moltbot-threat-detection.jpg'] },
-    alternates: { canonical: `https://clawguru.org/${lang}/moltbot/threat-detection-setup`, languages: { de: 'https://clawguru.org/de/moltbot/threat-detection-setup', en: 'https://clawguru.org/en/moltbot/threat-detection-setup', es: 'https://clawguru.org/es/moltbot/threat-detection-setup', fr: 'https://clawguru.org/fr/moltbot/threat-detection-setup', pt: 'https://clawguru.org/pt/moltbot/threat-detection-setup', it: 'https://clawguru.org/it/moltbot/threat-detection-setup', ru: 'https://clawguru.org/ru/moltbot/threat-detection-setup', zh: 'https://clawguru.org/zh/moltbot/threat-detection-setup', ja: 'https://clawguru.org/ja/moltbot/threat-detection-setup', ko: 'https://clawguru.org/ko/moltbot/threat-detection-setup', ar: 'https://clawguru.org/ar/moltbot/threat-detection-setup', hi: 'https://clawguru.org/hi/moltbot/threat-detection-setup', tr: 'https://clawguru.org/tr/moltbot/threat-detection-setup', pl: 'https://clawguru.org/pl/moltbot/threat-detection-setup', nl: 'https://clawguru.org/nl/moltbot/threat-detection-setup' } },
+    alternates: buildLocalizedAlternates(lang as Locale, '/moltbot/threat-detection-setup'),
     robots: 'index, follow',
   };
 }
 
-export default function MoltbotThreatDetectionPage({ params }: PageProps) {
+export default function MoltbotThreatDetectionPage({ params }: { params: { lang: string } }) {
   const { lang } = params;
-  if (!LANGS.includes(lang)) notFound();
+  if (!SUPPORTED_LOCALES.includes(lang as Locale)) notFound();
 
   return (
     <div className="container mx-auto px-4 py-8">

@@ -157,7 +157,7 @@ export default function OpenClawVsFalcoPage({ params }: PageProps) {
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">Use Case Analysis</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-white border border-gray-700 rounded-lg p-6">
+            <div className="bg-gray-800 border border-gray-700 rounded-lg p-6">
               <h3 className="font-bold text-cyan-400 mb-4">Choose OpenClaw if:</h3>
               <ul className="space-y-3 text-sm">
                 <li className="flex items-start">
@@ -182,7 +182,7 @@ export default function OpenClawVsFalcoPage({ params }: PageProps) {
                 </li>
               </ul>
             </div>
-            <div className="bg-white border border-gray-700 rounded-lg p-6">
+            <div className="bg-gray-800 border border-gray-700 rounded-lg p-6">
               <h3 className="font-bold text-cyan-400 mb-4">Choose Falco if:</h3>
               <ul className="space-y-3 text-sm">
                 <li className="flex items-start">
@@ -318,7 +318,7 @@ spec:
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">Deployment Comparison</h2>
           <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-white p-4 rounded border">
+              <div className="bg-gray-800 p-4 rounded border">
                 <h3 className="font-bold text-cyan-400 mb-3">OpenClaw Deployment</h3>
                 <ul className="space-y-2 text-sm text-gray-300">
                   <li><strong>Self-hosted:</strong> Docker Compose</li>
@@ -328,7 +328,7 @@ spec:
                   <li className="text-green-400">Complete control over data</li>
                 </ul>
               </div>
-              <div className="bg-white p-4 rounded border">
+              <div className="bg-gray-800 p-4 rounded border">
                 <h3 className="font-bold text-cyan-400 mb-3">Falco Deployment</h3>
                 <ul className="space-y-2 text-sm text-gray-300">
                   <li><strong>Kubernetes:</strong> DaemonSet deployment</li>

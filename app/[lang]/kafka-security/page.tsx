@@ -61,7 +61,7 @@ export default async function KafkaSecurityPage({
   const prefix = `/${locale}`;
   const coreLinks = getCoreSecurityLinks(locale);
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-gray-800">
       <section className="relative overflow-hidden bg-gradient-to-br from-cyan-700 via-blue-800 to-indigo-900 py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl">
@@ -82,8 +82,8 @@ export default async function KafkaSecurityPage({
         <div className="max-w-4xl mx-auto">
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">Kafka Security Architecture</h2>
-            <p className="text-slate-700 text-lg mb-6">
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">Kafka Security Architecture</h2>
+            <p className="text-gray-200 text-lg mb-6">
               Apache Kafka ist das Rückgrat moderner Event-Driven-Architekturen. Ohne Security ist jeder Topic offen für alle Producer und Consumer. Dieser Guide deckt Transport Encryption, Authentication, Authorization und Audit für Enterprise-Kafka-Cluster ab.
             </p>
 
@@ -119,7 +119,7 @@ export default async function KafkaSecurityPage({
           </section>
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">Broker SSL/TLS Configuration</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">Broker SSL/TLS Configuration</h2>
             <div className="bg-slate-900 rounded-xl p-6 overflow-x-auto">
               <pre className="font-mono text-sm text-green-400">
 {`# server.properties - Production SSL Configuration
@@ -162,7 +162,7 @@ inter.broker.listener.name=INTERNAL_SSL
           </section>
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">SASL/SCRAM Authentication</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">SASL/SCRAM Authentication</h2>
             <div className="bg-slate-900 rounded-xl p-6 overflow-x-auto">
               <pre className="font-mono text-sm text-green-400">
 {`# server.properties - SASL Configuration
@@ -194,7 +194,7 @@ EOF`}
           </section>
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">ACL-Based Authorization</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">ACL-Based Authorization</h2>
             <div className="bg-slate-900 rounded-xl p-6 overflow-x-auto">
               <pre className="font-mono text-sm text-green-400">
 {`# Enable ACLs
@@ -226,8 +226,8 @@ kafka-acls.sh \\\n  --bootstrap-server kafka-1:9093 \\\n  --command-config admin
           </section>
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">Apache Ranger Integration</h2>
-            <p className="text-slate-700 mb-6">
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">Apache Ranger Integration</h2>
+            <p className="text-gray-200 mb-6">
               Ranger bietet zentrale Policy-Verwaltung für Kafka mit Audit-Logging und feingranularer Zugriffskontrolle.
             </p>
             <div className="bg-slate-900 rounded-xl p-6 overflow-x-auto">
@@ -289,7 +289,7 @@ kafka-acls.sh \\\n  --bootstrap-server kafka-1:9093 \\\n  --command-config admin
           </section>
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">Audit Logging & Monitoring</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">Audit Logging & Monitoring</h2>
             <div className="bg-slate-900 rounded-xl p-6 overflow-x-auto">
               <pre className="font-mono text-sm text-green-400">
 {`# server.properties - Audit Configuration
@@ -344,7 +344,7 @@ output.elasticsearch:
 
           <section className="bg-gradient-to-r from-cyan-600 to-blue-600 rounded-2xl p-8 text-center text-white">
             <h2 className="text-2xl font-bold mb-4">Kafka Security Assessment</h2>
-            <a href={coreLinks.check} className="inline-block px-6 py-3 bg-white text-cyan-600 rounded-lg font-semibold">Assessment Starten</a>
+            <a href={coreLinks.check} className="inline-block px-6 py-3 bg-gray-800 text-cyan-600 rounded-lg font-semibold">Assessment Starten</a>
             <div className="mt-6 flex flex-wrap justify-center gap-3 text-sm">
               <a href={`${prefix}/openclaw-security-check`} className="rounded-lg border border-white/30 px-3 py-2 text-white hover:bg-white/10">OpenClaw Security Hub</a>
               <a href={`${prefix}/ai-agent-security`} className="rounded-lg border border-white/30 px-3 py-2 text-white hover:bg-white/10">AI Agent Security</a>

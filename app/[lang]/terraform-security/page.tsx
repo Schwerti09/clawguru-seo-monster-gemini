@@ -59,7 +59,7 @@ export default async function TerraformSecurityPage({
   const prefix = `/${locale}`;
   const coreLinks = getCoreSecurityLinks(locale);
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-gray-800">
       <section className="relative overflow-hidden bg-gradient-to-br from-purple-700 via-purple-800 to-indigo-900 py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl">
@@ -79,7 +79,7 @@ export default async function TerraformSecurityPage({
       <div className="container mx-auto px-4 py-12">
         <div className="max-w-4xl mx-auto">
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">State Security</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">State Security</h2>
             <div className="bg-slate-900 rounded-xl p-6">
               <pre className="font-mono text-sm text-green-400">
 {`# backend.tf - Remote Backend with Encryption
@@ -113,7 +113,7 @@ terraform {
           </section>
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">tfsec CI/CD Integration</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">tfsec CI/CD Integration</h2>
             <div className="bg-slate-900 rounded-xl p-6">
               <pre className="font-mono text-sm text-green-400">
 {`# .github/workflows/terraform-security.yml
@@ -159,7 +159,7 @@ jobs:
           </section>
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">Least Privilege IAM</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">Least Privilege IAM</h2>
             <div className="bg-slate-900 rounded-xl p-6">
               <pre className="font-mono text-sm text-green-400">
 {`# terraform-deployer-role.tf - Minimal Permissions
@@ -205,7 +205,7 @@ data "aws_iam_policy_document" "terraform_deployer" {
           </section>
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">Sentinel Policies (Terraform Cloud)</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">Sentinel Policies (Terraform Cloud)</h2>
             <div className="bg-slate-900 rounded-xl p-6">
               <pre className="font-mono text-sm text-green-400">
 {`# require-private-s3.sentinel
@@ -247,7 +247,7 @@ has_required_tags = rule {
 
           <section className="bg-gradient-to-r from-purple-700 to-indigo-700 rounded-2xl p-8 text-center text-white">
             <h2 className="text-2xl font-bold mb-4">Terraform Security Assessment</h2>
-            <a href={coreLinks.check} className="inline-block px-6 py-3 bg-white text-purple-700 rounded-lg font-semibold">Assessment Starten</a>
+            <a href={coreLinks.check} className="inline-block px-6 py-3 bg-gray-800 text-purple-700 rounded-lg font-semibold">Assessment Starten</a>
             <div className="mt-6 flex flex-wrap justify-center gap-3 text-sm">
               <a href={`${prefix}/openclaw-security-check`} className="rounded-lg border border-white/30 px-3 py-2 text-white hover:bg-white/10">OpenClaw Security Hub</a>
               <a href={`${prefix}/ai-agent-security`} className="rounded-lg border border-white/30 px-3 py-2 text-white hover:bg-white/10">AI Agent Security</a>

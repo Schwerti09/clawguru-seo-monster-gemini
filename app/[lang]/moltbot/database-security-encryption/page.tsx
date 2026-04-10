@@ -1,10 +1,12 @@
-import { Metadata } from 'next';
-import { notFound } from 'next/navigation';
+import type { Metadata } from 'next'
+import { notFound } from 'next/navigation'
+import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
 
-interface PageProps { params: { lang: string }; }
-const LANGS = ['de','en','es','fr','pt','it','ru','zh','ja','ko','ar','hi','tr','pl','nl'];
+export async function generateStaticParams() {
+  return SUPPORTED_LOCALES.map((lang) => ({ lang }))
+}
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const { lang } = params;
   return {
     title: 'Moltbot Database Security: Encryption & Access Control 2024',
@@ -12,14 +14,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     keywords: ['moltbot database security','database encryption','access control','sql injection prevention','row level security','postgresql security'],
     authors: [{ name: 'ClawGuru Security Team' }],
     openGraph: { title: 'Moltbot Database Security: Encryption & Access Control 2024', description: 'Datenbankabsicherung für Moltbot mit AES-256-GCM und Row-Level Security.', type: 'article', url: `https://clawguru.org/${lang}/moltbot/database-security-encryption`, images: ['/og-moltbot-db-security.jpg'] },
-    alternates: { canonical: `https://clawguru.org/${lang}/moltbot/database-security-encryption`, languages: { de: 'https://clawguru.org/de/moltbot/database-security-encryption', en: 'https://clawguru.org/en/moltbot/database-security-encryption', es: 'https://clawguru.org/es/moltbot/database-security-encryption', fr: 'https://clawguru.org/fr/moltbot/database-security-encryption', pt: 'https://clawguru.org/pt/moltbot/database-security-encryption', it: 'https://clawguru.org/it/moltbot/database-security-encryption', ru: 'https://clawguru.org/ru/moltbot/database-security-encryption', zh: 'https://clawguru.org/zh/moltbot/database-security-encryption', ja: 'https://clawguru.org/ja/moltbot/database-security-encryption', ko: 'https://clawguru.org/ko/moltbot/database-security-encryption', ar: 'https://clawguru.org/ar/moltbot/database-security-encryption', hi: 'https://clawguru.org/hi/moltbot/database-security-encryption', tr: 'https://clawguru.org/tr/moltbot/database-security-encryption', pl: 'https://clawguru.org/pl/moltbot/database-security-encryption', nl: 'https://clawguru.org/nl/moltbot/database-security-encryption' } },
+    alternates: buildLocalizedAlternates(lang as Locale, '/moltbot/database-security-encryption'),
     robots: 'index, follow',
   };
 }
 
-export default function MoltbotDatabaseSecurityPage({ params }: PageProps) {
+export default function MoltbotDatabaseSecurityPage({ params }: { params: { lang: string } }) {
   const { lang } = params;
-  if (!LANGS.includes(lang)) notFound();
+  if (!SUPPORTED_LOCALES.includes(lang as Locale)) notFound();
 
   return (
     <div className="container mx-auto px-4 py-8">

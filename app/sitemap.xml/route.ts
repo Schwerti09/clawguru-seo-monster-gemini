@@ -39,16 +39,11 @@ export async function GET(req: NextRequest) {
 
   const base = `${BASE_URL}/sitemaps`
 
-  // CORE PAGES ONLY - High quality, no duplicates
+  // CORE PAGES ONLY — quality over quantity.
+  // Hub sitemaps (providers/issues/services/years) each contain only 1-2 URLs and signal
+  // an inflated site to Google. They are merged into the main sitemap instead.
   const main = selectedLocales.map((loc) => `${base}/main-${loc}.xml`)
-  const hubs = selectedLocales.flatMap((loc) => [
-    `${base}/providers-${loc}.xml`,
-    `${base}/issues-${loc}.xml`,
-    `${base}/services-${loc}.xml`,
-    `${base}/years-${loc}.xml`,
-  ])
-  const tools = selectedLocales.map((loc) => `${base}/tools-check-${loc}.xml`)
-  const solutions = selectedLocales.map((loc) => `${base}/solutions-cve-${loc}.xml`)
+
   const geoRunbooks = process.env.GEO_MATRIX_SITEMAP === "1"
     ? selectedLocales.map((loc) => `${base}/geo-runbooks-${loc}.xml`)
     : []
@@ -57,6 +52,9 @@ export async function GET(req: NextRequest) {
   const tags = selectedLocales.flatMap((loc) => bucketsToUse.map((b) => `${base}/tags-${loc}-${b}.xml`))
   const runbooks = selectedLocales.flatMap((loc) => bucketsToUse.map((b) => `${base}/runbooks-${loc}-${b}.xml`))
   
+  // 100K synthetic sitemaps DISABLED by default — they were the primary cause of Google
+  // indexing 400k+ thin/duplicate pages and penalising the domain's crawl budget.
+  // Only enable after curated content exists for every slug.
   const includeSynthetic100k = process.env.SITEMAP_INCLUDE_SYNTHETIC_100K === "1"
   const SITEMAP_PAGE_SIZE_100K = 50000
   const count100kSlugs = () => {
@@ -74,9 +72,6 @@ export async function GET(req: NextRequest) {
 
   const listed = [
     ...main,
-    ...hubs,
-    ...tools,
-    ...solutions,
     ...geoRunbooks,
     ...tags,
     ...runbooks,

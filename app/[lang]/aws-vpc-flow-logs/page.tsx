@@ -64,7 +64,7 @@ export default function AWSVPCFlowLogsPage({
   const isGerman = locale === "de";
 
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-gray-800">
       <section className="relative overflow-hidden bg-gradient-to-br from-orange-500 via-amber-600 to-yellow-600 py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl">
@@ -94,8 +94,8 @@ export default function AWSVPCFlowLogsPage({
         <div className="max-w-4xl mx-auto">
           
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">Was sind VPC Flow Logs?</h2>
-            <p className="text-slate-700 text-lg mb-6">
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">Was sind VPC Flow Logs?</h2>
+            <p className="text-gray-200 text-lg mb-6">
               VPC Flow Logs erfassen Informationen über IP-Datenverkehr in und aus Netzwerkschnittstellen in Ihrer VPC. Nutzen Sie sie für Sicherheitsanalysen, Netzwerk-Fehlerbehebung und Compliance-Monitoring.
             </p>
 
@@ -125,7 +125,7 @@ export default function AWSVPCFlowLogsPage({
           </section>
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">Terraform Setup</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">Terraform Setup</h2>
             
             <div className="bg-slate-900 rounded-xl p-6">
               <h3 className="text-white font-semibold mb-4">VPC Flow Logs mit Athena Integration</h3>
@@ -182,7 +182,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "flow_logs" {
           </section>
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">Athena SQL Queries</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">Athena SQL Queries</h2>
             
             <div className="bg-slate-900 rounded-xl p-6 mb-6">
               <h3 className="text-white font-semibold mb-4">Athena Table Definition</h3>
@@ -261,7 +261,7 @@ ORDER BY numbytes DESC;`}
           <section className="bg-gradient-to-r from-orange-500 to-amber-600 rounded-2xl p-8 text-center text-white">
             <h2 className="text-2xl font-bold mb-4">VPC Flow Logs Analysis</h2>
             <p className="mb-6">Automatisieren Sie Ihre Netzwerk-Security Analyse.</p>
-            <a href={coreLinks.check} className="inline-block px-6 py-3 bg-white text-orange-400 rounded-lg font-semibold">
+            <a href={coreLinks.check} className="inline-block px-6 py-3 bg-gray-800 text-orange-400 rounded-lg font-semibold">
               Flow Logs Assessment
             </a>
             <div className="mt-6 flex flex-wrap justify-center gap-3 text-sm">

@@ -59,7 +59,7 @@ export default async function OpenTelemetrySecurityPage({
   const prefix = `/${locale}`;
   const coreLinks = getCoreSecurityLinks(locale);
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-gray-800">
       <section className="relative overflow-hidden bg-gradient-to-br from-purple-600 via-indigo-600 to-blue-700 py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl">
@@ -80,8 +80,8 @@ export default async function OpenTelemetrySecurityPage({
         <div className="max-w-4xl mx-auto">
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">OTEL Collector Security Architecture</h2>
-            <p className="text-slate-700 text-lg mb-6">
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">OTEL Collector Security Architecture</h2>
+            <p className="text-gray-200 text-lg mb-6">
               OpenTelemetry Collector ist der zentrale Hub für alle Telemetrie-Daten. Ohne Security könnten sensitive Daten (PII, Credentials) ungeschützt übertragen werden. Sichern Sie OTLP, Exporter und Processor Pipeline.
             </p>
 
@@ -117,7 +117,7 @@ export default async function OpenTelemetrySecurityPage({
           </section>
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">OTEL Collector mTLS Configuration</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">OTEL Collector mTLS Configuration</h2>
             <div className="bg-slate-900 rounded-xl p-6 overflow-x-auto">
               <pre className="font-mono text-sm text-green-400">
 {`# collector-config.yaml - Secure OTEL Collector
@@ -295,7 +295,7 @@ service:
           </section>
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">Application Instrumentation Security</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">Application Instrumentation Security</h2>
             <div className="bg-slate-900 rounded-xl p-6 overflow-x-auto">
               <pre className="font-mono text-sm text-green-400">
 {`# Node.js - Secure OpenTelemetry SDK Configuration
@@ -396,7 +396,7 @@ process.on('SIGTERM', () => {
           </section>
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">Kubernetes OTEL Security</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">Kubernetes OTEL Security</h2>
             <div className="bg-slate-900 rounded-xl p-6 overflow-x-auto">
               <pre className="font-mono text-sm text-green-400">
 {`# otel-collector-daemonset.yaml - Secure K8s Deployment
@@ -552,7 +552,7 @@ spec:
 
           <section className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl p-8 text-center text-white">
             <h2 className="text-2xl font-bold mb-4">OpenTelemetry Security Assessment</h2>
-            <a href={coreLinks.check} className="inline-block px-6 py-3 bg-white text-purple-600 rounded-lg font-semibold">Assessment Starten</a>
+            <a href={coreLinks.check} className="inline-block px-6 py-3 bg-gray-800 text-purple-600 rounded-lg font-semibold">Assessment Starten</a>
             <div className="mt-6 flex flex-wrap justify-center gap-3 text-sm">
               <a href={`${prefix}/openclaw-security-check`} className="rounded-lg border border-white/30 px-3 py-2 text-white hover:bg-white/10">OpenClaw Security Hub</a>
               <a href={`${prefix}/ai-agent-security`} className="rounded-lg border border-white/30 px-3 py-2 text-white hover:bg-white/10">AI Agent Security</a>

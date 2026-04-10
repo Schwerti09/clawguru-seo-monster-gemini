@@ -306,7 +306,7 @@ export default async function GeoVariantPage({ params }: GeoVariantPageProps) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <a 
                 href={`/${lang}/securitycheck`}
-                className="block bg-white rounded-lg p-6 border border-gray-700 hover:border-gray-300 transition-colors"
+                className="block bg-gray-800 rounded-lg p-6 border border-gray-700 hover:border-gray-600 transition-colors"
               >
                 <div className="font-semibold text-cyan-400 mb-2">
                   {lang === 'de' ? 'Security Check' : 'Security Check'}
@@ -321,7 +321,7 @@ export default async function GeoVariantPage({ params }: GeoVariantPageProps) {
               
               <a 
                 href={`/${lang}/runbooks`}
-                className="block bg-white rounded-lg p-6 border border-gray-700 hover:border-gray-300 transition-colors"
+                className="block bg-gray-800 rounded-lg p-6 border border-gray-700 hover:border-gray-600 transition-colors"
               >
                 <div className="font-semibold text-cyan-400 mb-2">
                   {lang === 'de' ? 'Security Runbooks' : 'Security Runbooks'}
@@ -481,7 +481,7 @@ roleRef:
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <a 
               href={`/${lang}/securitycheck`}
-              className="block bg-white rounded-lg p-6 border border-gray-700 hover:border-gray-300 transition-colors"
+              className="block bg-gray-800 rounded-lg p-6 border border-gray-700 hover:border-gray-600 transition-colors"
             >
               <div className="font-semibold text-cyan-400 mb-2">
                 {lang === 'de' ? 'Security Check' : 'Security Check'}
@@ -496,7 +496,7 @@ roleRef:
             
             <a 
               href={`/${lang}/runbooks`}
-              className="block bg-white rounded-lg p-6 border border-gray-700 hover:border-gray-300 transition-colors"
+              className="block bg-gray-800 rounded-lg p-6 border border-gray-700 hover:border-gray-600 transition-colors"
             >
               <div className="font-semibold text-cyan-400 mb-2">
                 {lang === 'de' ? 'Security Runbooks' : 'Security Runbooks'}
@@ -511,7 +511,7 @@ roleRef:
             
             <a 
               href={`/${lang}/oracle`}
-              className="block bg-white rounded-lg p-6 border border-gray-700 hover:border-gray-300 transition-colors"
+              className="block bg-gray-800 rounded-lg p-6 border border-gray-700 hover:border-gray-600 transition-colors"
             >
               <div className="font-semibold text-cyan-400 mb-2">
                 {lang === 'de' ? 'Threat Intelligence' : 'Threat Intelligence'}
@@ -526,7 +526,7 @@ roleRef:
             
             <a 
               href={`/${lang}/openclaw`}
-              className="block bg-white rounded-lg p-6 border border-gray-700 hover:border-gray-300 transition-colors"
+              className="block bg-gray-800 rounded-lg p-6 border border-gray-700 hover:border-gray-600 transition-colors"
             >
               <div className="font-semibold text-cyan-400 mb-2">
                 {lang === 'de' ? 'OpenClaw Framework' : 'OpenClaw Framework'}

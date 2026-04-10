@@ -64,7 +64,7 @@ export default function DockerSecurityPage({
   const isGerman = locale === "de";
 
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-gray-800">
       <section className="relative overflow-hidden bg-gradient-to-br from-blue-600 via-cyan-600 to-teal-600 py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl">
@@ -94,8 +94,8 @@ export default function DockerSecurityPage({
         <div className="max-w-4xl mx-auto">
           
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">Docker Security Grundlagen</h2>
-            <p className="text-slate-700 text-lg mb-6">
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">Docker Security Grundlagen</h2>
+            <p className="text-gray-200 text-lg mb-6">
               Container sind keine Sicherheitsgrenzen. Default-Docker ist unsicher - root im Container = root auf dem Host. Hardening ist Pflicht für Production.
             </p>
 
@@ -131,7 +131,7 @@ export default function DockerSecurityPage({
           </section>
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">Rootless Docker</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">Rootless Docker</h2>
             
             <div className="bg-slate-900 rounded-xl p-6 mb-6">
               <h3 className="text-white font-semibold mb-4">Installation & Setup</h3>
@@ -175,7 +175,7 @@ docker info --format '{{ .SecurityOptions }}'`}
           </section>
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">Hardened Container Runtime</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">Hardened Container Runtime</h2>
             
             <div className="bg-slate-900 rounded-xl p-6 mb-6">
               <h3 className="text-white font-semibold mb-4">Secure Docker Run</h3>
@@ -226,7 +226,7 @@ docker info --format '{{ .SecurityOptions }}'`}
           </section>
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">Hardened Dockerfile</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">Hardened Dockerfile</h2>
             
             <div className="bg-slate-900 rounded-xl p-6">
               <h3 className="text-white font-semibold mb-4">Multi-Stage Security Build</h3>
@@ -265,7 +265,7 @@ CMD ["dist/server.js"]`}
           </section>
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">Image Scanning</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">Image Scanning</h2>
             
             <div className="bg-slate-900 rounded-xl p-6">
               <h3 className="text-white font-semibold mb-4">Trivy Scan in CI/CD</h3>
@@ -303,7 +303,7 @@ jobs:
           <section className="bg-gradient-to-r from-blue-600 to-cyan-600 rounded-2xl p-8 text-center text-white">
             <h2 className="text-2xl font-bold mb-4">Docker Security Assessment</h2>
             <p className="mb-6">Validieren Sie Ihre Container-Konfiguration gegen CIS Benchmarks.</p>
-            <a href={coreLinks.check} className="inline-block px-6 py-3 bg-white text-cyan-400 rounded-lg font-semibold">
+            <a href={coreLinks.check} className="inline-block px-6 py-3 bg-gray-800 text-cyan-400 rounded-lg font-semibold">
               Security Assessment
             </a>
             <div className="mt-6 flex flex-wrap justify-center gap-3 text-sm">

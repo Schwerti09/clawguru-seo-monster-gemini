@@ -1,10 +1,12 @@
-import { Metadata } from 'next';
-import { notFound } from 'next/navigation';
+import type { Metadata } from 'next'
+import { notFound } from 'next/navigation'
+import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
 
-interface PageProps { params: { lang: string }; }
-const LANGS = ['de','en','es','fr','pt','it','ru','zh','ja','ko','ar','hi','tr','pl','nl'];
+export async function generateStaticParams() {
+  return SUPPORTED_LOCALES.map((lang) => ({ lang }))
+}
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const { lang } = params;
   return {
     title: 'Moltbot API Security: REST Endpoints Absichern 2024',
@@ -12,14 +14,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     keywords: ['moltbot api security','rest endpoint protection','api hardening','rate limiting','input validation','api authentication'],
     authors: [{ name: 'ClawGuru Security Team' }],
     openGraph: { title: 'Moltbot API Security: REST Endpoints Absichern 2024', description: 'Komplette API Security für Moltbot REST Endpoints.', type: 'article', url: `https://clawguru.org/${lang}/moltbot/api-security-protection`, images: ['/og-moltbot-api-security.jpg'] },
-    alternates: { canonical: `https://clawguru.org/${lang}/moltbot/api-security-protection`, languages: { de: 'https://clawguru.org/de/moltbot/api-security-protection', en: 'https://clawguru.org/en/moltbot/api-security-protection', es: 'https://clawguru.org/es/moltbot/api-security-protection', fr: 'https://clawguru.org/fr/moltbot/api-security-protection', pt: 'https://clawguru.org/pt/moltbot/api-security-protection', it: 'https://clawguru.org/it/moltbot/api-security-protection', ru: 'https://clawguru.org/ru/moltbot/api-security-protection', zh: 'https://clawguru.org/zh/moltbot/api-security-protection', ja: 'https://clawguru.org/ja/moltbot/api-security-protection', ko: 'https://clawguru.org/ko/moltbot/api-security-protection', ar: 'https://clawguru.org/ar/moltbot/api-security-protection', hi: 'https://clawguru.org/hi/moltbot/api-security-protection', tr: 'https://clawguru.org/tr/moltbot/api-security-protection', pl: 'https://clawguru.org/pl/moltbot/api-security-protection', nl: 'https://clawguru.org/nl/moltbot/api-security-protection' } },
+    alternates: buildLocalizedAlternates(lang as Locale, '/moltbot/api-security-protection'),
     robots: 'index, follow',
   };
 }
 
-export default function MoltbotApiSecurityPage({ params }: PageProps) {
+export default function MoltbotApiSecurityPage({ params }: { params: { lang: string } }) {
   const { lang } = params;
-  if (!LANGS.includes(lang)) notFound();
+  if (!SUPPORTED_LOCALES.includes(lang as Locale)) notFound();
 
   return (
     <div className="container mx-auto px-4 py-8">

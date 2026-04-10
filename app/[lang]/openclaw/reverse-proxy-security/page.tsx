@@ -1,10 +1,12 @@
-import { Metadata } from 'next';
-import { notFound } from 'next/navigation';
+import type { Metadata } from 'next'
+import { notFound } from 'next/navigation'
+import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
 
-interface PageProps { params: { lang: string }; }
-const LANGS = ['de','en','es','fr','pt','it','ru','zh','ja','ko','ar','hi','tr','pl','nl'];
+export async function generateStaticParams() {
+  return SUPPORTED_LOCALES.map((lang) => ({ lang }))
+}
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const { lang } = params;
   return {
     title: 'OpenClaw Reverse Proxy Security: nginx & Caddy Hardening 2024',
@@ -12,14 +14,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     keywords: ['openclaw reverse proxy','nginx security hardening','caddy security','modsecurity waf','rate limiting nginx','ddos protection'],
     authors: [{ name: 'ClawGuru Security Team' }],
     openGraph: { title: 'OpenClaw Reverse Proxy Security 2024', description: 'Reverse Proxy Hardening für OpenClaw.', type: 'article', url: `https://clawguru.org/${lang}/openclaw/reverse-proxy-security` },
-    alternates: { canonical: `https://clawguru.org/${lang}/openclaw/reverse-proxy-security`, languages: Object.fromEntries(LANGS.map(l => [l, `https://clawguru.org/${l}/openclaw/reverse-proxy-security`])) },
+    alternates: buildLocalizedAlternates(lang as Locale, '/openclaw/reverse-proxy-security'),
     robots: 'index, follow',
   };
 }
 
-export default function OpenClawReverseProxyPage({ params }: PageProps) {
+export default function OpenClawReverseProxyPage({ params }: { params: { lang: string } }) {
   const { lang } = params;
-  if (!LANGS.includes(lang)) notFound();
+  if (!SUPPORTED_LOCALES.includes(lang as Locale)) notFound();
 
   return (
     <div className="container mx-auto px-4 py-8">

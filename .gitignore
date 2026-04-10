@@ -24,7 +24,6 @@ pnpm-debug.log*
 env-*.env
 env-*.production
 # Platform-specific runtime env files with real secrets
-cloudflare.env.runtime
 
 # common backup artifacts
 *.bak

@@ -67,7 +67,7 @@ export default async function CloudflareTunnelPage({
   const isGerman = locale === "de";
 
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-gray-800">
       {/* Hero */}
       <section className="relative overflow-hidden bg-gradient-to-br from-orange-500 via-orange-600 to-red-600 py-20">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-orange-300/30 via-transparent to-transparent" />
@@ -105,11 +105,11 @@ export default async function CloudflareTunnelPage({
           
           {/* Why Cloudflare Tunnel */}
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">
               {isGerman ? "Warum Cloudflare Tunnel?" : "Why Cloudflare Tunnel?"}
             </h2>
             
-            <p className="text-slate-700 text-lg mb-6 leading-relaxed">
+            <p className="text-gray-200 text-lg mb-6 leading-relaxed">
               {isGerman
                 ? "Cloudflare Tunnel (früher Argo Tunnel) ermöglicht sicheren Zugriff auf interne Services ohne VPN und ohne Öffnen von Firewall-Ports. Der Traffic wird über Cloudflares globales Netzwerk mit integriertem DDoS-Schutz und WAF geroutet."
                 : "Cloudflare Tunnel (formerly Argo Tunnel) enables secure access to internal services without VPN and without opening firewall ports. Traffic is routed through Cloudflare's global network with integrated DDoS protection and WAF."}
@@ -143,7 +143,7 @@ export default async function CloudflareTunnelPage({
               </div>
               <div className="bg-gradient-to-br from-orange-50 to-orange-100 border border-orange-700 rounded-xl p-6">
                 <h3 className="font-semibold mb-4 text-orange-700">Cloudflare Tunnel (Modern)</h3>
-                <ul className="space-y-3 text-sm text-slate-700">
+                <ul className="space-y-3 text-sm text-gray-200">
                   <li className="flex items-start gap-2">
                     <span className="text-green-400">✓</span>
                     {isGerman ? "Keine öffentlichen Ports nötig" : "No public ports needed"}
@@ -171,7 +171,7 @@ export default async function CloudflareTunnelPage({
 
           {/* Architecture */}
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">Cloudflare Tunnel Architektur</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">Cloudflare Tunnel Architektur</h2>
             
             <div className="bg-slate-900 rounded-xl p-8 mb-8">
               <div className="flex flex-col items-center">
@@ -215,7 +215,7 @@ export default async function CloudflareTunnelPage({
 
           {/* Installation */}
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">cloudflared Installation</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">cloudflared Installation</h2>
             
             <div className="grid md:grid-cols-2 gap-6 mb-8">
               <div className="bg-slate-900 rounded-xl p-6">
@@ -287,9 +287,9 @@ kubectl create secret generic tunnel-token \\
 
           {/* Firewall Rules */}
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">Cloudflare Access Policies</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">Cloudflare Access Policies</h2>
             
-            <p className="text-slate-700 mb-6">
+            <p className="text-gray-200 mb-6">
               {isGerman
                 ? "Cloudflare Access Policies definieren wer Zugriff auf Ihre Tunnels erhält. Integriert mit OIDC, SAML, OTP und Service Tokens."
                 : "Cloudflare Access Policies define who gets access to your tunnels. Integrated with OIDC, SAML, OTP, and Service Tokens."}
@@ -330,18 +330,18 @@ require:
             </div>
 
             <div className="grid md:grid-cols-2 gap-6">
-              <div className="bg-white border border-slate-200 rounded-xl p-6">
-                <h3 className="font-semibold text-slate-900 mb-3">IdP Integration</h3>
-                <ul className="space-y-2 text-sm text-slate-700">
+              <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
+                <h3 className="font-semibold text-gray-100 mb-3">IdP Integration</h3>
+                <ul className="space-y-2 text-sm text-gray-200">
                   <li>• Okta / Azure AD / Google</li>
                   <li>• OneLogin / Ping Identity</li>
                   <li>• GitHub / GitLab OAuth</li>
                   <li>• Generic OIDC / SAML 2.0</li>
                 </ul>
               </div>
-              <div className="bg-white border border-slate-200 rounded-xl p-6">
-                <h3 className="font-semibold text-slate-900 mb-3">Service Tokens</h3>
-                <ul className="space-y-2 text-sm text-slate-700">
+              <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
+                <h3 className="font-semibold text-gray-100 mb-3">Service Tokens</h3>
+                <ul className="space-y-2 text-sm text-gray-200">
                   <li>• API-to-API Authentication</li>
                   <li>• CI/CD Pipeline Access</li>
                   <li>• Service Mesh Integration</li>
@@ -353,7 +353,7 @@ require:
 
           {/* WAF Integration */}
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">WAF & Security Integration</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">WAF & Security Integration</h2>
             
             <div className="bg-gradient-to-br from-orange-50 to-red-50 border border-orange-700 rounded-xl p-6 mb-8">
               <h3 className="font-semibold text-orange-900 mb-4">Security Layers</h3>
@@ -361,28 +361,28 @@ require:
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 rounded-lg bg-red-600 text-white flex items-center justify-center font-bold">1</div>
                   <div>
-                    <span className="font-medium text-slate-900">DDoS Protection</span>
+                    <span className="font-medium text-gray-100">DDoS Protection</span>
                     <p className="text-sm text-slate-600">Layer 3/4/7 DDoS mitigation automatisch</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 rounded-lg bg-orange-600 text-white flex items-center justify-center font-bold">2</div>
                   <div>
-                    <span className="font-medium text-slate-900">Bot Management</span>
+                    <span className="font-medium text-gray-100">Bot Management</span>
                     <p className="text-sm text-slate-600">AI-gestützte Bot-Erkennung</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 rounded-lg bg-yellow-600 text-white flex items-center justify-center font-bold">3</div>
                   <div>
-                    <span className="font-medium text-slate-900">WAF Rules</span>
+                    <span className="font-medium text-gray-100">WAF Rules</span>
                     <p className="text-sm text-slate-600">OWASP Top 10, SQLi, XSS Protection</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 rounded-lg bg-green-600 text-white flex items-center justify-center font-bold">4</div>
                   <div>
-                    <span className="font-medium text-slate-900">Access Policies</span>
+                    <span className="font-medium text-gray-100">Access Policies</span>
                     <p className="text-sm text-slate-600">Identity-based access control</p>
                   </div>
                 </div>
@@ -425,12 +425,12 @@ require:
 
           {/* Best Practices */}
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">Best Practices 2026</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">Best Practices 2026</h2>
             
             <div className="grid md:grid-cols-2 gap-6">
-              <div className="bg-white border border-slate-200 rounded-xl p-6">
-                <h3 className="font-semibold text-slate-900 mb-4">High Availability</h3>
-                <ul className="space-y-3 text-sm text-slate-700">
+              <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
+                <h3 className="font-semibold text-gray-100 mb-4">High Availability</h3>
+                <ul className="space-y-3 text-sm text-gray-200">
                   <li className="flex items-start gap-2">
                     <span className="text-green-500 mt-0.5">✓</span>
                     {isGerman ? "Mindestens 2 cloudflared Replicas" : "Minimum 2 cloudflared replicas"}
@@ -449,9 +449,9 @@ require:
                   </li>
                 </ul>
               </div>
-              <div className="bg-white border border-slate-200 rounded-xl p-6">
-                <h3 className="font-semibold text-slate-900 mb-4">Security</h3>
-                <ul className="space-y-3 text-sm text-slate-700">
+              <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
+                <h3 className="font-semibold text-gray-100 mb-4">Security</h3>
+                <ul className="space-y-3 text-sm text-gray-200">
                   <li className="flex items-start gap-2">
                     <span className="text-green-500 mt-0.5">✓</span>
                     {isGerman ? "SSO für alle internen Services" : "SSO for all internal services"}
@@ -485,7 +485,7 @@ require:
             </p>
             <a 
               href={coreLinks.check} 
-              className="inline-block px-6 py-3 bg-white text-orange-400 rounded-lg font-semibold hover:bg-slate-100 transition-colors"
+              className="inline-block px-6 py-3 bg-gray-800 text-orange-400 rounded-lg font-semibold hover:bg-slate-100 transition-colors"
             >
               {isGerman ? "Migration Assessment" : "Migration Assessment"}
             </a>

@@ -1,10 +1,12 @@
-import { Metadata } from 'next';
-import { notFound } from 'next/navigation';
+import type { Metadata } from 'next'
+import { notFound } from 'next/navigation'
+import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
 
-interface PageProps { params: { lang: string }; }
-const LANGS = ['de','en','es','fr','pt','it','ru','zh','ja','ko','ar','hi','tr','pl','nl'];
+export async function generateStaticParams() {
+  return SUPPORTED_LOCALES.map((lang) => ({ lang }))
+}
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const { lang } = params;
   return {
     title: 'SOC2 Compliance Automatisierung mit ClawGuru 2024',
@@ -12,7 +14,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     keywords: ['soc2 compliance automation','soc2 type ii','trust service criteria','evidence collection','soc2 audit','continuous monitoring soc2'],
     authors: [{ name: 'ClawGuru Security Team' }],
     openGraph: { title: 'SOC2 Compliance Automatisierung mit ClawGuru 2024', description: 'SOC2 Type II Compliance mit ClawGuru.', type: 'article', url: `https://clawguru.org/${lang}/solutions/soc2-compliance-automation` },
-    alternates: { canonical: `https://clawguru.org/${lang}/solutions/soc2-compliance-automation`, languages: Object.fromEntries(LANGS.map(l => [l, `https://clawguru.org/${l}/solutions/soc2-compliance-automation`])) },
+    alternates: buildLocalizedAlternates(lang as Locale, '/solutions/soc2-compliance-automation'),
     robots: 'index, follow',
   };
 }
@@ -29,9 +31,9 @@ const TSC_CRITERIA = [
   { code: 'CC9', name: 'Risk Mitigation', desc: 'Business Continuity, Vendor Management', status: 'manual' },
 ];
 
-export default function Soc2CompliancePage({ params }: PageProps) {
+export default function Soc2CompliancePage({ params }: { params: { lang: string } }) {
   const { lang } = params;
-  if (!LANGS.includes(lang)) notFound();
+  if (!SUPPORTED_LOCALES.includes(lang as Locale)) notFound();
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -72,7 +74,7 @@ export default function Soc2CompliancePage({ params }: PageProps) {
                 <div className="text-xs font-bold text-gray-400 mb-1">{phase}</div>
                 <div className="font-bold text-lg mb-3">{title}</div>
                 <ul className="space-y-1">
-                  {tasks.map(t => <li key={t} className="text-sm text-gray-700">• {t}</li>)}
+                  {tasks.map(t => <li key={t} className="text-sm text-gray-200">• {t}</li>)}
                 </ul>
               </div>
             ))}

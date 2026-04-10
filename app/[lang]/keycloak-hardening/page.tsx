@@ -67,7 +67,7 @@ export default async function KeycloakHardeningPage({
   const isGerman = locale === "de";
 
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-gray-800">
       {/* Hero */}
       <section className="relative overflow-hidden bg-gradient-to-br from-blue-700 via-indigo-800 to-purple-900 py-20">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-400/20 via-transparent to-transparent" />
@@ -104,11 +104,11 @@ export default async function KeycloakHardeningPage({
         <div className="max-w-4xl mx-auto">
           
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">
               {isGerman ? "Warum Keycloak Hardening?" : "Why Keycloak Hardening?"}
             </h2>
             
-            <p className="text-slate-700 text-lg mb-6 leading-relaxed">
+            <p className="text-gray-200 text-lg mb-6 leading-relaxed">
               {isGerman
                 ? "Keycloak ist der zentrale Identity Provider (IdP) für Ihre Organisation. Ein kompromittiertes Keycloak ermöglicht Zugriff auf ALLE angebundenen Services. IAM-Security ist kritisch für Zero Trust."
                 : "Keycloak is the central Identity Provider (IdP) for your organization. A compromised Keycloak enables access to ALL connected services. IAM security is critical for Zero Trust."}
@@ -130,7 +130,7 @@ export default async function KeycloakHardeningPage({
 
           {/* MFA Configuration */}
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">Multi-Factor Authentication</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">Multi-Factor Authentication</h2>
             
             <div className="grid md:grid-cols-3 gap-4 mb-8">
               <div className="bg-blue-900 border border-blue-700 rounded-xl p-5 text-center">
@@ -175,13 +175,13 @@ export default async function KeycloakHardeningPage({
 
           {/* Brute Force Protection */}
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">Brute-Force Protection</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">Brute-Force Protection</h2>
             
-            <div className="bg-white border border-slate-200 rounded-xl p-6 mb-6">
-              <h3 className="font-semibold text-slate-900 mb-4">Security Defenses</h3>
+            <div className="bg-gray-800 border border-slate-200 rounded-xl p-6 mb-6">
+              <h3 className="font-semibold text-gray-100 mb-4">Security Defenses</h3>
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
-                  <h4 className="font-medium text-slate-800 mb-2">Login-Failures</h4>
+                  <h4 className="font-medium text-gray-100 mb-2">Login-Failures</h4>
                   <ul className="text-sm text-slate-600 space-y-1">
                     <li>• Max 5 failed attempts per IP</li>
                     <li>• 15-minute temporary lockout</li>
@@ -190,7 +190,7 @@ export default async function KeycloakHardeningPage({
                   </ul>
                 </div>
                 <div>
-                  <h4 className="font-medium text-slate-800 mb-2">Account Lockout</h4>
+                  <h4 className="font-medium text-gray-100 mb-2">Account Lockout</h4>
                   <ul className="text-sm text-slate-600 space-y-1">
                     <li>• Permanent lock after 10 failures</li>
                     <li>• Admin unlock required</li>
@@ -237,7 +237,7 @@ export default async function KeycloakHardeningPage({
 
           {/* Session Management */}
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">Session & Token Management</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">Session & Token Management</h2>
             
             <div className="grid md:grid-cols-2 gap-6 mb-8">
               <div className="bg-amber-900 border border-yellow-700 rounded-xl p-6">
@@ -287,11 +287,11 @@ export default async function KeycloakHardeningPage({
 
           {/* Client Configuration */}
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">Client Security Configuration</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">Client Security Configuration</h2>
             
             <div className="space-y-6">
-              <div className="bg-white border border-slate-200 rounded-xl p-6">
-                <h3 className="font-semibold text-slate-900 mb-4">OIDC Client Settings</h3>
+              <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
+                <h3 className="font-semibold text-gray-100 mb-4">OIDC Client Settings</h3>
                 <div className="bg-slate-900 rounded-lg p-4 font-mono text-xs text-green-400">
 {`# Client Authentication
 Client Authenticator: Client ID and Secret (or Signed JWT)
@@ -344,12 +344,12 @@ ID Token Signature Algorithm: ES256
 
           {/* GDPR & Compliance */}
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">GDPR & Compliance</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">GDPR & Compliance</h2>
             
             <div className="grid md:grid-cols-2 gap-6 mb-8">
-              <div className="bg-white border border-slate-200 rounded-xl p-6">
-                <h3 className="font-semibold text-slate-900 mb-4">GDPR Features</h3>
-                <ul className="space-y-2 text-sm text-slate-700">
+              <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
+                <h3 className="font-semibold text-gray-100 mb-4">GDPR Features</h3>
+                <ul className="space-y-2 text-sm text-gray-200">
                   <li className="flex items-start gap-2">
                     <span className="text-green-500">✓</span>
                     User Data Export (JSON)
@@ -372,19 +372,19 @@ ID Token Signature Algorithm: ES256
                   </li>
                 </ul>
               </div>
-              <div className="bg-white border border-slate-200 rounded-xl p-6">
-                <h3 className="font-semibold text-slate-900 mb-4">Compliance Mapping</h3>
+              <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
+                <h3 className="font-semibold text-gray-100 mb-4">Compliance Mapping</h3>
                 <div className="space-y-3 text-sm">
                   <div>
-                    <span className="font-medium text-slate-800">SOC 2:</span>
+                    <span className="font-medium text-gray-100">SOC 2:</span>
                     <p className="text-slate-600">CC6.1 (Access Control), CC7.2 (Monitoring)</p>
                   </div>
                   <div>
-                    <span className="font-medium text-slate-800">ISO 27001:</span>
+                    <span className="font-medium text-gray-100">ISO 27001:</span>
                     <p className="text-slate-600">A.9.1 (Access Policy), A.9.2 (User Registration)</p>
                   </div>
                   <div>
-                    <span className="font-medium text-slate-800">NIST:</span>
+                    <span className="font-medium text-gray-100">NIST:</span>
                     <p className="text-slate-600">IA-2 (Identification), AC-2 (Account Management)</p>
                   </div>
                 </div>
@@ -418,12 +418,12 @@ Enabled Event Types:
 
           {/* Hardening Checklist */}
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">Keycloak Hardening Checklist</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">Keycloak Hardening Checklist</h2>
             
-            <div className="bg-white border border-slate-200 rounded-xl p-6">
+            <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
-                  <h3 className="font-semibold text-slate-900 mb-4">Authentication</h3>
+                  <h3 className="font-semibold text-gray-100 mb-4">Authentication</h3>
                   {[
                     "MFA enforced for all users",
                     "WebAuthn/FIDO2 configured",
@@ -434,12 +434,12 @@ Enabled Event Types:
                   ].map((item, i) => (
                     <div key={i} className="flex items-center gap-3 py-2 border-b border-slate-100 last:border-0">
                       <span className="w-5 h-5 rounded border-2 border-slate-300 flex items-center justify-center text-xs text-slate-400">☐</span>
-                      <span className="text-slate-700 text-sm">{item}</span>
+                      <span className="text-gray-200 text-sm">{item}</span>
                     </div>
                   ))}
                 </div>
                 <div>
-                  <h3 className="font-semibold text-slate-900 mb-4">Infrastructure</h3>
+                  <h3 className="font-semibold text-gray-100 mb-4">Infrastructure</h3>
                   {[
                     "HTTPS/TLS 1.3 only",
                     "Reverse proxy (nginx/traefik)",
@@ -450,7 +450,7 @@ Enabled Event Types:
                   ].map((item, i) => (
                     <div key={i} className="flex items-center gap-3 py-2 border-b border-slate-100 last:border-0">
                       <span className="w-5 h-5 rounded border-2 border-slate-300 flex items-center justify-center text-xs text-slate-400">☐</span>
-                      <span className="text-slate-700 text-sm">{item}</span>
+                      <span className="text-gray-200 text-sm">{item}</span>
                     </div>
                   ))}
                 </div>
@@ -470,7 +470,7 @@ Enabled Event Types:
             </p>
             <a 
               href={coreLinks.check} 
-              className="inline-block px-6 py-3 bg-white text-cyan-400 rounded-lg font-semibold hover:bg-slate-100 transition-colors"
+              className="inline-block px-6 py-3 bg-gray-800 text-cyan-400 rounded-lg font-semibold hover:bg-slate-100 transition-colors"
             >
               {isGerman ? "Assessment Starten" : "Start Assessment"}
             </a>

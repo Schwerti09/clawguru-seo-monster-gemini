@@ -1,10 +1,12 @@
-import { Metadata } from 'next';
-import { notFound } from 'next/navigation';
+import type { Metadata } from 'next'
+import { notFound } from 'next/navigation'
+import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
 
-interface PageProps { params: { lang: string }; }
-const LANGS = ['de','en','es','fr','pt','it','ru','zh','ja','ko','ar','hi','tr','pl','nl'];
+export async function generateStaticParams() {
+  return SUPPORTED_LOCALES.map((lang) => ({ lang }))
+}
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const { lang } = params;
   return {
     title: 'Moltbot Cloud Security Posture Management (CSPM) 2024',
@@ -12,14 +14,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     keywords: ['moltbot cspm','cloud security posture management','aws misconfiguration','policy as code','cloud drift detection','cis cloud benchmark'],
     authors: [{ name: 'ClawGuru Security Team' }],
     openGraph: { title: 'Moltbot CSPM 2024', description: 'Cloud Security Posture Management mit Moltbot.', type: 'article', url: `https://clawguru.org/${lang}/moltbot/cloud-security-posture-management` },
-    alternates: { canonical: `https://clawguru.org/${lang}/moltbot/cloud-security-posture-management`, languages: Object.fromEntries(LANGS.map(l => [l, `https://clawguru.org/${l}/moltbot/cloud-security-posture-management`])) },
+    alternates: buildLocalizedAlternates(lang as Locale, '/moltbot/cloud-security-posture-management'),
     robots: 'index, follow',
   };
 }
 
-export default function MoltbotCspmPage({ params }: PageProps) {
+export default function MoltbotCspmPage({ params }: { params: { lang: string } }) {
   const { lang } = params;
-  if (!LANGS.includes(lang)) notFound();
+  if (!SUPPORTED_LOCALES.includes(lang as Locale)) notFound();
 
   return (
     <div className="container mx-auto px-4 py-8">

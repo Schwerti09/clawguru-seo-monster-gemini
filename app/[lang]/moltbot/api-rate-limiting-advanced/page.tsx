@@ -1,16 +1,12 @@
-import { Metadata } from 'next';
+import type { Metadata } from 'next'
+import { notFound } from 'next/navigation'
+import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
 
-import { notFound } from 'next/navigation';
+export async function generateStaticParams() {
+  return SUPPORTED_LOCALES.map((lang) => ({ lang }))
+}
 
-
-
-interface PageProps { params: { lang: string }; }
-
-const LANGS = ['de','en','es','fr','pt','it','ru','zh','ja','ko','ar','hi','tr','pl','nl'];
-
-
-
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
 
   const { lang } = params;
 
@@ -26,7 +22,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
     openGraph: { title: 'Moltbot API Rate Limiting Advanced 2024', description: 'Advanced Rate Limiting für Moltbot.', type: 'article', url: `https://clawguru.org/${lang}/moltbot/api-rate-limiting-advanced` },
 
-    alternates: { canonical: `https://clawguru.org/${lang}/moltbot/api-rate-limiting-advanced`, languages: Object.fromEntries(LANGS.map(l => [l, `https://clawguru.org/${l}/moltbot/api-rate-limiting-advanced`])) },
+    alternates: buildLocalizedAlternates(lang as Locale, '/moltbot/api-rate-limiting-advanced'),
 
     robots: 'index, follow',
 
@@ -34,15 +30,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 }
 
-
-
-export default function MoltbotRateLimitPage({ params }: PageProps) {
+export default function MoltbotRateLimitPage({ params }: { params: { lang: string } }) {
 
   const { lang } = params;
 
-  if (!LANGS.includes(lang)) notFound();
-
-
+  if (!SUPPORTED_LOCALES.includes(lang as Locale)) notFound();
 
   return (
 
@@ -59,8 +51,6 @@ export default function MoltbotRateLimitPage({ params }: PageProps) {
         <h1 className="text-4xl font-bold mb-4 text-gray-100">Moltbot API Rate Limiting Advanced</h1>
 
         <p className="text-lg text-gray-300 mb-8">Ohne Rate Limiting sind APIs anfällig für DDoS und Abuse. Redis-basierte Sliding Window Algorithmen sind heute State-of-the-Art.</p>
-
-
 
         <section className="mb-10">
 
@@ -108,8 +98,6 @@ export default function MoltbotRateLimitPage({ params }: PageProps) {
 
         </section>
 
-
-
         <section className="mb-10">
 
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">Redis Sliding Window Implementation</h2>
@@ -121,8 +109,6 @@ export default function MoltbotRateLimitPage({ params }: PageProps) {
 const Redis = require('ioredis');
 
 const redis = new Redis(process.env.REDIS_URL);
-
-
 
 class SlidingWindowRateLimiter {
 
@@ -274,8 +260,6 @@ class SlidingWindowRateLimiter {
 
 }
 
-
-
 // Beispiel: API Endpoints
 
 const rateLimiter = new SlidingWindowRateLimiter({
@@ -288,8 +272,6 @@ const rateLimiter = new SlidingWindowRateLimiter({
 
 });
 
-
-
 // Auth Endpoints - stricter
 
 app.use('/api/auth', rateLimiter.middleware({
@@ -301,8 +283,6 @@ app.use('/api/auth', rateLimiter.middleware({
   key: 'auth'
 
 }));
-
-
 
 // General API
 
@@ -319,8 +299,6 @@ app.use('/api', rateLimiter.middleware({
           </div>
 
         </section>
-
-
 
         <section className="mb-10">
 
@@ -458,13 +436,9 @@ class DDoSProtection {
 
 }
 
-
-
 // Middleware Integration
 
 const ddosProtection = new DDoSProtection(redis);
-
-
 
 app.use(async (req, res, next) => {
 
@@ -503,8 +477,6 @@ app.use(async (req, res, next) => {
           </div>
 
         </section>
-
-
 
         <section className="mb-10">
 

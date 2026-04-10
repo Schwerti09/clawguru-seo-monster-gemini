@@ -23,7 +23,7 @@ function providerRole(p: AiProvider, available: AiProvider[]): "primary" | "fall
 }
 
 function buildActiveChain() {
-  const all: AiProvider[] = ["deepseek", "openai", "gemini"];
+  const all: AiProvider[] = ["openai", "deepseek", "gemini"];
   const envRaw = (
     process.env.AI_PROVIDER_ORDER ||
     process.env.AI_PREFERRED ||

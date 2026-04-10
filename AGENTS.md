@@ -822,17 +822,17 @@ Vercel auto-deploys on every push to `main`. A red build = broken website for re
 ### Provider Order and Fallback Chain
 Configured in `lib/ai/providers.ts`. Order controlled by env var `AI_PROVIDER_ORDER`.
 
-Default order (if no env var set): `deepseek → openai → gemini`
+Default order (if no env var set): `openai → deepseek → gemini`
 
 ```
-AI_PROVIDER_ORDER=deepseek,openai,gemini   # DeepSeek cheapest; Gemini last (400 errors since Apr 2026)
+AI_PROVIDER_ORDER=openai,deepseek,gemini   # GPT primary (funded); DeepSeek/Gemini out of credit (Apr 2026)
 ```
 
 ### Provider API Keys (Vercel Env Vars)
 | Variable | Provider | Notes |
 |----------|----------|-------|
-| `DEEPSEEK_API_KEY` | DeepSeek | Cheapest, use as primary |
-| `OPENAI_API_KEY` | OpenAI GPT | Stable fallback |
+| `OPENAI_API_KEY` | OpenAI GPT | Primary — funded and stable |
+| `DEEPSEEK_API_KEY` | DeepSeek | Cheap fallback (currently out of credit) |
 | `GEMINI_API_KEY` | Google Gemini | Demoted — frequent 400 errors since April 2026 |
 
 ### Gemini Model Configuration

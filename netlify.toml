@@ -1,6 +1,9 @@
 [build]
-  # Source build-only env vars from script, then run build
-  # This keeps Functions env under 4KB limit (only [build.environment] vars are injected into Functions)
+  # Source build-only env vars from script, then run build.
+  # Non-secret config defaults are in config/env-defaults.json (inlined at
+  # build time via next.config.js and loaded at runtime via instrumentation.ts).
+  # This keeps Functions env under 4KB limit — only secrets from the Netlify
+  # Dashboard are injected into Functions.
   command = "source scripts/netlify-build-env.sh && npm run build"
   publish = ".next"
 
@@ -12,28 +15,26 @@
 
 [build.environment]
   # ============================================================================
-  # RUNTIME VARIABLES ONLY - These are injected into Serverless Functions
-  # Keep this section minimal to stay under 4KB limit!
-  # Build-only variables are in scripts/netlify-build-env.sh
+  # MINIMAL FUNCTION ENV — must stay under 4 KB total (including Dashboard vars)
   # ============================================================================
-  
-  # Install devDependencies (typescript, @types/*) even though NODE_ENV=production
-  NPM_CONFIG_PRODUCTION = "false"
-  
-  # Suppress false-positive secrets scanning on server-side Next.js bundles
-  # SECRETS_SCAN_OMIT_PATHS: skip scanning build output directories
-  SECRETS_SCAN_OMIT_PATHS = ".next/cache,.next/server,.next/static"
-  # SECRETS_SCAN_OMIT_KEYS: ALL env var names that appear in git history
-  # (committed in .env.local, app/[lang]/account/.env.local — now deleted but still in history)
-  # Without this, Netlify's secrets scanner detects old values and aborts production builds with exit code 2.
-  # Preview deploys may lack dashboard env vars so the scanner has nothing to match — that's why previews pass.
-  SECRETS_SCAN_OMIT_KEYS = "ACCESS_TOKEN_SECRET,ACCOUNTING_EXPORT_SECRET,ADMIN_API_TOKEN,ADMIN_PASSWORT,ADMIN_PASSWORD,ADMIN_SESSION_SECRET,CRON_SECRET,DATABASE_URL,DEEPSEEK_API_KEY,DISCORD_WEBHOOK_URL,ENTERPRISE_API_KEYS,GEMINI_API_KEY,GITHUB_TOKEN,GOOGLE_INDEXER_KEY,HEYGEN_API_KEY,INTEL_API_KEY,MAGIC_LINK_SECRET,NETLIFY_API_KEY,NETLIFY_AUTH_TOKEN,NETLIFY_ACCOUNT_ID,NETLIFY_SITE_ID,NEWSLETTER_UNSUBSCRIBE_SECRET,NEXTAUTH_SECRET,NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,NVD_API_KEY,OPENAI_API_KEY,REDIS_URL,RESEND_API_KEY,SECURITY_CHECK_SECRET,SENTINEL_NOTIFY_URL,SESSION_SECRET,STRIPE_METERED_PRICE_ID,STRIPE_PRICE_DAYPASS,STRIPE_PRICE_ENTERPRISE,STRIPE_PRICE_INCIDENT,STRIPE_PRICE_MSP,STRIPE_PRICE_PRO,STRIPE_PRICE_PRO_MONTHLY,STRIPE_PRICE_PRO_YEARLY,STRIPE_PRICE_SPRINT,STRIPE_PRICE_TEAM,STRIPE_SECRET_KEY,STRIPE_WEBHOOK_SECRET,UPSTASH_REDIS_REST_TOKEN,UPSTASH_REDIS_REST_URL,V1_CHECK_INDICATOR_SECRET,AI_PROVIDER,GEMINI_MODEL,CVE_API_URL,SECRETS_SCAN_OMIT_KEYS"
-  
-  # Node.js settings
+  # Only keep vars here that Netlify's platform needs before/after the build.
+  # Everything else goes into:
+  #   - scripts/netlify-build-env.sh  (build-only vars, not in Functions)
+  #   - config/env-defaults.json      (non-secret defaults, inlined at build)
+  #   - Netlify Dashboard             (secrets, scoped to appropriate context)
+  # ============================================================================
+
   NODE_VERSION = "20"
-  NODE_OPTIONS = "--max-old-space-size=6144"
-  
-  # Site URLs (needed at runtime for redirects, canonical URLs)
-  NEXT_PUBLIC_SITE_URL = "https://clawguru.org"
-  SITE_URL = "https://clawguru.org"
-  NEXT_PUBLIC_BASE_URL = "https://clawguru.org"
+
+  # Suppress false-positive secrets scanning on server-side Next.js bundles.
+  # These must be in [build.environment] (not the build script) because the
+  # scanner runs as a post-build step outside the shell session.
+  SECRETS_SCAN_OMIT_PATHS = ".next/cache,.next/server,.next/static"
+
+  # ⚠️  SECRETS_SCAN_OMIT_KEYS is intentionally NOT here — it was ~1.1 KB and
+  # pushed Functions over the 4 KB limit. Instead:
+  #   1. SECRETS_SCAN_OMIT_PATHS above covers all build output directories.
+  #   2. If the scanner still flags secrets, set SECRETS_SCAN_OMIT_KEYS in
+  #      the Netlify Dashboard with scope "Builds" (not "Functions") so it
+  #      doesn't count toward the 4 KB function limit.
+  #      Value: ACCESS_TOKEN_SECRET,ACCOUNTING_EXPORT_SECRET,ADMIN_API_TOKEN,ADMIN_PASSWORT,ADMIN_PASSWORD,ADMIN_SESSION_SECRET,CRON_SECRET,DATABASE_URL,DEEPSEEK_API_KEY,DISCORD_WEBHOOK_URL,ENTERPRISE_API_KEYS,GEMINI_API_KEY,GITHUB_TOKEN,GOOGLE_INDEXER_KEY,HEYGEN_API_KEY,INTEL_API_KEY,MAGIC_LINK_SECRET,NETLIFY_API_KEY,NETLIFY_AUTH_TOKEN,NETLIFY_ACCOUNT_ID,NETLIFY_SITE_ID,NEWSLETTER_UNSUBSCRIBE_SECRET,NEXTAUTH_SECRET,NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,NVD_API_KEY,OPENAI_API_KEY,REDIS_URL,RESEND_API_KEY,SECURITY_CHECK_SECRET,SENTINEL_NOTIFY_URL,SESSION_SECRET,STRIPE_METERED_PRICE_ID,STRIPE_PRICE_DAYPASS,STRIPE_PRICE_ENTERPRISE,STRIPE_PRICE_INCIDENT,STRIPE_PRICE_MSP,STRIPE_PRICE_PRO,STRIPE_PRICE_PRO_MONTHLY,STRIPE_PRICE_PRO_YEARLY,STRIPE_PRICE_SPRINT,STRIPE_PRICE_TEAM,STRIPE_SECRET_KEY,STRIPE_WEBHOOK_SECRET,UPSTASH_REDIS_REST_TOKEN,UPSTASH_REDIS_REST_URL,V1_CHECK_INDICATOR_SECRET

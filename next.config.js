@@ -21,9 +21,10 @@ const nextConfig = {
     ]
   },
   experimental: {
-    // Limit parallel page generation to reduce peak memory usage during build
-    // (helps Cloudflare 8 GB and Netlify 8 GB build machines stay within limits)
-    cpus: 4,
+    // Limit parallel page generation to reduce peak memory usage during build.
+    // Cloudflare Pages has ~4GB available; Vercel/Netlify have ~8GB.
+    // Set to 2 for safer builds on constrained environments.
+    cpus: 2,
     outputFileTracingIncludes: {
       '/api/runbooks/search': ['./public/runbooks.json'],
       '/runbooks': ['./public/runbooks.json'],

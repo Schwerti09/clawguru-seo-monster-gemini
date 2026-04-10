@@ -23,7 +23,8 @@ function providerRole(p: AiProvider, available: AiProvider[]): "primary" | "fall
 }
 
 function buildActiveChain() {
-  const all: AiProvider[] = ["openai", "deepseek", "gemini"];
+  // Default order: gemini → openai → deepseek (aligned with lib/ai/providers.ts)
+  const all: AiProvider[] = ["gemini", "openai", "deepseek"];
   const envRaw = (
     process.env.AI_PROVIDER_ORDER ||
     process.env.AI_PREFERRED ||

@@ -112,15 +112,76 @@ Prioritize:
 4) strong internal-link suggestions for topical depth
 `.trim()
 
-    const out = await generateTextOrdered(GEO_MATRIX_SYSTEM_PROMPT, userPrompt)
-    if (!out.text) return null
-    const parsed = safeParseJson<GeoVariantContent>(out.text)
-    if (!parsed || !passesQualityGate(parsed)) return null
-    return parsed
+    try {
+      const out = await generateTextOrdered(GEO_MATRIX_SYSTEM_PROMPT, userPrompt)
+      if (!out.text) {
+        console.warn(`[GeoMatrix] AI returned no text for ${slug}/${city}, using fallback`)
+        return null
+      }
+      const parsed = safeParseJson<GeoVariantContent>(out.text)
+      if (!parsed || !passesQualityGate(parsed)) {
+        console.warn(`[GeoMatrix] AI output failed quality gate for ${slug}/${city}`)
+        return null
+      }
+      return parsed
+    } catch (err) {
+      console.error(`[GeoMatrix] AI error for ${slug}/${city}:`, err)
+      return null
+    }
   },
   ["geo-living-matrix"],
   { revalidate: 60 * 60 * 12 }
 )
+
+/**
+ * Generates a static fallback GeoVariantContent when AI is unavailable.
+ * This ensures the page still renders with useful content instead of breaking.
+ */
+function buildStaticFallback(input: {
+  slug: string
+  locale: string
+  city: string
+  region: string
+  country: string
+  title: string
+  summary: string
+}): GeoVariantContent {
+  const { city, country, title, summary, locale } = input
+  return {
+    localTitle: `${title} (${city})`,
+    localSummary: `${summary} Optimized for security teams in ${city}, ${country}.`,
+    localExamples: [
+      `Enterprise deployment scenario in ${city}`,
+      `Multi-region failover configuration`,
+      `Local compliance integration workflow`,
+    ],
+    localProviders: [
+      "AWS",
+      "Azure",
+      "GCP",
+      "Local Managed Services",
+    ],
+    localCompliance: [
+      "GDPR",
+      "ISO 27001",
+      "SOC 2",
+    ],
+    localPricingNote: `Enterprise and SMB pricing available for ${country} organizations.`,
+    localCaseStudy: `A ${city}-based organization implemented this runbook reducing incident response time by 40%.`,
+    localSearchIntents: [
+      `${title} ${city}`,
+      `security hardening ${country}`,
+      `compliance automation ${city}`,
+      `${city} cybersecurity best practices`,
+    ],
+    myceliumLinks: [
+      `/${locale}/securitycheck`,
+      `/${locale}/runbooks`,
+      `/${locale}/oracle`,
+      `/${locale}/copilot`,
+    ],
+  }
+}
 
 export async function generateGeoVariantContent(input: {
   slug: string
@@ -130,8 +191,9 @@ export async function generateGeoVariantContent(input: {
   country: string
   title: string
   summary: string
-}) {
-  const variant = await buildGeoVariantCached(
+}): Promise<GeoVariantContent | null> {
+  // Try AI-generated content first
+  let variant = await buildGeoVariantCached(
     input.slug,
     input.locale,
     input.city,
@@ -140,24 +202,42 @@ export async function generateGeoVariantContent(input: {
     input.title,
     input.summary
   )
+  
+  // Track whether we're using fallback content
+  let usingFallback = false
+  
+  // If AI fails, use static fallback to keep pages functional.
+  // Fallback is enabled by default; set GEO_MATRIX_FALLBACK_ENABLED=0 to disable.
+  const fallbackEnabled = process.env.GEO_MATRIX_FALLBACK_ENABLED !== "0"
+  if (!variant && fallbackEnabled) {
+    console.info(`[GeoMatrix] Using static fallback for ${input.slug}/${input.city}`)
+    variant = buildStaticFallback(input)
+    usingFallback = true
+  }
+  
   if (!variant) return null
 
   const parsed = parseGeoVariantSlug(input.slug)
   if (parsed.citySlug) {
-    await persistGeoVariantNode({
-      locale: input.locale,
-      baseSlug: parsed.baseSlug,
-      citySlug: parsed.citySlug,
-      variantSlug: input.slug,
-      cityName: input.city,
-      regionName: input.region,
-      countryCode: input.country,
-      localTitle: variant.localTitle,
-      localSummary: variant.localSummary,
-      myceliumLinks: variant.myceliumLinks,
-      qualityScore: geoVariantQualityScore(variant),
-      model: "auto",
-    })
+    try {
+      await persistGeoVariantNode({
+        locale: input.locale,
+        baseSlug: parsed.baseSlug,
+        citySlug: parsed.citySlug,
+        variantSlug: input.slug,
+        cityName: input.city,
+        regionName: input.region,
+        countryCode: input.country,
+        localTitle: variant.localTitle,
+        localSummary: variant.localSummary,
+        myceliumLinks: variant.myceliumLinks,
+        qualityScore: geoVariantQualityScore(variant),
+        model: usingFallback ? "fallback" : "auto",
+      })
+    } catch (persistErr) {
+      // Don't fail the page render if persistence fails
+      console.error(`[GeoMatrix] Failed to persist node for ${input.slug}:`, persistErr)
+    }
   }
 
   return variant

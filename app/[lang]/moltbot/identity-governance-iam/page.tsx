@@ -2,15 +2,11 @@ import { Metadata } from 'next';
 
 import { notFound } from 'next/navigation';
 
+export async function generateStaticParams() {
+  return SUPPORTED_LOCALES.map((lang) => ({ lang }))
+}
 
-
-interface PageProps { params: { lang: string }; }
-
-const LANGS = ['de','en','es','fr','pt','it','ru','zh','ja','ko','ar','hi','tr','pl','nl'];
-
-
-
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
 
   const { lang } = params;
 
@@ -26,7 +22,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
     openGraph: { title: 'Moltbot Identity Governance & IAM 2024', description: 'IAM und RBAC für Moltbot.', type: 'article', url: `https://clawguru.org/${lang}/moltbot/identity-governance-iam` },
 
-    alternates: { canonical: `https://clawguru.org/${lang}/moltbot/identity-governance-iam`, languages: Object.fromEntries(LANGS.map(l => [l, `https://clawguru.org/${l}/moltbot/identity-governance-iam`])) },
+    alternates: buildLocalizedAlternates(lang as Locale, '/moltbot/identity-governance-iam'),
 
     robots: 'index, follow',
 
@@ -34,15 +30,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 }
 
-
-
-export default function MoltbotIamPage({ params }: PageProps) {
+export default function MoltbotIamPage({ params }: { params: { lang: string } }) {
 
   const { lang } = params;
 
-  if (!LANGS.includes(lang)) notFound();
-
-
+  if (!SUPPORTED_LOCALES.includes(lang as Locale)) notFound();
 
   return (
 
@@ -59,8 +51,6 @@ export default function MoltbotIamPage({ params }: PageProps) {
         <h1 className="text-4xl font-bold mb-4 text-gray-100">Moltbot Identity Governance &amp; IAM</h1>
 
         <p className="text-lg text-gray-300 mb-8">85% aller Breaches nutzen kompromittierte oder überprivilegierte Identitäten aus. RBAC, Least Privilege und regelmäßige Access Reviews sind Pflicht.</p>
-
-
 
         <section className="mb-10">
 
@@ -86,15 +76,11 @@ const ROLE_PERMISSIONS = {
 
 };
 
-
-
 export function hasPermission(role, permission) {
 
   return ROLE_PERMISSIONS[role]?.includes(permission) ?? false;
 
 }
-
-
 
 // Beispiel in API-Route:
 
@@ -113,8 +99,6 @@ export async function GET(req) {
 `}</pre>
 
           </div>
-
-
 
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">Least Privilege Implementation</h2>
 
@@ -136,8 +120,6 @@ function requirePermission(permission) {
 
 }
 
-
-
 // Beispiel: Nur Admins können User-Management aufrufen
 
 app.get('/api/admin/users', 
@@ -149,8 +131,6 @@ app.get('/api/admin/users',
   handler
 
 );
-
-
 
 // Beispiel: Developer können nur eigene Executions sehen
 
@@ -173,8 +153,6 @@ app.get('/api/executions',
 );`}</pre>
 
           </div>
-
-
 
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">Automated Access Reviews</h2>
 
@@ -221,8 +199,6 @@ async function runAccessReviews() {
   }
 
 }
-
-
 
 // Moltbot Job Scheduler
 

@@ -1,10 +1,12 @@
-import { Metadata } from 'next';
-import { notFound } from 'next/navigation';
+import type { Metadata } from 'next'
+import { notFound } from 'next/navigation'
+import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
 
-interface PageProps { params: { lang: string }; }
-const LANGS = ['de','en','es','fr','pt','it','ru','zh','ja','ko','ar','hi','tr','pl','nl'];
+export async function generateStaticParams() {
+  return SUPPORTED_LOCALES.map((lang) => ({ lang }))
+}
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const { lang } = params;
   return {
     title: 'AWS Security Architecture mit ClawGuru: Well-Architected 2024',
@@ -12,14 +14,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     keywords: ['aws security architecture','aws well architected security','iam least privilege','cloudtrail monitoring','aws guardduty','aws security hub'],
     authors: [{ name: 'ClawGuru Security Team' }],
     openGraph: { title: 'AWS Security Architecture mit ClawGuru 2024', description: 'AWS Well-Architected Security.', type: 'article', url: `https://clawguru.org/${lang}/solutions/aws-security-architecture` },
-    alternates: { canonical: `https://clawguru.org/${lang}/solutions/aws-security-architecture`, languages: Object.fromEntries(LANGS.map(l => [l, `https://clawguru.org/${l}/solutions/aws-security-architecture`])) },
+    alternates: buildLocalizedAlternates(lang as Locale, '/solutions/aws-security-architecture'),
     robots: 'index, follow',
   };
 }
 
-export default function AwsSecurityPage({ params }: PageProps) {
+export default function AwsSecurityPage({ params }: { params: { lang: string } }) {
   const { lang } = params;
-  if (!LANGS.includes(lang)) notFound();
+  if (!SUPPORTED_LOCALES.includes(lang as Locale)) notFound();
 
   return (
     <div className="container mx-auto px-4 py-8">

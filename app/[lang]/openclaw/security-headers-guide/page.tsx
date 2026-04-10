@@ -1,10 +1,12 @@
-import { Metadata } from 'next';
-import { notFound } from 'next/navigation';
+import type { Metadata } from 'next'
+import { notFound } from 'next/navigation'
+import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
 
-interface PageProps { params: { lang: string }; }
-const LANGS = ['de','en','es','fr','pt','it','ru','zh','ja','ko','ar','hi','tr','pl','nl'];
+export async function generateStaticParams() {
+  return SUPPORTED_LOCALES.map((lang) => ({ lang }))
+}
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const { lang } = params;
   return {
     title: 'OpenClaw Security Headers: CSP, HSTS & X-Headers Guide 2024',
@@ -12,7 +14,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     keywords: ['openclaw security headers','content security policy','hsts header','x-frame-options','permissions policy','http security headers'],
     authors: [{ name: 'ClawGuru Security Team' }],
     openGraph: { title: 'OpenClaw Security Headers Guide 2024', description: 'Security Headers für OpenClaw mit A+ Rating.', type: 'article', url: `https://clawguru.org/${lang}/openclaw/security-headers-guide` },
-    alternates: { canonical: `https://clawguru.org/${lang}/openclaw/security-headers-guide`, languages: Object.fromEntries(LANGS.map(l => [l, `https://clawguru.org/${l}/openclaw/security-headers-guide`])) },
+    alternates: buildLocalizedAlternates(lang as Locale, '/openclaw/security-headers-guide'),
     robots: 'index, follow',
   };
 }
@@ -28,9 +30,9 @@ const HEADERS = [
   { name: 'Cross-Origin-Opener-Policy', value: 'same-origin', impact: 'Cross-Origin Isolation', critical: false },
 ];
 
-export default function OpenClawSecurityHeadersPage({ params }: PageProps) {
+export default function OpenClawSecurityHeadersPage({ params }: { params: { lang: string } }) {
   const { lang } = params;
-  if (!LANGS.includes(lang)) notFound();
+  if (!SUPPORTED_LOCALES.includes(lang as Locale)) notFound();
 
   return (
     <div className="container mx-auto px-4 py-8">

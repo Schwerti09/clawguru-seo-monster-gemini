@@ -1,10 +1,12 @@
-import { Metadata } from 'next';
-import { notFound } from 'next/navigation';
+import type { Metadata } from 'next'
+import { notFound } from 'next/navigation'
+import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
 
-interface PageProps { params: { lang: string }; }
-const LANGS = ['de','en','es','fr','pt','it','ru','zh','ja','ko','ar','hi','tr','pl','nl'];
+export async function generateStaticParams() {
+  return SUPPORTED_LOCALES.map((lang) => ({ lang }))
+}
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const { lang } = params;
   return {
     title: 'OpenClaw Self-Hosted Security Checklist: 100-Punkt-Check 2024',
@@ -12,7 +14,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     keywords: ['openclaw self hosted security','self hosting checklist','server security checklist','vps hardening','security audit checklist'],
     authors: [{ name: 'ClawGuru Security Team' }],
     openGraph: { title: 'OpenClaw Self-Hosted Security Checklist 2024', description: '100-Punkt Security-Checkliste für Self-Hosted OpenClaw.', type: 'article', url: `https://clawguru.org/${lang}/openclaw/self-hosted-security-checklist` },
-    alternates: { canonical: `https://clawguru.org/${lang}/openclaw/self-hosted-security-checklist`, languages: Object.fromEntries(LANGS.map(l => [l, `https://clawguru.org/${l}/openclaw/self-hosted-security-checklist`])) },
+    alternates: buildLocalizedAlternates(lang as Locale, '/openclaw/self-hosted-security-checklist'),
     robots: 'index, follow',
   };
 }
@@ -63,9 +65,9 @@ const CHECKLIST_CATEGORIES = [
   },
 ];
 
-export default function OpenClawSelfHostedChecklistPage({ params }: PageProps) {
+export default function OpenClawSelfHostedChecklistPage({ params }: { params: { lang: string } }) {
   const { lang } = params;
-  if (!LANGS.includes(lang)) notFound();
+  if (!SUPPORTED_LOCALES.includes(lang as Locale)) notFound();
 
   const totalItems = CHECKLIST_CATEGORIES.reduce((acc, cat) => acc + cat.items.length, 0);
   const criticalItems = CHECKLIST_CATEGORIES.reduce((acc, cat) => acc + cat.items.filter(i => i.critical).length, 0);

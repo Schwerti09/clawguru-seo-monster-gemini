@@ -1,10 +1,12 @@
-import { Metadata } from 'next';
-import { notFound } from 'next/navigation';
+import type { Metadata } from 'next'
+import { notFound } from 'next/navigation'
+import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
 
-interface PageProps { params: { lang: string }; }
-const LANGS = ['de','en','es','fr','pt','it','ru','zh','ja','ko','ar','hi','tr','pl','nl'];
+export async function generateStaticParams() {
+  return SUPPORTED_LOCALES.map((lang) => ({ lang }))
+}
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const { lang } = params;
   return {
     title: 'Moltbot API Gateway Security: Kong & Rate Limiting 2024',
@@ -12,14 +14,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     keywords: ['moltbot api gateway','kong security','api key management','rate limiting gateway','request validation','api authentication'],
     authors: [{ name: 'ClawGuru Security Team' }],
     openGraph: { title: 'Moltbot API Gateway Security: Kong & Rate Limiting 2024', description: 'API Gateway Security für Moltbot mit Kong.', type: 'article', url: `https://clawguru.org/${lang}/moltbot/api-gateway-security` },
-    alternates: { canonical: `https://clawguru.org/${lang}/moltbot/api-gateway-security`, languages: Object.fromEntries(LANGS.map(l => [l, `https://clawguru.org/${l}/moltbot/api-gateway-security`])) },
+    alternates: buildLocalizedAlternates(lang as Locale, '/moltbot/api-gateway-security'),
     robots: 'index, follow',
   };
 }
 
-export default function MoltbotApiGatewayPage({ params }: PageProps) {
+export default function MoltbotApiGatewayPage({ params }: { params: { lang: string } }) {
   const { lang } = params;
-  if (!LANGS.includes(lang)) notFound();
+  if (!SUPPORTED_LOCALES.includes(lang as Locale)) notFound();
 
   return (
     <div className="container mx-auto px-4 py-8">

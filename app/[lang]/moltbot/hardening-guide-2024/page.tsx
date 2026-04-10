@@ -1,10 +1,12 @@
-import { Metadata } from 'next';
-import { notFound } from 'next/navigation';
+import type { Metadata } from 'next'
+import { notFound } from 'next/navigation'
+import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
 
-interface PageProps { params: { lang: string }; }
-const LANGS = ['de','en','es','fr','pt','it','ru','zh','ja','ko','ar','hi','tr','pl','nl'];
+export async function generateStaticParams() {
+  return SUPPORTED_LOCALES.map((lang) => ({ lang }))
+}
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const { lang } = params;
   return {
     title: 'Moltbot Hardening Guide 2024: Production Security Standards',
@@ -12,14 +14,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     keywords: ['moltbot hardening guide','production security','security headers','secrets management','tls configuration','cis benchmark'],
     authors: [{ name: 'ClawGuru Security Team' }],
     openGraph: { title: 'Moltbot Hardening Guide 2024: Production Security Standards', description: 'Aktueller Moltbot Hardening Guide für Production-Deployments.', type: 'article', url: `https://clawguru.org/${lang}/moltbot/hardening-guide-2024`, images: ['/og-moltbot-hardening.jpg'] },
-    alternates: { canonical: `https://clawguru.org/${lang}/moltbot/hardening-guide-2024`, languages: { de: 'https://clawguru.org/de/moltbot/hardening-guide-2024', en: 'https://clawguru.org/en/moltbot/hardening-guide-2024', es: 'https://clawguru.org/es/moltbot/hardening-guide-2024', fr: 'https://clawguru.org/fr/moltbot/hardening-guide-2024', pt: 'https://clawguru.org/pt/moltbot/hardening-guide-2024', it: 'https://clawguru.org/it/moltbot/hardening-guide-2024', ru: 'https://clawguru.org/ru/moltbot/hardening-guide-2024', zh: 'https://clawguru.org/zh/moltbot/hardening-guide-2024', ja: 'https://clawguru.org/ja/moltbot/hardening-guide-2024', ko: 'https://clawguru.org/ko/moltbot/hardening-guide-2024', ar: 'https://clawguru.org/ar/moltbot/hardening-guide-2024', hi: 'https://clawguru.org/hi/moltbot/hardening-guide-2024', tr: 'https://clawguru.org/tr/moltbot/hardening-guide-2024', pl: 'https://clawguru.org/pl/moltbot/hardening-guide-2024', nl: 'https://clawguru.org/nl/moltbot/hardening-guide-2024' } },
+    alternates: buildLocalizedAlternates(lang as Locale, '/moltbot/hardening-guide-2024'),
     robots: 'index, follow',
   };
 }
 
-export default function MoltbotHardeningGuidePage({ params }: PageProps) {
+export default function MoltbotHardeningGuidePage({ params }: { params: { lang: string } }) {
   const { lang } = params;
-  if (!LANGS.includes(lang)) notFound();
+  if (!SUPPORTED_LOCALES.includes(lang as Locale)) notFound();
 
   return (
     <div className="container mx-auto px-4 py-8">

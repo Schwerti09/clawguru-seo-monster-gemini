@@ -1,10 +1,12 @@
-import { Metadata } from 'next';
-import { notFound } from 'next/navigation';
+import type { Metadata } from 'next'
+import { notFound } from 'next/navigation'
+import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
 
-interface PageProps { params: { lang: string }; }
-const LANGS = ['de','en','es','fr','pt','it','ru','zh','ja','ko','ar','hi','tr','pl','nl'];
+export async function generateStaticParams() {
+  return SUPPORTED_LOCALES.map((lang) => ({ lang }))
+}
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const { lang } = params;
   return {
     title: 'OpenClaw Intrusion Detection: OSSEC & Fail2ban Setup 2024',
@@ -12,14 +14,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     keywords: ['openclaw intrusion detection','ossec ids','fail2ban setup','suricata ids','brute force protection','log analysis security'],
     authors: [{ name: 'ClawGuru Security Team' }],
     openGraph: { title: 'OpenClaw Intrusion Detection Setup 2024', description: 'IDS für OpenClaw mit OSSEC und Fail2ban.', type: 'article', url: `https://clawguru.org/${lang}/openclaw/intrusion-detection-setup` },
-    alternates: { canonical: `https://clawguru.org/${lang}/openclaw/intrusion-detection-setup`, languages: Object.fromEntries(LANGS.map(l => [l, `https://clawguru.org/${l}/openclaw/intrusion-detection-setup`])) },
+    alternates: buildLocalizedAlternates(lang as Locale, '/openclaw/intrusion-detection-setup'),
     robots: 'index, follow',
   };
 }
 
-export default function OpenClawIntrusionDetectionPage({ params }: PageProps) {
+export default function OpenClawIntrusionDetectionPage({ params }: { params: { lang: string } }) {
   const { lang } = params;
-  if (!LANGS.includes(lang)) notFound();
+  if (!SUPPORTED_LOCALES.includes(lang as Locale)) notFound();
 
   return (
     <div className="container mx-auto px-4 py-8">

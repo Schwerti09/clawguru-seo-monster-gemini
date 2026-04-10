@@ -1,10 +1,12 @@
-import { Metadata } from 'next';
-import { notFound } from 'next/navigation';
+import type { Metadata } from 'next'
+import { notFound } from 'next/navigation'
+import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
 
-interface PageProps { params: { lang: string }; }
-const LANGS = ['de','en','es','fr','pt','it','ru','zh','ja','ko','ar','hi','tr','pl','nl'];
+export async function generateStaticParams() {
+  return SUPPORTED_LOCALES.map((lang) => ({ lang }))
+}
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const { lang } = params;
   return {
     title: 'OpenClaw vs Semgrep: SAST & Security Scanning Vergleich 2024',
@@ -12,14 +14,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     keywords: ['openclaw vs semgrep','semgrep alternative','sast vergleich','static analysis security','code security scanning','openclaw sast'],
     authors: [{ name: 'ClawGuru Security Team' }],
     openGraph: { title: 'OpenClaw vs Semgrep Vergleich 2024', description: 'OpenClaw vs Semgrep SAST.', type: 'article', url: `https://clawguru.org/${lang}/openclaw-vs-semgrep` },
-    alternates: { canonical: `https://clawguru.org/${lang}/openclaw-vs-semgrep`, languages: Object.fromEntries(LANGS.map(l => [l, `https://clawguru.org/${l}/openclaw-vs-semgrep`])) },
+    alternates: buildLocalizedAlternates(lang as Locale, '/openclaw-vs-semgrep'),
     robots: 'index, follow',
   };
 }
 
-export default function OpenClawVsSemgrepPage({ params }: PageProps) {
+export default function OpenClawVsSemgrepPage({ params }: { params: { lang: string } }) {
   const { lang } = params;
-  if (!LANGS.includes(lang)) notFound();
+  if (!SUPPORTED_LOCALES.includes(lang as Locale)) notFound();
 
   return (
     <div className="container mx-auto px-4 py-8">

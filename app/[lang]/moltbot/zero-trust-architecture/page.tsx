@@ -1,10 +1,12 @@
-import { Metadata } from 'next';
-import { notFound } from 'next/navigation';
+import type { Metadata } from 'next'
+import { notFound } from 'next/navigation'
+import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
 
-interface PageProps { params: { lang: string }; }
-const LANGS = ['de','en','es','fr','pt','it','ru','zh','ja','ko','ar','hi','tr','pl','nl'];
+export async function generateStaticParams() {
+  return SUPPORTED_LOCALES.map((lang) => ({ lang }))
+}
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const { lang } = params;
   return {
     title: 'Moltbot Zero Trust Architecture: Never Trust, Always Verify 2024',
@@ -12,14 +14,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     keywords: ['moltbot zero trust','zero trust architecture','micro segmentation','identity based access','least privilege','continuous verification'],
     authors: [{ name: 'ClawGuru Security Team' }],
     openGraph: { title: 'Moltbot Zero Trust Architecture: Never Trust, Always Verify 2024', description: 'Zero Trust Implementierung für Moltbot.', type: 'article', url: `https://clawguru.org/${lang}/moltbot/zero-trust-architecture` },
-    alternates: { canonical: `https://clawguru.org/${lang}/moltbot/zero-trust-architecture`, languages: Object.fromEntries(LANGS.map(l => [l, `https://clawguru.org/${l}/moltbot/zero-trust-architecture`])) },
+    alternates: buildLocalizedAlternates(lang as Locale, '/moltbot/zero-trust-architecture'),
     robots: 'index, follow',
   };
 }
 
-export default function MoltbotZeroTrustPage({ params }: PageProps) {
+export default function MoltbotZeroTrustPage({ params }: { params: { lang: string } }) {
   const { lang } = params;
-  if (!LANGS.includes(lang)) notFound();
+  if (!SUPPORTED_LOCALES.includes(lang as Locale)) notFound();
 
   return (
     <div className="container mx-auto px-4 py-8">

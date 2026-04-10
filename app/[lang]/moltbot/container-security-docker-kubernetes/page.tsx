@@ -1,10 +1,12 @@
-import { Metadata } from 'next';
-import { notFound } from 'next/navigation';
+import type { Metadata } from 'next'
+import { notFound } from 'next/navigation'
+import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
 
-interface PageProps { params: { lang: string }; }
-const LANGS = ['de','en','es','fr','pt','it','ru','zh','ja','ko','ar','hi','tr','pl','nl'];
+export async function generateStaticParams() {
+  return SUPPORTED_LOCALES.map((lang) => ({ lang }))
+}
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const { lang } = params;
   return {
     title: 'Moltbot Container Security: Docker & Kubernetes Hardening 2024',
@@ -12,14 +14,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     keywords: ['moltbot container security','docker hardening','kubernetes security','pod security','falco runtime','container rbac'],
     authors: [{ name: 'ClawGuru Security Team' }],
     openGraph: { title: 'Moltbot Container Security: Docker & Kubernetes Hardening 2024', description: 'Container Security für Moltbot in Docker und Kubernetes.', type: 'article', url: `https://clawguru.org/${lang}/moltbot/container-security-docker-kubernetes`, images: ['/og-moltbot-container.jpg'] },
-    alternates: { canonical: `https://clawguru.org/${lang}/moltbot/container-security-docker-kubernetes`, languages: { de: 'https://clawguru.org/de/moltbot/container-security-docker-kubernetes', en: 'https://clawguru.org/en/moltbot/container-security-docker-kubernetes', es: 'https://clawguru.org/es/moltbot/container-security-docker-kubernetes', fr: 'https://clawguru.org/fr/moltbot/container-security-docker-kubernetes', pt: 'https://clawguru.org/pt/moltbot/container-security-docker-kubernetes', it: 'https://clawguru.org/it/moltbot/container-security-docker-kubernetes', ru: 'https://clawguru.org/ru/moltbot/container-security-docker-kubernetes', zh: 'https://clawguru.org/zh/moltbot/container-security-docker-kubernetes', ja: 'https://clawguru.org/ja/moltbot/container-security-docker-kubernetes', ko: 'https://clawguru.org/ko/moltbot/container-security-docker-kubernetes', ar: 'https://clawguru.org/ar/moltbot/container-security-docker-kubernetes', hi: 'https://clawguru.org/hi/moltbot/container-security-docker-kubernetes', tr: 'https://clawguru.org/tr/moltbot/container-security-docker-kubernetes', pl: 'https://clawguru.org/pl/moltbot/container-security-docker-kubernetes', nl: 'https://clawguru.org/nl/moltbot/container-security-docker-kubernetes' } },
+    alternates: buildLocalizedAlternates(lang as Locale, '/moltbot/container-security-docker-kubernetes'),
     robots: 'index, follow',
   };
 }
 
-export default function MoltbotContainerSecurityPage({ params }: PageProps) {
+export default function MoltbotContainerSecurityPage({ params }: { params: { lang: string } }) {
   const { lang } = params;
-  if (!LANGS.includes(lang)) notFound();
+  if (!SUPPORTED_LOCALES.includes(lang as Locale)) notFound();
 
   return (
     <div className="container mx-auto px-4 py-8">

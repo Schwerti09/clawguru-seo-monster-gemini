@@ -1,10 +1,12 @@
-import { Metadata } from 'next';
-import { notFound } from 'next/navigation';
+import type { Metadata } from 'next'
+import { notFound } from 'next/navigation'
+import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
 
-interface PageProps { params: { lang: string }; }
-const LANGS = ['de','en','es','fr','pt','it','ru','zh','ja','ko','ar','hi','tr','pl','nl'];
+export async function generateStaticParams() {
+  return SUPPORTED_LOCALES.map((lang) => ({ lang }))
+}
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const { lang } = params;
   return {
     title: 'OpenClaw vs Snyk: Security Tool Vergleich 2024',
@@ -12,14 +14,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     keywords: ['openclaw vs snyk','snyk alternative','openclaw security tool','dependency scanning vergleich','open source security tools vergleich'],
     authors: [{ name: 'ClawGuru Security Team' }],
     openGraph: { title: 'OpenClaw vs Snyk Vergleich 2024', description: 'OpenClaw vs Snyk Security Tool.', type: 'article', url: `https://clawguru.org/${lang}/openclaw-vs-snyk` },
-    alternates: { canonical: `https://clawguru.org/${lang}/openclaw-vs-snyk`, languages: Object.fromEntries(LANGS.map(l => [l, `https://clawguru.org/${l}/openclaw-vs-snyk`])) },
+    alternates: buildLocalizedAlternates(lang as Locale, '/openclaw-vs-snyk'),
     robots: 'index, follow',
   };
 }
 
-export default function OpenClawVsSnykPage({ params }: PageProps) {
+export default function OpenClawVsSnykPage({ params }: { params: { lang: string } }) {
   const { lang } = params;
-  if (!LANGS.includes(lang)) notFound();
+  if (!SUPPORTED_LOCALES.includes(lang as Locale)) notFound();
 
   const COMPARISON = [
     { feature: 'Self-Hosting möglich', openclaw: '✅ Ja', snyk: '❌ Cloud-only' },

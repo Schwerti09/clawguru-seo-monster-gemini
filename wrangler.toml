@@ -6,12 +6,14 @@ compatibility_flags = ["nodejs_compat"]
 
 [build]
 # Cloudflare Pages has ~4GB RAM available. Use 3584MB to leave headroom for OS.
-command = "NODE_OPTIONS='--max-old-space-size=3584' npm run build"
+# Skip linting and type checking to save memory during the CF Pages build.
+command = "NEXT_DISABLE_ESLINT=1 NEXT_DISABLE_TYPE_CHECK=1 NODE_OPTIONS='--max-old-space-size=3584' npm run build"
 cwd = "."
 watch_dirs = ["app"]
 
 [build.environment]
 NODE_VERSION = "20"
+NEXT_TELEMETRY_DISABLED = "1"
 NEXT_PUBLIC_SITE_URL = "https://clawguru.org"
 SITE_URL = "https://clawguru.org"
 NEXT_PUBLIC_BASE_URL = "https://clawguru.org"

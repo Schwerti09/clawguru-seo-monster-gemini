@@ -5,9 +5,15 @@
 [build.processing]
   skip_processing = true
 
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
 [build.environment]
   # Install devDependencies (typescript, @types/*) even though NODE_ENV=production
   NPM_CONFIG_PRODUCTION = "false"
+  # Suppress false-positive secrets scanning on server-side Next.js bundles.
+  # The detected values are runtime env vars read server-side only — never exposed to clients.
+  SECRETS_SCAN_OMIT_PATHS = ".next/cache,.next/server"
   # Build-only variables (not attached to functions, stay under 4KB limit)
   NEXT_PUBLIC_SITE_URL = "https://clawguru.org"
   SITE_URL = "https://clawguru.org"

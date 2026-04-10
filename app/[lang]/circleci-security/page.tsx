@@ -59,7 +59,7 @@ export default async function CircleCISecurityPage({
   const prefix = `/${locale}`;
   const coreLinks = getCoreSecurityLinks(locale);
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-gray-800">
       <section className="relative overflow-hidden bg-gradient-to-br from-blue-600 via-indigo-600 to-violet-700 py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl">
@@ -80,8 +80,8 @@ export default async function CircleCISecurityPage({
         <div className="max-w-4xl mx-auto">
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">CircleCI Security Architecture</h2>
-            <p className="text-slate-700 text-lg mb-6">
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">CircleCI Security Architecture</h2>
+            <p className="text-gray-200 text-lg mb-6">
               CircleCI Pipelines haben Zugriff auf Code, Secrets und Deployments. Mit OIDC, Restricted Contexts und IP-Ranges können Sie Sicherheit dramatisch verbessern.
             </p>
 
@@ -117,7 +117,7 @@ export default async function CircleCISecurityPage({
           </section>
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">OIDC Configuration (AWS + CircleCI)</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">OIDC Configuration (AWS + CircleCI)</h2>
             <div className="bg-slate-900 rounded-xl p-6 overflow-x-auto">
               <pre className="font-mono text-sm text-green-400">
 {`# Terraform - AWS OIDC Provider for CircleCI
@@ -245,7 +245,7 @@ workflows:
           </section>
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">Restricted Contexts & Security Groups</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">Restricted Contexts & Security Groups</h2>
             <div className="bg-slate-900 rounded-xl p-6 overflow-x-auto">
               <pre className="font-mono text-sm text-green-400">
 {`# CircleCI Contexts Configuration
@@ -375,7 +375,7 @@ workflows:
           </section>
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">IP Ranges & Self-Hosted Runners</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">IP Ranges & Self-Hosted Runners</h2>
             <div className="bg-slate-900 rounded-xl p-6 overflow-x-auto">
               <pre className="font-mono text-sm text-green-400">
 {`# CircleCI IP Ranges (Paid Feature)
@@ -514,11 +514,11 @@ spec:
           </section>
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">CircleCI Security Checklist</h2>
-            <div className="bg-white border border-slate-200 rounded-xl p-6">
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">CircleCI Security Checklist</h2>
+            <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
-                  <h3 className="font-semibold text-slate-900 mb-4">Authentication & Access</h3>
+                  <h3 className="font-semibold text-gray-100 mb-4">Authentication & Access</h3>
                   {[
                     "OIDC configured (AWS/Azure/GCP)",
                     "Restricted contexts enabled",
@@ -527,12 +527,12 @@ spec:
                   ].map((item, i) => (
                     <div key={i} className="flex items-center gap-3 py-2 border-b border-slate-100 last:border-0">
                       <span className="w-5 h-5 rounded border-2 border-slate-300 flex items-center justify-center text-xs text-slate-400">☐</span>
-                      <span className="text-slate-700 text-sm">{item}</span>
+                      <span className="text-gray-200 text-sm">{item}</span>
                     </div>
                   ))}
                 </div>
                 <div>
-                  <h3 className="font-semibold text-slate-900 mb-4">Pipeline Security</h3>
+                  <h3 className="font-semibold text-gray-100 mb-4">Pipeline Security</h3>
                   {[
                     "No hardcoded secrets in config.yml",
                     "IP ranges enabled for sensitive jobs",
@@ -541,7 +541,7 @@ spec:
                   ].map((item, i) => (
                     <div key={i} className="flex items-center gap-3 py-2 border-b border-slate-100 last:border-0">
                       <span className="w-5 h-5 rounded border-2 border-slate-300 flex items-center justify-center text-xs text-slate-400">☐</span>
-                      <span className="text-slate-700 text-sm">{item}</span>
+                      <span className="text-gray-200 text-sm">{item}</span>
                     </div>
                   ))}
                 </div>
@@ -551,7 +551,7 @@ spec:
 
           <section className="bg-gradient-to-r from-blue-600 to-violet-600 rounded-2xl p-8 text-center text-white">
             <h2 className="text-2xl font-bold mb-4">CircleCI Security Assessment</h2>
-            <a href={coreLinks.check} className="inline-block px-6 py-3 bg-white text-cyan-400 rounded-lg font-semibold">Assessment Starten</a>
+            <a href={coreLinks.check} className="inline-block px-6 py-3 bg-gray-800 text-cyan-400 rounded-lg font-semibold">Assessment Starten</a>
             <div className="mt-6 flex flex-wrap justify-center gap-3 text-sm">
               <a href={`${prefix}/openclaw-security-check`} className="rounded-lg border border-white/30 px-3 py-2 text-white hover:bg-white/10">OpenClaw Security Hub</a>
               <a href={`${prefix}/ai-agent-security`} className="rounded-lg border border-white/30 px-3 py-2 text-white hover:bg-white/10">AI Agent Security</a>

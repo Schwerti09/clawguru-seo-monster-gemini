@@ -224,7 +224,7 @@ export default async function XXE2026Page({
             
             {/* Table of Contents */}
             <div className="bg-slate-50 rounded-2xl p-6 mb-12 border border-slate-200">
-              <h2 className="text-lg font-semibold text-slate-900 mb-4">Inhaltsverzeichnis</h2>
+              <h2 className="text-lg font-semibold text-gray-100 mb-4">Inhaltsverzeichnis</h2>
               <ul className="grid md:grid-cols-2 gap-2 text-sm">
                 <li><a href="#was-ist-xxe" className="text-cyan-400 hover:underline">→ Was ist XXE?</a></li>
                 <li><a href="#cve-2026" className="text-cyan-400 hover:underline">→ CVE-Übersicht 2026</a></li>
@@ -239,9 +239,9 @@ export default async function XXE2026Page({
 
             {/* What is XXE */}
             <section id="was-ist-xxe" className="mb-16">
-              <h2 className="text-3xl font-bold text-slate-900 mb-6">Was ist XXE (XML External Entity Injection)?</h2>
+              <h2 className="text-3xl font-bold text-gray-100 mb-6">Was ist XXE (XML External Entity Injection)?</h2>
               
-              <div className="prose prose-lg max-w-none text-slate-700 leading-relaxed">
+              <div className="prose prose-lg max-w-none text-gray-200 leading-relaxed">
                 <p className="mb-6">
                   <strong>XML External Entity Injection (XXE)</strong> ist eine kritische Sicherheitslücke, die auftritt, 
                   wenn XML-Parser externe Entities verarbeiten. Diese Schwachstelle ermöglicht Angreifern das Lesen interner Dateien, 
@@ -262,7 +262,7 @@ export default async function XXE2026Page({
                   </ul>
                 </div>
 
-                <h3 className="text-2xl font-semibold text-slate-900 mt-8 mb-4">Wie funktioniert ein XXE-Angriff?</h3>
+                <h3 className="text-2xl font-semibold text-gray-100 mt-8 mb-4">Wie funktioniert ein XXE-Angriff?</h3>
                 
                 <p className="mb-6">
                   Ein XXE-Angriff nutzt die DTD (Document Type Definition) Funktionalität von XML. 
@@ -304,18 +304,18 @@ export default async function XXE2026Page({
 
             {/* CVE Overview 2026 */}
             <section id="cve-2026" className="mb-16">
-              <h2 className="text-3xl font-bold text-slate-900 mb-6">CVE-Übersicht 2026: Kritische XXE-Schwachstellen</h2>
+              <h2 className="text-3xl font-bold text-gray-100 mb-6">CVE-Übersicht 2026: Kritische XXE-Schwachstellen</h2>
               
               <div className="grid gap-6 mb-8">
-                <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+                <div className="bg-gray-800 border border-slate-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
                   <div className="flex items-start justify-between mb-4">
                     <div>
                       <span className="inline-block px-3 py-1 rounded-full bg-red-100 text-red-700 text-sm font-medium mb-2">CRITICAL</span>
-                      <h3 className="text-xl font-semibold text-slate-900">CVE-2026-XXXX</h3>
+                      <h3 className="text-xl font-semibold text-gray-100">CVE-2026-XXXX</h3>
                     </div>
                     <span className="text-3xl font-bold text-red-400">9.8</span>
                   </div>
-                  <p className="text-slate-700 mb-4">
+                  <p className="text-gray-200 mb-4">
                     <strong>LibXML2 XXE via XInclude</strong> - Eine kritische Schwachstelle in LibXML2 ermöglicht 
                     XXE-Angriffe über verarbeitete XInclude-Direktiven. Betroffen sind alle Versionen vor 2.12.0.
                   </p>
@@ -326,15 +326,15 @@ export default async function XXE2026Page({
                   </div>
                 </div>
 
-                <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+                <div className="bg-gray-800 border border-slate-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
                   <div className="flex items-start justify-between mb-4">
                     <div>
                       <span className="inline-block px-3 py-1 rounded-full bg-orange-100 text-orange-700 text-sm font-medium mb-2">HIGH</span>
-                      <h3 className="text-xl font-semibold text-slate-900">CVE-2026-YYYY</h3>
+                      <h3 className="text-xl font-semibold text-gray-100">CVE-2026-YYYY</h3>
                     </div>
                     <span className="text-3xl font-bold text-orange-400">8.5</span>
                   </div>
-                  <p className="text-slate-700 mb-4">
+                  <p className="text-gray-200 mb-4">
                     <strong>Java XML Parsers Default XXE</strong> - Mehrere Java XML-Parser (DOM, SAX, StAX) 
                     sind standardmäßig für XXE anfällig, wenn nicht explizit konfiguriert.
                   </p>
@@ -345,15 +345,15 @@ export default async function XXE2026Page({
                   </div>
                 </div>
 
-                <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+                <div className="bg-gray-800 border border-slate-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
                   <div className="flex items-start justify-between mb-4">
                     <div>
                       <span className="inline-block px-3 py-1 rounded-full bg-yellow-100 text-yellow-700 text-sm font-medium mb-2">MEDIUM</span>
-                      <h3 className="text-xl font-semibold text-slate-900">CVE-2026-ZZZZ</h3>
+                      <h3 className="text-xl font-semibold text-gray-100">CVE-2026-ZZZZ</h3>
                     </div>
                     <span className="text-3xl font-bold text-yellow-400">6.8</span>
                   </div>
-                  <p className="text-slate-700 mb-4">
+                  <p className="text-gray-200 mb-4">
                     <strong>.NET XmlDocument XXE</strong> - XXE-Schwachstelle in .NET Framework und .NET Core 
                     XmlDocument bei Verarbeitung von DTDs mit externen Entities.
                   </p>
@@ -383,11 +383,11 @@ export default async function XXE2026Page({
 
             {/* Exploit Techniques */}
             <section id="exploit-techniken" className="mb-16">
-              <h2 className="text-3xl font-bold text-slate-900 mb-6">XXE Exploit-Techniken 2026</h2>
+              <h2 className="text-3xl font-bold text-gray-100 mb-6">XXE Exploit-Techniken 2026</h2>
               
               <div className="grid md:grid-cols-2 gap-6 mb-8">
-                <div className="bg-white border border-slate-200 rounded-xl p-6">
-                  <h3 className="text-lg font-semibold text-slate-900 mb-3 flex items-center gap-2">
+                <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
+                  <h3 className="text-lg font-semibold text-gray-100 mb-3 flex items-center gap-2">
                     <span className="w-8 h-8 rounded-lg bg-red-100 text-red-400 flex items-center justify-center text-sm">1</span>
                     File Disclosure
                   </h3>
@@ -403,8 +403,8 @@ export default async function XXE2026Page({
                   </div>
                 </div>
 
-                <div className="bg-white border border-slate-200 rounded-xl p-6">
-                  <h3 className="text-lg font-semibold text-slate-900 mb-3 flex items-center gap-2">
+                <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
+                  <h3 className="text-lg font-semibold text-gray-100 mb-3 flex items-center gap-2">
                     <span className="w-8 h-8 rounded-lg bg-red-100 text-red-400 flex items-center justify-center text-sm">2</span>
                     SSRF
                   </h3>
@@ -420,8 +420,8 @@ export default async function XXE2026Page({
                   </div>
                 </div>
 
-                <div className="bg-white border border-slate-200 rounded-xl p-6">
-                  <h3 className="text-lg font-semibold text-slate-900 mb-3 flex items-center gap-2">
+                <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
+                  <h3 className="text-lg font-semibold text-gray-100 mb-3 flex items-center gap-2">
                     <span className="w-8 h-8 rounded-lg bg-red-100 text-red-400 flex items-center justify-center text-sm">3</span>
                     Billion Laughs
                   </h3>
@@ -438,8 +438,8 @@ export default async function XXE2026Page({
                   </div>
                 </div>
 
-                <div className="bg-white border border-slate-200 rounded-xl p-6">
-                  <h3 className="text-lg font-semibold text-slate-900 mb-3 flex items-center gap-2">
+                <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
+                  <h3 className="text-lg font-semibold text-gray-100 mb-3 flex items-center gap-2">
                     <span className="w-8 h-8 rounded-lg bg-red-100 text-red-400 flex items-center justify-center text-sm">4</span>
                     Error-Based
                   </h3>
@@ -459,12 +459,12 @@ export default async function XXE2026Page({
 
             {/* Code Examples */}
             <section id="code-beispiele" className="mb-16">
-              <h2 className="text-3xl font-bold text-slate-900 mb-6">Sichere Code-Implementierungen</h2>
+              <h2 className="text-3xl font-bold text-gray-100 mb-6">Sichere Code-Implementierungen</h2>
               
               <div className="space-y-8">
-                <div className="bg-white border border-slate-200 rounded-xl overflow-hidden">
+                <div className="bg-gray-800 border border-slate-200 rounded-xl overflow-hidden">
                   <div className="bg-slate-100 px-6 py-3 border-b border-slate-200 flex items-center justify-between">
-                    <span className="font-semibold text-slate-700">Java (JAXB / DOM Parser)</span>
+                    <span className="font-semibold text-gray-200">Java (JAXB / DOM Parser)</span>
                     <span className="text-xs text-slate-500">OWASP Compliant</span>
                   </div>
                   <div className="p-6 bg-slate-900 overflow-x-auto">
@@ -489,9 +489,9 @@ Document doc = builder.parse(inputStream);`}
                   </div>
                 </div>
 
-                <div className="bg-white border border-slate-200 rounded-xl overflow-hidden">
+                <div className="bg-gray-800 border border-slate-200 rounded-xl overflow-hidden">
                   <div className="bg-slate-100 px-6 py-3 border-b border-slate-200 flex items-center justify-between">
-                    <span className="font-semibold text-slate-700">Python (lxml / defusedxml)</span>
+                    <span className="font-semibold text-gray-200">Python (lxml / defusedxml)</span>
                     <span className="text-xs text-slate-500">Best Practice</span>
                   </div>
                   <div className="p-6 bg-slate-900 overflow-x-auto">
@@ -517,9 +517,9 @@ tree = etree.parse(StringIO(xml_string), parser)`}
                   </div>
                 </div>
 
-                <div className="bg-white border border-slate-200 rounded-xl overflow-hidden">
+                <div className="bg-gray-800 border border-slate-200 rounded-xl overflow-hidden">
                   <div className="bg-slate-100 px-6 py-3 border-b border-slate-200 flex items-center justify-between">
-                    <span className="font-semibold text-slate-700">Node.js (libxmljs / fast-xml-parser)</span>
+                    <span className="font-semibold text-gray-200">Node.js (libxmljs / fast-xml-parser)</span>
                     <span className="text-xs text-slate-500">Secure Config</span>
                   </div>
                   <div className="p-6 bg-slate-900 overflow-x-auto">
@@ -550,9 +550,9 @@ const xmlDoc = libxml.parseXml(xmlString, {
                   </div>
                 </div>
 
-                <div className="bg-white border border-slate-200 rounded-xl overflow-hidden">
+                <div className="bg-gray-800 border border-slate-200 rounded-xl overflow-hidden">
                   <div className="bg-slate-100 px-6 py-3 border-b border-slate-200 flex items-center justify-between">
-                    <span className="font-semibold text-slate-700">.NET (C# XmlReader)</span>
+                    <span className="font-semibold text-gray-200">.NET (C# XmlReader)</span>
                     <span className="text-xs text-slate-500">Microsoft Guidelines</span>
                   </div>
                   <div className="p-6 bg-slate-900 overflow-x-auto">
@@ -583,7 +583,7 @@ using (XmlReader reader = XmlReader.Create(inputStream, settings))
 
             {/* Prevention */}
             <section id="prevention" className="mb-16">
-              <h2 className="text-3xl font-bold text-slate-900 mb-6">XXE Prevention & Defense-in-Depth</h2>
+              <h2 className="text-3xl font-bold text-gray-100 mb-6">XXE Prevention & Defense-in-Depth</h2>
               
               <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-8 border border-green-700 mb-8">
                 <h3 className="text-xl font-semibold text-green-900 mb-6">Das 5-Layer Defense Model</h3>
@@ -646,8 +646,8 @@ using (XmlReader reader = XmlReader.Create(inputStream, settings))
                 </div>
               </div>
 
-              <div className="bg-white border border-slate-200 rounded-xl p-6">
-                <h3 className="text-lg font-semibold text-slate-900 mb-4">XXE Prevention Checklist</h3>
+              <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
+                <h3 className="text-lg font-semibold text-gray-100 mb-4">XXE Prevention Checklist</h3>
                 <div className="grid md:grid-cols-2 gap-3">
                   {[
                     "DTD processing disabled in all parsers",
@@ -665,7 +665,7 @@ using (XmlReader reader = XmlReader.Create(inputStream, settings))
                   ].map((item, i) => (
                     <div key={i} className="flex items-center gap-3">
                       <span className="w-5 h-5 rounded border-2 border-slate-300 flex items-center justify-center text-slate-400">☐</span>
-                      <span className="text-slate-700 text-sm">{item}</span>
+                      <span className="text-gray-200 text-sm">{item}</span>
                     </div>
                   ))}
                 </div>
@@ -674,12 +674,12 @@ using (XmlReader reader = XmlReader.Create(inputStream, settings))
 
             {/* Tools */}
             <section id="tools" className="mb-16">
-              <h2 className="text-3xl font-bold text-slate-900 mb-6">XXE Scanner & Security Tools</h2>
+              <h2 className="text-3xl font-bold text-gray-100 mb-6">XXE Scanner & Security Tools</h2>
               
               <div className="grid md:grid-cols-3 gap-6">
-                <div className="bg-white border border-slate-200 rounded-xl p-6">
+                <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
                   <div className="w-12 h-12 rounded-lg bg-blue-100 text-cyan-400 flex items-center justify-center mb-4 text-2xl">🔍</div>
-                  <h3 className="font-semibold text-slate-900 mb-2">Burp Suite</h3>
+                  <h3 className="font-semibold text-gray-100 mb-2">Burp Suite</h3>
                   <p className="text-slate-600 text-sm mb-4">
                     Enterprise-Grade Web Security Testing mit XXE Detection Plugins
                   </p>
@@ -690,9 +690,9 @@ using (XmlReader reader = XmlReader.Create(inputStream, settings))
                   </div>
                 </div>
 
-                <div className="bg-white border border-slate-200 rounded-xl p-6">
+                <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
                   <div className="w-12 h-12 rounded-lg bg-orange-100 text-orange-400 flex items-center justify-center mb-4 text-2xl">🛡️</div>
-                  <h3 className="font-semibold text-slate-900 mb-2">OWASP ZAP</h3>
+                  <h3 className="font-semibold text-gray-100 mb-2">OWASP ZAP</h3>
                   <p className="text-slate-600 text-sm mb-4">
                     Open Source Web Application Security Scanner mit XXE Rules
                   </p>
@@ -703,9 +703,9 @@ using (XmlReader reader = XmlReader.Create(inputStream, settings))
                   </div>
                 </div>
 
-                <div className="bg-white border border-slate-200 rounded-xl p-6">
+                <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
                   <div className="w-12 h-12 rounded-lg bg-purple-100 text-purple-600 flex items-center justify-center mb-4 text-2xl">📊</div>
-                  <h3 className="font-semibold text-slate-900 mb-2">SonarQube</h3>
+                  <h3 className="font-semibold text-gray-100 mb-2">SonarQube</h3>
                   <p className="text-slate-600 text-sm mb-4">
                     Static Application Security Testing (SAST) für XXE-Vulnerabilities
                   </p>
@@ -716,9 +716,9 @@ using (XmlReader reader = XmlReader.Create(inputStream, settings))
                   </div>
                 </div>
 
-                <div className="bg-white border border-slate-200 rounded-xl p-6">
+                <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
                   <div className="w-12 h-12 rounded-lg bg-green-100 text-green-400 flex items-center justify-center mb-4 text-2xl">🔎</div>
-                  <h3 className="font-semibold text-slate-900 mb-2">Semgrep</h3>
+                  <h3 className="font-semibold text-gray-100 mb-2">Semgrep</h3>
                   <p className="text-slate-600 text-sm mb-4">
                     Lightweight Static Analysis mit XXE Detection Rules
                   </p>
@@ -729,9 +729,9 @@ using (XmlReader reader = XmlReader.Create(inputStream, settings))
                   </div>
                 </div>
 
-                <div className="bg-white border border-slate-200 rounded-xl p-6">
+                <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
                   <div className="w-12 h-12 rounded-lg bg-cyan-100 text-cyan-600 flex items-center justify-center mb-4 text-2xl">🐳</div>
-                  <h3 className="font-semibold text-slate-900 mb-2">Trivy</h3>
+                  <h3 className="font-semibold text-gray-100 mb-2">Trivy</h3>
                   <p className="text-slate-600 text-sm mb-4">
                     Container & Code Scanner mit XXE Detection
                   </p>
@@ -742,9 +742,9 @@ using (XmlReader reader = XmlReader.Create(inputStream, settings))
                   </div>
                 </div>
 
-                <div className="bg-white border border-slate-200 rounded-xl p-6">
+                <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
                   <div className="w-12 h-12 rounded-lg bg-red-100 text-red-400 flex items-center justify-center mb-4 text-2xl">⚡</div>
-                  <h3 className="font-semibold text-slate-900 mb-2">ClawGuru Intel</h3>
+                  <h3 className="font-semibold text-gray-100 mb-2">ClawGuru Intel</h3>
                   <p className="text-slate-600 text-sm mb-4">
                     Real-time XXE Threat Intelligence und CVE-Monitoring
                   </p>
@@ -759,19 +759,19 @@ using (XmlReader reader = XmlReader.Create(inputStream, settings))
 
             {/* Compliance */}
             <section id="compliance" className="mb-16">
-              <h2 className="text-3xl font-bold text-slate-900 mb-6">XXE & Compliance Standards</h2>
+              <h2 className="text-3xl font-bold text-gray-100 mb-6">XXE & Compliance Standards</h2>
               
               <div className="space-y-6">
-                <div className="bg-white border border-slate-200 rounded-xl p-6">
+                <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
                   <div className="flex items-start gap-4">
                     <div className="w-14 h-14 rounded-lg bg-slate-900 text-white flex items-center justify-center font-bold text-lg shrink-0">ISO</div>
                     <div>
-                      <h3 className="text-lg font-semibold text-slate-900 mb-2">ISO 27001:2022</h3>
-                      <p className="text-slate-700 mb-4">
+                      <h3 className="text-lg font-semibold text-gray-100 mb-2">ISO 27001:2022</h3>
+                      <p className="text-gray-200 mb-4">
                         <strong>Control A.8.9:</strong> Configuration Management - Sichere Konfiguration von 
                         XML-Parsern zur Vermeidung von XXE-Schwachstellen.
                       </p>
-                      <p className="text-slate-700 mb-4">
+                      <p className="text-gray-200 mb-4">
                         <strong>Control A.8.8:</strong> Management of Technical Vulnerabilities - Regelmäßige 
                         Scans auf XXE und andere Injection-Schwachstellen.
                       </p>
@@ -784,16 +784,16 @@ using (XmlReader reader = XmlReader.Create(inputStream, settings))
                   </div>
                 </div>
 
-                <div className="bg-white border border-slate-200 rounded-xl p-6">
+                <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
                   <div className="flex items-start gap-4">
                     <div className="w-14 h-14 rounded-lg bg-red-600 text-white flex items-center justify-center font-bold text-lg shrink-0">PCI</div>
                     <div>
-                      <h3 className="text-lg font-semibold text-slate-900 mb-2">PCI-DSS v4.0</h3>
-                      <p className="text-slate-700 mb-4">
+                      <h3 className="text-lg font-semibold text-gray-100 mb-2">PCI-DSS v4.0</h3>
+                      <p className="text-gray-200 mb-4">
                         <strong>Requirement 6.2:</strong> Software Security Patches - Alle System-Komponenten 
                         müssen gegen bekannte XXE-Schwachstellen gepatcht werden.
                       </p>
-                      <p className="text-slate-700 mb-4">
+                      <p className="text-gray-200 mb-4">
                         <strong>Requirement 6.5.1:</strong> Injection Flaws - XXE zählt als Injection-Angriff 
                         und muss durch Input Validation verhindert werden.
                       </p>
@@ -806,16 +806,16 @@ using (XmlReader reader = XmlReader.Create(inputStream, settings))
                   </div>
                 </div>
 
-                <div className="bg-white border border-slate-200 rounded-xl p-6">
+                <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
                   <div className="flex items-start gap-4">
                     <div className="w-14 h-14 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold text-lg shrink-0">OWASP</div>
                     <div>
-                      <h3 className="text-lg font-semibold text-slate-900 mb-2">OWASP Top 10 2021</h3>
-                      <p className="text-slate-700 mb-4">
+                      <h3 className="text-lg font-semibold text-gray-100 mb-2">OWASP Top 10 2021</h3>
+                      <p className="text-gray-200 mb-4">
                         <strong>A03:2021 - Injection:</strong> XXE fällt unter die Injection-Kategorie 
                         und ist eine der kritischsten Schwachstellen.
                       </p>
-                      <p className="text-slate-700 mb-4">
+                      <p className="text-gray-200 mb-4">
                         <strong>CWE-611:</strong> Improper Restriction of XML External Entity Reference - 
                         Die spezifische Schwachstellenklasse für XXE.
                       </p>
@@ -832,50 +832,50 @@ using (XmlReader reader = XmlReader.Create(inputStream, settings))
 
             {/* FAQ */}
             <section id="faq" className="mb-16">
-              <h2 className="text-3xl font-bold text-slate-900 mb-6">XXE 2026 FAQ</h2>
+              <h2 className="text-3xl font-bold text-gray-100 mb-6">XXE 2026 FAQ</h2>
               
               <div className="space-y-4">
-                <div className="bg-white border border-slate-200 rounded-xl overflow-hidden">
+                <div className="bg-gray-800 border border-slate-200 rounded-xl overflow-hidden">
                   <button className="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-slate-50">
-                    <span className="font-semibold text-slate-900">Was ist XXE (XML External Entity Injection)?</span>
+                    <span className="font-semibold text-gray-100">Was ist XXE (XML External Entity Injection)?</span>
                     <span className="text-slate-400">▼</span>
                   </button>
-                  <div className="px-6 pb-4 text-slate-700">
+                  <div className="px-6 pb-4 text-gray-200">
                     XXE ist eine Sicherheitslücke, die auftritt, wenn XML-Parser externe Entities verarbeiten. 
                     Angreifer können damit interne Dateien lesen, SSRF-Angriffe durchführen oder 
                     Denial-of-Service auslösen.
                   </div>
                 </div>
 
-                <div className="bg-white border border-slate-200 rounded-xl overflow-hidden">
+                <div className="bg-gray-800 border border-slate-200 rounded-xl overflow-hidden">
                   <button className="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-slate-50">
-                    <span className="font-semibold text-slate-900">Welche CVEs sind 2026 besonders kritisch?</span>
+                    <span className="font-semibold text-gray-100">Welche CVEs sind 2026 besonders kritisch?</span>
                     <span className="text-slate-400">▼</span>
                   </button>
-                  <div className="px-6 pb-4 text-slate-700">
+                  <div className="px-6 pb-4 text-gray-200">
                     CVE-2026-XXXX (LibXML2), CVE-2026-YYYY (Java XML Parsers) und CVE-2026-ZZZZ (.NET XmlDocument) 
                     sind die kritischsten XXE-Schwachstellen in 2026 mit CVSS-Scores von 6.8-9.8.
                   </div>
                 </div>
 
-                <div className="bg-white border border-slate-200 rounded-xl overflow-hidden">
+                <div className="bg-gray-800 border border-slate-200 rounded-xl overflow-hidden">
                   <button className="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-slate-50">
-                    <span className="font-semibold text-slate-900">Wie schütze ich meine Anwendung vor XXE?</span>
+                    <span className="font-semibold text-gray-100">Wie schütze ich meine Anwendung vor XXE?</span>
                     <span className="text-slate-400">▼</span>
                   </button>
-                  <div className="px-6 pb-4 text-slate-700">
+                  <div className="px-6 pb-4 text-gray-200">
                     Deaktivieren Sie DTDs und externe Entities in Ihrem XML-Parser. Verwenden Sie 
                     allowlists für erlaubte Schemas, validieren Sie Eingaben und implementieren Sie 
                     Content Security Policies.
                   </div>
                 </div>
 
-                <div className="bg-white border border-slate-200 rounded-xl overflow-hidden">
+                <div className="bg-gray-800 border border-slate-200 rounded-xl overflow-hidden">
                   <button className="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-slate-50">
-                    <span className="font-semibold text-slate-900">Welche Tools erkennen XXE-Schwachstellen?</span>
+                    <span className="font-semibold text-gray-100">Welche Tools erkennen XXE-Schwachstellen?</span>
                     <span className="text-slate-400">▼</span>
                   </button>
-                  <div className="px-6 pb-4 text-slate-700">
+                  <div className="px-6 pb-4 text-gray-200">
                     Burp Suite, OWASP ZAP, SonarQube, Semgrep und Trivy sind führende Tools zur 
                     Erkennung von XXE-Schwachstellen in Anwendungen und APIs.
                   </div>
@@ -893,7 +893,7 @@ using (XmlReader reader = XmlReader.Create(inputStream, settings))
                 und Echtzeit-Threat-Intelligence.
               </p>
               <div className="flex flex-wrap justify-center gap-4">
-                <a href={coreLinks.check} className="px-6 py-3 bg-white text-slate-900 rounded-lg font-semibold hover:bg-slate-100 transition-colors">
+                <a href={coreLinks.check} className="px-6 py-3 bg-gray-800 text-gray-100 rounded-lg font-semibold hover:bg-slate-100 transition-colors">
                   Security Check Starten
                 </a>
                 <a href={`${prefix}/intel`} className="px-6 py-3 bg-slate-700 text-white rounded-lg font-semibold hover:bg-slate-600 transition-colors">
@@ -968,7 +968,7 @@ using (XmlReader reader = XmlReader.Create(inputStream, settings))
     );
 
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-gray-800">
       {content}
     </main>
   );

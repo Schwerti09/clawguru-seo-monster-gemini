@@ -271,19 +271,19 @@ export default function PciDssCompliancePage({ params }: PageProps) {
             <div className="space-y-4">
               <div className="border-l-4 border-blue-600 pl-4">
                 <h3 className="font-bold text-blue-300 mb-2">SAQ A - Card-not-present merchants</h3>
-                <p className="text-sm text-gray-700">Fully outsourced payment processing, no electronic storage, no processing, no transmission</p>
+                <p className="text-sm text-gray-200">Fully outsourced payment processing, no electronic storage, no processing, no transmission</p>
               </div>
               <div className="border-l-4 border-green-600 pl-4">
                 <h3 className="font-bold text-green-300 mb-2">SAQ B - Imprint merchants</h3>
-                <p className="text-sm text-gray-700">Standalone terminals, no electronic storage, no processing, no transmission</p>
+                <p className="text-sm text-gray-200">Standalone terminals, no electronic storage, no processing, no transmission</p>
               </div>
               <div className="border-l-4 border-yellow-600 pl-4">
                 <h3 className="font-bold text-yellow-300 mb-2">SAQ C-VT - E-commerce merchants</h3>
-                <p className="text-sm text-gray-700">Web-based virtual terminals, no electronic storage, no processing, no transmission</p>
+                <p className="text-sm text-gray-200">Web-based virtual terminals, no electronic storage, no processing, no transmission</p>
               </div>
               <div className="border-l-4 border-red-600 pl-4">
                 <h3 className="font-bold text-red-300 mb-2">SAQ D - All other merchants</h3>
-                <p className="text-sm text-gray-700">All other environments with electronic storage, processing, or transmission</p>
+                <p className="text-sm text-gray-200">All other environments with electronic storage, processing, or transmission</p>
               </div>
             </div>
           </div>

@@ -64,7 +64,7 @@ export default async function NginxHardeningPage({
   const isGerman = locale === "de";
 
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-gray-800">
       <section className="relative overflow-hidden bg-gradient-to-br from-green-600 via-emerald-600 to-teal-600 py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl">
@@ -94,8 +94,8 @@ export default async function NginxHardeningPage({
         <div className="max-w-4xl mx-auto">
           
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">Nginx Security Grundlagen</h2>
-            <p className="text-slate-700 text-lg mb-6">
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">Nginx Security Grundlagen</h2>
+            <p className="text-gray-200 text-lg mb-6">
               Nginx ist der meistgenutzte Web Server weltweit. Falsche Konfiguration führt zu Datenlecks, DDoS-Anfälligkeit und Compliance-Verstößen. Dieser Guide zeigt Production-Grade Hardening.
             </p>
 
@@ -131,7 +131,7 @@ export default async function NginxHardeningPage({
           </section>
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">TLS 1.3 Konfiguration</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">TLS 1.3 Konfiguration</h2>
             
             <div className="bg-slate-900 rounded-xl p-6">
               <h3 className="text-white font-semibold mb-4">nginx.conf - SSL/TLS Hardening</h3>
@@ -178,7 +178,7 @@ export default async function NginxHardeningPage({
           </section>
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">Rate Limiting & DDoS Protection</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">Rate Limiting & DDoS Protection</h2>
             
             <div className="bg-slate-900 rounded-xl p-6">
               <h3 className="text-white font-semibold mb-4">Rate Limiting Config</h3>
@@ -219,7 +219,7 @@ server {
           </section>
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">ModSecurity WAF Integration</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">ModSecurity WAF Integration</h2>
             
             <div className="bg-slate-900 rounded-xl p-6">
               <h3 className="text-white font-semibold mb-4">ModSecurity + OWASP CRS</h3>
@@ -251,7 +251,7 @@ Include /etc/modsecurity/crs/rules/*.conf`}
           </section>
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">Brotli Compression</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">Brotli Compression</h2>
             
             <div className="bg-slate-900 rounded-xl p-6">
               <h3 className="text-white font-semibold mb-4">Brotli Config (better than gzip)</h3>
@@ -277,7 +277,7 @@ location ~ \\.(css|js)$ {
           <section className="bg-gradient-to-r from-green-600 to-emerald-600 rounded-2xl p-8 text-center text-white">
             <h2 className="text-2xl font-bold mb-4">Nginx Security Assessment</h2>
             <p className="mb-6">Validieren Sie Ihre Nginx-Konfiguration gegen CIS Benchmarks.</p>
-            <a href={coreLinks.check} className="inline-block px-6 py-3 bg-white text-green-400 rounded-lg font-semibold">
+            <a href={coreLinks.check} className="inline-block px-6 py-3 bg-gray-800 text-green-400 rounded-lg font-semibold">
               Security Check
             </a>
             <div className="mt-6 flex flex-wrap justify-center gap-3 text-sm">

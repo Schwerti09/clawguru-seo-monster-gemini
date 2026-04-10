@@ -117,7 +117,7 @@ export async function executePlaybook(type: IncidentType, ip: string) {
                 ['Long-term Fix', 'Was verhindert Wiederholung?'],
               ].map(([key, val]) => (
                 <div key={key}>
-                  <div className="font-semibold text-gray-700">{key}</div>
+                  <div className="font-semibold text-gray-200">{key}</div>
                   <div className="text-gray-400 font-mono text-xs">{val}</div>
                 </div>
               ))}

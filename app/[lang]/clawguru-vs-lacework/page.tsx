@@ -157,7 +157,7 @@ export default function ClawGuruVsLaceworkPage({ params }: PageProps) {
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">Use Case Analysis</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-white border border-gray-700 rounded-lg p-6">
+            <div className="bg-gray-800 border border-gray-700 rounded-lg p-6">
               <h3 className="font-bold text-cyan-400 mb-4">Choose ClawGuru if:</h3>
               <ul className="space-y-3 text-sm">
                 <li className="flex items-start">
@@ -182,7 +182,7 @@ export default function ClawGuruVsLaceworkPage({ params }: PageProps) {
                 </li>
               </ul>
             </div>
-            <div className="bg-white border border-gray-700 rounded-lg p-6">
+            <div className="bg-gray-800 border border-gray-700 rounded-lg p-6">
               <h3 className="font-bold text-cyan-400 mb-4">Choose Lacework if:</h3>
               <ul className="space-y-3 text-sm">
                 <li className="flex items-start">
@@ -270,7 +270,7 @@ export default function ClawGuruVsLaceworkPage({ params }: PageProps) {
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">Cloud Provider Integration</h2>
           <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-white p-4 rounded border">
+              <div className="bg-gray-800 p-4 rounded border">
                 <h3 className="font-bold text-cyan-400 mb-3">ClawGuru Integrations</h3>
                 <ul className="space-y-2 text-sm text-gray-300">
                   <li><strong>AWS:</strong> Config, CloudTrail, GuardDuty</li>
@@ -280,7 +280,7 @@ export default function ClawGuruVsLaceworkPage({ params }: PageProps) {
                   <li className="text-green-400">Full API access control</li>
                 </ul>
               </div>
-              <div className="bg-white p-4 rounded border">
+              <div className="bg-gray-800 p-4 rounded border">
                 <h3 className="font-bold text-cyan-400 mb-3">Lacework Integrations</h3>
                 <ul className="space-y-2 text-sm text-gray-300">
                   <li><strong>AWS:</strong> 300+ service integrations</li>
@@ -298,7 +298,7 @@ export default function ClawGuruVsLaceworkPage({ params }: PageProps) {
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">Pricing Comparison</h2>
           <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-white p-4 rounded border">
+              <div className="bg-gray-800 p-4 rounded border">
                 <h3 className="font-bold text-cyan-400 mb-3">ClawGuru Pricing</h3>
                 <ul className="space-y-2 text-sm text-gray-300">
                   <li><strong>Explorer:</strong> Free tier (up to 50 assets)</li>
@@ -308,7 +308,7 @@ export default function ClawGuruVsLaceworkPage({ params }: PageProps) {
                   <li className="text-green-400">No per-asset fees after license</li>
                 </ul>
               </div>
-              <div className="bg-white p-4 rounded border">
+              <div className="bg-gray-800 p-4 rounded border">
                 <h3 className="font-bold text-cyan-400 mb-3">Lacework Pricing</h3>
                 <ul className="space-y-2 text-sm text-gray-300">
                   <li><strong>Plan:</strong> Custom pricing (starts at ~$50K/year)</li>

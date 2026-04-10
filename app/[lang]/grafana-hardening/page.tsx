@@ -67,7 +67,7 @@ export default async function GrafanaHardeningPage({
   const isGerman = locale === "de";
 
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-gray-800">
       {/* Hero */}
       <section className="relative overflow-hidden bg-gradient-to-br from-yellow-500 via-orange-500 to-red-500 py-20">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-yellow-300/30 via-transparent to-transparent" />
@@ -104,11 +104,11 @@ export default async function GrafanaHardeningPage({
         <div className="max-w-4xl mx-auto">
           
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">
               {isGerman ? "Warum Grafana Hardening kritisch ist" : "Why Grafana Hardening is Critical"}
             </h2>
             
-            <p className="text-slate-700 text-lg mb-6 leading-relaxed">
+            <p className="text-gray-200 text-lg mb-6 leading-relaxed">
               {isGerman
                 ? "Grafana ist das zentrale Nervensystem Ihrer Observability-Infrastruktur. Es hat Zugriff auf alle Metriken, Logs und Traces. Ein kompromittiertes Grafana bedeutet vollständige Einsehbarkeit Ihrer Systeme - ein Goldmine für Angreifer."
                 : "Grafana is the central nervous system of your observability infrastructure. It has access to all metrics, logs, and traces. A compromised Grafana means complete visibility into your systems - a goldmine for attackers."}
@@ -130,11 +130,11 @@ export default async function GrafanaHardeningPage({
 
           {/* Authentication */}
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">SSO & Authentifizierung</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">SSO & Authentifizierung</h2>
             
             <div className="grid md:grid-cols-2 gap-6 mb-8">
-              <div className="bg-white border border-slate-200 rounded-xl p-6">
-                <h3 className="font-semibold text-slate-900 mb-3">OAuth 2.0 / OIDC</h3>
+              <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
+                <h3 className="font-semibold text-gray-100 mb-3">OAuth 2.0 / OIDC</h3>
                 <p className="text-slate-600 text-sm mb-4">
                   {isGerman ? "Google, Azure AD, Okta, Keycloak Integration" : "Google, Azure AD, Okta, Keycloak integration"}
                 </p>
@@ -151,8 +151,8 @@ api_url = https://sso.company.com/userinfo
 role_attribute_path = roles[0]`}
                 </div>
               </div>
-              <div className="bg-white border border-slate-200 rounded-xl p-6">
-                <h3 className="font-semibold text-slate-900 mb-3">SAML 2.0</h3>
+              <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
+                <h3 className="font-semibold text-gray-100 mb-3">SAML 2.0</h3>
                 <p className="text-slate-600 text-sm mb-4">
                   {isGerman ? "Enterprise IdP Integration (Okta, OneLogin, ADFS)" : "Enterprise IdP integration (Okta, OneLogin, ADFS)"}
                 </p>
@@ -191,9 +191,9 @@ role_attribute_path = role`}
 
           {/* RBAC */}
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">RBAC & Zugriffskontrolle</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">RBAC & Zugriffskontrolle</h2>
             
-            <p className="text-slate-700 mb-6">
+            <p className="text-gray-200 mb-6">
               {isGerman
                 ? "Grafana Enterprise bietet feingranulare RBAC. Definieren Sie wer welche Dashboards sehen, Datenquellen nutzen oder Alerting konfigurieren darf."
                 : "Grafana Enterprise offers fine-grained RBAC. Define who can view which dashboards, use data sources, or configure alerting."}
@@ -252,11 +252,11 @@ customRoles:
 
           {/* Network Security */}
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">Netzwerk-Security</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">Netzwerk-Security</h2>
             
             <div className="space-y-6">
-              <div className="bg-white border border-slate-200 rounded-xl p-6">
-                <h3 className="font-semibold text-slate-900 mb-4">mTLS (Mutual TLS)</h3>
+              <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
+                <h3 className="font-semibold text-gray-100 mb-4">mTLS (Mutual TLS)</h3>
                 <p className="text-slate-600 text-sm mb-4">
                   {isGerman 
                     ? "Erzwingen Sie Client-Zertifikate für Grafana-Zugriff. Schützt gegen Token-Diebstahl."
@@ -274,8 +274,8 @@ client_cert_allowed_organizations = ["Company Inc"]`}
                 </div>
               </div>
 
-              <div className="bg-white border border-slate-200 rounded-xl p-6">
-                <h3 className="font-semibold text-slate-900 mb-4">IP Whitelisting</h3>
+              <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
+                <h3 className="font-semibold text-gray-100 mb-4">IP Whitelisting</h3>
                 <p className="text-slate-600 text-sm mb-4">
                   {isGerman ? "Zugriff nur von bekannten IP-Bereichen erlauben" : "Only allow access from known IP ranges"}
                 </p>
@@ -296,7 +296,7 @@ location /grafana/ {
 
           {/* Secrets Management */}
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">Secrets Management</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">Secrets Management</h2>
             
             <div className="bg-gradient-to-br from-purple-50 to-indigo-50 border border-purple-700 rounded-xl p-6 mb-6">
               <h3 className="font-semibold text-purple-900 mb-4">HashiCorp Vault Integration</h3>
@@ -305,7 +305,7 @@ location /grafana/ {
                   ? "Nutzen Sie Vault für sichere Speicherung von Datenquellen-Credentials. Keine Secrets in Config-Files!"
                   : "Use Vault for secure storage of data source credentials. No secrets in config files!"}
               </p>
-              <div className="bg-white rounded-lg p-4 font-mono text-xs text-slate-700">
+              <div className="bg-gray-800 rounded-lg p-4 font-mono text-xs text-gray-200">
 {`# Vault configuration for Grafana
 datasource:
   - name: Prometheus
@@ -321,8 +321,8 @@ path "secret/data/grafana/*" {
               </div>
             </div>
 
-            <div className="bg-white border border-slate-200 rounded-xl p-6">
-              <h3 className="font-semibold text-slate-900 mb-4">Environment Variables</h3>
+            <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
+              <h3 className="font-semibold text-gray-100 mb-4">Environment Variables</h3>
               <p className="text-slate-600 text-sm mb-4">
                 {isGerman ? "Alternative zu Vault: Docker Secrets oder Kubernetes Secrets" : "Alternative to Vault: Docker Secrets or Kubernetes Secrets"}
               </p>
@@ -349,7 +349,7 @@ secrets:
 
           {/* Compliance */}
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">Compliance & Audit</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">Compliance & Audit</h2>
             
             <div className="grid md:grid-cols-2 gap-6 mb-8">
               <div className="bg-slate-900 text-white rounded-xl p-6">
@@ -362,12 +362,12 @@ secrets:
                   <li>• Alerting-Modifikationen</li>
                 </ul>
               </div>
-              <div className="bg-white border border-slate-200 rounded-xl p-6">
-                <h3 className="font-semibold text-slate-900 mb-4">SIEM Integration</h3>
+              <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
+                <h3 className="font-semibold text-gray-100 mb-4">SIEM Integration</h3>
                 <p className="text-slate-600 text-sm mb-4">
                   {isGerman ? "Exportieren Sie Audit-Logs zu Splunk, Datadog oder ELK" : "Export audit logs to Splunk, Datadog, or ELK"}
                 </p>
-                <div className="bg-slate-100 rounded-lg p-3 font-mono text-xs text-slate-700">
+                <div className="bg-slate-100 rounded-lg p-3 font-mono text-xs text-gray-200">
 {`[auditing]
 enabled = true
 log_dashboard_content = true
@@ -406,12 +406,12 @@ log_data_source_queries = true`}
 
           {/* Hardening Checklist */}
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">Grafana Hardening Checklist</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">Grafana Hardening Checklist</h2>
             
-            <div className="bg-white border border-slate-200 rounded-xl p-6">
+            <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
-                  <h3 className="font-semibold text-slate-900 mb-4">Authentication</h3>
+                  <h3 className="font-semibold text-gray-100 mb-4">Authentication</h3>
                   {[
                     "SSO (OAuth/SAML) enabled",
                     "Local auth disabled (if possible)",
@@ -422,12 +422,12 @@ log_data_source_queries = true`}
                   ].map((item, i) => (
                     <div key={i} className="flex items-center gap-3 py-2 border-b border-slate-100 last:border-0">
                       <span className="w-5 h-5 rounded border-2 border-slate-300 flex items-center justify-center text-xs text-slate-400">☐</span>
-                      <span className="text-slate-700 text-sm">{item}</span>
+                      <span className="text-gray-200 text-sm">{item}</span>
                     </div>
                   ))}
                 </div>
                 <div>
-                  <h3 className="font-semibold text-slate-900 mb-4">Security Settings</h3>
+                  <h3 className="font-semibold text-gray-100 mb-4">Security Settings</h3>
                   {[
                     "Strict-Transport-Security header",
                     "X-Content-Type-Options: nosniff",
@@ -438,7 +438,7 @@ log_data_source_queries = true`}
                   ].map((item, i) => (
                     <div key={i} className="flex items-center gap-3 py-2 border-b border-slate-100 last:border-0">
                       <span className="w-5 h-5 rounded border-2 border-slate-300 flex items-center justify-center text-xs text-slate-400">☐</span>
-                      <span className="text-slate-700 text-sm">{item}</span>
+                      <span className="text-gray-200 text-sm">{item}</span>
                     </div>
                   ))}
                 </div>
@@ -458,7 +458,7 @@ log_data_source_queries = true`}
             </p>
             <a 
               href={coreLinks.check} 
-              className="inline-block px-6 py-3 bg-white text-orange-400 rounded-lg font-semibold hover:bg-slate-100 transition-colors"
+              className="inline-block px-6 py-3 bg-gray-800 text-orange-400 rounded-lg font-semibold hover:bg-slate-100 transition-colors"
             >
               {isGerman ? "Assessment Starten" : "Start Assessment"}
             </a>

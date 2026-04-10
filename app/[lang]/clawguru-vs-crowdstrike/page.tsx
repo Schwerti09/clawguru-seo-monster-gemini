@@ -152,7 +152,7 @@ export default function ClawGuruVsCrowdstrikePage({ params }: PageProps) {
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">Use Case Analysis</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-white border border-gray-700 rounded-lg p-6">
+            <div className="bg-gray-800 border border-gray-700 rounded-lg p-6">
               <h3 className="font-bold text-cyan-400 mb-4">Choose ClawGuru if:</h3>
               <ul className="space-y-3 text-sm">
                 <li className="flex items-start">
@@ -177,7 +177,7 @@ export default function ClawGuruVsCrowdstrikePage({ params }: PageProps) {
                 </li>
               </ul>
             </div>
-            <div className="bg-white border border-gray-700 rounded-lg p-6">
+            <div className="bg-gray-800 border border-gray-700 rounded-lg p-6">
               <h3 className="font-bold text-cyan-400 mb-4">Choose CrowdStrike if:</h3>
               <ul className="space-y-3 text-sm">
                 <li className="flex items-start">
@@ -239,7 +239,7 @@ export default function ClawGuruVsCrowdstrikePage({ params }: PageProps) {
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">Pricing Comparison</h2>
           <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-white p-4 rounded border">
+              <div className="bg-gray-800 p-4 rounded border">
                 <h3 className="font-bold text-cyan-400 mb-3">ClawGuru Pricing</h3>
                 <ul className="space-y-2 text-sm text-gray-300">
                   <li><strong>Explorer:</strong> Free tier (up to 10 endpoints)</li>
@@ -249,7 +249,7 @@ export default function ClawGuruVsCrowdstrikePage({ params }: PageProps) {
                   <li className="text-green-400">No per-endpoint fees after initial license</li>
                 </ul>
               </div>
-              <div className="bg-white p-4 rounded border">
+              <div className="bg-gray-800 p-4 rounded border">
                 <h3 className="font-bold text-cyan-400 mb-3">CrowdStrike Pricing</h3>
                 <ul className="space-y-2 text-sm text-gray-300">
                   <li><strong>Falcon Prevent:</strong> $69/endpoint/year</li>

@@ -80,7 +80,7 @@ export default function OpenClawSelfHostedChecklistPage({ params }: PageProps) {
         <p className="text-lg text-gray-300 mb-4">Systematische Absicherung deiner Self-Hosted OpenClaw-Instanz — {totalItems} Prüfpunkte, davon {criticalItems} kritisch.</p>
         <div className="flex gap-4 mb-8 text-sm">
           <div className="bg-red-900 border border-red-700 px-3 py-1 rounded-full font-medium text-red-200">{criticalItems} Kritisch</div>
-          <div className="bg-gray-800 border border-gray-700 px-3 py-1 rounded-full font-medium text-gray-700">{totalItems - criticalItems} Standard</div>
+          <div className="bg-gray-800 border border-gray-700 px-3 py-1 rounded-full font-medium text-gray-200">{totalItems - criticalItems} Standard</div>
           <div className="bg-blue-900 border border-blue-700 px-3 py-1 rounded-full font-medium text-blue-200">{totalItems} Gesamt</div>
         </div>
 

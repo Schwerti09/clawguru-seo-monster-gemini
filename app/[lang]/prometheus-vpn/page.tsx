@@ -64,7 +64,7 @@ export default async function PrometheusVPNPage({
   const isGerman = locale === "de";
 
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-gray-800">
       <section className="relative overflow-hidden bg-gradient-to-br from-orange-600 via-red-600 to-pink-700 py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl">
@@ -94,10 +94,10 @@ export default async function PrometheusVPNPage({
         <div className="max-w-4xl mx-auto">
           
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">
               {isGerman ? "Das Problem: Metriken hinter Firewalls" : "The Problem: Metrics Behind Firewalls"}
             </h2>
-            <p className="text-slate-700 text-lg mb-6">
+            <p className="text-gray-200 text-lg mb-6">
               {isGerman
                 ? "Prometheus pull-based Monitoring funktioniert nicht, wenn Targets hinter NAT/Firewalls sind. Lösungen: Reverse Tunnel, VPN oder Push-basiertes Remote Write."
                 : "Prometheus pull-based monitoring doesn't work when targets are behind NAT/firewalls. Solutions: Reverse tunnel, VPN, or push-based remote write."}
@@ -120,7 +120,7 @@ export default async function PrometheusVPNPage({
           </section>
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">Tailscale + Prometheus</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">Tailscale + Prometheus</h2>
             
             <div className="bg-slate-900 rounded-xl p-6 mb-6">
               <h3 className="text-white font-semibold mb-4">Prometheus Config (scrape über Tailscale)</h3>
@@ -186,11 +186,11 @@ scrape_configs:
           </section>
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">Remote Write: Push statt Pull</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">Remote Write: Push statt Pull</h2>
             
-            <div className="bg-white border border-slate-200 rounded-xl p-6 mb-6">
-              <h3 className="font-semibold text-slate-900 mb-4">Wann Remote Write?</h3>
-              <ul className="space-y-2 text-slate-700">
+            <div className="bg-gray-800 border border-slate-200 rounded-xl p-6 mb-6">
+              <h3 className="font-semibold text-gray-100 mb-4">Wann Remote Write?</h3>
+              <ul className="space-y-2 text-gray-200">
                 <li>• Edge/IoT-Geräte ohne öffentliche IP</li>
                 <li>• Kunden-Premises (Multi-Tenant)</li>
                 <li>• Mobile/Wechselnde Netzwerke</li>
@@ -242,7 +242,7 @@ remote_write:
           </section>
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">mTLS für Prometheus</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">mTLS für Prometheus</h2>
             
             <div className="bg-slate-900 rounded-xl p-6">
               <h3 className="text-white font-semibold mb-4">Prometheus mTLS Config</h3>
@@ -275,7 +275,7 @@ tls_config:
           <section className="bg-gradient-to-r from-orange-600 to-red-600 rounded-2xl p-8 text-center text-white">
             <h2 className="text-2xl font-bold mb-4">VPN Monitoring Setup</h2>
             <p className="mb-6">Implementieren Sie sichere Prometheus-Monitoring über VPN.</p>
-            <a href={coreLinks.check} className="inline-block px-6 py-3 bg-white text-orange-400 rounded-lg font-semibold">
+            <a href={coreLinks.check} className="inline-block px-6 py-3 bg-gray-800 text-orange-400 rounded-lg font-semibold">
               Setup Assessment
             </a>
             <div className="mt-6 flex flex-wrap justify-center gap-3 text-sm">

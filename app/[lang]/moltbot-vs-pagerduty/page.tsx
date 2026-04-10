@@ -157,7 +157,7 @@ export default function MoltbotVsPagerdutyPage({ params }: PageProps) {
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">Use Case Analysis</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-white border border-gray-700 rounded-lg p-6">
+            <div className="bg-gray-800 border border-gray-700 rounded-lg p-6">
               <h3 className="font-bold text-cyan-400 mb-4">Choose Moltbot if:</h3>
               <ul className="space-y-3 text-sm">
                 <li className="flex items-start">
@@ -182,7 +182,7 @@ export default function MoltbotVsPagerdutyPage({ params }: PageProps) {
                 </li>
               </ul>
             </div>
-            <div className="bg-white border border-gray-700 rounded-lg p-6">
+            <div className="bg-gray-800 border border-gray-700 rounded-lg p-6">
               <h3 className="font-bold text-cyan-400 mb-4">Choose PagerDuty if:</h3>
               <ul className="space-y-3 text-sm">
                 <li className="flex items-start">
@@ -298,7 +298,7 @@ export default function MoltbotVsPagerdutyPage({ params }: PageProps) {
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">Alert Management Comparison</h2>
           <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-white p-4 rounded border">
+              <div className="bg-gray-800 p-4 rounded border">
                 <h3 className="font-bold text-cyan-400 mb-3">Moltbot Alert Features</h3>
                 <ul className="space-y-2 text-sm text-gray-300">
                   <li><strong>AI Triage:</strong> Automatic severity classification</li>
@@ -308,7 +308,7 @@ export default function MoltbotVsPagerdutyPage({ params }: PageProps) {
                   <li className="text-green-400">Security-focused analysis</li>
                 </ul>
               </div>
-              <div className="bg-white p-4 rounded border">
+              <div className="bg-gray-800 p-4 rounded border">
                 <h3 className="font-bold text-cyan-400 mb-3">PagerDuty Alert Features</h3>
                 <ul className="space-y-2 text-sm text-gray-300">
                   <li><strong>Routing:</strong> Advanced alert routing</li>
@@ -326,7 +326,7 @@ export default function MoltbotVsPagerdutyPage({ params }: PageProps) {
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">Pricing Comparison</h2>
           <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-white p-4 rounded border">
+              <div className="bg-gray-800 p-4 rounded border">
                 <h3 className="font-bold text-cyan-400 mb-3">Moltbot Pricing</h3>
                 <ul className="space-y-2 text-sm text-gray-300">
                   <li><strong>Explorer:</strong> Free tier (up to 10 users)</li>
@@ -336,7 +336,7 @@ export default function MoltbotVsPagerdutyPage({ params }: PageProps) {
                   <li className="text-green-400">No per-user fees after license</li>
                 </ul>
               </div>
-              <div className="bg-white p-4 rounded border">
+              <div className="bg-gray-800 p-4 rounded border">
                 <h3 className="font-bold text-cyan-400 mb-3">PagerDuty Pricing</h3>
                 <ul className="space-y-2 text-sm text-gray-300">
                   <li><strong>Business:</strong> $29/user/month</li>

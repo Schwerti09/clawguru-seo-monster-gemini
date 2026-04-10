@@ -59,7 +59,7 @@ export default async function LinuxHardeningPage({
   const prefix = `/${locale}`;
   const coreLinks = getCoreSecurityLinks(locale);
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-gray-800">
       <section className="relative overflow-hidden bg-gradient-to-br from-slate-800 via-slate-900 to-black py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl">
@@ -84,15 +84,15 @@ export default async function LinuxHardeningPage({
         <div className="max-w-4xl mx-auto">
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">Linux Security Architecture</h2>
-            <p className="text-slate-700 text-lg mb-6">
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">Linux Security Architecture</h2>
+            <p className="text-gray-200 text-lg mb-6">
               Linux-Server sind das Fundament moderner Infrastrukturen. Standard-Installationen sind unsicher. Hardening umfasst Kernel-Security, Mandatory Access Control, Auditing und kontinuierliche Compliance-Monitoring.
             </p>
 
             <div className="grid md:grid-cols-4 gap-4 mb-8">
               <div className="bg-slate-50 border border-slate-200 rounded-xl p-5 text-center">
                 <div className="text-3xl mb-2">🔒</div>
-                <h3 className="font-semibold text-slate-900 text-sm">Kernel</h3>
+                <h3 className="font-semibold text-gray-100 text-sm">Kernel</h3>
                 <p className="text-xs text-slate-600">Sysctl, Modules, ASLR</p>
               </div>
               <div className="bg-red-900 border border-red-700 rounded-xl p-5 text-center">
@@ -114,7 +114,7 @@ export default async function LinuxHardeningPage({
           </section>
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">Kernel Hardening (sysctl)</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">Kernel Hardening (sysctl)</h2>
             <div className="bg-slate-900 rounded-xl p-6 overflow-x-auto">
               <pre className="font-mono text-sm text-green-400">
 {`# /etc/sysctl.conf - Kernel Security Hardening
@@ -182,7 +182,7 @@ sysctl -p`}
           </section>
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">SELinux (RHEL/CentOS/Fedora)</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">SELinux (RHEL/CentOS/Fedora)</h2>
             <div className="bg-slate-900 rounded-xl p-6 overflow-x-auto">
               <pre className="font-mono text-sm text-green-400">
 {`# /etc/selinux/config
@@ -232,7 +232,7 @@ restorecon -Rv /web`}
           </section>
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">AppArmor (Ubuntu/Debian/SUSE)</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">AppArmor (Ubuntu/Debian/SUSE)</h2>
             <div className="bg-slate-900 rounded-xl p-6 overflow-x-auto">
               <pre className="font-mono text-sm text-green-400">
 {`# /etc/apparmor.d/usr.sbin.nginx
@@ -288,7 +288,7 @@ journalctl -k | grep -i apparmor`}
           </section>
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">Auditd - Comprehensive System Auditing</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">Auditd - Comprehensive System Auditing</h2>
             <div className="bg-slate-900 rounded-xl p-6 overflow-x-auto">
               <pre className="font-mono text-sm text-green-400">
 {`# /etc/audit/rules.d/audit.rules
@@ -358,7 +358,7 @@ journalctl -k | grep -i apparmor`}
           </section>
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">CIS Benchmark Automation (OpenSCAP)</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">CIS Benchmark Automation (OpenSCAP)</h2>
             <div className="bg-slate-900 rounded-xl p-6 overflow-x-auto">
               <pre className="font-mono text-sm text-green-400">
 {`# Install OpenSCAP
@@ -397,7 +397,7 @@ fi`}
           </section>
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">SSH Hardening</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">SSH Hardening</h2>
             <div className="bg-slate-900 rounded-xl p-6 overflow-x-auto">
               <pre className="font-mono text-sm text-green-400">
 {`# /etc/ssh/sshd_config - Production Hardening
@@ -456,11 +456,11 @@ Match Group developers
           </section>
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">Linux Security Checklist</h2>
-            <div className="bg-white border border-slate-200 rounded-xl p-6">
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">Linux Security Checklist</h2>
+            <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
-                  <h3 className="font-semibold text-slate-900 mb-4">System Hardening</h3>
+                  <h3 className="font-semibold text-gray-100 mb-4">System Hardening</h3>
                   {[
                     "Kernel updated to latest LTS",
                     "ASLR enabled (randomize_va_space=2)",
@@ -471,12 +471,12 @@ Match Group developers
                   ].map((item, i) => (
                     <div key={i} className="flex items-center gap-3 py-2 border-b border-slate-100 last:border-0">
                       <span className="w-5 h-5 rounded border-2 border-slate-300 flex items-center justify-center text-xs text-slate-400">☐</span>
-                      <span className="text-slate-700 text-sm">{item}</span>
+                      <span className="text-gray-200 text-sm">{item}</span>
                     </div>
                   ))}
                 </div>
                 <div>
-                  <h3 className="font-semibold text-slate-900 mb-4">Access Control</h3>
+                  <h3 className="font-semibold text-gray-100 mb-4">Access Control</h3>
                   {[
                     "SELinux/AppArmor enforcing",
                     "Password policy configured (PAM)",
@@ -487,14 +487,14 @@ Match Group developers
                   ].map((item, i) => (
                     <div key={i} className="flex items-center gap-3 py-2 border-b border-slate-100 last:border-0">
                       <span className="w-5 h-5 rounded border-2 border-slate-300 flex items-center justify-center text-xs text-slate-400">☐</span>
-                      <span className="text-slate-700 text-sm">{item}</span>
+                      <span className="text-gray-200 text-sm">{item}</span>
                     </div>
                   ))}
                 </div>
               </div>
               <div className="grid md:grid-cols-2 gap-6 mt-6">
                 <div>
-                  <h3 className="font-semibold text-slate-900 mb-4">Auditing</h3>
+                  <h3 className="font-semibold text-gray-100 mb-4">Auditing</h3>
                   {[
                     "Auditd installed and running",
                     "Custom audit rules configured",
@@ -505,12 +505,12 @@ Match Group developers
                   ].map((item, i) => (
                     <div key={i} className="flex items-center gap-3 py-2 border-b border-slate-100 last:border-0">
                       <span className="w-5 h-5 rounded border-2 border-slate-300 flex items-center justify-center text-xs text-slate-400">☐</span>
-                      <span className="text-slate-700 text-sm">{item}</span>
+                      <span className="text-gray-200 text-sm">{item}</span>
                     </div>
                   ))}
                 </div>
                 <div>
-                  <h3 className="font-semibold text-slate-900 mb-4">Compliance</h3>
+                  <h3 className="font-semibold text-gray-100 mb-4">Compliance</h3>
                   {[
                     "CIS benchmark scan completed",
                     "SCAP content installed",
@@ -521,7 +521,7 @@ Match Group developers
                   ].map((item, i) => (
                     <div key={i} className="flex items-center gap-3 py-2 border-b border-slate-100 last:border-0">
                       <span className="w-5 h-5 rounded border-2 border-slate-300 flex items-center justify-center text-xs text-slate-400">☐</span>
-                      <span className="text-slate-700 text-sm">{item}</span>
+                      <span className="text-gray-200 text-sm">{item}</span>
                     </div>
                   ))}
                 </div>
@@ -531,7 +531,7 @@ Match Group developers
 
           <section className="bg-gradient-to-r from-slate-700 to-black rounded-2xl p-8 text-center text-white">
             <h2 className="text-2xl font-bold mb-4">Linux Security Assessment</h2>
-            <a href={coreLinks.check} className="inline-block px-6 py-3 bg-white text-slate-800 rounded-lg font-semibold">Assessment Starten</a>
+            <a href={coreLinks.check} className="inline-block px-6 py-3 bg-gray-800 text-gray-100 rounded-lg font-semibold">Assessment Starten</a>
             <div className="mt-6 flex flex-wrap justify-center gap-3 text-sm">
               <a href={`${prefix}/openclaw-security-check`} className="rounded-lg border border-white/30 px-3 py-2 text-white hover:bg-white/10">OpenClaw Security Hub</a>
               <a href={`${prefix}/ai-agent-security`} className="rounded-lg border border-white/30 px-3 py-2 text-white hover:bg-white/10">AI Agent Security</a>

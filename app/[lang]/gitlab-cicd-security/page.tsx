@@ -59,7 +59,7 @@ export default async function GitLabSecurityPage({
   const prefix = `/${locale}`;
   const coreLinks = getCoreSecurityLinks(locale);
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-gray-800">
       <section className="relative overflow-hidden bg-gradient-to-br from-orange-600 via-red-600 to-pink-700 py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl">
@@ -80,8 +80,8 @@ export default async function GitLabSecurityPage({
         <div className="max-w-4xl mx-auto">
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">GitLab CI/CD Security Architecture</h2>
-            <p className="text-slate-700 text-lg mb-6">
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">GitLab CI/CD Security Architecture</h2>
+            <p className="text-gray-200 text-lg mb-6">
               Moderne CI/CD-Pipelines sind High-Value Targets. GitLab bietet integrierte DevSecOps-Funktionen: Statische und dynamische Sicherheitstests, Secret Detection, Container Scanning und Compliance-Pipelines.
             </p>
 
@@ -117,7 +117,7 @@ export default async function GitLabSecurityPage({
           </section>
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">Secure CI/CD Pipeline (.gitlab-ci.yml)</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">Secure CI/CD Pipeline (.gitlab-ci.yml)</h2>
             <div className="bg-slate-900 rounded-xl p-6 overflow-x-auto">
               <pre className="font-mono text-sm text-green-400">
 {`# .gitlab-ci.yml - Secure DevSecOps Pipeline
@@ -253,7 +253,7 @@ deploy_production:
           </section>
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">OIDC Authentication (Vault/AWS/Azure)</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">OIDC Authentication (Vault/AWS/Azure)</h2>
             <div className="bg-slate-900 rounded-xl p-6 overflow-x-auto">
               <pre className="font-mono text-sm text-green-400">
 {`# .gitlab-ci.yml - OIDC Authentication (No Long-Term Secrets)
@@ -310,7 +310,7 @@ deploy_production:
           </section>
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">Compliance Pipeline (SOC 2/ISO 27001)</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">Compliance Pipeline (SOC 2/ISO 27001)</h2>
             <div className="bg-slate-900 rounded-xl p-6 overflow-x-auto">
               <pre className="font-mono text-sm text-green-400">
 {`# .gitlab-ci.yml - Compliance Pipeline
@@ -369,7 +369,7 @@ audit_trail:
 
           <section className="bg-gradient-to-r from-orange-600 to-red-600 rounded-2xl p-8 text-center text-white">
             <h2 className="text-2xl font-bold mb-4">GitLab CI/CD Security Assessment</h2>
-            <a href={coreLinks.check} className="inline-block px-6 py-3 bg-white text-orange-400 rounded-lg font-semibold">Assessment Starten</a>
+            <a href={coreLinks.check} className="inline-block px-6 py-3 bg-gray-800 text-orange-400 rounded-lg font-semibold">Assessment Starten</a>
             <div className="mt-6 flex flex-wrap justify-center gap-3 text-sm">
               <a href={`${prefix}/openclaw-security-check`} className="rounded-lg border border-white/30 px-3 py-2 text-white hover:bg-white/10">OpenClaw Security Hub</a>
               <a href={`${prefix}/ai-agent-security`} className="rounded-lg border border-white/30 px-3 py-2 text-white hover:bg-white/10">AI Agent Security</a>

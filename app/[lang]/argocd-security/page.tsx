@@ -59,7 +59,7 @@ export default async function ArgoCDSecurityPage({
   const prefix = `/${locale}`;
   const coreLinks = getCoreSecurityLinks(locale);
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-gray-800">
       <section className="relative overflow-hidden bg-gradient-to-br from-cyan-600 via-blue-700 to-indigo-800 py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl">
@@ -80,8 +80,8 @@ export default async function ArgoCDSecurityPage({
         <div className="max-w-4xl mx-auto">
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">ArgoCD Security Architecture</h2>
-            <p className="text-slate-700 text-lg mb-6">
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">ArgoCD Security Architecture</h2>
+            <p className="text-gray-200 text-lg mb-6">
               ArgoCD ist ein High-Value Target - es hat direkten Zugriff auf Kubernetes-Cluster und kann Deployments steuern. Kompromittiertes ArgoCD = Kompromittierter Cluster. Defense-in-Depth ist essentiell.
             </p>
 
@@ -117,7 +117,7 @@ export default async function ArgoCDSecurityPage({
           </section>
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">ArgoCD RBAC Configuration</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">ArgoCD RBAC Configuration</h2>
             <div className="bg-slate-900 rounded-xl p-6 overflow-x-auto">
               <pre className="font-mono text-sm text-green-400">
 {`# argocd-rbac-cm.yaml - RBAC ConfigMap
@@ -179,7 +179,7 @@ data:
           </section>
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">AppProject Isolation</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">AppProject Isolation</h2>
             <div className="bg-slate-900 rounded-xl p-6 overflow-x-auto">
               <pre className="font-mono text-sm text-green-400">
 {`# production-project.yaml - Multi-Tenant AppProject
@@ -315,7 +315,7 @@ spec:
           </section>
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">SSO/OIDC Configuration (Dex)</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">SSO/OIDC Configuration (Dex)</h2>
             <div className="bg-slate-900 rounded-xl p-6 overflow-x-auto">
               <pre className="font-mono text-sm text-green-400">
 {`# argocd-cm.yaml - OIDC/Dex Configuration
@@ -400,7 +400,7 @@ data:
           </section>
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">ArgoCD Hardened Deployment</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">ArgoCD Hardened Deployment</h2>
             <div className="bg-slate-900 rounded-xl p-6 overflow-x-auto">
               <pre className="font-mono text-sm text-green-400">
 {`# argocd-values.yaml - Production Helm Values
@@ -560,7 +560,7 @@ resource.exclusions: |
 
           <section className="bg-gradient-to-r from-cyan-600 to-blue-600 rounded-2xl p-8 text-center text-white">
             <h2 className="text-2xl font-bold mb-4">ArgoCD Security Assessment</h2>
-            <a href={coreLinks.check} className="inline-block px-6 py-3 bg-white text-cyan-600 rounded-lg font-semibold">Assessment Starten</a>
+            <a href={coreLinks.check} className="inline-block px-6 py-3 bg-gray-800 text-cyan-600 rounded-lg font-semibold">Assessment Starten</a>
             <div className="mt-6 flex flex-wrap justify-center gap-3 text-sm">
               <a href={`${prefix}/openclaw-security-check`} className="rounded-lg border border-white/30 px-3 py-2 text-white hover:bg-white/10">OpenClaw Security Hub</a>
               <a href={`${prefix}/ai-agent-security`} className="rounded-lg border border-white/30 px-3 py-2 text-white hover:bg-white/10">AI Agent Security</a>

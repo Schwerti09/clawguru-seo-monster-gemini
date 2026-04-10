@@ -59,7 +59,7 @@ export default async function SonarQubeSecurityPage({
   const prefix = `/${locale}`;
   const coreLinks = getCoreSecurityLinks(locale);
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-gray-800">
       <section className="relative overflow-hidden bg-gradient-to-br from-sky-500 via-blue-600 to-indigo-700 py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl">
@@ -80,8 +80,8 @@ export default async function SonarQubeSecurityPage({
         <div className="max-w-4xl mx-auto">
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">SonarQube Security Architecture</h2>
-            <p className="text-slate-700 text-lg mb-6">
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">SonarQube Security Architecture</h2>
+            <p className="text-gray-200 text-lg mb-6">
               SonarQube enthält Source Code und Sicherheitsberichte. Kompromittierte Instanz = Source Code Leak. Strikte Authentifizierung, Quality Gates und Secret Detection sind essentiell.
             </p>
 
@@ -117,7 +117,7 @@ export default async function SonarQubeSecurityPage({
           </section>
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">Authentication & SSO Configuration</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">Authentication & SSO Configuration</h2>
             <div className="bg-slate-900 rounded-xl p-6 overflow-x-auto">
               <pre className="font-mono text-sm text-green-400">
 {`# sonar.properties - Security Configuration
@@ -178,7 +178,7 @@ sonar.web.http.responseHeaders=Strict-Transport-Security: max-age=31536000; incl
           </section>
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">Permissions & Templates</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">Permissions & Templates</h2>
             <div className="bg-slate-900 rounded-xl p-6 overflow-x-auto">
               <pre className="font-mono text-sm text-green-400">
 {`# SonarQube Permission Templates
@@ -255,7 +255,7 @@ POST /api/views/set_projects
           </section>
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">Quality Gates & Security</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">Quality Gates & Security</h2>
             <div className="bg-slate-900 rounded-xl p-6 overflow-x-auto">
               <pre className="font-mono text-sm text-green-400">
 {`# SonarQube Quality Gate - Security Focused
@@ -361,7 +361,7 @@ POST /api/qualitygates/set_as_default
           </section>
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">CI/CD Integration & Token Security</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">CI/CD Integration & Token Security</h2>
             <div className="bg-slate-900 rounded-xl p-6 overflow-x-auto">
               <pre className="font-mono text-sm text-green-400">
 {`# SonarQube CI/CD Security
@@ -473,11 +473,11 @@ steps:
           </section>
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">SonarQube Security Checklist</h2>
-            <div className="bg-white border border-slate-200 rounded-xl p-6">
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">SonarQube Security Checklist</h2>
+            <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
-                  <h3 className="font-semibold text-slate-900 mb-4">Authentication & Access</h3>
+                  <h3 className="font-semibold text-gray-100 mb-4">Authentication & Access</h3>
                   {[
                     "SAML/SSO configured",
                     "Force authentication enabled",
@@ -486,12 +486,12 @@ steps:
                   ].map((item, i) => (
                     <div key={i} className="flex items-center gap-3 py-2 border-b border-slate-100 last:border-0">
                       <span className="w-5 h-5 rounded border-2 border-slate-300 flex items-center justify-center text-xs text-slate-400">☐</span>
-                      <span className="text-slate-700 text-sm">{item}</span>
+                      <span className="text-gray-200 text-sm">{item}</span>
                     </div>
                   ))}
                 </div>
                 <div>
-                  <h3 className="font-semibold text-slate-900 mb-4">Analysis & Quality</h3>
+                  <h3 className="font-semibold text-gray-100 mb-4">Analysis & Quality</h3>
                   {[
                     "Quality gates enforced in CI/CD",
                     "Secret detection enabled",
@@ -500,7 +500,7 @@ steps:
                   ].map((item, i) => (
                     <div key={i} className="flex items-center gap-3 py-2 border-b border-slate-100 last:border-0">
                       <span className="w-5 h-5 rounded border-2 border-slate-300 flex items-center justify-center text-xs text-slate-400">☐</span>
-                      <span className="text-slate-700 text-sm">{item}</span>
+                      <span className="text-gray-200 text-sm">{item}</span>
                     </div>
                   ))}
                 </div>
@@ -510,7 +510,7 @@ steps:
 
           <section className="bg-gradient-to-r from-sky-500 to-blue-600 rounded-2xl p-8 text-center text-white">
             <h2 className="text-2xl font-bold mb-4">SonarQube Security Assessment</h2>
-            <a href={coreLinks.check} className="inline-block px-6 py-3 bg-white text-sky-600 rounded-lg font-semibold">Assessment Starten</a>
+            <a href={coreLinks.check} className="inline-block px-6 py-3 bg-gray-800 text-sky-600 rounded-lg font-semibold">Assessment Starten</a>
             <div className="mt-6 flex flex-wrap justify-center gap-3 text-sm">
               <a href={`${prefix}/openclaw-security-check`} className="rounded-lg border border-white/30 px-3 py-2 text-white hover:bg-white/10">OpenClaw Security Hub</a>
               <a href={`${prefix}/ai-agent-security`} className="rounded-lg border border-white/30 px-3 py-2 text-white hover:bg-white/10">AI Agent Security</a>

@@ -72,7 +72,7 @@ export default function Soc2CompliancePage({ params }: PageProps) {
                 <div className="text-xs font-bold text-gray-400 mb-1">{phase}</div>
                 <div className="font-bold text-lg mb-3">{title}</div>
                 <ul className="space-y-1">
-                  {tasks.map(t => <li key={t} className="text-sm text-gray-700">• {t}</li>)}
+                  {tasks.map(t => <li key={t} className="text-sm text-gray-200">• {t}</li>)}
                 </ul>
               </div>
             ))}

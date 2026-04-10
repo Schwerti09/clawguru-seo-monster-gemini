@@ -59,7 +59,7 @@ export default async function AzureADSecurityPage({
   const prefix = `/${locale}`;
   const coreLinks = getCoreSecurityLinks(locale);
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-gray-800">
       <section className="relative overflow-hidden bg-gradient-to-br from-blue-600 via-blue-700 to-sky-800 py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl">
@@ -80,7 +80,7 @@ export default async function AzureADSecurityPage({
         <div className="max-w-4xl mx-auto">
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">Azure AD Security Architecture</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">Azure AD Security Architecture</h2>
             <div className="grid md:grid-cols-3 gap-6 mb-8">
               <div className="bg-blue-900 border border-blue-700 rounded-xl p-6">
                 <h3 className="font-semibold text-blue-900 mb-2">Identity Foundation</h3>
@@ -113,7 +113,7 @@ export default async function AzureADSecurityPage({
           </section>
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">Conditional Access Policies</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">Conditional Access Policies</h2>
             <div className="bg-slate-900 rounded-xl p-6 overflow-x-auto">
               <pre className="font-mono text-sm text-green-400">
 {`# Terraform - Conditional Access Policies
@@ -230,7 +230,7 @@ resource "azuread_conditional_access_policy" "geo_block" {
           </section>
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">Privileged Identity Management (PIM)</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">Privileged Identity Management (PIM)</h2>
             <div className="bg-slate-900 rounded-xl p-6 overflow-x-auto">
               <pre className="font-mono text-sm text-green-400">
 {`# Terraform - PIM Role Settings
@@ -295,7 +295,7 @@ resource "azuread_privileged_access_group_role_setting" "approval_required" {
           </section>
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">App Registration Security</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">App Registration Security</h2>
             <div className="bg-slate-900 rounded-xl p-6 overflow-x-auto">
               <pre className="font-mono text-sm text-green-400">
 {`# Terraform - Secure App Registration
@@ -387,7 +387,7 @@ resource "azuread_service_principal" "api_sp" {
           </section>
 
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">Identity Protection & Risk Policies</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">Identity Protection & Risk Policies</h2>
             <div className="bg-slate-900 rounded-xl p-6 overflow-x-auto">
               <pre className="font-mono text-sm text-green-400">
 {`# PowerShell/Graph API - Identity Protection
@@ -439,7 +439,7 @@ GET https://graph.microsoft.com/v1.0/identityProtection/riskDetections
 
           <section className="bg-gradient-to-r from-blue-600 to-sky-600 rounded-2xl p-8 text-center text-white">
             <h2 className="text-2xl font-bold mb-4">Azure AD Security Assessment</h2>
-            <a href={coreLinks.check} className="inline-block px-6 py-3 bg-white text-cyan-400 rounded-lg font-semibold">Assessment Starten</a>
+            <a href={coreLinks.check} className="inline-block px-6 py-3 bg-gray-800 text-cyan-400 rounded-lg font-semibold">Assessment Starten</a>
             <div className="mt-6 flex flex-wrap justify-center gap-3 text-sm">
               <a href={`${prefix}/openclaw-security-check`} className="rounded-lg border border-white/30 px-3 py-2 text-white hover:bg-white/10">OpenClaw Security Hub</a>
               <a href={`${prefix}/ai-agent-security`} className="rounded-lg border border-white/30 px-3 py-2 text-white hover:bg-white/10">AI Agent Security</a>

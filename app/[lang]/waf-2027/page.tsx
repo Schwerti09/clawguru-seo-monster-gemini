@@ -68,7 +68,7 @@ export default async function WAF2027Page({
   const isGerman = locale === "de";
 
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-gray-800">
       {/* Hero */}
       <section className="relative overflow-hidden bg-gradient-to-br from-orange-600 via-red-600 to-purple-800 py-20">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-orange-400/30 via-transparent to-transparent" />
@@ -106,11 +106,11 @@ export default async function WAF2027Page({
           
           {/* WAF Overview */}
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">
               {isGerman ? "Was ist eine WAF 2027?" : "What is a WAF in 2027?"}
             </h2>
             
-            <p className="text-slate-700 text-lg mb-6 leading-relaxed">
+            <p className="text-gray-200 text-lg mb-6 leading-relaxed">
               {isGerman
                 ? "Eine Web Application Firewall (WAF) schützt Webanwendungen vor HTTP-basierten Angriffen. 2027 sind WAFs evolutioniert zu WAAPs (Web Application & API Protection) mit KI-gestützter Bedrohungserkennung, automatischer Zero-Day-Defense und API-spezifischem Schutz."
                 : "A Web Application Firewall (WAF) protects web applications from HTTP-based attacks. In 2027, WAFs have evolved into WAAPs (Web Application & API Protection) with AI-powered threat detection, automatic zero-day defense, and API-specific protection."}
@@ -119,22 +119,22 @@ export default async function WAF2027Page({
             <div className="grid md:grid-cols-4 gap-4 mb-8">
               <div className="bg-gradient-to-br from-orange-50 to-orange-100 border border-orange-700 rounded-xl p-5 text-center">
                 <div className="text-3xl mb-2">🛡️</div>
-                <h3 className="font-semibold text-slate-900 text-sm">Layer 7 Protection</h3>
+                <h3 className="font-semibold text-gray-100 text-sm">Layer 7 Protection</h3>
                 <p className="text-xs text-slate-600 mt-1">Application Layer Defense</p>
               </div>
               <div className="bg-gradient-to-br from-red-50 to-red-100 border border-red-700 rounded-xl p-5 text-center">
                 <div className="text-3xl mb-2">🤖</div>
-                <h3 className="font-semibold text-slate-900 text-sm">Bot Management</h3>
+                <h3 className="font-semibold text-gray-100 text-sm">Bot Management</h3>
                 <p className="text-xs text-slate-600 mt-1">Good vs Bad Bots</p>
               </div>
               <div className="bg-gradient-to-br from-purple-50 to-purple-100 border border-purple-700 rounded-xl p-5 text-center">
                 <div className="text-3xl mb-2">⚡</div>
-                <h3 className="font-semibold text-slate-900 text-sm">DDoS Mitigation</h3>
+                <h3 className="font-semibold text-gray-100 text-sm">DDoS Mitigation</h3>
                 <p className="text-xs text-slate-600 mt-1">Volumetric Attacks</p>
               </div>
               <div className="bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-700 rounded-xl p-5 text-center">
                 <div className="text-3xl mb-2">🔐</div>
-                <h3 className="font-semibold text-slate-900 text-sm">API Protection</h3>
+                <h3 className="font-semibold text-gray-100 text-sm">API Protection</h3>
                 <p className="text-xs text-slate-600 mt-1">Schema Validation</p>
               </div>
             </div>
@@ -185,17 +185,17 @@ export default async function WAF2027Page({
 
           {/* OWASP CRS */}
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">OWASP Core Rule Set 4.0</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">OWASP Core Rule Set 4.0</h2>
             
-            <p className="text-slate-700 mb-6">
+            <p className="text-gray-200 mb-6">
               {isGerman
                 ? "Das OWASP Core Rule Set (CRS) ist die Industriestandard-Regelsammlung für WAFs. Version 4.0 (2027) enthält verbesserte Regeln für moderne Angriffsmuster."
                 : "The OWASP Core Rule Set (CRS) is the industry-standard rule collection for WAFs. Version 4.0 (2027) includes improved rules for modern attack patterns."}
             </p>
 
-            <div className="bg-white border border-slate-200 rounded-xl overflow-hidden mb-6">
+            <div className="bg-gray-800 border border-slate-200 rounded-xl overflow-hidden mb-6">
               <div className="bg-slate-100 px-6 py-3 border-b border-slate-200">
-                <span className="font-semibold text-slate-700">CRS 4.0 Paranoia Levels</span>
+                <span className="font-semibold text-gray-200">CRS 4.0 Paranoia Levels</span>
               </div>
               <div className="p-6">
                 <div className="space-y-4">
@@ -265,7 +265,7 @@ SecAction \\
 
           {/* Cloudflare WAF */}
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">Cloudflare WAF 2027</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">Cloudflare WAF 2027</h2>
             
             <div className="grid md:grid-cols-2 gap-6 mb-8">
               <div className="bg-orange-50 border border-orange-700 rounded-xl p-6">
@@ -345,13 +345,13 @@ SecAction \\
 
           {/* AWS WAF */}
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">AWS WAF 2027</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">AWS WAF 2027</h2>
             
-            <div className="bg-white border border-slate-200 rounded-xl p-6 mb-6">
-              <h3 className="font-semibold text-slate-900 mb-4">AWS WAF Key Features 2027</h3>
+            <div className="bg-gray-800 border border-slate-200 rounded-xl p-6 mb-6">
+              <h3 className="font-semibold text-gray-100 mb-4">AWS WAF Key Features 2027</h3>
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
-                  <h4 className="font-medium text-slate-800 mb-2">Managed Rule Groups</h4>
+                  <h4 className="font-medium text-gray-100 mb-2">Managed Rule Groups</h4>
                   <ul className="text-sm text-slate-600 space-y-1">
                     <li>• Core Rule Set (CRS)</li>
                     <li>• Known Bad Inputs</li>
@@ -361,7 +361,7 @@ SecAction \\
                   </ul>
                 </div>
                 <div>
-                  <h4 className="font-medium text-slate-800 mb-2">Bot Control & ATP</h4>
+                  <h4 className="font-medium text-gray-100 mb-2">Bot Control & ATP</h4>
                   <ul className="text-sm text-slate-600 space-y-1">
                     <li>• Targeted Bot Protection</li>
                     <li>• Account Takeover Prevention</li>
@@ -433,12 +433,12 @@ SecAction \\
 
           {/* WAF Checklist */}
           <section className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6">WAF 2027 Security Checklist</h2>
+            <h2 className="text-3xl font-bold text-gray-100 mb-6">WAF 2027 Security Checklist</h2>
             
-            <div className="bg-white border border-slate-200 rounded-xl p-6">
+            <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
-                  <h3 className="font-semibold text-slate-900 mb-4">Core Protection</h3>
+                  <h3 className="font-semibold text-gray-100 mb-4">Core Protection</h3>
                   {[
                     "OWASP Top 10 rules enabled",
                     "SQL Injection protection active",
@@ -449,12 +449,12 @@ SecAction \\
                   ].map((item, i) => (
                     <div key={i} className="flex items-center gap-3 py-2 border-b border-slate-100 last:border-0">
                       <span className="w-5 h-5 rounded border-2 border-slate-300 flex items-center justify-center text-xs text-slate-400">☐</span>
-                      <span className="text-slate-700 text-sm">{item}</span>
+                      <span className="text-gray-200 text-sm">{item}</span>
                     </div>
                   ))}
                 </div>
                 <div>
-                  <h3 className="font-semibold text-slate-900 mb-4">Advanced Protection</h3>
+                  <h3 className="font-semibold text-gray-100 mb-4">Advanced Protection</h3>
                   {[
                     "Rate limiting configured",
                     "Bot management active",
@@ -465,7 +465,7 @@ SecAction \\
                   ].map((item, i) => (
                     <div key={i} className="flex items-center gap-3 py-2 border-b border-slate-100 last:border-0">
                       <span className="w-5 h-5 rounded border-2 border-slate-300 flex items-center justify-center text-xs text-slate-400">☐</span>
-                      <span className="text-slate-700 text-sm">{item}</span>
+                      <span className="text-gray-200 text-sm">{item}</span>
                     </div>
                   ))}
                 </div>
@@ -485,7 +485,7 @@ SecAction \\
             </p>
             <a 
               href={coreLinks.check} 
-              className="inline-block px-6 py-3 bg-white text-orange-700 rounded-lg font-semibold hover:bg-slate-100 transition-colors"
+              className="inline-block px-6 py-3 bg-gray-800 text-orange-700 rounded-lg font-semibold hover:bg-slate-100 transition-colors"
             >
               {isGerman ? "WAF Assessment Starten" : "Start WAF Assessment"}
             </a>

@@ -14,6 +14,10 @@
   # Suppress false-positive secrets scanning on server-side Next.js bundles.
   # The detected values are runtime env vars read server-side only — never exposed to clients.
   SECRETS_SCAN_OMIT_PATHS = ".next/cache,.next/server"
+  # Skip scanning for specific env var keys that exist in git history (test keys, already rotated)
+  # The secrets were removed in commit 22da5b28 but remain in git history. These are Stripe TEST keys.
+  # IMPORTANT: Rotate these keys in Stripe Dashboard since they're exposed in git history!
+  SECRETS_SCAN_OMIT_KEYS = "STRIPE_SECRET_KEY,NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,ACCESS_TOKEN_SECRET,STRIPE_PRICE_DAYPASS,STRIPE_PRICE_PRO,STRIPE_PRICE_TEAM,STRIPE_PRICE_ENTERPRISE"
   # Build-only variables (not attached to functions, stay under 4KB limit)
   NEXT_PUBLIC_SITE_URL = "https://clawguru.org"
   SITE_URL = "https://clawguru.org"

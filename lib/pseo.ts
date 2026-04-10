@@ -1661,6 +1661,9 @@ function _getRunbooks(): Runbook[] {
 export function materializedRunbooks(): Runbook[] {
   return _getRunbooks()
 }
+// SEO Fix: RUNBOOKS was always [] because it's a static constant initialized at module load.
+// Use materializedRunbooks() instead for runtime data. Keep the export for backwards compat
+// but consumers should use materializedRunbooks().
 export const RUNBOOKS: Runbook[] = []
 
 // Fallback builder used when on-demand generation crashes
@@ -1721,13 +1724,14 @@ export function getRunbook(slug: string): Runbook | null {
     try {
       const meta = _tryParse100kWithGeoStrip(slug)
       if (meta) {
-        const rb = generateRunbook100k(meta)
-        return rb ?? _buildDummyRunbook(slug)
+        return generateRunbook100k(meta) ?? null
       }
-      return _buildDummyRunbook(slug)
+      // SEO Fix: Do NOT return dummy runbooks for unknown slugs during build.
+      // Dummy runbooks create thin/duplicate content that tanks rankings.
+      return null
     } catch (e: unknown) {
       console.error("gen100k error(build)", { slug, error: e instanceof Error ? e.message : String(e) })
-      return _buildDummyRunbook(slug)
+      return null
     }
   }
   const list = _getRunbooks()
@@ -1737,9 +1741,10 @@ export function getRunbook(slug: string): Runbook | null {
   const meta = _tryParse100kWithGeoStrip(slug)
   if (meta) {
     try {
-      return generateRunbook100k(meta)
+      return generateRunbook100k(meta) ?? null
     } catch {
-      return _buildDummyRunbook(slug)
+      // SEO Fix: Return null for failed generation instead of dummy content
+      return null
     }
   }
   return null

@@ -2,7 +2,7 @@
 // Temporal search page: /runbook/[slug]/temporal?version=2025-Q3
 // Shows the runbook as it existed at a specific point in time.
 
-import { permanentRedirect } from "next/navigation"
+import { notFound } from "next/navigation"
 import Container from "@/components/shared/Container"
 import { getRunbook } from "@/lib/pseo"
 import { validateRunbook } from "@/lib/quality-gate"
@@ -50,7 +50,7 @@ export default async function TemporalPage(
   const prefix = `/${locale}`
   const r = getRunbook(params.slug)
   if (!r) {
-    permanentRedirect(`${prefix}/runbooks?q=${encodeURIComponent(params.slug)}`)
+    notFound()
   }
 
   const quality = validateRunbook(r)

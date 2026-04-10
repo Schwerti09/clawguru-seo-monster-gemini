@@ -1,14 +1,14 @@
 import type { Metadata } from "next"
 
 import { localeAlternates, SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
-import { permanentRedirect } from "next/navigation"
+import { notFound } from "next/navigation"
 import { parseGeoVariantSlug } from "@/lib/geo-matrix"
 import { getCityBySlug } from "@/lib/geo-cities"
 import { isGeoVariantIndexable } from "@/lib/geo-mycelium"
 
 export const dynamic = "force-static"
 export const revalidate = 86400
-export const dynamicParams = true // Recovery mode: stale indexed URLs should redirect, not 404
+export const dynamicParams = true // SEO: return 404 for unknown slugs (no redirect spam)
 export const runtime = "nodejs"
 export const maxDuration = 180
 export const preferredRegion = "iad1"
@@ -80,32 +80,20 @@ export default async function LocaleRunbookPage(props: {
   const { lang, slug } = props.params
   const allowed = (process.env.SITEMAP_100K_LOCALES ?? "de,en").split(",").map((s) => s.trim()).filter(Boolean)
   if (!allowed.includes(lang)) {
-    permanentRedirect(`/${SUPPORTED_LOCALES[0]}/runbooks?q=${encodeURIComponent(slug)}`)
+    notFound()
   }
   
-  // PHASE 1 Fix #1: Graceful error handling for broken runbook generation
-  try {
-    const { getRunbook } = await import("@/lib/pseo")
-    const { parseGeoVariantSlug } = await import("@/lib/geo-matrix")
-    // Try the slug as-is first, then strip geo-variant city suffix as fallback
-    const geoParsed = parseGeoVariantSlug(slug)
-    const resolvedSlug = getRunbook(slug) ? slug : (getRunbook(geoParsed.baseSlug) ? geoParsed.baseSlug : null)
-    if (!resolvedSlug) {
-      permanentRedirect(`/${lang}/runbooks?q=${encodeURIComponent(geoParsed.baseSlug || slug)}`)
-    }
-    const Mod = await import("@/app/runbook/[slug]/page")
-    const RootRunbookPage = Mod.default
-    return <RootRunbookPage params={{ lang, slug: resolvedSlug }} />
-  } catch (err) {
-    const anyErr = err as any
-    const message = err instanceof Error ? err.message : String(err)
-    const digest = typeof anyErr?.digest === "string" ? anyErr.digest : ""
-    // Next.js throws NEXT_REDIRECT as control flow signal; this is expected.
-    if (message === "NEXT_REDIRECT" || digest.includes("NEXT_REDIRECT") || String(err).includes("NEXT_REDIRECT")) {
-      throw err
-    }
-    // Keep logs clean: stale/synthetic slugs should silently redirect to search hub.
-    permanentRedirect(`/${lang}/runbooks?q=${encodeURIComponent(slug)}`)
+  // SEO Fix: Return 404 for non-existent runbooks instead of redirecting to /runbooks
+  // (redirects caused Google to see duplicate content on the listing page)
+  const { getRunbook } = await import("@/lib/pseo")
+  const { parseGeoVariantSlug } = await import("@/lib/geo-matrix")
+  const geoParsed = parseGeoVariantSlug(slug)
+  const resolvedSlug = getRunbook(slug) ? slug : (getRunbook(geoParsed.baseSlug) ? geoParsed.baseSlug : null)
+  if (!resolvedSlug) {
+    notFound()
   }
+  const Mod = await import("@/app/runbook/[slug]/page")
+  const RootRunbookPage = Mod.default
+  return <RootRunbookPage params={{ lang, slug: resolvedSlug }} />
 }
 

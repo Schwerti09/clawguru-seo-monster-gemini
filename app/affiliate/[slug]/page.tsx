@@ -25,8 +25,8 @@ export default async function AffiliateBridgePage(props: { params: { slug: strin
   const keyword = profile?.keyword ?? `${name} Security Recommendations`
   const description = profile?.description ?? `Kuratiertes ClawGuru Runbook-Setup für ${name}.`
 
-  const { RUNBOOKS } = await import("@/lib/pseo")
-  const linkEngine = buildLinkEngine(RUNBOOKS, {
+  const { materializedRunbooks } = await import("@/lib/pseo")
+  const linkEngine = buildLinkEngine(materializedRunbooks(), {
     maxLinks: 10,
     urlForPage: (page) => `/runbook/${page.slug}`,
     authorityForPage: (page) => page.clawScore,

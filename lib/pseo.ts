@@ -1661,51 +1661,8 @@ function _getRunbooks(): Runbook[] {
 export function materializedRunbooks(): Runbook[] {
   return _getRunbooks()
 }
-// SEO Fix: RUNBOOKS was always [] because it's a static constant initialized at module load.
-// Use materializedRunbooks() instead for runtime data. Keep the export for backwards compat
-// but consumers should use materializedRunbooks().
+/** @deprecated Use materializedRunbooks() instead. This is always [] at module load time. */
 export const RUNBOOKS: Runbook[] = []
-
-// Fallback builder used when on-demand generation crashes
-function _buildDummyRunbook(slug: string): Runbook {
-  const now = new Date()
-  const lastmod = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`
-  const providerGuess = PROVIDERS.find((p) => slug.includes(p.slug))?.slug ?? "generic"
-  const title = slug
-    .split("-")
-    .map((s) => s[0]?.toUpperCase() + s.slice(1))
-    .join(" ")
-  return {
-    slug,
-    title: `Runbook: ${title}`,
-    summary: "Automatisch erstelltes Fallback-Runbook. Inhalte werden on-demand generiert oder stammen aus der Library.",
-    tags: ["fallback", `provider:${providerGuess}`],
-    lastmod,
-    howto: {
-      steps: [
-        "Ist-Zustand prüfen (Logs, Metriken, Error-Raten)",
-        "Kleinsten Fix anwenden (rückrollbar)",
-        "Verifizieren (Smoke Test + Re-Check)",
-      ],
-    },
-    blocks: [
-      { kind: "h2", text: "Hinweis" },
-      { kind: "p", text: "Dieses Fallback-Runbook wird angezeigt, wenn die on‑demand Generierung vorübergehend nicht verfügbar ist." },
-      { kind: "h2", text: "Schnell‑Triage" },
-      { kind: "ul", items: [
-        "Welche Komponenten sind betroffen (Provider, Service, Year, Issue)?",
-        "Welche Errors sieht man in den letzten 15 Minuten?",
-        "Welche letzten Änderungen könnten ursächlich sein?",
-      ]},
-    ],
-    clawScore: clawScoreFor(slug),
-    faq: [
-      { q: "Ist das ein vollständiges Runbook?", a: "Es ist ein Platzhalter. Vollständige Inhalte werden dynamisch generiert/geladen." },
-    ],
-    relatedSlugs: [],
-    author: DEFAULT_AUTHOR,
-  }
-}
 
 export function allProviders() {
   return [...PROVIDERS]

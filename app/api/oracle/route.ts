@@ -169,10 +169,11 @@ function buildSummaries(runbooks: Array<{ slug: string; title: string; summary?:
 // Cache heavy Mycelium context (RUNBOOKS + Graph + Summaries) for faster teaser demos
 const getOracleContext = unstable_cache(
   async () => {
-    const { RUNBOOKS } = await import("@/lib/pseo")
-    const summaries = buildSummaries(RUNBOOKS)
-    const graph = buildMyceliumGraph(RUNBOOKS, 150)
-    return { RUNBOOKS, summaries, graph }
+    const { materializedRunbooks } = await import("@/lib/pseo")
+    const runbooks = materializedRunbooks()
+    const summaries = buildSummaries(runbooks)
+    const graph = buildMyceliumGraph(runbooks, 150)
+    return { runbooks, summaries, graph }
   },
   ["ORACLE_CONTEXT_V1"],
   { revalidate: 1800 }
@@ -255,7 +256,7 @@ function fallbackAnswer(
 
 export async function POST(req: NextRequest) {
   try {
-    const { RUNBOOKS, summaries, graph } = await getOracleContext()
+    const { runbooks, summaries, graph } = await getOracleContext()
     const body = (await req.json().catch(() => ({}))) as OracleRequestBody
     const question = (body.question || "").toString().slice(0, 4000).trim()
     const mode: OracleMode =
@@ -315,7 +316,7 @@ export async function POST(req: NextRequest) {
         score: Math.round(r.score * 100),
       })),
       nodeCount: graph.nodes.length,
-      totalRunbooks: RUNBOOKS.length,
+      totalRunbooks: runbooks.length,
     })
   } catch (err) {
     console.error("[ORACLE ERROR]", err)

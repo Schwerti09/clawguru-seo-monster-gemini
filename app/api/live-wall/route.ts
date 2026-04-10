@@ -112,14 +112,15 @@ export const getLiveWallCached = unstable_cache(
     let error: any = null
 
     try {
-      const { RUNBOOKS } = await import("@/lib/pseo")
+      const { materializedRunbooks } = await import("@/lib/pseo")
       const cveMod: any = await import("@/lib/cve-pseo").catch(() => null)
       const now = new Date()
       const day = isoDate(now)
       const seed = hash(day)
       const rnd = mulberry32(seed)
 
-      const RB = RUNBOOKS.slice(0, Math.min(5000, RUNBOOKS.length))
+      const allRunbooks = materializedRunbooks()
+      const RB = allRunbooks.slice(0, Math.min(5000, allRunbooks.length))
       const topTags = countTop(RB.flatMap((r) => r.tags))
 
       const issueKeywords = [
@@ -185,7 +186,7 @@ export const getLiveWallCached = unstable_cache(
         updatedAt: now.toISOString(),
         day,
         counts: {
-          runbooks: RUNBOOKS.length,
+          runbooks: allRunbooks.length,
           tags: new Set(RB.flatMap((r) => r.tags)).size
         },
         pulse: Math.max(7, pulse),

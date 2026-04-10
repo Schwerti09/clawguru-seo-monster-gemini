@@ -2,7 +2,7 @@
 // Strong hub for cloud provider runbooks – internal linking anchor
 
 import Container from "../../../../components/shared/Container"
-import { RUNBOOKS } from "../../../../lib/pseo"
+import { materializedRunbooks } from "../../../../lib/pseo"
 import { type Locale, SUPPORTED_LOCALES, buildLocalizedAlternates } from "../../../../lib/i18n"
 import Link from "next/link"
 
@@ -35,7 +35,7 @@ export default async function CloudHubPage(props: { params: { lang: string } }) 
   const params = props.params;
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
 
-  const cloudRunbooks = RUNBOOKS.filter((r) =>
+  const cloudRunbooks = materializedRunbooks().filter((r) =>
     CLOUD_PROVIDERS.some((p) => r.tags.includes("provider:" + p))
   ).slice(0, 120)
 

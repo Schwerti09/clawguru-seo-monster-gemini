@@ -23,10 +23,10 @@ export async function generateMetadata(props: { params: { lang: string } }) {
 
 export default async function KubernetesHubPage(props: { params: { lang: string } }) {
   const params = props.params;
-  const { RUNBOOKS } = await import("@/lib/pseo")
+  const { materializedRunbooks } = await import("@/lib/pseo")
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
 
-  const k8sRunbooks = RUNBOOKS.filter(
+  const k8sRunbooks = materializedRunbooks().filter(
     (r) => r.tags.includes("provider:kubernetes") || r.tags.includes("kubernetes")
   ).slice(0, 80)
 

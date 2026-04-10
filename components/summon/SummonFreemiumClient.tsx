@@ -101,9 +101,9 @@ export default function SummonFreemiumClient() {
         if (!pseoMod) return [] as Runbook[]
         try {
           const buildClient: undefined | ((n: number) => Runbook[]) = (pseoMod as any).buildRunbooksClient
-          return buildClient ? buildClient(1200) : ((pseoMod as any).RUNBOOKS ?? [])
+          return buildClient ? buildClient(1200) : (pseoMod as any).materializedRunbooks()
         } catch {
-          return ((pseoMod as any).RUNBOOKS ?? []) as Runbook[]
+          return ((pseoMod as any).materializedRunbooks?.() ?? []) as Runbook[]
         }
       })()
 

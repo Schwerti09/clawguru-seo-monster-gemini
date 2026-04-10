@@ -79,9 +79,9 @@ export default function RunbooksClientLoader() {
 
         let list: Runbook[] = []
         try {
-          list = buildClient ? buildClient(60) : (pseo.RUNBOOKS ?? []).slice(0, 60)
+          list = buildClient ? buildClient(60) : pseo.materializedRunbooks().slice(0, 60)
         } catch {
-          list = ((pseo.RUNBOOKS ?? []) as Runbook[]).slice(0, 60)
+          list = (pseo.materializedRunbooks() as Runbook[]).slice(0, 60)
         }
         const mapped = list.map((r) => ({
           slug: r.slug,

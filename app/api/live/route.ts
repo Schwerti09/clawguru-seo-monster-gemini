@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { RUNBOOKS, PROVIDERS, totalSitemapUrls } from "@/lib/pseo"
+import { materializedRunbooks, PROVIDERS, totalSitemapUrls } from "@/lib/pseo"
 import { STATS } from "@/lib/stats"
 import { getLiveWallCached } from "@/app/api/live-wall/route"
 
@@ -10,7 +10,7 @@ export const revalidate = 15
 export async function GET() {
   try {
     // Core counts derived from local dataset (no external calls)
-    const runbooks = RUNBOOKS
+    const runbooks = materializedRunbooks()
     const totalRunbooks = STATS.totalRunbooks
     const uniqueTags = new Set<string>(runbooks.flatMap((r) => r.tags)).size
     const providers = PROVIDERS.length

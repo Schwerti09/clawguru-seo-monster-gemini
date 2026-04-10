@@ -26,9 +26,9 @@ export async function generateMetadata(props: { params: { tag: string } }) {
     const pseo: any = await import("@/lib/pseo")
     let list: any[] = []
     try {
-      list = typeof pseo.buildRunbooksClient === "function" ? pseo.buildRunbooksClient(10000) : (pseo.RUNBOOKS ?? [])
+      list = typeof pseo.buildRunbooksClient === "function" ? pseo.buildRunbooksClient(10000) : pseo.materializedRunbooks()
     } catch {
-      list = (pseo.RUNBOOKS ?? [])
+      list = pseo.materializedRunbooks()
     }
     const key = String(tag).toLowerCase()
     const candidates = new Set<string>([key])
@@ -67,9 +67,9 @@ export default async function TagPage(props: { params: { tag: string } }) {
   const pseo: any = await import("@/lib/pseo")
   let list: any[] = []
   try {
-    list = typeof pseo.buildRunbooksClient === "function" ? pseo.buildRunbooksClient(10000) : (pseo.RUNBOOKS ?? [])
+    list = typeof pseo.buildRunbooksClient === "function" ? pseo.buildRunbooksClient(10000) : pseo.materializedRunbooks()
   } catch {
-    list = (pseo.RUNBOOKS ?? [])
+    list = pseo.materializedRunbooks()
   }
   const key = String(tag).toLowerCase()
   const candidates = new Set<string>([key])

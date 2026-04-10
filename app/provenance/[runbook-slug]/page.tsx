@@ -5,7 +5,7 @@
 
 import { notFound } from "next/navigation"
 import Container from "@/components/shared/Container"
-import { getRunbook, RUNBOOKS } from "@/lib/pseo"
+import { getRunbook, materializedRunbooks } from "@/lib/pseo"
 import { validateRunbook } from "@/lib/quality-gate"
 import ProvenanceChainView from "@/components/visual/ProvenanceChainView"
 import { BASE_URL } from "@/lib/config"
@@ -16,7 +16,7 @@ export const runtime = "nodejs"
 
 export async function generateStaticParams() {
   // Pre-render top 200 runbooks for fast initial crawl
-  return RUNBOOKS.slice(0, 200).map((r) => ({ "runbook-slug": r.slug }))
+  return materializedRunbooks().slice(0, 200).map((r) => ({ "runbook-slug": r.slug }))
 }
 
 export async function generateMetadata(

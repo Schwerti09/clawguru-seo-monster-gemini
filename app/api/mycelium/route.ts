@@ -16,10 +16,10 @@ export async function GET(req: NextRequest) {
       if (typeof pseo.buildRunbooksClient === "function") {
         runbooks = pseo.buildRunbooksClient(Math.max(120, limit * 4))
       } else {
-        runbooks = (pseo.RUNBOOKS ?? []) as any[]
+        runbooks = pseo.materializedRunbooks()
       }
     } catch {
-      runbooks = (pseo.RUNBOOKS ?? []) as any[]
+      runbooks = pseo.materializedRunbooks()
     }
 
     const graph = buildMyceliumGraph(runbooks, Math.max(60, limit * 3))

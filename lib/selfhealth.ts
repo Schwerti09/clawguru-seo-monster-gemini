@@ -2,7 +2,7 @@
 // Self-Health System – automated site health, SEO watchdog, content freshness monitor.
 // FULL PASSIVE WELTMACHT: autoHeal() makes the site self-improving with zero manual work.
 
-import { RUNBOOKS, totalSitemapUrls } from "./pseo"
+import { materializedRunbooks, totalSitemapUrls } from "./pseo"
 import { sendEmail } from "./email"
 import { BASE_URL } from "./config"
 import { generateTextOrdered } from "./ai/providers"
@@ -178,7 +178,7 @@ export function checkEnvVars(): HealthCheck[] {
 
 /** Check whether runbook content is fresh (recent lastmod dates). */
 export function checkContentFreshness(): HealthCheck[] {
-  const runbooks = RUNBOOKS
+  const runbooks = materializedRunbooks()
 
   if (runbooks.length === 0) {
     return [{ name: "content:freshness", status: "warn", message: "No runbooks found" }]
@@ -321,7 +321,7 @@ export async function autoHeal(): Promise<AutoHealResult> {
 
   // --- 1. Heal stale runbooks ---
   // FULL PASSIVE WELTMACHT: pick runbooks older than FRESHNESS_WARN_DAYS and rewrite their summary + title
-  const stale = RUNBOOKS.filter((r) => daysSince(r.lastmod) >= FRESHNESS_WARN_DAYS).slice(0, 10)
+  const stale = materializedRunbooks().filter((r) => daysSince(r.lastmod) >= FRESHNESS_WARN_DAYS).slice(0, 10)
 
   for (const runbook of stale) {
     const prompt = [

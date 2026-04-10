@@ -1,7 +1,7 @@
 // lib/runbooks-index.ts
 // NOTE (2026-03): Lightweight in-memory index for runbooks used by API routes.
 // - Exports: isReady(), warmup(), ensureReadyWithin(ms), search(q, tags, page, limit)
-// - Data source: lib/pseo (RUNBOOKS or buildRunbooksClient(n)) → materialized to docs
+// - Data source: lib/pseo (materializedRunbooks() or buildRunbooksClient(n)) → materialized to docs
 // - Tags filter in search(): treats provided tags as intersection
 // - Use ensureReadyWithin() before calling search() on cold starts
 
@@ -61,10 +61,10 @@ async function materializeDocs(): Promise<RunbookDoc[]> {
       const n = Number(process.env.PSEO_INDEX_COUNT || 2000)
       list = pseo.buildRunbooksClient(n)
     } else {
-      list = (pseo.RUNBOOKS ?? []) as any[]
+      list = pseo.materializedRunbooks()
     }
   } catch {
-    list = (pseo.RUNBOOKS ?? []) as any[]
+    list = pseo.materializedRunbooks()
   }
   return list.map(mapDoc)
 }

@@ -5,6 +5,7 @@ import { notFound } from "next/navigation"
 import { parseGeoVariantSlug } from "@/lib/geo-matrix"
 import { getCityBySlug } from "@/lib/geo-cities"
 import { isGeoVariantIndexable } from "@/lib/geo-mycelium"
+import { BASE_URL } from "@/lib/config"
 
 export const dynamic = "force-static"
 export const revalidate = 86400
@@ -58,7 +59,7 @@ export async function generateMetadata(props: {
       title,
       description,
       type: "article",
-      url: `/${lang}/runbook/${canonicalSlug}`,
+      url: `${BASE_URL}/${lang}/runbook/${canonicalSlug}`,
     },
     twitter: {
       card: "summary_large_image",

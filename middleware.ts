@@ -350,17 +350,17 @@ export function middleware(request: NextRequest) {
     const isTagDetail = new RegExp(`^/${locale}/tag/`, "i").test(pathname)
     const isRunbooksIndex = new RegExp(`^/${locale}/runbooks(?:/|$)`, "i").test(pathname)
     if (isRunbookDetail || isTagDetail || isRunbooksIndex) {
-      const fallbackLocale = (allowedLocales[0] as Locale) ?? DEFAULT_LOCALE
-      const targetPath = pathname.replace(new RegExp(`^/${locale}`), `/${fallbackLocale}`)
-      const url = request.nextUrl.clone()
-      url.pathname = targetPath
-      const res = NextResponse.redirect(url, 308)
-      res.headers.set("x-claw-locale", fallbackLocale)
-      res.headers.set("x-claw-dir", localeDir(fallbackLocale))
+      // SEO Fix: Don't redirect non-allowed locales — let the page handler return 404.
+      // 308 redirects were causing massive redirect chains that Google penalised.
+      // Pass through with noindex header so the page handler can decide (404 or render).
+      const res = NextResponse.next()
+      res.headers.set("x-claw-locale", locale)
+      res.headers.set("x-claw-dir", localeDir(locale as any))
       if (edgeGeo.city) res.headers.set("x-claw-geo-city", edgeGeo.city)
       if (edgeGeo.region) res.headers.set("x-claw-geo-region", edgeGeo.region)
       if (edgeGeo.country) res.headers.set("x-claw-geo-country", edgeGeo.country)
       res.headers.set(getRequestIdHeaderName(), requestId)
+      res.headers.set("X-Robots-Tag", "noindex, follow")
       return res
     }
   }

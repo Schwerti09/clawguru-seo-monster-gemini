@@ -109,6 +109,7 @@ export async function generateMetadata(props: { params: { slug: string } }) {
       title: `${title} | ClawGuru`,
       description,
       type: "article",
+      url: `${BASE_URL}/${locale}/runbook/${canonicalSlug}`,
     },
     robots: {
       index: isIndexableGeoVariant,

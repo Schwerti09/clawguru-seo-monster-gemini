@@ -217,9 +217,10 @@ async function callGemini(prompt: string): Promise<CallResult> {
   const primary = process.env.GEMINI_MODEL || "gemini-2.5-flash";
   const candidates = [
     primary,
-    // Append fallbacks only when they differ from the configured primary
-    ...(primary !== "gemini-2.0-flash" ? ["gemini-2.0-flash"] : []),
-    ...(primary !== "gemini-2.0-flash-lite" ? ["gemini-2.0-flash-lite"] : []),
+    // Append fallback only when it differs from the configured primary.
+    // gemini-2.0-flash & gemini-2.0-flash-lite are deprecated (shutdown June 2026)
+    // and already return 400 for many projects — use gemini-2.5-flash-lite instead.
+    ...(primary !== "gemini-2.5-flash-lite" ? ["gemini-2.5-flash-lite"] : []),
   ];
   let lastStatus = 0;
   let lastError = "";

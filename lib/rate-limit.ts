@@ -204,12 +204,11 @@ export function checkRateLimit(
 }
 
 /**
- * Extract the real client IP from Next.js / Cloudflare / Vercel headers.
+ * Extract the real client IP from Next.js / Vercel headers.
  * Falls back to "unknown" when no IP can be determined.
  */
 export function getClientIp(headers: Headers): string {
   return (
-    headers.get("cf-connecting-ip") ||
     headers.get("x-real-ip") ||
     (headers.get("x-forwarded-for") || "").split(",")[0].trim() ||
     "unknown"

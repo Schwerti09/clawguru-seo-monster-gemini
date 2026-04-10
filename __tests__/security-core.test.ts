@@ -99,12 +99,7 @@ describe("checkRateLimit", () => {
 // rate-limit – getClientIp
 // ---------------------------------------------------------------------------
 describe("getClientIp", () => {
-  it("prefers cf-connecting-ip", () => {
-    const headers = new Headers({ "cf-connecting-ip": "1.1.1.1" })
-    expect(getClientIp(headers)).toBe("1.1.1.1")
-  })
-
-  it("falls back to x-real-ip", () => {
+  it("prefers x-real-ip", () => {
     const headers = new Headers({ "x-real-ip": "2.2.2.2" })
     expect(getClientIp(headers)).toBe("2.2.2.2")
   })

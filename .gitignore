@@ -13,7 +13,7 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# env files
+# env files (NEVER commit real secrets)
 .env
 .env.local
 .env.development
@@ -22,6 +22,8 @@ pnpm-debug.log*
 # prevent committing exported/backup env files
 env-*.env
 env-*.production
+# Platform-specific runtime env files with real secrets
+cloudflare.env.runtime
 
 # common backup artifacts
 *.bak
@@ -66,17 +68,16 @@ coverage/
 .lh-*/
 .lighthouse*/
 lhtmp*/
+.lhtmp*/
+.lhtmp-*/
+.lhtmp2-*/
+.lhtmp3-*/
+.lhtmp4-*/
 lh-*.json
 clawguru-seo-monster-gemini-*/
 .git/
 .github/
 **/*.zip
-
-.env.local
-.lhtmp4-runbooks/
-
-
-.lhtmp4-live/
 
  
 # large local bundles/archives � never commit
@@ -96,3 +97,4 @@ DEPLOY_ID.txt
 deno.lock
 test-gemini.js
 fix-broken.js
+enrichment-test.log

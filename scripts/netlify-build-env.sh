@@ -16,7 +16,7 @@ export SITEMAP_ALLOW_CHUNK="1"
 export SITEMAP_QUALITY_STRICT="1"
 export SITEMAP_RUNBOOKS_PER_BUCKET="2000"
 export SITEMAP_INCLUDE_SYNTHETIC_100K="0"
-export SITEMAP_100K_LOCALES="de,en,es,fr,pt,it,ru,zh,ja,ko,ar,hi,tr,pl,nl,af"
+export SITEMAP_100K_LOCALES="de,en"
 export SITEMAP_100K_PAGES="42"
 
 # Geo Matrix Settings (Static Generation)

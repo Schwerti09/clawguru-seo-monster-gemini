@@ -400,12 +400,16 @@ export async function GET(
       // Compare pages
       const COMPARE_SLUGS = [
         "clawguru-vs-wiz","openclaw-vs-snyk","openclaw-vs-semgrep","openclaw-vs-sonarqube",
-        "moltbot-vs-opsgenie","moltbot-vs-clawbot","clawguru-vs-crowdstrike","clawguru-vs-datadog","openclaw-vs-falco","clawguru-vs-lacework","moltbot-vs-pagerduty",
+        "moltbot-vs-opsgenie","moltbot-vs-clawbot/security-comparison","clawguru-vs-crowdstrike","clawguru-vs-datadog","openclaw-vs-falco","clawguru-vs-lacework","moltbot-vs-pagerduty",
+        "openclaw-vs-trivy","openclaw-vs-grype","moltbot-vs-rundeck","moltbot-vs-stackstorm","clawguru-vs-tenable","clawguru-vs-qualys",
       ]
       // Solutions pages
       const SOLUTIONS_SLUGS = [
         "soc2-compliance-automation","kubernetes-security-hardening","startup-security-foundation",
         "enterprise-siem-integration","iso27001-certification-roadmap","pci-dss-compliance","hipaa-security-controls",
+        "aws-security-architecture","github-actions-bare-metal","influxdb-hipaa-compliance",
+        "iso-27001-google-cloud","rabbitmq-audit","terraform-canary-deploy",
+        "dora-compliance","tisax-compliance","bsi-it-grundschutz","kritis-compliance",
       ]
       // SEO guide pages
       const GUIDE_SLUGS = [
@@ -460,6 +464,22 @@ export async function GET(
         { loc: `${base}/${locale}/universe`, lastmod, changefreq: "weekly", priority: "0.85" },
         { loc: `${base}/${locale}/temporal`, lastmod, changefreq: "weekly", priority: "0.85" },
         { loc: `${base}/${locale}/clawlink`, lastmod, changefreq: "weekly", priority: "0.85" },
+        { loc: `${base}/${locale}/trust-security`, lastmod, changefreq: "monthly", priority: "0.80" },
+        { loc: `${base}/${locale}/vorstellung`, lastmod, changefreq: "monthly", priority: "0.75" },
+        { loc: `${base}/${locale}/ueber-uns`, lastmod, changefreq: "monthly", priority: "0.75" },
+        { loc: `${base}/${locale}/community`, lastmod, changefreq: "weekly", priority: "0.82" },
+        { loc: `${base}/${locale}/developer-hub`, lastmod, changefreq: "weekly", priority: "0.83" },
+        { loc: `${base}/${locale}/api-docs`, lastmod, changefreq: "weekly", priority: "0.83" },
+        { loc: `${base}/${locale}/hosting-kosten`, lastmod, changefreq: "monthly", priority: "0.80" },
+        { loc: `${base}/${locale}/guides`, lastmod, changefreq: "weekly", priority: "0.85" },
+        { loc: `${base}/${locale}/case-studies`, lastmod, changefreq: "weekly", priority: "0.82" },
+        { loc: `${base}/${locale}/bounties`, lastmod, changefreq: "weekly", priority: "0.80" },
+        { loc: `${base}/${locale}/daypass`, lastmod, changefreq: "weekly", priority: "0.80" },
+        { loc: `${base}/${locale}/launch-pack`, lastmod, changefreq: "monthly", priority: "0.80" },
+        { loc: `${base}/${locale}/leaderboard`, lastmod, changefreq: "daily", priority: "0.82" },
+        { loc: `${base}/${locale}/score`, lastmod, changefreq: "daily", priority: "0.85" },
+        { loc: `${base}/${locale}/openclaw-security-check`, lastmod, changefreq: "weekly", priority: "0.85" },
+        { loc: `${base}/${locale}/securitycheck`, lastmod, changefreq: "daily", priority: "0.9" },
         ...hubUrls,
         ...geoOpenClawSprintUrls,
         ...moltbotUrls,

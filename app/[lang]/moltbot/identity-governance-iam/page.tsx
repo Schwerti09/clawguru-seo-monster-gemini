@@ -1,6 +1,6 @@
-import { Metadata } from 'next';
-
-import { notFound } from 'next/navigation';
+import type { Metadata } from 'next'
+import { notFound } from 'next/navigation'
+import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
 
 export async function generateStaticParams() {
   return SUPPORTED_LOCALES.map((lang) => ({ lang }))

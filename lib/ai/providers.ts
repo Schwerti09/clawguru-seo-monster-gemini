@@ -53,20 +53,38 @@ function hasKey(provider: AiProvider): boolean {
   return false;
 }
 
+/** Returns diagnostic info about which keys are configured (for debugging). */
+export function getProviderDiagnostics(): { provider: AiProvider; hasKey: boolean; keyPrefix: string }[] {
+  const all: AiProvider[] = ["openai", "deepseek", "gemini"];
+  return all.map((p) => {
+    let raw = "";
+    if (p === "deepseek") raw = process.env.DEEPSEEK_API_KEY || "";
+    if (p === "openai") raw = process.env.OPENAI_API_KEY || "";
+    if (p === "gemini") raw = process.env.GEMINI_API_KEY || "";
+    const sanitized = sanitizeKey(raw);
+    return {
+      provider: p,
+      hasKey: !!sanitized,
+      keyPrefix: sanitized ? sanitized.slice(0, 6) + "..." : "(empty)",
+    };
+  });
+}
+
 /**
  * Builds the ordered list of providers to try.
  *
  * Priority:
  *  1. The `preferred` argument (if any key is present)
- *  2. AI_PROVIDER_ORDER env var (comma-separated, e.g. "deepseek,gemini,openai")
+ *  2. AI_PROVIDER_ORDER env var (comma-separated, e.g. "gemini,openai,deepseek")
  *  3. AI_PREFERRED env var (legacy alias for AI_PROVIDER_ORDER)
- *  4. Hard-coded default: deepseek → openai → gemini
+ *  4. Hard-coded default: gemini → openai → deepseek (April 2026: Gemini promoted to first)
  *
  * Providers whose API key is empty/absent are always excluded so we never
  * send a request to a provider that cannot authenticate.
  */
 function buildProviderList(preferred?: AiProvider): AiProvider[] {
-  const all: AiProvider[] = ["openai", "deepseek", "gemini"];
+  // Default order: gemini → openai → deepseek (Gemini is cheapest and most reliable as of April 2026)
+  const all: AiProvider[] = ["gemini", "openai", "deepseek"];
   const envRaw = (
     process.env.AI_PROVIDER_ORDER ||
     process.env.AI_PREFERRED ||
@@ -93,7 +111,15 @@ function buildProviderList(preferred?: AiProvider): AiProvider[] {
   }
 
   // Remove providers that have no key
-  return ordered.filter(hasKey);
+  const available = ordered.filter(hasKey);
+  
+  // Log diagnostics when no providers are available (helps debug missing keys)
+  if (available.length === 0) {
+    const diag = getProviderDiagnostics();
+    console.error("[AI] No providers available. Key diagnostics:", JSON.stringify(diag));
+  }
+  
+  return available;
 }
 
 /** Logs a 429 retry warning with provider name and attempt context. */
@@ -285,8 +311,10 @@ export async function generateOrdered(prompt: string, preferred?: AiProvider): P
     return { parsed: null };
   }
 
-  if (providers[0] === "deepseek") {
-    console.info("[AI] DeepSeek is cheapest – using it");
+  if (providers[0] === "gemini") {
+    console.info("[AI] Gemini is primary – using it");
+  } else if (providers[0] === "deepseek") {
+    console.info("[AI] DeepSeek is primary – using it");
   }
 
   const systemJson = "Antworte ausschließlich mit validem JSON ohne Markdown.";
@@ -363,8 +391,10 @@ export async function generateTextOrdered(system: string, user: string, preferre
     return { text: null };
   }
 
-  if (providers[0] === "deepseek") {
-    console.info("[AI] DeepSeek is cheapest – using it");
+  if (providers[0] === "gemini") {
+    console.info("[AI] Gemini is primary – using it");
+  } else if (providers[0] === "deepseek") {
+    console.info("[AI] DeepSeek is primary – using it");
   }
 
   let lastFail: { provider: AiProvider; status: number } | null = null;

@@ -1,10 +1,11 @@
 # Cloudflare Pages configuration for clawguru.org
 # Build command and output directory
 name = "clawguru-seo-monster-gemini"
-compatibility_date = "2024-04-09"
+compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat"]
 
 [build]
-command = "NODE_OPTIONS='--max-old-space-size=8192' npm run build"
+command = "NODE_OPTIONS='--max-old-space-size=6144' npm run build"
 cwd = "."
 watch_dirs = ["app"]
 
@@ -16,7 +17,7 @@ NEXT_PUBLIC_BASE_URL = "https://clawguru.org"
 NEXT_PUBLIC_ADMIN_UI = "1"
 NEXT_DISABLE_ESLINT = "1"
 NEXT_DISABLE_TYPE_CHECK = "1"
-NODE_OPTIONS = "--max-old-space-size=8192"
+NODE_OPTIONS = "--max-old-space-size=6144"
 GEO_MATRIX_SITEMAP = "1"
 SITEMAP_BUCKETS = "5"
 SITEMAP_ALLOW_CHUNK = "1"

@@ -115,7 +115,7 @@ export default function IntelNexusClient() {
           top = results[0] || null
           if (top) {
             const pseo: any = await import("@/lib/pseo")
-            const rb = (pseo.RUNBOOKS ?? []).find((r: any) => r.slug === top!.id)
+            const rb = pseo.materializedRunbooks().find((r: any) => r.slug === top!.id)
             if (rb) picked = { slug: rb.slug, title: rb.title, summary: (rb.summary ?? "").slice(0, 180) }
           }
           const m = (query.match(/CVE-\d{4}-\d{4,7}/i) || j?.answer?.match(/CVE-\d{4}-\d{4,7}/i)) as RegExpMatchArray | null
@@ -138,9 +138,9 @@ export default function IntelNexusClient() {
         const buildClient: undefined | ((n: number) => Runbook[]) = pseo.buildRunbooksClient
         let runbooks: Runbook[] = []
         try {
-          runbooks = buildClient ? buildClient(2000) : (pseo.RUNBOOKS ?? [])
+          runbooks = buildClient ? buildClient(2000) : pseo.materializedRunbooks()
         } catch {
-          runbooks = (pseo.RUNBOOKS ?? []) as Runbook[]
+          runbooks = pseo.materializedRunbooks() as Runbook[]
         }
         const total = runbooks.length
         const { buildMyceliumGraph, oracleSearch } = await import("@/lib/mycelium")

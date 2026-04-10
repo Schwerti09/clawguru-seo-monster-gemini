@@ -64,8 +64,9 @@ function toWhen(date: Date): string {
 const getIncidents = unstable_cache(
   async (): Promise<Item[]> => {
     try {
-      const { RUNBOOKS } = await import("@/lib/pseo")
-      const sample = RUNBOOKS.slice(0, Math.min(RUNBOOKS.length, 2000))
+      const { materializedRunbooks } = await import("@/lib/pseo")
+      const runbooks = materializedRunbooks()
+      const sample = runbooks.slice(0, Math.min(runbooks.length, 2000))
       const picked = sample.slice(0, 12)
       const out: Item[] = picked.map((r, i) => {
         const cat = classifyCategory(`${r.title} ${r.summary} ${(r.tags || []).join(" ")}`)

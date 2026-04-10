@@ -62,11 +62,11 @@ async function main() {
 
   // 1) Include currently materialized RUNBOOKS (fast; will be [] under build guard)
   try {
-    const arr = (pseo as any).RUNBOOKS as any[]
+    const arr = (pseo as any).materializedRunbooks() as any[]
     for (const r of arr) out.push(minimal(r))
-    console.log(`Included materialized RUNBOOKS: ${arr.length}`)
+    console.log(`Included materializedRunbooks: ${arr.length}`)
   } catch (e) {
-    console.warn('WARN: failed to include RUNBOOKS', (e as Error)?.message)
+    console.warn('WARN: failed to include materializedRunbooks', (e as Error)?.message)
   }
 
   // 2) Include N pages of deterministic 100k slugs (lightweight, titleized)

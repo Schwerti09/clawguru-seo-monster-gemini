@@ -15,9 +15,9 @@ async function computeTeaser(q: string) {
   let runbooks: any[] = []
   try {
     const buildClient: undefined | ((n: number) => any[]) = pseo?.buildRunbooksClient
-    runbooks = buildClient ? buildClient(2000) : (pseo?.RUNBOOKS ?? [])
+    runbooks = buildClient ? buildClient(2000) : pseo.materializedRunbooks()
   } catch {
-    runbooks = (pseo?.RUNBOOKS ?? []) as any[]
+    runbooks = pseo?.materializedRunbooks?.() ?? []
   }
   const total = runbooks.length
   const initialMax = Math.min(360, total)

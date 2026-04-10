@@ -2,18 +2,20 @@
 
 // Relative Imports – korrekt für app/[lang]/runbook/[slug]/temporal/page.tsx
 import Container from "../../../../../components/shared/Container"
-import { getRunbook, RUNBOOKS } from "../../../../../lib/pseo"
+import { getRunbook } from "../../../../../lib/pseo"
 import { validateRunbook } from "../../../../../lib/quality-gate"
 import { getTemporalHistory, findVersionByQuarter } from "../../../../../lib/temporal-mycelium"
-import { permanentRedirect } from "next/navigation"
+import { notFound } from "next/navigation"
 import { localeAlternates, type Locale, SUPPORTED_LOCALES } from "../../../../../lib/i18n"
 
 export const revalidate = 86400
 export const dynamicParams = true
 
 export async function generateStaticParams() {
+  // SEO Fix: RUNBOOKS was always []; use materializedRunbooks() for actual data
+  const { materializedRunbooks } = await import("../../../../../lib/pseo")
   return SUPPORTED_LOCALES.flatMap((lang) =>
-    RUNBOOKS.map((r) => ({ lang, slug: r.slug }))
+    materializedRunbooks().map((r) => ({ lang, slug: r.slug }))
   )
 }
 
@@ -41,7 +43,7 @@ export default async function LocaleTemporalRunbookPage(props: {
 
   const runbook = getRunbook(slug)
   if (!runbook) {
-    permanentRedirect(`/${locale}/runbooks?q=${encodeURIComponent(slug)}`)
+    notFound()
   }
 
   const history = getTemporalHistory(runbook)

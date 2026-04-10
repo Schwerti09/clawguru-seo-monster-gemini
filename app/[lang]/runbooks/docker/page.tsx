@@ -23,10 +23,10 @@ export async function generateMetadata(props: { params: { lang: string } }) {
 
 export default async function DockerHubPage(props: { params: { lang: string } }) {
   const params = props.params;
-  const { RUNBOOKS } = await import("@/lib/pseo")
+  const { materializedRunbooks } = await import("@/lib/pseo")
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
 
-  const dockerRunbooks = RUNBOOKS.filter(
+  const dockerRunbooks = materializedRunbooks().filter(
     (r) => r.tags.includes("provider:docker") || r.tags.includes("docker")
   ).slice(0, 80)
 

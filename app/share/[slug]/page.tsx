@@ -5,7 +5,7 @@ import Container from "@/components/shared/Container"
 import { getRunbook } from "@/lib/pseo"
 import { headers } from "next/headers"
 import { DEFAULT_LOCALE } from "@/lib/i18n"
-import { permanentRedirect } from "next/navigation"
+import { notFound } from "next/navigation"
 import { ShareButtons } from "./ShareButtons"
 
 export const revalidate = 60
@@ -30,7 +30,7 @@ export default async function SharePage(props: { params: { slug: string } }) {
   const locale = h.get("x-claw-locale") ?? DEFAULT_LOCALE
   const r = getRunbook(params.slug)
   if (!r) {
-    permanentRedirect(`/${locale}/runbooks?q=${encodeURIComponent(params.slug)}`)
+    notFound()
   }
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"

@@ -6,7 +6,7 @@ import { validateRunbook, type ClawCertifiedTier } from "@/lib/quality-gate"
 import { getTemporalHistory } from "@/lib/temporal-mycelium"
 import NextDynamic from "next/dynamic"
 import { Suspense } from "react"
-import { permanentRedirect } from "next/navigation"
+import { permanentRedirect, notFound } from "next/navigation"
 import { CopyLinkButton } from "./CopyLinkButton"
 import { ActivateSwarmButton } from "@/components/shared/ActivateSwarmButton"
 import { BASE_URL } from "@/lib/config"
@@ -31,14 +31,14 @@ const VersionsAndForksTabLazy = NextDynamic(() => import("@/components/runbook/V
 
 export const dynamic = "force-static"
 export const revalidate = 86400 // reduce rebuild frequency to cut CPU
-export const dynamicParams = true // Recovery mode: catch stale indexed slugs and redirect instead of 404
+export const dynamicParams = true // SEO: return 404 for unknown slugs (no redirect spam)
 export const runtime = "nodejs"
 export const maxDuration = 180
 export const preferredRegion = "iad1"
 
 async function buildLinkEngineNow() {
-  const { RUNBOOKS } = await import("@/lib/pseo")
-  return buildLinkEngine(RUNBOOKS, {
+  const { materializedRunbooks } = await import("@/lib/pseo")
+  return buildLinkEngine(materializedRunbooks(), {
     maxLinks: 10,
     urlForPage: (page) => `/runbook/${page.slug}`,
     authorityForPage: (page) => page.clawScore,
@@ -56,9 +56,9 @@ const getTemporalHistoryCached = unstable_cache(
 )
 
 export async function generateStaticParams() {
-  // Pre-render top 200 static RUNBOOKS + key 100k slugs for fast initial crawl
-  const { RUNBOOKS } = await import("@/lib/pseo")
-  const staticParams = RUNBOOKS.slice(0, 200).map((r) => ({ slug: r.slug }))
+  // Pre-render top 200 materialized runbooks + key 100k slugs for fast initial crawl
+  const { materializedRunbooks } = await import("@/lib/pseo")
+  const staticParams = materializedRunbooks().slice(0, 200).map((r) => ({ slug: r.slug }))
   const key100kSlugs = [
     "aws-ssh-hardening-2026",
     "aws-nginx-csp-2026",
@@ -109,6 +109,7 @@ export async function generateMetadata(props: { params: { slug: string } }) {
       title: `${title} | ClawGuru`,
       description,
       type: "article",
+      url: `${BASE_URL}/${locale}/runbook/${canonicalSlug}`,
     },
     robots: {
       index: isIndexableGeoVariant,
@@ -366,25 +367,14 @@ export default async function RunbookPage(props: { params: { slug: string; lang?
   const dict = await getDictionary(locale)
   const prefix = `/${locale}`
   
-  // PHASE 1 Fix #1: Graceful error handling – prevent 5xx errors during runbook generation
+  // SEO Fix: Return 404 for non-existent runbooks instead of redirecting to /runbooks
+  // (redirects caused Google to see duplicate content on the listing page)
   let r: any
   const geoParsed = parseGeoVariantSlug(params.slug)
   const geoCity = geoParsed.citySlug ? await getCityBySlug(geoParsed.citySlug) : null
-  try {
-    r = getRunbook(params.slug) ?? getRunbook(geoParsed.baseSlug)
-    if (!r) {
-      permanentRedirect(`/${locale}/runbooks?q=${encodeURIComponent(params.slug)}`)
-    }
-  } catch (err) {
-    const anyErr = err as any
-    const message = err instanceof Error ? err.message : String(err)
-    const digest = typeof anyErr?.digest === "string" ? anyErr.digest : ""
-    // Next.js throws NEXT_REDIRECT as control flow signal; this is expected.
-    if (message === "NEXT_REDIRECT" || digest.includes("NEXT_REDIRECT") || String(err).includes("NEXT_REDIRECT")) {
-      throw err
-    }
-    // Keep logs clean: stale/synthetic slugs should silently redirect to search hub.
-    permanentRedirect(`/${locale}/runbooks?q=${encodeURIComponent(params.slug)}`)
+  r = getRunbook(params.slug) ?? getRunbook(geoParsed.baseSlug)
+  if (!r) {
+    notFound()
   }
 
   const geoVariant =

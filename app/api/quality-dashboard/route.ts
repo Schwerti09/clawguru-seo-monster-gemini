@@ -13,9 +13,10 @@ export const dynamic = "force-dynamic"
 export const runtime = "nodejs"
 
 export async function GET() {
-  const { RUNBOOKS } = await import("@/lib/pseo")
+  const { materializedRunbooks } = await import("@/lib/pseo")
+  const runbooks = materializedRunbooks()
   // Validate all runbooks once; derive all stats from the single pass
-  const reports = RUNBOOKS.map((r) => validateRunbook(r, DEFAULT_THRESHOLDS))
+  const reports = runbooks.map((r) => validateRunbook(r, DEFAULT_THRESHOLDS))
   const passed = reports.filter((r) => r.pass).length
   const failed = reports.length - passed
   const avgScore = reports.length > 0
@@ -40,7 +41,7 @@ export async function GET() {
   // Auto-improve stats: runbooks passing but scoring below 90
   const autoImproveEligible = reports.filter((r) => r.pass && r.score < 90).length
 
-  const providerHeatmap = computeProviderHeatmap(RUNBOOKS, DEFAULT_THRESHOLDS)
+  const providerHeatmap = computeProviderHeatmap(runbooks, DEFAULT_THRESHOLDS)
 
   return NextResponse.json({
     // Overall pass-rate

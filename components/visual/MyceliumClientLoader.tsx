@@ -22,9 +22,9 @@ export default function MyceliumClientLoader(props: { ui?: "full" | "embed"; fil
         const buildClient: undefined | ((n: number) => Runbook[]) = pseo.buildRunbooksClient
         let runbooks: Runbook[] = []
         try {
-          runbooks = buildClient ? buildClient(8000) : (pseo.RUNBOOKS ?? [])
+          runbooks = buildClient ? buildClient(8000) : pseo.materializedRunbooks()
         } catch {
-          runbooks = (pseo.RUNBOOKS ?? []) as Runbook[]
+          runbooks = pseo.materializedRunbooks() as Runbook[]
         }
         if (filterSlugs.length > 0) {
           const set = new Set(filterSlugs)

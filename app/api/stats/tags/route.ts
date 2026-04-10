@@ -15,10 +15,10 @@ export async function GET(req: NextRequest) {
       if (typeof pseo.buildRunbooksClient === "function") {
         list = pseo.buildRunbooksClient(limit)
       } else {
-        list = (pseo.RUNBOOKS ?? []) as any[]
+        list = pseo.materializedRunbooks()
       }
     } catch {
-      list = (pseo.RUNBOOKS ?? []) as any[]
+      list = pseo.materializedRunbooks()
     }
 
     const setUniq = new Set<string>()

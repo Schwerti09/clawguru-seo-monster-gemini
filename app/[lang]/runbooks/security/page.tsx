@@ -30,10 +30,10 @@ export async function generateMetadata(props: { params: { lang: string } }) {
 
 export default async function SecurityHubPage(props: { params: { lang: string } }) {
   const params = props.params;
-  const { RUNBOOKS } = await import("@/lib/pseo")
+  const { materializedRunbooks } = await import("@/lib/pseo")
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
 
-  const securityRunbooks = RUNBOOKS.filter((r) =>
+  const securityRunbooks = materializedRunbooks().filter((r) =>
     SECURITY_TOPICS.some((topic) => r.tags.includes("topic:" + topic))
   ).slice(0, 100)
 

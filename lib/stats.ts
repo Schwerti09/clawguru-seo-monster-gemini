@@ -57,9 +57,9 @@ export async function buildTagStatsClient(sampleSize = 10000): Promise<TagStats>
   const buildClient: undefined | ((n: number) => any[]) = (pseo as any).buildRunbooksClient
   let list: any[] = []
   try {
-    list = buildClient ? buildClient(sampleSize) : ((pseo as any).RUNBOOKS ?? [])
+    list = buildClient ? buildClient(sampleSize) : (pseo as any).materializedRunbooks()
   } catch {
-    list = ((pseo as any).RUNBOOKS ?? []) as any[]
+    list = ((pseo as any).materializedRunbooks?.() ?? []) as any[]
   }
   const setUniq = new Set<string>()
   const cMap = new Map<string, number>()

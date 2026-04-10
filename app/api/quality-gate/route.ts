@@ -1,6 +1,6 @@
 // File: app/api/quality-gate/route.ts
 // ClawGuru 2026 Quality Gate API – Institutional-grade content health endpoint.
-// Returns quality statistics for the static RUNBOOKS library.
+// Returns quality statistics for the materializedRunbooks() library.
 // GENESIS QUALITY GATE 2.0 – Auto-Improve Engine included.
 
 import { NextResponse } from "next/server"
@@ -22,11 +22,12 @@ export async function GET(req: Request) {
   const { searchParams } = new URL(req.url)
   const slug = searchParams.get("slug")
   const autoImprove = searchParams.get("autoImprove") === "true"
-  const { RUNBOOKS } = await import("@/lib/pseo")
+  const { materializedRunbooks } = await import("@/lib/pseo")
+  const allRunbooks = materializedRunbooks()
 
   // Single runbook quality report
   if (slug) {
-    const runbook = RUNBOOKS.find((r) => r.slug === slug)
+    const runbook = allRunbooks.find((r) => r.slug === slug)
     if (!runbook) {
       return NextResponse.json({ error: "Runbook not found", slug }, { status: 404 })
     }
@@ -47,7 +48,7 @@ export async function GET(req: Request) {
   }
 
   // Aggregate stats for all static runbooks
-  const stats = computeQualityStats(RUNBOOKS, DEFAULT_THRESHOLDS)
+  const stats = computeQualityStats(allRunbooks, DEFAULT_THRESHOLDS)
   return NextResponse.json({
     ...stats,
     thresholds: DEFAULT_THRESHOLDS,

@@ -4,7 +4,7 @@
 //   ?company=MyMSP     (company display name)
 //   ?accent=#hexcolor  (optional accent color, defaults to #00ff9d)
 import { notFound } from "next/navigation"
-import { getRunbook, RUNBOOKS } from "@/lib/pseo"
+import { getRunbook, materializedRunbooks } from "@/lib/pseo"
 import { validateRunbook } from "@/lib/quality-gate"
 import type { RunbookBlock, RunbookFaqEntry } from "@/lib/pseo"
 import Image from "next/image"
@@ -12,7 +12,7 @@ import Image from "next/image"
 export const dynamicParams = true
 
 export async function generateStaticParams() {
-  return RUNBOOKS.slice(0, 200).map((r) => ({ slug: r.slug }))
+  return materializedRunbooks().slice(0, 200).map((r) => ({ slug: r.slug }))
 }
 
 function sanitizeHex(value: string | undefined): string | undefined {

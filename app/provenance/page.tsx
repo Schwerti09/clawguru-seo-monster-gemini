@@ -16,15 +16,15 @@ export const metadata = {
 }
 
 export default async function ProvenanceIndexPage() {
-  const { RUNBOOKS } = await import("@/lib/pseo")
+  const { materializedRunbooks } = await import("@/lib/pseo")
   const itemListLd = {
     "@context": "https://schema.org",
     "@type": "ItemList",
     name: "ClawGuru Provenance Index",
     description:
       "Cryptographic provenance chains for all ClawGuru runbooks. Append-only hash-chain, Ed25519 signatures, Merkle-tree verified.",
-    numberOfItems: Math.min(50, RUNBOOKS.length),
-    itemListElement: RUNBOOKS.slice(0, 50).map((r, i) => ({
+    numberOfItems: Math.min(50, materializedRunbooks().length),
+    itemListElement: materializedRunbooks().slice(0, 50).map((r, i) => ({
       "@type": "ListItem",
       position: i + 1,
       url: `${BASE_URL}/provenance/${r.slug}`,
@@ -32,7 +32,7 @@ export default async function ProvenanceIndexPage() {
     })),
   }
 
-  const sorted = [...RUNBOOKS].sort((a, b) => a.title.localeCompare(b.title))
+  const sorted = [...materializedRunbooks()].sort((a, b) => a.title.localeCompare(b.title))
 
   return (
     <Container>

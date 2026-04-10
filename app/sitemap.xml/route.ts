@@ -52,19 +52,9 @@ export async function GET(req: NextRequest) {
   const tags = selectedLocales.flatMap((loc) => bucketsToUse.map((b) => `${base}/tags-${loc}-${b}.xml`))
   const runbooks = selectedLocales.flatMap((loc) => bucketsToUse.map((b) => `${base}/runbooks-${loc}-${b}.xml`))
   
-  // 100K synthetic sitemaps DISABLED by default — they were the primary cause of Google
+  // 100K synthetic sitemaps PERMANENTLY DISABLED — they were the primary cause of Google
   // indexing 400k+ thin/duplicate pages and penalising the domain's crawl budget.
-  // Only enable after curated content exists for every slug.
-  const includeSynthetic100k = process.env.SITEMAP_INCLUDE_SYNTHETIC_100K === "1"
-  const SITEMAP_PAGE_SIZE_100K = 50000
-  const count100kSlugs = () => {
-    const P = 30, S = 38, I = 30, Y = 7
-    return P * S * I * Y
-  }
-  const pages100k = Math.ceil(count100kSlugs() / SITEMAP_PAGE_SIZE_100K)
-  const runbook100k = includeSynthetic100k
-    ? selectedLocales.flatMap((loc) => Array.from({ length: pages100k }, (_, page) => `${base}/runbook100k-${loc}-${page}.xml`))
-    : []
+  // These are NOT behind a flag anymore; they must never be re-enabled.
 
   const legacyCompat: string[] = [
     `${base}/main.xml`,
@@ -75,7 +65,6 @@ export async function GET(req: NextRequest) {
     ...geoRunbooks,
     ...tags,
     ...runbooks,
-    ...runbook100k,
     ...legacyCompat,
   ]
 

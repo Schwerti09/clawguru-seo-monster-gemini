@@ -35,8 +35,8 @@ export async function GET(
 
   const realDataMode = isFeatureEnabled("V1_RUNBOOK_REAL_DATA")
   if (realDataMode) {
-    const { RUNBOOKS } = await import("@/lib/pseo")
-    const runbook = RUNBOOKS.find((entry) => entry.slug === id)
+    const { materializedRunbooks } = await import("@/lib/pseo")
+    const runbook = materializedRunbooks().find((entry) => entry.slug === id)
     if (!runbook) {
       return NextResponse.json({ error: "Runbook not found" }, { status: 404 })
     }

@@ -203,12 +203,16 @@ export async function generateGeoVariantContent(input: {
     input.summary
   )
   
-  // If AI fails, check if we should use static fallback
-  // Only use fallback in production to keep pages functional
-  const useFallback = process.env.GEO_MATRIX_FALLBACK_ENABLED !== "0"
-  if (!variant && useFallback) {
+  // Track whether we're using fallback content
+  let usingFallback = false
+  
+  // If AI fails, use static fallback to keep pages functional.
+  // Fallback is enabled by default; set GEO_MATRIX_FALLBACK_ENABLED=0 to disable.
+  const fallbackEnabled = process.env.GEO_MATRIX_FALLBACK_ENABLED !== "0"
+  if (!variant && fallbackEnabled) {
     console.info(`[GeoMatrix] Using static fallback for ${input.slug}/${input.city}`)
     variant = buildStaticFallback(input)
+    usingFallback = true
   }
   
   if (!variant) return null
@@ -228,7 +232,7 @@ export async function generateGeoVariantContent(input: {
         localSummary: variant.localSummary,
         myceliumLinks: variant.myceliumLinks,
         qualityScore: geoVariantQualityScore(variant),
-        model: useFallback && !variant ? "fallback" : "auto",
+        model: usingFallback ? "fallback" : "auto",
       })
     } catch (persistErr) {
       // Don't fail the page render if persistence fails

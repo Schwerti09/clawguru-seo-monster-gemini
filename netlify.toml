@@ -17,7 +17,9 @@
   # Skip scanning for specific env var keys that exist in git history (test keys, already rotated)
   # The secrets were removed in commit 22da5b28 but remain in git history. These are Stripe TEST keys.
   # IMPORTANT: Rotate these keys in Stripe Dashboard since they're exposed in git history!
-  SECRETS_SCAN_OMIT_KEYS = "STRIPE_SECRET_KEY,NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,ACCESS_TOKEN_SECRET,STRIPE_PRICE_DAYPASS,STRIPE_PRICE_PRO,STRIPE_PRICE_TEAM,STRIPE_PRICE_ENTERPRISE"
+  # Also includes env var names (AI_PROVIDER, GEMINI_MODEL, CVE_API_URL) that aren't actual secrets
+  # but appear in config templates and cause false positives.
+  SECRETS_SCAN_OMIT_KEYS = "STRIPE_SECRET_KEY,NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,ACCESS_TOKEN_SECRET,STRIPE_PRICE_DAYPASS,STRIPE_PRICE_PRO,STRIPE_PRICE_TEAM,STRIPE_PRICE_ENTERPRISE,AI_PROVIDER,GEMINI_MODEL,CVE_API_URL,SECRETS_SCAN_OMIT_KEYS"
   # Build-only variables (not attached to functions, stay under 4KB limit)
   NEXT_PUBLIC_SITE_URL = "https://clawguru.org"
   SITE_URL = "https://clawguru.org"

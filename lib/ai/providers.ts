@@ -66,7 +66,7 @@ function hasKey(provider: AiProvider): boolean {
  * send a request to a provider that cannot authenticate.
  */
 function buildProviderList(preferred?: AiProvider): AiProvider[] {
-  const all: AiProvider[] = ["deepseek", "openai", "gemini"];
+  const all: AiProvider[] = ["openai", "deepseek", "gemini"];
   const envRaw = (
     process.env.AI_PROVIDER_ORDER ||
     process.env.AI_PREFERRED ||

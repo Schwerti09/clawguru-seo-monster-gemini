@@ -19,7 +19,7 @@ export async function generateMetadata(): Promise<Metadata> {
       title: "Case Studies 2026 | Security Incidents & Compliance | ClawGuru",
       description: "18+ echte Security Cases: KI-Angriffe, NIS2, Supply Chain, Cloud-Kosten — klare Schritte, messbare Ergebnisse.",
       type: "website",
-      url: `${BASE_URL}/de/case-studies`,
+      url: `${BASE_URL}/case-studies`,
       images: ["/og-image.png"],
     },
     robots: "index, follow",
@@ -193,7 +193,7 @@ const CASES: CaseItem[] = [
     ],
     impact: [
       { metric: "Meldung an Behörde", before: "Risiko: Fristversäumnis", after: "71h — fristgerecht" },
-      { metric: "Bussgeldrisko", before: "Hoch (bis 4% Jahresumsatz)", after: "Stark reduziert" },
+      { metric: "Bußgeldrisiko", before: "Hoch (bis 4% Jahresumsatz)", after: "Stark reduziert" },
     ],
     links: [
       { label: "Guide: GDPR Compliance", href: "/moltbot/compliance-gdpr-setup" },
@@ -528,7 +528,7 @@ export default function CaseStudiesPage() {
 
         {/* Not a Pentest Notice */}
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">&quot;Not a Pentest&quot; Notice</strong>: Alle Cases beschreiben defensive Massnahmen für eigene Systeme. Keine Angriffs-Tools, keine fremde Infrastruktur.
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: Alle Cases beschreiben defensive Massnahmen für eigene Systeme. Keine Angriffs-Tools, keine fremde Infrastruktur.
         </div>
 
         {/* Hero */}
@@ -637,7 +637,7 @@ export default function CaseStudiesPage() {
 
         {/* Further Resources */}
         <section className="mt-12 mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Weiterfuehrende Ressourcen</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Weiterführende Ressourcen</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <a href={`${prefix}/securitycheck`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Security Check</div>
@@ -645,11 +645,11 @@ export default function CaseStudiesPage() {
             </a>
             <a href={`${prefix}/runbooks`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">600+ Runbooks</div>
-              <div className="text-sm text-gray-300">Ausfuehrbare Security-Playbooks fuer jede Situation.</div>
+              <div className="text-sm text-gray-300">Ausführbare Security-Playbooks für jede Situation.</div>
             </a>
             <a href={`${prefix}/oracle`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Oracle — Threat Intelligence</div>
-              <div className="text-sm text-gray-300">KI-gestuetzte Bedrohungsanalyse in Echtzeit.</div>
+              <div className="text-sm text-gray-300">KI-gestützte Bedrohungsanalyse in Echtzeit.</div>
             </a>
           </div>
         </section>
@@ -658,7 +658,7 @@ export default function CaseStudiesPage() {
         <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
           <div className="text-lg font-bold text-gray-100 mb-2">Deinen Case hier einreichen?</div>
           <p className="text-gray-300 text-sm mb-4">
-            Schick anonymisierte Logs/Config-Snippets (ohne Secrets). Wir bauen daraus ein Runbook und — auf Wunsch — eine vollstaendige Case Study. 100% anonym, kein Unternehmensname ohne Zustimmung.
+            Schick anonymisierte Logs/Config-Snippets (ohne Secrets). Wir bauen daraus ein Runbook und — auf Wunsch — eine vollständige Case Study. 100% anonym, kein Unternehmensname ohne Zustimmung.
           </p>
           <a href={`${prefix}/copilot`} className="inline-block px-5 py-2.5 bg-cyan-700 hover:bg-cyan-600 text-white font-semibold rounded-lg transition-colors text-sm">
             Case einreichen via Copilot &rarr;

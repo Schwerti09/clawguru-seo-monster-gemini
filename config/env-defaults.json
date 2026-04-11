@@ -1,13 +1,10 @@
 {
-  "_comment": "Non-secret environment variable defaults. Used by next.config.js (build-time) and instrumentation.ts (runtime). Never put secrets here.",
+  "_comment": "Non-secret infrastructure defaults. Used by next.config.js (build-time) and instrumentation.ts (runtime). Never put secrets here. AI provider order (AI_PROVIDER_ORDER, AI_PREFERRED, AI_PROVIDER) must NOT be here — set them as Vercel/Netlify runtime env vars so platform config is respected.",
 
   "NEXT_PUBLIC_SITE_URL": "https://clawguru.org",
   "SITE_URL": "https://clawguru.org",
   "NEXT_PUBLIC_BASE_URL": "https://clawguru.org",
 
-  "AI_PROVIDER_ORDER": "gemini,openai,deepseek",
-  "AI_PROVIDER": "gemini",
-  "AI_PREFERRED": "gemini",
   "GEMINI_MODEL": "gemini-2.5-flash",
   "GEMINI_BASE_URL": "https://generativelanguage.googleapis.com/v1beta",
   "GEMINI_MAX_OUTPUT_TOKENS": "8192",

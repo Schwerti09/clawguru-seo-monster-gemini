@@ -12,8 +12,10 @@
 # config/env-defaults.json), the Function env contains only:
 #   - NODE_VERSION  (from netlify.toml, ~14 bytes)
 #   - SECRETS_SCAN_OMIT_PATHS  (from netlify.toml, ~55 bytes)
+#   - SECRETS_SCAN_OMIT_KEYS   (from netlify.toml, ~1.1 KB — required for scanner)
 #   - Dashboard secrets  (~2–3 KB depending on how many integrations are active)
-# Total ≈ 2–3 KB — well under the 4 KB limit.
+# Total ≈ 3–4 KB.  If Functions hit the 4 KB limit, move SECRETS_SCAN_OMIT_KEYS
+# to the Netlify Dashboard (scope: "Builds", not "Functions").
 # ============================================================================
 
 # ── Node.js / npm ─────────────────────────────────────────────────────────────
@@ -58,11 +60,10 @@ export MAX_PROMOTIONS="10"
 export OBS_ENABLED="0"
 export OBS_SAMPLE_RATE="0.1"
 
-# ── Secrets scanner fallback ─────────────────────────────────────────────────
-# The Netlify secrets scanner runs as a post-build step.  SECRETS_SCAN_OMIT_PATHS
-# in netlify.toml already covers all build output.  If the scanner still flags
-# something, set SECRETS_SCAN_OMIT_KEYS in the Netlify Dashboard (scope: Builds).
-# We also export it here in case the build-step scanner can pick it up:
-export SECRETS_SCAN_OMIT_KEYS="ACCESS_TOKEN_SECRET,ACCOUNTING_EXPORT_SECRET,ADMIN_API_TOKEN,ADMIN_PASSWORT,ADMIN_PASSWORD,ADMIN_SESSION_SECRET,CRON_SECRET,DATABASE_URL,DEEPSEEK_API_KEY,DISCORD_WEBHOOK_URL,ENTERPRISE_API_KEYS,GEMINI_API_KEY,GITHUB_TOKEN,GOOGLE_INDEXER_KEY,HEYGEN_API_KEY,INTEL_API_KEY,MAGIC_LINK_SECRET,NETLIFY_API_KEY,NETLIFY_AUTH_TOKEN,NETLIFY_ACCOUNT_ID,NETLIFY_SITE_ID,NEWSLETTER_UNSUBSCRIBE_SECRET,NEXTAUTH_SECRET,NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,NVD_API_KEY,OPENAI_API_KEY,REDIS_URL,RESEND_API_KEY,SECURITY_CHECK_SECRET,SENTINEL_NOTIFY_URL,SESSION_SECRET,STRIPE_METERED_PRICE_ID,STRIPE_PRICE_DAYPASS,STRIPE_PRICE_ENTERPRISE,STRIPE_PRICE_INCIDENT,STRIPE_PRICE_MSP,STRIPE_PRICE_PRO,STRIPE_PRICE_PRO_MONTHLY,STRIPE_PRICE_PRO_YEARLY,STRIPE_PRICE_SPRINT,STRIPE_PRICE_TEAM,STRIPE_SECRET_KEY,STRIPE_WEBHOOK_SECRET,UPSTASH_REDIS_REST_TOKEN,UPSTASH_REDIS_REST_URL,V1_CHECK_INDICATOR_SECRET"
+# ── Secrets scanner ──────────────────────────────────────────────────────────
+# SECRETS_SCAN_OMIT_KEYS is now in [build.environment] inside netlify.toml
+# because the scanner runs as a post-build step and does NOT see variables
+# exported only during the build command's shell session.
+# Do NOT move it back here — the scanner will miss it and fail the build.
 
 echo "✓ Build environment variables loaded ($(date))"

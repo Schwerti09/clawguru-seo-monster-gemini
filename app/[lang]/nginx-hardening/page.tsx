@@ -61,7 +61,6 @@ export default async function NginxHardeningPage({
   const prefix = `/${locale}`;
   const coreLinks = getCoreSecurityLinks(locale);
 
-  const isGerman = locale === "de";
 
   return (
     <main className="min-h-screen bg-gray-800">

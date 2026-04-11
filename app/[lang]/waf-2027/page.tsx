@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { SUPPORTED_LOCALES, type Locale, localeAlternates } from "@/lib/i18n";
 import { BASE_URL } from "@/lib/config";
 import { getCoreSecurityLinks } from "@/lib/core-security-links";
+import { t } from "@/lib/article-i18n"
 
 export const dynamic = "force-static";
 export const revalidate = 86400;
@@ -65,7 +66,6 @@ export default async function WAF2027Page({
   const prefix = `/${locale}`;
   const coreLinks = getCoreSecurityLinks(locale);
 
-  const isGerman = locale === "de";
 
   return (
     <main className="min-h-screen bg-gray-800">
@@ -82,14 +82,10 @@ export default async function WAF2027Page({
               WAF 2027
             </h1>
             <p className="text-2xl text-orange-100 mb-4 font-light">
-              {isGerman 
-                ? "Web Application Firewall für Enterprise Security"
-                : "Web Application Firewall for Enterprise Security"}
+              {t(locale, "Web Application Firewall für Enterprise Security", "Web Application Firewall for Enterprise Security")}
             </p>
             <p className="text-xl text-orange-50/80 mb-8">
-              {isGerman
-                ? "Cloudflare, AWS WAF, ModSecurity & OWASP CRS. Zero Day Defense, Bot Management, API Protection."
-                : "Cloudflare, AWS WAF, ModSecurity & OWASP CRS. Zero day defense, bot management, API protection."}
+              {t(locale, "Cloudflare, AWS WAF, ModSecurity & OWASP CRS. Zero Day Defense, Bot Management, API Protection.", "Cloudflare, AWS WAF, ModSecurity & OWASP CRS. Zero-day defense, bot management, API protection.")}
             </p>
             <div className="flex flex-wrap gap-3">
               <span className="px-4 py-2 bg-white/20 text-white rounded-lg text-sm">OWASP Top 10</span>
@@ -107,13 +103,11 @@ export default async function WAF2027Page({
           {/* WAF Overview */}
           <section className="mb-16">
             <h2 className="text-3xl font-bold text-gray-100 mb-6">
-              {isGerman ? "Was ist eine WAF 2027?" : "What is a WAF in 2027?"}
+              {t(locale, "Was ist eine WAF 2027?", "What is a WAF in 2027?")}
             </h2>
             
             <p className="text-gray-200 text-lg mb-6 leading-relaxed">
-              {isGerman
-                ? "Eine Web Application Firewall (WAF) schützt Webanwendungen vor HTTP-basierten Angriffen. 2027 sind WAFs evolutioniert zu WAAPs (Web Application & API Protection) mit KI-gestützter Bedrohungserkennung, automatischer Zero-Day-Defense und API-spezifischem Schutz."
-                : "A Web Application Firewall (WAF) protects web applications from HTTP-based attacks. In 2027, WAFs have evolved into WAAPs (Web Application & API Protection) with AI-powered threat detection, automatic zero-day defense, and API-specific protection."}
+              {t(locale, "Eine Web Application Firewall (WAF) schützt Webanwendungen vor HTTP-basierten Angriffen. 2027 sind WAFs evolutioniert zu WAAPs (Web Application & API Protection) mit KI-gestützter Bedrohungserkennung, automatischer Zero-Day-Defense und API-spezifischem Schutz.", "A Web Application Firewall (WAF) protects web applications from HTTP-based attacks. In 2027, WAFs have evolved into WAAPs (Web Application & API Protection) with AI-powered threat detection, automatic zero-day defense, and API-specific protection.")}
             </p>
 
             <div className="grid md:grid-cols-4 gap-4 mb-8">
@@ -188,9 +182,7 @@ export default async function WAF2027Page({
             <h2 className="text-3xl font-bold text-gray-100 mb-6">OWASP Core Rule Set 4.0</h2>
             
             <p className="text-gray-200 mb-6">
-              {isGerman
-                ? "Das OWASP Core Rule Set (CRS) ist die Industriestandard-Regelsammlung für WAFs. Version 4.0 (2027) enthält verbesserte Regeln für moderne Angriffsmuster."
-                : "The OWASP Core Rule Set (CRS) is the industry-standard rule collection for WAFs. Version 4.0 (2027) includes improved rules for modern attack patterns."}
+              {t(locale, "Das OWASP Core Rule Set (CRS) ist die Industriestandard-Regelsammlung für WAFs. Version 4.0 (2027) enthält verbesserte Regeln für moderne Angriffsmuster.", "The OWASP Core Rule Set (CRS) is the industry-standard rule collection for WAFs. Version 4.0 (2027) includes improved rules for modern attack patterns.")}
             </p>
 
             <div className="bg-gray-800 border border-slate-200 rounded-xl overflow-hidden mb-6">
@@ -476,18 +468,16 @@ SecAction \\
           {/* CTA */}
           <section className="bg-gradient-to-r from-orange-600 to-red-600 rounded-2xl p-8 text-center text-white">
             <h2 className="text-2xl font-bold mb-4">
-              {isGerman ? "WAF-Regeln optimieren?" : "Optimize your WAF rules?"}
+              {t(locale, "WAF-Regeln optimieren?", "Optimize your WAF rules?")}
             </h2>
             <p className="mb-6 max-w-2xl mx-auto">
-              {isGerman
-                ? "Nutzen Sie ClawGuru für automatisierte WAF-Tuning und Bedrohungs-Monitoring."
-                : "Use ClawGuru for automated WAF tuning and threat monitoring."}
+              {t(locale, "Nutzen Sie ClawGuru für automatisierte WAF-Tuning und Bedrohungs-Monitoring.", "Use ClawGuru for automated WAF tuning and threat monitoring.")}
             </p>
             <a 
               href={coreLinks.check} 
               className="inline-block px-6 py-3 bg-gray-800 text-orange-700 rounded-lg font-semibold hover:bg-slate-100 transition-colors"
             >
-              {isGerman ? "WAF Assessment Starten" : "Start WAF Assessment"}
+              {t(locale, "WAF Assessment Starten", "Start WAF Assessment")}
             </a>
           </section>
         </div>

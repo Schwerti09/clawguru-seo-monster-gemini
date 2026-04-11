@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { SUPPORTED_LOCALES, type Locale, localeAlternates } from "@/lib/i18n";
 import { BASE_URL } from "@/lib/config";
 import { getCoreSecurityLinks } from "@/lib/core-security-links";
+import { t } from "@/lib/article-i18n"
 
 export const dynamic = "force-static";
 export const revalidate = 86400;
@@ -61,7 +62,6 @@ export default async function K8sNetworkPoliciesPage({
   const prefix = `/${locale}`;
   const coreLinks = getCoreSecurityLinks(locale);
 
-  const isGerman = locale === "de";
 
   return (
     <main className="min-h-screen bg-gray-800">
@@ -75,7 +75,7 @@ export default async function K8sNetworkPoliciesPage({
               K8s Network Policies
             </h1>
             <p className="text-2xl text-blue-200 mb-4">
-              {isGerman ? "Zero Trust Pod-to-Pod Security" : "Zero Trust Pod-to-Pod Security"}
+              Zero Trust Pod-to-Pod Security
             </p>
             <p className="text-xl text-white/80 mb-8">
               Kubernetes Network Policies, Cilium, Calico, Ingress/Egress, DNS Policies. Cluster segmentation.
@@ -97,9 +97,7 @@ export default async function K8sNetworkPoliciesPage({
             <h2 className="text-3xl font-bold text-gray-100 mb-6">Default-Deny: Zero Trust Foundation</h2>
             
             <p className="text-gray-200 text-lg mb-6">
-              {isGerman
-                ? "Standardmäßig können alle Pods in Kubernetes miteinander kommunizieren. Das ist ein Security-Risiko. Zero Trust bedeutet: Default-Deny, explizite Erlaubnis."
-                : "By default, all pods in Kubernetes can communicate with each other. This is a security risk. Zero Trust means: default-deny, explicit allow."}
+              {t(locale, "Standardmäßig können alle Pods in Kubernetes miteinander kommunizieren. Das ist ein Security-Risiko. Zero Trust bedeutet: Default-Deny, explizite Erlaubnis.", "By default, all pods in Kubernetes can communicate with each other. This is a security risk. Zero Trust means: default-deny, explicit allow.")}
             </p>
 
             <div className="bg-slate-900 rounded-xl p-6 mb-6">

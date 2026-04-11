@@ -61,7 +61,6 @@ export default function DockerSecurityPage({
   const prefix = `/${locale}`;
   const coreLinks = getCoreSecurityLinks(locale);
 
-  const isGerman = locale === "de";
 
   return (
     <main className="min-h-screen bg-gray-800">
@@ -75,7 +74,7 @@ export default function DockerSecurityPage({
               Docker Security
             </h1>
             <p className="text-2xl text-cyan-100 mb-4">
-              {isGerman ? "Container Hardening & Security" : "Container Hardening & Security"}
+              Container Hardening & Security
             </p>
             <p className="text-xl text-white/80 mb-8">
               Rootless, seccomp, AppArmor, Cap-Drop, Image Scanning, CIS Benchmarks. Enterprise-grade Docker security.

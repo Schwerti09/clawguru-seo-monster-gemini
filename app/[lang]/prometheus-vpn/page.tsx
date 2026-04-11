@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { SUPPORTED_LOCALES, type Locale, localeAlternates } from "@/lib/i18n";
 import { BASE_URL } from "@/lib/config";
 import { getCoreSecurityLinks } from "@/lib/core-security-links";
+import { t } from "@/lib/article-i18n"
 
 export const dynamic = "force-static";
 export const revalidate = 86400;
@@ -61,7 +62,6 @@ export default async function PrometheusVPNPage({
   const prefix = `/${locale}`;
   const coreLinks = getCoreSecurityLinks(locale);
 
-  const isGerman = locale === "de";
 
   return (
     <main className="min-h-screen bg-gray-800">
@@ -75,7 +75,7 @@ export default async function PrometheusVPNPage({
               Prometheus VPN
             </h1>
             <p className="text-2xl text-orange-100 mb-4">
-              {isGerman ? "Sichere Metriken über VPN" : "Secure Metrics Over VPN"}
+              {t(locale, "Sichere Metriken über VPN", "Secure Metrics Over VPN")}
             </p>
             <p className="text-xl text-white/80 mb-8">
               Tailscale, WireGuard, Zero Trust. Remote Write, Federation & mTLS für private Infrastrukturen.
@@ -95,12 +95,10 @@ export default async function PrometheusVPNPage({
           
           <section className="mb-16">
             <h2 className="text-3xl font-bold text-gray-100 mb-6">
-              {isGerman ? "Das Problem: Metriken hinter Firewalls" : "The Problem: Metrics Behind Firewalls"}
+              {t(locale, "Das Problem: Metriken hinter Firewalls", "The Problem: Metrics Behind Firewalls")}
             </h2>
             <p className="text-gray-200 text-lg mb-6">
-              {isGerman
-                ? "Prometheus pull-based Monitoring funktioniert nicht, wenn Targets hinter NAT/Firewalls sind. Lösungen: Reverse Tunnel, VPN oder Push-basiertes Remote Write."
-                : "Prometheus pull-based monitoring doesn't work when targets are behind NAT/firewalls. Solutions: Reverse tunnel, VPN, or push-based remote write."}
+              {t(locale, "Prometheus pull-based Monitoring funktioniert nicht, wenn Targets hinter NAT/Firewalls sind. Lösungen: Reverse Tunnel, VPN oder Push-basiertes Remote Write.", "Prometheus pull-based monitoring doesn't work when targets are behind NAT/firewalls. Solutions: Reverse tunnel, VPN, or push-based remote write.")}
             </p>
 
             <div className="grid md:grid-cols-3 gap-6 mb-8">

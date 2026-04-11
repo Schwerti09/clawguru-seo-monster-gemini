@@ -98,7 +98,7 @@ export default function LiveThreatFeed({ prefix = "", dict = {} as IntelDict }: 
             {[...items, ...items].map((it, idx) => (
               <motion.a
                 key={`${it.id}-${idx}`}
-                href={`${prefix}/runbook/${it.runbook?.slug ?? ""}`.replace(/\/\//g, "/")}
+                href={it.runbook?.slug ? `${prefix}/runbook/${it.runbook.slug}`.replace(/\/\//g, "/") : `${prefix}/runbooks`.replace(/\/\//g, "/")}
                 className="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10"
                 whileHover={reduce ? undefined : { scale: 1.025, y: -2 }}
               >

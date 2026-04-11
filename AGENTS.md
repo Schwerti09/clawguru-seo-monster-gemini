@@ -361,7 +361,7 @@ Activates 27 cities: Japan (5), South Korea (5), Brazil (5), Mexico (5), Southea
 | Solutions Batch 2 (3 pages) | ✅ DONE | iso27001-certification-roadmap, pci-dss-compliance, hipaa-security-controls |
 | Moltbot Batch 3 (8 pages) | ✅ DONE | ai-agent-threat-model, ai-agent-threat-model-template, real-time-cve-feed, bot-security-testing, sbom-generation, compliance-automation-engine, ai-agent-security, ai-agent-hardening-guide |
 | Dark Theme Fix (109 files) | ✅ DONE 09.04 | All content pages fixed: bg-gray-100→bg-gray-800, text-gray-600→text-gray-300, tables, badges, notices |
-| Afrikaans Locale Expansion | 📋 PLANNED | Add `af` as 16th locale: homepage, all modules, all content pages |
+| Afrikaans Locale Expansion | ✅ DONE 11.04 | `af` fully activated: dictionary 100% (608 keys), getDictionary.ts registered, homepage-cro-i18n.ts complete |
 
 ---
 
@@ -390,35 +390,66 @@ app/sitemap.xml/route.ts                     Sitemap index (lists all child site
 app/robots.txt/route.ts                      robots.txt (dynamic)
 ```
 
-### Supported Locales (15) — ALL pages must have hreflang for all 15
+### Supported Locales (16) — ALL pages must have hreflang for all 16
 ```
-de, en, es, fr, pt, it, ru, zh, ja, ko, ar, hi, tr, pl, nl
+de, en, es, fr, pt, it, ru, zh, ja, ko, ar, hi, tr, pl, nl, af
 ```
 Defined in: `lib/i18n.ts` → `SUPPORTED_LOCALES`, `DEFAULT_LOCALE = "de"`
 
-**ABSOLUTE RULE: Every new content page MUST be available in ALL 15 locales.**
+**ABSOLUTE RULE: Every new content page MUST be available in ALL 16 locales.**
 The `[lang]` directory structure ensures this automatically. Never create pages outside `app/[lang]/`.
-Every `generateStaticParams()` MUST return all 15 locales. No exceptions, no “only de/en” shortcuts.
+Every `generateStaticParams()` MUST return all 16 locales. No exceptions, no “only de/en” shortcuts.
 
-### Planned Locale Expansion: Afrikaans (`af`)
+### Translation Coverage — 16 Sprachen 100% ✅ (Stand 11.04.2026)
 
-**Status: PLANNED** — Add Afrikaans as the 16th locale.
+All 16 dictionary files in `dictionaries/` are fully translated against the German reference (`de.json`, 602 keys).
 
-**Scope:**
-- Homepage (`/af`)
-- All core modules: Security Check, Runbooks, Copilot, Intel Feed, Oracle, Neuro, Dashboard
-- All navigation, headers, footers
-- All content pages (Moltbot, OpenClaw, Solutions, Compare, Security)
+| Locale | Language | Keys | Status |
+|--------|----------|------|--------|
+| de | Deutsch (reference) | 602 | ✅ 100% |
+| en | English | 602 | ✅ 100% |
+| es | Español | 602 | ✅ 100% |
+| fr | Français | 602 | ✅ 100% |
+| pt | Português | 602 | ✅ 100% |
+| it | Italiano | 602 | ✅ 100% |
+| ru | Русский | 602 | ✅ 100% |
+| zh | 中文 | 602 | ✅ 100% |
+| ja | 日本語 | 602 | ✅ 100% |
+| ar | العربية | 602 | ✅ 100% |
+| nl | Nederlands | 602 | ✅ 100% |
+| hi | हिन्दी | 602 | ✅ 100% |
+| tr | Türkçe | 602 | ✅ 100% |
+| pl | Polski | 602 | ✅ 100% |
+| ko | 한국어 | 602 | ✅ 100% |
+| af | Afrikaans | 608 | ✅ 100% |
 
-**Implementation Steps (when activated):**
-1. Add `"af"` to `SUPPORTED_LOCALES` in `lib/i18n.ts`
-2. Create `dictionaries/af.json` with full UI translations
-3. Add Afrikaans city data to geo_cities table (Johannesburg, Cape Town, Durban, Pretoria, Port Elizabeth)
-4. Update `generateStaticParams()` across all pages (automatic via `SUPPORTED_LOCALES`)
-5. Update sitemap generation to include `af` locale
-6. Add `af` hreflang tags via `buildLocalizedAlternates()`
-7. Test ALL pages render correctly in `/af/` routes
-8. Submit new sitemap to Google Search Console
+**Translation rules for agents:**
+1. **New keys in `de.json`** → Add the same key to ALL 15 other dictionaries immediately. Never leave a dictionary incomplete.
+2. **New language** → Register in BOTH `lib/getDictionary.ts` (`DICTIONARY_LOCALES` + `loaders`) AND `lib/homepage-cro-i18n.ts` (`COPY` object). Without `getDictionary.ts` registration, the new language silently falls back to English.
+3. **Validation command** (run before pushing any dictionary change):
+   ```bash
+   python3 -c "
+   import json
+   de = json.load(open('dictionaries/de.json'))
+   def cl(d): return sum(cl(v) if isinstance(v,dict) else 1 for v in d.values())
+   def miss(a,b,p=''): return [f'{p}.{k}' if p else k for k,v in a.items() if k not in b]+[x for k,v in a.items() if isinstance(v,dict) and k in b for x in miss(v,b[k] if isinstance(b.get(k),dict) else {},f'{p}.{k}' if p else k)]
+   [print(f'{l}: OK' if not miss(de,json.load(open(f'dictionaries/{l}.json'))) else f'{l}: MISSING') for l in ['en','es','fr','pt','it','ru','zh','ja','ar','nl','hi','tr','pl','ko','af']]
+   "
+   ```
+
+### Afrikaans (`af`) — Fully Activated 11.04.2026
+
+**Status: ✅ LIVE** — Afrikaans is the 16th locale, fully active in all routing and translations.
+
+- `dictionaries/af.json` — 608 keys, 100% complete (covers all 602 reference keys from `de.json`)
+- `lib/getDictionary.ts` — `af` registered in `DICTIONARY_LOCALES` and `loaders`
+- `lib/homepage-cro-i18n.ts` — `af` block with full Hero CTAs, Trust disclaimer, LP copy
+- `lib/i18n.ts` — `af` already in `SUPPORTED_LOCALES` and `LOCALE_HREFLANG`
+- Routing — `app/[lang]/page.tsx` uses `SUPPORTED_LOCALES.map()` → `/af` route live automatically
+
+**Remaining Afrikaans tasks (optional, lower priority):**
+- Add Afrikaans city data to geo_cities table (Johannesburg, Cape Town, Durban, Pretoria, Port Elizabeth)
+- Submit updated sitemap to Google Search Console after deploy
 
 ### Database Tables
 

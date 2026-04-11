@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useRef, useState } from "react"
-import { motion, useReducedMotion, useInView } from "framer-motion"
+import { motion, useReducedMotion } from "framer-motion"
 import { useI18n } from "@/components/i18n/I18nProvider"
 import { STATS } from "@/lib/stats"
 
@@ -27,8 +27,8 @@ function isMeaningful(p: Partial<LivePayload> | null | undefined): p is LivePayl
 function makeSynthetic(): LivePayload {
   const now = new Date().toISOString()
   const tags = [
-    "nginx", "webhook", "ssl", "docker", "secrets", "stripe", "oauth", "sso", "redis", "postgres",
-    "cdn", "cache", "ci/cd", "vercel", "nextjs", "rate-limit", "cors", "k8s", "helm", "kafka"
+    "nginx", "webhook", "ssl", "docker", "secrets", "oauth", "sso", "redis", "postgres",
+    "cdn", "cache", "ci/cd", "vercel", "nextjs", "rate-limit", "cors", "k8s", "helm", "kafka", "vault"
   ]
   const topTags = tags.slice(0, 20).map((name, i) => ({ name, count: 5 + ((i * 3) % 17) }))
   const issueCounts = [
@@ -39,17 +39,18 @@ function makeSynthetic(): LivePayload {
     { name: "Auth", count: 6 },
     { name: "Build", count: 4 }
   ]
+  // Slugs use the valid 100k format: {provider}-{service}-{issue}-{year}
   const trending = [
-    { slug: "nginx-502-gateway-timeout", title: "Nginx 502 Gateway Timeout fixen", summary: "Upstreams prüfen, timeouts erhöhen, health-checks.", tags: ["nginx", "timeouts", "upstream"] },
-    { slug: "stripe-webhook-signature-mismatch", title: "Stripe Webhook: Signature mismatch", summary: "Signing-Secret, raw body, clock skew.", tags: ["stripe", "webhook", "security"] },
-    { slug: "docker-secrets-best-practices", title: "Docker Secrets Best Practices", summary: "Kein ENV-Leak, mounts, rotation.", tags: ["docker", "secrets"] },
-    { slug: "cdn-cache-busting-strategies", title: "CDN Cache Busting Strategien", summary: "s-maxage, stale-while-revalidate, keys.", tags: ["cdn", "cache"] },
-    { slug: "postgres-connections", title: "Postgres: Too many connections", summary: "Pooling, pgbouncer, idle-killer.", tags: ["postgres", "pool"] },
-    { slug: "oauth-callback-mismatch", title: "OAuth Callback Mismatch", summary: "Origin korrekt setzen, redirect-URIs prüfen.", tags: ["oauth", "sso"] },
-    { slug: "k8s-crashloopbackoff", title: "K8s CrashLoopBackOff", summary: "Probes, resources, logs.", tags: ["k8s", "probes"] },
-    { slug: "cors-preflight-fail", title: "CORS Preflight Fail", summary: "Allowed origins, headers, methods.", tags: ["cors", "security"] },
-    { slug: "redis-evictions", title: "Redis Evictions", summary: "Maxmemory, eviction policy, sizing.", tags: ["redis", "memory"] },
-    { slug: "nextjs-edge-timeout", title: "Next.js Edge Timeout", summary: "Runtime wählen, payload minimieren, streaming.", tags: ["nextjs", "vercel"] }
+    { slug: "hetzner-nginx-hardening-2026", title: "Nginx Hardening auf Hetzner 2026", summary: "Upstreams prüfen, timeouts erhöhen, health-checks, TLS.", tags: ["nginx", "hardening", "hetzner"] },
+    { slug: "aws-docker-secret-rotation-2026", title: "Docker Secret Rotation auf AWS 2026", summary: "Signing-Secret, ENV-Leak vermeiden, Vault-Mounts.", tags: ["docker", "secrets", "aws"] },
+    { slug: "kubernetes-kubernetes-hardening-2026", title: "Kubernetes Hardening 2026", summary: "RBAC, PSS, Netzwerkrichtlinien, Admission Control.", tags: ["k8s", "hardening"] },
+    { slug: "hetzner-redis-hardening-2026", title: "Redis Hardening auf Hetzner 2026", summary: "Auth, maxmemory, eviction policy, TLS.", tags: ["redis", "hardening"] },
+    { slug: "aws-postgres-hardening-2026", title: "PostgreSQL Hardening auf AWS 2026", summary: "Pooling, pgbouncer, least privilege, audit logs.", tags: ["postgres", "hardening"] },
+    { slug: "gcp-nginx-rate-limiting-2026", title: "Nginx Rate Limiting auf GCP 2026", summary: "limit_req_zone, burst, 429-Handling.", tags: ["nginx", "rate-limiting"] },
+    { slug: "azure-kubernetes-rbac-misconfig-2026", title: "Kubernetes RBAC Misconfiguration auf Azure 2026", summary: "Service accounts, cluster-admin, audit.", tags: ["k8s", "rbac"] },
+    { slug: "hetzner-nginx-cors-misconfig-2026", title: "CORS Misconfiguration Nginx auf Hetzner 2026", summary: "Allowed origins, headers, preflight.", tags: ["nginx", "cors"] },
+    { slug: "aws-vault-secrets-management-2026", title: "Vault Secrets Management auf AWS 2026", summary: "KV-v2, dynamic secrets, rotation.", tags: ["vault", "secrets"] },
+    { slug: "hetzner-docker-container-escape-2026", title: "Docker Container Escape auf Hetzner 2026", summary: "Seccomp, capabilities drop, rootless Docker.", tags: ["docker", "security"] }
   ]
   return {
     updatedAt: now,
@@ -90,17 +91,6 @@ export default function OpsWall() {
   const [visibleCveCount, setVisibleCveCount] = useState(12)
   const [buying, setBuying] = useState<null | "daypass" | "pro">(null)
   const rootRef = useRef<HTMLDivElement>(null)
-  const inView = useInView(rootRef, { amount: 0.2, once: true })
-  const [heavyReady, setHeavyReady] = useState(false)
-  useEffect(() => {
-    try {
-      const w = typeof window !== "undefined" ? window.innerWidth : 1024
-      const cores = (typeof navigator !== "undefined" && (navigator as any).hardwareConcurrency) || 4
-      setHeavyReady((w >= 1024 || cores >= 6) && !prefersReduced)
-    } catch {
-      setHeavyReady(false)
-    }
-  }, [prefersReduced])
 
   const TOTAL_COUNT = STATS.totalRunbooks
   const totalShort = useMemo(() => {
@@ -229,30 +219,8 @@ export default function OpsWall() {
     return () => { mounted = false }
   }, [])
 
-  useEffect(() => {
-    if (!inView || !heavyReady) return
-    let id: number | null = null
-    ;(async () => {
-      try {
-        const pseo: any = await import("@/lib/pseo")
-        const buildClient: undefined | ((n: number) => any[]) = pseo.buildRunbooksClient
-        if (!buildClient) return
-        id = window.setTimeout(() => {
-          try {
-            const list = buildClient(12000)
-            const mapped = list.slice(0, 1200).map((r: any) => ({
-              slug: r.slug,
-              title: r.title,
-              summary: r.summary,
-              tags: (r.tags || []).slice(0, 4),
-            }))
-            setData((prev) => (prev ? { ...prev, trending: mapped.length ? mapped : prev.trending } : prev))
-          } catch {}
-        }, 600)
-      } catch {}
-    })()
-    return () => { if (id) window.clearTimeout(id) }
-  }, [inView, heavyReady])
+  // Heavy client-side pseo computation removed – was causing ~60s UI freeze.
+  // Trending data comes from /api/live-wall or the synthetic fallback above.
 
   useEffect(() => {
     setVisibleCount(24)

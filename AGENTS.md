@@ -822,10 +822,11 @@ Vercel auto-deploys on every push to `main`. A red build = broken website for re
 ### Provider Order and Fallback Chain
 Configured in `lib/ai/providers.ts`. Order controlled by env var `AI_PROVIDER_ORDER`.
 
-Default order (if no env var set): `openai → deepseek → gemini`
+Default order (if no env var set): openai first, then deepseek, then gemini.
 
 ```
-AI_PROVIDER_ORDER=openai,deepseek,gemini   # GPT primary (funded); DeepSeek/Gemini out of credit (Apr 2026)
+# Set in Netlify/Vercel Dashboard — do not hardcode values here
+AI_PROVIDER_ORDER=<primary>,<fallback1>,<fallback2>
 ```
 
 ### Provider API Keys (Vercel Env Vars)

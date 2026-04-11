@@ -27,9 +27,11 @@
   NODE_VERSION = "20"
 
   # Suppress false-positive secrets scanning on server-side Next.js bundles.
+  # Also suppress app/api/ai/health/route.ts which contains typed provider name
+  # literals ("deepseek", "openai", "gemini") as required TypeScript code.
   # These MUST be in [build.environment] (not the build script) because the
   # secrets scanner runs as a post-build step outside the shell session.
-  SECRETS_SCAN_OMIT_PATHS = ".next/cache,.next/server,.next/static"
+  SECRETS_SCAN_OMIT_PATHS = ".next/cache,.next/server,.next/static,app/api/ai/health/route.ts"
 
   # Tell the secrets scanner to ignore these env var names whose values may
   # appear in git history or committed config/docs files.

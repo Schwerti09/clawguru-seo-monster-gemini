@@ -825,7 +825,7 @@ Configured in `lib/ai/providers.ts`. Order controlled by env var `AI_PROVIDER_OR
 Default order (if no env var set): `openai → deepseek → gemini`
 
 ```
-AI_PROVIDER_ORDER=openai,deepseek,gemini   # GPT primary (funded); DeepSeek/Gemini out of credit (Apr 2026)
+AI_PROVIDER_ORDER=<provider-order>   # Set via ENV variable
 ```
 
 ### Provider API Keys (Vercel Env Vars)

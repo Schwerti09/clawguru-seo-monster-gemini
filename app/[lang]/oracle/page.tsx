@@ -170,7 +170,7 @@ const ScoreRing = dynamic(() => Promise.resolve(function ScoreRingImpl({ score, 
   )
 }), { ssr: false })
 
-export default function OraclePage({ params }: { params: { lang: string } }) {
+export default function OraclePage() {
   const { dict, locale } = useI18n()
   const t = dict.oracle
   const prefix = `/${locale}`

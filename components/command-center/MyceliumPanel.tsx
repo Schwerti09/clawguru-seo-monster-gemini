@@ -3,6 +3,7 @@
 import { useState, useMemo, useCallback } from "react"
 import dynamic from "next/dynamic"
 import type { MyceliumNode, NodeType } from "./MyceliumCanvas"
+import { EDGE_DISTANCE_THRESHOLD } from "./MyceliumCanvas"
 
 // ─── Lazy-load the R3F canvas (WebGL, no SSR) ────────────────────────────────
 const MyceliumCanvas = dynamic(() => import("./MyceliumCanvas"), {
@@ -122,12 +123,11 @@ export default function MyceliumPanel() {
 
   const toggleType = useCallback((t: NodeType) => {
     setVisibleTypes((prev) => {
+      const isLastVisible = prev.size === 1 && prev.has(t)
+      if (isLastVisible) return prev // keep at least one type visible
       const next = new Set(prev)
-      if (next.has(t)) {
-        if (next.size > 1) next.delete(t) // keep at least one type visible
-      } else {
-        next.add(t)
-      }
+      if (next.has(t)) next.delete(t)
+      else next.add(t)
       return next
     })
     setSelectedId(null)
@@ -144,7 +144,7 @@ export default function MyceliumPanel() {
     const threatCount = ALL_NODES.filter((n) => n.type === "threat").length
     const criticalCount = ALL_NODES.filter((n) => n.type === "threat" && n.severity === "critical").length
     let edges = 0
-    const threshold = 1.8
+    const threshold = EDGE_DISTANCE_THRESHOLD
     for (let i = 0; i < visible.length; i++) {
       for (let j = i + 1; j < visible.length; j++) {
         const [ax, ay, az] = visible[i].position

@@ -8,6 +8,12 @@ import { Canvas, useFrame, ThreeEvent } from "@react-three/fiber"
 import { OrbitControls, Html, Float } from "@react-three/drei"
 import * as THREE from "three"
 
+// ─── Geometry constants ──────────────────────────────────────────────────────
+const NODE_RADIUS = 0.05
+const SPHERE_WIDTH_SEGMENTS = 12
+const SPHERE_HEIGHT_SEGMENTS = 12
+export const EDGE_DISTANCE_THRESHOLD = 1.8
+
 // ─── Color palette (reusing QV system) ──────────────────────────────────────
 const COLORS = {
   void: "#050505",
@@ -87,7 +93,7 @@ function NodeMesh({ node, isSelected, visibleTypes, onSelect }: NodeMeshProps) {
         onSelect(isSelected ? null : node.id)
       }}
     >
-      <sphereGeometry args={[0.05, 12, 12]} />
+      <sphereGeometry args={[NODE_RADIUS, SPHERE_WIDTH_SEGMENTS, SPHERE_HEIGHT_SEGMENTS]} />
       <meshBasicMaterial color={color} transparent opacity={isSelected ? 1 : 0.82} />
 
       {/* Selection ring */}
@@ -132,14 +138,13 @@ function Edges({
 }) {
   const geometry = useMemo(() => {
     const pts: THREE.Vector3[] = []
-    const threshold = 1.8
     const visible = nodes.filter((n) => visibleTypes.has(n.type))
     for (let i = 0; i < visible.length; i++) {
       for (let j = i + 1; j < visible.length; j++) {
         const [ax, ay, az] = visible[i].position
         const [bx, by, bz] = visible[j].position
         const dist = Math.sqrt((bx - ax) ** 2 + (by - ay) ** 2 + (bz - az) ** 2)
-        if (dist < threshold) {
+        if (dist < EDGE_DISTANCE_THRESHOLD) {
           pts.push(new THREE.Vector3(ax, ay, az))
           pts.push(new THREE.Vector3(bx, by, bz))
         }

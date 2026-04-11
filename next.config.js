@@ -1,5 +1,24 @@
-﻿/** @type {import('next').NextConfig} */
+﻿// ---------------------------------------------------------------------------
+// Build-time environment defaults — keeps Netlify Functions under 4 KB env
+// limit by inlining non-secret config values into the webpack bundle.
+// Platform env vars (Vercel / Netlify dashboard) always take precedence.
+// At runtime, instrumentation.ts patches process.env with the same defaults.
+// ---------------------------------------------------------------------------
+const envDefaults = require("./config/env-defaults.json");
+
+/** Build the `env` map: for each default, use the current process.env value
+ *  if set (so platform overrides work), otherwise use the coded default. */
+const envMap = {};
+for (const [key, value] of Object.entries(envDefaults)) {
+  if (key.startsWith("_")) continue; // skip JSON comments
+  envMap[key] = process.env[key] || value;
+}
+
+/** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Inline non-secret defaults at build time (DefinePlugin).
+  // Secrets are NOT listed here — they come from runtime env vars only.
+  env: envMap,
   reactStrictMode: true,
   trailingSlash: false,
   poweredByHeader: false,
@@ -21,6 +40,9 @@ const nextConfig = {
     ]
   },
   experimental: {
+    // Enable instrumentation.ts for runtime env-default patching.
+    // Stable in Next.js 14.0+; the flag is a no-op there but harmless.
+    instrumentationHook: true,
     // Limit parallel page generation to reduce peak memory usage during build.
     // Vercel/Netlify have ~8GB available.
     // Set to 2 for safer builds on constrained environments.

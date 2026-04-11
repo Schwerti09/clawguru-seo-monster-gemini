@@ -1675,6 +1675,97 @@ export function runbooksByProvider(providerSlug: string) {
   return list.filter((r) => r.tags.includes("provider:" + p) || r.tags.includes(p))
 }
 
+// Lookup maps for fast on-demand short-slug generation (provider-topic and stack patterns)
+const _providerMap = new Map<string, { slug: string; name: string }>(
+  (PROVIDERS as unknown as Array<{ slug: string; name: string }>).map((p) => [p.slug, p])
+)
+const _topicMap = new Map<string, { slug: string; title: string; summary: string }>(
+  (TOPICS as unknown as Array<{ slug: string; title: string; summary: string }>).map((t) => [t.slug, t])
+)
+const _stackMap = new Map<string, { slug: string; name: string }>(
+  (STACKS as unknown as Array<{ slug: string; name: string }>).map((s) => [s.slug, s])
+)
+const _errorSlugMap = new Map<string, string>(
+  (ERRORS as unknown as string[]).map((e) => [slugify(e), e])
+)
+const _configMap = new Map<string, { slug: string; title: string; summary: string }>(
+  (CONFIGS as unknown as Array<{ slug: string; title: string; summary: string }>).map((c) => [c.slug, c])
+)
+
+/** Generate a runbook on-demand for short-format slugs (provider-topic, stack-error, config).
+ *  Returns null if the slug doesn't match any known pattern. */
+function _tryBuildShortSlugRunbook(slug: string): Runbook | null {
+  // Try config (exact slug match)
+  const cfg = _configMap.get(slug)
+  if (cfg) {
+    const rb: Runbook = {
+      slug: cfg.slug,
+      title: cfg.title,
+      summary: cfg.summary,
+      tags: uniq(["config", "runbook", "ops", ...cfg.slug.split("-").slice(0, 2)]),
+      lastmod: LASTMOD,
+      howto: { steps: stepsConfig(cfg.title) },
+      blocks: [],
+      clawScore: clawScoreFor(cfg.slug),
+      faq: buildFaq("config", { summary: cfg.summary }),
+      relatedSlugs: [],
+      author: DEFAULT_AUTHOR,
+    }
+    rb.blocks = buildBlocks(rb)
+    return rb
+  }
+  // Try provider-topic: slug = {provider}-{topic-slug}
+  for (const [ps, p] of _providerMap) {
+    if (!slug.startsWith(ps + "-")) continue
+    const topicSlug = slug.slice(ps.length + 1)
+    const t = _topicMap.get(topicSlug)
+    if (t) {
+      const summary = `${t.summary} (Operator Guide für ${p.name}).`
+      const rb: Runbook = {
+        slug,
+        title: `${t.title} auf ${p.name}`,
+        summary,
+        tags: uniq(["provider:" + ps, "topic:" + t.slug, ps, "runbook", "ops"]),
+        lastmod: LASTMOD,
+        howto: { steps: stepsProviderTopic(p.name, t.slug, t.title) },
+        blocks: [],
+        clawScore: clawScoreFor(slug),
+        faq: buildFaq("provider-topic", { providerName: p.name, topicTitle: t.title, summary }),
+        relatedSlugs: [],
+        author: DEFAULT_AUTHOR,
+      }
+      rb.blocks = buildBlocks(rb)
+      return rb
+    }
+  }
+  // Try stack-error: slug = {stack}-{slugified-error}
+  for (const [ss, s] of _stackMap) {
+    if (!slug.startsWith(ss + "-")) continue
+    const errorSlug = slug.slice(ss.length + 1)
+    const errorStr = _errorSlugMap.get(errorSlug)
+    if (errorStr) {
+      const summary = `Runbook, um \u201e${errorStr}\u201c in ${s.name} schnell zu analysieren, zu fixen und zu verifizieren.`
+      const rb: Runbook = {
+        slug,
+        title: `Fix: ${errorStr} (${s.name})`,
+        summary,
+        tags: uniq(["error:" + errorSlug, "stack:" + ss, "debug", "incident", "runbook"]),
+        lastmod: LASTMOD,
+        howto: { steps: stepsError(errorStr, ss, s.name) },
+        blocks: [],
+        clawScore: clawScoreFor(slug),
+        faq: buildFaq("error-stack", { error: errorStr, stackName: s.name, summary }),
+        relatedSlugs: [],
+        author: DEFAULT_AUTHOR,
+      }
+      rb.blocks = buildBlocks(rb)
+      return rb
+    }
+  }
+  return null
+}
+
+
 export function getRunbook(slug: string): Runbook | null {
   if (IS_BUILD_PHASE) {
     // During build, generate on-demand only (no static RUNBOOKS lookup)
@@ -1683,9 +1774,8 @@ export function getRunbook(slug: string): Runbook | null {
       if (meta) {
         return generateRunbook100k(meta) ?? null
       }
-      // SEO Fix: Do NOT return dummy runbooks for unknown slugs during build.
-      // Dummy runbooks create thin/duplicate content that tanks rankings.
-      return null
+      // Try short-format slugs on-demand during build
+      return _tryBuildShortSlugRunbook(slug)
     } catch (e: unknown) {
       console.error("gen100k error(build)", { slug, error: e instanceof Error ? e.message : String(e) })
       return null
@@ -1704,7 +1794,10 @@ export function getRunbook(slug: string): Runbook | null {
       return null
     }
   }
-  return null
+
+  // On-demand generation for short-format slugs not in the materialized cache
+  // (e.g. kubernetes-container-hardening when PSEO_RUNBOOK_COUNT is low)
+  return _tryBuildShortSlugRunbook(slug)
 }
 
 /** Try parsing as 100k slug; if it fails, progressively strip trailing segments

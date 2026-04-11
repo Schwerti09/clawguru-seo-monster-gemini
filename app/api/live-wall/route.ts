@@ -81,17 +81,18 @@ function syntheticPayload(now = new Date()) {
     { name: "Auth", count: 6 },
     { name: "Build", count: 4 }
   ]
+  // Slugs use valid 100k format (provider-service-issue-year) so card links don't 404
   const trending = [
-    { slug: "nginx-502-gateway-timeout", title: "Nginx 502 Gateway Timeout fixen", summary: "Upstreams prüfen, timeouts erhöhen, health-checks.", tags: ["nginx", "timeouts", "upstream"] },
-    { slug: "stripe-webhook-signature-mismatch", title: "Stripe Webhook: Signature mismatch", summary: "Signing-Secret, raw body, clock skew.", tags: ["stripe", "webhook", "security"] },
-    { slug: "docker-secrets-best-practices", title: "Docker Secrets Best Practices", summary: "Kein ENV-Leak, mounts, rotation.", tags: ["docker", "secrets"] },
-    { slug: "cdn-cache-busting-strategies", title: "CDN Cache Busting Strategien", summary: "s-maxage, stale-while-revalidate, keys.", tags: ["cdn", "cache"] },
-    { slug: "postgres-connections", title: "Postgres: Too many connections", summary: "Pooling, pgbouncer, idle-killer.", tags: ["postgres", "pool"] },
-    { slug: "oauth-callback-mismatch", title: "OAuth Callback Mismatch", summary: "Origin korrekt setzen, redirect-URIs prüfen.", tags: ["oauth", "sso"] },
-    { slug: "k8s-crashloopbackoff", title: "K8s CrashLoopBackOff", summary: "Probes, resources, logs.", tags: ["k8s", "probes"] },
-    { slug: "cors-preflight-fail", title: "CORS Preflight Fail", summary: "Allowed origins, headers, methods.", tags: ["cors", "security"] },
-    { slug: "redis-evictions", title: "Redis Evictions", summary: "Maxmemory, eviction policy, sizing.", tags: ["redis", "memory"] },
-    { slug: "nextjs-edge-timeout", title: "Next.js Edge Timeout", summary: "Runtime wählen, payload minimieren, streaming.", tags: ["nextjs", "vercel"] }
+    { slug: "hetzner-nginx-hardening-2026", title: "Nginx Hardening auf Hetzner 2026", summary: "Upstreams prüfen, timeouts erhöhen, health-checks, TLS.", tags: ["nginx", "hardening", "hetzner"] },
+    { slug: "aws-docker-secret-rotation-2026", title: "Docker Secret Rotation auf AWS 2026", summary: "Signing-Secret, ENV-Leak vermeiden, Vault-Mounts.", tags: ["docker", "secrets", "aws"] },
+    { slug: "kubernetes-kubernetes-hardening-2026", title: "Kubernetes Hardening 2026", summary: "RBAC, PSS, Netzwerkrichtlinien, Admission Control.", tags: ["k8s", "hardening"] },
+    { slug: "hetzner-redis-hardening-2026", title: "Redis Hardening auf Hetzner 2026", summary: "Auth, maxmemory, eviction policy, TLS.", tags: ["redis", "hardening"] },
+    { slug: "aws-postgres-hardening-2026", title: "PostgreSQL Hardening auf AWS 2026", summary: "Pooling, pgbouncer, least privilege, audit logs.", tags: ["postgres", "hardening"] },
+    { slug: "gcp-nginx-rate-limiting-2026", title: "Nginx Rate Limiting auf GCP 2026", summary: "limit_req_zone, burst, 429-Handling.", tags: ["nginx", "rate-limiting"] },
+    { slug: "azure-kubernetes-rbac-misconfig-2026", title: "Kubernetes RBAC Misconfiguration auf Azure 2026", summary: "Service accounts, cluster-admin, audit.", tags: ["k8s", "rbac"] },
+    { slug: "hetzner-nginx-cors-misconfig-2026", title: "CORS Misconfiguration Nginx auf Hetzner 2026", summary: "Allowed origins, headers, preflight.", tags: ["nginx", "cors"] },
+    { slug: "aws-vault-secrets-management-2026", title: "Vault Secrets Management auf AWS 2026", summary: "KV-v2, dynamic secrets, rotation.", tags: ["vault", "secrets"] },
+    { slug: "hetzner-docker-container-escape-2026", title: "Docker Container Escape auf Hetzner 2026", summary: "Seccomp, capabilities drop, rootless Docker.", tags: ["docker", "security"] }
   ]
   return {
     updatedAt: now.toISOString(),

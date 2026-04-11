@@ -5,6 +5,37 @@ import dynamic from "next/dynamic"
 import { motion, useReducedMotion } from "framer-motion"
 import { useI18n } from "@/components/i18n/I18nProvider"
 
+const FAQ_ITEMS = [
+  {
+    q: "Was ist der ClawGuru Oracle?",
+    a: "Oracle ist eine KI-gestützte Bedrohungsanalyse-Engine. Du gibst deinen Tech-Stack an (z.B. nginx, ubuntu-22.04, aws-ec2) und Oracle berechnet einen Predictive Risk Score, zeigt dir ein Live-Radar deiner Angriffsfläche und listet relevante CVEs mit direkten Runbook-Links.",
+  },
+  {
+    q: "Wie funktioniert der Predictive Risk Score?",
+    a: "Der Score (0–100) wird aus CVE-Daten, CVSS-Scores, Exploit-Verfügbarkeit und deiner Stack-Konfiguration berechnet. 0 = kein bekanntes Risiko, 100 = kritisch. Der Score aktualisiert sich automatisch wenn neue CVEs veröffentlicht werden.",
+  },
+  {
+    q: "Was zeigt das Risk Radar?",
+    a: "Das interaktive Radar visualisiert deine Risikoverteilung über mehrere Dimensionen: Netzwerk, Auth, Container, Daten, API und mehr. Du siehst auf einen Blick wo dein grösster Handlungsbedarf liegt.",
+  },
+  {
+    q: "Wie viele Analysen kann ich kostenlos durchführen?",
+    a: "Der Free-Plan erlaubt eine begrenzte Anzahl an Oracle-Scans. Mit dem Day Pass (9 €) erhältst du 24h unbegrenzte Scans. Pro (49 €/Monat) umfasst dauerhaften Zugriff, History-Tracking, Export-Funktion und Neuro-Integration.",
+  },
+  {
+    q: "Was ist der Unterschied zu einem klassischen Vulnerability Scanner?",
+    a: "Klassische Scanner suchen nur nach bekannten Schwachstellen in deiner laufenden Infrastruktur. Oracle kombiniert CVE-Intelligence mit Predictive Scoring: Wir sagen dir nicht nur was jetzt bekannt ist, sondern auch welche Komponenten historisch kritische Schwachstellen anziehen.",
+  },
+  {
+    q: "Werden meine Stack-Daten gespeichert?",
+    a: "Free-Nutzer: Keine persistente Speicherung. Pro-Nutzer: Stack-Konfigurationen und Scan-History werden in deinem Account gespeichert für Trend-Analyse und automatische Re-Scans bei neuen CVEs.",
+  },
+  {
+    q: "Was sind Runbooks und wie helfen sie mir?",
+    a: "Zu jedem entdeckten CVE gibt es ein Runbook – eine Schritt-für-Schritt-Anleitung zur Behebung der Schwachstelle. Kein Google, kein Suchen: Oracle verlinkt direkt zum passenden Runbook mit Copy-Paste-fähigen Befehlen.",
+  },
+]
+
 type Severity = "LOW" | "MEDIUM" | "HIGH" | "CRITICAL"
 
 interface RadarPoint {
@@ -170,6 +201,27 @@ const ScoreRing = dynamic(() => Promise.resolve(function ScoreRingImpl({ score, 
   )
 }), { ssr: false })
 
+function FaqItem({ q, a }: { q: string; a: string }) {
+  const [open, setOpen] = useState(false)
+  return (
+    <div className="border border-white/10 rounded-xl overflow-hidden">
+      <button
+        onClick={() => setOpen((v) => !v)}
+        className="w-full flex items-center justify-between gap-4 px-5 py-4 text-left bg-white/5 hover:bg-white/8 transition-colors"
+        aria-expanded={open}
+      >
+        <span className="text-sm font-semibold text-gray-100">{q}</span>
+        <span className={`text-cyan-400 text-lg leading-none shrink-0 transition-transform duration-200 ${open ? "rotate-45" : ""}`}>+</span>
+      </button>
+      {open && (
+        <div className="px-5 py-4 text-sm text-gray-300 leading-relaxed bg-black/30 border-t border-white/10">
+          {a}
+        </div>
+      )}
+    </div>
+  )
+}
+
 export default function OraclePage() {
   const { dict, locale } = useI18n()
   const t = dict.oracle
@@ -196,6 +248,7 @@ export default function OraclePage() {
   async function fetchOracle() {
     setBusy(true)
     setError(null)
+    setFreeLimited(null)
     try {
       const url = new URL(window.location.href)
       const cve = (url.searchParams.get("cve") || "").toUpperCase()
@@ -230,7 +283,7 @@ export default function OraclePage() {
   }
 
   useEffect(() => {
-    // Prefill from URL cve/scope on first mount
+    // Prefill scopes from URL params on first mount — but do NOT auto-fetch
     const url = new URL(window.location.href)
     const cve = url.searchParams.get("cve")
     const scopeQ = url.searchParams.get("scope")
@@ -238,27 +291,66 @@ export default function OraclePage() {
       const next = Array.from(new Set(scopeQ.split(/[\s,;|]+/).map((s) => s.trim()).filter(Boolean)))
       if (next.length) setScopes(next.slice(0, 8))
     }
-    fetchOracle()
+    // If a CVE is pre-selected via URL param, auto-run for that specific lookup
+    if (cve) fetchOracle()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
-    <>
-    <main className="px-4 sm:px-6 lg:px-8 py-8 max-w-6xl mx-auto">
-      <motion.header
-        initial={reduce ? undefined : { opacity: 0, y: 12 }}
-        whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ type: "spring", stiffness: 160, damping: 20 }}
-        className="mb-8"
-      >
-        <h1 className="text-3xl sm:text-4xl font-black text-white drop-shadow-[0_0_22px_rgba(0,184,255,0.35)]">{t.title}</h1>
-        <p className="text-gray-300 mt-2">{t.subtitle}</p>
-      </motion.header>
+    <main className="px-4 sm:px-6 lg:px-8 py-10 max-w-5xl mx-auto">
 
-      <section className="rounded-2xl border border-white/10 bg-black/40 p-4 sm:p-5 backdrop-blur">
+      {/* ── Hero ─────────────────────────────────────────────────────── */}
+      <motion.div
+        initial={reduce ? undefined : { opacity: 0, y: 16 }}
+        animate={reduce ? undefined : { opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="mb-10 text-center"
+      >
+        <div className="inline-flex items-center gap-2 text-[11px] font-mono uppercase tracking-[0.22em] text-cyan-400 mb-4 px-3 py-1 rounded-full border border-cyan-500/25 bg-cyan-500/10">
+          <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 inline-block" />
+          AI-Powered Threat Intelligence
+        </div>
+        <h1 className="text-4xl sm:text-5xl font-black text-white drop-shadow-[0_0_30px_rgba(0,184,255,0.3)] mb-4 leading-tight">
+          ClawGuru{" "}
+          <span
+            className="bg-clip-text text-transparent"
+            style={{ backgroundImage: "linear-gradient(90deg, #00b8ff, #00ff9d)" }}
+          >
+            Oracle
+          </span>
+        </h1>
+        <p className="text-gray-400 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
+          Gib deinen Tech-Stack ein — Oracle berechnet deinen Predictive Risk Score,
+          zeigt ein Live-Radar deiner Angriffsfläche und listet kritische CVEs mit direkten Fix-Runbooks.
+        </p>
+
+        {/* Feature pills */}
+        <div className="mt-6 flex flex-wrap justify-center gap-3">
+          {[
+            { icon: "🎯", label: "Predictive Risk Score" },
+            { icon: "📡", label: "Live CVE-Feed" },
+            { icon: "🗺️", label: "Attack Surface Radar" },
+            { icon: "📖", label: "Direkte Fix-Runbooks" },
+          ].map((f) => (
+            <span
+              key={f.label}
+              className="inline-flex items-center gap-2 text-xs text-gray-300 border border-white/10 bg-white/5 px-3 py-1.5 rounded-full"
+            >
+              <span>{f.icon}</span> {f.label}
+            </span>
+          ))}
+        </div>
+      </motion.div>
+
+      {/* ── Scope Input ──────────────────────────────────────────────── */}
+      <section className="rounded-2xl border border-white/10 bg-black/40 p-4 sm:p-6 backdrop-blur mb-6">
         <label className="text-sm font-semibold text-cyan-200">{t.scope_label}</label>
-        <div className="mt-2 flex gap-2">
+        <p className="text-xs text-gray-500 mt-0.5 mb-3">
+          Füge deine Technologien hinzu (z.B. <code className="text-cyan-400">nginx</code>,{" "}
+          <code className="text-cyan-400">ubuntu-22.04</code>,{" "}
+          <code className="text-cyan-400">postgres-15</code>) und starte die Analyse.
+        </p>
+        <div className="flex gap-2">
           <input
             value={input}
             onChange={(e) => setInput(e.target.value)}
@@ -293,12 +385,12 @@ export default function OraclePage() {
             </motion.span>
           ))}
         </div>
-        <div className="mt-4 flex items-center gap-3">
+        <div className="mt-5 flex items-center gap-3">
           <motion.button
             whileTap={reduce ? undefined : { scale: 0.98 }}
             onClick={fetchOracle}
             disabled={busy}
-            className="px-4 py-2 rounded-lg text-sm font-bold border border-cyan-500/40 bg-cyan-500/20 text-cyan-100 hover:shadow-[0_0_30px_rgba(0,184,255,0.35)] disabled:opacity-50"
+            className="px-5 py-2.5 rounded-lg text-sm font-bold border border-cyan-500/40 bg-cyan-500/20 text-cyan-100 hover:shadow-[0_0_30px_rgba(0,184,255,0.35)] disabled:opacity-50"
           >
             {busy ? t.loading : t.predict_btn}
           </motion.button>
@@ -306,91 +398,153 @@ export default function OraclePage() {
         </div>
       </section>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
-        <section className="rounded-2xl border border-white/10 bg-black/40 p-4 sm:p-5">
-          <div className="flex items-center justify-between mb-3">
-            <h2 className="text-white font-semibold">{t.risk_radar}</h2>
-            {(() => {
-              const stacks = (data?.suggestedStacks && data.suggestedStacks.length ? data.suggestedStacks : scopes) || []
-              return stacks.length ? (
-                <a
-                  href={`${prefix}/neuro?stack=${encodeURIComponent(stacks.join(","))}`}
-                  className="px-3 py-1.5 rounded-lg text-xs font-bold border border-emerald-500/40 bg-emerald-500/15 text-emerald-100 hover:shadow-[0_0_20px_rgba(0,255,157,0.35)]"
-                >
-                  In Neuro analysieren
-                </a>
-              ) : null
-            })()}
+      {/* ── Inline Upgrade Prompt (replaces blocking modal) ──────────── */}
+      {freeLimited && (
+        <motion.section
+          initial={reduce ? undefined : { opacity: 0, y: 10 }}
+          animate={reduce ? undefined : { opacity: 1, y: 0 }}
+          className="rounded-2xl border p-6 mb-6 text-center"
+          style={{
+            borderColor: "rgba(212,175,55,0.3)",
+            background: "linear-gradient(135deg, rgba(212,175,55,0.06), rgba(0,0,0,0.6))",
+          }}
+        >
+          <div className="text-[11px] font-mono uppercase tracking-[0.22em] mb-3" style={{ color: "#d4af37" }}>
+            ✦ Free-Limit erreicht
           </div>
-          <ErrorBoundary fallback={<Shimmer className="h-64" />}>
-            <Suspense fallback={<Shimmer className="h-64" />}>
-              {data ? <RadarCanvas data={data.radar} /> : <Shimmer className="h-64" />}
-            </Suspense>
-          </ErrorBoundary>
-        </section>
-
-        <section className="rounded-2xl border border-white/10 bg-black/40 p-4 sm:p-5">
-          <div className="flex items-center justify-between mb-3">
-            <h2 className="text-white font-semibold">{t.live_score}</h2>
+          <h2 className="text-xl font-black text-white mb-2">
+            Oracle-Analysen freischalten
+          </h2>
+          <p className="text-sm text-gray-400 mb-5 max-w-md mx-auto">
+            Du hast dein kostenloses Kontingent verbraucht. Wähle einen Plan um unbegrenzte Scans,
+            History-Tracking, Export und Neuro-Integration zu nutzen.
+          </p>
+          <div className="flex flex-col sm:flex-row justify-center gap-3 mb-4">
+            <a
+              href={`${prefix}/pricing`}
+              className="px-6 py-3 rounded-2xl font-black text-black text-sm shadow-lg hover:opacity-90 transition-opacity"
+              style={{ background: "linear-gradient(135deg,#ff0033,#ff7a00)" }}
+            >
+              Day Pass — 9 € · 24h Vollzugriff
+            </a>
+            <a
+              href={`${prefix}/pricing`}
+              className="px-6 py-3 rounded-2xl font-black text-black text-sm shadow-lg hover:opacity-90 transition-opacity"
+              style={{ background: "linear-gradient(135deg,#a78bfa,#00ff9d)" }}
+            >
+              Pro — 49 € / Monat
+            </a>
           </div>
-          <ErrorBoundary fallback={<Shimmer className="h-36" />}>
-            <Suspense fallback={<Shimmer className="h-36" />}>
-              {data ? <ScoreRing score={data.predictiveScore} label="ClawPredict" /> : <Shimmer className="h-36" />}
-            </Suspense>
-          </ErrorBoundary>
-        </section>
-      </div>
+          <p className="text-xs text-gray-500">
+            Pro: dauerhaft mit History, Export &amp; Neuro-Integration · Kein Abo-Zwang beim Day Pass
+          </p>
+        </motion.section>
+      )}
 
-      <section className="rounded-2xl border border-white/10 bg-black/40 p-4 sm:p-5 mt-6">
-        <h2 className="text-white font-semibold mb-3">{t.cve_title}</h2>
-        {!data && <Shimmer className="h-28" />}
-        {data && (
-          <ul className="space-y-3">
-            {data.cves.map((cve) => (
-              <li key={cve.id} className="rounded-xl border border-white/10 bg-white/5 p-3 hover:bg-white/7.5">
-                <div className="flex items-center justify-between gap-3">
-                  <div className="min-w-0">
-                    <div className="text-white font-semibold truncate">{cve.title}</div>
-                    <div className="flex items-center gap-2 mt-1">
-                      <span className={`text-[11px] px-2 py-[2px] rounded-full border ${
-                        cve.severity === "CRITICAL" ? "border-red-500/40 text-red-300" :
-                        cve.severity === "HIGH" ? "border-orange-500/40 text-orange-300" :
-                        cve.severity === "MEDIUM" ? "border-yellow-500/40 text-yellow-200" : "border-green-500/40 text-green-300"
-                      }`}>{cve.severity}</span>
-                      <span className="text-[11px] px-2 py-[2px] rounded-full border border-cyan-500/40 text-cyan-200">
-                        ClawScore {cve.clawScore}
-                      </span>
+      {/* ── Results ──────────────────────────────────────────────────── */}
+      {data && (
+        <>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+            <section className="rounded-2xl border border-white/10 bg-black/40 p-4 sm:p-5">
+              <div className="flex items-center justify-between mb-3">
+                <h2 className="text-white font-semibold">{t.risk_radar}</h2>
+                {(() => {
+                  const stacks = (data?.suggestedStacks && data.suggestedStacks.length ? data.suggestedStacks : scopes) || []
+                  return stacks.length ? (
+                    <a
+                      href={`${prefix}/neuro?stack=${encodeURIComponent(stacks.join(","))}`}
+                      className="px-3 py-1.5 rounded-lg text-xs font-bold border border-emerald-500/40 bg-emerald-500/15 text-emerald-100 hover:shadow-[0_0_20px_rgba(0,255,157,0.35)]"
+                    >
+                      In Neuro analysieren
+                    </a>
+                  ) : null
+                })()}
+              </div>
+              <ErrorBoundary fallback={<Shimmer className="h-64" />}>
+                <Suspense fallback={<Shimmer className="h-64" />}>
+                  <RadarCanvas data={data.radar} />
+                </Suspense>
+              </ErrorBoundary>
+            </section>
+
+            <section className="rounded-2xl border border-white/10 bg-black/40 p-4 sm:p-5">
+              <div className="flex items-center justify-between mb-3">
+                <h2 className="text-white font-semibold">{t.live_score}</h2>
+              </div>
+              <ErrorBoundary fallback={<Shimmer className="h-36" />}>
+                <Suspense fallback={<Shimmer className="h-36" />}>
+                  <ScoreRing score={data.predictiveScore} label="ClawPredict" />
+                </Suspense>
+              </ErrorBoundary>
+            </section>
+          </div>
+
+          <section className="rounded-2xl border border-white/10 bg-black/40 p-4 sm:p-5 mb-6">
+            <h2 className="text-white font-semibold mb-3">{t.cve_title}</h2>
+            <ul className="space-y-3">
+              {data.cves.map((cve) => (
+                <li key={cve.id} className="rounded-xl border border-white/10 bg-white/5 p-3 hover:bg-white/[0.075]">
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="min-w-0">
+                      <div className="text-white font-semibold truncate">{cve.title}</div>
+                      <div className="flex items-center gap-2 mt-1">
+                        <span className={`text-[11px] px-2 py-[2px] rounded-full border ${
+                          cve.severity === "CRITICAL" ? "border-red-500/40 text-red-300" :
+                          cve.severity === "HIGH" ? "border-orange-500/40 text-orange-300" :
+                          cve.severity === "MEDIUM" ? "border-yellow-500/40 text-yellow-200" : "border-green-500/40 text-green-300"
+                        }`}>{cve.severity}</span>
+                        <span className="text-[11px] px-2 py-[2px] rounded-full border border-cyan-500/40 text-cyan-200">
+                          ClawScore {cve.clawScore}
+                        </span>
+                      </div>
                     </div>
+                    <a
+                      className="shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold border border-cyan-500/40 bg-cyan-500/15 text-cyan-100 hover:shadow-[0_0_20px_rgba(0,184,255,0.35)]"
+                      href={`${prefix}/runbook/${encodeURIComponent(cve.runbookSlug)}`}
+                    >
+                      Runbook
+                    </a>
                   </div>
-                  <a
-                    className="shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold border border-cyan-500/40 bg-cyan-500/15 text-cyan-100 hover:shadow-[0_0_20px_rgba(0,184,255,0.35)]"
-                    href={`${prefix}/runbook/${encodeURIComponent(cve.runbookSlug)}`}
-                  >
-                    Runbook
-                  </a>
-                </div>
-              </li>
-            ))}
-          </ul>
-        )}
+                </li>
+              ))}
+            </ul>
+          </section>
+        </>
+      )}
+
+      {/* ── FAQ ──────────────────────────────────────────────────────── */}
+      <section className="mt-12 mb-8">
+        <div className="text-center mb-8">
+          <h2 className="text-2xl sm:text-3xl font-black text-white mb-2">
+            Häufige Fragen zum Oracle
+          </h2>
+          <p className="text-gray-500 text-sm">Alles was du wissen musst — bevor du den ersten Scan startest</p>
+        </div>
+        <div className="space-y-3 max-w-3xl mx-auto">
+          {FAQ_ITEMS.map((item) => (
+            <FaqItem key={item.q} q={item.q} a={item.a} />
+          ))}
+        </div>
+      </section>
+
+      {/* ── Further Resources ────────────────────────────────────────── */}
+      <section className="mt-10 mb-4">
+        <h2 className="text-lg font-semibold text-gray-100 mb-4">Weitere Tools</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <a href={`${prefix}/securitycheck`} className="block bg-gray-800 p-4 rounded-xl border border-gray-700 hover:bg-gray-700 transition-colors">
+            <div className="font-semibold text-cyan-400 mb-1">Security Check</div>
+            <div className="text-sm text-gray-300">HTTP-Header-Scan mit Security Score in Echtzeit</div>
+          </a>
+          <a href={`${prefix}/runbooks`} className="block bg-gray-800 p-4 rounded-xl border border-gray-700 hover:bg-gray-700 transition-colors">
+            <div className="font-semibold text-cyan-400 mb-1">Runbooks</div>
+            <div className="text-sm text-gray-300">600+ ausführbare Sicherheits-Playbooks</div>
+          </a>
+          <a href={`${prefix}/neuro`} className="block bg-gray-800 p-4 rounded-xl border border-gray-700 hover:bg-gray-700 transition-colors">
+            <div className="font-semibold text-cyan-400 mb-1">Neuro AI</div>
+            <div className="text-sm text-gray-300">Pattern-Analyse und Anomaly Detection</div>
+          </a>
+        </div>
       </section>
     </main>
-    {freeLimited && (
-      <div className="fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center z-50">
-        <div className="p-6 rounded-3xl border text-center max-w-md w-[92%]"
-             style={{ borderColor: "rgba(212,175,55,0.25)", background: "rgba(0,0,0,0.65)", boxShadow: "0 0 60px rgba(0,255,157,0.06) inset" }}>
-          <div className="text-[11px] font-mono uppercase tracking-[0.25em] mb-2" style={{ color: "#d4af37" }}>Premium Access</div>
-          <div className="text-lg md:text-xl font-black text-white">Mehr Oracle‑Vorhersagen freischalten</div>
-          <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2">
-            <a href={`${prefix}/pricing`} className="px-4 py-3 rounded-2xl font-black text-black text-sm"
-               style={{ background: "linear-gradient(135deg,#ff0033,#ff7a00)" }}>Day Pass 9 €</a>
-            <a href={`${prefix}/pricing`} className="px-4 py-3 rounded-2xl font-black text-black text-sm"
-               style={{ background: "linear-gradient(135deg,#a78bfa,#00ff9d)" }}>Pro 49 € / Monat</a>
-          </div>
-          <div className="mt-2 text-xs text-gray-400">Day Pass: 24h Zugriff — Pro: dauerhaft mit History, Export & Neuro</div>
-        </div>
-      </div>
-    )}
-    </>
   )
 }

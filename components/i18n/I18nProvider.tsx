@@ -28,6 +28,7 @@ const dictionaryLoaders: Partial<Record<Locale, () => Promise<Dictionary>>> = {
   tr: () => import("@/dictionaries/tr.json").then((m) => m.default as unknown as Dictionary),
   pl: () => import("@/dictionaries/pl.json").then((m) => m.default as unknown as Dictionary),
   ko: () => import("@/dictionaries/ko.json").then((m) => m.default as unknown as Dictionary),
+  af: () => import("@/dictionaries/af.json").then((m) => m.default as unknown as Dictionary),
 }
 
 function loadDictionary(locale: Locale): Promise<Dictionary> {

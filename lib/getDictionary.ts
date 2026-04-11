@@ -358,6 +358,28 @@ export type Dictionary = {
     spark_title: string
   }
   vorstellung?: Record<string, unknown>
+  check: {
+    page_title: string
+    page_subtitle: string
+    badge_no_reg: string
+    badge_time: string
+    badge_share: string
+    methodology_title: string
+    methodology_desc: string
+    methodology_bullet1: string
+    methodology_bullet2: string
+    methodology_bullet3: string
+    methodology_link: string
+    harden_title: string
+    harden_desc: string
+    faq_title: string
+    faq_q1: string
+    faq_a1: string
+    faq_q2: string
+    faq_a2: string
+    faq_q3: string
+    faq_a3: string
+  }
 }
 
 // Supported dictionary locales (JSON files that exist in /dictionaries)

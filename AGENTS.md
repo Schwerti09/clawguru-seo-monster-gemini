@@ -400,7 +400,7 @@ Defined in: `lib/i18n.ts` → `SUPPORTED_LOCALES`, `DEFAULT_LOCALE = "de"`
 The `[lang]` directory structure ensures this automatically. Never create pages outside `app/[lang]/`.
 Every `generateStaticParams()` MUST return all 16 locales. No exceptions, no “only de/en” shortcuts.
 
-### Translation Coverage — 16 Sprachen 100% ✅ (Stand 11.04.2026)
+### Translation Coverage — 16 Languages 100% ✅ (as of 11.04.2026)
 
 All 16 dictionary files in `dictionaries/` are fully translated against the German reference (`de.json`, 602 keys).
 
@@ -421,7 +421,9 @@ All 16 dictionary files in `dictionaries/` are fully translated against the Germ
 | tr | Türkçe | 602 | ✅ 100% |
 | pl | Polski | 602 | ✅ 100% |
 | ko | 한국어 | 602 | ✅ 100% |
-| af | Afrikaans | 608 | ✅ 100% |
+| af | Afrikaans | 608¹ | ✅ 100% |
+
+¹ `af.json` contains 6 extra keys (`neuro_info`, `neuro_analyzing`, `neuro_empty`, `neuro_add_tag`, `neuro_clear_tags`, `neuro_recommended`) that extend the base schema. All 602 reference keys from `de.json` are covered.
 
 **Translation rules for agents:**
 1. **New keys in `de.json`** → Add the same key to ALL 15 other dictionaries immediately. Never leave a dictionary incomplete.

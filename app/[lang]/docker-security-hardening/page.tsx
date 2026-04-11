@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { SUPPORTED_LOCALES, type Locale, localeAlternates } from "@/lib/i18n";
 import { BASE_URL } from "@/lib/config";
 import { getCoreSecurityLinks } from "@/lib/core-security-links";
-import { t } from "@/lib/article-i18n"
 
 export const dynamic = "force-static";
 export const revalidate = 86400;

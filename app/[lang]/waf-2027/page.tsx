@@ -85,7 +85,7 @@ export default async function WAF2027Page({
               {t(locale, "Web Application Firewall für Enterprise Security", "Web Application Firewall for Enterprise Security")}
             </p>
             <p className="text-xl text-orange-50/80 mb-8">
-              {t(locale, "Cloudflare, AWS WAF, ModSecurity & OWASP CRS. Zero Day Defense, Bot Management, API Protection.", "Cloudflare, AWS WAF, ModSecurity & OWASP CRS. Zero day defense, bot management, API protection.")}
+              {t(locale, "Cloudflare, AWS WAF, ModSecurity & OWASP CRS. Zero Day Defense, Bot Management, API Protection.", "Cloudflare, AWS WAF, ModSecurity & OWASP CRS. Zero-day defense, bot management, API protection.")}
             </p>
             <div className="flex flex-wrap gap-3">
               <span className="px-4 py-2 bg-white/20 text-white rounded-lg text-sm">OWASP Top 10</span>

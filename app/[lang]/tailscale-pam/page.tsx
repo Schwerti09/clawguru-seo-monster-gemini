@@ -542,7 +542,7 @@ export default async function TailscalePAMPage({
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
         "@context": "https://schema.org",
         "@type": "TechArticle",
-        headline: "Tailscale PAM 2026: Privileged Access Management Guide",
+        headline: t(locale, "Tailscale PAM 2026: Privileged Access Management Guide", "Tailscale PAM 2026: Privileged Access Management Guide"),
         author: { "@type": "Organization", name: "ClawGuru", url: BASE_URL },
         publisher: { "@type": "Organization", name: "ClawGuru", url: BASE_URL },
         datePublished: "2026-03-29",

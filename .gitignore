@@ -81,6 +81,8 @@ clawguru-seo-monster-gemini-*/
 .git/
 .github/
 **/*.zip
+# Allow premium download assets
+!public/downloads/*.zip
 
  
 # large local bundles/archives � never commit

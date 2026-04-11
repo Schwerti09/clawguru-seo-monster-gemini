@@ -7,6 +7,7 @@ import LiveThreatFeed from "@/components/intel/LiveThreatFeed"
 import CveAnalyzer from "@/components/intel/CveAnalyzer"
 import StatsDashboard from "@/components/intel/StatsDashboard"
 import UpgradeCTA from "@/components/shared/UpgradeCTA"
+import IntelFaq from "@/components/intel/IntelFaq"
 
 const PredictiveRadar = dynamic(() => import("@/components/intel/PredictiveRadar"), {
   loading: () => <div className="h-72 rounded-2xl border border-white/10 bg-white/5 animate-pulse" />,
@@ -47,6 +48,7 @@ export default async function LocaleIntelPage(props: { params: { lang: string } 
           <MyceliumPreview prefix={prefix} dict={intel} />
         </div>
         <StatsDashboard dict={intel} />
+        <IntelFaq dict={intel} />
       </section>
       <UpgradeCTA prefix={prefix} dict={intel} variant="intel" />
     </main>

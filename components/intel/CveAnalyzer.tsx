@@ -63,6 +63,10 @@ export default function CveAnalyzer({ prefix = "", dict = {} as IntelDict }: { p
   async function onAnalyze() {
     const id = q.trim().toUpperCase()
     if (!id) return
+    if (!/^CVE-\d{4}-\d{4,7}$/.test(id)) {
+      setErr("Invalid CVE ID — expected format: CVE-YYYY-NNNNN (e.g. CVE-2024-6387)")
+      return
+    }
     setBusy(true)
     setErr(null)
     setRes(null)
@@ -79,7 +83,10 @@ export default function CveAnalyzer({ prefix = "", dict = {} as IntelDict }: { p
         }
         throw new Error(j?.message || "Rate limited")
       }
-      if (!r.ok) throw new Error(String(r.status))
+      if (!r.ok) {
+        const body = (await r.json().catch(() => ({}))) as { error?: string }
+        throw new Error(body?.error || `Request failed (${r.status})`)
+      }
       const j = (await r.json()) as AnalyzeResult
       setRes(j)
     } catch (e: unknown) {

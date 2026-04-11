@@ -1,27 +1,9 @@
 "use client"
 
-import React, { Suspense, useEffect, useMemo, useState } from "react"
+import React, { Suspense, useEffect, useState } from "react"
 import dynamic from "next/dynamic"
 import { motion, useReducedMotion } from "framer-motion"
-import { usePathname } from "next/navigation"
-
-interface NeuroDict {
-  title: string
-  subtitle: string
-  pick_stack: string
-  add_stack: string
-  input_placeholder: string
-  recommend: string
-  recommendations: string
-  plan_title: string
-  score_title: string
-  confidence: string
-  loading: string
-  fetch_error: string
-  available_label?: string
-  chosen_label?: string
-}
-interface DictShape { neuro?: Partial<NeuroDict> }
+import { useI18n } from "@/components/i18n/I18nProvider"
 
 interface NeuroRunbook {
   slug: string
@@ -99,29 +81,9 @@ const ScoreRing = dynamic(() => Promise.resolve(function ScoreRingImpl({ score, 
 }), { ssr: false })
 
 export default function NeuroPage() {
-  const t: NeuroDict = useMemo(() => ({
-    title: "Neuro – Personal Intelligence",
-    subtitle: "Dein Stack. Deine Ziele. Dein persönlicher Ausführungsplan.",
-    pick_stack: "Stacks wählen",
-    add_stack: "Hinzufügen",
-    input_placeholder: "z. B. nodejs, postgres, kubernetes, aws-eks",
-    recommend: "Empfehlen",
-    recommendations: "Empfehlungen",
-    plan_title: "Ausführungsplan",
-    score_title: "Neuro Score",
-    confidence: "Confidence",
-    loading: "Lade...",
-    fetch_error: "Laden fehlgeschlagen",
-    available_label: "Available",
-    chosen_label: "Chosen",
-  }), [])
-
-  const pathname = usePathname()
-  const lang = useMemo(() => {
-    const seg = (pathname || "").split("/")[1] || "en"
-    return seg || "en"
-  }, [pathname])
-  const prefix = `/${lang}`
+  const { dict, locale } = useI18n()
+  const t = dict.neuro
+  const prefix = `/${locale}`
   const reduce = useReducedMotion()
   const [available, setAvailable] = useState<string[]>([
     "nodejs", "nginx", "postgres", "redis", "kubernetes", "aws-eks", "gcp-gke", "terraform", "github-actions",

@@ -358,10 +358,32 @@ export type Dictionary = {
     spark_title: string
   }
   vorstellung?: Record<string, unknown>
+  check: {
+    page_title: string
+    page_subtitle: string
+    badge_no_reg: string
+    badge_time: string
+    badge_share: string
+    methodology_title: string
+    methodology_desc: string
+    methodology_bullet1: string
+    methodology_bullet2: string
+    methodology_bullet3: string
+    methodology_link: string
+    harden_title: string
+    harden_desc: string
+    faq_title: string
+    faq_q1: string
+    faq_a1: string
+    faq_q2: string
+    faq_a2: string
+    faq_q3: string
+    faq_a3: string
+  }
 }
 
 // Supported dictionary locales (JSON files that exist in /dictionaries)
-const DICTIONARY_LOCALES = ["de", "en", "es", "fr", "pt", "it", "ru", "zh", "ja", "ar", "nl", "hi", "tr", "pl", "ko"] as const
+const DICTIONARY_LOCALES = ["de", "en", "es", "fr", "pt", "it", "ru", "zh", "ja", "ar", "nl", "hi", "tr", "pl", "ko", "af"] as const
 type DictionaryLocale = (typeof DICTIONARY_LOCALES)[number]
 
 const loaders: Record<DictionaryLocale, () => Promise<Dictionary>> = {
@@ -380,6 +402,7 @@ const loaders: Record<DictionaryLocale, () => Promise<Dictionary>> = {
   tr: () => import("@/dictionaries/tr.json").then((m) => m.default as unknown as Dictionary),
   pl: () => import("@/dictionaries/pl.json").then((m) => m.default as unknown as Dictionary),
   ko: () => import("@/dictionaries/ko.json").then((m) => m.default as unknown as Dictionary),
+  af: () => import("@/dictionaries/af.json").then((m) => m.default as unknown as Dictionary),
 }
 
 /** Returns the best available dictionary locale for the given locale. */

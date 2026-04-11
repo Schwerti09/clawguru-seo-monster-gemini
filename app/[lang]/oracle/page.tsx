@@ -1,29 +1,11 @@
 "use client"
 
-import React, { Suspense, useEffect, useMemo, useRef, useState } from "react"
+import React, { Suspense, useEffect, useRef, useState } from "react"
 import dynamic from "next/dynamic"
 import { motion, useReducedMotion } from "framer-motion"
-import { usePathname } from "next/navigation"
+import { useI18n } from "@/components/i18n/I18nProvider"
 
 type Severity = "LOW" | "MEDIUM" | "HIGH" | "CRITICAL"
-
-interface OracleDict {
-  title: string
-  subtitle: string
-  scope_label: string
-  scope_placeholder: string
-  add_scope: string
-  remove: string
-  risk_radar: string
-  live_score: string
-  cve_title: string
-  loading: string
-  fetch_error: string
-  scope_hint: string
-}
-interface DictShape {
-  oracle?: OracleDict
-}
 
 interface RadarPoint {
   label: string
@@ -188,28 +170,10 @@ const ScoreRing = dynamic(() => Promise.resolve(function ScoreRingImpl({ score, 
   )
 }), { ssr: false })
 
-export default function OraclePage({ params }: { params: { lang: string } }) {
-  const t: OracleDict = useMemo(() => ({
-    title: "Oracle – Predictive Risk Radar",
-    subtitle: "Erkenne Risiken, bevor sie eintreten. Personalisierte Vorhersagen für deinen Scope.",
-    scope_label: "Scope auswählen",
-    scope_placeholder: "z. B. nginx, postgres, aws-ec2",
-    add_scope: "Hinzufügen",
-    remove: "Entfernen",
-    risk_radar: "Predictive Risk Radar",
-    live_score: "Live Predictive Score",
-    cve_title: "Relevante CVEs",
-    loading: "Lade...",
-    fetch_error: "Laden fehlgeschlagen",
-    scope_hint: "Tippe Enter zum Hinzufügen. Nutze 3–6 präzise Begriffe.",
-  }), [])
-
-  const pathname = usePathname()
-  const lang = useMemo(() => {
-    const seg = (pathname || "").split("/")[1] || "en"
-    return seg || "en"
-  }, [pathname])
-  const prefix = `/${lang}`
+export default function OraclePage() {
+  const { dict, locale } = useI18n()
+  const t = dict.oracle
+  const prefix = `/${locale}`
 
   const reduce = useReducedMotion()
   const [scopes, setScopes] = useState<string[]>(["nginx", "ubuntu-22.04", "aws-ec2"])
@@ -336,7 +300,7 @@ export default function OraclePage({ params }: { params: { lang: string } }) {
             disabled={busy}
             className="px-4 py-2 rounded-lg text-sm font-bold border border-cyan-500/40 bg-cyan-500/20 text-cyan-100 hover:shadow-[0_0_30px_rgba(0,184,255,0.35)] disabled:opacity-50"
           >
-            {busy ? t.loading : "Predict"}
+            {busy ? t.loading : t.predict_btn}
           </motion.button>
           {error && <span className="text-sm text-red-300">{error}</span>}
         </div>

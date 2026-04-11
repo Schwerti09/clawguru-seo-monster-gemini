@@ -11,38 +11,14 @@ import { trackEvent } from "@/lib/analytics"
 
 export default function CheckPage() {
   const [showOnboarding, setShowOnboarding] = useState(false)
-  const { locale } = useI18n()
-  const isGerman = locale === "de"
+  const { locale, dict } = useI18n()
+  const c = dict.check
   const prefix = `/${locale}`
-  const faqItems = isGerman
-    ? [
-        {
-          q: "Speichert ClawGuru meine Eingaben?",
-          a: "Nein. Der Check speichert keine Targets dauerhaft. Technisch notwendige Request-Metadaten koennen in Server-Logs auftauchen.",
-        },
-        {
-          q: "Ist das ein Penetrationstest?",
-          a: "Nein. Es ist eine schnelle heuristische Bewertung oeffentlich sichtbarer Signale. Fuer verbindliche Aussagen braucht es interne Validierung.",
-        },
-        {
-          q: "Was mache ich nach dem Score?",
-          a: "Die Top-Empfehlungen direkt umsetzen, danach mit Runbooks nachhaerten und erneut pruefen.",
-        },
-      ]
-    : [
-        {
-          q: "Does ClawGuru store my inputs?",
-          a: "No. The check does not persist targets. Technically required request metadata can appear in server logs.",
-        },
-        {
-          q: "Is this a penetration test?",
-          a: "No. It is a fast heuristic evaluation of publicly visible signals. For binding conclusions, validate internally.",
-        },
-        {
-          q: "What should I do after the score?",
-          a: "Execute the top recommendations, harden with runbooks, then re-check for improvement.",
-        },
-      ]
+  const faqItems = [
+    { q: c.faq_q1, a: c.faq_a1 },
+    { q: c.faq_q2, a: c.faq_a2 },
+    { q: c.faq_q3, a: c.faq_a3 },
+  ]
   const faqJsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -84,22 +60,18 @@ export default function CheckPage() {
       <div className="py-16">
         <SectionTitle
           kicker="SECURITY"
-          title={isGerman ? "Security-Check in 30 Sekunden" : "Security Check in 30 seconds"}
-          subtitle={
-            isGerman
-              ? "Public Target rein, Claw Score raus: Risiko sehen, Top-Fehler verstehen und sofort konkrete nächste Schritte starten."
-              : "Enter a public target, get your Claw Score: see risk instantly, understand top gaps, and start concrete next steps."
-          }
+          title={c.page_title}
+          subtitle={c.page_subtitle}
         />
         <div className="mt-4 grid gap-3 sm:grid-cols-3 max-w-4xl">
           <div className="rounded-xl border border-emerald-900/40 bg-emerald-950/20 px-4 py-3 text-sm text-emerald-100">
-            {isGerman ? "Keine Registrierung fuer den ersten Check" : "No registration for your first check"}
+            {c.badge_no_reg}
           </div>
           <div className="rounded-xl border border-cyan-900/40 bg-cyan-950/20 px-4 py-3 text-sm text-cyan-100">
-            {isGerman ? "Ergebnis in unter 30 Sekunden" : "Result in under 30 seconds"}
+            {c.badge_time}
           </div>
           <div className="rounded-xl border border-violet-900/40 bg-violet-950/20 px-4 py-3 text-sm text-violet-100">
-            {isGerman ? "Share-Badge + konkrete Fix-Empfehlungen" : "Share badge + concrete fix recommendations"}
+            {c.badge_share}
           </div>
         </div>
         <div className="mt-8">
@@ -107,34 +79,30 @@ export default function CheckPage() {
         </div>
         <section className="mt-10 rounded-2xl border border-white/10 bg-black/20 p-6 max-w-4xl">
           <h3 className="text-lg font-bold text-white">
-            {isGerman ? "Methodik & Grenzen" : "Methodology & limitations"}
+            {c.methodology_title}
           </h3>
           <p className="mt-2 text-sm text-gray-300">
-            {isGerman
-              ? "Der Check bewertet nur oeffentlich sichtbare Signale (z. B. erreichbare Services, Header-/TLS-Indikatoren und typische Exposure-Muster). Kein Penetrationstest, keine Garantie."
-              : "This check evaluates publicly visible signals only (e.g. reachable services, header/TLS indicators, and common exposure patterns). It is not a penetration test and not a guarantee."}
+            {c.methodology_desc}
           </p>
           <ul className="mt-4 space-y-2 text-sm text-gray-300">
-            <li>{isGerman ? "• Score ist heuristisch und priorisiert schnelle Orientierung." : "• Score is heuristic and optimized for fast orientation."}</li>
-            <li>{isGerman ? "• Fuer belastbare Aussagen immer Konfiguration, Logs und interne Scans verifizieren." : "• For reliable conclusions, always verify config, logs, and internal scans."}</li>
-            <li>{isGerman ? "• Empfehlungen sind auf schnelle Hardening-Umsetzung mit Runbooks ausgerichtet." : "• Recommendations are designed for fast hardening execution via runbooks."}</li>
+            <li>• {c.methodology_bullet1}</li>
+            <li>• {c.methodology_bullet2}</li>
+            <li>• {c.methodology_bullet3}</li>
           </ul>
           <a
             href={`${prefix}/methodik`}
             onClick={() => trackEvent("methodik_click", { locale, source: "check_methodology_block" })}
             className="mt-4 inline-flex text-sm text-cyan-300 hover:text-cyan-200 underline underline-offset-4"
           >
-            {isGerman ? "Vollstaendige Methodik ansehen" : "View full methodology"}
+            {c.methodology_link}
           </a>
         </section>
         <section className="mt-8 rounded-2xl border border-white/10 bg-black/20 p-6 max-w-4xl">
           <h3 className="text-lg font-bold text-white">
-            {isGerman ? "Direkt weiter haerten" : "Harden further right away"}
+            {c.harden_title}
           </h3>
           <p className="mt-2 text-sm text-gray-300">
-            {isGerman
-              ? "Die haeufigsten Folgefragen nach dem Check: konkrete Hardening-Anleitungen fuer typische Stack-Bausteine."
-              : "Most common follow-ups after the check: concrete hardening guides for common stack components."}
+            {c.harden_desc}
           </p>
           <div className="mt-4 grid gap-2 sm:grid-cols-2">
             <a
@@ -183,7 +151,7 @@ export default function CheckPage() {
         </section>
         <section className="mt-8 rounded-2xl border border-white/10 bg-black/20 p-6 max-w-4xl">
           <h3 className="text-lg font-bold text-white">
-            {isGerman ? "FAQ zum Security-Check" : "Security Check FAQ"}
+            {c.faq_title}
           </h3>
           <div className="mt-4 space-y-3">
             {faqItems.map((item) => (

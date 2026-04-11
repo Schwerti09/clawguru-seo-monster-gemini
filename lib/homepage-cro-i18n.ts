@@ -230,6 +230,31 @@ const COPY: Partial<Record<Locale, Partial<HomepageCroCopy>>> = {
     lpHubTitle: "OpenClaw 및 AI-agent security 랜딩 페이지",
     lpHubSub: "check, hardening, guided fix 경로를 위한 intent 페이지로 바로 이동하세요.",
   },
+  af: {
+    heroPrimary: "Begin sekuriteitskontrole",
+    heroSecondary: "Blaai deur runbooks",
+    heroTertiary: "Braai My Stack — vind swakhede in ~30s",
+    heroNote:
+      "Gratis kontrole, geen aanmelding. Braai onthul swak punte vinnig — verifieer dan in jou eie omgewing. Nie 'n penetrasietoets nie.",
+    finalTitle: "Gereed vir egte sekuriteitsbedrywighede?",
+    finalSub: "Begin nou — risikovry. Produktief in 5 minute.",
+    finalPrimary: "Begin sekuriteitskontrole",
+    finalSecondary: "Maak OpenClaw-landbladsy oop",
+    trustDisclaimer:
+      "ClawGuru is nie 'n penetrasietoets nie. Behandel resultate as 'n vinnige sein, en verifieer dan in jou eie omgewing.",
+    stickyCheckCta: "Begin kontrole",
+    stickyRunbooksCta: "Runbooks",
+    lpHubTitle: "OpenClaw en KI-agent sekuriteitslandbladsye",
+    lpHubSub: "Gaan direk na bedoelingspesifieke bladsye vir kontroles, versterking en geleide herstelpaaie.",
+    lpOpenclawTitle: "OpenClaw",
+    lpOpenclawDesc: "Gemeenskapvertroue en bedryfskonteks",
+    lpCheckTitle: "OpenClaw Sekuriteitskontrole",
+    lpCheckDesc: "Vinnige sein in 30 sekondes",
+    lpMoltbotTitle: "Moltbot-versterking",
+    lpMoltbotDesc: "Gateway-, autentikasie- en blootstellingsherstelling",
+    lpAiTitle: "KI-agent sekuriteit",
+    lpAiDesc: "Van blootgestelde gereedskap na meetbare beheermaatreëls",
+  },
 }
 
 export function getHomepageCroCopy(locale: Locale): HomepageCroCopy {

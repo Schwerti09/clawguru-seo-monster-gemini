@@ -59,9 +59,13 @@ export default function TagsClientLoader({ dict }: { dict?: any }) {
   useEffect(() => {
     let mounted = true
     let timer: any = null
+    let abortTimer: any = null
+    const controller = typeof AbortController !== "undefined" ? new AbortController() : null
     ;(async () => {
       try {
-        const res = await fetch(`/api/stats/tags?limit=10000`, { cache: "no-store" })
+        abortTimer = setTimeout(() => controller?.abort(), 5000)
+        const res = await fetch(`/api/stats/tags`, { cache: "no-store", signal: controller?.signal })
+        clearTimeout(abortTimer)
         if (!res.ok) throw new Error(String(res.status))
         const { tags, counts, avgClaw, runbookCount } = await res.json()
         if (mounted) {
@@ -92,6 +96,7 @@ export default function TagsClientLoader({ dict }: { dict?: any }) {
           setReady(true)
         }
       } catch {
+        clearTimeout(abortTimer)
         if (mounted) {
           const demo = [
             "security","nginx","aws","kubernetes","docker","cloudflare","ssh","firewall","waf","backup"
@@ -129,7 +134,7 @@ export default function TagsClientLoader({ dict }: { dict?: any }) {
         setReady(true)
       }
     }, 2000)
-    return () => { mounted = false; if (timer) clearTimeout(timer) }
+    return () => { mounted = false; if (timer) clearTimeout(timer); if (abortTimer) clearTimeout(abortTimer); controller?.abort() }
   }, [])
 
   const tabs = useMemo(() => [

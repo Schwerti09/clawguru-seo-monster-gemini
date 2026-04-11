@@ -30,9 +30,9 @@ export async function generateMetadata(props: { params: { lang: string; tag: str
     const pseo: any = await import("@/lib/pseo")
     let list: any[] = []
     try {
-      list = typeof pseo.buildRunbooksClient === "function" ? pseo.buildRunbooksClient(10000) : pseo.materializedRunbooks()
-    } catch {
       list = pseo.materializedRunbooks()
+    } catch {
+      list = []
     }
     const items = Array.isArray(list) ? list.filter((r: any) => (r?.tags || []).includes(decodedTag)) : []
     if (!items.length) return { alternates: buildLocalizedAlternates(locale, `/tag/${encodeURIComponent(decodedTag)}`) }
@@ -50,9 +50,10 @@ export default async function LocaleTagPage(props: { params: { lang: string; tag
   const pseo: any = await import("@/lib/pseo")
   let list: any[] = []
   try {
-    list = typeof pseo.buildRunbooksClient === "function" ? pseo.buildRunbooksClient(10000) : pseo.materializedRunbooks()
-  } catch {
+    // Use cached materializedRunbooks() to avoid generating 10k runbooks on every request
     list = pseo.materializedRunbooks()
+  } catch {
+    list = []
   }
   // Flexible matching: support namespaced tags like "topic:x" or plain "x"
   const key = String(tag).toLowerCase()

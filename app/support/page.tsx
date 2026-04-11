@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import Container from "@/components/shared/Container"
 import { ClawguruAvatar } from "@/components/ui/ClawguruAvatar"
-import { COMMUNITY, LEGAL_INFO } from "@/lib/constants"
+import { LEGAL_INFO } from "@/lib/constants"
 
 export const metadata: Metadata = {
   title: "Kontakt & Support • ClawGuru",
@@ -30,10 +30,7 @@ export default function SupportPage() {
           </p>
           <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
             <a href={`mailto:${LEGAL_INFO.email}`} className="px-6 py-3 rounded-2xl font-black text-black" style={{ background: "linear-gradient(135deg, #d4af37 0%, #e8cc6a 50%, #a8872a 100%)" }}>
-              E‑Mail Support
-            </a>
-            <a href={COMMUNITY.discordInvite} className="px-6 py-3 rounded-2xl font-black border border-white/10 text-gray-200 hover:border-white/20">
-              Discord Ops‑Room
+              E‑Mail: {LEGAL_INFO.email}
             </a>
             <a href="/emergency" className="px-6 py-3 rounded-2xl font-black text-white" style={{ background: "linear-gradient(135deg,#ff0066,#ff9900)" }}>
               Notfall? → Emergency
@@ -82,7 +79,6 @@ export default function SupportPage() {
               <div className="text-sm font-black text-white mb-2">Wie erreichst du uns am schnellsten?</div>
               <ul className="space-y-2 text-sm text-gray-200">
                 <li>• E‑Mail: <a href={`mailto:${LEGAL_INFO.email}`} className="underline underline-offset-2">{LEGAL_INFO.email}</a></li>
-                <li>• Discord: <a href={COMMUNITY.discordInvite} className="underline underline-offset-2">Join Ops‑Room</a></li>
                 <li>• Notfall: <a href="/emergency" className="underline underline-offset-2">Emergency</a> (Day Pass 60s)</li>
               </ul>
             </div>

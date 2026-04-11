@@ -617,7 +617,7 @@ trufflehog git file://. --only-verified
 # - uses: slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml@v1
 #   with:
 #     image: openclaw/server
-#     digest: \${{ steps.build.outputs.digest }}`}</pre>
+#     digest: ${"{{"} steps.build.outputs.digest }}`}</pre>
                   </div>
                   <div className="grid md:grid-cols-3 gap-4">
                     <div className="bg-blue-900 p-4 rounded-lg border border-blue-700">

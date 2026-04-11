@@ -75,7 +75,7 @@ export default async function K8sNetworkPoliciesPage({
               K8s Network Policies
             </h1>
             <p className="text-2xl text-blue-200 mb-4">
-              {"Zero Trust Pod-to-Pod Security"}
+              Zero Trust Pod-to-Pod Security
             </p>
             <p className="text-xl text-white/80 mb-8">
               Kubernetes Network Policies, Cilium, Calico, Ingress/Egress, DNS Policies. Cluster segmentation.

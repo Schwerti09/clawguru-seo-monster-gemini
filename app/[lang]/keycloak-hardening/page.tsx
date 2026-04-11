@@ -81,7 +81,7 @@ export default async function KeycloakHardeningPage({
               Keycloak Hardening
             </h1>
             <p className="text-2xl text-blue-200 mb-4 font-light">
-              {"Enterprise IAM Security"}
+              Enterprise IAM Security
             </p>
             <p className="text-xl text-white/80 mb-8">
               {t(locale, "SSO, MFA, Brute-Force Protection, Session Management & GDPR Compliance. Schützen Sie Ihre Identity Provider.", "SSO, MFA, brute-force protection, session management & GDPR compliance. Protect your identity provider.")}
@@ -455,7 +455,7 @@ Enabled Event Types:
           {/* CTA */}
           <section className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl p-8 text-center text-white">
             <h2 className="text-2xl font-bold mb-4">
-              {"Keycloak Security Assessment"}
+              Keycloak Security Assessment
             </h2>
             <p className="mb-6 max-w-2xl mx-auto">
               {t(locale, "Überprüfen Sie Ihre Keycloak-Konfiguration auf Sicherheitslücken.", "Check your Keycloak configuration for security vulnerabilities.")}

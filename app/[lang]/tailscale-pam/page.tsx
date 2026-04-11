@@ -76,7 +76,7 @@ export default async function TailscalePAMPage({
           <div className="max-w-4xl">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-9000/20 text-blue-300 text-sm mb-4">
               <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
-              {"Zero Trust Security 2026"}
+              Zero Trust Security 2026
             </div>
             <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">
               Tailscale PAM
@@ -126,7 +126,7 @@ export default async function TailscalePAMPage({
             <div className="grid md:grid-cols-3 gap-6 mb-8">
               <div className="bg-blue-900 border border-blue-700 rounded-xl p-6">
                 <div className="text-3xl mb-3">🔐</div>
-                <h3 className="font-semibold text-gray-100 mb-2">{"Zero Trust"}</h3>
+                <h3 className="font-semibold text-gray-100 mb-2">Zero Trust</h3>
                 <p className="text-slate-600 text-sm">
                   {t(locale, "Kein implizites Vertrauen. Jede Verbindung wird authentifiziert und autorisiert.", "No implicit trust. Every connection is authenticated and authorized.")}
                 </p>
@@ -183,7 +183,7 @@ export default async function TailscalePAMPage({
             </p>
 
             <div className="bg-gray-800 border border-slate-200 rounded-xl p-6 mb-8">
-              <h3 className="font-semibold text-gray-100 mb-4">{"Device Trust Checks"}</h3>
+              <h3 className="font-semibold text-gray-100 mb-4">Device Trust Checks</h3>
               <div className="grid md:grid-cols-2 gap-4">
                 <div className="space-y-3">
                   <div className="flex items-start gap-3">
@@ -353,7 +353,7 @@ export default async function TailscalePAMPage({
             </p>
 
             <div className="bg-gray-800 border border-slate-200 rounded-xl p-6 mb-6">
-              <h3 className="font-semibold text-gray-100 mb-4">{"Tailscale SSH Features"}</h3>
+              <h3 className="font-semibold text-gray-100 mb-4">Tailscale SSH Features</h3>
               <div className="grid md:grid-cols-2 gap-4">
                 <ul className="space-y-2 text-gray-200">
                   <li className="flex items-center gap-2">

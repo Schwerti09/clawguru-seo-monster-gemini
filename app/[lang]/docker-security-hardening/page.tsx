@@ -75,7 +75,7 @@ export default function DockerSecurityPage({
               Docker Security
             </h1>
             <p className="text-2xl text-cyan-100 mb-4">
-              {"Container Hardening & Security"}
+              Container Hardening & Security
             </p>
             <p className="text-xl text-white/80 mb-8">
               Rootless, seccomp, AppArmor, Cap-Drop, Image Scanning, CIS Benchmarks. Enterprise-grade Docker security.

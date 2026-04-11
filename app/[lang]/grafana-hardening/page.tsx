@@ -437,7 +437,7 @@ log_data_source_queries = true`}
           {/* CTA */}
           <section className="bg-gradient-to-r from-yellow-500 to-orange-500 rounded-2xl p-8 text-center text-white">
             <h2 className="text-2xl font-bold mb-4">
-              {"Grafana Security Assessment"}
+              Grafana Security Assessment
             </h2>
             <p className="mb-6 max-w-2xl mx-auto">
               {t(locale, "Überprüfen Sie Ihre Grafana-Konfiguration auf Sicherheitslücken.", "Check your Grafana configuration for security vulnerabilities.")}

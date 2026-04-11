@@ -81,7 +81,7 @@ export default async function CloudflareTunnelPage({
               Cloudflare Tunnel
             </h1>
             <p className="text-2xl text-orange-100 mb-4 font-light">
-              {"Firewall Rules & Zero Trust Access"}
+              Firewall Rules & Zero Trust Access
             </p>
             <p className="text-xl text-white/80 mb-8">
               {t(locale, "Sichere interne Services ohne Öffnen von Ports. WAF, DDoS Protection, Bot Management & Access Policies in einem.", "Secure internal services without opening ports. WAF, DDoS protection, bot management & access policies combined.")}
@@ -475,7 +475,7 @@ require:
               href={coreLinks.check} 
               className="inline-block px-6 py-3 bg-gray-800 text-orange-400 rounded-lg font-semibold hover:bg-slate-100 transition-colors"
             >
-              {"Migration Assessment"}
+              Migration Assessment
             </a>
           </section>
         </div>

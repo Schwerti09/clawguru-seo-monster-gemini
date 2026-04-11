@@ -5,8 +5,43 @@ import { useState } from "react"
 type FaqItem = { q: string; a: string; category?: string }
 
 type IntelFaqDict = {
+  hero_badge?: string
+  hero_title?: string
+  hero_subline?: string
+  cta_daypass?: string
+  upgrade_premium_label?: string
+  upgrade_title?: string
+  upgrade_text?: string
+  upgrade_button?: string
+  live_header?: string
+  live_loading?: string
+  live_error?: string
+  export_csv?: string
+  export_json?: string
+  export_pdf?: string
+  fix_link_label?: string
+  free_teaser_text?: string
+  free_teaser_button?: string
+  analyzer_header?: string
+  analyzer_input_placeholder?: string
+  analyzing_label?: string
+  radar_header?: string
+  radar_loading?: string
+  radar_error?: string
+  probability_label?: string
+  preview_header?: string
+  preview_empty?: string
+  stats_title?: string
+  stats_subtitle?: string
+  tile_total_cves?: string
+  tile_avg_cvss?: string
+  tile_top_services?: string
+  spark_title?: string
   faq_title?: string
   faq_subtitle?: string
+  faq_cat_basics?: string
+  faq_cat_features?: string
+  faq_cat_access?: string
   faq_q1?: string; faq_a1?: string
   faq_q2?: string; faq_a2?: string
   faq_q3?: string; faq_a3?: string
@@ -15,9 +50,7 @@ type IntelFaqDict = {
   faq_q6?: string; faq_a6?: string
   faq_q7?: string; faq_a7?: string
   faq_q8?: string; faq_a8?: string
-  faq_cat_basics?: string
-  faq_cat_features?: string
-  faq_cat_access?: string
+  [key: string]: string | undefined
 }
 
 const FALLBACK: FaqItem[] = [

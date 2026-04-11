@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { SUPPORTED_LOCALES, type Locale, localeAlternates } from "@/lib/i18n";
 import { BASE_URL } from "@/lib/config";
 import { getCoreSecurityLinks } from "@/lib/core-security-links";
+import { t } from "@/lib/article-i18n"
 
 export const dynamic = "force-static";
 export const revalidate = 86400;
@@ -64,7 +65,6 @@ export default async function CloudflareTunnelPage({
   const prefix = `/${locale}`;
   const coreLinks = getCoreSecurityLinks(locale);
 
-  const isGerman = locale === "de";
 
   return (
     <main className="min-h-screen bg-gray-800">
@@ -81,14 +81,10 @@ export default async function CloudflareTunnelPage({
               Cloudflare Tunnel
             </h1>
             <p className="text-2xl text-orange-100 mb-4 font-light">
-              {isGerman 
-                ? "Firewall Rules & Zero Trust Access"
-                : "Firewall Rules & Zero Trust Access"}
+              {"Firewall Rules & Zero Trust Access"}
             </p>
             <p className="text-xl text-white/80 mb-8">
-              {isGerman
-                ? "Sichere interne Services ohne Öffnen von Ports. WAF, DDoS Protection, Bot Management & Access Policies in einem."
-                : "Secure internal services without opening ports. WAF, DDoS protection, bot management & access policies combined."}
+              {t(locale, "Sichere interne Services ohne Öffnen von Ports. WAF, DDoS Protection, Bot Management & Access Policies in einem.", "Secure internal services without opening ports. WAF, DDoS protection, bot management & access policies combined.")}
             </p>
             <div className="flex flex-wrap gap-3">
               <span className="px-4 py-2 bg-white/20 text-white rounded-lg text-sm">cloudflared</span>
@@ -106,38 +102,36 @@ export default async function CloudflareTunnelPage({
           {/* Why Cloudflare Tunnel */}
           <section className="mb-16">
             <h2 className="text-3xl font-bold text-gray-100 mb-6">
-              {isGerman ? "Warum Cloudflare Tunnel?" : "Why Cloudflare Tunnel?"}
+              {t(locale, "Warum Cloudflare Tunnel?", "Why Cloudflare Tunnel?")}
             </h2>
             
             <p className="text-gray-200 text-lg mb-6 leading-relaxed">
-              {isGerman
-                ? "Cloudflare Tunnel (früher Argo Tunnel) ermöglicht sicheren Zugriff auf interne Services ohne VPN und ohne Öffnen von Firewall-Ports. Der Traffic wird über Cloudflares globales Netzwerk mit integriertem DDoS-Schutz und WAF geroutet."
-                : "Cloudflare Tunnel (formerly Argo Tunnel) enables secure access to internal services without VPN and without opening firewall ports. Traffic is routed through Cloudflare's global network with integrated DDoS protection and WAF."}
+              {t(locale, "Cloudflare Tunnel (früher Argo Tunnel) ermöglicht sicheren Zugriff auf interne Services ohne VPN und ohne Öffnen von Firewall-Ports. Der Traffic wird über Cloudflares globales Netzwerk mit integriertem DDoS-Schutz und WAF geroutet.", "Cloudflare Tunnel (formerly Argo Tunnel) enables secure access to internal services without VPN and without opening firewall ports. Traffic is routed through Cloudflare's global network with integrated DDoS protection and WAF.")}
             </p>
 
             <div className="grid md:grid-cols-2 gap-6 mb-8">
               <div className="bg-slate-900 rounded-xl p-6 text-white">
-                <h3 className="font-semibold mb-4 text-orange-400">{isGerman ? "Traditionell (Alt)" : "Traditional (Old)"}</h3>
+                <h3 className="font-semibold mb-4 text-orange-400">{t(locale, "Traditionell (Alt)", "Traditional (Old)")}</h3>
                 <ul className="space-y-3 text-sm text-slate-300">
                   <li className="flex items-start gap-2">
                     <span className="text-red-400">✗</span>
-                    {isGerman ? "VPN-Server öffentlich exponiert" : "VPN server publicly exposed"}
+                    {t(locale, "VPN-Server öffentlich exponiert", "VPN server publicly exposed")}
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-red-400">✗</span>
-                    {isGerman ? "Ports 443/80 öffnen" : "Open ports 443/80"}
+                    {t(locale, "Ports 443/80 öffnen", "Open ports 443/80")}
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-red-400">✗</span>
-                    {isGerman ? "DDoS-Anfälligkeit" : "DDoS vulnerability"}
+                    {t(locale, "DDoS-Anfälligkeit", "DDoS vulnerability")}
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-red-400">✗</span>
-                    {isGerman ? "Statische IP-Whitelists" : "Static IP whitelists"}
+                    {t(locale, "Statische IP-Whitelists", "Static IP whitelists")}
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-red-400">✗</span>
-                    {isGerman ? "Komplexe VPN-Config" : "Complex VPN configuration"}
+                    {t(locale, "Komplexe VPN-Config", "Complex VPN configuration")}
                   </li>
                 </ul>
               </div>
@@ -146,23 +140,23 @@ export default async function CloudflareTunnelPage({
                 <ul className="space-y-3 text-sm text-gray-200">
                   <li className="flex items-start gap-2">
                     <span className="text-green-400">✓</span>
-                    {isGerman ? "Keine öffentlichen Ports nötig" : "No public ports needed"}
+                    {t(locale, "Keine öffentlichen Ports nötig", "No public ports needed")}
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-green-400">✓</span>
-                    {isGerman ? "Ausgehende Verbindung nur (HTTPS)" : "Outbound connection only (HTTPS)"}
+                    {t(locale, "Ausgehende Verbindung nur (HTTPS)", "Outbound connection only (HTTPS)")}
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-green-400">✓</span>
-                    {isGerman ? "Integrierter DDoS-Schutz" : "Integrated DDoS protection"}
+                    {t(locale, "Integrierter DDoS-Schutz", "Integrated DDoS protection")}
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-green-400">✓</span>
-                    {isGerman ? "Identity-basierter Zugriff" : "Identity-based access"}
+                    {t(locale, "Identity-basierter Zugriff", "Identity-based access")}
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-green-400">✓</span>
-                    {isGerman ? "Globale Edge-Performance" : "Global edge performance"}
+                    {t(locale, "Globale Edge-Performance", "Global edge performance")}
                   </li>
                 </ul>
               </div>
@@ -272,9 +266,7 @@ spec:
             <div className="bg-orange-50 border border-orange-700 rounded-xl p-6">
               <h3 className="font-semibold text-orange-900 mb-3">Token Management</h3>
               <p className="text-orange-800 text-sm mb-4">
-                {isGerman 
-                  ? "Speichern Sie den Tunnel-Token sicher in Kubernetes Secrets, Docker Secrets oder Vault. Niemals in Git committen!"
-                  : "Store the tunnel token securely in Kubernetes Secrets, Docker Secrets, or Vault. Never commit to Git!"}
+                {t(locale, "Speichern Sie den Tunnel-Token sicher in Kubernetes Secrets, Docker Secrets oder Vault. Niemals in Git committen!", "Store the tunnel token securely in Kubernetes Secrets, Docker Secrets, or Vault. Never commit to Git!")}
               </p>
               <div className="bg-slate-900 rounded-lg p-4 font-mono text-xs text-green-400">
 {`# Create tunnel token secret
@@ -290,9 +282,7 @@ kubectl create secret generic tunnel-token \\
             <h2 className="text-3xl font-bold text-gray-100 mb-6">Cloudflare Access Policies</h2>
             
             <p className="text-gray-200 mb-6">
-              {isGerman
-                ? "Cloudflare Access Policies definieren wer Zugriff auf Ihre Tunnels erhält. Integriert mit OIDC, SAML, OTP und Service Tokens."
-                : "Cloudflare Access Policies define who gets access to your tunnels. Integrated with OIDC, SAML, OTP, and Service Tokens."}
+              {t(locale, "Cloudflare Access Policies definieren wer Zugriff auf Ihre Tunnels erhält. Integriert mit OIDC, SAML, OTP und Service Tokens.", "Cloudflare Access Policies define who gets access to your tunnels. Integrated with OIDC, SAML, OTP, and Service Tokens.")}
             </p>
 
             <div className="bg-slate-900 rounded-xl p-6 overflow-x-auto mb-6">
@@ -433,19 +423,19 @@ require:
                 <ul className="space-y-3 text-sm text-gray-200">
                   <li className="flex items-start gap-2">
                     <span className="text-green-500 mt-0.5">✓</span>
-                    {isGerman ? "Mindestens 2 cloudflared Replicas" : "Minimum 2 cloudflared replicas"}
+                    {t(locale, "Mindestens 2 cloudflared Replicas", "Minimum 2 cloudflared replicas")}
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-green-500 mt-0.5">✓</span>
-                    {isGerman ? "Multi-Region Deployment" : "Multi-region deployment"}
+                    {t(locale, "Multi-Region Deployment", "Multi-region deployment")}
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-green-500 mt-0.5">✓</span>
-                    {isGerman ? "Health Checks konfigurieren" : "Configure health checks"}
+                    {t(locale, "Health Checks konfigurieren", "Configure health checks")}
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-green-500 mt-0.5">✓</span>
-                    {isGerman ? "Automatisches Failover" : "Automatic failover"}
+                    {t(locale, "Automatisches Failover", "Automatic failover")}
                   </li>
                 </ul>
               </div>
@@ -454,19 +444,19 @@ require:
                 <ul className="space-y-3 text-sm text-gray-200">
                   <li className="flex items-start gap-2">
                     <span className="text-green-500 mt-0.5">✓</span>
-                    {isGerman ? "SSO für alle internen Services" : "SSO for all internal services"}
+                    {t(locale, "SSO für alle internen Services", "SSO for all internal services")}
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-green-500 mt-0.5">✓</span>
-                    {isGerman ? "Service Tokens für APIs" : "Service tokens for APIs"}
+                    {t(locale, "Service Tokens für APIs", "Service tokens for APIs")}
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-green-500 mt-0.5">✓</span>
-                    {isGerman ? "Audit Logging aktivieren" : "Enable audit logging"}
+                    {t(locale, "Audit Logging aktivieren", "Enable audit logging")}
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-green-500 mt-0.5">✓</span>
-                    {isGerman ? "Session timeouts konfigurieren" : "Configure session timeouts"}
+                    {t(locale, "Session timeouts konfigurieren", "Configure session timeouts")}
                   </li>
                 </ul>
               </div>
@@ -476,18 +466,16 @@ require:
           {/* CTA */}
           <section className="bg-gradient-to-r from-orange-500 to-red-500 rounded-2xl p-8 text-center text-white">
             <h2 className="text-2xl font-bold mb-4">
-              {isGerman ? "Bereit für Zero Trust?" : "Ready for Zero Trust?"}
+              {t(locale, "Bereit für Zero Trust?", "Ready for Zero Trust?")}
             </h2>
             <p className="mb-6 max-w-2xl mx-auto">
-              {isGerman
-                ? "Migrieren Sie Ihre internen Services zu Cloudflare Tunnel. Keine öffentlichen Ports mehr nötig."
-                : "Migrate your internal services to Cloudflare Tunnel. No public ports needed anymore."}
+              {t(locale, "Migrieren Sie Ihre internen Services zu Cloudflare Tunnel. Keine öffentlichen Ports mehr nötig.", "Migrate your internal services to Cloudflare Tunnel. No public ports needed anymore.")}
             </p>
             <a 
               href={coreLinks.check} 
               className="inline-block px-6 py-3 bg-gray-800 text-orange-400 rounded-lg font-semibold hover:bg-slate-100 transition-colors"
             >
-              {isGerman ? "Migration Assessment" : "Migration Assessment"}
+              {"Migration Assessment"}
             </a>
           </section>
         </div>

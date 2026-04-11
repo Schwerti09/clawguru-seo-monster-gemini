@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { SUPPORTED_LOCALES, type Locale, localeAlternates } from "@/lib/i18n";
 import { BASE_URL } from "@/lib/config";
 import { getCoreSecurityLinks } from "@/lib/core-security-links";
+import { t } from "@/lib/article-i18n"
 
 export const dynamic = "force-static";
 export const revalidate = 86400;
@@ -64,7 +65,6 @@ export default async function GrafanaHardeningPage({
   const prefix = `/${locale}`;
   const coreLinks = getCoreSecurityLinks(locale);
 
-  const isGerman = locale === "de";
 
   return (
     <main className="min-h-screen bg-gray-800">
@@ -81,14 +81,10 @@ export default async function GrafanaHardeningPage({
               Grafana Hardening
             </h1>
             <p className="text-2xl text-yellow-100 mb-4 font-light">
-              {isGerman 
-                ? "Enterprise Security für Observability"
-                : "Enterprise Security for Observability"}
+              {t(locale, "Enterprise Security für Observability", "Enterprise Security for Observability")}
             </p>
             <p className="text-xl text-white/80 mb-8">
-              {isGerman
-                ? "SSO, RBAC, Netzwerk-Security, Secrets Management & Compliance. Schützen Sie Ihre Metriken und Dashboards."
-                : "SSO, RBAC, network security, secrets management & compliance. Protect your metrics and dashboards."}
+              {t(locale, "SSO, RBAC, Netzwerk-Security, Secrets Management & Compliance. Schützen Sie Ihre Metriken und Dashboards.", "SSO, RBAC, network security, secrets management & compliance. Protect your metrics and dashboards.")}
             </p>
             <div className="flex flex-wrap gap-3">
               <span className="px-4 py-2 bg-white/20 text-white rounded-lg text-sm">OAuth/SAML</span>
@@ -105,25 +101,23 @@ export default async function GrafanaHardeningPage({
           
           <section className="mb-16">
             <h2 className="text-3xl font-bold text-gray-100 mb-6">
-              {isGerman ? "Warum Grafana Hardening kritisch ist" : "Why Grafana Hardening is Critical"}
+              {t(locale, "Warum Grafana Hardening kritisch ist", "Why Grafana Hardening is Critical")}
             </h2>
             
             <p className="text-gray-200 text-lg mb-6 leading-relaxed">
-              {isGerman
-                ? "Grafana ist das zentrale Nervensystem Ihrer Observability-Infrastruktur. Es hat Zugriff auf alle Metriken, Logs und Traces. Ein kompromittiertes Grafana bedeutet vollständige Einsehbarkeit Ihrer Systeme - ein Goldmine für Angreifer."
-                : "Grafana is the central nervous system of your observability infrastructure. It has access to all metrics, logs, and traces. A compromised Grafana means complete visibility into your systems - a goldmine for attackers."}
+              {t(locale, "Grafana ist das zentrale Nervensystem Ihrer Observability-Infrastruktur. Es hat Zugriff auf alle Metriken, Logs und Traces. Ein kompromittiertes Grafana bedeutet vollständige Einsehbarkeit Ihrer Systeme - ein Goldmine für Angreifer.", "Grafana is the central nervous system of your observability infrastructure. It has access to all metrics, logs, and traces. A compromised Grafana means complete visibility into your systems - a goldmine for attackers.")}
             </p>
 
             <div className="bg-red-900 border-l-4 border-red-500 rounded-r-xl p-6 mb-8">
               <h3 className="text-red-900 font-semibold mb-2">
-                {isGerman ? "⚠️ Risiken eines unsicheren Grafana" : "⚠️ Risks of an Unsecured Grafana"}
+                {t(locale, "⚠️ Risiken eines unsicheren Grafana", "⚠️ Risks of an Unsecured Grafana")}
               </h3>
               <ul className="text-red-800 space-y-2 text-sm">
-                <li>• {isGerman ? "Einsehbarkeit aller System-Metriken und Performance-Daten" : "Visibility of all system metrics and performance data"}</li>
-                <li>• {isGerman ? "Zugriff auf Logs mit potenziell sensiblen Daten" : "Access to logs with potentially sensitive data"}</li>
-                <li>• {isGerman ? "Datenexfiltration über Alerting-Kanäle" : "Data exfiltration via alerting channels"}</li>
-                <li>• {isGerman ? "Lateral Movement über Dashboard-Links" : "Lateral movement via dashboard links"}</li>
-                <li>• {isGerman ? "Compliance-Verstöße (GDPR, SOC 2, ISO 27001)" : "Compliance violations (GDPR, SOC 2, ISO 27001)"}</li>
+                <li>• {t(locale, "Einsehbarkeit aller System-Metriken und Performance-Daten", "Visibility of all system metrics and performance data")}</li>
+                <li>• {t(locale, "Zugriff auf Logs mit potenziell sensiblen Daten", "Access to logs with potentially sensitive data")}</li>
+                <li>• {t(locale, "Datenexfiltration über Alerting-Kanäle", "Data exfiltration via alerting channels")}</li>
+                <li>• {t(locale, "Lateral Movement über Dashboard-Links", "Lateral movement via dashboard links")}</li>
+                <li>• {t(locale, "Compliance-Verstöße (GDPR, SOC 2, ISO 27001)", "Compliance violations (GDPR, SOC 2, ISO 27001)")}</li>
               </ul>
             </div>
           </section>
@@ -136,7 +130,7 @@ export default async function GrafanaHardeningPage({
               <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
                 <h3 className="font-semibold text-gray-100 mb-3">OAuth 2.0 / OIDC</h3>
                 <p className="text-slate-600 text-sm mb-4">
-                  {isGerman ? "Google, Azure AD, Okta, Keycloak Integration" : "Google, Azure AD, Okta, Keycloak integration"}
+                  {t(locale, "Google, Azure AD, Okta, Keycloak Integration", "Google, Azure AD, Okta, Keycloak integration")}
                 </p>
                 <div className="bg-slate-900 rounded-lg p-4 font-mono text-xs text-green-400">
 {`[auth.generic_oauth]
@@ -154,7 +148,7 @@ role_attribute_path = roles[0]`}
               <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
                 <h3 className="font-semibold text-gray-100 mb-3">SAML 2.0</h3>
                 <p className="text-slate-600 text-sm mb-4">
-                  {isGerman ? "Enterprise IdP Integration (Okta, OneLogin, ADFS)" : "Enterprise IdP integration (Okta, OneLogin, ADFS)"}
+                  {t(locale, "Enterprise IdP Integration (Okta, OneLogin, ADFS)", "Enterprise IdP integration (Okta, OneLogin, ADFS)")}
                 </p>
                 <div className="bg-slate-900 rounded-lg p-4 font-mono text-xs text-green-400">
 {`[auth.saml]
@@ -194,9 +188,7 @@ role_attribute_path = role`}
             <h2 className="text-3xl font-bold text-gray-100 mb-6">RBAC & Zugriffskontrolle</h2>
             
             <p className="text-gray-200 mb-6">
-              {isGerman
-                ? "Grafana Enterprise bietet feingranulare RBAC. Definieren Sie wer welche Dashboards sehen, Datenquellen nutzen oder Alerting konfigurieren darf."
-                : "Grafana Enterprise offers fine-grained RBAC. Define who can view which dashboards, use data sources, or configure alerting."}
+              {t(locale, "Grafana Enterprise bietet feingranulare RBAC. Definieren Sie wer welche Dashboards sehen, Datenquellen nutzen oder Alerting konfigurieren darf.", "Grafana Enterprise offers fine-grained RBAC. Define who can view which dashboards, use data sources, or configure alerting.")}
             </p>
 
             <div className="bg-slate-900 rounded-xl p-6 overflow-x-auto mb-6">
@@ -232,19 +224,19 @@ customRoles:
               <div className="bg-blue-900 rounded-lg p-4 border border-blue-700">
                 <h4 className="font-semibold text-blue-900 mb-2">Viewer</h4>
                 <p className="text-sm text-blue-300">
-                  {isGerman ? "Dashboards ansehen, keine Änderungen" : "View dashboards, no modifications"}
+                  {t(locale, "Dashboards ansehen, keine Änderungen", "View dashboards, no modifications")}
                 </p>
               </div>
               <div className="bg-green-900 rounded-lg p-4 border border-green-700">
                 <h4 className="font-semibold text-green-900 mb-2">Editor</h4>
                 <p className="text-sm text-green-300">
-                  {isGerman ? "Dashboards erstellen/bearbeiten" : "Create/edit dashboards"}
+                  {t(locale, "Dashboards erstellen/bearbeiten", "Create/edit dashboards")}
                 </p>
               </div>
               <div className="bg-red-900 rounded-lg p-4 border border-red-700">
                 <h4 className="font-semibold text-red-900 mb-2">Admin</h4>
                 <p className="text-sm text-red-300">
-                  {isGerman ? "Alle Berechtigungen + Benutzerverwaltung" : "All permissions + user management"}
+                  {t(locale, "Alle Berechtigungen + Benutzerverwaltung", "All permissions + user management")}
                 </p>
               </div>
             </div>
@@ -258,9 +250,7 @@ customRoles:
               <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
                 <h3 className="font-semibold text-gray-100 mb-4">mTLS (Mutual TLS)</h3>
                 <p className="text-slate-600 text-sm mb-4">
-                  {isGerman 
-                    ? "Erzwingen Sie Client-Zertifikate für Grafana-Zugriff. Schützt gegen Token-Diebstahl."
-                    : "Enforce client certificates for Grafana access. Protects against token theft."}
+                  {t(locale, "Erzwingen Sie Client-Zertifikate für Grafana-Zugriff. Schützt gegen Token-Diebstahl.", "Enforce client certificates for Grafana access. Protects against token theft.")}
                 </p>
                 <div className="bg-slate-900 rounded-lg p-4 font-mono text-xs text-green-400">
 {`[server]
@@ -277,7 +267,7 @@ client_cert_allowed_organizations = ["Company Inc"]`}
               <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
                 <h3 className="font-semibold text-gray-100 mb-4">IP Whitelisting</h3>
                 <p className="text-slate-600 text-sm mb-4">
-                  {isGerman ? "Zugriff nur von bekannten IP-Bereichen erlauben" : "Only allow access from known IP ranges"}
+                  {t(locale, "Zugriff nur von bekannten IP-Bereichen erlauben", "Only allow access from known IP ranges")}
                 </p>
                 <div className="bg-slate-900 rounded-lg p-4 font-mono text-xs text-green-400">
 {`# nginx.conf - Reverse Proxy
@@ -301,9 +291,7 @@ location /grafana/ {
             <div className="bg-gradient-to-br from-purple-50 to-indigo-50 border border-purple-700 rounded-xl p-6 mb-6">
               <h3 className="font-semibold text-purple-900 mb-4">HashiCorp Vault Integration</h3>
               <p className="text-purple-800 text-sm mb-4">
-                {isGerman
-                  ? "Nutzen Sie Vault für sichere Speicherung von Datenquellen-Credentials. Keine Secrets in Config-Files!"
-                  : "Use Vault for secure storage of data source credentials. No secrets in config files!"}
+                {t(locale, "Nutzen Sie Vault für sichere Speicherung von Datenquellen-Credentials. Keine Secrets in Config-Files!", "Use Vault for secure storage of data source credentials. No secrets in config files!")}
               </p>
               <div className="bg-gray-800 rounded-lg p-4 font-mono text-xs text-gray-200">
 {`# Vault configuration for Grafana
@@ -324,7 +312,7 @@ path "secret/data/grafana/*" {
             <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
               <h3 className="font-semibold text-gray-100 mb-4">Environment Variables</h3>
               <p className="text-slate-600 text-sm mb-4">
-                {isGerman ? "Alternative zu Vault: Docker Secrets oder Kubernetes Secrets" : "Alternative to Vault: Docker Secrets or Kubernetes Secrets"}
+                {t(locale, "Alternative zu Vault: Docker Secrets oder Kubernetes Secrets", "Alternative to Vault: Docker Secrets or Kubernetes Secrets")}
               </p>
               <div className="bg-slate-900 rounded-lg p-4 font-mono text-xs text-green-400">
 {`# docker-compose.yml
@@ -365,7 +353,7 @@ secrets:
               <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
                 <h3 className="font-semibold text-gray-100 mb-4">SIEM Integration</h3>
                 <p className="text-slate-600 text-sm mb-4">
-                  {isGerman ? "Exportieren Sie Audit-Logs zu Splunk, Datadog oder ELK" : "Export audit logs to Splunk, Datadog, or ELK"}
+                  {t(locale, "Exportieren Sie Audit-Logs zu Splunk, Datadog oder ELK", "Export audit logs to Splunk, Datadog, or ELK")}
                 </p>
                 <div className="bg-slate-100 rounded-lg p-3 font-mono text-xs text-gray-200">
 {`[auditing]
@@ -449,18 +437,16 @@ log_data_source_queries = true`}
           {/* CTA */}
           <section className="bg-gradient-to-r from-yellow-500 to-orange-500 rounded-2xl p-8 text-center text-white">
             <h2 className="text-2xl font-bold mb-4">
-              {isGerman ? "Grafana Security Assessment" : "Grafana Security Assessment"}
+              {"Grafana Security Assessment"}
             </h2>
             <p className="mb-6 max-w-2xl mx-auto">
-              {isGerman
-                ? "Überprüfen Sie Ihre Grafana-Konfiguration auf Sicherheitslücken."
-                : "Check your Grafana configuration for security vulnerabilities."}
+              {t(locale, "Überprüfen Sie Ihre Grafana-Konfiguration auf Sicherheitslücken.", "Check your Grafana configuration for security vulnerabilities.")}
             </p>
             <a 
               href={coreLinks.check} 
               className="inline-block px-6 py-3 bg-gray-800 text-orange-400 rounded-lg font-semibold hover:bg-slate-100 transition-colors"
             >
-              {isGerman ? "Assessment Starten" : "Start Assessment"}
+              {t(locale, "Assessment Starten", "Start Assessment")}
             </a>
           </section>
         </div>

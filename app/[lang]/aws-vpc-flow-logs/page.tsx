@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { SUPPORTED_LOCALES, type Locale, localeAlternates } from "@/lib/i18n";
 import { BASE_URL } from "@/lib/config";
 import { getCoreSecurityLinks } from "@/lib/core-security-links";
+import { t } from "@/lib/article-i18n"
 
 export const dynamic = "force-static";
 export const revalidate = 86400;
@@ -61,7 +62,6 @@ export default function AWSVPCFlowLogsPage({
   const prefix = `/${locale}`;
   const coreLinks = getCoreSecurityLinks(locale);
 
-  const isGerman = locale === "de";
 
   return (
     <main className="min-h-screen bg-gray-800">
@@ -75,7 +75,7 @@ export default function AWSVPCFlowLogsPage({
               AWS VPC Flow Logs
             </h1>
             <p className="text-2xl text-amber-100 mb-4">
-              {isGerman ? "Netzwerk-Traffic Analyse & Security" : "Network Traffic Analysis & Security"}
+              {t(locale, "Netzwerk-Traffic Analyse & Security", "Network Traffic Analysis & Security")}
             </p>
             <p className="text-xl text-white/80 mb-8">
               Athena, CloudWatch Insights, S3, Security Monitoring & Compliance. Network Forensics für AWS.

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { SUPPORTED_LOCALES, type Locale, localeAlternates } from "@/lib/i18n";
 import { BASE_URL } from "@/lib/config";
 import { getCoreSecurityLinks } from "@/lib/core-security-links";
+import { t } from "@/lib/article-i18n"
 
 export const dynamic = "force-static";
 export const revalidate = 86400;
@@ -64,7 +65,6 @@ export default async function KeycloakHardeningPage({
   const prefix = `/${locale}`;
   const coreLinks = getCoreSecurityLinks(locale);
 
-  const isGerman = locale === "de";
 
   return (
     <main className="min-h-screen bg-gray-800">
@@ -81,14 +81,10 @@ export default async function KeycloakHardeningPage({
               Keycloak Hardening
             </h1>
             <p className="text-2xl text-blue-200 mb-4 font-light">
-              {isGerman 
-                ? "Enterprise IAM Security"
-                : "Enterprise IAM Security"}
+              {"Enterprise IAM Security"}
             </p>
             <p className="text-xl text-white/80 mb-8">
-              {isGerman
-                ? "SSO, MFA, Brute-Force Protection, Session Management & GDPR Compliance. Schützen Sie Ihre Identity Provider."
-                : "SSO, MFA, brute-force protection, session management & GDPR compliance. Protect your identity provider."}
+              {t(locale, "SSO, MFA, Brute-Force Protection, Session Management & GDPR Compliance. Schützen Sie Ihre Identity Provider.", "SSO, MFA, brute-force protection, session management & GDPR compliance. Protect your identity provider.")}
             </p>
             <div className="flex flex-wrap gap-3">
               <span className="px-4 py-2 bg-white/20 text-white rounded-lg text-sm">OAuth 2.0</span>
@@ -105,25 +101,23 @@ export default async function KeycloakHardeningPage({
           
           <section className="mb-16">
             <h2 className="text-3xl font-bold text-gray-100 mb-6">
-              {isGerman ? "Warum Keycloak Hardening?" : "Why Keycloak Hardening?"}
+              {t(locale, "Warum Keycloak Hardening?", "Why Keycloak Hardening?")}
             </h2>
             
             <p className="text-gray-200 text-lg mb-6 leading-relaxed">
-              {isGerman
-                ? "Keycloak ist der zentrale Identity Provider (IdP) für Ihre Organisation. Ein kompromittiertes Keycloak ermöglicht Zugriff auf ALLE angebundenen Services. IAM-Security ist kritisch für Zero Trust."
-                : "Keycloak is the central Identity Provider (IdP) for your organization. A compromised Keycloak enables access to ALL connected services. IAM security is critical for Zero Trust."}
+              {t(locale, "Keycloak ist der zentrale Identity Provider (IdP) für Ihre Organisation. Ein kompromittiertes Keycloak ermöglicht Zugriff auf ALLE angebundenen Services. IAM-Security ist kritisch für Zero Trust.", "Keycloak is the central Identity Provider (IdP) for your organization. A compromised Keycloak enables access to ALL connected services. IAM security is critical for Zero Trust.")}
             </p>
 
             <div className="bg-red-900 border-l-4 border-red-500 rounded-r-xl p-6 mb-8">
               <h3 className="text-red-900 font-semibold mb-2">
-                {isGerman ? "⚠️ Risiken eines unsicheren IAM" : "⚠️ Risks of an Unsecure IAM"}
+                {t(locale, "⚠️ Risiken eines unsicheren IAM", "⚠️ Risks of an Unsecure IAM")}
               </h3>
               <ul className="text-red-800 space-y-2 text-sm">
-                <li>• {isGerman ? "Single Point of Failure für alle Services" : "Single point of failure for all services"}</li>
-                <li>• {isGerman ? "Lateral Movement zu allen angebundenen Apps" : "Lateral movement to all connected apps"}</li>
-                <li>• {isGerman ? "Data Breach aller User-Daten" : "Data breach of all user data"}</li>
-                <li>• {isGerman ? "GDPR Verstöße (PII in Token)" : "GDPR violations (PII in tokens)"}</li>
-                <li>• {isGerman ? "Compliance-Audit-Failures (SOC 2, ISO 27001)" : "Compliance audit failures (SOC 2, ISO 27001)"}</li>
+                <li>• {t(locale, "Single Point of Failure für alle Services", "Single point of failure for all services")}</li>
+                <li>• {t(locale, "Lateral Movement zu allen angebundenen Apps", "Lateral movement to all connected apps")}</li>
+                <li>• {t(locale, "Data Breach aller User-Daten", "Data breach of all user data")}</li>
+                <li>• {t(locale, "GDPR Verstöße (PII in Token)", "GDPR violations (PII in tokens)")}</li>
+                <li>• {t(locale, "Compliance-Audit-Failures (SOC 2, ISO 27001)", "Compliance audit failures (SOC 2, ISO 27001)")}</li>
               </ul>
             </div>
           </section>
@@ -461,18 +455,16 @@ Enabled Event Types:
           {/* CTA */}
           <section className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl p-8 text-center text-white">
             <h2 className="text-2xl font-bold mb-4">
-              {isGerman ? "Keycloak Security Assessment" : "Keycloak Security Assessment"}
+              {"Keycloak Security Assessment"}
             </h2>
             <p className="mb-6 max-w-2xl mx-auto">
-              {isGerman
-                ? "Überprüfen Sie Ihre Keycloak-Konfiguration auf Sicherheitslücken."
-                : "Check your Keycloak configuration for security vulnerabilities."}
+              {t(locale, "Überprüfen Sie Ihre Keycloak-Konfiguration auf Sicherheitslücken.", "Check your Keycloak configuration for security vulnerabilities.")}
             </p>
             <a 
               href={coreLinks.check} 
               className="inline-block px-6 py-3 bg-gray-800 text-cyan-400 rounded-lg font-semibold hover:bg-slate-100 transition-colors"
             >
-              {isGerman ? "Assessment Starten" : "Start Assessment"}
+              {t(locale, "Assessment Starten", "Start Assessment")}
             </a>
           </section>
         </div>

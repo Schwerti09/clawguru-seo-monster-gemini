@@ -1,0 +1,39 @@
+# Cloudflare Workers configuration for @opennextjs/cloudflare
+# Deployment: npx wrangler deploy (after npm run build:cf)
+# Dashboard secrets: dash.cloudflare.com → Workers → clawguru-seo-monster-gemini → Settings → Variables
+
+name = "clawguru-seo-monster-gemini"
+main = ".worker-next/_worker.js/index.js"
+compatibility_date = "2024-12-30"
+compatibility_flags = ["nodejs_compat_v2"]
+
+[assets]
+directory = ".worker-next/assets"
+binding = "ASSETS"
+
+[build]
+command = "bash scripts/cloudflare-build.sh"
+
+[build.environment_variables]
+NODE_VERSION = "20"
+NODE_OPTIONS = "--max-old-space-size=3584"
+
+# ─── Secrets ──────────────────────────────────────────────────────────────────
+# Set all secrets via the Cloudflare Dashboard or `wrangler secret put <KEY>`.
+# NEVER add real secret values here – this file is committed to git.
+#
+# Required secrets (wrangler secret put <KEY>):
+#   DATABASE_URL
+#   UPSTASH_REDIS_REST_URL
+#   UPSTASH_REDIS_REST_TOKEN
+#   OPENAI_API_KEY
+#   GEMINI_API_KEY
+#   DEEPSEEK_API_KEY
+#   STRIPE_SECRET_KEY
+#   STRIPE_WEBHOOK_SECRET
+#   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+#   NEXTAUTH_SECRET / ACCESS_TOKEN_SECRET
+#   CRON_SECRET
+#   RESEND_API_KEY
+#   NVD_API_KEY
+#   GOOGLE_INDEXER_KEY

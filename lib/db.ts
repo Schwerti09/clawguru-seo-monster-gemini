@@ -1,4 +1,7 @@
-import { Pool, PoolClient, QueryResult, QueryResultRow } from "pg"
+// @neondatabase/serverless is a drop-in replacement for `pg` that works on
+// both Node.js (Vercel/Netlify) and Cloudflare Workers (nodejs_compat_v2).
+// It uses WebSockets to connect to Neon's serverless PostgreSQL endpoint.
+import { Pool, PoolClient, QueryResult, QueryResultRow } from "@neondatabase/serverless"
 
 declare global {
   // eslint-disable-next-line no-var
@@ -10,17 +13,14 @@ function createPool(): Pool {
   if (!connectionString) {
     throw new Error("DATABASE_URL is not set")
   }
-  // Strip sslmode from the connection string so that newer versions of pg
-  // (which warn when sslmode is 'prefer', 'require', or 'verify-ca') do not
-  // emit the SECURITY WARNING. SSL is configured programmatically below.
+  // Strip sslmode from the connection string — neon/serverless handles SSL
+  // internally; explicit sslmode params can cause connection warnings.
   const url = new URL(connectionString)
   url.searchParams.delete("sslmode")
   return new Pool({
     connectionString: url.toString(),
-    // Neon requires SSL; rejectUnauthorized=false works with Neon pooler
-    ssl: { rejectUnauthorized: false },
-    // Vercel functions are short-lived: keep the pool small to avoid
-    // exhausting Neon's connection limit across concurrent invocations.
+    // Keep the pool small: serverless functions are short-lived and Neon's
+    // connection limit is shared across concurrent invocations.
     max: 3,
     idleTimeoutMillis: 30_000,
     // Allow enough time for Neon cold-starts, especially across regions.

@@ -12,11 +12,8 @@ directory = ".worker-next/assets"
 binding = "ASSETS"
 
 [build]
+# NODE_OPTIONS and other build vars are set inside the script itself.
 command = "bash scripts/cloudflare-build.sh"
-
-[build.environment_variables]
-NODE_VERSION = "20"
-NODE_OPTIONS = "--max-old-space-size=3584"
 
 # ─── Secrets ──────────────────────────────────────────────────────────────────
 # Set all secrets via the Cloudflare Dashboard or `wrangler secret put <KEY>`.

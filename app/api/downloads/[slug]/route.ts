@@ -25,9 +25,13 @@ const DOWNLOAD_MAP: Record<string, { filename: string; displayName: string }> = 
 
 export async function GET(
   _req: NextRequest,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
-  const entry = DOWNLOAD_MAP[params.slug]
+  const { slug } = await params
+  if (!slug || typeof slug !== "string") {
+    return NextResponse.json({ error: "Not found" }, { status: 404 })
+  }
+  const entry = DOWNLOAD_MAP[slug]
   if (!entry) {
     return NextResponse.json({ error: "Not found" }, { status: 404 })
   }

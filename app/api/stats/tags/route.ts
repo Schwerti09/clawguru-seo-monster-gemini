@@ -1,24 +1,17 @@
-import { NextRequest, NextResponse } from "next/server"
+import { NextResponse } from "next/server"
 
 export const runtime = "nodejs"
 export const dynamic = "force-dynamic"
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
-    const url = new URL(req.url)
-    const raw = parseInt(url.searchParams.get("limit") || "4000", 10)
-    const limit = Math.max(500, Math.min(20000, isNaN(raw) ? 4000 : raw))
-
     const pseo: any = await import("@/lib/pseo")
     let list: any[] = []
     try {
-      if (typeof pseo.buildRunbooksClient === "function") {
-        list = pseo.buildRunbooksClient(limit)
-      } else {
-        list = pseo.materializedRunbooks()
-      }
-    } catch {
+      // Use cached materializedRunbooks() to avoid generating 10k runbooks on every request
       list = pseo.materializedRunbooks()
+    } catch {
+      list = []
     }
 
     const setUniq = new Set<string>()

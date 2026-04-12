@@ -5,7 +5,6 @@ import { DEFAULT_LOCALE, SUPPORTED_LOCALES, type Locale, getLocaleHrefLang, loca
 import { logTelemetry } from "@/lib/ops/telemetry"
 import { getRequestId } from "@/lib/ops/request-id"
 import { getTopCities } from "@/lib/geo-cities"
-import { GEO_OPENCLAW_SPRINT_CITIES, geoOpenClawSprintPath } from "@/lib/geo-openclaw-city-sprint"
 import { getGeoSitemapRuntimeLimits } from "@/lib/geo-runtime-config"
 // lightweight: avoid importing heavy datasets here to keep Edge fast
 
@@ -202,18 +201,7 @@ export async function GET(
         changefreq: "weekly",
         priority: "0.85",
       }))
-      const geoOpenClawSprintUrls =
-        locale === "de" || locale === "en"
-          ? GEO_OPENCLAW_SPRINT_CITIES.map((city) => {
-              const path = geoOpenClawSprintPath(locale, city)
-              return {
-                loc: `${base}${path}`,
-                lastmod,
-                changefreq: "weekly" as const,
-                priority: "0.86",
-              }
-            })
-          : []
+      const geoOpenClawSprintUrls: { loc: string; lastmod: string; changefreq: string; priority: string }[] = []
       // Moltbot subpages (29 pages × all locales)
       const MOLTBOT_SLUGS = [
         "hardening-guide-2024","security-framework","threat-detection-setup","network-security-firewall",
@@ -248,7 +236,6 @@ export async function GET(
       const COMPARE_SLUGS = [
         "clawguru-vs-wiz","openclaw-vs-snyk","openclaw-vs-semgrep","openclaw-vs-sonarqube",
         "moltbot-vs-opsgenie","moltbot-vs-clawbot/security-comparison","clawguru-vs-crowdstrike","clawguru-vs-datadog","openclaw-vs-falco","clawguru-vs-lacework","moltbot-vs-pagerduty",
-        "openclaw-vs-trivy","openclaw-vs-grype","moltbot-vs-rundeck","moltbot-vs-stackstorm","clawguru-vs-tenable","clawguru-vs-qualys",
       ]
       // Solutions pages
       const SOLUTIONS_SLUGS = [
@@ -256,7 +243,6 @@ export async function GET(
         "enterprise-siem-integration","iso27001-certification-roadmap","pci-dss-compliance","hipaa-security-controls",
         "aws-security-architecture","github-actions-bare-metal","influxdb-hipaa-compliance",
         "iso-27001-google-cloud","rabbitmq-audit","terraform-canary-deploy",
-        "dora-compliance","tisax-compliance","bsi-it-grundschutz","kritis-compliance",
       ]
       // SEO guide pages
       const GUIDE_SLUGS = [
@@ -326,7 +312,7 @@ export async function GET(
         { loc: `${base}/${locale}/leaderboard`, lastmod, changefreq: "daily", priority: "0.82" },
         { loc: `${base}/${locale}/score`, lastmod, changefreq: "daily", priority: "0.85" },
         { loc: `${base}/${locale}/openclaw-security-check`, lastmod, changefreq: "weekly", priority: "0.85" },
-        { loc: `${base}/${locale}/securitycheck`, lastmod, changefreq: "daily", priority: "0.9" },
+        { loc: `${base}/${locale}/check`, lastmod, changefreq: "daily", priority: "0.9" },
         ...hubUrls,
         ...geoOpenClawSprintUrls,
         ...moltbotUrls,

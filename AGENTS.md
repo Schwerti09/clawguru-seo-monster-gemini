@@ -52,11 +52,33 @@ The file must explicitly have `Allow: /sitemaps/`.
 ```
 BANNED: bg-gray-50, bg-gray-100, bg-gray-200
 BANNED: bg-yellow-50, bg-blue-50, bg-green-50, bg-red-50, bg-purple-50
+BANNED: bg-teal-50, bg-orange-50, bg-amber-50, bg-cyan-50, bg-pink-50, bg-indigo-50
 BANNED: bg-blue-100, bg-green-100, bg-yellow-100, bg-red-100, bg-purple-100
+BANNED: bg-teal-100, bg-orange-100, bg-amber-100, bg-cyan-100
 BANNED: bg-white
 BANNED: text-gray-600, text-gray-700, text-gray-800, text-gray-900
-BANNED: border-gray-200, border-blue-200, border-green-200
+BANNED: text-teal-600, text-teal-700, text-teal-800, text-teal-900
+BANNED: text-blue-600, text-blue-700, text-blue-800, text-blue-900
+BANNED: border-gray-200, border-blue-200, border-green-200, border-teal-200, border-orange-200
 ```
+
+#### QUICK FIX TABLE — Replace light classes with dark equivalents
+| ❌ Banned (light) | ✅ Use instead (dark) |
+|---|---|
+| `bg-teal-50` | `bg-teal-900 border border-teal-700` |
+| `bg-orange-50` | `bg-orange-900 border border-orange-700` |
+| `bg-amber-50` | `bg-amber-900 border border-amber-700` |
+| `bg-cyan-50` | `bg-cyan-900 border border-cyan-700` |
+| `bg-blue-50` | `bg-blue-900 border border-blue-700` |
+| `bg-green-50` | `bg-green-900 border border-green-700` |
+| `bg-yellow-50` | `bg-yellow-900 border border-yellow-700` |
+| `bg-red-50` | `bg-red-900 border border-red-700` |
+| `bg-gray-50` / `bg-gray-100` | `bg-gray-800 border border-gray-700` |
+| `bg-white` | `bg-gray-900` |
+| `text-teal-600/700/800` | `text-teal-300` |
+| `text-blue-600/700/800` | `text-blue-300` |
+| `text-gray-600/700/800/900` | `text-gray-300` or `text-gray-400` |
+| `border-gray-200` | `border-gray-700` |
 
 #### REQUIRED: Card Backgrounds
 ```tsx
@@ -163,18 +185,21 @@ ${active ? 'bg-green-900/30 border-green-700' : 'bg-gray-800 border-gray-700'}
 ```
 
 #### Pre-Push Visual Verification Checklist
-Before pushing ANY new content page, run these checks:
+Before pushing ANY new content page, run these checks (PowerShell):
 ```powershell
-# 1. Zero light backgrounds remaining
-rg "bg-gray-50|bg-gray-100|bg-yellow-50|bg-blue-50|bg-green-50|bg-white" app/[lang]/ --type tsx
+# 1. Zero light backgrounds remaining (ALL banned -50 and -100 variants)
+Get-ChildItem -Path "app\[lang]" -Recurse -Filter "*.tsx" |
+  Select-String "bg-gray-50|bg-gray-100|bg-yellow-50|bg-blue-50|bg-green-50|bg-white|bg-teal-50|bg-orange-50|bg-amber-50|bg-cyan-50|bg-red-50|bg-purple-50"
 # MUST return 0 results
 
 # 2. Zero light text on dark background
-rg "text-gray-600|text-gray-800" app/[lang]/ --type tsx
+Get-ChildItem -Path "app\[lang]" -Recurse -Filter "*.tsx" |
+  Select-String "text-gray-600|text-gray-700|text-gray-800|text-gray-900|text-teal-600|text-blue-600"
 # MUST return 0 results
 
 # 3. Zero light borders
-rg "border-gray-200|border-blue-200" app/[lang]/ --type tsx
+Get-ChildItem -Path "app\[lang]" -Recurse -Filter "*.tsx" |
+  Select-String "border-gray-200|border-blue-200|border-teal-200|border-orange-200"
 # MUST return 0 results
 
 # 4. Build passes

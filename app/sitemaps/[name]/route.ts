@@ -239,7 +239,7 @@ export async function GET(
         "openclaw-top-5-exposure-misconfigs","openclaw-security-2026","moltbot-hardening",
         "ai-agent-security","ai-agent-threat-model-template","api-key-leak-response-playbook",
         "gateway-auth-10-steps","waf-2027","xxe-2026","hetzner-vs-do-security-baseline-2026",
-        "check-methodology-30-seconds",
+        "check-methodology-30-seconds","kubernetes-security",
       ]
       const moltbotUrls = MOLTBOT_SLUGS.map((slug) => ({
         loc: `${base}/${locale}/moltbot/${slug}`, lastmod, changefreq: "weekly", priority: "0.88",

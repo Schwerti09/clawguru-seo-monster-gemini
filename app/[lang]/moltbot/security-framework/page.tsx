@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n';
 
 interface PageProps {
   params: { lang: string };
@@ -26,60 +27,19 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       description: "Fundamentale Architektur und Security-Prinzipien von Moltbot mit Best Practices für 2024.",
       images: ["/og-moltbot-security-framework.jpg"]
     },
-    alternates: {
-      canonical: `https://clawguru.org/${lang}/moltbot/security-framework`,
-      languages: {
-        de: "https://clawguru.org/de/moltbot/security-framework",
-        en: "https://clawguru.org/en/moltbot/security-framework",
-        es: "https://clawguru.org/es/moltbot/security-framework",
-        fr: "https://clawguru.org/fr/moltbot/security-framework",
-        pt: "https://clawguru.org/pt/moltbot/security-framework",
-        it: "https://clawguru.org/it/moltbot/security-framework",
-        ru: "https://clawguru.org/ru/moltbot/security-framework",
-        zh: "https://clawguru.org/zh/moltbot/security-framework",
-        ja: "https://clawguru.org/ja/moltbot/security-framework",
-        ko: "https://clawguru.org/ko/moltbot/security-framework",
-        ar: "https://clawguru.org/ar/moltbot/security-framework",
-        hi: "https://clawguru.org/hi/moltbot/security-framework",
-        tr: "https://clawguru.org/tr/moltbot/security-framework",
-        pl: "https://clawguru.org/pl/moltbot/security-framework",
-        nl: "https://clawguru.org/nl/moltbot/security-framework",
-        af: "https://clawguru.org/af/moltbot/security-framework"
-      }
-    },
+    alternates: buildLocalizedAlternates(lang as Locale, '/moltbot/security-framework'),
     robots: "index, follow"
   };
 }
 
 export async function generateStaticParams() {
-  return [
-    { lang: 'de' },
-    { lang: 'en' },
-    { lang: 'es' },
-    { lang: 'fr' },
-    { lang: 'pt' },
-    { lang: 'it' },
-    { lang: 'ru' },
-    { lang: 'zh' },
-    { lang: 'ja' },
-    { lang: 'ko' },
-    { lang: 'ar' },
-    { lang: 'hi' },
-    { lang: 'tr' },
-    { lang: 'pl' },
-    { lang: 'nl' },
-    { lang: 'af' }
-  ];
+  return SUPPORTED_LOCALES.map((lang) => ({ lang }));
 }
 
 export default function MoltbotSecurityFrameworkPage({ params }: PageProps) {
   const { lang } = params;
   
-  // Validate language
-  const supportedLanguages = ['de', 'en', 'es', 'fr', 'pt', 'it', 'ru', 'zh', 'ja', 'ko', 'ar', 'hi', 'tr', 'pl', 'nl', 'af'];
-  if (!supportedLanguages.includes(lang)) {
-    notFound();
-  }
+  if (!SUPPORTED_LOCALES.includes(lang as Locale)) notFound();
 
   return (
     <div className="container mx-auto px-4 py-8">

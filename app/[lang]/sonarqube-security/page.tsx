@@ -57,8 +57,19 @@ export default async function SonarQubeSecurityPage({
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale;
   const prefix = `/${locale}`;
   const coreLinks = getCoreSecurityLinks(locale);
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      { '@type': 'Question', name: locale === 'de' ? 'Was ist SonarQube und wofür wird es genutzt?' : 'What is SonarQube and what is it used for?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'SonarQube ist eine statische Code-Analyse-Plattform (SAST) die Bugs, Security Vulnerabilities und Code Smells in 30+ Programmiersprachen erkennt. Integriert in CI/CD-Pipelines prüft es jeden Commit auf Quality Gates. Community Edition kostenlos, Enterprise Edition für Branching und Reports.' : 'SonarQube is a static code analysis platform (SAST) that detects bugs, security vulnerabilities and code smells in 30+ programming languages. Integrated into CI/CD pipelines it checks every commit against quality gates. Community edition free, Enterprise edition for branching and reports.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Wie sichere ich SonarQube gegen unbefugten Zugriff ab?' : 'How do I secure SonarQube against unauthorized access?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'SonarQube Hardening: Admin-Passwort ändern, anonymen Zugriff deaktivieren (Administration > Security > Force user authentication), HTTPS via Reverse Proxy, SAML/LDAP für SSO, Token-basierte CI/CD-Authentifizierung statt Passwort. SonarQube NIE direkt ins Internet exponieren.' : 'SonarQube hardening: change admin password, disable anonymous access (Administration > Security > Force user authentication), HTTPS via reverse proxy, SAML/LDAP for SSO, token-based CI/CD authentication instead of password. Never expose SonarQube directly to the internet.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Was sind SonarQube Quality Gates?' : 'What are SonarQube Quality Gates?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Quality Gates sind Schwellwerte die ein Projekt erfüllen muss um als "Passed" zu gelten. Standard-Gate: keine neuen Blocker Bugs, Security Rating A, weniger als 3% Code Duplication, Coverage über 80%. CI/CD-Pipeline: Build schltägt fehl wenn Quality Gate nicht erfüllt.' : 'Quality gates are thresholds a project must meet to be considered passed. Default gate: no new blocker bugs, security rating A, less than 3% code duplication, coverage above 80%. CI/CD pipeline: build fails if quality gate not met.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Was ist der Unterschied zwischen SonarQube und Snyk?' : 'What is the difference between SonarQube and Snyk?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'SonarQube fokussiert auf statische Code-Analyse (eigener Code). Snyk fokussiert auf Dependency-Scanning (Open-Source-Bibliotheken). Beide ergänzen sich: SonarQube findet Fehler im eigenen Code, Snyk findet verwundbare Dependencies. Für umfassende Security: beide kombinieren.' : 'SonarQube focuses on static code analysis (own code). Snyk focuses on dependency scanning (open source libraries). Both complement each other: SonarQube finds bugs in own code, Snyk finds vulnerable dependencies. For comprehensive security: combine both.' } },
+    ],
+  }
   return (
     <main className="min-h-screen bg-gray-800">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <section className="relative overflow-hidden bg-gradient-to-br from-sky-500 via-blue-600 to-indigo-700 py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl">

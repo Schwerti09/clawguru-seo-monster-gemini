@@ -60,10 +60,20 @@ export default function AWSVPCFlowLogsPage({
     : "de") as Locale;
   const prefix = `/${locale}`;
   const coreLinks = getCoreSecurityLinks(locale);
-
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      { '@type': 'Question', name: locale === 'de' ? 'Was sind AWS VPC Flow Logs?' : 'What are AWS VPC Flow Logs?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'VPC Flow Logs erfassen Informationen über den IP-Traffic zu und von Netzwerkinterfaces in einer VPC. Sie loggen Source/Destination IP, Ports, Protokoll, Bytes und ob der Traffic akzeptiert oder abgelehnt wurde. Unverzichtbar für Security-Monitoring und Compliance (PCI DSS, HIPAA, SOC 2).' : 'VPC Flow Logs capture information about IP traffic to and from network interfaces in a VPC. They log source/destination IP, ports, protocol, bytes and whether traffic was accepted or rejected. Essential for security monitoring and compliance (PCI DSS, HIPAA, SOC 2).' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Wie aktiviere ich AWS VPC Flow Logs?' : 'How do I enable AWS VPC Flow Logs?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'VPC Flow Logs aktivieren: AWS Console > VPC > Flow Logs > Create. Ziel: CloudWatch Logs (für Alarme) oder S3 (für Athena-Analyse). IAM-Rolle mit Publish-Rechten auf CloudWatch erstellen. Empfohlen: ALL-Traffic loggen (accepted + rejected), nicht nur rejected.' : 'Enable VPC Flow Logs: AWS Console > VPC > Flow Logs > Create. Destination: CloudWatch Logs (for alarms) or S3 (for Athena analysis). Create IAM role with publish rights on CloudWatch. Recommended: log ALL traffic (accepted + rejected), not just rejected.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Wie analysiere ich VPC Flow Logs mit Athena?' : 'How do I analyze VPC Flow Logs with Athena?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Flow Logs in S3 speichern, Athena-Table mit dem VPC Flow Log Schema erstellen. Queries: Top Talkers identifizieren, Port-Scans erkennen (viele REJECT auf verschiedene Ports), unbekannte IP-Ranges analysieren. AWS Security Lake vereinfacht die Analyse deutlich.' : 'Store flow logs in S3, create Athena table with VPC flow log schema. Queries: identify top talkers, detect port scans (many REJECT on various ports), analyze unknown IP ranges. AWS Security Lake simplifies analysis significantly.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Wie viel kosten AWS VPC Flow Logs?' : 'How much do AWS VPC Flow Logs cost?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Kosten: Datenaufnahme ($0.50/GB für CloudWatch, $0.08/GB für S3), Speicher (CloudWatch $0.03/GB/Monat, S3 $0.023/GB/Monat), Athena-Queries ($5/TB gescannte Daten). Für Kostenoptimierung: S3 als Ziel nutzen, Parquet-Format aktivieren, S3-Lifecycle-Policies für ältere Logs.' : 'Costs: data ingestion ($0.50/GB for CloudWatch, $0.08/GB for S3), storage (CloudWatch $0.03/GB/month, S3 $0.023/GB/month), Athena queries ($5/TB scanned data). For cost optimization: use S3 as destination, enable Parquet format, S3 lifecycle policies for older logs.' } },
+    ],
+  }
 
   return (
     <main className="min-h-screen bg-gray-800">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <section className="relative overflow-hidden bg-gradient-to-br from-orange-500 via-amber-600 to-yellow-600 py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl">

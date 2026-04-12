@@ -57,8 +57,19 @@ export default async function AzureADSecurityPage({
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale;
   const prefix = `/${locale}`;
   const coreLinks = getCoreSecurityLinks(locale);
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      { '@type': 'Question', name: locale === 'de' ? 'Was ist Azure AD Conditional Access?' : 'What is Azure AD Conditional Access?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Conditional Access ist Azures Zero-Trust-Zugriffskontrolle. Policies definieren Bedingungen (User, Gerät, Standort, Risiko-Score) und Kontrollen (MFA, compliant device, block). Beispiel: Alle Admins müssen MFA nutzen; Zugriff von unbekannten Ländern blockieren.' : 'Conditional Access is Azure Zero Trust access control. Policies define conditions (user, device, location, risk score) and controls (MFA, compliant device, block). Example: all admins must use MFA; block access from unknown countries.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Wie aktiviere ich Azure AD MFA?' : 'How do I enable Azure AD MFA?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Empfohlen: Conditional Access Policy mit MFA-Anforderung (kein Security Defaults, mehr Kontrolle). Security Defaults als Einstieg für kleinere Organisationen. Microsoft Authenticator App ist der sicherste MFA-Faktor. FIDO2 Security Keys für Phishing-resistente Authentifizierung.' : 'Recommended: Conditional Access policy with MFA requirement (not Security Defaults, more control). Security Defaults as entry point for smaller organizations. Microsoft Authenticator App is the most secure MFA factor. FIDO2 security keys for phishing-resistant authentication.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Was ist Azure AD Privileged Identity Management (PIM)?' : 'What is Azure AD Privileged Identity Management (PIM)?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'PIM implementiert Just-in-Time-Zugriff für privilegierte Rollen. Admins haben die Rolle normalerweise nicht aktiv, sondern aktivieren sie bei Bedarf für eine begrenzte Zeit. Vorteile: geringeres Angriffspotenzial, Audit-Trail, Approval-Workflow, MFA-Anforderung bei Aktivierung.' : 'PIM implements just-in-time access for privileged roles. Admins do not normally have the role active but activate it when needed for a limited time. Benefits: reduced attack surface, audit trail, approval workflow, MFA requirement on activation.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Wie schütze ich Azure AD gegen Token-Diebstahl?' : 'How do I protect Azure AD against token theft?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Token-Schutz in Conditional Access: Token Protection Policy aktiviert Geräte-Binding für Tokens. Continuous Access Evaluation (CAE) widerruft Tokens sofort bei verdachtsverdächtigen Events. Defender for Identity erkennt Pass-the-Token-Angriffe. Token-Lifetime-Policies für kurze Lebensdauer konfigurieren.' : 'Token protection in Conditional Access: Token Protection Policy enables device binding for tokens. Continuous Access Evaluation (CAE) revokes tokens immediately on suspicious events. Defender for Identity detects pass-the-token attacks. Configure token lifetime policies for short lifetime.' } },
+    ],
+  }
   return (
     <main className="min-h-screen bg-gray-800">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <section className="relative overflow-hidden bg-gradient-to-br from-blue-600 via-blue-700 to-sky-800 py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl">

@@ -57,8 +57,19 @@ export default async function SplunkSecurityPage({
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale;
   const prefix = `/${locale}`;
   const coreLinks = getCoreSecurityLinks(locale);
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      { '@type': 'Question', name: locale === 'de' ? 'Wie sichere ich Splunk gegen unbefugten Zugriff ab?' : 'How do I secure Splunk against unauthorized access?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Splunk Hardening: HTTPS erzwingen, default admin-Passwort ändern, SSL für Forwarder-to-Indexer-Kommunikation, Role-based Access Control (RBAC) konfigurieren, Splunk Web hinter Reverse Proxy, Management Port (8089) einschränken, Audit Logging aktivieren.' : 'Splunk hardening: enforce HTTPS, change default admin password, SSL for forwarder-to-indexer communication, configure role-based access control (RBAC), Splunk Web behind reverse proxy, restrict management port (8089), enable audit logging.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Was sind Splunk Indexes und wie schränke ich Zugriff ein?' : 'What are Splunk indexes and how do I restrict access?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Splunk Indexes sind logische Datenspeicher. Zugriffskontrolle: Rollen können auf bestimmte Indexes beschränkt werden (srchIndexesAllowed in roles.conf). Separate Indexes für security, compliance, application logs erstellen. Sensible Daten in eigene Indexes isolieren und nur autorisierte Rollen gewähren.' : 'Splunk indexes are logical data stores. Access control: roles can be restricted to specific indexes (srchIndexesAllowed in roles.conf). Create separate indexes for security, compliance, application logs. Isolate sensitive data in dedicated indexes and grant only authorized roles.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Wie aktiviere ich Splunk Audit Logging?' : 'How do I enable Splunk audit logging?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Splunk loggt Audit-Events in den _audit Index automatisch. Splunk Audit App installieren für bessere Visualisierung. Wichtige Events: Login/Logout, Suchen, Config-Änderungen, User-Management. Alerts für suspicious Searches (z.B. password, secret, credential in SPL-Queries) konfigurieren.' : 'Splunk logs audit events to the _audit index automatically. Install Splunk Audit App for better visualization. Important events: login/logout, searches, config changes, user management. Configure alerts for suspicious searches (e.g. password, secret, credential in SPL queries).' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Was ist Splunk Phantom und wie sichert es Workflows ab?' : 'What is Splunk Phantom and how does it secure workflows?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Splunk Phantom (jetzt Splunk SOAR) ist eine Security Orchestration-Plattform. Playbooks automatisieren Incident-Response: Alert erkannt > Enrichment > Containment > Notification. Phantom-Credentials für externe APIs in verschlüsseltem Vault speichern. Playbook-Code-Review obligatorisch.' : 'Splunk Phantom (now Splunk SOAR) is a security orchestration platform. Playbooks automate incident response: alert detected > enrichment > containment > notification. Store Phantom credentials for external APIs in encrypted vault. Playbook code review mandatory.' } },
+    ],
+  }
   return (
     <main className="min-h-screen bg-gray-800">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <section className="relative overflow-hidden bg-gradient-to-br from-green-600 via-emerald-600 to-teal-700 py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl">

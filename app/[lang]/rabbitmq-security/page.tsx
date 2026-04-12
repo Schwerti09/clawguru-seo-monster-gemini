@@ -57,8 +57,19 @@ export default async function RabbitMQSecurityPage({
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale;
   const prefix = `/${locale}`;
   const coreLinks = getCoreSecurityLinks(locale);
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      { '@type': 'Question', name: locale === 'de' ? 'Wie aktiviere ich TLS in RabbitMQ?' : 'How do I enable TLS in RabbitMQ?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'In rabbitmq.conf: listeners.ssl.default = 5671, ssl_options.certfile, ssl_options.keyfile, ssl_options.cacertfile setzen. Plaintext-Port 5672 danach deaktivieren: listeners.tcp = none. Clients müssen SSL-Verbindungen nutzen. mTLS: ssl_options.verify = verify_peer und ssl_options.fail_if_no_peer_cert = true.' : 'In rabbitmq.conf: set listeners.ssl.default = 5671, ssl_options.certfile, ssl_options.keyfile, ssl_options.cacertfile. Then disable plaintext port 5672: listeners.tcp = none. Clients must use SSL connections. mTLS: ssl_options.verify = verify_peer and ssl_options.fail_if_no_peer_cert = true.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Wie sichere ich das RabbitMQ Management Plugin ab?' : 'How do I secure the RabbitMQ Management Plugin?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Management UI Hardening: Guest-User deaktivieren (nur localhost), starkes Admin-Passwort, HTTPS für Management UI (management.ssl.*), Management UI hinter Reverse Proxy. IP-Whitelist für Management Port (15672/15671). Audit-Logging für alle Admin-Aktionen aktivieren.' : 'Management UI hardening: disable guest user (localhost only), strong admin password, HTTPS for Management UI (management.ssl.*), Management UI behind reverse proxy. IP whitelist for management port (15672/15671). Enable audit logging for all admin actions.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Wie konfiguriere ich RabbitMQ Virtual Hosts für Isolation?' : 'How do I configure RabbitMQ Virtual Hosts for isolation?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Virtual Hosts (vhosts) isolieren Ressourcen zwischen Applikationen. Jede App bekommt einen eigenen vhost. User-Berechtigungen pro vhost konfigurieren: rabbitmqctl set_permissions -p /app-vhost app-user ".*" ".*" ".*". Kein User sollte Zugriff auf mehrere vhosts haben.' : 'Virtual hosts (vhosts) isolate resources between applications. Each app gets its own vhost. Configure user permissions per vhost: rabbitmqctl set_permissions -p /app-vhost app-user ".*" ".*" ".*". No user should have access to multiple vhosts.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Was sind RabbitMQ Topic Exchange Berechtigungen?' : 'What are RabbitMQ Topic Exchange permissions?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Topic Permissions erlauben feingranulare Kontrolle auf Routing-Key-Ebene: rabbitmqctl set_topic_permissions -p / user exchange "^read\..*" "^write\..*". Producer darf nur auf write.* publizieren, Consumer darf nur read.* abonnieren. Wichtig für Microservices mit gemeinsamen Exchanges.' : 'Topic permissions allow fine-grained control at the routing key level: rabbitmqctl set_topic_permissions -p / user exchange "^read\..*" "^write\..*". Producer may only publish to write.*, consumer may only subscribe to read.*. Important for microservices with shared exchanges.' } },
+    ],
+  }
   return (
     <main className="min-h-screen bg-gray-800">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <section className="relative overflow-hidden bg-gradient-to-br from-orange-600 via-orange-700 to-amber-800 py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl">

@@ -57,8 +57,19 @@ export default async function CircleCISecurityPage({
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale;
   const prefix = `/${locale}`;
   const coreLinks = getCoreSecurityLinks(locale);
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      { '@type': 'Question', name: locale === 'de' ? 'Wie sichere ich CircleCI Secrets ab?' : 'How do I secure CircleCI secrets?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'CircleCI Secrets als Environment Variables im Project/Context Settings speichern, nie im .circleci/config.yml hardcoden. Contexts für teamweite Secrets nutzen, Project-Secrets nur für projektspezifische Werte. OIDC-Integration für AWS/GCP/Azure empfohlen statt gespeicherter Credentials.' : 'Store CircleCI secrets as environment variables in Project/Context Settings, never hardcode in .circleci/config.yml. Use Contexts for team-wide secrets, Project secrets only for project-specific values. OIDC integration recommended for AWS/GCP/Azure instead of stored credentials.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Was sind CircleCI Contexts?' : 'What are CircleCI Contexts?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Contexts sind geteilte Umgebungsvariablen-Sets die multiple Projekte nutzen können. Sicherheit: Context-Zugriff auf bestimmte Gruppen (GitHub/Bitbucket Teams) einschränken, Security Group Restrictions aktivieren, Contexts für Prod/Staging trennen. Secrets nie in zwei Contexts gleichzeitig haben.' : 'Contexts are shared environment variable sets that multiple projects can use. Security: restrict context access to specific groups (GitHub/Bitbucket teams), enable security group restrictions, separate contexts for prod/staging. Never have secrets in two contexts simultaneously.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Wie nutze ich CircleCI OIDC für AWS?' : 'How do I use CircleCI OIDC for AWS?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'CircleCI OIDC erlaubt temporäre AWS-Credentials ohne gespeicherte Access Keys. AWS IAM OIDC Identity Provider für CircleCI konfigurieren, IAM-Rolle mit Trust Policy für CircleCI-Jobs erstellen. Im Job: aws sts assume-role-with-web-identity mit CIRCLE_OIDC_TOKEN. Sicherster Ansatz.' : 'CircleCI OIDC allows temporary AWS credentials without stored access keys. Configure AWS IAM OIDC Identity Provider for CircleCI, create IAM role with trust policy for CircleCI jobs. In job: aws sts assume-role-with-web-identity with CIRCLE_OIDC_TOKEN. Most secure approach.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Wie schränke ich CircleCI Runner Zugriff ein?' : 'How do I restrict CircleCI Runner access?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Self-Hosted Runner für sensitive Pipelines nutzen. Runner in isolierter Netzwerkzone betreiben. Docker-Executor mit Resource Classes und Memory-Limits. Runner-Token regelmäßig rotieren. Separate Runner-Pools für Prod vs Dev. Network Egress auf nötige Endpoints beschränken.' : 'Use self-hosted runners for sensitive pipelines. Run runners in isolated network zone. Docker executor with resource classes and memory limits. Rotate runner tokens regularly. Separate runner pools for prod vs dev. Restrict network egress to necessary endpoints.' } },
+    ],
+  }
   return (
     <main className="min-h-screen bg-gray-800">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <section className="relative overflow-hidden bg-gradient-to-br from-blue-600 via-indigo-600 to-violet-700 py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl">

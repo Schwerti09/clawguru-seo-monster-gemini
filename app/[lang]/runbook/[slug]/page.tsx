@@ -32,13 +32,6 @@ export async function generateMetadata(props: {
   const runbook = getRunbook(slug) ?? getRunbook(geoParsed.baseSlug)
   // Use the actual slug (with or without geo variant) for canonical - don't redirect base to geo
   const canonicalSlug = runbook ? slug : slug
-  const isIndexableGeoVariant = geoCity
-    ? await isGeoVariantIndexable({
-        locale: lang,
-        variantSlug: canonicalSlug,
-        rolloutStage: geoCity.rollout_stage,
-      })
-    : true
   const citySuffix = geoCity ? ` (${geoCity.name_en})` : ""
   const title = runbook?.title ? `${runbook.title}${citySuffix} | ClawGuru Runbook` : undefined
   const baseDescription = runbook?.summary ?? ""
@@ -64,12 +57,6 @@ export async function generateMetadata(props: {
       title,
       description,
     },
-    robots: {
-      index: isIndexableGeoVariant,
-      follow: true,
-      // Keep canary geo variants crawlable for discovery but out of index until stable.
-      nocache: false,
-    },
   }
 }
 
@@ -90,6 +77,16 @@ export default async function LocaleRunbookPage(props: {
   const resolvedSlug = getRunbook(slug) ? slug : (getRunbook(geoParsed.baseSlug) ? geoParsed.baseSlug : null)
   if (!resolvedSlug) {
     notFound()
+  }
+  // Geo-variant: check indexability; if not promoted yet, return 404 instead of noindex page
+  if (geoParsed.citySlug) {
+    const { getCityBySlug: getCity } = await import("@/lib/geo-cities")
+    const { isGeoVariantIndexable: isIndexable } = await import("@/lib/geo-mycelium")
+    const city = await getCity(geoParsed.citySlug)
+    if (city) {
+      const indexable = await isIndexable({ locale: lang, variantSlug: slug, rolloutStage: city.rollout_stage })
+      if (!indexable) notFound()
+    }
   }
   const Mod = await import("@/app/runbook/[slug]/page")
   const RootRunbookPage = Mod.default

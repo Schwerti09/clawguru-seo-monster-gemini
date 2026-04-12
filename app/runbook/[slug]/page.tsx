@@ -107,12 +107,7 @@ export async function generateMetadata(props: { params: { slug: string } }) {
       type: "article",
       url: `${BASE_URL}/${locale}/runbook/${canonicalSlug}`,
     },
-    robots: {
-      index: isIndexableGeoVariant,
-      follow: true,
-      // Keep canary geo variants crawlable for discovery but out of index until stable.
-      nocache: false,
-    },
+    ...(geoCity && !isIndexableGeoVariant ? { robots: { index: false, follow: true } } : {}),
   }
 }
 

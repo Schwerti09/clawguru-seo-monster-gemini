@@ -3,7 +3,6 @@
 // progress bar for fix readiness, and neon border + inner scan effect on hover.
 
 import { useRef, useState } from "react"
-import { motion } from "framer-motion"
 import type { SeverityLevel } from "@/lib/design-system"
 import { severityConfig } from "@/lib/design-system"
 import { useI18n } from "@/components/i18n/I18nProvider"
@@ -48,12 +47,9 @@ export default function RunbookCard({
   }
 
   return (
-    <motion.a
+    <a
       href={`${prefix}/runbook/${slug}`}
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.4 }}
+      className="animate-fade-in-up"
     >
       <div
         ref={cardRef}
@@ -137,6 +133,6 @@ export default function RunbookCard({
           Runbook öffnen →
         </div>
       </div>
-    </motion.a>
+    </a>
   )
 }

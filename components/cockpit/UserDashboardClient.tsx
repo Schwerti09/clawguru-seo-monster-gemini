@@ -4,11 +4,12 @@ import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { User, UserTier, TIER_CONFIGS, isFeatureShadowed, getUpgradePath } from '@/lib/tier-access'
 import type { DashboardData } from '@/types/dashboard'
+import dynamic from 'next/dynamic'
 import { OverviewTab } from './tabs/OverviewTab'
-import { MyceliumTab } from './tabs/MyceliumTab'
-import { ToolsTab } from './tabs/ToolsTab'
-import { ExecutionsTab } from './tabs/ExecutionsTab'
-import { BillingTab } from './tabs/BillingTab'
+const MyceliumTab = dynamic(() => import('./tabs/MyceliumTab').then(m => ({ default: m.MyceliumTab })), { ssr: false, loading: () => <div className="h-64 flex items-center justify-center text-gray-500 text-sm">Loading Mycelium…</div> })
+const ToolsTab = dynamic(() => import('./tabs/ToolsTab').then(m => ({ default: m.ToolsTab })), { ssr: false, loading: () => <div className="h-64 flex items-center justify-center text-gray-500 text-sm">Loading Tools…</div> })
+const ExecutionsTab = dynamic(() => import('./tabs/ExecutionsTab').then(m => ({ default: m.ExecutionsTab })), { ssr: false, loading: () => <div className="h-64 flex items-center justify-center text-gray-500 text-sm">Loading Executions…</div> })
+const BillingTab = dynamic(() => import('./tabs/BillingTab').then(m => ({ default: m.BillingTab })), { ssr: false, loading: () => <div className="h-64 flex items-center justify-center text-gray-500 text-sm">Loading Billing…</div> })
 import { ShadowRealmOverlay } from './ShadowRealmOverlay'
 import { UpgradeModal } from './UpgradeModal'
 import { MyceliumMinimap } from './MyceliumMinimap'

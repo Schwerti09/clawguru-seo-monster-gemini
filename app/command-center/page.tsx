@@ -66,7 +66,7 @@ export default function CommandCenterPage() {
               <TabButton id="mycelium" current={tab} onClick={onTab} label="Mycelium" />
             </div>
           </div>
-          {Panel}
+          <div className="min-h-[480px]">{Panel}</div>
         </div>
       </Container>
     </div>

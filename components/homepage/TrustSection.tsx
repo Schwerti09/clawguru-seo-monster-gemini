@@ -1,6 +1,5 @@
 "use client"
 
-import { motion } from "framer-motion"
 import type { Locale } from "@/lib/i18n"
 import { getHomepageCroCopy } from "@/lib/homepage-cro-i18n"
 
@@ -51,16 +50,13 @@ export default function TrustSection({ locale, prefix = "", dict = {} }: Props) 
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
           {points.map((p, i) => (
-            <motion.a
+            <a
               key={p.title}
               href={p.href}
               target={p.href.startsWith("http") ? "_blank" : undefined}
               rel={p.href.startsWith("http") ? "noopener noreferrer" : undefined}
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.05 }}
-              className="block rounded-2xl bg-white/5 border border-white/10 p-6 hover:border-cyan-400/30 hover:shadow-[0_0_30px_rgba(34,211,238,0.15)] transition-all duration-300"
+              className="animate-fade-in-up block rounded-2xl bg-white/5 border border-white/10 p-6 hover:border-cyan-400/30 hover:shadow-[0_0_30px_rgba(34,211,238,0.15)] transition-all duration-300"
+              style={{ animationDelay: `${i * 0.05}s` }}
             >
               <div className="text-lg font-semibold text-white">{p.title}</div>
               <p className="mt-2 text-sm text-gray-300">{p.desc}</p>
@@ -70,7 +66,7 @@ export default function TrustSection({ locale, prefix = "", dict = {} }: Props) 
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
               </div>
-            </motion.a>
+            </a>
           ))}
         </div>
 

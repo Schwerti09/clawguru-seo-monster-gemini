@@ -1,6 +1,5 @@
 "use client"
 
-import { motion } from "framer-motion"
 import { GlowButton } from "@/components/ui/GlowButton"
 import HeroPreview from "@/components/home/HeroPreview"
 import { usePathname } from "next/navigation"
@@ -27,11 +26,7 @@ export const Hero = () => {
         }}
       />
       <div className="max-w-6xl mx-auto text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-        >
+        <div className="animate-fade-in-up" style={{ animationDuration: '0.8s' }}>
           <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-cyan-300 via-white to-fuchsia-400 bg-clip-text text-transparent">
             clawguru
           </h1>
@@ -45,7 +40,7 @@ export const Hero = () => {
 
           {/* High-tech platform preview (perf-optimized) */}
           <HeroPreview />
-        </motion.div>
+        </div>
       </div>
     </section>
   )

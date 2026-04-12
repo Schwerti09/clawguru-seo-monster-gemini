@@ -1,6 +1,5 @@
 "use client"
 
-import { motion } from "framer-motion"
 import { ReactNode } from "react"
 
 interface GlowButtonProps {
@@ -19,23 +18,16 @@ export const GlowButton = ({ children, onClick, variant = "primary", className =
   } as const
 
   const content = (
-    <motion.button
+    <button
       onClick={onClick}
-      className={`${base} ${variants[variant]} ${className}`}
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.98 }}
+      className={`${base} ${variants[variant]} ${className} hover:scale-105 active:scale-[0.98]`}
       style={variant === "primary" ? { backgroundImage: "linear-gradient(90deg,#00f2ff 0%, #bf4eff 100%)" } : undefined}
     >
       {variant === "primary" && (
-        <motion.div
-          className="absolute inset-0"
-          style={{ backgroundImage: "linear-gradient(90deg,#00f2ff 0%, #bf4eff 100%)", opacity: 0 }}
-          animate={{ scale: [1, 1.15, 1], opacity: [0, 0.25, 0] }}
-          transition={{ repeat: Infinity, duration: 2 }}
-        />
+        <span className="absolute inset-0 animate-glow-pulse" aria-hidden />
       )}
       <span className="relative z-10">{children}</span>
-    </motion.button>
+    </button>
   )
 
   if (href) {

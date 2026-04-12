@@ -7,7 +7,7 @@ import Header from "@/components/layout/Header"
 import Footer from "@/components/layout/Footer"
 import TrustShield from "@/components/layout/TrustShield"
 import dynamic from "next/dynamic"
-import { AnimatedBackground } from "@/components/ui/AnimatedBackground"
+const AnimatedBackground = dynamic(() => import("@/components/ui/AnimatedBackground").then(m => ({ default: m.AnimatedBackground })), { ssr: false })
 const ActionDock = dynamic(() => import("@/components/layout/ActionDock"))
 const SocialProofOverlay = dynamic(() => import("@/components/social/SocialProofOverlay"))
 // WORLD BEAST FINAL LAUNCH: Umami privacy-first analytics
@@ -15,7 +15,6 @@ import UmamiAnalytics from "@/components/analytics/UmamiAnalytics"
 import GA4Pageview from "@/components/analytics/GA4Pageview"
 // VISUAL UPGRADE 2026: Neon cursor + page transition wrapper
 const NeonCursor = dynamic(() => import("@/components/visual/NeonCursor"))
-import PageTransition from "@/components/visual/PageTransition"
 // NEXT-LEVEL UPGRADE 2026: RTL direction support for Arabic + other RTL locales
 import RTLProvider from "@/components/layout/RTLProvider"
 // VIRAL SHARE 2026: Global floating Mycelium share button
@@ -25,7 +24,7 @@ import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
 import { SEO_TARGET_KEYWORDS_2026 } from "@/lib/seo/targets"
 import { getDictionary } from "@/lib/getDictionary"
 import { I18nProvider } from "@/components/i18n/I18nProvider"
-import CommandK from "@/components/search/CommandK"
+const CommandK = dynamic(() => import("@/components/search/CommandK"), { ssr: false })
 const GlobalMagnetics = dynamic(() => import("@/components/visual/GlobalMagnetics"))
 const FirstVisitPageGuide = dynamic(() => import("@/components/onboarding/FirstVisitPageGuide"), { ssr: false })
 
@@ -162,7 +161,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             <Header />
             {/* 100/100 OPTIMIZATION 2026: id="main-content" for skip link target; role implicit from <main> */}
             <main id="main-content" className="pt-20 pb-20 lg:pb-0">
-              <PageTransition>{children}</PageTransition>
+              {children}
             </main>
             <TrustShield />
             <Footer />

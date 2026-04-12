@@ -155,24 +155,16 @@ curl http://localhost:8080/v1/decisions/stream \
           </div>
         </section>
 
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify([
-          {
-            "@context": "https://schema.org",
-            "@type": "FAQPage",
-            mainEntity: [
-              { "@type": "Question", name: "Is CrowdSec free?", acceptedAnswer: { "@type": "Answer", text: "CrowdSec's core engine is open source and free. The CTI hub (community blocklists) is freemium — free for community use, paid for commercial threat intel feeds." } },
-              { "@type": "Question", name: "Does OpenClaw replace CrowdSec?", acceptedAnswer: { "@type": "Answer", text: "No — they complement each other. CrowdSec handles reactive IP blocking via crowdsourced threat intel. OpenClaw handles proactive hardening, compliance scoring, and executable runbook remediation." } },
-              { "@type": "Question", name: "Can OpenClaw and CrowdSec run on the same server?", acceptedAnswer: { "@type": "Answer", text: "Yes. CrowdSec installs as a lightweight agent alongside your services. OpenClaw runs as a separate security check layer. They share no port conflicts and can exchange data via OpenClaw's webhook integration." } },
-            ]
-          },
-          {
-            "@context": "https://schema.org",
-            "@type": "WebPage",
-            name: "OpenClaw vs CrowdSec 2025",
-            description: "Collaborative threat intelligence vs. runbook-driven hardening for self-hosted stacks.",
-            url: "https://clawguru.org/de/openclaw-vs-crowdsec"
-          }
-        ]) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: [
+            { "@type": "Question", name: "Ist CrowdSec kostenlos?", acceptedAnswer: { "@type": "Answer", text: "Die CrowdSec-Core-Engine ist Open Source und kostenlos. Der CTI-Hub (Community-Blocklisten) ist Freemium \u2014 kostenlos f\u00fcr Community-Nutzung, kostenpflichtig f\u00fcr kommerzielle Threat-Intel-Feeds." } },
+            { "@type": "Question", name: "Kann OpenClaw CrowdSec ersetzen?", acceptedAnswer: { "@type": "Answer", text: "Nein \u2014 beide Tools erg\u00e4nzen sich. CrowdSec \u00fcbernimmt reaktives IP-Blocking via Crowdsourced Threat Intel. OpenClaw \u00fcbernimmt proaktives Hardening, Compliance-Scoring und Executable-Runbook-Remediation." } },
+            { "@type": "Question", name: "K\u00f6nnen OpenClaw und CrowdSec auf demselben Server laufen?", acceptedAnswer: { "@type": "Answer", text: "Ja. CrowdSec installiert sich als leichtgewichtiger Agent neben Ihren Services. OpenClaw l\u00e4uft als separate Security-Check-Schicht. Es gibt keine Port-Konflikte und Datenaustausch ist \u00fcber OpenClaws Webhook-Integration m\u00f6glich." } },
+            { "@type": "Question", name: "Was ist der gr\u00f6\u00dfte Unterschied zwischen OpenClaw und CrowdSec?", acceptedAnswer: { "@type": "Answer", text: "CrowdSec ist spezialisiert auf kollaborative Bedrohungsintelligenz und IP-Reputationsdaten. OpenClaw bietet eine ganzheitliche Security-Plattform mit Executable Runbooks, Compliance-Dashboard und Live-Score \u2014 erg\u00e4nzt CrowdSec optimal." } }
+          ]
+        }) }} />
       </div>
     </div>
   )

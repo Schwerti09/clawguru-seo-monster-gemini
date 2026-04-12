@@ -10,6 +10,7 @@ import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
 import type { Metadata } from "next"
 
 export const dynamic = "force-dynamic"
+export const dynamicParams = true
 
 export async function generateMetadata(): Promise<Metadata> {
   const h = headers()
@@ -34,11 +35,27 @@ function severityColor(severity: string) {
   return { text: "#00ff9d", bg: "rgba(0,255,157,0.1)", border: "rgba(0,255,157,0.3)" }
 }
 
-export default function SolutionsPage() {
+export default function SolutionsPage({ searchParams }: { searchParams?: { q?: string } }) {
   const h = headers()
   const locale = (h.get("x-claw-locale") ?? DEFAULT_LOCALE) as Locale
   const prefix = `/${locale}`
-  const sorted = [...KNOWN_CVES].sort((a, b) => b.cvssScore - a.cvssScore)
+  const query = searchParams?.q?.trim().toUpperCase() ?? ""
+
+  // If ?q=CVE-XXXX-YYYY exactly matches a known CVE, show a single-result redirect hint
+  const exactMatch = query ? KNOWN_CVES.find(c => c.cveId.toUpperCase() === query) : null
+
+  const sorted = [...KNOWN_CVES]
+    .filter(c => {
+      if (!query) return true
+      const q = query.toLowerCase()
+      return (
+        c.cveId.toLowerCase().includes(q) ||
+        c.name.toLowerCase().includes(q) ||
+        c.description.toLowerCase().includes(q) ||
+        c.affectedSoftware.toLowerCase().includes(q)
+      )
+    })
+    .sort((a, b) => b.cvssScore - a.cvssScore)
 
   const itemListLd = {
     "@context": "https://schema.org",
@@ -71,6 +88,39 @@ export default function SolutionsPage() {
           title="CVE Fix Solutions"
           subtitle="Step-by-step guides to fix critical vulnerabilities in your infrastructure. AI-generated unique content per CVE, with verification commands and security best practices."
         />
+
+        {/* Search bar */}
+        <form method="GET" action="" className="mt-6 flex gap-2">
+          <input
+            name="q"
+            defaultValue={searchParams?.q ?? ""}
+            placeholder="CVE-ID oder Stichwort suchen, z.B. CVE-2024-3094"
+            className="flex-1 bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 text-sm text-gray-200 placeholder-gray-500 focus:outline-none focus:border-cyan-500"
+          />
+          <button type="submit" className="bg-cyan-600 hover:bg-cyan-500 text-white text-sm px-4 py-2 rounded-lg transition-colors">Suchen</button>
+          {query && <a href="?" className="bg-gray-800 hover:bg-gray-700 text-gray-300 text-sm px-4 py-2 rounded-lg transition-colors">Reset</a>}
+        </form>
+
+        {/* Exact match: direct link banner */}
+        {exactMatch && (
+          <div className="mt-4 bg-green-900 border border-green-700 rounded-lg p-4 flex items-center justify-between">
+            <div>
+              <span className="text-green-300 font-bold">{exactMatch.cveId}</span>
+              <span className="text-green-200 text-sm ml-2">— {exactMatch.name}</span>
+            </div>
+            <a href={`${prefix}/solutions/fix-${exactMatch.cveId}`} className="bg-green-700 hover:bg-green-600 text-white text-sm px-4 py-2 rounded-lg transition-colors">
+              Fix Guide öffnen →
+            </a>
+          </div>
+        )}
+
+        {/* No results */}
+        {query && sorted.length === 0 && (
+          <div className="mt-6 bg-gray-800 border border-gray-700 rounded-lg p-6 text-center text-gray-400">
+            <p className="mb-2">Keine CVEs für <strong className="text-gray-200">{searchParams?.q}</strong> gefunden.</p>
+            <p className="text-sm">Direkt zur Fix-Seite: <a href={`${prefix}/solutions/fix-${searchParams?.q}`} className="text-cyan-400 hover:underline">/solutions/fix-{searchParams?.q}</a></p>
+          </div>
+        )}
 
         <div className="mt-8 grid md:grid-cols-2 lg:grid-cols-3 gap-4">
           {sorted.map((cve) => {

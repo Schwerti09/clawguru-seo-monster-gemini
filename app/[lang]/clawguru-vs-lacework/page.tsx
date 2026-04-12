@@ -59,7 +59,7 @@ export default function ClawGuruVsLaceworkPage({ params }: PageProps) {
         <p className="text-lg text-gray-300 mb-8">Umfassender Cloud-Security-Plattform-Vergleich f\u00fcr CSPM, Compliance-Management und Multi-Cloud-Security-Betrieb.</p>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Quick Comparison Overview</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Schnellvergleich im Überblick</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-blue-900 p-6 rounded-lg">
               <h3 className="font-bold text-blue-300 mb-4">ClawGuru</h3>
@@ -227,7 +227,7 @@ export default function ClawGuruVsLaceworkPage({ params }: PageProps) {
           <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <h3 className="font-bold text-cyan-400 mb-3">ClawGuru Architecture</h3>
+                <h3 className="font-bold text-cyan-400 mb-3">ClawGuru Architektur</h3>
                 <ul className="space-y-2 text-sm text-gray-300">
                   <li>PostgreSQL + Supabase backend</li>
                   <li>Next.js 14 frontend</li>
@@ -238,7 +238,7 @@ export default function ClawGuruVsLaceworkPage({ params }: PageProps) {
                 </ul>
               </div>
               <div>
-                <h3 className="font-bold text-cyan-400 mb-3">Lacework Architecture</h3>
+                <h3 className="font-bold text-cyan-400 mb-3">Lacework Architektur</h3>
                 <ul className="space-y-2 text-sm text-gray-300">
                   <li>Proprietary cloud platform</li>
                   <li>AI/ML Polygraph engine</li>

@@ -166,24 +166,16 @@ curl -k https://splunk:8088/services/collector \
           </div>
         </section>
 
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify([
-          {
-            "@context": "https://schema.org",
-            "@type": "FAQPage",
-            mainEntity: [
-              { "@type": "Question", name: "Is Moltbot a Splunk replacement?", acceptedAnswer: { "@type": "Answer", text: "Moltbot focuses on executable runbooks and actionable security checks, not full SIEM log aggregation. It can complement Splunk or replace it for teams that prioritize remediation over raw log search." } },
-              { "@type": "Question", name: "How much does Splunk cost vs Moltbot?", acceptedAnswer: { "@type": "Answer", text: "Splunk charges ~$150-200 per GB/day ingested. A team ingesting 50 GB/day can pay $300,000+/year. Moltbot uses flat-rate pricing with no per-GB surprises." } },
-              { "@type": "Question", name: "Can Moltbot send data to Splunk?", acceptedAnswer: { "@type": "Answer", text: "Yes. Moltbot supports webhook output that can feed Splunk's HTTP Event Collector (HEC), enabling hybrid architectures." } },
-            ]
-          },
-          {
-            "@context": "https://schema.org",
-            "@type": "WebPage",
-            name: "Moltbot vs Splunk SIEM 2025",
-            description: "Executable Runbooks vs. enterprise SIEM — cost, self-hosting, alert fatigue, compliance automation.",
-            url: "https://clawguru.org/de/moltbot-vs-splunk"
-          }
-        ]) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: [
+            { "@type": "Question", name: "Kann Moltbot Splunk ersetzen?", acceptedAnswer: { "@type": "Answer", text: "Moltbot fokussiert auf Executable Runbooks und handlungsf\u00e4hige Security-Checks, nicht auf vollst\u00e4ndige SIEM-Log-Aggregation. Es kann Splunk erg\u00e4nzen oder f\u00fcr Teams ersetzen, die Remediation \u00fcber rohe Log-Suche stellen." } },
+            { "@type": "Question", name: "Was kostet Splunk im Vergleich zu Moltbot?", acceptedAnswer: { "@type": "Answer", text: "Splunk berechnet ca. $150\u2013200 pro GB/Tag Ingest. Bei 50 GB/Tag entstehen \u00fcber $300.000/Jahr Lizenzkosten. Moltbot nutzt Flatrate-Preise ohne GB-\u00dcberraschungen." } },
+            { "@type": "Question", name: "Kann Moltbot Daten an Splunk senden?", acceptedAnswer: { "@type": "Answer", text: "Ja. Moltbot unterst\u00fctzt Webhook-Output der an Splunks HTTP Event Collector (HEC) gesendet werden kann \u2014 f\u00fcr hybride Architekturen." } },
+            { "@type": "Question", name: "Ist Moltbot DSGVO-konform?", acceptedAnswer: { "@type": "Answer", text: "Ja. Moltbot ist vollst\u00e4ndig self-hosted betreibbar, DSGVO-konform und ohne Cloud-Abh\u00e4ngigkeit. Splunk (SaaS) speichert Daten in US-Rechenzentren, was f\u00fcr EU-Unternehmen problematisch sein kann." } }
+          ]
+        }) }} />
       </div>
     </div>
   )

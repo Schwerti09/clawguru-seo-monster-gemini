@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { buildLocalizedAlternates, DEFAULT_LOCALE } from "@/lib/i18n"
 import { cookies } from 'next/headers'
 import { UserDashboardClient } from '@/components/cockpit/UserDashboardClient'
 import { getUserTierFromPlan } from '@/lib/tier-access'
@@ -15,6 +16,7 @@ export const runtime = 'nodejs'
 export const metadata: Metadata = {
   title: "Dashboard | ClawGuru",
   description: "Your ClawGuru dashboard — monitor security threats, runbook executions, and your subscription.",
+  alternates: buildLocalizedAlternates(DEFAULT_LOCALE, "/dashboard"),
 }
 
 /* ── Empty data fallback ── */

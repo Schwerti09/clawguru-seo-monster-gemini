@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { BASE_URL } from "@/lib/config"
+import { buildLocalizedAlternates, DEFAULT_LOCALE } from "@/lib/i18n"
 
 // GSC Quick-Win Keywords Hub
 // Targets: 30 high-impression, 0-click keywords from Google Search Console
@@ -8,12 +9,12 @@ import { BASE_URL } from "@/lib/config"
 export const metadata: Metadata = {
   title: "Infrastructure Security, Compliance & Deployment Guides 2026",
   description: "Expert guides for Kubernetes, Docker, Terraform, databases. HIPAA, ISO 27001, PCI-DSS compliance. AWS, GCP, Azure hardening.",
-  alternates: { canonical: "/gsc-optimize" },
+  alternates: buildLocalizedAlternates(DEFAULT_LOCALE, "/gsc-optimize"),
   keywords: [
     "influxdb hipaa compliance",
     "iso 27001 google cloud",
     "github actions bare metal",
-    "rabbitmq audit", 
+    "rabbitmq audit",
     "terraform canary deploy",
     "kubernetes iso 27001",
     "docker compliance",

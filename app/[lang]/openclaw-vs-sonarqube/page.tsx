@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+﻿import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
 
@@ -13,7 +13,8 @@ export async function generateMetadata({ params }: { params: { lang: string } })
     description: 'OpenClaw vs SonarQube im Vergleich. Code Quality vs Security Posture, Self-Hosting, SAST-Tiefe, Executable Runbooks und Runtime-Schutz. Für Self-Hosted DevOps-Teams.',
     keywords: ['openclaw vs sonarqube','sonarqube alternative','code security vergleich','sast tools','sonarqube security','openclaw code quality'],
     authors: [{ name: 'ClawGuru Security Team' }],
-    openGraph: { title: 'OpenClaw vs SonarQube Vergleich 2024', description: 'OpenClaw vs SonarQube SAST.', type: 'article', url: `https://clawguru.org/${lang}/openclaw-vs-sonarqube` },
+    openGraph: {
+      images: ["/og-image.png"], title: 'OpenClaw vs SonarQube Vergleich 2024', description: 'OpenClaw vs SonarQube SAST.', type: 'article', url: `https://clawguru.org/${lang}/openclaw-vs-sonarqube` },
     alternates: buildLocalizedAlternates(lang as Locale, '/openclaw-vs-sonarqube'),
     robots: 'index, follow',
   };

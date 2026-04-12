@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+﻿import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
 
@@ -13,7 +13,8 @@ export async function generateMetadata({ params }: { params: { lang: string } })
     description: 'Security Monitoring für Moltbot mit Grafana und Prometheus. Real-time Dashboards, Anomalie-Erkennung, SLA-Tracking und Security KPIs. Production-ready Monitoring Stack.',
     keywords: ['moltbot monitoring','grafana security dashboard','prometheus metrics','security kpi','anomaly detection','sla monitoring'],
     authors: [{ name: 'ClawGuru Security Team' }],
-    openGraph: { title: 'Moltbot Monitoring & Security Dashboards: Grafana Setup 2024', description: 'Security Monitoring für Moltbot mit Grafana.', type: 'article', url: `https://clawguru.org/${lang}/moltbot/monitoring-dashboards` },
+    openGraph: {
+      images: ["/og-image.png"], title: 'Moltbot Monitoring & Security Dashboards: Grafana Setup 2024', description: 'Security Monitoring für Moltbot mit Grafana.', type: 'article', url: `https://clawguru.org/${lang}/moltbot/monitoring-dashboards` },
     alternates: buildLocalizedAlternates(lang as Locale, '/moltbot/monitoring-dashboards'),
     robots: 'index, follow',
   };

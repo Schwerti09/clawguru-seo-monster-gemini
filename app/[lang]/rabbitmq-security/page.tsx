@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n";
 import { BASE_URL } from "@/lib/config";
 import { getCoreSecurityLinks } from "@/lib/core-security-links";
@@ -40,6 +40,7 @@ export async function generateMetadata({
     ],
     alternates: buildLocalizedAlternates(locale, "/rabbitmq-security"),
     openGraph: {
+      images: ["/og-image.png"],
       title: "RabbitMQ Security 2026: Message Broker Protection",
       description: "Comprehensive RabbitMQ security with TLS, OAuth 2.0, management hardening & federation.",
       type: "article",

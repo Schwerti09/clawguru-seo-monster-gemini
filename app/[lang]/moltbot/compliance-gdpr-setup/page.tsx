@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+﻿import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
 
@@ -13,7 +13,8 @@ export async function generateMetadata({ params }: { params: { lang: string } })
     description: 'GDPR-konforme Implementierung für Moltbot. Einwilligungsmanagement, Datenschutzerklärung, Right-to-Erasure, Data Minimization und Verzeichnis von Verarbeitungstätigkeiten (VVT).',
     keywords: ['moltbot gdpr compliance','datenschutz implementation','einwilligungsmanagement','data minimization','right to erasure','vvt'],
     authors: [{ name: 'ClawGuru Security Team' }],
-    openGraph: { title: 'Moltbot GDPR Compliance Setup: Datenschutz Implementation 2024', description: 'GDPR-konforme Implementierung für Moltbot.', type: 'article', url: `https://clawguru.org/${lang}/moltbot/compliance-gdpr-setup` },
+    openGraph: {
+      images: ["/og-image.png"], title: 'Moltbot GDPR Compliance Setup: Datenschutz Implementation 2024', description: 'GDPR-konforme Implementierung für Moltbot.', type: 'article', url: `https://clawguru.org/${lang}/moltbot/compliance-gdpr-setup` },
     alternates: buildLocalizedAlternates(lang as Locale, '/moltbot/compliance-gdpr-setup'),
     robots: 'index, follow',
   };

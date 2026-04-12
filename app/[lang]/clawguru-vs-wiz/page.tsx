@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+﻿import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
 
@@ -13,7 +13,8 @@ export async function generateMetadata({ params }: { params: { lang: string } })
     description: 'ClawGuru vs Wiz im Vergleich. Self-Hosted vs Cloud-Native CSPM, Preismodell, DSGVO-Konformität, Runbook-Support und SMB vs Enterprise-Fokus.',
     keywords: ['clawguru vs wiz','wiz alternative','cspm vergleich','cloud security posture management','wiz security','clawguru cloud security'],
     authors: [{ name: 'ClawGuru Security Team' }],
-    openGraph: { title: 'ClawGuru vs Wiz Cloud Security 2024', description: 'ClawGuru vs Wiz CSPM Vergleich.', type: 'article', url: `https://clawguru.org/${lang}/clawguru-vs-wiz` },
+    openGraph: {
+      images: ["/og-image.png"], title: 'ClawGuru vs Wiz Cloud Security 2024', description: 'ClawGuru vs Wiz CSPM Vergleich.', type: 'article', url: `https://clawguru.org/${lang}/clawguru-vs-wiz` },
     alternates: buildLocalizedAlternates(lang as Locale, '/clawguru-vs-wiz'),
     robots: 'index, follow',
   };

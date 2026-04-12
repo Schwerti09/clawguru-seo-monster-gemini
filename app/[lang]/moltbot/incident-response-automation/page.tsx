@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+﻿import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
 
@@ -13,7 +13,8 @@ export async function generateMetadata({ params }: { params: { lang: string } })
     description: 'Automatisierte Incident Response für Moltbot. Security Playbooks, Auto-Remediation, PagerDuty-Integration und Post-Mortem-Prozesse. Reaktionszeit von Stunden auf Minuten reduzieren.',
     keywords: ['moltbot incident response','security automation','playbooks','auto remediation','pagerduty integration','security incidents'],
     authors: [{ name: 'ClawGuru Security Team' }],
-    openGraph: { title: 'Moltbot Incident Response: Automatisierung & Playbooks 2024', description: 'Automatisierte Incident Response für Moltbot.', type: 'article', url: `https://clawguru.org/${lang}/moltbot/incident-response-automation` },
+    openGraph: {
+      images: ["/og-image.png"], title: 'Moltbot Incident Response: Automatisierung & Playbooks 2024', description: 'Automatisierte Incident Response für Moltbot.', type: 'article', url: `https://clawguru.org/${lang}/moltbot/incident-response-automation` },
     alternates: buildLocalizedAlternates(lang as Locale, '/moltbot/incident-response-automation'),
     robots: 'index, follow',
   };

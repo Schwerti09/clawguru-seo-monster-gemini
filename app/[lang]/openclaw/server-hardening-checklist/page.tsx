@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+﻿import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
 
@@ -13,7 +13,8 @@ export async function generateMetadata({ params }: { params: { lang: string } })
     description: 'Linux Server Hardening für OpenClaw auf Ubuntu und Debian. SSH-Absicherung, Kernel-Parameter, AppArmor, Auditd und CIS Benchmark Compliance. Automated Hardening Script.',
     keywords: ['openclaw server hardening','linux hardening ubuntu','debian security','ssh hardening','apparmor setup','cis benchmark linux'],
     authors: [{ name: 'ClawGuru Security Team' }],
-    openGraph: { title: 'OpenClaw Linux Server Hardening 2024', description: 'Linux Server Hardening für OpenClaw.', type: 'article', url: `https://clawguru.org/${lang}/openclaw/server-hardening-checklist` },
+    openGraph: {
+      images: ["/og-image.png"], title: 'OpenClaw Linux Server Hardening 2024', description: 'Linux Server Hardening für OpenClaw.', type: 'article', url: `https://clawguru.org/${lang}/openclaw/server-hardening-checklist` },
     alternates: buildLocalizedAlternates(lang as Locale, '/openclaw/server-hardening-checklist'),
     robots: 'index, follow',
   };

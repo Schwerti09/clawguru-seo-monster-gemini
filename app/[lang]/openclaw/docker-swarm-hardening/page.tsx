@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+﻿import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
 
@@ -13,7 +13,8 @@ export async function generateMetadata({ params }: { params: { lang: string } })
     description: 'Docker Swarm Hardening für OpenClaw. Secrets Management, TLS Encryption, Network Isolation, Image Scanning und Service Mesh Security. Production-ready Swarm Konfiguration.',
     keywords: ['openclaw docker swarm','docker swarm hardening','swarm secrets','docker network isolation','container security production'],
     authors: [{ name: 'ClawGuru Security Team' }],
-    openGraph: { title: 'OpenClaw Docker Swarm Hardening 2024', description: 'Docker Swarm Hardening für OpenClaw.', type: 'article', url: `https://clawguru.org/${lang}/openclaw/docker-swarm-hardening` },
+    openGraph: {
+      images: ["/og-image.png"], title: 'OpenClaw Docker Swarm Hardening 2024', description: 'Docker Swarm Hardening für OpenClaw.', type: 'article', url: `https://clawguru.org/${lang}/openclaw/docker-swarm-hardening` },
     alternates: buildLocalizedAlternates(lang as Locale, '/openclaw/docker-swarm-hardening'),
     robots: 'index, follow',
   };

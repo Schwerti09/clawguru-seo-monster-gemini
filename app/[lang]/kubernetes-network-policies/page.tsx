@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n";
 import { BASE_URL } from "@/lib/config";
 import { getCoreSecurityLinks } from "@/lib/core-security-links";
@@ -41,6 +41,7 @@ export async function generateMetadata({
     ],
     alternates: buildLocalizedAlternates(locale, "/kubernetes-network-policies"),
     openGraph: {
+      images: ["/og-image.png"],
       title: "Kubernetes Network Policies 2026: Zero Trust Networking",
       description: "Implement Zero Trust in Kubernetes with Network Policies, Cilium & Calico.",
       type: "article",

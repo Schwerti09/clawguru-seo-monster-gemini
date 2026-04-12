@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n";
 import { BASE_URL } from "@/lib/config";
 import { getCoreSecurityLinks } from "@/lib/core-security-links";
@@ -42,6 +42,7 @@ export async function generateMetadata({
     ],
     alternates: buildLocalizedAlternates(locale, "/kafka-security"),
     openGraph: {
+      images: ["/og-image.png"],
       title: "Apache Kafka Security 2026: Enterprise Streaming Security",
       description: "Comprehensive Kafka security with SSL/TLS, SASL, ACLs, Ranger & audit logging.",
       type: "article",

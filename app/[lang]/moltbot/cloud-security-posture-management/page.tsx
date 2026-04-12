@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+﻿import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
 
@@ -13,7 +13,8 @@ export async function generateMetadata({ params }: { params: { lang: string } })
     description: 'CSPM mit Moltbot für AWS, GCP und Azure. Misconfiguration Detection, Policy-as-Code, Drift Detection und automatisierte Cloud-Remediation. CIS Cloud Benchmarks.',
     keywords: ['moltbot cspm','cloud security posture management','aws misconfiguration','policy as code','cloud drift detection','cis cloud benchmark'],
     authors: [{ name: 'ClawGuru Security Team' }],
-    openGraph: { title: 'Moltbot CSPM 2024', description: 'Cloud Security Posture Management mit Moltbot.', type: 'article', url: `https://clawguru.org/${lang}/moltbot/cloud-security-posture-management` },
+    openGraph: {
+      images: ["/og-image.png"], title: 'Moltbot CSPM 2024', description: 'Cloud Security Posture Management mit Moltbot.', type: 'article', url: `https://clawguru.org/${lang}/moltbot/cloud-security-posture-management` },
     alternates: buildLocalizedAlternates(lang as Locale, '/moltbot/cloud-security-posture-management'),
     robots: 'index, follow',
   };

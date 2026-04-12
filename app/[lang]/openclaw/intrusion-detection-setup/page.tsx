@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+﻿import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
 
@@ -13,7 +13,8 @@ export async function generateMetadata({ params }: { params: { lang: string } })
     description: 'Intrusion Detection für OpenClaw mit OSSEC, Fail2ban und Suricata. Echtzeit-Alerts, Log-Analyse, Brute-Force-Erkennung und automatische IP-Blockierung.',
     keywords: ['openclaw intrusion detection','ossec ids','fail2ban setup','suricata ids','brute force protection','log analysis security'],
     authors: [{ name: 'ClawGuru Security Team' }],
-    openGraph: { title: 'OpenClaw Intrusion Detection Setup 2024', description: 'IDS für OpenClaw mit OSSEC und Fail2ban.', type: 'article', url: `https://clawguru.org/${lang}/openclaw/intrusion-detection-setup` },
+    openGraph: {
+      images: ["/og-image.png"], title: 'OpenClaw Intrusion Detection Setup 2024', description: 'IDS für OpenClaw mit OSSEC und Fail2ban.', type: 'article', url: `https://clawguru.org/${lang}/openclaw/intrusion-detection-setup` },
     alternates: buildLocalizedAlternates(lang as Locale, '/openclaw/intrusion-detection-setup'),
     robots: 'index, follow',
   };

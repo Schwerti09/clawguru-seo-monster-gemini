@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+﻿import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
 
@@ -13,7 +13,8 @@ export async function generateMetadata({ params }: { params: { lang: string } })
     description: 'OpenClaw vs Snyk im direkten Vergleich. Funktionen, Preise, Self-Hosting, Datenschutz und Integrations-Support. Welches Security-Tool passt zu deinem Self-Hosted Stack?',
     keywords: ['openclaw vs snyk','snyk alternative','openclaw security tool','dependency scanning vergleich','open source security tools vergleich'],
     authors: [{ name: 'ClawGuru Security Team' }],
-    openGraph: { title: 'OpenClaw vs Snyk Vergleich 2024', description: 'OpenClaw vs Snyk Security Tool.', type: 'article', url: `https://clawguru.org/${lang}/openclaw-vs-snyk` },
+    openGraph: {
+      images: ["/og-image.png"], title: 'OpenClaw vs Snyk Vergleich 2024', description: 'OpenClaw vs Snyk Security Tool.', type: 'article', url: `https://clawguru.org/${lang}/openclaw-vs-snyk` },
     alternates: buildLocalizedAlternates(lang as Locale, '/openclaw-vs-snyk'),
     robots: 'index, follow',
   };

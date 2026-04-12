@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+﻿import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
 
@@ -13,7 +13,8 @@ export async function generateMetadata({ params }: { params: { lang: string } })
     description: 'Supply Chain Security für OpenClaw. Software Bill of Materials (SBOM), Dependency Pinning, npm Audit, Sigstore Container Signing und Build Provenance. SolarWinds-Schutz.',
     keywords: ['openclaw supply chain security','sbom software','dependency security','npm audit','sigstore signing','build provenance'],
     authors: [{ name: 'ClawGuru Security Team' }],
-    openGraph: { title: 'OpenClaw Supply Chain Security 2024', description: 'Supply Chain Security für OpenClaw.', type: 'article', url: `https://clawguru.org/${lang}/openclaw/supply-chain-security` },
+    openGraph: {
+      images: ["/og-image.png"], title: 'OpenClaw Supply Chain Security 2024', description: 'Supply Chain Security für OpenClaw.', type: 'article', url: `https://clawguru.org/${lang}/openclaw/supply-chain-security` },
     alternates: buildLocalizedAlternates(lang as Locale, '/openclaw/supply-chain-security'),
     robots: 'index, follow',
   };

@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+﻿import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
 
@@ -13,7 +13,8 @@ export async function generateMetadata({ params }: { params: { lang: string } })
     description: 'Backup und Disaster Recovery für Moltbot. RTO/RPO-Definitionen, automatisierte Backups, Geo-Redundanz, Failover-Prozesse und DR-Tests. PostgreSQL, Redis und File-Backups.',
     keywords: ['moltbot backup recovery','disaster recovery','rto rpo','geo redundancy','failover','postgresql backup'],
     authors: [{ name: 'ClawGuru Security Team' }],
-    openGraph: { title: 'Moltbot Backup & Disaster Recovery: RTO/RPO Guide 2024', description: 'Backup und Disaster Recovery für Moltbot.', type: 'article', url: `https://clawguru.org/${lang}/moltbot/backup-recovery-disaster-recovery` },
+    openGraph: {
+      images: ["/og-image.png"], title: 'Moltbot Backup & Disaster Recovery: RTO/RPO Guide 2024', description: 'Backup und Disaster Recovery für Moltbot.', type: 'article', url: `https://clawguru.org/${lang}/moltbot/backup-recovery-disaster-recovery` },
     alternates: buildLocalizedAlternates(lang as Locale, '/moltbot/backup-recovery-disaster-recovery'),
     robots: 'index, follow',
   };

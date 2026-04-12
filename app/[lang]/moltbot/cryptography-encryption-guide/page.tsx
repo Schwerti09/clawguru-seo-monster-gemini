@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+﻿import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
 
@@ -13,7 +13,8 @@ export async function generateMetadata({ params }: { params: { lang: string } })
     description: 'Kryptografie für Moltbot. AES-256 Verschlüsselung, RSA Schlüsselmanagement, Hashing-Algorithmen, Key Rotation und sichere Implementierung.',
     keywords: ['moltbot cryptography','aes encryption','rsa key management','hashing algorithms','key rotation','secure crypto implementation'],
     authors: [{ name: 'ClawGuru Security Team' }],
-    openGraph: { title: 'Moltbot Cryptography & Encryption Guide 2024', description: 'Kryptografie für Moltbot.', type: 'article', url: `https://clawguru.org/${lang}/moltbot/cryptography-encryption-guide` },
+    openGraph: {
+      images: ["/og-image.png"], title: 'Moltbot Cryptography & Encryption Guide 2024', description: 'Kryptografie für Moltbot.', type: 'article', url: `https://clawguru.org/${lang}/moltbot/cryptography-encryption-guide` },
     alternates: buildLocalizedAlternates(lang as Locale, '/moltbot/cryptography-encryption-guide'),
     robots: 'index, follow',
   };

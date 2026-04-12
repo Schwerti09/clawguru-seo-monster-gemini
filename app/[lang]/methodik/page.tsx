@@ -1,4 +1,4 @@
-import type { Metadata } from "next"
+﻿import type { Metadata } from "next"
 import Link from "next/link"
 
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
@@ -21,6 +21,7 @@ export async function generateMetadata(props: { params: { lang: string } }): Pro
     description,
     alternates: buildLocalizedAlternates(locale, "/methodik"),
     openGraph: {
+      images: ["/og-image.png"],
       title,
       description,
       type: "article",

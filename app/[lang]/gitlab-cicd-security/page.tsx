@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n";
 import { BASE_URL } from "@/lib/config";
 import { getCoreSecurityLinks } from "@/lib/core-security-links";
@@ -40,6 +40,7 @@ export async function generateMetadata({
     ],
     alternates: buildLocalizedAlternates(locale, "/gitlab-cicd-security"),
     openGraph: {
+      images: ["/og-image.png"],
       title: "GitLab CI/CD Security 2026: DevSecOps Pipeline Protection",
       description: "Secure GitLab CI/CD with SAST, secrets management, compliance & OIDC.",
       type: "article",

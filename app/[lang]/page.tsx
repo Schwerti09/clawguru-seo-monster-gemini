@@ -1,4 +1,4 @@
-// Locale home pages: /en, /es, /fr, /pt, /it, /ru, /zh, /ja, /ar
+﻿// Locale home pages: /en, /es, /fr, /pt, /it, /ru, /zh, /ja, /ar
 // Renders the same main page with locale-aware dictionary so content is translated.
 
 import { SUPPORTED_LOCALES, buildLocalizedAlternates, normalizeLocale } from "@/lib/i18n"
@@ -21,6 +21,7 @@ export async function generateMetadata(props: { params: { lang: string } }) {
   return {
     alternates: buildLocalizedAlternates(locale, "/"),
     openGraph: {
+      images: ["/og-image.png"],
       type: "website" as const,
       url: pageUrl,
       locale: locale === "zh" ? "zh_CN" : locale === "hi" ? "hi_IN" : locale === "ar" ? "ar_SA" : `${locale}_${locale.toUpperCase()}`,

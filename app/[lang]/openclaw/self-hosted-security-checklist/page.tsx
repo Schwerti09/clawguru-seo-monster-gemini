@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+﻿import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
 
@@ -13,7 +13,8 @@ export async function generateMetadata({ params }: { params: { lang: string } })
     description: 'Vollständige Security-Checkliste für Self-Hosted OpenClaw. 100 Prüfpunkte für Server, Netzwerk, Datenbank, Auth und Monitoring. Downloadbar als PDF.',
     keywords: ['openclaw self hosted security','self hosting checklist','server security checklist','vps hardening','security audit checklist'],
     authors: [{ name: 'ClawGuru Security Team' }],
-    openGraph: { title: 'OpenClaw Self-Hosted Security Checklist 2024', description: '100-Punkt Security-Checkliste für Self-Hosted OpenClaw.', type: 'article', url: `https://clawguru.org/${lang}/openclaw/self-hosted-security-checklist` },
+    openGraph: {
+      images: ["/og-image.png"], title: 'OpenClaw Self-Hosted Security Checklist 2024', description: '100-Punkt Security-Checkliste für Self-Hosted OpenClaw.', type: 'article', url: `https://clawguru.org/${lang}/openclaw/self-hosted-security-checklist` },
     alternates: buildLocalizedAlternates(lang as Locale, '/openclaw/self-hosted-security-checklist'),
     robots: 'index, follow',
   };

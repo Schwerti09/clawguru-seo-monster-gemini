@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+﻿import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
 
@@ -13,7 +13,8 @@ export async function generateMetadata({ params }: { params: { lang: string } })
     description: 'SSL/TLS Management für Moltbot. Let\'s Encrypt Automatisierung, TLS 1.3 Konfiguration, Certificate Pinning, HSTS Preloading und Cipher Suite Hardening. A+ SSL Labs Rating.',
     keywords: ['moltbot ssl tls','certificate management','lets encrypt','tls 1.3','cipher suite','hsts preloading','ssl labs'],
     authors: [{ name: 'ClawGuru Security Team' }],
-    openGraph: { title: 'Moltbot SSL/TLS Management: Zertifikate & Cipher Suites 2024', description: 'SSL/TLS Management für Moltbot mit A+ SSL Labs Rating.', type: 'article', url: `https://clawguru.org/${lang}/moltbot/ssl-tls-management` },
+    openGraph: {
+      images: ["/og-image.png"], title: 'Moltbot SSL/TLS Management: Zertifikate & Cipher Suites 2024', description: 'SSL/TLS Management für Moltbot mit A+ SSL Labs Rating.', type: 'article', url: `https://clawguru.org/${lang}/moltbot/ssl-tls-management` },
     alternates: buildLocalizedAlternates(lang as Locale, '/moltbot/ssl-tls-management'),
     robots: 'index, follow',
   };

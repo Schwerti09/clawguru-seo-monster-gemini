@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n";
 import { BASE_URL } from "@/lib/config";
 import { getCoreSecurityLinks } from "@/lib/core-security-links";
@@ -44,6 +44,7 @@ export async function generateMetadata({
     ],
     alternates: buildLocalizedAlternates(locale, "/keycloak-hardening"),
     openGraph: {
+      images: ["/og-image.png"],
       title: "Keycloak Hardening 2026: IAM Security Guide",
       description: "Secure your Keycloak IAM with MFA, brute-force protection, session management & compliance controls.",
       type: "article",

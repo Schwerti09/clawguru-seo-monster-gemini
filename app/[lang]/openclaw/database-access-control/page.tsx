@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+﻿import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
 
@@ -13,7 +13,8 @@ export async function generateMetadata({ params }: { params: { lang: string } })
     description: 'Datenbank-Sicherheit für OpenClaw mit PostgreSQL. Row-Level Security, Role-Based Access Control, Audit Logging, Encryption at Rest und Connection Pooling.',
     keywords: ['openclaw database security','postgresql access control','row level security','rbac database','pgaudit','database encryption'],
     authors: [{ name: 'ClawGuru Security Team' }],
-    openGraph: { title: 'OpenClaw Database Access Control 2024', description: 'PostgreSQL Security für OpenClaw.', type: 'article', url: `https://clawguru.org/${lang}/openclaw/database-access-control` },
+    openGraph: {
+      images: ["/og-image.png"], title: 'OpenClaw Database Access Control 2024', description: 'PostgreSQL Security für OpenClaw.', type: 'article', url: `https://clawguru.org/${lang}/openclaw/database-access-control` },
     alternates: buildLocalizedAlternates(lang as Locale, '/openclaw/database-access-control'),
     robots: 'index, follow',
   };

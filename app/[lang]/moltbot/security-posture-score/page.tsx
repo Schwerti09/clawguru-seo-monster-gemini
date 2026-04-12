@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+﻿import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
 
@@ -13,7 +13,8 @@ export async function generateMetadata({ params }: { params: { lang: string } })
     description: 'Security Posture Score für Moltbot. Risk Assessment, Security Metrics, Posture Management, Compliance Scoring und Security KPIs.',
     keywords: ['moltbot security posture score','risk assessment','security metrics','posture management','compliance scoring','security kpis'],
     authors: [{ name: 'ClawGuru Security Team' }],
-    openGraph: { title: 'Moltbot Security Posture Score 2024', description: 'Security Posture Score für Moltbot.', type: 'article', url: `https://clawguru.org/${lang}/moltbot/security-posture-score` },
+    openGraph: {
+      images: ["/og-image.png"], title: 'Moltbot Security Posture Score 2024', description: 'Security Posture Score für Moltbot.', type: 'article', url: `https://clawguru.org/${lang}/moltbot/security-posture-score` },
     alternates: buildLocalizedAlternates(lang as Locale, '/moltbot/security-posture-score'),
     robots: 'index, follow',
   };

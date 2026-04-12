@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+﻿import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
 
@@ -13,7 +13,8 @@ export async function generateMetadata({ params }: { params: { lang: string } })
     description: 'Moltbot vs OpsGenie im Vergleich. Security-fokussiertes Incident Management vs generisches Alerting. Executable Runbooks, Auto-Remediation und On-Call-Management im Vergleich.',
     keywords: ['moltbot vs opsgenie','opsgenie alternative','incident management security','on call management','alerting tools vergleich','moltbot incident response'],
     authors: [{ name: 'ClawGuru Security Team' }],
-    openGraph: { title: 'Moltbot vs OpsGenie Vergleich 2024', description: 'Moltbot vs OpsGenie Incident Management.', type: 'article', url: `https://clawguru.org/${lang}/moltbot-vs-opsgenie` },
+    openGraph: {
+      images: ["/og-image.png"], title: 'Moltbot vs OpsGenie Vergleich 2024', description: 'Moltbot vs OpsGenie Incident Management.', type: 'article', url: `https://clawguru.org/${lang}/moltbot-vs-opsgenie` },
     alternates: buildLocalizedAlternates(lang as Locale, '/moltbot-vs-opsgenie'),
     robots: 'index, follow',
   };

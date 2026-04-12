@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n";
 import { BASE_URL } from "@/lib/config";
 import { getCoreSecurityLinks } from "@/lib/core-security-links";
@@ -40,6 +40,7 @@ export async function generateMetadata({
     ],
     alternates: buildLocalizedAlternates(locale, "/sonarqube-security"),
     openGraph: {
+      images: ["/og-image.png"],
       title: "SonarQube Security 2026: SAST Protection",
       description: "Secure SonarQube with authentication, permissions, quality gates & secret detection.",
       type: "article",

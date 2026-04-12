@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+﻿import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
 
@@ -13,7 +13,8 @@ export async function generateMetadata({ params }: { params: { lang: string } })
     description: 'OpenClaw vs Semgrep im Vergleich. SAST-Tiefe, Custom Rules, Self-Hosting, Executable Runbooks vs Code-Pattern-Matching. Welches Tool für deinen Security-Stack?',
     keywords: ['openclaw vs semgrep','semgrep alternative','sast vergleich','static analysis security','code security scanning','openclaw sast'],
     authors: [{ name: 'ClawGuru Security Team' }],
-    openGraph: { title: 'OpenClaw vs Semgrep Vergleich 2024', description: 'OpenClaw vs Semgrep SAST.', type: 'article', url: `https://clawguru.org/${lang}/openclaw-vs-semgrep` },
+    openGraph: {
+      images: ["/og-image.png"], title: 'OpenClaw vs Semgrep Vergleich 2024', description: 'OpenClaw vs Semgrep SAST.', type: 'article', url: `https://clawguru.org/${lang}/openclaw-vs-semgrep` },
     alternates: buildLocalizedAlternates(lang as Locale, '/openclaw-vs-semgrep'),
     robots: 'index, follow',
   };

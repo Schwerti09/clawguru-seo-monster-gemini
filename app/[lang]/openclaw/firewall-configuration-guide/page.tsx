@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+﻿import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
 
@@ -13,7 +13,8 @@ export async function generateMetadata({ params }: { params: { lang: string } })
     description: 'Firewall-Konfiguration für OpenClaw mit UFW und iptables. Whitelist-Regeln, Port-Blocking, Geo-Blocking, Fail2ban-Integration und automatisierte Firewall-Audits.',
     keywords: ['openclaw firewall','ufw konfiguration','iptables rules','geo blocking','fail2ban firewall','port security'],
     authors: [{ name: 'ClawGuru Security Team' }],
-    openGraph: { title: 'OpenClaw Firewall Konfiguration: UFW & iptables 2024', description: 'Firewall-Konfiguration für OpenClaw.', type: 'article', url: `https://clawguru.org/${lang}/openclaw/firewall-configuration-guide` },
+    openGraph: {
+      images: ["/og-image.png"], title: 'OpenClaw Firewall Konfiguration: UFW & iptables 2024', description: 'Firewall-Konfiguration für OpenClaw.', type: 'article', url: `https://clawguru.org/${lang}/openclaw/firewall-configuration-guide` },
     alternates: buildLocalizedAlternates(lang as Locale, '/openclaw/firewall-configuration-guide'),
     robots: 'index, follow',
   };

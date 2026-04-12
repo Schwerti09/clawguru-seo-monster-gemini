@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+﻿import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
 
@@ -13,7 +13,8 @@ export async function generateMetadata({ params }: { params: { lang: string } })
     description: 'Komplette Security Headers Implementierung für OpenClaw. Content-Security-Policy, HSTS, X-Frame-Options, Permissions-Policy und Referrer-Policy. Next.js Konfiguration mit A+ Rating.',
     keywords: ['openclaw security headers','content security policy','hsts header','x-frame-options','permissions policy','http security headers'],
     authors: [{ name: 'ClawGuru Security Team' }],
-    openGraph: { title: 'OpenClaw Security Headers Guide 2024', description: 'Security Headers für OpenClaw mit A+ Rating.', type: 'article', url: `https://clawguru.org/${lang}/openclaw/security-headers-guide` },
+    openGraph: {
+      images: ["/og-image.png"], title: 'OpenClaw Security Headers Guide 2024', description: 'Security Headers für OpenClaw mit A+ Rating.', type: 'article', url: `https://clawguru.org/${lang}/openclaw/security-headers-guide` },
     alternates: buildLocalizedAlternates(lang as Locale, '/openclaw/security-headers-guide'),
     robots: 'index, follow',
   };

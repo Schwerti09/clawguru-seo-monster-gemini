@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+﻿import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
 
@@ -13,7 +13,8 @@ export async function generateMetadata({ params }: { params: { lang: string } })
     description: 'Security für Startups von Anfang an. Minimales Security-Budget, maximale Wirkung: Auth, Secrets, TLS, Backup und Incident Response für Early-Stage Startups.',
     keywords: ['startup security','early stage security','security für startups','minimal security budget','startup compliance','security foundation'],
     authors: [{ name: 'ClawGuru Security Team' }],
-    openGraph: { title: 'Startup Security Foundation mit ClawGuru', description: 'Security für Startups von Tag 1.', type: 'article', url: `https://clawguru.org/${lang}/solutions/startup-security-foundation` },
+    openGraph: {
+      images: ["/og-image.png"], title: 'Startup Security Foundation mit ClawGuru', description: 'Security für Startups von Tag 1.', type: 'article', url: `https://clawguru.org/${lang}/solutions/startup-security-foundation` },
     alternates: buildLocalizedAlternates(lang as Locale, '/solutions/startup-security-foundation'),
     robots: 'index, follow',
   };

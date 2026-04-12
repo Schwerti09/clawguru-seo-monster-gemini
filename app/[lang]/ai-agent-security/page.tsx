@@ -1,4 +1,4 @@
-import type { Metadata } from "next"
+﻿import type { Metadata } from "next"
 import Link from "next/link"
 
 import Container from "@/components/shared/Container"
@@ -20,7 +20,8 @@ export async function generateMetadata(props: { params: { lang: string } }): Pro
     title: copy.title,
     description: copy.description,
     alternates: buildLocalizedAlternates(locale, "/ai-agent-security"),
-    openGraph: { title: copy.title, description: copy.description, type: "website" },
+    openGraph: {
+      images: ["/og-image.png"], title: copy.title, description: copy.description, type: "website" },
   }
 }
 

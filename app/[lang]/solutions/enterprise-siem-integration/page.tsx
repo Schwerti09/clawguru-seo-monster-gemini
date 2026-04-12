@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+﻿import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
 
@@ -13,7 +13,8 @@ export async function generateMetadata({ params }: { params: { lang: string } })
     description: 'SIEM Integration für Enterprise mit ClawGuru. Splunk, Datadog, Elastic Stack und Microsoft Sentinel Anbindung. Log Aggregation, Korrelationsregeln und SOC-Ready Dashboards.',
     keywords: ['enterprise siem integration','splunk security','datadog siem','elastic security','microsoft sentinel','soc security operations'],
     authors: [{ name: 'ClawGuru Security Team' }],
-    openGraph: { title: 'Enterprise SIEM Integration mit ClawGuru 2024', description: 'SIEM für Enterprise mit ClawGuru.', type: 'article', url: `https://clawguru.org/${lang}/solutions/enterprise-siem-integration` },
+    openGraph: {
+      images: ["/og-image.png"], title: 'Enterprise SIEM Integration mit ClawGuru 2024', description: 'SIEM für Enterprise mit ClawGuru.', type: 'article', url: `https://clawguru.org/${lang}/solutions/enterprise-siem-integration` },
     alternates: buildLocalizedAlternates(lang as Locale, '/solutions/enterprise-siem-integration'),
     robots: 'index, follow',
   };

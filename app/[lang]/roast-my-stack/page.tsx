@@ -1,4 +1,4 @@
-import type { Metadata } from "next"
+﻿import type { Metadata } from "next"
 
 import RoastMyStack from "@/components/roast/RoastMyStack"
 import Container from "@/components/shared/Container"
@@ -23,6 +23,7 @@ export async function generateMetadata(props: { params: { lang: string } }): Pro
     description,
     alternates: buildLocalizedAlternates(locale, "/roast-my-stack"),
     openGraph: {
+      images: ["/og-image.png"],
       title,
       description,
       url: `https://clawguru.org/${locale}/roast-my-stack`,

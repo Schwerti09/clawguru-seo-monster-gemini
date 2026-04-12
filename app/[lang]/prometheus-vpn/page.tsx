@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n";
 import { BASE_URL } from "@/lib/config";
 import { getCoreSecurityLinks } from "@/lib/core-security-links";
@@ -41,6 +41,7 @@ export async function generateMetadata({
     ],
     alternates: buildLocalizedAlternates(locale, "/prometheus-vpn"),
     openGraph: {
+      images: ["/og-image.png"],
       title: "Prometheus VPN Monitoring 2026: Secure Metrics",
       description: "Collect Prometheus metrics securely over VPN with Tailscale, WireGuard & Zero Trust.",
       type: "article",

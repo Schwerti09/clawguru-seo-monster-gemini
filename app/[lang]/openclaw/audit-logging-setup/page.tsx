@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+﻿import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
 
@@ -13,7 +13,8 @@ export async function generateMetadata({ params }: { params: { lang: string } })
     description: 'Audit Logging für OpenClaw. Strukturiertes JSON Logging, Tamper-Proof Log Storage, Log Retention Policies, GDPR-konformes Logging und Forensics-Ready Audit Trail.',
     keywords: ['openclaw audit logging','compliance logging','audit trail','tamper proof logs','gdpr logging','forensics logging'],
     authors: [{ name: 'ClawGuru Security Team' }],
-    openGraph: { title: 'OpenClaw Audit Logging Setup 2024', description: 'Compliance & Forensics Logging für OpenClaw.', type: 'article', url: `https://clawguru.org/${lang}/openclaw/audit-logging-setup` },
+    openGraph: {
+      images: ["/og-image.png"], title: 'OpenClaw Audit Logging Setup 2024', description: 'Compliance & Forensics Logging für OpenClaw.', type: 'article', url: `https://clawguru.org/${lang}/openclaw/audit-logging-setup` },
     alternates: buildLocalizedAlternates(lang as Locale, '/openclaw/audit-logging-setup'),
     robots: 'index, follow',
   };

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n";
 import { BASE_URL } from "@/lib/config";
 import { getCoreSecurityLinks } from "@/lib/core-security-links";
@@ -45,6 +45,7 @@ export async function generateMetadata({
     ],
     alternates: buildLocalizedAlternates(locale, "/tailscale-pam"),
     openGraph: {
+      images: ["/og-image.png"],
       title: "Tailscale PAM 2026: Zero Trust Privileged Access",
       description: "Complete guide to Tailscale PAM implementation with Zero Trust SSH, Device Trust & enterprise security.",
       type: "article",

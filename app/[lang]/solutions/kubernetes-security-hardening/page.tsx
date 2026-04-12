@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+﻿import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
 
@@ -13,7 +13,8 @@ export async function generateMetadata({ params }: { params: { lang: string } })
     description: 'Kubernetes Security Hardening mit ClawGuru. CIS Kubernetes Benchmark, RBAC Setup, Network Policies, Pod Security Standards und automatisiertes K8s Scanning.',
     keywords: ['kubernetes security hardening','cis kubernetes benchmark','rbac kubernetes','network policies k8s','pod security standards','kubernetes scanning'],
     authors: [{ name: 'ClawGuru Security Team' }],
-    openGraph: { title: 'Kubernetes Security Hardening mit ClawGuru 2024', description: 'K8s Hardening mit CIS Benchmark.', type: 'article', url: `https://clawguru.org/${lang}/solutions/kubernetes-security-hardening` },
+    openGraph: {
+      images: ["/og-image.png"], title: 'Kubernetes Security Hardening mit ClawGuru 2024', description: 'K8s Hardening mit CIS Benchmark.', type: 'article', url: `https://clawguru.org/${lang}/solutions/kubernetes-security-hardening` },
     alternates: buildLocalizedAlternates(lang as Locale, '/solutions/kubernetes-security-hardening'),
     robots: 'index, follow',
   };

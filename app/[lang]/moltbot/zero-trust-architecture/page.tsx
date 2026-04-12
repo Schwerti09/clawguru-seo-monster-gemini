@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+﻿import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
 
@@ -13,7 +13,8 @@ export async function generateMetadata({ params }: { params: { lang: string } })
     description: 'Zero Trust Implementierung für Moltbot. Micro-Segmentierung, Identity-basierter Zugriff, Continuous Verification und Least-Privilege-Prinzip. Komplette ZTA-Architektur mit Code-Beispielen.',
     keywords: ['moltbot zero trust','zero trust architecture','micro segmentation','identity based access','least privilege','continuous verification'],
     authors: [{ name: 'ClawGuru Security Team' }],
-    openGraph: { title: 'Moltbot Zero Trust Architecture: Never Trust, Always Verify 2024', description: 'Zero Trust Implementierung für Moltbot.', type: 'article', url: `https://clawguru.org/${lang}/moltbot/zero-trust-architecture` },
+    openGraph: {
+      images: ["/og-image.png"], title: 'Moltbot Zero Trust Architecture: Never Trust, Always Verify 2024', description: 'Zero Trust Implementierung für Moltbot.', type: 'article', url: `https://clawguru.org/${lang}/moltbot/zero-trust-architecture` },
     alternates: buildLocalizedAlternates(lang as Locale, '/moltbot/zero-trust-architecture'),
     robots: 'index, follow',
   };

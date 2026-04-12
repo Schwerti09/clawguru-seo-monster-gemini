@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+﻿import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
 
@@ -13,7 +13,8 @@ export async function generateMetadata({ params }: { params: { lang: string } })
     description: 'Security Automation für Moltbot. Workflow-Orchestration, Webhook-Integration, Playbook-Automatisierung und Incident Response Automation.',
     keywords: ['moltbot security automation','workflow orchestration','security playbooks','incident response automation','webhook integration'],
     authors: [{ name: 'ClawGuru Security Team' }],
-    openGraph: { title: 'Moltbot Security Automation Workflows 2024', description: 'Security Automation für Moltbot.', type: 'article', url: `https://clawguru.org/${lang}/moltbot/security-automation-workflows` },
+    openGraph: {
+      images: ["/og-image.png"], title: 'Moltbot Security Automation Workflows 2024', description: 'Security Automation für Moltbot.', type: 'article', url: `https://clawguru.org/${lang}/moltbot/security-automation-workflows` },
     alternates: buildLocalizedAlternates(lang as Locale, '/moltbot/security-automation-workflows'),
     robots: 'index, follow',
   };

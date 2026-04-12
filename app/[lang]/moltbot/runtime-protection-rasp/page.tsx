@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+﻿import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
 
@@ -13,7 +13,8 @@ export async function generateMetadata({ params }: { params: { lang: string } })
     description: 'Runtime Application Self-Protection für Moltbot. RASP-Implementierung, Runtime Security, Application Control und Live Attack Prevention.',
     keywords: ['moltbot rasp','runtime protection','self-protecting applications','runtime security','application control','attack prevention'],
     authors: [{ name: 'ClawGuru Security Team' }],
-    openGraph: { title: 'Moltbot Runtime Protection RASP 2024', description: 'RASP und Runtime Protection für Moltbot.', type: 'article', url: `https://clawguru.org/${lang}/moltbot/runtime-protection-rasp` },
+    openGraph: {
+      images: ["/og-image.png"], title: 'Moltbot Runtime Protection RASP 2024', description: 'RASP und Runtime Protection für Moltbot.', type: 'article', url: `https://clawguru.org/${lang}/moltbot/runtime-protection-rasp` },
     alternates: buildLocalizedAlternates(lang as Locale, '/moltbot/runtime-protection-rasp'),
     robots: 'index, follow',
   };

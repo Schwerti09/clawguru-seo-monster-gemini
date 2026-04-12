@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n";
 import { BASE_URL } from "@/lib/config";
 import { getCoreSecurityLinks } from "@/lib/core-security-links";
@@ -40,6 +40,7 @@ export async function generateMetadata({
     ],
     alternates: buildLocalizedAlternates(locale, "/docker-security-hardening"),
     openGraph: {
+      images: ["/og-image.png"],
       title: "Docker Security Hardening 2026: Container Security",
       description: "Harden Docker with rootless mode, seccomp, AppArmor & CIS benchmarks.",
       type: "article",

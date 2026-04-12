@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+﻿import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
 
@@ -13,7 +13,8 @@ export async function generateMetadata({ params }: { params: { lang: string } })
     description: 'Data Loss Prevention für Moltbot. DLP-Implementierung, Datenklassifizierung, Endpoint-DLP, Network-DLP und automatisierte Erkennung sensibler Daten.',
     keywords: ['moltbot data loss prevention','dlp','data classification','endpoint dlp','network dlp','sensitive data detection'],
     authors: [{ name: 'ClawGuru Security Team' }],
-    openGraph: { title: 'Moltbot Data Loss Prevention 2024', description: 'DLP und Data Classification für Moltbot.', type: 'article', url: `https://clawguru.org/${lang}/moltbot/data-loss-prevention` },
+    openGraph: {
+      images: ["/og-image.png"], title: 'Moltbot Data Loss Prevention 2024', description: 'DLP und Data Classification für Moltbot.', type: 'article', url: `https://clawguru.org/${lang}/moltbot/data-loss-prevention` },
     alternates: buildLocalizedAlternates(lang as Locale, '/moltbot/data-loss-prevention'),
     robots: 'index, follow',
   };

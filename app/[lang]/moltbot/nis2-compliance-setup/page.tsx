@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+﻿import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
 
@@ -13,7 +13,8 @@ export async function generateMetadata({ params }: { params: { lang: string } })
     description: 'NIS2-Richtlinie mit Moltbot umsetzen. Technische Maßnahmen nach Art. 21, Incident Reporting (24h/72h), Supply Chain Security und Risikobeurteilung für kritische Infrastrukturen.',
     keywords: ['moltbot nis2 compliance','nis2 richtlinie','nis2 technische massnahmen','nis2 incident reporting','kritis nis2','nis2 umsetzung'],
     authors: [{ name: 'ClawGuru Security Team' }],
-    openGraph: { title: 'Moltbot NIS2 Compliance Setup 2024', description: 'NIS2-Richtlinie mit Moltbot.', type: 'article', url: `https://clawguru.org/${lang}/moltbot/nis2-compliance-setup` },
+    openGraph: {
+      images: ["/og-image.png"], title: 'Moltbot NIS2 Compliance Setup 2024', description: 'NIS2-Richtlinie mit Moltbot.', type: 'article', url: `https://clawguru.org/${lang}/moltbot/nis2-compliance-setup` },
     alternates: buildLocalizedAlternates(lang as Locale, '/moltbot/nis2-compliance-setup'),
     robots: 'index, follow',
   };

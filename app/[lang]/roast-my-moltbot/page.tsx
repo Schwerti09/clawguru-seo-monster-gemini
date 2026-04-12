@@ -1,4 +1,4 @@
-import type { Metadata } from "next"
+﻿import type { Metadata } from "next"
 import Link from "next/link"
 
 import RoastMyStack from "@/components/roast/RoastMyStack"
@@ -52,6 +52,7 @@ export async function generateMetadata(props: { params: { lang: string } }): Pro
     description: copy.metaDescription,
     alternates: buildLocalizedAlternates(locale, "/roast-my-moltbot"),
     openGraph: {
+      images: ["/og-image.png"],
       title: copy.metaTitle,
       description: copy.metaDescription,
       type: "website",

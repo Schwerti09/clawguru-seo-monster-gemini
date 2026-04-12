@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+﻿import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
 
@@ -13,7 +13,8 @@ export async function generateMetadata({ params }: { params: { lang: string } })
     description: 'Reverse Proxy Security für OpenClaw mit nginx und Caddy. Rate Limiting, IP Blocking, Security Headers, ModSecurity WAF und DDoS-Schutz. Produktionsreife Konfiguration.',
     keywords: ['openclaw reverse proxy','nginx security hardening','caddy security','modsecurity waf','rate limiting nginx','ddos protection'],
     authors: [{ name: 'ClawGuru Security Team' }],
-    openGraph: { title: 'OpenClaw Reverse Proxy Security 2024', description: 'Reverse Proxy Hardening für OpenClaw.', type: 'article', url: `https://clawguru.org/${lang}/openclaw/reverse-proxy-security` },
+    openGraph: {
+      images: ["/og-image.png"], title: 'OpenClaw Reverse Proxy Security 2024', description: 'Reverse Proxy Hardening für OpenClaw.', type: 'article', url: `https://clawguru.org/${lang}/openclaw/reverse-proxy-security` },
     alternates: buildLocalizedAlternates(lang as Locale, '/openclaw/reverse-proxy-security'),
     robots: 'index, follow',
   };

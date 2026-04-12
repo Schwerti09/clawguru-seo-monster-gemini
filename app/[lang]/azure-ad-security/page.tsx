@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n";
 import { BASE_URL } from "@/lib/config";
 import { getCoreSecurityLinks } from "@/lib/core-security-links";
@@ -40,6 +40,7 @@ export async function generateMetadata({
     ],
     alternates: buildLocalizedAlternates(locale, "/azure-ad-security"),
     openGraph: {
+      images: ["/og-image.png"],
       title: "Azure AD Security 2026: Entra ID Protection",
       description: "Azure AD security with Conditional Access, PIM, Zero Trust & passwordless.",
       type: "article",

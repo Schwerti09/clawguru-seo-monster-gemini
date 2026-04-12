@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+﻿import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
 
@@ -13,7 +13,8 @@ export async function generateMetadata({ params }: { params: { lang: string } })
     description: 'SOC2 Type II Compliance mit ClawGuru automatisieren. Kontinuierliches Monitoring, Evidence Collection, Trust Service Criteria und automatisierte Auditor-Reports. SOC2 in 90 Tagen.',
     keywords: ['soc2 compliance automation','soc2 type ii','trust service criteria','evidence collection','soc2 audit','continuous monitoring soc2'],
     authors: [{ name: 'ClawGuru Security Team' }],
-    openGraph: { title: 'SOC2 Compliance Automatisierung mit ClawGuru 2024', description: 'SOC2 Type II Compliance mit ClawGuru.', type: 'article', url: `https://clawguru.org/${lang}/solutions/soc2-compliance-automation` },
+    openGraph: {
+      images: ["/og-image.png"], title: 'SOC2 Compliance Automatisierung mit ClawGuru 2024', description: 'SOC2 Type II Compliance mit ClawGuru.', type: 'article', url: `https://clawguru.org/${lang}/solutions/soc2-compliance-automation` },
     alternates: buildLocalizedAlternates(lang as Locale, '/solutions/soc2-compliance-automation'),
     robots: 'index, follow',
   };

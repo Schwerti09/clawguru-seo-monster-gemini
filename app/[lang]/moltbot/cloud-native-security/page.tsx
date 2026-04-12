@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+﻿import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
 
@@ -13,7 +13,8 @@ export async function generateMetadata({ params }: { params: { lang: string } })
     description: 'Cloud Native Security für Moltbot. Kubernetes Security, Container Hardening, Microservices Security, Service Mesh und Cloud Native Protection.',
     keywords: ['moltbot cloud native security','kubernetes security','container security','microservices security','service mesh','cloud native protection'],
     authors: [{ name: 'ClawGuru Security Team' }],
-    openGraph: { title: 'Moltbot Cloud Native Security 2024', description: 'Cloud Native Security für Moltbot.', type: 'article', url: `https://clawguru.org/${lang}/moltbot/cloud-native-security` },
+    openGraph: {
+      images: ["/og-image.png"], title: 'Moltbot Cloud Native Security 2024', description: 'Cloud Native Security für Moltbot.', type: 'article', url: `https://clawguru.org/${lang}/moltbot/cloud-native-security` },
     alternates: buildLocalizedAlternates(lang as Locale, '/moltbot/cloud-native-security'),
     robots: 'index, follow',
   };

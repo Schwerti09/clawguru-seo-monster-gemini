@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+﻿import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
 
@@ -13,7 +13,8 @@ export async function generateMetadata({ params }: { params: { lang: string } })
     description: 'Sicheres Secrets Management für Moltbot mit HashiCorp Vault. Dynamic Secrets, Secret Rotation, Vault Agent Injection und Environment Variable Best Practices.',
     keywords: ['moltbot secrets management','hashicorp vault','dynamic secrets','secret rotation','vault agent','env variables security'],
     authors: [{ name: 'ClawGuru Security Team' }],
-    openGraph: { title: 'Moltbot Secrets & Vault Management: HashiCorp Vault Setup 2024', description: 'Sicheres Secrets Management für Moltbot mit HashiCorp Vault.', type: 'article', url: `https://clawguru.org/${lang}/moltbot/secrets-vault-management` },
+    openGraph: {
+      images: ["/og-image.png"], title: 'Moltbot Secrets & Vault Management: HashiCorp Vault Setup 2024', description: 'Sicheres Secrets Management für Moltbot mit HashiCorp Vault.', type: 'article', url: `https://clawguru.org/${lang}/moltbot/secrets-vault-management` },
     alternates: buildLocalizedAlternates(lang as Locale, '/moltbot/secrets-vault-management'),
     robots: 'index, follow',
   };

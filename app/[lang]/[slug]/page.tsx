@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+﻿import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { dbQuery } from '@/lib/db';
 import Container from '@/components/shared/Container';
@@ -181,6 +181,7 @@ export async function generateMetadata({ params }: GeoVariantPageProps): Promise
       keywords: [baseSlug, citySlug, 'security', 'hardening', 'runbook', fallbackCityName],
       authors: [{ name: 'ClawGuru Security Team' }],
       openGraph: {
+      images: ["/og-image.png"],
         title: fallbackTitle,
         description: fallbackDescription,
         type: 'article',
@@ -209,6 +210,7 @@ export async function generateMetadata({ params }: GeoVariantPageProps): Promise
     keywords: [baseSlug, citySlug, 'security', 'hardening', 'runbook', cityName],
     authors: [{ name: 'ClawGuru Security Team' }],
     openGraph: {
+      images: ["/og-image.png"],
       title,
       description,
       type: 'article',

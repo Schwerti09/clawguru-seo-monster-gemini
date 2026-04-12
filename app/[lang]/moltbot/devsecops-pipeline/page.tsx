@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+﻿import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
 
@@ -13,7 +13,8 @@ export async function generateMetadata({ params }: { params: { lang: string } })
     description: 'DevSecOps für Moltbot: Security-Gates im CI/CD-Pipeline, SAST/DAST-Integration, Dependency Scanning, Container Scanning und automatisierte Compliance-Checks. GitHub Actions Konfiguration.',
     keywords: ['moltbot devsecops','cicd security','sast dast','dependency scanning','container scanning','github actions security'],
     authors: [{ name: 'ClawGuru Security Team' }],
-    openGraph: { title: 'Moltbot DevSecOps Pipeline: Security im CI/CD 2024', description: 'DevSecOps für Moltbot mit Security-Gates im CI/CD.', type: 'article', url: `https://clawguru.org/${lang}/moltbot/devsecops-pipeline` },
+    openGraph: {
+      images: ["/og-image.png"], title: 'Moltbot DevSecOps Pipeline: Security im CI/CD 2024', description: 'DevSecOps für Moltbot mit Security-Gates im CI/CD.', type: 'article', url: `https://clawguru.org/${lang}/moltbot/devsecops-pipeline` },
     alternates: buildLocalizedAlternates(lang as Locale, '/moltbot/devsecops-pipeline'),
     robots: 'index, follow',
   };

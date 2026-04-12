@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n";
 import { BASE_URL } from "@/lib/config";
 import { getCoreSecurityLinks } from "@/lib/core-security-links";
@@ -40,6 +40,7 @@ export async function generateMetadata({
     ],
     alternates: buildLocalizedAlternates(locale, "/cloudformation-security"),
     openGraph: {
+      images: ["/og-image.png"],
       title: "CloudFormation Security 2026: AWS IaC Protection",
       description: "Secure CloudFormation with stack policies, drift detection, service roles & compliance controls.",
       type: "article",

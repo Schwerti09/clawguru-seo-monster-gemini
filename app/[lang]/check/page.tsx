@@ -1,4 +1,4 @@
-import type { Metadata } from "next"
+﻿import type { Metadata } from "next"
 
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
 import RootPage from "@/app/check/page"
@@ -26,6 +26,7 @@ export async function generateMetadata(props: { params: { lang: string } }): Pro
     description,
     alternates: buildLocalizedAlternates(locale, "/check"),
     openGraph: {
+      images: ["/og-image.png"],
       title,
       description,
       type: "website",

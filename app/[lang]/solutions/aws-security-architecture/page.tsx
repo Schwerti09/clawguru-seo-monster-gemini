@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+﻿import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
 
@@ -13,7 +13,8 @@ export async function generateMetadata({ params }: { params: { lang: string } })
     description: 'AWS Security Architecture mit ClawGuru. AWS Well-Architected Security Pillar, IAM Least Privilege, CloudTrail Monitoring, GuardDuty Integration und Security Hub.',
     keywords: ['aws security architecture','aws well architected security','iam least privilege','cloudtrail monitoring','aws guardduty','aws security hub'],
     authors: [{ name: 'ClawGuru Security Team' }],
-    openGraph: { title: 'AWS Security Architecture mit ClawGuru 2024', description: 'AWS Well-Architected Security.', type: 'article', url: `https://clawguru.org/${lang}/solutions/aws-security-architecture` },
+    openGraph: {
+      images: ["/og-image.png"], title: 'AWS Security Architecture mit ClawGuru 2024', description: 'AWS Well-Architected Security.', type: 'article', url: `https://clawguru.org/${lang}/solutions/aws-security-architecture` },
     alternates: buildLocalizedAlternates(lang as Locale, '/solutions/aws-security-architecture'),
     robots: 'index, follow',
   };

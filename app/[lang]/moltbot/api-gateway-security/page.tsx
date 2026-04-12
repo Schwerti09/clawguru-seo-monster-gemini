@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+﻿import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
 
@@ -13,7 +13,8 @@ export async function generateMetadata({ params }: { params: { lang: string } })
     description: 'API Gateway Security für Moltbot mit Kong. Authentication Plugins, Rate Limiting, IP Whitelisting, Request Validation und API Key Management. Production-ready Gateway Konfiguration.',
     keywords: ['moltbot api gateway','kong security','api key management','rate limiting gateway','request validation','api authentication'],
     authors: [{ name: 'ClawGuru Security Team' }],
-    openGraph: { title: 'Moltbot API Gateway Security: Kong & Rate Limiting 2024', description: 'API Gateway Security für Moltbot mit Kong.', type: 'article', url: `https://clawguru.org/${lang}/moltbot/api-gateway-security` },
+    openGraph: {
+      images: ["/og-image.png"], title: 'Moltbot API Gateway Security: Kong & Rate Limiting 2024', description: 'API Gateway Security für Moltbot mit Kong.', type: 'article', url: `https://clawguru.org/${lang}/moltbot/api-gateway-security` },
     alternates: buildLocalizedAlternates(lang as Locale, '/moltbot/api-gateway-security'),
     robots: 'index, follow',
   };

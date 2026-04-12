@@ -1,4 +1,4 @@
-import type { Metadata } from "next"
+﻿import type { Metadata } from "next"
 
 import { buildLocalizedAlternates, SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
 import { notFound } from "next/navigation"
@@ -47,6 +47,7 @@ export async function generateMetadata(props: {
     description,
     alternates: buildLocalizedAlternates(locale, `/runbook/${canonicalSlug}`),
     openGraph: {
+      images: ["/og-image.png"],
       title,
       description,
       type: "article",

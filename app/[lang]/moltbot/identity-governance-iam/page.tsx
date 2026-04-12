@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+﻿import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
 
@@ -20,7 +20,8 @@ export async function generateMetadata({ params }: { params: { lang: string } })
 
     authors: [{ name: 'ClawGuru Security Team' }],
 
-    openGraph: { title: 'Moltbot Identity Governance & IAM 2024', description: 'IAM und RBAC für Moltbot.', type: 'article', url: `https://clawguru.org/${lang}/moltbot/identity-governance-iam` },
+    openGraph: {
+      images: ["/og-image.png"], title: 'Moltbot Identity Governance & IAM 2024', description: 'IAM und RBAC für Moltbot.', type: 'article', url: `https://clawguru.org/${lang}/moltbot/identity-governance-iam` },
 
     alternates: buildLocalizedAlternates(lang as Locale, '/moltbot/identity-governance-iam'),
 

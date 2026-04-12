@@ -14,8 +14,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const pageUrl = `${SITE_URL}/${locale}${PATH}`
-  const title = "Secrets Rotation Automation: Vault Management 2026"
-  const description = "Complete secrets rotation automation guide with HashiCorp Vault, Kubernetes secrets, and automated credential management for security compliance."
+  const title = "Secrets Rotation Automation: Vault Management 2026 | OpenClaw"
+  const description = "Automatisierte Secrets-Rotation mit HashiCorp Vault, Kubernetes Secrets und DSGVO-konformem Credential Management — für selbst-gehostete Infrastrukturen."
   return {
     title,
     description,
@@ -33,35 +33,47 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 }
 
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    { '@type': 'Question', name: 'Warum ist automatisierte Secrets-Rotation wichtig?', acceptedAnswer: { '@type': 'Answer', text: 'Statische Secrets (Passwörter, API-Keys, Zertifikate) sind das größte Risiko für Credential-Leaks. Automatisierte Rotation begrenzt das Exposure-Fenster: Selbst bei einem Leak ist ein rotiertes Secret in Minuten wertlos.' } },
+    { '@type': 'Question', name: 'Wie funktioniert HashiCorp Vault Secrets Rotation?', acceptedAnswer: { '@type': 'Answer', text: 'Vault generiert dynamische Credentials on-demand (z.B. kurzlebige DB-Passwörter), rotiert sie automatisch nach TTL und widerruft sie nach Ablauf. Anwendungen erhalten Tokens mit minimalem TTL — nie dauerhafte Credentials.' } },
+    { '@type': 'Question', name: 'Welche Secrets sollten rotiert werden?', acceptedAnswer: { '@type': 'Answer', text: 'Alle kritischen Credentials: Datenbank-Passwörter (täglich), API-Keys (monatlich), TLS-Zertifikate (90 Tage), SSH-Keys (jährlich), Service-Account-Tokens (wöchentlich). Vault und External Secrets Operator automatisieren diesen Prozess.' } },
+    { '@type': 'Question', name: 'Wie integriere ich Vault mit Kubernetes?', acceptedAnswer: { '@type': 'Answer', text: 'Mit dem Vault Agent Injector oder External Secrets Operator können Pods automatisch Secrets aus Vault beziehen — als gemountete Dateien oder Umgebungsvariablen. Kubernetes Service Accounts authentifizieren sich via Vault Kubernetes Auth Method.' } },
+  ],
+}
+
 export default function SecretsRotationAutomationPage({ params }: PageProps) {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   if (!SUPPORTED_LOCALES.includes(locale)) notFound()
 
   return (
     <div className="container mx-auto px-4 py-8">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: This guide is for hardening your own systems. No attack tools.
+          <strong className="text-amber-100">&quot;Not a Pentest&quot; Hinweis</strong>: Dieser Guide dient der Absicherung eigener Secrets-Infrastrukturen. Kein Angriffs-Tool.
         </div>
         <h1 className="text-4xl font-bold mb-4 text-gray-100">Secrets Rotation Automation: Vault Management</h1>
-        <p className="text-lg text-gray-300 mb-8">Complete automated secrets rotation with HashiCorp Vault, Kubernetes integration, and compliance-driven credential management.</p>
+        <p className="text-lg text-gray-300 mb-8">Vollständig automatisierte Secrets-Rotation mit HashiCorp Vault, Kubernetes-Integration und Compliance-konformem Credential Management.</p>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Secrets Management Fundamentals</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Secrets Management Grundlagen</h2>
           <div className="bg-gray-800 p-6 rounded-lg mb-4 border border-gray-700">
-            <h3 className="font-semibold mb-2 text-gray-100">Core Components</h3>
+            <h3 className="font-semibold mb-2 text-gray-100">Kernkomponenten</h3>
             <ul className="list-disc list-inside space-y-1 text-gray-300">
-              <li>Automated credential rotation policies</li>
-              <li>Zero-trust access controls</li>
-              <li>Audit trails and compliance logging</li>
-              <li>Dynamic secrets generation</li>
-              <li>Multi-cloud secrets orchestration</li>
+              <li>Automatisierte Credential-Rotations-Policies</li>
+              <li>Zero-Trust-Zugriffskontrolle</li>
+              <li>Audit Trails und Compliance-Logging</li>
+              <li>Dynamische Secrets-Generierung</li>
+              <li>Multi-Cloud Secrets-Orchestrierung</li>
             </ul>
           </div>
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">HashiCorp Vault Configuration</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">HashiCorp Vault Konfiguration</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto">
             <pre>
 {`# Vault configuration for automated rotation

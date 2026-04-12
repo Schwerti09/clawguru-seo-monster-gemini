@@ -14,8 +14,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const pageUrl = `${SITE_URL}/${locale}${PATH}`
-  const title = "Microservices Security: Architecture Patterns 2026"
-  const description = "Complete microservices security guide with zero-trust architecture, API gateway security, service mesh, and container security patterns."
+  const title = "Microservices Security: Architektur-Patterns 2026 | OpenClaw"
+  const description = "Microservices Security mit Zero-Trust-Architektur, API-Gateway-Absicherung, Service Mesh mTLS und Container Security Patterns für selbst-gehostete Infrastrukturen."
   return {
     title,
     description,
@@ -33,35 +33,47 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 }
 
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    { '@type': 'Question', name: 'Was ist Zero-Trust in Microservices?', acceptedAnswer: { '@type': 'Answer', text: 'Zero-Trust bedeutet: kein Service vertraut einem anderen per Default. Jede Kommunikation wird authentifiziert (mTLS), autorisiert (RBAC) und protokolliert — unabhängig davon, ob der Aufrufer intern oder extern ist.' } },
+    { '@type': 'Question', name: 'Wie sichere ich die Kommunikation zwischen Microservices ab?', acceptedAnswer: { '@type': 'Answer', text: 'Mutual TLS (mTLS) verschlüsselt und authentifiziert Service-zu-Service-Kommunikation. Service Meshes wie Istio oder Linkerd implementieren mTLS automatisch, ohne Änderung am Anwendungscode.' } },
+    { '@type': 'Question', name: 'Was ist der größte Sicherheitsrisiko bei Microservices?', acceptedAnswer: { '@type': 'Answer', text: 'Die größten Risiken sind: unsichere Service-Kommunikation (kein mTLS), zu weitreichende RBAC-Berechtigungen, unsichere API Gateways, fehlende Netzwerk-Segmentierung und unkontrollierte Secrets-Verteilung.' } },
+    { '@type': 'Question', name: 'Welche Tools empfiehlt OpenClaw für Microservices Security?', acceptedAnswer: { '@type': 'Answer', text: 'OpenClaw empfiehlt: Istio/Linkerd für Service Mesh mTLS, OPA/Kyverno für Policy-as-Code, Falco für Runtime-Detection, Trivy für Container-Scanning und HashiCorp Vault für Secrets Management.' } },
+  ],
+}
+
 export default function MicroservicesSecurityPage({ params }: PageProps) {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   if (!SUPPORTED_LOCALES.includes(locale)) notFound()
 
   return (
     <div className="container mx-auto px-4 py-8">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: This guide is for hardening your own systems. No attack tools.
+          <strong className="text-amber-100">&quot;Not a Pentest&quot; Hinweis</strong>: Dieser Guide dient der Absicherung eigener Microservices-Infrastrukturen. Kein Angriffs-Tool.
         </div>
-        <h1 className="text-4xl font-bold mb-4 text-gray-100">Microservices Security: Architecture Patterns</h1>
-        <p className="text-lg text-gray-300 mb-8">Complete microservices security implementation with zero-trust architecture, API gateway security, and service mesh patterns.</p>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">Microservices Security: Architektur-Patterns</h1>
+        <p className="text-lg text-gray-300 mb-8">Vollständige Microservices-Absicherung mit Zero-Trust-Architektur, API-Gateway-Security, Service Mesh und Container Security Patterns.</p>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Microservices Security Fundamentals</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Microservices Security Grundlagen</h2>
           <div className="bg-gray-800 p-4 rounded-lg mb-4 border border-gray-700">
-            <h3 className="font-semibold mb-2 text-gray-100">Core Security Principles</h3>
+            <h3 className="font-semibold mb-2 text-gray-100">Grundlegende Security-Prinzipien</h3>
             <ul className="list-disc list-inside space-y-1 text-gray-300">
-              <li>Zero-trust network architecture</li>
-              <li>Defense in depth strategy</li>
-              <li>Least privilege access controls</li>
-              <li>Secure service-to-service communication</li>
-              <li>Comprehensive observability and logging</li>
+              <li>Zero-Trust-Netzwerkarchitektur</li>
+              <li>Defense-in-Depth-Strategie</li>
+              <li>Minimale Zugriffsprivilegien (Least Privilege)</li>
+              <li>Gesicherte Service-zu-Service-Kommunikation</li>
+              <li>Umfassende Observability und Logging</li>
             </ul>
           </div>
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Zero-Trust Architecture</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Zero-Trust-Architektur</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto">
             <pre>
 {`# Zero-Trust Network Policy Example

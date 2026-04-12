@@ -14,8 +14,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const pageUrl = `${SITE_URL}/${locale}${PATH}`
-  const title = "WAF Configuration: Web Application Firewall Setup 2026"
-  const description = "Complete WAF configuration guide for web application security. Learn OWASP rules, custom policies, and best practices for firewall deployment."
+  const title = "WAF Konfiguration: Web Application Firewall Setup 2026 | OpenClaw"
+  const description = "WAF Konfiguration für Web-Anwendungssicherheit: OWASP-Regeln, Custom Policies und Best Practices für ModSecurity, nginx WAF und Cloudflare WAF in selbst-gehosteten Infrastrukturen."
   return {
     title,
     description,
@@ -33,35 +33,47 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 }
 
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    { '@type': 'Question', name: 'Was ist eine WAF und wozu brauche ich sie?', acceptedAnswer: { '@type': 'Answer', text: 'Eine Web Application Firewall (WAF) analysiert HTTP/HTTPS-Traffic und blockiert bösartige Anfragen (SQL-Injection, XSS, CSRF, Path Traversal) bevor sie die Anwendung erreichen. Sie ist Pflicht für jede öffentlich erreichbare Web-Applikation.' } },
+    { '@type': 'Question', name: 'Was sind OWASP ModSecurity Core Rules?', acceptedAnswer: { '@type': 'Answer', text: 'Das OWASP ModSecurity Core Rule Set (CRS) ist eine Sammlung von über 200 generischen WAF-Regeln, die die häufigsten Web-Angriffe blockieren. Es ist der Standard für ModSecurity und kompatibel mit nginx, Apache und IIS.' } },
+    { '@type': 'Question', name: 'Was ist der Unterschied zwischen einer WAF und einer Netzwerk-Firewall?', acceptedAnswer: { '@type': 'Answer', text: 'Eine Netzwerk-Firewall filtert Traffic auf IP/Port-Ebene (Layer 3/4). Eine WAF analysiert den HTTP-Inhalt (Layer 7) und versteht Anwendungsprotokolle. Für Web-Sicherheit sind beide nötig — sie ergänzen sich.' } },
+    { '@type': 'Question', name: 'Soll ich ModSecurity oder Cloudflare WAF verwenden?', acceptedAnswer: { '@type': 'Answer', text: 'Für Self-Hosted: ModSecurity mit nginx (kostenlos, volle Kontrolle, DSGVO-konform). Für Cloud/CDN: Cloudflare WAF (einfach, managed, aber Daten verlassen EU). Für DSGVO-konforme Self-Hosted Infrastruktur ist ModSecurity die erste Wahl.' } },
+  ],
+}
+
 export default function WafConfigurationPage({ params }: PageProps) {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   if (!SUPPORTED_LOCALES.includes(locale)) notFound()
 
   return (
     <div className="container mx-auto px-4 py-8">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: This guide is for hardening your own systems. No attack tools.
+          <strong className="text-amber-100">&quot;Not a Pentest&quot; Hinweis</strong>: Dieser Guide dient der Absicherung eigener Web-Applikationen. Kein Angriffs-Tool.
         </div>
-        <h1 className="text-4xl font-bold mb-4 text-gray-100">WAF Configuration: Web Application Firewall Setup</h1>
-        <p className="text-lg text-gray-300 mb-8">Complete guide to configuring web application firewalls with OWASP rules and custom security policies.</p>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">WAF Konfiguration: Web Application Firewall Setup</h1>
+        <p className="text-lg text-gray-300 mb-8">Vollständige WAF-Konfiguration mit OWASP-Regeln und Custom Security Policies für ModSecurity, nginx WAF und Cloudflare.</p>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">WAF Fundamentals</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">WAF Grundlagen</h2>
           <div className="bg-gray-800 p-4 rounded-lg mb-4 border border-gray-700">
-            <h3 className="font-semibold mb-2 text-gray-100">Core Components</h3>
+            <h3 className="font-semibold mb-2 text-gray-100">Kernkomponenten</h3>
             <ul className="list-disc list-inside space-y-1 text-gray-300">
-              <li>OWASP Core Rule Set (CRS) integration</li>
-              <li>Custom rule configuration</li>
-              <li>Rate limiting and DDoS protection</li>
-              <li>Request/response inspection</li>
-              <li>Virtual patching capabilities</li>
+              <li>OWASP Core Rule Set (CRS) Integration</li>
+              <li>Custom-Regel-Konfiguration</li>
+              <li>Rate-Limiting und DDoS-Schutz</li>
+              <li>Request/Response-Inspektion</li>
+              <li>Virtual Patching</li>
             </ul>
           </div>
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">ModSecurity Configuration</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">ModSecurity Konfiguration</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto">
             <pre>
 {`# Enable ModSecurity with OWASP CRS

@@ -14,8 +14,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const pageUrl = `${SITE_URL}/${locale}${PATH}`
-  const title = "CI/CD Security Pipeline: GitLab DevSecOps Setup 2026"
-  const description = "Complete CI/CD security pipeline guide with GitLab, secrets management, SAST, DAST, and container scanning for DevSecOps automation."
+  const title = "CI/CD Security Pipeline: GitLab DevSecOps Setup 2026 | OpenClaw"
+  const description = "CI/CD Security Pipeline mit GitLab DevSecOps: SAST, DAST, Secrets Management und Container Scanning für automatisierte Security-Prüfungen in der Pipeline."
   return {
     title,
     description,
@@ -33,36 +33,48 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 }
 
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    { '@type': 'Question', name: 'Was ist eine sichere CI/CD-Pipeline?', acceptedAnswer: { '@type': 'Answer', text: 'Eine sichere CI/CD-Pipeline integriert automatisierte Security-Checks in jeden Build: SAST (Static Code Analysis), DAST (Dynamic Testing), Dependency-Scanning, Container-Image-Scanning und Secrets-Detection — bevor Code in Produktion geht.' } },
+    { '@type': 'Question', name: 'Was ist der Unterschied zwischen SAST und DAST?', acceptedAnswer: { '@type': 'Answer', text: 'SAST (Static Application Security Testing) analysiert Quellcode ohne Ausführung. DAST (Dynamic Application Security Testing) testet laufende Anwendungen auf Schwachstellen. Beide sind notwendig für vollständige CI/CD Security Coverage.' } },
+    { '@type': 'Question', name: 'Wie schütze ich Secrets in CI/CD-Pipelines?', acceptedAnswer: { '@type': 'Answer', text: 'Secrets nie in Code oder Umgebungsvariablen hardcoden. Nutze GitLab CI/CD Variables (masked), HashiCorp Vault, oder AWS Secrets Manager. Automatisiertes Secret-Scanning (Gitleaks, GitGuardian) in Pre-Commit-Hooks und Pipeline-Steps.' } },
+    { '@type': 'Question', name: 'Welche Tools empfiehlt OpenClaw für CI/CD Security?', acceptedAnswer: { '@type': 'Answer', text: 'OpenClaw empfiehlt: Trivy für Container-Scanning, Semgrep/Bandit für SAST, OWASP ZAP für DAST, Gitleaks für Secret-Detection, Renovate für Dependency-Updates — alle integrierbar in GitLab CI, GitHub Actions und Jenkins.' } },
+  ],
+}
+
 export default function CicdSecurityPipelinePage({ params }: PageProps) {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   if (!SUPPORTED_LOCALES.includes(locale)) notFound()
 
   return (
     <div className="container mx-auto px-4 py-8">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: This guide is for hardening your own systems. No attack tools.
+          <strong className="text-amber-100">&quot;Not a Pentest&quot; Hinweis</strong>: Dieser Guide dient der Absicherung eigener CI/CD-Pipelines. Kein Angriffs-Tool.
         </div>
         <h1 className="text-4xl font-bold mb-4 text-gray-100">CI/CD Security Pipeline: GitLab DevSecOps Setup</h1>
-        <p className="text-lg text-gray-300 mb-8">Complete DevSecOps pipeline implementation with automated security testing, secrets management, and compliance checks.</p>
+        <p className="text-lg text-gray-300 mb-8">Vollständige DevSecOps-Pipeline mit automatisierten Security-Tests, Secrets Management und Compliance-Checks — für jedes Commit.</p>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Pipeline Security Fundamentals</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Pipeline Security Grundlagen</h2>
           <div className="bg-gray-800 p-4 rounded-lg mb-4 border border-gray-700">
             <h3 className="font-semibold mb-2 text-gray-100">Security Stages</h3>
             <ul className="list-disc list-inside space-y-1 text-gray-300">
-              <li>Pre-commit hooks and local validation</li>
+              <li>Pre-Commit Hooks und lokale Validierung</li>
               <li>Static Application Security Testing (SAST)</li>
-              <li>Dependency scanning and vulnerability checks</li>
-              <li>Container image security scanning</li>
+              <li>Dependency Scanning und Schwachstellen-Checks</li>
+              <li>Container-Image Security Scanning</li>
               <li>Dynamic Application Security Testing (DAST)</li>
-              <li>Infrastructure as Code security testing</li>
+              <li>Infrastructure-as-Code Security Testing</li>
             </ul>
           </div>
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">GitLab CI/CD Security Configuration</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">GitLab CI/CD Security-Konfiguration</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto">
             <pre>
 {`# .gitlab-ci.yml - Complete Security Pipeline
@@ -132,7 +144,7 @@ secret-detection:
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Advanced Security Pipeline</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Erweiterte Security Pipeline</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto">
             <pre>
 {`# Advanced security scanning with custom tools

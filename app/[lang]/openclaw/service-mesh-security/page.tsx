@@ -14,8 +14,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const pageUrl = `${SITE_URL}/${locale}${PATH}`
-  const title = "Service Mesh Security: Istio Linkerd Guide 2026"
-  const description = "Complete service mesh security guide for Istio and Linkerd. Learn mTLS, access control, observability, and best practices for microservices security."
+  const title = "Service Mesh Security: Istio & Linkerd Guide 2026 | OpenClaw"
+  const description = "Service Mesh Security mit Istio und Linkerd: mTLS, Zero-Trust-Kommunikation, Observability und Zugriffskontrolle für selbst-gehostete Microservices-Infrastrukturen."
   return {
     title,
     description,
@@ -33,35 +33,47 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 }
 
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    { '@type': 'Question', name: 'Was ist ein Service Mesh und warum ist es sicherheitsrelevant?', acceptedAnswer: { '@type': 'Answer', text: 'Ein Service Mesh (Istio, Linkerd) ist eine Infrastrukturschicht, die Service-zu-Service-Kommunikation verwaltet. Sicherheitsrelevant weil es automatisch mTLS, Traffic-Verschlüsselung, Authentifizierung und Autorisierung zwischen allen Services erzwingt.' } },
+    { '@type': 'Question', name: 'Was ist der Unterschied zwischen Istio und Linkerd?', acceptedAnswer: { '@type': 'Answer', text: 'Istio ist feature-reiches Service Mesh mit umfangreichen Traffic-Management-Fähigkeiten (aber komplexer). Linkerd ist leichtgewichtiger, einfacher zu betreiben und für kleinere Teams geeignet. Beide bieten mTLS und Observability.' } },
+    { '@type': 'Question', name: 'Was ist mTLS und wie hilft es bei der Sicherheit?', acceptedAnswer: { '@type': 'Answer', text: 'Mutual TLS (mTLS) authentifiziert beide Seiten einer Verbindung (Client UND Server) — nicht nur den Server wie bei normalem TLS. Im Service Mesh bedeutet das: jeder Service muss sich ausweisen. Kompromittierte Services können nicht unerkannt kommunizieren.' } },
+    { '@type': 'Question', name: 'Brauche ich ein Service Mesh für kleine Teams?', acceptedAnswer: { '@type': 'Answer', text: 'Für kleine Teams (unter 10 Services) ist Linkerd empfehlenswert wegen geringer Komplexity. Alternativ können Kubernetes Network Policies und cert-manager für mTLS ausreichen. Istio lohnt sich ab 20+ Services oder Enterprise-Anforderungen.' } },
+  ],
+}
+
 export default function ServiceMeshSecurityPage({ params }: PageProps) {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   if (!SUPPORTED_LOCALES.includes(locale)) notFound()
 
   return (
     <div className="container mx-auto px-4 py-8">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: This guide is for hardening your own systems. No attack tools.
+          <strong className="text-amber-100">&quot;Not a Pentest&quot; Hinweis</strong>: Dieser Guide dient der Absicherung eigener Service-Mesh-Infrastrukturen. Kein Angriffs-Tool.
         </div>
-        <h1 className="text-4xl font-bold mb-4 text-gray-100">Service Mesh Security: Istio & Linkerd Guide</h1>
-        <p className="text-lg text-gray-300 mb-8">Complete security implementation for service mesh architectures with mTLS, access control, and observability.</p>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">Service Mesh Security: Istio &amp; Linkerd Guide</h1>
+        <p className="text-lg text-gray-300 mb-8">Vollständige Service-Mesh-Absicherung mit mTLS, Zero-Trust-Kommunikation, Zugriffskontrolle und Observability für Microservices.</p>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Service Mesh Security Fundamentals</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Service Mesh Security Grundlagen</h2>
           <div className="bg-gray-800 p-4 rounded-lg mb-4 border border-gray-700">
-            <h3 className="font-semibold mb-2 text-gray-100">Key Security Components</h3>
+            <h3 className="font-semibold mb-2 text-gray-100">Sicherheits-Kernkomponenten</h3>
             <ul className="list-disc list-inside space-y-1 text-gray-300">
-              <li>Automatic mTLS encryption between services</li>
-              <li>Fine-grained access control policies</li>
-              <li>Service-to-service authentication</li>
-              <li>Traffic management and security rules</li>
-              <li>Observability and audit logging</li>
+              <li>Automatische mTLS-Verschlüsselung zwischen Services</li>
+              <li>Feingranulare Zugriffssteuerungs-Policies</li>
+              <li>Service-zu-Service-Authentifizierung</li>
+              <li>Traffic-Management und Security-Regeln</li>
+              <li>Observability und Audit-Logging</li>
             </ul>
           </div>
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Istio Security Implementation</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Istio Security Implementierung</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto">
             <pre>
 {`# Enable mTLS globally

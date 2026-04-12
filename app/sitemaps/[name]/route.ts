@@ -1,7 +1,7 @@
 import type { NextRequest } from "next/server"
 import { NextResponse } from "next/server"
 import { BASE_URL } from "@/lib/config"
-import { DEFAULT_LOCALE, SUPPORTED_LOCALES, type Locale, getLocaleHrefLang, localizePath, stripLocalePrefix } from "@/lib/i18n"
+import { DEFAULT_LOCALE, SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
 import { logTelemetry } from "@/lib/ops/telemetry"
 import { getRequestId } from "@/lib/ops/request-id"
 import { getTopCities } from "@/lib/geo-cities"
@@ -94,29 +94,17 @@ function geoPriorityFromCity(cityPriority: number, rolloutStage?: string): strin
   return p.toFixed(2)
 }
 
-function buildAlternateLinks(loc: string): string[] {
-  let pathname = "/"
-  try {
-    pathname = new URL(loc).pathname || "/"
-  } catch {
-    pathname = "/"
-  }
-
-  const canonicalPath = stripLocalePrefix(pathname)
-  const links = SUPPORTED_LOCALES.map(
-    (locale) =>
-      `    <xhtml:link rel="alternate" hreflang="${getLocaleHrefLang(locale)}" href="${BASE_URL}${localizePath(locale, canonicalPath)}" />`
-  )
-  links.push(
-    `    <xhtml:link rel="alternate" hreflang="x-default" href="${BASE_URL}${localizePath(DEFAULT_LOCALE, canonicalPath)}" />`
-  )
-  return links
+function buildAlternateLinks(_loc: string): string[] {
+  // hreflang is set in page <head> via Next.js generateMetadata alternates.
+  // Omitting from sitemap avoids tool limits (Ahrefs 20k cap) and reduces XML size.
+  // Google only requires hreflang in ONE place (head OR sitemap, not both).
+  return []
 }
 
 function urlset(urls: Array<{ loc: string; lastmod?: string; changefreq?: string; priority?: string }>) {
   const xml =
     `<?xml version="1.0" encoding="UTF-8"?>\n` +
-    `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n` +
+    `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
     urls
       .map((u) => {
         const alternates = buildAlternateLinks(u.loc)
@@ -312,7 +300,6 @@ export async function GET(
         { loc: `${base}/${locale}/leaderboard`, lastmod, changefreq: "daily", priority: "0.82" },
         { loc: `${base}/${locale}/score`, lastmod, changefreq: "daily", priority: "0.85" },
         { loc: `${base}/${locale}/openclaw-security-check`, lastmod, changefreq: "weekly", priority: "0.85" },
-        { loc: `${base}/${locale}/check`, lastmod, changefreq: "daily", priority: "0.9" },
         ...hubUrls,
         ...geoOpenClawSprintUrls,
         ...moltbotUrls,

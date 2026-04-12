@@ -1,8 +1,20 @@
 import Container from "@/components/shared/Container"
 
 export default function WSOrigin() {
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      { '@type': 'Question', name: 'Was ist WebSocket Origin Validation?', acceptedAnswer: { '@type': 'Answer', text: 'WebSocket Origin Validation prüft beim WebSocket-Handshake den Origin-Header der Anfrage. Ohne Validierung kann jede Website eine WebSocket-Verbindung zu deinem Server im Kontext eingeloggter User aufbauen (Cross-Site WebSocket Hijacking). Korrekte Implementierung: Server prüft Origin-Header gegen Allowlist und lehnt unbekannte Origins ab.' } },
+      { '@type': 'Question', name: 'Wie implementiere ich WebSocket Origin-Prüfung?', acceptedAnswer: { '@type': 'Answer', text: 'WebSocket Origin-Prüfung: Server-seitig beim Upgrade-Request prüfen: const allowedOrigins = ["https://app.example.com"]. Beim Connection-Handler: if (!allowedOrigins.includes(req.headers.origin)) { ws.close(403); return; }. Node.js ws-Library: server.on("upgrade", ...) prüfen. Keine Wildcards (*). Zusätzlich: Token-basierte Auth beim Verbindungsaufbau.' } },
+      { '@type': 'Question', name: 'Was ist Cross-Site WebSocket Hijacking?', acceptedAnswer: { '@type': 'Answer', text: 'Cross-Site WebSocket Hijacking (CSWSH): Angreifer-Website initiiert WebSocket-Verbindung zu deinem Server. Browser sendet automatisch Session-Cookies mit. Server akzeptiert Verbindung (weil Cookie gültig). Angreifer kann im Namen des Users Nachrichten senden/empfangen. Schutz: Origin-Validierung + CSRF-Token im WebSocket-Handshake + SameSite=Strict Cookies.' } },
+      { '@type': 'Question', name: 'Wie teste ich WebSocket-Sicherheit?', acceptedAnswer: { '@type': 'Answer', text: 'WebSocket Security Tests: Burp Suite Pro (WebSocket-Interception und -Testing). wscat CLI: wscat -c wss://example.com mit manipulierten Origin-Headern testen. Browser DevTools: Netzwerk-Tab zeigt WebSocket-Frames. OWASP ZAP für automatisierten WebSocket-Scan. Prüfen: Akzeptiert der Server beliebige Origins? Ist Auth beim Handshake oder erst danach? Rate Limiting auf WS-Connections aktiv?' } },
+    ],
+  }
+
   return (
     <Container>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <div className="py-16 max-w-4xl mx-auto">
         <div className="text-xs uppercase tracking-widest text-brand-cyan/80">Vault</div>
         <h1 className="mt-2 text-4xl font-black">WebSocket Origin Validation</h1>

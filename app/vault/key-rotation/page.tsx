@@ -1,8 +1,20 @@
 import Container from "@/components/shared/Container"
 
 export default function KeyRotationVault() {
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      { '@type': 'Question', name: 'Was ist Key Rotation und warum ist sie wichtig?', acceptedAnswer: { '@type': 'Answer', text: 'Key Rotation ist das regelmäßige Ersetzen von kryptographischen Schlüsseln, API-Tokens und Zertifikaten durch neue. Wichtig weil: kompromittierte Keys werden dadurch unbrauchbar, Audit-Trail bleibt sauber, Compliance-Anforderungen (SOC2, ISO 27001) fordern Rotation. Empfehlung: API-Keys alle 90 Tage, TLS-Zertifikate automatisch via Let¹s Encrypt, DB-Passwort alle 180 Tage.' } },
+      { '@type': 'Question', name: 'Wie rotiere ich Keys ohne Produktionsausfall?', acceptedAnswer: { '@type': 'Answer', text: 'Zero-Downtime Key Rotation: 1) Neuen Key generieren (alter Key läuft noch). 2) Neue Key in Secret Manager/Env deployen. 3) Rolling Deploy der Applikation (neuer Key aktiv). 4) Überprüfen: alle Requests laufen über neuen Key. 5) Alten Key invalidieren. Monitoring: Auth-Fails nach Rotation sofort prüfen. Rollback-Plan vorbereiten.' } },
+      { '@type': 'Question', name: 'Wie oft sollte ich API-Keys und Secrets rotieren?', acceptedAnswer: { '@type': 'Answer', text: 'Rotationsintervalle: API-Keys (Cloud-Provider): 90 Tage. JWT Signing Keys: 30 Tage oder weniger. TLS-Zertifikate: automatisch (Let¹s Encrypt alle 90 Tage). Datenbank-Passwort: 180 Tage. SSH-Schlüssel: jährlich. Nach Security-Incident: sofort. Faustregel: kurze TTL ist besser als lange, auch wenn der Aufwand steigt.' } },
+      { '@type': 'Question', name: 'Welche Tools helfen bei automatischer Key Rotation?', acceptedAnswer: { '@type': 'Answer', text: 'Key Rotation Tools: HashiCorp Vault (Dynamic Secrets, automatische DB-Credentials). AWS Secrets Manager (automatische Rotation via Lambda). GCP Secret Manager (Rotation-Notifications). Kubernetes External Secrets Operator (sync von Vault/AWS). Certbot/Cert-Manager für TLS. Renovate/Dependabot für Dependency-Updates. ClawGuru Runbooks für Schritt-für-Schritt Rotation.' } },
+    ],
+  }
+
   return (
     <Container>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <div className="py-16 max-w-4xl mx-auto">
         <div className="text-xs uppercase tracking-widest text-brand-cyan/80">Vault</div>
         <h1 className="mt-2 text-4xl font-black">Key Rotation (Runbook)</h1>

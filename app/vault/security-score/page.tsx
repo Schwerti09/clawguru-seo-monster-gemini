@@ -1,8 +1,20 @@
 import Container from "@/components/shared/Container"
 
 export default function SecurityScoreVault() {
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      { '@type': 'Question', name: 'Was ist der ClawGuru Security Score?', acceptedAnswer: { '@type': 'Answer', text: 'Der ClawGuru Security Score ist eine heuristische Risiko-Einschätzung für Self-Hosted und Cloud-Infrastruktur. Er analysiert: HTTP Security Headers, TLS-Konfiguration, offene Ports, Authentifizierungs-Konfiguration und bekannte Schwachstellen. Score 0-100: unter 60 = kritisch, 60-80 = verbesserungswürdig, 80-95 = gut, 95+ = exzellent.' } },
+      { '@type': 'Question', name: 'Wie verbessere ich meinen Security Score auf 95+?', acceptedAnswer: { '@type': 'Answer', text: 'Security Score 95+ erreichen: 1) Private Networking als Default (keine Bind-All Ports). 2) HTTPS überall mit korrekten Security Headers (HSTS, CSP, X-Frame-Options). 3) Secrets Rotation + kurze Token TTL. 4) Origin Allowlist für WebSockets und Callbacks. 5) Monitoring: Auth-Fails, Anomalien, Request-Rates. 6) Backups mit Restore-Test. 7) Dependency Updates automatisieren.' } },
+      { '@type': 'Question', name: 'Wofür eignet sich der Security Score?', acceptedAnswer: { '@type': 'Answer', text: 'Security Score Anwendungsfälle: Startpunkt für Priorisierung (Welche 3 Maßnahmen zuerst?). Kommunikations-Asset für Team und Management (Score + Runbook teilen). Regelmäßiges Ritual: Check → Sprint → Re-Check. Vor/nach Infrastrukturänderungen. Vendor Security Assessments (Kunden fragen oft nach Security-Nachweis). Wichtig: Score ist Heuristik, kein Pentest-Ersatz.' } },
+      { '@type': 'Question', name: 'Was ist der Unterschied zwischen Security Score und Penetrationstest?', acceptedAnswer: { '@type': 'Answer', text: 'Security Score vs. Pentest: Score = automatisierter Check bekannter Schwachstellenmuster, sekunden-schnell, kontinuierlich einsetzbar, kostenlos/günstig. Pentest = manueller Test durch Sicherheitsexperten, sucht unbekannte Schwachstellen durch kreative Angriffspfade, dauert Tage/Wochen, kostet 5.000-50.000 EUR. Ideal: Regelmäßiger Score-Check + jährlicher Pentest für kritische Systeme.' } },
+    ],
+  }
+
   return (
     <Container>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <div className="py-16 max-w-4xl mx-auto">
         <div className="text-xs uppercase tracking-widest text-brand-cyan/80">Vault</div>
         <h1 className="mt-2 text-4xl font-black">Claw Security Score</h1>

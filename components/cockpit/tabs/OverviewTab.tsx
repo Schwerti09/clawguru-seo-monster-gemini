@@ -1,6 +1,5 @@
 'use client'
 
-import { motion } from 'framer-motion'
 import dynamic from 'next/dynamic'
 import { 
   TrendingUp, 
@@ -84,11 +83,7 @@ export function OverviewTab({ data, tier, onUpgrade }: OverviewTabProps) {
       <InstantSecurityCheck tier={tier} onUpgrade={onUpgrade} />
 
       {/* ── Hero Section: 3D ClawScore + Gauge + Live Stats ── */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
-      >
+      <div className="animate-fade-in-up" style={{ animationDuration: '0.8s' }}>
         <div
           className="relative overflow-hidden rounded-3xl border p-8"
           style={{
@@ -135,17 +130,10 @@ export function OverviewTab({ data, tier, onUpgrade }: OverviewTabProps) {
                 { label: 'Active Nodes', value: String(data.myceliumNodes), icon: Activity, color: '#A1A1AA' },
                 { label: 'Success Rate', value: `${data.successRate}%`, icon: Shield, color: '#EAB308' }
               ].map((stat, i) => (
-                <motion.div
+                <div
                   key={stat.label}
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.4 + i * 0.15 }}
-                  className="rounded-xl border p-4 transition-all hover:border-yellow-500/20"
-                  style={{
-                    background: 'rgba(255,255,255,0.02)',
-                    borderColor: 'rgba(255,255,255,0.06)',
-                    backdropFilter: 'blur(12px)'
-                  }}
+                  className="animate-fade-in-up rounded-xl border p-4 transition-all hover:border-yellow-500/20"
+                  style={{ animationDelay: `${0.4 + i * 0.15}s`, background: 'rgba(255,255,255,0.02)', borderColor: 'rgba(255,255,255,0.06)', backdropFilter: 'blur(12px)' }}
                 >
                   <div className="flex items-center justify-between mb-1">
                     <span className="text-[10px] font-semibold tracking-[0.15em] uppercase text-gray-500">
@@ -156,12 +144,12 @@ export function OverviewTab({ data, tier, onUpgrade }: OverviewTabProps) {
                   <div className="text-2xl font-black text-white" style={{ textShadow: `0 0 20px ${stat.color}30` }}>
                     {stat.value}
                   </div>
-                </motion.div>
+                </div>
               ))}
             </div>
           </div>
         </div>
-      </motion.div>
+      </div>
 
       {/* ── Metric Cards Grid ── */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
@@ -206,17 +194,9 @@ export function OverviewTab({ data, tier, onUpgrade }: OverviewTabProps) {
       {/* ── System Status & Activity ── */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* System Status */}
-        <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.6, delay: 0.5 }}
-          className="rounded-2xl border p-6"
-          style={{
-            background: 'linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.005))',
-            borderColor: 'rgba(255,255,255,0.06)',
-            backdropFilter: 'blur(20px)',
-            boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.03)'
-          }}
+        <div
+          className="animate-fade-in-up rounded-2xl border p-6"
+          style={{ animationDelay: '0.5s', background: 'linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.005))', borderColor: 'rgba(255,255,255,0.06)', backdropFilter: 'blur(20px)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.03)' }}
         >
           <h3 className="text-sm font-semibold mb-5 flex items-center gap-2" style={{ color: '#EAB308' }}>
             <Shield className="w-4 h-4" />
@@ -227,16 +207,10 @@ export function OverviewTab({ data, tier, onUpgrade }: OverviewTabProps) {
             {systemStatus.map((item, index) => {
               const Icon = item.icon
               return (
-                <motion.div
+                <div
                   key={item.name}
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.6 + index * 0.1 }}
-                  className="flex items-center justify-between p-3 rounded-xl border transition-all hover:border-yellow-500/15"
-                  style={{
-                    background: 'rgba(255,255,255,0.015)',
-                    borderColor: 'rgba(255,255,255,0.05)'
-                  }}
+                  className="animate-fade-in-up flex items-center justify-between p-3 rounded-xl border transition-all hover:border-yellow-500/15"
+                  style={{ animationDelay: `${0.6 + index * 0.1}s`, background: 'rgba(255,255,255,0.015)', borderColor: 'rgba(255,255,255,0.05)' }}
                 >
                   <div className="flex items-center gap-3">
                     <Icon className="w-4 h-4 text-gray-500" />
@@ -251,24 +225,16 @@ export function OverviewTab({ data, tier, onUpgrade }: OverviewTabProps) {
                       {item.status}
                     </span>
                   </div>
-                </motion.div>
+                </div>
               )
             })}
           </div>
-        </motion.div>
+        </div>
 
         {/* Recent Activity */}
-        <motion.div
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.6, delay: 0.6 }}
-          className="rounded-2xl border p-6"
-          style={{
-            background: 'linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.005))',
-            borderColor: 'rgba(255,255,255,0.06)',
-            backdropFilter: 'blur(20px)',
-            boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.03)'
-          }}
+        <div
+          className="animate-fade-in-up rounded-2xl border p-6"
+          style={{ animationDelay: '0.6s', background: 'linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.005))', borderColor: 'rgba(255,255,255,0.06)', backdropFilter: 'blur(20px)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.03)' }}
         >
           <h3 className="text-sm font-semibold mb-5 flex items-center gap-2" style={{ color: '#EAB308' }}>
             <Activity className="w-4 h-4" />
@@ -277,16 +243,10 @@ export function OverviewTab({ data, tier, onUpgrade }: OverviewTabProps) {
 
           <div className="space-y-2.5">
             {recentActivity.map((activity, index) => (
-              <motion.div
+              <div
                 key={index}
-                initial={{ opacity: 0, x: 10 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.7 + index * 0.1 }}
-                className="flex items-start gap-3 p-3 rounded-xl border transition-all hover:border-yellow-500/15"
-                style={{
-                  background: 'rgba(255,255,255,0.015)',
-                  borderColor: 'rgba(255,255,255,0.05)'
-                }}
+                className="animate-fade-in-up flex items-start gap-3 p-3 rounded-xl border transition-all hover:border-yellow-500/15"
+                style={{ animationDelay: `${0.7 + index * 0.1}s`, background: 'rgba(255,255,255,0.015)', borderColor: 'rgba(255,255,255,0.05)' }}
               >
                 <div
                   className="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0"
@@ -299,24 +259,16 @@ export function OverviewTab({ data, tier, onUpgrade }: OverviewTabProps) {
                   <p className="text-sm text-gray-300 leading-snug">{activity.action}</p>
                   <p className="text-[11px] text-gray-600 mt-0.5">{activity.time}</p>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
-        </motion.div>
+        </div>
       </div>
 
       {/* ── Performance Overview ── */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.8 }}
-        className="rounded-2xl border p-6"
-        style={{
-          background: 'linear-gradient(135deg, rgba(234,179,8,0.02), rgba(10,10,10,0.95))',
-          borderColor: 'rgba(234,179,8,0.1)',
-          backdropFilter: 'blur(20px)',
-          boxShadow: '0 0 60px rgba(234,179,8,0.03), inset 0 1px 0 rgba(255,255,255,0.03)'
-        }}
+      <div
+        className="animate-fade-in-up rounded-2xl border p-6"
+        style={{ animationDelay: '0.8s', background: 'linear-gradient(135deg, rgba(234,179,8,0.02), rgba(10,10,10,0.95))', borderColor: 'rgba(234,179,8,0.1)', backdropFilter: 'blur(20px)', boxShadow: '0 0 60px rgba(234,179,8,0.03), inset 0 1px 0 rgba(255,255,255,0.03)' }}
       >
         <h3 className="text-sm font-semibold mb-6 flex items-center gap-2" style={{ color: '#EAB308' }}>
           <TrendingUp className="w-4 h-4" />
@@ -344,7 +296,7 @@ export function OverviewTab({ data, tier, onUpgrade }: OverviewTabProps) {
             <div className="text-[11px] text-gray-600 mt-1">{data.totalExecutions > 0 ? `Basierend auf ${data.totalExecutions} Ausführungen` : 'Noch keine Ausführungen'}</div>
           </div>
         </div>
-      </motion.div>
+      </div>
     </div>
   )
 }

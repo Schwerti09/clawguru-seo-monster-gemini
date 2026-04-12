@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { motion } from 'framer-motion'
 
 interface PremiumGaugeProps {
   value: number
@@ -146,15 +145,12 @@ export default function PremiumGauge({ value, label, sublabel, className = '' }:
     <div className={`relative flex flex-col items-center ${className}`}>
       <canvas ref={canvasRef} className="rounded-lg" />
       <div className="absolute bottom-4 left-0 right-0 text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-          className="text-3xl font-black text-white"
-          style={{ textShadow: '0 0 20px rgba(234,179,8,0.3)' }}
+        <div
+          className="animate-fade-in-up text-3xl font-black text-white"
+          style={{ textShadow: '0 0 20px rgba(234,179,8,0.3)', animationDelay: '0.5s' }}
         >
           {Math.round(animatedValue)}%
-        </motion.div>
+        </div>
         <div className="text-[11px] font-semibold tracking-[0.2em] uppercase" style={{ color: '#EAB308' }}>
           {label}
         </div>

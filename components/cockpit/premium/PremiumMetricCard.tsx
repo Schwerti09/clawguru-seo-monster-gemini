@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useState, useRef } from 'react'
-import { motion } from 'framer-motion'
 import { ArrowUp, ArrowDown, type LucideIcon } from 'lucide-react'
 
 interface PremiumMetricCardProps {
@@ -48,13 +47,11 @@ export default function PremiumMetricCard({
   const [isHovered, setIsHovered] = useState(false)
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 30, scale: 0.95 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{ duration: 0.6, delay, ease: [0.25, 0.46, 0.45, 0.94] }}
+    <div
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="group relative cursor-default"
+      className="animate-fade-in-up group relative cursor-default"
+      style={{ animationDelay: `${delay}s`, animationDuration: '0.6s' }}
     >
       {/* Card */}
       <div
@@ -130,15 +127,12 @@ export default function PremiumMetricCard({
           </div>
 
           {/* Bottom accent line */}
-          <motion.div
-            className="absolute bottom-0 left-0 right-0 h-[1px]"
-            style={{ background: `linear-gradient(90deg, transparent, ${accentColor}40, transparent)` }}
-            initial={{ scaleX: 0 }}
-            animate={{ scaleX: isHovered ? 1 : 0 }}
-            transition={{ duration: 0.4 }}
+          <div
+            className="absolute bottom-0 left-0 right-0 h-[1px] transition-transform duration-300 origin-center"
+            style={{ background: `linear-gradient(90deg, transparent, ${accentColor}40, transparent)`, transform: isHovered ? 'scaleX(1)' : 'scaleX(0)' }}
           />
         </div>
       </div>
-    </motion.div>
+    </div>
   )
 }

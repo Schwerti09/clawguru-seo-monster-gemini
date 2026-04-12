@@ -26,6 +26,17 @@ export async function generateMetadata({ params }: { params: { lang: string } })
   }
 }
 
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    { '@type': 'Question', name: 'Was ist der Unterschied zwischen OpenClaw und OSSEC?', acceptedAnswer: { '@type': 'Answer', text: 'OSSEC ist ein Host-based IDS (HIDS) mit File Integrity Monitoring und Log-Analyse. OpenClaw ist eine ganzheitliche Security-Plattform mit Executable Runbooks, Live-Score und Compliance-Dashboard — mit deutlich geringerem Setup-Aufwand als OSSEC.' } },
+    { '@type': 'Question', name: 'Ist OSSEC kostenlos?', acceptedAnswer: { '@type': 'Answer', text: 'Ja, OSSEC ist Open Source und kostenlos. Allerdings erfordert es erheblichen Setup-Aufwand (Agent-Deployment, Konfiguration, Integration mit Kibana/Graylog). OpenClaw startet ebenfalls kostenlos mit dem Explorer-Plan.' } },
+    { '@type': 'Question', name: 'Was ist File Integrity Monitoring (FIM)?', acceptedAnswer: { '@type': 'Answer', text: 'File Integrity Monitoring überwacht kritische Systemdateien auf unbefugte Änderungen. OSSEC bietet native FIM-Funktionalität. OpenClaw fokussiert auf Runtime-Security und Compliance, ohne nativen FIM-Support.' } },
+    { '@type': 'Question', name: 'Welches Tool ist einfacher aufzusetzen?', acceptedAnswer: { '@type': 'Answer', text: 'OpenClaw ist deutlich einfacher: Einstieg in unter 30 Minuten ohne Agent-Deployment. OSSEC erfordert Agent-Installation auf jedem Host, Konfigurationstuning und typischerweise Kibana/Graylog für ein Dashboard.' } },
+  ],
+}
+
 export default function OpenClawVsOssecPage({ params }: { params: { lang: string } }) {
   const { lang } = params
   if (!SUPPORTED_LOCALES.includes(lang as Locale)) notFound()
@@ -33,6 +44,7 @@ export default function OpenClawVsOssecPage({ params }: { params: { lang: string
 
   return (
     <div className="container mx-auto px-4 py-8">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
           <strong className="text-amber-100">&quot;Not a Pentest&quot; {isDE ? 'Hinweis' : 'Notice'}</strong>

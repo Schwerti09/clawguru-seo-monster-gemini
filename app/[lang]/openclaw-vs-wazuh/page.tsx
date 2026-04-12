@@ -25,6 +25,17 @@ export async function generateMetadata({ params }: { params: { lang: string } })
   }
 }
 
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    { '@type': 'Question', name: 'Was ist der Unterschied zwischen OpenClaw und Wazuh?', acceptedAnswer: { '@type': 'Answer', text: 'Wazuh ist ein Open-Source SIEM/XDR mit Log-Analyse, Intrusion Detection und File Integrity Monitoring. OpenClaw bietet Executable Runbooks, Live-Score und Compliance-Dashboard — mit deutlich weniger Setup-Aufwand und ohne Agent-Deployment.' } },
+    { '@type': 'Question', name: 'Ist Wazuh wirklich kostenlos?', acceptedAnswer: { '@type': 'Answer', text: 'Die Wazuh-Software ist Open Source und kostenlos. Allerdings erfordert Wazuh erheblichen Infrastrukturaufwand (Wazuh Manager, Indexer, Dashboard) und Agent-Deployment auf jedem überwachten Host.' } },
+    { '@type': 'Question', name: 'Kann ich OpenClaw und Wazuh zusammen nutzen?', acceptedAnswer: { '@type': 'Answer', text: 'Ja — beide Tools ergänzen sich gut. Wazuh übernimmt Log-Korrelation und SIEM-Funktionalität, OpenClaw ergänzt mit Executable Runbooks für Remediation, Compliance-Dashboards und Live-Security-Score.' } },
+    { '@type': 'Question', name: 'Welches Tool ist besser für kleine Teams?', acceptedAnswer: { '@type': 'Answer', text: 'OpenClaw ist für kleine Teams ohne dediziertes Security-Team besser geeignet: Einstieg in unter 30 Minuten, kein Agent-Deployment, integriertes Dashboard. Wazuh erfordert mehr Expertise und Betriebsaufwand.' } },
+  ],
+}
+
 export default function OpenClawVsWazuhPage({ params }: { params: { lang: string } }) {
   const { lang } = params
   if (!SUPPORTED_LOCALES.includes(lang as Locale)) notFound()
@@ -32,6 +43,7 @@ export default function OpenClawVsWazuhPage({ params }: { params: { lang: string
 
   return (
     <div className="container mx-auto px-4 py-8">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
           <strong className="text-amber-100">{isDE ? '"Not a Pentest" Hinweis' : '"Not a Pentest" Notice'}</strong>

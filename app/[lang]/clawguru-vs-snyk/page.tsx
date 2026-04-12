@@ -26,6 +26,17 @@ export async function generateMetadata({ params }: { params: { lang: string } })
   }
 }
 
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    { '@type': 'Question', name: 'Was ist der Unterschied zwischen ClawGuru und Snyk?', acceptedAnswer: { '@type': 'Answer', text: 'Snyk ist eine Developer-Security-Plattform für SAST, SCA und Container-Scanning. ClawGuru ist eine Live-Security-Plattform mit Runtime-Score, 600+ Executable Runbooks und DSGVO-konformem Self-Hosting — ergänzt Snyk um Runtime-Security und Compliance.' } },
+    { '@type': 'Question', name: 'Kann ClawGuru Snyk ersetzen?', acceptedAnswer: { '@type': 'Answer', text: 'Für Teams mit Self-Hosting- und Runtime-Security-Anforderungen: ja. Snyk ist stärker im Code- und Dependency-Scanning (SAST/SCA). Die Kombination beider Tools ist ideal für vollständige Coverage von Build bis Runtime.' } },
+    { '@type': 'Question', name: 'Ist Snyk DSGVO-konform?', acceptedAnswer: { '@type': 'Answer', text: 'Snyk ist ein US-basiertes SaaS-Produkt ohne Self-Hosting-Option. Für strenge DSGVO-Anforderungen ist ClawGuru mit Self-Hosted-Deployment die bessere Wahl, da alle Daten in der eigenen Infrastruktur verbleiben.' } },
+    { '@type': 'Question', name: 'Was kosten Snyk und ClawGuru im Vergleich?', acceptedAnswer: { '@type': 'Answer', text: 'Snyk bietet einen begrenzten Free-Tier, Pro ab $25/Monat pro Entwickler. ClawGuru startet bei €0 (Explorer-Plan) mit unbegrenzten Scans. Für Teams ab 5 Personen ist ClawGuru in der Regel günstiger.' } },
+  ],
+}
+
 export default function ClawGuruVsSnykPage({ params }: { params: { lang: string } }) {
   const { lang } = params
   if (!SUPPORTED_LOCALES.includes(lang as Locale)) notFound()
@@ -33,6 +44,7 @@ export default function ClawGuruVsSnykPage({ params }: { params: { lang: string 
 
   return (
     <div className="container mx-auto px-4 py-8">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
           <strong className="text-amber-100">&quot;Not a Pentest&quot; {isDE ? 'Hinweis' : 'Notice'}</strong>

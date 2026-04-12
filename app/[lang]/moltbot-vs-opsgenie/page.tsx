@@ -20,12 +20,24 @@ export async function generateMetadata({ params }: { params: { lang: string } })
   };
 }
 
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    { '@type': 'Question', name: 'Was ist der Unterschied zwischen Moltbot und OpsGenie?', acceptedAnswer: { '@type': 'Answer', text: 'OpsGenie (Atlassian) ist ein generisches On-Call-Management-Tool für alle Alert-Typen. Moltbot ist Security-First mit Auto-Remediation, Executable Runbooks und CVE-Alerts — speziell für Security-Incident-Response optimiert.' } },
+    { '@type': 'Question', name: 'Kann Moltbot Self-Hosted betrieben werden?', acceptedAnswer: { '@type': 'Answer', text: 'Ja. Moltbot ist vollständig self-hosted betreibbar, DSGVO-konform und ohne Cloud-Abhängigkeit. OpsGenie ist ein reines Cloud-SaaS-Produkt von Atlassian ohne Self-Hosting-Option.' } },
+    { '@type': 'Question', name: 'Was ist Auto-Remediation bei Moltbot?', acceptedAnswer: { '@type': 'Answer', text: 'Auto-Remediation bedeutet, dass Moltbot bei Security-Incidents automatisch Gegenmaßnahmen einleitet: IP-Blocking, Rate-Limiting, Service-Isolation oder Benachrichtigungen — ohne manuellen Eingriff.' } },
+    { '@type': 'Question', name: 'Wie unterscheiden sich die Preise von Moltbot und OpsGenie?', acceptedAnswer: { '@type': 'Answer', text: 'Moltbot startet bei €0 (Explorer-Plan). OpsGenie kostet ab $9 pro User pro Monat und skaliert mit Teamgröße. Für Security-Teams mit Self-Hosting-Anforderung ist Moltbot deutlich kostengünstiger.' } },
+  ],
+}
+
 export default function MoltbotVsOpsgeniePage({ params }: { params: { lang: string } }) {
   const { lang } = params;
   if (!SUPPORTED_LOCALES.includes(lang as Locale)) notFound();
 
   return (
     <div className="container mx-auto px-4 py-8">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
           <strong>Vergleichsseite</strong>: Moltbot ist Security-spezifisch. OpsGenie ist generisches Alerting. Beide lösen Incident Management — unterschiedlich.
@@ -74,7 +86,7 @@ export default function MoltbotVsOpsgeniePage({ params }: { params: { lang: stri
                 <li>• CVE-Alerts nativ integrieren</li>
               </ul>
             </div>
-            <div className="bg-orange-50 border border-orange-700 p-5 rounded-lg">
+            <div className="bg-orange-900 border border-orange-700 p-5 rounded-lg">
               <h3 className="font-bold text-orange-300 mb-2">🔔 OpsGenie wenn...</h3>
               <ul className="space-y-1 text-sm text-orange-200">
                 <li>• On-Call Schedules und Rotationen</li>

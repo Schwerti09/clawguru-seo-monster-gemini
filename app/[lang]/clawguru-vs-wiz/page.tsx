@@ -20,12 +20,24 @@ export async function generateMetadata({ params }: { params: { lang: string } })
   };
 }
 
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    { '@type': 'Question', name: 'Was ist der Unterschied zwischen ClawGuru und Wiz?', acceptedAnswer: { '@type': 'Answer', text: 'Wiz ist eine Enterprise Cloud Security Plattform ab ca. $100k/Jahr, Cloud-only (kein Self-Hosting). ClawGuru ist die Self-Hosted, DSGVO-konforme Alternative für SMBs und Tech-Teams mit Executable Runbooks und Live-Score.' } },
+    { '@type': 'Question', name: 'Ist ClawGuru günstiger als Wiz?', acceptedAnswer: { '@type': 'Answer', text: 'Ja, deutlich. ClawGuru startet bei €0 (Explorer-Plan) und skaliert für Teams. Wiz kostet typischerweise $100.000+ pro Jahr für Enterprise-Lizenzen und richtet sich an große Konzerne.' } },
+    { '@type': 'Question', name: 'Kann ClawGuru Self-Hosted betrieben werden?', acceptedAnswer: { '@type': 'Answer', text: 'Ja. ClawGuru ist vollständig self-hosted betreibbar — alle Daten bleiben in Ihrer Infrastruktur. Wiz ist ein reines Cloud-SaaS-Produkt ohne Self-Hosting-Option.' } },
+    { '@type': 'Question', name: 'Welches Tool ist besser für DSGVO-Compliance?', acceptedAnswer: { '@type': 'Answer', text: 'ClawGuru ist EU-First und DSGVO-konform durch Self-Hosting. Wiz speichert Daten in US-Cloud-Rechenzentren, was für EU-Unternehmen datenschutzrechtliche Herausforderungen mit sich bringt.' } },
+  ],
+}
+
 export default function ClawGuruVsWizPage({ params }: { params: { lang: string } }) {
   const { lang } = params;
   if (!SUPPORTED_LOCALES.includes(lang as Locale)) notFound();
 
   return (
     <div className="container mx-auto px-4 py-8">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
           <strong>Vergleichsseite</strong>: ClawGuru und Wiz sind für unterschiedliche Zielgruppen optimiert. Dieser Guide hilft bei der Entscheidung.

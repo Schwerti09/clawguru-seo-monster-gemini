@@ -25,6 +25,17 @@ export async function generateMetadata({ params }: { params: { lang: string } })
   }
 }
 
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    { '@type': 'Question', name: 'Was ist der Unterschied zwischen ClawGuru und Checkov?', acceptedAnswer: { '@type': 'Answer', text: 'Checkov ist ein statischer IaC-Scanner (Terraform, CloudFormation, K8s) für Pre-Deploy-Checks. ClawGuru ist eine Live-Security-Plattform mit Runtime-Score, 600+ Executable Runbooks und Compliance-Dashboard — ergänzt Checkov um die Runtime-Dimension.' } },
+    { '@type': 'Question', name: 'Kann ich ClawGuru und Checkov zusammen nutzen?', acceptedAnswer: { '@type': 'Answer', text: 'Ja, beide Tools ergänzen sich ideal. Checkov deckt die Pre-Deploy IaC-Sicherheit ab, ClawGuru übernimmt Runtime-Monitoring, Compliance-Nachweise und Incident-Response mit Executable Runbooks.' } },
+    { '@type': 'Question', name: 'Ist ClawGuru DSGVO-konform?', acceptedAnswer: { '@type': 'Answer', text: 'Ja. ClawGuru ist EU-First und kann vollständig self-hosted betrieben werden. Alle Daten verbleiben in Ihrer eigenen Infrastruktur. Checkov in Verbindung mit Prisma Cloud speichert Daten US-basiert.' } },
+    { '@type': 'Question', name: 'Was sind Executable Runbooks?', acceptedAnswer: { '@type': 'Answer', text: 'Executable Runbooks sind automatisierbare Security-Playbooks, die über Klick oder API ausgelöst werden können. ClawGuru bietet 600+ Runbooks für Incident Response, Härtung, Compliance und Remediation.' } },
+  ],
+}
+
 export default function ClawGuruVsCheckovPage({ params }: { params: { lang: string } }) {
   const { lang } = params
   if (!SUPPORTED_LOCALES.includes(lang as Locale)) notFound()
@@ -32,6 +43,7 @@ export default function ClawGuruVsCheckovPage({ params }: { params: { lang: stri
 
   return (
     <div className="container mx-auto px-4 py-8">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
           <strong className="text-amber-100">{isDE ? '"Not a Pentest" Hinweis' : '"Not a Pentest" Notice'}</strong>

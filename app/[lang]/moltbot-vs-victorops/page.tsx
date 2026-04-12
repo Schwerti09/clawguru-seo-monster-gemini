@@ -26,6 +26,17 @@ export async function generateMetadata({ params }: { params: { lang: string } })
   }
 }
 
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    { '@type': 'Question', name: 'Was ist der Unterschied zwischen Moltbot und VictorOps?', acceptedAnswer: { '@type': 'Answer', text: 'VictorOps (Splunk On-Call) ist eine On-Call-Management-Plattform für Alert-Routing und Eskalation. Moltbot ist Security-First mit Executable Runbooks, automatisierter Incident-Response und DSGVO-konformem Self-Hosting.' } },
+    { '@type': 'Question', name: 'Ist VictorOps jetzt Splunk On-Call?', acceptedAnswer: { '@type': 'Answer', text: 'Ja. VictorOps wurde von Splunk übernommen und in Splunk On-Call umbenannt. Die Kernfunktionalität (On-Call-Scheduling, Alert-Routing, Timeline) bleibt erhalten, ist aber eng mit dem Splunk-Ökosystem verknüpft.' } },
+    { '@type': 'Question', name: 'Kann Moltbot Self-Hosted betrieben werden?', acceptedAnswer: { '@type': 'Answer', text: 'Ja. Moltbot ist vollständig self-hosted betreibbar, DSGVO-konform und ohne Cloud-Abhängigkeit. VictorOps/Splunk On-Call ist ein reines SaaS-Produkt ohne Self-Hosting-Option.' } },
+    { '@type': 'Question', name: 'Was sind die Preise von Moltbot und VictorOps im Vergleich?', acceptedAnswer: { '@type': 'Answer', text: 'Moltbot startet bei €0 (Explorer-Plan). VictorOps/Splunk On-Call kostet ab $5 pro User pro Monat und skaliert mit der Teamgröße. Für Security-Teams mit Self-Hosting-Anforderung ist Moltbot deutlich kostengünstiger.' } },
+  ],
+}
+
 export default function MoltbotVsVictorOpsPage({ params }: { params: { lang: string } }) {
   const { lang } = params
   if (!SUPPORTED_LOCALES.includes(lang as Locale)) notFound()
@@ -33,6 +44,7 @@ export default function MoltbotVsVictorOpsPage({ params }: { params: { lang: str
 
   return (
     <div className="container mx-auto px-4 py-8">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
           <strong className="text-amber-100">&quot;Not a Pentest&quot; {isDE ? 'Hinweis' : 'Notice'}</strong>

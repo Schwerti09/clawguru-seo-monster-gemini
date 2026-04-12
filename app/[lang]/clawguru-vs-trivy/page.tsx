@@ -25,6 +25,17 @@ export async function generateMetadata({ params }: { params: { lang: string } })
   }
 }
 
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    { '@type': 'Question', name: 'Was ist der Unterschied zwischen ClawGuru und Trivy?', acceptedAnswer: { '@type': 'Answer', text: 'Trivy ist ein Open-Source-Scanner für CVEs in Container-Images, Dateisystemen und Git-Repos. ClawGuru ist eine vollständige Security-Plattform mit Live-Score, 600+ Executable Runbooks und Compliance-Dashboard — ergänzt Trivy um Runtime-Security.' } },
+    { '@type': 'Question', name: 'Kann ich ClawGuru und Trivy zusammen nutzen?', acceptedAnswer: { '@type': 'Answer', text: 'Ja — das ist die empfohlene Kombination. Trivy übernimmt das CVE-Scanning in der CI/CD-Pipeline, ClawGuru ergänzt mit Runtime-Monitoring, Compliance-Automation und Executable Runbooks für Remediation.' } },
+    { '@type': 'Question', name: 'Ist Trivy kostenlos?', acceptedAnswer: { '@type': 'Answer', text: 'Ja, Trivy ist vollständig Open Source und kostenlos (von Aqua Security). Es läuft lokal als CLI oder CI/CD-Plugin ohne Cloud-Abhängigkeit. ClawGuru bietet ebenfalls einen kostenlosen Explorer-Plan.' } },
+    { '@type': 'Question', name: 'Was sind Executable Runbooks?', acceptedAnswer: { '@type': 'Answer', text: 'Executable Runbooks sind automatisierbare Security-Playbooks für Incident Response, Härtung und Remediation. ClawGuru bietet 600+ Runbooks — Trivy hingegen liefert nur CVE-Findings ohne Handlungsempfehlungen.' } },
+  ],
+}
+
 export default function ClawGuruVsTrivyPage({ params }: { params: { lang: string } }) {
   const { lang } = params
   if (!SUPPORTED_LOCALES.includes(lang as Locale)) notFound()
@@ -32,6 +43,7 @@ export default function ClawGuruVsTrivyPage({ params }: { params: { lang: string
 
   return (
     <div className="container mx-auto px-4 py-8">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
           <strong className="text-amber-100">{isDE ? '"Not a Pentest" Hinweis' : '"Not a Pentest" Notice'}</strong>

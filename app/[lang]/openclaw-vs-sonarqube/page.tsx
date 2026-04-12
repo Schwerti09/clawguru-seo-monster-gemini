@@ -20,12 +20,24 @@ export async function generateMetadata({ params }: { params: { lang: string } })
   };
 }
 
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    { '@type': 'Question', name: 'Was ist der Unterschied zwischen OpenClaw und SonarQube?', acceptedAnswer: { '@type': 'Answer', text: 'SonarQube ist auf Code-Qualität und SAST (Static Application Security Testing) spezialisiert. OpenClaw fokussiert auf Runtime-Security, API-Schutz, Container-Sicherheit und Compliance-Automation. Beide ergänzen sich ideal.' } },
+    { '@type': 'Question', name: 'Kann ich SonarQube und OpenClaw zusammen nutzen?', acceptedAnswer: { '@type': 'Answer', text: 'Ja — das ist die empfohlene Kombination. SonarQube übernimmt Code Quality und SAST in der CI/CD-Pipeline. OpenClaw ergänzt mit Runtime Security, Compliance-Runbooks und Production Hardening ohne Überschneidungen.' } },
+    { '@type': 'Question', name: 'Ist SonarQube kostenlos?', acceptedAnswer: { '@type': 'Answer', text: 'Die Community Edition von SonarQube ist kostenlos und self-hosted. Für erweiterte Security-Features (Developer/Enterprise Edition) fallen Lizenzkosten an. OpenClaw startet ebenfalls kostenlos mit dem Explorer-Plan.' } },
+    { '@type': 'Question', name: 'Welches Tool ist besser für DSGVO-Compliance?', acceptedAnswer: { '@type': 'Answer', text: 'Beide Tools können self-hosted betrieben werden. OpenClaw bietet zusätzlich Compliance-Reports für SOC2, ISO27001, GDPR und NIS2, während SonarQube primär OWASP Top 10 Code-Findings liefert.' } },
+  ],
+}
+
 export default function OpenClawVsSonarQubePage({ params }: { params: { lang: string } }) {
   const { lang } = params;
   if (!SUPPORTED_LOCALES.includes(lang as Locale)) notFound();
 
   return (
     <div className="container mx-auto px-4 py-8">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
           <strong>Vergleichsseite</strong>: SonarQube fokussiert auf Code-Qualität. OpenClaw auf ganzheitliche Security-Posture. Beide Self-Hosted möglich.

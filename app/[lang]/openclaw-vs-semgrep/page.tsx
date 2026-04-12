@@ -20,12 +20,24 @@ export async function generateMetadata({ params }: { params: { lang: string } })
   };
 }
 
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    { '@type': 'Question', name: 'Was ist der Unterschied zwischen OpenClaw und Semgrep?', acceptedAnswer: { '@type': 'Answer', text: 'Semgrep ist ein SAST-Spezialist für Code-Pattern-Matching mit Custom Rules. OpenClaw ist eine ganzheitliche Security-Plattform mit Runtime-Schutz, Container Security, Dependency Scanning und 600+ Executable Runbooks.' } },
+    { '@type': 'Question', name: 'Kann OpenClaw Semgrep ersetzen?', acceptedAnswer: { '@type': 'Answer', text: 'Für Teams die primär Runtime- und Infrastructure-Security benötigen: ja. Für tiefes SAST-Code-Scanning mit Custom Rules ist Semgrep stärker. Die Kombination beider Tools ist ideal für vollständige Coverage.' } },
+    { '@type': 'Question', name: 'Unterstützt OpenClaw Static Code Analysis?', acceptedAnswer: { '@type': 'Answer', text: 'OpenClaw bietet Basis-SAST-Checks, fokussiert aber auf Runtime-Security, API-Schutz, Container Hardening und Compliance. Für tiefes SAST empfiehlt sich Semgrep als Ergänzung zu OpenClaw.' } },
+    { '@type': 'Question', name: 'Welches Tool ist besser für Self-Hosted Security?', acceptedAnswer: { '@type': 'Answer', text: 'Beide Tools unterstützen Self-Hosting. OpenClaw bietet ein breiteres Security-Spektrum (Runtime, Compliance, Runbooks), während Semgrep als OSS-Tool für Code-Scanning optimiert ist.' } },
+  ],
+}
+
 export default function OpenClawVsSemgrepPage({ params }: { params: { lang: string } }) {
   const { lang } = params;
   if (!SUPPORTED_LOCALES.includes(lang as Locale)) notFound();
 
   return (
     <div className="container mx-auto px-4 py-8">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
           <strong>Vergleichsseite</strong>: OpenClaw und Semgrep lösen unterschiedliche Probleme — dieser Guide hilft dir, das richtige Tool zu wählen.

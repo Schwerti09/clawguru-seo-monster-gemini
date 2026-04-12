@@ -6,7 +6,7 @@ import Container from "@/components/shared/Container"
 import { getCoreSecurityLinks } from "@/lib/core-security-links"
 import { getDictionary } from "@/lib/getDictionary"
 import { geoOpenClawSprintPath } from "@/lib/geo-openclaw-city-sprint"
-import { SUPPORTED_LOCALES, getLocaleHrefLang, localeAlternates, type Locale } from "@/lib/i18n"
+import { SUPPORTED_LOCALES, buildLocalizedAlternates, type Locale } from "@/lib/i18n"
 
 export const revalidate = 60
 
@@ -47,18 +47,13 @@ export async function generateStaticParams() {
 export async function generateMetadata(props: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(props.params.lang as Locale) ? props.params.lang : "de") as Locale
   const copy = getMoltbotCopy(locale)
-  const alternates = localeAlternates("/roast-my-moltbot")
-  const hrefLang = getLocaleHrefLang(locale)
-  const canonical = alternates.languages[hrefLang] ?? alternates.canonical
-
   return {
     title: copy.metaTitle,
     description: copy.metaDescription,
-    alternates: { canonical, languages: alternates.languages },
+    alternates: buildLocalizedAlternates(locale, "/roast-my-moltbot"),
     openGraph: {
       title: copy.metaTitle,
       description: copy.metaDescription,
-      url: canonical,
       type: "website",
     },
     twitter: {

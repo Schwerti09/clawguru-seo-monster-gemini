@@ -13,7 +13,7 @@ import { BASE_URL } from "@/lib/config"
 import { buildLinkEngine } from "@/lib/seo/link-engine"
 import MyceliumShareCard from "@/components/share/MyceliumShareCard"
 import { unstable_cache } from "next/cache"
-import { DEFAULT_LOCALE, localeAlternates, type Locale } from "@/lib/i18n"
+import { DEFAULT_LOCALE, buildLocalizedAlternates, type Locale } from "@/lib/i18n"
 import { getDictionary } from "@/lib/getDictionary"
 import { parseGeoVariantSlug } from "@/lib/geo-matrix"
 import { generateGeoVariantContent } from "@/lib/geo-content-generator"
@@ -97,14 +97,10 @@ export async function generateMetadata(props: { params: { slug: string } }) {
         rolloutStage: geoCity.rollout_stage,
       })
     : true
-  const alternates = localeAlternates(`/runbook/${canonicalSlug}`)
   return {
     title: `${title} | ClawGuru Runbook`,
     description,
-    alternates: {
-      canonical: alternates.canonical,
-      languages: alternates.languages,
-    },
+    alternates: buildLocalizedAlternates(locale, `/runbook/${canonicalSlug}`),
     openGraph: {
       title: `${title} | ClawGuru`,
       description,

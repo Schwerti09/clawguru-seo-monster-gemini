@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { SUPPORTED_LOCALES, type Locale, localeAlternates } from "@/lib/i18n";
+import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n";
 import { BASE_URL } from "@/lib/config";
 import { getCoreSecurityLinks } from "@/lib/core-security-links";
 import { t } from "@/lib/article-i18n"
@@ -43,9 +43,7 @@ export async function generateMetadata({
       "WAF security",
       "WAF best practices",
     ],
-    alternates: {
-      ...localeAlternates(`/${locale}/waf-2027`),
-    },
+    alternates: buildLocalizedAlternates(locale, "/waf-2027"),
     openGraph: {
       title: "WAF 2027: Complete Web Application Firewall Guide",
       description: "Enterprise WAF configuration for Cloudflare, AWS, Azure. DDoS, bot protection, OWASP Top 10 defense.",

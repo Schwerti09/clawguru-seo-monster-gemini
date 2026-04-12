@@ -1,7 +1,7 @@
 // Locale home pages: /en, /es, /fr, /pt, /it, /ru, /zh, /ja, /ar
 // Renders the same main page with locale-aware dictionary so content is translated.
 
-import { SUPPORTED_LOCALES, localeAlternates, normalizeLocale, getLocaleHrefLang } from "@/lib/i18n"
+import { SUPPORTED_LOCALES, buildLocalizedAlternates, normalizeLocale } from "@/lib/i18n"
 
 import { getDictionary } from "@/lib/getDictionary"
 import Home from "@/app/page"
@@ -16,16 +16,10 @@ export async function generateStaticParams() {
 
 export async function generateMetadata(props: { params: { lang: string } }) {
   const locale = normalizeLocale(props.params.lang)
-  const alternates = localeAlternates("/")
-  const localeHrefLang = getLocaleHrefLang(locale)
-  const canonical = alternates.languages[localeHrefLang] ?? alternates.canonical
   const pageUrl = `${SITE_URL}/${locale}`
 
   return {
-    alternates: {
-      canonical,
-      languages: alternates.languages,
-    },
+    alternates: buildLocalizedAlternates(locale, "/"),
     openGraph: {
       type: "website" as const,
       url: pageUrl,

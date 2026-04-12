@@ -2,19 +2,18 @@ import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
 import { BASE_URL } from "@/lib/config"
 import { headers } from "next/headers"
-import { DEFAULT_LOCALE, type Locale, localeAlternates } from "@/lib/i18n"
+import { DEFAULT_LOCALE, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
 import type { Metadata } from "next"
 
 export const dynamic = "force-static"
 export const revalidate = 86400
 
 export async function generateMetadata(): Promise<Metadata> {
-  const alts = localeAlternates("/solutions/iso-27001-google-cloud")
   return {
     title: "ISO 27001 auf Google Cloud 2026 | Komplettes ISMS-Implementation Guide",
     description: "ISO 27001 Zertifizierung auf GCP: Risk Assessment, Annex A Controls, IAM, Logging, Backup/DR. Schritt-für-Schritt zum audit-sicheren ISMS mit Google Cloud.",
     keywords: ["iso 27001 google cloud", "iso 27001 gcp", "isms google cloud", "iso 27001 compliance gcp", "gcp security controls"],
-    alternates: alts,
+    alternates: buildLocalizedAlternates(DEFAULT_LOCALE, "/solutions/iso-27001-google-cloud"),
     openGraph: {
       title: "ISO 27001 auf Google Cloud – Kompletter Guide 2026",
       description: "Praxisleitfaden für ISO 27001 Zertifizierung auf Google Cloud Platform",

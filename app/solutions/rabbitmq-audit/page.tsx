@@ -2,19 +2,18 @@ import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
 import { BASE_URL } from "@/lib/config"
 import { headers } from "next/headers"
-import { DEFAULT_LOCALE, type Locale, localeAlternates } from "@/lib/i18n"
+import { DEFAULT_LOCALE, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
 import type { Metadata } from "next"
 
 export const dynamic = "force-static"
 export const revalidate = 86400
 
 export async function generateMetadata(): Promise<Metadata> {
-  const alts = localeAlternates("/solutions/rabbitmq-audit")
   return {
     title: "RabbitMQ Audit & Compliance 2026 | Logging, RBAC & SIEM Integration",
     description: "Vollständige RabbitMQ Audit-Lösung: TLS-Konfiguration, RBAC, Policy-Management, SIEM-Integration. Compliance-ready für SOC2, ISO 27001.",
     keywords: ["rabbitmq audit", "rabbitmq compliance", "rabbitmq logging", "rabbitmq rbac", "message queue security"],
-    alternates: alts,
+    alternates: buildLocalizedAlternates(DEFAULT_LOCALE, "/solutions/rabbitmq-audit"),
     openGraph: {
       title: "RabbitMQ Audit & Compliance Guide 2026",
       description: "Audit-Logging und Compliance für RabbitMQ-Cluster",

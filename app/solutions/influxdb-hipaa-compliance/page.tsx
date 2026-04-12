@@ -2,19 +2,18 @@ import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
 import { BASE_URL } from "@/lib/config"
 import { headers } from "next/headers"
-import { DEFAULT_LOCALE, type Locale, localeAlternates } from "@/lib/i18n"
+import { DEFAULT_LOCALE, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
 import type { Metadata } from "next"
 
 export const dynamic = "force-static"
 export const revalidate = 86400
 
 export async function generateMetadata(): Promise<Metadata> {
-  const alts = localeAlternates("/solutions/influxdb-hipaa-compliance")
   return {
     title: "InfluxDB HIPAA Compliance 2026 | Sichere Zeitreihendaten im Healthcare",
     description: "Vollständige HIPAA-Compliance für InfluxDB: Encryption at Rest, Audit Logs, Access Controls, BAA-Verträge. Schritt-für-Schritt Implementierungsguide für Healthcare-Workloads.",
     keywords: ["influxdb hipaa compliance", "hipaa zeitreihendaten", "healthcare monitoring hipaa", "influxdb encryption", "hipaa audit logs"],
-    alternates: alts,
+    alternates: buildLocalizedAlternates(DEFAULT_LOCALE, "/solutions/influxdb-hipaa-compliance"),
     openGraph: {
       title: "InfluxDB HIPAA Compliance Guide 2026",
       description: "Sichere Zeitreihendaten im Healthcare: Vollständige HIPAA-Implementierung für InfluxDB",

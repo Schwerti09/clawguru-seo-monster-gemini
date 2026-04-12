@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { SUPPORTED_LOCALES, type Locale, localeAlternates } from "@/lib/i18n";
+import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n";
 import { BASE_URL } from "@/lib/config";
 import { getCoreSecurityLinks } from "@/lib/core-security-links";
 
@@ -38,9 +38,7 @@ export async function generateMetadata({
       "Terraform compliance",
       "Infrastructure as Code",
     ],
-    alternates: {
-      ...localeAlternates(`/${locale}/terraform-security`),
-    },
+    alternates: buildLocalizedAlternates(locale, "/terraform-security"),
     openGraph: {
       title: "Terraform Security 2026: IaC Security",
       description: "Secure Terraform with tfsec, state encryption, Sentinel policies & least privilege.",

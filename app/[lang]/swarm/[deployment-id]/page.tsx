@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 
-import { localeAlternates, SUPPORTED_LOCALES } from "@/lib/i18n"
+import { buildLocalizedAlternates, SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
 import RootPage from "@/app/swarm/[deployment-id]/page"
 
 export const revalidate = 60
@@ -12,14 +12,10 @@ export async function generateStaticParams() {
 export async function generateMetadata(
   props: { params: { lang: string; "deployment-id": string } }
 ): Promise<Metadata> {
-  const params = props.params
-  const alternates = localeAlternates(`/swarm/${encodeURIComponent(params["deployment-id"])}`)
-
+  const { lang } = props.params
+  const locale = (SUPPORTED_LOCALES.includes(lang as Locale) ? lang : "de") as Locale
   return {
-    alternates: {
-      canonical: alternates.canonical,
-      languages: alternates.languages,
-    },
+    alternates: buildLocalizedAlternates(locale, `/swarm/${encodeURIComponent(props.params["deployment-id"])}`),
   }
 }
 

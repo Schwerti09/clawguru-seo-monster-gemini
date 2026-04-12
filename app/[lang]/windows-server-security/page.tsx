@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { SUPPORTED_LOCALES, type Locale, localeAlternates } from "@/lib/i18n";
+import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n";
 import { BASE_URL } from "@/lib/config";
 import { getCoreSecurityLinks } from "@/lib/core-security-links";
 
@@ -38,9 +38,7 @@ export async function generateMetadata({
       "AD hardening",
       "Windows compliance",
     ],
-    alternates: {
-      ...localeAlternates(`/${locale}/windows-server-security`),
-    },
+    alternates: buildLocalizedAlternates(locale, "/windows-server-security"),
     openGraph: {
       title: "Windows Server Security 2026: AD & Defender Hardening",
       description: "Windows Server security with Active Directory, GPO, Defender & Credential Guard.",

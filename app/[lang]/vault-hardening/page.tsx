@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { SUPPORTED_LOCALES, type Locale, localeAlternates } from "@/lib/i18n";
+import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n";
 import { BASE_URL } from "@/lib/config";
 import { getCoreSecurityLinks } from "@/lib/core-security-links";
 
@@ -38,9 +38,7 @@ export async function generateMetadata({
       "Vault audit",
       "Secrets management",
     ],
-    alternates: {
-      ...localeAlternates(`/${locale}/vault-hardening`),
-    },
+    alternates: buildLocalizedAlternates(locale, "/vault-hardening"),
     openGraph: {
       title: "Vault Hardening 2026: Secrets Security",
       description: "Harden HashiCorp Vault with auto-unseal, TLS, PKI & Sentinel policies.",

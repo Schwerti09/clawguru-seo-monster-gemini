@@ -2,19 +2,18 @@ import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
 import { BASE_URL } from "@/lib/config"
 import { headers } from "next/headers"
-import { DEFAULT_LOCALE, type Locale, localeAlternates } from "@/lib/i18n"
+import { DEFAULT_LOCALE, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
 import type { Metadata } from "next"
 
 export const dynamic = "force-static"
 export const revalidate = 86400
 
 export async function generateMetadata(): Promise<Metadata> {
-  const alts = localeAlternates("/solutions/terraform-canary-deploy")
   return {
     title: "Terraform Canary Deployment 2026 | Zero-Downtime mit Blue-Green",
     description: "Canary Deployments mit Terraform: Traffic-Shaping, Health-Probes, Progressive Rollouts, automatisches Rollback. Kompletter Guide für Zero-Downtime Infrastructure.",
     keywords: ["terraform canary deploy", "terraform blue green", "zero downtime deployment", "infrastructure as code", "terraform traffic splitting"],
-    alternates: alts,
+    alternates: buildLocalizedAlternates(DEFAULT_LOCALE, "/solutions/terraform-canary-deploy"),
     openGraph: {
       title: "Terraform Canary Deployment Guide 2026",
       description: "Zero-Downtime Deployments mit Terraform: Canary, Blue-Green, automatisches Rollback",

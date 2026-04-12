@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 
-import { localeAlternates, SUPPORTED_LOCALES } from "@/lib/i18n"
+import { buildLocalizedAlternates, SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
 import RootPage from "@/app/fix/[slug]/page"
 
 export const revalidate = 60
@@ -13,14 +13,10 @@ export async function generateStaticParams() {
 export async function generateMetadata(
   props: { params: { lang: string; slug: string } }
 ): Promise<Metadata> {
-  const params = props.params
-  const alternates = localeAlternates(`/fix/${encodeURIComponent(params.slug)}`)
-
+  const { lang, slug } = props.params
+  const locale = (SUPPORTED_LOCALES.includes(lang as Locale) ? lang : "de") as Locale
   return {
-    alternates: {
-      canonical: alternates.canonical,
-      languages: alternates.languages,
-    },
+    alternates: buildLocalizedAlternates(locale, `/fix/${encodeURIComponent(slug)}`),
   }
 }
 

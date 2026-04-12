@@ -2,16 +2,15 @@ import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
 import { BASE_URL } from "@/lib/config"
 import { headers } from "next/headers"
-import { DEFAULT_LOCALE, type Locale, localeAlternates } from "@/lib/i18n"
+import { DEFAULT_LOCALE, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
 
 export const dynamic = "force-static"
 
 export async function generateMetadata() {
-  const alts = localeAlternates("/issues")
   return {
     title: "Issues | ClawGuru",
     description: "Issue-Index: RBAC Misconfiguration, SQL Injection, Container Escape, SBOM, Zero-Trust und 100+ weitere Security & Ops Issues — jeweils mit vollständiger Provider × Service × Year Runbook-Matrix.",
-    alternates: alts,
+    alternates: buildLocalizedAlternates(DEFAULT_LOCALE, "/issues"),
   }
 }
 

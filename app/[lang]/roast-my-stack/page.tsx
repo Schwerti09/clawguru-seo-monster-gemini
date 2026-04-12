@@ -3,7 +3,7 @@ import type { Metadata } from "next"
 import RoastMyStack from "@/components/roast/RoastMyStack"
 import Container from "@/components/shared/Container"
 import { getDictionary } from "@/lib/getDictionary"
-import { SUPPORTED_LOCALES, getLocaleHrefLang, localeAlternates, type Locale } from "@/lib/i18n"
+import { SUPPORTED_LOCALES, buildLocalizedAlternates, type Locale } from "@/lib/i18n"
 
 export const revalidate = 60
 
@@ -15,20 +15,17 @@ export async function generateMetadata(props: { params: { lang: string } }): Pro
   const locale = (SUPPORTED_LOCALES.includes(props.params.lang as Locale) ? props.params.lang : "de") as Locale
   const dict = await getDictionary(locale)
   const r = (dict as { roast?: Record<string, string> }).roast ?? {}
-  const alternates = localeAlternates("/roast-my-stack")
-  const hrefLang = getLocaleHrefLang(locale)
-  const canonical = alternates.languages[hrefLang] ?? alternates.canonical
   const title = r.meta_title || r.title || "Roast My Stack"
   const description = r.meta_description || r.subtitle || ""
 
   return {
     title,
     description,
-    alternates: { canonical, languages: alternates.languages },
+    alternates: buildLocalizedAlternates(locale, "/roast-my-stack"),
     openGraph: {
       title,
       description,
-      url: canonical,
+      url: `https://clawguru.org/${locale}/roast-my-stack`,
       type: "website",
     },
     twitter: {

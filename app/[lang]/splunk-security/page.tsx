@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { SUPPORTED_LOCALES, type Locale, localeAlternates } from "@/lib/i18n";
+import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n";
 import { BASE_URL } from "@/lib/config";
 import { getCoreSecurityLinks } from "@/lib/core-security-links";
 
@@ -38,9 +38,7 @@ export async function generateMetadata({
       "Splunk best practices",
       "Enterprise SIEM security",
     ],
-    alternates: {
-      ...localeAlternates(`/${locale}/splunk-security`),
-    },
+    alternates: buildLocalizedAlternates(locale, "/splunk-security"),
     openGraph: {
       title: "Splunk Security 2026: SIEM Protection",
       description: "Secure Splunk with RBAC, field masking, data retention & SSL/TLS configuration.",

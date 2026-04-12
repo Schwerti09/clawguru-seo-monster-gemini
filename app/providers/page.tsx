@@ -2,16 +2,15 @@ import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
 import { BASE_URL } from "@/lib/config"
 import { headers } from "next/headers"
-import { DEFAULT_LOCALE, type Locale, localeAlternates } from "@/lib/i18n"
+import { DEFAULT_LOCALE, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
 
 export const revalidate = 60
 
 export async function generateMetadata() {
-  const alts = localeAlternates("/providers")
   return {
     title: "Providers | ClawGuru",
     description: "Provider Hubs: AWS, Hetzner, Cloudflare & Co — Runbooks, Fixes und Baselines nach Plattform sortiert.",
-    alternates: alts,
+    alternates: buildLocalizedAlternates(DEFAULT_LOCALE, "/providers"),
   }
 }
 

@@ -2,16 +2,15 @@ import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
 import { BASE_URL } from "@/lib/config"
 import { headers } from "next/headers"
-import { DEFAULT_LOCALE, type Locale, localeAlternates } from "@/lib/i18n"
+import { DEFAULT_LOCALE, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
 
 export const dynamic = "force-dynamic"
 
 export async function generateMetadata() {
-  const alts = localeAlternates("/services")
   return {
     title: "Services | ClawGuru",
     description: "Service-Index: SSH, Docker, Kubernetes, PostgreSQL, Nginx, Kafka und 70+ weitere Services — jeweils mit vollständiger Provider × Issue × Year Runbook-Matrix.",
-    alternates: alts,
+    alternates: buildLocalizedAlternates(DEFAULT_LOCALE, "/services"),
   }
 }
 

@@ -2,19 +2,18 @@ import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
 import { BASE_URL } from "@/lib/config"
 import { headers } from "next/headers"
-import { DEFAULT_LOCALE, type Locale, localeAlternates } from "@/lib/i18n"
+import { DEFAULT_LOCALE, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
 import type { Metadata } from "next"
 
 export const dynamic = "force-static"
 export const revalidate = 86400
 
 export async function generateMetadata(): Promise<Metadata> {
-  const alts = localeAlternates("/solutions/github-actions-bare-metal")
   return {
     title: "GitHub Actions auf Bare Metal 2026 | Self-Hosted Runner Deployment Guide",
     description: "Sichere GitHub Actions Self-Hosted Runner auf Bare Metal: Installation, Isolation, Secrets-Management, Canary Deployments. Kompletter Hardering-Guide für CI/CD auf eigenen Servern.",
     keywords: ["github actions bare metal", "self hosted runner", "github actions hardening", "ci/cd security", "bare metal deployment"],
-    alternates: alts,
+    alternates: buildLocalizedAlternates(DEFAULT_LOCALE, "/solutions/github-actions-bare-metal"),
     openGraph: {
       title: "GitHub Actions auf Bare Metal – Security Guide 2026",
       description: "Self-Hosted Runner sicher betreiben: Isolation, Secrets, Canary Deployments",

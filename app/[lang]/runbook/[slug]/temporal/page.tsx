@@ -6,7 +6,7 @@ import { getRunbook } from "../../../../../lib/pseo"
 import { validateRunbook } from "../../../../../lib/quality-gate"
 import { getTemporalHistory, findVersionByQuarter } from "../../../../../lib/temporal-mycelium"
 import { notFound } from "next/navigation"
-import { localeAlternates, type Locale, SUPPORTED_LOCALES } from "../../../../../lib/i18n"
+import { buildLocalizedAlternates, type Locale, SUPPORTED_LOCALES } from "../../../../../lib/i18n"
 
 export const revalidate = 86400
 export const dynamicParams = true
@@ -22,16 +22,13 @@ export async function generateStaticParams() {
 export async function generateMetadata(props: {
   params: { lang: string; slug: string }
 }) {
-  const { slug } = props.params
-  const alternates = localeAlternates(`/runbook/${encodeURIComponent(slug)}/temporal`)
+  const { slug, lang } = props.params
+  const locale = (SUPPORTED_LOCALES.includes(lang as Locale) ? lang : "de") as Locale
 
   return {
     title: `Temporal History | ClawGuru Runbooks`,
     description: "Zeitliche Entwicklung und Versionsgeschichte des Runbooks",
-    alternates: {
-      canonical: alternates.canonical,
-      languages: alternates.languages,
-    },
+    alternates: buildLocalizedAlternates(locale, `/runbook/${encodeURIComponent(slug)}/temporal`),
   }
 }
 

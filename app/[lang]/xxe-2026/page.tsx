@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { SUPPORTED_LOCALES, type Locale, localeAlternates } from "@/lib/i18n";
+import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n";
 import { notFound } from "next/navigation";
 import { BASE_URL } from "@/lib/config";
 import { getCoreSecurityLinks } from "@/lib/core-security-links";
@@ -51,9 +51,7 @@ export async function generateMetadata({
       "XXE mitigation",
       "XXE scanner",
     ],
-    alternates: {
-      ...localeAlternates(`/${locale}/xxe-2026`),
-    },
+    alternates: buildLocalizedAlternates(locale, "/xxe-2026"),
     openGraph: {
       title,
       description,

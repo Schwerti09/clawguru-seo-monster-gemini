@@ -1,6 +1,7 @@
-import type { Metadata } from "next"
+﻿import type { Metadata } from "next"
 import NextDynamic from "next/dynamic"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { metadata as rootMetadata } from "@/app/tags/page"
 import { getDictionary } from "@/lib/getDictionary"
 import { Suspense } from "react"
 
@@ -33,9 +34,7 @@ export async function generateMetadata(props: { params: { lang: string } }): Pro
   const params = props.params
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
 
-  return {
-    alternates: buildLocalizedAlternates(locale, "/tags")
-  }
+  return { ...(rootMetadata as Metadata), alternates: buildLocalizedAlternates(locale, "/tags") }
 }
 
 export default async function LocaleTagsPage(props: { params: { lang: string } }) {

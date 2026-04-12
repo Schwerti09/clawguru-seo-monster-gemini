@@ -1,7 +1,7 @@
-import type { Metadata } from "next"
+﻿import type { Metadata } from "next"
 
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
-import RootPage from "@/app/years/page"
+import RootPage, { metadata as rootMetadata } from "@/app/years/page"
 
 export const revalidate = 60
 
@@ -13,9 +13,7 @@ export async function generateMetadata(props: { params: { lang: string } }): Pro
   const params = props.params
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
 
-  return {
-    alternates: buildLocalizedAlternates(locale, "/years")
-  }
+  return { ...(rootMetadata as Metadata), alternates: buildLocalizedAlternates(locale, "/years") }
 }
 
 export default function LocaleYearsPage() {

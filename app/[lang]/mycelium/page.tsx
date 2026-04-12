@@ -1,7 +1,8 @@
-import type { Metadata } from "next"
+﻿import type { Metadata } from "next"
 import NextDynamic from "next/dynamic"
 
 import { SUPPORTED_LOCALES, DEFAULT_LOCALE, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { metadata as rootMetadata } from "@/app/mycelium/page"
 import Container from "@/components/shared/Container"
 import MyceliumShareCard from "@/components/share/MyceliumShareCard"
 import { getDictionary } from "@/lib/dictionary"
@@ -24,9 +25,7 @@ export async function generateMetadata(props: { params: { lang: string } }): Pro
   const params = props.params
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
 
-  return {
-    alternates: buildLocalizedAlternates(locale, "/mycelium")
-  }
+  return { ...(rootMetadata as Metadata), alternates: buildLocalizedAlternates(locale, "/mycelium") }
 }
 
 export default async function LocaleMyceliumPage(props: { params: { lang: string } }) {

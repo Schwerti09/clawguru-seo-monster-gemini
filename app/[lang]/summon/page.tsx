@@ -1,7 +1,8 @@
-import type { Metadata } from "next"
+﻿import type { Metadata } from "next"
 import dynamic from "next/dynamic"
 
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { metadata as rootMetadata } from "@/app/summon/page"
 import { getDictionary } from "@/lib/getDictionary"
 import SummonHero from "@/components/summon/SummonHero"
 import HowItWorks from "@/components/summon/HowItWorks"
@@ -19,9 +20,7 @@ export async function generateMetadata(props: { params: { lang: string } }): Pro
   const params = props.params
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
 
-  return {
-    alternates: buildLocalizedAlternates(locale, "/summon")
-  }
+  return { ...(rootMetadata as Metadata), alternates: buildLocalizedAlternates(locale, "/summon") }
 }
 
 export default async function LocaleSummonPage(props: { params: { lang: string } }) {

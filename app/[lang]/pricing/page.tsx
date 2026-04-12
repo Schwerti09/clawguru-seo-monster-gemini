@@ -1,5 +1,7 @@
+﻿import type { Metadata } from "next"
 import PricingPage from "@/app/pricing/page"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { metadata as rootMetadata } from "@/app/pricing/page"
 
 export const revalidate = 60
 
@@ -9,9 +11,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: { lang: string } }) {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
-  return {
-    alternates: buildLocalizedAlternates(locale, "/pricing"),
-  }
+  return { ...(rootMetadata as Metadata), alternates: buildLocalizedAlternates(locale, "/pricing") }
 }
 
 export default function LocalePricingPage() {

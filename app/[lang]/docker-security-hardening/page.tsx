@@ -60,9 +60,20 @@ export default function DockerSecurityPage({
   const prefix = `/${locale}`;
   const coreLinks = getCoreSecurityLinks(locale);
 
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      { '@type': 'Question', name: locale === 'de' ? 'Was ist Docker Security Hardening?' : 'What is Docker security hardening?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Docker Security Hardening umfasst: Rootless-Betrieb, seccomp-Profile, AppArmor/SELinux, Capability-Dropping (--cap-drop=ALL), Read-only-Filesystems, Image-Scanning mit Trivy und CIS Docker Benchmark Compliance.' : 'Docker security hardening includes: rootless operation, seccomp profiles, AppArmor/SELinux, capability dropping (--cap-drop=ALL), read-only filesystems, image scanning with Trivy and CIS Docker Benchmark compliance.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Wie verhindere ich Docker Privilege Escalation?' : 'How do I prevent Docker privilege escalation?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Wichtigste Maßnahmen: --no-new-privileges Flag setzen, User-Namespace-Remapping aktivieren, root-User in Containern vermeiden (USER directive im Dockerfile), seccomp und AppArmor Profile nutzen und Docker Socket nicht in Container mounten.' : 'Key measures: set --no-new-privileges flag, enable user namespace remapping, avoid root user in containers (USER directive in Dockerfile), use seccomp and AppArmor profiles and never mount the Docker socket into containers.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Warum sollte ich Docker Rootless verwenden?' : 'Why should I use Docker rootless mode?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Docker Rootless Mode lässt den Docker Daemon als nicht-privilegierter User laufen. Selbst bei einem Container-Escape hat ein Angreifer nur User-Level-Rechte auf dem Host — kein root-Zugriff. Empfohlen für alle Produktionsumgebungen.' : 'Docker rootless mode runs the Docker daemon as an unprivileged user. Even in a container escape, an attacker only has user-level rights on the host — no root access. Recommended for all production environments.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Wie scanne ich Docker Images auf Schwachstellen?' : 'How do I scan Docker images for vulnerabilities?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Trivy ist das empfohlene Tool: trivy image mein-image:latest. In CI/CD-Pipelines integrierbar (GitLab CI, GitHub Actions). Docker Scout ist eine weitere Option. Grails-Regeln für kritische CVEs: Build-Pipeline unterbrechen bei CRITICAL-Findings.' : 'Trivy is the recommended tool: trivy image my-image:latest. Integrable in CI/CD pipelines (GitLab CI, GitHub Actions). Docker Scout is another option. Rule of thumb for critical CVEs: break the build pipeline on CRITICAL findings.' } },
+    ],
+  }
 
   return (
     <main className="min-h-screen bg-gray-800">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <section className="relative overflow-hidden bg-gradient-to-br from-blue-600 via-cyan-600 to-teal-600 py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl">

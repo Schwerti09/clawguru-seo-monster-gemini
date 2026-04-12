@@ -60,10 +60,20 @@ export default async function K8sNetworkPoliciesPage({
     : "de") as Locale;
   const prefix = `/${locale}`;
   const coreLinks = getCoreSecurityLinks(locale);
-
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      { '@type': 'Question', name: locale === 'de' ? 'Was sind Kubernetes Network Policies?' : 'What are Kubernetes Network Policies?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Network Policies sind Kubernetes-Ressourcen die Pod-zu-Pod-Kommunikation auf Netzwerkebene kontrollieren. By default: alle Pods können miteinander kommunizieren. Mit Network Policies: explizites Whitelist-Prinzip. Erfordern einen CNI-Plugin der Policies unterstützt (Calico, Cilium, Weave).' : 'Network Policies are Kubernetes resources that control pod-to-pod communication at the network level. By default: all pods can communicate with each other. With Network Policies: explicit whitelist principle. Require a CNI plugin that supports policies (Calico, Cilium, Weave).' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Wie implementiere ich Default-Deny in Kubernetes?' : 'How do I implement default-deny in Kubernetes?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Default-Deny Policy für jeden Namespace: NetworkPolicy mit podSelector: {} und leeren ingress/egress Regeln erstellt eine Deny-All Policy. Dann explizit erlaubte Verbindungen hinzufügen. Wichtig: DNS (Port 53) für alle Pods explizit erlauben damit Service Discovery funktioniert.' : 'Default-Deny policy for each namespace: NetworkPolicy with podSelector: {} and empty ingress/egress rules creates a deny-all policy. Then explicitly add allowed connections. Important: explicitly allow DNS (port 53) for all pods so service discovery works.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Was ist der Unterschied zwischen Calico und Cilium?' : 'What is the difference between Calico and Cilium?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Calico ist battle-tested, weit verbreitet, unterstützt Kubernetes Network Policies + eigene GlobalNetworkPolicy. Cilium nutzt eBPF für Layer 7 Visibility und höhere Performance, unterstützt HTTP/gRPC-aware Policies. Für neue Cluster: Cilium empfohlen. Für bestehende: Calico bewährt.' : 'Calico is battle-tested, widely used, supports Kubernetes Network Policies + own GlobalNetworkPolicy. Cilium uses eBPF for layer 7 visibility and higher performance, supports HTTP/gRPC-aware policies. For new clusters: Cilium recommended. For existing: Calico proven.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Wie teste ich ob Network Policies funktionieren?' : 'How do I test if network policies work?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Test-Pod deployen: kubectl run test --image=busybox --rm -it -- /bin/sh, dann wget oder nc zu anderen Services testen. netassert und network-policy-explorer visualisieren Policies. Hubble (Cilium) zeigt allowed/denied Traffic in Echtzeit.' : 'Deploy test pod: kubectl run test --image=busybox --rm -it -- /bin/sh, then test wget or nc to other services. netassert and network-policy-explorer visualize policies. Hubble (Cilium) shows allowed/denied traffic in real time.' } },
+    ],
+  }
 
   return (
     <main className="min-h-screen bg-gray-800">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <section className="relative overflow-hidden bg-gradient-to-br from-blue-700 via-indigo-700 to-purple-800 py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl">

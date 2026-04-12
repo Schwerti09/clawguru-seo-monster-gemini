@@ -64,10 +64,21 @@ export default async function KeycloakHardeningPage({
   const prefix = `/${locale}`;
   const coreLinks = getCoreSecurityLinks(locale);
 
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      { '@type': 'Question', name: locale === 'de' ? 'Was ist Keycloak und wozu brauche ich Hardening?' : 'What is Keycloak and why does it need hardening?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Keycloak ist ein Open-Source Identity Provider (IAM) für SSO, OAuth 2.0 und OpenID Connect. Hardening ist kritisch weil Keycloak der zentrale Authentifizierungs-Gatekeeper ist — eine Schwachstelle kompromittiert alle angebundenen Anwendungen.' : 'Keycloak is an open-source identity provider (IAM) for SSO, OAuth 2.0 and OpenID Connect. Hardening is critical because Keycloak is the central authentication gatekeeper — one vulnerability compromises all connected applications.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Wie aktiviere ich MFA in Keycloak?' : 'How do I enable MFA in Keycloak?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Im Keycloak Admin Console: Authentication > Flows > Browser > OTP Form auf Required setzen. Für Conditional MFA: Browser-Flow klonen und Conditional OTP Form hinzufügen mit Bedingung (Rolle, IP-Range). TOTP (Google Authenticator) und WebAuthn werden unterstützt.' : 'In Keycloak Admin Console: Authentication > Flows > Browser > set OTP Form to Required. For conditional MFA: clone the Browser flow and add Conditional OTP Form with condition (role, IP range). TOTP (Google Authenticator) and WebAuthn are supported.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Wie schütze ich Keycloak vor Brute-Force?' : 'How do I protect Keycloak against brute force?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Realm Settings > Security Defenses > Brute Force Detection aktivieren: Max Login Failures = 5, Wait Increment = 60s, Max Wait = 900s. Zusätzlich: nginx Rate Limiting vor Keycloak, fail2ban für Login-Endpoints, Admin Console nie öffentlich exponieren.' : 'Realm Settings > Security Defenses > enable Brute Force Detection: Max Login Failures = 5, Wait Increment = 60s, Max Wait = 900s. Also: nginx rate limiting in front of Keycloak, fail2ban for login endpoints, never expose Admin Console publicly.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Wie sichere ich Keycloak in Produktion ab?' : 'How do I secure Keycloak in production?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Produktions-Checkliste: HTTPS mit TLS 1.3 erzwingen, Admin Console auf internes Netz beschränken, PostgreSQL Backend statt H2, Clustering mit Infinispan für HA, regelmäßige Backups des Realms, Audit-Logging aktivieren, Update-Prozess automatisieren.' : 'Production checklist: enforce HTTPS with TLS 1.3, restrict Admin Console to internal network, use PostgreSQL backend instead of H2, clustering with Infinispan for HA, regular realm backups, enable audit logging, automate update process.' } },
+    ],
+  }
 
   return (
     <main className="min-h-screen bg-gray-800">
       {/* Hero */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <section className="relative overflow-hidden bg-gradient-to-br from-blue-700 via-indigo-800 to-purple-900 py-20">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-400/20 via-transparent to-transparent" />
         <div className="container mx-auto px-4 relative z-10">

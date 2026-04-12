@@ -57,8 +57,20 @@ export default async function TerraformSecurityPage({
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale;
   const prefix = `/${locale}`;
   const coreLinks = getCoreSecurityLinks(locale);
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      { '@type': 'Question', name: locale === 'de' ? 'Was ist tfsec und wie verwende ich es?' : 'What is tfsec and how do I use it?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'tfsec ist ein statischer Sicherheitsscanner für Terraform-Code. Installation: brew install tfsec oder als Container. Ausführung: tfsec . im Terraform-Verzeichnis. Findet Fehlkonfigurationen wie öffentliche S3-Buckets, offene Security Groups und fehlende Verschlüsselung.' : 'tfsec is a static security scanner for Terraform code. Install: brew install tfsec or as container. Run: tfsec . in the Terraform directory. Finds misconfigurations like public S3 buckets, open security groups and missing encryption.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Wie schütze ich den Terraform State?' : 'How do I protect Terraform state?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Terraform State niemals lokal oder in Git speichern. Remote Backend verwenden: S3 mit Encryption und Versioning, Terraform Cloud, oder Azure Blob Storage. State-Locking via DynamoDB (AWS) verhindert konkurrierende Applies.' : 'Never store Terraform state locally or in Git. Use remote backend: S3 with encryption and versioning, Terraform Cloud, or Azure Blob Storage. State locking via DynamoDB (AWS) prevents concurrent applies.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Was macht checkov bei Terraform?' : 'What does checkov do for Terraform?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Checkov prüft Terraform-Code auf über 1000 Sicherheits- und Compliance-Checks. Unterstützt CIS Benchmarks, GDPR, HIPAA, SOC2. Installation: pip install checkov. Ausführung: checkov -d . --framework terraform.' : 'Checkov checks Terraform code against over 1000 security and compliance checks. Supports CIS benchmarks, GDPR, HIPAA, SOC2. Install: pip install checkov. Run: checkov -d . --framework terraform.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Was sind Terraform Sentinel Policies?' : 'What are Terraform Sentinel policies?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Sentinel ist Hashicorps Policy-as-Code Framework für Terraform Enterprise/Cloud. Policies erzwingen Sicherheitsanforderungen vor jedem Apply: z.B. keine öffentlichen Ressourcen, Pflicht-Tags, erlaubte Regionen, Mindest-Encryption-Standards.' : 'Sentinel is HashiCorp\'s policy-as-code framework for Terraform Enterprise/Cloud. Policies enforce security requirements before every apply: e.g. no public resources, mandatory tags, allowed regions, minimum encryption standards.' } },
+    ],
+  }
+
   return (
     <main className="min-h-screen bg-gray-800">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <section className="relative overflow-hidden bg-gradient-to-br from-purple-700 via-purple-800 to-indigo-900 py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl">

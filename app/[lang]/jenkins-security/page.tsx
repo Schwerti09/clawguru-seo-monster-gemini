@@ -57,8 +57,19 @@ export default async function JenkinsSecurityPage({
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale;
   const prefix = `/${locale}`;
   const coreLinks = getCoreSecurityLinks(locale);
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      { '@type': 'Question', name: locale === 'de' ? 'Wie sichere ich Jenkins gegen unbefugten Zugriff ab?' : 'How do I secure Jenkins against unauthorized access?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Matrix-based Security Plugin aktivieren: Manage Jenkins > Security > Authorization > Matrix-based security. Anonymous-User alle Rechte entziehen. Role-based Access Control (RBAC) mit Role Strategy Plugin für granulare Berechtigungen. LDAP/SSO Integration für zentrale Authentifizierung.' : 'Enable Matrix-based Security Plugin: Manage Jenkins > Security > Authorization > Matrix-based security. Remove all rights from anonymous user. Role-based Access Control (RBAC) with Role Strategy Plugin for granular permissions. LDAP/SSO integration for centralized authentication.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Was ist Jenkins Script Security?' : 'What is Jenkins Script Security?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Script Security Plugin schränkt Groovy-Code in Pipelines ein. Sandboxed Pipelines dürfen nur genehmigte Methoden aufrufen. In-process Script Approval erlaubt Admins das manuelle Freigeben von Methoden. Niemals Sandbox-Restrictions deaktivieren in Produktionsumgebungen.' : 'Script Security Plugin restricts Groovy code in pipelines. Sandboxed pipelines may only call approved methods. In-process Script Approval lets admins manually approve methods. Never disable sandbox restrictions in production environments.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Wie verwalte ich Credentials sicher in Jenkins?' : 'How do I manage credentials securely in Jenkins?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Jenkins Credentials Plugin verschlüsselt Secrets im credentials.xml. Credentials nie als Klartext in Jenkinsfiles hardcoden — immer credentials() Binding nutzen. HashiCorp Vault Plugin für zentrales Secret Management. Credentials regelmäßig rotieren.' : 'Jenkins Credentials Plugin encrypts secrets in credentials.xml. Never hardcode credentials as plaintext in Jenkinsfiles — always use credentials() binding. HashiCorp Vault Plugin for centralized secret management. Rotate credentials regularly.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Wie schütze ich Jenkins vor CSRF-Angriffen?' : 'How do I protect Jenkins from CSRF attacks?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'CSRF Protection ist in Jenkins 2.x standardmäßig aktiviert (Crumb Issuer). Manage Jenkins > Security > CSRF Protection prüfen. Für API-Zugriff: API Token verwenden statt Passwort. Reverse Proxy: X-Forwarded-For und Proxy korrekt konfigurieren um Crumb-Validierung nicht zu brechen.' : 'CSRF protection is enabled by default in Jenkins 2.x (Crumb Issuer). Check Manage Jenkins > Security > CSRF Protection. For API access: use API Token instead of password. Reverse proxy: configure X-Forwarded-For and proxy correctly to not break crumb validation.' } },
+    ],
+  }
   return (
     <main className="min-h-screen bg-gray-800">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <section className="relative overflow-hidden bg-gradient-to-br from-red-600 via-red-700 to-slate-800 py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl">

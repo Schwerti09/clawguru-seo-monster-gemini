@@ -60,8 +60,20 @@ export default async function PostgreSQLSecurityPage({
   const prefix = `/${locale}`;
   const coreLinks = getCoreSecurityLinks(locale);
 
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      { '@type': 'Question', name: locale === 'de' ? 'Wie sichere ich PostgreSQL mit SSL/TLS ab?' : 'How do I secure PostgreSQL with SSL/TLS?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'In postgresql.conf: ssl = on, ssl_cert_file und ssl_key_file setzen, ssl_min_protocol_version = TLSv1.2. In pg_hba.conf hostssl für alle Verbindungen erzwingen. Let\'s Encrypt Zertifikate funktionieren direkt mit PostgreSQL.' : 'In postgresql.conf: set ssl = on, ssl_cert_file and ssl_key_file, ssl_min_protocol_version = TLSv1.2. In pg_hba.conf enforce hostssl for all connections. Let\'s Encrypt certificates work directly with PostgreSQL.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Was ist PostgreSQL Row-Level Security?' : 'What is PostgreSQL row-level security?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Row-Level Security (RLS) erlaubt Zugriffskontrolle auf Zeilenebene. Policies definieren welche Rows ein User sehen/ändern darf. Aktivierung: ALTER TABLE tabelle ENABLE ROW LEVEL SECURITY; dann Policy-Definition mit CREATE POLICY.' : 'Row-Level Security (RLS) allows access control at the row level. Policies define which rows a user can see/modify. Enable with: ALTER TABLE table ENABLE ROW LEVEL SECURITY; then define policies with CREATE POLICY.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Wie aktiviere ich PostgreSQL Audit Logging?' : 'How do I enable PostgreSQL audit logging?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'pgAudit Extension installieren und in postgresql.conf konfigurieren: shared_preload_libraries = pgaudit, pgaudit.log = ddl,write,role. Protokolliert alle DDL-Statements, Write-Operationen und Rollen-Änderungen — DSGVO/SOC2-konform.' : 'Install pgAudit extension and configure in postgresql.conf: shared_preload_libraries = pgaudit, pgaudit.log = ddl,write,role. Logs all DDL statements, write operations and role changes — GDPR/SOC2 compliant.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Wie verschlüssele ich Daten in PostgreSQL?' : 'How do I encrypt data in PostgreSQL?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'pgcrypto Extension bietet: pgp_sym_encrypt() für symmetrische Verschlüsselung, pgp_pub_encrypt() für asymmetrische Verschlüsselung, crypt() für Passwort-Hashing. Für Disk-Encryption: LUKS auf OS-Ebene oder Transparent Data Encryption (TDE) mit pg_tde.' : 'pgcrypto extension provides: pgp_sym_encrypt() for symmetric encryption, pgp_pub_encrypt() for asymmetric encryption, crypt() for password hashing. For disk encryption: LUKS at OS level or Transparent Data Encryption (TDE) with pg_tde.' } },
+    ],
+  }
+
   return (
     <main className="min-h-screen bg-gray-800">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <section className="relative overflow-hidden bg-gradient-to-br from-blue-700 via-indigo-700 to-blue-900 py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl">

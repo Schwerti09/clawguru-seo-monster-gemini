@@ -60,9 +60,20 @@ export default async function NginxHardeningPage({
   const prefix = `/${locale}`;
   const coreLinks = getCoreSecurityLinks(locale);
 
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      { '@type': 'Question', name: locale === 'de' ? 'Was ist Nginx Hardening?' : 'What is Nginx hardening?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Nginx Hardening umfasst alle Maßnahmen zur Absicherung des Nginx-Webservers: TLS 1.3 Enforcement, Security Headers (HSTS, CSP, X-Frame-Options), Rate Limiting, ModSecurity WAF und deaktivierung unnötiger Module.' : 'Nginx hardening covers all measures to secure the Nginx web server: TLS 1.3 enforcement, security headers (HSTS, CSP, X-Frame-Options), rate limiting, ModSecurity WAF and disabling unnecessary modules.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Welche Security Headers braucht Nginx?' : 'Which security headers does Nginx need?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Pflicht-Headers: Strict-Transport-Security (HSTS), X-Frame-Options: DENY, X-Content-Type-Options: nosniff, Content-Security-Policy (CSP), Referrer-Policy: strict-origin-when-cross-origin, Permissions-Policy. Diese blockieren XSS, Clickjacking und MIME-Sniffing-Angriffe.' : 'Required headers: Strict-Transport-Security (HSTS), X-Frame-Options: DENY, X-Content-Type-Options: nosniff, Content-Security-Policy (CSP), Referrer-Policy: strict-origin-when-cross-origin, Permissions-Policy. These block XSS, clickjacking and MIME-sniffing attacks.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Wie teste ich Nginx Security Headers?' : 'How do I test Nginx security headers?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Verwende securityheaders.com für einen kostenlosen Header-Scan. Mozilla Observatory und SSL Labs (ssllabs.com/ssltest) prüfen TLS-Konfiguration. ClawGuru Security Check analysiert alle Headers in Echtzeit.' : 'Use securityheaders.com for a free header scan. Mozilla Observatory and SSL Labs (ssllabs.com/ssltest) check TLS configuration. ClawGuru Security Check analyzes all headers in real time.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Was ist Nginx Rate Limiting?' : 'What is Nginx rate limiting?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Rate Limiting begrenzt die Anzahl der Anfragen pro IP-Adresse pro Zeiteinheit. Schützt vor Brute-Force, DDoS und API-Abuse. Konfiguration via limit_req_zone und limit_req Direktiven in nginx.conf.' : 'Rate limiting limits the number of requests per IP address per time unit. Protects against brute force, DDoS and API abuse. Configuration via limit_req_zone and limit_req directives in nginx.conf.' } },
+    ],
+  }
 
   return (
     <main className="min-h-screen bg-gray-800">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <section className="relative overflow-hidden bg-gradient-to-br from-green-600 via-emerald-600 to-teal-600 py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl">

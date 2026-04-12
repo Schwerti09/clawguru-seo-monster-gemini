@@ -63,11 +63,21 @@ export default async function GrafanaHardeningPage({
     : "de") as Locale;
   const prefix = `/${locale}`;
   const coreLinks = getCoreSecurityLinks(locale);
-
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      { '@type': 'Question', name: locale === 'de' ? 'Wie sichere ich Grafana gegen unbefugten Zugriff ab?' : 'How do I secure Grafana against unauthorized access?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'In grafana.ini: [auth] anonymous anon_access_enabled = false, [security] admin_password ändern, [auth.basic] disable_login_form = false. OAuth/LDAP für SSO konfigurieren. Grafana nie mit Default-Credentials (admin/admin) in Produktion lassen.' : 'In grafana.ini: [auth] set anon_access_enabled = false, [security] change admin_password, [auth.basic] disable_login_form = false. Configure OAuth/LDAP for SSO. Never leave Grafana with default credentials (admin/admin) in production.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Wie aktiviere ich HTTPS in Grafana?' : 'How do I enable HTTPS in Grafana?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'In grafana.ini unter [server]: protocol = https, cert_file und cert_key setzen. Alternativ: Grafana hinter nginx/Traefik als Reverse Proxy betreiben der TLS terminiert — empfohlen für Produktionsumgebungen da Grafana dann nicht direkt exponiert wird.' : 'In grafana.ini under [server]: set protocol = https, cert_file and cert_key. Alternative: run Grafana behind nginx/Traefik as reverse proxy that terminates TLS — recommended for production as Grafana is not directly exposed.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Wie schränke ich Grafana Data Source Zugriff ein?' : 'How do I restrict Grafana data source access?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Data Source Permissions Plugin (Enterprise) ermöglicht Team-basierte Zugriffskontrolle. Community: Organizations und Teams nutzen für Isolation. Datenbank-User für Grafana mit minimalen Rechten erstellen — nur SELECT auf benötigte Tables/Schemas.' : 'Data Source Permissions Plugin (Enterprise) enables team-based access control. Community: use Organizations and Teams for isolation. Create database users for Grafana with minimal rights — only SELECT on required tables/schemas.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Wie konfiguriere ich Grafana Alerting sicher?' : 'How do I configure Grafana Alerting securely?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Alert-Benachrichtigungen via Webhook, Slack, PagerDuty oder E-Mail konfigurieren. Credentials für Notification Channels in Grafana Secrets speichern (nicht im Dashboard JSON). Alertmanager-Integration für komplexe Alert-Routing-Logik empfehlenswert.' : 'Configure alert notifications via webhook, Slack, PagerDuty or email. Store credentials for notification channels in Grafana Secrets (not in dashboard JSON). Alertmanager integration recommended for complex alert routing logic.' } },
+    ],
+  }
 
   return (
     <main className="min-h-screen bg-gray-800">
       {/* Hero */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <section className="relative overflow-hidden bg-gradient-to-br from-yellow-500 via-orange-500 to-red-500 py-20">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-yellow-300/30 via-transparent to-transparent" />
         <div className="container mx-auto px-4 relative z-10">

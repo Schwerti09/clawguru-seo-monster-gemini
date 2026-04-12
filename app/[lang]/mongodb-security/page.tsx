@@ -62,9 +62,20 @@ export default async function MongoDBSecurityPage({
     : "de") as Locale;
   const prefix = `/${locale}`;
   const coreLinks = getCoreSecurityLinks(locale);
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      { '@type': 'Question', name: locale === 'de' ? 'Wie aktiviere ich MongoDB Authentifizierung?' : 'How do I enable MongoDB authentication?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'In mongod.conf: security.authorization: enabled setzen. Dann Admin-User anlegen: db.createUser({user:"admin",pwd:"...",roles:[{role:"userAdminAnyDatabase",db:"admin"}]}). SCRAM-SHA-256 ist der empfohlene Authentifizierungsmechanismus.' : 'In mongod.conf: set security.authorization: enabled. Then create admin user: db.createUser({user:"admin",pwd:"...",roles:[{role:"userAdminAnyDatabase",db:"admin"}]}). SCRAM-SHA-256 is the recommended authentication mechanism.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Wie aktiviere ich TLS/SSL in MongoDB?' : 'How do I enable TLS/SSL in MongoDB?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'In mongod.conf unter net.tls: mode: requireTLS, certificateKeyFile, CAFile setzen. Clients verbinden mit --tls --tlsCAFile. Für Replica Sets: alle Member müssen TLS konfiguriert haben und gegenseitig authentifizieren.' : 'In mongod.conf under net.tls: set mode: requireTLS, certificateKeyFile, CAFile. Clients connect with --tls --tlsCAFile. For replica sets: all members must have TLS configured and authenticate mutually.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Was ist MongoDB Field-Level Encryption?' : 'What is MongoDB field-level encryption?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Client-Side Field Level Encryption (CSFLE) verschlüsselt sensible Felder im Client bevor sie die Datenbank erreichen. Der MongoDB-Server sieht nur verschlüsselte Daten. Ideal für PII, Kreditkartendaten und DSGVO-Compliance.' : 'Client-Side Field Level Encryption (CSFLE) encrypts sensitive fields in the client before they reach the database. The MongoDB server only sees encrypted data. Ideal for PII, credit card data and GDPR compliance.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Wie aktiviere ich MongoDB Audit Logging?' : 'How do I enable MongoDB audit logging?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Audit Logging ist ein Enterprise-Feature. In mongod.conf: auditLog.destination: file, format: JSON, path und filter konfigurieren. Community Edition: mongod --profile=2 für langsame Query-Logs. Für kostenlose Audit-Logs: mongoaudit oder Change Streams nutzen.' : 'Audit logging is an enterprise feature. In mongod.conf: configure auditLog.destination: file, format: JSON, path and filter. Community edition: mongod --profile=2 for slow query logs. For free audit logs: use mongoaudit or change streams.' } },
+    ],
+  }
 
   return (
     <main className="min-h-screen bg-gray-800">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <section className="relative overflow-hidden bg-gradient-to-br from-green-600 via-green-700 to-emerald-800 py-20">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-green-400/30 via-transparent to-transparent" />
         <div className="container mx-auto px-4 relative z-10">

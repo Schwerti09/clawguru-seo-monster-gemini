@@ -57,8 +57,19 @@ export default async function RedisSecurityPage({
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale;
   const prefix = `/${locale}`;
   const coreLinks = getCoreSecurityLinks(locale);
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      { '@type': 'Question', name: locale === 'de' ? 'Warum ist Redis standardmäßig unsicher?' : 'Why is Redis insecure by default?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Redis wurde ursprünglich für vertrauenswürdige Netzwerke entwickelt und hat keine Authentifizierung oder Verschlüsselung by default. Jeder mit Netzwerkzugang kann alle Daten lesen/schreiben. Redis NIE direkt ins Internet exponieren.' : 'Redis was originally designed for trusted networks and has no authentication or encryption by default. Anyone with network access can read/write all data. Never expose Redis directly to the internet.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Wie aktiviere ich Redis ACL (Access Control Lists)?' : 'How do I enable Redis ACL?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Ab Redis 6.0: ACL-Regeln in redis.conf konfigurieren. Beispiel: user app on >password ~app:* &* +@read +@write -@admin. Jeder User bekommt nur Zugriff auf sein Keyspace-Pattern und erlaubte Kommandos.' : 'Since Redis 6.0: configure ACL rules in redis.conf. Example: user app on >password ~app:* &* +@read +@write -@admin. Each user only gets access to their keyspace pattern and allowed commands.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Wie aktiviere ich TLS in Redis?' : 'How do I enable TLS in Redis?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Redis 6+ unterstützt TLS nativ. In redis.conf: tls-port 6380, tls-cert-file, tls-key-file, tls-ca-cert-file setzen. Clients müssen TLS-fähig sein (redis-cli --tls). Für ältere Versionen: stunnel als TLS-Proxy verwenden.' : 'Redis 6+ supports TLS natively. In redis.conf: set tls-port 6380, tls-cert-file, tls-key-file, tls-ca-cert-file. Clients must be TLS-capable (redis-cli --tls). For older versions: use stunnel as TLS proxy.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Welche Redis-Kommandos sollte ich deaktivieren?' : 'Which Redis commands should I disable?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Gefährliche Kommandos deaktivieren: FLUSHALL, FLUSHDB, CONFIG, DEBUG, EVAL (falls nicht benötigt), KEYS (Performance-Problem), SHUTDOWN. In redis.conf: rename-command FLUSHALL "" deaktiviert das Kommando komplett.' : 'Disable dangerous commands: FLUSHALL, FLUSHDB, CONFIG, DEBUG, EVAL (if not needed), KEYS (performance issue), SHUTDOWN. In redis.conf: rename-command FLUSHALL "" disables the command completely.' } },
+    ],
+  }
   return (
     <main className="min-h-screen bg-gray-800">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <section className="relative overflow-hidden bg-gradient-to-br from-red-600 via-red-700 to-orange-700 py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl">

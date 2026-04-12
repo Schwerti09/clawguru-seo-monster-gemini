@@ -63,10 +63,20 @@ export default async function CloudflareTunnelPage({
     : "de") as Locale;
   const prefix = `/${locale}`;
   const coreLinks = getCoreSecurityLinks(locale);
-
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      { '@type': 'Question', name: locale === 'de' ? 'Was ist ein Cloudflare Tunnel und wie funktioniert er?' : 'What is a Cloudflare Tunnel and how does it work?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Cloudflare Tunnel (ehemals Argo Tunnel) erstellt eine ausgehende Verbindung von deinem Server zu Cloudflare, ohne eingehende Ports öffnen zu müssen. Der cloudflared-Daemon baut einen verschlüsselten Tunnel auf. Angreifer können keine offenen Ports scannen, da keine existieren. Ideal für Self-Hosted-Services hinter CGNAT oder Firewalls.' : 'Cloudflare Tunnel (formerly Argo Tunnel) creates an outbound connection from your server to Cloudflare without opening inbound ports. The cloudflared daemon establishes an encrypted tunnel. Attackers cannot scan open ports because none exist. Ideal for self-hosted services behind CGNAT or firewalls.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Wie konfiguriere ich Cloudflare Firewall Rules richtig?' : 'How do I configure Cloudflare Firewall Rules correctly?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Cloudflare Firewall Rules (jetzt WAF Custom Rules) arbeiten mit Feldern wie ip.src, cf.threat_score, http.request.uri. Empfohlene Regeln: Bot-Traffic blockieren (cf.client.bot), Länder blockieren (ip.geoip.country), bekannte Angreifer-IPs via IP-Liste blockieren, Rate-Limiting für Login-Endpoints.' : 'Cloudflare Firewall Rules (now WAF Custom Rules) work with fields like ip.src, cf.threat_score, http.request.uri. Recommended rules: block bot traffic (cf.client.bot), block countries (ip.geoip.country), block known attacker IPs via IP list, rate-limiting for login endpoints.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Wie schütze ich meinen Cloudflare Tunnel gegen Missbrauch?' : 'How do I protect my Cloudflare Tunnel against abuse?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Tunnel-Sicherheit: Cloudflare Access (Zero Trust) vor den Tunnel schalten für Authentifizierung. Service Token für API-Zugriff statt offener Endpoints. Tunnel-Config in YAML mit ingress rules die nur nötige Pfade erlauben. cloudflared regelmäßig updaten. Separate Tunnel pro Service/Umgebung.' : 'Tunnel security: put Cloudflare Access (Zero Trust) in front of the tunnel for authentication. Service tokens for API access instead of open endpoints. Tunnel config in YAML with ingress rules allowing only necessary paths. Update cloudflared regularly. Separate tunnel per service/environment.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Was ist der Unterschied zwischen Cloudflare Tunnel und VPN?' : 'What is the difference between Cloudflare Tunnel and VPN?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Cloudflare Tunnel exponiert spezifische Services öffentlich via Cloudflare-Netzwerk. Ein VPN (z.B. Tailscale, WireGuard) ermöglicht privaten Netzwerkzugriff ohne öffentliche Exponierung. Cloudflare Tunnel: für öffentliche Web-Services mit WAF-Schutz. VPN: für internen Team-Zugriff auf private Services.' : 'Cloudflare Tunnel exposes specific services publicly via Cloudflare network. A VPN (e.g. Tailscale, WireGuard) enables private network access without public exposure. Cloudflare Tunnel: for public web services with WAF protection. VPN: for internal team access to private services.' } },
+    ],
+  }
 
   return (
     <main className="min-h-screen bg-gray-800">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       {/* Hero */}
       <section className="relative overflow-hidden bg-gradient-to-br from-orange-500 via-orange-600 to-red-600 py-20">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-orange-300/30 via-transparent to-transparent" />

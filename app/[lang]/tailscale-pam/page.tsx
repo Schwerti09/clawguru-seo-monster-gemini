@@ -64,10 +64,20 @@ export default async function TailscalePAMPage({
     : "de") as Locale;
   const prefix = `/${locale}`;
   const coreLinks = getCoreSecurityLinks(locale);
-
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      { '@type': 'Question', name: locale === 'de' ? 'Was ist Tailscale und wie funktioniert PAM damit?' : 'What is Tailscale and how does PAM work with it?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Tailscale ist ein Zero-Config VPN basierend auf WireGuard. Privileged Access Management (PAM) mit Tailscale: SSH-Zugriff nur über Tailscale-Netzwerk erlauben, Tailscale ACLs für granulare Zugriffskontrolle nutzen, MFA über Identity Provider erzwingen. Kein offener SSH-Port im Internet mehr nötig.' : 'Tailscale is a zero-config VPN based on WireGuard. Privileged Access Management (PAM) with Tailscale: allow SSH access only over Tailscale network, use Tailscale ACLs for granular access control, enforce MFA via identity provider. No open SSH port on the internet needed anymore.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Wie konfiguriere ich Tailscale SSH für Server-Zugriff?' : 'How do I configure Tailscale SSH for server access?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Tailscale SSH aktivieren: tailscale up --ssh. ACL in Tailscale Admin: ssh-Regeln definieren wer auf welchen Server als welcher User zugreifen darf. Session Recording für Compliance aktivieren. Check Mode: tailscale ssh --check erlaubt Zugriffstests ohne echte Verbindung. Public SSH-Port danach in Firewall schließen.' : 'Enable Tailscale SSH: tailscale up --ssh. ACL in Tailscale Admin: define SSH rules for who can access which server as which user. Enable session recording for compliance. Check mode: tailscale ssh --check allows access testing without real connection. Then close public SSH port in firewall.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Was sind Tailscale ACL Tags und wie nutze ich sie für PAM?' : 'What are Tailscale ACL Tags and how do I use them for PAM?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Tags klassifizieren Tailscale-Geräte nach Funktion: tag:prod-server, tag:dev-server, tag:admin-laptop. ACL-Regeln: Admins (tag:admin-laptop) dürfen SSH auf tag:prod-server. Devs nur auf tag:dev-server. Service-Accounts mit tag:ci-runner nur auf Deployment-Ports. Least-Privilege durch feingranulare Tag-Kombinationen.' : 'Tags classify Tailscale devices by function: tag:prod-server, tag:dev-server, tag:admin-laptop. ACL rules: admins (tag:admin-laptop) may SSH to tag:prod-server. Devs only to tag:dev-server. Service accounts with tag:ci-runner only on deployment ports. Least-privilege through fine-grained tag combinations.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Wie integriere ich Tailscale mit einem Identity Provider für MFA?' : 'How do I integrate Tailscale with an identity provider for MFA?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Tailscale unterstützt SSO-Integration mit Okta, Google, Azure AD, GitHub. MFA wird vom Identity Provider erzwungen: Nutzer müssen sich mit MFA am IdP authentifizieren bevor Tailscale-Zugang gewährt wird. Key-Expiry konfigurieren (z.B. 90 Tage) damit kompromittierte Keys automatisch ablaufen.' : 'Tailscale supports SSO integration with Okta, Google, Azure AD, GitHub. MFA is enforced by the identity provider: users must authenticate with MFA at the IdP before Tailscale access is granted. Configure key expiry (e.g. 90 days) so compromised keys expire automatically.' } },
+    ],
+  }
 
   return (
     <main className="min-h-screen bg-gray-800">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       {/* Hero */}
       <section className="relative overflow-hidden bg-gradient-to-br from-blue-900 via-slate-900 to-blue-800 py-20">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-500/20 via-transparent to-transparent" />

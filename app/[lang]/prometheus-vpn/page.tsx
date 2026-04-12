@@ -60,10 +60,20 @@ export default async function PrometheusVPNPage({
     : "de") as Locale;
   const prefix = `/${locale}`;
   const coreLinks = getCoreSecurityLinks(locale);
-
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      { '@type': 'Question', name: locale === 'de' ? 'Warum sollte Prometheus hinter einem VPN laufen?' : 'Why should Prometheus run behind a VPN?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Prometheus hat keine eingebaute Authentifizierung für seinen Web-UI und Metrics-Endpoint. Ein öffentlich erreichbarer Prometheus leakt interne Infrastruktur-Details (Hostnamen, IPs, Service-Namen, Metriken). Ohne VPN sind diese Daten für Angreifer wertvoll für Reconnaissance. VPN oder Reverse Proxy mit Auth sind Pflicht.' : 'Prometheus has no built-in authentication for its web UI and metrics endpoint. A publicly accessible Prometheus leaks internal infrastructure details (hostnames, IPs, service names, metrics). Without VPN this data is valuable for attackers for reconnaissance. VPN or reverse proxy with auth is mandatory.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Wie konfiguriere ich Prometheus mit WireGuard VPN?' : 'How do I configure Prometheus with WireGuard VPN?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Prometheus nur auf VPN-Interface binden: --web.listen-address=10.0.0.1:9090. WireGuard-Interface wg0 mit privater IP konfigurieren. Prometheus-Scrape-Targets über VPN-IPs ansprechen. Alertmanager ebenfalls nur über VPN erreichbar. Firewall: Port 9090 nur für VPN-Subnetz (z.B. 10.0.0.0/8) erlauben.' : 'Bind Prometheus only to VPN interface: --web.listen-address=10.0.0.1:9090. Configure WireGuard interface wg0 with private IP. Address Prometheus scrape targets via VPN IPs. Alertmanager also only reachable via VPN. Firewall: allow port 9090 only for VPN subnet (e.g. 10.0.0.0/8).' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Wie sichere ich Prometheus mit Basic Auth ab?' : 'How do I secure Prometheus with basic auth?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Prometheus unterstützt Basic Auth via web.yml-Config: basic_auth_users mit bcrypt-Hashes. Nginx als Reverse Proxy mit auth_basic als Alternative. TLS-Config in web.yml für HTTPS. Empfehlung: VPN als primären Schutz nutzen, Basic Auth als zusätzliche Schicht. Niemals Prometheus direkt ohne Auth im Internet.' : 'Prometheus supports basic auth via web.yml config: basic_auth_users with bcrypt hashes. Nginx as reverse proxy with auth_basic as alternative. TLS config in web.yml for HTTPS. Recommendation: use VPN as primary protection, basic auth as additional layer. Never run Prometheus directly without auth on the internet.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Wie exportiere ich Prometheus Metriken sicher zu Grafana Cloud?' : 'How do I securely export Prometheus metrics to Grafana Cloud?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Prometheus remote_write an Grafana Cloud: TLS-Verbindung, Basic Auth mit API-Key in Kubernetes Secret. Alternativ: Grafana Agent lokal installieren, der Metriken sammelt und sicher weiterleitet. Niemals Prometheus-Passwort im prometheus.yml plaintext. Prometheus-Operator in Kubernetes verwaltet Secrets sicher.' : 'Prometheus remote_write to Grafana Cloud: TLS connection, basic auth with API key in Kubernetes secret. Alternative: install Grafana Agent locally to collect and securely forward metrics. Never store Prometheus password plaintext in prometheus.yml. Prometheus Operator in Kubernetes manages secrets securely.' } },
+    ],
+  }
 
   return (
     <main className="min-h-screen bg-gray-800">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <section className="relative overflow-hidden bg-gradient-to-br from-orange-600 via-red-600 to-pink-700 py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl">

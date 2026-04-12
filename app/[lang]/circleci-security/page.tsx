@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { SUPPORTED_LOCALES, type Locale, localeAlternates } from "@/lib/i18n";
+import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n";
 import { BASE_URL } from "@/lib/config";
 import { getCoreSecurityLinks } from "@/lib/core-security-links";
 
@@ -38,9 +38,7 @@ export async function generateMetadata({
       "CircleCI AWS OIDC",
       "CircleCI restricted contexts",
     ],
-    alternates: {
-      ...localeAlternates(`/${locale}/circleci-security`),
-    },
+    alternates: buildLocalizedAlternates(locale, "/circleci-security"),
     openGraph: {
       title: "CircleCI Security 2026: Pipeline Protection",
       description: "Secure CircleCI with OIDC, restricted contexts, IP ranges & secrets management.",

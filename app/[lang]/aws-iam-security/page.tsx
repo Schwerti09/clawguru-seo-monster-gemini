@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { SUPPORTED_LOCALES, type Locale, localeAlternates } from "@/lib/i18n";
+import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n";
 import { BASE_URL } from "@/lib/config";
 import { getCoreSecurityLinks } from "@/lib/core-security-links";
 
@@ -17,9 +17,7 @@ export async function generateMetadata({ params }: { params: { lang: string } })
     title: "AWS IAM Security 2026 | Best Practices",
     description: "AWS IAM Security Guide - Least Privilege, SCPs, OIDC",
     keywords: ["AWS", "IAM", "Security"],
-    alternates: {
-      ...localeAlternates(`/${locale}/aws-iam-security`),
-    },
+    alternates: buildLocalizedAlternates(locale, "/aws-iam-security"),
   };
 }
 

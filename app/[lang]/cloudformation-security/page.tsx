@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { SUPPORTED_LOCALES, type Locale, localeAlternates } from "@/lib/i18n";
+import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n";
 import { BASE_URL } from "@/lib/config";
 import { getCoreSecurityLinks } from "@/lib/core-security-links";
 
@@ -38,9 +38,7 @@ export async function generateMetadata({
       "AWS infrastructure security",
       "CloudFormation best practices",
     ],
-    alternates: {
-      ...localeAlternates(`/${locale}/cloudformation-security`),
-    },
+    alternates: buildLocalizedAlternates(locale, "/cloudformation-security"),
     openGraph: {
       title: "CloudFormation Security 2026: AWS IaC Protection",
       description: "Secure CloudFormation with stack policies, drift detection, service roles & compliance controls.",

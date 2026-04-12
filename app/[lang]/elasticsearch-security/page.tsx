@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { SUPPORTED_LOCALES, type Locale, localeAlternates } from "@/lib/i18n";
+import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n";
 import { BASE_URL } from "@/lib/config";
 import { getCoreSecurityLinks } from "@/lib/core-security-links";
 
@@ -38,9 +38,7 @@ export async function generateMetadata({
       "Elasticsearch encryption",
       "Field level security",
     ],
-    alternates: {
-      ...localeAlternates(`/${locale}/elasticsearch-security`),
-    },
+    alternates: buildLocalizedAlternates(locale, "/elasticsearch-security"),
     openGraph: {
       title: "Elasticsearch Security 2026: Search Security",
       description: "Secure Elasticsearch with X-Pack, TLS, RBAC & field-level security.",

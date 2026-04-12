@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { SUPPORTED_LOCALES, type Locale, localeAlternates } from "@/lib/i18n";
+import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n";
 import { BASE_URL } from "@/lib/config";
 import { getCoreSecurityLinks } from "@/lib/core-security-links";
 import { t } from "@/lib/article-i18n"
@@ -42,9 +42,7 @@ export async function generateMetadata({
       "Cloudflare daemon",
       "cloudflared",
     ],
-    alternates: {
-      ...localeAlternates(`/${locale}/cloudflare-tunnel-firewall-rules`),
-    },
+    alternates: buildLocalizedAlternates(locale, "/cloudflare-tunnel-firewall-rules"),
     openGraph: {
       title: "Cloudflare Tunnel Firewall Rules 2026: Zero Trust Guide",
       description: "Secure internal services with Cloudflare Tunnel: firewall rules, access policies, and Zero Trust implementation.",

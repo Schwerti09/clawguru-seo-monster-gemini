@@ -2,11 +2,10 @@
 // Strong hub for cloud provider runbooks – internal linking anchor
 
 import Container from "../../../../components/shared/Container"
-import { materializedRunbooks } from "../../../../lib/pseo"
 import { type Locale, SUPPORTED_LOCALES, buildLocalizedAlternates } from "../../../../lib/i18n"
 import Link from "next/link"
 
-export const revalidate = 60
+export const dynamic = "force-dynamic"
 
 const CLOUD_PROVIDERS = [
   "hetzner", "digitalocean", "aws", "lightsail", "gcp", "azure",
@@ -35,7 +34,8 @@ export default async function CloudHubPage(props: { params: { lang: string } }) 
   const params = props.params;
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
 
-  const cloudRunbooks = materializedRunbooks().filter((r) =>
+  const { materializedRunbooks, getRunbook } = await import("../../../../lib/pseo")
+  const cloudRunbooks = materializedRunbooks().filter((r) => getRunbook(r.slug) !== null).filter((r) =>
     CLOUD_PROVIDERS.some((p) => r.tags.includes("provider:" + p))
   ).slice(0, 120)
 

@@ -5,7 +5,7 @@ import Container from "@/components/shared/Container"
 import { type Locale, SUPPORTED_LOCALES, buildLocalizedAlternates } from "@/lib/i18n"
 import Link from "next/link"
 
-export const revalidate = 60
+export const dynamic = "force-dynamic"
 
 const SECURITY_TOPICS = [
   "firewall-baseline", "ssh-hardening", "security-headers-csp",
@@ -33,9 +33,11 @@ export default async function SecurityHubPage(props: { params: { lang: string } 
   const { materializedRunbooks } = await import("@/lib/pseo")
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
 
-  const securityRunbooks = materializedRunbooks().filter((r) =>
-    SECURITY_TOPICS.some((topic) => r.tags.includes("topic:" + topic))
-  ).slice(0, 100)
+  const { getRunbook } = await import("@/lib/pseo")
+  const securityRunbooks = materializedRunbooks()
+    .filter((r) => getRunbook(r.slug) !== null)
+    .filter((r) => SECURITY_TOPICS.some((topic) => r.tags.includes("topic:" + topic)))
+    .slice(0, 100)
 
   const hubSchema = {
     "@context": "https://schema.org",

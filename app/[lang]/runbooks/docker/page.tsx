@@ -5,7 +5,7 @@ import Container from "@/components/shared/Container"
 import { type Locale, SUPPORTED_LOCALES, buildLocalizedAlternates } from "@/lib/i18n"
 import Link from "next/link"
 
-export const revalidate = 60
+export const dynamic = "force-dynamic"
 
 export async function generateStaticParams() {
   return SUPPORTED_LOCALES.map((lang) => ({ lang }))
@@ -26,9 +26,11 @@ export default async function DockerHubPage(props: { params: { lang: string } })
   const { materializedRunbooks } = await import("@/lib/pseo")
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
 
-  const dockerRunbooks = materializedRunbooks().filter(
-    (r) => r.tags.includes("provider:docker") || r.tags.includes("docker")
-  ).slice(0, 80)
+  const { getRunbook } = await import("@/lib/pseo")
+  const dockerRunbooks = materializedRunbooks()
+    .filter((r) => r.tags.includes("provider:docker"))
+    .filter((r) => getRunbook(r.slug) !== null)
+    .slice(0, 80)
 
   const hubSchema = {
     "@context": "https://schema.org",

@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 
-import { localeAlternates, SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
+import { buildLocalizedAlternates, SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
 import { notFound } from "next/navigation"
 import { parseGeoVariantSlug } from "@/lib/geo-matrix"
 import { getCityBySlug } from "@/lib/geo-cities"
@@ -25,11 +25,13 @@ export async function generateMetadata(props: {
   params: { lang: string; slug: string }
 }): Promise<Metadata> {
   const { slug, lang } = props.params
+  const locale = (SUPPORTED_LOCALES.includes(lang as Locale) ? lang : "de") as Locale
   const { getRunbook } = await import("@/lib/pseo")
   const geoParsed = parseGeoVariantSlug(slug)
   const geoCity = geoParsed.citySlug ? await getCityBySlug(geoParsed.citySlug) : null
   const runbook = getRunbook(slug) ?? getRunbook(geoParsed.baseSlug)
-  const canonicalSlug = runbook ? (geoCity ? `${runbook.slug}-${geoCity.slug}` : runbook.slug) : slug
+  // Use the actual slug (with or without geo variant) for canonical - don't redirect base to geo
+  const canonicalSlug = runbook ? slug : slug
   const isIndexableGeoVariant = geoCity
     ? await isGeoVariantIndexable({
         locale: lang,
@@ -46,15 +48,11 @@ export async function generateMetadata(props: {
       ? geoDescription.slice(0, 157) + "..."
       : geoDescription
     : undefined
-  const alternates = localeAlternates(`/runbook/${canonicalSlug}`)
 
   return {
     title,
     description,
-    alternates: {
-      canonical: alternates.canonical,
-      languages: alternates.languages,
-    },
+    alternates: buildLocalizedAlternates(locale, `/runbook/${canonicalSlug}`),
     openGraph: {
       title,
       description,

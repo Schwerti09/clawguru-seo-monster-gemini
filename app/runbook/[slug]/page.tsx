@@ -551,7 +551,7 @@ export default async function RunbookPage(props: { params: { slug: string; lang?
 
           <div className="mt-6 flex flex-wrap gap-3">
             <a
-              href={`/${locale}/runbook/${r.slug}/temporal`}
+              href={`/runbook/${r.slug}/temporal`}
               className="group flex items-center gap-2 px-6 py-3 bg-white/10 hover:bg-white/20 border border-white/20 rounded-2xl transition-all active:scale-95"
               aria-label="Timeline / Versionsgeschichte öffnen"
             >
@@ -632,7 +632,7 @@ export default async function RunbookPage(props: { params: { slug: string; lang?
             This runbook is cryptographically signed and immutably recorded.
           </p>
           <a
-            href={`${prefix}/provenance/${r.slug}`}
+            href={`/provenance/${r.slug}`}
             className="ml-auto shrink-0 text-xs text-cyan-400 hover:text-cyan-200 underline underline-offset-2 transition-colors"
           >
             View Provenance Chain →

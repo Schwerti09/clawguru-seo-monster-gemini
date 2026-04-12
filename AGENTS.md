@@ -202,7 +202,7 @@ npm run build 2>&1 | Select-Object -Last 15
 | Indexed Pages | ~24,500 URLs | 1,000,000+ URLs |
 | Active Cities (Geo) | 123 cities | 500+ cities |
 | Languages | 15 | 15 (complete) |
-| Content Clusters | Moltbot(37), OpenClaw(15), Solutions(8), Compare(14) | 50+ clusters |
+| Content Clusters | Moltbot(37), OpenClaw(15), Solutions(8), Compare(17) | 50+ clusters |
 | Monthly Visitors | Growth phase | 500,000+ unique visitors |
 
 ### Trust Anchor — Use on Every Content Page
@@ -297,13 +297,14 @@ npm run build 2>&1 | Select-Object -Last 15
 `startup-security-foundation`, `enterprise-siem-integration`,
 `iso27001-certification-roadmap`, `pci-dss-compliance`, `hipaa-security-controls`
 
-**Compare Pages — 14 pages, all live**
+**Compare Pages — 17 pages, all live**
 
 `openclaw-vs-snyk`, `openclaw-vs-semgrep`, `clawguru-vs-wiz`, `openclaw-vs-sonarqube`,
 `moltbot-vs-opsgenie`, `moltbot-vs-clawbot`,
 `clawguru-vs-crowdstrike`, `clawguru-vs-datadog`, `openclaw-vs-falco`,
 `clawguru-vs-lacework`, `moltbot-vs-pagerduty`,
-`clawguru-vs-trivy`, `clawguru-vs-checkov`, `openclaw-vs-wazuh`
+`clawguru-vs-trivy`, `clawguru-vs-checkov`, `openclaw-vs-wazuh`,
+`clawguru-vs-snyk`, `moltbot-vs-victorops`, `openclaw-vs-ossec`
 
 **Specialized Security Pages (in `app/[lang]/`) — 31+ pages, all live**
 
@@ -929,7 +930,7 @@ Will be resolved automatically when upgrading to Next.js 15 + eslint 9 (future s
 | 07.04.2026 | 6 | Moltbot Batch 1+2 (21 pages), OpenClaw Batch 1 (10 pages), Asia/LatAm Geo (27 cities), Solutions (5 pages), Compare (5 pages), AGENTS.md v5 |
 | 08.04.2026 | 7 | Full traffic analysis: robots.txt fix, sitemap 15 locales, 1,300+ new sitemap URLs, OG Soft-404 fix, Badge component, truncated JSX fix, Gemini model fix, AGENTS.md v6 |
 | 11.04.2026 | 8 | Page speed: framer-motion removed from shared bundle (lazy-load PageTransition/AnimatedBackground/CommandK, all heavy dashboard tabs, RunbookCard, Hero, FeaturesGrid, CTA, TrustSection, GlowButton, BentoCard, OverviewTab, PremiumMetricCard, PremiumGauge). CSS animations replace JS animations. CLS fix on command-center. |
-| 12.04.2026 | 9 | SEO: hreflang xhtml:link removed from sitemap XML (head alternates sufficient, fixes Ahrefs 20k cap). Duplicate /check URL removed. Traffic growth sprint: /de/check CTA + proof bullets + score methodology + 2 new FAQ items. /de/roast-my-stack + FAQ + example stacks + FAQPage schema. 3 new Compare pages (clawguru-vs-trivy, clawguru-vs-checkov, openclaw-vs-wazuh). AGENTS.md v8. |
+| 12.04.2026 | 9 | SEO: hreflang xhtml:link removed from sitemap XML. Duplicate /check URL removed. Traffic growth sprint: /de/check CTA + proof bullets + score methodology. /de/roast-my-stack FAQ + examples. Compare Batch 3 (trivy/checkov/wazuh). /kubernetes-security pillar page. Compare Batch 4 (snyk/victorops/ossec). FAQPage + WebPage JSON-LD added to all 37 Moltbot pages via batch script. AGENTS.md v8. |
 
 ### Open Tasks by Priority
 
@@ -939,11 +940,12 @@ Will be resolved automatically when upgrading to Next.js 15 + eslint 9 (future s
 - [ ] Google Search Console: resubmit `sitemap.xml`, request indexing for `/de/runbooks` and `/de`
 
 **HIGH — Next Session (Traffic Growth Sprint)**
-- [ ] `/de/kubernetes-security` Pillar-Page erstellen (2000+ words, all K8s subtopics linked)
-- [ ] Migrate all 29 Moltbot pages from hardcoded `LANGS` array to `buildLocalizedAlternates()` — adds `x-default` hreflang to all pages
-- [ ] Add FAQ + WebPage schema JSON-LD to all Moltbot + OpenClaw pages (rich snippets)
-- [ ] Compare Batch 4: `clawguru-vs-snyk`, `moltbot-vs-victorops`, `openclaw-vs-ossec`
-- [ ] `/de/check` page: add `check-methodology-30-seconds` internal link more prominently
+- [x] `/de/kubernetes-security` Pillar-Page erstellt ✅
+- [x] FAQPage + WebPage JSON-LD auf alle 37 Moltbot-Pages ✅
+- [x] Compare Batch 4: clawguru-vs-snyk, moltbot-vs-victorops, openclaw-vs-ossec ✅
+- [ ] Migrate all 37 Moltbot pages from hardcoded LANGS to `buildLocalizedAlternates()` — adds `x-default` hreflang
+- [ ] FAQPage + HowTo schema auf alle 15 OpenClaw-Pages
+- [ ] Compare Batch 5: `clawguru-vs-lacework` follow-up, `moltbot-vs-splunk`, `openclaw-vs-crowdsec`
 
 **MEDIUM — Sprint 2**
 - [ ] Solutions Batch 2: ISO27001, PCI-DSS, HIPAA pages (still pending)

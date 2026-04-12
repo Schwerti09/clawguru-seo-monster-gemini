@@ -483,7 +483,7 @@ export class AuthService {
             <p>Entdecke unsere <a href="/runbooks" className="text-cyan-400 hover:text-blue-800 font-semibold">AI Runbooks</a> für detaillierte Implementierungsanleitungen.</p>
           </div>
           
-          <div className="bg-purple-50 border-l-4 border-purple-400 p-6">
+          <div className="bg-purple-900 border-l-4 border-purple-400 p-6">
             <h3 className="font-semibold mb-2 text-gray-100">🤝 Join the community?</h3>
             <p>Werde Teil der <a href="/community" className="text-cyan-400 hover:text-blue-800 font-semibold">ClawBot Community</a> und tausche dich mit anderen Security-Experten aus.</p>
           </div>
@@ -492,6 +492,24 @@ export class AuthService {
             <p>Dieser Guide wird regelmäßig aktualisiert, um die neuesten Security-Best Practices und Threat-Landscape-Veränderungen zu berücksichtigen. Letzte Aktualisierung: April 2024.</p>
           </div>
         </div>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify([
+          {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: [
+              { "@type": "Question", name: "Was ist Moltbot Security?", acceptedAnswer: { "@type": "Answer", text: "Moltbot ist eine Security-Automation-Plattform mit 600+ Executable Runbooks, Live-Score und Compliance-Dashboard f&#xFC;r Self-Hosting-Infrastrukturen." } },
+              { "@type": "Question", name: "Ist dieser Guide ein Penetrationstest?", acceptedAnswer: { "@type": "Answer", text: "Nein. Dieser Guide dient ausschlie&#xDF;lich zur Absicherung eigener Systeme. Kein Angriffs-Tool, keine illegalen Aktivit&#xE4;ten." } },
+              { "@type": "Question", name: "Wo finde ich zugeh&#xF6;rige Runbooks?", acceptedAnswer: { "@type": "Answer", text: "Alle Runbooks sind unter /runbooks abrufbar. Jeder Befund im Security-Check enth&#xE4;lt einen direkten Link zum passenden Runbook." } }
+            ]
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "WebPage",
+            name: "Moltbot Security Guide",
+            description: "Executable Security Runbooks und Hardening-Guides f&#xFC;r Moltbot-Infrastrukturen.",
+            url: "https://clawguru.org/de/moltbot/security-framework"
+          }
+        ]) }} />
       </div>
     </div>
   );

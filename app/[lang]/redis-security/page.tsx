@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { SUPPORTED_LOCALES, type Locale, localeAlternates } from "@/lib/i18n";
+import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n";
 import { BASE_URL } from "@/lib/config";
 import { getCoreSecurityLinks } from "@/lib/core-security-links";
 
@@ -38,9 +38,7 @@ export async function generateMetadata({
       "Redis Sentinel",
       "Redis Cluster",
     ],
-    alternates: {
-      ...localeAlternates(`/${locale}/redis-security`),
-    },
+    alternates: buildLocalizedAlternates(locale, "/redis-security"),
     openGraph: {
       title: "Redis Security 2026: Cache Security",
       description: "Secure Redis with ACL, TLS, AUTH & monitoring.",

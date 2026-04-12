@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { SUPPORTED_LOCALES, type Locale, localeAlternates } from "@/lib/i18n";
+import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n";
 import { BASE_URL } from "@/lib/config";
 import { getCoreSecurityLinks } from "@/lib/core-security-links";
 import { t } from "@/lib/article-i18n"
@@ -42,9 +42,7 @@ export async function generateMetadata({
       "SSO hardening",
       "Keycloak cluster",
     ],
-    alternates: {
-      ...localeAlternates(`/${locale}/keycloak-hardening`),
-    },
+    alternates: buildLocalizedAlternates(locale, "/keycloak-hardening"),
     openGraph: {
       title: "Keycloak Hardening 2026: IAM Security Guide",
       description: "Secure your Keycloak IAM with MFA, brute-force protection, session management & compliance controls.",

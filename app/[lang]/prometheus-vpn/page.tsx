@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { SUPPORTED_LOCALES, type Locale, localeAlternates } from "@/lib/i18n";
+import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n";
 import { BASE_URL } from "@/lib/config";
 import { getCoreSecurityLinks } from "@/lib/core-security-links";
 import { t } from "@/lib/article-i18n"
@@ -39,9 +39,7 @@ export async function generateMetadata({
       "Metrics over vpn",
       "Prometheus mTLS",
     ],
-    alternates: {
-      ...localeAlternates(`/${locale}/prometheus-vpn`),
-    },
+    alternates: buildLocalizedAlternates(locale, "/prometheus-vpn"),
     openGraph: {
       title: "Prometheus VPN Monitoring 2026: Secure Metrics",
       description: "Collect Prometheus metrics securely over VPN with Tailscale, WireGuard & Zero Trust.",

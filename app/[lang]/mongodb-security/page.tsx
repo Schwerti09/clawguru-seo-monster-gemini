@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { SUPPORTED_LOCALES, type Locale, localeAlternates } from "@/lib/i18n";
+import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n";
 import { BASE_URL } from "@/lib/config";
 import { getCoreSecurityLinks } from "@/lib/core-security-links";
 
@@ -41,9 +41,7 @@ export async function generateMetadata({
       "MongoDB compliance",
       "MongoDB enterprise security",
     ],
-    alternates: {
-      ...localeAlternates(`/${locale}/mongodb-security`),
-    },
+    alternates: buildLocalizedAlternates(locale, "/mongodb-security"),
     openGraph: {
       title: "MongoDB Security Hardening 2026: Enterprise Database Protection",
       description: "Comprehensive MongoDB security with encryption, authentication, authorization & audit controls.",

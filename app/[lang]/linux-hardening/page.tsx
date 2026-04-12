@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { SUPPORTED_LOCALES, type Locale, localeAlternates } from "@/lib/i18n";
+import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n";
 import { BASE_URL } from "@/lib/config";
 import { getCoreSecurityLinks } from "@/lib/core-security-links";
 
@@ -38,9 +38,7 @@ export async function generateMetadata({
       "Server hardening",
       "Linux compliance",
     ],
-    alternates: {
-      ...localeAlternates(`/${locale}/linux-hardening`),
-    },
+    alternates: buildLocalizedAlternates(locale, "/linux-hardening"),
     openGraph: {
       title: "Linux Hardening 2026: Enterprise Server Security",
       description: "Comprehensive Linux hardening with CIS, SELinux, AppArmor & kernel security.",

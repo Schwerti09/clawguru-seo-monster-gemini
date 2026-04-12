@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { SUPPORTED_LOCALES, type Locale, localeAlternates } from "@/lib/i18n";
+import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n";
 import { BASE_URL } from "@/lib/config";
 import { getCoreSecurityLinks } from "@/lib/core-security-links";
 
@@ -38,9 +38,7 @@ export async function generateMetadata({
       "Nginx CIS benchmark",
       "Web server security",
     ],
-    alternates: {
-      ...localeAlternates(`/${locale}/nginx-hardening`),
-    },
+    alternates: buildLocalizedAlternates(locale, "/nginx-hardening"),
     openGraph: {
       title: "Nginx Hardening 2026: Web Server Security",
       description: "Harden Nginx with TLS 1.3, security headers, ModSecurity & rate limiting.",

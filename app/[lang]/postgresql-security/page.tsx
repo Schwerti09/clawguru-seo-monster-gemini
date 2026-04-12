@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { SUPPORTED_LOCALES, type Locale, localeAlternates } from "@/lib/i18n";
+import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n";
 import { BASE_URL } from "@/lib/config";
 import { getCoreSecurityLinks } from "@/lib/core-security-links";
 
@@ -38,9 +38,7 @@ export async function generateMetadata({
       "Database security",
       "Postgres hardening",
     ],
-    alternates: {
-      ...localeAlternates(`/${locale}/postgresql-security`),
-    },
+    alternates: buildLocalizedAlternates(locale, "/postgresql-security"),
     openGraph: {
       title: "PostgreSQL Security 2026: Database Hardening",
       description: "Secure PostgreSQL with SSL, RLS, audit logging & encryption.",

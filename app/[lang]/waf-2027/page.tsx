@@ -64,16 +64,27 @@ export default async function WAF2027Page({
     : "de") as Locale;
   const prefix = `/${locale}`;
   const coreLinks = getCoreSecurityLinks(locale);
-
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      { '@type': 'Question', name: locale === 'de' ? 'Was ist ein WAF und warum ist es 2027 wichtiger denn je?' : 'What is a WAF and why is it more important than ever in 2027?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Eine Web Application Firewall (WAF) filtert HTTP/HTTPS-Traffic und blockiert OWASP Top 10 Angriffe (SQLi, XSS, CSRF, RCE). 2027 sind WAFs kritisch wegen KI-generierter Angriffe, Zero-Day-Exploits und API-Security. Cloud-WAFs (Cloudflare, AWS WAF) ergänzen lokale Lösungen (ModSecurity, Coraza).' : 'A Web Application Firewall (WAF) filters HTTP/HTTPS traffic and blocks OWASP Top 10 attacks (SQLi, XSS, CSRF, RCE). In 2027 WAFs are critical due to AI-generated attacks, zero-day exploits and API security. Cloud WAFs (Cloudflare, AWS WAF) complement local solutions (ModSecurity, Coraza).' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Was ist der Unterschied zwischen Cloudflare WAF und ModSecurity?' : 'What is the difference between Cloudflare WAF and ModSecurity?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Cloudflare WAF ist ein Managed Cloud-Service: kein Aufwand, automatische Rule-Updates, globales Anycast-Netzwerk für DDoS-Schutz. ModSecurity/Coraza sind selbstgehostete Open-Source-WAFs: volle Kontrolle, keine Cloud-Abhängigkeit, GDPR-konform. Für maximale Security: Cloudflare als erste Schicht + ModSecurity im Nginx/Apache.' : 'Cloudflare WAF is a managed cloud service: no effort, automatic rule updates, global anycast network for DDoS protection. ModSecurity/Coraza are self-hosted open source WAFs: full control, no cloud dependency, GDPR compliant. For maximum security: Cloudflare as first layer + ModSecurity in Nginx/Apache.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Wie verhindere ich False Positives in meiner WAF?' : 'How do I prevent false positives in my WAF?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'False Positives-Strategie: Zuerst im Detection-Mode betreiben (nur loggen, nicht blockieren). Logs analysieren, legitimen Traffic identifizieren. Spezifische Ausnahmen (Exclusions) für bekannte False Positives konfigurieren. Score-basierte WAFs (Paranoia Level 1-4 in CRS) schrittweise erhöhen. Niemals direkt auf Block-Mode in Produktion.' : 'False positive strategy: first run in detection mode (only log, not block). Analyze logs, identify legitimate traffic. Configure specific exclusions for known false positives. Gradually increase score-based WAFs (Paranoia Level 1-4 in CRS). Never go directly to block mode in production.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Wie schütze ich APIs mit einem WAF in 2027?' : 'How do I protect APIs with a WAF in 2027?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'API-WAF-Schutz 2027: Schema-Validierung (OpenAPI/Swagger) für Request-Body-Validierung, Rate-Limiting pro API-Key/IP, Bot-Detection für API-Endpoints, JWT-Validierung in WAF-Schicht, GraphQL-spezifische Rules (Introspection deaktivieren, Query-Depth-Limits). Cloudflare API Shield oder AWS WAF mit API Gateway kombinieren.' : 'API WAF protection 2027: schema validation (OpenAPI/Swagger) for request body validation, rate limiting per API key/IP, bot detection for API endpoints, JWT validation in WAF layer, GraphQL-specific rules (disable introspection, query depth limits). Combine Cloudflare API Shield or AWS WAF with API Gateway.' } },
+    ],
+  }
 
   return (
     <main className="min-h-screen bg-gray-800">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       {/* Hero */}
       <section className="relative overflow-hidden bg-gradient-to-br from-orange-600 via-red-600 to-purple-800 py-20">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-orange-400/30 via-transparent to-transparent" />
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 text-white text-sm mb-4">
+              <span className="w-2 h-2 bg-orange-500 rounded-full" />
               <span className="w-2 h-2 rounded-full bg-orange-300 animate-pulse" />
               Web Application Security 2027
             </div>

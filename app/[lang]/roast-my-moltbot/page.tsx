@@ -93,6 +93,20 @@ export default async function RoastMyMoltbotPage(props: { params: { lang: string
           </h1>
           <p className="mt-4 text-zinc-400 text-sm sm:text-base leading-relaxed">{m.pageIntro}</p>
         </header>
+        <div className="mx-auto max-w-3xl mb-8 grid sm:grid-cols-3 gap-3 text-sm">
+          {[
+            { icon: "🔐", label: locale === "de" ? "API-Key Exposition" : "API Key Exposure", desc: locale === "de" ? "Moltbot Secrets in Logs & Env-Vars" : "Moltbot secrets in logs & env vars" },
+            { icon: "⚡", label: locale === "de" ? "Webhook-Sicherheit" : "Webhook Security", desc: locale === "de" ? "HMAC-Validierung & Rate Limiting" : "HMAC validation & rate limiting" },
+            { icon: "🛡️", label: locale === "de" ? "RBAC-Konfiguration" : "RBAC Configuration", desc: locale === "de" ? "Moltbot Agent Berechtigungen" : "Moltbot agent permissions" },
+          ].map((item) => (
+            <div key={item.label} className="bg-gray-900 border border-gray-800 rounded-xl p-4 flex flex-col gap-1">
+              <div className="text-xl">{item.icon}</div>
+              <div className="font-semibold text-cyan-400">{item.label}</div>
+              <div className="text-zinc-400 text-xs leading-relaxed">{item.desc}</div>
+            </div>
+          ))}
+        </div>
+
         <RoastMyStack
           locale={locale}
           prefix={prefix}

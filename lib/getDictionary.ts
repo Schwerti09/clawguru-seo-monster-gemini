@@ -364,6 +364,15 @@ export type Dictionary = {
     badge_no_reg: string
     badge_time: string
     badge_share: string
+    proof_heading: string
+    proof_1_title: string
+    proof_1_desc: string
+    proof_2_title: string
+    proof_2_desc: string
+    proof_3_title: string
+    proof_3_desc: string
+    score_methodology_heading: string
+    score_methodology_desc: string
     methodology_title: string
     methodology_desc: string
     methodology_bullet1: string
@@ -379,6 +388,10 @@ export type Dictionary = {
     faq_a2: string
     faq_q3: string
     faq_a3: string
+    faq_q4: string
+    faq_a4: string
+    faq_q5: string
+    faq_a5: string
   }
 }
 

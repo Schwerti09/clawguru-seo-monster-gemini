@@ -1,8 +1,8 @@
-﻿# ClawGuru — AGENTS.md · Master Operating Manual v7 (09.04.2026)
+﻿# ClawGuru — AGENTS.md · Master Operating Manual v8 (12.04.2026)
 
 > **This document is the single source of truth for every agent working in this codebase.**
 > Read it completely BEFORE making any change. Update the Session Log after every session.
-> Last updated: 09.04.2026 | Language: English (maximises AI model compatibility)
+> Last updated: 12.04.2026 | Language: English (maximises AI model compatibility)
 
 ---
 
@@ -202,7 +202,7 @@ npm run build 2>&1 | Select-Object -Last 15
 | Indexed Pages | ~24,500 URLs | 1,000,000+ URLs |
 | Active Cities (Geo) | 123 cities | 500+ cities |
 | Languages | 15 | 15 (complete) |
-| Content Clusters | Moltbot(37), OpenClaw(15), Solutions(8), Compare(11) | 50+ clusters |
+| Content Clusters | Moltbot(37), OpenClaw(15), Solutions(8), Compare(14) | 50+ clusters |
 | Monthly Visitors | Growth phase | 500,000+ unique visitors |
 
 ### Trust Anchor — Use on Every Content Page
@@ -297,12 +297,13 @@ npm run build 2>&1 | Select-Object -Last 15
 `startup-security-foundation`, `enterprise-siem-integration`,
 `iso27001-certification-roadmap`, `pci-dss-compliance`, `hipaa-security-controls`
 
-**Compare Pages — 11 pages, all live**
+**Compare Pages — 14 pages, all live**
 
 `openclaw-vs-snyk`, `openclaw-vs-semgrep`, `clawguru-vs-wiz`, `openclaw-vs-sonarqube`,
 `moltbot-vs-opsgenie`, `moltbot-vs-clawbot`,
 `clawguru-vs-crowdstrike`, `clawguru-vs-datadog`, `openclaw-vs-falco`,
-`clawguru-vs-lacework`, `moltbot-vs-pagerduty`
+`clawguru-vs-lacework`, `moltbot-vs-pagerduty`,
+`clawguru-vs-trivy`, `clawguru-vs-checkov`, `openclaw-vs-wazuh`
 
 **Specialized Security Pages (in `app/[lang]/`) — 31+ pages, all live**
 
@@ -927,6 +928,8 @@ Will be resolved automatically when upgrading to Next.js 15 + eslint 9 (future s
 | 06.04.2026 | 5 | 1M-pages strategy, content pipeline defined |
 | 07.04.2026 | 6 | Moltbot Batch 1+2 (21 pages), OpenClaw Batch 1 (10 pages), Asia/LatAm Geo (27 cities), Solutions (5 pages), Compare (5 pages), AGENTS.md v5 |
 | 08.04.2026 | 7 | Full traffic analysis: robots.txt fix, sitemap 15 locales, 1,300+ new sitemap URLs, OG Soft-404 fix, Badge component, truncated JSX fix, Gemini model fix, AGENTS.md v6 |
+| 11.04.2026 | 8 | Page speed: framer-motion removed from shared bundle (lazy-load PageTransition/AnimatedBackground/CommandK, all heavy dashboard tabs, RunbookCard, Hero, FeaturesGrid, CTA, TrustSection, GlowButton, BentoCard, OverviewTab, PremiumMetricCard, PremiumGauge). CSS animations replace JS animations. CLS fix on command-center. |
+| 12.04.2026 | 9 | SEO: hreflang xhtml:link removed from sitemap XML (head alternates sufficient, fixes Ahrefs 20k cap). Duplicate /check URL removed. Traffic growth sprint: /de/check CTA + proof bullets + score methodology + 2 new FAQ items. /de/roast-my-stack + FAQ + example stacks + FAQPage schema. 3 new Compare pages (clawguru-vs-trivy, clawguru-vs-checkov, openclaw-vs-wazuh). AGENTS.md v8. |
 
 ### Open Tasks by Priority
 
@@ -935,17 +938,19 @@ Will be resolved automatically when upgrading to Next.js 15 + eslint 9 (future s
 - [ ] Run Asia/LatAm DB seeding: `GET /api/geo/asia-latam-expansion?stable=1`
 - [ ] Google Search Console: resubmit `sitemap.xml`, request indexing for `/de/runbooks` and `/de`
 
-**HIGH — Next Session**
+**HIGH — Next Session (Traffic Growth Sprint)**
+- [ ] `/de/kubernetes-security` Pillar-Page erstellen (2000+ words, all K8s subtopics linked)
 - [ ] Migrate all 29 Moltbot pages from hardcoded `LANGS` array to `buildLocalizedAlternates()` — adds `x-default` hreflang to all pages
-- [ ] Add FAQ + WebPage schema JSON-LD to all Moltbot + OpenClaw pages
-- [ ] OpenClaw Batch 2: 5 new pages (see Phase 2 above)
-- [ ] Compare Batch 2: 5 new pages (vs-crowdstrike, vs-datadog, vs-falco, vs-lacework, vs-pagerduty)
+- [ ] Add FAQ + WebPage schema JSON-LD to all Moltbot + OpenClaw pages (rich snippets)
+- [ ] Compare Batch 4: `clawguru-vs-snyk`, `moltbot-vs-victorops`, `openclaw-vs-ossec`
+- [ ] `/de/check` page: add `check-methodology-30-seconds` internal link more prominently
 
 **MEDIUM — Sprint 2**
-- [ ] Solutions Batch 2: ISO27001, PCI-DSS, HIPAA pages
+- [ ] Solutions Batch 2: ISO27001, PCI-DSS, HIPAA pages (still pending)
 - [ ] Africa expansion route: `/api/geo/africa-expansion`
 - [ ] MEA expansion route: `/api/geo/mea-expansion`
 - [ ] Moltbot Batch 4: 5 AI-agent focused pages
+- [ ] Academy/Blog section with weekly CVE analysis pages (`/de/academy/cve-YYYY-XXXXX`) — fresh content signal
 
 **LOW — Ongoing**
 - [ ] 250 Moltbot/AI-Agent pages (Mycelium Content Architect v3)
@@ -956,9 +961,59 @@ Will be resolved automatically when upgrading to Next.js 15 + eslint 9 (future s
 ### Next 5 Immediate Actions (in Order)
 1. Set Vercel env vars (manual, Vercel dashboard)
 2. Run Asia/LatAm DB seeding (HTTP call with secret)
-3. Resubmit sitemap in Google Search Console
-4. Migrate Moltbot pages to `buildLocalizedAlternates()` — write a batch script
-5. OpenClaw Batch 2 — create 5 new pages using the template in §5
+3. Resubmit sitemap in Google Search Console after new compare pages deploy
+4. Build `/de/kubernetes-security` Pillar Page
+5. Add FAQPage + WebPage schema JSON-LD to all Moltbot pages (batch edit)
+
+---
+
+## 13. TRAFFIC GROWTH STRATEGY (Added 12.04.2026)
+
+### The 5 Core Traffic Levers
+
+**Lever 1 — High-Intent Tool Pages (Priority: CRITICAL)**
+`/de/check` and `/de/roast-my-stack` are the highest-converting pages.
+- `/de/check`: Proof bullets, Score methodology, 5 FAQ items, sharp CTA copy (done 12.04)
+- `/de/roast-my-stack`: Example stacks, FAQ section, FAQPage schema (done 12.04)
+- Target KPI: +20% check_start_rate within 14 days
+
+**Lever 2 — Compare Pages (Priority: HIGH)**
+High commercial intent, 3-5× better conversion than info content.
+- Existing pattern: `clawguru-vs-wiz` (template confirmed working)
+- Next targets: `clawguru-vs-snyk`, `moltbot-vs-victorops`, `openclaw-vs-ossec`
+- Always include: comparison table, "when to choose which" section, internal links
+
+**Lever 3 — Pillar Pages + Topic Clusters (Priority: HIGH)**
+Missing for: Kubernetes, Docker, AWS, Linux, Compliance.
+- Format: 2000+ words, TL;DR, checklist, common misconfigs, linked runbooks, FAQPage schema
+- Each pillar links to 5+ cluster pages; cluster pages link back to pillar
+- Start with `/de/kubernetes-security` (highest search volume)
+
+**Lever 4 — FAQPage + HowTo Schema on Content Pages (Priority: MEDIUM)**
+Rich snippets increase CTR by 20-30% without ranking change.
+- Add to ALL Moltbot pages: `FAQPage` JSON-LD with 3-5 Q&As
+- Add to ALL OpenClaw pages: `HowTo` JSON-LD for step-by-step guides
+- Template already in §4 Schema Markup section
+
+**Lever 5 — Fresh Content Signal (Priority: MEDIUM)**
+- Weekly CVE analysis pages at `/de/academy/cve-YYYY-XXXXX`
+- Each page: CVE summary, affected services, fix runbook link, CVSS score
+- ~50 new indexable pages/year with guaranteed freshness signal
+
+### Compare Page Template Rules
+All compare pages MUST follow this structure:
+1. "Not a Pentest" amber notice box
+2. H1 with both tool names + year
+3. Intro paragraph (2-3 sentences, what each tool does)
+4. Comparison table (`min-w-full bg-gray-900 border border-gray-700 rounded-lg` — see Rule 6)
+5. "When to choose which" section (2 cards: green for ClawGuru/OpenClaw, blue for competitor)
+6. Further resources section (internal links to matching runbooks/pages)
+7. Slug added to `COMPARE_SLUGS` in `app/sitemaps/[name]/route.ts`
+
+### Dictionary Key Rule for New Check/Tool Pages
+When adding new keys to `dictionaries/de.json` and `dictionaries/en.json`, also update:
+- `lib/getDictionary.ts` → the `Dictionary` type definition for the relevant section
+- All 14 other locale JSON files (or rely on `deepMerge` fallback to EN)
 
 ---
 

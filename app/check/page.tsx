@@ -18,6 +18,8 @@ export default function CheckPage() {
     { q: c.faq_q1, a: c.faq_a1 },
     { q: c.faq_q2, a: c.faq_a2 },
     { q: c.faq_q3, a: c.faq_a3 },
+    { q: c.faq_q4, a: c.faq_a4 },
+    { q: c.faq_q5, a: c.faq_a5 },
   ]
   const faqJsonLd = {
     "@context": "https://schema.org",
@@ -77,7 +79,37 @@ export default function CheckPage() {
         <div className="mt-8">
           <HeroSecurityCheck />
         </div>
-        <section className="mt-10 rounded-2xl border border-white/10 bg-black/20 p-6 max-w-4xl">
+
+        {/* Proof Bullets */}
+        <section className="mt-10 max-w-4xl">
+          <h2 className="text-xl font-bold text-gray-100 mb-5">{c.proof_heading}</h2>
+          <div className="grid gap-4 sm:grid-cols-3">
+            {[
+              { title: c.proof_1_title, desc: c.proof_1_desc, color: "cyan" },
+              { title: c.proof_2_title, desc: c.proof_2_desc, color: "emerald" },
+              { title: c.proof_3_title, desc: c.proof_3_desc, color: "violet" },
+            ].map((p) => (
+              <div key={p.title} className={`rounded-xl border p-5 ${
+                p.color === "cyan"    ? "border-cyan-900/50 bg-cyan-950/20" :
+                p.color === "emerald" ? "border-emerald-900/50 bg-emerald-950/20" :
+                "border-violet-900/50 bg-violet-950/20"
+              }`}>
+                <p className={`font-semibold text-sm mb-2 ${
+                  p.color === "cyan" ? "text-cyan-300" : p.color === "emerald" ? "text-emerald-300" : "text-violet-300"
+                }`}>{p.title}</p>
+                <p className="text-sm text-gray-400 leading-relaxed">{p.desc}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Score Methodology */}
+        <section className="mt-6 rounded-2xl border border-yellow-900/30 bg-yellow-950/10 p-6 max-w-4xl">
+          <h2 className="text-base font-bold text-yellow-300 mb-2">{c.score_methodology_heading}</h2>
+          <p className="text-sm text-gray-300 leading-relaxed">{c.score_methodology_desc}</p>
+        </section>
+
+        <section className="mt-8 rounded-2xl border border-white/10 bg-black/20 p-6 max-w-4xl">
           <h3 className="text-lg font-bold text-white">
             {c.methodology_title}
           </h3>

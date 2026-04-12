@@ -57,8 +57,19 @@ export default async function ElasticsearchSecurityPage({
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale;
   const prefix = `/${locale}`;
   const coreLinks = getCoreSecurityLinks(locale);
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      { '@type': 'Question', name: locale === 'de' ? 'Warum ist Elasticsearch standardmäßig unsicher?' : 'Why is Elasticsearch insecure by default?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Ältere Elasticsearch-Versionen (< 8.0) hatten keine Authentifizierung by default. Tausende offene Elasticsearch-Instanzen wurden durch Shodan gefunden und Daten gestohlen. Ab ES 8.0 ist Security by default aktiviert. Ältere Versionen: X-Pack Security manuell aktivieren.' : 'Older Elasticsearch versions (< 8.0) had no authentication by default. Thousands of open Elasticsearch instances were found via Shodan and data stolen. From ES 8.0 security is enabled by default. Older versions: manually enable X-Pack Security.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Wie aktiviere ich TLS in Elasticsearch?' : 'How do I enable TLS in Elasticsearch?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'In elasticsearch.yml: xpack.security.enabled: true, xpack.security.transport.ssl.enabled: true, xpack.security.http.ssl.enabled: true. Zertifikate mit elasticsearch-certutil erstellen. Für neue ES 8+ Cluster: Automatisch konfiguriert beim ersten Start.' : 'In elasticsearch.yml: xpack.security.enabled: true, xpack.security.transport.ssl.enabled: true, xpack.security.http.ssl.enabled: true. Create certificates with elasticsearch-certutil. For new ES 8+ clusters: automatically configured on first start.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Wie konfiguriere ich Elasticsearch RBAC?' : 'How do I configure Elasticsearch RBAC?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Elasticsearch bietet built-in Roles (superuser, kibana_admin, viewer) und Custom Roles. Rollen über Kibana UI oder REST API erstellen. Field Level Security schränkt Zugriff auf bestimmte Index-Felder ein. Document Level Security filtert Dokumente per Query.' : 'Elasticsearch offers built-in roles (superuser, kibana_admin, viewer) and custom roles. Create roles via Kibana UI or REST API. Field Level Security restricts access to specific index fields. Document Level Security filters documents by query.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Wie aktiviere ich Elasticsearch Audit Logging?' : 'How do I enable Elasticsearch audit logging?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'In elasticsearch.yml: xpack.security.audit.enabled: true. Loggt alle Authentifizierungs- und Autorisierungs-Events. Konfigurierbar welche Events geloggt werden: access_granted, access_denied, authentication_failed, connection_denied. Logs in Elasticsearch selbst oder in Datei speichern.' : 'In elasticsearch.yml: xpack.security.audit.enabled: true. Logs all authentication and authorization events. Configurable which events are logged: access_granted, access_denied, authentication_failed, connection_denied. Store logs in Elasticsearch itself or file.' } },
+    ],
+  }
   return (
     <main className="min-h-screen bg-gray-800">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <section className="relative overflow-hidden bg-gradient-to-br from-yellow-500 via-yellow-600 to-orange-600 py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl">

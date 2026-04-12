@@ -57,8 +57,19 @@ export default async function VaultHardeningPage({
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale;
   const prefix = `/${locale}`;
   const coreLinks = getCoreSecurityLinks(locale);
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      { '@type': 'Question', name: locale === 'de' ? 'Was ist HashiCorp Vault Auto-Unseal?' : 'What is HashiCorp Vault auto-unseal?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Nach einem Neustart ist Vault versiegelt und muss manuell entsiegelt werden (Shamir Key Shares). Auto-Unseal delegiert das Entsiegeln an einen Cloud KMS (AWS KMS, GCP KMS, Azure Key Vault) oder HSM. Vault startet automatisch ohne manuelle Intervention — wichtig für HA und automatische Recovery.' : 'After a restart Vault is sealed and must be manually unsealed (Shamir key shares). Auto-unseal delegates unsealing to a cloud KMS (AWS KMS, GCP KMS, Azure Key Vault) or HSM. Vault starts automatically without manual intervention — critical for HA and automatic recovery.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Wie konfiguriere ich Vault Audit Logging?' : 'How do I configure Vault audit logging?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Audit Device aktivieren: vault audit enable file file_path=/var/log/vault/audit.log. Vault loggt jeden Request/Response (mit HMAC-Hashes für Secrets). Mindestens 2 Audit Devices konfigurieren — falls ein Device nicht schreibbar ist, blockiert Vault alle Requests (Sicherheitsprinzip).' : 'Enable audit device: vault audit enable file file_path=/var/log/vault/audit.log. Vault logs every request/response (with HMAC hashes for secrets). Configure at least 2 audit devices — if one device is not writable, Vault blocks all requests (security principle).' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Was sind Vault Dynamic Secrets?' : 'What are Vault dynamic secrets?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Dynamic Secrets werden on-demand generiert und haben eine TTL. Vault erstellt z.B. temporäre Datenbankpasswörter die nach X Stunden automatisch widerrufen werden. Kein Passwort-Sharing, kein langes Rotationsintervall. Unterstützt: AWS, GCP, Azure, PostgreSQL, MySQL, MongoDB, SSH, PKI.' : 'Dynamic secrets are generated on-demand and have a TTL. Vault creates e.g. temporary database passwords that are automatically revoked after X hours. No password sharing, no long rotation interval. Supports: AWS, GCP, Azure, PostgreSQL, MySQL, MongoDB, SSH, PKI.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Wie setze ich Vault Policies ein?' : 'How do I implement Vault policies?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Vault Policies (HCL) definieren Pfad-basierte Zugriffsrechte. Beispiel: path "secret/data/app/*" { capabilities = ["read"] }. Policies an Tokens oder Auth-Methoden (AppRole, Kubernetes, AWS) binden. Least-Privilege: jede App bekommt nur Zugriff auf ihre eigenen Secret-Pfade.' : 'Vault policies (HCL) define path-based access rights. Example: path "secret/data/app/*" { capabilities = ["read"] }. Bind policies to tokens or auth methods (AppRole, Kubernetes, AWS). Least-privilege: each app gets access only to its own secret paths.' } },
+    ],
+  }
   return (
     <main className="min-h-screen bg-gray-800">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <section className="relative overflow-hidden bg-gradient-to-br from-slate-700 via-slate-800 to-black py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl">

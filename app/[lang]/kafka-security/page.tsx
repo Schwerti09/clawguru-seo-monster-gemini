@@ -59,8 +59,19 @@ export default async function KafkaSecurityPage({
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale;
   const prefix = `/${locale}`;
   const coreLinks = getCoreSecurityLinks(locale);
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      { '@type': 'Question', name: locale === 'de' ? 'Wie aktiviere ich TLS in Apache Kafka?' : 'How do I enable TLS in Apache Kafka?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'In server.properties: listeners=SSL://0.0.0.0:9093, ssl.keystore.location, ssl.keystore.password, ssl.truststore.location, ssl.truststore.password setzen. Clients brauchen entsprechende SSL-Konfiguration. mTLS mit ssl.client.auth=required erzwingt Client-Zertifikate.' : 'In server.properties: set listeners=SSL://0.0.0.0:9093, ssl.keystore.location, ssl.keystore.password, ssl.truststore.location, ssl.truststore.password. Clients need corresponding SSL configuration. mTLS with ssl.client.auth=required enforces client certificates.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Was ist Kafka SASL/SCRAM Authentifizierung?' : 'What is Kafka SASL/SCRAM authentication?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'SASL/SCRAM-SHA-256 ist der empfohlene Mechanismus für Kafka-Authentifizierung. Credentials in ZooKeeper (< 3.x) oder Kafka selbst (KRaft) gespeichert. Besser als SASL/PLAIN (Klartext) und einfacher als SASL/GSSAPI (Kerberos). User erstellen: kafka-configs.sh --alter --add-config.' : 'SASL/SCRAM-SHA-256 is the recommended mechanism for Kafka authentication. Credentials stored in ZooKeeper (< 3.x) or Kafka itself (KRaft). Better than SASL/PLAIN (cleartext) and simpler than SASL/GSSAPI (Kerberos). Create user: kafka-configs.sh --alter --add-config.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Wie funktioniert Kafka ACL Autorisierung?' : 'How does Kafka ACL authorization work?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Kafka ACLs definieren welcher Principal (User/Service) welche Operationen auf welchen Ressourcen (Topics, Consumer Groups) darf. Hinzufügen: kafka-acls.sh --add --allow-principal User:app --operation Read --topic my-topic. StandardAuthorizer ist der built-in ACL-Manager.' : 'Kafka ACLs define which principal (user/service) is allowed which operations on which resources (topics, consumer groups). Add: kafka-acls.sh --add --allow-principal User:app --operation Read --topic my-topic. StandardAuthorizer is the built-in ACL manager.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Was ist Kafka Topic Encryption at Rest?' : 'What is Kafka topic encryption at rest?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Kafka selbst bietet keine native Encryption at Rest. Optionen: OS-Level Disk Encryption (LUKS), Cloud-Provider Disk Encryption (AWS EBS, GCP PD), Confluent Platform Encryption, oder Application-Level Encryption vor dem Produzieren. Für DSGVO-Compliance empfohlen.' : 'Kafka itself does not offer native encryption at rest. Options: OS-level disk encryption (LUKS), cloud provider disk encryption (AWS EBS, GCP PD), Confluent Platform encryption, or application-level encryption before producing. Recommended for GDPR compliance.' } },
+    ],
+  }
   return (
     <main className="min-h-screen bg-gray-800">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <section className="relative overflow-hidden bg-gradient-to-br from-cyan-700 via-blue-800 to-indigo-900 py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl">

@@ -57,8 +57,19 @@ export default async function ArgoCDSecurityPage({
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale;
   const prefix = `/${locale}`;
   const coreLinks = getCoreSecurityLinks(locale);
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      { '@type': 'Question', name: locale === 'de' ? 'Was ist ArgoCD und warum braucht es Hardening?' : 'What is ArgoCD and why does it need hardening?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'ArgoCD ist ein GitOps-Tool für Kubernetes-Deployments das direkten Cluster-Zugriff hat. Kompromittiertes ArgoCD = vollständige Kontrolle über alle Kubernetes-Cluster. Hardening umfasst RBAC, SSO, Netzwerk-Policies und Secret Management.' : 'ArgoCD is a GitOps tool for Kubernetes deployments with direct cluster access. Compromised ArgoCD = full control over all Kubernetes clusters. Hardening includes RBAC, SSO, network policies and secret management.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Wie konfiguriere ich ArgoCD RBAC?' : 'How do I configure ArgoCD RBAC?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'ArgoCD RBAC in der argocd-rbac-cm ConfigMap konfigurieren. Rollen definieren mit p, [user/group], [resource], [action], [object], [allow/deny]. Least-Privilege: Entwickler nur read auf ihre Apps. Deployment-Recht nur für CI/CD Service Accounts.' : 'Configure ArgoCD RBAC in the argocd-rbac-cm ConfigMap. Define roles with p, [user/group], [resource], [action], [object], [allow/deny]. Least-privilege: developers only read on their apps. Deployment rights only for CI/CD service accounts.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Wie aktiviere ich SSO in ArgoCD?' : 'How do I enable SSO in ArgoCD?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'ArgoCD unterstützt OIDC (Keycloak, Okta, Dex) und SAML. In der argocd-cm ConfigMap: oidc.config mit issuer, clientID, clientSecret konfigurieren. Dex als eingebetteter OIDC Provider ist die einfachste Option für self-hosted Setups.' : 'ArgoCD supports OIDC (Keycloak, Okta, Dex) and SAML. In the argocd-cm ConfigMap: configure oidc.config with issuer, clientID, clientSecret. Dex as embedded OIDC provider is the simplest option for self-hosted setups.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Wie schütze ich ArgoCD Secrets?' : 'How do I protect ArgoCD secrets?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'ArgoCD Secrets nie im Git-Repo speichern. Optionen: Sealed Secrets (bitnami), External Secrets Operator mit Vault/AWS SSM, SOPS für verschlüsselte Secrets im Repo, oder ArgoCD Vault Plugin. Kubernetes Secrets sind nur Base64-kodiert — nicht verschlüsselt.' : 'Never store ArgoCD secrets in Git repos. Options: Sealed Secrets (bitnami), External Secrets Operator with Vault/AWS SSM, SOPS for encrypted secrets in repo, or ArgoCD Vault Plugin. Kubernetes Secrets are only Base64-encoded — not encrypted.' } },
+    ],
+  }
   return (
     <main className="min-h-screen bg-gray-800">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <section className="relative overflow-hidden bg-gradient-to-br from-cyan-600 via-blue-700 to-indigo-800 py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl">

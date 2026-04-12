@@ -25,9 +25,20 @@ export default function AWSIAMPage({ params }: { params: { lang: string } }) {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale;
   const prefix = `/${locale}`;
   const coreLinks = getCoreSecurityLinks(locale);
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      { '@type': 'Question', name: locale === 'de' ? 'Was ist das Least-Privilege-Prinzip in AWS IAM?' : 'What is the least privilege principle in AWS IAM?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Least Privilege bedeutet: jede IAM-Entität bekommt nur die Rechte die sie für ihre Aufgabe braucht — nicht mehr. Starte mit Deny-All, füge nur benötigte Aktionen auf bestimmte Ressourcen hinzu. AWS IAM Access Analyzer hilft unused permissions zu identifizieren.' : 'Least privilege means: every IAM entity gets only the rights it needs for its task — nothing more. Start with deny-all, add only required actions on specific resources. AWS IAM Access Analyzer helps identify unused permissions.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Was sind AWS Service Control Policies (SCPs)?' : 'What are AWS Service Control Policies (SCPs)?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'SCPs sind AWS Organizations-Policies die maximale Berechtigungen für alle Accounts in einer OU definieren. SCPs überschreiben IAM-Policies — selbst ein Admin kann keine durch SCP verbotenen Aktionen ausführen. Ideal für guardrails: kein Root-Zugriff, nur bestimmte Regions erlaubt.' : 'SCPs are AWS Organizations policies that define maximum permissions for all accounts in an OU. SCPs override IAM policies — even an admin cannot perform actions forbidden by SCP. Ideal for guardrails: no root access, only certain regions allowed.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Was ist AWS IAM OIDC und wofür brauche ich es?' : 'What is AWS IAM OIDC and what do I need it for?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'OIDC Identity Provider erlaubt externen Systemen (GitHub Actions, GitLab CI, Kubernetes) temporäre AWS-Credentials über sts:AssumeRoleWithWebIdentity zu erhalten — ohne gespeicherte Access Keys. Sicherster Weg für CI/CD-Pipelines AWS zu nutzen.' : 'OIDC Identity Provider allows external systems (GitHub Actions, GitLab CI, Kubernetes) to obtain temporary AWS credentials via sts:AssumeRoleWithWebIdentity — without stored access keys. Most secure way for CI/CD pipelines to use AWS.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Wie erkenne ich überprivilegierte IAM-Rollen?' : 'How do I detect overprivileged IAM roles?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Tools: AWS IAM Access Analyzer findet unused access. AWS CloudTrail + Athena für Analyse welche Actions tatsächlich genutzt werden. IAM Last Accessed Information zeigt wann Permissions zuletzt genutzt wurden. Drittanbieter: Cloudsploit, Snyk Cloud, tfsec für IaC-Analyse.' : 'Tools: AWS IAM Access Analyzer finds unused access. AWS CloudTrail + Athena for analysis of which actions are actually used. IAM Last Accessed Information shows when permissions were last used. Third-party: Cloudsploit, Snyk Cloud, tfsec for IaC analysis.' } },
+    ],
+  }
 
   return (
     <main className="min-h-screen bg-gray-800">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <section className="relative overflow-hidden bg-gradient-to-br from-orange-500 via-amber-600 to-yellow-600 py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl">

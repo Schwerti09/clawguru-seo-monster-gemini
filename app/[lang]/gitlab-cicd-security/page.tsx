@@ -57,8 +57,19 @@ export default async function GitLabSecurityPage({
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale;
   const prefix = `/${locale}`;
   const coreLinks = getCoreSecurityLinks(locale);
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      { '@type': 'Question', name: locale === 'de' ? 'Wie sichere ich GitLab CI/CD Secrets ab?' : 'How do I secure GitLab CI/CD secrets?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'GitLab CI/CD Variables in den Project/Group Settings speichern, nicht im .gitlab-ci.yml. Protected Variables nur für Protected Branches/Tags. Masked Variables werden in Logs ausgeblendet. Für Enterprise: HashiCorp Vault Integration für dynamische Secrets.' : 'Store GitLab CI/CD variables in Project/Group Settings, not in .gitlab-ci.yml. Protected Variables only for protected branches/tags. Masked Variables are hidden in logs. For enterprise: HashiCorp Vault integration for dynamic secrets.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Was sind GitLab Protected Branches?' : 'What are GitLab protected branches?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Protected Branches verhindern direktes Pushen auf main/production ohne Merge Request. Konfiguration: Settings > Repository > Protected Branches. Allowed to merge: Maintainers, Allowed to push: No one. Erzwingt Code Review und verhindert direkten Code-Push in Production.' : 'Protected branches prevent direct pushing to main/production without merge request. Configuration: Settings > Repository > Protected Branches. Allowed to merge: Maintainers, Allowed to push: No one. Enforces code review and prevents direct code push to production.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Wie aktiviere ich SAST in GitLab CI?' : 'How do I enable SAST in GitLab CI?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'GitLab SAST in .gitlab-ci.yml einbinden: include: template: Security/SAST.gitlab-ci.yml. Unterstützt 15+ Sprachen automatisch. Findings erscheinen im Merge Request als Security-Report. GitLab Ultimate: Vulnerability Management Dashboard für zentrales Tracking.' : 'Include GitLab SAST in .gitlab-ci.yml: include: template: Security/SAST.gitlab-ci.yml. Supports 15+ languages automatically. Findings appear in merge request as security report. GitLab Ultimate: Vulnerability Management Dashboard for central tracking.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Wie schütze ich GitLab Runner?' : 'How do I protect GitLab Runner?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'GitLab Runner Hardening: Eigene Runner (nicht Shared) für sensitive Pipelines. Runner Tags für Job-Routing. Runner auf dedizierter VM isolieren. Docker Executor mit --no-new-privileges. Regelmäßige Runner-Updates. Runner Token rotieren. Job Timeout konfigurieren.' : 'GitLab Runner hardening: own runners (not shared) for sensitive pipelines. Runner tags for job routing. Isolate runner on dedicated VM. Docker executor with --no-new-privileges. Regular runner updates. Rotate runner token. Configure job timeout.' } },
+    ],
+  }
   return (
     <main className="min-h-screen bg-gray-800">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <section className="relative overflow-hidden bg-gradient-to-br from-orange-600 via-red-600 to-pink-700 py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl">

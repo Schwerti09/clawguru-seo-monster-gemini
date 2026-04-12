@@ -9,9 +9,21 @@ export const metadata = {
   alternates: { canonical: "/security" },
 }
 
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    { '@type': 'Question', name: 'Was ist der ClawGuru Security Hub?', acceptedAnswer: { '@type': 'Answer', text: 'Der ClawGuru Security Hub ist das zentrale Portal für Security-Ressourcen: CVE-Klassen-Dokumentation, Misconfiguration-Patterns, Incident-Response-Runbooks und Hardening-Guides. Ziel: Praktische, sofort umsetzbare Security-Anleitungen für Self-Hosted und Cloud-Infrastruktur — kein theoretisches Framework, sondern operative Checklisten.' } },
+    { '@type': 'Question', name: 'Welche CVE-Klassen sind am häufigsten bei Self-Hosted?', acceptedAnswer: { '@type': 'Answer', text: 'Häufigste CVE-Klassen bei Self-Hosted: 1) Exposed Admin Panels (kein Auth, öffentlich erreichbar). 2) Default Credentials (nie geänderte Passwörter). 3) Unpatched Dependencies (veraltete npm/pip/apt Pakete). 4) Misconfigured CORS/CSP (zu permissiv). 5) Secrets in Repos (API-Keys in Git). 6) Unverschlüsselte Kommunikation (HTTP statt HTTPS intern). ClawGuru Security Check erkennt viele dieser Klassen automatisch.' } },
+    { '@type': 'Question', name: 'Was sind die häufigsten Security Misconfigurations?', acceptedAnswer: { '@type': 'Answer', text: 'Top Security Misconfigs 2026: Fehlende Security Headers (HSTS, CSP, X-Frame-Options). Offene Ports ohne Firewall. Docker-Container mit --privileged. Kubernetes Pods ohne SecurityContext. S3 Buckets public. SSH mit Password-Auth statt Key-Auth. MongoDB/Redis ohne Auth. Nginx/Apache ohne Rate Limiting. Alle prüfbar mit ClawGuru Security Check in 30 Sekunden.' } },
+    { '@type': 'Question', name: 'Wie starte ich mit Security-Hardening?', acceptedAnswer: { '@type': 'Answer', text: 'Security-Hardening Einstieg: 1) ClawGuru Security Check ausführen (30 Sekunden, kostenlos). 2) Top-3-Findings priorisieren (höchster Impact, einfachste Umsetzung). 3) Passendes Runbook auswählen und umsetzen. 4) Re-Check nach jeder Änderung. 5) Monitoring einrichten (Prometheus + Alertmanager). Quick Wins: HTTPS aktivieren, Security Headers setzen, SSH absichern. Diese 3 Schritte lösen 60% der häufigsten Findings.' } },
+  ],
+}
+
 export default function Security() {
   return (
     <Container>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <div className="py-16 max-w-4xl mx-auto">
         <SectionTitle
           kicker="Hub"

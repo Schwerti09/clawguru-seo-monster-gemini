@@ -12,9 +12,21 @@ export const metadata: Metadata = {
   alternates: { canonical: "/security/zero-knowledge" },
 }
 
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    { '@type': 'Question', name: 'Was bedeutet Zero-Knowledge Security Check?', acceptedAnswer: { '@type': 'Answer', text: 'Zero-Knowledge Security Check bedeutet: die gesamte Analyse läuft im Browser des Nutzers, keine Daten verlassen das Gerät. Configs, Logs und Code werden lokal verarbeitet — kein Server-Call, keine Speicherung, kein Tracking. Ideal für sensible Produktions-Configs, die nicht an externe Dienste gesendet werden dürfen (DSGVO, HIPAA, interne Security-Policies).' } },
+    { '@type': 'Question', name: 'Welche Daten kann ich im Zero-Knowledge Check analysieren?', acceptedAnswer: { '@type': 'Answer', text: 'Zero-Knowledge Check unterstützt: nginx/Apache Config-Files (Prüfung auf Security-Headers, TLS-Config). Docker Compose/Kubernetes YAML (Sicherheits-Misconfigs). .env-Dateien (Secrets-Leaks-Erkennung, nie an Server senden). SSH Config (Hardening-Prüfung). Firewall-Regeln (ufw, iptables). Alle Analysen: 100% client-seitig in WebAssembly oder JavaScript.' } },
+    { '@type': 'Question', name: 'Wie unterscheidet sich Zero-Knowledge vom normalen Security Check?', acceptedAnswer: { '@type': 'Answer', text: 'Normaler ClawGuru Check: analysiert extern sichtbare Eigenschaften (HTTP Headers, TLS) durch Server-seitige Anfragen. Zero-Knowledge Check: analysiert interne Config-Files die du hochlädst, vollständig client-seitig. Kombination ideal: externer Check für öffentliche Exposition + Zero-Knowledge für interne Config-Qualität. Keine dieser Methoden ersetzt einen Pentest.' } },
+    { '@type': 'Question', name: 'Ist der Zero-Knowledge Check wirklich sicher?', acceptedAnswer: { '@type': 'Answer', text: 'Zero-Knowledge Sicherheitsgarantien: Browser-Isolation verhindert Datenaustausch mit Servern. Kein Netzwerk-Request bei der Analyse (überprüfbar im Browser DevTools: Network-Tab zeigt keine Requests beim Upload). Open-Source-Code verifizierbar. Empfehlung für hochsensible Daten: zusätzlich offline-Analyse mit lokalen Tools (lynis, docker-bench-security) erwägen.' } },
+  ],
+}
+
 export default function ZeroKnowledgePage() {
   return (
     <Container>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <div className="py-16 max-w-3xl mx-auto">
         <div className="mb-2 text-xs text-gray-500 uppercase tracking-widest">Security · Zero-Knowledge</div>
         <h1 className="text-4xl md:text-5xl font-black mb-4">

@@ -71,9 +71,21 @@ export default function SolutionsPage({ searchParams }: { searchParams?: { q?: s
     })),
   }
 
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      { '@type': 'Question', name: 'Was sind ClawGuru CVE Solutions?', acceptedAnswer: { '@type': 'Answer', text: 'ClawGuru CVE Solutions sind schrittweise Anleitungen zur Behebung bekannter CVEs (Common Vulnerabilities and Exposures) in Self-Hosted und Cloud-Infrastruktur. Jede Solution enthält: betroffene Komponenten, CVSS-Score, Patch-Anleitung, Workarounds falls kein Patch verfügbar, Verifikationsschritte. Alle Solutions sind für Produktionsumgebungen optimiert.' } },
+      { '@type': 'Question', name: 'Wie finde ich die richtige CVE Solution für mein System?', acceptedAnswer: { '@type': 'Answer', text: 'CVE Solution finden: Suche nach CVE-ID (z.B. CVE-2024-12345), Komponentenname (z.B. "nginx", "docker") oder Schweregrad (Critical, High). ClawGuru Security Check identifiziert automatisch relevante CVEs für deine Domain. Alternativ: SBOM deines Systems mit Moltbot generieren und gegen NVD-Datenbank matchen — zeigt alle betroffenen Komponenten.' } },
+      { '@type': 'Question', name: 'Wie dringend muss ich Critical CVEs patchen?', acceptedAnswer: { '@type': 'Answer', text: 'CVE-Patch-SLAs nach Schweregrad: Critical (CVSS 9.0-10.0): innerhalb 24 Stunden bei aktiven Exploits (CISA KEV), sonst 7 Tage. High (7.0-8.9): 7-14 Tage. Medium (4.0-6.9): 30 Tage. Low (0.1-3.9): 90 Tage oder nächstes Maintenance Window. Bei CISA Known Exploited Vulnerabilities (KEV): immer sofortige Aktion, unabhängig vom CVSS-Score.' } },
+      { '@type': 'Question', name: 'Was tue ich wenn kein Patch für eine CVE verfügbar ist?', acceptedAnswer: { '@type': 'Answer', text: 'CVE ohne Patch — Workaround-Strategie: 1) Betroffene Komponente vom Internet isolieren (nur interner Zugriff). 2) WAF-Regel für bekannte Exploit-Patterns. 3) Virtual Patching via ModSecurity/Nginx-Config. 4) Alternativen evaluieren (andere Komponente ohne CVE). 5) Vendor für Patch-Timeline kontaktieren. 6) CVSS Environmental Score anpassen (reduzierter Scope = niedrigeres effektives Risiko). ClawGuru Solutions dokumentieren verfügbare Workarounds.' } },
+    ],
+  }
+
   return (
     <Container>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <div className="py-16 max-w-6xl mx-auto">
         <nav className="text-sm text-gray-500 mb-6" aria-label="Breadcrumb">
           <ol className="flex flex-wrap items-center gap-2">

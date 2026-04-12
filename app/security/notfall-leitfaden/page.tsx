@@ -11,9 +11,21 @@ export const metadata: Metadata = {
   alternates: { canonical: "/security/notfall-leitfaden" },
 }
 
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    { '@type': 'Question', name: 'Was tue ich in den ersten 10 Minuten nach einem Security Incident?', acceptedAnswer: { '@type': 'Answer', text: 'Erste 10 Minuten Security Incident: 1) Ruhe bewahren, nicht panisch Systeme abschalten. 2) Incident dokumentieren (Zeitstempel, Beobachtungen). 3) Betroffene Systeme identifizieren und isolieren (Network-Segment trennen, nicht rebooten — Forensik-Daten im RAM gehen verloren). 4) Backup-Integrität prüfen. 5) Team und Management informieren. Wichtig: Logs sichern BEVOR man Systeme bereinigt.' } },
+    { '@type': 'Question', name: 'Wie rotiere ich kompromittierte Keys schnell?', acceptedAnswer: { '@type': 'Answer', text: 'Notfall Key Rotation Reihenfolge: 1) Cloud-Provider-Keys (AWS, GCP, Azure) sofort invalidieren — höchstes Risiko. 2) GitHub/GitLab Access Tokens. 3) Datenbank-Passwörter. 4) API-Keys für externe Services (Stripe, Twilio, etc.). 5) SSH-Schlüssel auf allen Servern. Neue Keys sofort deployen, dann alte invalidieren. Access Logs nach jeder Rotation prüfen: Wer hat den alten Key noch genutzt?' } },
+    { '@type': 'Question', name: 'Wann muss ich einen Security Incident melden?', acceptedAnswer: { '@type': 'Answer', text: 'Meldepflichten bei Security Incidents: DSGVO Art. 33: Datenpanne mit personenbezogenen Daten → Aufsichtsbehörde innerhalb 72 Stunden. NIS2: Erhebliche Vorfälle → BSI innerhalb 24h (Initial), 72h (Details), 1 Monat (Abschlussbericht). KRITIS: sofort an BSI. Betroffene Personen (Art. 34 DSGVO): bei hohem Risiko für Rechte/Freiheiten. Intern: CEO/CISO sofort.' } },
+    { '@type': 'Question', name: 'Wie sichere ich Logs für forensische Analyse?', acceptedAnswer: { '@type': 'Answer', text: 'Forensische Log-Sicherung: Logs sofort kopieren BEVOR Systeme bereinigt werden (dd, rsync, CloudTrail-Export). Read-only Mount für betroffene Filesysteme. Hashwerte (SHA-256) aller Log-Files für Integritätsbeweis. Logs an sicheren, nicht kompromittierten Ort senden (S3, separater Log-Server). Zeitraum: mindestens 90 Tage vor Incident. SIEM-Export für zentrale Analyse.' } },
+  ],
+}
+
 export default function Emergency() {
   return (
     <Container>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <div className="py-16 max-w-4xl mx-auto">
         <div className="inline-flex items-center gap-2 px-3 py-2 rounded-full border border-brand-red/30 bg-brand-red/10 text-brand-red text-xs font-black">
           🔥 Notfall-Protokoll

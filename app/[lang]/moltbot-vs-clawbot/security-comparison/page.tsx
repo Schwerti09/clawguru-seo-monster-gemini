@@ -48,9 +48,21 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default function MoltbotVsClawbotPage({ params }: PageProps) {
   const { lang } = params;
   if (!SUPPORTED_LANGUAGES.includes(lang)) notFound();
+  const isDE = lang === 'de'
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      { '@type': 'Question', name: isDE ? 'Was ist der Unterschied zwischen Moltbot und Clawbot?' : 'What is the difference between Moltbot and Clawbot?', acceptedAnswer: { '@type': 'Answer', text: isDE ? 'Moltbot ist ein autonomes Security-Framework f\u00fcr komplexe Multi-Agent-Orchestrierung mit Fokus auf Compliance-Automatisierung und SBOM-Generierung. Clawbot ist ein leichtgewichtiges Security-Tool f\u00fcr einfachere Anwendungsf\u00e4lle mit schnellerem Setup. Moltbot eignet sich f\u00fcr Enterprise, Clawbot f\u00fcr Startups und KMU.' : 'Moltbot is an autonomous security framework for complex multi-agent orchestration with focus on compliance automation and SBOM generation. Clawbot is a lightweight security tool for simpler use cases with faster setup. Moltbot suits enterprise, Clawbot suits startups and SMEs.' } },
+      { '@type': 'Question', name: isDE ? 'Welches Framework ist sicherer: Moltbot oder Clawbot?' : 'Which framework is more secure: Moltbot or Clawbot?', acceptedAnswer: { '@type': 'Answer', text: isDE ? 'Beide Frameworks folgen Security-by-Design-Prinzipien. Moltbot bietet erweiterte Sicherheitsfeatures: granulares RBAC, Compliance-Reporting (SOC2, ISO27001), CVE-Feed-Integration, SBOM-Generierung. Clawbot hat einfachere Angriffsoberfl\u00e4che durch weniger Komponenten. Die Sicherheit h\u00e4ngt mehr von der Konfiguration als vom Framework ab.' : 'Both frameworks follow security-by-design principles. Moltbot offers advanced security features: granular RBAC, compliance reporting (SOC2, ISO27001), CVE feed integration, SBOM generation. Clawbot has simpler attack surface due to fewer components. Security depends more on configuration than the framework.' } },
+      { '@type': 'Question', name: isDE ? 'F\u00fcr welche Use Cases eignet sich Moltbot vs. Clawbot?' : 'For which use cases is Moltbot vs. Clawbot suitable?', acceptedAnswer: { '@type': 'Answer', text: isDE ? 'Moltbot Use Cases: Enterprise-Compliance (SOC2, ISO27001, HIPAA), Multi-Cloud-Environments, komplexe CI/CD-Pipelines, Regulated Industries. Clawbot Use Cases: Startups, einfache Self-Hosted-Deployments, schnelle Security-Checks, begrenzte Ressourcen. Entscheidungsfaktor: Compliance-Anforderungen und Team-Gr\u00f6\u00dfe.' : 'Moltbot use cases: enterprise compliance (SOC2, ISO27001, HIPAA), multi-cloud environments, complex CI/CD pipelines, regulated industries. Clawbot use cases: startups, simple self-hosted deployments, quick security checks, limited resources. Decision factor: compliance requirements and team size.' } },
+      { '@type': 'Question', name: isDE ? 'Kann ich von Clawbot zu Moltbot migrieren?' : 'Can I migrate from Clawbot to Moltbot?', acceptedAnswer: { '@type': 'Answer', text: isDE ? 'Migration Clawbot zu Moltbot: ClawGuru bietet Migrations-Runbooks f\u00fcr den \u00dcbergang. Schritte: Security-Baseline-Export aus Clawbot, Moltbot-Konfiguration einrichten, Compliance-Policies importieren, Integrations-Tests. Typische Migrationsdauer: 1-4 Wochen abh\u00e4ngig von Komplexit\u00e4t. ClawGuru Copilot unterst\u00fctzt bei der Migration.' : 'Migration Clawbot to Moltbot: ClawGuru provides migration runbooks for the transition. Steps: export security baseline from Clawbot, set up Moltbot configuration, import compliance policies, integration tests. Typical migration duration: 1-4 weeks depending on complexity. ClawGuru Copilot supports during migration.' } },
+    ],
+  }
 
   return (
     <div className="container mx-auto px-4 py-8">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
           <strong className="text-amber-100">"Not a Pentest" Trust-Anker</strong>: Dieser Vergleich dient ausschließlich zur Entscheidungshilfe bei der Wahl des richtigen Security-Frameworks. Keine Angriffswerkzeuge.

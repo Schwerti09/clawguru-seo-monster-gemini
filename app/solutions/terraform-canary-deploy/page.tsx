@@ -61,11 +61,8 @@ export default async function TerraformCanaryDeployPage() {
           </ol>
         </nav>
 
-        <SectionTitle
-          kicker="Infrastructure as Code"
-          title="Terraform Canary Deployment 2026"
-          subtitle="Zero-Downtime Infrastructure Deployments mit Terraform. Canary, Blue-Green, automatisches Rollback und Observability für sichere Produktions-Updates."
-        />
+        <h1 className="text-4xl font-black mb-4 text-gray-100">Terraform Canary Deployment 2026</h1>
+        <p className="text-lg text-gray-300 mb-8">Zero-Downtime Infrastructure Deployments mit Terraform. Canary, Blue-Green, automatisches Rollback und Observability für sichere Produktions-Updates.</p>
 
         <div className="mt-12 space-y-12">
           <section>

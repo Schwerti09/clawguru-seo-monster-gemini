@@ -1,5 +1,4 @@
 import Container from "@/components/shared/Container"
-import SectionTitle from "@/components/shared/SectionTitle"
 import { BASE_URL } from "@/lib/config"
 import { headers } from "next/headers"
 import { DEFAULT_LOCALE, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
@@ -61,11 +60,8 @@ export default async function RabbitMQAuditPage() {
           </ol>
         </nav>
 
-        <SectionTitle
-          kicker="Message Queue Security"
-          title="RabbitMQ Audit & Compliance 2026"
-          subtitle="Vollständige Audit-Lösung für RabbitMQ: TLS, RBAC, Policy-Management und SIEM-Integration. Compliance-ready für SOC2 und ISO 27001."
-        />
+        <h1 className="text-4xl font-black mb-4 text-gray-100">RabbitMQ Audit &amp; Compliance 2026</h1>
+        <p className="text-lg text-gray-300 mb-8">Vollständige Audit-Lösung für RabbitMQ: TLS, RBAC, Policy-Management und SIEM-Integration. Compliance-ready für SOC2 und ISO 27001.</p>
 
         <div className="mt-12 space-y-12">
           <section>

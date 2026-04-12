@@ -1,5 +1,4 @@
 import Container from "@/components/shared/Container"
-import SectionTitle from "@/components/shared/SectionTitle"
 import { BASE_URL } from "@/lib/config"
 import { headers } from "next/headers"
 import { DEFAULT_LOCALE, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
@@ -84,11 +83,8 @@ export default async function ISO27001GCPPage() {
           </ol>
         </nav>
 
-        <SectionTitle
-          kicker="Information Security Management"
-          title="ISO 27001 auf Google Cloud 2026"
-          subtitle="Kompletter Praxisleitfaden für ISO 27001 Zertifizierung auf GCP. Von Risk Assessment bis Audit – mit Annex A Controls & Google Cloud Security Services."
-        />
+        <h1 className="text-4xl font-black mb-4 text-gray-100">ISO 27001 auf Google Cloud 2026</h1>
+        <p className="text-lg text-gray-300 mb-8">Kompletter Praxisleitfaden für ISO 27001 Zertifizierung auf GCP. Von Risk Assessment bis Audit – mit Annex A Controls &amp; Google Cloud Security Services.</p>
 
         {/* Trust Badge */}
         <div className="mt-8 p-4 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 flex items-center gap-3">

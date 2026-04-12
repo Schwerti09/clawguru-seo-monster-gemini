@@ -76,11 +76,8 @@ export default async function GitHubActionsBareMetalPage() {
           </ol>
         </nav>
 
-        <SectionTitle
-          kicker="CI/CD Security"
-          title="GitHub Actions auf Bare Metal 2026"
-          subtitle="Sichere Self-Hosted Runner auf eigenen Servern: Installation, Isolation, Secrets-Management und Canary Deployments für Enterprise-CI/CD."
-        />
+        <h1 className="text-4xl font-black mb-4 text-gray-100">GitHub Actions auf Bare Metal 2026</h1>
+        <p className="text-lg text-gray-300 mb-8">Sichere Self-Hosted Runner auf eigenen Servern: Installation, Isolation, Secrets-Management und Canary Deployments für Enterprise-CI/CD.</p>
 
         <div className="mt-8 p-4 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 flex items-center gap-3">
           <span className="text-emerald-400 text-xl">✓</span>

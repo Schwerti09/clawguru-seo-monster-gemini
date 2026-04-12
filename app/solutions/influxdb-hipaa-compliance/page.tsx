@@ -84,11 +84,8 @@ export default async function InfluxDBHIPAACompliancePage() {
           </ol>
         </nav>
 
-        <SectionTitle
-          kicker="Healthcare Data Security"
-          title="InfluxDB HIPAA Compliance Guide 2026"
-          subtitle="Vollständige HIPAA-Konformität für Zeitreihendaten in Healthcare-Umgebungen. Schritt-für-Schritt Implementierung mit Audit-Trails und BAA-Vorlagen."
-        />
+        <h1 className="text-4xl font-black mb-4 text-gray-100">InfluxDB HIPAA Compliance Guide 2026</h1>
+        <p className="text-lg text-gray-300 mb-8">Vollständige HIPAA-Konformität für Zeitreihendaten in Healthcare-Umgebungen. Schritt-für-Schritt Implementierung mit Audit-Trails und BAA-Vorlagen.</p>
 
         {/* Trust Badge */}
         <div className="mt-8 p-4 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 flex items-center gap-3">

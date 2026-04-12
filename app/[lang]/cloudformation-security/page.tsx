@@ -57,8 +57,19 @@ export default function CloudFormationSecurityPage({
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale;
   const prefix = `/${locale}`;
   const coreLinks = getCoreSecurityLinks(locale);
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      { '@type': 'Question', name: locale === 'de' ? 'Was sind AWS CloudFormation Stack Policies?' : 'What are AWS CloudFormation Stack Policies?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Stack Policies schützen kritische Ressourcen vor unbeabsichtigten Updates oder Löschungen. Eine Stack Policy ist ein JSON-Dokument das definiert welche Update-Aktionen auf welche Ressourcen erlaubt sind. Ohne Stack Policy sind alle Ressourcen updatebar. Produtions-Datenbanken und IAM-Rollen immer schützen.' : 'Stack policies protect critical resources from unintentional updates or deletions. A stack policy is a JSON document that defines which update actions are allowed on which resources. Without stack policy all resources are updatable. Always protect production databases and IAM roles.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Wie verhindere ich Secrets in CloudFormation Templates?' : 'How do I prevent secrets in CloudFormation templates?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Secrets nie direkt in CloudFormation-Parameter einbetten. Stattdessen: AWS Secrets Manager (dynamic references: {{resolve:secretsmanager:secret-id}}), AWS SSM Parameter Store für Konfiguration, AWS KMS für Verschlüsselung. CloudFormation-Templates in Git haben keine Secrets — nur References.' : 'Never embed secrets directly in CloudFormation parameters. Instead: AWS Secrets Manager (dynamic references: {{resolve:secretsmanager:secret-id}}), AWS SSM Parameter Store for configuration, AWS KMS for encryption. CloudFormation templates in Git contain no secrets — only references.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Wie aktiviere ich CloudFormation Drift Detection?' : 'How do I enable CloudFormation drift detection?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Drift Detection prüft ob aktuelle Ressourcen-Konfigurationen vom CloudFormation-Template abweichen. Auslösen: aws cloudformation detect-stack-drift --stack-name my-stack. Ergebnis: DRIFTED (Ressource abgewichen), IN_SYNC, NOT_CHECKED. Regelmäßige Drift-Detection per EventBridge-Scheduled-Rule für Compliance.' : 'Drift detection checks if current resource configurations deviate from the CloudFormation template. Trigger: aws cloudformation detect-stack-drift --stack-name my-stack. Result: DRIFTED (resource drifted), IN_SYNC, NOT_CHECKED. Regular drift detection via EventBridge scheduled rule for compliance.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Was ist CloudFormation Guard (cfn-guard)?' : 'What is CloudFormation Guard (cfn-guard)?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'cfn-guard ist ein Policy-as-Code-Tool das CloudFormation-Templates vor dem Deployment prüft. Regeln in eigener DSL definieren: z.B. alle S3-Buckets müssen Verschlüsselung aktiviert haben, keine Security Groups mit 0.0.0.0/0. Integration in CI/CD verhindert nicht-konforme Deployments.' : 'cfn-guard is a policy-as-code tool that validates CloudFormation templates before deployment. Define rules in its own DSL: e.g. all S3 buckets must have encryption enabled, no security groups with 0.0.0.0/0. CI/CD integration prevents non-compliant deployments.' } },
+    ],
+  }
   return (
     <main className="min-h-screen bg-gray-800">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <section className="relative overflow-hidden bg-gradient-to-br from-orange-500 via-amber-600 to-yellow-600 py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl">

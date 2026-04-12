@@ -57,8 +57,19 @@ export default async function DatadogSecurityPage({
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale;
   const prefix = `/${locale}`;
   const coreLinks = getCoreSecurityLinks(locale);
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      { '@type': 'Question', name: locale === 'de' ? 'Wie sichere ich Datadog Agent-Kommunikation ab?' : 'How do I secure Datadog Agent communication?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Datadog Agent kommuniziert verschlüsselt mit HTTPS/TLS zu Datadog-Servern. Für Self-Hosted: Agent Proxy-Konfiguration für Traffic-Kontrolle. API-Key und APP-Key in Kubernetes Secrets oder HashiCorp Vault speichern, nie in Umgebungsvariablen plaintext. Agent-Logs auf minimale Log-Level setzen.' : 'Datadog Agent communicates encrypted with HTTPS/TLS to Datadog servers. For self-hosted: agent proxy configuration for traffic control. Store API key and APP key in Kubernetes Secrets or HashiCorp Vault, never in plaintext environment variables. Set agent logs to minimal log level.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Wie konfiguriere ich Datadog RBAC?' : 'How do I configure Datadog RBAC?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Datadog bietet Built-in Roles (Admin, Standard, Read-Only) und Custom Roles (Enterprise). Custom Roles über die UI oder Terraform (datadog_role) erstellen. Least-Privilege: Entwickler bekommen nur Read-Only auf ihre Service-Dashboards. Sensitive Daten-Indexes nur für Security-Team sichtbar machen.' : 'Datadog offers built-in roles (Admin, Standard, Read-Only) and custom roles (Enterprise). Create custom roles via UI or Terraform (datadog_role). Least-privilege: developers get only read-only on their service dashboards. Make sensitive data indexes visible only to security team.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Was ist Datadog Sensitive Data Scanner?' : 'What is Datadog Sensitive Data Scanner?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Sensitive Data Scanner erkennt und maskiert PII, Kreditkarten, API-Keys und andere sensible Daten in Logs und Traces automatisch. Konfiguration: Organization Settings > Sensitive Data Scanner. Vordefinierte Rules für GDPR/DSGVO, PCI DSS, HIPAA verfügbar. Custom Regex-Rules für unternehmens-spezifische Daten möglich.' : 'Sensitive Data Scanner detects and masks PII, credit cards, API keys and other sensitive data in logs and traces automatically. Configuration: Organization Settings > Sensitive Data Scanner. Predefined rules for GDPR, PCI DSS, HIPAA available. Custom regex rules for company-specific data possible.' } },
+      { '@type': 'Question', name: locale === 'de' ? 'Wie aktiviere ich Datadog Audit Trail?' : 'How do I enable Datadog Audit Trail?', acceptedAnswer: { '@type': 'Answer', text: locale === 'de' ? 'Datadog Audit Trail loggt alle User-Aktionen in der Datadog-Plattform (Dashboard-Änderungen, API-Aufrufe, User-Management). Aktivierung: Organization Settings > Audit Trail. Logs können an S3 oder externe SIEM-Systeme weitergeleitet werden. Pflicht für SOC 2 Type II Compliance.' : 'Datadog Audit Trail logs all user actions in the Datadog platform (dashboard changes, API calls, user management). Activation: Organization Settings > Audit Trail. Logs can be forwarded to S3 or external SIEM systems. Required for SOC 2 Type II compliance.' } },
+    ],
+  }
   return (
     <main className="min-h-screen bg-gray-800">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <section className="relative overflow-hidden bg-gradient-to-br from-purple-600 via-indigo-600 to-violet-700 py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl">

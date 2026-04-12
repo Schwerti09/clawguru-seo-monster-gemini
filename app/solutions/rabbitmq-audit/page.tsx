@@ -45,10 +45,23 @@ export default async function RabbitMQAuditPage() {
     ],
   }
 
+  const isDE = locale === 'de'
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      { '@type': 'Question', name: isDE ? 'Wie aktiviere ich Audit-Logging in RabbitMQ?' : 'How do I enable audit logging in RabbitMQ?', acceptedAnswer: { '@type': 'Answer', text: isDE ? 'RabbitMQ Audit-Logging via rabbitmq_event_exchange Plugin: rabbit mq-plugins enable rabbitmq_event_exchange. Events werden an den Exchange amq.rabbitmq.event geroutet. Alle Admin-Aktionen (Queue erstellen/löschen, User erstellen, Policy ändern) werden geloggt. Für Compliance: Events in Elasticsearch oder Splunk weiterleiten.' : 'RabbitMQ audit logging via rabbitmq_event_exchange plugin: rabbitmq-plugins enable rabbitmq_event_exchange. Events are routed to the exchange amq.rabbitmq.event. All admin actions (create/delete queue, create user, change policy) are logged. For compliance: forward events to Elasticsearch or Splunk.' } },
+      { '@type': 'Question', name: isDE ? 'Wie konfiguriere ich TLS für RabbitMQ?' : 'How do I configure TLS for RabbitMQ?', acceptedAnswer: { '@type': 'Answer', text: isDE ? 'RabbitMQ TLS-Konfiguration in rabbitmq.conf: ssl_options.cacertfile, ssl_options.certfile, ssl_options.keyfile setzen. AMQPS-Port 5671 statt 5672 aktivieren. Management UI auf Port 15671 mit TLS. Minimum TLS 1.2 erzwingen: ssl_options.versions = [tlsv1.2, tlsv1.3]. Client-Zertifikate für Mutual TLS (mTLS) empfohlen.' : 'RabbitMQ TLS configuration in rabbitmq.conf: set ssl_options.cacertfile, ssl_options.certfile, ssl_options.keyfile. Enable AMQPS port 5671 instead of 5672. Management UI on port 15671 with TLS. Enforce minimum TLS 1.2: ssl_options.versions = [tlsv1.2, tlsv1.3]. Client certificates for mutual TLS (mTLS) recommended.' } },
+      { '@type': 'Question', name: isDE ? 'Wie implementiere ich RBAC in RabbitMQ?' : 'How do I implement RBAC in RabbitMQ?', acceptedAnswer: { '@type': 'Answer', text: isDE ? 'RabbitMQ RBAC via Virtual Hosts und User-Tags: Separate VHosts für verschiedene Applikationen/Teams. User-Tags: administrator, monitoring, management, policymaker. Per-VHost Permissions: configure (Queue/Exchange erstellen), write (publish), read (consume). Applikations-User: nur Permissions auf eigenen VHost, keine management-Tag.' : 'RabbitMQ RBAC via virtual hosts and user tags: separate vhosts for different applications/teams. User tags: administrator, monitoring, management, policymaker. Per-vhost permissions: configure (create queue/exchange), write (publish), read (consume). Application users: permissions only on own vhost, no management tag.' } },
+      { '@type': 'Question', name: isDE ? 'Wie integriere ich RabbitMQ in ein SIEM für SOC2?' : 'How do I integrate RabbitMQ into a SIEM for SOC2?', acceptedAnswer: { '@type': 'Answer', text: isDE ? 'RabbitMQ SIEM-Integration für SOC2: Filebeat auf RabbitMQ-Knoten für Log-Shipping. rabbitmq_event_exchange Events via Consumer-Service in strukturiertes JSON transformieren. Kritische Events: failed.authentication, user.created, user.deleted, permission.created. Retention: SOC2 fordert 1 Jahr Log-Aufbewahrung. Alerting auf suspicious patterns.' : 'RabbitMQ SIEM integration for SOC2: Filebeat on RabbitMQ nodes for log shipping. Transform rabbitmq_event_exchange events to structured JSON via consumer service. Critical events: failed.authentication, user.created, user.deleted, permission.created. Retention: SOC2 requires 1 year log retention. Alerting on suspicious patterns.' } },
+    ],
+  }
+
   return (
     <Container>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <div className="py-16 max-w-4xl mx-auto">
         <nav className="text-sm text-gray-500 mb-6" aria-label="Breadcrumb">
           <ol className="flex flex-wrap items-center gap-2">

@@ -46,10 +46,23 @@ export default async function TerraformCanaryDeployPage() {
     ],
   }
 
+  const isDE = locale === 'de'
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      { '@type': 'Question', name: isDE ? 'Was ist ein Canary Deployment mit Terraform?' : 'What is a canary deployment with Terraform?', acceptedAnswer: { '@type': 'Answer', text: isDE ? 'Terraform Canary Deployment: Schrittweises Ausrollen neuer Infrastructure-Versionen. Terraform verwaltet zwei parallele Instanzgruppen (Canary + Stable). Traffic-Weight via Load Balancer variabel: 5% Canary, 95% Stable. Bei Erfolg: Canary-Weight erhöhen. Bei Fehler: Canary-Gruppe via terraform destroy entfernen. Keine Downtime, minimales Risiko.' : 'Terraform canary deployment: gradual rollout of new infrastructure versions. Terraform manages two parallel instance groups (canary + stable). Traffic weight via load balancer variable: 5% canary, 95% stable. On success: increase canary weight. On failure: remove canary group via terraform destroy. No downtime, minimal risk.' } },
+      { '@type': 'Question', name: isDE ? 'Wie implementiere ich Blue-Green mit Terraform?' : 'How do I implement blue-green with Terraform?', acceptedAnswer: { '@type': 'Answer', text: isDE ? 'Terraform Blue-Green: Zwei identische Umgebungen (Blue=aktiv, Green=neu). Terraform-Workspace oder separate State-Files pro Umgebung. DNS/Load Balancer Cutover: terraform apply mit verändertem target_group. Rollback: DNS/LB auf Blue zurücksetzen. Vorteil: Sofortiger Rollback ohne Downtime. Nachteil: Doppelte Infrastrukturkosten während Deployment.' : 'Terraform blue-green: two identical environments (blue=active, green=new). Terraform workspace or separate state files per environment. DNS/load balancer cutover: terraform apply with changed target group. Rollback: switch DNS/LB back to blue. Advantage: instant rollback without downtime. Disadvantage: double infrastructure costs during deployment.' } },
+      { '@type': 'Question', name: isDE ? 'Wie verhindere ich Terraform State-Konflikte bei parallelen Deployments?' : 'How do I prevent Terraform state conflicts in parallel deployments?', acceptedAnswer: { '@type': 'Answer', text: isDE ? 'Terraform State-Isolation: Remote Backend mit State-Locking (S3 + DynamoDB oder Terraform Cloud). Workspaces für Environment-Trennung (terraform workspace new canary). Separate State-Files für Blue/Green vermeidet State-Konflikte. CI/CD: Serial Deployments per Environment, nie parallel auf gleichen State. terraform plan vor apply in Pipeline obligatorisch.' : 'Terraform state isolation: remote backend with state locking (S3 + DynamoDB or Terraform Cloud). Workspaces for environment separation (terraform workspace new canary). Separate state files for blue/green avoids state conflicts. CI/CD: serial deployments per environment, never parallel on same state. terraform plan before apply in pipeline mandatory.' } },
+      { '@type': 'Question', name: isDE ? 'Wie automatisiere ich Rollback in Terraform Canary Deployments?' : 'How do I automate rollback in Terraform canary deployments?', acceptedAnswer: { '@type': 'Answer', text: isDE ? 'Terraform Auto-Rollback: Health-Check in CI/CD-Pipeline nach Canary-Deploy (Prometheus-Metriken, Fehlerrate). Bei Schwellwertüberschreitung: terraform destroy -target=module.canary. Oder: Traffic-Weight auf 0% setzen (canary_weight = 0 Variable). Terraform State-History ermöglicht terraform state rollback zu vorherigem Zustand. Sentinel-Policies verhindern Deploy bei Policy-Verletzungen.' : 'Terraform auto-rollback: health check in CI/CD pipeline after canary deploy (Prometheus metrics, error rate). On threshold breach: terraform destroy -target=module.canary. Or: set traffic weight to 0% (canary_weight = 0 variable). Terraform state history enables terraform state rollback to previous state. Sentinel policies prevent deploy on policy violations.' } },
+    ],
+  }
+
   return (
     <Container>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <div className="py-16 max-w-4xl mx-auto">
         <nav className="text-sm text-gray-500 mb-6" aria-label="Breadcrumb">
           <ol className="flex flex-wrap items-center gap-2">

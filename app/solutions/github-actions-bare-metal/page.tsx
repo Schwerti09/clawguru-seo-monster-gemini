@@ -59,11 +59,23 @@ export default async function GitHubActionsBareMetalPage() {
     { name: "GitHub Self-Hosted Runner Hardening", url: "https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/about-self-hosted-runners" },
     { name: "OWASP CI/CD Security", url: "https://owasp.org/www-project-top-10-ci-cd-security-risks/" },
   ]
+  const isDE = locale === 'de'
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      { '@type': 'Question', name: isDE ? 'Was sind GitHub Actions Self-Hosted Runner?' : 'What are GitHub Actions self-hosted runners?', acceptedAnswer: { '@type': 'Answer', text: isDE ? 'Self-Hosted Runner sind eigene Server die GitHub Actions Workflows ausführen. Vorteile: Zugriff auf interne Ressourcen, keine Minutenlimits, dedizierte Hardware, compliance-konforme Datenverarbeitung.' : 'Self-hosted runners are your own servers running GitHub Actions workflows. Advantages: access to internal resources, no minute limits, dedicated hardware, compliance-compliant data processing.' } },
+      { '@type': 'Question', name: isDE ? 'Wie isoliere ich GitHub Actions Runner sicher?' : 'How do I securely isolate GitHub Actions runners?', acceptedAnswer: { '@type': 'Answer', text: isDE ? 'Ephemeral Runner (nach jedem Job neu erstellen). Docker-in-Docker für Job-Isolation. Separater Linux-User ohne sudo. Network Policies: Runner dürfen nur GitHub API und interne Registry erreichen.' : 'Ephemeral runners (recreate after each job). Docker-in-Docker for job isolation. Separate Linux user without sudo. Network policies: runners may only reach GitHub API and internal registry.' } },
+      { '@type': 'Question', name: isDE ? 'Wie manage ich Secrets in GitHub Actions?' : 'How do I manage secrets in GitHub Actions?', acceptedAnswer: { '@type': 'Answer', text: isDE ? 'Repository-Secrets für repo-spezifische Credentials. Environment Secrets für prod/staging. Niemals Secrets in Logs ausgeben. HashiCorp Vault Action für dynamische Secrets. Rotation alle 90 Tage.' : 'Repository secrets for repo-specific credentials. Environment secrets for prod/staging. Never output secrets in logs. HashiCorp Vault Action for dynamic secrets. Rotate every 90 days.' } },
+      { '@type': 'Question', name: isDE ? 'Was ist ein Canary Deployment mit GitHub Actions?' : 'What is a canary deployment with GitHub Actions?', acceptedAnswer: { '@type': 'Answer', text: isDE ? 'Canary Deployment rollt neue Versionen schrittweise aus: 5% Traffic zuerst, dann 25%, 50%, 100%. Bei Fehlerrate > 1%: automatisches Rollback via GitHub Environments mit required reviews.' : 'Canary deployment rolls out new versions gradually: 5% traffic first, then 25%, 50%, 100%. On error rate > 1%: automatic rollback via GitHub Environments with required reviews.' } },
+    ],
+  }
 
   return (
     <Container>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       
       <div className="py-16 max-w-4xl mx-auto">
         <nav className="text-sm text-gray-500 mb-6" aria-label="Breadcrumb">

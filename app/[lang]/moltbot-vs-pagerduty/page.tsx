@@ -14,12 +14,12 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const pageUrl = `${SITE_URL}/${locale}${PATH}`
-  const title = "Moltbot vs PagerDuty: Incident Response Comparison 2026"
-  const description = "Complete comparison between Moltbot and PagerDuty for incident response, alert management, and DevOps automation. Features, pricing, and deployment analysis."
+  const title = "Moltbot vs PagerDuty: Incident-Response Vergleich 2026"
+  const description = "Moltbot vs PagerDuty im direkten Vergleich: Incident-Response, Alert-Management, DSGVO-Compliance und Self-Hosting. Welche Plattform eignet sich besser für Ihr DevOps-Team?"
   return {
     title,
     description,
-    keywords: ["moltbot vs pagerduty", "incident response", "alert management", "devops automation", "incident management"],
+    keywords: ["moltbot vs pagerduty", "incident response vergleich", "alert management", "devops automatisierung", "selbst-gehostet incident management"],
     authors: [{ name: "ClawGuru Security Team" }],
     openGraph: {
       title,
@@ -33,6 +33,17 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 }
 
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    { "@type": "Question", name: "Was ist der Unterschied zwischen Moltbot und PagerDuty?", acceptedAnswer: { "@type": "Answer", text: "Moltbot ist ein selbst-gehosteter Incident-Response-Automatisierer mit DSGVO-Compliance. PagerDuty ist ein Cloud-SaaS-Alerting-Tool ohne Self-Hosting-Option." } },
+    { "@type": "Question", name: "Kann Moltbot PagerDuty ersetzen?", acceptedAnswer: { "@type": "Answer", text: "Für Teams mit EU-Datenschutzanforderungen und Self-Hosting-Bedarf ja. Moltbot bietet vergleichbare Alerting- und Eskalations-Features plus Security-Automatisierung durch 600+ Runbooks." } },
+    { "@type": "Question", name: "Welche Plattform ist DSGVO-konform?", acceptedAnswer: { "@type": "Answer", text: "Moltbot ist durch Self-Hosting vollständig DSGVO-konform – alle Daten bleiben in Ihrer eigenen Infrastruktur. PagerDuty speichert Daten in US-Rechenzentren." } },
+    { "@type": "Question", name: "Was kostet PagerDuty im Vergleich zu Moltbot?", acceptedAnswer: { "@type": "Answer", text: "PagerDuty startet bei ca. 21$/User/Monat und wird bei wachsenden Teams teuer. Moltbot bietet ein Festpreis-Lizenzmodell ohne nutzungsbasierte Überraschungskosten." } },
+  ],
+}
+
 export default function MoltbotVsPagerdutyPage({ params }: PageProps) {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   if (!SUPPORTED_LOCALES.includes(locale)) notFound()
@@ -40,70 +51,41 @@ export default function MoltbotVsPagerdutyPage({ params }: PageProps) {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-4xl mx-auto">
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: This comparison is for security architecture decisions. No attack tools.
+          <strong className="text-amber-100">Kein Penetrationstest</strong>: Dieser Vergleich dient der Incident-Response-Architekturentscheidung. Keine Angriffswerkzeuge.
         </div>
-        <h1 className="text-4xl font-bold mb-4 text-gray-100">Moltbot vs PagerDuty: Incident Response Comparison</h1>
-        <p className="text-lg text-gray-300 mb-8">Comprehensive incident response platform comparison for alert management, DevOps automation, and security incident handling.</p>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">Moltbot vs PagerDuty: Incident-Response Vergleich 2026</h1>
+        <p className="text-lg text-gray-300 mb-8">Umfassender Vergleich für DevOps-Teams und SREs: Moltbot als selbst-gehostete, DSGVO-konforme Alternative zu PagerDuty mit integrierter Security-Automatisierung und über 600 ausführbaren Runbooks.</p>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Quick Comparison Overview</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Schnellvergleich</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-purple-900 p-6 rounded-lg">
+            <div className="bg-purple-900 p-6 rounded-lg border border-purple-700">
               <h3 className="font-bold text-purple-300 mb-4">Moltbot</h3>
               <ul className="space-y-2 text-sm text-gray-300">
-                <li className="flex items-start">
-                  <span className="text-green-400 mr-2">+</span>
-                  AI-powered incident response
-                </li>
-                <li className="flex items-start">
-                  <span className="text-green-400 mr-2">+</span>
-                  Self-hosted deployment
-                </li>
-                <li className="flex items-start">
-                  <span className="text-green-400 mr-2">+</span>
-                  Security-focused automation
-                </li>
-                <li className="flex items-start">
-                  <span className="text-green-400 mr-2">+</span>
-                  600+ executable runbooks
-                </li>
-                <li className="flex items-start">
-                  <span className="text-green-400 mr-2">+</span>
-                  No vendor lock-in
-                </li>
+                <li className="flex items-start"><span className="text-green-400 mr-2">✓</span>KI-gestützte Incident Response</li>
+                <li className="flex items-start"><span className="text-green-400 mr-2">✓</span>Self-Hosted – vollständige Datenkontrolle</li>
+                <li className="flex items-start"><span className="text-green-400 mr-2">✓</span>Security-fokussierte Automatisierung</li>
+                <li className="flex items-start"><span className="text-green-400 mr-2">✓</span>600+ ausführbare Runbooks</li>
+                <li className="flex items-start"><span className="text-green-400 mr-2">✓</span>Kein Vendor Lock-in</li>
               </ul>
             </div>
             <div className="bg-red-900 p-6 rounded-lg border border-red-700">
-              <h3 className="font-bold text-red-800 mb-4">PagerDuty</h3>
+              <h3 className="font-bold text-red-300 mb-4">PagerDuty</h3>
               <ul className="space-y-2 text-sm text-gray-300">
-                <li className="flex items-start">
-                  <span className="text-green-400 mr-2">+</span>
-                  Industry standard for incident management
-                </li>
-                <li className="flex items-start">
-                  <span className="text-green-400 mr-2">+</span>
-                  24/7 operations support
-                </li>
-                <li className="flex items-start">
-                  <span className="text-green-400 mr-2">+</span>
-                  Enterprise-grade reliability
-                </li>
-                <li className="flex items-start">
-                  <span className="text-green-400 mr-2">+</span>
-                  Comprehensive integrations
-                </li>
-                <li className="flex items-start">
-                  <span className="text-green-400 mr-2">+</span>
-                  Advanced analytics & reporting
-                </li>
+                <li className="flex items-start"><span className="text-green-400 mr-2">✓</span>Branchenstandard für Incident-Management</li>
+                <li className="flex items-start"><span className="text-green-400 mr-2">✓</span>24/7 Betriebsunterstützung</li>
+                <li className="flex items-start"><span className="text-green-400 mr-2">✓</span>Enterprise-Zuverlässigkeit</li>
+                <li className="flex items-start"><span className="text-green-400 mr-2">✓</span>700+ native Integrationen</li>
+                <li className="flex items-start"><span className="text-yellow-400 mr-2">~</span>US-Rechenzentren (DSGVO-Risiko)</li>
               </ul>
             </div>
           </div>
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Feature Comparison</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Feature-Vergleich</h2>
           <div className="overflow-x-auto">
             <table className="min-w-full bg-gray-900 border border-gray-700 rounded-lg">
               <thead className="bg-gray-800">
@@ -114,208 +96,65 @@ export default function MoltbotVsPagerdutyPage({ params }: PageProps) {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-700">
-                <tr>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-100">Incident Management</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-green-400">AI-powered triage & response</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-green-400">Industry-standard incident workflow</td>
-                </tr>
-                <tr className="bg-gray-800">
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-100">Alert Management</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-green-400">Smart alert correlation</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-green-400">Advanced alert grouping</td>
-                </tr>
-                <tr>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-100">Automation</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-green-400">600+ executable runbooks</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-yellow-400">Limited automation capabilities</td>
-                </tr>
-                <tr className="bg-gray-800">
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-100">Deployment</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-green-400">Self-hosted, on-prem, cloud</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-yellow-400">Cloud-only (SaaS)</td>
-                </tr>
-                <tr>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-100">Security Focus</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-green-400">Security incident specialization</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-yellow-400">General incident management</td>
-                </tr>
-                <tr className="bg-gray-800">
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-100">AI/ML Capabilities</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-green-400">Advanced AI automation</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-yellow-400">Basic ML features</td>
-                </tr>
-                <tr>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-100">Pricing Model</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-green-400">Perpetual license + support</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-yellow-400">Per-user subscription</td>
-                </tr>
+                <tr><td className="px-6 py-4 text-sm font-medium text-gray-100">Incident-Management</td><td className="px-6 py-4 text-sm text-green-400">KI-Triage & Automatisierung</td><td className="px-6 py-4 text-sm text-green-400">Branchenstandard-Workflow</td></tr>
+                <tr className="bg-gray-800"><td className="px-6 py-4 text-sm font-medium text-gray-100">Automatisierung</td><td className="px-6 py-4 text-sm text-green-400">600+ ausführbare Runbooks</td><td className="px-6 py-4 text-sm text-yellow-400">Eingeschränkte Automation</td></tr>
+                <tr><td className="px-6 py-4 text-sm font-medium text-gray-100">Deployment</td><td className="px-6 py-4 text-sm text-green-400">Self-Hosted, On-Prem, Cloud</td><td className="px-6 py-4 text-sm text-yellow-400">Nur Cloud (SaaS)</td></tr>
+                <tr className="bg-gray-800"><td className="px-6 py-4 text-sm font-medium text-gray-100">Datenschutz</td><td className="px-6 py-4 text-sm text-green-400">DSGVO-konform, EU-Daten</td><td className="px-6 py-4 text-sm text-red-400">US-Rechenzentren</td></tr>
+                <tr><td className="px-6 py-4 text-sm font-medium text-gray-100">Sicherheitsfokus</td><td className="px-6 py-4 text-sm text-green-400">Security-spezialisiert</td><td className="px-6 py-4 text-sm text-yellow-400">Allgemeines Alerting</td></tr>
+                <tr className="bg-gray-800"><td className="px-6 py-4 text-sm font-medium text-gray-100">Preismodell</td><td className="px-6 py-4 text-sm text-green-400">Festpreis-Lizenz</td><td className="px-6 py-4 text-sm text-yellow-400">Pro User/Monat</td></tr>
               </tbody>
             </table>
           </div>
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Use Case Analysis</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Wann welche Plattform wählen?</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-gray-800 border border-gray-700 rounded-lg p-6">
-              <h3 className="font-bold text-cyan-400 mb-4">Choose Moltbot if:</h3>
-              <ul className="space-y-3 text-sm">
-                <li className="flex items-start">
-                  <span className="text-purple-400 mr-2">-</span>
-                  Security incident response is priority
-                </li>
-                <li className="flex items-start">
-                  <span className="text-purple-400 mr-2">-</span>
-                  You need extensive automation
-                </li>
-                <li className="flex items-start">
-                  <span className="text-purple-400 mr-2">-</span>
-                  You want self-hosted deployment
-                </li>
-                <li className="flex items-start">
-                  <span className="text-purple-400 mr-2">-</span>
-                  You need AI-powered triage
-                </li>
-                <li className="flex items-start">
-                  <span className="text-purple-400 mr-2">-</span>
-                  You prefer predictable costs
-                </li>
+              <h3 className="font-bold text-cyan-400 mb-4">Moltbot wählen wenn:</h3>
+              <ul className="space-y-3 text-sm text-gray-300">
+                <li className="flex items-start"><span className="text-purple-400 mr-2">→</span>Security-Incident-Response Priorität hat</li>
+                <li className="flex items-start"><span className="text-purple-400 mr-2">→</span>Umfangreiche Automatisierung benötigt wird</li>
+                <li className="flex items-start"><span className="text-purple-400 mr-2">→</span>DSGVO-konformes Self-Hosting gewünscht ist</li>
+                <li className="flex items-start"><span className="text-purple-400 mr-2">→</span>KI-gestützte Triage erforderlich ist</li>
+                <li className="flex items-start"><span className="text-purple-400 mr-2">→</span>Planbare Fixkosten bevorzugt werden</li>
               </ul>
             </div>
             <div className="bg-gray-800 border border-gray-700 rounded-lg p-6">
-              <h3 className="font-bold text-cyan-400 mb-4">Choose PagerDuty if:</h3>
-              <ul className="space-y-3 text-sm">
-                <li className="flex items-start">
-                  <span className="text-red-400 mr-2">-</span>
-                  You need industry-standard reliability
-                </li>
-                <li className="flex items-start">
-                  <span className="text-red-400 mr-2">-</span>
-                  You have 24/7 operations teams
-                </li>
-                <li className="flex items-start">
-                  <span className="text-red-400 mr-2">-</span>
-                  You need enterprise support
-                </li>
-                <li className="flex items-start">
-                  <span className="text-red-400 mr-2">-</span>
-                  You want cloud-native solution
-                </li>
-                <li className="flex items-start">
-                  <span className="text-red-400 mr-2">-</span>
-                  You need comprehensive integrations
-                </li>
+              <h3 className="font-bold text-red-300 mb-4">PagerDuty wählen wenn:</h3>
+              <ul className="space-y-3 text-sm text-gray-300">
+                <li className="flex items-start"><span className="text-red-400 mr-2">→</span>Branchenstandard-Zuverlässigkeit nötig ist</li>
+                <li className="flex items-start"><span className="text-red-400 mr-2">→</span>24/7-Betriebsteams vorhanden sind</li>
+                <li className="flex items-start"><span className="text-red-400 mr-2">→</span>Enterprise-Support erforderlich ist</li>
+                <li className="flex items-start"><span className="text-red-400 mr-2">→</span>Cloud-native Lösung bevorzugt wird</li>
+                <li className="flex items-start"><span className="text-red-400 mr-2">→</span>700+ Integrationen out-of-the-box benötigt</li>
               </ul>
             </div>
           </div>
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Technical Architecture</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Preisvergleich 2026</h2>
           <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <h3 className="font-bold text-cyan-400 mb-3">Moltbot Architecture</h3>
+              <div className="bg-gray-900 p-4 rounded-lg border border-gray-700">
+                <h3 className="font-bold text-purple-300 mb-3">Moltbot Preise</h3>
                 <ul className="space-y-2 text-sm text-gray-300">
-                  <li>PostgreSQL + Supabase backend</li>
-                  <li>Next.js 14 frontend</li>
-                  <li>AI-powered incident engine</li>
-                  <li>Mycelium graph database</li>
-                  <li>Docker/Kubernetes deployment</li>
-                  <li>Security rule engine</li>
+                  <li><strong className="text-gray-100">Explorer:</strong> Kostenlos (bis 10 Nutzer)</li>
+                  <li><strong className="text-gray-100">Pro:</strong> 2.999$/Jahr (bis 50 Nutzer)</li>
+                  <li><strong className="text-gray-100">Team:</strong> 9.999$/Jahr (unbegrenzt)</li>
+                  <li><strong className="text-gray-100">Enterprise:</strong> Individuelles Angebot</li>
+                  <li className="text-green-400 mt-2">Keine nutzerbasierten Zusatzkosten</li>
                 </ul>
               </div>
-              <div>
-                <h3 className="font-bold text-cyan-400 mb-3">PagerDuty Architecture</h3>
+              <div className="bg-gray-900 p-4 rounded-lg border border-gray-700">
+                <h3 className="font-bold text-red-300 mb-3">PagerDuty Preise</h3>
                 <ul className="space-y-2 text-sm text-gray-300">
-                  <li>Proprietary cloud platform</li>
-                  <li>Microservices architecture</li>
-                  <li>Real-time event processing</li>
-                  <li>Advanced analytics engine</li>
-                  <li>Global CDN infrastructure</li>
-                  <li>Enterprise-grade reliability</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Incident Response Workflow</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto">
-              <h3 className="text-white font-semibold mb-3">Moltbot Workflow</h3>
-              <pre className="text-sm">
-{`# Moltbot Incident Response
-1. AI-powered alert analysis
-2. Automatic threat classification
-3. Execute security runbooks
-4. Real-time remediation
-5. Post-incident learning
-6. Automated compliance reporting`}</pre>
-            </div>
-            <div className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto">
-              <h3 className="text-white font-semibold mb-3">PagerDuty Workflow</h3>
-              <pre className="text-sm">
-{`# PagerDuty Incident Management
-1. Alert ingestion & routing
-2. Escalation policy execution
-3. On-call notification
-4. Incident coordination
-5. Resolution tracking
-6. Post-mortem analysis`}</pre>
-            </div>
-          </div>
-        </section>
-
-        <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Integration & Ecosystem</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-purple-900 p-4 rounded-lg border border-purple-700">
-              <h3 className="font-semibold text-purple-300 mb-2">Moltbot Integrations</h3>
-              <ul className="text-sm space-y-1">
-                <li>Security tools (Wazuh, Osquery)</li>
-                <li>SIEM systems (ELK, Splunk)</li>
-                <li>Container platforms (K8s, Docker)</li>
-                <li>Cloud providers (AWS, GCP, Azure)</li>
-                <li>Custom API endpoints</li>
-              </ul>
-            </div>
-            <div className="bg-red-900 p-4 rounded-lg border border-red-700">
-              <h3 className="font-semibold text-red-300 mb-2">PagerDuty Integrations</h3>
-              <ul className="text-sm space-y-1">
-                <li>700+ native integrations</li>
-                <li>Monitoring tools (Datadog, New Relic)</li>
-                <li>Chat platforms (Slack, Teams)</li>
-                <li>ITSM systems (ServiceNow, Jira)</li>
-                <li>Developer tools (GitHub, GitLab)</li>
-              </ul>
-            </div>
-          </div>
-        </section>
-
-        <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Alert Management Comparison</h2>
-          <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-gray-800 p-4 rounded border">
-                <h3 className="font-bold text-cyan-400 mb-3">Moltbot Alert Features</h3>
-                <ul className="space-y-2 text-sm text-gray-300">
-                  <li><strong>AI Triage:</strong> Automatic severity classification</li>
-                  <li><strong>Correlation:</strong> Smart alert grouping</li>
-                  <li><strong>Context:</strong> Security threat intelligence</li>
-                  <li><strong>Automation:</strong> One-click remediation</li>
-                  <li className="text-green-400">Security-focused analysis</li>
-                </ul>
-              </div>
-              <div className="bg-gray-800 p-4 rounded border">
-                <h3 className="font-bold text-cyan-400 mb-3">PagerDuty Alert Features</h3>
-                <ul className="space-y-2 text-sm text-gray-300">
-                  <li><strong>Routing:</strong> Advanced alert routing</li>
-                  <li><strong>Suppression:</strong> Intelligent alert suppression</li>
-                  <li><strong>Context:</strong> Rich alert metadata</li>
-                  <li><strong>Escalation:</strong> Multi-level escalation policies</li>
-                  <li className="text-green-400">Enterprise-grade reliability</li>
+                  <li><strong className="text-gray-100">Business:</strong> 29$/Nutzer/Monat</li>
+                  <li><strong className="text-gray-100">Digital Operations:</strong> 49$/Nutzer/Monat</li>
+                  <li><strong className="text-gray-100">Enterprise:</strong> Individuell</li>
+                  <li><strong className="text-gray-100">Event Intelligence:</strong> Zusatzkosten</li>
+                  <li className="text-red-400 mt-2">Wird bei großen Teams teuer</li>
                 </ul>
               </div>
             </div>
@@ -323,73 +162,31 @@ export default function MoltbotVsPagerdutyPage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Pricing Comparison</h2>
-          <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-gray-800 p-4 rounded border">
-                <h3 className="font-bold text-cyan-400 mb-3">Moltbot Pricing</h3>
-                <ul className="space-y-2 text-sm text-gray-300">
-                  <li><strong>Explorer:</strong> Free tier (up to 10 users)</li>
-                  <li><strong>Pro:</strong> $2,999/year (up to 50 users)</li>
-                  <li><strong>Team:</strong> $9,999/year (unlimited users)</li>
-                  <li><strong>Enterprise:</strong> Custom pricing</li>
-                  <li className="text-green-400">No per-user fees after license</li>
-                </ul>
-              </div>
-              <div className="bg-gray-800 p-4 rounded border">
-                <h3 className="font-bold text-cyan-400 mb-3">PagerDuty Pricing</h3>
-                <ul className="space-y-2 text-sm text-gray-300">
-                  <li><strong>Business:</strong> $29/user/month</li>
-                  <li><strong>Digital Operations:</strong> $49/user/month</li>
-                  <li><strong>Enterprise:</strong> Custom pricing</li>
-                  <li><strong>Event Intelligence:</strong> Additional fees</li>
-                  <li className="text-red-400">Can be expensive for large teams</li>
-                </ul>
-              </div>
-            </div>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Häufige Fragen (FAQ)</h2>
+          <div className="space-y-4">
+            {faqSchema.mainEntity.map((item, i) => (
+              <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
+                <summary className="font-semibold text-gray-100 cursor-pointer">{item.name}</summary>
+                <p className="mt-3 text-sm text-gray-300">{item.acceptedAnswer.text}</p>
+              </details>
+            ))}
           </div>
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Security & Compliance</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-purple-900 p-4 rounded-lg border border-purple-700">
-              <h3 className="font-semibold text-purple-300 mb-2">Moltbot Security</h3>
-              <ul className="text-sm space-y-1">
-                <li>GDPR/DSGVO compliant by design</li>
-                <li>Self-hosted data control</li>
-                <li>End-to-end encryption</li>
-                <li>Security incident specialization</li>
-                <li>Comprehensive audit trails</li>
-              </ul>
-            </div>
-            <div className="bg-red-900 p-4 rounded-lg border border-red-700">
-              <h3 className="font-semibold text-red-300 mb-2">PagerDuty Security</h3>
-              <ul className="text-sm space-y-1">
-                <li>SOC 2 Type II certified</li>
-                <li>ISO 27001 compliant</li>
-                <li>HIPAA compliant</li>
-                <li>Role-based access control</li>
-                <li>Data encryption at rest & in transit</li>
-              </ul>
-            </div>
-          </div>
-        </section>
-
-        <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Further Resources</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Weiterführende Ressourcen</h2>
           <div className="grid grid-cols-2 gap-4">
-            <a href={`/${locale}/securitycheck`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
+            <a href={`/${locale}/check`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Security Check</div>
-              <div className="text-sm text-gray-300">Scan your system now</div>
+              <div className="text-sm text-gray-300">System jetzt scannen</div>
             </a>
             <a href={`/${locale}/runbooks`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Runbooks</div>
-              <div className="text-sm text-gray-300">600+ security playbooks</div>
+              <div className="text-sm text-gray-300">600+ Security-Playbooks</div>
             </a>
-            <a href={`/${locale}/openclaw`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
-              <div className="font-semibold text-cyan-400">OpenClaw Framework</div>
-              <div className="text-sm text-gray-300">Self-hosted security</div>
+            <a href={`/${locale}/moltbot/incident-response-automation`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
+              <div className="font-semibold text-cyan-400">Incident Response</div>
+              <div className="text-sm text-gray-300">Moltbot Automatisierung</div>
             </a>
             <a href={`/${locale}/solutions/kubernetes-security-hardening`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Kubernetes Security</div>

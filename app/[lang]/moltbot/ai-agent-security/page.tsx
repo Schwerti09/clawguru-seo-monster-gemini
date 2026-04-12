@@ -14,12 +14,12 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const pageUrl = `${SITE_URL}/${locale}${PATH}`
-  const title = "AI Agent Security: Complete Protection Framework 2026"
-  const description = "Complete AI agent security framework with threat protection, security controls, and defense mechanisms for autonomous systems and artificial intelligence."
+  const title = "KI-Agenten Sicherheit: Vollständiges Schutz-Framework 2026"
+  const description = "Vollständiges KI-Agenten Sicherheits-Framework: Bedrohungsschutz, Sicherheitskontrollen und Abwehrmechanismen für autonome Systeme. DSGVO-konform mit Moltbot automatisierbar."
   return {
     title,
     description,
-    keywords: ["ai agent security", "autonomous system security", "ai protection", "agent security controls", "artificial intelligence security"],
+    keywords: ["ki agenten sicherheit", "autonome systeme schutz", "ai agent security", "prompt injection schutz", "ki sicherheitskontrollen"],
     authors: [{ name: "ClawGuru Security Team" }],
     openGraph: {
       title,
@@ -33,55 +33,67 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 }
 
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    { "@type": "Question", name: "Wie schützt man KI-Agenten vor Angriffen?", acceptedAnswer: { "@type": "Answer", text: "Durch mehrschichtige Sicherheit: Input-Validierung und Sanitierung auf Eingabeebene, Sandbox-Ausführung und Ressourcenlimits auf Verarbeitungsebene, Output-Filterung auf Ausgabeebene sowie kontinuierliches Verhaltensmonitoring." } },
+    { "@type": "Question", name: "Was ist Prompt Injection bei KI-Agenten?", acceptedAnswer: { "@type": "Answer", text: "Prompt Injection ist ein Angriff, bei dem bösartige Eingaben das Verhalten eines KI-Agenten manipulieren. Schutzmaßnahmen umfassen Input-Validierung, Prompt-Templates, Anomalieerkennung und Verhaltensmonitoring." } },
+    { "@type": "Question", name: "Welche ML-Sicherheitskontrollen sind wichtig?", acceptedAnswer: { "@type": "Answer", text: "Modellverschlüsselung, Integritätsprüfung, adversariales Training, sichere Inferenzumgebungen und Datenschutz durch Federated Learning sind die wichtigsten Sicherheitskontrollen für ML-Systeme." } },
+    { "@type": "Question", name: "Wie unterstützt Moltbot die KI-Agenten Sicherheit?", acceptedAnswer: { "@type": "Answer", text: "Moltbot bietet 600+ ausführbare Security-Runbooks speziell für KI-Agenten-Sicherheit, automatisiertes Incident-Response, Echtzeit-Verhaltensmonitoring und DSGVO-konforme Self-Hosted Infrastruktur." } },
+  ],
+}
+
 export default function AiAgentSecurityPage({ params }: PageProps) {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   if (!SUPPORTED_LOCALES.includes(locale)) notFound()
 
   return (
     <div className="container mx-auto px-4 py-8">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: This guide is for AI agent security and protection. No attack tools.
+          <strong className="text-amber-100">Kein Penetrationstest</strong>: Dieser Leitfaden dient dem Schutz von KI-Agenten. Keine Angriffswerkzeuge.
         </div>
-        <h1 className="text-4xl font-bold mb-4 text-gray-100">AI Agent Security: Complete Protection Framework</h1>
-        <p className="text-lg text-gray-300 mb-8">Complete AI agent security framework with threat protection, security controls, and defense mechanisms for autonomous systems and artificial intelligence.</p>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">KI-Agenten Sicherheit: Vollständiges Schutz-Framework 2026</h1>
+        <p className="text-lg text-gray-300 mb-8">Vollständiges KI-Agenten Sicherheits-Framework mit Bedrohungsschutz, Sicherheitskontrollen und Abwehrmechanismen für autonome Systeme. Mit Moltbot automatisiert und DSGVO-konform.</p>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">AI Agent Security Overview</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">KI-Agenten Sicherheitsüberblick</h2>
           <div className="bg-gray-800 p-4 rounded-lg mb-4 border border-gray-700">
-            <h3 className="font-semibold mb-2 text-gray-100">Security Challenges</h3>
+            <h3 className="font-semibold mb-2 text-gray-100">Sicherheitsherausforderungen</h3>
             <ul className="list-disc list-inside space-y-1 text-gray-300">
-              <li>Autonomous decision-making security</li>
-              <li>Self-modifying code protection</li>
-              <li>Complex interaction security</li>
-              <li>Distributed system vulnerabilities</li>
-              <li>Real-time learning security</li>
+              <li>Sicherheit autonomer Entscheidungen</li>
+              <li>Schutz selbstmodifizierenden Codes</li>
+              <li>Sicherheit komplexer Interaktionen</li>
+              <li>Schwachstellen verteilter Systeme</li>
+              <li>Sicherheit bei Echtzeit-Lernen</li>
             </ul>
           </div>
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Security Architecture</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Sicherheitsarchitektur</h2>
           <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
-                <h3 className="font-bold text-cyan-400 mb-3">Input Layer Security</h3>
+                <h3 className="font-bold text-cyan-400 mb-3">Eingabeschicht-Sicherheit</h3>
                 <ul className="space-y-2 text-sm text-gray-300">
-                  <li>Input validation and sanitization</li>
-                  <li>Prompt injection protection</li>
-                  <li>Data poisoning prevention</li>
-                  <li>Content filtering and moderation</li>
-                  <li>Anomaly detection for inputs</li>
+                  <li>Input-Validierung und Sanitierung</li>
+                  <li>Prompt-Injection-Schutz</li>
+                  <li>Datenvergiftungsprävention</li>
+                  <li>Content-Filterung und Moderation</li>
+                  <li>Anomalieerkennung für Eingaben</li>
                 </ul>
               </div>
               <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
-                <h3 className="font-bold text-cyan-400 mb-3">Processing Layer Security</h3>
+                <h3 className="font-bold text-cyan-400 mb-3">Verarbeitungsschicht-Sicherheit</h3>
                 <ul className="space-y-2 text-sm text-gray-300">
-                  <li>Sandboxed execution environments</li>
-                  <li>Resource allocation limits</li>
-                  <li>Memory and processing constraints</li>
-                  <li>Network access controls</li>
-                  <li>File system isolation</li>
+                  <li>Sandbox-Ausführungsumgebungen</li>
+                  <li>Ressourcenzuteilungslimits</li>
+                  <li>Speicher- und Rechenbeschränkungen</li>
+                  <li>Netzwerkzugriffskontrollen</li>
+                  <li>Dateisystem-Isolation</li>
                 </ul>
               </div>
             </div>
@@ -89,7 +101,7 @@ export default function AiAgentSecurityPage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Threat Protection Mechanisms</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Bedrohungsschutz-Mechanismen</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto">
             <pre>
 {`# AI Agent Threat Protection
@@ -118,27 +130,27 @@ export default function AiAgentSecurityPage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Security Controls Implementation</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Sicherheitskontrollen Implementierung</h2>
           <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
-                <h3 className="font-bold text-cyan-400 mb-3">Preventive Controls</h3>
+                <h3 className="font-bold text-cyan-400 mb-3">Präventive Kontrollen</h3>
                 <ul className="space-y-2 text-sm text-gray-300">
-                  <li>Input validation and sanitization</li>
-                  <li>Prompt engineering and templating</li>
-                  <li>Access control and authentication</li>
-                  <li>Network segmentation and isolation</li>
-                  <li>Secure development practices</li>
+                  <li>Input-Validierung und Sanitierung</li>
+                  <li>Prompt-Engineering und Templates</li>
+                  <li>Zugriffskontrollen und Authentifizierung</li>
+                  <li>Netzwerksegmentierung und Isolation</li>
+                  <li>Sichere Entwicklungspraktiken</li>
                 </ul>
               </div>
               <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
-                <h3 className="font-bold text-cyan-400 mb-3">Detective Controls</h3>
+                <h3 className="font-bold text-cyan-400 mb-3">Erkennende Kontrollen</h3>
                 <ul className="space-y-2 text-sm text-gray-300">
-                  <li>Behavioral analysis and monitoring</li>
-                  <li>Anomaly detection systems</li>
-                  <li>Security logging and auditing</li>
-                  <li>Real-time threat detection</li>
-                  <li>Model performance monitoring</li>
+                  <li>Verhaltensanalyse und Monitoring</li>
+                  <li>Anomalieerkennungssysteme</li>
+                  <li>Security-Logging und Auditing</li>
+                  <li>Echtzeit-Bedrohungserkennung</li>
+                  <li>Modellleistungsüberwachung</li>
                 </ul>
               </div>
             </div>
@@ -146,35 +158,35 @@ export default function AiAgentSecurityPage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Autonomous System Security</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Autonome System-Sicherheit</h2>
           <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
             <div className="space-y-4">
               <div className="flex items-start space-x-4">
                 <div className="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold flex-shrink-0">1</div>
                 <div>
-                  <div className="font-semibold text-gray-100">Decision Validation</div>
-                  <div className="text-sm text-gray-300">Validate autonomous decisions against security policies</div>
+                  <div className="font-semibold text-gray-100">Entscheidungsvalidierung</div>
+                  <div className="text-sm text-gray-300">Autonome Entscheidungen gegen Sicherheitsrichtlinien validieren</div>
                 </div>
               </div>
               <div className="flex items-start space-x-4">
                 <div className="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold flex-shrink-0">2</div>
                 <div>
-                  <div className="font-semibold text-gray-100">Behavior Monitoring</div>
-                  <div className="text-sm text-gray-300">Monitor agent behavior for anomalies and security violations</div>
+                  <div className="font-semibold text-gray-100">Verhaltensmonitoring</div>
+                  <div className="text-sm text-gray-300">Agentenverhalten auf Anomalien und Sicherheitsverstöße überwachen</div>
                 </div>
               </div>
               <div className="flex items-start space-x-4">
                 <div className="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold flex-shrink-0">3</div>
                 <div>
-                  <div className="font-semibold text-gray-100">Intervention Mechanisms</div>
-                  <div className="text-sm text-gray-300">Implement human intervention and override capabilities</div>
+                  <div className="font-semibold text-gray-100">Interventionsmechanismen</div>
+                  <div className="text-sm text-gray-300">Menschliche Eingriffs- und Überschreibungsmöglichkeiten implementieren</div>
                 </div>
               </div>
               <div className="flex items-start space-x-4">
                 <div className="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold flex-shrink-0">4</div>
                 <div>
-                  <div className="font-semibold text-gray-100">Fail-safe Mechanisms</div>
-                  <div className="text-sm text-gray-300">Implement fail-safe mechanisms for security violations</div>
+                  <div className="font-semibold text-gray-100">Fail-Safe-Mechanismen</div>
+                  <div className="text-sm text-gray-300">Ausfallsichere Mechanismen für Sicherheitsverstöße implementieren</div>
                 </div>
               </div>
             </div>
@@ -182,7 +194,7 @@ export default function AiAgentSecurityPage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Machine Learning Security</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Machine-Learning-Sicherheit</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto">
             <pre>
 {`# ML Security Controls
@@ -211,27 +223,27 @@ export default function AiAgentSecurityPage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Compliance and Governance</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Compliance und Governance</h2>
           <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
-                <h3 className="font-bold text-cyan-400 mb-3">Regulatory Compliance</h3>
+                <h3 className="font-bold text-cyan-400 mb-3">Regulatorische Compliance</h3>
                 <ul className="space-y-2 text-sm text-gray-300">
-                  <li>GDPR data protection requirements</li>
-                  <li>AI Act compliance (EU)</li>
-                  <li>Industry-specific regulations</li>
-                  <li>Data retention policies</li>
-                  <li>Privacy by design principles</li>
+                  <li>DSGVO-Datenschutzanforderungen</li>
+                  <li>EU AI Act Compliance</li>
+                  <li>Branchenspezifische Vorschriften</li>
+                  <li>Datenhaltungsrichtlinien</li>
+                  <li>Privacy by Design</li>
                 </ul>
               </div>
               <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
-                <h3 className="font-bold text-cyan-400 mb-3">Ethical Governance</h3>
+                <h3 className="font-bold text-cyan-400 mb-3">Ethische Governance</h3>
                 <ul className="space-y-2 text-sm text-gray-300">
-                  <li>Fairness and bias mitigation</li>
-                  <li>Transparency and explainability</li>
-                  <li>Human oversight requirements</li>
-                  <li>Accountability frameworks</li>
-                  <li>Risk assessment procedures</li>
+                  <li>Fairness und Bias-Minderung</li>
+                  <li>Transparenz und Erklärbarkeit</li>
+                  <li>Anforderungen an menschliche Aufsicht</li>
+                  <li>Rechenschaftsrahmen</li>
+                  <li>Risikobewertungsverfahren</li>
                 </ul>
               </div>
             </div>
@@ -239,27 +251,27 @@ export default function AiAgentSecurityPage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Monitoring and Incident Response</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Monitoring und Incident Response</h2>
           <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
-                <h3 className="font-bold text-cyan-400 mb-3">Real-time Monitoring</h3>
+                <h3 className="font-bold text-cyan-400 mb-3">Echtzeit-Monitoring</h3>
                 <ul className="space-y-2 text-sm text-gray-300">
-                  <li>Agent behavior tracking</li>
-                  <li>Performance metrics monitoring</li>
-                  <li>Resource utilization tracking</li>
-                  <li>Security event correlation</li>
-                  <li>Anomaly detection systems</li>
+                  <li>Agentenverhaltens-Tracking</li>
+                  <li>Leistungsmetriken-Überwachung</li>
+                  <li>Ressourcennutzungs-Tracking</li>
+                  <li>Security-Event-Korrelation</li>
+                  <li>Anomalieerkennungssysteme</li>
                 </ul>
               </div>
               <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
                 <h3 className="font-bold text-cyan-400 mb-3">Incident Response</h3>
                 <ul className="space-y-2 text-sm text-gray-300">
-                  <li>Incident identification and classification</li>
-                  <li>Immediate containment procedures</li>
-                  <li>Investigation and root cause analysis</li>
-                  <li>Remediation and recovery actions</li>
-                  <li>Post-incident review and improvement</li>
+                  <li>Incident-Identifikation und -Klassifikation</li>
+                  <li>Sofortige Eindämmungsmaßnahmen</li>
+                  <li>Untersuchung und Ursachenanalyse</li>
+                  <li>Remediation und Wiederherstellung</li>
+                  <li>Post-Incident-Review und Verbesserung</li>
                 </ul>
               </div>
             </div>
@@ -267,7 +279,7 @@ export default function AiAgentSecurityPage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Testing and Validation</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Testing und Validierung</h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto">
             <pre>
 {`# Security Testing Framework
@@ -300,45 +312,45 @@ export default function AiAgentSecurityPage({ params }: PageProps) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-blue-900 p-4 rounded-lg border border-blue-700">
               <h3 className="font-semibold text-blue-300 mb-2">Security by Design</h3>
-              <p className="text-sm text-blue-200">Implement security controls from the beginning of AI agent development</p>
+              <p className="text-sm text-blue-200">Sicherheitskontrollen von Beginn der KI-Agenten-Entwicklung an implementieren</p>
             </div>
             <div className="bg-green-900 p-4 rounded-lg border border-green-700">
               <h3 className="font-semibold text-green-300 mb-2">Defense in Depth</h3>
-              <p className="text-sm text-green-200">Layer multiple security controls for comprehensive protection</p>
+              <p className="text-sm text-green-200">Mehrere Sicherheitskontrollen für umfassenden Schutz schichten</p>
             </div>
             <div className="bg-yellow-900 p-4 rounded-lg border border-yellow-700">
-              <h3 className="font-semibold text-yellow-300 mb-2">Continuous Monitoring</h3>
-              <p className="text-sm text-yellow-200">Maintain continuous monitoring for security and performance</p>
+              <h3 className="font-semibold text-yellow-300 mb-2">Kontinuierliches Monitoring</h3>
+              <p className="text-sm text-yellow-200">Kontinuierliches Monitoring für Sicherheit und Performance aufrechterhalten</p>
             </div>
             <div className="bg-red-900 p-4 rounded-lg border border-red-700">
-              <h3 className="font-semibold text-red-300 mb-2">Regular Updates</h3>
-              <p className="text-sm text-red-200">Regularly update security controls and threat models</p>
+              <h3 className="font-semibold text-red-300 mb-2">Regelmäßige Updates</h3>
+              <p className="text-sm text-red-200">Sicherheitskontrollen und Bedrohungsmodelle regelmäßig aktualisieren</p>
             </div>
           </div>
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Implementation Examples</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Implementierungsbeispiele</h2>
           <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
-                <h3 className="font-bold text-cyan-400 mb-3">Chatbot Security</h3>
+                <h3 className="font-bold text-cyan-400 mb-3">Chatbot-Sicherheit</h3>
                 <ul className="space-y-2 text-sm text-gray-300">
-                  <li>Input validation and sanitization</li>
-                  <li>Prompt injection protection</li>
-                  <li>Output filtering and monitoring</li>
-                  <li>Rate limiting and throttling</li>
-                  <li>Behavioral analysis</li>
+                  <li>Input-Validierung und Sanitierung</li>
+                  <li>Prompt-Injection-Schutz</li>
+                  <li>Output-Filterung und Monitoring</li>
+                  <li>Rate-Limiting und Throttling</li>
+                  <li>Verhaltensanalyse</li>
                 </ul>
               </div>
               <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
-                <h3 className="font-bold text-cyan-400 mb-3">Input Layer Security</h3>
+                <h3 className="font-bold text-cyan-400 mb-3">Autonome Agenten-Sicherheit</h3>
                 <ul className="space-y-2 text-sm text-gray-300">
-                  <li>Decision validation frameworks</li>
-                  <li>Behavior monitoring systems</li>
-                  <li>Human intervention mechanisms</li>
-                  <li>Fail-safe implementations</li>
-                  <li>Resource constraint enforcement</li>
+                  <li>Entscheidungsvalidierungs-Frameworks</li>
+                  <li>Verhaltensmonitoring-Systeme</li>
+                  <li>Menschliche Eingriffsmechanismen</li>
+                  <li>Fail-Safe-Implementierungen</li>
+                  <li>Ressourcenbeschränkungs-Durchsetzung</li>
                 </ul>
               </div>
             </div>
@@ -346,23 +358,32 @@ export default function AiAgentSecurityPage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Further Resources</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Häufige Fragen (FAQ)</h2>
+          <div className="space-y-4 mb-10">
+            {faqSchema.mainEntity.map((item, i) => (
+              <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
+                <summary className="font-semibold text-gray-100 cursor-pointer">{item.name}</summary>
+                <p className="mt-3 text-sm text-gray-300">{item.acceptedAnswer.text}</p>
+              </details>
+            ))}
+          </div>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Weiterführende Ressourcen</h2>
           <div className="grid grid-cols-2 gap-4">
-            <a href={`/${locale}/securitycheck`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
+            <a href={`/${locale}/check`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Security Check</div>
-              <div className="text-sm text-gray-300">Scan your system now</div>
+              <div className="text-sm text-gray-300">System jetzt scannen</div>
             </a>
             <a href={`/${locale}/runbooks`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Runbooks</div>
-              <div className="text-sm text-gray-300">600+ security playbooks</div>
+              <div className="text-sm text-gray-300">600+ Security-Playbooks</div>
             </a>
-            <a href={`/${locale}/openclaw`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
-              <div className="font-semibold text-cyan-400">OpenClaw Framework</div>
-              <div className="text-sm text-gray-300">Self-hosted security</div>
+            <a href={`/${locale}/moltbot/ai-agent-threat-model`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
+              <div className="font-semibold text-cyan-400">Bedrohungsmodellierung</div>
+              <div className="text-sm text-gray-300">KI-Agenten Threat Modeling</div>
             </a>
-            <a href={`/${locale}/solutions/kubernetes-security-hardening`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
-              <div className="font-semibold text-cyan-400">Kubernetes Security</div>
-              <div className="text-sm text-gray-300">Complete hardening guide</div>
+            <a href={`/${locale}/moltbot/ai-agent-hardening-guide`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
+              <div className="font-semibold text-cyan-400">Härtungsleitfaden</div>
+              <div className="text-sm text-gray-300">KI-Agenten Härtung</div>
             </a>
           </div>
         </section>

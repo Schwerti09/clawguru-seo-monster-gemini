@@ -49,6 +49,17 @@ export async function generateMetadata({
   };
 }
 
+const windowsFaqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    { "@type": "Question", name: "Wie sichert man Active Directory ab?", acceptedAnswer: { "@type": "Answer", text: "Active Directory wird durch das Tier-Modell (Tier 0/1/2), Admin Forest (ESAE), Privileged Access Workstations (PAW), Just-in-Time Admin und strenge GPO-Security-Baselines abgesichert. Kritisch: Domain Controller niemals für reguläre Aufgaben nutzen." } },
+    { "@type": "Question", name: "Was ist Credential Guard in Windows?", acceptedAnswer: { "@type": "Answer", text: "Credential Guard ist ein Windows-Sicherheitsfeature, das LSASS-Prozesse durch Virtualization-Based Security (VBS) isoliert. Es schützt vor Pass-the-Hash und Pass-the-Ticket Angriffen, indem Anmeldeinformationen in einem gesicherten Container gespeichert werden." } },
+    { "@type": "Question", name: "Wie richtet man Windows Security Baselines ein?", acceptedAnswer: { "@type": "Answer", text: "Microsoft Security Compliance Toolkit (SCT) bietet vorkonfigurierte GPO-Baselines für Windows Server. Diese werden per PowerShell oder GPMC importiert und decken Account-Policies, Netzwerksicherheit, Auditrichtlinien und AppLocker-Regeln ab." } },
+    { "@type": "Question", name: "Was ist der Unterschied zwischen AppLocker und Windows Defender Application Control?", acceptedAnswer: { "@type": "Answer", text: "AppLocker bietet regelbasierte Anwendungskontrolle auf Basis von Pfad, Publisher oder Hash. WDAC (Windows Defender Application Control) ist die modernere, kernel-basierte Alternative mit stärkerem Schutz gegen Admin-Manipulationen, aber komplexerer Verwaltung." } },
+  ],
+}
+
 export default async function WindowsSecurityPage({
   params,
 }: {
@@ -59,6 +70,7 @@ export default async function WindowsSecurityPage({
   const coreLinks = getCoreSecurityLinks(locale);
   return (
     <main className="min-h-screen bg-gray-800">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(windowsFaqSchema) }} />
       <section className="relative overflow-hidden bg-gradient-to-br from-blue-700 via-blue-800 to-indigo-900 py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl">

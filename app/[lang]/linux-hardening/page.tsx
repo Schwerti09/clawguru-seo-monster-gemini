@@ -49,6 +49,17 @@ export async function generateMetadata({
   };
 }
 
+const linuxFaqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    { "@type": "Question", name: "Was ist Linux Hardening?", acceptedAnswer: { "@type": "Answer", text: "Linux Hardening bezeichnet die systematische Absicherung eines Linux-Servers durch Kernel-Security (sysctl), Mandatory Access Control (SELinux/AppArmor), Auditd-Logging und CIS-Benchmark-Compliance. Ziel ist die Reduzierung der Angriffsoberfläche." } },
+    { "@type": "Question", name: "Was ist der CIS Benchmark für Linux?", acceptedAnswer: { "@type": "Answer", text: "Der CIS (Center for Internet Security) Benchmark ist ein Industriestandard für Linux-Sicherheitskonfigurationen. Er definiert über 200 Prüfpunkte für Kernel, Authentifizierung, Netzwerk, Logging und Dateisystemberechtigungen." } },
+    { "@type": "Question", name: "SELinux oder AppArmor – was ist besser?", acceptedAnswer: { "@type": "Answer", text: "SELinux bietet feinere Kontrolle durch Typ-Enforcement und ist Standard auf RHEL/CentOS/Fedora. AppArmor ist einfacher zu konfigurieren und Standard auf Ubuntu/Debian. Beide bieten effektiven Schutz – die Wahl hängt von der Distribution ab." } },
+    { "@type": "Question", name: "Wie automatisiert man Linux Hardening mit Moltbot?", acceptedAnswer: { "@type": "Answer", text: "Moltbot bietet 600+ ausführbare Security-Runbooks für Linux Hardening, inklusive automatisierter sysctl-Konfiguration, SELinux-Policy-Deployment, Auditd-Setup und CIS-Benchmark-Compliance-Checks." } },
+  ],
+}
+
 export default async function LinuxHardeningPage({
   params,
 }: {
@@ -59,6 +70,7 @@ export default async function LinuxHardeningPage({
   const coreLinks = getCoreSecurityLinks(locale);
   return (
     <main className="min-h-screen bg-gray-800">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(linuxFaqSchema) }} />
       <section className="relative overflow-hidden bg-gradient-to-br from-slate-800 via-slate-900 to-black py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl">
@@ -99,10 +111,10 @@ export default async function LinuxHardeningPage({
                 <h3 className="font-semibold text-red-900 text-sm">MAC</h3>
                 <p className="text-xs text-red-700">SELinux/AppArmor</p>
               </div>
-              <div className="bg-amber-50 border border-amber-200 rounded-xl p-5 text-center">
+              <div className="bg-amber-900 border border-amber-700 rounded-xl p-5 text-center">
                 <div className="text-3xl mb-2">📊</div>
-                <h3 className="font-semibold text-amber-900 text-sm">Audit</h3>
-                <p className="text-xs text-amber-700">Auditd, syslog</p>
+                <h3 className="font-semibold text-amber-300 text-sm">Audit</h3>
+                <p className="text-xs text-amber-400">Auditd, syslog</p>
               </div>
               <div className="bg-blue-900 border border-blue-700 rounded-xl p-5 text-center">
                 <div className="text-3xl mb-2">⚙️</div>

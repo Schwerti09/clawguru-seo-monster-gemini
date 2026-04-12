@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n";
 import { BASE_URL } from "@/lib/config";
 import { getCoreSecurityLinks } from "@/lib/core-security-links";
@@ -95,17 +95,17 @@ export default async function ArgoCDSecurityPage({
                 </ul>
               </div>
               <div className="bg-blue-900 border border-blue-700 rounded-xl p-6">
-                <h3 className="font-semibold text-blue-900 mb-2">Authorization</h3>
-                <ul className="text-sm text-blue-800 space-y-1">
+                <h3 className="font-semibold text-blue-200 mb-2">Authorization</h3>
+                <ul className="text-sm text-blue-300 space-y-1">
                   <li>• RBAC Policies</li>
                   <li>• AppProject Isolation</li>
                   <li>• Resource Constraints</li>
                   <li>• Multi-Tenancy</li>
                 </ul>
               </div>
-              <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-6">
-                <h3 className="font-semibold text-indigo-900 mb-2">Repository Security</h3>
-                <ul className="text-sm text-indigo-800 space-y-1">
+              <div className="bg-indigo-900 border border-indigo-700 rounded-xl p-6">
+                <h3 className="font-semibold text-indigo-200 mb-2">Repository Security</h3>
+                <ul className="text-sm text-indigo-300 space-y-1">
                   <li>• Allowed Repositories</li>
                   <li>• GPG Signature Verification</li>
                   <li>• Secret Management</li>

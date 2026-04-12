@@ -221,7 +221,7 @@ export default async function XXE2026Page({
           <div className="max-w-4xl mx-auto">
             
             {/* Table of Contents */}
-            <div className="bg-slate-50 rounded-2xl p-6 mb-12 border border-slate-200">
+            <div className="bg-gray-800 rounded-2xl p-6 mb-12 border border-gray-700">
               <h2 className="text-lg font-semibold text-gray-100 mb-4">Inhaltsverzeichnis</h2>
               <ul className="grid md:grid-cols-2 gap-2 text-sm">
                 <li><a href="#was-ist-xxe" className="text-cyan-400 hover:underline">→ Was ist XXE?</a></li>
@@ -305,7 +305,7 @@ export default async function XXE2026Page({
               <h2 className="text-3xl font-bold text-gray-100 mb-6">CVE-Übersicht 2026: Kritische XXE-Schwachstellen</h2>
               
               <div className="grid gap-6 mb-8">
-                <div className="bg-gray-800 border border-slate-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+                <div className="bg-gray-800 border border-gray-700 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
                   <div className="flex items-start justify-between mb-4">
                     <div>
                       <span className="inline-block px-3 py-1 rounded-full bg-red-100 text-red-700 text-sm font-medium mb-2">CRITICAL</span>
@@ -324,7 +324,7 @@ export default async function XXE2026Page({
                   </div>
                 </div>
 
-                <div className="bg-gray-800 border border-slate-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+                <div className="bg-gray-800 border border-gray-700 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
                   <div className="flex items-start justify-between mb-4">
                     <div>
                       <span className="inline-block px-3 py-1 rounded-full bg-orange-100 text-orange-700 text-sm font-medium mb-2">HIGH</span>
@@ -343,7 +343,7 @@ export default async function XXE2026Page({
                   </div>
                 </div>
 
-                <div className="bg-gray-800 border border-slate-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+                <div className="bg-gray-800 border border-gray-700 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
                   <div className="flex items-start justify-between mb-4">
                     <div>
                       <span className="inline-block px-3 py-1 rounded-full bg-yellow-100 text-yellow-700 text-sm font-medium mb-2">MEDIUM</span>
@@ -384,7 +384,7 @@ export default async function XXE2026Page({
               <h2 className="text-3xl font-bold text-gray-100 mb-6">XXE Exploit-Techniken 2026</h2>
               
               <div className="grid md:grid-cols-2 gap-6 mb-8">
-                <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
+                <div className="bg-gray-800 border border-gray-700 rounded-xl p-6">
                   <h3 className="text-lg font-semibold text-gray-100 mb-3 flex items-center gap-2">
                     <span className="w-8 h-8 rounded-lg bg-red-100 text-red-400 flex items-center justify-center text-sm">1</span>
                     File Disclosure
@@ -401,7 +401,7 @@ export default async function XXE2026Page({
                   </div>
                 </div>
 
-                <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
+                <div className="bg-gray-800 border border-gray-700 rounded-xl p-6">
                   <h3 className="text-lg font-semibold text-gray-100 mb-3 flex items-center gap-2">
                     <span className="w-8 h-8 rounded-lg bg-red-100 text-red-400 flex items-center justify-center text-sm">2</span>
                     SSRF
@@ -418,7 +418,7 @@ export default async function XXE2026Page({
                   </div>
                 </div>
 
-                <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
+                <div className="bg-gray-800 border border-gray-700 rounded-xl p-6">
                   <h3 className="text-lg font-semibold text-gray-100 mb-3 flex items-center gap-2">
                     <span className="w-8 h-8 rounded-lg bg-red-100 text-red-400 flex items-center justify-center text-sm">3</span>
                     Billion Laughs
@@ -436,7 +436,7 @@ export default async function XXE2026Page({
                   </div>
                 </div>
 
-                <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
+                <div className="bg-gray-800 border border-gray-700 rounded-xl p-6">
                   <h3 className="text-lg font-semibold text-gray-100 mb-3 flex items-center gap-2">
                     <span className="w-8 h-8 rounded-lg bg-red-100 text-red-400 flex items-center justify-center text-sm">4</span>
                     Error-Based
@@ -460,8 +460,8 @@ export default async function XXE2026Page({
               <h2 className="text-3xl font-bold text-gray-100 mb-6">Sichere Code-Implementierungen</h2>
               
               <div className="space-y-8">
-                <div className="bg-gray-800 border border-slate-200 rounded-xl overflow-hidden">
-                  <div className="bg-slate-100 px-6 py-3 border-b border-slate-200 flex items-center justify-between">
+                <div className="bg-gray-800 border border-gray-700 rounded-xl overflow-hidden">
+                  <div className="bg-slate-100 px-6 py-3 border-b border-gray-700 flex items-center justify-between">
                     <span className="font-semibold text-gray-200">Java (JAXB / DOM Parser)</span>
                     <span className="text-xs text-slate-500">OWASP Compliant</span>
                   </div>
@@ -487,8 +487,8 @@ Document doc = builder.parse(inputStream);`}
                   </div>
                 </div>
 
-                <div className="bg-gray-800 border border-slate-200 rounded-xl overflow-hidden">
-                  <div className="bg-slate-100 px-6 py-3 border-b border-slate-200 flex items-center justify-between">
+                <div className="bg-gray-800 border border-gray-700 rounded-xl overflow-hidden">
+                  <div className="bg-slate-100 px-6 py-3 border-b border-gray-700 flex items-center justify-between">
                     <span className="font-semibold text-gray-200">Python (lxml / defusedxml)</span>
                     <span className="text-xs text-slate-500">Best Practice</span>
                   </div>
@@ -515,8 +515,8 @@ tree = etree.parse(StringIO(xml_string), parser)`}
                   </div>
                 </div>
 
-                <div className="bg-gray-800 border border-slate-200 rounded-xl overflow-hidden">
-                  <div className="bg-slate-100 px-6 py-3 border-b border-slate-200 flex items-center justify-between">
+                <div className="bg-gray-800 border border-gray-700 rounded-xl overflow-hidden">
+                  <div className="bg-slate-100 px-6 py-3 border-b border-gray-700 flex items-center justify-between">
                     <span className="font-semibold text-gray-200">Node.js (libxmljs / fast-xml-parser)</span>
                     <span className="text-xs text-slate-500">Secure Config</span>
                   </div>
@@ -548,8 +548,8 @@ const xmlDoc = libxml.parseXml(xmlString, {
                   </div>
                 </div>
 
-                <div className="bg-gray-800 border border-slate-200 rounded-xl overflow-hidden">
-                  <div className="bg-slate-100 px-6 py-3 border-b border-slate-200 flex items-center justify-between">
+                <div className="bg-gray-800 border border-gray-700 rounded-xl overflow-hidden">
+                  <div className="bg-slate-100 px-6 py-3 border-b border-gray-700 flex items-center justify-between">
                     <span className="font-semibold text-gray-200">.NET (C# XmlReader)</span>
                     <span className="text-xs text-slate-500">Microsoft Guidelines</span>
                   </div>
@@ -644,7 +644,7 @@ using (XmlReader reader = XmlReader.Create(inputStream, settings))
                 </div>
               </div>
 
-              <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
+              <div className="bg-gray-800 border border-gray-700 rounded-xl p-6">
                 <h3 className="text-lg font-semibold text-gray-100 mb-4">XXE Prevention Checklist</h3>
                 <div className="grid md:grid-cols-2 gap-3">
                   {[
@@ -675,7 +675,7 @@ using (XmlReader reader = XmlReader.Create(inputStream, settings))
               <h2 className="text-3xl font-bold text-gray-100 mb-6">XXE Scanner & Security Tools</h2>
               
               <div className="grid md:grid-cols-3 gap-6">
-                <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
+                <div className="bg-gray-800 border border-gray-700 rounded-xl p-6">
                   <div className="w-12 h-12 rounded-lg bg-blue-100 text-cyan-400 flex items-center justify-center mb-4 text-2xl">🔍</div>
                   <h3 className="font-semibold text-gray-100 mb-2">Burp Suite</h3>
                   <p className="text-slate-600 text-sm mb-4">
@@ -688,7 +688,7 @@ using (XmlReader reader = XmlReader.Create(inputStream, settings))
                   </div>
                 </div>
 
-                <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
+                <div className="bg-gray-800 border border-gray-700 rounded-xl p-6">
                   <div className="w-12 h-12 rounded-lg bg-orange-100 text-orange-400 flex items-center justify-center mb-4 text-2xl">🛡️</div>
                   <h3 className="font-semibold text-gray-100 mb-2">OWASP ZAP</h3>
                   <p className="text-slate-600 text-sm mb-4">
@@ -701,8 +701,8 @@ using (XmlReader reader = XmlReader.Create(inputStream, settings))
                   </div>
                 </div>
 
-                <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
-                  <div className="w-12 h-12 rounded-lg bg-purple-100 text-purple-600 flex items-center justify-center mb-4 text-2xl">📊</div>
+                <div className="bg-gray-800 border border-gray-700 rounded-xl p-6">
+                  <div className="w-12 h-12 rounded-lg bg-purple-100 text-purple-400 flex items-center justify-center mb-4 text-2xl">📊</div>
                   <h3 className="font-semibold text-gray-100 mb-2">SonarQube</h3>
                   <p className="text-slate-600 text-sm mb-4">
                     Static Application Security Testing (SAST) für XXE-Vulnerabilities
@@ -714,7 +714,7 @@ using (XmlReader reader = XmlReader.Create(inputStream, settings))
                   </div>
                 </div>
 
-                <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
+                <div className="bg-gray-800 border border-gray-700 rounded-xl p-6">
                   <div className="w-12 h-12 rounded-lg bg-green-100 text-green-400 flex items-center justify-center mb-4 text-2xl">🔎</div>
                   <h3 className="font-semibold text-gray-100 mb-2">Semgrep</h3>
                   <p className="text-slate-600 text-sm mb-4">
@@ -727,7 +727,7 @@ using (XmlReader reader = XmlReader.Create(inputStream, settings))
                   </div>
                 </div>
 
-                <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
+                <div className="bg-gray-800 border border-gray-700 rounded-xl p-6">
                   <div className="w-12 h-12 rounded-lg bg-cyan-100 text-cyan-600 flex items-center justify-center mb-4 text-2xl">🐳</div>
                   <h3 className="font-semibold text-gray-100 mb-2">Trivy</h3>
                   <p className="text-slate-600 text-sm mb-4">
@@ -740,7 +740,7 @@ using (XmlReader reader = XmlReader.Create(inputStream, settings))
                   </div>
                 </div>
 
-                <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
+                <div className="bg-gray-800 border border-gray-700 rounded-xl p-6">
                   <div className="w-12 h-12 rounded-lg bg-red-100 text-red-400 flex items-center justify-center mb-4 text-2xl">⚡</div>
                   <h3 className="font-semibold text-gray-100 mb-2">ClawGuru Intel</h3>
                   <p className="text-slate-600 text-sm mb-4">
@@ -760,7 +760,7 @@ using (XmlReader reader = XmlReader.Create(inputStream, settings))
               <h2 className="text-3xl font-bold text-gray-100 mb-6">XXE & Compliance Standards</h2>
               
               <div className="space-y-6">
-                <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
+                <div className="bg-gray-800 border border-gray-700 rounded-xl p-6">
                   <div className="flex items-start gap-4">
                     <div className="w-14 h-14 rounded-lg bg-slate-900 text-white flex items-center justify-center font-bold text-lg shrink-0">ISO</div>
                     <div>
@@ -782,7 +782,7 @@ using (XmlReader reader = XmlReader.Create(inputStream, settings))
                   </div>
                 </div>
 
-                <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
+                <div className="bg-gray-800 border border-gray-700 rounded-xl p-6">
                   <div className="flex items-start gap-4">
                     <div className="w-14 h-14 rounded-lg bg-red-600 text-white flex items-center justify-center font-bold text-lg shrink-0">PCI</div>
                     <div>
@@ -804,7 +804,7 @@ using (XmlReader reader = XmlReader.Create(inputStream, settings))
                   </div>
                 </div>
 
-                <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
+                <div className="bg-gray-800 border border-gray-700 rounded-xl p-6">
                   <div className="flex items-start gap-4">
                     <div className="w-14 h-14 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold text-lg shrink-0">OWASP</div>
                     <div>
@@ -833,8 +833,8 @@ using (XmlReader reader = XmlReader.Create(inputStream, settings))
               <h2 className="text-3xl font-bold text-gray-100 mb-6">XXE 2026 FAQ</h2>
               
               <div className="space-y-4">
-                <div className="bg-gray-800 border border-slate-200 rounded-xl overflow-hidden">
-                  <button className="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-slate-50">
+                <div className="bg-gray-800 border border-gray-700 rounded-xl overflow-hidden">
+                  <button className="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-800">
                     <span className="font-semibold text-gray-100">Was ist XXE (XML External Entity Injection)?</span>
                     <span className="text-slate-400">▼</span>
                   </button>
@@ -845,8 +845,8 @@ using (XmlReader reader = XmlReader.Create(inputStream, settings))
                   </div>
                 </div>
 
-                <div className="bg-gray-800 border border-slate-200 rounded-xl overflow-hidden">
-                  <button className="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-slate-50">
+                <div className="bg-gray-800 border border-gray-700 rounded-xl overflow-hidden">
+                  <button className="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-800">
                     <span className="font-semibold text-gray-100">Welche CVEs sind 2026 besonders kritisch?</span>
                     <span className="text-slate-400">▼</span>
                   </button>
@@ -856,8 +856,8 @@ using (XmlReader reader = XmlReader.Create(inputStream, settings))
                   </div>
                 </div>
 
-                <div className="bg-gray-800 border border-slate-200 rounded-xl overflow-hidden">
-                  <button className="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-slate-50">
+                <div className="bg-gray-800 border border-gray-700 rounded-xl overflow-hidden">
+                  <button className="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-800">
                     <span className="font-semibold text-gray-100">Wie schütze ich meine Anwendung vor XXE?</span>
                     <span className="text-slate-400">▼</span>
                   </button>
@@ -868,8 +868,8 @@ using (XmlReader reader = XmlReader.Create(inputStream, settings))
                   </div>
                 </div>
 
-                <div className="bg-gray-800 border border-slate-200 rounded-xl overflow-hidden">
-                  <button className="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-slate-50">
+                <div className="bg-gray-800 border border-gray-700 rounded-xl overflow-hidden">
+                  <button className="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-800">
                     <span className="font-semibold text-gray-100">Welche Tools erkennen XXE-Schwachstellen?</span>
                     <span className="text-slate-400">▼</span>
                   </button>

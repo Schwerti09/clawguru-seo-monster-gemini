@@ -435,17 +435,17 @@ export class AuthService {
           
           <div className="bg-blue-900 border-l-4 border-blue-400 p-6 mb-8">
             <h3 className="font-semibold mb-2 text-gray-100">🛡️ Ready to implement?</h3>
-            <p>Starte mit unserem <a href="/securitycheck" className="text-cyan-400 hover:text-blue-800 font-semibold">Security Check Tool</a> für eine umfassende Analyse deines aktuellen Security-Status.</p>
+            <p>Starte mit unserem <a href="/securitycheck" className="text-cyan-400 hover:text-blue-300 font-semibold">Security Check Tool</a> für eine umfassende Analyse deines aktuellen Security-Status.</p>
           </div>
           
           <div className="bg-green-900 border-l-4 border-green-400 p-6 mb-8">
             <h3 className="font-semibold mb-2 text-gray-100">📚 Need more guidance?</h3>
-            <p>Entdecke unsere <a href="/runbooks" className="text-cyan-400 hover:text-blue-800 font-semibold">AI Runbooks</a> für detaillierte Implementierungsanleitungen.</p>
+            <p>Entdecke unsere <a href="/runbooks" className="text-cyan-400 hover:text-blue-300 font-semibold">AI Runbooks</a> für detaillierte Implementierungsanleitungen.</p>
           </div>
           
           <div className="bg-purple-900 border-l-4 border-purple-400 p-6">
             <h3 className="font-semibold mb-2 text-gray-100">🤝 Join the community?</h3>
-            <p>Werde Teil der <a href="/community" className="text-cyan-400 hover:text-blue-800 font-semibold">ClawBot Community</a> und tausche dich mit anderen Security-Experten aus.</p>
+            <p>Werde Teil der <a href="/community" className="text-cyan-400 hover:text-blue-300 font-semibold">ClawBot Community</a> und tausche dich mit anderen Security-Experten aus.</p>
           </div>
           
           <div className="text-center text-sm text-gray-400 mt-12">

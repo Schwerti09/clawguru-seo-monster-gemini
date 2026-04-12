@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n";
 import { BASE_URL } from "@/lib/config";
 import { getCoreSecurityLinks } from "@/lib/core-security-links";
@@ -100,7 +100,7 @@ export default async function TailscalePAMPage({
         <div className="max-w-4xl mx-auto">
           
           {/* TOC */}
-          <div className="bg-slate-50 rounded-xl p-6 mb-12 border border-slate-200">
+          <div className="bg-gray-800 rounded-xl p-6 mb-12 border border-gray-700">
             <h2 className="font-semibold text-gray-100 mb-4">{t(locale, "Inhaltsverzeichnis", "Table of Contents")}</h2>
             <div className="grid md:grid-cols-2 gap-2 text-sm">
               <a href="#overview" className="text-cyan-400 hover:underline">→ {t(locale, "Was ist Tailscale PAM?", "What is Tailscale PAM?")}</a>
@@ -137,7 +137,7 @@ export default async function TailscalePAMPage({
                   {t(locale, "Modernes, schnelles VPN-Protokoll. 3-5x schneller als OpenVPN/IPsec.", "Modern, fast VPN protocol. 3-5x faster than OpenVPN/IPsec.")}
                 </p>
               </div>
-              <div className="bg-purple-50 border border-purple-700 rounded-xl p-6">
+              <div className="bg-purple-900 border border-purple-700 rounded-xl p-6">
                 <div className="text-3xl mb-3">🛡️</div>
                 <h3 className="font-semibold text-gray-100 mb-2">Device Trust</h3>
                 <p className="text-slate-600 text-sm">
@@ -181,7 +181,7 @@ export default async function TailscalePAMPage({
               {t(locale, "Device Trust ist das Fundament von Tailscale PAM. Nur geprüfte und verifizierte Geräte erhalten Netzwerkzugriff. Die Sicherheitslage (Posture) jedes Geräts wird kontinuierlich überwacht.", "Device Trust is the foundation of Tailscale PAM. Only inspected and verified devices receive network access. The security posture of each device is continuously monitored.")}
             </p>
 
-            <div className="bg-gray-800 border border-slate-200 rounded-xl p-6 mb-8">
+            <div className="bg-gray-800 border border-gray-700 rounded-xl p-6 mb-8">
               <h3 className="font-semibold text-gray-100 mb-4">Device Trust Checks</h3>
               <div className="grid md:grid-cols-2 gap-4">
                 <div className="space-y-3">
@@ -282,8 +282,8 @@ export default async function TailscalePAMPage({
             </p>
 
             <div className="space-y-6">
-              <div className="bg-gray-800 border border-slate-200 rounded-xl overflow-hidden">
-                <div className="bg-slate-100 px-6 py-3 border-b border-slate-200">
+              <div className="bg-gray-800 border border-gray-700 rounded-xl overflow-hidden">
+                <div className="bg-slate-100 px-6 py-3 border-b border-gray-700">
                   <span className="font-semibold text-gray-200">{t(locale, "Beispiel: DevOps Team Zugriff", "Example: DevOps Team Access")}</span>
                 </div>
                 <div className="p-6 bg-slate-900 overflow-x-auto">
@@ -329,15 +329,15 @@ export default async function TailscalePAMPage({
 
             <div className="grid md:grid-cols-3 gap-4 mt-8">
               <div className="bg-blue-900 rounded-lg p-4 border border-blue-700">
-                <h4 className="font-semibold text-blue-900 mb-2">Principle of Least Privilege</h4>
+                <h4 className="font-semibold text-blue-200 mb-2">Principle of Least Privilege</h4>
                 <p className="text-sm text-blue-300">{t(locale, "Nur notwendige Zugriffe erlauben", "Only allow necessary access")}</p>
               </div>
               <div className="bg-blue-900 rounded-lg p-4 border border-blue-700">
-                <h4 className="font-semibold text-blue-900 mb-2">Identity-Based</h4>
+                <h4 className="font-semibold text-blue-200 mb-2">Identity-Based</h4>
                 <p className="text-sm text-blue-300">{t(locale, "SSO/IdP statt IP-Whitelists", "SSO/IdP instead of IP whitelists")}</p>
               </div>
               <div className="bg-blue-900 rounded-lg p-4 border border-blue-700">
-                <h4 className="font-semibold text-blue-900 mb-2">Just-in-Time</h4>
+                <h4 className="font-semibold text-blue-200 mb-2">Just-in-Time</h4>
                 <p className="text-sm text-blue-300">{t(locale, "Temporäre Zugriffsrechte", "Temporary access rights")}</p>
               </div>
             </div>
@@ -351,7 +351,7 @@ export default async function TailscalePAMPage({
               {t(locale, "Tailscale SSH ersetzt traditionelle SSH-Keys. Authentifizierung über Identity Provider, Session Recording für Compliance.", "Tailscale SSH replaces traditional SSH keys. Authentication via Identity Provider, session recording for compliance.")}
             </p>
 
-            <div className="bg-gray-800 border border-slate-200 rounded-xl p-6 mb-6">
+            <div className="bg-gray-800 border border-gray-700 rounded-xl p-6 mb-6">
               <h3 className="font-semibold text-gray-100 mb-4">Tailscale SSH Features</h3>
               <div className="grid md:grid-cols-2 gap-4">
                 <ul className="space-y-2 text-gray-200">
@@ -408,7 +408,7 @@ export default async function TailscalePAMPage({
             <h2 className="text-3xl font-bold text-gray-100 mb-6">Compliance & Certifications</h2>
             
             <div className="grid md:grid-cols-2 gap-6">
-              <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
+              <div className="bg-gray-800 border border-gray-700 rounded-xl p-6">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-12 h-12 bg-slate-900 text-white rounded-lg flex items-center justify-center font-bold">SOC<br/><span className="text-xs">2</span></div>
                   <div>
@@ -424,7 +424,7 @@ export default async function TailscalePAMPage({
                 </ul>
               </div>
 
-              <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
+              <div className="bg-gray-800 border border-gray-700 rounded-xl p-6">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-12 h-12 bg-blue-600 text-white rounded-lg flex items-center justify-center font-bold text-xs">ISO<br/>27001</div>
                   <div>
@@ -529,7 +529,7 @@ export default async function TailscalePAMPage({
             </p>
             <a 
               href={coreLinks.check} 
-              className="inline-block px-6 py-3 bg-gray-800 text-blue-800 rounded-lg font-semibold hover:bg-slate-100 transition-colors"
+              className="inline-block px-6 py-3 bg-gray-800 text-blue-300 rounded-lg font-semibold hover:bg-slate-100 transition-colors"
             >
               {t(locale, "Security Assessment Starten", "Start Security Assessment")}
             </a>

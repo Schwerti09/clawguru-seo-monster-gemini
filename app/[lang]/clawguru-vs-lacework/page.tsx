@@ -50,7 +50,7 @@ export default function ClawGuruVsLaceworkPage({ params }: PageProps) {
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">Quick Comparison Overview</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-blue-900 p-6 rounded-lg">
-              <h3 className="font-bold text-blue-800 mb-4">ClawGuru</h3>
+              <h3 className="font-bold text-blue-300 mb-4">ClawGuru</h3>
               <ul className="space-y-2 text-sm text-gray-300">
                 <li className="flex items-start">
                   <span className="text-green-400 mr-2">+</span>
@@ -113,7 +113,7 @@ export default function ClawGuruVsLaceworkPage({ params }: PageProps) {
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Lacework</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200">
+              <tbody className="divide-y divide-gray-700">
                 <tr>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-100">CSPM Capabilities</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-green-400">Full CSPM with custom rules</td>

@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n";
 import { BASE_URL } from "@/lib/config";
 import { getCoreSecurityLinks } from "@/lib/core-security-links";
@@ -408,7 +408,7 @@ whitelist.0 = *  # Or specific allowlist
 
           <section className="mb-16">
             <h2 className="text-3xl font-bold text-gray-100 mb-6">Splunk Security Checklist</h2>
-            <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
+            <div className="bg-gray-800 border border-gray-700 rounded-xl p-6">
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <h3 className="font-semibold text-gray-100 mb-4">Access & Authentication</h3>
@@ -418,7 +418,7 @@ whitelist.0 = *  # Or specific allowlist
                     "Index restrictions enforced",
                     "Audit logging enabled",
                   ].map((item, i) => (
-                    <div key={i} className="flex items-center gap-3 py-2 border-b border-slate-100 last:border-0">
+                    <div key={i} className="flex items-center gap-3 py-2 border-b border-gray-700 last:border-0">
                       <span className="w-5 h-5 rounded border-2 border-slate-300 flex items-center justify-center text-xs text-slate-400">☐</span>
                       <span className="text-gray-200 text-sm">{item}</span>
                     </div>
@@ -432,7 +432,7 @@ whitelist.0 = *  # Or specific allowlist
                     "SSN masking enabled",
                     "PII routing to nullQueue",
                   ].map((item, i) => (
-                    <div key={i} className="flex items-center gap-3 py-2 border-b border-slate-100 last:border-0">
+                    <div key={i} className="flex items-center gap-3 py-2 border-b border-gray-700 last:border-0">
                       <span className="w-5 h-5 rounded border-2 border-slate-300 flex items-center justify-center text-xs text-slate-400">☐</span>
                       <span className="text-gray-200 text-sm">{item}</span>
                     </div>

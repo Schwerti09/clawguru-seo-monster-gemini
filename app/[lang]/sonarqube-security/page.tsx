@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n";
 import { BASE_URL } from "@/lib/config";
 import { getCoreSecurityLinks } from "@/lib/core-security-links";
@@ -95,17 +95,17 @@ export default async function SonarQubeSecurityPage({
                 </ul>
               </div>
               <div className="bg-blue-900 border border-blue-700 rounded-xl p-6">
-                <h3 className="font-semibold text-blue-900 mb-2">Access Control</h3>
-                <ul className="text-sm text-blue-800 space-y-1">
+                <h3 className="font-semibold text-blue-200 mb-2">Access Control</h3>
+                <ul className="text-sm text-blue-300 space-y-1">
                   <li>• Permissions Templates</li>
                   <li>• Project Visibility</li>
                   <li>• Group Management</li>
                   <li>• Portfolio Access</li>
                 </ul>
               </div>
-              <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-6">
-                <h3 className="font-semibold text-indigo-900 mb-2">Security Analysis</h3>
-                <ul className="text-sm text-indigo-800 space-y-1">
+              <div className="bg-indigo-900 border border-indigo-700 rounded-xl p-6">
+                <h3 className="font-semibold text-indigo-200 mb-2">Security Analysis</h3>
+                <ul className="text-sm text-indigo-300 space-y-1">
                   <li>• Quality Gates</li>
                   <li>• Secret Detection</li>
                   <li>• Vulnerability Rules</li>
@@ -473,7 +473,7 @@ steps:
 
           <section className="mb-16">
             <h2 className="text-3xl font-bold text-gray-100 mb-6">SonarQube Security Checklist</h2>
-            <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
+            <div className="bg-gray-800 border border-gray-700 rounded-xl p-6">
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <h3 className="font-semibold text-gray-100 mb-4">Authentication & Access</h3>
@@ -483,7 +483,7 @@ steps:
                     "Permission templates defined",
                     "Project tokens (not global)",
                   ].map((item, i) => (
-                    <div key={i} className="flex items-center gap-3 py-2 border-b border-slate-100 last:border-0">
+                    <div key={i} className="flex items-center gap-3 py-2 border-b border-gray-700 last:border-0">
                       <span className="w-5 h-5 rounded border-2 border-slate-300 flex items-center justify-center text-xs text-slate-400">☐</span>
                       <span className="text-gray-200 text-sm">{item}</span>
                     </div>
@@ -497,7 +497,7 @@ steps:
                     "Vulnerability rules active",
                     "Coverage thresholds set",
                   ].map((item, i) => (
-                    <div key={i} className="flex items-center gap-3 py-2 border-b border-slate-100 last:border-0">
+                    <div key={i} className="flex items-center gap-3 py-2 border-b border-gray-700 last:border-0">
                       <span className="w-5 h-5 rounded border-2 border-slate-300 flex items-center justify-center text-xs text-slate-400">☐</span>
                       <span className="text-gray-200 text-sm">{item}</span>
                     </div>

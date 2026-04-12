@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n";
 import { BASE_URL } from "@/lib/config";
 import { getCoreSecurityLinks } from "@/lib/core-security-links";
@@ -117,7 +117,7 @@ export default async function NginxHardeningPage({
                 </ul>
               </div>
               <div className="bg-blue-900 border border-blue-700 rounded-xl p-6">
-                <h3 className="font-semibold text-blue-900 mb-2">Compliance</h3>
+                <h3 className="font-semibold text-blue-200 mb-2">Compliance</h3>
                 <ul className="text-sm text-blue-700 space-y-1">
                   <li>• PCI DSS</li>
                   <li>• SOC 2</li>

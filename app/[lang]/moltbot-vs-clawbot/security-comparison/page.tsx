@@ -65,7 +65,7 @@ export default function MoltbotVsClawbotPage({ params }: PageProps) {
           <h2 className="text-2xl font-semibold mb-4">🎯 Executive Summary</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-blue-900 p-6 rounded-lg border border-blue-700">
-              <h3 className="text-xl font-bold text-blue-800 mb-3">Moltbot</h3>
+              <h3 className="text-xl font-bold text-blue-300 mb-3">Moltbot</h3>
               <ul className="space-y-2 text-sm">
                 <li>✅ Enterprise-Grade Zero Trust Architektur</li>
                 <li>✅ Native GDPR/HIPAA/SOC2 Compliance</li>
@@ -126,7 +126,7 @@ export default function MoltbotVsClawbotPage({ params }: PageProps) {
           <h2 className="text-2xl font-semibold mb-4">🏆 Wann welches Framework?</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-blue-900 p-6 rounded-lg">
-              <h3 className="font-bold text-blue-800 mb-3">Wähle Moltbot wenn...</h3>
+              <h3 className="font-bold text-blue-300 mb-3">Wähle Moltbot wenn...</h3>
               <ul className="space-y-2 text-sm list-disc list-inside">
                 <li>Enterprise mit strengen Compliance-Anforderungen</li>
                 <li>Kritische Infrastruktur oder Finanzdaten</li>

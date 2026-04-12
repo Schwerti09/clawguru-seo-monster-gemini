@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n";
 import { BASE_URL } from "@/lib/config";
 import { getCoreSecurityLinks } from "@/lib/core-security-links";
@@ -184,8 +184,8 @@ export default async function WAF2027Page({
               {t(locale, "Das OWASP Core Rule Set (CRS) ist die Industriestandard-Regelsammlung für WAFs. Version 4.0 (2027) enthält verbesserte Regeln für moderne Angriffsmuster.", "The OWASP Core Rule Set (CRS) is the industry-standard rule collection for WAFs. Version 4.0 (2027) includes improved rules for modern attack patterns.")}
             </p>
 
-            <div className="bg-gray-800 border border-slate-200 rounded-xl overflow-hidden mb-6">
-              <div className="bg-slate-100 px-6 py-3 border-b border-slate-200">
+            <div className="bg-gray-800 border border-gray-700 rounded-xl overflow-hidden mb-6">
+              <div className="bg-slate-100 px-6 py-3 border-b border-gray-700">
                 <span className="font-semibold text-gray-200">CRS 4.0 Paranoia Levels</span>
               </div>
               <div className="p-6">
@@ -338,7 +338,7 @@ SecAction \\
           <section className="mb-16">
             <h2 className="text-3xl font-bold text-gray-100 mb-6">AWS WAF 2027</h2>
             
-            <div className="bg-gray-800 border border-slate-200 rounded-xl p-6 mb-6">
+            <div className="bg-gray-800 border border-gray-700 rounded-xl p-6 mb-6">
               <h3 className="font-semibold text-gray-100 mb-4">AWS WAF Key Features 2027</h3>
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
@@ -426,7 +426,7 @@ SecAction \\
           <section className="mb-16">
             <h2 className="text-3xl font-bold text-gray-100 mb-6">WAF 2027 Security Checklist</h2>
             
-            <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
+            <div className="bg-gray-800 border border-gray-700 rounded-xl p-6">
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <h3 className="font-semibold text-gray-100 mb-4">Core Protection</h3>
@@ -438,7 +438,7 @@ SecAction \\
                     "LFI/RFI protection enabled",
                     "XML/XXE protection",
                   ].map((item, i) => (
-                    <div key={i} className="flex items-center gap-3 py-2 border-b border-slate-100 last:border-0">
+                    <div key={i} className="flex items-center gap-3 py-2 border-b border-gray-700 last:border-0">
                       <span className="w-5 h-5 rounded border-2 border-slate-300 flex items-center justify-center text-xs text-slate-400">☐</span>
                       <span className="text-gray-200 text-sm">{item}</span>
                     </div>
@@ -454,7 +454,7 @@ SecAction \\
                     "Geo-blocking (if needed)",
                     "Custom rules for business logic",
                   ].map((item, i) => (
-                    <div key={i} className="flex items-center gap-3 py-2 border-b border-slate-100 last:border-0">
+                    <div key={i} className="flex items-center gap-3 py-2 border-b border-gray-700 last:border-0">
                       <span className="w-5 h-5 rounded border-2 border-slate-300 flex items-center justify-center text-xs text-slate-400">☐</span>
                       <span className="text-gray-200 text-sm">{item}</span>
                     </div>

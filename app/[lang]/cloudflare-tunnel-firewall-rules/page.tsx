@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n";
 import { BASE_URL } from "@/lib/config";
 import { getCoreSecurityLinks } from "@/lib/core-security-links";
@@ -319,7 +319,7 @@ require:
             </div>
 
             <div className="grid md:grid-cols-2 gap-6">
-              <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
+              <div className="bg-gray-800 border border-gray-700 rounded-xl p-6">
                 <h3 className="font-semibold text-gray-100 mb-3">IdP Integration</h3>
                 <ul className="space-y-2 text-sm text-gray-200">
                   <li>• Okta / Azure AD / Google</li>
@@ -328,7 +328,7 @@ require:
                   <li>• Generic OIDC / SAML 2.0</li>
                 </ul>
               </div>
-              <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
+              <div className="bg-gray-800 border border-gray-700 rounded-xl p-6">
                 <h3 className="font-semibold text-gray-100 mb-3">Service Tokens</h3>
                 <ul className="space-y-2 text-sm text-gray-200">
                   <li>• API-to-API Authentication</li>
@@ -417,7 +417,7 @@ require:
             <h2 className="text-3xl font-bold text-gray-100 mb-6">Best Practices 2026</h2>
             
             <div className="grid md:grid-cols-2 gap-6">
-              <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
+              <div className="bg-gray-800 border border-gray-700 rounded-xl p-6">
                 <h3 className="font-semibold text-gray-100 mb-4">High Availability</h3>
                 <ul className="space-y-3 text-sm text-gray-200">
                   <li className="flex items-start gap-2">
@@ -438,7 +438,7 @@ require:
                   </li>
                 </ul>
               </div>
-              <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
+              <div className="bg-gray-800 border border-gray-700 rounded-xl p-6">
                 <h3 className="font-semibold text-gray-100 mb-4">Security</h3>
                 <ul className="space-y-3 text-sm text-gray-200">
                   <li className="flex items-start gap-2">

@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n";
 import { BASE_URL } from "@/lib/config";
 import { getCoreSecurityLinks } from "@/lib/core-security-links";
@@ -89,7 +89,7 @@ export default async function LinuxHardeningPage({
             </p>
 
             <div className="grid md:grid-cols-4 gap-4 mb-8">
-              <div className="bg-slate-50 border border-slate-200 rounded-xl p-5 text-center">
+              <div className="bg-gray-800 border border-gray-700 rounded-xl p-5 text-center">
                 <div className="text-3xl mb-2">🔒</div>
                 <h3 className="font-semibold text-gray-100 text-sm">Kernel</h3>
                 <p className="text-xs text-slate-600">Sysctl, Modules, ASLR</p>
@@ -106,7 +106,7 @@ export default async function LinuxHardeningPage({
               </div>
               <div className="bg-blue-900 border border-blue-700 rounded-xl p-5 text-center">
                 <div className="text-3xl mb-2">⚙️</div>
-                <h3 className="font-semibold text-blue-900 text-sm">CIS</h3>
+                <h3 className="font-semibold text-blue-200 text-sm">CIS</h3>
                 <p className="text-xs text-blue-700">Benchmarks, SCAP</p>
               </div>
             </div>
@@ -456,7 +456,7 @@ Match Group developers
 
           <section className="mb-16">
             <h2 className="text-3xl font-bold text-gray-100 mb-6">Linux Security Checklist</h2>
-            <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
+            <div className="bg-gray-800 border border-gray-700 rounded-xl p-6">
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <h3 className="font-semibold text-gray-100 mb-4">System Hardening</h3>
@@ -468,7 +468,7 @@ Match Group developers
                     "Boot loader password set (GRUB)",
                     "Single user mode password protected",
                   ].map((item, i) => (
-                    <div key={i} className="flex items-center gap-3 py-2 border-b border-slate-100 last:border-0">
+                    <div key={i} className="flex items-center gap-3 py-2 border-b border-gray-700 last:border-0">
                       <span className="w-5 h-5 rounded border-2 border-slate-300 flex items-center justify-center text-xs text-slate-400">☐</span>
                       <span className="text-gray-200 text-sm">{item}</span>
                     </div>
@@ -484,7 +484,7 @@ Match Group developers
                     "Sudo logging enabled",
                     "SSH key-only auth (no passwords)",
                   ].map((item, i) => (
-                    <div key={i} className="flex items-center gap-3 py-2 border-b border-slate-100 last:border-0">
+                    <div key={i} className="flex items-center gap-3 py-2 border-b border-gray-700 last:border-0">
                       <span className="w-5 h-5 rounded border-2 border-slate-300 flex items-center justify-center text-xs text-slate-400">☐</span>
                       <span className="text-gray-200 text-sm">{item}</span>
                     </div>
@@ -502,7 +502,7 @@ Match Group developers
                     "Failed login alerts enabled",
                     "Privileged command auditing",
                   ].map((item, i) => (
-                    <div key={i} className="flex items-center gap-3 py-2 border-b border-slate-100 last:border-0">
+                    <div key={i} className="flex items-center gap-3 py-2 border-b border-gray-700 last:border-0">
                       <span className="w-5 h-5 rounded border-2 border-slate-300 flex items-center justify-center text-xs text-slate-400">☐</span>
                       <span className="text-gray-200 text-sm">{item}</span>
                     </div>
@@ -518,7 +518,7 @@ Match Group developers
                     "Configuration drift detection",
                     "Remediation automation in place",
                   ].map((item, i) => (
-                    <div key={i} className="flex items-center gap-3 py-2 border-b border-slate-100 last:border-0">
+                    <div key={i} className="flex items-center gap-3 py-2 border-b border-gray-700 last:border-0">
                       <span className="w-5 h-5 rounded border-2 border-slate-300 flex items-center justify-center text-xs text-slate-400">☐</span>
                       <span className="text-gray-200 text-sm">{item}</span>
                     </div>

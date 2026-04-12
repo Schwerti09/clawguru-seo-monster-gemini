@@ -209,17 +209,17 @@ app.post('/api/webhooks/github', handleSecurityWebhook);`}</pre>
             <div className="bg-gray-800 p-4 rounded-lg border border-gray-700 border">
               <div className="font-semibold text-lg mb-2">Moltbot Documentation</div>
               <div className="text-sm text-gray-300 mb-2">Learn more about Moltbot and its features.</div>
-              <a href="https://moltbot.com/docs" target="_blank" rel="noopener noreferrer" className="text-blue-700 hover:text-blue-900">Visit Documentation</a>
+              <a href="https://moltbot.com/docs" target="_blank" rel="noopener noreferrer" className="text-blue-700 hover:text-blue-200">Visit Documentation</a>
             </div>
             <div className="bg-gray-800 p-4 rounded-lg border border-gray-700 border">
               <div className="font-semibold text-lg mb-2">Moltbot Community</div>
               <div className="text-sm text-gray-300 mb-2">Join the Moltbot community to connect with other users and get support.</div>
-              <a href="https://moltbot.com/community" target="_blank" rel="noopener noreferrer" className="text-blue-700 hover:text-blue-900">Visit Community</a>
+              <a href="https://moltbot.com/community" target="_blank" rel="noopener noreferrer" className="text-blue-700 hover:text-blue-200">Visit Community</a>
             </div>
             <div className="bg-gray-800 p-4 rounded-lg border border-gray-700 border">
               <div className="font-semibold text-lg mb-2">Moltbot GitHub</div>
               <div className="text-sm text-gray-300 mb-2">Explore Moltbot's open-source code and contribute to the project.</div>
-              <a href="https://github.com/moltbot" target="_blank" rel="noopener noreferrer" className="text-blue-700 hover:text-blue-900">Visit GitHub</a>
+              <a href="https://github.com/moltbot" target="_blank" rel="noopener noreferrer" className="text-blue-700 hover:text-blue-200">Visit GitHub</a>
             </div>
           </div>
         </section>

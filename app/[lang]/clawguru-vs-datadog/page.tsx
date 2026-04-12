@@ -50,7 +50,7 @@ export default function ClawGuruVsDatadogPage({ params }: PageProps) {
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">Quick Comparison Overview</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-blue-900 p-6 rounded-lg">
-              <h3 className="font-bold text-blue-800 mb-4">ClawGuru</h3>
+              <h3 className="font-bold text-blue-300 mb-4">ClawGuru</h3>
               <ul className="space-y-2 text-sm text-gray-300">
                 <li className="flex items-start">
                   <span className="text-green-400 mr-2">+</span>
@@ -74,8 +74,8 @@ export default function ClawGuruVsDatadogPage({ params }: PageProps) {
                 </li>
               </ul>
             </div>
-            <div className="bg-purple-50 p-6 rounded-lg">
-              <h3 className="font-bold text-purple-800 mb-4">Datadog</h3>
+            <div className="bg-purple-900 p-6 rounded-lg">
+              <h3 className="font-bold text-purple-300 mb-4">Datadog</h3>
               <ul className="space-y-2 text-sm text-gray-300">
                 <li className="flex items-start">
                   <span className="text-green-400 mr-2">+</span>
@@ -113,7 +113,7 @@ export default function ClawGuruVsDatadogPage({ params }: PageProps) {
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Datadog</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200">
+              <tbody className="divide-y divide-gray-700">
                 <tr>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-100">Security Monitoring</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-green-400">Advanced security focus</td>
@@ -186,23 +186,23 @@ export default function ClawGuruVsDatadogPage({ params }: PageProps) {
               <h3 className="font-bold text-cyan-400 mb-4">Choose Datadog if:</h3>
               <ul className="space-y-3 text-sm">
                 <li className="flex items-start">
-                  <span className="text-purple-600 mr-2">-</span>
+                  <span className="text-purple-400 mr-2">-</span>
                   You need comprehensive observability
                 </li>
                 <li className="flex items-start">
-                  <span className="text-purple-600 mr-2">-</span>
+                  <span className="text-purple-400 mr-2">-</span>
                   APM and RUM are critical
                 </li>
                 <li className="flex items-start">
-                  <span className="text-purple-600 mr-2">-</span>
+                  <span className="text-purple-400 mr-2">-</span>
                   You need 600+ integrations
                 </li>
                 <li className="flex items-start">
-                  <span className="text-purple-600 mr-2">-</span>
+                  <span className="text-purple-400 mr-2">-</span>
                   You want cloud-native solution
                 </li>
                 <li className="flex items-start">
-                  <span className="text-purple-600 mr-2">-</span>
+                  <span className="text-purple-400 mr-2">-</span>
                   You need AI-powered insights
                 </li>
               </ul>

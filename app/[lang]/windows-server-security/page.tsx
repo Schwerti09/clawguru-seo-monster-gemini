@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n";
 import { BASE_URL } from "@/lib/config";
 import { getCoreSecurityLinks } from "@/lib/core-security-links";
@@ -86,24 +86,24 @@ export default async function WindowsSecurityPage({
 
             <div className="grid md:grid-cols-3 gap-6 mb-8">
               <div className="bg-blue-900 border border-blue-700 rounded-xl p-6">
-                <h3 className="font-semibold text-blue-900 mb-2">AD Hardening</h3>
-                <ul className="text-sm text-blue-800 space-y-1">
+                <h3 className="font-semibold text-blue-200 mb-2">AD Hardening</h3>
+                <ul className="text-sm text-blue-300 space-y-1">
                   <li>• Tier-Modell (Tier 0/1/2)</li>
                   <li>• Admin Forest (ESAE)</li>
                   <li>• Privileged Access Workstations</li>
                   <li>• Just-in-Time Admin</li>
                 </ul>
               </div>
-              <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-6">
-                <h3 className="font-semibold text-indigo-900 mb-2">Authentication</h3>
-                <ul className="text-sm text-indigo-800 space-y-1">
+              <div className="bg-indigo-900 border border-indigo-700 rounded-xl p-6">
+                <h3 className="font-semibold text-indigo-200 mb-2">Authentication</h3>
+                <ul className="text-sm text-indigo-300 space-y-1">
                   <li>• Windows Hello for Business</li>
                   <li>• FIDO2/Passwordless</li>
                   <li>• Smart Cards</li>
                   <li>• NTLM Restrictions</li>
                 </ul>
               </div>
-              <div className="bg-slate-50 border border-slate-200 rounded-xl p-6">
+              <div className="bg-gray-800 border border-gray-700 rounded-xl p-6">
                 <h3 className="font-semibold text-gray-100 mb-2">Monitoring</h3>
                 <ul className="text-sm text-gray-100 space-y-1">
                   <li>• Advanced Audit Policies</li>
@@ -347,7 +347,7 @@ Set-NetFirewallProfile -DefaultInboundAction Block -DefaultOutboundAction Allow`
 
           <section className="mb-16">
             <h2 className="text-3xl font-bold text-gray-100 mb-6">Windows Security Checklist</h2>
-            <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
+            <div className="bg-gray-800 border border-gray-700 rounded-xl p-6">
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <h3 className="font-semibold text-gray-100 mb-4">Active Directory</h3>
@@ -359,7 +359,7 @@ Set-NetFirewallProfile -DefaultInboundAction Block -DefaultOutboundAction Allow`
                     "LAPS deployed on all machines",
                     "AD Recycle Bin enabled",
                   ].map((item, i) => (
-                    <div key={i} className="flex items-center gap-3 py-2 border-b border-slate-100 last:border-0">
+                    <div key={i} className="flex items-center gap-3 py-2 border-b border-gray-700 last:border-0">
                       <span className="w-5 h-5 rounded border-2 border-slate-300 flex items-center justify-center text-xs text-slate-400">☐</span>
                       <span className="text-gray-200 text-sm">{item}</span>
                     </div>
@@ -375,7 +375,7 @@ Set-NetFirewallProfile -DefaultInboundAction Block -DefaultOutboundAction Allow`
                     "Application Control (WDAC/AppLocker)",
                     "Exploit protection configured",
                   ].map((item, i) => (
-                    <div key={i} className="flex items-center gap-3 py-2 border-b border-slate-100 last:border-0">
+                    <div key={i} className="flex items-center gap-3 py-2 border-b border-gray-700 last:border-0">
                       <span className="w-5 h-5 rounded border-2 border-slate-300 flex items-center justify-center text-xs text-slate-400">☐</span>
                       <span className="text-gray-200 text-sm">{item}</span>
                     </div>

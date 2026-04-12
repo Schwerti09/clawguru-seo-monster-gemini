@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n";
 import { BASE_URL } from "@/lib/config";
 import { getCoreSecurityLinks } from "@/lib/core-security-links";
@@ -85,18 +85,18 @@ export default async function DatadogSecurityPage({
             </p>
 
             <div className="grid md:grid-cols-3 gap-6 mb-8">
-              <div className="bg-purple-50 border border-purple-700 rounded-xl p-6">
+              <div className="bg-purple-900 border border-purple-700 rounded-xl p-6">
                 <h3 className="font-semibold text-purple-900 mb-2">Access Control</h3>
-                <ul className="text-sm text-purple-800 space-y-1">
+                <ul className="text-sm text-purple-300 space-y-1">
                   <li>• Custom Roles</li>
                   <li>• Granular Permissions</li>
                   <li>• SAML/SSO</li>
                   <li>• SCIM Provisioning</li>
                 </ul>
               </div>
-              <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-6">
-                <h3 className="font-semibold text-indigo-900 mb-2">Data Protection</h3>
-                <ul className="text-sm text-indigo-800 space-y-1">
+              <div className="bg-indigo-900 border border-indigo-700 rounded-xl p-6">
+                <h3 className="font-semibold text-indigo-200 mb-2">Data Protection</h3>
+                <ul className="text-sm text-indigo-300 space-y-1">
                   <li>• Sensitive Data Scanner</li>
                   <li>• Log Sanitization</li>
                   <li>• PII Redaction</li>
@@ -485,7 +485,7 @@ resource "datadog_sensitive_data_scanner_rule" "custom_api_keys" {
 
           <section className="mb-16">
             <h2 className="text-3xl font-bold text-gray-100 mb-6">Datadog Security Checklist</h2>
-            <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
+            <div className="bg-gray-800 border border-gray-700 rounded-xl p-6">
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <h3 className="font-semibold text-gray-100 mb-4">Access & Authentication</h3>
@@ -495,7 +495,7 @@ resource "datadog_sensitive_data_scanner_rule" "custom_api_keys" {
                     "API keys rotated quarterly",
                     "Service accounts documented",
                   ].map((item, i) => (
-                    <div key={i} className="flex items-center gap-3 py-2 border-b border-slate-100 last:border-0">
+                    <div key={i} className="flex items-center gap-3 py-2 border-b border-gray-700 last:border-0">
                       <span className="w-5 h-5 rounded border-2 border-slate-300 flex items-center justify-center text-xs text-slate-400">☐</span>
                       <span className="text-gray-200 text-sm">{item}</span>
                     </div>
@@ -509,7 +509,7 @@ resource "datadog_sensitive_data_scanner_rule" "custom_api_keys" {
                     "Agent log scrubbing configured",
                     "APM span filtering active",
                   ].map((item, i) => (
-                    <div key={i} className="flex items-center gap-3 py-2 border-b border-slate-100 last:border-0">
+                    <div key={i} className="flex items-center gap-3 py-2 border-b border-gray-700 last:border-0">
                       <span className="w-5 h-5 rounded border-2 border-slate-300 flex items-center justify-center text-xs text-slate-400">☐</span>
                       <span className="text-gray-200 text-sm">{item}</span>
                     </div>
@@ -521,7 +521,7 @@ resource "datadog_sensitive_data_scanner_rule" "custom_api_keys" {
 
           <section className="bg-gradient-to-r from-purple-600 to-violet-600 rounded-2xl p-8 text-center text-white">
             <h2 className="text-2xl font-bold mb-4">Datadog Security Assessment</h2>
-            <a href={coreLinks.check} className="inline-block px-6 py-3 bg-gray-800 text-purple-600 rounded-lg font-semibold">Assessment Starten</a>
+            <a href={coreLinks.check} className="inline-block px-6 py-3 bg-gray-800 text-purple-400 rounded-lg font-semibold">Assessment Starten</a>
             <div className="mt-6 flex flex-wrap justify-center gap-3 text-sm">
               <a href={`${prefix}/openclaw-security-check`} className="rounded-lg border border-white/30 px-3 py-2 text-white hover:bg-white/10">OpenClaw Security Hub</a>
               <a href={`${prefix}/ai-agent-security`} className="rounded-lg border border-white/30 px-3 py-2 text-white hover:bg-white/10">AI Agent Security</a>

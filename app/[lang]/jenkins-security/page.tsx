@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n";
 import { BASE_URL } from "@/lib/config";
 import { getCoreSecurityLinks } from "@/lib/core-security-links";
@@ -103,7 +103,7 @@ export default async function JenkinsSecurityPage({
                   <li>• Agent Security</li>
                 </ul>
               </div>
-              <div className="bg-slate-50 border border-slate-200 rounded-xl p-6">
+              <div className="bg-gray-800 border border-gray-700 rounded-xl p-6">
                 <h3 className="font-semibold text-gray-100 mb-2">Secrets</h3>
                 <ul className="text-sm text-gray-100 space-y-1">
                   <li>• Credentials Binding</li>
@@ -331,7 +331,7 @@ pipeline {
 
           <section className="mb-16">
             <h2 className="text-3xl font-bold text-gray-100 mb-6">Jenkins Hardening Checklist</h2>
-            <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
+            <div className="bg-gray-800 border border-gray-700 rounded-xl p-6">
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <h3 className="font-semibold text-gray-100 mb-4">Core Security</h3>
@@ -342,7 +342,7 @@ pipeline {
                     "Signup disabled",
                     "Security Realm configured",
                   ].map((item, i) => (
-                    <div key={i} className="flex items-center gap-3 py-2 border-b border-slate-100 last:border-0">
+                    <div key={i} className="flex items-center gap-3 py-2 border-b border-gray-700 last:border-0">
                       <span className="w-5 h-5 rounded border-2 border-slate-300 flex items-center justify-center text-xs text-slate-400">☐</span>
                       <span className="text-gray-200 text-sm">{item}</span>
                     </div>
@@ -357,7 +357,7 @@ pipeline {
                     "Job Restrictions configured",
                     "Workspace cleanup enforced",
                   ].map((item, i) => (
-                    <div key={i} className="flex items-center gap-3 py-2 border-b border-slate-100 last:border-0">
+                    <div key={i} className="flex items-center gap-3 py-2 border-b border-gray-700 last:border-0">
                       <span className="w-5 h-5 rounded border-2 border-slate-300 flex items-center justify-center text-xs text-slate-400">☐</span>
                       <span className="text-gray-200 text-sm">{item}</span>
                     </div>

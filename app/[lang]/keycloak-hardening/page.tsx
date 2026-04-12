@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n";
 import { BASE_URL } from "@/lib/config";
 import { getCoreSecurityLinks } from "@/lib/core-security-links";
@@ -128,7 +128,7 @@ export default async function KeycloakHardeningPage({
             <div className="grid md:grid-cols-3 gap-4 mb-8">
               <div className="bg-blue-900 border border-blue-700 rounded-xl p-5 text-center">
                 <div className="text-3xl mb-2">📱</div>
-                <h3 className="font-semibold text-blue-900">TOTP</h3>
+                <h3 className="font-semibold text-blue-200">TOTP</h3>
                 <p className="text-xs text-blue-700 mt-1">Google/Microsoft Authenticator</p>
               </div>
               <div className="bg-green-900 border border-green-700 rounded-xl p-5 text-center">
@@ -136,7 +136,7 @@ export default async function KeycloakHardeningPage({
                 <h3 className="font-semibold text-green-900">WebAuthn</h3>
                 <p className="text-xs text-green-700 mt-1">YubiKey/FIDO2</p>
               </div>
-              <div className="bg-purple-50 border border-purple-700 rounded-xl p-5 text-center">
+              <div className="bg-purple-900 border border-purple-700 rounded-xl p-5 text-center">
                 <div className="text-3xl mb-2">📧</div>
                 <h3 className="font-semibold text-purple-900">OTP Email</h3>
                 <p className="text-xs text-purple-700 mt-1">Email-based (fallback)</p>
@@ -170,7 +170,7 @@ export default async function KeycloakHardeningPage({
           <section className="mb-16">
             <h2 className="text-3xl font-bold text-gray-100 mb-6">Brute-Force Protection</h2>
             
-            <div className="bg-gray-800 border border-slate-200 rounded-xl p-6 mb-6">
+            <div className="bg-gray-800 border border-gray-700 rounded-xl p-6 mb-6">
               <h3 className="font-semibold text-gray-100 mb-4">Security Defenses</h3>
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
@@ -283,7 +283,7 @@ export default async function KeycloakHardeningPage({
             <h2 className="text-3xl font-bold text-gray-100 mb-6">Client Security Configuration</h2>
             
             <div className="space-y-6">
-              <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
+              <div className="bg-gray-800 border border-gray-700 rounded-xl p-6">
                 <h3 className="font-semibold text-gray-100 mb-4">OIDC Client Settings</h3>
                 <div className="bg-slate-900 rounded-lg p-4 font-mono text-xs text-green-400">
 {`# Client Authentication
@@ -340,7 +340,7 @@ ID Token Signature Algorithm: ES256
             <h2 className="text-3xl font-bold text-gray-100 mb-6">GDPR & Compliance</h2>
             
             <div className="grid md:grid-cols-2 gap-6 mb-8">
-              <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
+              <div className="bg-gray-800 border border-gray-700 rounded-xl p-6">
                 <h3 className="font-semibold text-gray-100 mb-4">GDPR Features</h3>
                 <ul className="space-y-2 text-sm text-gray-200">
                   <li className="flex items-start gap-2">
@@ -365,7 +365,7 @@ ID Token Signature Algorithm: ES256
                   </li>
                 </ul>
               </div>
-              <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
+              <div className="bg-gray-800 border border-gray-700 rounded-xl p-6">
                 <h3 className="font-semibold text-gray-100 mb-4">Compliance Mapping</h3>
                 <div className="space-y-3 text-sm">
                   <div>
@@ -413,7 +413,7 @@ Enabled Event Types:
           <section className="mb-16">
             <h2 className="text-3xl font-bold text-gray-100 mb-6">Keycloak Hardening Checklist</h2>
             
-            <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
+            <div className="bg-gray-800 border border-gray-700 rounded-xl p-6">
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <h3 className="font-semibold text-gray-100 mb-4">Authentication</h3>
@@ -425,7 +425,7 @@ Enabled Event Types:
                     "No default credentials",
                     "Admin 2FA mandatory",
                   ].map((item, i) => (
-                    <div key={i} className="flex items-center gap-3 py-2 border-b border-slate-100 last:border-0">
+                    <div key={i} className="flex items-center gap-3 py-2 border-b border-gray-700 last:border-0">
                       <span className="w-5 h-5 rounded border-2 border-slate-300 flex items-center justify-center text-xs text-slate-400">☐</span>
                       <span className="text-gray-200 text-sm">{item}</span>
                     </div>
@@ -441,7 +441,7 @@ Enabled Event Types:
                     "Cluster mode (HA)",
                     "Monitoring/Alerting",
                   ].map((item, i) => (
-                    <div key={i} className="flex items-center gap-3 py-2 border-b border-slate-100 last:border-0">
+                    <div key={i} className="flex items-center gap-3 py-2 border-b border-gray-700 last:border-0">
                       <span className="w-5 h-5 rounded border-2 border-slate-300 flex items-center justify-center text-xs text-slate-400">☐</span>
                       <span className="text-gray-200 text-sm">{item}</span>
                     </div>

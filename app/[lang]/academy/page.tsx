@@ -212,7 +212,7 @@ export default async function AcademyPage({ params }: { params: { lang: string }
                 </Link>
                 <Link
                   href="/check"
-                  className="px-8 py-4 border-2 border-green-500/50 text-green-400 font-bold text-lg rounded-lg hover:bg-green-500/10 transition-all duration-300"
+                  className="px-8 py-4 border-2 border-green-500/50 text-green-400 font-bold text-lg rounded-lg hover:bg-green-9000/10 transition-all duration-300"
                 >
                   {t.cta_check}
                 </Link>
@@ -438,7 +438,7 @@ export default async function AcademyPage({ params }: { params: { lang: string }
                 </Link>
                 <Link
                   href="/downloads"
-                  className="px-8 py-4 border-2 border-green-500/50 text-green-400 font-bold text-lg rounded-lg hover:bg-green-500/10 transition-all duration-300"
+                  className="px-8 py-4 border-2 border-green-500/50 text-green-400 font-bold text-lg rounded-lg hover:bg-green-9000/10 transition-all duration-300"
                 >
                   {t.final_cta_downloads}
                 </Link>

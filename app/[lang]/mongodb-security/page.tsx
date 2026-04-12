@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n";
 import { BASE_URL } from "@/lib/config";
 import { getCoreSecurityLinks } from "@/lib/core-security-links";
@@ -110,10 +110,10 @@ export default async function MongoDBSecurityPage({
               </div>
               <div className="bg-blue-900 border border-blue-700 rounded-xl p-5 text-center">
                 <div className="text-3xl mb-2">👤</div>
-                <h3 className="font-semibold text-blue-900 text-sm mb-1">Authentication</h3>
+                <h3 className="font-semibold text-blue-200 text-sm mb-1">Authentication</h3>
                 <p className="text-xs text-blue-700">SCRAM, x.509, LDAP, Kerberos</p>
               </div>
-              <div className="bg-purple-50 border border-purple-700 rounded-xl p-5 text-center">
+              <div className="bg-purple-900 border border-purple-700 rounded-xl p-5 text-center">
                 <div className="text-3xl mb-2">🛡️</div>
                 <h3 className="font-semibold text-purple-900 text-sm mb-1">Authorization</h3>
                 <p className="text-xs text-purple-700">RBAC mit built-in & custom roles</p>
@@ -541,7 +541,7 @@ net:
 
           <section className="mb-16">
             <h2 className="text-3xl font-bold text-gray-100 mb-6">Security Checklist: Production Readiness</h2>
-            <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
+            <div className="bg-gray-800 border border-gray-700 rounded-xl p-6">
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <h3 className="font-semibold text-gray-100 mb-4">Network Security</h3>
@@ -553,7 +553,7 @@ net:
                     "VPC peering or private endpoints",
                     "No public internet exposure",
                   ].map((item, i) => (
-                    <div key={i} className="flex items-center gap-3 py-2 border-b border-slate-100 last:border-0">
+                    <div key={i} className="flex items-center gap-3 py-2 border-b border-gray-700 last:border-0">
                       <span className="w-5 h-5 rounded border-2 border-slate-300 flex items-center justify-center text-xs text-slate-400">☐</span>
                       <span className="text-gray-200 text-sm">{item}</span>
                     </div>
@@ -569,7 +569,7 @@ net:
                     "Regular access reviews (quarterly)",
                     "LDAP/AD integration (Enterprise)",
                   ].map((item, i) => (
-                    <div key={i} className="flex items-center gap-3 py-2 border-b border-slate-100 last:border-0">
+                    <div key={i} className="flex items-center gap-3 py-2 border-b border-gray-700 last:border-0">
                       <span className="w-5 h-5 rounded border-2 border-slate-300 flex items-center justify-center text-xs text-slate-400">☐</span>
                       <span className="text-gray-200 text-sm">{item}</span>
                     </div>
@@ -586,7 +586,7 @@ net:
                     "External KMS/HSM integration",
                     "Backup encryption verified",
                   ].map((item, i) => (
-                    <div key={i} className="flex items-center gap-3 py-2 border-b border-slate-100 last:border-0">
+                    <div key={i} className="flex items-center gap-3 py-2 border-b border-gray-700 last:border-0">
                       <span className="w-5 h-5 rounded border-2 border-slate-300 flex items-center justify-center text-xs text-slate-400">☐</span>
                       <span className="text-gray-200 text-sm">{item}</span>
                     </div>
@@ -602,7 +602,7 @@ net:
                     "SOC 2 Type II evidence collection",
                     "Quarterly security assessments",
                   ].map((item, i) => (
-                    <div key={i} className="flex items-center gap-3 py-2 border-b border-slate-100 last:border-0">
+                    <div key={i} className="flex items-center gap-3 py-2 border-b border-gray-700 last:border-0">
                       <span className="w-5 h-5 rounded border-2 border-slate-300 flex items-center justify-center text-xs text-slate-400">☐</span>
                       <span className="text-gray-200 text-sm">{item}</span>
                     </div>

@@ -1,4 +1,4 @@
-﻿import type { Metadata } from 'next'
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
 
@@ -49,7 +49,7 @@ export default function KubernetesSecurityPage({ params }: { params: { lang: str
                   <div className="font-semibold text-sm">{area}</div>
                   <div className={`text-sm font-bold ${score >= 95 ? 'text-green-400' : score >= 85 ? 'text-yellow-400' : 'text-red-400'}`}>{score}%</div>
                 </div>
-                <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
+                <div className="w-full bg-gray-700 rounded-full h-2 mb-2">
                   <div className={`h-2 rounded-full ${score >= 95 ? 'bg-green-9000' : score >= 85 ? 'bg-amber-9000' : 'bg-red-9000'}`} style={{ width: `${score}%` }} />
                 </div>
                 <div className="text-xs text-gray-400">{passing}/{checks} Checks bestanden</div>

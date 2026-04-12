@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n";
 import { BASE_URL } from "@/lib/config";
 import { getCoreSecurityLinks } from "@/lib/core-security-links";
@@ -126,7 +126,7 @@ export default async function GrafanaHardeningPage({
             <h2 className="text-3xl font-bold text-gray-100 mb-6">SSO & Authentifizierung</h2>
             
             <div className="grid md:grid-cols-2 gap-6 mb-8">
-              <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
+              <div className="bg-gray-800 border border-gray-700 rounded-xl p-6">
                 <h3 className="font-semibold text-gray-100 mb-3">OAuth 2.0 / OIDC</h3>
                 <p className="text-slate-600 text-sm mb-4">
                   {t(locale, "Google, Azure AD, Okta, Keycloak Integration", "Google, Azure AD, Okta, Keycloak integration")}
@@ -144,7 +144,7 @@ api_url = https://sso.company.com/userinfo
 role_attribute_path = roles[0]`}
                 </div>
               </div>
-              <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
+              <div className="bg-gray-800 border border-gray-700 rounded-xl p-6">
                 <h3 className="font-semibold text-gray-100 mb-3">SAML 2.0</h3>
                 <p className="text-slate-600 text-sm mb-4">
                   {t(locale, "Enterprise IdP Integration (Okta, OneLogin, ADFS)", "Enterprise IdP integration (Okta, OneLogin, ADFS)")}
@@ -221,7 +221,7 @@ customRoles:
 
             <div className="grid md:grid-cols-3 gap-4">
               <div className="bg-blue-900 rounded-lg p-4 border border-blue-700">
-                <h4 className="font-semibold text-blue-900 mb-2">Viewer</h4>
+                <h4 className="font-semibold text-blue-200 mb-2">Viewer</h4>
                 <p className="text-sm text-blue-300">
                   {t(locale, "Dashboards ansehen, keine Änderungen", "View dashboards, no modifications")}
                 </p>
@@ -246,7 +246,7 @@ customRoles:
             <h2 className="text-3xl font-bold text-gray-100 mb-6">Netzwerk-Security</h2>
             
             <div className="space-y-6">
-              <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
+              <div className="bg-gray-800 border border-gray-700 rounded-xl p-6">
                 <h3 className="font-semibold text-gray-100 mb-4">mTLS (Mutual TLS)</h3>
                 <p className="text-slate-600 text-sm mb-4">
                   {t(locale, "Erzwingen Sie Client-Zertifikate für Grafana-Zugriff. Schützt gegen Token-Diebstahl.", "Enforce client certificates for Grafana access. Protects against token theft.")}
@@ -263,7 +263,7 @@ client_cert_allowed_organizations = ["Company Inc"]`}
                 </div>
               </div>
 
-              <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
+              <div className="bg-gray-800 border border-gray-700 rounded-xl p-6">
                 <h3 className="font-semibold text-gray-100 mb-4">IP Whitelisting</h3>
                 <p className="text-slate-600 text-sm mb-4">
                   {t(locale, "Zugriff nur von bekannten IP-Bereichen erlauben", "Only allow access from known IP ranges")}
@@ -289,7 +289,7 @@ location /grafana/ {
             
             <div className="bg-gradient-to-br from-purple-50 to-indigo-50 border border-purple-700 rounded-xl p-6 mb-6">
               <h3 className="font-semibold text-purple-900 mb-4">HashiCorp Vault Integration</h3>
-              <p className="text-purple-800 text-sm mb-4">
+              <p className="text-purple-300 text-sm mb-4">
                 {t(locale, "Nutzen Sie Vault für sichere Speicherung von Datenquellen-Credentials. Keine Secrets in Config-Files!", "Use Vault for secure storage of data source credentials. No secrets in config files!")}
               </p>
               <div className="bg-gray-800 rounded-lg p-4 font-mono text-xs text-gray-200">
@@ -308,7 +308,7 @@ path "secret/data/grafana/*" {
               </div>
             </div>
 
-            <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
+            <div className="bg-gray-800 border border-gray-700 rounded-xl p-6">
               <h3 className="font-semibold text-gray-100 mb-4">Environment Variables</h3>
               <p className="text-slate-600 text-sm mb-4">
                 {t(locale, "Alternative zu Vault: Docker Secrets oder Kubernetes Secrets", "Alternative to Vault: Docker Secrets or Kubernetes Secrets")}
@@ -349,7 +349,7 @@ secrets:
                   <li>• Alerting-Modifikationen</li>
                 </ul>
               </div>
-              <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
+              <div className="bg-gray-800 border border-gray-700 rounded-xl p-6">
                 <h3 className="font-semibold text-gray-100 mb-4">SIEM Integration</h3>
                 <p className="text-slate-600 text-sm mb-4">
                   {t(locale, "Exportieren Sie Audit-Logs zu Splunk, Datadog oder ELK", "Export audit logs to Splunk, Datadog, or ELK")}
@@ -395,7 +395,7 @@ log_data_source_queries = true`}
           <section className="mb-16">
             <h2 className="text-3xl font-bold text-gray-100 mb-6">Grafana Hardening Checklist</h2>
             
-            <div className="bg-gray-800 border border-slate-200 rounded-xl p-6">
+            <div className="bg-gray-800 border border-gray-700 rounded-xl p-6">
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <h3 className="font-semibold text-gray-100 mb-4">Authentication</h3>
@@ -407,7 +407,7 @@ log_data_source_queries = true`}
                     "Anonymous access disabled",
                     "Signup disabled",
                   ].map((item, i) => (
-                    <div key={i} className="flex items-center gap-3 py-2 border-b border-slate-100 last:border-0">
+                    <div key={i} className="flex items-center gap-3 py-2 border-b border-gray-700 last:border-0">
                       <span className="w-5 h-5 rounded border-2 border-slate-300 flex items-center justify-center text-xs text-slate-400">☐</span>
                       <span className="text-gray-200 text-sm">{item}</span>
                     </div>
@@ -423,7 +423,7 @@ log_data_source_queries = true`}
                     "Secrets in Vault (not files)",
                     "mTLS for sensitive instances",
                   ].map((item, i) => (
-                    <div key={i} className="flex items-center gap-3 py-2 border-b border-slate-100 last:border-0">
+                    <div key={i} className="flex items-center gap-3 py-2 border-b border-gray-700 last:border-0">
                       <span className="w-5 h-5 rounded border-2 border-slate-300 flex items-center justify-center text-xs text-slate-400">☐</span>
                       <span className="text-gray-200 text-sm">{item}</span>
                     </div>

@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n";
 import { BASE_URL } from "@/lib/config";
 import { getCoreSecurityLinks } from "@/lib/core-security-links";
@@ -106,10 +106,10 @@ export default async function PrometheusVPNPage({
                 <p className="text-sm text-orange-700">Zero Trust Mesh VPN. Einfachste Lösung.</p>
               </div>
               <div className="bg-blue-900 border border-blue-700 rounded-xl p-6">
-                <h3 className="font-semibold text-blue-900 mb-2">WireGuard</h3>
+                <h3 className="font-semibold text-blue-200 mb-2">WireGuard</h3>
                 <p className="text-sm text-blue-700">Selbst-gehostete VPN. Volle Kontrolle.</p>
               </div>
-              <div className="bg-purple-50 border border-purple-700 rounded-xl p-6">
+              <div className="bg-purple-900 border border-purple-700 rounded-xl p-6">
                 <h3 className="font-semibold text-purple-900 mb-2">Remote Write</h3>
                 <p className="text-sm text-purple-700">Push-basiert zu central Prometheus.</p>
               </div>
@@ -185,7 +185,7 @@ scrape_configs:
           <section className="mb-16">
             <h2 className="text-3xl font-bold text-gray-100 mb-6">Remote Write: Push statt Pull</h2>
             
-            <div className="bg-gray-800 border border-slate-200 rounded-xl p-6 mb-6">
+            <div className="bg-gray-800 border border-gray-700 rounded-xl p-6 mb-6">
               <h3 className="font-semibold text-gray-100 mb-4">Wann Remote Write?</h3>
               <ul className="space-y-2 text-gray-200">
                 <li>• Edge/IoT-Geräte ohne öffentliche IP</li>

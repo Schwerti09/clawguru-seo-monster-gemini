@@ -1,4 +1,4 @@
-﻿import type { Metadata } from 'next'
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
 
@@ -27,7 +27,7 @@ export default function StartupSecurityPage({ params }: { params: { lang: string
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-4xl mx-auto">
-        <div className="bg-purple-50 border-l-4 border-purple-400 p-4 mb-8 text-sm">
+        <div className="bg-purple-900 border-l-4 border-purple-400 p-4 mb-8 text-sm">
           <strong>Startup Security</strong>: Security ist keine Frage des Budgets, sondern der Priorität. Starte sicher — bevor der erste Breach kommt.
         </div>
         <h1 className="text-4xl font-bold mb-4 text-gray-100">Startup Security Foundation</h1>

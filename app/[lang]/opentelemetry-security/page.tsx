@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n";
 import { BASE_URL } from "@/lib/config";
 import { getCoreSecurityLinks } from "@/lib/core-security-links";
@@ -85,18 +85,18 @@ export default async function OpenTelemetrySecurityPage({
             </p>
 
             <div className="grid md:grid-cols-3 gap-6 mb-8">
-              <div className="bg-purple-50 border border-purple-700 rounded-xl p-6">
+              <div className="bg-purple-900 border border-purple-700 rounded-xl p-6">
                 <h3 className="font-semibold text-purple-900 mb-2">Receiver Security</h3>
-                <ul className="text-sm text-purple-800 space-y-1">
+                <ul className="text-sm text-purple-300 space-y-1">
                   <li>• mTLS Authentication</li>
                   <li>• API Key Validation</li>
                   <li>• CORS Configuration</li>
                   <li>• Rate Limiting</li>
                 </ul>
               </div>
-              <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-6">
-                <h3 className="font-semibold text-indigo-900 mb-2">Data Protection</h3>
-                <ul className="text-sm text-indigo-800 space-y-1">
+              <div className="bg-indigo-900 border border-indigo-700 rounded-xl p-6">
+                <h3 className="font-semibold text-indigo-200 mb-2">Data Protection</h3>
+                <ul className="text-sm text-indigo-300 space-y-1">
                   <li>• PII Filtering</li>
                   <li>• Attribute Sanitization</li>
                   <li>• Span Masking</li>
@@ -104,8 +104,8 @@ export default async function OpenTelemetrySecurityPage({
                 </ul>
               </div>
               <div className="bg-blue-900 border border-blue-700 rounded-xl p-6">
-                <h3 className="font-semibold text-blue-900 mb-2">Export Security</h3>
-                <ul className="text-sm text-blue-800 space-y-1">
+                <h3 className="font-semibold text-blue-200 mb-2">Export Security</h3>
+                <ul className="text-sm text-blue-300 space-y-1">
                   <li>• Secure OTLP</li>
                   <li>• Credential Management</li>
                   <li>• Endpoint Validation</li>
@@ -551,7 +551,7 @@ spec:
 
           <section className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl p-8 text-center text-white">
             <h2 className="text-2xl font-bold mb-4">OpenTelemetry Security Assessment</h2>
-            <a href={coreLinks.check} className="inline-block px-6 py-3 bg-gray-800 text-purple-600 rounded-lg font-semibold">Assessment Starten</a>
+            <a href={coreLinks.check} className="inline-block px-6 py-3 bg-gray-800 text-purple-400 rounded-lg font-semibold">Assessment Starten</a>
             <div className="mt-6 flex flex-wrap justify-center gap-3 text-sm">
               <a href={`${prefix}/openclaw-security-check`} className="rounded-lg border border-white/30 px-3 py-2 text-white hover:bg-white/10">OpenClaw Security Hub</a>
               <a href={`${prefix}/ai-agent-security`} className="rounded-lg border border-white/30 px-3 py-2 text-white hover:bg-white/10">AI Agent Security</a>

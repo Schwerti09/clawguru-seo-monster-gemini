@@ -69,33 +69,32 @@ export default async function LocaleRunbookPage(props: {
     notFound()
   }
   
-  // SEO Fix: Return 404 for non-existent runbooks instead of redirecting to /runbooks
-  // (redirects caused Google to see duplicate content on the listing page)
   const { getRunbook } = await import("@/lib/pseo")
   const { parseGeoVariantSlug } = await import("@/lib/geo-matrix")
   const geoParsed = parseGeoVariantSlug(slug)
-  const resolvedSlug = getRunbook(slug) ? slug : (getRunbook(geoParsed.baseSlug) ? geoParsed.baseSlug : null)
-  if (!resolvedSlug) {
-    notFound()
-  }
-  // Geo-variant: check indexability; if not promoted yet, fall back to base slug instead of 404
-  // (GEO_MATRIX_AUTO_REWRITE rewrites base slug URLs to geo-variants — must not 404 those)
-  let finalSlug = resolvedSlug!
-  if (geoParsed.citySlug) {
-    const { getCityBySlug: getCity } = await import("@/lib/geo-cities")
+
+  // GEO_MATRIX_AUTO_REWRITE rewrites base slugs to geo-variants in middleware.
+  // Always fall back to base slug if geo-variant is not yet indexed — never 404.
+  const directRunbook = getRunbook(slug)
+  const baseRunbook = directRunbook ?? getRunbook(geoParsed.baseSlug)
+  if (!baseRunbook) notFound()
+
+  let finalSlug: string = geoParsed.baseSlug
+  if (directRunbook && geoParsed.citySlug) {
+    // Geo-variant exists — check if it's indexable; if yes serve it, otherwise base
     const { isGeoVariantIndexable: isIndexable } = await import("@/lib/geo-mycelium")
+    const { getCityBySlug: getCity } = await import("@/lib/geo-cities")
     const city = await getCity(geoParsed.citySlug)
-    if (city) {
-      const indexable = await isIndexable({ locale: lang, variantSlug: slug, rolloutStage: city.rollout_stage })
-      if (!indexable) {
-        // Fall back to base slug — render the base runbook instead of 404
-        finalSlug = geoParsed.baseSlug
-        if (!getRunbook(finalSlug)) notFound()
-      }
-    }
+    const indexable = city
+      ? await isIndexable({ locale: lang, variantSlug: slug, rolloutStage: city.rollout_stage })
+      : false
+    finalSlug = indexable ? slug : geoParsed.baseSlug
+  } else if (directRunbook) {
+    finalSlug = slug
   }
+
   const Mod = await import("@/app/runbook/[slug]/page")
   const RootRunbookPage = Mod.default
-  return <RootRunbookPage params={{ lang, slug: finalSlug }} />
+  return <RootRunbookPage params={{ lang, slug: finalSlug! }} />
 }
 

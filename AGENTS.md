@@ -1,8 +1,8 @@
-﻿# ClawGuru — AGENTS.md · Master Operating Manual v8 (12.04.2026)
+﻿# ClawGuru — AGENTS.md · Master Operating Manual v9 (13.04.2026)
 
 > **This document is the single source of truth for every agent working in this codebase.**
 > Read it completely BEFORE making any change. Update the Session Log after every session.
-> Last updated: 12.04.2026 | Language: English (maximises AI model compatibility)
+> Last updated: 13.04.2026 | Language: English (maximises AI model compatibility)
 
 ---
 
@@ -359,7 +359,11 @@ npm run build 2>&1 | Select-Object -Last 15
 
 ### Critical Open Tasks (Do These First)
 
-**1. Vercel Environment Variables — Set in Vercel Dashboard**
+**1. Vercel Cache Purge (URGENT — cached 404s still in CDN)**
+Vercel Dashboard → Project → Settings → Data Cache → **Purge Everything**
+Or: Deployments → latest deploy → three dots → **Redeploy (without cache)**
+
+**2. Vercel Environment Variables — Set in Vercel Dashboard**
 ```
 GEO_MATRIX_SITEMAP=1               # Activates geo-runbook sitemaps
 GEO_MATRIX_SITEMAP_CITY_LIMIT=50   # 50 cities per sitemap
@@ -399,8 +403,8 @@ Activates 27 cities: Japan (5), South Korea (5), Brazil (5), Mexico (5), Southea
 - **Framework**: Next.js 14 (App Router), TypeScript strict
 - **Database**: PostgreSQL via Supabase (`lib/db.ts` → `dbQuery()`)
 - **Cache / Rate-Limit**: Upstash Redis (`lib/rate-limit.ts`)
-- **Deployment**: Vercel (auto-deploy on push to `main`)
-- **Domain**: clawguru.org
+- **Deployment**: Vercel (primary, auto-deploy on push to `main`) + Railway (standby/staging)
+- **Domain**: clawguru.org (Vercel) / *.up.railway.app (Railway staging)
 
 ### Routing Patterns
 ```
@@ -853,9 +857,18 @@ npm run build 2>&1 | Select-Object -Last 15
 git add -A
 git commit -m "feat(seo): [what was done]"
 
-# Step 3 — Push (Vercel deploys automatically)
+# Step 3 — Push (Vercel + Railway deploy automatically)
 git push
 ```
+
+### Railway Setup (Standby/Staging)
+- **Config**: `railway.json` in repo root
+- **Start**: `next start -p ${PORT:-3000}` — Railway sets `PORT=8080`
+- **Health check**: `/api/health` (120s timeout)
+- **Memory**: Set `PSEO_RUNBOOK_COUNT=5000` on Railway (not 50000 — memory limit)
+- **Domain**: Railway generates `*.up.railway.app` — use as staging URL
+- **Switch to Railway**: Change DNS A/CNAME from Vercel IPs to Railway domain
+- **Key env vars for Railway**: All same as Vercel EXCEPT `PSEO_RUNBOOK_COUNT=5000` and no `VERCEL_OIDC_TOKEN`
 
 ### Commit Message Conventions
 - `feat(seo):` new content pages, sitemap changes
@@ -942,6 +955,9 @@ Will be resolved automatically when upgrading to Next.js 15 + eslint 9 (future s
 | Gemini 400 errors | All models returning 400 — demoted to last fallback | 09.04.2026 |
 | Build errors (Badge component) | `@/components/ui/badge.tsx` missing | 08.04.2026 |
 | Build error (truncated JSX) | `api-rate-limiting-advanced/page.tsx` missing closing tags | 08.04.2026 |
+| **404 on all /de/runbooks/cloud links** | `GEO_MATRIX_AUTO_REWRITE=1` rewrites base slugs to geo-variant with non-seeded city (e.g. "groheide") → `parseGeoVariantSlug` doesn't recognize city → `getRunbook()` = null → 404. Plus `Cache-Control: immutable` on all routes cached the 404 for 1 year. | 13.04.2026 |
+| **Locale-Runbook-Page 404 on geo-variants** | `isGeoVariantIndexable()` returned false for un-promoted geo-variants → `notFound()` instead of fallback | 13.04.2026 |
+| **Railway SIGTERM on start** | `next start` listens on port 3000 but Railway assigns port 8080 via `PORT` env var. Fixed: `next start -p ${PORT:-3000}` | 13.04.2026 |
 
 ---
 
@@ -957,13 +973,15 @@ Will be resolved automatically when upgrading to Next.js 15 + eslint 9 (future s
 | 08.04.2026 | 7 | Full traffic analysis: robots.txt fix, sitemap 15 locales, 1,300+ new sitemap URLs, OG Soft-404 fix, Badge component, truncated JSX fix, Gemini model fix, AGENTS.md v6 |
 | 11.04.2026 | 8 | Page speed: framer-motion removed from shared bundle (lazy-load PageTransition/AnimatedBackground/CommandK, all heavy dashboard tabs, RunbookCard, Hero, FeaturesGrid, CTA, TrustSection, GlowButton, BentoCard, OverviewTab, PremiumMetricCard, PremiumGauge). CSS animations replace JS animations. CLS fix on command-center. |
 | 12.04.2026 | 9 | SEO: hreflang xhtml:link removed from sitemap XML. Duplicate /check URL removed. Traffic growth sprint: /de/check CTA + proof bullets + score methodology. /de/roast-my-stack FAQ + examples. Compare Batch 3 (trivy/checkov/wazuh). /kubernetes-security pillar page. Compare Batch 4 (snyk/victorops/ossec). FAQPage + WebPage JSON-LD added to all 37 Moltbot pages via batch script. security-framework migrated to buildLocalizedAlternates. FAQPage JSON-LD added to all 15 OpenClaw pages via batch script. Compare Batch 5 (moltbot-vs-splunk, openclaw-vs-crowdsec). AGENTS.md v8. |
+| 13.04.2026 | 10 | **Critical bugfix: /de/runbooks/cloud links (404 root cause found).** GEO_MATRIX_AUTO_REWRITE=1 rewrites base runbook slugs to geo-variants (e.g. hetzner-ssh-hardening → hetzner-ssh-hardening-groheide). City "Großheide" slugifies to "groheide" which is NOT in SEEDED_CITY_SLUGS → parseGeoVariantSlug returns full slug as baseSlug → getRunbook() = null → 404. Fix 1: Middleware now verifies city is seeded before rewriting (round-trip parseGeoVariantSlug check). Fix 2: Locale-Runbook-Page falls back to baseSlug instead of notFound() when geo-variant not indexed. Fix 3: Cache-Control immutable moved from all routes to /_next/static/ only (was caching 404s for 1 year). Fix 4: vercel.json maxDuration=60s for runbook pages. Fix 5: SITEMAP_100K_LOCALES locale guard replaced with SUPPORTED_LOCALES. Railway deployment setup: railway.json + PORT env var fix (next start -p ${PORT:-3000}). AGENTS.md v9. |
 
 ### Open Tasks by Priority
 
 **CRITICAL — Do Before Next Content Work**
+- [ ] **Vercel Cache Purge** — Dashboard → Settings → Data Cache → Purge Everything (cached 404s!)
 - [ ] Set Vercel env vars: `GEO_MATRIX_SITEMAP=1`, `SITEMAP_BUCKETS=5`, `GEO_MATRIX_SITEMAP_CITY_LIMIT=50`
 - [ ] Run Asia/LatAm DB seeding: `GET /api/geo/asia-latam-expansion?stable=1`
-- [ ] Google Search Console: resubmit `sitemap.xml`, request indexing for `/de/runbooks` and `/de`
+- [ ] Google Search Console: resubmit `sitemap.xml`, request indexing for `/de/runbooks` und `/de`
 
 **HIGH — Next Session (Traffic Growth Sprint)**
 - [x] `/de/kubernetes-security` Pillar-Page erstellt ✅
@@ -990,11 +1008,11 @@ Will be resolved automatically when upgrading to Next.js 15 + eslint 9 (future s
 - [ ] Next.js 15 upgrade (unlocks eslint 9, removes all npm warnings)
 
 ### Next 5 Immediate Actions (in Order)
-1. Set Vercel env vars (manual, Vercel dashboard)
-2. Run Asia/LatAm DB seeding (HTTP call with secret)
-3. Resubmit sitemap in Google Search Console after new compare pages deploy
-4. Build `/de/kubernetes-security` Pillar Page
-5. Add FAQPage + WebPage schema JSON-LD to all Moltbot pages (batch edit)
+1. **Vercel Cache Purge** — clear CDN cache so 404s are gone (Vercel Dashboard)
+2. Run Asia/LatAm DB seeding: `GET /api/geo/asia-latam-expansion?stable=1`
+3. Set Vercel env vars: `GEO_MATRIX_SITEMAP=1`, `SITEMAP_BUCKETS=5`
+4. Resubmit sitemap in Google Search Console after new compare pages deploy
+5. Compare Batch 6 + HowTo schema on OpenClaw pages
 
 ---
 

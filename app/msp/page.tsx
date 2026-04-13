@@ -77,9 +77,21 @@ const MSP_GROUPS: FeatureGroup[] = [
   },
 ]
 
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    { '@type': 'Question', name: 'Was ist ClawGuru MSP und für wen ist es geeignet?', acceptedAnswer: { '@type': 'Answer', text: 'ClawGuru MSP ist die Managed Service Provider Edition: zentrale Verwaltung der Security-Scores und Hardening-Status aller Kunden-Domains. Geeignet für: IT-Dienstleister, Hosting-Provider, DevOps-Agenturen, Security-Consultants die mehrere Kunden betreuen. Features: Multi-Tenant Dashboard, White-Label Reports, Kunden-spezifische Runbooks, konsolidierte Compliance-Berichte.' } },
+    { '@type': 'Question', name: 'Wie viele Kunden-Domains kann ich mit ClawGuru MSP verwalten?', acceptedAnswer: { '@type': 'Answer', text: 'ClawGuru MSP Kapazität: MSP Starter: bis 25 Kunden-Domains. MSP Pro: bis 100 Kunden-Domains. MSP Enterprise: unbegrenzt. Jede Domain wird täglich automatisch geprüft. Alert-System: automatische Benachrichtigung wenn Kunden-Score unter definierten Threshold fällt. API für Integration in bestehende MSP-Tools (PSA-Systeme, Monitoring-Dashboards).' } },
+    { '@type': 'Question', name: 'Kann ich ClawGuru MSP Reports white-labeln?', acceptedAnswer: { '@type': 'Answer', text: 'ClawGuru MSP White-Label: Ja — PDF-Reports mit deinem Logo, Farben und Firmennamen. Kunden sehen deine Marke, nicht ClawGuru. Automatisierte monatliche Reports per E-Mail. Report-Inhalte: Security-Score-Trend, gefundene Schwachstellen, behobene Issues, Compliance-Status (NIS2, DSGVO). Verfügbar ab MSP Pro Plan.' } },
+    { '@type': 'Question', name: 'Wie funktioniert die Abrechnung im MSP-Modell?', acceptedAnswer: { '@type': 'Answer', text: 'ClawGuru MSP Abrechnung: Flat-Rate pro Tier (nicht pro Domain-Check). Monatliche oder jährliche Abrechnung (jährlich 20% günstiger). Zusätzliche Domains über Tier-Limit: Zubuchung möglich. Kein Minimum-Contract. Für große MSPs: Volume-Pricing über Enterprise-Anfrage. Alle Pläne inkl. unbegrenzter Checks pro Domain (täglich automatisch + manuell on-demand).' } },
+  ],
+}
+
 export default function MspPage() {
   return (
     <main className="min-h-screen bg-[#05060A]">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       {/* Hero */}
       <section className="relative overflow-hidden pt-20 pb-10 text-center px-4">
         <div

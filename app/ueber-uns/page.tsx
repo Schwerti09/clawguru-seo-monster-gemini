@@ -20,9 +20,21 @@ const people = [
   }
 ]
 
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    { '@type': 'Question', name: 'Wer steckt hinter ClawGuru?', acceptedAnswer: { '@type': 'Answer', text: 'ClawGuru wurde von einem kleinen, erfahrenen Team aus DevOps- und Security-Experten gegründet. Kernteam: Rolf S. (Founder, Ops/Research) — baut seit Jahren Bots, Pipelines und Deployments. Mara K. (Security Engineering) — Threat Modeling, Hardening, Incident-Forensik. Das Team hat selbst in Produktionsumgebungen gearbeitet und kennt den Unterschied zwischen theoretischen Guides und operativer Realität.' } },
+    { '@type': 'Question', name: 'Was ist die Mission von ClawGuru?', acceptedAnswer: { '@type': 'Answer', text: 'ClawGuru Mission: Security-Hygiene für jeden zugänglich machen — nicht nur für Teams mit dediziertem Security-Budget. "Not a Pentest" Framing: wir sind der vertrauenswürdige Verteidigungspartner, kein Angriffs-Tool. Praktische, sofort umsetzbare Runbooks statt theoretischer Frameworks. Self-Hosted und DSGVO-first: keine Cloud-Lock-ins, volle Datenkontrolle. Ziel: 1 Million+ qualitativ hochwertige, indexierbare Security-Seiten.' } },
+    { '@type': 'Question', name: 'Ist ClawGuru ein deutsches Unternehmen?', acceptedAnswer: { '@type': 'Answer', text: 'ClawGuru ist EU-basiert mit starkem DSGVO-Fokus. Infrastruktur auf EU-Servern (Hetzner). Keine Datenweitergabe an US-Anbieter für produktive Nutzerdaten. BSI-Richtlinien werden aktiv referenziert. Sprachen: 15 Sprachen, Schwerpunkt DACH-Region (Deutsch als Erstsprache des Teams). Compliance-Expertise: DSGVO, NIS2, BSI IT-Grundschutz.' } },
+    { '@type': 'Question', name: 'Wie kann ich mit dem ClawGuru Team in Kontakt treten?', acceptedAnswer: { '@type': 'Answer', text: 'ClawGuru Kontakt: Support: über das Support-Formular auf /support. Enterprise-Anfragen: Enterprise-Kontaktformular auf /pricing. Security-Disclosure (Responsible Disclosure): security@clawguru.org. Feature-Requests: GitHub Issues oder Community-Forum. Durchschnittliche Antwortzeit: Pro-Kunden < 4h, Free-Nutzer < 24h (Werktage).' } },
+  ],
+}
+
 export default function AboutPage() {
   return (
     <Container>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <div className="py-16">
         <SectionTitle
           kicker="E-A-T / Transparenz"

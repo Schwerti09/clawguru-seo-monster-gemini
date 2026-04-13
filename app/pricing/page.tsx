@@ -226,8 +226,21 @@ export default async function PricingPage() {
   const PRO_GROUPS = getProGroups(dict)
   const TEAM_GROUPS = getTeamGroups(dict)
   const ENTERPRISE_GROUPS = getEnterpriseGroups(dict)
+
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      { '@type': 'Question', name: 'Was ist im ClawGuru Free Plan enthalten?', acceptedAnswer: { '@type': 'Answer', text: 'ClawGuru Free Plan: Unbegrenzte Security Checks für beliebige Domains. HTTP-Header-Analyse, TLS-Check, Security-Score. Zugriff auf öffentliche Runbooks. Kein Konto nötig. Keine Kreditkarte. Ideal für: Entwickler, kleine Teams, einmalige Checks. Limits: keine Monitoring-Alerts, kein API-Zugang, keine Team-Features.' } },
+      { '@type': 'Question', name: 'Was bietet ClawGuru Pro zusätzlich?', acceptedAnswer: { '@type': 'Answer', text: 'ClawGuru Pro Zusatzfeatures: Continuous Monitoring mit automatischen Alerts bei Score-Verschlechterung. API-Zugang für CI/CD-Integration (GitHub Actions, GitLab CI). Erweiterte CVE-Berichte mit Priorisierung. Historische Score-Daten und Trend-Analyse. Priority Support. Moltbot-Integration für automatisiertes Hardening. Ideal für: professionelle DevOps-Teams, Startups mit Compliance-Anforderungen.' } },
+      { '@type': 'Question', name: 'Gibt es einen Enterprise-Plan für große Organisationen?', acceptedAnswer: { '@type': 'Answer', text: 'ClawGuru Enterprise: Unbegrenzte Domains und Teams. Dedizierter Account Manager. Custom SLAs (99.99% Uptime). On-Premise Deployment möglich (DSGVO/HIPAA-kritische Umgebungen). SSO/SAML-Integration. Custom Compliance Reports (SOC2, ISO27001, PCI-DSS, HIPAA). Audit-Trail-Export. Volume-Pricing. Kontakt: Enterprise-Anfragen über das Kontaktformular.' } },
+      { '@type': 'Question', name: 'Kann ich ClawGuru kostenlos testen bevor ich zahle?', acceptedAnswer: { '@type': 'Answer', text: 'ClawGuru Testmöglichkeiten: Free Plan ist dauerhaft kostenlos — kein Trial-Ablauf. Pro Plan: 14-Tage-Testphase ohne Kreditkarte. Day Pass: Einmaliger Pro-Zugang für 24 Stunden (ideal zum Testen aller Pro-Features). Empfehlung: Security Check kostenlos durchführen, dann mit einem Day Pass die Pro-Features testen bevor du abonnierst.' } },
+    ],
+  }
+
   return (
     <main className="min-h-screen bg-[#05060A]">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       {/* Hero */}
       <section className="relative overflow-hidden pt-20 pb-10 text-center px-4">
         <div className="pointer-events-none absolute inset-0" aria-hidden="true"

@@ -517,7 +517,7 @@ export default function NeuroPage() {
             {/* NEURO-MYCELIUM INTERFACE v3.5 – Overlord AI: Header */}
             <div className="text-center mb-8">
               <div className="text-xs font-mono tracking-widest uppercase mb-3" style={{ color: "#b464ff" }}>
-                NEURO-MYCELIUM INTERFACE v3.5 · GENESIS PROTOKOLL
+                NEURO-MYCELIUM INTERFACE v3.5 · NEURAL COSMOS
               </div>
               <div className="text-4xl mb-3">🧠</div>
               <h1 className="text-3xl font-black mb-3" style={{ color: "#fff" }}>
@@ -579,19 +579,13 @@ export default function NeuroPage() {
     <>
       {mounted && <NeuroMyceliumBackground />}
 
-      {/* Camera permission box – shown automatically when camera is detected */}
-      {showCameraPermissionBox && !eyeTrackingEnabled && !gazeActive && (
-        <CameraPermissionBox
-          onAccept={() => { setShowCameraPermissionBox(false); setEyeTrackingEnabled(true) }}
-          onDismiss={() => setShowCameraPermissionBox(false)}
-        />
-      )}
+      {/* Camera permission removed - eye tracking is now manual opt-in only */}
 
       <div className="relative min-h-screen flex flex-col" style={{ zIndex: 1 }}>
         {/* ── Header ───────────────────────────────────────────────────────── */}
         <div className="pt-16 pb-6 text-center px-4">
           <div className="text-xs font-mono tracking-widest uppercase mb-3" style={{ color: "#b464ff" }}>
-            NEURO-MYCELIUM INTERFACE v3.5 · GENESIS PROTOKOLL · THINK IT. THE MYCELIUM KNOWS.
+            NEURO-MYCELIUM INTERFACE v3.5 · NEURAL COSMOS · THINK IT. THE MYCELIUM KNOWS.
           </div>
           <h1 className="text-5xl md:text-6xl font-black mb-4 leading-none tracking-tight">
             <span
@@ -870,7 +864,7 @@ export default function NeuroPage() {
             )}
 
             {/* Ask again */}
-            <div className="text-center">
+            <div className="text-center mb-10">
               <button
                 onClick={() => { setResponse(null); setSelectedQuestion(""); setTriggeredByGaze(false) }}
                 className="px-6 py-2 rounded-full text-sm font-mono border transition-all duration-200"
@@ -880,6 +874,72 @@ export default function NeuroPage() {
               </button>
             </div>
 
+            {/* ── Cross-Links ─────────────────────────────────────────────── */}
+            <div className="mx-auto w-full max-w-2xl px-4 pb-8">
+              <div className="rounded-2xl border p-6" style={{ borderColor: "rgba(180,100,255,0.15)", background: "rgba(180,100,255,0.03)" }}>
+                <div className="text-xs font-mono uppercase tracking-widest mb-4 text-center" style={{ color: "#b464ff" }}>
+                  Mycelium Kreislauf
+                </div>
+                <div className="flex flex-wrap justify-center gap-3">
+                  <a
+                    href="/summon"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-mono font-bold transition-all duration-300 hover:scale-105"
+                    style={{ background: "rgba(0,184,255,0.1)", border: "1px solid #00b8ff", color: "#00b8ff" }}
+                  >
+                    <span>◆</span> Summon AI
+                  </a>
+                  <a
+                    href="/intel"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-mono font-bold transition-all duration-300 hover:scale-105"
+                    style={{ background: "rgba(0,255,157,0.1)", border: "1px solid #00ff9d", color: "#00ff9d" }}
+                  >
+                    <span>◆</span> Intel Feed
+                  </a>
+                  <a
+                    href="/oracle"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-mono font-bold transition-all duration-300 hover:scale-105"
+                    style={{ background: "rgba(255,200,0,0.1)", border: "1px solid #ffc800", color: "#ffc800" }}
+                  >
+                    <span>◆</span> The Oracle
+                  </a>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        )}
+
+        {/* ── Cross-Links for empty state ─────────────────────────────────── */}
+        {!thinking && !response && (
+          <div className="mx-auto w-full max-w-2xl px-4 mb-8">
+            <div className="rounded-2xl border p-6" style={{ borderColor: "rgba(180,100,255,0.15)", background: "rgba(180,100,255,0.03)" }}>
+              <div className="text-xs font-mono uppercase tracking-widest mb-4 text-center" style={{ color: "#b464ff" }}>
+                Mycelium Kreislauf
+              </div>
+              <div className="flex flex-wrap justify-center gap-3">
+                <a
+                  href="/summon"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-mono font-bold transition-all duration-300 hover:scale-105"
+                  style={{ background: "rgba(0,184,255,0.1)", border: "1px solid #00b8ff", color: "#00b8ff" }}
+                >
+                  <span>◆</span> Summon AI
+                </a>
+                <a
+                  href="/intel"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-mono font-bold transition-all duration-300 hover:scale-105"
+                  style={{ background: "rgba(0,255,157,0.1)", border: "1px solid #00ff9d", color: "#00ff9d" }}
+                >
+                  <span>◆</span> Intel Feed
+                </a>
+                <a
+                  href="/oracle"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-mono font-bold transition-all duration-300 hover:scale-105"
+                  style={{ background: "rgba(255,200,0,0.1)", border: "1px solid #ffc800", color: "#ffc800" }}
+                >
+                  <span>◆</span> The Oracle
+                </a>
+              </div>
+            </div>
           </div>
         )}
 

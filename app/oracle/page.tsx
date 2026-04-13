@@ -322,7 +322,7 @@ export default function OraclePage() {
             className="text-xs font-mono tracking-widest uppercase mb-3"
             style={{ color: "#00ff9d" }}
           >
-            MYCELIUM ORACLE v3.3 · GENESIS PROTOKOLL · {NODE_DISPLAY.toLocaleString()} NODES
+            MYCELIUM ORACLE v3.3 · COSMIC INTELLIGENCE · {NODE_DISPLAY.toLocaleString()} NODES
           </div>
           <h1 className="text-5xl md:text-7xl font-black mb-4 leading-none tracking-tight">
             <span
@@ -546,6 +546,38 @@ export default function OraclePage() {
 
           </div>
         )}
+
+        {/* ── Cross-Links ─────────────────────────────────────────────────── */}
+        <div className="mx-auto w-full max-w-2xl px-4 pb-8">
+          <div className="rounded-2xl border p-6" style={{ borderColor: "rgba(0,255,157,0.15)", background: "rgba(0,255,157,0.03)" }}>
+            <div className="text-xs font-mono uppercase tracking-widest mb-4 text-center" style={{ color: "#00ff9d" }}>
+              Mycelium Kreislauf
+            </div>
+            <div className="flex flex-wrap justify-center gap-3">
+              <a
+                href="/summon"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-mono font-bold transition-all duration-300 hover:scale-105"
+                style={{ background: "rgba(0,184,255,0.1)", border: "1px solid #00b8ff", color: "#00b8ff" }}
+              >
+                <span>◆</span> Summon AI
+              </a>
+              <a
+                href="/intel"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-mono font-bold transition-all duration-300 hover:scale-105"
+                style={{ background: "rgba(180,100,255,0.1)", border: "1px solid #b464ff", color: "#b464ff" }}
+              >
+                <span>◆</span> Intel Feed
+              </a>
+              <a
+                href="/neuro"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-mono font-bold transition-all duration-300 hover:scale-105"
+                style={{ background: "rgba(255,200,0,0.1)", border: "1px solid #ffc800", color: "#ffc800" }}
+              >
+                <span>◆</span> Neuro Core
+              </a>
+            </div>
+          </div>
+        </div>
 
         {/* ── Footer message ──────────────────────────────────────────────── */}
         {!thinking && !response && (

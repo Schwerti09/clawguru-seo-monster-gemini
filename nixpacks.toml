@@ -2,4 +2,4 @@
 cmds = ["npm install --legacy-peer-deps"]
 
 [phases.build]
-cmds = ["npm run build"]
+cmds = ["NODE_OPTIONS='--max-old-space-size=900' npm run build"]

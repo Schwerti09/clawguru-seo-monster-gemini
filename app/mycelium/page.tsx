@@ -27,8 +27,20 @@ export default async function MyceliumPage() {
   const dict = await getDictionary(locale)
   const prefix = `/${locale}`
 
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      { '@type': 'Question', name: 'Was ist das ClawGuru Mycelium?', acceptedAnswer: { '@type': 'Answer', text: 'Das ClawGuru Mycelium ist ein lebendiger Wissens-Graph: 1M+ Runbooks als Knoten, semantische Beziehungen als Kanten. Visualisierung: Force-Directed Graph — ähnlich einem Pilz-Mycel-Netzwerk. Jeder Knoten repräsentiert ein Runbook oder eine Security-Concept. Kanten zeigen Abhängigkeiten, Ähnlichkeiten, Co-Occurrence in Incidents. Darwinian-Evolution: häufig genutzte Runbooks werden prominenter dargestellt.' } },
+      { '@type': 'Question', name: 'Wie navigiere ich im Mycelium-Graphen?', acceptedAnswer: { '@type': 'Answer', text: 'Mycelium Navigation: Zoom: Mausrad oder Pinch-to-Zoom. Pan: Drag auf freier Fläche. Knoten-Klick: zeigt Runbook-Details und verwandte Knoten. Suche: Suchfeld oben — Knoten werden hervorgehoben. Filter: nach Kategorie (Security, Compliance, Monitoring). Oracle-Modus: KI-gestützte Navigation ("Zeig mir alle Runbooks für nginx"). Cluster-Ansicht: verwandte Runbooks werden gruppiert.' } },
+      { '@type': 'Question', name: 'Was bedeutet die Farbe der Mycelium-Knoten?', acceptedAnswer: { '@type': 'Answer', text: 'Mycelium Knoten-Farbkodierung: Cyan: Security-Hardening-Runbooks. Orange: Incident-Response-Runbooks. Grün: Monitoring und Observability. Violett: Compliance-Runbooks (SOC2, ISO27001). Rot: kritische CVE-Runbooks (sofortiger Handlungsbedarf). Grau: allgemeine Ops-Runbooks. Größe des Knotens: Nutzungsfrequenz — große Knoten werden häufig ausgeführt. Pulsieren: Runbook wurde in letzten 24h ausgeführt.' } },
+      { '@type': 'Question', name: 'Kann ich das Mycelium für meine eigenen Runbooks nutzen?', acceptedAnswer: { '@type': 'Answer', text: 'Custom Mycelium: Pro-Plan — eigene Runbooks werden in deinen privaten Mycelium-Namespace eingefügt. Enterprise — vollständig isolierter Mycelium-Graph für deine Organisation. API: Runbooks programmatisch hinzufügen (POST /api/mycelium/nodes). Semantic Linking: ClawGuru verknüpft automatisch ähnliche Runbooks basierend auf Embedding-Similarity. Export: Mycelium als JSON-Graph exportieren für eigene Visualisierungen.' } },
+    ],
+  }
+
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       {/* MYCELIAL SINGULARITY v3.0 – Page header */}
       <div className="border-b border-white/10 bg-gradient-to-b from-gray-950 to-[#050608] py-10">
         <Container>

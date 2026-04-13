@@ -63,12 +63,24 @@ const FEATURES = [
   },
 ]
 
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    { '@type': 'Question', name: 'Was ist der ClawGuru Approved Remediation Swarm?', acceptedAnswer: { '@type': 'Answer', text: 'Der Approved Remediation Swarm ist ClawGurus automatisiertes System zur koordinierten Behebung von Security-Findings. Mehrere spezialisierte Runbooks werden in der richtigen Reihenfolge ausgeführt (Swarm-Execution). Vorteil: abhängige Fixes werden korrekt sequenziert (z.B. erst TLS, dann HSTS). Approval-Workflow: kritische Änderungen erfordern manuelle Bestätigung vor Ausführung. Audit-Trail: alle Swarm-Aktionen werden geloggt.' } },
+    { '@type': 'Question', name: 'Wie starte ich einen Remediation Swarm?', acceptedAnswer: { '@type': 'Answer', text: 'Remediation Swarm starten: 1) Security Check für deine Domain durchführen. 2) Mehrere Findings auswählen. 3) "Als Swarm ausführen" klicken — ClawGuru erstellt automatisch einen optimierten Ausführungsplan. 4) Approval-Screen: kritische Schritte bestätigen. 5) Swarm läuft sequenziell durch alle Runbooks. 6) Re-Check am Ende zeigt Score-Verbesserung. Verfügbar ab Pro-Plan.' } },
+    { '@type': 'Question', name: 'Was ist der Unterschied zwischen Swarm und einzelnem Runbook?', acceptedAnswer: { '@type': 'Answer', text: 'Einzelnes Runbook: behebt einen spezifischen Finding (z.B. nur HSTS setzen). Swarm: orchestriert mehrere Runbooks intelligent — erkennt Abhängigkeiten, vermeidet Konflikte, optimiert Reihenfolge. Beispiel: CSP-Policy hängt von nginx-Konfiguration ab — Swarm führt nginx-Runbook zuerst aus. Zeitersparnis: Swarm erledigt in einer Session was sonst mehrere manuelle Iterationen braucht.' } },
+    { '@type': 'Question', name: 'Kann ich einen Swarm rückgängig machen?', acceptedAnswer: { '@type': 'Answer', text: 'Swarm Rollback: Ja — jeder Swarm-Step erstellt automatisch einen Checkpoint (Config-Snapshot). Rollback über Dashboard: einzelne Steps oder kompletten Swarm rückgängig machen. CLI: clawguru swarm rollback <swarm-id>. Zeitfenster: Rollback möglich innerhalb 24h nach Ausführung. Nach 24h: manuelle Rollback-Anleitung im Swarm-History-Log. Empfehlung: immer zuerst in Staging-Umgebung testen.' } },
+  ],
+}
+
 export default function SwarmIndexPage() {
   return (
     <div
       className="relative min-h-screen flex flex-col"
       style={{ background: QV.void, color: QV.coldWhite }}
     >
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       {/* ── Header ── */}
       <div className="pt-16 pb-10 px-4 text-center">
         <a

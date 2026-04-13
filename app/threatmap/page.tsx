@@ -23,11 +23,23 @@ export const metadata: Metadata = {
 // WORLD BEAST UPGRADE: 5-minute ISR revalidation
 export const revalidate = 300
 
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    { '@type': 'Question', name: 'Was zeigt die ClawGuru Threat Map?', acceptedAnswer: { '@type': 'Answer', text: 'Die ClawGuru Threat Map visualisiert globale Security-Bedrohungen in Echtzeit: Angriffs-Hotspots nach Region, aktive CVE-Exploits, DDoS-Angriffswellen, Botnet-Aktivität. Datenquellen: NVD, CISA KEV, Community-Threat-Feeds, Shodan-Daten. Interaktiv: klicke auf eine Region um spezifische Bedrohungen und passende Runbooks zu sehen. Update-Frequenz: alle 5 Minuten (ISR).' } },
+    { '@type': 'Question', name: 'Wie interpretiere ich die Threat-Severity auf der Map?', acceptedAnswer: { '@type': 'Answer', text: 'Threat Map Severity-Farbskala: Rot (Critical): aktive Exploits, CISA KEV-gelistet, sofortiger Handlungsbedarf. Orange (High): CVSS 7.0-8.9, Patch verfügbar, 72h SLA. Gelb (Medium): CVSS 4.0-6.9, kein aktiver Exploit bekannt, 30 Tage. Grün (Low/Informational): Härtungsempfehlungen ohne akute Bedrohung. Größe des Markers: Anzahl betroffener Systeme/IPs in der Region.' } },
+    { '@type': 'Question', name: 'Welche Regionen haben aktuell die höchste Bedrohungslage?', acceptedAnswer: { '@type': 'Answer', text: 'Threat Map Hotspots 2026: Ostasien (CN, KP): höchste APT-Aktivität, Supply-Chain-Angriffe auf Infrastruktur. Osteuropa: Ransomware-Gruppen, kritische Infrastruktur-Angriffe. Nordamerika: höchste CVE-Exploit-Rate bei Cloud-Diensten. Westeuropa (DE, FR): NIS2-Scope Angriffe auf kritische Infrastruktur. Diese Daten sind aggregiert und anonymisiert — keine Einzelsysteme identifizierbar.' } },
+    { '@type': 'Question', name: 'Wie kann ich mein System gegen aktuelle Bedrohungen absichern?', acceptedAnswer: { '@type': 'Answer', text: 'Threat-reaktive Härtung: 1) Threat Map prüfen — welche CVEs sind in deiner Region aktiv? 2) ClawGuru Security Check für deine Domain. 3) Passende Runbooks für aktive Bedrohungen auswählen. 4) Moltbot CVE-Feed abonnieren (automatische Alerts bei neuen Exploits). 5) CISA KEV-Liste täglich prüfen (Known Exploited Vulnerabilities). Sofortmaßnahme bei Critical-Alert: betroffene Services isolieren, Patch priorisieren.' } },
+  ],
+}
+
 export default function ThreatMapPage() {
   const totalThreats = THREAT_REGIONS.reduce((sum, r) => sum + r.threats, 0)
 
   return (
     <Container>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <div className="py-12 max-w-6xl mx-auto">
         {/* WORLD BEAST UPGRADE: Header */}
         <div className="mb-2 text-xs uppercase tracking-widest" style={{ color: "#ff3b5c" }}>

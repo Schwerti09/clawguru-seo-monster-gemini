@@ -52,6 +52,16 @@ export default async function YearsPage() {
   return (
     <Container>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: [
+          { '@type': 'Question', name: 'Was zeigt das ClawGuru Jahres-Archiv?', acceptedAnswer: { '@type': 'Answer', text: 'Das ClawGuru Jahres-Archiv dokumentiert die Security-Landscape über die Jahre: wichtigste CVEs pro Jahr, größte Angriffs-Trends, Entwicklung von Security-Standards (TLS-Versionen, Header-Adoption). Historische Perspektive hilft: Muster erkennen, Compliance-Entwicklung nachvollziehen, Security-Reifegrad der eigenen Infrastruktur einschätzen.' } },
+          { '@type': 'Question', name: 'Was waren die kritischsten CVEs der letzten Jahre?', acceptedAnswer: { '@type': 'Answer', text: 'Kritischste CVEs nach Jahr: 2021: Log4Shell (CVE-2021-44228, CVSS 10.0) — RCE in Log4j, betraf Millionen Java-Anwendungen. 2022: Spring4Shell (CVE-2022-22965) — RCE in Spring Framework. 2023: MOVEit Transfer SQLi (CVE-2023-34362) — massenhafter Datenverlust. 2024: XZ Utils Backdoor (CVE-2024-3094) — Supply-Chain-Kompromittierung. 2025/2026: AI-System-Exploits und LLM-Prompt-Injection in produktiven Systemen.' } },
+          { '@type': 'Question', name: 'Wie hat sich die TLS-Adoption über die Jahre entwickelt?', acceptedAnswer: { '@type': 'Answer', text: 'TLS-Adoption Timeline: 2018: TLS 1.3 Finalisierung (RFC 8446). 2020: TLS 1.0/1.1 offiziell deprecated (RFC 8996). 2021: Browser deaktivieren TLS 1.0/1.1. 2023: 95%+ aller öffentlichen Domains nutzen TLS 1.2+. 2026: TLS 1.3 Adoption bei ~80% der Domains. ClawGuru Score-Penalty für TLS < 1.2: -25 Punkte. Empfehlung: TLS 1.3 als Minimum, TLS 1.2 als Fallback.' } },
+          { '@type': 'Question', name: 'Welche Security-Trends sind für 2026 besonders relevant?', acceptedAnswer: { '@type': 'Answer', text: 'Security-Trends 2026: AI-System-Security (LLM-Prompt-Injection, Agent-Hijacking). Post-Quantum-Kryptographie Vorbereitung (NIST PQC-Standards). Supply-Chain-Security (SBOM-Pflicht in regulierten Bereichen). NIS2-Compliance-Druck in der EU. Zero-Trust-Architekturen für Remote-Work. Container-Security (Kubernetes RBAC, Pod-Security-Standards). API-Security (OWASP API Top 10 2023).' } },
+        ],
+      }) }} />
       <div className="py-16 max-w-6xl mx-auto">
         <nav className="text-sm text-gray-500 mb-6" aria-label="Breadcrumb">
           <ol className="flex flex-wrap items-center gap-2">

@@ -363,16 +363,20 @@ export function middleware(request: NextRequest) {
         const citySlug = slugifyCity(edgeGeo.city)
         if (citySlug) {
           const geoSlug = buildGeoSlug(parsed.baseSlug, citySlug)
-          const url = request.nextUrl.clone()
-          url.pathname = `/${lang}/runbook/${geoSlug}`
-          const res = NextResponse.rewrite(url)
-          res.headers.set("x-claw-locale", lang.toLowerCase())
-          res.headers.set("x-claw-dir", localeDir(lang.toLowerCase() as any))
-          if (edgeGeo.city) res.headers.set("x-claw-geo-city", edgeGeo.city)
-          if (edgeGeo.region) res.headers.set("x-claw-geo-region", edgeGeo.region)
-          if (edgeGeo.country) res.headers.set("x-claw-geo-country", edgeGeo.country)
-          res.headers.set(getRequestIdHeaderName(), requestId)
-          return res
+          // Only rewrite if the city is in SEEDED_CITY_SLUGS (verified by round-trip parse)
+          const verify = parseGeoVariantSlug(geoSlug)
+          if (verify.citySlug) {
+            const url = request.nextUrl.clone()
+            url.pathname = `/${lang}/runbook/${geoSlug}`
+            const res = NextResponse.rewrite(url)
+            res.headers.set("x-claw-locale", lang.toLowerCase())
+            res.headers.set("x-claw-dir", localeDir(lang.toLowerCase() as any))
+            if (edgeGeo.city) res.headers.set("x-claw-geo-city", edgeGeo.city)
+            if (edgeGeo.region) res.headers.set("x-claw-geo-region", edgeGeo.region)
+            if (edgeGeo.country) res.headers.set("x-claw-geo-country", edgeGeo.country)
+            res.headers.set(getRequestIdHeaderName(), requestId)
+            return res
+          }
         }
       }
     }

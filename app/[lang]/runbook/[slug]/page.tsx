@@ -65,8 +65,7 @@ export default async function LocaleRunbookPage(props: {
   params: { lang: string; slug: string }
 }) {
   const { lang, slug } = props.params
-  const allowed = (process.env.SITEMAP_100K_LOCALES ?? "de,en").split(",").map((s) => s.trim()).filter(Boolean)
-  if (!allowed.includes(lang)) {
+  if (!SUPPORTED_LOCALES.includes(lang as Locale)) {
     notFound()
   }
   

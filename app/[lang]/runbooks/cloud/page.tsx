@@ -34,15 +34,23 @@ export default async function CloudHubPage(props: { params: { lang: string } }) 
   const params = props.params;
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
 
-  const { materializedRunbooks, getRunbook } = await import("../../../../lib/pseo")
-  const cloudRunbooks = materializedRunbooks().filter((r) => getRunbook(r.slug) !== null).filter((r) =>
-    CLOUD_PROVIDERS.some((p) => r.tags.includes("provider:" + p))
-  ).slice(0, 120)
+  const { materializedRunbooks, getRunbook, runbooksByProvider } = await import("../../../../lib/pseo")
 
-  const grouped = CLOUD_PROVIDERS.map((provider) => ({
-    provider,
-    runbooks: cloudRunbooks.filter((r) => r.tags.includes("provider:" + provider)).slice(0, 8),
-  })).filter((g) => g.runbooks.length > 0)
+  // Try materializedRunbooks first, fallback to per-provider lookup
+  const allRunbooks = materializedRunbooks()
+  const cloudRunbooks = allRunbooks.length > 0
+    ? allRunbooks.filter((r) => getRunbook(r.slug) !== null).filter((r) =>
+        CLOUD_PROVIDERS.some((p) => r.tags.includes("provider:" + p))
+      ).slice(0, 120)
+    : []
+
+  const grouped = CLOUD_PROVIDERS.map((provider) => {
+    const fromMaterialized = cloudRunbooks.filter((r) => r.tags.includes("provider:" + provider)).slice(0, 8)
+    const runbooks = fromMaterialized.length > 0
+      ? fromMaterialized
+      : runbooksByProvider(provider).slice(0, 8)
+    return { provider, runbooks }
+  }).filter((g) => g.runbooks.length > 0)
 
   const hubSchema = {
     "@context": "https://schema.org",
@@ -76,6 +84,10 @@ export default async function CloudHubPage(props: { params: { lang: string } }) 
           <Link href={`/${locale}/runbooks/kubernetes`} className="px-4 py-2 rounded-xl border border-gray-700 text-sm hover:border-brand-cyan/50">Kubernetes</Link>
           <Link href={`/${locale}/runbooks/security`} className="px-4 py-2 rounded-xl border border-gray-700 text-sm hover:border-brand-cyan/50">Security</Link>
         </div>
+
+        {grouped.length === 0 && (
+          <p className="text-gray-400">Cloud-Runbooks werden geladen… Bitte Seite neu laden.</p>
+        )}
 
         {grouped.map(({ provider, runbooks }) => (
           <div key={provider} className="mb-10">

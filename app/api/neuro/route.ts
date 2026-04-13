@@ -43,7 +43,8 @@ function parseStack(sp: URLSearchParams): string[] {
   return Array.from(new Set(raw.split(/[\s,;|]+/).map((s) => s.trim()).filter(Boolean)))
 }
 
-export async function GET(req: NextRequest) {
+// Shared logic for GET and POST
+async function handleNeuroRequest(req: NextRequest, body?: { stack?: string[]; question?: string }) {
   try {
     const url = new URL(req.url)
     const isPreview = url.searchParams.get("preview") === "1"
@@ -63,7 +64,14 @@ export async function GET(req: NextRequest) {
       }
     }
 
-    const tags = parseStack(url.searchParams)
+    // Support both GET (query params) and POST (body)
+    let tags: string[]
+    if (body?.stack?.length) {
+      tags = body.stack.map((s: string) => s.toLowerCase()).filter(Boolean)
+    } else {
+      tags = parseStack(url.searchParams)
+    }
+    
     const rawLimit = Math.max(1, parseInt(url.searchParams.get("limit") || "5", 10) || 5)
     const limit = Math.min(20, rawLimit)
 
@@ -112,7 +120,12 @@ export async function GET(req: NextRequest) {
       Math.round(40 + avgRel * 0.4 + Math.min(5, tags.length) * 4 + Math.min(10, top.length) * 2)
     ))
 
+    const answer = top.length
+      ? `Basierend auf deiner Anfrage habe ich ${top.length} relevante Runbooks gefunden. ${execution_plan} Die geschätzte Ausführungszeit beträgt ${estimated_time}.`
+      : "Ich konnte keine passenden Runbooks finden. Versuche es mit anderen Keywords wie 'aws', 'nginx', 'postgres', 'docker', 'kubernetes'."
+
     const payload = {
+      answer,
       recommended_runbooks: top.map((r) => ({
         slug: r.slug,
         title: r.title,
@@ -133,5 +146,21 @@ export async function GET(req: NextRequest) {
   } catch (err) {
     console.error("[/api/neuro] error", err)
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+  }
+}
+
+// GET handler
+export async function GET(req: NextRequest) {
+  return handleNeuroRequest(req)
+}
+
+// POST handler (for client-side form submissions)
+export async function POST(req: NextRequest) {
+  try {
+    const body = await req.json()
+    return handleNeuroRequest(req, body)
+  } catch {
+    // If JSON parsing fails, fall back to GET behavior
+    return handleNeuroRequest(req)
   }
 }

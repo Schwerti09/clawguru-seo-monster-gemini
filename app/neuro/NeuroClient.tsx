@@ -219,6 +219,7 @@ export default function NeuroClient() {
   const [question, setQuestion] = useState("")
   const [response, setResponse] = useState<NeuroResponse | null>(null)
   const [thinking, setThinking] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const [cameraActive, setCameraActive] = useState(false)
   const videoRef = useRef<HTMLVideoElement>(null)
   const [typingComplete, setTypingComplete] = useState(false)
@@ -293,30 +294,43 @@ export default function NeuroClient() {
       setCameraActive(true)
     } catch (err) {
       console.error("Camera access denied:", err)
-      alert("Kamera-Zugriff abgelehnt. Eye-Tracking funktioniert mit Maus-Simulation.")
+      // Fallback: Maus-Simulation funktioniert auch ohne Kamera
     }
   }
 
   const triggerOracle = async (q: string, cardId?: string) => {
+    console.log("🧠 triggerOracle called:", { q, cardId })
     if (cardId) setLoadingCard(cardId)
+    setError(null)
     setQuestion(q)
     setThinking(true)
     setResponse(null)
     setTypingComplete(false)
     
     try {
+      console.log("📡 Fetching /api/neuro...")
       const res = await fetch("/api/neuro", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ stack: q.split(" ").slice(0, 3), question: q }),
       })
       
-      if (!res.ok) throw new Error(`Neuro error: ${res.status}`)
+      console.log("📡 Response status:", res.status)
+      
+      if (!res.ok) {
+        const errorText = await res.text()
+        console.error("❌ API Error:", errorText)
+        throw new Error(`Neuro error: ${res.status} - ${errorText}`)
+      }
+      
       const data = await res.json()
+      console.log("✅ Response data:", data)
       setResponse(data)
-    } catch (err) {
-      console.error(err)
+    } catch (err: any) {
+      console.error("❌ Error in triggerOracle:", err)
+      setError(err.message || "Ein Fehler ist aufgetreten")
     } finally {
+      console.log("🔄 Resetting loading state")
       setThinking(false)
       setLoadingCard(null)
     }
@@ -424,8 +438,8 @@ export default function NeuroClient() {
                   background: eyeTrackingEnabled ? "rgba(180,100,255,0.1)" : "transparent"
                 }}
               >
-                <span>{eyeTrackingEnabled ? "👁️" : "👁️‍🗨️"}</span>
-                {eyeTrackingEnabled ? "Eye-Tracking AKTIV" : "Eye-Tracking aktivieren"}
+                <span>{eyeTrackingEnabled ? "�️" : "👁️"}</span>
+                {eyeTrackingEnabled ? "Maus-Simulation AKTIV" : "Gaze-Simulation aktivieren"}
               </button>
               
               <button
@@ -440,28 +454,53 @@ export default function NeuroClient() {
             {eyeTrackingEnabled && (
               <>
                 <p className="text-xs font-mono mt-3 animate-pulse" style={{ color: "#b464ff" }}>
-                  👁️ Eye-Tracking aktiv — schaue 2 Sekunden auf eine Karte
+                  �️ Maus-Simulation aktiv — halte Maus 2 Sek. auf einer Karte
                 </p>
-                {/* Camera Preview */}
-                <div className="mt-4 flex justify-center">
-                  <div className="relative w-40 h-30 rounded-xl overflow-hidden border-2 border-[#b464ff] bg-black">
-                    <video
-                      ref={videoRef}
-                      autoPlay
-                      playsInline
-                      muted
-                      className="w-full h-full object-cover transform scale-x-[-1]"
-                    />
-                    <div className="absolute top-2 right-2 w-3 h-3 rounded-full bg-red-500 animate-pulse" />
-                    <div className="absolute bottom-1 left-1 text-[10px] font-mono text-white bg-black/50 px-2 py-0.5 rounded">
-                      Eye-Tracking Cam
+                <p className="text-[10px] mt-1" style={{ color: "rgba(255,255,255,0.3)" }}>
+                  Hinweis: Echtes Eye-Tracking erfordert WebGazer.js (Experimentell)
+                </p>
+                {/* Camera Preview (nur Visualisierung) */}
+                {cameraActive && (
+                  <div className="mt-4 flex justify-center">
+                    <div className="relative w-40 h-30 rounded-xl overflow-hidden border-2 border-[#b464ff] bg-black">
+                      <video
+                        ref={videoRef}
+                        autoPlay
+                        playsInline
+                        muted
+                        className="w-full h-full object-cover transform scale-x-[-1]"
+                      />
+                      <div className="absolute top-2 right-2 w-3 h-3 rounded-full bg-red-500 animate-pulse" />
+                      <div className="absolute bottom-1 left-1 text-[10px] font-mono text-white bg-black/50 px-2 py-0.5 rounded">
+                        Kamera Visual
+                      </div>
                     </div>
                   </div>
-                </div>
+                )}
               </>
             )}
           </div>
         </section>
+
+        {/* ── ERROR ────────────────────────────────────────────────────── */}
+        {error && (
+          <section className="px-4 mb-6">
+            <div className="max-w-3xl mx-auto">
+              <div className="rounded-2xl p-4 border" style={{ background: "rgba(255,0,0,0.1)", borderColor: "rgba(255,0,0,0.3)" }}>
+                <div className="flex items-center gap-2 text-red-400 text-sm">
+                  <span>⚠️</span>
+                  <span>{error}</span>
+                </div>
+                <button 
+                  onClick={() => setError(null)}
+                  className="mt-2 text-xs underline text-red-400 hover:text-red-300"
+                >
+                  Schließen
+                </button>
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* ── RESPONSE ───────────────────────────────────────────────────── */}
         {response && (

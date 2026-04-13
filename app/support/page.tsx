@@ -9,9 +9,21 @@ export const metadata: Metadata = {
   alternates: { canonical: "/support" },
 }
 
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    { '@type': 'Question', name: 'Wie erreiche ich den ClawGuru Support?', acceptedAnswer: { '@type': 'Answer', text: 'ClawGuru Support-Kanäle: Support-Formular auf dieser Seite (schnellster Weg). E-Mail: support@clawguru.org. Security-Disclosure: security@clawguru.org. Antwortzeiten: Pro-Plan < 4h (Werktage), Free-Plan < 24h. Notfall (Produktions-Incident): im Formular "Emergency" auswählen — wird priorisiert behandelt. Enterprise-Kunden: dedizierter Account Manager mit direktem Kontakt.' } },
+    { '@type': 'Question', name: 'Was tue ich bei einem Sicherheits-Notfall?', acceptedAnswer: { '@type': 'Answer', text: 'Security-Notfall bei ClawGuru: 1) Support-Formular mit Priorität "Emergency" ausfüllen. 2) Notfall-Leitfaden unter /security/notfall-leitfaden aufrufen (sofort verfügbar, kein Login nötig). 3) Betroffene Systeme isolieren (nicht sofort abschalten — Forensik-Daten im RAM). 4) Incident dokumentieren (Zeitstempel, Beobachtungen). ClawGuru MSP-Kunden erhalten SLA-gebundene Incident-Response.' } },
+    { '@type': 'Question', name: 'Gibt es Community-Support für ClawGuru?', acceptedAnswer: { '@type': 'Answer', text: 'ClawGuru Community: GitHub Discussions für Feature-Requests und Bug-Reports. Community-Forum für allgemeine Security-Fragen. Öffentliche Runbooks: jeder kann Issues melden. ClawGuru Copilot (/copilot): KI-Assistent für sofortige Security-Antworten ohne Wartezeit. Für Selbsthilfe: Methodik-Seite (/methodik) erklärt wie Security Checks funktionieren.' } },
+    { '@type': 'Question', name: 'Wie melde ich eine Sicherheitslücke in ClawGuru?', acceptedAnswer: { '@type': 'Answer', text: 'Responsible Disclosure bei ClawGuru: E-Mail an security@clawguru.org. Bitte beschreiben: Schwachstelle, Reproduktionsschritte, potentieller Impact. Wir antworten innerhalb 24h. Koordinierte Offenlegung: wir informieren dich bevor wir patchen und veröffentlichen. Bug Bounty: für kritische Findings bieten wir Belohnungen (Details auf Anfrage). Keine öffentliche Offenlegung ohne Absprache.' } },
+  ],
+}
+
 export default function SupportPage() {
   return (
     <main className="min-h-screen" style={{ background: "var(--surface-1, #0a0a0a)" }}>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       {/* Hero */}
       <section className="relative overflow-hidden pt-24 pb-12 px-4">
         <div className="pointer-events-none absolute inset-0" aria-hidden="true" style={{

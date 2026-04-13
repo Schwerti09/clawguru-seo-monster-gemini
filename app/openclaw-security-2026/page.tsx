@@ -15,9 +15,21 @@ const TOC = [
   { id: "faq", label: "FAQ" },
 ]
 
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    { '@type': 'Question', name: 'Was sind die kritischsten OpenClaw Security-Risiken 2026?', acceptedAnswer: { '@type': 'Answer', text: 'OpenClaw Security-Risiken 2026: Ungepatchte Dependencies (Supply-Chain-Angriffe über kompromittierte npm/pip-Pakete). Unsichere WebSocket-Verbindungen ohne Auth. Exponierte Admin-Interfaces ohne IP-Beschränkung. Fehlende Rate-Limits auf Bot-API-Endpoints. Unsichere Secrets-Verwaltung (Hardcoded API Keys in Configs). Container ohne Read-Only-Filesystem. Fehlende Audit-Logs für Bot-Aktionen.' } },
+    { '@type': 'Question', name: 'Wie härte ich OpenClaw gegen Prompt Injection ab?', acceptedAnswer: { '@type': 'Answer', text: 'OpenClaw Prompt Injection Hardening: Input-Validierung: Alle User-Inputs gegen Allowlist prüfen, keine direkten LLM-Prompts aus User-Input konstruieren. Sandboxing: OpenClaw-Instanz in isoliertem Container (kein Zugriff auf Host-Filesystem). Least Privilege: Bot-API-Key nur mit minimalen Berechtigungen. Output-Validation: LLM-Outputs vor Ausführung validieren. Monitoring: Alert bei ungewöhnlichen Bot-Aktionsmustern (Falco).' } },
+    { '@type': 'Question', name: 'Was ist die empfohlene OpenClaw Netzwerk-Konfiguration 2026?', acceptedAnswer: { '@type': 'Answer', text: 'OpenClaw Netzwerk-Hardening: Reverse Proxy (nginx/Traefik) als einziger öffentlicher Endpoint. OpenClaw intern im Docker-Network (kein direkter Port-Expose). WebSocket-Verbindungen nur über wss:// (TLS). Admin-Interface auf separatem Port, nur über VPN/SSH-Tunnel erreichbar. Rate Limiting: 10 Anfragen/Sekunde pro IP. DDoS-Schutz via Cloudflare oder Hetzner Firewall. Firewall: nur Ports 80/443 öffentlich.' } },
+    { '@type': 'Question', name: 'Wie führe ich einen OpenClaw Security Check durch?', acceptedAnswer: { '@type': 'Answer', text: 'OpenClaw Security Check: 1) ClawGuru Security Check für OpenClaw-Domain durchführen (kostenlos, 30 Sekunden). 2) Score und Findings analysieren. 3) OpenClaw-spezifische Runbooks auswählen (/runbooks). 4) SBOM mit Moltbot generieren (zeigt alle OpenClaw-Dependencies und bekannte CVEs). 5) Container-Scan mit Trivy: trivy image openclaw:latest. 6) Re-Check nach Fixes. Empfehlung: wöchentlicher automatischer Check.' } },
+  ],
+}
+
 export default function Pillar() {
   return (
     <Container>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <div className="py-8">
         <div className="max-w-7xl mx-auto">
           <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">

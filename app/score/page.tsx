@@ -23,8 +23,20 @@ export default async function ScorePage(
       : `Ich habe einen Score von ${score}/100 für ${target} bekommen. Wie mache ich daraus 95+?`
   )
 
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      { '@type': 'Question', name: 'Was bedeutet mein ClawGuru Security Score?', acceptedAnswer: { '@type': 'Answer', text: 'ClawGuru Security Score 0-100: 90-100 (Ausgezeichnet): Top-Tier Security-Hygiene, alle kritischen Headers gesetzt, TLS optimal konfiguriert. 75-89 (Gut): solide Basis, einige optionale Verbesserungen möglich. 60-74 (Verbesserungsbedarf): kritische Punkte fehlen, Angriffsfläche erhöht. Unter 60 (Kritisch): wichtige Security-Controls fehlen, sofortiger Handlungsbedarf. Score ist Hygiene-Indikator, kein Pentest-Ersatz.' } },
+      { '@type': 'Question', name: 'Wie verbessere ich meinen Security Score schnell?', acceptedAnswer: { '@type': 'Answer', text: 'Score schnell verbessern: Quick Wins (je +5-15 Punkte): HSTS Header setzen (Strict-Transport-Security). Content-Security-Policy hinzufügen. X-Frame-Options: DENY setzen. X-Content-Type-Options: nosniff. Referrer-Policy konfigurieren. TLS auf 1.3 upgraden. HTTP→HTTPS Redirect erzwingen. Jeder dieser Punkte hat ein dediziertes ClawGuru Runbook. Nach Fixes: sofort Re-Check durchführen.' } },
+      { '@type': 'Question', name: 'Wie teile ich meinen Security Score?', acceptedAnswer: { '@type': 'Answer', text: 'ClawGuru Score teilen: Direkt-Link dieser Seite mit Score und Domain-Parameter. Badge für README oder Website: ClawGuru bietet einbettbare Score-Badges. LinkedIn/Twitter: Score-Screenshot oder Share-Link. Kunden-Reports: Pro-Plan exportiert PDF-Reports mit Score-Verlauf. Warum teilen? Zeigt Verantwortung gegenüber Security — positives Signal für Kunden und Partner.' } },
+      { '@type': 'Question', name: 'Verändert sich mein Score über die Zeit?', acceptedAnswer: { '@type': 'Answer', text: 'Score-Dynamik: Score kann sich durch Infra-Änderungen verschlechtern (neues Deploy, Config-Änderung entfernt Header). Kontinuierliches Monitoring (Pro-Plan) erkennt Score-Verschlechterungen sofort. Trend-Analyse: historische Score-Daten zeigen ob Hygiene besser oder schlechter wird. Empfehlung: Score in CI/CD-Pipeline als Gate einbauen (schlägt fehl wenn unter Threshold).' } },
+    ],
+  }
+
   return (
     <Container>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <div className="py-16">
         <h1 className="text-4xl md:text-5xl font-black mb-4">Dein Claw Security Score</h1>
         <p className="text-gray-300 text-lg mb-8">

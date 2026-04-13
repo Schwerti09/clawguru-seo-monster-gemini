@@ -53,6 +53,16 @@ export default async function ServicesPage() {
     <Container>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: [
+          { '@type': 'Question', name: 'Welche Security-Services bietet ClawGuru an?', acceptedAnswer: { '@type': 'Answer', text: 'ClawGuru Services: Security Check (HTTP-Header, TLS, Score 0-100). Runbooks (600+ ausführbare Hardening-Playbooks). Oracle (KI-gestützte Threat-Intelligence). Neuro AI (Anomalie-Erkennung, Pattern-Analyse). Dashboard (Audit-Trail, Mycelium-Graph). Copilot (KI-Assistent für Security-Fragen). MSP-Portal (Multi-Tenant für IT-Dienstleister). Alle Services: DSGVO-konform, EU-Server, kein US-Cloud-Act.' } },
+          { '@type': 'Question', name: 'Was ist der Unterschied zwischen Security Check und Runbook?', acceptedAnswer: { '@type': 'Answer', text: 'Security Check: Diagnose — analysiert extern sichtbare Security-Eigenschaften deiner Domain in 30 Sekunden, gibt Score und priorisierte Findings. Runbook: Therapie — schritt-für-schritt Anleitung zur Behebung der gefundenen Issues mit Verifikation. Workflow: Check → Finding → Runbook → Fix → Re-Check. Beide Services ergänzen sich: Check identifiziert Probleme, Runbook löst sie.' } },
+          { '@type': 'Question', name: 'Wie funktioniert der ClawGuru Oracle AI-Service?', acceptedAnswer: { '@type': 'Answer', text: 'ClawGuru Oracle: KI-gestützte Threat Intelligence über das Mycelium-Netzwerk (1M+ Datenpunkte). Natürlichsprachliche Security-Fragen stellen ("Welche CVEs betreffen nginx 1.24?"). Antworten basieren auf aktuellen NVD-Daten, CISA KEV, Community-Threat-Feeds. Kontext-aware: kennt deinen Security-Score und gibt personalisierte Empfehlungen. Keine Daten-Speicherung (Privacy-first).' } },
+          { '@type': 'Question', name: 'Welche Compliance-Frameworks unterstützt ClawGuru?', acceptedAnswer: { '@type': 'Answer', text: 'ClawGuru Compliance-Abdeckung: DSGVO/GDPR (Datenschutz-Grundverordnung). NIS2 (Network and Information Security Directive). SOC2 Type II (Security, Availability, Confidentiality). ISO 27001 (Information Security Management). PCI-DSS (Payment Card Industry Data Security Standard). HIPAA (Health Insurance Portability). BSI IT-Grundschutz. Für jeden Standard: dedizierte Runbooks, Evidenz-Export, Gap-Analysis.' } },
+        ],
+      }) }} />
       <div className="py-16 max-w-6xl mx-auto">
         <nav className="text-sm text-gray-500 mb-6" aria-label="Breadcrumb">
           <ol className="flex flex-wrap items-center gap-2">

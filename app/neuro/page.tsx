@@ -1,12 +1,12 @@
-// NEURO v4.0 — Premium Experience with SEO + JSON-LD
+// NEURO v5.0 — Predictive Security Cortex with Stack MRI
 // Server-side entry with full metadata, schema markup, and client interactivity
 
 import type { Metadata } from "next"
-import NeuroClient from "./NeuroClient"
+import NeuroClient from "./NeuroClient-v5"
 
 const SITE_URL = "https://clawguru.org"
-const PAGE_TITLE = "Neuro | ClawGuru NEURAL COSMOS"
-const PAGE_DESC = "Think your question — the Mycelium listens. AI-powered neural interface with eye-tracking and EEG integration for security intelligence."
+const PAGE_TITLE = "Stack MRI | ClawGuru Predictive Security Cortex"
+const PAGE_DESC = "Scan your tech stack for vulnerabilities, CVEs, and security issues. Live threat intelligence with automated runbook recommendations."
 
 export const metadata: Metadata = {
   title: PAGE_TITLE,
@@ -44,10 +44,10 @@ const neuroFAQ = {
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "What is Neuro?",
+      "name": "What is Stack MRI?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Neuro is ClawGuru's neural interface that connects your thoughts directly to the Mycelium. It uses optional eye-tracking and EEG devices to select security topics by gaze or brainwave patterns, then queries the Oracle for answers."
+        "text": "Stack MRI is ClawGuru's predictive security scanner. It analyzes your technology stack (AWS, Kubernetes, PostgreSQL, etc.) and identifies vulnerabilities, CVEs, and security misconfigurations in real-time."
       }
     },
     {

@@ -1,9 +1,20 @@
-// NEURO v4.0 — DEPRECATED, use NeuroClient-v5.tsx instead
-// This file is kept for backwards compatibility but exports v5
+// NEURO v5.0 — Predictive Security Cortex
+// Stack MRI, Live CVE Scanning, Voice Control, Threat Intelligence Integration
 
 "use client"
 
-export { default } from "./NeuroClient-v5"
+import { useState, useEffect, useRef } from "react"
+
+// ── TYPES ─────────────────────────────────────────────────────────────────────
+type TechStackItem = {
+  id: string
+  name: string
+  version: string
+  category: "cloud" | "container" | "database" | "web" | "security" | "other"
+  icon: string
+}
+
+type CVEItem = {
   id: string
   severity: "CRITICAL" | "HIGH" | "MEDIUM" | "LOW"
   title: string
@@ -32,15 +43,6 @@ type StackMRIResult = {
   }[]
 }
 
-type IntelFeedItem = {
-  id: string
-  title: string
-  severity: string
-  timestamp: string
-  source: string
-  affectedStacks: string[]
-}
-
 // ── CONFIG ────────────────────────────────────────────────────────────────────
 const PRESET_STACKS: TechStackItem[] = [
   { id: "aws", name: "AWS", version: "Latest", category: "cloud", icon: "☁️" },
@@ -66,7 +68,6 @@ const VOICE_COMMANDS = [
   { phrase: "show threats", action: "SHOW_THREATS" },
   { phrase: "execute fix", action: "EXECUTE_FIX" },
   { phrase: "what is my score", action: "SHOW_SCORE" },
-  { phrase: "help", action: "SHOW_HELP" },
 ]
 
 // ── ANIMATED BACKGROUND ──────────────────────────────────────────────────────
@@ -103,13 +104,11 @@ function NeuroBackground() {
       })
     }
 
-    let frame = 0
     function draw() {
       if (!canvas || !ctx) return
       ctx.fillStyle = "#050505"
       ctx.fillRect(0, 0, canvas.width, canvas.height)
 
-      // Neural connections
       ctx.strokeStyle = "rgba(180,100,255,0.08)"
       ctx.lineWidth = 0.5
       for (let i = 0; i < neurons.length; i++) {
@@ -128,24 +127,19 @@ function NeuroBackground() {
       }
       ctx.globalAlpha = 1
 
-      // Animated neurons
       neurons.forEach((n, i) => {
         n.x += n.vx
         n.y += n.vy
         n.pulse += 0.05
-        
         if (n.x < 0 || n.x > canvas.width) n.vx *= -1
         if (n.y < 0 || n.y > canvas.height) n.vy *= -1
         
         const pulseRadius = n.radius + Math.sin(n.pulse) * 1.5
-        
         ctx.beginPath()
         ctx.arc(n.x, n.y, pulseRadius, 0, Math.PI * 2)
         ctx.fillStyle = colors[i % colors.length]
         ctx.globalAlpha = 0.6
         ctx.fill()
-        
-        // Glow
         ctx.beginPath()
         ctx.arc(n.x, n.y, pulseRadius * 2, 0, Math.PI * 2)
         ctx.fillStyle = colors[i % colors.length]
@@ -154,7 +148,6 @@ function NeuroBackground() {
       })
       ctx.globalAlpha = 1
 
-      frame++
       animRef.current = requestAnimationFrame(draw)
     }
 
@@ -168,76 +161,6 @@ function NeuroBackground() {
   return <canvas ref={canvasRef} className="fixed inset-0 w-full h-full pointer-events-none" style={{ zIndex: 0 }} />
 }
 
-// ── TYPING EFFECT ─────────────────────────────────────────────────────────────
-function TypewriterText({ text, speed = 15, onComplete }: { text: string; speed?: number; onComplete?: () => void }) {
-  const [displayed, setDisplayed] = useState("")
-  const indexRef = useRef(0)
-  const intervalRef = useRef<NodeJS.Timeout | null>(null)
-
-  useEffect(() => {
-    setDisplayed("")
-    indexRef.current = 0
-    
-    intervalRef.current = setInterval(() => {
-      if (indexRef.current < text.length) {
-        setDisplayed(text.slice(0, indexRef.current + 1))
-        indexRef.current++
-      } else {
-        if (intervalRef.current) clearInterval(intervalRef.current)
-        onComplete?.()
-      }
-    }, speed)
-
-    return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current)
-    }
-  }, [text, speed, onComplete])
-
-  return <span>{displayed}</span>
-}
-
-// ── DWELL RING ────────────────────────────────────────────────────────────────
-function DwellRing({ progress, color }: { progress: number; color: string }) {
-  const circumference = 2 * Math.PI * 48
-  const strokeDashoffset = circumference * (1 - progress)
-  
-  return (
-    <svg className="absolute inset-0 w-full h-full -rotate-90 pointer-events-none" viewBox="0 0 100 100">
-      <circle
-        cx="50"
-        cy="50"
-        r="48"
-        fill="none"
-        stroke={color}
-        strokeWidth="2"
-        strokeDasharray={circumference}
-        strokeDashoffset={strokeDashoffset}
-        strokeLinecap="round"
-        className="transition-all duration-100"
-        style={{ opacity: 0.6 }}
-      />
-    </svg>
-  )
-}
-
-// ── FAQ ACCORDION ────────────────────────────────────────────────────────────
-function FAQItem({ q, a, isOpen, onClick, index }: { q: string; a: string; isOpen: boolean; onClick: () => void; index: number }) {
-  return (
-    <div className="border-b" style={{ borderColor: "rgba(255,255,255,0.08)" }}>
-      <button onClick={onClick} className="w-full py-4 flex items-center justify-between text-left group">
-        <span className="flex items-center gap-3">
-          <span className="text-xs font-mono" style={{ color: "#b464ff" }}>0{index + 1}</span>
-          <span className="font-medium text-sm group-hover:text-white transition-colors" style={{ color: isOpen ? "#fff" : "rgba(255,255,255,0.7)" }}>{q}</span>
-        </span>
-        <span className="text-lg transition-transform duration-300" style={{ transform: isOpen ? "rotate(45deg)" : "rotate(0)", color: "#b464ff" }}>+</span>
-      </button>
-      <div className="overflow-hidden transition-all duration-300" style={{ maxHeight: isOpen ? "200px" : "0", opacity: isOpen ? 1 : 0 }}>
-        <p className="pb-4 pl-7 text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.5)" }}>{a}</p>
-      </div>
-    </div>
-  )
-}
-
 // ── MAIN COMPONENT ───────────────────────────────────────────────────────────
 export default function NeuroClient() {
   const [mounted, setMounted] = useState(false)
@@ -246,11 +169,7 @@ export default function NeuroClient() {
   const [userStack, setUserStack] = useState<TechStackItem[]>([])
   const [mriResult, setMriResult] = useState<StackMRIResult | null>(null)
   const [scanning, setScanning] = useState(false)
-  const [activeTab, setActiveTab] = useState<"input" | "mri" | "threats" | "voice">("input")
-  
-  // Intel Feed
-  const [intelFeed, setIntelFeed] = useState<IntelFeedItem[]>([])
-  const [loadingIntel, setLoadingIntel] = useState(false)
+  const [activeTab, setActiveTab] = useState<"input" | "mri" | "voice">("input")
   
   // Voice Control
   const [voiceActive, setVoiceActive] = useState(false)
@@ -280,7 +199,6 @@ export default function NeuroClient() {
         .join(" ")
       setTranscript(transcript.toLowerCase())
       
-      // Check for commands
       VOICE_COMMANDS.forEach(({ phrase, action }) => {
         if (transcript.toLowerCase().includes(phrase)) {
           handleVoiceCommand(action)
@@ -289,7 +207,7 @@ export default function NeuroClient() {
     }
     
     recognitionRef.current = recognition
-  }, [])
+  }, [userStack])
 
   const handleVoiceCommand = (action: string) => {
     switch (action) {
@@ -297,13 +215,10 @@ export default function NeuroClient() {
         if (userStack.length > 0) performStackMRI()
         break
       case "SHOW_CRITICAL":
-        setActiveTab("mri")
-        break
-      case "SHOW_THREATS":
-        setActiveTab("threats")
+        if (mriResult) setActiveTab("mri")
         break
       case "SHOW_SCORE":
-        setActiveTab("mri")
+        if (mriResult) setActiveTab("mri")
         break
     }
   }
@@ -338,7 +253,7 @@ export default function NeuroClient() {
     setError(null)
     
     try {
-      // Fetch CVEs from Intel API
+      // Fetch CVEs
       const stackNames = userStack.map(s => s.name.toLowerCase()).join(",")
       const cveRes = await fetch(`/api/intel/cves?stack=${encodeURIComponent(stackNames)}&limit=20`)
       
@@ -359,10 +274,11 @@ export default function NeuroClient() {
       const runbookData = await runbookRes.json()
       
       // Calculate Score
-      const critical = cveData.cves?.filter((c: any) => c.severity === "CRITICAL").length || 0
-      const high = cveData.cves?.filter((c: any) => c.severity === "HIGH").length || 0
-      const medium = cveData.cves?.filter((c: any) => c.severity === "MEDIUM").length || 0
-      const low = cveData.cves?.filter((c: any) => c.severity === "LOW").length || 0
+      const cves = cveData.cves || []
+      const critical = cves.filter((c: any) => c.severity === "CRITICAL").length
+      const high = cves.filter((c: any) => c.severity === "HIGH").length
+      const medium = cves.filter((c: any) => c.severity === "MEDIUM").length
+      const low = cves.filter((c: any) => c.severity === "LOW").length
       
       const baseScore = 100
       const deductions = critical * 25 + high * 15 + medium * 5 + low * 2
@@ -370,7 +286,7 @@ export default function NeuroClient() {
       
       setMriResult({
         stackItems: userStack,
-        cves: cveData.cves || [],
+        cves: cves,
         score,
         issues: { critical, high, medium, low, optimal: Math.max(0, 5 - critical - high) },
         runbooks: runbookData.recommended_runbooks?.map((r: any) => ({
@@ -420,7 +336,6 @@ export default function NeuroClient() {
               {[
                 { id: "input", label: "🎯 Stack Input", color: "#b464ff" },
                 { id: "mri", label: "🩻 MRI Scan", color: "#00ff9d" },
-                { id: "threats", label: "⚠️ Threats", color: "#ff6b6b" },
                 { id: "voice", label: "🎙️ Voice", color: "#00b8ff" },
               ].map((tab) => (
                 <button
@@ -454,7 +369,7 @@ export default function NeuroClient() {
             
             {voiceActive && transcript && (
               <p className="text-xs font-mono mt-3" style={{ color: "#00b8ff" }}>
-                Erkannt: "{transcript}"
+                Erkannt: &quot;{transcript}&quot;
               </p>
             )}
           </div>
@@ -480,126 +395,85 @@ export default function NeuroClient() {
           </section>
         )}
 
-        {/* ── RESPONSE ───────────────────────────────────────────────────── */}
-        {response && (
-          <section className="px-4 mb-10 animate-fade-in">
-            <div className="max-w-3xl mx-auto">
-              <div className="rounded-3xl p-8 mb-6 border" style={{ background: "rgba(10,10,14,0.95)", borderColor: "rgba(180,100,255,0.3)", backdropFilter: "blur(20px)" }}>
-                <div className="flex items-center gap-3 mb-6">
-                  <span className="text-2xl">🧠</span>
-                  <span className="font-mono text-sm uppercase tracking-wider" style={{ color: "#b464ff" }}>Neural Response</span>
+        {/* ── STACK INPUT TAB ────────────────────────────────────────────── */}
+        {activeTab === "input" && (
+          <section className="px-4 mb-12">
+            <div className="max-w-4xl mx-auto">
+              {/* User Stack */}
+              <div className="rounded-3xl p-6 mb-6 border" style={{ background: "rgba(10,10,14,0.8)", borderColor: "rgba(255,255,255,0.08)" }}>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="text-xs font-mono uppercase tracking-widest" style={{ color: "#b464ff" }}>Dein Tech Stack</div>
+                  <div className="text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>{userStack.length} Komponenten</div>
                 </div>
                 
-                <div className="prose prose-invert max-w-none mb-6">
-                  <p className="text-lg leading-relaxed whitespace-pre-wrap" style={{ color: "rgba(255,255,255,0.9)" }}>
-                    <TypewriterText text={response.answer || "Verarbeite deine neuronale Anfrage..."} speed={15} onComplete={() => setTypingComplete(true)} />
-                  </p>
-                </div>
-                
-                {/* Stats */}
-                <div className="flex gap-6 mb-6 text-xs font-mono" style={{ color: "rgba(255,255,255,0.4)" }}>
-                  <span>NeuroScore: <span style={{ color: "#b464ff" }}>{(response.neuroScore || 0).toFixed(1)}</span></span>
-                  <span>Confidence: <span style={{ color: "#00ff9d" }}>{(response.confidence || 0).toFixed(0)}%</span></span>
-                </div>
-                
-                {/* Runbooks */}
-                {response.recommended_runbooks?.length > 0 && (
-                  <div className="rounded-2xl p-4 border mb-6" style={{ background: "rgba(180,100,255,0.05)", borderColor: "rgba(180,100,255,0.15)" }}>
-                    <div className="text-xs font-mono uppercase tracking-widest mb-3" style={{ color: "#b464ff" }}>📚 Empfohlene Runbooks</div>
-                    <div className="space-y-2">
-                      {response.recommended_runbooks.slice(0, 4).map((rb, i) => (
-                        <a key={i} href={rb.summonUrl || `/runbooks/${rb.slug}`} className="flex items-center justify-between p-3 rounded-xl border transition-all hover:border-[#b464ff]" style={{ background: "rgba(255,255,255,0.02)", borderColor: "rgba(255,255,255,0.06)" }}>
-                          <span className="text-sm text-gray-300">{rb.title}</span>
-                          <span className="text-xs font-mono" style={{ color: "#b464ff" }}>Relevanz {(rb.relevance * 100).toFixed(0)}% →</span>
-                        </a>
-                      ))}
-                    </div>
+                {userStack.length === 0 ? (
+                  <div className="text-center py-8 text-sm" style={{ color: "rgba(255,255,255,0.3)" }}>
+                    Wähle deine Infrastruktur-Komponenten unten aus
+                  </div>
+                ) : (
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {userStack.map((item) => (
+                      <button
+                        key={item.id}
+                        onClick={() => removeFromStack(item.id)}
+                        className="flex items-center gap-2 px-3 py-2 rounded-full text-sm border transition-all hover:scale-105"
+                        style={{ 
+                          background: "rgba(180,100,255,0.15)", 
+                          borderColor: "#b464ff",
+                          color: "#b464ff" 
+                        }}
+                      >
+                        <span>{item.icon}</span>
+                        <span>{item.name}</span>
+                        <span className="text-xs opacity-60">×</span>
+                      </button>
+                    ))}
                   </div>
                 )}
                 
-                {/* Cross-Links */}
-                <div className="rounded-2xl p-4 border" style={{ background: "rgba(0,255,157,0.03)", borderColor: "rgba(0,255,157,0.15)" }}>
-                  <div className="text-xs font-mono uppercase tracking-widest mb-3 text-center" style={{ color: "#00ff9d" }}>🔗 Mycelium Kreislauf</div>
-                  <div className="flex flex-wrap justify-center gap-2">
-                    <a href="/oracle" className="px-4 py-2 rounded-full text-sm font-mono font-bold border transition-all hover:scale-105" style={{ background: "rgba(0,255,157,0.1)", borderColor: "#00ff9d", color: "#00ff9d" }}>
-                      🔮 Oracle
-                    </a>
-                    <a href="/intel" className="px-4 py-2 rounded-full text-sm font-mono font-bold border transition-all hover:scale-105" style={{ background: "rgba(0,184,255,0.1)", borderColor: "#00b8ff", color: "#00b8ff" }}>
-                      📊 Intel
-                    </a>
-                    <a href="/summon" className="px-4 py-2 rounded-full text-sm font-mono font-bold border transition-all hover:scale-105" style={{ background: "rgba(255,200,0,0.1)", borderColor: "#ffc800", color: "#ffc800" }}>
-                      ⚡ Summon
-                    </a>
-                  </div>
-                </div>
+                {userStack.length > 0 && (
+                  <button
+                    onClick={performStackMRI}
+                    disabled={scanning}
+                    className="w-full py-3 rounded-2xl font-bold text-sm uppercase tracking-wider transition-all disabled:opacity-50"
+                    style={{ 
+                      background: "linear-gradient(90deg, #00ff9d30, #00ff9d50)", 
+                      border: "1px solid #00ff9d", 
+                      color: "#00ff9d" 
+                    }}
+                  >
+                    {scanning ? (
+                      <span className="flex items-center justify-center gap-2">
+                        <span className="animate-spin">⏳</span> Scanning...
+                      </span>
+                    ) : (
+                      "🩻 Stack MRI durchführen"
+                    )}
+                  </button>
+                )}
               </div>
               
-              {/* Ask Again */}
-              <div className="text-center">
-                <button
-                  onClick={() => { setResponse(null); setQuestion(""); setTypingComplete(false); }}
-                  className="px-6 py-3 rounded-full text-sm font-mono border transition-all duration-300 hover:border-[#b464ff]"
-                  style={{ borderColor: "rgba(255,255,255,0.2)", color: "rgba(255,255,255,0.6)" }}
-                >
-                  ← Neue Frage denken
-                </button>
-              </div>
-            </div>
-          </section>
-        )}
-
-        {/* ── THOUGHT CARDS ──────────────────────────────────────────────── */}
-        {!response && !thinking && (
-          <section className="px-4 mb-10">
-            <div className="max-w-4xl mx-auto">
-              <div className="text-center mb-6">
-                <div className="text-xs font-mono uppercase tracking-widest mb-2" style={{ color: "#00b8ff" }}>
-                  {eyeTrackingEnabled ? "👁️ Schaue auf eine Karte (2 Sek.)" : "🖱️ Klicke auf ein Thema"}
-                </div>
-                <p className="text-sm" style={{ color: "rgba(255,255,255,0.4)" }}>
-                  Oder tippe deine Frage unten ein
-                </p>
-              </div>
-              
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                {THOUGHT_CARDS.map((card) => {
-                  const progress = dwellProgress[card.id] || 0
-                  const isActive = gazeCardRef.current === card.id
-                  const isLoading = loadingCard === card.id
-                  
+              {/* Available Components */}
+              <div className="grid grid-cols-3 md:grid-cols-5 gap-3">
+                {PRESET_STACKS.map((item) => {
+                  const isSelected = userStack.find(s => s.id === item.id)
                   return (
-                    <div
-                      key={card.id}
-                      ref={(el) => { cardRefs.current[card.id] = el }}
-                      onClick={() => handleCardClick(card.id, card.question)}
-                      className={`relative rounded-2xl border p-5 cursor-pointer transition-all duration-300 overflow-hidden ${isLoading ? 'pointer-events-none' : ''}`}
-                      style={{
-                        background: isLoading ? `${card.color}30` : isActive ? `${card.color}10` : "rgba(10,10,14,0.8)",
-                        borderColor: isLoading ? card.color : progress > 0 ? card.color : "rgba(255,255,255,0.08)",
-                        boxShadow: isLoading ? `0 0 30px ${card.color}50` : progress > 0 ? `0 0 ${20 + progress * 30}px ${card.color}30` : "none",
-                        transform: isLoading ? 'scale(0.98)' : 'scale(1)'
+                    <button
+                      key={item.id}
+                      onClick={() => addToStack(item)}
+                      disabled={!!isSelected}
+                      className="p-3 rounded-xl border text-center transition-all disabled:opacity-40 hover:border-[#b464ff]"
+                      style={{ 
+                        background: isSelected ? "rgba(180,100,255,0.1)" : "rgba(10,10,14,0.6)",
+                        borderColor: isSelected ? "#b464ff" : "rgba(255,255,255,0.08)"
                       }}
                     >
-                      {progress > 0 && !isLoading && <DwellRing progress={progress} color={card.color} />}
-                      
-                      {isLoading && (
-                        <div className="absolute inset-0 flex items-center justify-center bg-black/60 z-20">
-                          <div className="w-8 h-8 border-2 border-t-transparent rounded-full animate-spin" style={{ borderColor: `${card.color} transparent transparent transparent` }} />
-                        </div>
-                      )}
-                      
-                      <div className={`text-3xl mb-3 relative z-10 transition-opacity ${isLoading ? 'opacity-50' : ''}`}>{card.icon}</div>
-                      <div className={`font-bold text-sm mb-1 relative z-10 ${isLoading ? 'opacity-50' : ''}`} style={{ color: isLoading ? card.color : progress > 0.3 ? card.color : "rgba(255,255,255,0.9)" }}>
-                        {isLoading ? 'Verarbeite...' : card.label}
+                      <div className="text-2xl mb-1">{item.icon}</div>
+                      <div className="text-xs font-medium truncate" style={{ color: isSelected ? "#b464ff" : "rgba(255,255,255,0.7)" }}>
+                        {item.name}
                       </div>
-                      <div className={`text-xs relative z-10 ${isLoading ? 'opacity-50' : ''}`} style={{ color: "rgba(255,255,255,0.4)" }}>
-                        {isLoading ? 'Neural analysis running...' : `${card.question.slice(0, 40)}...`}
-                      </div>
-                      
-                      {!isLoading && progress > 0 && (
-                        <div className="absolute inset-0 pointer-events-none" style={{ background: `linear-gradient(135deg, ${card.color}10, transparent)` }} />
-                      )}
-                    </div>
+                      <div className="text-[10px]" style={{ color: "rgba(255,255,255,0.3)" }}>{item.version}</div>
+                    </button>
                   )
                 })}
               </div>
@@ -607,51 +481,168 @@ export default function NeuroClient() {
           </section>
         )}
 
-        {/* ── TEXT INPUT ───────────────────────────────────────────────────── */}
-        {!response && !thinking && (
-          <section className="px-4 mb-12">
-            <div className="max-w-2xl mx-auto">
-              <div className="text-xs font-mono uppercase tracking-widest mb-3 text-center" style={{ color: "rgba(255,255,255,0.3)" }}>
-                — oder tippe deine Frage —
-              </div>
-              <div className="relative rounded-2xl overflow-hidden border" style={{ borderColor: "rgba(255,255,255,0.1)", background: "rgba(10,10,14,0.9)" }}>
-                <textarea
-                  value={question}
-                  onChange={(e) => setQuestion(e.target.value)}
-                  placeholder="z.B. Wie sichere ich meine Kubernetes Cluster?"
-                  rows={3}
-                  className="w-full bg-transparent px-5 pt-4 pb-14 text-white placeholder-gray-600 font-mono text-sm resize-none outline-none"
-                />
-                <div className="absolute bottom-3 right-4">
-                  <button
-                    onClick={() => question.trim() && triggerOracle(question)}
-                    disabled={!question.trim()}
-                    className="px-5 py-2 rounded-full text-xs font-mono font-bold uppercase transition-all disabled:opacity-40"
-                    style={{ background: "linear-gradient(135deg, #b464ff30, #b464ff50)", border: "1px solid #b464ff", color: "#b464ff" }}
+        {/* ── MRI RESULTS TAB ─────────────────────────────────────────────── */}
+        {activeTab === "mri" && mriResult && (
+          <section className="px-4 mb-12 animate-fade-in">
+            <div className="max-w-4xl mx-auto">
+              {/* Score Card */}
+              <div className="rounded-3xl p-8 mb-6 border" style={{ background: "rgba(10,10,14,0.95)", borderColor: "rgba(180,100,255,0.3)", backdropFilter: "blur(20px)" }}>
+                <div className="flex items-center justify-between mb-6">
+                  <div className="flex items-center gap-3">
+                    <span className="text-3xl">🩻</span>
+                    <span className="font-mono text-sm uppercase tracking-wider" style={{ color: "#b464ff" }}>MRI Scan Ergebnis</span>
+                  </div>
+                  <div 
+                    className="text-4xl font-black"
+                    style={{ 
+                      color: mriResult.score >= 80 ? "#00ff9d" : mriResult.score >= 60 ? "#ffc800" : "#ff6b6b" 
+                    }}
                   >
-                    Senden →
-                  </button>
+                    {mriResult.score}
+                    <span className="text-lg font-normal text-gray-500">/100</span>
+                  </div>
+                </div>
+                
+                {/* Issue Breakdown */}
+                <div className="grid grid-cols-4 gap-3 mb-6">
+                  <div className="rounded-xl p-3 text-center border" style={{ background: "rgba(255,0,0,0.1)", borderColor: "rgba(255,0,0,0.2)" }}>
+                    <div className="text-2xl font-bold text-red-400">{mriResult.issues.critical}</div>
+                    <div className="text-[10px] uppercase tracking-wider text-red-400">Kritisch</div>
+                  </div>
+                  <div className="rounded-xl p-3 text-center border" style={{ background: "rgba(255,200,0,0.1)", borderColor: "rgba(255,200,0,0.2)" }}>
+                    <div className="text-2xl font-bold text-yellow-400">{mriResult.issues.high}</div>
+                    <div className="text-[10px] uppercase tracking-wider text-yellow-400">Hoch</div>
+                  </div>
+                  <div className="rounded-xl p-3 text-center border" style={{ background: "rgba(0,184,255,0.1)", borderColor: "rgba(0,184,255,0.2)" }}>
+                    <div className="text-2xl font-bold text-blue-400">{mriResult.issues.medium}</div>
+                    <div className="text-[10px] uppercase tracking-wider text-blue-400">Mittel</div>
+                  </div>
+                  <div className="rounded-xl p-3 text-center border" style={{ background: "rgba(0,255,157,0.1)", borderColor: "rgba(0,255,157,0.2)" }}>
+                    <div className="text-2xl font-bold text-green-400">{mriResult.issues.optimal}</div>
+                    <div className="text-[10px] uppercase tracking-wider text-green-400">Optimal</div>
+                  </div>
+                </div>
+                
+                {/* CVE List */}
+                {mriResult.cves.length > 0 && (
+                  <div className="mb-6">
+                    <div className="text-xs font-mono uppercase tracking-widest mb-3" style={{ color: "#ff6b6b" }}>⚠️ Gefundene CVEs</div>
+                    <div className="space-y-2 max-h-64 overflow-y-auto">
+                      {mriResult.cves.slice(0, 10).map((cve) => (
+                        <div 
+                          key={cve.id} 
+                          className="rounded-xl p-3 border"
+                          style={{ 
+                            background: cve.severity === "CRITICAL" ? "rgba(255,0,0,0.08)" : cve.severity === "HIGH" ? "rgba(255,200,0,0.08)" : "rgba(0,184,255,0.08)",
+                            borderColor: cve.severity === "CRITICAL" ? "rgba(255,0,0,0.2)" : cve.severity === "HIGH" ? "rgba(255,200,0,0.2)" : "rgba(0,184,255,0.2)"
+                          }}
+                        >
+                          <div className="flex items-center gap-2 mb-1">
+                            <span 
+                              className="px-2 py-0.5 rounded text-[10px] font-bold uppercase"
+                              style={{ 
+                                background: cve.severity === "CRITICAL" ? "#ff0000" : cve.severity === "HIGH" ? "#ffc800" : "#00b8ff",
+                                color: cve.severity === "CRITICAL" ? "#fff" : cve.severity === "HIGH" ? "#000" : "#fff"
+                              }}
+                            >
+                              {cve.severity}
+                            </span>
+                            <span className="text-xs font-mono text-gray-400">{cve.id}</span>
+                          </div>
+                          <div className="text-sm text-gray-300">{cve.title}</div>
+                          <div className="text-xs text-gray-500 mt-1">Betrifft: {cve.affected}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                
+                {/* Recommended Runbooks */}
+                {mriResult.runbooks.length > 0 && (
+                  <div>
+                    <div className="text-xs font-mono uppercase tracking-widest mb-3" style={{ color: "#00ff9d" }}>📚 Empfohlene Runbooks</div>
+                    <div className="space-y-2">
+                      {mriResult.runbooks.slice(0, 5).map((rb) => (
+                        <a 
+                          key={rb.slug}
+                          href={`/summon?q=${encodeURIComponent(rb.title)}`}
+                          className="flex items-center justify-between p-3 rounded-xl border transition-all hover:border-[#00ff9d]"
+                          style={{ background: "rgba(255,255,255,0.02)", borderColor: "rgba(255,255,255,0.06)" }}
+                        >
+                          <div>
+                            <div className="text-sm text-gray-300">{rb.title}</div>
+                            <div className="text-xs text-gray-500">Relevanz: {(rb.relevance * 100).toFixed(0)}%</div>
+                          </div>
+                          <span 
+                            className="px-2 py-1 rounded text-[10px] font-bold uppercase"
+                            style={{ 
+                              background: rb.urgency === "NOW" ? "#ff0000" : rb.urgency === "SOON" ? "#ffc800" : "#00b8ff",
+                              color: rb.urgency === "SOON" ? "#000" : "#fff"
+                            }}
+                          >
+                            {rb.urgency}
+                          </span>
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+              
+              {/* Kreislauf Links */}
+              <div className="rounded-2xl p-4 border" style={{ background: "rgba(0,255,157,0.03)", borderColor: "rgba(0,255,157,0.15)" }}>
+                <div className="text-xs font-mono uppercase tracking-widest mb-3 text-center" style={{ color: "#00ff9d" }}>🔗 Mycelium Kreislauf</div>
+                <div className="flex flex-wrap justify-center gap-2">
+                  <a href="/oracle" className="px-4 py-2 rounded-full text-sm font-mono font-bold border transition-all hover:scale-105" style={{ background: "rgba(0,255,157,0.1)", borderColor: "#00ff9d", color: "#00ff9d" }}>
+                    🔮 Oracle
+                  </a>
+                  <a href="/intel" className="px-4 py-2 rounded-full text-sm font-mono font-bold border transition-all hover:scale-105" style={{ background: "rgba(0,184,255,0.1)", borderColor: "#00b8ff", color: "#00b8ff" }}>
+                    📊 Intel
+                  </a>
+                  <a href="/summon" className="px-4 py-2 rounded-full text-sm font-mono font-bold border transition-all hover:scale-105" style={{ background: "rgba(255,200,0,0.1)", borderColor: "#ffc800", color: "#ffc800" }}>
+                    ⚡ Summon
+                  </a>
                 </div>
               </div>
             </div>
           </section>
         )}
 
-        {/* ── FAQ SECTION ──────────────────────────────────────────────────── */}
-        <section className="px-4 mb-16">
-          <div className="max-w-3xl mx-auto">
-            <div className="text-center mb-8">
-              <div className="text-xs font-mono uppercase tracking-widest mb-2" style={{ color: "#b464ff" }}>Häufige Fragen</div>
-              <h2 className="text-2xl font-bold" style={{ color: "rgba(255,255,255,0.9)" }}>FAQ</h2>
+        {/* ── VOICE TAB ──────────────────────────────────────────────────── */}
+        {activeTab === "voice" && (
+          <section className="px-4 mb-12">
+            <div className="max-w-2xl mx-auto">
+              <div className="rounded-3xl p-8 text-center border" style={{ background: "rgba(10,10,14,0.8)", borderColor: "rgba(0,184,255,0.2)" }}>
+                <div className="text-6xl mb-4">🎙️</div>
+                <h3 className="text-xl font-bold mb-4 text-white">Sprachsteuerung</h3>
+                <p className="text-sm mb-6" style={{ color: "rgba(255,255,255,0.5)" }}>
+                  Aktiviere dein Mikrofon und nutze diese Befehle:
+                </p>
+                
+                <div className="space-y-2 text-left">
+                  {VOICE_COMMANDS.map((cmd) => (
+                    <div key={cmd.action} className="flex items-center gap-3 p-3 rounded-xl border" style={{ background: "rgba(255,255,255,0.02)", borderColor: "rgba(255,255,255,0.06)" }}>
+                      <span style={{ color: "#00b8ff" }}>🗣️</span>
+                      <span className="text-sm text-gray-300">&quot;{cmd.phrase}&quot;</span>
+                    </div>
+                  ))}
+                </div>
+                
+                <button
+                  onClick={toggleVoice}
+                  className="mt-6 px-6 py-3 rounded-full font-bold text-sm uppercase tracking-wider transition-all"
+                  style={{ 
+                    background: voiceActive ? "rgba(255,0,0,0.2)" : "rgba(0,184,255,0.2)", 
+                    border: voiceActive ? "1px solid #ff0000" : "1px solid #00b8ff",
+                    color: voiceActive ? "#ff0000" : "#00b8ff" 
+                  }}
+                >
+                  {voiceActive ? "⏹️ Spracherkennung stoppen" : "🎤 Spracherkennung starten"}
+                </button>
+              </div>
             </div>
-            
-            <div className="rounded-3xl p-6 border" style={{ background: "rgba(10,10,14,0.8)", borderColor: "rgba(255,255,255,0.08)" }}>
-              {FAQ_ITEMS.map((item, i) => (
-                <FAQItem key={i} index={i} {...item} isOpen={openFAQ === i} onClick={() => setOpenFAQ(openFAQ === i ? null : i)} />
-              ))}
-            </div>
-          </div>
-        </section>
+          </section>
+        )}
 
         {/* ── FOOTER ───────────────────────────────────────────────────────── */}
         <footer className="px-4 py-12 text-center">
@@ -660,7 +651,7 @@ export default function NeuroClient() {
               <span className="text-2xl">◆</span>
               <span className="font-mono text-sm tracking-widest uppercase" style={{ color: "rgba(255,255,255,0.5)" }}>One Mycelium to rule them all</span>
             </div>
-            <p className="text-xs" style={{ color: "rgba(255,255,255,0.2)" }}>ClawGuru NEURAL COSMOS • v4.0 • clawguru.org</p>
+            <p className="text-xs" style={{ color: "rgba(255,255,255,0.2)" }}>ClawGuru Predictive Security Cortex • v5.0 • clawguru.org</p>
           </div>
         </footer>
       </div>

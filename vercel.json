@@ -3,5 +3,13 @@
   "buildCommand": "npm run build",
   "outputDirectory": ".next",
   "installCommand": "npm install --legacy-peer-deps",
-  "crons": []
+  "crons": [],
+  "functions": {
+    "app/[lang]/runbook/[slug]/page.tsx": { "maxDuration": 60 },
+    "app/runbook/[slug]/page.tsx": { "maxDuration": 60 },
+    "app/[lang]/runbooks/cloud/page.tsx": { "maxDuration": 30 },
+    "app/[lang]/runbooks/docker/page.tsx": { "maxDuration": 30 },
+    "app/[lang]/runbooks/kubernetes/page.tsx": { "maxDuration": 30 },
+    "app/[lang]/runbooks/security/page.tsx": { "maxDuration": 30 }
+  }
 }

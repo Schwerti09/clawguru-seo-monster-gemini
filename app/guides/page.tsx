@@ -263,9 +263,21 @@ interface GuidesPageProps {
   locale?: string
 }
 
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    { '@type': 'Question', name: 'Was sind ClawGuru Integration Guides?', acceptedAnswer: { '@type': 'Answer', text: 'ClawGuru Integration Guides: Schritt-für-Schritt-Anleitungen zur Integration von ClawBot und Moltbot in bestehende Infrastruktur. Themen: Docker-Setup, API-Integration, Webhook-Konfiguration, Monitoring-Anbindung, CI/CD-Pipeline-Integration. Jeder Guide enthält: Voraussetzungen, Setup-Schritte, Verifikation, Troubleshooting. Für verschiedene Erfahrungslevel: Beginner bis Advanced.' } },
+    { '@type': 'Question', name: 'Wie integriere ich ClawBot in meine bestehende Infrastruktur?', acceptedAnswer: { '@type': 'Answer', text: 'ClawBot Integration: Docker-Compose: ClawBot als Service hinzufügen, Netzwerk-Konfiguration, Environment Variables. API-Integration: REST-API oder WebSocket-Verbindung. Authentifizierung: API-Key oder JWT. Monitoring: Prometheus-Metrics-Endpoint (/metrics). Logging: Structured JSON-Logs, SIEM-Integration. Setup-Zeit: ca. 30-60 Minuten für Basis-Setup. Vollständige Anleitung im Integration Guide.' } },
+    { '@type': 'Question', name: 'Welche Voraussetzungen gibt es für die Moltbot-Integration?', acceptedAnswer: { '@type': 'Answer', text: 'Moltbot Voraussetzungen: Docker 20.10+ und Docker Compose v2. Mindest-Ressourcen: 2 vCPU, 4GB RAM. Betriebssystem: Ubuntu 20.04+, Debian 11+, oder RHEL 8+. Netzwerk: Ausgehende HTTPS-Verbindung für Updates und CVE-Feed. Optional: Kubernetes-Cluster für K8s-Deployment. API-Key: Moltbot-Account für Pro-Features. Alles andere wird durch die Setup-Skripte automatisch konfiguriert.' } },
+    { '@type': 'Question', name: 'Gibt es ClawGuru Guides für CI/CD-Integration?', acceptedAnswer: { '@type': 'Answer', text: 'ClawGuru CI/CD-Integration: GitHub Actions: vorgefertigte Action für Security-Check als Pipeline-Gate. GitLab CI: YAML-Template für Security-Scan-Stage. Jenkins: Groovy-Script für Security-Check-Step. Funktion: Check läuft bei jedem Merge, schlägt fehl wenn Score unter Threshold. Ergebnis: automatische Security-Regression-Erkennung bei jedem Deploy. Template-Download im Resources-Bereich.' } },
+  ],
+}
+
 export default function GuidesPage({ dict, locale = "de" }: GuidesPageProps = {}) {
   return (
     <div className="container mx-auto px-4 py-8 max-w-7xl">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       {/* Hero Section */}
       <div className="text-center mb-12">
         <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-medium mb-4">

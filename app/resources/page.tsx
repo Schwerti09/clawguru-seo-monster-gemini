@@ -245,9 +245,21 @@ interface ResourcesPageProps {
   locale?: string
 }
 
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    { '@type': 'Question', name: 'Welche Community-Ressourcen bietet ClawGuru?', acceptedAnswer: { '@type': 'Answer', text: 'ClawGuru Community Resources: Agent Templates (vorgefertigte ClawBot/Moltbot-Konfigurationen). Dev Tools (CLI-Utilities für lokales Testing). Security Checklists (druckbare PDF-Checklisten). CI/CD-Templates (GitHub Actions, GitLab CI YAML). Docker-Compose-Vorlagen (produktionsreife Setups). Dokumentation (API-Referenz, Architektur-Guides). Alle Ressourcen: kostenlos, Community-geprüft, DSGVO-konform.' } },
+    { '@type': 'Question', name: 'Wie lade ich ClawGuru Agent Templates herunter?', acceptedAnswer: { '@type': 'Answer', text: 'Agent Template Download: Direkt von dieser Seite (kein Account nötig für Basic Templates). GitHub Repository: github.com/clawguru/templates. CLI: npx clawguru init (interaktiver Setup-Wizard). Pro-Templates: nur für Pro/Enterprise-Kunden. Templates enthalten: Basis-Konfiguration, Security-Defaults, Monitoring-Setup, Beispiel-Webhooks. Nach Download: README.md lesen, Variablen in .env setzen, docker-compose up -d.' } },
+    { '@type': 'Question', name: 'Gibt es ClawGuru CLI-Tools?', acceptedAnswer: { '@type': 'Answer', text: 'ClawGuru CLI-Tools: clawguru-cli (npm): Security-Check aus der Kommandozeile. clawguru scan <domain>: Direkter Check ohne Browser. clawguru runbook list: Verfügbare Runbooks anzeigen. clawguru runbook run <id>: Runbook ausführen. CI/CD-Integration: clawguru check --threshold 75 (Exit-Code 1 wenn Score unter Threshold). Installation: npm install -g @clawguru/cli. Dokumentation: /api-docs.' } },
+    { '@type': 'Question', name: 'Wie kann ich zur ClawGuru Community beitragen?', acceptedAnswer: { '@type': 'Answer', text: 'ClawGuru Community-Beiträge: Runbooks verbessern: Pull Request auf GitHub (Templates-Repo). Bugs melden: GitHub Issues. Feature-Requests: GitHub Discussions. Eigene Agent-Templates einreichen: PR mit Template + README. Sicherheitslücken: security@clawguru.org (Responsible Disclosure). Top-Contributor werden im Changelog und /ueber-uns erwähnt. Community-Review: alle eingereichten Templates werden durch das Core-Team geprüft.' } },
+  ],
+}
+
 export default function ResourcesPage({ dict, locale = "de" }: ResourcesPageProps = {}) {
   return (
     <div className="container mx-auto px-4 py-8 max-w-7xl">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       {/* Hero Section */}
       <div className="text-center mb-12">
         <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-medium mb-4">

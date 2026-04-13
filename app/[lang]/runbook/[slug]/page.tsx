@@ -78,18 +78,24 @@ export default async function LocaleRunbookPage(props: {
   if (!resolvedSlug) {
     notFound()
   }
-  // Geo-variant: check indexability; if not promoted yet, return 404 instead of noindex page
+  // Geo-variant: check indexability; if not promoted yet, fall back to base slug instead of 404
+  // (GEO_MATRIX_AUTO_REWRITE rewrites base slug URLs to geo-variants — must not 404 those)
+  let finalSlug = resolvedSlug!
   if (geoParsed.citySlug) {
     const { getCityBySlug: getCity } = await import("@/lib/geo-cities")
     const { isGeoVariantIndexable: isIndexable } = await import("@/lib/geo-mycelium")
     const city = await getCity(geoParsed.citySlug)
     if (city) {
       const indexable = await isIndexable({ locale: lang, variantSlug: slug, rolloutStage: city.rollout_stage })
-      if (!indexable) notFound()
+      if (!indexable) {
+        // Fall back to base slug — render the base runbook instead of 404
+        finalSlug = geoParsed.baseSlug
+        if (!getRunbook(finalSlug)) notFound()
+      }
     }
   }
   const Mod = await import("@/app/runbook/[slug]/page")
   const RootRunbookPage = Mod.default
-  return <RootRunbookPage params={{ lang, slug: resolvedSlug }} />
+  return <RootRunbookPage params={{ lang, slug: finalSlug }} />
 }
 

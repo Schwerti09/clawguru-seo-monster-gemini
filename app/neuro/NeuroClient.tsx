@@ -214,10 +214,13 @@ export default function NeuroClient() {
   const [eyeTrackingEnabled, setEyeTrackingEnabled] = useState(false)
   const [gazeActive, setGazeActive] = useState(false)
   const [selectedCard, setSelectedCard] = useState<string | null>(null)
+  const [loadingCard, setLoadingCard] = useState<string | null>(null)
   const [dwellProgress, setDwellProgress] = useState<Record<string, number>>({})
   const [question, setQuestion] = useState("")
   const [response, setResponse] = useState<NeuroResponse | null>(null)
   const [thinking, setThinking] = useState(false)
+  const [cameraActive, setCameraActive] = useState(false)
+  const videoRef = useRef<HTMLVideoElement>(null)
   const [typingComplete, setTypingComplete] = useState(false)
   const [openFAQ, setOpenFAQ] = useState<number | null>(null)
   
@@ -281,7 +284,21 @@ export default function NeuroClient() {
     return () => clearInterval(interval)
   }, [eyeTrackingEnabled])
 
-  const triggerOracle = async (q: string) => {
+  const startCamera = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } })
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream
+      }
+      setCameraActive(true)
+    } catch (err) {
+      console.error("Camera access denied:", err)
+      alert("Kamera-Zugriff abgelehnt. Eye-Tracking funktioniert mit Maus-Simulation.")
+    }
+  }
+
+  const triggerOracle = async (q: string, cardId?: string) => {
+    if (cardId) setLoadingCard(cardId)
     setQuestion(q)
     setThinking(true)
     setResponse(null)
@@ -301,12 +318,14 @@ export default function NeuroClient() {
       console.error(err)
     } finally {
       setThinking(false)
+      setLoadingCard(null)
     }
   }
 
   const handleCardClick = (cardId: string, cardQuestion: string) => {
+    if (loadingCard) return // Prevent double-clicks
     setSelectedCard(cardId)
-    triggerOracle(cardQuestion)
+    triggerOracle(cardQuestion, cardId)
   }
 
   // CONSENT SCREEN
@@ -392,7 +411,12 @@ export default function NeuroClient() {
             {/* Controls */}
             <div className="flex flex-wrap justify-center gap-3">
               <button
-                onClick={() => setEyeTrackingEnabled(!eyeTrackingEnabled)}
+                onClick={() => {
+                  if (!eyeTrackingEnabled && !cameraActive) {
+                    startCamera()
+                  }
+                  setEyeTrackingEnabled(!eyeTrackingEnabled)
+                }}
                 className="flex items-center gap-2 px-4 py-2 rounded-full border text-sm font-mono transition-all duration-300"
                 style={{
                   borderColor: eyeTrackingEnabled ? "#b464ff" : "rgba(255,255,255,0.1)",
@@ -414,9 +438,27 @@ export default function NeuroClient() {
             </div>
             
             {eyeTrackingEnabled && (
-              <p className="text-xs font-mono mt-3 animate-pulse" style={{ color: "#b464ff" }}>
-                👁️ Eye-Tracking aktiv — schaue 2 Sekunden auf eine Karte
-              </p>
+              <>
+                <p className="text-xs font-mono mt-3 animate-pulse" style={{ color: "#b464ff" }}>
+                  👁️ Eye-Tracking aktiv — schaue 2 Sekunden auf eine Karte
+                </p>
+                {/* Camera Preview */}
+                <div className="mt-4 flex justify-center">
+                  <div className="relative w-40 h-30 rounded-xl overflow-hidden border-2 border-[#b464ff] bg-black">
+                    <video
+                      ref={videoRef}
+                      autoPlay
+                      playsInline
+                      muted
+                      className="w-full h-full object-cover transform scale-x-[-1]"
+                    />
+                    <div className="absolute top-2 right-2 w-3 h-3 rounded-full bg-red-500 animate-pulse" />
+                    <div className="absolute bottom-1 left-1 text-[10px] font-mono text-white bg-black/50 px-2 py-0.5 rounded">
+                      Eye-Tracking Cam
+                    </div>
+                  </div>
+                </div>
+              </>
             )}
           </div>
         </section>
@@ -506,30 +548,38 @@ export default function NeuroClient() {
                 {THOUGHT_CARDS.map((card) => {
                   const progress = dwellProgress[card.id] || 0
                   const isActive = gazeCardRef.current === card.id
+                  const isLoading = loadingCard === card.id
                   
                   return (
                     <div
                       key={card.id}
                       ref={(el) => { cardRefs.current[card.id] = el }}
                       onClick={() => handleCardClick(card.id, card.question)}
-                      className="relative rounded-2xl border p-5 cursor-pointer transition-all duration-300 overflow-hidden"
+                      className={`relative rounded-2xl border p-5 cursor-pointer transition-all duration-300 overflow-hidden ${isLoading ? 'pointer-events-none' : ''}`}
                       style={{
-                        background: isActive ? `${card.color}10` : "rgba(10,10,14,0.8)",
-                        borderColor: progress > 0 ? card.color : "rgba(255,255,255,0.08)",
-                        boxShadow: progress > 0 ? `0 0 ${20 + progress * 30}px ${card.color}30` : "none"
+                        background: isLoading ? `${card.color}30` : isActive ? `${card.color}10` : "rgba(10,10,14,0.8)",
+                        borderColor: isLoading ? card.color : progress > 0 ? card.color : "rgba(255,255,255,0.08)",
+                        boxShadow: isLoading ? `0 0 30px ${card.color}50` : progress > 0 ? `0 0 ${20 + progress * 30}px ${card.color}30` : "none",
+                        transform: isLoading ? 'scale(0.98)' : 'scale(1)'
                       }}
                     >
-                      {progress > 0 && <DwellRing progress={progress} color={card.color} />}
+                      {progress > 0 && !isLoading && <DwellRing progress={progress} color={card.color} />}
                       
-                      <div className="text-3xl mb-3 relative z-10">{card.icon}</div>
-                      <div className="font-bold text-sm mb-1 relative z-10" style={{ color: progress > 0.3 ? card.color : "rgba(255,255,255,0.9)" }}>
-                        {card.label}
+                      {isLoading && (
+                        <div className="absolute inset-0 flex items-center justify-center bg-black/60 z-20">
+                          <div className="w-8 h-8 border-2 border-t-transparent rounded-full animate-spin" style={{ borderColor: `${card.color} transparent transparent transparent` }} />
+                        </div>
+                      )}
+                      
+                      <div className={`text-3xl mb-3 relative z-10 transition-opacity ${isLoading ? 'opacity-50' : ''}`}>{card.icon}</div>
+                      <div className={`font-bold text-sm mb-1 relative z-10 ${isLoading ? 'opacity-50' : ''}`} style={{ color: isLoading ? card.color : progress > 0.3 ? card.color : "rgba(255,255,255,0.9)" }}>
+                        {isLoading ? 'Verarbeite...' : card.label}
                       </div>
-                      <div className="text-xs relative z-10" style={{ color: "rgba(255,255,255,0.4)" }}>
-                        {card.question.slice(0, 40)}...
+                      <div className={`text-xs relative z-10 ${isLoading ? 'opacity-50' : ''}`} style={{ color: "rgba(255,255,255,0.4)" }}>
+                        {isLoading ? 'Neural analysis running...' : `${card.question.slice(0, 40)}...`}
                       </div>
                       
-                      {progress > 0 && (
+                      {!isLoading && progress > 0 && (
                         <div className="absolute inset-0 pointer-events-none" style={{ background: `linear-gradient(135deg, ${card.color}10, transparent)` }} />
                       )}
                     </div>

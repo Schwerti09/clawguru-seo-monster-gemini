@@ -53,8 +53,20 @@ export default async function LeaderboardPage() {
   const top3 = leaderboard.slice(0, 3)
   const rest = leaderboard.slice(3)
 
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      { '@type': 'Question', name: 'Was ist das ClawGuru Leaderboard?', acceptedAnswer: { '@type': 'Answer', text: 'Das ClawGuru Leaderboard zeigt die Top 100 Ops-Heroes — anonymisierte Nutzer mit dem höchsten Security-Score und den meisten abgeschlossenen Runbooks. Gamification-Element: Motivation durch Wettbewerb und Community-Vergleich. Anonym: keine echten Namen oder Domains sichtbar. Punkte: Security-Score + Anzahl Runbooks + Fix-Streak. Wöchentliche Rotation: Top-Platzierungen werden wöchentlich ermittelt.' } },
+      { '@type': 'Question', name: 'Wie komme ich auf das ClawGuru Leaderboard?', acceptedAnswer: { '@type': 'Answer', text: 'Leaderboard-Aufnahme: Security Check durchführen (Score > 0). Account erstellen (kostenlos). Opt-in für Leaderboard-Tracking in den Einstellungen. Punkte sammeln: Security-Score erhöhen, Runbooks abschließen, tägliche Checks (Streak). Je höher der Score und mehr Runbooks abgeschlossen, desto höher die Platzierung. Top 10 erhalten Community-Badge und Erwähnung im Newsletter.' } },
+      { '@type': 'Question', name: 'Sind die Leaderboard-Daten anonym?', acceptedAnswer: { '@type': 'Answer', text: 'Leaderboard Privacy: Ja — vollständig anonymisiert. Angezeigt werden: Pseudonym (selbstgewählt), Gesamtpunkte, Anzahl Runbooks, Score-Tier. NICHT angezeigt: echte Namen, E-Mail-Adressen, Domains, IP-Adressen. Opt-out jederzeit möglich in Einstellungen. DSGVO-konform: keine personenbezogenen Daten öffentlich. Interne Verknüpfung mit Account nur für eigene Score-Anzeige.' } },
+      { '@type': 'Question', name: 'Wie wird der Leaderboard-Score berechnet?', acceptedAnswer: { '@type': 'Answer', text: 'Leaderboard Score-Berechnung: Security-Score-Punkte (max. 100 × Anzahl Domains). Runbook-Punkte (10 Punkte pro abgeschlossenem Runbook). Streak-Bonus (tägl. Check: +5 Punkte/Tag, max. 7 Tage). Compliance-Bonus (SOC2/ISO27001-Runbooks: 2× Punkte). Fix-Speed-Bonus (kritischer Fix < 24h: +20 Punkte). Gesamtpunkte bestimmen Platzierung. Decay: Punkte verfallen nach 90 Tagen Inaktivität.' } },
+    ],
+  }
+
   return (
     <Container>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <div className="py-16 max-w-4xl mx-auto">
         <div className="mb-2 text-xs text-gray-500 uppercase tracking-widest">
           WorldBeast 2026

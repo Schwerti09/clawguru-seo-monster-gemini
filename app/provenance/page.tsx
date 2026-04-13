@@ -40,6 +40,16 @@ export default async function ProvenanceIndexPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }}
       />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: [
+          { '@type': 'Question', name: 'Was ist Runbook Provenance?', acceptedAnswer: { '@type': 'Answer', text: 'Runbook Provenance ist die kryptographische Herkunftskette eines Runbooks: wann wurde es erstellt, von wem, welche Änderungen wurden wann gemacht. Jedes ClawGuru Runbook hat einen unveränderlichen Provenance-Hash (SHA-256). Compliance-Vorteil: Auditoren können prüfen dass Runbooks nicht nachträglich manipuliert wurden. Wichtig für: SOC2, ISO27001, regulatorische Audits.' } },
+          { '@type': 'Question', name: 'Wie verifiziere ich die Integrität eines ClawGuru Runbooks?', acceptedAnswer: { '@type': 'Answer', text: 'Runbook-Integrität prüfen: Provenance-Hash auf dieser Seite mit dem Hash im Runbook vergleichen. CLI: clawguru runbook verify <id> — gibt OK oder TAMPERED zurück. API: GET /api/provenance/<id> gibt Provenance-Chain als JSON. Automatische Verifikation: ClawGuru verifiziert alle Runbooks bei jedem Deployment. Externe Verifikation möglich: Hash-Werte sind öffentlich zugänglich.' } },
+          { '@type': 'Question', name: 'Was ist der Unterschied zwischen Runbook-Version und Provenance?', acceptedAnswer: { '@type': 'Answer', text: 'Version vs. Provenance: Version bezeichnet den inhaltlichen Stand (v1.2.3). Provenance ist die kryptographische Kette aller Versionen mit Zeitstempel und Autor-Hash. Während Versionen überschrieben werden können, ist die Provenance-Chain unveränderlich (append-only, wie Blockchain). Compliance-Anforderung: SOC2 CC6.1 verlangt Nachweisbarkeit von Config-Änderungen — Provenance erfüllt das.' } },
+          { '@type': 'Question', name: 'Werden Runbook-Änderungen in der Provenance erfasst?', acceptedAnswer: { '@type': 'Answer', text: 'Ja — jede Änderung an einem ClawGuru Runbook erzeugt einen neuen Provenance-Eintrag: Timestamp (UTC), Content-Hash (SHA-256), Editor-ID (anonymisiert), Change-Summary. Die gesamte Provenance-Chain ist über die API abrufbar. Für Enterprise-Kunden: vollständige Autor-Attribution und Approval-Workflow (4-Augen-Prinzip) für Runbook-Änderungen.' } },
+        ],
+      }) }} />
       <div className="py-16 max-w-6xl mx-auto">
         <SectionTitle
           kicker="Cryptographic Audit Trail"

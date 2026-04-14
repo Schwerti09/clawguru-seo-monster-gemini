@@ -211,6 +211,7 @@ export async function GET(
         "audit-logging-setup","database-access-control","intrusion-detection-setup","supply-chain-security",
         "runtime-policy-enforcement",
         "container-escape-prevention","kubernetes-secrets-management",
+        "ebpf-security-monitoring","network-segmentation-guide",
         "service-mesh-security","waf-configuration","cicd-security-pipeline","secrets-rotation-automation","microservices-security",
       ]
       // Specialized security + compare pages
@@ -319,6 +320,7 @@ export async function GET(
         { loc: `${base}/${locale}/academy/cve/CVE-2025-1974`, lastmod, changefreq: "monthly", priority: "0.87" },
         { loc: `${base}/${locale}/academy/cve/CVE-2024-56337`, lastmod, changefreq: "monthly", priority: "0.87" },
         { loc: `${base}/${locale}/academy/cve/CVE-2025-24054`, lastmod, changefreq: "monthly", priority: "0.87" },
+        { loc: `${base}/${locale}/academy/cve/CVE-2025-29824`, lastmod, changefreq: "monthly", priority: "0.87" },
         { loc: `${base}/${locale}/pricing`, lastmod, changefreq: "weekly", priority: "0.85" },
         { loc: `${base}/${locale}/downloads`, lastmod, changefreq: "weekly", priority: "0.85" },
         { loc: `${base}/${locale}/clawverse`, lastmod, changefreq: "weekly", priority: "0.85" },

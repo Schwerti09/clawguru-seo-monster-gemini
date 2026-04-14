@@ -306,6 +306,26 @@ export default function AiAgentSecurityPage({ params }: PageProps) {
           </div>
         </section>
 
+        {/* Batch 5 Advanced Topics */}
+        <section className="mb-10">
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Advanced Topics — Batch 5</h2>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {[
+              { slug: "agentic-rag-security", icon: "🗃️", title: "Agentic RAG Security", desc: "Vector DB hardening, document injection defense, retrieval access control." },
+              { slug: "multi-agent-trust", icon: "🤝", title: "Multi-Agent Trust", desc: "Capability tokens, mTLS, lateral movement prevention in agent networks." },
+              { slug: "ai-red-teaming", icon: "🎯", title: "AI Red Teaming", desc: "Systematic testing of AI agent defenses: injection, exfiltration, DoS." },
+              { slug: "ai-tool-use-security", icon: "🔧", title: "AI Tool Use Security", desc: "LLM function calling, tool scope restriction, HITL for dangerous tools." },
+              { slug: "federated-learning-security", icon: "🌐", title: "Federated Learning Security", desc: "Gradient poisoning defense, differential privacy, Byzantine-robust aggregation." },
+            ].map((p) => (
+              <a key={p.slug} href={`/${locale}/moltbot/${p.slug}`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
+                <div className="text-2xl mb-2">{p.icon}</div>
+                <div className="font-semibold text-cyan-400 mb-1">{p.title}</div>
+                <div className="text-xs text-gray-300">{p.desc}</div>
+              </a>
+            ))}
+          </div>
+        </section>
+
         {/* Further Resources */}
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">Further Resources</h2>

@@ -210,6 +210,7 @@ export async function GET(
         "firewall-configuration-guide","reverse-proxy-security","docker-swarm-hardening",
         "audit-logging-setup","database-access-control","intrusion-detection-setup","supply-chain-security",
         "runtime-policy-enforcement",
+        "container-escape-prevention","kubernetes-secrets-management",
         "service-mesh-security","waf-configuration","cicd-security-pipeline","secrets-rotation-automation","microservices-security",
       ]
       // Specialized security + compare pages
@@ -236,6 +237,7 @@ export async function GET(
         "clawguru-vs-aquasec","openclaw-vs-tenable",
         "moltbot-vs-semantic-kernel",
         "clawguru-vs-prisma-cloud","openclaw-vs-trivy",
+        "clawguru-vs-orca-security","moltbot-vs-haystack",
       ]
       // Solutions pages
       const SOLUTIONS_SLUGS = [

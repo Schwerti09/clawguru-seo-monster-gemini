@@ -1,4 +1,4 @@
-﻿# ClawGuru — AGENTS.md · Master Operating Manual v10 (14.04.2026)
+﻿# ClawGuru — AGENTS.md · Master Operating Manual v11 (14.04.2026)
 
 > **This document is the single source of truth for every agent working in this codebase.**
 > Read it completely BEFORE making any change. Update the Session Log after every session.
@@ -974,6 +974,7 @@ Will be resolved automatically when upgrading to Next.js 15 + eslint 9 (future s
 | 11.04.2026 | 8 | Page speed: framer-motion removed from shared bundle (lazy-load PageTransition/AnimatedBackground/CommandK, all heavy dashboard tabs, RunbookCard, Hero, FeaturesGrid, CTA, TrustSection, GlowButton, BentoCard, OverviewTab, PremiumMetricCard, PremiumGauge). CSS animations replace JS animations. CLS fix on command-center. |
 | 12.04.2026 | 9 | SEO: hreflang xhtml:link removed from sitemap XML. Duplicate /check URL removed. Traffic growth sprint: /de/check CTA + proof bullets + score methodology. /de/roast-my-stack FAQ + examples. Compare Batch 3 (trivy/checkov/wazuh). /kubernetes-security pillar page. Compare Batch 4 (snyk/victorops/ossec). FAQPage + WebPage JSON-LD added to all 37 Moltbot pages via batch script. security-framework migrated to buildLocalizedAlternates. FAQPage JSON-LD added to all 15 OpenClaw pages via batch script. Compare Batch 5 (moltbot-vs-splunk, openclaw-vs-crowdsec). AGENTS.md v8. |
 | 13.04.2026 | 10 | **Critical bugfix: /de/runbooks/cloud links (404 root cause found).** GEO_MATRIX_AUTO_REWRITE=1 rewrites base runbook slugs to geo-variants (e.g. hetzner-ssh-hardening → hetzner-ssh-hardening-groheide). City "Großheide" slugifies to "groheide" which is NOT in SEEDED_CITY_SLUGS → parseGeoVariantSlug returns full slug as baseSlug → getRunbook() = null → 404. Fix 1: Middleware now verifies city is seeded before rewriting (round-trip parseGeoVariantSlug check). Fix 2: Locale-Runbook-Page falls back to baseSlug instead of notFound() when geo-variant not indexed. Fix 3: Cache-Control immutable moved from all routes to /_next/static/ only (was caching 404s for 1 year). Fix 4: vercel.json maxDuration=60s for runbook pages. Fix 5: SITEMAP_100K_LOCALES locale guard replaced with SUPPORTED_LOCALES. Railway deployment setup: railway.json + PORT env var fix (next start -p ${PORT:-3000}). AGENTS.md v9. |
+| 14.04.2026 | 12 | **TypeScript strict:true + Rate-limiting default ON + Compare Batch 6 + HowTo Schema.** tsconfig.json: strict:false→strict:true (fixed 2 TS18046 errors in enrich-city/route.ts). Middleware: MW_RL_ENABLED opt-in→opt-out (default ON, set =0 to disable). New page: moltbot-vs-grafana (full compare, sitemap). HowTo JSON-LD schema added to all 15 OpenClaw sub-pages (security-headers-guide, server-hardening-checklist, audit-logging-setup, firewall-configuration-guide, intrusion-detection-setup, docker-swarm-hardening, database-access-control, reverse-proxy-security, supply-chain-security, self-hosted-security-checklist + 5 pages without prior schema: secrets-rotation-automation, microservices-security, service-mesh-security, waf-configuration, cicd-security-pipeline). Solutions Batch 2 verified complete (iso27001, pci-dss, hipaa all existed with full metadata). Build ✓ (Exit 0). AGENTS.md v11. |
 | 14.04.2026 | 11 | **Neuro v5 overhaul + Project Audit + Locale Migration.** Neuro: fixed CVE score (items[] not cves[]), runbook relevance normalization, added visible FAQ, live Threat Correlation API (/api/intel/threats created), updated layout metadata. CRITICAL: removed netlify.env.production + netlify.env.import from Git (contained production secrets — user must rotate all keys). Removed stale zip/junk files. Fixed Node.js engines: 24.x → >=20. Created AUDIT-MASTERPLAN.md. Locale Migration: [lang]/neuro/page.tsx + [lang]/oracle/page.tsx upgraded with full metadata, openGraph.url with locale, generateStaticParams. Root /neuro and /oracle set to noindex (canonical → /de/neuro and /de/oracle). P2: CSP + HSTS + X-Frame-Options + nosniff security headers added to next.config.js for all routes. AGENTS.md v10. |
 
 ### Open Tasks by Priority
@@ -994,12 +995,14 @@ Will be resolved automatically when upgrading to Next.js 15 + eslint 9 (future s
 - [x] **[lang]/neuro + [lang]/oracle locale migration** — full metadata, openGraph.url with locale, generateStaticParams ✅
 - [x] **CSP + Security Headers** in next.config.js (HSTS, X-Frame-Options, nosniff, Referrer-Policy) ✅
 - [ ] **SECRET ROTATION** — All keys from netlify.env.production must be rotated NOW (manual user action)
-- [ ] Compare Batch 6: `clawguru-vs-lacework` follow-up, `moltbot-vs-grafana`, `openclaw-vs-falco` (deep-dive)
-- [ ] HowTo schema auf alle 15 OpenClaw-Pages (Schritt-für-Schritt-Anleitungen)
-- [ ] Solutions Batch 2: ISO27001, PCI-DSS, HIPAA pages
+- [x] Compare Batch 6: `moltbot-vs-grafana` ✅ (`clawguru-vs-lacework` + `openclaw-vs-falco` existed already)
+- [x] HowTo schema auf alle 15 OpenClaw-Pages ✅
+- [x] Solutions Batch 2: ISO27001, PCI-DSS, HIPAA pages ✅ (existed from prior session)
+- [x] **tsconfig strict:true** — 2 TS errors fixed, strict mode enabled ✅
+- [x] **Rate-limiting default ON** — MW_RL_ENABLED opt-out model ✅
 
 **MEDIUM — Sprint 2**
-- [ ] Solutions Batch 2: ISO27001, PCI-DSS, HIPAA pages (still pending)
+- [x] Solutions Batch 2: ISO27001, PCI-DSS, HIPAA pages ✅
 - [ ] Africa expansion route: `/api/geo/africa-expansion`
 - [ ] MEA expansion route: `/api/geo/mea-expansion`
 - [ ] Moltbot Batch 4: 5 AI-agent focused pages
@@ -1015,8 +1018,8 @@ Will be resolved automatically when upgrading to Next.js 15 + eslint 9 (future s
 1. **SECRET ROTATION** — Rotate all keys exposed in netlify.env.production (DB, API keys, session secrets)
 2. **Vercel Cache Purge** — Dashboard → Settings → Data Cache → Purge Everything
 3. Run Asia/LatAm DB seeding: `GET /api/geo/asia-latam-expansion?stable=1`
-4. Compare Batch 6: `clawguru-vs-lacework`, `moltbot-vs-grafana`, `openclaw-vs-falco`
-5. HowTo schema on all 15 OpenClaw pages
+4. Google Search Console: resubmit sitemap, request indexing for /de/neuro, /de/oracle, all new OpenClaw pages
+5. Moltbot Batch 4: 5 AI-agent focused pages (`/de/moltbot/ai-agent-*`)
 
 ---
 

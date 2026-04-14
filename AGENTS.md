@@ -1,4 +1,4 @@
-﻿# ClawGuru — AGENTS.md · Master Operating Manual v11 (14.04.2026)
+﻿# ClawGuru — AGENTS.md · Master Operating Manual v12 (14.04.2026)
 
 > **This document is the single source of truth for every agent working in this codebase.**
 > Read it completely BEFORE making any change. Update the Session Log after every session.
@@ -1011,6 +1011,7 @@ Will be resolved automatically when upgrading to Next.js 15 + eslint 9 (future s
 | 11.04.2026 | 8 | Page speed: framer-motion removed from shared bundle (lazy-load PageTransition/AnimatedBackground/CommandK, all heavy dashboard tabs, RunbookCard, Hero, FeaturesGrid, CTA, TrustSection, GlowButton, BentoCard, OverviewTab, PremiumMetricCard, PremiumGauge). CSS animations replace JS animations. CLS fix on command-center. |
 | 12.04.2026 | 9 | SEO: hreflang xhtml:link removed from sitemap XML. Duplicate /check URL removed. Traffic growth sprint: /de/check CTA + proof bullets + score methodology. /de/roast-my-stack FAQ + examples. Compare Batch 3 (trivy/checkov/wazuh). /kubernetes-security pillar page. Compare Batch 4 (snyk/victorops/ossec). FAQPage + WebPage JSON-LD added to all 37 Moltbot pages via batch script. security-framework migrated to buildLocalizedAlternates. FAQPage JSON-LD added to all 15 OpenClaw pages via batch script. Compare Batch 5 (moltbot-vs-splunk, openclaw-vs-crowdsec). AGENTS.md v8. |
 | 13.04.2026 | 10 | **Critical bugfix: /de/runbooks/cloud links (404 root cause found).** GEO_MATRIX_AUTO_REWRITE=1 rewrites base runbook slugs to geo-variants (e.g. hetzner-ssh-hardening → hetzner-ssh-hardening-groheide). City "Großheide" slugifies to "groheide" which is NOT in SEEDED_CITY_SLUGS → parseGeoVariantSlug returns full slug as baseSlug → getRunbook() = null → 404. Fix 1: Middleware now verifies city is seeded before rewriting (round-trip parseGeoVariantSlug check). Fix 2: Locale-Runbook-Page falls back to baseSlug instead of notFound() when geo-variant not indexed. Fix 3: Cache-Control immutable moved from all routes to /_next/static/ only (was caching 404s for 1 year). Fix 4: vercel.json maxDuration=60s for runbook pages. Fix 5: SITEMAP_100K_LOCALES locale guard replaced with SUPPORTED_LOCALES. Railway deployment setup: railway.json + PORT env var fix (next start -p ${PORT:-3000}). AGENTS.md v9. |
+| 14.04.2026 | 13 | **30-Tage Master-Plan + Moltbot Batch 4 (5 AI-Agent Pages) + God Mode Directive.** God Mode v1.0 Directive added to AGENTS.md. Full project audit completed (8 traffic blockers identified). Moltbot Batch 4: 5 new AI-agent security pages created: prompt-injection-defense, model-poisoning-protection, secure-agent-communication, llm-gateway-hardening, ai-agent-sandboxing. All 5 have full FAQPage + HowTo JSON-LD, internal links, CTA. Added to MOLTBOT_SLUGS sitemap. Build ✓ (Exit 0). AGENTS.md v12. 30-Tage Master-Plan added as Section 14. |
 | 14.04.2026 | 12 | **TypeScript strict:true + Rate-limiting default ON + Compare Batch 6 + HowTo Schema.** tsconfig.json: strict:false→strict:true (fixed 2 TS18046 errors in enrich-city/route.ts). Middleware: MW_RL_ENABLED opt-in→opt-out (default ON, set =0 to disable). New page: moltbot-vs-grafana (full compare, sitemap). HowTo JSON-LD schema added to all 15 OpenClaw sub-pages (security-headers-guide, server-hardening-checklist, audit-logging-setup, firewall-configuration-guide, intrusion-detection-setup, docker-swarm-hardening, database-access-control, reverse-proxy-security, supply-chain-security, self-hosted-security-checklist + 5 pages without prior schema: secrets-rotation-automation, microservices-security, service-mesh-security, waf-configuration, cicd-security-pipeline). Solutions Batch 2 verified complete (iso27001, pci-dss, hipaa all existed with full metadata). Build ✓ (Exit 0). AGENTS.md v11. |
 | 14.04.2026 | 11 | **Neuro v5 overhaul + Project Audit + Locale Migration.** Neuro: fixed CVE score (items[] not cves[]), runbook relevance normalization, added visible FAQ, live Threat Correlation API (/api/intel/threats created), updated layout metadata. CRITICAL: removed netlify.env.production + netlify.env.import from Git (contained production secrets — user must rotate all keys). Removed stale zip/junk files. Fixed Node.js engines: 24.x → >=20. Created AUDIT-MASTERPLAN.md. Locale Migration: [lang]/neuro/page.tsx + [lang]/oracle/page.tsx upgraded with full metadata, openGraph.url with locale, generateStaticParams. Root /neuro and /oracle set to noindex (canonical → /de/neuro and /de/oracle). P2: CSP + HSTS + X-Frame-Options + nosniff security headers added to next.config.js for all routes. AGENTS.md v10. |
 
@@ -1042,7 +1043,7 @@ Will be resolved automatically when upgrading to Next.js 15 + eslint 9 (future s
 - [x] Solutions Batch 2: ISO27001, PCI-DSS, HIPAA pages ✅
 - [ ] Africa expansion route: `/api/geo/africa-expansion`
 - [ ] MEA expansion route: `/api/geo/mea-expansion`
-- [ ] Moltbot Batch 4: 5 AI-agent focused pages
+- [x] Moltbot Batch 4: 5 AI-agent focused pages ✅ (prompt-injection-defense, model-poisoning-protection, secure-agent-communication, llm-gateway-hardening, ai-agent-sandboxing)
 - [ ] Academy/Blog section with weekly CVE analysis pages (`/de/academy/cve-YYYY-XXXXX`) — fresh content signal
 
 **LOW — Ongoing**
@@ -1055,8 +1056,8 @@ Will be resolved automatically when upgrading to Next.js 15 + eslint 9 (future s
 1. **SECRET ROTATION** — Rotate all keys exposed in netlify.env.production (DB, API keys, session secrets)
 2. **Vercel Cache Purge** — Dashboard → Settings → Data Cache → Purge Everything
 3. Run Asia/LatAm DB seeding: `GET /api/geo/asia-latam-expansion?stable=1`
-4. Google Search Console: resubmit sitemap, request indexing for /de/neuro, /de/oracle, all new OpenClaw pages
-5. Moltbot Batch 4: 5 AI-agent focused pages (`/de/moltbot/ai-agent-*`)
+4. Google Search Console: resubmit sitemap, request indexing for all new Moltbot Batch 4 pages + OpenClaw pages
+5. **Week 1 of 30-Day Plan**: Roast My Moltbot Share-Button + Academy CVE Feed (Week 1 viral mechanic)
 
 ---
 
@@ -1107,6 +1108,141 @@ All compare pages MUST follow this structure:
 When adding new keys to `dictionaries/de.json` and `dictionaries/en.json`, also update:
 - `lib/getDictionary.ts` → the `Dictionary` type definition for the relevant section
 - All 14 other locale JSON files (or rely on `deepMerge` fallback to EN)
+
+---
+
+---
+
+## 14. 30-TAGE MASSEN-TRAFFIC MASTER-PLAN (Added 14.04.2026)
+
+> **Ziel**: Von Growth Phase → 50,000+ unique visitors/month in 30 Tagen.
+> Jede Woche hat ein Schwerpunktthema, messbare KPIs, und konkrete Deliverables.
+
+---
+
+### WOCHE 1 (Tag 1–7): Virale Mechanik + Frischer Content-Rhythmus
+
+**Schwerpunkt: Die Tools viral machen + ersten Crawl-Signal-Boost**
+
+**Tag 1-2: Roast My Moltbot — Share-Button**
+- [ ] "Teile deinen Roast-Score"-Button hinzufügen (copy-to-clipboard, Twitter-Share mit prefilled text)
+- [ ] Shareable URL-Pattern: `/roast-my-moltbot?score=72&issues=api-key-exposure,no-rbac`
+- [ ] `openGraph.url` auf Roast My Moltbot Page hinzufügen (Rule 2 fix!)
+
+**Tag 3-4: Academy CVE Feed — Wöchentlicher Crawl-Magnet**
+- [ ] `/de/academy/cve-2026-XXXXX` Route bauen (dynamic route für CVE-Detail-Pages)
+- [ ] 3 initiale CVE-Pages mit "How to fix in Moltbot" CTA erstellen
+- [ ] Format: Schweregrad, Betroffene Software, Fix-Steps, Link zu Runbook
+
+**Tag 5-7: Interne Verlinkung Audit + Fix**
+- [ ] Academy-Tracks die auf nicht-existente Pages zeigen fixen (`/moltbot/ai-agent-security` → `/moltbot/ai-agent-sandboxing`)
+- [ ] Alle 5 neuen Moltbot Batch 4 Pages in Academy Popular Courses eintragen
+- [ ] Cross-links: Jede neue AI-Agent Page → Stack MRI (`/neuro`) als CTA
+
+**KPI Woche 1**: Roast-Tool Shares +20%, Google crawlt alle 5 neuen Batch-4-Pages
+
+---
+
+### WOCHE 2 (Tag 8–14): AI-Agent Pillar Page + Compare Batch 7
+
+**Schwerpunkt: Den wichtigsten Traffic-Hebel bauen — AI Agent Security Pillar**
+
+**Tag 8-10: AI Agent Security Pillar Page**
+- [ ] `/de/moltbot/ai-agent-security` als vollständige Pillar-Page (2000+ Wörter)
+- [ ] Deckt alle 5 Batch-4-Themen ab + verlinkt auf jede Sub-Page
+- [ ] Schema: FAQPage + HowTo + BreadcrumbList + Article
+- [ ] Keywords: "ai agent security", "llm security 2026", "moltbot security"
+
+**Tag 11-12: Compare Batch 7 — AI-Tool Vergleiche**
+- [ ] `moltbot-vs-langchain` — Developer-Traffic mit hohem Intent
+- [ ] `moltbot-vs-autogpt` — Viral-Potenzial (AutoGPT Community)
+- [ ] `clawguru-vs-openai-safety` — High-authority keyword
+
+**Tag 13-14: Solutions Batch 3 — Compliance Deep-Dives**
+- [ ] `/de/solutions/dsgvo-compliance-automation` — Größtes EU-Keyword
+- [ ] `/de/solutions/nist-csf-implementation` — USA-Enterprise-Traffic
+- [ ] Beide mit HowTo-Schema und internen Links zu OpenClaw-Pages
+
+**KPI Woche 2**: AI Agent Security Pillar indexiert, 3 neue Compare Pages live, GSC zeigt neue Impressions
+
+---
+
+### WOCHE 3 (Tag 15–21): Geo-Expansion + Moltbot Batch 5
+
+**Schwerpunkt: Geografischen Footprint verdoppeln**
+
+**Tag 15-16: Asia/LatAm DB Seeding**
+- [ ] `GET /api/geo/asia-latam-expansion?stable=1` ausführen
+- [ ] Sitemap-Buckets neu generieren: `GEO_MATRIX_SITEMAP=1`
+- [ ] Vercel: Cache Purge + neu deployen
+
+**Tag 17-19: Moltbot Batch 5 — 5 Weitere AI-Agent Pages**
+- [ ] `ai-agent-observability-monitoring` — Ops-Team-Traffic
+- [ ] `ai-agent-incident-response-playbook` — Security-Team-Traffic
+- [ ] `llm-cost-security-optimization` — DevOps-Traffic
+- [ ] `ai-agent-access-control-rbac` — IAM-Traffic
+- [ ] `moltbot-multi-agent-orchestration` — Pillar-Sub-Page
+
+**Tag 20-21: Google Search Console Action**
+- [ ] Sitemap neu einreichen
+- [ ] URL Inspection für alle neuen Pages anfordern
+- [ ] Core Web Vitals Report prüfen — LCP/CLS fixen falls > 2.5s
+
+**KPI Woche 3**: 50+ neue Geo-URLs indexiert, Moltbot Batch 5 live, Sitemap Submission abgeschlossen
+
+---
+
+### WOCHE 4 (Tag 22–30): Conversion-Optimierung + Academy Relaunch
+
+**Schwerpunkt: Traffic in Users und Shares konvertieren**
+
+**Tag 22-24: /check und /neuro Conversion-Boost**
+- [ ] A/B-Test: Hero-CTA Text "Kostenloser Security-Check" vs "Stack in 30s scannen"
+- [ ] Stack MRI: Ergebnis-Share-Button ("Mein Stack hat 8 Sicherheitslücken — analysiere deinen: clawguru.org/neuro")
+- [ ] E-Mail Capture nach erfolgreichem Check-Scan (opt-in, GDPR)
+
+**Tag 25-27: Academy Relaunch — CVE Feed + 5 Neue Kurse**
+- [ ] 5 neue CVE-Pages mit Woche-1-System
+- [ ] Academy Landing Page: Neue Tracks für AI Agent Security (linkt zu Batch 4+5)
+- [ ] "Trendige Kurse" Section mit neuen AI-Agent-Pages
+
+**Tag 28-30: Performance + Monitoring-Baseline setzen**
+- [ ] Vercel Analytics: Funnel von Landing Page → Check Start → Completion messen
+- [ ] Top 10 Pages nach organischem Traffic identifizieren → interne Verlinkung verstärken
+- [ ] AGENTS.md Kapitel 14 mit tatsächlichen KPI-Ergebnissen updaten
+- [ ] 30-Tage-Retrospektive: Was hat Traffic gebracht? Was nicht? Plan für Tag 31-60 anpassen.
+
+**KPI Woche 4**: Check Completion Rate +15%, Academy Traffic +30%, 10+ Social Shares/Tag
+
+---
+
+### 30-TAGE GESAMT-ZIELE
+
+| Metrik | Jetzt | Ziel Tag 30 | Messbar via |
+|--------|-------|-------------|-------------|
+| Organische Impressions (GSC) | Baseline | +40% | Google Search Console |
+| Indexierte Pages | ~25,000 | ~26,500+ | GSC Coverage |
+| Check-Start-Rate | Baseline | +20% | Vercel Analytics |
+| Social Shares/Tag | ~0 | 10+ | UTM-Tracking |
+| Academy Page Views | Baseline | +30% | Analytics |
+| Neue AI-Agent Pages | 5 (Batch 4) | 10+ (Batch 4+5) | Code |
+
+---
+
+### CONTENT-PRIORITÄTS-MATRIX (für schnelle Entscheidungen)
+
+Wenn du nicht weißt, was als nächstes gebaut werden soll, nimm immer das mit dem höchsten Traffic-Score:
+
+| Content-Typ | Traffic-Score | Zeit-Aufwand | Wann bauen |
+|-------------|---------------|--------------|-----------|
+| AI Agent Pillar Page | 10/10 | 3h | Sofort |
+| Compare Page (vs Tool) | 9/10 | 1.5h | Woche 1-2 |
+| CVE Analysis Page | 8/10 | 1h | Wöchentlich |
+| Moltbot Sub-Page (Batch) | 7/10 | 2h | Wöchentlich |
+| Geo City Page | 6/10 | 0.5h (automatisch) | API-Seeding |
+| Solutions Deep-Dive | 7/10 | 2h | Woche 2-3 |
+| OpenClaw Sub-Page | 6/10 | 1.5h | Batch |
+| Academy Course Page | 5/10 | 1h | Batch |
 
 ---
 

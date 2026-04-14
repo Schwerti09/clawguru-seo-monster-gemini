@@ -239,6 +239,7 @@ export async function GET(
         "moltbot-vs-semantic-kernel",
         "clawguru-vs-prisma-cloud","openclaw-vs-trivy",
         "clawguru-vs-orca-security","moltbot-vs-haystack",
+        "openclaw-vs-crowdstrike",
       ]
       // Solutions pages
       const SOLUTIONS_SLUGS = [
@@ -326,6 +327,7 @@ export async function GET(
         { loc: `${base}/${locale}/academy/cve/CVE-2025-29824`, lastmod, changefreq: "monthly", priority: "0.87" },
         { loc: `${base}/${locale}/academy/cve/CVE-2025-21420`, lastmod, changefreq: "monthly", priority: "0.87" },
         { loc: `${base}/${locale}/academy/cve/CVE-2025-32433`, lastmod, changefreq: "monthly", priority: "0.90" },
+        { loc: `${base}/${locale}/academy/cve/CVE-2025-31324`, lastmod, changefreq: "monthly", priority: "0.90" },
         { loc: `${base}/${locale}/pricing`, lastmod, changefreq: "weekly", priority: "0.85" },
         { loc: `${base}/${locale}/downloads`, lastmod, changefreq: "weekly", priority: "0.85" },
         { loc: `${base}/${locale}/clawverse`, lastmod, changefreq: "weekly", priority: "0.85" },

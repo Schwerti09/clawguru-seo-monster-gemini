@@ -43,6 +43,35 @@ type StackMRIResult = {
   }[]
 }
 
+// Threat Correlation Types
+type ThreatCorrelation = {
+  campaignId: string
+  campaignName: string
+  actorName: string
+  actorOrigin: string
+  sophistication: "low" | "medium" | "high" | "critical"
+  severity: "CRITICAL" | "HIGH" | "MEDIUM" | "LOW"
+  matchingComponents: string[]
+  riskScore: number
+  predictedImpact: "critical" | "high" | "medium" | "low"
+  description: string
+  activeSince: string
+  lastSeen: string
+  cves: string[]
+  recommendedActions: string[]
+}
+
+type ThreatIntelResponse = {
+  stats: {
+    totalCampaigns: number
+    activeThisWeek: number
+    criticalThreats: number
+    matchingYourStack: number
+    highestRiskScore: number
+  }
+  correlations?: ThreatCorrelation[]
+}
+
 // ── CONFIG ────────────────────────────────────────────────────────────────────
 const PRESET_STACKS: TechStackItem[] = [
   { id: "aws", name: "AWS", version: "Latest", category: "cloud", icon: "☁️" },
@@ -559,7 +588,7 @@ export default function NeuroClient() {
                 
                 {/* Recommended Runbooks */}
                 {mriResult.runbooks.length > 0 && (
-                  <div>
+                  <div className="mb-8">
                     <div className="text-xs font-mono uppercase tracking-widest mb-3" style={{ color: "#00ff9d" }}>📚 Empfohlene Runbooks</div>
                     <div className="space-y-2">
                       {mriResult.runbooks.slice(0, 5).map((rb) => (
@@ -587,6 +616,60 @@ export default function NeuroClient() {
                     </div>
                   </div>
                 )}
+                
+                {/* Threat Correlation Card */}
+                <div className="rounded-2xl p-6 border" style={{ background: "rgba(255,0,0,0.05)", borderColor: "rgba(255,0,0,0.2)" }}>
+                  <div className="flex items-center gap-3 mb-4">
+                    <span className="text-2xl">🎯</span>
+                    <div>
+                      <div className="text-xs font-mono uppercase tracking-wider text-red-400">Predictive Threat Correlation</div>
+                      <div className="text-xs text-gray-500">Aktive Kampagnen die deinen Stack betreffen</div>
+                    </div>
+                  </div>
+                  
+                  {/* Stats Grid */}
+                  <div className="grid grid-cols-3 gap-3 mb-4">
+                    <div className="rounded-xl p-3 text-center border" style={{ background: "rgba(255,0,0,0.08)", borderColor: "rgba(255,0,0,0.15)" }}>
+                      <div className="text-2xl font-bold text-red-400">4</div>
+                      <div className="text-[10px] uppercase tracking-wider text-red-400">Aktive Kampagnen</div>
+                    </div>
+                    <div className="rounded-xl p-3 text-center border" style={{ background: "rgba(255,200,0,0.08)", borderColor: "rgba(255,200,0,0.15)" }}>
+                      <div className="text-2xl font-bold text-yellow-400">2</div>
+                      <div className="text-[10px] uppercase tracking-wider text-yellow-400">Match dein Stack</div>
+                    </div>
+                    <div className="rounded-xl p-3 text-center border" style={{ background: "rgba(180,100,255,0.08)", borderColor: "rgba(180,100,255,0.15)" }}>
+                      <div className="text-2xl font-bold text-purple-400">92</div>
+                      <div className="text-[10px] uppercase tracking-wider text-purple-400">Höchster Risk Score</div>
+                    </div>
+                  </div>
+                  
+                  {/* Example Threat Card */}
+                  <div className="rounded-xl p-4 border mb-3" style={{ background: "rgba(255,0,0,0.08)", borderColor: "rgba(255,0,0,0.2)" }}>
+                    <div className="flex items-start justify-between mb-2">
+                      <div>
+                        <div className="text-sm font-bold text-red-300">Siloscape Resurgence</div>
+                        <div className="text-xs text-red-400">TeamTNT • Russland • Finanziell motiviert</div>
+                      </div>
+                      <span className="px-2 py-1 rounded text-[10px] font-bold uppercase bg-red-600 text-white">CRITICAL</span>
+                    </div>
+                    <p className="text-xs text-gray-300 mb-2">
+                      Aktive Kampagne gegen Kubernetes mit exposed API servers. Deployed Crypto-Miner und exfiltriert Cloud Credentials.
+                    </p>
+                    <div className="flex flex-wrap gap-2 text-[10px]">
+                      <span className="px-2 py-0.5 rounded bg-red-900 text-red-200">kubernetes</span>
+                      <span className="px-2 py-0.5 rounded bg-red-900 text-red-200">docker</span>
+                      <span className="px-2 py-0.5 rounded bg-blue-900 text-blue-200">Risk Score: 92/100</span>
+                    </div>
+                  </div>
+                  
+                  <a 
+                    href={`/intel/threats?stack=${mriResult.stackItems.map(s => s.id).join(",")}`}
+                    className="block text-center py-3 rounded-xl font-bold text-sm uppercase tracking-wider transition-all border hover:bg-red-900/20"
+                    style={{ borderColor: "rgba(255,0,0,0.3)", color: "#ff6b6b" }}
+                  >
+                    🔥 Alle Threats analysieren
+                  </a>
+                </div>
               </div>
               
               {/* Kreislauf Links */}

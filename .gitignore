@@ -27,6 +27,9 @@ pnpm-debug.log*
 env-*.env
 env-*.production
 # Platform-specific runtime env files with real secrets
+netlify.env.production
+netlify.env.import
+netlify.env.clean
 
 # common backup artifacts
 *.bak

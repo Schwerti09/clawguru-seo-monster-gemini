@@ -202,6 +202,7 @@ export async function GET(
         "cloud-security-posture-management","cryptography-encryption-guide","data-loss-prevention",
         "api-rate-limiting-advanced","ai-agent-threat-model","real-time-cve-feed","bot-security-testing","sbom-generation","compliance-automation-engine","ai-agent-security","ai-agent-threat-model-template","ai-agent-hardening-guide",
         "prompt-injection-defense","model-poisoning-protection","secure-agent-communication","llm-gateway-hardening","ai-agent-sandboxing",
+        "agentic-rag-security","multi-agent-trust","ai-red-teaming","ai-tool-use-security","federated-learning-security",
       ]
       // OpenClaw subpages (10 pages × all locales)
       const OPENCLAW_SLUGS = [
@@ -236,6 +237,7 @@ export async function GET(
         "enterprise-siem-integration","iso27001-certification-roadmap","pci-dss-compliance","hipaa-security-controls",
         "aws-security-architecture","github-actions-bare-metal","influxdb-hipaa-compliance",
         "iso-27001-google-cloud","rabbitmq-audit","terraform-canary-deploy",
+        "dsgvo-compliance-automation","nis2-compliance",
       ]
       // SEO guide pages
       const GUIDE_SLUGS = [

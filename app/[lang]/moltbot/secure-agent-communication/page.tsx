@@ -178,9 +178,9 @@ export default function SecureAgentCommunicationPage({ params }: PageProps) {
               <div className="font-semibold text-cyan-400">Service Mesh Security</div>
               <div className="text-sm text-gray-300">Istio/Linkerd mTLS guide</div>
             </a>
-            <a href={`/${locale}/neuro`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
-              <div className="font-semibold text-cyan-400">Stack MRI</div>
-              <div className="text-sm text-gray-300">Scan your agent communication stack</div>
+            <a href={`/${locale}/moltbot/ai-agent-security`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
+              <div className="font-semibold text-cyan-400">AI Agent Security Hub</div>
+              <div className="text-sm text-gray-300">OWASP LLM Top 10 — full defense map</div>
             </a>
           </div>
         </section>

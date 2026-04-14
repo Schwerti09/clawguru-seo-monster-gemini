@@ -173,9 +173,9 @@ async function runModelIntegrityTests(modelEndpoint: string) {
               <div className="font-semibold text-cyan-400">Stack MRI</div>
               <div className="text-sm text-gray-300">Scan your AI stack for vulnerabilities</div>
             </a>
-            <a href={`/${locale}/roast-my-moltbot`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
-              <div className="font-semibold text-cyan-400">Roast My Moltbot</div>
-              <div className="text-sm text-gray-300">Free security roast of your AI setup</div>
+            <a href={`/${locale}/moltbot/ai-agent-security`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
+              <div className="font-semibold text-cyan-400">AI Agent Security Hub</div>
+              <div className="text-sm text-gray-300">OWASP LLM Top 10 — full defense map</div>
             </a>
           </div>
         </section>

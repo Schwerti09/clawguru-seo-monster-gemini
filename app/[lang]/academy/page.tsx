@@ -122,6 +122,11 @@ const POPULAR_COURSES = [
     duration: "35 Min",
     link: "/moltbot/incident-response-automation",
   },
+  {
+    id: "cve_feed",
+    duration: "Laufend",
+    link: "/academy/cve-feed",
+  },
 ]
 
 // Free Resources (static data, links are locale-independent)

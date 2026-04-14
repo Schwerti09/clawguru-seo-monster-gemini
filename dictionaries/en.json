@@ -879,6 +879,8 @@
     "course_model_poisoning_desc": "Defend AI models against data poisoning, backdoor attacks and supply chain threats in training pipelines.",
     "course_incident_response_title": "Incident Response Playbook",
     "course_incident_response_desc": "When it hits: detection, containment, recovery and postmortem – step by step.",
+    "course_cve_feed_title": "CVE Feed: Live Vulnerability Database",
+    "course_cve_feed_desc": "Latest CVEs with actionable fix guides for OpenSSH, Docker, Next.js and more — sorted by severity.",
     "difficulty_medium": "Medium",
     "difficulty_advanced": "Advanced",
     "duration": "Duration",

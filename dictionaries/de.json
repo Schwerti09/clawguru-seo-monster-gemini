@@ -886,6 +886,8 @@
     "course_supply_desc": "SBOM, Cosign, Sigstore und Dependency-Pinning – Supply-Chain-Attacks verhindern.",
     "course_ir_title": "Incident Response Playbook",
     "course_ir_desc": "Wenn es kracht: Erkennung, Containment, Recovery und Postmortem – Schritt für Schritt.",
+    "course_cve_feed_title": "CVE Feed: Live Schwachstellen-Datenbank",
+    "course_cve_feed_desc": "Aktuelle CVEs mit sofort anwendbaren Fix-Anleitungen für OpenSSH, Docker, Next.js und mehr — nach Schweregrad sortiert.",
     "difficulty_medium": "Mittel",
     "difficulty_advanced": "Fortgeschritten",
     "duration": "Dauer",

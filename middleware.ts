@@ -254,8 +254,8 @@ export function middleware(request: NextRequest) {
     return res
   }
 
-  // Apply per-IP rate limiting for hot routes (env-gated to reduce Edge CPU when not needed)
-  if (process.env.MW_RL_ENABLED === '1') {
+  // Apply per-IP rate limiting for hot routes (default ON; set MW_RL_ENABLED=0 to disable)
+  if (process.env.MW_RL_ENABLED !== '0') {
     const bucket = routeBucket(pathname)
     if (bucket) {
       const ip = getClientIp(request)

@@ -266,7 +266,8 @@ export async function GET(
         "llm-embeddings-security","ai-agent-rate-limiting","llm-prompt-injection-detection",
         "llm-api-security","ai-agent-persistence","llm-token-budgeting",
         "llm-model-access-control","ai-agent-communication-security","llm-injection-response",
-        "llm-output-encoding-security","ai-agent-sandboxing-runtime","llm-context-manipulation-defense"]
+        "llm-output-encoding-security","ai-agent-sandboxing-runtime","llm-context-manipulation-defense",
+        "llm-bias-detection-mitigation","ai-agent-behavioral-monitoring","llm-hallucination-detection"]
       // SEO guide pages
       const GUIDE_SLUGS = [
         "executable-runbook-vs-static-blog","security-check-vs-pentest-guide","nis2-technical-controls-self-hosted",
@@ -349,6 +350,8 @@ export async function GET(
         { loc: `${base}/${locale}/academy/cve/CVE-2025-36102`, lastmod, changefreq: "monthly", priority: "0.87" },
         { loc: `${base}/${locale}/academy/cve/CVE-2025-37101`, lastmod, changefreq: "monthly", priority: "0.87" },
         { loc: `${base}/${locale}/academy/cve/CVE-2025-37102`, lastmod, changefreq: "monthly", priority: "0.87" },
+        { loc: `${base}/${locale}/academy/cve/CVE-2025-38101`, lastmod, changefreq: "monthly", priority: "0.87" },
+        { loc: `${base}/${locale}/academy/cve/CVE-2025-38102`, lastmod, changefreq: "monthly", priority: "0.90" },
         { loc: `${base}/${locale}/pricing`, lastmod, changefreq: "weekly", priority: "0.85" },
         { loc: `${base}/${locale}/downloads`, lastmod, changefreq: "weekly", priority: "0.85" },
         { loc: `${base}/${locale}/clawverse`, lastmod, changefreq: "weekly", priority: "0.85" },

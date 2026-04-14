@@ -302,12 +302,20 @@ export default function NeuroClient() {
       if (!runbookRes.ok) throw new Error("Runbook fetch failed")
       const runbookData = await runbookRes.json()
       
-      // Calculate Score
-      const cves = cveData.cves || []
-      const critical = cves.filter((c: any) => c.severity === "CRITICAL").length
-      const high = cves.filter((c: any) => c.severity === "HIGH").length
-      const medium = cves.filter((c: any) => c.severity === "MEDIUM").length
-      const low = cves.filter((c: any) => c.severity === "LOW").length
+      // Calculate Score — API returns .items[] not .cves[]
+      const cves: CVEItem[] = (cveData.items || cveData.cves || []).map((c: any) => ({
+        id: c.id,
+        severity: c.severity,
+        title: c.title,
+        affected: c.affected,
+        fixedIn: c.fixedIn,
+        description: c.description || "",
+        published: c.published || "",
+      }))
+      const critical = cves.filter((c) => c.severity === "CRITICAL").length
+      const high = cves.filter((c) => c.severity === "HIGH").length
+      const medium = cves.filter((c) => c.severity === "MEDIUM").length
+      const low = cves.filter((c) => c.severity === "LOW").length
       
       const baseScore = 100
       const deductions = critical * 25 + high * 15 + medium * 5 + low * 2
@@ -318,12 +326,15 @@ export default function NeuroClient() {
         cves: cves,
         score,
         issues: { critical, high, medium, low, optimal: Math.max(0, 5 - critical - high) },
-        runbooks: runbookData.recommended_runbooks?.map((r: any) => ({
-          slug: r.slug,
-          title: r.title,
-          relevance: r.relevance,
-          urgency: r.relevance > 0.8 ? "NOW" : r.relevance > 0.5 ? "SOON" : "LATER"
-        })) || []
+        runbooks: runbookData.recommended_runbooks?.map((r: any) => {
+          const rel = r.relevance > 1 ? r.relevance / 100 : r.relevance
+          return {
+            slug: r.slug,
+            title: r.title,
+            relevance: rel,
+            urgency: (rel > 0.8 ? "NOW" : rel > 0.5 ? "SOON" : "LATER") as "NOW" | "SOON" | "LATER"
+          }
+        }) || []
       })
       
       setActiveTab("mri")
@@ -726,6 +737,55 @@ export default function NeuroClient() {
             </div>
           </section>
         )}
+
+        {/* ── FAQ ──────────────────────────────────────────────────────────── */}
+        <section className="px-4 mb-12">
+          <div className="max-w-3xl mx-auto">
+            <h2 className="text-2xl font-bold mb-6 text-center text-gray-100">Häufige Fragen</h2>
+            <div className="space-y-3">
+              {[
+                {
+                  q: "Was ist Stack MRI?",
+                  a: "Stack MRI ist ClawGurus prädiktiver Security Scanner. Du wählst deine Technologien (AWS, Kubernetes, PostgreSQL, Docker etc.) und bekommst einen Live-Scan mit CVEs, Security Score und empfohlenen Runbooks."
+                },
+                {
+                  q: "Woher kommen die CVE-Daten?",
+                  a: "Die CVE-Daten stammen aus unserer Intel-Datenbank, die auf der NVD (National Vulnerability Database), CISA KEV und GitHub Security Advisories basiert. Die Datenbank wird regelmäßig aktualisiert."
+                },
+                {
+                  q: "Was bedeutet der Security Score?",
+                  a: "Der Score geht von 0 bis 100. Jede kritische CVE zieht 25 Punkte ab, hohe CVEs 15 Punkte, mittlere 5 Punkte. Grün (80+) = gut, Gelb (60-79) = Handlungsbedarf, Rot (<60) = sofort patchen."
+                },
+                {
+                  q: "Funktioniert die Sprachsteuerung?",
+                  a: "Ja, über die Web Speech API. Unterstützte Befehle: 'scan my stack', 'show critical', 'show threats', 'what is my score'. Funktioniert in Chrome und Edge."
+                },
+                {
+                  q: "Was ist Predictive Threat Correlation?",
+                  a: "Wir analysieren aktive Angriffskampagnen (z.B. TeamTNT, APT29) und zeigen dir, welche davon deinen spezifischen Tech-Stack betreffen. Inklusive Risk Score und empfohlener Gegenmaßnahmen."
+                },
+                {
+                  q: "Werden meine Daten gespeichert?",
+                  a: "Nein. Dein Tech-Stack wird nur für den aktuellen Scan verwendet und nicht gespeichert. Alle Verarbeitung passiert in Echtzeit. Kein Tracking, kein Profiling."
+                },
+                {
+                  q: "Wie hängt Neuro mit Oracle, Intel und Summon zusammen?",
+                  a: "Neuro scannt deinen Stack → empfiehlt Runbooks → Summon führt sie aus. Oracle beantwortet Security-Fragen. Intel liefert die CVE- und Threat-Daten. Alle Produkte arbeiten im Mycelium-Kreislauf zusammen."
+                }
+              ].map((faq, i) => (
+                <details key={i} className="group rounded-xl border" style={{ background: "rgba(10,10,14,0.6)", borderColor: "rgba(255,255,255,0.08)" }}>
+                  <summary className="flex items-center justify-between cursor-pointer p-4 text-sm font-medium text-gray-200 hover:text-white transition-colors">
+                    <span>{faq.q}</span>
+                    <span className="ml-2 text-gray-500 group-open:rotate-180 transition-transform">▾</span>
+                  </summary>
+                  <div className="px-4 pb-4 text-sm text-gray-400 leading-relaxed">
+                    {faq.a}
+                  </div>
+                </details>
+              ))}
+            </div>
+          </div>
+        </section>
 
         {/* ── FOOTER ───────────────────────────────────────────────────────── */}
         <footer className="px-4 py-12 text-center">

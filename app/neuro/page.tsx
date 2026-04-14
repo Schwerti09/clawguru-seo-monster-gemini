@@ -47,47 +47,55 @@ const neuroFAQ = {
       "name": "What is Stack MRI?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Stack MRI is ClawGuru's predictive security scanner. It analyzes your technology stack (AWS, Kubernetes, PostgreSQL, etc.) and identifies vulnerabilities, CVEs, and security misconfigurations in real-time."
+        "text": "Stack MRI is ClawGuru's predictive security scanner. Select your technology stack (AWS, Kubernetes, PostgreSQL, Docker, etc.) and get a live vulnerability scan with CVEs, a security score, and automated runbook recommendations."
       }
     },
     {
       "@type": "Question",
-      "name": "How does eye-tracking work?",
+      "name": "Where do the CVE data come from?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Neuro uses WebGazer.js for client-side eye-tracking. Look at a thought card for 3 seconds to select it. All processing happens locally in your browser — no camera data is stored or transmitted."
+        "text": "CVE data is sourced from ClawGuru's Intel database, based on the NVD (National Vulnerability Database), CISA KEV catalog, and GitHub Security Advisories. The database is updated regularly."
       }
     },
     {
       "@type": "Question",
-      "name": "Is eye-tracking mandatory?",
+      "name": "What does the Security Score mean?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "No. Eye-tracking is completely optional. You can click on thought cards manually or type your question directly in the text input field."
+        "text": "The Security Score ranges from 0 to 100. Critical CVEs deduct 25 points, high CVEs 15 points, medium 5 points. Green (80+) = good, Yellow (60-79) = action needed, Red (<60) = patch immediately."
       }
     },
     {
       "@type": "Question",
-      "name": "What EEG devices are supported?",
+      "name": "Does voice control work?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Neuro supports Bluetooth EEG devices like Muse and Emotiv via Web Bluetooth API. EEG data enhances query relevance by detecting your focus state."
+        "text": "Yes, via the Web Speech API. Supported commands include 'scan my stack', 'show critical', 'show threats', and 'what is my score'. Works in Chrome and Edge browsers."
       }
     },
     {
       "@type": "Question",
-      "name": "Is my biometric data secure?",
+      "name": "What is Predictive Threat Correlation?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Absolutely. Eye-tracking and EEG data are processed entirely client-side. No biometric data leaves your device. Only the selected question (anonymized) is sent to the Oracle."
+        "text": "ClawGuru analyzes active attack campaigns (e.g., TeamTNT, APT29, Lazarus Group) and shows which ones target your specific tech stack, including a risk score and recommended countermeasures."
       }
     },
     {
       "@type": "Question",
-      "name": "What languages does Neuro support?",
+      "name": "Is my data stored?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Neuro supports all 15 ClawGuru languages. The interface adapts to your browser language automatically."
+        "text": "No. Your tech stack selection is only used for the current scan and is not stored. All processing happens in real-time. No tracking, no profiling."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How does Neuro connect to Oracle, Intel, and Summon?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Neuro scans your stack and recommends runbooks. Summon executes them. Oracle answers security questions. Intel provides CVE and threat data. All products work together in the Mycelium ecosystem."
       }
     }
   ]

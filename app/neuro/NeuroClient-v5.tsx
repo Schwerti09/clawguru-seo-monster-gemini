@@ -43,25 +43,8 @@ type StackMRIResult = {
   }[]
 }
 
-// Threat Correlation Types
-type ThreatCorrelation = {
-  campaignId: string
-  campaignName: string
-  actorName: string
-  actorOrigin: string
-  sophistication: "low" | "medium" | "high" | "critical"
-  severity: "CRITICAL" | "HIGH" | "MEDIUM" | "LOW"
-  matchingComponents: string[]
-  riskScore: number
-  predictedImpact: "critical" | "high" | "medium" | "low"
-  description: string
-  activeSince: string
-  lastSeen: string
-  cves: string[]
-  recommendedActions: string[]
-}
-
-type ThreatIntelResponse = {
+// Threat Intel Types
+type ThreatData = {
   stats: {
     totalCampaigns: number
     activeThisWeek: number
@@ -69,7 +52,25 @@ type ThreatIntelResponse = {
     matchingYourStack: number
     highestRiskScore: number
   }
-  correlations?: ThreatCorrelation[]
+  campaigns: {
+    id: string
+    name: string
+    actor: { name: string; origin: string; motivation: string; sophistication: string }
+    severity: string
+    targets: string[]
+    description: string
+    activeSince: string
+    lastSeen: string
+    cves: string[]
+  }[]
+  correlations?: {
+    campaignId: string
+    campaignName: string
+    matchingComponents: string[]
+    riskScore: number
+    predictedImpact: string
+    recommendedActions: string[]
+  }[]
 }
 
 // ── CONFIG ────────────────────────────────────────────────────────────────────
@@ -205,6 +206,9 @@ export default function NeuroClient() {
   const [transcript, setTranscript] = useState("")
   const recognitionRef = useRef<any>(null)
   
+  // Threat Intel
+  const [threatData, setThreatData] = useState<ThreatData | null>(null)
+  
   // Error State
   const [error, setError] = useState<string | null>(null)
 
@@ -336,6 +340,17 @@ export default function NeuroClient() {
           }
         }) || []
       })
+      
+      // Fetch Threat Correlations
+      try {
+        const threatRes = await fetch(`/api/intel/threats?stack=${encodeURIComponent(stackNames)}`)
+        if (threatRes.ok) {
+          const td = await threatRes.json()
+          setThreatData(td)
+        }
+      } catch {
+        // Non-critical: threat data is optional
+      }
       
       setActiveTab("mri")
     } catch (err: any) {
@@ -629,58 +644,81 @@ export default function NeuroClient() {
                 )}
                 
                 {/* Threat Correlation Card */}
-                <div className="rounded-2xl p-6 border" style={{ background: "rgba(255,0,0,0.05)", borderColor: "rgba(255,0,0,0.2)" }}>
-                  <div className="flex items-center gap-3 mb-4">
-                    <span className="text-2xl">🎯</span>
-                    <div>
-                      <div className="text-xs font-mono uppercase tracking-wider text-red-400">Predictive Threat Correlation</div>
-                      <div className="text-xs text-gray-500">Aktive Kampagnen die deinen Stack betreffen</div>
-                    </div>
-                  </div>
-                  
-                  {/* Stats Grid */}
-                  <div className="grid grid-cols-3 gap-3 mb-4">
-                    <div className="rounded-xl p-3 text-center border" style={{ background: "rgba(255,0,0,0.08)", borderColor: "rgba(255,0,0,0.15)" }}>
-                      <div className="text-2xl font-bold text-red-400">4</div>
-                      <div className="text-[10px] uppercase tracking-wider text-red-400">Aktive Kampagnen</div>
-                    </div>
-                    <div className="rounded-xl p-3 text-center border" style={{ background: "rgba(255,200,0,0.08)", borderColor: "rgba(255,200,0,0.15)" }}>
-                      <div className="text-2xl font-bold text-yellow-400">2</div>
-                      <div className="text-[10px] uppercase tracking-wider text-yellow-400">Match dein Stack</div>
-                    </div>
-                    <div className="rounded-xl p-3 text-center border" style={{ background: "rgba(180,100,255,0.08)", borderColor: "rgba(180,100,255,0.15)" }}>
-                      <div className="text-2xl font-bold text-purple-400">92</div>
-                      <div className="text-[10px] uppercase tracking-wider text-purple-400">Höchster Risk Score</div>
-                    </div>
-                  </div>
-                  
-                  {/* Example Threat Card */}
-                  <div className="rounded-xl p-4 border mb-3" style={{ background: "rgba(255,0,0,0.08)", borderColor: "rgba(255,0,0,0.2)" }}>
-                    <div className="flex items-start justify-between mb-2">
+                {threatData && (
+                  <div className="rounded-2xl p-6 border" style={{ background: "rgba(255,0,0,0.05)", borderColor: "rgba(255,0,0,0.2)" }}>
+                    <div className="flex items-center gap-3 mb-4">
+                      <span className="text-2xl">🎯</span>
                       <div>
-                        <div className="text-sm font-bold text-red-300">Siloscape Resurgence</div>
-                        <div className="text-xs text-red-400">TeamTNT • Russland • Finanziell motiviert</div>
+                        <div className="text-xs font-mono uppercase tracking-wider text-red-400">Predictive Threat Correlation</div>
+                        <div className="text-xs text-gray-500">Aktive Kampagnen die deinen Stack betreffen</div>
                       </div>
-                      <span className="px-2 py-1 rounded text-[10px] font-bold uppercase bg-red-600 text-white">CRITICAL</span>
                     </div>
-                    <p className="text-xs text-gray-300 mb-2">
-                      Aktive Kampagne gegen Kubernetes mit exposed API servers. Deployed Crypto-Miner und exfiltriert Cloud Credentials.
-                    </p>
-                    <div className="flex flex-wrap gap-2 text-[10px]">
-                      <span className="px-2 py-0.5 rounded bg-red-900 text-red-200">kubernetes</span>
-                      <span className="px-2 py-0.5 rounded bg-red-900 text-red-200">docker</span>
-                      <span className="px-2 py-0.5 rounded bg-blue-900 text-blue-200">Risk Score: 92/100</span>
+                    
+                    {/* Stats Grid — LIVE from API */}
+                    <div className="grid grid-cols-3 gap-3 mb-4">
+                      <div className="rounded-xl p-3 text-center border" style={{ background: "rgba(255,0,0,0.08)", borderColor: "rgba(255,0,0,0.15)" }}>
+                        <div className="text-2xl font-bold text-red-400">{threatData.stats.totalCampaigns}</div>
+                        <div className="text-[10px] uppercase tracking-wider text-red-400">Aktive Kampagnen</div>
+                      </div>
+                      <div className="rounded-xl p-3 text-center border" style={{ background: "rgba(255,200,0,0.08)", borderColor: "rgba(255,200,0,0.15)" }}>
+                        <div className="text-2xl font-bold text-yellow-400">{threatData.stats.matchingYourStack}</div>
+                        <div className="text-[10px] uppercase tracking-wider text-yellow-400">Match dein Stack</div>
+                      </div>
+                      <div className="rounded-xl p-3 text-center border" style={{ background: "rgba(180,100,255,0.08)", borderColor: "rgba(180,100,255,0.15)" }}>
+                        <div className="text-2xl font-bold text-purple-400">{threatData.stats.highestRiskScore}</div>
+                        <div className="text-[10px] uppercase tracking-wider text-purple-400">Höchster Risk Score</div>
+                      </div>
                     </div>
+                    
+                    {/* Live Threat Cards from API */}
+                    <div className="space-y-3 mb-4">
+                      {threatData.campaigns.slice(0, 3).map((camp) => {
+                        const corr = threatData.correlations?.find(c => c.campaignId === camp.id)
+                        return (
+                          <div key={camp.id} className="rounded-xl p-4 border" style={{ 
+                            background: camp.severity === "CRITICAL" ? "rgba(255,0,0,0.08)" : "rgba(255,200,0,0.06)",
+                            borderColor: camp.severity === "CRITICAL" ? "rgba(255,0,0,0.2)" : "rgba(255,200,0,0.15)"
+                          }}>
+                            <div className="flex items-start justify-between mb-2">
+                              <div>
+                                <div className="text-sm font-bold" style={{ color: camp.severity === "CRITICAL" ? "#fca5a5" : "#fcd34d" }}>{camp.name}</div>
+                                <div className="text-xs" style={{ color: camp.severity === "CRITICAL" ? "#f87171" : "#fbbf24" }}>
+                                  {camp.actor.name} • {camp.actor.origin} • {camp.actor.motivation}
+                                </div>
+                              </div>
+                              <span className={`px-2 py-1 rounded text-[10px] font-bold uppercase ${
+                                camp.severity === "CRITICAL" ? "bg-red-600 text-white" : "bg-yellow-600 text-white"
+                              }`}>{camp.severity}</span>
+                            </div>
+                            <p className="text-xs text-gray-300 mb-2">{camp.description}</p>
+                            <div className="flex flex-wrap gap-2 text-[10px]">
+                              {camp.targets.slice(0, 4).map(t => (
+                                <span key={t} className="px-2 py-0.5 rounded bg-red-900 text-red-200">{t}</span>
+                              ))}
+                              {corr && (
+                                <span className="px-2 py-0.5 rounded bg-blue-900 text-blue-200">Risk Score: {corr.riskScore}/100</span>
+                              )}
+                            </div>
+                          </div>
+                        )
+                      })}
+                    </div>
+                    
+                    {threatData.stats.matchingYourStack === 0 && (
+                      <div className="text-center py-4 text-sm text-green-400">
+                        ✅ Keine aktiven Kampagnen betreffen deinen Stack direkt.
+                      </div>
+                    )}
+                    
+                    <a 
+                      href="/intel"
+                      className="block text-center py-3 rounded-xl font-bold text-sm uppercase tracking-wider transition-all border hover:bg-red-900/20"
+                      style={{ borderColor: "rgba(255,0,0,0.3)", color: "#ff6b6b" }}
+                    >
+                      🔥 Intel Dashboard öffnen
+                    </a>
                   </div>
-                  
-                  <a 
-                    href={`/intel/threats?stack=${mriResult.stackItems.map(s => s.id).join(",")}`}
-                    className="block text-center py-3 rounded-xl font-bold text-sm uppercase tracking-wider transition-all border hover:bg-red-900/20"
-                    style={{ borderColor: "rgba(255,0,0,0.3)", color: "#ff6b6b" }}
-                  >
-                    🔥 Alle Threats analysieren
-                  </a>
-                </div>
+                )}
               </div>
               
               {/* Kreislauf Links */}

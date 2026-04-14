@@ -1,8 +1,8 @@
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "Neuro – Pattern Analysis & Anomaly Detection | ClawGuru",
-  description: "Mustererkennung und Anomalie-Detection für Security-Events. Neuro analysiert Logs, Metriken und Verhaltensabweichungen in Echtzeit.",
+  title: "Stack MRI | ClawGuru Predictive Security Cortex",
+  description: "Scan your tech stack for vulnerabilities, CVEs, and security issues. Live threat intelligence, automated runbook recommendations, and voice control.",
 }
 
 export default function NeuroLayout({ children }: { children: React.ReactNode }) {

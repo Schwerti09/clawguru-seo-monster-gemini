@@ -231,6 +231,7 @@ export async function GET(
         "moltbot-vs-splunk","openclaw-vs-crowdsec","moltbot-vs-grafana",
         "moltbot-vs-langchain","moltbot-vs-autogpt",
         "moltbot-vs-crewai","moltbot-vs-llamaindex",
+        "moltbot-vs-autogen","openclaw-vs-falcosidekick",
       ]
       // Solutions pages
       const SOLUTIONS_SLUGS = [
@@ -239,6 +240,7 @@ export async function GET(
         "aws-security-architecture","github-actions-bare-metal","influxdb-hipaa-compliance",
         "iso-27001-google-cloud","rabbitmq-audit","terraform-canary-deploy",
         "dsgvo-compliance-automation","nis2-compliance","nist-csf-compliance",
+        "eu-ai-act-compliance","soc2-type-ii-automation",
       ]
       // SEO guide pages
       const GUIDE_SLUGS = [
@@ -288,6 +290,7 @@ export async function GET(
         { loc: `${base}/${locale}/intel`, lastmod, changefreq: "daily", priority: "0.9" },
         { loc: `${base}/${locale}/academy`, lastmod, changefreq: "weekly", priority: "0.85" },
         { loc: `${base}/${locale}/academy/cve-feed`, lastmod, changefreq: "weekly", priority: "0.88" },
+        { loc: `${base}/${locale}/academy/cve`, lastmod, changefreq: "weekly", priority: "0.87" },
         { loc: `${base}/${locale}/academy/cve/CVE-2024-6387`, lastmod, changefreq: "monthly", priority: "0.87" },
         { loc: `${base}/${locale}/academy/cve/CVE-2025-29927`, lastmod, changefreq: "monthly", priority: "0.87" },
         { loc: `${base}/${locale}/academy/cve/CVE-2024-21626`, lastmod, changefreq: "monthly", priority: "0.87" },

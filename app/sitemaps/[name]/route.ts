@@ -249,7 +249,8 @@ export async function GET(
       ]
       // Moltbot Batch 6
       const MOLTBOT_BATCH6 = ["ai-compliance-automation","llm-observability","agent-memory-security",
-        "zero-trust-ai-agents","llm-rate-limiting","ai-incident-response"]
+        "zero-trust-ai-agents","llm-rate-limiting","ai-incident-response",
+        "secure-agent-deployment","llm-prompt-hardening","ai-supply-chain"]
       // SEO guide pages
       const GUIDE_SLUGS = [
         "executable-runbook-vs-static-blog","security-check-vs-pentest-guide","nis2-technical-controls-self-hosted",
@@ -312,6 +313,7 @@ export async function GET(
         { loc: `${base}/${locale}/academy/cve/CVE-2025-21333`, lastmod, changefreq: "monthly", priority: "0.87" },
         { loc: `${base}/${locale}/academy/cve/CVE-2025-30065`, lastmod, changefreq: "monthly", priority: "0.87" },
         { loc: `${base}/${locale}/academy/cve/CVE-2025-1974`, lastmod, changefreq: "monthly", priority: "0.87" },
+        { loc: `${base}/${locale}/academy/cve/CVE-2024-56337`, lastmod, changefreq: "monthly", priority: "0.87" },
         { loc: `${base}/${locale}/pricing`, lastmod, changefreq: "weekly", priority: "0.85" },
         { loc: `${base}/${locale}/downloads`, lastmod, changefreq: "weekly", priority: "0.85" },
         { loc: `${base}/${locale}/clawverse`, lastmod, changefreq: "weekly", priority: "0.85" },

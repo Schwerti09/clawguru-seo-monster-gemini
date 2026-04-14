@@ -235,6 +235,7 @@ export async function GET(
         "moltbot-vs-autogen","openclaw-vs-falcosidekick",
         "clawguru-vs-aquasec","openclaw-vs-tenable",
         "moltbot-vs-semantic-kernel",
+        "clawguru-vs-prisma-cloud","openclaw-vs-trivy",
       ]
       // Solutions pages
       const SOLUTIONS_SLUGS = [
@@ -309,6 +310,8 @@ export async function GET(
         { loc: `${base}/${locale}/academy/cve/CVE-2024-45337`, lastmod, changefreq: "monthly", priority: "0.87" },
         { loc: `${base}/${locale}/academy/cve/CVE-2024-49138`, lastmod, changefreq: "monthly", priority: "0.87" },
         { loc: `${base}/${locale}/academy/cve/CVE-2025-21333`, lastmod, changefreq: "monthly", priority: "0.87" },
+        { loc: `${base}/${locale}/academy/cve/CVE-2025-30065`, lastmod, changefreq: "monthly", priority: "0.87" },
+        { loc: `${base}/${locale}/academy/cve/CVE-2025-1974`, lastmod, changefreq: "monthly", priority: "0.87" },
         { loc: `${base}/${locale}/pricing`, lastmod, changefreq: "weekly", priority: "0.85" },
         { loc: `${base}/${locale}/downloads`, lastmod, changefreq: "weekly", priority: "0.85" },
         { loc: `${base}/${locale}/clawverse`, lastmod, changefreq: "weekly", priority: "0.85" },

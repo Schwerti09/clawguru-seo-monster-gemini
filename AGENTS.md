@@ -1,8 +1,8 @@
-﻿# ClawGuru — AGENTS.md · Master Operating Manual v9 (13.04.2026)
+﻿# ClawGuru — AGENTS.md · Master Operating Manual v10 (14.04.2026)
 
 > **This document is the single source of truth for every agent working in this codebase.**
 > Read it completely BEFORE making any change. Update the Session Log after every session.
-> Last updated: 13.04.2026 | Language: English (maximises AI model compatibility)
+> Last updated: 14.04.2026 | Language: English (maximises AI model compatibility)
 
 ---
 
@@ -974,6 +974,7 @@ Will be resolved automatically when upgrading to Next.js 15 + eslint 9 (future s
 | 11.04.2026 | 8 | Page speed: framer-motion removed from shared bundle (lazy-load PageTransition/AnimatedBackground/CommandK, all heavy dashboard tabs, RunbookCard, Hero, FeaturesGrid, CTA, TrustSection, GlowButton, BentoCard, OverviewTab, PremiumMetricCard, PremiumGauge). CSS animations replace JS animations. CLS fix on command-center. |
 | 12.04.2026 | 9 | SEO: hreflang xhtml:link removed from sitemap XML. Duplicate /check URL removed. Traffic growth sprint: /de/check CTA + proof bullets + score methodology. /de/roast-my-stack FAQ + examples. Compare Batch 3 (trivy/checkov/wazuh). /kubernetes-security pillar page. Compare Batch 4 (snyk/victorops/ossec). FAQPage + WebPage JSON-LD added to all 37 Moltbot pages via batch script. security-framework migrated to buildLocalizedAlternates. FAQPage JSON-LD added to all 15 OpenClaw pages via batch script. Compare Batch 5 (moltbot-vs-splunk, openclaw-vs-crowdsec). AGENTS.md v8. |
 | 13.04.2026 | 10 | **Critical bugfix: /de/runbooks/cloud links (404 root cause found).** GEO_MATRIX_AUTO_REWRITE=1 rewrites base runbook slugs to geo-variants (e.g. hetzner-ssh-hardening → hetzner-ssh-hardening-groheide). City "Großheide" slugifies to "groheide" which is NOT in SEEDED_CITY_SLUGS → parseGeoVariantSlug returns full slug as baseSlug → getRunbook() = null → 404. Fix 1: Middleware now verifies city is seeded before rewriting (round-trip parseGeoVariantSlug check). Fix 2: Locale-Runbook-Page falls back to baseSlug instead of notFound() when geo-variant not indexed. Fix 3: Cache-Control immutable moved from all routes to /_next/static/ only (was caching 404s for 1 year). Fix 4: vercel.json maxDuration=60s for runbook pages. Fix 5: SITEMAP_100K_LOCALES locale guard replaced with SUPPORTED_LOCALES. Railway deployment setup: railway.json + PORT env var fix (next start -p ${PORT:-3000}). AGENTS.md v9. |
+| 14.04.2026 | 11 | **Neuro v5 overhaul + Project Audit + Locale Migration.** Neuro: fixed CVE score (items[] not cves[]), runbook relevance normalization, added visible FAQ, live Threat Correlation API (/api/intel/threats created), updated layout metadata. CRITICAL: removed netlify.env.production + netlify.env.import from Git (contained production secrets — user must rotate all keys). Removed stale zip/junk files. Fixed Node.js engines: 24.x → >=20. Created AUDIT-MASTERPLAN.md. Locale Migration: [lang]/neuro/page.tsx + [lang]/oracle/page.tsx upgraded with full metadata, openGraph.url with locale, generateStaticParams. Root /neuro and /oracle set to noindex (canonical → /de/neuro and /de/oracle). P2: CSP + HSTS + X-Frame-Options + nosniff security headers added to next.config.js for all routes. AGENTS.md v10. |
 
 ### Open Tasks by Priority
 
@@ -990,6 +991,9 @@ Will be resolved automatically when upgrading to Next.js 15 + eslint 9 (future s
 - [x] Migrate all 37 Moltbot pages to `buildLocalizedAlternates()` (security-framework war letzte) ✅
 - [x] FAQPage JSON-LD auf alle 15 OpenClaw-Pages (Batch-Script) ✅
 - [x] Compare Batch 5: moltbot-vs-splunk, openclaw-vs-crowdsec ✅
+- [x] **[lang]/neuro + [lang]/oracle locale migration** — full metadata, openGraph.url with locale, generateStaticParams ✅
+- [x] **CSP + Security Headers** in next.config.js (HSTS, X-Frame-Options, nosniff, Referrer-Policy) ✅
+- [ ] **SECRET ROTATION** — All keys from netlify.env.production must be rotated NOW (manual user action)
 - [ ] Compare Batch 6: `clawguru-vs-lacework` follow-up, `moltbot-vs-grafana`, `openclaw-vs-falco` (deep-dive)
 - [ ] HowTo schema auf alle 15 OpenClaw-Pages (Schritt-für-Schritt-Anleitungen)
 - [ ] Solutions Batch 2: ISO27001, PCI-DSS, HIPAA pages
@@ -1008,11 +1012,11 @@ Will be resolved automatically when upgrading to Next.js 15 + eslint 9 (future s
 - [ ] Next.js 15 upgrade (unlocks eslint 9, removes all npm warnings)
 
 ### Next 5 Immediate Actions (in Order)
-1. **Vercel Cache Purge** — clear CDN cache so 404s are gone (Vercel Dashboard)
-2. Run Asia/LatAm DB seeding: `GET /api/geo/asia-latam-expansion?stable=1`
-3. Set Vercel env vars: `GEO_MATRIX_SITEMAP=1`, `SITEMAP_BUCKETS=5`
-4. Resubmit sitemap in Google Search Console after new compare pages deploy
-5. Compare Batch 6 + HowTo schema on OpenClaw pages
+1. **SECRET ROTATION** — Rotate all keys exposed in netlify.env.production (DB, API keys, session secrets)
+2. **Vercel Cache Purge** — Dashboard → Settings → Data Cache → Purge Everything
+3. Run Asia/LatAm DB seeding: `GET /api/geo/asia-latam-expansion?stable=1`
+4. Compare Batch 6: `clawguru-vs-lacework`, `moltbot-vs-grafana`, `openclaw-vs-falco`
+5. HowTo schema on all 15 OpenClaw pages
 
 ---
 

@@ -44,9 +44,12 @@ export async function generateStaticParams() {
   return SUPPORTED_LOCALES.map((lang) => ({ lang }))
 }
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
+
 export async function generateMetadata(props: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(props.params.lang as Locale) ? props.params.lang : "de") as Locale
   const copy = getMoltbotCopy(locale)
+  const pageUrl = `${SITE_URL}/${locale}/roast-my-moltbot`
   return {
     title: copy.metaTitle,
     description: copy.metaDescription,
@@ -56,6 +59,7 @@ export async function generateMetadata(props: { params: { lang: string } }): Pro
       title: copy.metaTitle,
       description: copy.metaDescription,
       type: "website",
+      url: pageUrl,
     },
     twitter: {
       card: "summary_large_image",

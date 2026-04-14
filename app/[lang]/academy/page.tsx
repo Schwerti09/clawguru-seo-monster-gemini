@@ -55,14 +55,14 @@ const ACADEMY_TRACKS = [
     icon: "🤖",
     duration: "10–15 Stunden",
     color: "from-cyan-500 to-blue-600",
-    link: "/moltbot/ai-agent-security",
+    link: "/moltbot/ai-agent-sandboxing",
   },
   {
     id: "zero-trust",
     icon: "🔐",
     duration: "12–18 Stunden",
     color: "from-purple-500 to-pink-600",
-    link: "/openclaw/zero-trust-architecture",
+    link: "/moltbot/ai-agent-hardening-guide",
   },
   {
     id: "incident-response",
@@ -95,7 +95,17 @@ const POPULAR_COURSES = [
   {
     id: "prompt-injection",
     duration: "30 Min",
-    link: "/moltbot/ai-agent-threat-model",
+    link: "/moltbot/prompt-injection-defense",
+  },
+  {
+    id: "llm-gateway",
+    duration: "25 Min",
+    link: "/moltbot/llm-gateway-hardening",
+  },
+  {
+    id: "model-poisoning",
+    duration: "35 Min",
+    link: "/moltbot/model-poisoning-protection",
   },
   {
     id: "network-firewall",

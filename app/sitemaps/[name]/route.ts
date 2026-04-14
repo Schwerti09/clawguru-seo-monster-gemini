@@ -232,6 +232,7 @@ export async function GET(
         "moltbot-vs-langchain","moltbot-vs-autogpt",
         "moltbot-vs-crewai","moltbot-vs-llamaindex",
         "moltbot-vs-autogen","openclaw-vs-falcosidekick",
+        "clawguru-vs-aquasec","openclaw-vs-tenable",
       ]
       // Solutions pages
       const SOLUTIONS_SLUGS = [
@@ -242,6 +243,8 @@ export async function GET(
         "dsgvo-compliance-automation","nis2-compliance","nist-csf-compliance",
         "eu-ai-act-compliance","soc2-type-ii-automation",
       ]
+      // Moltbot Batch 6
+      const MOLTBOT_BATCH6 = ["ai-compliance-automation","llm-observability","agent-memory-security"]
       // SEO guide pages
       const GUIDE_SLUGS = [
         "executable-runbook-vs-static-blog","security-check-vs-pentest-guide","nis2-technical-controls-self-hosted",
@@ -250,6 +253,9 @@ export async function GET(
         "gateway-auth-10-steps","waf-2027","xxe-2026","hetzner-vs-do-security-baseline-2026",
         "check-methodology-30-seconds","kubernetes-security",
       ]
+      const moltbotBatch6Urls = MOLTBOT_BATCH6.flatMap((slug) =>
+        SUPPORTED_LOCALES.map((locale) => ({ loc: `${base}/${locale}/moltbot/${slug}`, lastmod, changefreq: "monthly", priority: "0.85" }))
+      )
       const moltbotUrls = MOLTBOT_SLUGS.map((slug) => ({
         loc: `${base}/${locale}/moltbot/${slug}`, lastmod, changefreq: "weekly", priority: "0.88",
       }))
@@ -297,6 +303,8 @@ export async function GET(
         { loc: `${base}/${locale}/academy/cve/CVE-2024-3094`, lastmod, changefreq: "monthly", priority: "0.87" },
         { loc: `${base}/${locale}/academy/cve/CVE-2023-44487`, lastmod, changefreq: "monthly", priority: "0.87" },
         { loc: `${base}/${locale}/academy/cve/CVE-2024-45337`, lastmod, changefreq: "monthly", priority: "0.87" },
+        { loc: `${base}/${locale}/academy/cve/CVE-2024-49138`, lastmod, changefreq: "monthly", priority: "0.87" },
+        { loc: `${base}/${locale}/academy/cve/CVE-2025-21333`, lastmod, changefreq: "monthly", priority: "0.87" },
         { loc: `${base}/${locale}/pricing`, lastmod, changefreq: "weekly", priority: "0.85" },
         { loc: `${base}/${locale}/downloads`, lastmod, changefreq: "weekly", priority: "0.85" },
         { loc: `${base}/${locale}/clawverse`, lastmod, changefreq: "weekly", priority: "0.85" },
@@ -321,6 +329,7 @@ export async function GET(
         ...hubUrls,
         ...geoOpenClawSprintUrls,
         ...moltbotUrls,
+        ...moltbotBatch6Urls,
         ...openclawSubUrls,
         ...securityUrls,
         ...compareUrls,

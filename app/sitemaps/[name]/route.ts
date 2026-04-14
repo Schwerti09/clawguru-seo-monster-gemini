@@ -259,7 +259,8 @@ export async function GET(
         "secure-agent-deployment","llm-prompt-hardening","ai-supply-chain",
         "multi-model-orchestration-security","ai-agent-rbac","llm-context-isolation",
         "ai-agent-audit-logging","llm-output-validation","agentic-workflow-security",
-        "ai-model-versioning-security","llm-api-gateway-hardening","agent-tool-security"]
+        "ai-model-versioning-security","llm-api-gateway-hardening","agent-tool-security",
+        "ai-data-loss-prevention","llm-jailbreak-defense","ai-regulatory-reporting"]
       // SEO guide pages
       const GUIDE_SLUGS = [
         "executable-runbook-vs-static-blog","security-check-vs-pentest-guide","nis2-technical-controls-self-hosted",
@@ -328,6 +329,8 @@ export async function GET(
         { loc: `${base}/${locale}/academy/cve/CVE-2025-21420`, lastmod, changefreq: "monthly", priority: "0.87" },
         { loc: `${base}/${locale}/academy/cve/CVE-2025-32433`, lastmod, changefreq: "monthly", priority: "0.90" },
         { loc: `${base}/${locale}/academy/cve/CVE-2025-31324`, lastmod, changefreq: "monthly", priority: "0.90" },
+        { loc: `${base}/${locale}/academy/cve/CVE-2025-24813`, lastmod, changefreq: "monthly", priority: "0.88" },
+        { loc: `${base}/${locale}/academy/cve/CVE-2025-22457`, lastmod, changefreq: "monthly", priority: "0.90" },
         { loc: `${base}/${locale}/pricing`, lastmod, changefreq: "weekly", priority: "0.85" },
         { loc: `${base}/${locale}/downloads`, lastmod, changefreq: "weekly", priority: "0.85" },
         { loc: `${base}/${locale}/clawverse`, lastmod, changefreq: "weekly", priority: "0.85" },

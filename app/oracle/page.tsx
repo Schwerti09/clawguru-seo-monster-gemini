@@ -11,7 +11,7 @@ const PAGE_DESC = "Ask the Mycelium. Get answers from 1M+ nodes of collective se
 export const metadata: Metadata = {
   title: PAGE_TITLE,
   description: PAGE_DESC,
-  alternates: { canonical: `${SITE_URL}/oracle` },
+  alternates: { canonical: `${SITE_URL}/de/oracle` },
   openGraph: {
     title: PAGE_TITLE,
     description: PAGE_DESC,
@@ -31,9 +31,9 @@ export const metadata: Metadata = {
     images: [`${SITE_URL}/og/oracle.png`]
   },
   robots: {
-    index: true,
+    index: false,
     follow: true,
-    googleBot: { index: true, follow: true }
+    googleBot: { index: false, follow: true }
   }
 }
 

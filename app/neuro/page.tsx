@@ -11,7 +11,7 @@ const PAGE_DESC = "Scan your tech stack for vulnerabilities, CVEs, and security 
 export const metadata: Metadata = {
   title: PAGE_TITLE,
   description: PAGE_DESC,
-  alternates: { canonical: `${SITE_URL}/neuro` },
+  alternates: { canonical: `${SITE_URL}/de/neuro` },
   openGraph: {
     title: PAGE_TITLE,
     description: PAGE_DESC,
@@ -31,9 +31,9 @@ export const metadata: Metadata = {
     images: [`${SITE_URL}/og/neuro.png`]
   },
   robots: {
-    index: true,
+    index: false,
     follow: true,
-    googleBot: { index: true, follow: true }
+    googleBot: { index: false, follow: true }
   }
 }
 

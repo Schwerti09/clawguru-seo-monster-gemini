@@ -122,6 +122,20 @@ module.exports = {
             name: "OpenClaw Security Guide",
             description: "Self-Hosted Security Hardening mit OpenClaw Executable Runbooks.",
             url: "https://clawguru.org/de/openclaw"
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "HowTo",
+            name: "Security Headers für OpenClaw konfigurieren",
+            description: "Schritt-für-Schritt Anleitung zum Einrichten von HTTP Security Headers (CSP, HSTS, X-Frame-Options) für OpenClaw mit A+ Rating.",
+            totalTime: "PT30M",
+            step: [
+              { "@type": "HowToStep", name: "HSTS aktivieren", text: "Strict-Transport-Security Header setzen: max-age=63072000; includeSubDomains; preload" },
+              { "@type": "HowToStep", name: "Content-Security-Policy konfigurieren", text: "CSP Header setzen: default-src 'self'; script-src 'self'. Erlaubte Quellen schrittweise hinzufügen." },
+              { "@type": "HowToStep", name: "X-Frame-Options setzen", text: "X-Frame-Options: DENY hinzufügen um Clickjacking-Angriffe zu verhindern." },
+              { "@type": "HowToStep", name: "X-Content-Type-Options aktivieren", text: "X-Content-Type-Options: nosniff setzen um MIME-Sniffing-Angriffe zu blockieren." },
+              { "@type": "HowToStep", name: "Headers mit securityheaders.com prüfen", text: "URL in securityheaders.com eingeben und A+ Rating verifizieren. Warnungen schrittweise beheben." },
+            ]
           }
         ]) }} />
       </div>

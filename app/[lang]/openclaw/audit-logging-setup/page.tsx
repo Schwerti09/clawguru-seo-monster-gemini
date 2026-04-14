@@ -125,6 +125,20 @@ export async function logAuditEvent(event: AuditEvent): Promise<void> {
             name: "OpenClaw Security Guide",
             description: "Self-Hosted Security Hardening mit OpenClaw Executable Runbooks.",
             url: "https://clawguru.org/de/openclaw"
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "HowTo",
+            name: "Audit Logging für OpenClaw einrichten",
+            description: "Compliance-konformes Audit Logging mit tamper-proof Log Storage und GDPR-konformer Retention für OpenClaw.",
+            totalTime: "PT45M",
+            step: [
+              { "@type": "HowToStep", name: "Strukturiertes JSON Logging aktivieren", text: "Logging-Bibliothek auf JSON-Output umstellen (z.B. Winston/Pino). Felder: timestamp, level, userId, action, resource." },
+              { "@type": "HowToStep", name: "Log Retention Policy definieren", text: "GDPR-konform: Zugriffslogs 90 Tage, Security-Events 1 Jahr, Audit-Trail 3 Jahre aufbewahren." },
+              { "@type": "HowToStep", name: "Tamper-Proof Storage einrichten", text: "Logs in append-only Storage schreiben (S3 mit Object Lock oder Loki mit immutable chunks)." },
+              { "@type": "HowToStep", name: "Alerting auf kritische Events", text: "Alerts für: failed logins > 5/min, privilege escalation, config changes, data exports." },
+              { "@type": "HowToStep", name: "Compliance-Audit durchführen", text: "ClawGuru Compliance Dashboard öffnen und Logging-Checklist für NIS2/SOC2 prüfen." },
+            ]
           }
         ]) }} />
       </div>

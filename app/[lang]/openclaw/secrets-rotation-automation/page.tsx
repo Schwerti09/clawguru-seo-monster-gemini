@@ -323,6 +323,25 @@ main "$@"`}
             </a>
           </div>
         </section>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify([
+          { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: [
+            { "@type": "Question", name: "Was ist OpenClaw Secrets Rotation?", acceptedAnswer: { "@type": "Answer", text: "Automatisierte Secret-Rotation dreht API-Keys, Passwörter und Zertifikate ohne manuellen Eingriff — minimiert Exposure-Fenster bei Credential-Leaks." } },
+            { "@type": "Question", name: "Wie funktioniert HashiCorp Vault mit OpenClaw?", acceptedAnswer: { "@type": "Answer", text: "Vault speichert Secrets zentral, rotiert sie automatisch per Lease-Renewal und injiziert sie sicher per Kubernetes Sidecar oder API-Call in die Anwendung." } },
+            { "@type": "Question", name: "Wie oft sollten Secrets rotiert werden?", acceptedAnswer: { "@type": "Answer", text: "Kritische Credentials (DB-Passwörter, API-Keys): alle 30 Tage. TLS-Zertifikate: automatisch vor Ablauf (Let's Encrypt alle 60 Tage). Session-Secrets: wöchentlich." } },
+          ]},
+          { "@context": "https://schema.org", "@type": "WebPage", name: "OpenClaw Secrets Rotation Automation", description: "Automatisierte Secret-Rotation für OpenClaw mit HashiCorp Vault.", url: "https://clawguru.org/de/openclaw/secrets-rotation-automation" },
+          { "@context": "https://schema.org", "@type": "HowTo", name: "Automatische Secrets-Rotation für OpenClaw einrichten",
+            description: "HashiCorp Vault für automatische Credential-Rotation auf OpenClaw Infrastruktur konfigurieren.",
+            totalTime: "PT90M",
+            step: [
+              { "@type": "HowToStep", name: "HashiCorp Vault installieren", text: "apt install vault oder Docker: docker run -d --cap-add=IPC_LOCK vault:latest. vault operator init ausführen." },
+              { "@type": "HowToStep", name: "Secrets Engine aktivieren", text: "vault secrets enable database. Datenbankverbindung konfigurieren und Rotation-Intervall setzen." },
+              { "@type": "HowToStep", name: "Applikations-Policy erstellen", text: "vault policy write myapp policy.hcl. Minimal-Rechte: nur Lesen des eigenen Secret-Pfads." },
+              { "@type": "HowToStep", name: "Kubernetes-Integration einrichten", text: "vault auth enable kubernetes. ServiceAccount-Token für automatischen Login konfigurieren." },
+              { "@type": "HowToStep", name: "Rotation testen und überwachen", text: "vault lease renew <lease_id>. Vault-Audit-Log auf erfolgreiche Rotationen prüfen." },
+            ]
+          }
+        ]) }} />
       </div>
     </div>
   )

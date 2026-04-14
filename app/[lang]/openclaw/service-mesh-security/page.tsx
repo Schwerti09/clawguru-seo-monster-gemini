@@ -176,6 +176,25 @@ spec:
             </a>
           </div>
         </section>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify([
+          { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: [
+            { "@type": "Question", name: "Was ist ein Service Mesh bei OpenClaw?", acceptedAnswer: { "@type": "Answer", text: "Ein Service Mesh (Istio, Linkerd) verwaltet Service-to-Service Kommunikation automatisch: mTLS, Traffic-Management, Observability und Access-Policies ohne Code-Änderungen." } },
+            { "@type": "Question", name: "Istio oder Linkerd für OpenClaw?", acceptedAnswer: { "@type": "Answer", text: "Linkerd ist leichter und einfacher einzurichten (empfohlen für OpenClaw). Istio bietet mehr Features (Traffic-Splitting, WASM-Plugins) für komplexere Deployments." } },
+            { "@type": "Question", name: "Brauche ich mTLS für interne Services?", acceptedAnswer: { "@type": "Answer", text: "Ja, für Production empfohlen. Ohne mTLS kann ein kompromittierter Service unbeschränkt andere interne Services anfragen. mTLS-STRICT erzwingt gegenseitige Authentifizierung." } },
+          ]},
+          { "@context": "https://schema.org", "@type": "WebPage", name: "OpenClaw Service Mesh Security", description: "Istio und Linkerd Service Mesh Security für OpenClaw.", url: "https://clawguru.org/de/openclaw/service-mesh-security" },
+          { "@context": "https://schema.org", "@type": "HowTo", name: "Service Mesh für OpenClaw einrichten",
+            description: "Istio oder Linkerd als Service Mesh für sichere Service-to-Service Kommunikation in OpenClaw konfigurieren.",
+            totalTime: "PT90M",
+            step: [
+              { "@type": "HowToStep", name: "Linkerd installieren", text: "linkerd install | kubectl apply -f -. linkerd check ausführen, alle Checks grün warten." },
+              { "@type": "HowToStep", name: "Namespace injizieren", text: "kubectl annotate namespace default linkerd.io/inject=enabled. Bestehende Pods neu starten." },
+              { "@type": "HowToStep", name: "mTLS STRICT aktivieren", text: "PeerAuthentication Manifest mit mtls.mode: STRICT auf alle relevanten Namespaces anwenden." },
+              { "@type": "HowToStep", name: "AuthorizationPolicies definieren", text: "Für jeden Service: welche anderen Services dürfen ihn aufrufen? Mit Server-Ressourcen einschränken." },
+              { "@type": "HowToStep", name: "Traffic im Dashboard beobachten", text: "linkerd viz install && linkerd viz dashboard. Erfolgsrate, Latenz und mTLS-Status prüfen." },
+            ]
+          }
+        ]) }} />
       </div>
     </div>
   )

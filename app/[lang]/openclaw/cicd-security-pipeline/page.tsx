@@ -278,6 +278,25 @@ approval_policies:
             </a>
           </div>
         </section>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify([
+          { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: [
+            { "@type": "Question", name: "Was ist eine sichere CI/CD-Pipeline für OpenClaw?", acceptedAnswer: { "@type": "Answer", text: "Eine DevSecOps-Pipeline integriert SAST, DAST, Container-Scanning, Secret-Detection und Signierung in jeden Build — Security-Gates stoppen fehlerhafte Deployments automatisch." } },
+            { "@type": "Question", name: "Welche SAST-Tools eignen sich für OpenClaw?", acceptedAnswer: { "@type": "Answer", text: "Semgrep (kostenlos, schnell), Bandit (Python), ESLint-Security (JS/TS). Für Containers: Trivy und Grype. Alle lassen sich in GitHub Actions, GitLab CI und Jenkins integrieren." } },
+            { "@type": "Question", name: "Wie verhindere ich Secret-Leaks in der Pipeline?", acceptedAnswer: { "@type": "Answer", text: "git-secrets oder truffleHog als Pre-Commit-Hook. GitLeaks in CI-Pipeline. Niemals Secrets in Umgebungsvariablen im Klartext — immer über Vault oder CI/CD-Secret-Store." } },
+          ]},
+          { "@context": "https://schema.org", "@type": "WebPage", name: "OpenClaw CI/CD Security Pipeline", description: "DevSecOps Pipeline für OpenClaw: SAST, DAST, Container-Scanning.", url: "https://clawguru.org/de/openclaw/cicd-security-pipeline" },
+          { "@context": "https://schema.org", "@type": "HowTo", name: "Sichere CI/CD-Pipeline für OpenClaw aufbauen",
+            description: "DevSecOps Pipeline mit SAST, Secret-Detection, Container-Scanning und Signierung für OpenClaw einrichten.",
+            totalTime: "PT120M",
+            step: [
+              { "@type": "HowToStep", name: "Pre-Commit Hooks einrichten", text: "pre-commit install. .pre-commit-config.yaml mit git-secrets, detect-secrets und trailing-whitespace." },
+              { "@type": "HowToStep", name: "SAST in Pipeline integrieren", text: "Semgrep-Job in CI hinzufügen: semgrep --config=auto --error. Bei Findings Build abbrechen." },
+              { "@type": "HowToStep", name: "Container-Scanning hinzufügen", text: "trivy image --exit-code 1 --severity HIGH,CRITICAL $IMAGE_NAME nach dem Build-Schritt ausführen." },
+              { "@type": "HowToStep", name: "Image signieren", text: "cosign sign --key $COSIGN_KEY $IMAGE@$DIGEST nach erfolgreichem Scan. Verify bei Deployment erzwingen." },
+              { "@type": "HowToStep", name: "Deployment-Gates konfigurieren", text: "Deployment nur erlauben wenn: alle Tests grün, SAST clean, Image signiert und Scan < 24h alt." },
+            ]
+          }
+        ]) }} />
       </div>
     </div>
   )

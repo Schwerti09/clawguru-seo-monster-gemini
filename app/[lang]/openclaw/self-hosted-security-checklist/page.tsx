@@ -127,6 +127,20 @@ export default function OpenClawSelfHostedChecklistPage({ params }: { params: { 
             name: "OpenClaw Security Guide",
             description: "Self-Hosted Security Hardening mit OpenClaw Executable Runbooks.",
             url: "https://clawguru.org/de/openclaw"
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "HowTo",
+            name: "Self-Hosted Security Checklist für OpenClaw abarbeiten",
+            description: "Vollständige Security-Checkliste für selbst gehostete OpenClaw-Infrastruktur: Network, Access, Monitoring, Backup.",
+            totalTime: "PT120M",
+            step: [
+              { "@type": "HowToStep", name: "Netzwerk-Sicherheit prüfen", text: "Firewall aktiv, nur benötigte Ports offen, SSH nicht auf Port 22, fail2ban konfiguriert." },
+              { "@type": "HowToStep", name: "Zugriffskontrolle validieren", text: "Alle Passwörter > 16 Zeichen, MFA aktiviert, keine Root-Logins, SSH-Keys statt Passwörter." },
+              { "@type": "HowToStep", name: "Updates prüfen", text: "unattended-upgrades aktiv, alle Pakete aktuell, Docker-Images auf aktuellem Tag." },
+              { "@type": "HowToStep", name: "Monitoring einrichten", text: "Logs an zentrales System, Alerts für kritische Events, Disk-Space-Monitoring aktiv." },
+              { "@type": "HowToStep", name: "Backup testen", text: "Letztes Backup validieren: Restore-Test auf Staging-System. 3-2-1-Backup-Regel einhalten." },
+            ]
           }
         ]) }} />
       </div>

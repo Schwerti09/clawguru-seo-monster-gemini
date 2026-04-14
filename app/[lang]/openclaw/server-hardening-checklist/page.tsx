@@ -110,6 +110,20 @@ echo "[DONE] Basic hardening applied. Reboot recommended."`}</pre>
             name: "OpenClaw Security Guide",
             description: "Self-Hosted Security Hardening mit OpenClaw Executable Runbooks.",
             url: "https://clawguru.org/de/openclaw"
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "HowTo",
+            name: "Linux Server für OpenClaw absichern",
+            description: "Schritt-für-Schritt Server Hardening für Ubuntu/Debian Server auf denen OpenClaw läuft.",
+            totalTime: "PT60M",
+            step: [
+              { "@type": "HowToStep", name: "SSH Hardening", text: "Port ändern, PasswordAuthentication deaktivieren, PermitRootLogin auf no setzen, MaxAuthTries auf 3 begrenzen." },
+              { "@type": "HowToStep", name: "Automatische Updates einrichten", text: "unattended-upgrades installieren, tägliche Sicherheitsupdates konfigurieren." },
+              { "@type": "HowToStep", name: "Kernel Hardening", text: "sysctl-Parameter setzen: tcp_syncookies=1, ip_forward=0, randomize_va_space=2." },
+              { "@type": "HowToStep", name: "Audit-Logging aktivieren", text: "auditd installieren, kritische Dateien (/etc/passwd, /etc/sudoers) überwachen." },
+              { "@type": "HowToStep", name: "Security Check ausführen", text: "ClawGuru Security Check aufrufen um Konfiguration zu validieren und Score zu überprüfen." },
+            ]
           }
         ]) }} />
       </div>

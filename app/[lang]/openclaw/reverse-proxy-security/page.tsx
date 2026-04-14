@@ -139,6 +139,20 @@ server {
             name: "OpenClaw Security Guide",
             description: "Self-Hosted Security Hardening mit OpenClaw Executable Runbooks.",
             url: "https://clawguru.org/de/openclaw"
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "HowTo",
+            name: "Reverse Proxy für OpenClaw absichern",
+            description: "Nginx oder Caddy als sicherer Reverse Proxy vor OpenClaw: TLS, Rate-Limiting, WAF-Basis-Regeln.",
+            totalTime: "PT45M",
+            step: [
+              { "@type": "HowToStep", name: "TLS mit Let's Encrypt konfigurieren", text: "certbot --nginx -d example.com. SSL-Protokoll auf TLSv1.2+ limitieren, TLSv1.0/1.1 deaktivieren." },
+              { "@type": "HowToStep", name: "Security Headers hinzufügen", text: "In nginx.conf: add_header Strict-Transport-Security, X-Frame-Options DENY, X-Content-Type-Options nosniff." },
+              { "@type": "HowToStep", name: "Rate-Limiting aktivieren", text: "limit_req_zone $binary_remote_addr zone=api:10m rate=10r/s. limit_req zone=api burst=20 nodelay." },
+              { "@type": "HowToStep", name: "Backend-IP verstecken", text: "proxy_hide_header X-Powered-By. server_tokens off. Interne IPs niemals in Error-Pages preisgeben." },
+              { "@type": "HowToStep", name: "Konfiguration prüfen", text: "nginx -t, dann Security Check auf clawguru.org ausführen um Header-Score zu verifizieren." },
+            ]
           }
         ]) }} />
       </div>

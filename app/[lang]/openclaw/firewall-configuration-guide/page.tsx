@@ -120,6 +120,20 @@ ufw status numbered`}</pre>
             name: "OpenClaw Security Guide",
             description: "Self-Hosted Security Hardening mit OpenClaw Executable Runbooks.",
             url: "https://clawguru.org/de/openclaw"
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "HowTo",
+            name: "Firewall für OpenClaw mit UFW konfigurieren",
+            description: "Schritt-für-Schritt Firewall-Konfiguration mit UFW und iptables für OpenClaw Server nach Whitelist-Prinzip.",
+            totalTime: "PT30M",
+            step: [
+              { "@type": "HowToStep", name: "UFW installieren und aktivieren", text: "apt install ufw && ufw default deny incoming && ufw default allow outgoing && ufw enable" },
+              { "@type": "HowToStep", name: "SSH-Port freigeben", text: "ufw allow 22/tcp (oder custom port). Danach SSH-Verbindung testen bevor weitere Regeln gesetzt werden." },
+              { "@type": "HowToStep", name: "Anwendungsports öffnen", text: "Nur explizit benötigte Ports freigeben: ufw allow 443/tcp, ufw allow 80/tcp. Alle anderen blockiert lassen." },
+              { "@type": "HowToStep", name: "Fail2ban installieren", text: "apt install fail2ban, /etc/fail2ban/jail.local anlegen: maxretry=5, bantime=3600." },
+              { "@type": "HowToStep", name: "Firewall-Regeln prüfen", text: "ufw status verbose ausführen. Alle offenen Ports dokumentieren und mit Security Check validieren." },
+            ]
           }
         ]) }} />
       </div>

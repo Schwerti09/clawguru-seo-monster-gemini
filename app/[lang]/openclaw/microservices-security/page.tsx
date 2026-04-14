@@ -398,6 +398,25 @@ spec:
             </a>
           </div>
         </section>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify([
+          { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: [
+            { "@type": "Question", name: "Wie sichere ich Microservices in OpenClaw ab?", acceptedAnswer: { "@type": "Answer", text: "Zero-Trust zwischen Services: mTLS für alle Service-to-Service Kommunikation, RBAC per Namespace, NetworkPolicies für Netzwerksegmentierung." } },
+            { "@type": "Question", name: "Was ist mTLS bei Microservices?", acceptedAnswer: { "@type": "Answer", text: "Mutual TLS (mTLS) authentifiziert beide Seiten einer Verbindung gegenseitig — jeder Service beweist seine Identität per Zertifikat. Verhindert Lateral Movement bei kompromittierten Services." } },
+            { "@type": "Question", name: "Brauche ich ein Service Mesh für OpenClaw?", acceptedAnswer: { "@type": "Answer", text: "Für kleine Deployments (< 5 Services) reichen NetworkPolicies. Ab 5+ Services empfehlen wir Istio oder Linkerd für automatisches mTLS, Tracing und Traffic Management." } },
+          ]},
+          { "@context": "https://schema.org", "@type": "WebPage", name: "OpenClaw Microservices Security", description: "Zero-Trust Microservices-Sicherheit für OpenClaw.", url: "https://clawguru.org/de/openclaw/microservices-security" },
+          { "@context": "https://schema.org", "@type": "HowTo", name: "Microservices für OpenClaw absichern",
+            description: "Zero-Trust Architektur für OpenClaw Microservices: mTLS, NetworkPolicies, RBAC und Observability.",
+            totalTime: "PT120M",
+            step: [
+              { "@type": "HowToStep", name: "Kubernetes NetworkPolicies erstellen", text: "Default-Deny für alle Namespaces setzen. Explizite Allow-Rules nur für benötigte Service-Kommunikation." },
+              { "@type": "HowToStep", name: "mTLS mit Istio aktivieren", text: "istioctl install --set profile=minimal. PeerAuthentication mit mode: STRICT im Namespace deployen." },
+              { "@type": "HowToStep", name: "RBAC per Service konfigurieren", text: "ServiceAccount pro Microservice anlegen. RBAC-Roles mit minimalen Rechten binden." },
+              { "@type": "HowToStep", name: "Secrets per Vault injizieren", text: "Vault Agent Sidecar Injector aktivieren. Secrets nie als ENV-Variablen, sondern als gemountete Files." },
+              { "@type": "HowToStep", name: "Distributed Tracing einrichten", text: "Jaeger oder Zipkin deployen. Alle Services instrumentieren für Security-Event-Korrelation." },
+            ]
+          }
+        ]) }} />
       </div>
     </div>
   )

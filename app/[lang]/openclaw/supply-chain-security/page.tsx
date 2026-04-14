@@ -109,6 +109,20 @@ cosign verify-attestation \\
             name: "OpenClaw Security Guide",
             description: "Self-Hosted Security Hardening mit OpenClaw Executable Runbooks.",
             url: "https://clawguru.org/de/openclaw"
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "HowTo",
+            name: "Supply Chain Security für OpenClaw implementieren",
+            description: "Software Supply Chain absichern: SBOM, Dependency Scanning, Image Signing und CI/CD-Integration für OpenClaw.",
+            totalTime: "PT60M",
+            step: [
+              { "@type": "HowToStep", name: "SBOM generieren", text: "syft image myapp:latest -o cyclonedx-json > sbom.json. SBOM in CI/CD nach jedem Build erstellen und archivieren." },
+              { "@type": "HowToStep", name: "Dependency Scanning einrichten", text: "npm audit, pip-audit oder trivy fs . in CI-Pipeline als Pflichtschritt. Bei HIGH/CRITICAL Build abbrechen." },
+              { "@type": "HowToStep", name: "Container Images signieren", text: "cosign sign --key cosign.key myimage:latest. cosign verify vor jedem Deploy ausführen." },
+              { "@type": "HowToStep", name: "Pinned Dependencies erzwingen", text: "package-lock.json committen. Docker-Images mit SHA256-Digest pinnen statt floating Tags (latest)." },
+              { "@type": "HowToStep", name: "Renovate/Dependabot aktivieren", text: "renovate.json oder .github/dependabot.yml anlegen für automatische Dependency-Update-PRs." },
+            ]
           }
         ]) }} />
       </div>

@@ -220,6 +220,25 @@ server {
             </a>
           </div>
         </section>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify([
+          { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: [
+            { "@type": "Question", name: "Was macht ein WAF für OpenClaw?", acceptedAnswer: { "@type": "Answer", text: "Ein Web Application Firewall (WAF) filtert HTTP-Traffic vor OpenClaw: blockiert SQL Injection, XSS, Path Traversal und OWASP Top 10 Angriffe bevor sie die Anwendung erreichen." } },
+            { "@type": "Question", name: "ModSecurity oder Cloudflare WAF?", acceptedAnswer: { "@type": "Answer", text: "ModSecurity (selbst gehostet, kostenlos, volle Kontrolle) für on-premises OpenClaw. Cloudflare WAF (managed, einfacher) für Cloud-Deployments. Beide unterstützen OWASP CRS." } },
+            { "@type": "Question", name: "Wie vermeide ich False-Positives beim WAF?", acceptedAnswer: { "@type": "Answer", text: "Zuerst im Detection-Mode starten, Logs analysieren, legitime Anfragen identifizieren. Schrittweise auf Prevention-Mode umstellen. Whitelist für bekannte Safe-Paths anlegen." } },
+          ]},
+          { "@context": "https://schema.org", "@type": "WebPage", name: "OpenClaw WAF Konfiguration", description: "ModSecurity und Cloudflare WAF für OpenClaw konfigurieren.", url: "https://clawguru.org/de/openclaw/waf-configuration" },
+          { "@context": "https://schema.org", "@type": "HowTo", name: "WAF für OpenClaw konfigurieren",
+            description: "ModSecurity mit OWASP Core Rule Set oder Cloudflare WAF für OpenClaw einrichten und tunen.",
+            totalTime: "PT60M",
+            step: [
+              { "@type": "HowToStep", name: "ModSecurity installieren", text: "apt install libmodsecurity3 libmodsecurity-dev. Nginx-Modul einbinden: load_module modules/ngx_http_modsecurity_module.so." },
+              { "@type": "HowToStep", name: "OWASP CRS herunterladen", text: "git clone https://github.com/coreruleset/coreruleset. crs-setup.conf.example nach crs-setup.conf kopieren." },
+              { "@type": "HowToStep", name: "Detection Mode aktivieren", text: "SecRuleEngine DetectionOnly in modsecurity.conf. Nginx neu starten, Logs 24h analysieren." },
+              { "@type": "HowToStep", name: "False-Positives beheben", text: "Legitime Anfragen whitelisten: SecRuleRemoveById für spezifische Rule-IDs. Schrittweise vorgehen." },
+              { "@type": "HowToStep", name: "Prevention Mode aktivieren", text: "SecRuleEngine On setzen. Monitoring intensivieren. Alert-Threshold für Anomaly-Score justieren." },
+            ]
+          }
+        ]) }} />
       </div>
     </div>
   )

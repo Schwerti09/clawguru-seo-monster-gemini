@@ -122,6 +122,20 @@ failregex = ^<HOST> .* POST /api/auth/activate HTTP.* 401
             name: "OpenClaw Security Guide",
             description: "Self-Hosted Security Hardening mit OpenClaw Executable Runbooks.",
             url: "https://clawguru.org/de/openclaw"
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "HowTo",
+            name: "Intrusion Detection für OpenClaw einrichten",
+            description: "OSSEC, Fail2ban und Suricata für Echtzeit-IDS auf OpenClaw Servern konfigurieren.",
+            totalTime: "PT60M",
+            step: [
+              { "@type": "HowToStep", name: "OSSEC installieren", text: "apt install ossec-hids-server. ossec.conf bearbeiten: localfile-Einträge für /var/log/auth.log, /var/log/syslog hinzufügen." },
+              { "@type": "HowToStep", name: "Fail2ban konfigurieren", text: "/etc/fail2ban/jail.local anlegen: [sshd] enabled=true, maxretry=5, bantime=3600, findtime=600." },
+              { "@type": "HowToStep", name: "Suricata für Netzwerk-IDS", text: "apt install suricata. suricata-update ausführen, Interface in suricata.yaml setzen, als Service starten." },
+              { "@type": "HowToStep", name: "Alert-Routing einrichten", text: "OSSEC-Alerts per E-Mail oder Slack-Webhook weiterleiten. Threshold für false-positives kalibrieren." },
+              { "@type": "HowToStep", name: "Erkennung testen", text: "Kontrollierten Brute-Force-Versuch (eigene IP) durchführen und Fail2ban-Ban verifizieren." },
+            ]
           }
         ]) }} />
       </div>

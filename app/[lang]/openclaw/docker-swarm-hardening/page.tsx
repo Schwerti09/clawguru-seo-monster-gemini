@@ -153,6 +153,20 @@ docker swarm update --autolock=true`}</pre>
             name: "OpenClaw Security Guide",
             description: "Self-Hosted Security Hardening mit OpenClaw Executable Runbooks.",
             url: "https://clawguru.org/de/openclaw"
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "HowTo",
+            name: "Docker Swarm für OpenClaw absichern",
+            description: "Production-ready Docker Swarm Hardening: Secrets, TLS, Network Isolation und Image Scanning.",
+            totalTime: "PT90M",
+            step: [
+              { "@type": "HowToStep", name: "Swarm mit TLS initialisieren", text: "docker swarm init mit --autolock=true. Manager-Token sicher aufbewahren." },
+              { "@type": "HowToStep", name: "Docker Secrets einrichten", text: "echo 'mypassword' | docker secret create db_password -. Niemals Secrets als ENV-Variablen in compose-Files." },
+              { "@type": "HowToStep", name: "Netzwerk-Isolation konfigurieren", text: "Overlay-Netzwerke pro Service-Gruppe erstellen. --internal Flag für interne Services ohne externen Zugang." },
+              { "@type": "HowToStep", name: "Image Scanning aktivieren", text: "Trivy oder Docker Scout vor jedem Deploy ausführen: trivy image myimage:latest --exit-code 1 --severity HIGH,CRITICAL." },
+              { "@type": "HowToStep", name: "Runtime-Security konfigurieren", text: "seccomp und AppArmor Profile für Container aktivieren. --cap-drop=ALL, nur benötigte Capabilities explizit hinzufügen." },
+            ]
           }
         ]) }} />
       </div>

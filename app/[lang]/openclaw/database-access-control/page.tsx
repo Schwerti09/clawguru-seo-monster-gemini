@@ -112,6 +112,20 @@ CREATE EXTENSION IF NOT EXISTS pgcrypto;
             name: "OpenClaw Security Guide",
             description: "Self-Hosted Security Hardening mit OpenClaw Executable Runbooks.",
             url: "https://clawguru.org/de/openclaw"
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "HowTo",
+            name: "Datenbank-Zugriffskontrolle für OpenClaw konfigurieren",
+            description: "Least-Privilege Datenbankzugriff, Verschlüsselung und Audit-Trail für PostgreSQL und Redis auf OpenClaw.",
+            totalTime: "PT45M",
+            step: [
+              { "@type": "HowToStep", name: "Dedizierte DB-User anlegen", text: "Für jede Anwendung eigenen User mit minimalen Rechten anlegen: GRANT SELECT, INSERT, UPDATE ON schema TO appuser." },
+              { "@type": "HowToStep", name: "Verbindungs-Verschlüsselung erzwingen", text: "PostgreSQL: ssl = on in postgresql.conf. pg_hba.conf: hostssl statt host für alle Verbindungen." },
+              { "@type": "HowToStep", name: "Audit-Logging aktivieren", text: "pgaudit Extension installieren: CREATE EXTENSION pgaudit. pgaudit.log = 'ddl,write,role' in postgresql.conf." },
+              { "@type": "HowToStep", name: "Connection Pooling absichern", text: "PgBouncer mit auth_type=scram-sha-256 konfigurieren. Max. Verbindungen pro User limitieren." },
+              { "@type": "HowToStep", name: "Regelmäßige Zugriffs-Reviews", text: "Monatlich: SELECT * FROM pg_user; alle Accounts prüfen. Ungenutzte User sofort löschen." },
+            ]
           }
         ]) }} />
       </div>

@@ -209,6 +209,7 @@ export async function GET(
         "server-hardening-checklist","self-hosted-security-checklist","security-headers-guide",
         "firewall-configuration-guide","reverse-proxy-security","docker-swarm-hardening",
         "audit-logging-setup","database-access-control","intrusion-detection-setup","supply-chain-security",
+        "runtime-policy-enforcement",
         "service-mesh-security","waf-configuration","cicd-security-pipeline","secrets-rotation-automation","microservices-security",
       ]
       // Specialized security + compare pages
@@ -233,6 +234,7 @@ export async function GET(
         "moltbot-vs-crewai","moltbot-vs-llamaindex",
         "moltbot-vs-autogen","openclaw-vs-falcosidekick",
         "clawguru-vs-aquasec","openclaw-vs-tenable",
+        "moltbot-vs-semantic-kernel",
       ]
       // Solutions pages
       const SOLUTIONS_SLUGS = [
@@ -242,9 +244,11 @@ export async function GET(
         "iso-27001-google-cloud","rabbitmq-audit","terraform-canary-deploy",
         "dsgvo-compliance-automation","nis2-compliance","nist-csf-compliance",
         "eu-ai-act-compliance","soc2-type-ii-automation",
+        "zero-trust-architecture","hipaa-ai-systems",
       ]
       // Moltbot Batch 6
-      const MOLTBOT_BATCH6 = ["ai-compliance-automation","llm-observability","agent-memory-security"]
+      const MOLTBOT_BATCH6 = ["ai-compliance-automation","llm-observability","agent-memory-security",
+        "zero-trust-ai-agents","llm-rate-limiting","ai-incident-response"]
       // SEO guide pages
       const GUIDE_SLUGS = [
         "executable-runbook-vs-static-blog","security-check-vs-pentest-guide","nis2-technical-controls-self-hosted",

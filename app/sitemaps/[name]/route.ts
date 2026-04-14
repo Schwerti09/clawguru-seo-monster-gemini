@@ -228,6 +228,7 @@ export async function GET(
         "clawguru-vs-trivy","clawguru-vs-checkov","openclaw-vs-wazuh",
         "clawguru-vs-snyk","moltbot-vs-victorops","openclaw-vs-ossec",
         "moltbot-vs-splunk","openclaw-vs-crowdsec","moltbot-vs-grafana",
+        "moltbot-vs-langchain","moltbot-vs-autogpt",
       ]
       // Solutions pages
       const SOLUTIONS_SLUGS = [

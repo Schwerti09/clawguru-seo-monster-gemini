@@ -250,13 +250,15 @@ export async function GET(
         "eu-ai-act-compliance","soc2-type-ii-automation",
         "zero-trust-architecture","hipaa-ai-systems",
         "iso27001-ai-systems","pci-dss-ai-payments",
+        "gdpr-ai-data-processing","nis2-ai-infrastructure",
       ]
       // Moltbot Batch 6
       const MOLTBOT_BATCH6 = ["ai-compliance-automation","llm-observability","agent-memory-security",
         "zero-trust-ai-agents","llm-rate-limiting","ai-incident-response",
         "secure-agent-deployment","llm-prompt-hardening","ai-supply-chain",
         "multi-model-orchestration-security","ai-agent-rbac","llm-context-isolation",
-        "ai-agent-audit-logging","llm-output-validation","agentic-workflow-security"]
+        "ai-agent-audit-logging","llm-output-validation","agentic-workflow-security",
+        "ai-model-versioning-security","llm-api-gateway-hardening","agent-tool-security"]
       // SEO guide pages
       const GUIDE_SLUGS = [
         "executable-runbook-vs-static-blog","security-check-vs-pentest-guide","nis2-technical-controls-self-hosted",

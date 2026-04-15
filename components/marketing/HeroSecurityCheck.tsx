@@ -5,6 +5,7 @@ import { performSecurityCheck, type SecurityCheckResult } from "@/lib/security-c
 import CTAButton from "@/components/marketing/CTAButton"
 import BuyButton from "@/components/commerce/BuyButton"
 import { ClawguruAvatar } from "@/components/ui/ClawguruAvatar"
+import { SecurityCheckShareCard } from "@/components/marketing/SecurityCheckShareCard"
 import dynamic from "next/dynamic"
 import { useI18n } from "@/components/i18n/I18nProvider"
 import Image from "next/image"
@@ -292,12 +293,6 @@ export default function HeroSecurityCheck({ dict = {} }: { dict?: Record<string,
                   <div className="mt-2 text-sm text-gray-300">{scoreHint(result.score)}</div>
 
                   <div className="mt-4 flex flex-wrap gap-3">
-                    <button onClick={nativeShare} className="px-4 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-700 font-bold text-white transition-colors">
-                      {isGerman ? "Badge teilen" : "Share badge"}
-                    </button>
-                    <button onClick={copyLink} className="px-4 py-2 rounded-xl border border-gray-700 hover:border-gray-500 font-bold text-gray-200 transition-colors">
-                      {isGerman ? "Link kopieren" : "Copy link"}
-                    </button>
                     <a
                       href={copilotPrefill}
                       className="px-4 py-2 rounded-xl font-black text-black transition-all"
@@ -310,6 +305,26 @@ export default function HeroSecurityCheck({ dict = {} }: { dict?: Record<string,
                         ? (dict.check_ask_guru_de || "Frag den Guru")
                         : (dict.check_ask_guru_en || "Ask the Guru")} →
                     </a>
+                  </div>
+
+                  {/* Viral Share Card */}
+                  <div className="mt-6">
+                    <SecurityCheckShareCard
+                      score={result.score}
+                      target={result.target}
+                      vulnerable={result.vulnerable}
+                      dict={{
+                        share_title: isGerman ? "Score teilen" : "Share score",
+                        share_x: isGerman ? "Auf X teilen" : "Share on X",
+                        share_li: "LinkedIn",
+                        share_wa: "WhatsApp",
+                        share_tg: "Telegram",
+                        share_mail: isGerman ? "E-Mail" : "Email",
+                        copy_link: isGerman ? "Link kopieren" : "Copy link",
+                        copied: isGerman ? "Kopiert!" : "Copied!",
+                      }}
+                      shareUrl={`${window.location.origin}${shareUrl}`}
+                    />
                   </div>
 
                   <div className="mt-4 text-xs text-gray-500">

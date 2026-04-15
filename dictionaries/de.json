@@ -794,6 +794,16 @@
       "error_invalid": "Bitte gib eine gültige E-Mail-Adresse ein.",
       "error_generic": "Etwas ist schiefgelaufen. Bitte versuche es erneut."
     },
+    "security_share": {
+      "share_title": "Score teilen",
+      "share_x": "Auf X teilen",
+      "share_li": "LinkedIn",
+      "share_wa": "WhatsApp",
+      "share_tg": "Telegram",
+      "share_mail": "E-Mail",
+      "copy_link": "Link kopieren",
+      "copied": "Kopiert!"
+    },
     "error_empty_input": "Erst Stack oder Domain eingeben.",
     "error_input_too_long": "Maximal 400 Zeichen.",
     "error_invalid_level": "Roast-Level wählen.",

@@ -781,6 +781,16 @@
       "error_invalid": "Please enter a valid email address.",
       "error_generic": "Something went wrong. Please try again."
     },
+    "security_share": {
+      "share_title": "Share score",
+      "share_x": "Share on X",
+      "share_li": "LinkedIn",
+      "share_wa": "WhatsApp",
+      "share_tg": "Telegram",
+      "share_mail": "Email",
+      "copy_link": "Copy link",
+      "copied": "Copied!"
+    },
     "challenge_desc": "Think your stack is more secure? Send the roast to a colleague.",
     "error_empty_input": "Enter a stack or domain first.",
     "error_input_too_long": "Keep it under 400 characters.",

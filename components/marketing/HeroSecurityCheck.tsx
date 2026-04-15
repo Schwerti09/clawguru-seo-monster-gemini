@@ -292,6 +292,32 @@ export default function HeroSecurityCheck({ dict = {} }: { dict?: Record<string,
                   </div>
                   <div className="mt-2 text-sm text-gray-300">{scoreHint(result.score)}</div>
 
+                  {/* Free→Pro Funnel: Score < 70 → Unlock full report CTA */}
+                  {result.score < 70 && (
+                    <div className="mt-4 rounded-xl border border-orange-700 bg-orange-950/20 p-4">
+                      <div className="flex items-start gap-3">
+                        <div className="text-2xl">🔓</div>
+                        <div className="flex-1">
+                          <div className="font-semibold text-orange-200 mb-1">
+                            {isGerman ? "Vollständiger Report freischalten" : "Unlock full report"}
+                          </div>
+                          <div className="text-sm text-orange-100 mb-3">
+                            {isGerman
+                              ? "Dein Score zeigt Schwachstellen. Hol dir den vollständigen Remediation-Report mit Priorisierung und detaillierten Fix-Schritten."
+                              : "Your score shows vulnerabilities. Get the full remediation report with prioritization and detailed fix steps."}
+                          </div>
+                          <a
+                            href={`${prefix}/pricing`}
+                            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-sm text-white bg-orange-600 hover:bg-orange-500 transition-colors"
+                          >
+                            {isGerman ? "Pro starten (49€/Monat)" : "Start Pro (€49/month)"}
+                            <span className="text-lg">→</span>
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
                   <div className="mt-4 flex flex-wrap gap-3">
                     <a
                       href={copilotPrefill}

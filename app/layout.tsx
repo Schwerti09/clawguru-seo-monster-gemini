@@ -39,12 +39,12 @@ export const metadata: Metadata = {
     "ClawGuru Mycelial Singularity Engine v4.0: Das lebende Wissensgraph von 1M+ Runbooks. Copilot, Intel Feed, Academy, Vault – evolutionäre Ops-Intelligence für OpenClaw/Moltbot Security & Betrieb.",
   keywords: SEO_TARGET_KEYWORDS_2026,
   alternates: {
-    canonical: "/",
+    canonical: "/de",
   },
   openGraph: {
     type: "website",
     locale: "de_DE",
-    url: SITE_URL,
+    url: `${SITE_URL}/de`,
     title: "ClawGuru | Mycelial Singularity Engine v4.0",
     description: "Das lebende Mycelium von 1M+ Runbooks. Force-directed Graph, Darwinian Evolution, Oracle Mode.",
     images: ["/og-image.png", "/og-image.svg"]

@@ -190,9 +190,9 @@ export async function GET(
         priority: "0.85",
       }))
       const geoOpenClawSprintUrls: { loc: string; lastmod: string; changefreq: string; priority: string }[] = []
-      // Moltbot subpages (32 pages × all locales)
+      // Moltbot subpages (33 pages × all locales)
       const MOLTBOT_SLUGS = [
-        "moltbot-security-fundamentals","moltbot-threat-modeling-guide","moltbot-iam-hardening","hardening-guide-2024","security-framework","threat-detection-setup","network-security-firewall",
+        "moltbot-security-fundamentals","moltbot-threat-modeling-guide","moltbot-iam-hardening","moltbot-network-security","hardening-guide-2024","security-framework","threat-detection-setup","network-security-firewall",
         "api-security-protection","authentication-oauth2-jwt","database-security-encryption",
         "container-security-docker-kubernetes","logging-auditing-compliance","incident-response-automation",
         "devsecops-pipeline","monitoring-dashboards","backup-recovery-disaster-recovery","secrets-vault-management",

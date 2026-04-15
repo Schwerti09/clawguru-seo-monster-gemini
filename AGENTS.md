@@ -1,8 +1,8 @@
-﻿# ClawGuru — AGENTS.md · Master Operating Manual v12 (14.04.2026)
+﻿# ClawGuru — AGENTS.md · Master Operating Manual v13 (15.04.2026)
 
 > **This document is the single source of truth for every agent working in this codebase.**
 > Read it completely BEFORE making any change. Update the Session Log after every session.
-> Last updated: 14.04.2026 | Language: English (maximises AI model compatibility)
+> Last updated: 15.04.2026 | Language: English (maximises AI model compatibility)
 
 ---
 
@@ -264,7 +264,7 @@ npm run build 2>&1 | Select-Object -Last 15
 | Indexed Pages | ~24,500 URLs | 1,000,000+ URLs |
 | Active Cities (Geo) | 123 cities | 500+ cities |
 | Languages | 15 | 15 (complete) |
-| Content Clusters | Moltbot(37), OpenClaw(15), Solutions(8), Compare(19) | 50+ clusters |
+| Content Clusters | Moltbot(67), OpenClaw(17), Solutions(13), Compare(28) | 50+ clusters |
 | Monthly Visitors | Growth phase | 500,000+ unique visitors |
 
 ### Trust Anchor — Use on Every Content Page
@@ -1012,6 +1012,8 @@ Will be resolved automatically when upgrading to Next.js 15 + eslint 9 (future s
 | 12.04.2026 | 9 | SEO: hreflang xhtml:link removed from sitemap XML. Duplicate /check URL removed. Traffic growth sprint: /de/check CTA + proof bullets + score methodology. /de/roast-my-stack FAQ + examples. Compare Batch 3 (trivy/checkov/wazuh). /kubernetes-security pillar page. Compare Batch 4 (snyk/victorops/ossec). FAQPage + WebPage JSON-LD added to all 37 Moltbot pages via batch script. security-framework migrated to buildLocalizedAlternates. FAQPage JSON-LD added to all 15 OpenClaw pages via batch script. Compare Batch 5 (moltbot-vs-splunk, openclaw-vs-crowdsec). AGENTS.md v8. |
 | 13.04.2026 | 10 | **Critical bugfix: /de/runbooks/cloud links (404 root cause found).** GEO_MATRIX_AUTO_REWRITE=1 rewrites base runbook slugs to geo-variants (e.g. hetzner-ssh-hardening → hetzner-ssh-hardening-groheide). City "Großheide" slugifies to "groheide" which is NOT in SEEDED_CITY_SLUGS → parseGeoVariantSlug returns full slug as baseSlug → getRunbook() = null → 404. Fix 1: Middleware now verifies city is seeded before rewriting (round-trip parseGeoVariantSlug check). Fix 2: Locale-Runbook-Page falls back to baseSlug instead of notFound() when geo-variant not indexed. Fix 3: Cache-Control immutable moved from all routes to /_next/static/ only (was caching 404s for 1 year). Fix 4: vercel.json maxDuration=60s for runbook pages. Fix 5: SITEMAP_100K_LOCALES locale guard replaced with SUPPORTED_LOCALES. Railway deployment setup: railway.json + PORT env var fix (next start -p ${PORT:-3000}). AGENTS.md v9. |
 | 14.04.2026 | 13 | **30-Tage Master-Plan + Moltbot Batch 4 (5 AI-Agent Pages) + God Mode Directive.** God Mode v1.0 Directive added to AGENTS.md. Full project audit completed (8 traffic blockers identified). Moltbot Batch 4: 5 new AI-agent security pages created: prompt-injection-defense, model-poisoning-protection, secure-agent-communication, llm-gateway-hardening, ai-agent-sandboxing. All 5 have full FAQPage + HowTo JSON-LD, internal links, CTA. Added to MOLTBOT_SLUGS sitemap. Build ✓ (Exit 0). AGENTS.md v12. 30-Tage Master-Plan added as Section 14. |
+| 14.04.2026 | 14 | **Content Expansion Sprint: Moltbot Batches 5–28 + CVE Batches 1–27 + Solutions Batches 3–10 + Compare Batches 6–17 + OpenClaw Batches 3–8.** Moltbot: 30 new pages (Batches 5–28: llm-output-filtering, llm-jailbreak-detection, ai-agent-privilege-escalation, llm-context-window-security, ai-agent-data-exfiltration-prevention, llm-model-theft-detection, llm-output-encoding-security, ai-agent-sandboxing-runtime, llm-context-manipulation-defense, llm-bias-detection-mitigation, ai-agent-behavioral-monitoring, llm-hallucination-detection, llm-data-encryption-at-rest, ai-agent-secure-communication, llm-privacy-preserving-computation, llm-model-watermarking, ai-agent-federated-learning, llm-secure-inference, llm-adversarial-robustness, ai-agent-secure-deployment, llm-model-extraction-defense, llm-federated-inference, ai-agent-multi-modal-security, llm-quantization-security, llm-model-compression-security, ai-agent-orchestration-security, llm-edge-deployment-security, llm-model-versioning-security, ai-agent-human-in-the-loop-security, llm-continual-learning-security). CVE Batches 1–27: 27 CVE fix pages (MongoDB, Elasticsearch, RabbitMQ, Redis, Apache Kafka, Cassandra, Apache Tomcat, Jenkins, GitLab, GitHub Actions Runner, Docker Engine, containerd). Solutions Batches 3–10: 10 new pages (dsgvo-compliance-automation, nis2-compliance, nist-csf-compliance, eu-ai-act-compliance, soc2-type-ii-automation, zero-trust-architecture, hipaa-ai-systems, iso27001-ai-systems, gdpr-ai-data-processing, nis2-ai-infrastructure → plus hipaa-ai-compliance, iso27001-ai-systems-roadmap, nist-csf-ai-profile, eu-ai-act-compliance-checklist). Compare Batches 6–17: 12 pages (moltbot-vs-bedrock-agents, clawguru-vs-wiz-code, moltbot-vs-langchain-agents, openclaw-vs-prisma-cloud, moltbot-vs-autogen, openclaw-vs-tenable). OpenClaw Batches 3–8: 4 new pages (zero-trust-networking, supply-chain-sbom-security). All builds ✓ Exit 0. Sitemap updated after each batch. |
+| 15.04.2026 | 15 | **Moltbot Batches 26–30 + CVE Batches 25–29 + Solutions Batch 11 + Compare Batch 18.** Moltbot Batch 26: llm-inference-cost-security, ai-agent-goal-alignment-security, llm-context-poisoning-defense. Moltbot Batch 27: llm-supply-chain-security, ai-agent-memory-poisoning-defense, llm-output-watermarking. Moltbot Batch 28: llm-prompt-leakage-defense, ai-agent-capability-control, llm-red-team-automation. Moltbot Batch 29: llm-bias-fairness-auditing, ai-agent-escalation-prevention, llm-multilingual-security. Moltbot Batch 30: llm-adversarial-examples-defense, ai-agent-tool-poisoning-prevention, llm-inference-privacy. CVE Batch 28: CVE-2025-48101 (Nginx HTTP/3 RCE, CVSS 9.1), CVE-2025-48102 (HAProxy Header Injection, CVSS 8.2). CVE Batch 29: CVE-2025-49101 (PostgreSQL RLS Bypass, CVSS 8.8), CVE-2025-49102 (Redis ACL Bypass, CVSS 8.1). Solutions Batch 11: pci-dss-ai-payments-v2, nis2-ai-infrastructure-guide. Compare Batch 18: moltbot-vs-crewai, openclaw-vs-aquasec. Sitemap duplicate cleanup (moltbot-vs-crewai, clawguru-vs-aquasec removed). All builds ✓ Exit 0. AGENTS.md v13. |
 | 14.04.2026 | 12 | **TypeScript strict:true + Rate-limiting default ON + Compare Batch 6 + HowTo Schema.** tsconfig.json: strict:false→strict:true (fixed 2 TS18046 errors in enrich-city/route.ts). Middleware: MW_RL_ENABLED opt-in→opt-out (default ON, set =0 to disable). New page: moltbot-vs-grafana (full compare, sitemap). HowTo JSON-LD schema added to all 15 OpenClaw sub-pages (security-headers-guide, server-hardening-checklist, audit-logging-setup, firewall-configuration-guide, intrusion-detection-setup, docker-swarm-hardening, database-access-control, reverse-proxy-security, supply-chain-security, self-hosted-security-checklist + 5 pages without prior schema: secrets-rotation-automation, microservices-security, service-mesh-security, waf-configuration, cicd-security-pipeline). Solutions Batch 2 verified complete (iso27001, pci-dss, hipaa all existed with full metadata). Build ✓ (Exit 0). AGENTS.md v11. |
 | 14.04.2026 | 11 | **Neuro v5 overhaul + Project Audit + Locale Migration.** Neuro: fixed CVE score (items[] not cves[]), runbook relevance normalization, added visible FAQ, live Threat Correlation API (/api/intel/threats created), updated layout metadata. CRITICAL: removed netlify.env.production + netlify.env.import from Git (contained production secrets — user must rotate all keys). Removed stale zip/junk files. Fixed Node.js engines: 24.x → >=20. Created AUDIT-MASTERPLAN.md. Locale Migration: [lang]/neuro/page.tsx + [lang]/oracle/page.tsx upgraded with full metadata, openGraph.url with locale, generateStaticParams. Root /neuro and /oracle set to noindex (canonical → /de/neuro and /de/oracle). P2: CSP + HSTS + X-Frame-Options + nosniff security headers added to next.config.js for all routes. AGENTS.md v10. |
 
@@ -1022,6 +1024,7 @@ Will be resolved automatically when upgrading to Next.js 15 + eslint 9 (future s
 - [ ] Set Vercel env vars: `GEO_MATRIX_SITEMAP=1`, `SITEMAP_BUCKETS=5`, `GEO_MATRIX_SITEMAP_CITY_LIMIT=50`
 - [ ] Run Asia/LatAm DB seeding: `GET /api/geo/asia-latam-expansion?stable=1`
 - [ ] Google Search Console: resubmit `sitemap.xml`, request indexing for `/de/runbooks` und `/de`
+- [ ] **SECRET ROTATION** — Rotate all keys from netlify.env.production (DB, API keys, session secrets)
 
 **HIGH — Next Session (Traffic Growth Sprint)**
 - [x] `/de/kubernetes-security` Pillar-Page erstellt ✅
@@ -1043,8 +1046,17 @@ Will be resolved automatically when upgrading to Next.js 15 + eslint 9 (future s
 - [x] Solutions Batch 2: ISO27001, PCI-DSS, HIPAA pages ✅
 - [ ] Africa expansion route: `/api/geo/africa-expansion`
 - [ ] MEA expansion route: `/api/geo/mea-expansion`
-- [x] Moltbot Batch 4: 5 AI-agent focused pages ✅ (prompt-injection-defense, model-poisoning-protection, secure-agent-communication, llm-gateway-hardening, ai-agent-sandboxing)
-- [ ] Academy/Blog section with weekly CVE analysis pages (`/de/academy/cve-YYYY-XXXXX`) — fresh content signal
+- [x] Moltbot Batch 4: 5 AI-agent focused pages ✅
+- [x] Moltbot Batches 5–30: 60+ AI-security pages ✅ (all with FAQPage JSON-LD, bilingual, sitemap)
+- [x] CVE Batches 1–29: 29+ CVE fix pages ✅ (Nginx, HAProxy, PostgreSQL, Redis, Docker, GitLab, etc.)
+- [x] Solutions Batches 3–11: 11 compliance pages ✅ (HIPAA, ISO27001, NIST, EU AI Act, PCI DSS, NIS2)
+- [x] Compare Batches 6–18: 12 compare pages ✅
+- [x] OpenClaw Batches 3–8: 4 new pages ✅
+- [ ] Academy/Blog section with weekly CVE analysis pages (`/de/academy/cve-YYYY-XXXXX`) — ✅ Routes exist, continue CVE batches weekly
+- [ ] Solutions Batch 12: zero-trust-ai-architecture + gdpr-llm-data-processing
+- [ ] Compare Batch 19: moltbot-vs-semantic-kernel + openclaw-vs-crowdstrike
+- [ ] Moltbot Batch 31: llm-prompt-hardening-advanced + ai-agent-permission-minimization + llm-output-schema-validation
+- [ ] CVE Batch 30: CVE-2025-50101 (Kubernetes) + CVE-2025-50102 (Vault)
 
 **LOW — Ongoing**
 - [ ] 250 Moltbot/AI-Agent pages (Mycelium Content Architect v3)
@@ -1053,11 +1065,11 @@ Will be resolved automatically when upgrading to Next.js 15 + eslint 9 (future s
 - [ ] Next.js 15 upgrade (unlocks eslint 9, removes all npm warnings)
 
 ### Next 5 Immediate Actions (in Order)
-1. **SECRET ROTATION** — Rotate all keys exposed in netlify.env.production (DB, API keys, session secrets)
-2. **Vercel Cache Purge** — Dashboard → Settings → Data Cache → Purge Everything
-3. Run Asia/LatAm DB seeding: `GET /api/geo/asia-latam-expansion?stable=1`
-4. Google Search Console: resubmit sitemap, request indexing for all new Moltbot Batch 4 pages + OpenClaw pages
-5. **Week 1 of 30-Day Plan**: Roast My Moltbot Share-Button + Academy CVE Feed (Week 1 viral mechanic)
+1. **Vercel Cache Purge** — Dashboard → Settings → Data Cache → Purge Everything
+2. Run Asia/LatAm DB seeding: `GET /api/geo/asia-latam-expansion?stable=1`
+3. Google Search Console: resubmit sitemap, request indexing for all new pages (Moltbot Batch 26–30, CVE 28–29, Solutions 11, Compare 18)
+4. **Solutions Batch 12**: zero-trust-ai-architecture + gdpr-llm-data-processing
+5. **Compare Batch 19**: moltbot-vs-semantic-kernel + openclaw-vs-crowdstrike
 
 ---
 

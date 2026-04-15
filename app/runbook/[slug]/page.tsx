@@ -86,10 +86,19 @@ export async function generateMetadata(props: { params: { slug: string } }) {
   const geoParsed = parseGeoVariantSlug(params.slug)
   const geoCity = geoParsed.citySlug ? await getCityBySlug(geoParsed.citySlug) : null
   const r = getRunbook(params.slug) ?? getRunbook(geoParsed.baseSlug)
-  if (!r) return {}
+  // Always set canonical + openGraph.url even for dynamically generated slugs.
+  // Without this, the root layout's openGraph.url ("https://clawguru.org") is
+  // inherited and Google classifies the page as a Soft-404 with canonical = /de.
+  const canonicalSlug = r ? (geoCity ? `${r.slug}-${geoCity.slug}` : r.slug) : params.slug
+  const fallbackUrl = `${BASE_URL}/${locale}/runbook/${canonicalSlug}`
+  if (!r) {
+    return {
+      alternates: buildLocalizedAlternates(locale, `/runbook/${canonicalSlug}`),
+      openGraph: { type: "article", url: fallbackUrl },
+    }
+  }
   const title = r.title.length > 60 ? r.title.slice(0, 57) + "..." : r.title
   const description = r.summary.length > 160 ? r.summary.slice(0, 157) + "..." : r.summary
-  const canonicalSlug = geoCity ? `${r.slug}-${geoCity.slug}` : r.slug
   const isIndexableGeoVariant = geoCity
     ? await isGeoVariantIndexable({
         locale,

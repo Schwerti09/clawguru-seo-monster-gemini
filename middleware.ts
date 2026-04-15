@@ -305,12 +305,12 @@ export function middleware(request: NextRequest) {
   const locale = localeFromPathname(pathname)
 
   // Enforce locale-prefix-only routing:
-  // /runbook/x -> /de/runbook/x
+  // /runbook/x -> /de/runbook/x (307 = temporary, not cached by browsers/CDN)
   if (!locale) {
     const targetLocale = preferredLocale(request)
     const url = request.nextUrl.clone()
     url.pathname = `/${targetLocale}${pathname}`
-    const res = NextResponse.redirect(url, 308)
+    const res = NextResponse.redirect(url, 307)
     res.headers.set("x-claw-locale", targetLocale)
     res.headers.set("x-claw-dir", localeDir(targetLocale))
     if (edgeGeo.city) res.headers.set("x-claw-geo-city", edgeGeo.city)

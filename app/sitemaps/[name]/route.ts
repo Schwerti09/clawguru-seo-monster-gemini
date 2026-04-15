@@ -260,6 +260,7 @@ export async function GET(
         "hipaa-ai-compliance","iso27001-ai-systems-roadmap",
         "nist-csf-ai-profile","eu-ai-act-compliance-checklist",
         "pci-dss-ai-payments-v2","nis2-ai-infrastructure-guide",
+        "zero-trust-ai-architecture","gdpr-llm-data-processing",
       ]
       // Moltbot Batch 6
       const MOLTBOT_BATCH6 = ["ai-compliance-automation","llm-observability","agent-memory-security",

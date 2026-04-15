@@ -235,10 +235,11 @@ export async function GET(
         "moltbot-vs-splunk","openclaw-vs-crowdsec","moltbot-vs-grafana",
         "moltbot-vs-bedrock-agents","clawguru-vs-wiz-code",
         "moltbot-vs-langchain-agents","openclaw-vs-prisma-cloud",
+        "moltbot-vs-autogen","openclaw-vs-tenable",
         "moltbot-vs-langchain","moltbot-vs-autogpt",
         "moltbot-vs-crewai","moltbot-vs-llamaindex",
-        "moltbot-vs-autogen","openclaw-vs-falcosidekick",
-        "clawguru-vs-aquasec","openclaw-vs-tenable",
+        "openclaw-vs-falcosidekick",
+        "clawguru-vs-aquasec",
         "moltbot-vs-semantic-kernel",
         "clawguru-vs-prisma-cloud","openclaw-vs-trivy",
         "clawguru-vs-orca-security","moltbot-vs-haystack",
@@ -257,6 +258,7 @@ export async function GET(
         "gdpr-ai-data-processing","nis2-ai-infrastructure",
         "soc2-ai-systems","gdpr-breach-notification-ai",
         "hipaa-ai-compliance","iso27001-ai-systems-roadmap",
+        "nist-csf-ai-profile","eu-ai-act-compliance-checklist",
       ]
       // Moltbot Batch 6
       const MOLTBOT_BATCH6 = ["ai-compliance-automation","llm-observability","agent-memory-security",

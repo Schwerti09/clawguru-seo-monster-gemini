@@ -211,6 +211,7 @@ export async function GET(
         "audit-logging-setup","database-access-control","intrusion-detection-setup","supply-chain-security",
         "runtime-policy-enforcement",
         "container-escape-prevention","kubernetes-secrets-management",
+        "zero-trust-networking","supply-chain-sbom-security",
         "ebpf-security-monitoring","network-segmentation-guide",
         "service-mesh-security","waf-configuration","cicd-security-pipeline","secrets-rotation-automation","microservices-security",
       ]

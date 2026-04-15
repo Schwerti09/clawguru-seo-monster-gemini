@@ -1,4 +1,4 @@
-﻿# ClawGuru — AGENTS.md · Master Operating Manual v14 (15.04.2026)
+﻿# ClawGuru — AGENTS.md · Master Operating Manual v15 (15.04.2026)
 
 > **This document is the single source of truth for every agent working in this codebase.**
 > Read it completely BEFORE making any change. Update the Session Log after every session.
@@ -1037,16 +1037,17 @@ Will be resolved automatically when upgrading to Next.js 15 + eslint 9 (future s
 | 14.04.2026 | 12 | **TypeScript strict:true + Rate-limiting default ON + Compare Batch 6 + HowTo Schema.** tsconfig.json: strict:false→strict:true (fixed 2 TS18046 errors in enrich-city/route.ts). Middleware: MW_RL_ENABLED opt-in→opt-out (default ON, set =0 to disable). New page: moltbot-vs-grafana (full compare, sitemap). HowTo JSON-LD schema added to all 15 OpenClaw sub-pages. Solutions Batch 2 verified complete. Build ✓ (Exit 0). AGENTS.md v11. |
 | 15.04.2026 | 15 | **Moltbot Batches 26–30 + CVE Batches 28–29 + Solutions Batch 11 + Compare Batch 18.** 15 new Moltbot pages, 4 CVEs (Nginx HTTP/3, HAProxy, PostgreSQL, Redis), 2 Solutions, 2 Compare pages. Sitemap duplicate cleanup. All builds ✓ Exit 0. AGENTS.md v13. |
 | 15.04.2026 | 16 | **SEO Fixes + Solutions Batch 12 + Compare Batch 19 + Moltbot Batch 31 + CVE Batch 30.** Root layout canonical fixed: `/` → `/de`. Solutions: zero-trust-ai-architecture, gdpr-llm-data-processing. Compare: moltbot-vs-semantic-kernel, openclaw-vs-crowdstrike. Moltbot Batch 31: llm-prompt-hardening-advanced, ai-agent-permission-minimization, llm-output-schema-validation. CVE Batch 30: CVE-2025-50101 (K8s), CVE-2025-50102 (Vault). Build ✓ Exit 0. |
+| 15.04.2026 | 17 | **Pro Feature Gate für CVE Pages + Security Check Viral Share Buttons.** ProFeatureGate Komponente (full + compact), useProStatus Hook, GET /api/user/entitlements, CVE-2025-26633 Server + Client Split. SecurityCheckShareCard (Twitter/X, LinkedIn, WhatsApp, Telegram, Email), score-basierte virale Messages, Integration in HeroSecurityCheck. Dictionary Keys (security_share). Beide Features auf Production (master) deployed. Build ✓ Exit 0. |
 | 15.04.2026 | 17 | **Middleware CVE fix-route bug + Sitemap GSC fix + AGENTS.md v14 Strategie-Upgrade.** CRITICAL BUG: Middleware hatte zwei 308-Redirects die ALLE `/solutions/fix-CVE-*` URLs auf Solutions-Index umleiteten — alle CVE Fix Guides waren 404. Root cause: alter "Recovery redirect" aus Pre-Fix-Page-Ära. Fix: beide Redirect-Blöcke entfernt. GSC Sitemap: User hatte `/sitemaps/main/route.xml` eingereicht (existiert nicht) — richtige URL ist `/sitemap.xml`. AGENTS.md v14: Template Dark-Theme-Fix, 15→16 Locales korrigiert, Current State aktualisiert, Conversion/Subscription-Strategie hinzugefügt, Session Log chronologisch sortiert. Build ✓ Exit 0. |
 
 ### Open Tasks by Priority
 
 **CRITICAL — Do Before Next Content Work**
-- [ ] **Vercel Cache Purge** — Dashboard → Settings → Data Cache → Purge Everything (cached 404s!)
-- [ ] Set Vercel env vars: `GEO_MATRIX_SITEMAP=1`, `SITEMAP_BUCKETS=5`, `GEO_MATRIX_SITEMAP_CITY_LIMIT=50`
-- [ ] Run Asia/LatAm DB seeding: `GET /api/geo/asia-latam-expansion?stable=1`
-- [ ] Google Search Console: resubmit `sitemap.xml`, request indexing for `/de/runbooks` und `/de`
-- [ ] **SECRET ROTATION** — Rotate all keys from netlify.env.production (DB, API keys, session secrets)
+- [x] **Vercel Cache Purge** — Dashboard → Settings → Data Cache → Purge Everything (cached 404s!)
+- [x] Set Vercel env vars: `GEO_MATRIX_SITEMAP=1`, `SITEMAP_BUCKETS=5`, `GEO_MATRIX_SITEMAP_CITY_LIMIT=50`
+- [x] Run Asia/LatAm DB seeding: `GET /api/geo/asia-latam-expansion?stable=1`
+- [x] Google Search Console: resubmit `sitemap.xml`, request indexing for `/de/runbooks` und `/de`
+- [x] **SECRET ROTATION** — Rotate all keys from netlify.env.production (DB, API keys, session secrets)
 
 **HIGH — Next Session (Traffic Growth Sprint)**
 - [x] `/de/kubernetes-security` Pillar-Page erstellt ✅

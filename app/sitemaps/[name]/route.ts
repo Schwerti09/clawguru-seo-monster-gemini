@@ -232,6 +232,7 @@ export async function GET(
         "clawguru-vs-trivy","clawguru-vs-checkov","openclaw-vs-wazuh",
         "clawguru-vs-snyk","moltbot-vs-victorops","openclaw-vs-ossec",
         "moltbot-vs-splunk","openclaw-vs-crowdsec","moltbot-vs-grafana",
+        "moltbot-vs-bedrock-agents","clawguru-vs-wiz-code",
         "moltbot-vs-langchain","moltbot-vs-autogpt",
         "moltbot-vs-crewai","moltbot-vs-llamaindex",
         "moltbot-vs-autogen","openclaw-vs-falcosidekick",

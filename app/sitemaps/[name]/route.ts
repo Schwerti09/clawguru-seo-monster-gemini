@@ -252,6 +252,7 @@ export async function GET(
         "zero-trust-architecture","hipaa-ai-systems",
         "iso27001-ai-systems","pci-dss-ai-payments",
         "gdpr-ai-data-processing","nis2-ai-infrastructure",
+        "soc2-ai-systems","gdpr-breach-notification-ai",
       ]
       // Moltbot Batch 6
       const MOLTBOT_BATCH6 = ["ai-compliance-automation","llm-observability","agent-memory-security",

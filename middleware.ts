@@ -226,33 +226,9 @@ export function middleware(request: NextRequest) {
     return res
   }
 
-  // Recovery redirect for stale CVE solution URLs from search engines.
-  // Example: /solutions/fix-CVE-2025-29927 -> /de/solutions?q=CVE-2025-29927
-  const rootFixCveUpper = pathname.match(/^\/solutions\/fix-CVE-(.+)$/)
-  if (rootFixCveUpper) {
-    const url = request.nextUrl.clone()
-    url.pathname = `/${DEFAULT_LOCALE}/solutions`
-    url.searchParams.set("q", `CVE-${rootFixCveUpper[1]}`)
-    const res = NextResponse.redirect(url, 308)
-    res.headers.set("x-claw-locale", DEFAULT_LOCALE)
-    res.headers.set("x-claw-dir", localeDir(DEFAULT_LOCALE))
-    res.headers.set(getRequestIdHeaderName(), requestId)
-    return res
-  }
-
-  const localizedFixCveUpper = pathname.match(/^\/([a-z]{2}(?:-[a-z]{2})?)\/solutions\/fix-CVE-(.+)$/)
-  if (localizedFixCveUpper) {
-    const localeFromPath = localizedFixCveUpper[1].toLowerCase() as Locale
-    const targetLocale = SUPPORTED_LOCALES.includes(localeFromPath) ? localeFromPath : DEFAULT_LOCALE
-    const url = request.nextUrl.clone()
-    url.pathname = `/${targetLocale}/solutions`
-    url.searchParams.set("q", `CVE-${localizedFixCveUpper[2]}`)
-    const res = NextResponse.redirect(url, 308)
-    res.headers.set("x-claw-locale", targetLocale)
-    res.headers.set("x-claw-dir", localeDir(targetLocale))
-    res.headers.set(getRequestIdHeaderName(), requestId)
-    return res
-  }
+  // CVE fix routes: /solutions/fix-CVE-* and /[lang]/solutions/fix-CVE-*
+  // are handled by app/solutions/fix-[cve_id]/page.tsx and app/[lang]/solutions/fix-[cve_id]/page.tsx
+  // Do NOT redirect — let Next.js route to the actual fix guide pages.
 
   // Apply per-IP rate limiting for hot routes (default ON; set MW_RL_ENABLED=0 to disable)
   if (process.env.MW_RL_ENABLED !== '0') {

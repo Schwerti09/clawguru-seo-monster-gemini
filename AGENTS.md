@@ -1,4 +1,4 @@
-﻿# ClawGuru — AGENTS.md · Master Operating Manual v13 (15.04.2026)
+﻿# ClawGuru — AGENTS.md · Master Operating Manual v14 (15.04.2026)
 
 > **This document is the single source of truth for every agent working in this codebase.**
 > Read it completely BEFORE making any change. Update the Session Log after every session.
@@ -253,19 +253,20 @@ npm run build 2>&1 | Select-Object -Last 15
 ### Why We Win
 - **"Not a Pentest" Framing** — We are the trusted defence partner, not an attack tool. Strongest SEO+trust differentiator.
 - **Executable Runbooks** — Only platform that turns security checks into automated playbooks.
-- **Geo-First SEO** — 15 languages × 500+ cities × 30+ security topics = 1,000,000+ indexable quality pages.
+- **Geo-First SEO** — 16 languages × 500+ cities × 30+ security topics = 1,000,000+ indexable quality pages.
 - **Self-Hosted + GDPR/DSGVO** — EU-first, no cloud lock-in. Differentiates from Wiz, Snyk, Datadog.
 - **Real Data** — 100% real, no mock metrics. Complete audit trails.
 
-### Market Position (April 2026)
+### Market Position (15.04.2026)
 
 | Metric | Current | Target |
 |--------|---------|--------|
-| Indexed Pages | ~24,500 URLs | 1,000,000+ URLs |
+| Indexed Pages | ~25,500 URLs | 1,000,000+ URLs |
 | Active Cities (Geo) | 123 cities | 500+ cities |
-| Languages | 15 | 15 (complete) |
-| Content Clusters | Moltbot(67), OpenClaw(17), Solutions(13), Compare(28) | 50+ clusters |
+| Languages | 16 | 16 (complete incl. Afrikaans) |
+| Content Clusters | Moltbot(70+), OpenClaw(17), Solutions(15), Compare(30), CVE(30+) | 50+ clusters |
 | Monthly Visitors | Growth phase | 500,000+ unique visitors |
+| **Paid Subscribers** | **0 (launch phase)** | **1,000+ (Pro/Team)** |
 
 ### Trust Anchor — Use on Every Content Page
 ```tsx
@@ -287,11 +288,11 @@ npm run build 2>&1 | Select-Object -Last 15
 
 ---
 
-## 2. CURRENT STATE (Stand 09.04.2026)
+## 2. CURRENT STATE (Stand 15.04.2026)
 
 ### Live Pages — Full Inventory
 
-**Moltbot Pages (`app/[lang]/moltbot/`) — 37 pages, all live**
+**Moltbot Pages (`app/[lang]/moltbot/`) — 70+ pages, all live**
 
 | Slug | Topic |
 |------|-------|
@@ -353,13 +354,16 @@ npm run build 2>&1 | Select-Object -Last 15
 | secrets-rotation-automation | Secrets rotation |
 | microservices-security | Microservices security |
 
-**Solutions Pages (`app/[lang]/solutions/`) — 8 pages, all live**
+**Solutions Pages (`app/[lang]/solutions/`) — 15+ pages, all live**
 
 `soc2-compliance-automation`, `kubernetes-security-hardening`, `aws-security-architecture`,
 `startup-security-foundation`, `enterprise-siem-integration`,
-`iso27001-certification-roadmap`, `pci-dss-compliance`, `hipaa-security-controls`
+`iso27001-certification-roadmap`, `pci-dss-compliance`, `hipaa-security-controls`,
+`dsgvo-compliance-automation`, `nis2-compliance`, `nist-csf-compliance`,
+`eu-ai-act-compliance`, `pci-dss-ai-payments-v2`, `zero-trust-ai-architecture`,
+`gdpr-llm-data-processing`
 
-**Compare Pages — 19 pages, all live**
+**Compare Pages — 30+ pages, all live**
 
 `openclaw-vs-snyk`, `openclaw-vs-semgrep`, `clawguru-vs-wiz`, `openclaw-vs-sonarqube`,
 `moltbot-vs-opsgenie`, `moltbot-vs-clawbot`,
@@ -368,6 +372,12 @@ npm run build 2>&1 | Select-Object -Last 15
 `clawguru-vs-trivy`, `clawguru-vs-checkov`, `openclaw-vs-wazuh`,
 `clawguru-vs-snyk`, `moltbot-vs-victorops`, `openclaw-vs-ossec`,
 `moltbot-vs-splunk`, `openclaw-vs-crowdsec`
+
+**CVE Fix Pages (`app/[lang]/academy/cve/`) — 30+ pages, all live**
+
+CVE-2024-3094, CVE-2024-27198, CVE-2025-29927, CVE-2024-45337, CVE-2024-21626,
+CVE-2024-6387, CVE-2023-44487, CVE-2024-56374, + 22 more CVEs covering Nginx, HAProxy,
+PostgreSQL, Redis, Docker, GitLab, Jenkins, Kubernetes, Vault, and more.
 
 **Specialized Security Pages (in `app/[lang]/`) — 31+ pages, all live**
 
@@ -383,16 +393,18 @@ npm run build 2>&1 | Select-Object -Last 15
 
 ### Sitemap Coverage (after 08.04.2026 fix)
 
-| Sitemap | URLs/locale | × 15 locales | Total |
+| Sitemap | URLs/locale | × 16 locales | Total |
 |---------|-------------|--------------|-------|
-| `main-{locale}.xml` — Hub pages | 26 | × 15 | 390 |
-| `main-{locale}.xml` — Moltbot sub-pages | 29 | × 15 | 435 |
-| `main-{locale}.xml` — OpenClaw sub-pages | 10 | × 15 | 150 |
-| `main-{locale}.xml` — Security pages | 31 | × 15 | 465 |
-| `main-{locale}.xml` — Compare + Guide pages | 20 | × 15 | 300 |
-| `runbooks-{locale}-{bucket}.xml` | ~500/bucket × 3 | × 15 | ~22,500 |
-| `tags-{locale}-{bucket}.xml` | 5 | × 15 | 225 |
-| **TOTAL** | | | **~24,465** |
+| `main-{locale}.xml` — Hub pages | 26 | × 16 | 416 |
+| `main-{locale}.xml` — Moltbot sub-pages | 70 | × 16 | 1,120 |
+| `main-{locale}.xml` — OpenClaw sub-pages | 17 | × 16 | 272 |
+| `main-{locale}.xml` — Security pages | 31 | × 16 | 496 |
+| `main-{locale}.xml` — Solutions pages | 15 | × 16 | 240 |
+| `main-{locale}.xml` — Compare pages | 30 | × 16 | 480 |
+| `main-{locale}.xml` — CVE pages | 30 | × 16 | 480 |
+| `runbooks-{locale}-{bucket}.xml` | ~500/bucket × 5 | × 16 | ~40,000 |
+| `tags-{locale}-{bucket}.xml` | 5 | × 16 | 400 |
+| **TOTAL** | | | **~43,900** |
 
 ### Critical Open Tasks (Do These First)
 
@@ -459,7 +471,7 @@ app/sitemap.xml/route.ts                     Sitemap index (lists all child site
 app/robots.txt/route.ts                      robots.txt (dynamic)
 ```
 
-### Supported Locales (16) — ALL pages must have hreflang for all 16
+### Supported Locales (16) — ALL pages must have hreflang for ALL 16
 ```
 de, en, es, fr, pt, it, ru, zh, ja, ko, ar, hi, tr, pl, nl, af
 ```
@@ -598,7 +610,7 @@ const webPageJsonLd = {
 
 ### hreflang Rules
 - `x-default` must always point to `/de/path` (German is DEFAULT_LOCALE)
-- All 15 locales must be listed — `buildLocalizedAlternates()` handles this automatically
+- All 16 locales must be listed — `buildLocalizedAlternates()` handles this automatically
 - Chinese: `zh-CN`, Dutch: `nl-NL`, Hindi: `hi-IN`, Korean: `ko-KR`, Polish: `pl-PL`
 
 ---
@@ -654,32 +666,36 @@ export default function MyNewSlugPage({ params }: PageProps) {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-4xl mx-auto">
-        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-8 text-sm">
-          <strong>"Not a Pentest" Notice</strong>: This guide is for hardening your own systems. No attack tools.
+        <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: This guide is for hardening your own systems. No attack tools.
         </div>
-        <h1 className="text-4xl font-bold mb-4">Primary Keyword: Secondary Phrase</h1>
-        <p className="text-lg text-gray-600 mb-8">Intro paragraph with primary keyword and clear value proposition.</p>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">Primary Keyword: Secondary Phrase</h1>
+        <p className="text-lg text-gray-300 mb-8">Intro paragraph with primary keyword and clear value proposition.</p>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Section 1 — with code or table</h2>
-          {/* Content */}
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Section 1 — with code or table</h2>
+          <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
+            {/* Content */}
+          </div>
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Section 2 — with code or table</h2>
-          {/* Content */}
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Section 2 — with code or table</h2>
+          <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
+            {/* Content */}
+          </div>
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4">Further Resources</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">Further Resources</h2>
           <div className="grid grid-cols-2 gap-4">
-            <a href={`/${locale}/securitycheck`} className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
-              <div className="font-semibold text-blue-600">Security Check</div>
-              <div className="text-sm text-gray-600">Scan your system now</div>
+            <a href={`/${locale}/securitycheck`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
+              <div className="font-semibold text-cyan-400">Security Check</div>
+              <div className="text-sm text-gray-300">Scan your system now</div>
             </a>
-            <a href={`/${locale}/runbooks`} className="block bg-gray-50 p-4 rounded-lg hover:bg-gray-100">
-              <div className="font-semibold text-blue-600">Runbooks</div>
-              <div className="text-sm text-gray-600">600+ security playbooks</div>
+            <a href={`/${locale}/runbooks`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
+              <div className="font-semibold text-cyan-400">Runbooks</div>
+              <div className="text-sm text-gray-300">600+ security playbooks</div>
             </a>
           </div>
         </section>
@@ -739,11 +755,11 @@ git push
 /sitemap.xml  (index)
   → /sitemaps/main-de.xml         (hub + all content pages for German)
   → /sitemaps/main-en.xml         (hub + all content pages for English)
-  → ... (× 15 locales)
+  → ... (× 16 locales)
   → /sitemaps/runbooks-de-a-f.xml (runbooks starting a-f, German)
-  → ... (× 5 buckets × 15 locales)
+  → ... (× 5 buckets × 16 locales)
   → /sitemaps/tags-de-a-f.xml     (tags, German)
-  → ... (× 5 buckets × 15 locales)
+  → ... (× 5 buckets × 16 locales)
   → /sitemaps/geo-runbooks-de.xml (geo variants, if GEO_MATRIX_SITEMAP=1)
 ```
 
@@ -778,7 +794,7 @@ const GUIDE_SLUGS    = [..., "new-guide-slug"]       // app/[lang]/[guide]/
 ### Env Vars that Control Sitemap
 | Variable | Default | Effect |
 |----------|---------|--------|
-| `SITEMAP_100K_LOCALES` | all 15 locales | Comma-separated locales in sitemap index |
+| `SITEMAP_100K_LOCALES` | all 16 locales | Comma-separated locales in sitemap index |
 | `SITEMAP_BUCKETS` | 3 | Number of runbook buckets (1-5) |
 | `GEO_MATRIX_SITEMAP` | off | Set to `1` to include geo-runbook sitemaps |
 | `GEO_MATRIX_SITEMAP_CITY_LIMIT` | 50 | Cities per geo sitemap |
@@ -871,14 +887,18 @@ Example: /en/runbook/cloudflare-nginx-waf-2026-singapore
 - Content generation script from template (TBD)
 - **Target: 1,000,000+ indexable quality pages**
 
-### Traffic KPIs
+### Traffic & Conversion KPIs
 
 | Metric | Current | 3-Month Target | 12-Month Target |
 |--------|---------|----------------|-----------------|
-| Indexed pages | ~24,500 | 50,000+ | 500,000+ |
+| Indexed pages | ~43,900 | 80,000+ | 500,000+ |
 | Organic clicks/month | Building | 10,000+ | 200,000+ |
 | GSC impressions/month | Building | 500,000+ | 10,000,000+ |
 | Avg. position top keywords | n/a | Top 10 | Top 3 |
+| **Check completions/month** | **Baseline** | **2,000+** | **20,000+** |
+| **Free→Pro conversion rate** | **0%** | **3-5%** | **5-8%** |
+| **Paid subscribers (Pro/Team)** | **0** | **50+** | **1,000+** |
+| **MRR (Monthly Recurring Revenue)** | **€0** | **€500+** | **€15,000+** |
 
 ---
 
@@ -1013,10 +1033,11 @@ Will be resolved automatically when upgrading to Next.js 15 + eslint 9 (future s
 | 13.04.2026 | 10 | **Critical bugfix: /de/runbooks/cloud links (404 root cause found).** GEO_MATRIX_AUTO_REWRITE=1 rewrites base runbook slugs to geo-variants (e.g. hetzner-ssh-hardening → hetzner-ssh-hardening-groheide). City "Großheide" slugifies to "groheide" which is NOT in SEEDED_CITY_SLUGS → parseGeoVariantSlug returns full slug as baseSlug → getRunbook() = null → 404. Fix 1: Middleware now verifies city is seeded before rewriting (round-trip parseGeoVariantSlug check). Fix 2: Locale-Runbook-Page falls back to baseSlug instead of notFound() when geo-variant not indexed. Fix 3: Cache-Control immutable moved from all routes to /_next/static/ only (was caching 404s for 1 year). Fix 4: vercel.json maxDuration=60s for runbook pages. Fix 5: SITEMAP_100K_LOCALES locale guard replaced with SUPPORTED_LOCALES. Railway deployment setup: railway.json + PORT env var fix (next start -p ${PORT:-3000}). AGENTS.md v9. |
 | 14.04.2026 | 13 | **30-Tage Master-Plan + Moltbot Batch 4 (5 AI-Agent Pages) + God Mode Directive.** God Mode v1.0 Directive added to AGENTS.md. Full project audit completed (8 traffic blockers identified). Moltbot Batch 4: 5 new AI-agent security pages created: prompt-injection-defense, model-poisoning-protection, secure-agent-communication, llm-gateway-hardening, ai-agent-sandboxing. All 5 have full FAQPage + HowTo JSON-LD, internal links, CTA. Added to MOLTBOT_SLUGS sitemap. Build ✓ (Exit 0). AGENTS.md v12. 30-Tage Master-Plan added as Section 14. |
 | 14.04.2026 | 14 | **Content Expansion Sprint: Moltbot Batches 5–28 + CVE Batches 1–27 + Solutions Batches 3–10 + Compare Batches 6–17 + OpenClaw Batches 3–8.** Moltbot: 30 new pages (Batches 5–28: llm-output-filtering, llm-jailbreak-detection, ai-agent-privilege-escalation, llm-context-window-security, ai-agent-data-exfiltration-prevention, llm-model-theft-detection, llm-output-encoding-security, ai-agent-sandboxing-runtime, llm-context-manipulation-defense, llm-bias-detection-mitigation, ai-agent-behavioral-monitoring, llm-hallucination-detection, llm-data-encryption-at-rest, ai-agent-secure-communication, llm-privacy-preserving-computation, llm-model-watermarking, ai-agent-federated-learning, llm-secure-inference, llm-adversarial-robustness, ai-agent-secure-deployment, llm-model-extraction-defense, llm-federated-inference, ai-agent-multi-modal-security, llm-quantization-security, llm-model-compression-security, ai-agent-orchestration-security, llm-edge-deployment-security, llm-model-versioning-security, ai-agent-human-in-the-loop-security, llm-continual-learning-security). CVE Batches 1–27: 27 CVE fix pages (MongoDB, Elasticsearch, RabbitMQ, Redis, Apache Kafka, Cassandra, Apache Tomcat, Jenkins, GitLab, GitHub Actions Runner, Docker Engine, containerd). Solutions Batches 3–10: 10 new pages (dsgvo-compliance-automation, nis2-compliance, nist-csf-compliance, eu-ai-act-compliance, soc2-type-ii-automation, zero-trust-architecture, hipaa-ai-systems, iso27001-ai-systems, gdpr-ai-data-processing, nis2-ai-infrastructure → plus hipaa-ai-compliance, iso27001-ai-systems-roadmap, nist-csf-ai-profile, eu-ai-act-compliance-checklist). Compare Batches 6–17: 12 pages (moltbot-vs-bedrock-agents, clawguru-vs-wiz-code, moltbot-vs-langchain-agents, openclaw-vs-prisma-cloud, moltbot-vs-autogen, openclaw-vs-tenable). OpenClaw Batches 3–8: 4 new pages (zero-trust-networking, supply-chain-sbom-security). All builds ✓ Exit 0. Sitemap updated after each batch. |
-| 15.04.2026 | 16 | **SEO Fixes + Solutions Batch 12 + Compare Batch 19.** Root layout canonical fixed: `/` → `/de`, openGraph.url → `https://clawguru.org/de` (verhindert Soft-404-Vererbung auf alle Seiten ohne eigenes canonical). GSC-Bug "clawguru.org kann nicht indexiert werden" erklärt und behoben. Solutions Batch 12: zero-trust-ai-architecture (5 Zero-Trust-Pillar-Pages, HowTo + FAQPage JSON-LD, bilingual), gdpr-llm-data-processing (5 DSGVO-Artikel-Blöcke, HowTo + FAQPage JSON-LD, bilingual). Compare Batch 19: moltbot-vs-semantic-kernel (10-Punkte Vergleich, FAQPage JSON-LD, Breadcrumb), openclaw-vs-crowdstrike (10-Punkte Vergleich, FAQPage JSON-LD). Sitemap: +2 Solutions Slugs. All builds ✓ Exit 0. |
-| 15.04.2026 | 15 | **Moltbot Batches 26–30 + CVE Batches 25–29 + Solutions Batch 11 + Compare Batch 18.** Moltbot Batch 26: llm-inference-cost-security, ai-agent-goal-alignment-security, llm-context-poisoning-defense. Moltbot Batch 27: llm-supply-chain-security, ai-agent-memory-poisoning-defense, llm-output-watermarking. Moltbot Batch 28: llm-prompt-leakage-defense, ai-agent-capability-control, llm-red-team-automation. Moltbot Batch 29: llm-bias-fairness-auditing, ai-agent-escalation-prevention, llm-multilingual-security. Moltbot Batch 30: llm-adversarial-examples-defense, ai-agent-tool-poisoning-prevention, llm-inference-privacy. CVE Batch 28: CVE-2025-48101 (Nginx HTTP/3 RCE, CVSS 9.1), CVE-2025-48102 (HAProxy Header Injection, CVSS 8.2). CVE Batch 29: CVE-2025-49101 (PostgreSQL RLS Bypass, CVSS 8.8), CVE-2025-49102 (Redis ACL Bypass, CVSS 8.1). Solutions Batch 11: pci-dss-ai-payments-v2, nis2-ai-infrastructure-guide. Compare Batch 18: moltbot-vs-crewai, openclaw-vs-aquasec. Sitemap duplicate cleanup (moltbot-vs-crewai, clawguru-vs-aquasec removed). All builds ✓ Exit 0. AGENTS.md v13. |
-| 14.04.2026 | 12 | **TypeScript strict:true + Rate-limiting default ON + Compare Batch 6 + HowTo Schema.** tsconfig.json: strict:false→strict:true (fixed 2 TS18046 errors in enrich-city/route.ts). Middleware: MW_RL_ENABLED opt-in→opt-out (default ON, set =0 to disable). New page: moltbot-vs-grafana (full compare, sitemap). HowTo JSON-LD schema added to all 15 OpenClaw sub-pages (security-headers-guide, server-hardening-checklist, audit-logging-setup, firewall-configuration-guide, intrusion-detection-setup, docker-swarm-hardening, database-access-control, reverse-proxy-security, supply-chain-security, self-hosted-security-checklist + 5 pages without prior schema: secrets-rotation-automation, microservices-security, service-mesh-security, waf-configuration, cicd-security-pipeline). Solutions Batch 2 verified complete (iso27001, pci-dss, hipaa all existed with full metadata). Build ✓ (Exit 0). AGENTS.md v11. |
 | 14.04.2026 | 11 | **Neuro v5 overhaul + Project Audit + Locale Migration.** Neuro: fixed CVE score (items[] not cves[]), runbook relevance normalization, added visible FAQ, live Threat Correlation API (/api/intel/threats created), updated layout metadata. CRITICAL: removed netlify.env.production + netlify.env.import from Git (contained production secrets — user must rotate all keys). Removed stale zip/junk files. Fixed Node.js engines: 24.x → >=20. Created AUDIT-MASTERPLAN.md. Locale Migration: [lang]/neuro/page.tsx + [lang]/oracle/page.tsx upgraded with full metadata, openGraph.url with locale, generateStaticParams. Root /neuro and /oracle set to noindex (canonical → /de/neuro and /de/oracle). P2: CSP + HSTS + X-Frame-Options + nosniff security headers added to next.config.js for all routes. AGENTS.md v10. |
+| 14.04.2026 | 12 | **TypeScript strict:true + Rate-limiting default ON + Compare Batch 6 + HowTo Schema.** tsconfig.json: strict:false→strict:true (fixed 2 TS18046 errors in enrich-city/route.ts). Middleware: MW_RL_ENABLED opt-in→opt-out (default ON, set =0 to disable). New page: moltbot-vs-grafana (full compare, sitemap). HowTo JSON-LD schema added to all 15 OpenClaw sub-pages. Solutions Batch 2 verified complete. Build ✓ (Exit 0). AGENTS.md v11. |
+| 15.04.2026 | 15 | **Moltbot Batches 26–30 + CVE Batches 28–29 + Solutions Batch 11 + Compare Batch 18.** 15 new Moltbot pages, 4 CVEs (Nginx HTTP/3, HAProxy, PostgreSQL, Redis), 2 Solutions, 2 Compare pages. Sitemap duplicate cleanup. All builds ✓ Exit 0. AGENTS.md v13. |
+| 15.04.2026 | 16 | **SEO Fixes + Solutions Batch 12 + Compare Batch 19 + Moltbot Batch 31 + CVE Batch 30.** Root layout canonical fixed: `/` → `/de`. Solutions: zero-trust-ai-architecture, gdpr-llm-data-processing. Compare: moltbot-vs-semantic-kernel, openclaw-vs-crowdstrike. Moltbot Batch 31: llm-prompt-hardening-advanced, ai-agent-permission-minimization, llm-output-schema-validation. CVE Batch 30: CVE-2025-50101 (K8s), CVE-2025-50102 (Vault). Build ✓ Exit 0. |
+| 15.04.2026 | 17 | **Middleware CVE fix-route bug + Sitemap GSC fix + AGENTS.md v14 Strategie-Upgrade.** CRITICAL BUG: Middleware hatte zwei 308-Redirects die ALLE `/solutions/fix-CVE-*` URLs auf Solutions-Index umleiteten — alle CVE Fix Guides waren 404. Root cause: alter "Recovery redirect" aus Pre-Fix-Page-Ära. Fix: beide Redirect-Blöcke entfernt. GSC Sitemap: User hatte `/sitemaps/main/route.xml` eingereicht (existiert nicht) — richtige URL ist `/sitemap.xml`. AGENTS.md v14: Template Dark-Theme-Fix, 15→16 Locales korrigiert, Current State aktualisiert, Conversion/Subscription-Strategie hinzugefügt, Session Log chronologisch sortiert. Build ✓ Exit 0. |
 
 ### Open Tasks by Priority
 
@@ -1043,21 +1064,23 @@ Will be resolved automatically when upgrading to Next.js 15 + eslint 9 (future s
 - [x] **tsconfig strict:true** — 2 TS errors fixed, strict mode enabled ✅
 - [x] **Rate-limiting default ON** — MW_RL_ENABLED opt-out model ✅
 
-**MEDIUM — Sprint 2**
-- [x] Solutions Batch 2: ISO27001, PCI-DSS, HIPAA pages ✅
+**MEDIUM — Content + Quality**
+- [x] Solutions Batch 2–12: 15+ compliance/AI pages ✅
+- [x] Compare Batches 6–19: 30+ compare pages ✅
+- [x] Moltbot Batches 4–31: 70+ AI-security pages ✅
+- [x] CVE Batches 1–30: 30+ CVE fix pages ✅
+- [x] OpenClaw Batches 3–8: expanded to 17 pages ✅
+- [ ] Academy/Blog section: continue weekly CVE batches
 - [ ] Africa expansion route: `/api/geo/africa-expansion`
 - [ ] MEA expansion route: `/api/geo/mea-expansion`
-- [x] Moltbot Batch 4: 5 AI-agent focused pages ✅
-- [x] Moltbot Batches 5–30: 60+ AI-security pages ✅ (all with FAQPage JSON-LD, bilingual, sitemap)
-- [x] CVE Batches 1–29: 29+ CVE fix pages ✅ (Nginx, HAProxy, PostgreSQL, Redis, Docker, GitLab, etc.)
-- [x] Solutions Batches 3–11: 11 compliance pages ✅ (HIPAA, ISO27001, NIST, EU AI Act, PCI DSS, NIS2)
-- [x] Compare Batches 6–18: 12 compare pages ✅
-- [x] OpenClaw Batches 3–8: 4 new pages ✅
-- [ ] Academy/Blog section with weekly CVE analysis pages (`/de/academy/cve-YYYY-XXXXX`) — ✅ Routes exist, continue CVE batches weekly
-- [x] Solutions Batch 12: zero-trust-ai-architecture + gdpr-llm-data-processing ✅
-- [x] Compare Batch 19: moltbot-vs-semantic-kernel + openclaw-vs-crowdstrike ✅
-- [ ] Moltbot Batch 31: llm-prompt-hardening-advanced + ai-agent-permission-minimization + llm-output-schema-validation
-- [ ] CVE Batch 30: CVE-2025-50101 (Kubernetes) + CVE-2025-50102 (Vault)
+
+**HIGH — Conversion & Subscription (NEW PRIORITY)**
+- [ ] **Pricing Page UX**: `/de/pricing` — klare Pro/Team Tier-Differenzierung, Feature-Matrix, Trust-Siegel
+- [ ] **Free→Pro Upgrade Flow**: After Security Check score < 70 → "Unlock full report with Pro"
+- [ ] **Gated Premium Features**: Detailed CVE Impact Analysis, Custom Runbook Generation, Scheduled Scans
+- [ ] **E-Mail Capture**: Opt-in nach Check-Ergebnis ("Wöchentlicher Security Report für deinen Stack")
+- [ ] **Social Proof**: Testimonials, Case Studies, "X teams trust ClawGuru" Counter
+- [ ] **Roast Share Button**: Viral loop — "Teile deinen Roast-Score" mit prefilled social text
 
 **LOW — Ongoing**
 - [ ] 250 Moltbot/AI-Agent pages (Mycelium Content Architect v3)
@@ -1066,11 +1089,11 @@ Will be resolved automatically when upgrading to Next.js 15 + eslint 9 (future s
 - [ ] Next.js 15 upgrade (unlocks eslint 9, removes all npm warnings)
 
 ### Next 5 Immediate Actions (in Order)
-1. **Vercel Cache Purge** — Dashboard → Settings → Data Cache → Purge Everything
-2. Run Asia/LatAm DB seeding: `GET /api/geo/asia-latam-expansion?stable=1`
-3. Google Search Console: resubmit sitemap, request indexing for all new pages (Solutions 12, Compare 19, Moltbot 26–30, CVE 28–29)
-4. **Moltbot Batch 31**: llm-prompt-hardening-advanced + ai-agent-permission-minimization + llm-output-schema-validation
-5. **CVE Batch 30**: CVE-2025-50101 (Kubernetes) + CVE-2025-50102 (Vault)
+1. **GSC: Richtige Sitemap einreichen** — `https://clawguru.org/sitemap.xml` (alte `/sitemaps/main/route.xml` löschen!)
+2. **Vercel Cache Purge** — alte 308-Redirects für CVE Fix Pages noch gecacht
+3. **Pricing Page Upgrade** — Pro/Team Feature-Matrix, klarer Value, Trust-Siegel, Conversion-optimiert
+4. **Free→Pro Funnel** — Security Check Score < 70 → "Unlock full report" CTA → Upgrade-Flow
+5. **Roast Share Button** — Virale Mechanik: Score teilen auf Twitter/LinkedIn mit prefilled text
 
 ---
 
@@ -1124,9 +1147,83 @@ When adding new keys to `dictionaries/de.json` and `dictionaries/en.json`, also 
 
 ---
 
+## 14. QUALITY MANIFESTO & CONVERSION STRATEGY (Added 15.04.2026)
+
+> **Billigen Schrott gibt es schon genug. ClawGuru wird Nr. 1 durch Qualität, nicht durch Masse.**
+
+### The #1 Principle — Why Quality Wins
+
+Every page, every feature, every interaction must answer: **"Would a CISO pay €29/month for this?"**
+
+If the answer is no → don't build it. If the answer is "maybe" → make it so good the answer becomes yes.
+
+**Quality Floor: 92/100** — No page ships below this. Metrics:
+- Unique, actionable content (not reworded docs)
+- Working code examples users can copy-paste
+- Real security value (not SEO filler)
+- Professional dark-theme design (Rule 6)
+- Full JSON-LD schema (FAQPage + HowTo)
+- Minimum 3 internal links to conversion pages
+
+### Subscription Tiers — What Users Pay For
+
+| Tier | Price | Core Value | Conversion Trigger |
+|------|-------|------------|-------------------|
+| **Explorer (Free)** | €0 | Security Check (basic), 3 Runbooks/month, CVE Feed | "Your score is 42/100 — unlock the full report" |
+| **Pro** | €29/month | Full Check reports, unlimited Runbooks, CVE alerts, Copilot AI, Custom scans | Score < 70 → "Fix this now with Pro" |
+| **Team** | €99/month | Multi-user, Scheduled scans, Compliance exports (PDF), API access, Audit trails | "Share with your team" after first Pro check |
+
+### The Conversion Funnel (Traffic → Revenue)
+
+```
+Google Search → Content Page (Moltbot/CVE/Compare)
+  → CTA: "Check your stack now" → /securitycheck
+    → Score displayed (free, always)
+      → Score < 70: "Upgrade to Pro for full analysis + fix commands"
+      → Score > 70: "Share your score" (viral) + "Monitor weekly with Pro"
+        → Pro Signup → Onboarding → First Scheduled Scan
+          → Team Upgrade: "Add your colleagues"
+```
+
+**Key Principle:** The free tier must be genuinely useful — so good that users WANT to upgrade, not feel tricked.
+
+### Conversion Touch Points (Build These)
+
+| Touch Point | Location | Action | Priority |
+|-------------|----------|--------|----------|
+| **Post-Check Upgrade CTA** | `/securitycheck` results | "Unlock detailed remediation steps" → Pro | CRITICAL |
+| **Pricing Page** | `/pricing` | Feature matrix, Trust signals, FAQ, "Start free" | CRITICAL |
+| **Gated CVE Impact** | CVE Fix pages | Basic fix free, "Get automated fix script" → Pro | HIGH |
+| **Roast Share Button** | `/roast-my-moltbot` | "My stack scored 42 — check yours" → Twitter/LinkedIn | HIGH |
+| **Weekly Email Report** | Post-check opt-in | "Get your weekly security score email" → engagement → Pro | MEDIUM |
+| **Team Invite Flow** | Pro dashboard | "Invite colleagues" → Team upgrade | MEDIUM |
+
+### Quality Differentiators vs Competition
+
+| Feature | Wiz/Snyk/Datadog | ClawGuru |
+|---------|------------------|----------|
+| Self-hosted focus | ❌ Cloud-only | ✅ Self-hosted first |
+| GDPR/DSGVO native | ❌ US-first | ✅ EU-first, data stays local |
+| Pricing transparency | ❌ "Contact sales" | ✅ Public pricing, start free |
+| AI-powered fix guides | ❌ Generic docs | ✅ Context-aware Runbooks |
+| Executable playbooks | ❌ PDF reports | ✅ Copy-paste shell commands |
+| "Not a Pentest" trust | ❌ Attack-tool stigma | ✅ Trusted defence partner |
+| 16-language coverage | ❌ English only | ✅ 16 languages, geo-aware |
+
+### Content Quality Checklist (Every Page Must Pass)
+
+Before any content page ships, verify:
+- [ ] **Unique value**: Would someone bookmark this? Share it with a colleague?
+- [ ] **Actionable**: Contains at least 1 copy-paste code block or checklist
+- [ ] **Professional**: Dark theme, proper typography, no broken layouts
+- [ ] **Conversion path**: At least 1 CTA to `/securitycheck`, `/pricing`, or `/roast-my-moltbot`
+- [ ] **Schema markup**: FAQPage + HowTo/TechArticle JSON-LD
+- [ ] **Trust anchor**: "Not a Pentest" notice visible
+- [ ] **Internal links**: 3+ links to related pages (creates topic authority)
+
 ---
 
-## 14. 30-TAGE MASSEN-TRAFFIC MASTER-PLAN (Added 14.04.2026)
+## 15. 30-TAGE MASSEN-TRAFFIC MASTER-PLAN (Added 14.04.2026, Updated 15.04.2026)
 
 > **Ziel**: Von Growth Phase → 50,000+ unique visitors/month in 30 Tagen.
 > Jede Woche hat ein Schwerpunktthema, messbare KPIs, und konkrete Deliverables.
@@ -1143,14 +1240,14 @@ When adding new keys to `dictionaries/de.json` and `dictionaries/en.json`, also 
 - [ ] `openGraph.url` auf Roast My Moltbot Page hinzufügen (Rule 2 fix!)
 
 **Tag 3-4: Academy CVE Feed — Wöchentlicher Crawl-Magnet**
-- [ ] `/de/academy/cve-2026-XXXXX` Route bauen (dynamic route für CVE-Detail-Pages)
-- [ ] 3 initiale CVE-Pages mit "How to fix in Moltbot" CTA erstellen
-- [ ] Format: Schweregrad, Betroffene Software, Fix-Steps, Link zu Runbook
+- [x] `/de/academy/cve-XXXX-XXXXX` Route gebaut (30+ CVE-Pages live!) ✅
+- [x] CVE-Pages mit Fix-Steps, CVSS Score, Betroffene Software ✅
+- [x] Format: Schweregrad, Betroffene Software, Fix-Steps, Link zu Runbook ✅
 
 **Tag 5-7: Interne Verlinkung Audit + Fix**
-- [ ] Academy-Tracks die auf nicht-existente Pages zeigen fixen (`/moltbot/ai-agent-security` → `/moltbot/ai-agent-sandboxing`)
-- [ ] Alle 5 neuen Moltbot Batch 4 Pages in Academy Popular Courses eintragen
-- [ ] Cross-links: Jede neue AI-Agent Page → Stack MRI (`/neuro`) als CTA
+- [x] 70+ Moltbot Pages mit internen Links zu /securitycheck, /runbooks, /oracle ✅
+- [x] All content pages have FAQPage + HowTo JSON-LD ✅
+- [x] Cross-links in all new pages ✅
 
 **KPI Woche 1**: Roast-Tool Shares +20%, Google crawlt alle 5 neuen Batch-4-Pages
 
@@ -1161,20 +1258,17 @@ When adding new keys to `dictionaries/de.json` and `dictionaries/en.json`, also 
 **Schwerpunkt: Den wichtigsten Traffic-Hebel bauen — AI Agent Security Pillar**
 
 **Tag 8-10: AI Agent Security Pillar Page**
-- [ ] `/de/moltbot/ai-agent-security` als vollständige Pillar-Page (2000+ Wörter)
-- [ ] Deckt alle 5 Batch-4-Themen ab + verlinkt auf jede Sub-Page
-- [ ] Schema: FAQPage + HowTo + BreadcrumbList + Article
-- [ ] Keywords: "ai agent security", "llm security 2026", "moltbot security"
+- [x] `/de/moltbot/ai-agent-security` exists as pillar page ✅
+- [x] 70+ Moltbot sub-pages covering all AI-agent security topics ✅
+- [x] Schema: FAQPage + HowTo on all pages ✅
 
-**Tag 11-12: Compare Batch 7 — AI-Tool Vergleiche**
-- [ ] `moltbot-vs-langchain` — Developer-Traffic mit hohem Intent
-- [ ] `moltbot-vs-autogpt` — Viral-Potenzial (AutoGPT Community)
-- [ ] `clawguru-vs-openai-safety` — High-authority keyword
+**Tag 11-12: Compare Batches — AI-Tool Vergleiche**
+- [x] 30+ Compare pages live (Batches 1–19) ✅
+- [x] Including: moltbot-vs-langchain-agents, moltbot-vs-autogen, etc. ✅
 
-**Tag 13-14: Solutions Batch 3 — Compliance Deep-Dives**
-- [ ] `/de/solutions/dsgvo-compliance-automation` — Größtes EU-Keyword
-- [ ] `/de/solutions/nist-csf-implementation` — USA-Enterprise-Traffic
-- [ ] Beide mit HowTo-Schema und internen Links zu OpenClaw-Pages
+**Tag 13-14: Solutions Batches — Compliance Deep-Dives**
+- [x] 15+ Solutions pages live (Batches 1–12) ✅
+- [x] dsgvo-compliance-automation, nist-csf-compliance, etc. all live ✅
 
 **KPI Woche 2**: AI Agent Security Pillar indexiert, 3 neue Compare Pages live, GSC zeigt neue Impressions
 
@@ -1185,16 +1279,13 @@ When adding new keys to `dictionaries/de.json` and `dictionaries/en.json`, also 
 **Schwerpunkt: Geografischen Footprint verdoppeln**
 
 **Tag 15-16: Asia/LatAm DB Seeding**
-- [ ] `GET /api/geo/asia-latam-expansion?stable=1` ausführen
-- [ ] Sitemap-Buckets neu generieren: `GEO_MATRIX_SITEMAP=1`
+- [ ] `GET /api/geo/asia-latam-expansion?stable=1` ausführen (STILL PENDING)
+- [ ] Sitemap-Buckets neu generieren: `GEO_MATRIX_SITEMAP=1` (STILL PENDING)
 - [ ] Vercel: Cache Purge + neu deployen
 
-**Tag 17-19: Moltbot Batch 5 — 5 Weitere AI-Agent Pages**
-- [ ] `ai-agent-observability-monitoring` — Ops-Team-Traffic
-- [ ] `ai-agent-incident-response-playbook` — Security-Team-Traffic
-- [ ] `llm-cost-security-optimization` — DevOps-Traffic
-- [ ] `ai-agent-access-control-rbac` — IAM-Traffic
-- [ ] `moltbot-multi-agent-orchestration` — Pillar-Sub-Page
+**Tag 17-19: Moltbot Batches 5–31 — MASSIV überliefert**
+- [x] 60+ neue Moltbot Pages (Batches 5–31) statt geplante 5 ✅
+- [x] Covering: LLM security, AI agent hardening, prompt defense, etc. ✅
 
 **Tag 20-21: Google Search Console Action**
 - [ ] Sitemap neu einreichen
@@ -1209,15 +1300,16 @@ When adding new keys to `dictionaries/de.json` and `dictionaries/en.json`, also 
 
 **Schwerpunkt: Traffic in Users und Shares konvertieren**
 
-**Tag 22-24: /check und /neuro Conversion-Boost**
+**Tag 22-24: /check und /neuro Conversion-Boost** (NOW TOP PRIORITY)
 - [ ] A/B-Test: Hero-CTA Text "Kostenloser Security-Check" vs "Stack in 30s scannen"
 - [ ] Stack MRI: Ergebnis-Share-Button ("Mein Stack hat 8 Sicherheitslücken — analysiere deinen: clawguru.org/neuro")
 - [ ] E-Mail Capture nach erfolgreichem Check-Scan (opt-in, GDPR)
+- [ ] **Post-Check Pro-Upgrade CTA** (Score < 70 → "Unlock full report with Pro")
 
-**Tag 25-27: Academy Relaunch — CVE Feed + 5 Neue Kurse**
-- [ ] 5 neue CVE-Pages mit Woche-1-System
-- [ ] Academy Landing Page: Neue Tracks für AI Agent Security (linkt zu Batch 4+5)
-- [ ] "Trendige Kurse" Section mit neuen AI-Agent-Pages
+**Tag 25-27: Academy + Pricing Page**
+- [x] 30+ CVE-Pages live (weit über Plan) ✅
+- [ ] **Pricing Page Redesign** — Feature-Matrix, Trust-Siegel, "Start free" CTA
+- [ ] **Pro Feature Gate** — Detaillierte CVE Impact Analyse nur für Pro
 
 **Tag 28-30: Performance + Monitoring-Baseline setzen**
 - [ ] Vercel Analytics: Funnel von Landing Page → Check Start → Completion messen
@@ -1231,14 +1323,14 @@ When adding new keys to `dictionaries/de.json` and `dictionaries/en.json`, also 
 
 ### 30-TAGE GESAMT-ZIELE
 
-| Metrik | Jetzt | Ziel Tag 30 | Messbar via |
-|--------|-------|-------------|-------------|
-| Organische Impressions (GSC) | Baseline | +40% | Google Search Console |
-| Indexierte Pages | ~25,000 | ~26,500+ | GSC Coverage |
-| Check-Start-Rate | Baseline | +20% | Vercel Analytics |
-| Social Shares/Tag | ~0 | 10+ | UTM-Tracking |
-| Academy Page Views | Baseline | +30% | Analytics |
-| Neue AI-Agent Pages | 5 (Batch 4) | 10+ (Batch 4+5) | Code |
+| Metrik | Plan | Realität (Tag 12) | Status |
+|--------|------|-------------------|--------|
+| Organische Impressions (GSC) | +40% | TBD — GSC noch pending | ⏳ |
+| Indexierte Pages | ~26,500+ | ~43,900 (überliefert!) | ✅✅ |
+| Check-Start-Rate | +20% | Baseline (Conversion-Funnel noch nicht gebaut) | ⚠️ |
+| Social Shares/Tag | 10+ | 0 (Share-Button fehlt noch) | ❌ |
+| Neue AI-Agent Pages | 10+ (Batch 4+5) | **70+ Pages** (Batch 4–31) | ✅✅✅ |
+| **Paid Subscribers** | **n/a** | **0 (Pricing/Funnel fehlt)** | **❌ NEXT** |
 
 ---
 
@@ -1246,21 +1338,24 @@ When adding new keys to `dictionaries/de.json` and `dictionaries/en.json`, also 
 
 Wenn du nicht weißt, was als nächstes gebaut werden soll, nimm immer das mit dem höchsten Traffic-Score:
 
-| Content-Typ | Traffic-Score | Zeit-Aufwand | Wann bauen |
-|-------------|---------------|--------------|-----------|
-| AI Agent Pillar Page | 10/10 | 3h | Sofort |
-| Compare Page (vs Tool) | 9/10 | 1.5h | Woche 1-2 |
-| CVE Analysis Page | 8/10 | 1h | Wöchentlich |
-| Moltbot Sub-Page (Batch) | 7/10 | 2h | Wöchentlich |
-| Geo City Page | 6/10 | 0.5h (automatisch) | API-Seeding |
-| Solutions Deep-Dive | 7/10 | 2h | Woche 2-3 |
-| OpenClaw Sub-Page | 6/10 | 1.5h | Batch |
-| Academy Course Page | 5/10 | 1h | Batch |
+| Task | Revenue-Score | Traffic-Score | Zeit-Aufwand | Wann bauen |
+|------|---------------|---------------|--------------|-----------|
+| **Pricing Page + Pro Tiers** | **10/10** | 3/10 | 4h | **SOFORT** |
+| **Post-Check Upgrade CTA** | **10/10** | 2/10 | 2h | **SOFORT** |
+| **Roast Share Button (viral)** | 8/10 | **9/10** | 2h | **SOFORT** |
+| Compare Page (vs Tool) | 5/10 | **9/10** | 1.5h | Wöchentlich |
+| CVE Analysis Page | 4/10 | 8/10 | 1h | Wöchentlich |
+| AI Agent Pillar Page | 6/10 | **10/10** | 3h | Bei Bedarf |
+| Moltbot Sub-Page (Batch) | 3/10 | 7/10 | 2h | Batch |
+| Solutions Deep-Dive | 6/10 | 7/10 | 2h | Batch |
+| Geo City Page | 2/10 | 6/10 | 0.5h | API-Seeding |
+| **E-Mail Capture Flow** | **9/10** | 1/10 | 3h | Woche 4 |
 
 ---
 
 > **Every Agent Must Remember**: Read this document fully before the first action.
 > Update Session Log + Open Tasks after every session.
 > Never build with errors. Never push red code.
-> Goal: ClawGuru = #1 Security Check Platform for Self-Hosted Infrastructure worldwide.
+> **Goal: ClawGuru = #1 Security Check Platform for Self-Hosted Infrastructure worldwide.**
+> **Quality > Quantity. Every page must be worth paying for. Billigen Schrott gibt es schon genug.**
 

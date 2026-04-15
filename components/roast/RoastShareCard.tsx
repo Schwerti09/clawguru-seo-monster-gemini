@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { motion } from "framer-motion"
 import Link from "next/link"
-import { Flame, Share2, ShieldCheck } from "lucide-react"
+import { Flame, Share2, ShieldCheck, Users, MessageCircle, Send, Mail, Trophy } from "lucide-react"
 import type { RoastStackResult } from "@/app/actions/roast-stack"
 
 export type RoastShareDict = {
@@ -13,8 +13,14 @@ export type RoastShareDict = {
   fix_cta: string
   share_x: string
   share_li: string
+  share_wa: string
+  share_tg: string
+  share_mail: string
   copy_link: string
   copied: string
+  challenge_title: string
+  challenge_desc: string
+  challenge_cta: string
 }
 
 type Props = {
@@ -32,12 +38,33 @@ function scoreColor(score: number): string {
   return "#f87171"
 }
 
+function viralMessage(score: number, topRoast: string): string {
+  if (score >= 80) return `My stack scored ${score}/100 on ClawGuru Roast. Think yours can beat it?`
+  if (score >= 60) return `${score}/100 on ClawGuru Roast: "${topRoast}" — brutal but fair. Can you do better?`
+  if (score >= 40) return `Got roasted: ${score}/100. "${topRoast}" — I need to fix this. How bad is YOUR stack?`
+  return `${score}/100... my stack got DESTROYED by ClawGuru Roast. I dare you to try yours.`
+}
+
+function scoreEmoji(score: number): string {
+  if (score >= 80) return "🛡️"
+  if (score >= 60) return "⚠️"
+  if (score >= 40) return "🔥"
+  return "💥"
+}
+
 export function RoastShareCard({ result, dict, prefix, shareUrl, onCopy, copied }: Props) {
   const [badgeCopied, setBadgeCopied] = useState(false)
-  const text = `${dict.score_label}: ${result.score}/100 — ${result.top_roasts[0]}`
-  const tweet = `🔥 ${text}\n`
+  const viral = viralMessage(result.score, result.top_roasts[0] ?? "")
+  const emoji = scoreEmoji(result.score)
+  const tweet = `${emoji} ${viral}\n`
   const xHref = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweet)}&url=${encodeURIComponent(shareUrl)}`
   const liHref = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`
+  const waText = `${emoji} ${viral} ${shareUrl}`
+  const waHref = `https://wa.me/?text=${encodeURIComponent(waText)}`
+  const tgHref = `https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(`${emoji} ${viral}`)}`
+  const mailSubject = `ClawGuru Roast: ${result.score}/100`
+  const mailBody = `${viral}\n\nTry it yourself: ${shareUrl}`
+  const mailHref = `mailto:?subject=${encodeURIComponent(mailSubject)}&body=${encodeURIComponent(mailBody)}`
   const badgeSnippet = `<a href="${shareUrl}?utm_source=community-launch&utm_medium=badge&utm_campaign=secured-by-clawguru" class="inline-flex items-center gap-2 rounded-full border border-cyan-400/40 bg-cyan-500/10 px-4 py-1.5 text-xs font-bold uppercase tracking-wide text-cyan-200"><span>Secured by ClawGuru</span></a>`
 
   async function copyBadgeSnippet() {
@@ -117,6 +144,31 @@ export function RoastShareCard({ result, dict, prefix, shareUrl, onCopy, copied 
             <Share2 className="h-4 w-4 text-amber-300" />
             {dict.share_li}
           </a>
+          <a
+            href={waHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white transition hover:border-green-400/40 hover:bg-green-500/10"
+          >
+            <MessageCircle className="h-4 w-4 text-green-400" />
+            {dict.share_wa}
+          </a>
+          <a
+            href={tgHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white transition hover:border-blue-400/40 hover:bg-blue-400/10"
+          >
+            <Send className="h-4 w-4 text-blue-400" />
+            {dict.share_tg}
+          </a>
+          <a
+            href={mailHref}
+            className="inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white transition hover:border-purple-400/40 hover:bg-purple-400/10"
+          >
+            <Mail className="h-4 w-4 text-purple-400" />
+            {dict.share_mail}
+          </a>
           <button
             type="button"
             onClick={onCopy}
@@ -155,6 +207,40 @@ export function RoastShareCard({ result, dict, prefix, shareUrl, onCopy, copied 
         >
           {dict.fix_cta}
         </Link>
+      </div>
+
+      {/* Challenge a Friend — Viral Loop */}
+      <div className="relative mt-6 rounded-xl border border-purple-500/25 p-5"
+        style={{ background: "linear-gradient(135deg, rgba(139,92,246,0.08) 0%, rgba(34,211,238,0.04) 100%)" }}>
+        <div className="flex items-center gap-3 mb-3">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-500/15">
+            <Trophy className="h-4 w-4 text-purple-400" />
+          </div>
+          <div>
+            <p className="text-sm font-bold text-white">{dict.challenge_title}</p>
+            <p className="text-xs text-zinc-400">{dict.challenge_desc}</p>
+          </div>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <a
+            href={waHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-green-600 to-green-500 px-4 py-2.5 text-sm font-bold text-black transition hover:opacity-90"
+          >
+            <MessageCircle className="h-4 w-4" />
+            {dict.challenge_cta}
+          </a>
+          <a
+            href={xHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-lg border border-white/15 bg-white/5 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-white/10"
+          >
+            <Users className="h-4 w-4 text-cyan-400" />
+            {dict.share_x}
+          </a>
+        </div>
       </div>
 
       <div className="relative mt-6 rounded-xl border border-cyan-400/25 bg-cyan-500/5 p-4">

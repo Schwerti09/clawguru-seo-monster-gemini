@@ -358,6 +358,58 @@ export default function HeroSecurityCheck({ dict = {} }: { dict?: Record<string,
                         />
                       </div>
                     </div>
+                  ) : result.score < 70 ? (
+                    <div className="mt-5 p-4 rounded-2xl border border-amber-800/60 bg-gradient-to-br from-amber-950/30 to-orange-950/20">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-amber-400 text-lg">⚠️</span>
+                        <div className="text-sm text-amber-200 font-bold">
+                          {isGerman
+                            ? `Score ${result.score}/100 — da geht mehr.`
+                            : `Score ${result.score}/100 — there's room to improve.`}
+                        </div>
+                      </div>
+                      <div className="text-sm text-gray-300 mb-3">
+                        {isGerman
+                          ? "Mit Pro bekommst du: Continuous Monitoring, automatische Alerts bei Score-Verschlechterung, Full Remediation Reports, personalisierte Runbooks und Copilot AI."
+                          : "With Pro you get: continuous monitoring, automatic alerts on score drops, full remediation reports, personalized runbooks and Copilot AI."}
+                      </div>
+                      <div className="grid grid-cols-2 gap-2 mb-4 text-xs">
+                        <div className="flex items-center gap-1.5 text-amber-200/80">
+                          <span className="text-amber-400">✓</span> {isGerman ? "Monitoring & Alerts" : "Monitoring & alerts"}
+                        </div>
+                        <div className="flex items-center gap-1.5 text-amber-200/80">
+                          <span className="text-amber-400">✓</span> {isGerman ? "Full Reports" : "Full reports"}
+                        </div>
+                        <div className="flex items-center gap-1.5 text-amber-200/80">
+                          <span className="text-amber-400">✓</span> {isGerman ? "Copilot AI unbegrenzt" : "Copilot AI unlimited"}
+                        </div>
+                        <div className="flex items-center gap-1.5 text-amber-200/80">
+                          <span className="text-amber-400">✓</span> {isGerman ? "Personalisierte Runbooks" : "Personalized runbooks"}
+                        </div>
+                      </div>
+                      <div className="flex flex-col sm:flex-row gap-3">
+                        <BuyButton
+                          product="pro"
+                          label={isGerman ? "Pro starten (49€/Mo)" : "Start Pro (€49/mo)"}
+                          className="px-5 py-3 rounded-2xl font-black text-black"
+                          style={{ background: "linear-gradient(135deg, #f59e0b 0%, #d97706 100%)", boxShadow: "0 0 20px rgba(245,158,11,0.25)" }}
+                          analyticsSource="check_score_below_70"
+                        />
+                        <BuyButton
+                          product="daypass"
+                          label={isGerman ? "Erst testen: Day Pass 9€" : "Try first: Day Pass €9"}
+                          className="px-5 py-3 rounded-2xl font-black border border-amber-700/50 text-amber-200 hover:bg-amber-900/20"
+                          analyticsSource="check_score_below_70"
+                        />
+                        <CTAButton
+                          href={`${prefix}/pricing`}
+                          label={isGerman ? "Alle Pläne" : "All plans"}
+                          variant="outline"
+                          size="md"
+                          onClick={() => trackEvent("pricing_click", { locale, source: "check_score_below_70" })}
+                        />
+                      </div>
+                    </div>
                   ) : (
                     <div className="mt-5 p-4 rounded-2xl border border-gray-800 bg-black/20">
                       <div className="text-sm font-bold text-gray-100 mb-2">{improveTitle}</div>

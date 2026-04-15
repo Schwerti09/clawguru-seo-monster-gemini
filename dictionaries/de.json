@@ -782,6 +782,18 @@
     "challenge_title": "Fordere einen Kollegen heraus",
     "challenge_desc": "Dein Stack ist sicherer? Beweis es — schick den Roast weiter.",
     "challenge_cta": "Challenge senden",
+    "email_capture": {
+      "headline": "Wöchentlicher Security-Report",
+      "subtext": "Kritische CVEs, Fix-Anleitungen und Hardening-Tipps kostenlos jede Woche.",
+      "placeholder": "deine@email.de",
+      "cta": "Anmelden",
+      "consent": "Ich stimme dem Erhalt des wöchentlichen Security-Newsletters zu. Jederzeit abbestellbar.",
+      "privacy_link": "Datenschutz",
+      "success_title": "Angemeldet!",
+      "success_text": "Du erhältst den nächsten Security-Report direkt in dein Postfach.",
+      "error_invalid": "Bitte gib eine gültige E-Mail-Adresse ein.",
+      "error_generic": "Etwas ist schiefgelaufen. Bitte versuche es erneut."
+    },
     "error_empty_input": "Erst Stack oder Domain eingeben.",
     "error_input_too_long": "Maximal 400 Zeichen.",
     "error_invalid_level": "Roast-Level wählen.",

@@ -195,7 +195,22 @@ export function buildNewsletterHtml({
 }
 
 export async function getStripeCustomerEmails(): Promise<NewsletterRecipient[]> {
-  return []
+  const recipients: NewsletterRecipient[] = []
+
+  // Try to fetch from newsletter_subscribers table
+  try {
+    const { dbQuery } = await import("@/lib/db")
+    const res = await dbQuery<{ email: string; status: string }>(
+      `SELECT email, status FROM newsletter_subscribers WHERE status = 'active' ORDER BY created_at DESC`
+    )
+    for (const row of res.rows) {
+      recipients.push({ email: row.email, isPro: false, status: row.status })
+    }
+  } catch (err) {
+    console.warn("[newsletter] Could not fetch DB subscribers:", err)
+  }
+
+  return recipients
 }
 
 export function signUnsubscribeToken(email: string): string {

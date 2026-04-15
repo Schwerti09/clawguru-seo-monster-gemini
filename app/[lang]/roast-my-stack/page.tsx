@@ -4,6 +4,7 @@ import RoastMyStack from "@/components/roast/RoastMyStack"
 import Container from "@/components/shared/Container"
 import { getDictionary } from "@/lib/getDictionary"
 import { SUPPORTED_LOCALES, buildLocalizedAlternates, type Locale } from "@/lib/i18n"
+import { EmailCapture } from "@/components/conversion/EmailCapture"
 
 export const revalidate = 60
 
@@ -63,6 +64,10 @@ export default async function RoastMyStackPage(props: { params: { lang: string }
           showDedicatedPageLink={false}
           showTitleBlock={false}
         />
+
+        <div className="mx-auto max-w-3xl mt-10">
+          <EmailCapture locale={locale} source="roast_stack" variant="card" />
+        </div>
 
         {/* Example Stacks */}
         {r.examples_heading && (

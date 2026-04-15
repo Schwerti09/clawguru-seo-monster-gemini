@@ -8,6 +8,7 @@ import PageOnboarding from "@/components/onboarding/PageOnboarding"
 import { useI18n } from "@/components/i18n/I18nProvider"
 import { useState, useEffect } from "react"
 import { trackEvent } from "@/lib/analytics"
+import { EmailCapture } from "@/components/conversion/EmailCapture"
 
 export default function CheckPage() {
   const [showOnboarding, setShowOnboarding] = useState(false)
@@ -78,6 +79,11 @@ export default function CheckPage() {
         </div>
         <div className="mt-8">
           <HeroSecurityCheck />
+        </div>
+
+        {/* Email Capture after Check */}
+        <div className="mt-8 max-w-4xl">
+          <EmailCapture locale={locale} source="check_page" variant="card" />
         </div>
 
         {/* Proof Bullets */}

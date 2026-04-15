@@ -7,6 +7,7 @@ import { getCoreSecurityLinks } from "@/lib/core-security-links"
 import { getDictionary } from "@/lib/getDictionary"
 import { geoOpenClawSprintPath } from "@/lib/geo-openclaw-city-sprint"
 import { SUPPORTED_LOCALES, buildLocalizedAlternates, type Locale } from "@/lib/i18n"
+import { EmailCapture } from "@/components/conversion/EmailCapture"
 
 export const revalidate = 60
 
@@ -119,6 +120,10 @@ export default async function RoastMyMoltbotPage(props: { params: { lang: string
           showDedicatedPageLink={false}
           showTitleBlock={false}
         />
+
+        <div className="mx-auto max-w-3xl mt-10">
+          <EmailCapture locale={locale} source="roast_moltbot" variant="card" />
+        </div>
 
         <nav
           className="mx-auto max-w-3xl mt-12 pt-8 border-t border-white/10 text-sm text-zinc-400 flex flex-col sm:flex-row flex-wrap gap-4 justify-center"

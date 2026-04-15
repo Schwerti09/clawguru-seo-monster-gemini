@@ -715,6 +715,57 @@ curl https://clawguru.com/api/intel/feeds \\
             </div>
           </div>
 
+          {/* ── Testimonials Section ── */}
+          <div className="mt-10">
+            <div className="text-xs font-mono uppercase tracking-[0.25em] text-gray-500 mb-6 text-center">
+              Was Security Teams sagen
+            </div>
+            <div className="grid md:grid-cols-3 gap-6">
+              <div className="rounded-2xl border border-white/10 p-6" style={{ background: "rgba(255,255,255,0.02)" }}>
+                <div className="text-sm text-gray-300 leading-relaxed mb-4">
+                  "ClawGuru hat uns 3 CVEs entdeckt, die wir komplett übersehen hatten. Die Runbooks waren direkt anwendbar — 2 Stunden später war alles gepatcht."
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-500 to-blue-500 flex items-center justify-center text-white font-bold text-sm">
+                    MK
+                  </div>
+                  <div>
+                    <div className="text-sm font-semibold text-white">Michael K.</div>
+                    <div className="text-xs text-gray-500">DevOps Lead, FinTech Startup</div>
+                  </div>
+                </div>
+              </div>
+              <div className="rounded-2xl border border-white/10 p-6" style={{ background: "rgba(255,255,255,0.02)" }}>
+                <div className="text-sm text-gray-300 leading-relaxed mb-4">
+                  "Der Security Check ist brutal schnell. 30 Sekunden und wir wissen, ob unsere K8s Cluster exposed sind. Pro ist jeden Cent wert."
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold text-sm">
+                    SL
+                  </div>
+                  <div>
+                    <div className="text-sm font-semibold text-white">Sarah L.</div>
+                    <div className="text-xs text-gray-500">Platform Engineer, SaaS Company</div>
+                  </div>
+                </div>
+              </div>
+              <div className="rounded-2xl border border-white/10 p-6" style={{ background: "rgba(255,255,255,0.02)" }}>
+                <div className="text-sm text-gray-300 leading-relaxed mb-4">
+                  "Endlich eine Security-Plattform, die DSGVO-konform ist und keine Cloud-Abhängigkeiten. ClawGuru passt perfekt zu unserer Self-Hosted Strategie."
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center text-white font-bold text-sm">
+                    TW
+                  </div>
+                  <div>
+                    <div className="text-sm font-semibold text-white">Thomas W.</div>
+                    <div className="text-xs text-gray-500">CTO, Enterprise Software</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
           {/* Info strip */}
           <div className="mt-8 grid md:grid-cols-3 gap-4">
             {[

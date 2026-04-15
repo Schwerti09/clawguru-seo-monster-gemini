@@ -11,7 +11,14 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: { lang: string } }) {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
-  return { ...(rootMetadata as Metadata), alternates: buildLocalizedAlternates(locale, "/pricing") }
+  return {
+    ...(rootMetadata as Metadata),
+    alternates: buildLocalizedAlternates(locale, "/pricing"),
+    openGraph: {
+      ...(rootMetadata as Metadata).openGraph,
+      url: `https://clawguru.org/${locale}/pricing`,
+    },
+  }
 }
 
 export default function LocalePricingPage() {

@@ -19,11 +19,17 @@ const PRICING_KEYWORDS = [
 ]
 
 export const metadata = {
-  title: "Day Pass | ClawGuru – Sofortzugang für Security Incidents",
+  title: "Preise & Pläne | ClawGuru – Security Check Platform",
   description:
-    "Security Incident? Day Pass: 24h Vollzugriff auf alle Runbooks, Log4j-Check, Ransomware Playbooks, Copilot & mehr. Einmal zahlen, sofort loslegen – kein Abo-Approval nötig.",
+    "ClawGuru Preise: Kostenloser Security Check, Pro ab 49€/Monat mit Full Reports & Copilot AI, Teams für 129€/Monat. Enterprise mit API-Zugang. DSGVO-konform, jederzeit kündbar.",
   keywords: PRICING_KEYWORDS,
-  alternates: { canonical: "/pricing" }
+  alternates: { canonical: "/pricing" },
+  openGraph: {
+    title: "Preise & Pläne | ClawGuru",
+    description: "Security Check kostenlos. Pro, Teams & Enterprise Pläne für professionelle Infrastruktur-Sicherheit.",
+    url: "https://clawguru.org/de/pricing",
+    type: "website" as const,
+  },
 }
 
 type Feature = { label: string; isNew?: boolean; isComing?: boolean }
@@ -231,7 +237,7 @@ export default async function PricingPage() {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
     mainEntity: [
-      { '@type': 'Question', name: 'Was ist im ClawGuru Free Plan enthalten?', acceptedAnswer: { '@type': 'Answer', text: 'ClawGuru Free Plan: Unbegrenzte Security Checks für beliebige Domains. HTTP-Header-Analyse, TLS-Check, Security-Score. Zugriff auf öffentliche Runbooks. Kein Konto nötig. Keine Kreditkarte. Ideal für: Entwickler, kleine Teams, einmalige Checks. Limits: keine Monitoring-Alerts, kein API-Zugang, keine Team-Features.' } },
+      { '@type': 'Question', name: 'Was ist im ClawGuru Free Plan enthalten?', acceptedAnswer: { '@type': 'Answer', text: 'ClawGuru Explorer (Free) Plan: Unbegrenzte Security Checks für beliebige Domains. HTTP-Header-Analyse, TLS-Check, Security-Score in 30 Sekunden. Zugriff auf 30+ CVE Fix Guides und öffentliche Runbooks (3/Monat). Zugang zur Academy und Moltbot Hardening Guides. Kein Account nötig. Keine Kreditkarte. Ideal für: Entwickler, kleine Teams, einmalige Checks. Limits: keine Saved Checks, kein Copilot, keine Monitoring-Alerts, kein API-Zugang, keine Team-Features.' } },
       { '@type': 'Question', name: 'Was bietet ClawGuru Pro zusätzlich?', acceptedAnswer: { '@type': 'Answer', text: 'ClawGuru Pro Zusatzfeatures: Continuous Monitoring mit automatischen Alerts bei Score-Verschlechterung. API-Zugang für CI/CD-Integration (GitHub Actions, GitLab CI). Erweiterte CVE-Berichte mit Priorisierung. Historische Score-Daten und Trend-Analyse. Priority Support. Moltbot-Integration für automatisiertes Hardening. Ideal für: professionelle DevOps-Teams, Startups mit Compliance-Anforderungen.' } },
       { '@type': 'Question', name: 'Gibt es einen Enterprise-Plan für große Organisationen?', acceptedAnswer: { '@type': 'Answer', text: 'ClawGuru Enterprise: Unbegrenzte Domains und Teams. Dedizierter Account Manager. Custom SLAs (99.99% Uptime). On-Premise Deployment möglich (DSGVO/HIPAA-kritische Umgebungen). SSO/SAML-Integration. Custom Compliance Reports (SOC2, ISO27001, PCI-DSS, HIPAA). Audit-Trail-Export. Volume-Pricing. Kontakt: Enterprise-Anfragen über das Kontaktformular.' } },
       { '@type': 'Question', name: 'Kann ich ClawGuru kostenlos testen bevor ich zahle?', acceptedAnswer: { '@type': 'Answer', text: 'ClawGuru Testmöglichkeiten: Free Plan ist dauerhaft kostenlos — kein Trial-Ablauf. Pro Plan: 14-Tage-Testphase ohne Kreditkarte. Day Pass: Einmaliger Pro-Zugang für 24 Stunden (ideal zum Testen aller Pro-Features). Empfehlung: Security Check kostenlos durchführen, dann mit einem Day Pass die Pro-Features testen bevor du abonnierst.' } },
@@ -256,6 +262,35 @@ export default async function PricingPage() {
           <p className="mt-4 text-gray-400 text-lg">
             {dict.pricing.subtitle}
           </p>
+          {/* Free CTA */}
+          <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+            <a href={`${prefix}/securitycheck`}
+              className="px-8 py-3.5 rounded-2xl font-black text-sm text-black transition-all duration-300 hover:opacity-90"
+              style={{ background: "linear-gradient(135deg, #00ff9d 0%, #00b8ff 100%)", boxShadow: "0 0 30px rgba(0,255,157,0.25)" }}>
+              Kostenlos starten → Security Check
+            </a>
+            <a href="#compare"
+              className="px-6 py-3 rounded-2xl font-semibold text-sm text-gray-300 border border-white/10 hover:border-white/25 transition-all duration-200">
+              Pläne vergleichen ↓
+            </a>
+          </div>
+
+          {/* Trust badges */}
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-gray-500">
+            <span className="flex items-center gap-1.5">
+              <span style={{ color: "#00ff9d" }}>✓</span> Keine Kreditkarte nötig
+            </span>
+            <span className="flex items-center gap-1.5">
+              <span style={{ color: "#00ff9d" }}>✓</span> DSGVO-konform
+            </span>
+            <span className="flex items-center gap-1.5">
+              <span style={{ color: "#00ff9d" }}>✓</span> Jederzeit kündbar
+            </span>
+            <span className="flex items-center gap-1.5">
+              <span style={{ color: "#00ff9d" }}>✓</span> Self-Hosted ready
+            </span>
+          </div>
+
           {/* Emergency nudge */}
           <div className="mt-5 inline-flex items-center gap-2 text-sm px-4 py-2 rounded-full border"
             style={{ borderColor: "rgba(220,38,38,0.35)", color: "#f87171", background: "rgba(220,38,38,0.06)" }}>
@@ -278,10 +313,11 @@ export default async function PricingPage() {
             <div className="text-xs font-mono uppercase tracking-[0.25em] text-gray-500 mb-5 text-center">
               {dict.pricing.featureComparison}
             </div>
-            <table className="w-full min-w-[640px] text-sm border-separate border-spacing-y-0">
+            <table className="w-full min-w-[720px] text-sm border-separate border-spacing-y-0">
               <thead>
                 <tr>
-                  <th className="text-left py-3 px-4 text-gray-500 font-mono text-xs uppercase tracking-widest w-1/2">Feature</th>
+                  <th className="text-left py-3 px-4 text-gray-500 font-mono text-xs uppercase tracking-widest w-2/5">Feature</th>
+                  <th className="py-3 px-4 text-center font-black text-[#00ff9d] text-xs uppercase tracking-wider">Free<br /><span className="font-normal text-gray-500 normal-case">0 € / immer</span></th>
                   <th className="py-3 px-4 text-center font-black text-[#00b8ff] text-xs uppercase tracking-wider">Day Pass<br /><span className="font-normal text-gray-500 normal-case">9 € / 24h</span></th>
                   <th className="py-3 px-4 text-center font-black text-[#a78bfa] text-xs uppercase tracking-wider">Pro<br /><span className="font-normal text-gray-500 normal-case">49 € / Mo</span></th>
                   <th className="py-3 px-4 text-center font-black text-[#ffaa00] text-xs uppercase tracking-wider">Enterprise<br /><span className="font-normal text-gray-500 normal-case">Custom</span></th>
@@ -290,68 +326,89 @@ export default async function PricingPage() {
               <tbody>
                 {[
                   {
-                    label: "Saved Security Checks",
-                    daypass: `Max. ${TIER_LIMITS.daypass.maxSavedChecks}`,
-                    pro: "Unlimited",
-                    enterprise: "Unlimited",
-                  },
-                  {
-                    label: "Private Nodes / Private Fork",
-                    daypass: "✕",
-                    pro: "✓",
-                    enterprise: "✓",
-                  },
-                  {
-                    label: "Voice Copilot",
-                    daypass: dict.pricing.voiceCopilotLimited,
-                    pro: "Unlimited",
-                    enterprise: "Unlimited",
-                  },
-                  {
-                    label: "Darwinian Feed",
-                    daypass: "✕",
-                    pro: "✓",
-                    enterprise: "✓",
-                  },
-                  {
-                    label: "SSO / SAML",
-                    daypass: "✕",
-                    pro: "✕",
-                    enterprise: "✓",
-                  },
-                  {
-                    label: "Team Sharing & Shared Dashboards",
-                    daypass: "✕",
-                    pro: "✕",
-                    enterprise: "✓",
-                  },
-                  {
-                    label: "Custom Runbooks",
-                    daypass: "✕",
-                    pro: "✕",
-                    enterprise: "✓",
-                  },
-                  {
-                    label: "Runbooks & Vault Zugang",
+                    label: "Security Check (Score + Headers)",
+                    free: "✓",
                     daypass: "✓",
                     pro: "✓",
                     enterprise: "✓",
                   },
                   {
-                    label: "Security Check / OpsWall",
+                    label: "CVE Fix Guides (30+)",
+                    free: "✓",
+                    daypass: "✓",
+                    pro: "✓",
+                    enterprise: "✓",
+                  },
+                  {
+                    label: "Public Runbooks Browse",
+                    free: "3 / Monat",
                     daypass: "✓",
                     pro: "✓",
                     enterprise: "✓",
                   },
                   {
                     label: "Copilot Chat",
+                    free: "✕",
                     daypass: "✓",
                     pro: "✓",
+                    enterprise: "✓",
+                  },
+                  {
+                    label: "Saved Security Checks",
+                    free: "✕",
+                    daypass: `Max. ${TIER_LIMITS.daypass.maxSavedChecks}`,
+                    pro: "Unlimited",
+                    enterprise: "Unlimited",
+                  },
+                  {
+                    label: "Full Remediation Reports",
+                    free: "✕",
+                    daypass: "✓",
+                    pro: "✓",
+                    enterprise: "✓",
+                  },
+                  {
+                    label: "Darwinian Intel Feed",
+                    free: "✕",
+                    daypass: "✕",
+                    pro: "✓",
+                    enterprise: "✓",
+                  },
+                  {
+                    label: "Private Nodes / Private Fork",
+                    free: "✕",
+                    daypass: "✕",
+                    pro: "✓",
+                    enterprise: "✓",
+                  },
+                  {
+                    label: "Team Sharing & Dashboards",
+                    free: "✕",
+                    daypass: "✕",
+                    pro: "✕",
+                    enterprise: "✓",
+                  },
+                  {
+                    label: "SSO / SAML",
+                    free: "✕",
+                    daypass: "✕",
+                    pro: "✕",
+                    enterprise: "✓",
+                  },
+                  {
+                    label: "Custom Runbooks & API",
+                    free: "✕",
+                    daypass: "✕",
+                    pro: "✕",
                     enterprise: "✓",
                   },
                 ].map((row, i) => (
                   <tr key={row.label} className={i % 2 === 0 ? "bg-white/[0.02]" : ""}>
                     <td className="py-3 px-4 text-gray-300 rounded-l-xl">{row.label}</td>
+                    <td className="py-3 px-4 text-center rounded-none"
+                      style={{ color: row.free === "✕" ? "#4b5563" : "#00ff9d" }}>
+                      {row.free}
+                    </td>
                     <td className="py-3 px-4 text-center rounded-none"
                       style={{ color: row.daypass === "✕" ? "#4b5563" : "#00b8ff" }}>
                       {row.daypass}
@@ -369,6 +426,47 @@ export default async function PricingPage() {
               </tbody>
             </table>
           </section>
+
+          {/* ── Free Explorer Card ── */}
+          <div className="mb-8 relative rounded-3xl p-[1px] overflow-hidden"
+            style={{ background: "linear-gradient(135deg, rgba(0,255,157,0.3) 0%, rgba(0,184,255,0.15) 100%)" }}>
+            <div className="rounded-3xl p-7" style={{ background: "#060d0a" }}>
+              <div className="flex flex-col md:flex-row md:items-center gap-6">
+                <div className="flex-1">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="text-[11px] font-mono uppercase tracking-[0.2em]" style={{ color: "#00ff9d" }}>
+                      Free · Forever
+                    </div>
+                    <div className="text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full"
+                      style={{ background: "rgba(0,255,157,0.1)", color: "#00ff9d", border: "1px solid rgba(0,255,157,0.25)" }}>
+                      Kein Account nötig
+                    </div>
+                  </div>
+                  <div className="text-xl font-black text-white font-heading">ClawGuru Explorer</div>
+                  <div className="mt-2 flex items-end gap-2">
+                    <span className="text-4xl font-black text-white">0€</span>
+                    <span className="text-sm text-gray-400 pb-1">für immer</span>
+                  </div>
+                  <p className="mt-3 text-sm text-gray-300 leading-relaxed max-w-lg">
+                    Sofort Security Check starten. Domain eingeben, Score + Header-Analyse + TLS-Check in 30 Sekunden.
+                    Plus: CVE Fix Guides, Public Runbooks, Academy – ohne Registrierung.
+                  </p>
+                </div>
+                <div className="flex flex-col items-center gap-3 md:shrink-0">
+                  <a href={`${prefix}/securitycheck`}
+                    className="px-8 py-3 rounded-2xl font-black text-sm text-black transition-all duration-300 hover:opacity-90 whitespace-nowrap"
+                    style={{ background: "linear-gradient(135deg, #00ff9d 0%, #00b8ff 100%)", boxShadow: "0 0 25px rgba(0,255,157,0.2)" }}>
+                    Jetzt kostenlos checken →
+                  </a>
+                  <div className="flex items-center gap-4 text-xs text-gray-500">
+                    <span>✓ Security Score</span>
+                    <span>✓ Header Check</span>
+                    <span>✓ TLS Analyse</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 
           {/* Cards */}
           <div className="grid lg:grid-cols-3 gap-6 items-stretch">
@@ -565,6 +663,54 @@ curl https://clawguru.com/api/intel/feeds \\
                     </pre>
                   </div>
                 </div>
+              </div>
+            </div>
+          </div>
+
+          {/* ── Social Proof + Conversion Nudge ── */}
+          <div className="mt-10 rounded-3xl border border-white/8 p-8 text-center"
+            style={{ background: "rgba(255,255,255,0.015)" }}>
+            <div className="text-xs font-mono uppercase tracking-[0.25em] text-gray-500 mb-4">
+              Trusted by Security Teams
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-6">
+              <div>
+                <div className="text-3xl font-black text-white">25k+</div>
+                <div className="text-xs text-gray-400 mt-1">Indexierte Seiten</div>
+              </div>
+              <div>
+                <div className="text-3xl font-black text-white">500+</div>
+                <div className="text-xs text-gray-400 mt-1">Runbooks & Playbooks</div>
+              </div>
+              <div>
+                <div className="text-3xl font-black text-white">16</div>
+                <div className="text-xs text-gray-400 mt-1">Sprachen</div>
+              </div>
+              <div>
+                <div className="text-3xl font-black text-white">30+</div>
+                <div className="text-xs text-gray-400 mt-1">CVE Fix Guides</div>
+              </div>
+            </div>
+            <div className="flex flex-wrap items-center justify-center gap-4 text-sm">
+              <div className="flex items-center gap-2 px-4 py-2 rounded-xl border border-white/10"
+                style={{ background: "rgba(0,255,157,0.04)" }}>
+                <span style={{ color: "#00ff9d" }}>🛡</span>
+                <span className="text-gray-300">DSGVO / GDPR konform</span>
+              </div>
+              <div className="flex items-center gap-2 px-4 py-2 rounded-xl border border-white/10"
+                style={{ background: "rgba(0,184,255,0.04)" }}>
+                <span style={{ color: "#00b8ff" }}>🔒</span>
+                <span className="text-gray-300">Zero-Knowledge Checks</span>
+              </div>
+              <div className="flex items-center gap-2 px-4 py-2 rounded-xl border border-white/10"
+                style={{ background: "rgba(139,92,246,0.04)" }}>
+                <span style={{ color: "#a78bfa" }}>⚡</span>
+                <span className="text-gray-300">Self-Hosted ready</span>
+              </div>
+              <div className="flex items-center gap-2 px-4 py-2 rounded-xl border border-white/10"
+                style={{ background: "rgba(255,165,0,0.04)" }}>
+                <span style={{ color: "#ffaa00" }}>🇪🇺</span>
+                <span className="text-gray-300">EU-first, kein Cloud Lock-in</span>
               </div>
             </div>
           </div>

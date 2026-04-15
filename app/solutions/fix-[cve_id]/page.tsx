@@ -6,7 +6,7 @@
 // H3: "Impact and Risks for your Infrastructure"
 
 import type { Metadata } from "next"
-import { notFound, permanentRedirect } from "next/navigation"
+import { notFound, redirect } from "next/navigation"
 import Container from "@/components/shared/Container"
 import { getCveEntry, KNOWN_CVES, parseCveId } from "@/lib/cve-pseo"
 import { generateCveContent } from "@/lib/agents/cve-agent"
@@ -41,6 +41,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
       title: `How to fix ${entry.cveId} – ${entry.name} | ClawGuru`,
       description: entry.description,
       type: "article",
+      url: `${BASE_URL}/${locale}/solutions/fix-${entry.cveId}`,
     },
   }
 }
@@ -59,12 +60,12 @@ export default async function CveFixPage(props: Props) {
   const prefix = `/${locale}`
   const cveId = parseCveId(decodeURIComponent(params.cve_id))
   if (!cveId) {
-    permanentRedirect(`/${locale}/solutions?q=${encodeURIComponent(params.cve_id)}`)
+    redirect(`/${locale}/solutions?q=${encodeURIComponent(params.cve_id)}`)
   }
 
   const entry = getCveEntry(cveId)
   if (!entry) {
-    permanentRedirect(`/${locale}/solutions?q=${encodeURIComponent(cveId)}`)
+    redirect(`/${locale}/solutions?q=${encodeURIComponent(cveId)}`)
   }
 
   // AI-generated unique content via Gemini (with static fallback)

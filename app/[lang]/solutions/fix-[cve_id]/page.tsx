@@ -19,9 +19,15 @@ export async function generateMetadata(props: {
 }) {
   const { lang, cve_id } = props.params
   const locale = (SUPPORTED_LOCALES.includes(lang as Locale) ? lang : "de") as Locale
+  const cveIdClean = decodeURIComponent(cve_id).toUpperCase()
   return {
-    title: `How to fix ${decodeURIComponent(cve_id)} | ClawGuru`,
-    alternates: buildLocalizedAlternates(locale, `/solutions/fix-${encodeURIComponent(cve_id)}`),
+    title: `How to fix ${cveIdClean} | ClawGuru`,
+    alternates: buildLocalizedAlternates(locale, `/solutions/fix-${cveIdClean}`),
+    openGraph: {
+      url: `https://clawguru.org/${locale}/solutions/fix-${cveIdClean}`,
+      type: "article" as const,
+    },
+    robots: "index, follow",
   }
 }
 

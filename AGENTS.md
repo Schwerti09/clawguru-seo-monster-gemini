@@ -1042,6 +1042,7 @@ Will be resolved automatically when upgrading to Next.js 15 + eslint 9 (future s
 | 16.04.2026 | 18 | **Roast My Moltbot Viral Pages.** Added hall-of-shame, share-badge-gallery, weekly-roast pages with dark-theme layout, trust notice, and internal links. Sitemap updated to include new roast URLs. |
 | 16.04.2026 | 19 | **Pricing Page UX Upgrade.** Added Pro vs Teams decision section and expanded the feature comparison table with Teams column + checks. |
 | 16.04.2026 | 20 | **Post-Check Pro Upgrade CTA.** Score share page now shows Pro/Day Pass upgrade CTA when score < 70. |
+| 16.04.2026 | 21 | **VIRAL FIRST — 5 Schritte zur Traffic-Explosion.** Schritt 1: Roast My Moltbot Core Engine mit viralen Hooks (Social Proof Banner: 1,247 Stacks geröstet, 89% kritische Lücken). Schritt 2: ShareScore Komponente (Twitter/X, LinkedIn, Copy Link, PNG Badge Download). Schritt 3: Hall of Fame/Shame mit viralen Stats (847 Elite, 3,892 Shame, 67% Fix-Rate). Schritt 4: Weekly Roast mit Stats (KW 16, 156 Teilnehmer, Ø +31 Punkte). Schritt 5: PNG Badge Export (integriert in ShareScore). Alle 5 Schritte gebaut, getestet, committed, gepusht. |
 
 ### Open Tasks by Priority
 

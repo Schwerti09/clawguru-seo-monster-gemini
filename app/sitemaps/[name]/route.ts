@@ -190,7 +190,7 @@ export async function GET(
         priority: "0.85",
       }))
       const geoOpenClawSprintUrls: { loc: string; lastmod: string; changefreq: string; priority: string }[] = []
-      // Moltbot subpages (130 pages × all locales)
+      // Moltbot subpages (152 pages × all locales)
       const MOLTBOT_SLUGS = [
         // Phase 1-2: Core Moltbot (10)
         "moltbot-security-fundamentals","moltbot-threat-modeling-guide","moltbot-iam-hardening","moltbot-network-security","moltbot-data-encryption","moltbot-logging-monitoring","moltbot-compliance-framework","moltbot-incident-response","moltbot-backup-recovery","moltbot-security-automation",
@@ -201,6 +201,11 @@ export async function GET(
         "ai-agent-privacy-preservation","ai-agent-ethical-ai-security","ai-agent-resilience-patterns",
         "ai-agent-deployment-security","ai-agent-observability-security","ai-agent-context-security",
         "ai-agent-input-validation","ai-agent-output-security",
+        // Phase 5: New pages (10)
+        "ai-agent-secrets-management","ai-agent-network-isolation","ai-agent-identity-verification",
+        "ai-agent-threat-intelligence","ai-agent-access-control","ai-agent-data-integrity",
+        "ai-agent-vulnerability-management","ai-agent-incident-response-playbook",
+        "ai-agent-compliance-automation","ai-agent-runtime-protection",
         // Legacy security pages (22)
         "hardening-guide-2024","security-framework","threat-detection-setup","network-security-firewall",
         "api-security-protection","authentication-oauth2-jwt","database-security-encryption",

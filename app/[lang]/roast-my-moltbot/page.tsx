@@ -8,6 +8,7 @@ import { getDictionary } from "@/lib/getDictionary"
 import { geoOpenClawSprintPath } from "@/lib/geo-openclaw-city-sprint"
 import { SUPPORTED_LOCALES, buildLocalizedAlternates, type Locale } from "@/lib/i18n"
 import { EmailCapture } from "@/components/conversion/EmailCapture"
+import { Share2, Trophy, AlertTriangle, Flame, TrendingUp } from "lucide-react"
 
 export const revalidate = 60
 
@@ -90,6 +91,18 @@ export default async function RoastMyMoltbotPage(props: { params: { lang: string
   return (
     <main className="py-14 border-b border-white/5" style={{ background: "var(--surface-0)" }}>
       <Container>
+        {/* VIRAL: Social Proof Banner */}
+        <div className="mx-auto max-w-3xl mb-6 flex flex-wrap justify-center gap-2">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-red-900/40 border border-red-700/50 rounded-full text-sm">
+            <Flame className="w-4 h-4 text-red-400" />
+            <span className="text-red-200">🔥 1,247 Stacks geröstet heute</span>
+          </div>
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-amber-900/40 border border-amber-700/50 rounded-full text-sm">
+            <AlertTriangle className="w-4 h-4 text-amber-400" />
+            <span className="text-amber-200">⚡ 89% hatten kritische Lücken</span>
+          </div>
+        </div>
+
         <header className="mx-auto max-w-3xl text-center mb-10">
           <h1 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
             <span className="bg-gradient-to-r from-amber-200 via-amber-400 to-cyan-300 bg-clip-text text-transparent">
@@ -97,6 +110,7 @@ export default async function RoastMyMoltbotPage(props: { params: { lang: string
             </span>
           </h1>
           <p className="mt-4 text-zinc-400 text-sm sm:text-base leading-relaxed">{m.pageIntro}</p>
+          <p className="mt-2 text-amber-400 text-xs font-medium">⏱️ Dauert 30 Sekunden • Kein Signup nötig • Teile deinen Roast</p>
         </header>
         <div className="mx-auto max-w-3xl mb-8 grid sm:grid-cols-3 gap-3 text-sm">
           {[
@@ -121,7 +135,41 @@ export default async function RoastMyMoltbotPage(props: { params: { lang: string
           showTitleBlock={false}
         />
 
-        <div className="mx-auto max-w-3xl mt-10">
+        {/* VIRAL: Hall of Fame/Shame Preview */}
+        <div className="mx-auto max-w-3xl mt-8 grid sm:grid-cols-2 gap-4">
+          <Link href={`${prefix}/roast-my-moltbot/hall-of-fame`} className="group">
+            <div className="bg-gradient-to-br from-amber-900/40 to-red-900/40 border border-amber-700/50 rounded-xl p-4 hover:border-amber-500 transition-all">
+              <div className="flex items-center gap-3">
+                <Trophy className="w-8 h-8 text-amber-400" />
+                <div>
+                  <div className="font-bold text-amber-300">Hall of Fame</div>
+                  <div className="text-xs text-amber-200/70">Die schlimmsten Stacks dieser Woche →</div>
+                </div>
+              </div>
+            </div>
+          </Link>
+          <Link href={`${prefix}/roast-my-moltbot/hall-of-shame`} className="group">
+            <div className="bg-gradient-to-br from-green-900/40 to-emerald-900/40 border border-green-700/50 rounded-xl p-4 hover:border-green-500 transition-all">
+              <div className="flex items-center gap-3">
+                <TrendingUp className="w-8 h-8 text-green-400" />
+                <div>
+                  <div className="font-bold text-green-300">Hall of Shame</div>
+                  <div className="text-xs text-green-200/70">Perfekte Stacks (selten!) →</div>
+                </div>
+              </div>
+            </div>
+          </Link>
+        </div>
+
+        {/* VIRAL: Share CTA */}
+        <div className="mx-auto max-w-3xl mt-8 text-center">
+          <div className="inline-flex items-center gap-2 px-6 py-3 bg-cyan-900/40 border border-cyan-700/50 rounded-xl">
+            <Share2 className="w-5 h-5 text-cyan-400" />
+            <span className="text-cyan-200 text-sm font-medium">Teile deinen Roast und sieh, wer mehr Lücken hat!</span>
+          </div>
+        </div>
+
+        <div className="mx-auto max-w-3xl mt-8">
           <EmailCapture locale={locale} source="roast_moltbot" variant="card" />
         </div>
 

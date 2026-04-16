@@ -190,19 +190,63 @@ export async function GET(
         priority: "0.85",
       }))
       const geoOpenClawSprintUrls: { loc: string; lastmod: string; changefreq: string; priority: string }[] = []
-      // Moltbot subpages (49 pages × all locales)
+      // Moltbot subpages (130 pages × all locales)
       const MOLTBOT_SLUGS = [
-        "moltbot-security-fundamentals","moltbot-threat-modeling-guide","moltbot-iam-hardening","moltbot-network-security","moltbot-data-encryption","moltbot-logging-monitoring","moltbot-compliance-framework","moltbot-incident-response","moltbot-backup-recovery","moltbot-security-automation","ai-agent-sandboxing-advanced","llm-gateway-advanced-security","multi-agent-trust-frameworks","agentic-rag-security-patterns","ai-red-teaming-methodologies","ai-agent-testing-strategies","ai-agent-governance","ai-agent-supply-chain-security","ai-agent-continuous-security","ai-agent-zero-trust-advanced","hardening-guide-2024","security-framework","threat-detection-setup","network-security-firewall",
+        // Phase 1-2: Core Moltbot (10)
+        "moltbot-security-fundamentals","moltbot-threat-modeling-guide","moltbot-iam-hardening","moltbot-network-security","moltbot-data-encryption","moltbot-logging-monitoring","moltbot-compliance-framework","moltbot-incident-response","moltbot-backup-recovery","moltbot-security-automation",
+        // Phase 3: AI Agent Advanced (10)
+        "ai-agent-sandboxing-advanced","llm-gateway-advanced-security","multi-agent-trust-frameworks","agentic-rag-security-patterns","ai-red-teaming-methodologies","ai-agent-testing-strategies","ai-agent-governance","ai-agent-supply-chain-security","ai-agent-continuous-security","ai-agent-zero-trust-advanced",
+        // Phase 4: New pages (4)
+        "ai-agent-model-hardening","ai-agent-human-oversight","ai-agent-secure-communication","ai-agent-multi-modal-security",
+        // Legacy security pages (22)
+        "hardening-guide-2024","security-framework","threat-detection-setup","network-security-firewall",
         "api-security-protection","authentication-oauth2-jwt","database-security-encryption",
         "container-security-docker-kubernetes","logging-auditing-compliance","incident-response-automation",
         "devsecops-pipeline","monitoring-dashboards","backup-recovery-disaster-recovery","secrets-vault-management",
         "ssl-tls-management","vulnerability-scanning","zero-trust-architecture","compliance-gdpr-setup",
         "api-gateway-security","identity-governance-iam","nis2-compliance-setup","runtime-protection-rasp",
+        // Security automation & posture (6)
         "security-automation-workflows","security-posture-score","cloud-native-security",
         "cloud-security-posture-management","cryptography-encryption-guide","data-loss-prevention",
+        // AI agent core (11)
         "api-rate-limiting-advanced","ai-agent-threat-model","real-time-cve-feed","bot-security-testing","sbom-generation","compliance-automation-engine","ai-agent-security","ai-agent-threat-model-template","ai-agent-hardening-guide",
-        "prompt-injection-defense","model-poisoning-protection","secure-agent-communication","llm-gateway-hardening","ai-agent-sandboxing",
-        "agentic-rag-security","multi-agent-trust","ai-red-teaming","ai-tool-use-security","federated-learning-security",
+        "prompt-injection-defense","model-poisoning-protection",
+        // AI agent communication & sandboxing (5)
+        "secure-agent-communication","llm-gateway-hardening","ai-agent-sandboxing",
+        "agentic-rag-security","multi-agent-trust",
+        // AI agent misc (4)
+        "ai-red-teaming","ai-tool-use-security","federated-learning-security","ai-agent-testing",
+        // Agent security (previously missing) (18)
+        "agent-memory-security","agent-tool-security","agentic-workflow-security",
+        "ai-agent-audit-logging","ai-agent-behavioral-monitoring","ai-agent-capability-control",
+        "ai-agent-communication-security","ai-agent-escalation-prevention","ai-agent-federated-learning",
+        "ai-agent-goal-alignment-security","ai-agent-human-in-the-loop-security","ai-agent-memory-poisoning-defense",
+        "ai-agent-orchestration-security","ai-agent-permission-minimization","ai-agent-persistence",
+        "ai-agent-rate-limiting","ai-agent-rbac","ai-agent-sandboxing-runtime",
+        // AI agent deployment & tooling (7)
+        "ai-agent-secure-deployment","ai-agent-tool-poisoning-prevention",
+        "ai-compliance-automation","ai-data-loss-prevention","ai-incident-response",
+        "ai-model-versioning-security","ai-regulatory-reporting",
+        // AI supply chain & misc (3)
+        "ai-supply-chain","multi-model-orchestration-security","multi-tenant-llm-isolation",
+        // Zero trust & secure deployment (2)
+        "secure-agent-deployment","zero-trust-ai-agents",
+        // LLM security pages (38)
+        "llm-adversarial-examples-defense","llm-adversarial-robustness","llm-api-gateway-hardening",
+        "llm-api-security","llm-bias-detection-mitigation","llm-bias-fairness-auditing",
+        "llm-context-isolation","llm-context-manipulation-defense","llm-context-poisoning-defense",
+        "llm-context-window-security","llm-continual-learning-security","llm-data-encryption-at-rest",
+        "llm-edge-deployment-security","llm-embeddings-security","llm-federated-inference",
+        "llm-fine-tuning-security","llm-hallucination-detection","llm-inference-cost-security",
+        "llm-inference-privacy","llm-injection-response","llm-jailbreak-defense",
+        "llm-model-access-control","llm-model-compression-security","llm-model-extraction-defense",
+        "llm-model-versioning-security","llm-model-watermarking","llm-multilingual-security",
+        "llm-observability","llm-output-encoding-security","llm-output-filtering",
+        "llm-output-schema-validation","llm-output-validation","llm-output-watermarking",
+        "llm-privacy-preserving-computation","llm-prompt-hardening","llm-prompt-hardening-advanced",
+        "llm-prompt-injection-detection","llm-prompt-leakage-defense","llm-quantization-security",
+        "llm-rate-limiting","llm-red-team-automation","llm-secure-inference",
+        "llm-supply-chain-security","llm-token-budgeting",
       ]
       // OpenClaw subpages (10 pages × all locales)
       const OPENCLAW_SLUGS = [

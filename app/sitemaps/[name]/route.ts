@@ -190,7 +190,7 @@ export async function GET(
         priority: "0.85",
       }))
       const geoOpenClawSprintUrls: { loc: string; lastmod: string; changefreq: string; priority: string }[] = []
-      // Moltbot subpages (152 pages × all locales)
+      // Moltbot subpages (153 pages × all locales)
       const MOLTBOT_SLUGS = [
         // Phase 1-2: Core Moltbot (10)
         "moltbot-security-fundamentals","moltbot-threat-modeling-guide","moltbot-iam-hardening","moltbot-network-security","moltbot-data-encryption","moltbot-logging-monitoring","moltbot-compliance-framework","moltbot-incident-response","moltbot-backup-recovery","moltbot-security-automation",
@@ -206,6 +206,8 @@ export async function GET(
         "ai-agent-threat-intelligence","ai-agent-access-control","ai-agent-data-integrity",
         "ai-agent-vulnerability-management","ai-agent-incident-response-playbook",
         "ai-agent-compliance-automation","ai-agent-runtime-protection",
+        // Phase 6: New pages (1)
+        "ai-agent-security-asia",
         // Legacy security pages (22)
         "hardening-guide-2024","security-framework","threat-detection-setup","network-security-firewall",
         "api-security-protection","authentication-oauth2-jwt","database-security-encryption",
@@ -377,6 +379,8 @@ export async function GET(
         { loc: `${base}/${locale}/methodik`, lastmod, changefreq: "monthly", priority: "0.72" },
         { loc: `${base}/${locale}/roast-my-stack`, lastmod, changefreq: "weekly", priority: "0.88" },
         { loc: `${base}/${locale}/roast-my-moltbot`, lastmod, changefreq: "daily", priority: "0.9" },
+        { loc: `${base}/${locale}/roast-my-moltbot/shareable-roast-report`, lastmod, changefreq: "weekly", priority: "0.88" },
+        { loc: `${base}/${locale}/roast-my-moltbot/roast-score-methodology`, lastmod, changefreq: "weekly", priority: "0.88" },
         { loc: `${base}/${locale}/emergency`, lastmod, changefreq: "weekly", priority: "0.85" },
         { loc: `${base}/${locale}/copilot`, lastmod, changefreq: "weekly", priority: "0.85" },
         { loc: `${base}/${locale}/runbooks`, lastmod, changefreq: "daily", priority: "0.9" },
@@ -391,6 +395,7 @@ export async function GET(
         { loc: `${base}/${locale}/years`, lastmod, changefreq: "monthly", priority: "0.8" },
         { loc: `${base}/${locale}/intel`, lastmod, changefreq: "daily", priority: "0.9" },
         { loc: `${base}/${locale}/academy`, lastmod, changefreq: "weekly", priority: "0.85" },
+        { loc: `${base}/${locale}/academy/roast-learn-prompt-injection`, lastmod, changefreq: "weekly", priority: "0.87" },
         { loc: `${base}/${locale}/academy/cve-feed`, lastmod, changefreq: "weekly", priority: "0.88" },
         { loc: `${base}/${locale}/academy/cve`, lastmod, changefreq: "weekly", priority: "0.87" },
         { loc: `${base}/${locale}/academy/cve/CVE-2024-6387`, lastmod, changefreq: "monthly", priority: "0.87" },

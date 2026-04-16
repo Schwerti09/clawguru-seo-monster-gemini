@@ -1041,6 +1041,7 @@ Will be resolved automatically when upgrading to Next.js 15 + eslint 9 (future s
 | 15.04.2026 | 17 | **Middleware CVE fix-route bug + Sitemap GSC fix + AGENTS.md v14 Strategie-Upgrade.** CRITICAL BUG: Middleware hatte zwei 308-Redirects die ALLE `/solutions/fix-CVE-*` URLs auf Solutions-Index umleiteten — alle CVE Fix Guides waren 404. Root cause: alter "Recovery redirect" aus Pre-Fix-Page-Ära. Fix: beide Redirect-Blöcke entfernt. GSC Sitemap: User hatte `/sitemaps/main/route.xml` eingereicht (existiert nicht) — richtige URL ist `/sitemap.xml`. AGENTS.md v14: Template Dark-Theme-Fix, 15→16 Locales korrigiert, Current State aktualisiert, Conversion/Subscription-Strategie hinzugefügt, Session Log chronologisch sortiert. Build ✓ Exit 0. |
 | 16.04.2026 | 18 | **Roast My Moltbot Viral Pages.** Added hall-of-shame, share-badge-gallery, weekly-roast pages with dark-theme layout, trust notice, and internal links. Sitemap updated to include new roast URLs. |
 | 16.04.2026 | 19 | **Pricing Page UX Upgrade.** Added Pro vs Teams decision section and expanded the feature comparison table with Teams column + checks. |
+| 16.04.2026 | 20 | **Post-Check Pro Upgrade CTA.** Score share page now shows Pro/Day Pass upgrade CTA when score < 70. |
 
 ### Open Tasks by Priority
 

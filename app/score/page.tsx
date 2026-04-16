@@ -9,6 +9,7 @@ export default async function ScorePage(
   const scoreRaw = typeof searchParams?.score === "string" ? Number(searchParams?.score) : 0
   const score = Number.isFinite(scoreRaw) ? Math.max(0, Math.min(100, Math.round(scoreRaw))) : 0
   const vulnerable = typeof searchParams?.vulnerable === "string" ? searchParams?.vulnerable === "1" : false
+  const needsUpgrade = score < 70
 
   const params = new URLSearchParams({
     target,
@@ -93,6 +94,33 @@ export default async function ScorePage(
                 </a>
               </div>
             </div>
+
+            {needsUpgrade && (
+              <div className="p-6 rounded-3xl border border-amber-700/60 bg-amber-950/20">
+                <div className="text-[11px] font-mono uppercase tracking-[0.2em] text-amber-300 mb-2">
+                  Score unter 70
+                </div>
+                <div className="text-lg font-bold text-amber-100 mb-2">Voller Report + Monitoring aktivieren</div>
+                <p className="text-sm text-amber-100/80 mb-4">
+                  Dein Score zeigt echte Lücken. Pro liefert Full Remediation Reports, Priorisierung,
+                  Monitoring & Alerts – damit der Score dauerhaft steigt.
+                </p>
+                <div className="flex flex-wrap gap-3">
+                  <a
+                    href="/pricing"
+                    className="px-5 py-3 rounded-2xl bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 font-bold text-black transition-all"
+                  >
+                    Pro freischalten (49€/Monat) →
+                  </a>
+                  <a
+                    href="/daypass"
+                    className="px-5 py-3 rounded-2xl border border-amber-500/60 text-amber-200 hover:text-amber-100 hover:border-amber-400 font-bold transition-colors"
+                  >
+                    Day Pass testen (9€ / 24h)
+                  </a>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

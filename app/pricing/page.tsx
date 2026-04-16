@@ -227,6 +227,7 @@ export default async function PricingPage() {
   const locale = (h.get("x-claw-locale") ?? DEFAULT_LOCALE) as Locale
   const dict = await getDictionary(locale)
   const prefix = `/${locale}`
+  const isDE = locale === "de"
 
   const DAY_PASS_GROUPS = getDayPassGroups(dict)
   const PRO_GROUPS = getProGroups(dict)
@@ -313,13 +314,14 @@ export default async function PricingPage() {
             <div className="text-xs font-mono uppercase tracking-[0.25em] text-gray-500 mb-5 text-center">
               {dict.pricing.featureComparison}
             </div>
-            <table className="w-full min-w-[720px] text-sm border-separate border-spacing-y-0">
+            <table className="w-full min-w-[900px] text-sm border-separate border-spacing-y-0">
               <thead>
                 <tr>
                   <th className="text-left py-3 px-4 text-gray-500 font-mono text-xs uppercase tracking-widest w-2/5">Feature</th>
                   <th className="py-3 px-4 text-center font-black text-[#00ff9d] text-xs uppercase tracking-wider">Free<br /><span className="font-normal text-gray-500 normal-case">0 € / immer</span></th>
                   <th className="py-3 px-4 text-center font-black text-[#00b8ff] text-xs uppercase tracking-wider">Day Pass<br /><span className="font-normal text-gray-500 normal-case">9 € / 24h</span></th>
                   <th className="py-3 px-4 text-center font-black text-[#a78bfa] text-xs uppercase tracking-wider">Pro<br /><span className="font-normal text-gray-500 normal-case">49 € / Mo</span></th>
+                  <th className="py-3 px-4 text-center font-black text-[#22c55e] text-xs uppercase tracking-wider">Teams<br /><span className="font-normal text-gray-500 normal-case">129 € / Mo</span></th>
                   <th className="py-3 px-4 text-center font-black text-[#ffaa00] text-xs uppercase tracking-wider">Enterprise<br /><span className="font-normal text-gray-500 normal-case">Custom</span></th>
                 </tr>
               </thead>
@@ -330,6 +332,7 @@ export default async function PricingPage() {
                     free: "✓",
                     daypass: "✓",
                     pro: "✓",
+                    team: "✓",
                     enterprise: "✓",
                   },
                   {
@@ -337,6 +340,7 @@ export default async function PricingPage() {
                     free: "✓",
                     daypass: "✓",
                     pro: "✓",
+                    team: "✓",
                     enterprise: "✓",
                   },
                   {
@@ -344,6 +348,7 @@ export default async function PricingPage() {
                     free: "3 / Monat",
                     daypass: "✓",
                     pro: "✓",
+                    team: "✓",
                     enterprise: "✓",
                   },
                   {
@@ -351,6 +356,7 @@ export default async function PricingPage() {
                     free: "✕",
                     daypass: "✓",
                     pro: "✓",
+                    team: "✓",
                     enterprise: "✓",
                   },
                   {
@@ -358,6 +364,7 @@ export default async function PricingPage() {
                     free: "✕",
                     daypass: `Max. ${TIER_LIMITS.daypass.maxSavedChecks}`,
                     pro: "Unlimited",
+                    team: "Unlimited",
                     enterprise: "Unlimited",
                   },
                   {
@@ -365,6 +372,7 @@ export default async function PricingPage() {
                     free: "✕",
                     daypass: "✓",
                     pro: "✓",
+                    team: "✓",
                     enterprise: "✓",
                   },
                   {
@@ -372,6 +380,7 @@ export default async function PricingPage() {
                     free: "✕",
                     daypass: "✕",
                     pro: "✓",
+                    team: "✓",
                     enterprise: "✓",
                   },
                   {
@@ -379,6 +388,7 @@ export default async function PricingPage() {
                     free: "✕",
                     daypass: "✕",
                     pro: "✓",
+                    team: "✓",
                     enterprise: "✓",
                   },
                   {
@@ -386,6 +396,7 @@ export default async function PricingPage() {
                     free: "✕",
                     daypass: "✕",
                     pro: "✕",
+                    team: "✓",
                     enterprise: "✓",
                   },
                   {
@@ -393,6 +404,7 @@ export default async function PricingPage() {
                     free: "✕",
                     daypass: "✕",
                     pro: "✕",
+                    team: "✕",
                     enterprise: "✓",
                   },
                   {
@@ -400,6 +412,7 @@ export default async function PricingPage() {
                     free: "✕",
                     daypass: "✕",
                     pro: "✕",
+                    team: "✕",
                     enterprise: "✓",
                   },
                 ].map((row, i) => (
@@ -417,6 +430,10 @@ export default async function PricingPage() {
                       style={{ color: row.pro === "✕" ? "#4b5563" : "#a78bfa" }}>
                       {row.pro}
                     </td>
+                    <td className="py-3 px-4 text-center rounded-none"
+                      style={{ color: row.team === "✕" ? "#4b5563" : "#22c55e" }}>
+                      {row.team}
+                    </td>
                     <td className="py-3 px-4 text-center rounded-r-xl"
                       style={{ color: row.enterprise === "✕" ? "#4b5563" : "#00ff9d" }}>
                       {row.enterprise}
@@ -425,6 +442,60 @@ export default async function PricingPage() {
                 ))}
               </tbody>
             </table>
+          </section>
+
+          <section className="mb-12">
+            <div className="text-xs font-mono uppercase tracking-[0.25em] text-gray-500 mb-5 text-center">
+              {isDE ? "Pro vs Teams" : "Pro vs Teams"}
+            </div>
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="rounded-2xl border border-white/10 p-6" style={{ background: "rgba(139,92,246,0.08)" }}>
+                <div className="text-[11px] font-mono uppercase tracking-[0.2em] text-[#a78bfa]">Pro</div>
+                <h3 className="text-xl font-black text-white mt-2">
+                  {isDE ? "Für Solo + kleine Ops-Teams" : "For solo + small ops teams"}
+                </h3>
+                <p className="mt-2 text-sm text-gray-300">
+                  {isDE
+                    ? "Ideal für Founder, 1–5 Personen und schnelle Fixes ohne Team-Workflows."
+                    : "Ideal for founders, 1–5 people, and fast fixes without team workflows."}
+                </p>
+                <ul className="mt-4 space-y-2 text-sm text-gray-300">
+                  {[
+                    isDE ? "Unlimitierte Checks + Full Reports" : "Unlimited checks + full reports",
+                    isDE ? "Intel Feed, Runbooks, Copilot inklusive" : "Intel feed, runbooks, copilot included",
+                    isDE ? "Keine geteilten Dashboards nötig" : "No shared dashboards required",
+                  ].map((item) => (
+                    <li key={item} className="flex gap-2">
+                      <span className="text-[#a78bfa]">✓</span>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="rounded-2xl border border-white/10 p-6" style={{ background: "rgba(34,197,94,0.08)" }}>
+                <div className="text-[11px] font-mono uppercase tracking-[0.2em] text-[#22c55e]">Teams</div>
+                <h3 className="text-xl font-black text-white mt-2">
+                  {isDE ? "Für wachsende Teams + gemeinsame Workflows" : "For growing teams + shared workflows"}
+                </h3>
+                <p className="mt-2 text-sm text-gray-300">
+                  {isDE
+                    ? "Wenn mehrere Personen den Score verantworten, braucht ihr Team-Sharing und gemeinsame Playbooks."
+                    : "If multiple people own the score, you need team sharing and shared playbooks."}
+                </p>
+                <ul className="mt-4 space-y-2 text-sm text-gray-300">
+                  {[
+                    isDE ? "Alles aus Pro + Team-Limits" : "Everything from Pro + team limits",
+                    isDE ? "Shared Runbook Links & Dashboards" : "Shared runbook links & dashboards",
+                    isDE ? "Besser für 5+ Seats" : "Better for 5+ seats",
+                  ].map((item) => (
+                    <li key={item} className="flex gap-2">
+                      <span className="text-[#22c55e]">✓</span>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
           </section>
 
           {/* ── Free Explorer Card ── */}

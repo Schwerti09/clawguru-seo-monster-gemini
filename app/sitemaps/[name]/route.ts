@@ -196,8 +196,11 @@ export async function GET(
         "moltbot-security-fundamentals","moltbot-threat-modeling-guide","moltbot-iam-hardening","moltbot-network-security","moltbot-data-encryption","moltbot-logging-monitoring","moltbot-compliance-framework","moltbot-incident-response","moltbot-backup-recovery","moltbot-security-automation",
         // Phase 3: AI Agent Advanced (10)
         "ai-agent-sandboxing-advanced","llm-gateway-advanced-security","multi-agent-trust-frameworks","agentic-rag-security-patterns","ai-red-teaming-methodologies","ai-agent-testing-strategies","ai-agent-governance","ai-agent-supply-chain-security","ai-agent-continuous-security","ai-agent-zero-trust-advanced",
-        // Phase 4: New pages (4)
+        // Phase 4: New pages (10)
         "ai-agent-model-hardening","ai-agent-human-oversight","ai-agent-secure-communication","ai-agent-multi-modal-security",
+        "ai-agent-privacy-preservation","ai-agent-ethical-ai-security","ai-agent-resilience-patterns",
+        "ai-agent-deployment-security","ai-agent-observability-security","ai-agent-context-security",
+        "ai-agent-input-validation","ai-agent-output-security",
         // Legacy security pages (22)
         "hardening-guide-2024","security-framework","threat-detection-setup","network-security-firewall",
         "api-security-protection","authentication-oauth2-jwt","database-security-encryption",

@@ -320,33 +320,19 @@ export async function GET(
         "pci-dss-ai-payments-v2","nis2-ai-infrastructure-guide",
         "zero-trust-ai-architecture","gdpr-llm-data-processing",
       ]
-      // Moltbot Batch 6
-      const MOLTBOT_BATCH6 = ["ai-compliance-automation","llm-observability","agent-memory-security",
-        "zero-trust-ai-agents","llm-rate-limiting","ai-incident-response",
-        "secure-agent-deployment","llm-prompt-hardening","ai-supply-chain",
-        "multi-model-orchestration-security","ai-agent-rbac","llm-context-isolation",
-        "ai-agent-audit-logging","llm-output-validation","agentic-workflow-security",
-        "ai-model-versioning-security","llm-api-gateway-hardening","agent-tool-security",
-        "ai-data-loss-prevention","llm-jailbreak-defense","ai-regulatory-reporting",
-        "llm-fine-tuning-security","multi-tenant-llm-isolation",
-        "llm-context-window-security","ai-agent-testing","llm-output-filtering",
-        "llm-embeddings-security","ai-agent-rate-limiting","llm-prompt-injection-detection",
-        "llm-api-security","ai-agent-persistence","llm-token-budgeting",
-        "llm-model-access-control","ai-agent-communication-security","llm-injection-response",
-        "llm-output-encoding-security","ai-agent-sandboxing-runtime","llm-context-manipulation-defense",
-        "llm-bias-detection-mitigation","ai-agent-behavioral-monitoring","llm-hallucination-detection",
-        "llm-data-encryption-at-rest","ai-agent-secure-communication","llm-privacy-preserving-computation",
-        "llm-model-watermarking","ai-agent-federated-learning","llm-secure-inference",
-        "llm-adversarial-robustness","ai-agent-secure-deployment","llm-model-extraction-defense",
-        "llm-federated-inference","ai-agent-multi-modal-security","llm-quantization-security",
-        "llm-model-compression-security","ai-agent-orchestration-security","llm-edge-deployment-security",
-        "llm-model-versioning-security","ai-agent-human-in-the-loop-security","llm-continual-learning-security",
-        "llm-inference-cost-security","ai-agent-goal-alignment-security","llm-context-poisoning-defense",
-        "llm-supply-chain-security","ai-agent-memory-poisoning-defense","llm-output-watermarking",
-        "llm-prompt-leakage-defense","ai-agent-capability-control","llm-red-team-automation",
-        "llm-bias-fairness-auditing","ai-agent-escalation-prevention","llm-multilingual-security",
-        "llm-adversarial-examples-defense","ai-agent-tool-poisoning-prevention","llm-inference-privacy",
-        "llm-prompt-hardening-advanced","ai-agent-permission-minimization","llm-output-schema-validation"]
+      // Moltbot Batch 6 (bereinigt: nur unique Slugs, Duplikate zu MOLTBOT_SLUGS entfernt)
+      // 60 Duplikate entfernt, 9 echte neue Slugs behalten
+      const MOLTBOT_BATCH6 = [
+        "llm-observability",
+        "llm-output-validation",
+        "llm-fine-tuning-security",
+        "multi-tenant-llm-isolation",
+        "ai-agent-rbac",
+        "llm-context-isolation",
+        "llm-inference-cost-security",
+        "llm-context-poisoning-defense",
+        "ai-agent-goal-alignment-security"
+      ]
       // SEO guide pages
       const GUIDE_SLUGS = [
         "executable-runbook-vs-static-blog","security-check-vs-pentest-guide","nis2-technical-controls-self-hosted",

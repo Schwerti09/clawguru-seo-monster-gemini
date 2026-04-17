@@ -7,6 +7,7 @@ import type { Locale } from "@/lib/i18n"
 import { SUPPORTED_LOCALES } from "@/lib/i18n"
 import { buildRoastUserPrompt, type RoastLevel } from "@/lib/roast/prompt"
 import { checkRoastServerRateLimit } from "@/lib/roast/server-rate-limit"
+import { dbQuery } from "@/lib/db"
 
 const roastLevelSchema = z.enum(["mild", "medium", "spicy"])
 
@@ -81,6 +82,28 @@ export async function roastMyStackAction(form: {
   }
 
   const data = validated.data
+
+  // Save to database for real statistics
+  try {
+    await dbQuery(
+      `INSERT INTO roast_results (stack_summary, score, roast_level, weaknesses, fixes, roast_text, top_roasts, locale, ip_address)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
+      [
+        trimmed.length > 80 ? `${trimmed.slice(0, 77)}…` : trimmed,
+        data.score,
+        levelParsed.data,
+        data.weaknesses,
+        data.fixes,
+        data.roast_text,
+        data.top_roasts,
+        locale,
+        clientKeyFromHeaders(),
+      ]
+    )
+  } catch (dbError) {
+    // Log error but don't fail the roast - DB is optional for now
+    console.error("Failed to save roast result to DB:", dbError)
+  }
 
   return {
     ok: true,

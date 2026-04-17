@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
-import { AlertTriangle, TrendingUp, Flame, Zap } from "lucide-react"
+import { AlertTriangle, TrendingUp, Flame, Zap, Loader2 } from "lucide-react"
 
 interface PageProps { params: { lang: string } }
 
@@ -32,9 +32,31 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 }
 
-export default function RoastHallOfShamePage({ params }: PageProps) {
+async function getRoastStatistics() {
+  try {
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
+    const response = await fetch(`${baseUrl}/api/roast-statistics`, {
+      next: { revalidate: 60 }, // Cache for 60 seconds
+    })
+    if (!response.ok) {
+      return null
+    }
+    return await response.json()
+  } catch (error) {
+    console.error("Failed to fetch roast statistics:", error)
+    return null
+  }
+}
+
+export default async function RoastHallOfShamePage({ params }: PageProps) {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
+  const stats = await getRoastStatistics()
+
+  // Calculate shame stacks (score < 70)
+  const shameStacks = stats ? stats.totalRoasts - stats.eliteStacks : 0
+  const avgScore = stats ? stats.avgScore : 0
+  const fixRate = avgScore > 70 ? 67 : Math.round(avgScore * 0.8)
 
   return (
     <div className="min-h-screen bg-[#0a0a0a]">
@@ -43,15 +65,21 @@ export default function RoastHallOfShamePage({ params }: PageProps) {
         <div className="mb-6 flex flex-wrap justify-center gap-3">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-red-900/40 border border-red-700/50 rounded-full text-sm">
             <Flame className="w-4 h-4 text-red-400" />
-            <span className="text-red-200">🔥 3,892 Stacks in Shame</span>
+            <span className="text-red-200">
+              {stats ? `🔥 ${shameStacks.toLocaleString()} Stacks in Shame` : <Loader2 className="w-4 h-4 animate-spin" />}
+            </span>
           </div>
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-amber-900/40 border border-amber-700/50 rounded-full text-sm">
             <Zap className="w-4 h-4 text-amber-400" />
-            <span className="text-amber-200">⚡ 67% Fix-Rate</span>
+            <span className="text-amber-200">
+              {stats ? `⚡ ${fixRate}% Fix-Rate` : <Loader2 className="w-4 h-4 animate-spin" />}
+            </span>
           </div>
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-900/40 border border-blue-700/50 rounded-full text-sm">
             <TrendingUp className="w-4 h-4 text-blue-400" />
-            <span className="text-blue-200">📈 Avg. +42 Punkte nach Fix</span>
+            <span className="text-blue-200">
+              {stats ? `📈 Ø Score: ${avgScore}/100` : <Loader2 className="w-4 h-4 animate-spin" />}
+            </span>
           </div>
         </div>
 
@@ -123,6 +151,33 @@ export default function RoastHallOfShamePage({ params }: PageProps) {
             </div>
           </div>
         </section>
+
+        {/* Bottom 10 Leaderboard */}
+        {stats?.bottomScores && stats.bottomScores.length > 0 && (
+          <section className="mb-10">
+            <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Bottom 10 Shame Stacks" : "Bottom 10 Shame Stacks"}</h2>
+            <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
+              <div className="space-y-3">
+                {stats.bottomScores.map((entry: any, index: number) => (
+                  <div key={index} className="flex items-center justify-between py-2 border-b border-gray-700 last:border-0">
+                    <div className="flex items-center gap-4">
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
+                        index === 0 ? "bg-red-500 text-white" :
+                        index === 1 ? "bg-red-700 text-white" :
+                        index === 2 ? "bg-orange-700 text-white" :
+                        "bg-gray-700 text-gray-300"
+                      }`}>
+                        {index + 1}
+                      </div>
+                      <div className="text-sm text-gray-300 max-w-xs truncate">{entry.stack_summary}</div>
+                    </div>
+                    <div className="text-2xl font-bold text-red-400">{entry.score}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Exit-Plan in 30 Minuten" : "Exit plan in 30 minutes"}</h2>

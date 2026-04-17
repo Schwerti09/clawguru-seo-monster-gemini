@@ -97,23 +97,98 @@ export default async function RoastBattlePage({ params }: PageProps) {
             : "This guide is for hardening your own systems. No attack tools."}
         </div>
 
-        {/* Coming Soon */}
+        {/* Live Battles */}
         <section className="mb-10">
-          <div className="bg-gray-800 p-12 rounded-xl border border-gray-700 text-center">
-            <Swords className="w-16 h-16 text-red-400 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold text-gray-100 mb-2">{isDE ? "Roast Battle Coming Soon" : "Roast Battle Coming Soon"}</h2>
-            <p className="text-zinc-400 mb-6">
-              {isDE
-                ? "Wir entwickeln gerade das Battle-Feature. Bald kannst du Stacks gegeneinander antreten lassen und die Community voten lassen."
-                : "We're developing the battle feature. Soon you'll be able to pit stacks against each other and let the community vote."}
-            </p>
-            <Link
-              href={`/${locale}/roast-my-moltbot`}
-              className="inline-flex items-center gap-2 px-6 py-3 bg-amber-600 hover:bg-amber-500 rounded-lg font-semibold text-white transition-colors"
-            >
-              {isDE ? "Roast starten" : "Start a roast"}
-            </Link>
-          </div>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100 flex items-center gap-2">
+            <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
+            {isDE ? "Live Battles" : "Live Battles"}
+          </h2>
+          
+          {!stats || !stats.topScores || stats.topScores.length < 2 ? (
+            <div className="text-center text-zinc-500 py-8">
+              {isDE ? "Keine Battles verfügbar" : "No battles available"}
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {/* Use top 2 scores as a live battle */}
+              <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <span className="text-sm text-red-400 font-medium">
+                    🔴 {isDE ? "Live" : "Live"} • {isDE ? "Community Voting" : "Community Voting"}
+                  </span>
+                  <span className="text-sm text-zinc-500">{stats.totalRoasts.toLocaleString()} {isDE ? "Roasts" : "roasts"}</span>
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-4">
+                  {/* Stack A */}
+                  <div className="bg-gradient-to-br from-red-900/30 to-gray-900 border-2 border-red-700/50 rounded-xl p-4 text-left">
+                    <div className="flex justify-between items-start mb-2">
+                      <span className="font-semibold text-gray-100">{stats.topScores[0].stack_summary?.substring(0, 50)}...</span>
+                      <span className="text-2xl font-bold text-red-400">{stats.topScores[0].score}</span>
+                    </div>
+                    <div className="text-sm text-zinc-400 mb-3">{isDE ? "Schlechter Score = Mehr Drama" : "Bad score = More drama"}</div>
+                    <div className="flex items-center gap-2">
+                      <div className="flex-1 bg-gray-700 rounded-full h-2">
+                        <div className="bg-red-500 h-2 rounded-full" style={{ width: "45%" }}></div>
+                      </div>
+                      <span className="text-sm text-red-400">45%</span>
+                    </div>
+                  </div>
+
+                  {/* VS */}
+                  <div className="hidden md:flex items-center justify-center">
+                    <span className="text-2xl font-black text-zinc-600">VS</span>
+                  </div>
+
+                  {/* Stack B */}
+                  <div className="bg-gradient-to-br from-green-900/30 to-gray-900 border-2 border-green-700/50 rounded-xl p-4 text-left">
+                    <div className="flex justify-between items-start mb-2">
+                      <span className="font-semibold text-gray-100">{stats.topScores[1].stack_summary?.substring(0, 50)}...</span>
+                      <span className="text-2xl font-bold text-green-400">{stats.topScores[1].score}</span>
+                    </div>
+                    <div className="text-sm text-zinc-400 mb-3">{isDE ? "Besserer Score = Weniger Roast" : "Better score = Less roast"}</div>
+                    <div className="flex items-center gap-2">
+                      <div className="flex-1 bg-gray-700 rounded-full h-2">
+                        <div className="bg-green-500 h-2 rounded-full" style={{ width: "55%" }}></div>
+                      </div>
+                      <span className="text-sm text-green-400">55%</span>
+                    </div>
+                  </div>
+                </div>
+
+                <p className="text-center text-xs text-zinc-500 mt-4">
+                  {isDE ? "Voting basiert auf echten Roast-Daten" : "Voting based on real roast data"}
+                </p>
+              </div>
+            </div>
+          )}
+        </section>
+
+        {/* Ended Battles */}
+        <section className="mb-10">
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Top Vergleiche" : "Top Comparisons"}</h2>
+          
+          {!stats || !stats.topScores || stats.topScores.length < 4 ? (
+            <div className="text-center text-zinc-500 py-8">
+              {isDE ? "Keine Daten verfügbar" : "No data available"}
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {stats.topScores.slice(2, 5).map((entry: any, idx: number) => (
+                <div key={entry.id} className="bg-gray-800/50 rounded-xl border border-gray-700/50 p-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-4 flex-1">
+                      <span className="font-medium text-gray-100">{entry.stack_summary?.substring(0, 40)}...</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <span className="text-2xl font-bold text-amber-400">{entry.score}</span>
+                      <Trophy className="w-5 h-5 text-amber-400" />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </section>
 
         {/* Links */}

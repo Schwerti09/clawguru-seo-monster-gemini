@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
-import { Users, Crown, TrendingUp, Target, Zap } from "lucide-react"
+import { Users, Crown, TrendingUp, Target, Zap, Loader2 } from "lucide-react"
 import Link from "next/link"
 
 interface PageProps { params: { lang: string } }
@@ -31,22 +31,35 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 }
 
-const activeTeams = [
-  { name: "Security First Inc.", members: 12, avgScore: 78, totalImprovement: 156, rank: 1 },
-  { name: "DevOps Allstars", members: 8, avgScore: 74, totalImprovement: 134, rank: 2 },
-  { name: "Cloud Ninjas", members: 15, avgScore: 71, totalImprovement: 198, rank: 3 },
-  { name: "Zero Trust Squad", members: 6, avgScore: 69, totalImprovement: 87, rank: 4 },
-]
+async function getRoastStatistics() {
+  try {
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
+    const response = await fetch(`${baseUrl}/api/roast-statistics`, {
+      next: { revalidate: 60 }, // Cache for 60 seconds
+    })
+    if (!response.ok) {
+      return null
+    }
+    return await response.json()
+  } catch (error) {
+    console.error("Failed to fetch roast statistics:", error)
+    return null
+  }
+}
 
-const challenges = [
-  { name: "30-Day Sprint", desc: "Alle Teams müssen in 30 Tagen +20 Punkte erreichen", reward: "🏆 Team Badge", participants: 23 },
-  { name: "Critical Fix Week", desc: "Fixe alle Critical Vulns in einer Woche", reward: "🔥 Fire Badge", participants: 18 },
-  { name: "Hall of Fame Race", desc: "Wer schafft es zuerst in die Hall of Fame?", reward: "👑 Crown Badge", participants: 12 },
-]
-
-export default function TeamRoastPage({ params }: PageProps) {
+export default async function TeamRoastPage({ params }: PageProps) {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
+  const stats = await getRoastStatistics()
+
+  // Use topScores as teams (anonymized)
+  const teams = stats?.topScores?.slice(0, 4).map((entry: any, idx: number) => ({
+    name: `Team #${idx + 1}`,
+    members: "-",
+    avgScore: entry.score,
+    totalImprovement: "-",
+    rank: idx + 1,
+  })) || []
 
   return (
     <div className="min-h-screen bg-[#0a0a0a]">
@@ -55,7 +68,9 @@ export default function TeamRoastPage({ params }: PageProps) {
         <div className="text-center mb-10">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-cyan-900/40 border border-cyan-700/50 rounded-full text-sm mb-4">
             <Users className="w-4 h-4 text-cyan-400" />
-            <span className="text-cyan-200">👥 47 aktive Teams • 312 Mitglieder</span>
+            <span className="text-cyan-200">
+              {stats ? `👥 ${stats.totalRoasts.toLocaleString()} Roasts` : <Loader2 className="w-4 h-4 animate-spin inline" />}
+            </span>
           </div>
           <h1 className="text-4xl font-bold text-gray-100 mb-2">{isDE ? "Team Roast" : "Team Roast"}</h1>
           <p className="text-lg text-gray-300">
@@ -94,29 +109,34 @@ export default function TeamRoastPage({ params }: PageProps) {
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4 text-gray-100 flex items-center gap-2">
             <Crown className="w-5 h-5 text-amber-400" />
-            {isDE ? "Aktive Teams" : "Active Teams"}
+            {isDE ? "Top Stacks" : "Top Stacks"}
           </h2>
-          <div className="space-y-3">
-            {activeTeams.map((team) => (
-              <div key={team.name} className="bg-gray-800 rounded-xl border border-gray-700 p-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center font-bold text-amber-400">
-                      #{team.rank}
+          {!stats || teams.length === 0 ? (
+            <div className="text-center text-zinc-500 py-8">
+              {isDE ? "Keine Daten verfügbar" : "No data available"}
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {teams.map((team: any) => (
+                <div key={team.name} className="bg-gray-800 rounded-xl border border-gray-700 p-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                      <div className="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center font-bold text-amber-400">
+                        #{team.rank}
+                      </div>
+                      <div>
+                        <div className="font-semibold text-gray-100">{team.name}</div>
+                        <div className="text-sm text-zinc-500">{isDE ? "Anonymisiert" : "Anonymized"}</div>
+                      </div>
                     </div>
-                    <div>
-                      <div className="font-semibold text-gray-100">{team.name}</div>
-                      <div className="text-sm text-zinc-500">{team.members} {isDE ? "Mitglieder" : "members"}</div>
+                    <div className="text-right">
+                      <div className="text-2xl font-bold text-cyan-400">{team.avgScore}</div>
                     </div>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-2xl font-bold text-cyan-400">{team.avgScore}</div>
-                    <div className="text-sm text-green-400">+{team.totalImprovement} total</div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </section>
 
         {/* Challenges */}
@@ -126,31 +146,48 @@ export default function TeamRoastPage({ params }: PageProps) {
             {isDE ? "Aktive Challenges" : "Active Challenges"}
           </h2>
           <div className="grid md:grid-cols-3 gap-4">
-            {challenges.map((challenge) => (
-              <div key={challenge.name} className="bg-gradient-to-br from-amber-900/30 to-gray-800 rounded-xl border border-amber-700/50 p-4">
-                <div className="font-semibold text-amber-300 mb-1">{challenge.name}</div>
-                <p className="text-sm text-zinc-400 mb-3">{challenge.desc}</p>
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-amber-400">{challenge.reward}</span>
-                  <span className="text-zinc-500">{challenge.participants} {isDE ? "Teams" : "teams"}</span>
-                </div>
+            <div className="bg-gradient-to-br from-amber-900/30 to-gray-800 rounded-xl border border-amber-700/50 p-4">
+              <div className="font-semibold text-amber-300 mb-1">{isDE ? "Elite Score" : "Elite Score"}</div>
+              <p className="text-sm text-zinc-400 mb-3">{isDE ? "Erreiche 90+ Punkte" : "Reach 90+ points"}</p>
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-amber-400">🏆 Badge</span>
+                <span className="text-zinc-500">{stats?.eliteStacks || 0}</span>
               </div>
-            ))}
+            </div>
+            <div className="bg-gradient-to-br from-green-900/30 to-gray-800 rounded-xl border border-green-700/50 p-4">
+              <div className="font-semibold text-green-300 mb-1">{isDE ? "Verbesserung" : "Improvement"}</div>
+              <p className="text-sm text-zinc-400 mb-3">{isDE ? "+20 Punkte in einer Woche" : "+20 points in a week"}</p>
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-green-400">🔥 Badge</span>
+                <span className="text-zinc-500">{stats?.totalRoasts || 0}</span>
+              </div>
+            </div>
+            <div className="bg-gradient-to-br from-cyan-900/30 to-gray-800 rounded-xl border border-cyan-700/50 p-4">
+              <div className="font-semibold text-cyan-300 mb-1">{isDE ? "Hall of Fame" : "Hall of Fame"}</div>
+              <p className="text-sm text-zinc-400 mb-3">{isDE ? "Top 10 erreichen" : "Reach Top 10"}</p>
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-cyan-400">👑 Badge</span>
+                <span className="text-zinc-500">{stats?.topScores?.length || 0}</span>
+              </div>
+            </div>
           </div>
         </section>
 
         {/* CTA */}
         <div className="bg-gradient-to-r from-cyan-900/40 to-blue-900/40 border border-cyan-700/50 rounded-xl p-6 text-center">
           <h3 className="text-xl font-bold text-cyan-300 mb-2">
-            {isDE ? "Starte dein Team" : "Start your team"}
+            {isDE ? "Starte deinen Roast" : "Start your roast"}
           </h3>
           <p className="text-sm text-cyan-200/70 mb-4">
-            {isDE ? "Kostenlos. Bis zu 20 Mitglieder pro Team." : "Free. Up to 20 members per team."}
+            {isDE ? "Kostenlos. Sofort verfügbar." : "Free. Available now."}
           </p>
-          <button className="inline-flex items-center gap-2 px-6 py-3 bg-cyan-600 hover:bg-cyan-500 rounded-lg font-semibold text-white transition-colors">
+          <Link
+            href={`/${locale}/roast-my-moltbot`}
+            className="inline-flex items-center gap-2 px-6 py-3 bg-cyan-600 hover:bg-cyan-500 rounded-lg font-semibold text-white transition-colors"
+          >
             <Users className="w-5 h-5" />
-            {isDE ? "Team erstellen" : "Create team"}
-          </button>
+            {isDE ? "Jetzt rosten" : "Roast now"}
+          </Link>
         </div>
       </div>
     </div>

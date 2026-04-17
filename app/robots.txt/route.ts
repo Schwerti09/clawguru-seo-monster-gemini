@@ -48,6 +48,12 @@ export async function GET(req: NextRequest) {
     "# Blockiere Checkout/Success",
     "Disallow: /checkout/",
     "Disallow: /success/",
+    "",
+    "# Blockiere synthetische Pattern (SEO Fix 2026-04-17)",
+    "Disallow: /runbook100k-",
+    "Disallow: /*-provider-*-service-*-issue-*-",
+    "Disallow: /*-provider-*-service-*-year-*-",
+    "Disallow: /*-provider-*-issue-*-year-*-",
     ...localeDisallows,
     "",
     `Sitemap: ${base}/sitemap.xml`

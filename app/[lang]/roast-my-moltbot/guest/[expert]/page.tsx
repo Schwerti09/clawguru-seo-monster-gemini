@@ -1,16 +1,36 @@
 import type { Metadata } from "next"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
-import { User, Star, ExternalLink, Twitter, Linkedin } from "lucide-react"
+import { User, Star, ExternalLink, Loader2 } from "lucide-react"
 import Link from "next/link"
+import { notFound } from "next/navigation"
 
 interface PageProps { params: { lang: string; expert: string } }
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 
+async function getRoastStatistics() {
+  try {
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
+    const response = await fetch(`${baseUrl}/api/roast-statistics`, {
+      next: { revalidate: 60 }, // Cache for 60 seconds
+    })
+    if (!response.ok) {
+      return null
+    }
+    return await response.json()
+  } catch (error) {
+    console.error("Failed to fetch roast statistics:", error)
+    return null
+  }
+}
+
 export async function generateStaticParams() {
-  const experts = ["mike-bloomberg", "kelsey-hightower", "addy-osmani", "dave-farley"]
+  const stats = await getRoastStatistics()
+  const experts = stats?.topScores?.slice(0, 10).map((entry: any, idx: number) => 
+    `guest-${idx + 1}`
+  ) || ["guest-1", "guest-2", "guest-3"]
   return SUPPORTED_LOCALES.flatMap((lang) => 
-    experts.map((expert) => ({ lang, expert }))
+    experts.map((expert: string) => ({ lang, expert }))
   )
 }
 
@@ -36,59 +56,21 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 }
 
-const guestExperts = {
-  "mike-bloomberg": {
-    name: "Mike Bloomberg",
-    title: "CTO @ TechCorp",
-    avatar: "MB",
-    stack: "Kubernetes + Istio + Prometheus",
-    score: 78,
-    quote: "Even the best stacks have room for improvement. This roast opened my eyes to 3 critical issues I missed.",
-    social: { twitter: "@mikebloomberg", linkedin: "linkedin.com/in/mikebloomberg" },
-  },
-  "kelsey-hightower": {
-    name: "Kelsey Hightower",
-    title: "DevOps Advocate",
-    avatar: "KH",
-    stack: "GKE + Anthos + Cloud Build",
-    score: 92,
-    quote: "I thought my setup was bulletproof. The roast found 2 edge cases I never considered. This is how you learn.",
-    social: { twitter: "@kelseyhightower", linkedin: "linkedin.com/in/kelseyhightower" },
-  },
-  "addy-osmani": {
-    name: "Addy Osmani",
-    title: "Engineering Manager @ Google",
-    avatar: "AO",
-    stack: "Next.js + Vercel + Firebase",
-    score: 85,
-    quote: "Performance and security go hand in hand. This roast proved that beautifully.",
-    social: { twitter: "@addyosmani", linkedin: "linkedin.com/in/addyosmani" },
-  },
-  "dave-farley": {
-    name: "Dave Farley",
-    title: "Author of Continuous Delivery",
-    avatar: "DF",
-    stack: "Jenkins + Docker + AWS",
-    score: 81,
-    quote: "Continuous security is as important as continuous delivery. This roast showed me where I was lacking.",
-    social: { twitter: "@davefarley77", linkedin: "linkedin.com/in/davefarley77" },
-  },
-}
-
-export default function GuestRoastPage({ params }: PageProps) {
+export default async function GuestRoastPage({ params }: PageProps) {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const expert = guestExperts[params.expert as keyof typeof guestExperts]
+  const stats = await getRoastStatistics()
+
+  // Parse expert index from params.expert (e.g., "guest-1" -> 1)
+  const expertIndex = parseInt(params.expert.replace(/\D/g, "")) - 1
+  const expert = stats?.topScores?.[expertIndex] || null
 
   if (!expert) {
-    return (
-      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
-        <div className="text-gray-400">{isDE ? "Expert nicht gefunden" : "Expert not found"}</div>
-      </div>
-    )
+    notFound()
   }
 
   const isGood = expert.score >= 80
+  const initials = expert.stack_summary?.split(" ").map((w: string) => w[0]).join("").substring(0, 2).toUpperCase() || "XX"
 
   return (
     <div className="min-h-screen bg-[#0a0a0a]">
@@ -96,22 +78,14 @@ export default function GuestRoastPage({ params }: PageProps) {
         {/* Header */}
         <div className="flex items-center gap-4 mb-8">
           <div className="w-20 h-20 bg-gradient-to-br from-purple-900/50 to-cyan-900/50 rounded-2xl flex items-center justify-center text-3xl font-bold text-white">
-            {expert.avatar}
+            {initials}
           </div>
           <div>
             <div className="flex items-center gap-2 mb-1">
               <User className="w-5 h-5 text-cyan-400" />
-              <h1 className="text-3xl font-bold text-gray-100">{expert.name}</h1>
+              <h1 className="text-3xl font-bold text-gray-100">{isDE ? `Gast #${expertIndex + 1}` : `Guest #${expertIndex + 1}`}</h1>
             </div>
-            <p className="text-zinc-500">{expert.title}</p>
-            <div className="flex gap-2 mt-2">
-              <a href={`https://twitter.com/${expert.social.twitter}`} target="_blank" rel="noopener noreferrer" className="text-zinc-500 hover:text-cyan-400">
-                <Twitter className="w-4 h-4" />
-              </a>
-              <a href={`https://${expert.social.linkedin}`} target="_blank" rel="noopener noreferrer" className="text-zinc-500 hover:text-cyan-400">
-                <Linkedin className="w-4 h-4" />
-              </a>
-            </div>
+            <p className="text-zinc-500">{isDE ? "Anonymisierter Stack" : "Anonymized stack"}</p>
           </div>
         </div>
 
@@ -120,7 +94,7 @@ export default function GuestRoastPage({ params }: PageProps) {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-zinc-500 mb-2">{isDE ? "Gerösteter Stack" : "Roasted Stack"}</p>
-              <div className="text-xl font-semibold text-gray-100">{expert.stack}</div>
+              <div className="text-xl font-semibold text-gray-100">{expert.stack_summary?.substring(0, 60)}...</div>
             </div>
             <div className={`text-5xl font-bold ${isGood ? "text-green-400" : "text-amber-400"}`}>
               {expert.score}
@@ -132,28 +106,34 @@ export default function GuestRoastPage({ params }: PageProps) {
         <div className="bg-gradient-to-r from-purple-900/30 to-gray-800 rounded-xl border border-purple-700/50 p-6 mb-8">
           <div className="flex gap-3 mb-3">
             <Star className="w-5 h-5 text-amber-400" />
-            <span className="text-sm text-amber-400 font-medium">{isDE ? "Was er sagt" : "What he says"}</span>
+            <span className="text-sm text-amber-400 font-medium">{isDE ? "Was er sagt" : "What they say"}</span>
           </div>
-          <p className="text-lg text-gray-300 italic">"{expert.quote}"</p>
+          <p className="text-lg text-gray-300 italic">
+            {isDE 
+              ? "Dieser Stack wurde von der Community geprüft und verbessert." 
+              : "This stack was reviewed and improved by the community."}
+          </p>
         </div>
 
         {/* Key Findings */}
         <section className="mb-8">
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Key Findings" : "Key Findings"}</h2>
-          <div className="space-y-3">
-            <div className="bg-gray-800 rounded-lg p-4 border border-gray-700">
-              <div className="text-sm text-zinc-500 mb-1">{isDE ? "Kritisch" : "Critical"}</div>
-              <div className="text-gray-300">{isDE ? "API Keys in Logs — Gefunden und rotiert" : "API keys in logs — Found and rotated"}</div>
+          {!expert.weaknesses || expert.weaknesses.length === 0 ? (
+            <div className="text-center text-zinc-500 py-4">
+              {isDE ? "Keine Findings verfügbar" : "No findings available"}
             </div>
-            <div className="bg-gray-800 rounded-lg p-4 border border-gray-700">
-              <div className="text-sm text-zinc-500 mb-1">{isDE ? "Mittel" : "Medium"}</div>
-              <div className="text-gray-300">{isDE ? "RBAC Over-Privilege — Berechtigungen reduziert" : "RBAC over-privilege — Permissions reduced"}</div>
+          ) : (
+            <div className="space-y-3">
+              {expert.weaknesses.slice(0, 3).map((weakness: string, index: number) => (
+                <div key={index} className="bg-gray-800 rounded-lg p-4 border border-gray-700">
+                  <div className="text-sm text-zinc-500 mb-1">
+                    {index === 0 ? (isDE ? "Kritisch" : "Critical") : index === 1 ? (isDE ? "Mittel" : "Medium") : (isDE ? "Gering" : "Low")}
+                  </div>
+                  <div className="text-gray-300">{weakness}</div>
+                </div>
+              ))}
             </div>
-            <div className="bg-gray-800 rounded-lg p-4 border border-gray-700">
-              <div className="text-sm text-zinc-500 mb-1">{isDE ? "Gering" : "Low"}</div>
-              <div className="text-gray-300">{isDE ? "Egress Control — Hinzugefügt" : "Egress control — Added"}</div>
-            </div>
-          </div>
+          )}
         </section>
 
         {/* CTA */}
@@ -162,7 +142,7 @@ export default function GuestRoastPage({ params }: PageProps) {
             {isDE ? "Roaste deinen Stack wie ein Profi" : "Roast your stack like a pro"}
           </h3>
           <p className="text-sm text-cyan-200/70 mb-4">
-            {isDE ? "Wenn ${expert.name} es kann, du auch." : "If ${expert.name} can do it, so can you."}
+            {isDE ? "Wenn dieser Stack es kann, du auch." : "If this stack can do it, so can you."}
           </p>
           <Link 
             href={`/${locale}/roast-my-moltbot`}

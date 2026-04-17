@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
-import { TrendingUp, Flame, AlertTriangle, Zap, ArrowUpRight } from "lucide-react"
+import { TrendingUp, Flame, AlertTriangle, Zap, ArrowUpRight, Loader2 } from "lucide-react"
 import Link from "next/link"
 
 interface PageProps { params: { lang: string } }
@@ -33,28 +33,34 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 }
 
-const trendingStacks = [
-  { name: "Next.js + Prisma + PostgreSQL", score: 45, change: -12, volume: "1.2K" },
-  { name: "Django + Redis + Celery", score: 62, change: +8, volume: "892" },
-  { name: "FastAPI + MongoDB + Docker", score: 38, change: -23, volume: "756" },
-  { name: "Spring Boot + Kafka + K8s", score: 71, change: +15, volume: "634" },
-]
+async function getRoastStatistics() {
+  try {
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
+    const response = await fetch(`${baseUrl}/api/roast-statistics`, {
+      next: { revalidate: 60 }, // Cache for 60 seconds
+    })
+    if (!response.ok) {
+      return null
+    }
+    return await response.json()
+  } catch (error) {
+    console.error("Failed to fetch roast statistics:", error)
+    return null
+  }
+}
 
-const hotVulns = [
-  { id: "CVE-2025-50201", name: "Log4j Reload", severity: "CRITICAL", mentions: 2.4 },
-  { id: "CVE-2025-50189", name: "Docker Socket Exposure", severity: "HIGH", mentions: 1.8 },
-  { id: "CVE-2025-50123", name: "Redis Unauthorized", severity: "HIGH", mentions: 1.2 },
-]
-
-const topJumps = [
-  { stack: "Startup-MVP", from: 28, to: 74, time: "3 Tage" },
-  { stack: "Legacy-Monolith", from: 31, to: 68, time: "5 Tage" },
-  { stack: "Cloud-Native", from: 42, to: 89, time: "7 Tage" },
-]
-
-export default function RoastTrendsPage({ params }: PageProps) {
+export default async function RoastTrendsPage({ params }: PageProps) {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
+  const stats = await getRoastStatistics()
+
+  // Use topScores as trending stacks (anonymized)
+  const trendingStacks = stats?.topScores?.slice(0, 4).map((entry: any) => ({
+    name: entry.stack_summary,
+    score: entry.score,
+    change: 0,
+    volume: "N/A",
+  })) || []
 
   return (
     <div className="min-h-screen bg-[#0a0a0a]">
@@ -67,7 +73,9 @@ export default function RoastTrendsPage({ params }: PageProps) {
             </div>
             <div>
               <h1 className="text-4xl font-bold text-gray-100">{isDE ? "Roast Trends" : "Roast Trends"}</h1>
-              <p className="text-amber-400">{isDE ? "Live: 1.2K aktive Roasts" : "Live: 1.2K active roasts"}</p>
+              <p className="text-amber-400">
+                {stats ? `Live: ${stats.totalRoasts.toLocaleString()} aktive Roasts` : <Loader2 className="w-4 h-4 animate-spin inline" />}
+              </p>
             </div>
           </div>
           <p className="text-lg text-gray-300">
@@ -81,33 +89,34 @@ export default function RoastTrendsPage({ params }: PageProps) {
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4 text-gray-100 flex items-center gap-2">
             <Flame className="w-5 h-5 text-red-400" />
-            {isDE ? "Trending Stacks" : "Trending Stacks"}
+            {isDE ? "Top Stacks" : "Top Stacks"}
           </h2>
-          <div className="space-y-3">
-            {trendingStacks.map((stack) => (
-              <div key={stack.name} className="bg-gray-800 rounded-xl border border-gray-700 p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="font-semibold text-gray-100">{stack.name}</div>
-                    <div className="text-sm text-zinc-500">{stack.volume} {isDE ? "Roasts" : "roasts"} this week</div>
-                  </div>
-                  <div className="text-right">
-                    <div className={`text-2xl font-bold ${
-                      stack.score >= 80 ? "text-green-400" : 
-                      stack.score >= 50 ? "text-amber-400" : "text-red-400"
-                    }`}>
-                      {stack.score}
+          {!stats || trendingStacks.length === 0 ? (
+            <div className="text-center text-zinc-500 py-8">
+              {isDE ? "Keine Daten verfügbar" : "No data available"}
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {trendingStacks.map((stack: any) => (
+                <div key={stack.name} className="bg-gray-800 rounded-xl border border-gray-700 p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="font-semibold text-gray-100">{stack.name}</div>
+                      <div className="text-sm text-zinc-500">{isDE ? "Anonymisiert" : "Anonymized"}</div>
                     </div>
-                    <div className={`text-sm flex items-center gap-1 ${
-                      stack.change > 0 ? "text-green-400" : "text-red-400"
-                    }`}>
-                      {stack.change > 0 ? "↑" : "↓"} {Math.abs(stack.change)}%
+                    <div className="text-right">
+                      <div className={`text-2xl font-bold ${
+                        stack.score >= 80 ? "text-green-400" : 
+                        stack.score >= 50 ? "text-amber-400" : "text-red-400"
+                      }`}>
+                        {stack.score}
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </section>
 
         {/* Hot Vulnerabilities */}
@@ -116,30 +125,8 @@ export default function RoastTrendsPage({ params }: PageProps) {
             <AlertTriangle className="w-5 h-5 text-amber-400" />
             {isDE ? "Heiße Vulnerabilities" : "Hot Vulnerabilities"}
           </h2>
-          <div className="space-y-3">
-            {hotVulns.map((vuln) => (
-              <div key={vuln.id} className="bg-gray-800 rounded-xl border border-gray-700 p-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className={`px-2 py-1 rounded text-xs font-bold ${
-                      vuln.severity === "CRITICAL" ? "bg-red-900 text-red-300" : "bg-amber-900 text-amber-300"
-                    }`}>
-                      {vuln.severity}
-                    </div>
-                    <div>
-                      <div className="font-medium text-gray-100">{vuln.id}</div>
-                      <div className="text-sm text-zinc-400">{vuln.name}</div>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-sm text-zinc-400">{vuln.mentions}K {isDE ? "Erwähnungen" : "mentions"}</div>
-                    <Link href={`/${locale}/academy/cve/${vuln.id}`} className="text-xs text-cyan-400 hover:underline">
-                      {isDE ? "Fix ansehen →" : "View fix →"}
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            ))}
+          <div className="bg-gray-800 p-6 rounded-lg border border-gray-700 text-center">
+            <p className="text-zinc-400 text-sm">{isDE ? "CVE-Tracking in Kürze verfügbar" : "CVE tracking coming soon"}</p>
           </div>
         </section>
 
@@ -147,21 +134,23 @@ export default function RoastTrendsPage({ params }: PageProps) {
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4 text-gray-100 flex items-center gap-2">
             <Zap className="w-5 h-5 text-cyan-400" />
-            {isDE ? "Schnellste Score-Sprünge" : "Fastest Score Jumps"}
+            {isDE ? "Top Scores" : "Top Scores"}
           </h2>
-          <div className="grid md:grid-cols-3 gap-4">
-            {topJumps.map((jump, idx) => (
-              <div key={jump.stack} className="bg-gradient-to-br from-green-900/30 to-gray-800 rounded-xl border border-green-700/50 p-4">
-                <div className="text-sm text-zinc-400 mb-1">#{idx + 1} {jump.stack}</div>
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="text-red-400 font-bold">{jump.from}</span>
-                  <ArrowUpRight className="w-4 h-4 text-green-400" />
-                  <span className="text-green-400 font-bold text-xl">{jump.to}</span>
+          {!stats || trendingStacks.length === 0 ? (
+            <div className="text-center text-zinc-500 py-8">
+              {isDE ? "Keine Daten verfügbar" : "No data available"}
+            </div>
+          ) : (
+            <div className="grid md:grid-cols-3 gap-4">
+              {trendingStacks.slice(0, 3).map((stack: any, idx: number) => (
+                <div key={stack.name} className="bg-gradient-to-br from-green-900/30 to-gray-800 rounded-xl border border-green-700/50 p-4">
+                  <div className="text-sm text-zinc-400 mb-1">#{idx + 1}</div>
+                  <div className="text-2xl font-bold text-green-400">{stack.score}</div>
+                  <div className="text-xs text-green-300">{isDE ? "Elite Score" : "Elite Score"}</div>
                 </div>
-                <div className="text-xs text-green-300">+{jump.to - jump.from} {isDE ? "in" : "in"} {jump.time}</div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </section>
 
         {/* CTA */}

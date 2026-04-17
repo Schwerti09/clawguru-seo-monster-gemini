@@ -443,6 +443,7 @@ Activates 27 cities: Japan (5), South Korea (5), Brazil (5), Mexico (5), Southea
 | Moltbot Batch 3 (8 pages) | ✅ DONE | ai-agent-threat-model, ai-agent-threat-model-template, real-time-cve-feed, bot-security-testing, sbom-generation, compliance-automation-engine, ai-agent-security, ai-agent-hardening-guide |
 | Dark Theme Fix (109 files) | ✅ DONE 09.04 | All content pages fixed: bg-gray-100→bg-gray-800, text-gray-600→text-gray-300, tables, badges, notices |
 | Afrikaans Locale Expansion | ✅ DONE 11.04 | `af` fully activated: dictionary 100% (608 keys), getDictionary.ts registered, homepage-cro-i18n.ts complete |
+| Phase 4 — Real Data Integration | ✅ DONE 17.04 | All viral feature pages use real data from roast_results: mystery, evolution, guest/[expert] — Mock-Daten entfernt, echte Daten aus /api/roast-statistics |
 
 ---
 

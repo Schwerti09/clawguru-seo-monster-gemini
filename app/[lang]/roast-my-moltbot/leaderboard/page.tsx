@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
-import { Trophy, Medal, Crown, TrendingUp, Flame } from "lucide-react"
+import { Trophy, Medal, Crown, TrendingUp, Flame, Loader2 } from "lucide-react"
 import Link from "next/link"
 
 interface PageProps { params: { lang: string } }
@@ -31,28 +31,36 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 }
 
-const topUsers = [
-  { rank: 1, name: "EliteSec_Ops", score: 98, industry: "Fintech", streak: 12, avatar: "🥇" },
-  { rank: 2, name: "DevOps_Ninja", score: 96, industry: "Crypto", streak: 8, avatar: "🥈" },
-  { rank: 3, name: "Cloud_Guardian", score: 94, industry: "SaaS", streak: 15, avatar: "🥉" },
-  { rank: 4, name: "Security_First", score: 92, industry: "HealthTech", streak: 6, avatar: "🔥" },
-  { rank: 5, name: "ZeroTrust_Pro", score: 91, industry: "Enterprise", streak: 9, avatar: "🛡️" },
-  { rank: 6, name: "Infra_Wizard", score: 89, industry: "Gaming", streak: 4, avatar: "⚡" },
-  { rank: 7, name: "Code_Hardened", score: 87, industry: "AI/ML", streak: 3, avatar: "💪" },
-  { rank: 8, name: "Stack_Master", score: 85, industry: "E-Commerce", streak: 7, avatar: "🏆" },
-  { rank: 9, name: "SysAdmin_Pro", score: 84, industry: "Media", streak: 2, avatar: "⭐" },
-  { rank: 10, name: "Cyber_Defender", score: 82, industry: "Fintech", streak: 5, avatar: "🔒" },
-]
+async function getRoastStatistics() {
+  try {
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
+    const response = await fetch(`${baseUrl}/api/roast-statistics`, {
+      next: { revalidate: 60 }, // Cache for 60 seconds
+    })
+    if (!response.ok) {
+      return null
+    }
+    return await response.json()
+  } catch (error) {
+    console.error("Failed to fetch roast statistics:", error)
+    return null
+  }
+}
 
-const risingStars = [
-  { name: "Startup_Founder", score: 76, improvement: +45, time: "2 weeks" },
-  { name: "CTO_TechCorp", score: 81, improvement: +38, time: "3 weeks" },
-  { name: "FullStack_Dev", score: 74, improvement: +36, time: "1 month" },
-]
-
-export default function LeaderboardPage({ params }: PageProps) {
+export default async function LeaderboardPage({ params }: PageProps) {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
+  const stats = await getRoastStatistics()
+
+  // Use topScores as leaderboard (anonymized)
+  const topUsers = stats?.topScores?.slice(0, 10).map((entry: any, idx: number) => ({
+    rank: idx + 1,
+    name: `Stack #${idx + 1}`,
+    score: entry.score,
+    industry: "Anonymized",
+    streak: "-",
+    avatar: idx === 0 ? "🥇" : idx === 1 ? "🥈" : idx === 2 ? "🥉" : "🔒",
+  })) || []
 
   return (
     <div className="min-h-screen bg-[#0a0a0a]">
@@ -61,7 +69,9 @@ export default function LeaderboardPage({ params }: PageProps) {
         <div className="text-center mb-10">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-amber-900/40 border border-amber-700/50 rounded-full text-sm mb-4">
             <Crown className="w-4 h-4 text-amber-400" />
-            <span className="text-amber-200">🏆 2,847 Teilnehmer weltweit</span>
+            <span className="text-amber-200">
+              {stats ? `🏆 ${stats.totalRoasts.toLocaleString()} Teilnehmer weltweit` : <Loader2 className="w-4 h-4 animate-spin inline" />}
+            </span>
           </div>
           <h1 className="text-4xl font-bold text-gray-100 mb-2">{isDE ? "Roast Leaderboard" : "Roast Leaderboard"}</h1>
           <p className="text-lg text-gray-300">
@@ -70,29 +80,34 @@ export default function LeaderboardPage({ params }: PageProps) {
         </div>
 
         {/* Top 3 Podium */}
-        <div className="grid md:grid-cols-3 gap-4 mb-10">
-          {topUsers.slice(0, 3).map((user, idx) => {
-            const sizes = ["scale-100", "scale-110", "scale-100"]
-            const orders = [2, 1, 3]
-            const medals = ["bg-gray-400", "bg-amber-400", "bg-orange-400"]
-            
-            return (
-              <div 
-                key={user.name}
-                className={`${sizes[idx]} ${orders[idx] === 1 ? "md:-mt-4" : ""} bg-gray-800 rounded-xl border border-gray-700 p-6 text-center relative`}
-              >
-                <div className={`absolute -top-3 left-1/2 -translate-x-1/2 w-8 h-8 ${medals[idx]} rounded-full flex items-center justify-center font-bold text-gray-900`}>
-                  {user.rank}
+        {!stats || topUsers.length === 0 ? (
+          <div className="text-center text-zinc-500 py-8 mb-10">
+            {isDE ? "Keine Daten verfügbar" : "No data available"}
+          </div>
+        ) : (
+          <div className="grid md:grid-cols-3 gap-4 mb-10">
+            {topUsers.slice(0, 3).map((user: any, idx: number) => {
+              const sizes = ["scale-100", "scale-110", "scale-100"]
+              const orders = [2, 1, 3]
+              const medals = ["bg-gray-400", "bg-amber-400", "bg-orange-400"]
+              
+              return (
+                <div 
+                  key={user.name}
+                  className={`${sizes[idx]} ${orders[idx] === 1 ? "md:-mt-4" : ""} bg-gray-800 rounded-xl border border-gray-700 p-6 text-center relative`}
+                >
+                  <div className={`absolute -top-3 left-1/2 -translate-x-1/2 w-8 h-8 ${medals[idx]} rounded-full flex items-center justify-center font-bold text-gray-900`}>
+                    {user.rank}
+                  </div>
+                  <div className="text-4xl mb-2">{user.avatar}</div>
+                  <div className="font-semibold text-gray-100">{user.name}</div>
+                  <div className="text-3xl font-bold text-amber-400 my-2">{user.score}</div>
+                  <div className="text-sm text-zinc-500">{user.industry}</div>
                 </div>
-                <div className="text-4xl mb-2">{user.avatar}</div>
-                <div className="font-semibold text-gray-100">{user.name}</div>
-                <div className="text-3xl font-bold text-amber-400 my-2">{user.score}</div>
-                <div className="text-sm text-zinc-500">{user.industry}</div>
-                <div className="text-xs text-amber-400 mt-1">🔥 {user.streak} {isDE ? "Wochen Streak" : "week streak"}</div>
-              </div>
-            )
-          })}
-        </div>
+              )
+            })}
+          </div>
+        )}
 
         {/* Full Leaderboard */}
         <section className="mb-10">
@@ -100,32 +115,37 @@ export default function LeaderboardPage({ params }: PageProps) {
             <Trophy className="w-5 h-5 text-amber-400" />
             {isDE ? "Top 10" : "Top 10"}
           </h2>
-          <div className="bg-gray-800 rounded-xl border border-gray-700 overflow-hidden">
-            {topUsers.map((user) => (
-              <div 
-                key={user.name} 
-                className="flex items-center gap-4 p-4 border-b border-gray-700/50 last:border-0 hover:bg-gray-700/30 transition-colors"
-              >
-                <div className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center font-bold text-sm text-gray-300">
-                  {user.rank}
-                </div>
-                <div className="text-2xl">{user.avatar}</div>
-                <div className="flex-1">
-                  <div className="font-medium text-gray-100">{user.name}</div>
-                  <div className="text-sm text-zinc-500">{user.industry}</div>
-                </div>
-                <div className="text-right">
-                  <div className={`text-xl font-bold ${
-                    user.score >= 90 ? "text-amber-400" :
-                    user.score >= 80 ? "text-green-400" : "text-cyan-400"
-                  }`}>
-                    {user.score}
+          {!stats || topUsers.length === 0 ? (
+            <div className="text-center text-zinc-500 py-8">
+              {isDE ? "Keine Daten verfügbar" : "No data available"}
+            </div>
+          ) : (
+            <div className="bg-gray-800 rounded-xl border border-gray-700 overflow-hidden">
+              {topUsers.map((user: any) => (
+                <div 
+                  key={user.name} 
+                  className="flex items-center gap-4 p-4 border-b border-gray-700/50 last:border-0 hover:bg-gray-700/30 transition-colors"
+                >
+                  <div className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center font-bold text-sm text-gray-300">
+                    {user.rank}
                   </div>
-                  <div className="text-xs text-zinc-500">🔥 {user.streak}</div>
+                  <div className="text-2xl">{user.avatar}</div>
+                  <div className="flex-1">
+                    <div className="font-medium text-gray-100">{user.name}</div>
+                    <div className="text-sm text-zinc-500">{user.industry}</div>
+                  </div>
+                  <div className="text-right">
+                    <div className={`text-xl font-bold ${
+                      user.score >= 90 ? "text-amber-400" :
+                      user.score >= 80 ? "text-green-400" : "text-cyan-400"
+                    }`}>
+                      {user.score}
+                    </div>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </section>
 
         {/* Rising Stars */}
@@ -134,16 +154,8 @@ export default function LeaderboardPage({ params }: PageProps) {
             <TrendingUp className="w-5 h-5 text-green-400" />
             {isDE ? "Rising Stars" : "Rising Stars"}
           </h2>
-          <div className="grid md:grid-cols-3 gap-4">
-            {risingStars.map((star) => (
-              <div key={star.name} className="bg-gradient-to-br from-green-900/30 to-gray-800 rounded-xl border border-green-700/50 p-4">
-                <div className="font-semibold text-gray-100">{star.name}</div>
-                <div className="flex items-center gap-2 mt-2">
-                  <span className="text-2xl font-bold text-green-400">{star.score}</span>
-                  <span className="text-sm text-green-300">+{star.improvement} in {star.time}</span>
-                </div>
-              </div>
-            ))}
+          <div className="bg-gray-800 p-6 rounded-lg border border-gray-700 text-center">
+            <p className="text-zinc-400 text-sm">{isDE ? "Rising Stars Tracking in Kürze verfügbar" : "Rising Stars tracking coming soon"}</p>
           </div>
         </section>
 

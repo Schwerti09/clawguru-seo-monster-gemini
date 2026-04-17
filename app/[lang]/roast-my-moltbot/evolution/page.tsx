@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
-import { TrendingUp, ArrowRight, Calendar } from "lucide-react"
+import { TrendingUp, ArrowRight, Calendar, Loader2 } from "lucide-react"
 
 interface PageProps { params: { lang: string } }
 
@@ -25,26 +25,30 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 }
 
-const evolutionData = [
-  {
-    id: "1",
-    stackName: "Kubernetes + Istio",
-    before: { score: 45, date: "2026-03-01", critical: 8 },
-    after: { score: 87, date: "2026-04-15", critical: 1 },
-    fixes: ["Added network policies", "Enabled mTLS", "Fixed RBAC", "Rotated secrets"],
-  },
-  {
-    id: "2",
-    stackName: "PostgreSQL + pgcrypto",
-    before: { score: 62, date: "2026-03-15", critical: 3 },
-    after: { score: 94, date: "2026-04-10", critical: 0 },
-    fixes: ["Enabled row-level security", "Added encryption at rest", "Updated to latest version"],
-  },
-]
+async function getRoastStatistics() {
+  try {
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
+    const response = await fetch(`${baseUrl}/api/roast-statistics`, {
+      next: { revalidate: 60 }, // Cache for 60 seconds
+    })
+    if (!response.ok) {
+      return null
+    }
+    return await response.json()
+  } catch (error) {
+    console.error("Failed to fetch roast statistics:", error)
+    return null
+  }
+}
 
-export default function StackEvolutionPage({ params }: PageProps) {
+export default async function StackEvolutionPage({ params }: PageProps) {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
+  const stats = await getRoastStatistics()
+
+  // Use bottom scores as "before" and top scores as "after" to show evolution
+  const before = stats?.bottomScores?.[0] || null
+  const after = stats?.topScores?.[0] || null
 
   return (
     <div className="min-h-screen bg-[#0a0a0a]">
@@ -62,24 +66,32 @@ export default function StackEvolutionPage({ params }: PageProps) {
         </div>
 
         {/* Evolution Cards */}
-        <div className="space-y-6">
-          {evolutionData.map((evolution) => (
-            <div key={evolution.id} className="bg-gray-800 rounded-xl border border-gray-700 p-6">
+        {!stats || !before || !after ? (
+          <div className="bg-gray-800 rounded-xl border border-gray-700 p-12 text-center">
+            <TrendingUp className="w-16 h-16 text-zinc-500 mx-auto mb-4" />
+            <h2 className="text-2xl font-bold text-gray-100 mb-2">{isDE ? "Keine Evolution-Daten verfügbar" : "No evolution data available"}</h2>
+            <p className="text-zinc-400">
+              {isDE ? "Noch keine Roast-Daten für Evolution verfügbar" : "No roast data available for evolution yet"}
+            </p>
+          </div>
+        ) : (
+          <div className="space-y-6">
+            <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
               {/* Stack Name */}
-              <h3 className="text-xl font-semibold text-gray-100 mb-4">{evolution.stackName}</h3>
+              <h3 className="text-xl font-semibold text-gray-100 mb-4">{isDE ? "Community Evolution" : "Community Evolution"}</h3>
 
               {/* Before/After Comparison */}
               <div className="grid grid-cols-2 gap-4 mb-6">
                 {/* Before */}
                 <div className="bg-red-900/20 rounded-lg p-4 border border-red-800/50">
-                  <div className="text-sm text-zinc-500 mb-2">{isDE ? "Vorher" : "Before"}</div>
+                  <div className="text-sm text-zinc-500 mb-2">{isDE ? "Niedrigster Score" : "Lowest Score"}</div>
                   <div className="flex items-center gap-2 mb-2">
                     <Calendar className="w-4 h-4 text-zinc-500" />
-                    <span className="text-xs text-zinc-500">{evolution.before.date}</span>
+                    <span className="text-xs text-zinc-500">{before.created_at ? new Date(before.created_at).toLocaleDateString() : "-"}</span>
                   </div>
-                  <div className="text-4xl font-bold text-red-400 mb-1">{evolution.before.score}</div>
+                  <div className="text-4xl font-bold text-red-400 mb-1">{before.score}</div>
                   <div className="text-sm text-zinc-500">
-                    {evolution.before.critical} {isDE ? "kritisch" : "critical"}
+                    {isDE ? "Verbesserungsbedarf" : "Needs improvement"}
                   </div>
                 </div>
 
@@ -90,14 +102,14 @@ export default function StackEvolutionPage({ params }: PageProps) {
 
                 {/* After */}
                 <div className="bg-green-900/20 rounded-lg p-4 border border-green-800/50">
-                  <div className="text-sm text-zinc-500 mb-2">{isDE ? "Nachher" : "After"}</div>
+                  <div className="text-sm text-zinc-500 mb-2">{isDE ? "Höchster Score" : "Highest Score"}</div>
                   <div className="flex items-center gap-2 mb-2">
                     <Calendar className="w-4 h-4 text-zinc-500" />
-                    <span className="text-xs text-zinc-500">{evolution.after.date}</span>
+                    <span className="text-xs text-zinc-500">{after.created_at ? new Date(after.created_at).toLocaleDateString() : "-"}</span>
                   </div>
-                  <div className="text-4xl font-bold text-green-400 mb-1">{evolution.after.score}</div>
+                  <div className="text-4xl font-bold text-green-400 mb-1">{after.score}</div>
                   <div className="text-sm text-zinc-500">
-                    {evolution.after.critical} {isDE ? "kritisch" : "critical"}
+                    {isDE ? "Elite Status" : "Elite status"}
                   </div>
                 </div>
               </div>
@@ -106,32 +118,32 @@ export default function StackEvolutionPage({ params }: PageProps) {
               <div className="flex items-center gap-2 mb-4">
                 <TrendingUp className="w-5 h-5 text-cyan-400" />
                 <span className="text-sm text-cyan-400">
-                  +{evolution.after.score - evolution.before.score} {isDE ? "Punkte" : "points"}
+                  +{after.score - before.score} {isDE ? "Punkte Differenz" : "points difference"}
                 </span>
               </div>
 
               {/* Fixes */}
               <div>
                 <div className="text-sm text-zinc-500 mb-2">
-                  {isDE ? "Behoben" : "Fixed"}
+                  {isDE ? "Top Fixes" : "Top fixes"}
                 </div>
                 <div className="space-y-1">
-                  {evolution.fixes.map((fix, index) => (
+                  {after.weaknesses?.slice(0, 3).map((fix: string, index: number) => (
                     <div key={index} className="flex items-start gap-2 text-sm text-gray-300">
                       <div className="text-green-400 mt-0.5">✓</div>
                       <span>{fix}</span>
                     </div>
-                  ))}
+                  )) || <div className="text-zinc-500">{isDE ? "Keine Fixes verfügbar" : "No fixes available"}</div>}
                 </div>
               </div>
             </div>
-          ))}
-        </div>
+          </div>
+        )}
 
         {/* Add New */}
         <div className="mt-6 text-center">
           <button className="px-6 py-3 bg-cyan-600 hover:bg-cyan-500 rounded-lg font-semibold text-white transition-colors">
-            {isDE ? "+ Evolution hinzufügen" : "+ Add evolution"}
+            {isDE ? "+ Roast starten" : "+ Start roast"}
           </button>
         </div>
 

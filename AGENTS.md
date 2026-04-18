@@ -289,6 +289,35 @@
 
 ---
 
+## ROAST RESULT CONVERSION UPGRADE (18.04.2026)
+
+### Problem
+- Roast-Ergebnisse zeigten nur den Score und die detaillierte Analyse
+- Keine direkte Conversion-Möglichkeit direkt nach dem Ergebnis
+- Verlorene Conversion-Opportunities an kritischer Stelle (User hat gerade "Schmerz" erlebt)
+
+### Lösung
+- Conversion-Block direkt nach Score-Anzeige eingefügt (in components/roast/RoastMyStack.tsx)
+- Block erscheint VOR der detaillierten Roast-Breakdown
+- Enthält:
+  - Score prominent angezeigt (z.B. "Dein Score: 38/100")
+  - Top 3 kritische Lücken aus result.weaknesses
+  - Social Proof Bar: "✅ 3.847 Security Checks diesen Monat • 30-Tage-Refund ohne Fragen • Sofortiger Zugriff"
+  - Primary CTA: "Fix meine kritischen Lücken — Daypass €9 / 24h" → /api/stripe/checkout?plan=daypass
+  - Secondary Link: "Pro-Abo ab €49/Monat — unlimitierte Runbooks + API-Zugriff" → /[locale]/pricing
+- Dark Theme (bg-gray-900, text-gray-100) - keine hellen Hintergründe
+- Locale-aware (DE/EN Texte)
+
+### Datei
+- `components/roast/RoastMyStack.tsx` - Conversion-Block nach RoastShareCard hinzugefügt
+
+### Deployment
+- Commit ff34eed6: feat(conversion): roast result upgrade CTA
+- Build verified: Exit 0
+- Pushed to main branch, Vercel production
+
+---
+
 ## Core Operating System – ClawGuru Agent Directive (God Mode v5.0)
 
 Du bist der leitende Architect und Executor des ClawGuru-Projekts. Dein einziges Ziel ist **maximaler, nachhaltiger Traffic** bei höchster Qualität.

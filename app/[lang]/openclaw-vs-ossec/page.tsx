@@ -167,7 +167,7 @@ export default function OpenClawVsOssecPage({ params }: { params: { lang: string
               <div className="font-semibold text-cyan-400">🖥️ {isDE ? 'Server Hardening' : 'Server Hardening'}</div>
               <div className="text-sm text-gray-300">{isDE ? 'Server Checklist Runbook' : 'Server Checklist Runbook'}</div>
             </a>
-            <a href={`/${lang}/securitycheck`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
+            <a href={`/${lang}/check`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">🛡️ {isDE ? 'Security Check' : 'Security Check'}</div>
               <div className="text-sm text-gray-300">{isDE ? 'Kostenlos starten' : 'Start for free'}</div>
             </a>

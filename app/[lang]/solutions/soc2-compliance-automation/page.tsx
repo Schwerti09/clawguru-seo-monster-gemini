@@ -97,7 +97,7 @@ export default function Soc2CompliancePage({ params }: { params: { lang: string 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">🔗 ClawGuru für SOC2</h2>
           <div className="grid grid-cols-2 gap-4">
-            <a href="/securitycheck" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700"><div className="font-semibold text-cyan-400">🛡️ Security Check</div><div className="text-sm text-gray-300">SOC2 Gap Assessment</div></a>
+            <a href="/check" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700"><div className="font-semibold text-cyan-400">🛡️ Security Check</div><div className="text-sm text-gray-300">SOC2 Gap Assessment</div></a>
             <a href="/runbooks" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700"><div className="font-semibold text-cyan-400">📚 Compliance Runbooks</div><div className="text-sm text-gray-300">SOC2 Control Guides</div></a>
             <a href="/oracle" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700"><div className="font-semibold text-cyan-400">🔮 Oracle</div><div className="text-sm text-gray-300">Compliance Intelligence</div></a>
             <a href="/solutions" className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700"><div className="font-semibold text-cyan-400">🏢 Enterprise</div><div className="text-sm text-gray-300">Managed SOC2</div></a>

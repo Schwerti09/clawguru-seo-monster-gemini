@@ -225,7 +225,7 @@ export default function GdprLlmDataProcessingPage({ params }: { params: { lang: 
               <div className="font-semibold text-cyan-400">Privacy-Preserving LLM Computation</div>
               <div className="text-sm text-gray-300">{isDE ? "Datenschutzkonforme LLM-Verarbeitung" : "Privacy-safe LLM computation techniques"}</div>
             </a>
-            <a href={`/${locale}/securitycheck`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
+            <a href={`/${locale}/check`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">{isDE ? "Security Check starten" : "Start Security Check"}</div>
               <div className="text-sm text-gray-300">{isDE ? "DSGVO-Lücken in deiner KI-Infrastruktur finden" : "Find GDPR gaps in your AI infrastructure"}</div>
             </a>
@@ -241,7 +241,7 @@ export default function GdprLlmDataProcessingPage({ params }: { params: { lang: 
               ? "ClawGuru analysiert deine LLM-Infrastruktur und erstellt einen DSGVO-Compliance-Runbook für dein Setup."
               : "ClawGuru analyzes your LLM infrastructure and generates a GDPR compliance runbook for your setup."}
           </p>
-          <a href={`/${locale}/securitycheck`} className="inline-block bg-cyan-500 hover:bg-cyan-400 text-black font-bold px-6 py-3 rounded-lg transition-colors">
+          <a href={`/${locale}/check`} className="inline-block bg-cyan-500 hover:bg-cyan-400 text-black font-bold px-6 py-3 rounded-lg transition-colors">
             {isDE ? "🛡️ Kostenloser Security Check" : "🛡️ Free Security Check"}
           </a>
         </div>

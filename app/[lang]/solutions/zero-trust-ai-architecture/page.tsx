@@ -225,7 +225,7 @@ export default function ZeroTrustAiArchitecturePage({ params }: { params: { lang
               <div className="font-semibold text-cyan-400">AI Agent RBAC</div>
               <div className="text-sm text-gray-300">{isDE ? "Rollenbasierte Zugriffskontrolle" : "Role-based access control for agents"}</div>
             </a>
-            <a href={`/${locale}/securitycheck`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
+            <a href={`/${locale}/check`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">{isDE ? "Security Check starten" : "Start Security Check"}</div>
               <div className="text-sm text-gray-300">{isDE ? "Deine AI-Infrastruktur in 30 Sekunden prüfen" : "Check your AI infrastructure in 30 seconds"}</div>
             </a>
@@ -239,7 +239,7 @@ export default function ZeroTrustAiArchitecturePage({ params }: { params: { lang
           <p className="text-gray-300 mb-4 text-sm">
             {isDE ? "ClawGuru analysiert deine Architektur und generiert einen Zero-Trust-Runbook für dein Setup." : "ClawGuru analyzes your architecture and generates a Zero Trust runbook for your setup."}
           </p>
-          <a href={`/${locale}/securitycheck`} className="inline-block bg-cyan-500 hover:bg-cyan-400 text-black font-bold px-6 py-3 rounded-lg transition-colors">
+          <a href={`/${locale}/check`} className="inline-block bg-cyan-500 hover:bg-cyan-400 text-black font-bold px-6 py-3 rounded-lg transition-colors">
             {isDE ? "🛡️ Kostenloser Security Check" : "🛡️ Free Security Check"}
           </a>
         </div>

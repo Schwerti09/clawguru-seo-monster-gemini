@@ -299,7 +299,7 @@ export default function PartnersPage({ params }: PageProps) {
               <div className="font-semibold text-cyan-400">{isDE ? "Roast My Moltbot" : "Roast My Moltbot"}</div>
               <div className="text-sm text-gray-300">{isDE ? "Roast starten" : "Start the roast"}</div>
             </Link>
-            <Link href={`/${locale}/securitycheck`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
+            <Link href={`/${locale}/check`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">{isDE ? "Security Check" : "Security Check"}</div>
               <div className="text-sm text-gray-300">{isDE ? "Infrastruktur prüfen" : "Check infrastructure"}</div>
             </Link>

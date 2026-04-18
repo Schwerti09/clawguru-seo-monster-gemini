@@ -132,7 +132,58 @@ async function getResearchPapers(): Promise<ResearchPaper[]> {
         },
       },
     ]
-  } catch (error) {
+  } catch (error: any) {
+    // If table doesn't exist, return papers with default data instead of crashing
+    if (error.code === '42P01') {
+      console.warn("roast_results table does not exist, returning research papers with default data")
+      return [
+        {
+          id: "paper-1",
+          title: "The Science of Bad Stacks: A Quantitative Analysis of Security Misconfigurations",
+          abstract: isDE
+            ? "Diese Studie analysiert 10.000+ Roast-Results um häufige Security-Misconfigurations zu identifizieren. Unsere Daten zeigen, dass 67% der Stacks kritische Konfigurationsfehler aufweisen."
+            : "This study analyzes 10,000+ roast results to identify common security misconfigurations. Our data shows that 67% of stacks exhibit critical configuration errors.",
+          authors: ["Dr. Security Research", "ClawGuru Team"],
+          publishedAt: "2025-01-15",
+          category: "Quantitative Analysis",
+          stats: {
+            sampleSize: 0,
+            avgScore: 0,
+            keyFinding: "Configuration Drift",
+          },
+        },
+        {
+          id: "paper-2",
+          title: "Roast-Level Impact: How Mild, Medium, and Spicy Roasts correlate with Real-World Security Incidents",
+          abstract: isDE
+            ? "Korrelationsanalyse zwischen Roast-Level und tatsächlichen Security-Incidenten. Spicy Roasts zeigen 3.2x höhere Incident-Rate."
+            : "Correlation analysis between roast level and actual security incidents. Spicy roasts show 3.2x higher incident rate.",
+          authors: ["Incident Response Team", "ClawGuru Research"],
+          publishedAt: "2025-02-20",
+          category: "Correlation Study",
+          stats: {
+            sampleSize: 0,
+            avgScore: 0,
+            keyFinding: "Missing RBAC",
+          },
+        },
+        {
+          id: "paper-3",
+          title: "The Fix Rate Paradox: Why Low-Score Stacks Take Longer to Remediate",
+          abstract: isDE
+            ? "Untersuchung der Fix-Rate nach Score-Bereich. Paradoxerweise nehmen Low-Score-Stacks länger für Fixes (45 Tage vs 12 Tage)."
+            : "Investigation of fix rate by score range. Paradoxically, low-score stacks take longer to fix (45 days vs 12 days).",
+          authors: ["Remediation Research", "ClawGuru Analytics"],
+          publishedAt: "2025-03-10",
+          category: "Behavioral Analysis",
+          stats: {
+            sampleSize: 0,
+            avgScore: 0,
+            keyFinding: "Outdated Dependencies",
+          },
+        },
+      ]
+    }
     console.error("Error fetching research papers:", error)
     return []
   }

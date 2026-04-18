@@ -51,7 +51,19 @@ export async function GET() {
       topScores: topScoresResult.rows,
       bottomScores: bottomScoresResult.rows,
     })
-  } catch (error) {
+  } catch (error: any) {
+    // If table doesn't exist, return default data instead of crashing
+    if (error.code === '42P01') {
+      console.warn("roast_results table does not exist, returning default data")
+      return NextResponse.json({
+        totalRoasts: 0,
+        eliteStacks: 0,
+        avgScore: 0,
+        roastsToday: 0,
+        topScores: [],
+        bottomScores: [],
+      })
+    }
     console.error("Error fetching roast statistics:", error)
     return NextResponse.json(
       { error: "Failed to fetch statistics" },

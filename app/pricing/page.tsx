@@ -1,8 +1,10 @@
 import Container from "@/components/shared/Container"
 import BuyButton from "@/components/commerce/BuyButton"
+import SocialProofBlock from "@/components/commerce/SocialProofBlock"
 import EnterpriseConciergeButton from "@/components/enterprise/EnterpriseConciergeButton"
 import { SEO_TARGET_KEYWORDS_2026 } from "@/lib/seo/targets"
 import { TIER_LIMITS } from "@/lib/feature-gating"
+import { SOCIAL_PROOF_CONFIG } from "@/lib/social-proof-config"
 import { headers } from "next/headers"
 import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
 import { getDictionary } from "@/lib/getDictionary"
@@ -571,9 +573,10 @@ export default async function PricingPage() {
                 <FeatureList groups={DAY_PASS_GROUPS} newBadge={dict.pricing.newBadge} />
 
                 <div className="mt-auto pt-6">
+                  <SocialProofBlock locale={locale} />
                   <BuyButton
                     product="daypass"
-                    label={"Day Pass kaufen (9€) → Stripe"}
+                    label={isDE ? "Fix meine Lücken — Daypass €9" : "Fix my gaps — Daypass €9"}
                     className="w-full py-3 px-6 rounded-2xl font-black text-sm text-black transition-all duration-300 hover:opacity-90 disabled:opacity-60"
                     style={{ background: "linear-gradient(135deg, #00b8ff 0%, #0077ff 100%)", boxShadow: "0 0 30px rgba(0,184,255,0.3)" }}
                   />
@@ -619,9 +622,10 @@ export default async function PricingPage() {
                 <FeatureList groups={PRO_GROUPS} newBadge={dict.pricing.newBadge} />
 
                 <div className="mt-auto pt-6">
+                  <SocialProofBlock locale={locale} />
                   <BuyButton
                     product="pro"
-                    label={"Pro starten (49€/Monat) → Stripe"}
+                    label={isDE ? "Jetzt Pro werden — €49/Monat" : "Become Pro now — €49/Month"}
                     className="w-full py-3 px-6 rounded-2xl font-black text-sm text-black transition-all duration-300 hover:opacity-90 disabled:opacity-60"
                     style={{ background: "linear-gradient(135deg, #a78bfa 0%, #00ff9d 100%)", boxShadow: "0 0 30px rgba(139,92,246,0.35)" }}
                   />
@@ -661,9 +665,10 @@ export default async function PricingPage() {
                 <FeatureList groups={TEAM_GROUPS} newBadge={dict.pricing.newBadge} />
 
                 <div className="mt-auto pt-6">
+                  <SocialProofBlock locale={locale} />
                   <BuyButton
                     product="team"
-                    label={"Teams starten (129€/Monat) → Stripe"}
+                    label={isDE ? "Teams starten (129€/Monat) → Stripe" : "Start Teams (129€/Month) → Stripe"}
                     className="w-full py-3 px-6 rounded-2xl font-black text-sm text-white border transition-all duration-300 hover:bg-white/5 disabled:opacity-60"
                     style={{ borderColor: "rgba(0,255,157,0.4)", boxShadow: "0 0 20px rgba(0,255,157,0.1)" }}
                   />
@@ -674,6 +679,21 @@ export default async function PricingPage() {
               </div>
             </div>
           </div>
+
+          {/* ── Who is Pro for? ── */}
+          <section className="mb-12">
+            <div className="text-xs font-mono uppercase tracking-[0.25em] text-gray-500 mb-6 text-center">
+              {isDE ? "Für wen ist Pro?" : "Who is Pro for?"}
+            </div>
+            <div className="grid md:grid-cols-3 gap-6">
+              {(SOCIAL_PROOF_CONFIG.proPersonas[locale as keyof typeof SOCIAL_PROOF_CONFIG.proPersonas] || SOCIAL_PROOF_CONFIG.proPersonas.de).map((persona, index) => (
+                <div key={index} className="bg-gray-800 border border-gray-700 p-4 rounded-lg">
+                  <div className="font-semibold text-gray-100 text-base mb-2">{persona.title}</div>
+                  <div className="text-sm text-gray-300">{persona.description}</div>
+                </div>
+              ))}
+            </div>
+          </section>
 
           {/* ── Enterprise API ── */}
           <div id="enterprise" className="mt-10 relative rounded-3xl p-[1px] overflow-hidden"

@@ -1,5 +1,6 @@
 import Container from "@/components/shared/Container"
 import BuyButton from "@/components/commerce/BuyButton"
+import SocialProofBlock from "@/components/commerce/SocialProofBlock"
 
 export const metadata = {
   title: "24h Day Pass – Sofortzugang bei IT-Notfall | ClawGuru",
@@ -161,9 +162,10 @@ function HeroCard({
 
         {/* CTA */}
         <div className="mt-6">
+          <SocialProofBlock locale="de" />
           <BuyButton
             product="daypass"
-            label={hero.cta}
+            label="Fix meine Lücken — Daypass €9"
             className="inline-block px-8 py-4 rounded-2xl font-black text-base text-black transition-all duration-300 hover:opacity-90 disabled:opacity-60"
             style={{
               background: `linear-gradient(135deg, ${hero.gradientStart} 0%, ${hero.gradientEnd} 100%)`,
@@ -211,9 +213,10 @@ export default function DayPassLandingPage() {
             </span>
           </p>
           <div className="mt-8">
+            <SocialProofBlock locale="de" />
             <BuyButton
               product="daypass"
-              label="Sofort-Zugang kaufen – 9€ · Kein Abo"
+              label="Fix meine Lücken — Daypass €9"
               className="inline-block px-10 py-4 rounded-2xl font-black text-base text-black transition-all duration-300 hover:opacity-90 disabled:opacity-60"
               style={{
                 background: "linear-gradient(135deg, #ff4040 0%, #ff8800 100%)",
@@ -323,9 +326,10 @@ export default function DayPassLandingPage() {
               9€. 24 Stunden. Vollzugriff. Kein Abo, kein Account, kein Onboarding.
               Zugang ist in unter 60 Sekunden aktiv.
             </p>
+            <SocialProofBlock locale="de" />
             <BuyButton
               product="daypass"
-              label="Day Pass kaufen – 9€ · Kein Abo · Sofort aktiv"
+              label="Fix meine Lücken — Daypass €9"
               className="inline-block px-10 py-4 rounded-2xl font-black text-base text-black transition-all duration-300 hover:opacity-90 disabled:opacity-60"
               style={{
                 background: "linear-gradient(135deg, #ff4040 0%, #ff8800 100%)",

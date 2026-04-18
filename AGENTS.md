@@ -207,6 +207,36 @@
 
 ---
 
+## CRITICAL BUG FIX — roast_results Table Missing (18.04.2026)
+
+### Problem
+- Production errors: `relation "roast_results" does not exist` (PostgreSQL Error Code 42P01)
+- Affects: `/api/roast-statistics`, `/app/[lang]/roast-statistics/page`, `/app/[lang]/research/page`
+- Migration exists: `scripts/db/migrations/004_roast_results.sql` (not yet applied to production)
+
+### Fix Applied
+- Added graceful error handling for PostgreSQL Error Code '42P01' (relation does not exist)
+- Returns default data instead of crashing:
+  - API Route: `{ totalRoasts: 0, eliteStacks: 0, avgScore: 0, roastsToday: 0, topScores: [], bottomScores: [] }`
+  - Statistics Page: Full default statistics object with zero values
+  - Research Page: Research papers with default stats (sampleSize: 0, avgScore: 0)
+
+### Files Modified
+- `app/api/roast-statistics/route.ts` - Graceful error handling
+- `app/[lang]/roast-statistics/page.tsx` - Graceful error handling
+- `app/[lang]/research/page.tsx` - Graceful error handling
+
+### Deployment
+- Commit c7589241: API Route fix
+- Commit d76eea12: Page fixes
+- Both deployed to main branch, Vercel production
+
+### Future Action
+- Run migration `scripts/db/migrations/004_roast_results.sql` on production database when ready
+- After migration, default data will be replaced with real statistics
+
+---
+
 ## Core Operating System – ClawGuru Agent Directive (God Mode v2.0)
 
 Du bist der leitende Architect und Executor des ClawGuru-Projekts. Dein einziges Ziel ist **maximaler, nachhaltiger Traffic** bei höchster Qualität.

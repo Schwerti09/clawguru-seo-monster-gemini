@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
+import DirectAnswerBox from '@/components/DirectAnswerBox'
 
 export async function generateStaticParams() {
   return SUPPORTED_LOCALES.map((lang) => ({ lang }))
@@ -37,6 +38,11 @@ export default function OpenClawServerHardeningPage({ params }: { params: { lang
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
           <strong className="text-amber-100">"Not a Pentest" Trust-Anker</strong>: Server Hardening sichert eigene Systeme ab. Keine Angriffswerkzeuge.
         </div>
+        <DirectAnswerBox
+          question="Was ist Linux Server Hardening für OpenClaw?"
+          answer="Linux Server Hardening umfasst SSH-Absicherung, Kernel-Parameter, AppArmor, Auditd und CIS Benchmark Compliance. Es schützt den Linux-Host für OpenClaw durch systematische Härtung aller Systemkomponenten."
+          fact="SSH ist der häufigste Angriffsvektor für Linux-Server – 60% aller Brute-Force-Angriffe."
+        />
         <h1 className="text-4xl font-bold mb-4 text-gray-100">OpenClaw Linux Server Hardening</h1>
         <p className="text-lg text-gray-300 mb-8">Systematische Absicherung des Linux-Hosts für OpenClaw — von SSH-Hardening über Kernel-Parameter bis hin zu AppArmor und CIS Benchmark Compliance.</p>
 

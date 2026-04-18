@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
+import DirectAnswerBox from '@/components/DirectAnswerBox'
 
 export async function generateStaticParams() {
   return SUPPORTED_LOCALES.map((lang) => ({ lang }))
@@ -30,6 +31,11 @@ export default function MoltbotZeroTrustPage({ params }: { params: { lang: strin
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
           <strong className="text-amber-100">"Not a Pentest" Trust-Anker</strong>: Zero Trust ist ein Sicherheitsmodell, kein Angriffswerkzeug. Dieser Guide dient ausschließlich der Absicherung von Systemen.
         </div>
+        <DirectAnswerBox
+          question="Was ist Zero Trust Architecture?"
+          answer="Zero Trust Architecture bedeutet Never Trust, Always Verify – jeder Zugriff wird kontinuierlich verifiziert, unabhängig von Netzwerkposition oder Identität. Es implementiert Micro-Segmentierung, Identity-basierten Zugriff und Least-Privilege-Prinzipien."
+          fact="Zero Trust reduziert das Risiko von Lateral Movement um 80% durch kontinuierliche Verifizierung."
+        />
         <h1 className="text-4xl font-bold mb-4 text-gray-100">Moltbot Zero Trust Architecture</h1>
         <p className="text-lg text-gray-300 mb-8">Zero Trust bedeutet: Kein implizites Vertrauen – weder intern noch extern. Jeder Zugriff wird kontinuierlich verifiziert, unabhängig von Netzwerkposition oder Identität.</p>
 

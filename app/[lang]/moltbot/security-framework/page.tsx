@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n';
+import DirectAnswerBox from '@/components/DirectAnswerBox';
 
 interface PageProps {
   params: { lang: string };
@@ -56,7 +57,13 @@ export default function MoltbotSecurityFrameworkPage({ params }: PageProps) {
               <strong className="text-amber-100">"Not a Pentest" Trust-Anker</strong>: Dieser Guide dient ausschließlich zu Bildungs- und Hardening-Zwecken. Keine Angriffswerkzeuge, keine illegalen Aktivitäten.
             </p>
           </div>
-          
+
+          <DirectAnswerBox
+            question="Was ist das Moltbot Security Framework?"
+            answer="Das Moltbot Security Framework ist ein umfassender Ansatz zur Absicherung autonomer Bot-Systeme mit Zero Trust Architecture, Defense in Depth und Secure by Design Prinzipien. Es schützt kritische Geschäftsprozesse durch mehrschichtige Sicherheitskontrollen und kontinuierliche Überwachung."
+            fact="Das Framework integriert Security von Anfang an und erfordert Verifizierung jeder Anfrage."
+          />
+
           <section className="mb-12">
             <h2 className="text-2xl font-semibold mb-4 text-gray-100">🎯 Executive Summary</h2>
             <p>

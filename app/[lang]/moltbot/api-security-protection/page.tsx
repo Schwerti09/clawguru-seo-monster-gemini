@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
+import DirectAnswerBox from '@/components/DirectAnswerBox'
 
 export async function generateStaticParams() {
   return SUPPORTED_LOCALES.map((lang) => ({ lang }))
@@ -29,6 +30,11 @@ export default function MoltbotApiSecurityPage({ params }: { params: { lang: str
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
           <strong className="text-amber-100">"Not a Pentest" Trust-Anker</strong>: Dieser Guide dient ausschließlich zur Absicherung von API-Endpoints. Keine Angriffswerkzeuge, keine illegalen Aktivitäten.
         </div>
+        <DirectAnswerBox
+          question="Was ist API Security Protection?"
+          answer="API Security Protection umfasst die Absicherung von REST Endpoints durch JWT Hardening, Rate Limiting, Input Validation und DDoS-Schutz. Es schützt API-gesteuerte Systeme vor unautorisiertem Zugriff und Missbrauch durch mehrschichtige Sicherheitskontrollen."
+          fact="70% aller API-Sicherheitsvorfälle resultieren aus fehlender Authentifizierung oder Rate Limiting."
+        />
         <h1 className="text-4xl font-bold mb-4 text-gray-100">Moltbot API Security: REST Endpoints Protection</h1>
         <p className="text-lg text-gray-300 mb-8">Vollständige API Security für Moltbot — von JWT-Hardening über Rate Limiting bis hin zu Input Validation und DDoS-Schutz.</p>
 

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
+import DirectAnswerBox from '@/components/DirectAnswerBox'
 
 export async function generateStaticParams() {
   return SUPPORTED_LOCALES.map((lang) => ({ lang }))
@@ -30,6 +31,11 @@ export default function OpenClawDockerSwarmPage({ params }: { params: { lang: st
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
           <strong className="text-amber-100">"Not a Pentest" Trust-Anker</strong>: Docker Swarm Hardening sichert eigene Container-Infrastrukturen ab. Keine Angriffswerkzeuge.
         </div>
+        <DirectAnswerBox
+          question="Was ist Docker Swarm Hardening für OpenClaw?"
+          answer="Docker Swarm Hardening umfasst Secrets Management, TLS Encryption, Network Isolation, Image Scanning und Service Mesh Security. Es schützt Container-Workloads vor Escape-Angriffen durch mehrschichtige Sicherheitskontrollen."
+          fact="80% aller Docker-Container laufen mit unsicheren Default-Konfigurationen."
+        />
         <h1 className="text-4xl font-bold mb-4 text-gray-100">OpenClaw Docker Swarm Hardening</h1>
         <p className="text-lg text-gray-300 mb-8">Production-ready Security für Docker Swarm — von Secrets Management über Network Isolation bis hin zu Image Scanning und Runtime Security.</p>
 

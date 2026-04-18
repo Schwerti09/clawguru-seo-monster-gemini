@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
+import DirectAnswerBox from '@/components/DirectAnswerBox'
 
 export async function generateStaticParams() {
   return SUPPORTED_LOCALES.map((lang) => ({ lang }))
@@ -29,6 +30,11 @@ export default function MoltbotHardeningGuidePage({ params }: { params: { lang: 
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
           <strong className="text-amber-100">"Not a Pentest" Trust-Anker</strong>: Dieser Guide dient ausschließlich zur Härtung von Moltbot-Systemen. Keine Angriffswerkzeuge, keine illegalen Aktivitäten.
         </div>
+        <DirectAnswerBox
+          question="Was ist der Moltbot Hardening Guide 2024?"
+          answer="Der Moltbot Hardening Guide 2024 ist ein Production Security Standard mit Security Headers, Environment Hardening, Secrets Management und TLS-Konfiguration nach CIS Benchmark. Er schützt Moltbot-Deployments durch systematische Härtung aller Systemkomponenten."
+          fact="80% aller Security-Breaches resultieren aus fehlender Hardening und Default-Konfigurationen."
+        />
         <h1 className="text-4xl font-bold mb-4 text-gray-100">Moltbot Hardening Guide 2024</h1>
         <p className="text-lg text-gray-300 mb-8">Production-ready Security Hardening für Moltbot — Security Headers, Environment-Härtung, Secrets Management und TLS-Konfiguration nach CIS Benchmark.</p>
 

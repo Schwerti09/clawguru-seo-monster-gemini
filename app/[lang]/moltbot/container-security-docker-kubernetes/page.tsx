@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
+import DirectAnswerBox from '@/components/DirectAnswerBox'
 
 export async function generateStaticParams() {
   return SUPPORTED_LOCALES.map((lang) => ({ lang }))
@@ -29,6 +30,11 @@ export default function MoltbotContainerSecurityPage({ params }: { params: { lan
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
           <strong className="text-amber-100">"Not a Pentest" Trust-Anker</strong>: Dieser Guide dient ausschließlich zur Absicherung von Container-Infrastrukturen. Keine Angriffswerkzeuge, keine illegalen Aktivitäten.
         </div>
+        <DirectAnswerBox
+          question="Was ist Container Security für Docker und Kubernetes?"
+          answer="Container Security umfasst Dockerfile Hardening, Kubernetes Network Policies, RBAC, Pod Security Standards und Runtime Protection mit Falco. Es schützt Container-Workloads vor Escape-Angriffen und unautorisiertem Zugriff durch mehrschichtige Sicherheitskontrollen."
+          fact="70% aller Docker-Container laufen als root – ein kritisches Sicherheitsrisiko."
+        />
         <h1 className="text-4xl font-bold mb-4 text-gray-100">Moltbot Container Security: Docker &amp; Kubernetes</h1>
         <p className="text-lg text-gray-300 mb-8">Umfassende Container Security für Moltbot — von gehärteten Dockerfiles über Kubernetes Network Policies bis hin zu Runtime Protection mit Falco.</p>
 

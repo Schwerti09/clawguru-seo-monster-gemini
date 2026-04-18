@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
+import DirectAnswerBox from '@/components/DirectAnswerBox'
 
 export async function generateStaticParams() {
   return SUPPORTED_LOCALES.map((lang) => ({ lang }))
@@ -79,6 +80,11 @@ export default function OpenClawSelfHostedChecklistPage({ params }: { params: { 
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
           <strong className="text-amber-100">"Not a Pentest" Trust-Anker</strong>: Diese Checkliste dient der Absicherung eigener OpenClaw-Installationen. Keine Angriffswerkzeuge.
         </div>
+        <DirectAnswerBox
+          question="Was ist die OpenClaw Self-Hosted Security Checklist?"
+          answer="Die OpenClaw Self-Hosted Security Checklist ist eine 100-Punkt-Checkliste für Server, Netzwerk, Datenbank, Auth und Monitoring. Sie sichert Self-Hosted OpenClaw-Installationen durch systematische Prüfung aller Sicherheitsaspekte."
+          fact="90% aller Self-Hosted-Installationen haben mindestens eine kritische Sicherheitslücke."
+        />
         <h1 className="text-4xl font-bold mb-4 text-gray-100">OpenClaw Self-Hosted Security Checklist</h1>
         <p className="text-lg text-gray-300 mb-4">Systematische Absicherung deiner Self-Hosted OpenClaw-Instanz — {totalItems} Prüfpunkte, davon {criticalItems} kritisch.</p>
         <div className="flex gap-4 mb-8 text-sm">

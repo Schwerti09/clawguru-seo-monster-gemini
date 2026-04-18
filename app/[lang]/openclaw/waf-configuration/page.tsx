@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import DirectAnswerBox from "@/components/DirectAnswerBox"
 
 interface PageProps { params: { lang: string } }
 
@@ -55,6 +56,11 @@ export default function WafConfigurationPage({ params }: PageProps) {
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
           <strong className="text-amber-100">&quot;Not a Pentest&quot; Hinweis</strong>: Dieser Guide dient der Absicherung eigener Web-Applikationen. Kein Angriffs-Tool.
         </div>
+        <DirectAnswerBox
+          question="Was ist WAF Konfiguration?"
+          answer="WAF Konfiguration umfasst OWASP-Regeln, Custom Policies und Best Practices für ModSecurity, nginx WAF und Cloudflare WAF. Sie blockiert bösartige Anfragen wie SQL-Injection und XSS vor der Anwendung."
+          fact="Eine WAF blockiert bis zu 90% aller OWASP Top 10 Angriffe bei korrekter Konfiguration."
+        />
         <h1 className="text-4xl font-bold mb-4 text-gray-100">WAF Konfiguration: Web Application Firewall Setup</h1>
         <p className="text-lg text-gray-300 mb-8">Vollständige WAF-Konfiguration mit OWASP-Regeln und Custom Security Policies für ModSecurity, nginx WAF und Cloudflare.</p>
 

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
+import DirectAnswerBox from '@/components/DirectAnswerBox'
 
 export async function generateStaticParams() {
   return SUPPORTED_LOCALES.map((lang) => ({ lang }))
@@ -41,6 +42,11 @@ export default function OpenClawSecurityHeadersPage({ params }: { params: { lang
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
           <strong className="text-amber-100">"Not a Pentest" Trust-Anker</strong>: Security Headers schützen Browser-Benutzer. Keine Angriffswerkzeuge.
         </div>
+        <DirectAnswerBox
+          question="Was sind Security Headers für OpenClaw?"
+          answer="Security Headers umfassen Content-Security-Policy, HSTS, X-Frame-Options, Permissions-Policy und Referrer-Policy. Sie schützen Browser-Benutzer vor XSS, Clickjacking und Datenlecks durch HTTP-Header-Konfiguration."
+          fact="CSP verhindert bis zu 95% aller XSS-Angriffe bei korrekter Implementierung."
+        />
         <h1 className="text-4xl font-bold mb-4 text-gray-100">OpenClaw Security Headers Guide</h1>
         <p className="text-lg text-gray-300 mb-8">Alle Security Headers für OpenClaw — von CSP über HSTS bis hin zu Permissions-Policy. Implementierung in Next.js mit A+ securityheaders.com Rating.</p>
 

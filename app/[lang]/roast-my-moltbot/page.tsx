@@ -52,6 +52,39 @@ export async function generateMetadata(props: { params: { lang: string } }): Pro
   const locale = (SUPPORTED_LOCALES.includes(props.params.lang as Locale) ? props.params.lang : "de") as Locale
   const copy = getMoltbotCopy(locale)
   const pageUrl = `${SITE_URL}/${locale}/roast-my-moltbot`
+
+  // GEO-DOMINATION: FAQPage Schema for AI Engines
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: [
+      {
+        "@type": "Question",
+        name: locale === "de" ? "Was ist Roast My Moltbot?" : "What is Roast My Moltbot?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: locale === "de" ? "Roast My Moltbot ist ein kostenloses Tool, das deine Moltbot-Konfiguration analysiert und sofortige Security-Empfehlungen gibt." : "Roast My Moltbot is a free tool that analyzes your Moltbot configuration and provides instant security recommendations."
+        }
+      },
+      {
+        "@type": "Question",
+        name: locale === "de" ? "Ist Roast My Moltbot kostenlos?" : "Is Roast My Moltbot free?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: locale === "de" ? "Ja, Roast My Moltbot ist 100% kostenlos und erfordert keine Anmeldung." : "Yes, Roast My Moltbot is 100% free and requires no signup."
+        }
+      },
+      {
+        "@type": "Question",
+        name: locale === "de" ? "Wie lange dauert ein Roast?" : "How long does a roast take?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: locale === "de" ? "Ein Roast dauert in der Regel weniger als 30 Sekunden." : "A roast typically takes less than 30 seconds."
+        }
+      }
+    ]
+  }
+
   return {
     title: copy.metaTitle,
     description: copy.metaDescription,
@@ -68,6 +101,9 @@ export async function generateMetadata(props: { params: { lang: string } }): Pro
       title: copy.metaTitle,
       description: copy.metaDescription,
     },
+    other: {
+      "application/ld+json": JSON.stringify(faqSchema)
+    }
   }
 }
 

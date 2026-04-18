@@ -196,7 +196,7 @@ export async function generateMetadata({ params }: GeoVariantPageProps): Promise
           ])
         ),
       },
-      robots: 'index, follow',
+      robots: 'noindex, follow',
     };
   }
 

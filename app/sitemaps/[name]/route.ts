@@ -445,7 +445,7 @@ export async function GET(
         { loc: `${base}/${locale}/score`, lastmod, changefreq: "daily", priority: "0.85" },
         { loc: `${base}/${locale}/openclaw-security-check`, lastmod, changefreq: "weekly", priority: "0.85" },
         ...hubUrls,
-        ...geoOpenClawSprintUrls,
+        // SEO FIX: geoOpenClawSprintUrls REMOVED - 95k thin geo pages noindexed
         ...moltbotUrls,
         ...moltbotBatch6Urls,
         ...openclawSubUrls,

@@ -10,9 +10,8 @@ import dynamic from "next/dynamic"
 const AnimatedBackground = dynamic(() => import("@/components/ui/AnimatedBackground").then(m => ({ default: m.AnimatedBackground })), { ssr: false })
 const ActionDock = dynamic(() => import("@/components/layout/ActionDock"))
 const SocialProofOverlay = dynamic(() => import("@/components/social/SocialProofOverlay"))
-// WORLD BEAST FINAL LAUNCH: Umami privacy-first analytics
+// WORLD BEAST FINAL LAUNCH: Umami privacy-first analytics (GA4 removed for performance)
 import UmamiAnalytics from "@/components/analytics/UmamiAnalytics"
-import GA4Pageview from "@/components/analytics/GA4Pageview"
 // VISUAL UPGRADE 2026: Neon cursor + page transition wrapper
 const NeonCursor = dynamic(() => import("@/components/visual/NeonCursor"))
 // NEXT-LEVEL UPGRADE 2026: RTL direction support for Arabic + other RTL locales
@@ -98,28 +97,14 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang={locale} dir={dir}>
       <head>
-        {/* WORLD BEAST FINAL LAUNCH: Umami analytics */}
+        {/* WORLD BEAST FINAL LAUNCH: Umami analytics (GTM removed for performance) */}
         <UmamiAnalytics />
-        <Script src="https://www.googletagmanager.com/gtag/js?id=G-1BHBS4FG2Y" strategy="afterInteractive" />
-        <Script id="ga-gtag" strategy="afterInteractive">{`
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);} 
-          gtag('js', new Date());
-          gtag('config', 'G-1BHBS4FG2Y');
-        `}</Script>
-        {/* FAVICON PACK 2026 */}
+        {/* FAVICON PACK 2026 — CONSOLIDATED for performance */}
         <link rel="icon" href="/favicon.ico" sizes="any" />
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
-        <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
-        <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png" />
-        <link rel="icon" type="image/png" sizes="512x512" href="/favicon-512.png" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
         {/* 100/100 LCP OPTIMIZATION: Preload critical OG image for faster LCP */}
         <link rel="preload" as="image" href="/og-image.png" fetchPriority="high" />
         {/* 100/100 LCP OPTIMIZATION: DNS prefetch for analytics */}
-        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://umami.clawguru.org" />
         {/* NEXT-LEVEL UPGRADE 2026: PWA manifest */}
         <link rel="manifest" href="/manifest.json" />
@@ -174,7 +159,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             <CommandK />
             <GlobalMagnetics />
             <FirstVisitPageGuide />
-            <GA4Pageview />
 
           </RTLProvider>
         </I18nProvider>

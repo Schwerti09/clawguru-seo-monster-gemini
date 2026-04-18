@@ -246,6 +246,56 @@ export default async function RoastMyMoltbotPage(props: { params: { lang: string
           </div>
         </div>
 
+        {/* TOTAL WAR ROUND 5: Aggressive Internal Links to High-Value Content */}
+        <div className="mx-auto max-w-3xl mt-8">
+          <div className="text-center mb-6">
+            <div className="text-xs font-mono uppercase tracking-widest mb-2 text-cyan-400">
+              {locale === 'de' ? '🎯 Tiefer eintauchen' : '🎯 Go Deeper'}
+            </div>
+            <h2 className="text-xl font-bold text-white">
+              {locale === 'de' ? 'Master AI Agent Security' : 'Master AI Agent Security'}
+            </h2>
+          </div>
+          <div className="grid sm:grid-cols-2 gap-4">
+            <a href={`${prefix}/academy`} className="block bg-gray-800 border border-gray-700 rounded-xl p-4 hover:border-purple-400/50 transition-all">
+              <div className="flex items-center gap-3">
+                <div className="text-2xl">🎓</div>
+                <div>
+                  <div className="font-semibold text-purple-400">{locale === 'de' ? 'Academy' : 'Academy'}</div>
+                  <div className="text-xs text-gray-400">{locale === 'de' ? 'Kurse & Zertifizierung' : 'Courses & Certification'}</div>
+                </div>
+              </div>
+            </a>
+            <a href={`${prefix}/solutions`} className="block bg-gray-800 border border-gray-700 rounded-xl p-4 hover:border-emerald-400/50 transition-all">
+              <div className="flex items-center gap-3">
+                <div className="text-2xl">🏢</div>
+                <div>
+                  <div className="font-semibold text-emerald-400">{locale === 'de' ? 'Enterprise Solutions' : 'Enterprise Solutions'}</div>
+                  <div className="text-xs text-gray-400">{locale === 'de' ? 'Für Teams & Unternehmen' : 'For Teams & Enterprises'}</div>
+                </div>
+              </div>
+            </a>
+            <a href={`${prefix}/openclaw`} className="block bg-gray-800 border border-gray-700 rounded-xl p-4 hover:border-green-400/50 transition-all">
+              <div className="flex items-center gap-3">
+                <div className="text-2xl">🛡️</div>
+                <div>
+                  <div className="font-semibold text-green-400">{locale === 'de' ? 'OpenClaw Framework' : 'OpenClaw Framework'}</div>
+                  <div className="text-xs text-gray-400">{locale === 'de' ? 'Self-Hosted Security' : 'Self-Hosted Security'}</div>
+                </div>
+              </div>
+            </a>
+            <a href={`${prefix}/security/mycelium`} className="block bg-gray-800 border border-gray-700 rounded-xl p-4 hover:border-cyan-400/50 transition-all">
+              <div className="flex items-center gap-3">
+                <div className="text-2xl">🍄</div>
+                <div>
+                  <div className="font-semibold text-cyan-400">{locale === 'de' ? 'Mycelium Network' : 'Mycelium Network'}</div>
+                  <div className="text-xs text-gray-400">{locale === 'de' ? 'Verteiltes Security-System' : 'Distributed Security System'}</div>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+
         <div className="mx-auto max-w-3xl mt-8">
           <EmailCapture locale={locale} source="roast_moltbot" variant="card" />
         </div>

@@ -140,6 +140,56 @@ export default async function RunbooksPageContent({
             </a>
           </div>
         </div>
+
+        {/* TOTAL WAR ROUND 5: Aggressive Internal Links to High-Value Content */}
+        <div className="mt-12">
+          <div className="text-center mb-6">
+            <div className="text-xs font-mono uppercase tracking-widest mb-2 text-cyan-400">
+              {locale === 'de' ? '🎯 Tiefer eintauchen' : '🎯 Go Deeper'}
+            </div>
+            <h2 className="text-xl font-bold text-white">
+              {locale === 'de' ? 'Master Infrastructure Security' : 'Master Infrastructure Security'}
+            </h2>
+          </div>
+          <div className="grid sm:grid-cols-2 gap-4">
+            <a href={`/${locale}/academy`} className="block bg-gray-800 border border-gray-700 rounded-xl p-4 hover:border-purple-400/50 transition-all">
+              <div className="flex items-center gap-3">
+                <div className="text-2xl">🎓</div>
+                <div>
+                  <div className="font-semibold text-purple-400">{locale === 'de' ? 'Academy' : 'Academy'}</div>
+                  <div className="text-xs text-gray-400">{locale === 'de' ? 'Kurse & Zertifizierung' : 'Courses & Certification'}</div>
+                </div>
+              </div>
+            </a>
+            <a href={`/${locale}/solutions`} className="block bg-gray-800 border border-gray-700 rounded-xl p-4 hover:border-emerald-400/50 transition-all">
+              <div className="flex items-center gap-3">
+                <div className="text-2xl">🏢</div>
+                <div>
+                  <div className="font-semibold text-emerald-400">{locale === 'de' ? 'Enterprise Solutions' : 'Enterprise Solutions'}</div>
+                  <div className="text-xs text-gray-400">{locale === 'de' ? 'Für Teams & Unternehmen' : 'For Teams & Enterprises'}</div>
+                </div>
+              </div>
+            </a>
+            <a href={`/oracle`} className="block bg-gray-800 border border-gray-700 rounded-xl p-4 hover:border-amber-400/50 transition-all">
+              <div className="flex items-center gap-3">
+                <div className="text-2xl">🔮</div>
+                <div>
+                  <div className="font-semibold text-amber-400">Oracle</div>
+                  <div className="text-xs text-gray-400">{locale === 'de' ? 'AI-Powered Intelligence' : 'AI-Powered Intelligence'}</div>
+                </div>
+              </div>
+            </a>
+            <a href={`/neuro`} className="block bg-gray-800 border border-gray-700 rounded-xl p-4 hover:border-pink-400/50 transition-all">
+              <div className="flex items-center gap-3">
+                <div className="text-2xl">🧠</div>
+                <div>
+                  <div className="font-semibold text-pink-400">Neuro</div>
+                  <div className="text-xs text-gray-400">{locale === 'de' ? 'Predictive Security' : 'Predictive Security'}</div>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
       </div>
     </Container>
   )

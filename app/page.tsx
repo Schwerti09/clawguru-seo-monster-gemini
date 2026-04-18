@@ -94,9 +94,24 @@ export default async function Home({ dict, locale }: HomeProps = {}) {
     ]
   }
 
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: safeLocale === 'de' ? 'Startseite' : 'Home',
+        item: `https://clawguru.org/${safeLocale}`,
+      },
+    ],
+  }
+
+  const combinedSchema = [faqJsonLd, breadcrumbJsonLd]
+
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(combinedSchema) }} />
 
       <HeroSection locale={safeLocale} prefix={prefix} dict={hp} />
 
@@ -192,6 +207,42 @@ export default async function Home({ dict, locale }: HomeProps = {}) {
           <div className="grid md:grid-cols-2 gap-8 items-stretch">
             <HeroSecurityCheck dict={hp} />
             <LivePreview dict={hp} />
+          </div>
+        </Container>
+      </section>
+
+      {/* TOTAL WAR ROUND 5: Aggressive Conversion Section */}
+      <section className="py-16" style={{ background: "var(--surface-0)" }}>
+        <Container>
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-8">
+              <div className="text-xs font-mono uppercase tracking-widest mb-2 text-cyan-400">
+                {safeLocale === 'de' ? '🎯 Starte jetzt' : '🎯 Get Started Now'}
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-black text-white">
+                {safeLocale === 'de' ? 'Master AI Agent Security' : 'Master AI Agent Security'}
+              </h2>
+            </div>
+            <div className="grid sm:grid-cols-2 gap-4">
+              <a href={`${prefix}/academy`} className="block bg-gradient-to-r from-purple-600 to-purple-500 border border-purple-400 rounded-xl p-6 hover:from-purple-500 hover:to-purple-400 transition-all">
+                <div className="flex items-center gap-4">
+                  <div className="text-4xl">🎓</div>
+                  <div>
+                    <div className="font-bold text-white text-lg">{safeLocale === 'de' ? 'Academy' : 'Academy'}</div>
+                    <div className="text-purple-100 text-sm">{safeLocale === 'de' ? 'Kurse & Zertifizierung' : 'Courses & Certification'}</div>
+                  </div>
+                </div>
+              </a>
+              <a href={`${prefix}/solutions`} className="block bg-gradient-to-r from-emerald-600 to-emerald-500 border border-emerald-400 rounded-xl p-6 hover:from-emerald-500 hover:to-emerald-400 transition-all">
+                <div className="flex items-center gap-4">
+                  <div className="text-4xl">🏢</div>
+                  <div>
+                    <div className="font-bold text-white text-lg">{safeLocale === 'de' ? 'Enterprise Solutions' : 'Enterprise Solutions'}</div>
+                    <div className="text-emerald-100 text-sm">{safeLocale === 'de' ? 'Für Teams & Unternehmen' : 'For Teams & Enterprises'}</div>
+                  </div>
+                </div>
+              </a>
+            </div>
           </div>
         </Container>
       </section>

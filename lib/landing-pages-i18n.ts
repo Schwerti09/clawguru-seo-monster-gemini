@@ -682,10 +682,10 @@ const OPENCLAW_CHECK: Record<Locale, CompactLandingCopy> = {
 
 const MOLTBOT: Record<Locale, CompactLandingCopy> = {
   de: {
-    title: "Moltbot haerten: Gateway, Auth, Exposure | ClawGuru",
-    description: "Runbooks plus Security Check, um haeufige Moltbot-Fehlkonfigurationen schnell zu schliessen.",
-    h1: "Moltbot haerten - Gateway, Auth, Exposure",
-    sub: "Schneller vom Risiko zum Fix: Security Check starten, priorisieren, Runbook ausfuehren.",
+    title: "Moltbot härten: Gateway, Auth, Exposure | ClawGuru",
+    description: "Runbooks plus Security Check, um häufige Moltbot-Fehlkonfigurationen schnell zu schließen.",
+    h1: "Moltbot härten - Gateway, Auth, Exposure",
+    sub: "Schneller vom Risiko zum Fix: Security Check starten, priorisieren, Runbook ausführen.",
     sectionTitle: "Fokusbereiche",
     sectionBodyA: "Gateway-Absicherung, Zugriffstrennung, Token-Scopes und Rotation.",
     sectionBodyB: "Exposition reduzieren, Monitoring nachziehen, danach Re-Check.",

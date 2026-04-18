@@ -857,6 +857,21 @@ export default function NeuroClient() {
                 <div className="text-sm font-medium" style={{ color: "rgba(255,255,255,0.9)" }}>Security Check</div>
                 <div className="text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>Scan</div>
               </a>
+              <a href="/de/academy" className="rounded-xl p-4 border text-center transition-all hover:border-[#9333ea]" style={{ background: "rgba(10,10,14,0.8)", borderColor: "rgba(255,255,255,0.08)" }}>
+                <div className="text-2xl mb-2">🎓</div>
+                <div className="text-sm font-medium" style={{ color: "rgba(255,255,255,0.9)" }}>Academy</div>
+                <div className="text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>Courses</div>
+              </a>
+              <a href="/de/solutions" className="rounded-xl p-4 border text-center transition-all hover:border-[#10b981]" style={{ background: "rgba(10,10,14,0.8)", borderColor: "rgba(255,255,255,0.08)" }}>
+                <div className="text-2xl mb-2">🏢</div>
+                <div className="text-sm font-medium" style={{ color: "rgba(255,255,255,0.9)" }}>Solutions</div>
+                <div className="text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>Enterprise</div>
+              </a>
+              <a href="/de/runbooks" className="rounded-xl p-4 border text-center transition-all hover:border-[#06b6d4]" style={{ background: "rgba(10,10,14,0.8)", borderColor: "rgba(255,255,255,0.08)" }}>
+                <div className="text-2xl mb-2">📚</div>
+                <div className="text-sm font-medium" style={{ color: "rgba(255,255,255,0.9)" }}>Runbooks</div>
+                <div className="text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>Library</div>
+              </a>
             </div>
           </div>
         </section>

@@ -132,7 +132,33 @@ export default function CheckPage() {
                 <div className="text-2xl">🛡️</div>
                 <div>
                   <div className="font-semibold text-green-400">{locale === 'de' ? 'OpenClaw' : 'OpenClaw'}</div>
-                  <div className="text-xs text-gray-400">{locale === 'de' ? 'Self-Hosted Security Framework' : 'Self-hosted security framework'}</div>
+                  <div className="text-xs text-gray-400">{locale === 'de' ? 'Self-Hosted Security' : 'Self-hosted security'}</div>
+                </div>
+              </div>
+            </a>
+            <a
+              href={`${prefix}/academy`}
+              onClick={() => trackEvent("cta_click", { locale, target: "academy", source: "check_page_cta" })}
+              className="block bg-gray-800 border border-gray-700 rounded-xl p-4 hover:border-purple-500/50 transition-all"
+            >
+              <div className="flex items-center gap-3">
+                <div className="text-2xl">🎓</div>
+                <div>
+                  <div className="font-semibold text-purple-400">{locale === 'de' ? 'Academy' : 'Academy'}</div>
+                  <div className="text-xs text-gray-400">{locale === 'de' ? 'Kurse & Zertifizierung' : 'Courses & Certification'}</div>
+                </div>
+              </div>
+            </a>
+            <a
+              href={`${prefix}/solutions`}
+              onClick={() => trackEvent("cta_click", { locale, target: "solutions", source: "check_page_cta" })}
+              className="block bg-gray-800 border border-gray-700 rounded-xl p-4 hover:border-emerald-500/50 transition-all"
+            >
+              <div className="flex items-center gap-3">
+                <div className="text-2xl">🏢</div>
+                <div>
+                  <div className="font-semibold text-emerald-400">{locale === 'de' ? 'Solutions' : 'Solutions'}</div>
+                  <div className="text-xs text-gray-400">{locale === 'de' ? 'Enterprise Lösungen' : 'Enterprise solutions'}</div>
                 </div>
               </div>
             </a>

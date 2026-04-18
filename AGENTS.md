@@ -1,4 +1,4 @@
-﻿# ClawGuru — AGENTS.md · Master Operating Manual v3.0 (18.04.2026)
+﻿# ClawGuru — AGENTS.md · Master Operating Manual v4.1 (18.04.2026)
 
 > **This document is the single source of truth for every agent working in this codebase.**
 > Read it completely BEFORE making any change. Update the Session Log after every session.

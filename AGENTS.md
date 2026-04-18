@@ -199,11 +199,7 @@
 - No thin content can be created in the future
 
 ### Phase 6: AGENTS.md War Machine Update v3.0 (COMPLETED)
-- Updated to version 3.0 with TOTAL WAR ROUND 5 documentation
-- Traffic-First Doctrine: Absolute highest law
-- Strict ban on any form of thin geo pages or mass-generated low-quality content
-- Quality Threshold: 95/100 minimum (raised from 94/100)
-- Mandatory internal linking, mandatory GEO, mandatory strong CTAs
+- Updated to version 3.0 with TOTAL WAR Series dokumentiert als neuer Standard
 
 ---
 

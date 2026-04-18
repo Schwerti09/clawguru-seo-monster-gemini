@@ -290,6 +290,7 @@ export async function GET(
         "opentelemetry-security","cloudformation-security","tailscale-pam","aws-iam-security",
         "aws-vpc-flow-logs","azure-ad-security","cloudflare-tunnel-firewall-rules",
         "docker-reverse-proxy-hardening-cheatsheet",
+        "security-report-2026",
       ]
       // Compare pages
       const COMPARE_SLUGS = [

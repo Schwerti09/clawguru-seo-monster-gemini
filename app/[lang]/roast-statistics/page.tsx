@@ -62,8 +62,8 @@ async function getRoastStatistics() {
 
     // Score distribution
     const scoreDistResult = await dbQuery(`
-      SELECT 
-        CASE 
+      SELECT
+        CASE
           WHEN score >= 90 THEN 'elite'
           WHEN score >= 70 THEN 'good'
           WHEN score >= 50 THEN 'average'
@@ -112,7 +112,22 @@ async function getRoastStatistics() {
       topStacks: topStacksResult.rows,
       localeDistribution,
     }
-  } catch (error) {
+  } catch (error: any) {
+    // If table doesn't exist, return default data instead of crashing
+    if (error.code === '42P01') {
+      console.warn("roast_results table does not exist, returning default statistics")
+      return {
+        totalRoasts: 0,
+        avgScore: 0,
+        eliteStacks: 0,
+        roastsToday: 0,
+        roastsThisWeek: 0,
+        roastsThisMonth: 0,
+        scoreDistribution: { elite: 0, good: 0, average: 0, poor: 0 },
+        topStacks: [],
+        localeDistribution: [],
+      }
+    }
     console.error("Error fetching roast statistics:", error)
     return null
   }

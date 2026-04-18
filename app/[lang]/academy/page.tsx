@@ -215,6 +215,7 @@ const TRUST_STATS = [
 export default async function AcademyPage({ params }: { params: { lang: string } }) {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const dict = await getDictionary(locale)
+  const prefix = `/${locale}`
 
   const t = dict.academy
 
@@ -273,8 +274,32 @@ export default async function AcademyPage({ params }: { params: { lang: string }
                 {t.hero_description}
               </p>
 
-              {/* CTA Buttons */}
+              {/* FINAL EXECUTION ROUND 10: Aggressive CTAs with Pulsing Badges */}
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <Link
+                  href={`${prefix}/check`}
+                  className="group relative px-8 py-4 bg-gradient-to-r from-cyan-600 to-cyan-500 text-white font-bold text-lg rounded-lg hover:from-cyan-500 hover:to-cyan-400 transition-all duration-300 shadow-lg shadow-cyan-500/30 hover:shadow-cyan-500/50"
+                >
+                  <div className="absolute -top-3 -right-3 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full animate-pulse">
+                    {locale === 'de' ? 'JETZT' : 'NOW'}
+                  </div>
+                  <span className="flex items-center gap-2">
+                    <span className="text-2xl"></span>
+                    {locale === 'de' ? 'Security Check' : 'Security Check'}
+                  </span>
+                </Link>
+                <Link
+                  href={`${prefix}/roast-my-moltbot`}
+                  className="group relative px-8 py-4 bg-gradient-to-r from-red-600 to-red-500 text-white font-bold text-lg rounded-lg hover:from-red-500 hover:to-red-400 transition-all duration-300 shadow-lg shadow-red-500/30 hover:shadow-red-500/50"
+                >
+                  <div className="absolute -top-3 -right-3 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full animate-pulse">
+                    {locale === 'de' ? 'JETZT' : 'NOW'}
+                  </div>
+                  <span className="flex items-center gap-2">
+                    <span className="text-2xl"></span>
+                    {locale === 'de' ? 'Roast My Moltbot' : 'Roast My Moltbot'}
+                  </span>
+                </Link>
                 <Link
                   href="#tracks"
                   className="group relative px-8 py-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold text-lg rounded-lg hover:from-green-600 hover:to-emerald-700 transition-all duration-300 shadow-lg shadow-green-500/30 hover:shadow-green-500/50"

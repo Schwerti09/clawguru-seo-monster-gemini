@@ -246,6 +246,15 @@ export default function OpenClawPage(props: { params: { lang: string } }) {
                   </div>
                 </div>
               </Link>
+              <Link href={`${prefix}/runbooks`} className="group bg-gradient-to-br from-cyan-900/30 to-[#0a0a0a] p-4 rounded-xl border border-cyan-700/50 hover:border-cyan-500 transition-all">
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl">📚</span>
+                  <div>
+                    <div className="font-semibold text-cyan-400 group-hover:text-cyan-300">{locale === "de" ? "Security Runbooks" : "Security Runbooks"}</div>
+                    <div className="text-xs text-gray-400">{locale === "de" ? "1,000+ Fix-Runbooks" : "1,000+ fix runbooks"}</div>
+                  </div>
+                </div>
+              </Link>
             </div>
           </section>
 

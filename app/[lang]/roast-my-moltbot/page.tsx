@@ -213,6 +213,24 @@ export default async function RoastMyMoltbotPage(props: { params: { lang: string
           </a>
 
           <div className="grid sm:grid-cols-2 gap-4">
+            <a href={`${prefix}/academy`} className="block bg-gradient-to-r from-purple-600 to-purple-500 border border-purple-400 rounded-xl p-4 hover:from-purple-500 hover:to-purple-400 transition-all">
+              <div className="flex items-center gap-3">
+                <div className="text-2xl"></div>
+                <div>
+                  <div className="font-semibold text-white">{locale === 'de' ? 'Academy' : 'Academy'}</div>
+                  <div className="text-xs text-purple-100">{locale === 'de' ? 'Kurse & Zertifizierung' : 'Courses & Certification'}</div>
+                </div>
+              </div>
+            </a>
+            <a href={`${prefix}/solutions`} className="block bg-gradient-to-r from-emerald-600 to-emerald-500 border border-emerald-400 rounded-xl p-4 hover:from-emerald-500 hover:to-emerald-400 transition-all">
+              <div className="flex items-center gap-3">
+                <div className="text-2xl"></div>
+                <div>
+                  <div className="font-semibold text-white">{locale === 'de' ? 'Solutions' : 'Solutions'}</div>
+                  <div className="text-xs text-emerald-100">{locale === 'de' ? 'Enterprise Lösungen' : 'Enterprise solutions'}</div>
+                </div>
+              </div>
+            </a>
             <a href={`${prefix}/runbooks`} className="block bg-gray-800 border border-gray-700 rounded-xl p-4 hover:border-cyan-400/50 transition-all">
               <div className="flex items-center gap-3">
                 <TrendingUp className="w-6 h-6 text-cyan-400" />

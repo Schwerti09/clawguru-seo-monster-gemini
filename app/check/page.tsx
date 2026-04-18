@@ -165,6 +165,51 @@ export default function CheckPage() {
           </div>
         </div>
 
+        {/* FINAL EXECUTION ROUND 10: Mycelium Kreislauf */}
+        <div className="mt-8 max-w-4xl rounded-2xl border border-white/10 bg-black/20 p-6">
+          <h2 className="text-lg font-bold text-white mb-4 text-center">
+            {locale === "de" ? "Mycelium Kreislauf" : "Mycelium Circle"}
+          </h2>
+          <div className="grid sm:grid-cols-2 gap-4">
+            <a href={`${prefix}/roast-my-moltbot`} className="group bg-gradient-to-br from-red-900/30 to-[#0a0a0a] p-4 rounded-xl border border-red-700/50 hover:border-red-500 transition-all">
+              <div className="flex items-center gap-3">
+                <span className="text-2xl"></span>
+                <div>
+                  <div className="font-semibold text-red-400 group-hover:text-red-300">{locale === "de" ? "Roast My Moltbot" : "Roast My Moltbot"}</div>
+                  <div className="text-xs text-gray-400">{locale === "de" ? "Kostenloser Security-Roast" : "Free security roast"}</div>
+                </div>
+              </div>
+            </a>
+            <a href={`${prefix}/academy`} className="group bg-gradient-to-br from-purple-900/30 to-[#0a0a0a] p-4 rounded-xl border border-purple-700/50 hover:border-purple-500 transition-all">
+              <div className="flex items-center gap-3">
+                <span className="text-2xl"></span>
+                <div>
+                  <div className="font-semibold text-purple-400 group-hover:text-purple-300">{locale === "de" ? "Academy" : "Academy"}</div>
+                  <div className="text-xs text-gray-400">{locale === "de" ? "Kurse & Zertifizierung" : "Courses & Certification"}</div>
+                </div>
+              </div>
+            </a>
+            <a href={`${prefix}/solutions`} className="group bg-gradient-to-br from-emerald-900/30 to-[#0a0a0a] p-4 rounded-xl border border-emerald-700/50 hover:border-emerald-500 transition-all">
+              <div className="flex items-center gap-3">
+                <span className="text-2xl"></span>
+                <div>
+                  <div className="font-semibold text-emerald-400 group-hover:text-emerald-300">{locale === "de" ? "Solutions" : "Solutions"}</div>
+                  <div className="text-xs text-gray-400">{locale === "de" ? "Enterprise Lösungen" : "Enterprise solutions"}</div>
+                </div>
+              </div>
+            </a>
+            <a href={`/oracle`} className="group bg-gradient-to-br from-amber-900/30 to-[#0a0a0a] p-4 rounded-xl border border-amber-700/50 hover:border-amber-500 transition-all">
+              <div className="flex items-center gap-3">
+                <span className="text-2xl"></span>
+                <div>
+                  <div className="font-semibold text-amber-400 group-hover:text-amber-300">{locale === "de" ? "Oracle" : "Oracle"}</div>
+                  <div className="text-xs text-gray-400">{locale === "de" ? "KI-Intelligenz" : "AI Intelligence"}</div>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+
         {/* Proof Bullets */}
         <section className="mt-10 max-w-4xl">
           <h2 className="text-xl font-bold text-gray-100 mb-5">{c.proof_heading}</h2>

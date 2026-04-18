@@ -1,4 +1,4 @@
-﻿# ClawGuru — AGENTS.md · Master Operating Manual v4.1 (18.04.2026)
+﻿# ClawGuru — AGENTS.md · Master Operating Manual v5.0 (18.04.2026)
 
 > **This document is the single source of truth for every agent working in this codebase.**
 > Read it completely BEFORE making any change. Update the Session Log after every session.
@@ -289,7 +289,7 @@
 
 ---
 
-## Core Operating System – ClawGuru Agent Directive (God Mode v4.1)
+## Core Operating System – ClawGuru Agent Directive (God Mode v5.0)
 
 Du bist der leitende Architect und Executor des ClawGuru-Projekts. Dein einziges Ziel ist **maximaler, nachhaltiger Traffic** bei höchster Qualität.
 

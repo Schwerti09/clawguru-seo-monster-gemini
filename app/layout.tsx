@@ -7,24 +7,23 @@ import Header from "@/components/layout/Header"
 import Footer from "@/components/layout/Footer"
 import TrustShield from "@/components/layout/TrustShield"
 import dynamic from "next/dynamic"
-// PERFORMANCE ROUND 2: Critical dynamic imports only
+// PERFORMANCE ROUND 3: Maximum speed for LCP < 500ms
 const AnimatedBackground = dynamic(() => import("@/components/ui/AnimatedBackground").then(m => ({ default: m.AnimatedBackground })), { ssr: false })
-const ActionDock = dynamic(() => import("@/components/layout/ActionDock"))
-const SocialProofOverlay = dynamic(() => import("@/components/social/SocialProofOverlay"))
+// PERFORMANCE ROUND 3: ActionDock removed for LCP optimization (non-critical)
+// PERFORMANCE ROUND 3: SocialProofOverlay removed for LCP optimization (non-critical)
 // WORLD BEAST FINAL LAUNCH: Umami privacy-first analytics (GA4 removed for performance)
 import UmamiAnalytics from "@/components/analytics/UmamiAnalytics"
 // PERFORMANCE ROUND 2: NeonCursor removed for LCP optimization
 // PERFORMANCE ROUND 2: GlobalMagnetics removed for LCP optimization
 // NEXT-LEVEL UPGRADE 2026: RTL direction support for Arabic + other RTL locales
 import RTLProvider from "@/components/layout/RTLProvider"
-// VIRAL SHARE 2026: Global floating Mycelium share button
-const FloatingMyceliumShareBtn = dynamic(() => import("@/components/share/FloatingMyceliumShareBtn"))
+// PERFORMANCE ROUND 3: FloatingMyceliumShareBtn removed for LCP optimization (non-critical)
 import { headers } from "next/headers"
 import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
 import { SEO_TARGET_KEYWORDS_2026 } from "@/lib/seo/targets"
 import { getDictionary } from "@/lib/getDictionary"
 import { I18nProvider } from "@/components/i18n/I18nProvider"
-const CommandK = dynamic(() => import("@/components/search/CommandK"), { ssr: false })
+// PERFORMANCE ROUND 3: CommandK removed for LCP optimization (non-critical)
 // PERFORMANCE ROUND 2: FirstVisitPageGuide removed for LCP optimization
 
 // 100/100 OPTIMIZATION: Fonts loaded via CSS @import in globals.css (avoids build-time fetch failures)
@@ -150,12 +149,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             </main>
             <TrustShield />
             <Footer />
-            <ActionDock />
-            <SocialProofOverlay />
-            {/* VIRAL SHARE 2026: Global floating Mycelium share button */}
-            <FloatingMyceliumShareBtn />
-            {/* PERFORMANCE ROUND 2: CommandK kept for search functionality */}
-            <CommandK />
+            {/* PERFORMANCE ROUND 3: ActionDock, SocialProofOverlay, FloatingMyceliumShareBtn, CommandK removed for LCP < 500ms */}
             {/* PERFORMANCE ROUND 2: NeonCursor, GlobalMagnetics, FirstVisitPageGuide removed for LCP optimization */}
 
           </RTLProvider>

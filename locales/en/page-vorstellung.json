@@ -1,0 +1,563 @@
+{
+  "meta": {
+    "title": "About ClawGuru - AI Agent Security Platform | Product Overview",
+    "description": "Discover ClawGuru's comprehensive AI agent security platform. Learn about our mission, technology, and how we protect AI infrastructure with enterprise-grade security solutions.",
+    "keywords": "ClawGuru about, AI security platform, product overview, AI agent protection, security company, mission, team, technology",
+    "og_title": "About ClawGuru - AI Agent Security Platform",
+    "og_description": "Learn about ClawGuru's mission to secure AI agents with enterprise-grade protection and innovative security technology.",
+    "og_image": "https://clawguru.org/og-about.jpg",
+    "twitter_card": "summary_large_image",
+    "twitter_title": "About ClawGuru - AI Agent Security Platform",
+    "twitter_description": "Learn about ClawGuru's mission to secure AI agents with enterprise-grade protection and innovative security technology.",
+    "twitter_image": "https://clawguru.org/twitter-about.jpg"
+  },
+  "hero": {
+    "title": "Securing the Future of AI",
+    "subtitle": "ClawGuru is the leading AI agent security platform, protecting the infrastructure that powers tomorrow's intelligent systems",
+    "description": "We believe AI agents deserve the same security standards as critical infrastructure. Our platform provides comprehensive protection for AI systems, from individual agents to large-scale deployments.",
+    "stats": [
+      {
+        "number": "4.2M+",
+        "label": "Security Runbooks Generated"
+      },
+      {
+        "number": "50K+",
+        "label": "AI Agents Secured"
+      },
+      {
+        "number": "99.9%",
+        "label": "Platform Uptime"
+      },
+      {
+        "number": "250+",
+        "label": "Enterprise Customers"
+      }
+    ]
+  },
+  "mission": {
+    "title": "Our Mission",
+    "subtitle": "Democratizing AI Security",
+    "content": "ClawGuru was founded with a simple mission: to make enterprise-grade AI security accessible to everyone. We believe that as AI becomes more critical to business operations, security must evolve to protect these intelligent systems.",
+    "pillars": [
+      {
+        "icon": "shield",
+        "title": "Security First",
+        "description": "Every decision we make prioritizes the security and protection of AI systems and their data."
+      },
+      {
+        "icon": "users",
+        "title": "Accessibility",
+        "description": "Advanced security should be available to organizations of all sizes, not just large enterprises."
+      },
+      {
+        "icon": "globe",
+        "title": "Global Impact",
+        "description": "AI security is a global challenge that requires collaborative solutions and shared intelligence."
+      },
+      {
+        "icon": "zap",
+        "title": "Innovation",
+        "description": "We continuously push the boundaries of what's possible in AI security technology."
+      }
+    ]
+  },
+  "story": {
+    "title": "Our Story",
+    "subtitle": "From Challenge to Solution",
+    "timeline": [
+      {
+        "year": "2023",
+        "title": "The Challenge Identified",
+        "description": "Our founders discovered a critical gap in AI security while working with large enterprises. AI agents were being deployed without proper security measures, exposing organizations to significant risks."
+      },
+      {
+        "year": "2024",
+        "title": "ClawGuru Founded",
+        "description": "We assembled a team of security experts, AI specialists, and enterprise architects to build the first comprehensive AI agent security platform."
+      },
+      {
+        "year": "2024",
+        "title": "Platform Launch",
+        "description": "Launched our initial platform with core security assessment, runbook generation, and basic threat detection capabilities."
+      },
+      {
+        "year": "2025",
+        "title": "Rapid Growth",
+        "description": "Expanded to serve thousands of customers, introduced Oracle AI intelligence, and reached 4.2 million generated security runbooks."
+      },
+      {
+        "year": "2026",
+        "title": "Market Leadership",
+        "description": "Established ourselves as the leading AI agent security platform with enterprise customers worldwide and continuous innovation."
+      }
+    ]
+  },
+  "technology": {
+    "title": "Our Technology",
+    "subtitle": "Cutting-Edge AI Security Innovation",
+    "sections": [
+      {
+        "title": "AI-Powered Analysis",
+        "description": "Our proprietary AI models analyze security patterns, predict threats, and generate intelligent responses.",
+        "features": [
+          "Machine learning threat detection",
+          "Predictive security analytics",
+          "Automated vulnerability assessment",
+          "Intelligent runbook generation"
+        ]
+      },
+      {
+        "title": "Mycelium Network",
+        "description": "Distributed security intelligence network that enables collaborative defense across organizations.",
+        "features": [
+          "Peer-to-peer threat sharing",
+          "Real-time intelligence exchange",
+          "Community-driven security",
+          "Scalable network architecture"
+        ]
+      },
+      {
+        "title": "Zero Trust Architecture",
+        "description": "Built on zero-trust principles with comprehensive authentication, authorization, and access control.",
+        "features": [
+          "Identity-based security",
+          "Continuous verification",
+          "Least privilege access",
+          "Comprehensive audit trails"
+        ]
+      },
+      {
+        "title": "Enterprise Integration",
+        "description": "Seamless integration with existing security infrastructure and enterprise systems.",
+        "features": [
+          "RESTful APIs and webhooks",
+          "SIEM and SOAR compatibility",
+          "Custom connector framework",
+          "Enterprise SSO support"
+        ]
+      }
+    ]
+  },
+  "products": {
+    "title": "Our Products",
+    "subtitle": "Comprehensive Security Solutions",
+    "products": [
+      {
+        "name": "Security Assessment",
+        "icon": "check-circle",
+        "description": "Complete security posture analysis in 30 seconds with actionable recommendations.",
+        "key_features": [
+          "Real-time vulnerability scanning",
+          "Configuration analysis",
+          "Compliance checking",
+          "Risk prioritization"
+        ],
+        "cta": "Run Security Check"
+      },
+      {
+        "name": "Oracle Intelligence",
+        "icon": "brain",
+        "description": "AI-powered threat detection and predictive security analysis for proactive defense.",
+        "key_features": [
+          "Machine learning analysis",
+          "Predictive threat modeling",
+          "Real-time alerts",
+          "Automated response"
+        ],
+        "cta": "Explore Oracle"
+      },
+      {
+        "name": "Security Runbooks",
+        "icon": "book",
+        "description": "4.2 million+ AI-generated security runbooks for every possible scenario.",
+        "key_features": [
+          "Automated fix generation",
+          "Step-by-step guidance",
+          "Technology-specific solutions",
+          "Continuous updates"
+        ],
+        "cta": "Browse Runbooks"
+      },
+      {
+        "name": "Mycelium Network",
+        "icon": "network",
+        "description": "Distributed security intelligence sharing for collaborative defense.",
+        "key_features": [
+          "Peer-to-peer sharing",
+          "Real-time intelligence",
+          "Community insights",
+          "Network-wide visibility"
+        ],
+        "cta": "Join Network"
+      },
+      {
+        "name": "Neuro Analytics",
+        "icon": "activity",
+        "description": "Predictive security analytics and behavioral analysis for advanced threat detection.",
+        "key_features": [
+          "Behavioral pattern analysis",
+          "Anomaly detection",
+          "Risk forecasting",
+          "Trend analysis"
+        ],
+        "cta": "Try Neuro"
+      },
+      {
+        "name": "Copilot Assistant",
+        "icon": "cpu",
+        "description": "AI-powered security assistant for guided remediation and operations.",
+        "key_features": [
+          "Interactive guidance",
+          "Natural language interface",
+          "Context-aware assistance",
+          "Learning capabilities"
+        ],
+        "cta": "Use Copilot"
+      }
+    ]
+  },
+  "team": {
+    "title": "Our Team",
+    "subtitle": "Security Experts and AI Innovators",
+    "description": "Our team brings together decades of experience in cybersecurity, artificial intelligence, and enterprise software.",
+    "members": [
+      {
+        "name": "Dr. Sarah Chen",
+        "role": "CEO & Co-Founder",
+        "bio": "Former Chief Security Officer at TechCorp with 15+ years in enterprise security and AI research.",
+        "avatar": "sarah-chen"
+      },
+      {
+        "name": "Michael Rodriguez",
+        "role": "CTO & Co-Founder",
+        "bio": "AI research lead with expertise in machine learning and distributed systems from MIT.",
+        "avatar": "michael-rodriguez"
+      },
+      {
+        "name": "Emma Thompson",
+        "role": "Head of Security",
+        "bio": "Former security architect at CloudScale with deep expertise in zero-trust architectures.",
+        "avatar": "emma-thompson"
+      },
+      {
+        "name": "David Kim",
+        "role": "VP of Engineering",
+        "bio": "Scaled engineering teams at multiple startups with focus on security and AI platforms.",
+        "avatar": "david-kim"
+      },
+      {
+        "name": "Lisa Martinez",
+        "role": "Head of Product",
+        "bio": "Product leader with experience building security products for enterprise customers.",
+        "avatar": "lisa-martinez"
+      },
+      {
+        "name": "James Wilson",
+        "role": "Head of Customer Success",
+        "bio": "Customer experience expert focused on security operations and enterprise deployments.",
+        "avatar": "james-wilson"
+      }
+    ]
+  },
+  "values": {
+    "title": "Our Values",
+    "subtitle": "Principles That Guide Us",
+    "values": [
+      {
+        "title": "Security Excellence",
+        "description": "We never compromise on security quality and continuously raise the bar for AI protection standards.",
+        "icon": "shield-check"
+      },
+      {
+        "title": "Customer Success",
+        "description": "Our customers' security is our success. We're committed to helping them achieve their security goals.",
+        "icon": "heart"
+      },
+      {
+        "title": "Innovation First",
+        "description": "We embrace cutting-edge technology and creative solutions to solve complex security challenges.",
+        "icon": "lightbulb"
+      },
+      {
+        "title": "Transparency",
+        "description": "We operate with openness and honesty in our technology, processes, and customer relationships.",
+        "icon": "eye"
+      },
+      {
+        "title": "Collaboration",
+        "description": "Security is a team sport. We believe in working together with customers and the security community.",
+        "icon": "users"
+      },
+      {
+        "title": "Continuous Learning",
+        "description": "The security landscape evolves constantly, and so do we. We're always learning and improving.",
+        "icon": "book-open"
+      }
+    ]
+  },
+  "customers": {
+    "title": "Trusted by Industry Leaders",
+    "subtitle": "Companies worldwide trust ClawGuru for their AI security needs",
+    "logos": [
+      "techcorp",
+      "global-finance",
+      "cloudscale",
+      "enterprise-solutions",
+      "innovate-labs",
+      "secure-systems",
+      "ai-pioneers",
+      "future-tech"
+    ],
+    "testimonials": [
+      {
+        "quote": "ClawGuru has transformed how we approach AI security. The platform's intelligence and automation have reduced our security incidents by 85%.",
+        "author": "Jennifer Adams",
+        "role": "CISO",
+        "company": "TechCorp Industries",
+        "avatar": "jennifer-adams"
+      },
+      {
+        "quote": "The 4.2 million security runbooks are incredible. Whatever security challenge we face, there's a detailed solution ready to implement.",
+        "author": "Robert Chang",
+        "role": "Security Director",
+        "company": "Global Finance Corp",
+        "avatar": "robert-chang"
+      },
+      {
+        "quote": "Oracle's predictive capabilities have helped us prevent multiple security incidents. The AI insights are invaluable for proactive defense.",
+        "author": "Maria Garcia",
+        "role": "Head of Security Operations",
+        "company": "CloudScale Systems",
+        "avatar": "maria-garcia"
+      }
+    ]
+  },
+  "achievements": {
+    "title": "Our Achievements",
+    "subtitle": "Milestones and Recognition",
+    "achievements": [
+      {
+        "icon": "trophy",
+        "title": "Industry Recognition",
+        "description": "Named "Best AI Security Solution" at the Global Security Awards 2025"
+      },
+      {
+        "icon": "certificate",
+        "title": "Security Certifications",
+        "description": "SOC 2 Type II, ISO 27001, and GDPR compliant with regular audits"
+      },
+      {
+        "icon": "users",
+        "title": "Community Growth",
+        "description": "50,000+ AI agents secured across 250+ enterprise customers worldwide"
+      },
+      {
+        "icon": "book",
+        "title": "Knowledge Leadership",
+        "description": "4.2 million security runbooks generated and shared with the community"
+      },
+      {
+        "icon": "globe",
+        "title": "Global Reach",
+        "description": "Operating in 15 languages with customers across 50+ countries"
+      },
+      {
+        "icon": "shield",
+        "title": "Zero Incidents",
+        "description": "Maintained 99.9% uptime with zero security breaches since launch"
+      }
+    ]
+  },
+  "contact": {
+    "title": "Get in Touch",
+    "subtitle": "We're here to help secure your AI journey",
+    "description": "Have questions about AI security? Want to see how ClawGuru can protect your infrastructure? Our team is ready to help.",
+    "contact_methods": [
+      {
+        "icon": "mail",
+        "title": "Email Us",
+        "description": "security@clawguru.org",
+        "action": "Send us a message"
+      },
+      {
+        "icon": "phone",
+        "title": "Call Us",
+        "description": "+1-555-CLAWGURU",
+        "action": "Schedule a consultation"
+      },
+      {
+        "icon": "calendar",
+        "title": "Schedule Demo",
+        "description": "Book a personalized demo",
+        "action": "View calendar"
+      },
+      {
+        "icon": "message-circle",
+        "title": "Live Chat",
+        "description": "Chat with our security experts",
+        "action": "Start chat"
+      }
+    ],
+    "offices": [
+      {
+        "city": "San Francisco",
+        "country": "United States",
+        "address": "123 Market Street, Suite 1000, San Francisco, CA 94105"
+      },
+      {
+        "city": "Berlin",
+        "country": "Germany",
+        "address": "Friedrichstrasse 123, 10117 Berlin, Germany"
+      },
+      {
+        "city": "London",
+        "country": "United Kingdom",
+        "address": "100 Bishopsgate, London EC2N 4AG, UK"
+      },
+      {
+        "city": "Tokyo",
+        "country": "Japan",
+        "address": "1-2-3 Marunouchi, Chiyoda-ku, Tokyo 100-0005, Japan"
+      }
+    ]
+  },
+  "careers": {
+    "title": "Join Our Team",
+    "subtitle": "Help us secure the future of AI",
+    "description": "We're always looking for talented individuals who are passionate about AI security and want to make an impact.",
+    "open_positions": [
+      {
+        "title": "Senior Security Engineer",
+        "department": "Engineering",
+        "location": "San Francisco / Remote",
+        "type": "Full-time"
+      },
+      {
+        "title": "AI Research Scientist",
+        "department": "Research",
+        "location": "Berlin / Remote",
+        "type": "Full-time"
+      },
+      {
+        "title": "Product Manager",
+        "department": "Product",
+        "location": "London / Remote",
+        "type": "Full-time"
+      },
+      {
+        "title": "Security Analyst",
+        "department": "Security Operations",
+        "location": "Remote",
+        "type": "Full-time"
+      }
+    ],
+    "benefits": [
+      "Competitive salary and equity",
+      "Comprehensive health benefits",
+      "Flexible work arrangements",
+      "Professional development budget",
+      "Cutting-edge technology stack",
+      "Mission-driven work environment"
+    ],
+    "cta": "View All Positions"
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "subtitle": "Learn more about ClawGuru and our approach to AI security",
+    "questions": [
+      {
+        "question": "What makes ClawGuru different from other security solutions?",
+        "answer": "ClawGuru is specifically designed for AI agents and their unique security challenges. Unlike traditional security tools, we understand AI-specific vulnerabilities like API key exposure, model poisoning, and agent communication security. Our platform combines AI-powered analysis with the world's largest library of AI security runbooks."
+      },
+      {
+        "question": "How does the Mycelium Network work?",
+        "answer": "The Mycelium Network is our distributed security intelligence system that allows organizations to share threat information and security insights. When one organization detects a new threat or vulnerability, that intelligence is automatically shared across the network, helping all participants stay protected against emerging threats."
+      },
+      {
+        "question": "What types of AI agents does ClawGuru support?",
+        "answer": "ClawGuru supports all types of AI agents including language models, computer vision systems, autonomous agents, robotic systems, and custom AI applications. Our platform is technology-agnostic and can secure AI agents built with any framework or platform."
+      },
+      {
+        "question": "How quickly can we get started with ClawGuru?",
+        "answer": "You can start with our free security assessment in 30 seconds. Full platform setup typically takes less than an hour, and most customers see value within the first day. Our team provides onboarding assistance to ensure you get the most out of the platform quickly."
+      },
+      {
+        "question": "Is ClawGuru suitable for small teams?",
+        "answer": "Absolutely! We offer plans for organizations of all sizes, from individual developers to large enterprises. Our free tier includes essential security features, while our paid plans provide advanced capabilities for growing teams and enterprises."
+      },
+      {
+        "question": "How does ClawGuru ensure data privacy and compliance?",
+        "answer": "We take data privacy seriously and comply with major regulations including GDPR, SOC 2, and ISO 27001. Your data is encrypted at rest and in transit, and we never share your specific security information with third parties. You maintain full control over your data and can choose on-premise deployment if required."
+      }
+    ]
+  },
+  "schema": {
+    "organization": {
+      "@type": "Organization",
+      "name": "ClawGuru",
+      "url": "https://clawguru.org",
+      "logo": "https://clawguru.org/logo.png",
+      "description": "AI Agent Security Platform for the Future",
+      "foundingDate": "2024",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+1-555-CLAWGURU",
+        "contactType": "customer service",
+        "availableLanguage": ["English", "German", "Spanish", "French", "Italian", "Portuguese", "Dutch", "Polish", "Russian", "Turkish", "Arabic", "Chinese", "Japanese", "Korean", "Swedish"]
+      },
+      "sameAs": [
+        "https://twitter.com/clawguru",
+        "https://linkedin.com/company/clawguru",
+        "https://github.com/clawguru"
+      ]
+    },
+    "webpage": {
+      "@type": "WebPage",
+      "name": "About ClawGuru - AI Agent Security Platform",
+      "description": "Learn about ClawGuru's mission to secure AI agents with enterprise-grade protection and innovative security technology.",
+      "url": "https://clawguru.org/about",
+      "mainEntity": {
+        "@type": "Organization",
+        "name": "ClawGuru"
+      }
+    },
+    "breadcrumb": {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://clawguru.org"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "About",
+          "item": "https://clawguru.org/about"
+        }
+      ]
+    },
+    "faq": {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What makes ClawGuru different from other security solutions?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "ClawGuru is specifically designed for AI agents and their unique security challenges. Unlike traditional security tools, we understand AI-specific vulnerabilities like API key exposure, model poisoning, and agent communication security."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How does the Mycelium Network work?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The Mycelium Network is our distributed security intelligence system that allows organizations to share threat information and security insights. When one organization detects a new threat or vulnerability, that intelligence is automatically shared across the network."
+          }
+        }
+      ]
+    }
+  }
+}

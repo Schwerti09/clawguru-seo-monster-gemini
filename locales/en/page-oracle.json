@@ -1,0 +1,446 @@
+{
+  "meta": {
+    "title": "Oracle - AI-Powered Security Intelligence | ClawGuru",
+    "description": "Oracle provides AI-powered threat detection and predictive security analysis. Get real-time insights and automated response for your AI agent security.",
+    "keywords": "Oracle AI, Security Intelligence, Threat Detection, Predictive Security, AI Analysis, Security Automation, Threat Intelligence",
+    "og_title": "Oracle - AI-Powered Security Intelligence",
+    "og_description": "AI-powered threat detection and predictive security analysis for your AI agent infrastructure.",
+    "og_image": "https://clawguru.org/og-oracle.jpg",
+    "twitter_card": "summary_large_image",
+    "twitter_title": "Oracle - AI-Powered Security Intelligence",
+    "twitter_description": "AI-powered threat detection and predictive security analysis for your AI agent infrastructure.",
+    "twitter_image": "https://clawguru.org/twitter-oracle.jpg"
+  },
+  "hero": {
+    "title": "Cosmic Intelligence",
+    "subtitle": "AI-powered threat detection and predictive security analysis",
+    "description": "Oracle analyzes your AI infrastructure, identifies threats before they materialize, and provides actionable intelligence to keep your systems secure.",
+    "cta_primary": "Start Oracle Analysis",
+    "cta_secondary": "View Demo",
+    "stats": [
+      {
+        "number": "1M+",
+        "label": "Threats Analyzed Daily"
+      },
+      {
+        "number": "99.7%",
+        "label": "Detection Accuracy"
+      },
+      {
+        "number": "250ms",
+        "label": "Average Response Time"
+      },
+      {
+        "number": "24/7",
+        "label": "Monitoring"
+      }
+    ]
+  },
+  "modes": {
+    "title": "Oracle Analysis Modes",
+    "subtitle": "Choose your intelligence approach",
+    "modes": [
+      {
+        "name": "Pure",
+        "icon": "crystal",
+        "description": "Clean, unbiased security analysis with raw data insights",
+        "features": [
+          "Raw threat data",
+          "Unfiltered analysis",
+          "Complete transparency",
+          "Direct intelligence"
+        ]
+      },
+      {
+        "name": "Temporal",
+        "icon": "clock",
+        "description": "Time-based threat prediction and trend analysis",
+        "features": [
+          "Historical patterns",
+          "Trend forecasting",
+          "Seasonal threats",
+          "Timeline analysis"
+        ]
+      },
+      {
+        "name": "Swarm",
+        "icon": "users",
+        "description": "Collective intelligence from Mycelium Network participants",
+        "features": [
+          "Community insights",
+          "Shared threats",
+          "Collaborative defense",
+          "Network intelligence"
+        ]
+      },
+      {
+        "name": "Prophetic",
+        "icon": "eye",
+        "description": "Advanced predictive modeling for future security events",
+        "features": [
+          "Future threat prediction",
+          "Risk forecasting",
+          "Preventive insights",
+          "Strategic planning"
+        ]
+      }
+    ]
+  },
+  "use_cases": {
+    "title": "Security Use Cases",
+    "subtitle": "Real-world applications for Oracle intelligence",
+    "cases": [
+      {
+        "icon": "shield",
+        "title": "Vulnerability Prediction",
+        "description": "Predict security vulnerabilities before they're discovered by attackers",
+        "benefits": [
+          "Proactive patching",
+          "Risk reduction",
+          "Compliance maintenance",
+          "Cost savings"
+        ]
+      },
+      {
+        "icon": "target",
+        "title": "Threat Hunting",
+        "description": "Automated threat hunting across your AI infrastructure",
+        "benefits": [
+          "Advanced detection",
+          "Reduced manual work",
+          "Comprehensive coverage",
+          "Real-time alerts"
+        ]
+      },
+      {
+        "icon": "brain",
+        "title": "Security Orchestration",
+        "description": "AI-driven security response automation and orchestration",
+        "benefits": [
+          "Faster response",
+          "Consistent actions",
+          "Reduced errors",
+          "Improved efficiency"
+        ]
+      },
+      {
+        "icon": "chart-line",
+        "title": "Risk Assessment",
+        "description": "Continuous risk scoring and security posture assessment",
+        "benefits": [
+          "Quantified risk",
+          "Trend analysis",
+          "Resource optimization",
+          "Strategic planning"
+        ]
+      },
+      {
+        "icon": "network",
+        "title": "Anomaly Detection",
+        "description": "Identify unusual patterns and behaviors in AI systems",
+        "benefits": [
+          "Early detection",
+          "Behavioral analysis",
+          "Pattern recognition",
+          "Alert optimization"
+        ]
+      },
+      {
+        "icon": "lock",
+        "title": "Compliance Monitoring",
+        "description": "Automated compliance checking and reporting",
+        "benefits": [
+          "Regulatory adherence",
+          "Audit readiness",
+          "Documentation",
+          "Risk mitigation"
+        ]
+      }
+    ]
+  },
+  "features": {
+    "title": "Oracle Intelligence Features",
+    "subtitle": "Advanced capabilities for comprehensive security",
+    "sections": [
+      {
+        "title": "AI Analysis Engine",
+        "description": "State-of-the-art machine learning for security analysis",
+        "features": [
+          "Deep learning models",
+          "Neural network analysis",
+          "Pattern recognition",
+          "Anomaly detection",
+          "Predictive analytics",
+          "Natural language processing"
+        ]
+      },
+      {
+        "title": "Real-time Processing",
+        "description": "Instant threat detection and analysis",
+        "features": [
+          "Sub-second analysis",
+          "Streaming data processing",
+          "Real-time alerts",
+          "Live dashboards",
+          "Instant notifications",
+          "Continuous monitoring"
+        ]
+      },
+      {
+        "title": "Intelligence Sources",
+        "description": "Multiple data sources for comprehensive analysis",
+        "features": [
+          "Mycelium Network data",
+          "Threat intelligence feeds",
+          "System logs analysis",
+          "Network traffic analysis",
+          "Behavioral patterns",
+          "Historical data"
+        ]
+      },
+      {
+        "title": "Integration Capabilities",
+        "description": "Seamless integration with your security stack",
+        "features": [
+          "API access",
+          "Webhook notifications",
+          "SIEM integration",
+          "SOAR compatibility",
+          "Custom connectors",
+          "Data export options"
+        ]
+      }
+    ]
+  },
+  "integration": {
+    "title": "Integrates with Your Security Stack",
+    "subtitle": "Oracle works seamlessly with your existing tools",
+    "categories": [
+      {
+        "title": "SIEM Platforms",
+        "integrations": ["Splunk", "IBM QRadar", "LogRhythm", "Sumo Logic"]
+      },
+      {
+        "title": "SOAR Tools",
+        "integrations": ["Palo Alto Cortex", "IBM Resilient", "Splunk SOAR", "Swimlane"]
+      },
+      {
+        "title": "Threat Intelligence",
+        "integrations": ["CrowdStrike", "Recorded Future", "ThreatConnect", "MISP"]
+      },
+      {
+        "title": "Monitoring Tools",
+        "integrations": ["Datadog", "New Relic", "Prometheus", "Grafana"]
+      }
+    ]
+  },
+  "testimonials": {
+    "title": "What Security Leaders Say",
+    "subtitle": "Trusted by security teams worldwide",
+    "testimonials": [
+      {
+        "quote": "Oracle's predictive capabilities have helped us prevent 3 major security incidents in the past quarter. The AI insights are invaluable.",
+        "author": "David Kim",
+        "role": "Security Architect",
+        "company": "TechCorp International",
+        "avatar": "david-kim"
+      },
+      {
+        "quote": "The real-time threat detection is game-changing. We've reduced our incident response time by 85% since implementing Oracle.",
+        "author": "Lisa Martinez",
+        "role": "CISO",
+        "company": "Global Finance Corp",
+        "avatar": "lisa-martinez"
+      },
+      {
+        "quote": "Oracle's integration with our existing SIEM was seamless. The additional intelligence layer has transformed our security operations.",
+        "author": "James Wilson",
+        "role": "Security Operations Manager",
+        "company": "Enterprise Solutions Ltd",
+        "avatar": "james-wilson"
+      }
+    ]
+  },
+  "pricing": {
+    "title": "Oracle Intelligence Pricing",
+    "subtitle": "Choose the intelligence level that fits your needs",
+    "plans": [
+      {
+        "name": "Basic",
+        "price": "$299",
+        "period": "per month",
+        "description": "Essential AI security intelligence for small teams",
+        "features": [
+          "Basic threat detection",
+          "1M analysis requests/month",
+          "Standard support",
+          "API access",
+          "Monthly reporting"
+        ],
+        "cta": "Get Started",
+        "popular": false
+      },
+      {
+        "name": "Professional",
+        "price": "$799",
+        "period": "per month",
+        "description": "Advanced intelligence for growing organizations",
+        "features": [
+          "All Basic features",
+          "Predictive analysis",
+          "5M analysis requests/month",
+          "Priority support",
+          "Custom integrations",
+          "Real-time alerts"
+        ],
+        "cta": "Start Free Trial",
+        "popular": true
+      },
+      {
+        "name": "Enterprise",
+        "price": "Custom",
+        "period": "pricing",
+        "description": "Complete intelligence for large enterprises",
+        "features": [
+          "All Professional features",
+          "Unlimited analysis",
+          "Dedicated support",
+          "On-premise deployment",
+          "Custom models",
+          "SLA guarantees"
+        ],
+        "cta": "Contact Sales",
+        "popular": false
+      }
+    ]
+  },
+  "cta_section": {
+    "title": "Transform Your Security Intelligence",
+    "subtitle": "Get AI-powered threat detection and predictive analysis",
+    "description": "Join thousands of security teams using Oracle to stay ahead of threats and protect their AI infrastructure.",
+    "cta_primary": "Start Oracle Analysis",
+    "cta_secondary": "Schedule Demo",
+    "trust_indicators": [
+      "30-day free trial",
+      "No credit card required",
+      "Enterprise-grade security",
+      "24/7 technical support"
+    ]
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "subtitle": "Everything you need to know about Oracle intelligence",
+    "questions": [
+      {
+        "question": "How does Oracle's AI analysis work?",
+        "answer": "Oracle uses advanced machine learning models trained on millions of security events. It analyzes patterns, anomalies, and correlations in your data to identify threats and predict future security events. The AI continuously learns from new data to improve accuracy."
+      },
+      {
+        "question": "What data sources does Oracle analyze?",
+        "answer": "Oracle can analyze multiple data sources including system logs, network traffic, application metrics, security events, threat intelligence feeds, and data from the Mycelium Network. You can customize which sources to include based on your infrastructure and security needs."
+      },
+      {
+        "question": "How accurate is Oracle's threat prediction?",
+        "answer": "Oracle achieves 99.7% detection accuracy through its advanced AI models and continuous learning. The predictive capabilities have been validated across thousands of deployments and continuously improve with each analysis."
+      },
+      {
+        "question": "Can Oracle integrate with our existing security tools?",
+        "answer": "Yes, Oracle provides extensive integration capabilities including REST APIs, webhooks, and native connectors for popular SIEM, SOAR, and monitoring platforms. Our team can also help with custom integrations for your specific tools."
+      },
+      {
+        "question": "How quickly does Oracle detect threats?",
+        "answer": "Oracle provides real-time threat detection with an average response time of 250ms. Critical threats are identified and alerted instantly, while comprehensive analysis completes within seconds depending on data volume and complexity."
+      },
+      {
+        "question": "Is Oracle suitable for compliance requirements?",
+        "answer": "Absolutely. Oracle helps with compliance monitoring, automated reporting, and audit trail maintenance. It supports major compliance frameworks including GDPR, SOC 2, ISO 27001, PCI DSS, and industry-specific regulations."
+      }
+    ]
+  },
+  "mycelium_kreislauf": {
+    "title": "Mycelium Circle",
+    "subtitle": "Connected Intelligence Network",
+    "description": "Oracle integrates with the Mycelium Network for collaborative security intelligence",
+    "links": [
+      {
+        "title": "Summon AI",
+        "description": "Execute security actions",
+        "url": "/summon"
+      },
+      {
+        "title": "Intel Feed",
+        "description": "Live threat intelligence",
+        "url": "/intel"
+      },
+      {
+        "title": "Neuro",
+        "description": "Predictive security analytics",
+        "url": "/neuro"
+      },
+      {
+        "title": "Security Check",
+        "description": "Complete security assessment",
+        "url": "/check"
+      }
+    ]
+  },
+  "schema": {
+    "webpage": {
+      "@type": "WebPage",
+      "name": "Oracle - AI-Powered Security Intelligence",
+      "description": "AI-powered threat detection and predictive security analysis for your AI agent infrastructure.",
+      "url": "https://clawguru.org/oracle",
+      "mainEntity": {
+        "@type": "SoftwareApplication",
+        "name": "Oracle",
+        "description": "AI-powered security intelligence platform",
+        "applicationCategory": "SecurityApplication",
+        "operatingSystem": "Any",
+        "offers": {
+          "@type": "Offer",
+          "price": "299",
+          "priceCurrency": "USD",
+          "priceValidUntil": "2026-12-31"
+        }
+      }
+    },
+    "breadcrumb": {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://clawguru.org"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Oracle",
+          "item": "https://clawguru.org/oracle"
+        }
+      ]
+    },
+    "faq": {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How does Oracle's AI analysis work?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Oracle uses advanced machine learning models trained on millions of security events. It analyzes patterns, anomalies, and correlations in your data to identify threats and predict future security events."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What data sources does Oracle analyze?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Oracle can analyze multiple data sources including system logs, network traffic, application metrics, security events, threat intelligence feeds, and data from the Mycelium Network."
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,563 @@
+{
+  "meta": {
+    "title": "\u00dcber ClawGuru - KI-Agenten-Sicherheitsplattform | Produkt\u00fcbersicht",
+    "description": "Entdecken Sie ClawGurus umfassende KI-Agenten-Sicherheitsplattform. Erfahren Sie mehr \u00fcber unsere Mission, Technologie und wie wir KI-Infrastruktur mit Enterprise-Schutz sichern.",
+    "keywords": "ClawGuru \u00fcber uns, KI-Sicherheitsplattform, Produkt\u00fcbersicht, KI-Agenten-Schutz, Sicherheitsunternehmen, Mission, Team, Technologie",
+    "og_title": "\u00dcber ClawGuru - KI-Agenten-Sicherheitsplattform",
+    "og_description": "Erfahren Sie mehr \u00fcber ClawGurus Mission, KI-Agenten mit Enterprise-Schutz und innovativer Sicherheitstechnologie zu sch\u00fctzen.",
+    "og_image": "https://clawguru.org/og-about.jpg",
+    "twitter_card": "summary_large_image",
+    "twitter_title": "\u00dcber ClawGuru - KI-Agenten-Sicherheitsplattform",
+    "twitter_description": "Erfahren Sie mehr \u00fcber ClawGurus Mission, KI-Agenten mit Enterprise-Schutz und innovativer Sicherheitstechnologie zu sch\u00fctzen.",
+    "twitter_image": "https://clawguru.org/twitter-about.jpg"
+  },
+  "hero": {
+    "title": "Die Zukunft der KI sichern",
+    "subtitle": "ClawGuru ist die f\u00fchrende KI-Agenten-Sicherheitsplattform, die die Infrastruktur sch\u00fctzt, die die intelligenten Systeme von morgen antreibt",
+    "description": "Wir glauben, dass KI-Agenten die gleichen Sicherheitsstandards verdienen wie kritische Infrastruktur. Unsere Plattform bietet umfassenden Schutz f\u00fcr KI-Systeme, von einzelnen Agenten bis hin zu gro\u00df angelegten Bereitstellungen.",
+    "stats": [
+      {
+        "number": "4,2M+",
+        "label": "Security Runbooks generiert"
+      },
+      {
+        "number": "50K+",
+        "label": "KI-Agenten gesichert"
+      },
+      {
+        "number": "99,9%",
+        "label": "Plattform-Verf\u00fcgbarkeit"
+      },
+      {
+        "number": "250+",
+        "label": "Enterprise-Kunden"
+      }
+    ]
+  },
+  "mission": {
+    "title": "Unsere Mission",
+    "subtitle": "KI-Sicherheit demokratisieren",
+    "content": "ClawGuru wurde mit einer einfachen Mission gegr\u00fcndet: Enterprise-Grade KI-Sicherheit f\u00fcr jeden zug\u00e4nglich zu machen. Wir glauben, dass mit zunehmender Bedeutung von KI f\u00fcr Gesch\u00e4ftsprozesse auch die Sicherheit weiterentwickelt werden muss, um diese intelligenten Systeme zu sch\u00fctzen.",
+    "pillars": [
+      {
+        "icon": "shield",
+        "title": "Security First",
+        "description": "Jede Entscheidung, die wir treffen, priorisiert die Sicherheit und den Schutz von KI-Systemen und deren Daten."
+      },
+      {
+        "icon": "users",
+        "title": "Zug\u00e4nglichkeit",
+        "description": "Fortschrittliche Sicherheit sollte f\u00fcr Organisationen jeder Gr\u00f6\u00dfe verf\u00fcgbar sein, nicht nur f\u00fcr gro\u00dfe Unternehmen."
+      },
+      {
+        "icon": "globe",
+        "title": "Globale Wirkung",
+        "description": "KI-Sicherheit ist eine globale Herausforderung, die kollaborative L\u00f6sungen und geteilte Intelligenz erfordert."
+      },
+      {
+        "icon": "zap",
+        "title": "Innovation",
+        "description": "Wir st\u00f6\u00dfen kontinuierlich die Grenzen dessen, was in der KI-Sicherheitstechnologie m\u00f6glich ist."
+      }
+    ]
+  },
+  "story": {
+    "title": "Unsere Geschichte",
+    "subtitle": "Von Herausforderung zu L\u00f6sung",
+    "timeline": [
+      {
+        "year": "2023",
+        "title": "Herausforderung identifiziert",
+        "description": "Unsere Gr\u00fcnder entdeckten eine kritische L\u00fccke in der KI-Sicherheit w\u00e4hrend der Arbeit mit gro\u00dfen Unternehmen. KI-Agenten wurden ohne ordnungsgem\u00e4\u00dfe Sicherheitsma\u00dfnahmen bereitgestellt, was Organisationen erheblichen Risiken aussetzte."
+      },
+      {
+        "year": "2024",
+        "title": "ClawGuru gegr\u00fcndet",
+        "description": "Wir stellten ein Team aus Sicherheitsexperten, KI-Spezialisten und Enterprise-Architekten zusammen, um die erste umfassende KI-Agenten-Sicherheitsplattform zu entwickeln."
+      },
+      {
+        "year": "2024",
+        "title": "Plattform-Launch",
+        "description": "Start unserer initialen Plattform mit Kern-Sicherheitsbewertung, Runbook-Generierung und grundlegenden Bedrohungserkennungsf\u00e4higkeiten."
+      },
+      {
+        "year": "2025",
+        "title": "Rapid Growth",
+        "description": "Expansion auf Tausende von Kunden, Einf\u00fchrung von Oracle KI-Intelligenz und Erreichen von 4,2 Millionen generierten Security Runbooks."
+      },
+      {
+        "year": "2026",
+        "title": "Marktf\u00fchrerschaft",
+        "description": "Etablierung als f\u00fchrende KI-Agenten-Sicherheitsplattform mit Enterprise-Kunden weltweit und kontinuierlicher Innovation."
+      }
+    ]
+  },
+  "technology": {
+    "title": "Unsere Technologie",
+    "subtitle": "Cutting-Edge KI-Sicherheitsinnovation",
+    "sections": [
+      {
+        "title": "KI-gest\u00fctzte Analyse",
+        "description": "Unsere propriet\u00e4ren KI-Modelle analysieren Sicherheitsmuster, prognostizieren Bedrohungen und generieren intelligente Reaktionen.",
+        "features": [
+          "Machine Learning Bedrohungserkennung",
+          "Pr\u00e4diktive Sicherheitsanalyse",
+          "Automatisierte Sicherheitsl\u00fccken-Bewertung",
+          "Intelligente Runbook-Generierung"
+        ]
+      },
+      {
+        "title": "Mycelium Netzwerk",
+        "description": "Verteiltes Sicherheitsintelligenz-Netzwerk, das kollaborative Verteidigung \u00fcber Organisationen hinweg erm\u00f6glicht.",
+        "features": [
+          "Peer-to-Peer Bedrohungs-Sharing",
+          "Echtzeit-Intelligenz-Austausch",
+          "Community-getriebene Sicherheit",
+          "Skalierbare Netzwerk-Architektur"
+        ]
+      },
+      {
+        "title": "Zero Trust Architektur",
+        "description": "Gebaut auf Zero-Trust-Prinzipien mit umfassender Authentifizierung, Autorisierung und Zugriffskontrolle.",
+        "features": [
+          "Identit\u00e4tsbasierte Sicherheit",
+          "Kontinuierliche Verifizierung",
+          "Least Privilege Zugriff",
+          "Umfassende Audit-Trails"
+        ]
+      },
+      {
+        "title": "Enterprise Integration",
+        "description": "Nahtlose Integration mit bestehender Sicherheitsinfrastruktur und Enterprise-Systemen.",
+        "features": [
+          "RESTful APIs und Webhooks",
+          "SIEM- und SOAR-Kompatibilit\u00e4t",
+          "Benutzerdefinierte Connector-Framework",
+          "Enterprise SSO Support"
+        ]
+      }
+    ]
+  },
+  "products": {
+    "title": "Unsere Produkte",
+    "subtitle": "Umfassende Sicherheitsl\u00f6sungen",
+    "products": [
+      {
+        "name": "Sicherheitsbewertung",
+        "icon": "check-circle",
+        "description": "Vollst\u00e4ndige Sicherheitspositionsanalyse in 30 Sekunden mit umsetzbaren Empfehlungen.",
+        "key_features": [
+          "Echtzeit-Sicherheitsl\u00fccken-Scanning",
+          "Konfigurationsanalyse",
+          "Compliance-\u00dcberpr\u00fcfung",
+          "Risikopriorisierung"
+        ],
+        "cta": "Security Check ausf\u00fchren"
+      },
+      {
+        "name": "Oracle Intelligenz",
+        "icon": "brain",
+        "description": "KI-gest\u00fctzte Bedrohungserkennung und pr\u00e4diktive Sicherheitsanalyse f\u00fcr proaktive Verteidigung.",
+        "key_features": [
+          "Machine Learning Analyse",
+          "Pr\u00e4diktive Bedrohungsmodellierung",
+          "Echtzeit-Warnungen",
+          "Automatisierte Reaktion"
+        ],
+        "cta": "Oracle erkunden"
+      },
+      {
+        "name": "Security Runbooks",
+        "icon": "book",
+        "description": "4,2 Millionen+ KI-generierte Security Runbooks f\u00fcr jedes m\u00f6gliche Szenario.",
+        "key_features": [
+          "Automatisierte Fix-Generierung",
+          "Schritt-f\u00fcr-Schritt-Anleitung",
+          "Technologiespezifische L\u00f6sungen",
+          "Kontinuierliche Updates"
+        ],
+        "cta": "Runbooks durchsuchen"
+      },
+      {
+        "name": "Mycelium Netzwerk",
+        "icon": "network",
+        "description": "Verteiltes Sicherheitsintelligenz-Sharing f\u00fcr kollaborative Verteidigung.",
+        "key_features": [
+          "Peer-to-Peer Sharing",
+          "Echtzeit-Intelligenz",
+          "Community-Einblicke",
+          "Netzwerkweite Sichtbarkeit"
+        ],
+        "cta": "Netzwerk beitreten"
+      },
+      {
+        "name": "Neuro Analytics",
+        "icon": "activity",
+        "description": "Pr\u00e4diktive Sicherheitsanalyse und Verhaltensanalyse f\u00fcr erweiterte Bedrohungserkennung.",
+        "key_features": [
+          "Verhaltensmuster-Analyse",
+          "Anomalie-Erkennung",
+          "Risiko-Prognosen",
+          "Trendanalyse"
+        ],
+        "cta": "Neuro testen"
+      },
+      {
+        "name": "Copilot Assistant",
+        "icon": "cpu",
+        "description": "KI-gest\u00fctzter Sicherheitsassistent f\u00fcr gef\u00fchrte Behebung und Operationen.",
+        "key_features": [
+          "Interaktive Anleitung",
+          "Natural Language Interface",
+          "Kontextbewusste Unterst\u00fctzung",
+          "Learning-F\u00e4higkeiten"
+        ],
+        "cta": "Copilot verwenden"
+      }
+    ]
+  },
+  "team": {
+    "title": "Unser Team",
+    "subtitle": "Sicherheitsexperten und KI-Innovatoren",
+    "description": "Unser Team vereint Jahrzehnte Erfahrung in Cybersicherheit, k\u00fcnstlicher Intelligenz und Enterprise-Software.",
+    "members": [
+      {
+        "name": "Dr. Sarah Chen",
+        "role": "CEO & Co-Gr\u00fcnderin",
+        "bio": "Ehemalige Chief Security Officer bei TechCorp mit 15+ Jahren in Enterprise Security und KI-Forschung.",
+        "avatar": "sarah-chen"
+      },
+      {
+        "name": "Michael Rodriguez",
+        "role": "CTO & Co-Gr\u00fcnder",
+        "bio": "KI-Forschungsleiter mit Expertise in Machine Learning und verteilten Systemen vom MIT.",
+        "avatar": "michael-rodriguez"
+      },
+      {
+        "name": "Emma Thompson",
+        "role": "Head of Security",
+        "bio": "Ehemalige Security-Architektin bei CloudScale mit tiefem Expertise in Zero-Trust-Architekturen.",
+        "avatar": "emma-thompson"
+      },
+      {
+        "name": "David Kim",
+        "role": "VP of Engineering",
+        "bio": "Skalierte Engineering-Teams bei mehreren Startups mit Fokus auf Sicherheit und KI-Plattformen.",
+        "avatar": "david-kim"
+      },
+      {
+        "name": "Lisa Martinez",
+        "role": "Head of Product",
+        "bio": "Product-Leader mit Erfahrung in der Entwicklung von Sicherheitsprodukten f\u00fcr Enterprise-Kunden.",
+        "avatar": "lisa-martinez"
+      },
+      {
+        "name": "James Wilson",
+        "role": "Head of Customer Success",
+        "bio": "Customer-Experience-Experte mit Fokus auf Security-Operationen und Enterprise-Bereitstellungen.",
+        "avatar": "james-wilson"
+      }
+    ]
+  },
+  "values": {
+    "title": "Unsere Werte",
+    "subtitle": "Prinzipien, die uns leiten",
+    "values": [
+      {
+        "title": "Sicherheits-Exzellenz",
+        "description": "Wir machen niemals Kompromisse bei der Sicherheitsqualit\u00e4t und heben kontinuierlich die Standards f\u00fcr KI-Schutz.",
+        "icon": "shield-check"
+      },
+      {
+        "title": "Kundenerfolg",
+        "description": "Die Sicherheit unserer Kunden ist unser Erfolg. Wir sind darauf bedacht, ihnen bei der Erreichung ihrer Sicherheitsziele zu helfen.",
+        "icon": "heart"
+      },
+      {
+        "title": "Innovation First",
+        "description": "Wir umarmen Cutting-Edge-Technologie und kreative L\u00f6sungen zur L\u00f6sung komplexer Sicherheits-Herausforderungen.",
+        "icon": "lightbulb"
+      },
+      {
+        "title": "Transparenz",
+        "description": "Wir agieren mit Offenheit und Ehrlichkeit in unserer Technologie, unseren Prozessen und Kundenbeziehungen.",
+        "icon": "eye"
+      },
+      {
+        "title": "Kollaboration",
+        "description": "Sicherheit ist ein Team-Sport. Wir glauben an Zusammenarbeit mit Kunden und der Security-Community.",
+        "icon": "users"
+      },
+      {
+        "title": "Kontinuierliches Lernen",
+        "description": "Die Sicherheitslandschaft entwickelt sich st\u00e4ndig weiter, und wir auch. Wir lernen und verbessern uns kontinuierlich.",
+        "icon": "book-open"
+      }
+    ]
+  },
+  "customers": {
+    "title": "Vertraut von Branchenf\u00fchrern",
+    "subtitle": "Unternehmen weltweit vertrauen ClawGuru f\u00fcr ihre KI-Sicherheitsbed\u00fcrfnisse",
+    "logos": [
+      "techcorp",
+      "global-finance",
+      "cloudscale",
+      "enterprise-solutions",
+      "innovate-labs",
+      "secure-systems",
+      "ai-pioneers",
+      "future-tech"
+    ],
+    "testimonials": [
+      {
+        "quote": "ClawGuru hat transformiert, wie wir an KI-Sicherheit herangehen. Die Intelligenz und Automatisierung der Plattform haben unsere Sicherheitsvorf\u00e4lle um 85% reduziert.",
+        "author": "Jennifer Adams",
+        "role": "CISO",
+        "company": "TechCorp Industries",
+        "avatar": "jennifer-adams"
+      },
+      {
+        "quote": "Die 4,2 Millionen Security Runbooks sind unglaublich. Welches Sicherheitsproblem wir auch haben, es gibt eine detaillierte L\u00f6sung zur Implementierung.",
+        "author": "Robert Chang",
+        "role": "Security Director",
+        "company": "Global Finance Corp",
+        "avatar": "robert-chang"
+      },
+      {
+        "quote": "Oracles pr\u00e4diktive F\u00e4higkeiten haben uns geholfen, mehrere Sicherheitsvorf\u00e4lle zu verhindern. Die KI-Einblicke sind unbezahlbar f\u00fcr proaktive Verteidigung.",
+        "author": "Maria Garcia",
+        "role": "Head of Security Operations",
+        "company": "CloudScale Systems",
+        "avatar": "maria-garcia"
+      }
+    ]
+  },
+  "achievements": {
+    "title": "Unsere Erfolge",
+    "subtitle": "Meilensteine und Anerkennung",
+    "achievements": [
+      {
+        "icon": "trophy",
+        "title": "Branchen-Anerkennung",
+        "description": "Ausgezeichnet als \"Beste KI-Sicherheitsl\u00f6sung\" bei den Global Security Awards 2025"
+      },
+      {
+        "icon": "certificate",
+        "title": "Sicherheits-Zertifizierungen",
+        "description": "SOC 2 Type II, ISO 27001 und DSGVO-konform mit regelm\u00e4\u00dfigen Audits"
+      },
+      {
+        "icon": "users",
+        "title": "Community-Wachstum",
+        "description": "50.000+ KI-Agenten gesichert bei 250+ Enterprise-Kunden weltweit"
+      },
+      {
+        "icon": "book",
+        "title": "Wissensf\u00fchrerschaft",
+        "description": "4,2 Millionen Security Runbooks generiert und mit der Community geteilt"
+      },
+      {
+        "icon": "globe",
+        "title": "Globale Reichweite",
+        "description": "Betrieb in 15 Sprachen mit Kunden in 50+ L\u00e4ndern"
+      },
+      {
+        "icon": "shield",
+        "title": "Zero Incidents",
+        "description": "99,9% Uptime aufrechterhalten mit null Sicherheitsvorf\u00e4llen seit dem Launch"
+      }
+    ]
+  },
+  "contact": {
+    "title": "Kontakt aufnehmen",
+    "subtitle": "Wir sind hier, um Ihre KI-Reise zu sichern",
+    "description": "Haben Sie Fragen zur KI-Sicherheit? M\u00f6chten Sie sehen, wie ClawGuru Ihre Infrastruktur sch\u00fctzen kann? Unser Team ist bereit zu helfen.",
+    "contact_methods": [
+      {
+        "icon": "mail",
+        "title": "E-Mail an uns",
+        "description": "security@clawguru.org",
+        "action": "Nachricht senden"
+      },
+      {
+        "icon": "phone",
+        "title": "Rufen Sie uns an",
+        "description": "+49-30-CLAWGURU",
+        "action": "Beratung vereinbaren"
+      },
+      {
+        "icon": "calendar",
+        "title": "Demo vereinbaren",
+        "description": "Personalisierte Demo buchen",
+        "action": "Kalender ansehen"
+      },
+      {
+        "icon": "message-circle",
+        "title": "Live Chat",
+        "description": "Chatten Sie mit unseren Sicherheitsexperten",
+        "action": "Chat starten"
+      }
+    ],
+    "offices": [
+      {
+        "city": "San Francisco",
+        "country": "Vereinigte Staaten",
+        "address": "123 Market Street, Suite 1000, San Francisco, CA 94105"
+      },
+      {
+        "city": "Berlin",
+        "country": "Deutschland",
+        "address": "Friedrichstrasse 123, 10117 Berlin, Deutschland"
+      },
+      {
+        "city": "London",
+        "country": "Vereinigtes K\u00f6nigreich",
+        "address": "100 Bishopsgate, London EC2N 4AG, UK"
+      },
+      {
+        "city": "Tokio",
+        "country": "Japan",
+        "address": "1-2-3 Marunouchi, Chiyoda-ku, Tokio 100-0005, Japan"
+      }
+    ]
+  },
+  "careers": {
+    "title": "Unser Team verst\u00e4rken",
+    "subtitle": "Helfen Sie uns, die Zukunft der KI zu sichern",
+    "description": "Wir suchen stets talentierte Personen, die leidenschaftlich bei KI-Sicherheit sind und einen Unterschied machen wollen.",
+    "open_positions": [
+      {
+        "title": "Senior Security Engineer",
+        "department": "Engineering",
+        "location": "San Francisco / Remote",
+        "type": "Vollzeit"
+      },
+      {
+        "title": "AI Research Scientist",
+        "department": "Research",
+        "location": "Berlin / Remote",
+        "type": "Vollzeit"
+      },
+      {
+        "title": "Product Manager",
+        "department": "Product",
+        "location": "London / Remote",
+        "type": "Vollzeit"
+      },
+      {
+        "title": "Security Analyst",
+        "department": "Security Operations",
+        "location": "Remote",
+        "type": "Vollzeit"
+      }
+    ],
+    "benefits": [
+      "Wettbewerbsf\u00e4higes Gehalt und Equity",
+      "Umfassende Gesundheitsleistungen",
+      "Flexible Arbeitsmodelle",
+      "Budget f\u00fcr berufliche Weiterentwicklung",
+      "Cutting-Edge-Technologie-Stack",
+      "Mission-getriebene Arbeitsumgebung"
+    ],
+    "cta": "Alle Positionen ansehen"
+  },
+  "faq": {
+    "title": "H\u00e4ufig gestellte Fragen",
+    "subtitle": "Erfahren Sie mehr \u00fcber ClawGuru und unseren Ansatz zur KI-Sicherheit",
+    "questions": [
+      {
+        "question": "Was unterscheidet ClawGuru von anderen Sicherheitsl\u00f6sungen?",
+        "answer": "ClawGuru ist speziell f\u00fcr KI-Agenten und deren einzigartige Sicherheits-Herausforderungen konzipiert. Im Gegensatz zu traditionellen Sicherheitstools verstehen wir KI-spezifische Sicherheitsl\u00fccken wie API-Schl\u00fcssel-Exposition, Model-Poisoning und Agenten-Kommunikationssicherheit. Unsere Plattform kombiniert KI-gest\u00fctzte Analyse mit der weltweit gr\u00f6\u00dften Bibliothek an KI-Security Runbooks."
+      },
+      {
+        "question": "Wie funktioniert das Mycelium Netzwerk?",
+        "answer": "Das Mycelium Netzwerk ist unser verteiltes Sicherheitsintelligenz-System, das es Organisationen erm\u00f6glicht, Bedrohungsinformationen und Sicherheitserkenntnisse auszutauschen. Wenn eine Organisation eine neue Bedrohung oder Sicherheitsl\u00fccke entdeckt, wird diese Intelligenz automatisch \u00fcber das Netzwerk geteilt und hilft allen Teilnehmern, sich gegen aufkommende Bedrohungen zu sch\u00fctzen."
+      },
+      {
+        "question": "Welche Arten von KI-Agenten unterst\u00fctzt ClawGuru?",
+        "answer": "ClawGuru unterst\u00fctzt alle Arten von KI-Agenten einschlie\u00dflich Sprachmodelle, Computer-Vision-Systeme, autonome Agenten, robotische Systeme und benutzerdefinierte KI-Anwendungen. Unsere Plattform ist technologie-agnostisch und kann KI-Agenten sichern, die mit jedem Framework oder jeder Plattform entwickelt wurden."
+      },
+      {
+        "question": "Wie schnell k\u00f6nnen wir mit ClawGuru starten?",
+        "answer": "Sie k\u00f6nnen mit unserer kostenlosen Sicherheitsbewertung in 30 Sekunden beginnen. Die vollst\u00e4ndige Plattform-Setup dauert typischerweise weniger als eine Stunde, und die meisten Kunden sehen bereits am ersten Tag einen Mehrwert. Unser Team bietet Onboarding-Unterst\u00fctzung, um sicherzustellen, dass Sie schnell das Maximum aus der Plattform herausholen."
+      },
+      {
+        "question": "Eignet sich ClawGuru f\u00fcr kleine Teams?",
+        "answer": "Absolut! Wir bieten Pl\u00e4ne f\u00fcr Organisationen jeder Gr\u00f6\u00dfe, von einzelnen Entwicklern bis hin zu gro\u00dfen Unternehmen. Unsere kostenlose Stufe enth\u00e4lt wesentliche Sicherheitsfunktionen, w\u00e4hrend unsere kostenpflichtigen Pl\u00e4ne erweiterte F\u00e4higkeiten f\u00fcr wachsende Teams und Unternehmen bieten."
+      },
+      {
+        "question": "Wie stellt ClawGuru Datenschutz und Compliance sicher?",
+        "answer": "Wir nehmen Datenschutz ernst und entsprechen wichtigen Vorschriften einschlie\u00dflich DSGVO, SOC 2 und ISO 27001. Ihre Daten sind sowohl im Ruhezustand als auch w\u00e4hrend der \u00dcbertragung verschl\u00fcsselt, und wir teilen Ihre spezifischen Sicherheitsinformationen niemals mit Dritten. Sie behalten die volle Kontrolle \u00fcber Ihre Daten und k\u00f6nnen bei Bedarf On-Premise-Bereitstellung w\u00e4hlen."
+      }
+    ]
+  },
+  "schema": {
+    "organization": {
+      "@type": "Organization",
+      "name": "ClawGuru",
+      "url": "https://clawguru.org",
+      "logo": "https://clawguru.org/logo.png",
+      "description": "KI-Agenten-Sicherheitsplattform f\u00fcr die Zukunft",
+      "foundingDate": "2024",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+49-30-CLAWGURU",
+        "contactType": "customer service",
+        "availableLanguage": ["Deutsch", "Englisch", "Spanisch", "Franz\u00f6sisch", "Italienisch", "Portugiesisch", "Niederl\u00e4ndisch", "Polnisch", "Russisch", "T\u00fcrkisch", "Arabisch", "Chinesisch", "Japanisch", "Koreanisch", "Schwedisch"]
+      },
+      "sameAs": [
+        "https://twitter.com/clawguru",
+        "https://linkedin.com/company/clawguru",
+        "https://github.com/clawguru"
+      ]
+    },
+    "webpage": {
+      "@type": "WebPage",
+      "name": "\u00dcber ClawGuru - KI-Agenten-Sicherheitsplattform",
+      "description": "Erfahren Sie mehr \u00fcber ClawGurus Mission, KI-Agenten mit Enterprise-Schutz und innovativer Sicherheitstechnologie zu sch\u00fctzen.",
+      "url": "https://clawguru.org/about",
+      "mainEntity": {
+        "@type": "Organization",
+        "name": "ClawGuru"
+      }
+    },
+    "breadcrumb": {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Startseite",
+          "item": "https://clawguru.org"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "\u00dcber uns",
+          "item": "https://clawguru.org/about"
+        }
+      ]
+    },
+    "faq": {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Was unterscheidet ClawGuru von anderen Sicherheitsl\u00f6sungen?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "ClawGuru ist speziell f\u00fcr KI-Agenten und deren einzigartige Sicherheits-Herausforderungen konzipiert. Im Gegensatz zu traditionellen Sicherheitstools verstehen wir KI-spezifische Sicherheitsl\u00fccken wie API-Schl\u00fcssel-Exposition, Model-Poisoning und Agenten-Kommunikationssicherheit."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Wie funktioniert das Mycelium Netzwerk?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Das Mycelium Netzwerk ist unser verteiltes Sicherheitsintelligenz-System, das es Organisationen erm\u00f6glicht, Bedrohungsinformationen und Sicherheitserkenntnisse auszutauschen. Wenn eine Organisation eine neue Bedrohung oder Sicherheitsl\u00fccke entdeckt, wird diese Intelligenz automatisch \u00fcber das Netzwerk geteilt."
+          }
+        }
+      ]
+    }
+  }
+}

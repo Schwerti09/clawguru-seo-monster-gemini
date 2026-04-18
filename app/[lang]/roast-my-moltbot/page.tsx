@@ -212,7 +212,16 @@ export default async function RoastMyMoltbotPage(props: { params: { lang: string
             </div>
           </a>
 
-          <div className="grid sm:grid-cols-2 gap-4">
+          <div className="grid sm:grid-cols-3 gap-4">
+            <a href={`${prefix}/runbooks`} className="block bg-gradient-to-r from-cyan-600 to-cyan-500 border border-cyan-400 rounded-xl p-4 hover:from-cyan-500 hover:to-cyan-400 transition-all">
+              <div className="flex items-center gap-3">
+                <div className="text-2xl"></div>
+                <div>
+                  <div className="font-semibold text-white">{locale === 'de' ? 'Security Runbooks' : 'Security Runbooks'}</div>
+                  <div className="text-xs text-cyan-100">{locale === 'de' ? '1,000+ Fix-Runbooks' : '1,000+ fix runbooks'}</div>
+                </div>
+              </div>
+            </a>
             <a href={`${prefix}/academy`} className="block bg-gradient-to-r from-purple-600 to-purple-500 border border-purple-400 rounded-xl p-4 hover:from-purple-500 hover:to-purple-400 transition-all">
               <div className="flex items-center gap-3">
                 <div className="text-2xl"></div>

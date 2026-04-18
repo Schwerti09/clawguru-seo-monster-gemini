@@ -1,0 +1,446 @@
+{
+  "meta": {
+    "title": "Oracle - KI-gest\u00fctzte Sicherheitsintelligenz | ClawGuru",
+    "description": "Oracle bietet KI-gest\u00fctzte Bedrohungserkennung und pr\u00e4diktive Sicherheitsanalyse. Erhalten Sie Echtzeit-Einblicke und automatisierte Reaktion f\u00fcr Ihre KI-Agenten-Sicherheit.",
+    "keywords": "Oracle KI, Sicherheitsintelligenz, Bedrohungserkennung, Pr\u00e4diktive Sicherheit, KI-Analyse, Sicherheitsautomatisierung, Bedrohungsintelligenz",
+    "og_title": "Oracle - KI-gest\u00fctzte Sicherheitsintelligenz",
+    "og_description": "KI-gest\u00fctzte Bedrohungserkennung und pr\u00e4diktive Sicherheitsanalyse f\u00fcr Ihre KI-Agenten-Infrastruktur.",
+    "og_image": "https://clawguru.org/og-oracle.jpg",
+    "twitter_card": "summary_large_image",
+    "twitter_title": "Oracle - KI-gest\u00fctzte Sicherheitsintelligenz",
+    "twitter_description": "KI-gest\u00fctzte Bedrohungserkennung und pr\u00e4diktive Sicherheitsanalyse f\u00fcr Ihre KI-Agenten-Infrastruktur.",
+    "twitter_image": "https://clawguru.org/twitter-oracle.jpg"
+  },
+  "hero": {
+    "title": "Cosmic Intelligence",
+    "subtitle": "KI-gest\u00fctzte Bedrohungserkennung und pr\u00e4diktive Sicherheitsanalyse",
+    "description": "Oracle analysiert Ihre KI-Infrastruktur, identifiziert Bedrohungen bevor sie materialisieren, und liefert umsetzbare Intelligenz, um Ihre Systeme sicher zu halten.",
+    "cta_primary": "Oracle Analyse starten",
+    "cta_secondary": "Demo ansehen",
+    "stats": [
+      {
+        "number": "1M+",
+        "label": "T\u00e4glich analysierte Bedrohungen"
+      },
+      {
+        "number": "99,7%",
+        "label": "Erkennungsgenauigkeit"
+      },
+      {
+        "number": "250ms",
+        "label": "Durchschnittliche Reaktionszeit"
+      },
+      {
+        "number": "24/7",
+        "label": "\u00dcberwachung"
+      }
+    ]
+  },
+  "modes": {
+    "title": "Oracle Analyse-Modi",
+    "subtitle": "W\u00e4hlen Sie Ihren Intelligenz-Ansatz",
+    "modes": [
+      {
+        "name": "Pure",
+        "icon": "crystal",
+        "description": "Saubere, unvoreingenommene Sicherheitsanalyse mit Rohdaten-Einblicken",
+        "features": [
+          "Roh-Bedrohungsdaten",
+          "Ungefilterte Analyse",
+          "Vollst\u00e4ndige Transparenz",
+          "Direkte Intelligenz"
+        ]
+      },
+      {
+        "name": "Temporal",
+        "icon": "clock",
+        "description": "Zeitbasierte Bedrohungsprognose und Trendanalyse",
+        "features": [
+          "Historische Muster",
+          "Trendprognosen",
+          "Saisonale Bedrohungen",
+          "Zeitstrahl-Analyse"
+        ]
+      },
+      {
+        "name": "Swarm",
+        "icon": "users",
+        "description": "Kollektive Intelligenz von Mycelium Network Teilnehmern",
+        "features": [
+          "Community-Einblicke",
+          "Geteilte Bedrohungen",
+          "Kollaborative Verteidigung",
+          "Netzwerk-Intelligenz"
+        ]
+      },
+      {
+        "name": "Prophetic",
+        "icon": "eye",
+        "description": "Fortschrittliche pr\u00e4diktive Modellierung f\u00fcr zuk\u00fcnftige Sicherheitsereignisse",
+        "features": [
+          "Zukunfts-Bedrohungsprognose",
+          "Risiko-Prognosen",
+          "Pr\u00e4ventive Einblicke",
+          "Strategische Planung"
+        ]
+      }
+    ]
+  },
+  "use_cases": {
+    "title": "Sicherheits-Anwendungsf\u00e4lle",
+    "subtitle": "Reale Anwendungen f\u00fcr Oracle Intelligenz",
+    "cases": [
+      {
+        "icon": "shield",
+        "title": "Sicherheitsl\u00fccken-Prognose",
+        "description": "Sicherheitsl\u00fccken vorhersagen, bevor sie von Angreifern entdeckt werden",
+        "benefits": [
+          "Proaktives Patchen",
+          "Risikoreduktion",
+          "Compliance-Wartung",
+          "Kosteneinsparungen"
+        ]
+      },
+      {
+        "icon": "target",
+        "title": "Bedrohungsjagd",
+        "description": "Automatisierte Bedrohungsjagd \u00fcber Ihre KI-Infrastruktur",
+        "benefits": [
+          "Erweiterte Erkennung",
+          "Reduzierte manuelle Arbeit",
+          "Umfassende Abdeckung",
+          "Echtzeit-Warnungen"
+        ]
+      },
+      {
+        "icon": "brain",
+        "title": "Sicherheits-Orchestrierung",
+        "description": "KI-gesteuerte Sicherheitsreaktionsautomatisierung und -orchestrierung",
+        "benefits": [
+          "Schnellere Reaktion",
+          "Konsistente Aktionen",
+          "Reduzierte Fehler",
+          "Verbesserte Effizienz"
+        ]
+      },
+      {
+        "icon": "chart-line",
+        "title": "Risikobewertung",
+        "description": "Kontinuierliche Risikobewertung und Sicherheitspositions-Bewertung",
+        "benefits": [
+          "Quantifiziertes Risiko",
+          "Trendanalyse",
+          "Ressourcen-Optimierung",
+          "Strategische Planung"
+        ]
+      },
+      {
+        "icon": "network",
+        "title": "Anomalie-Erkennung",
+        "description": "Ungew\u00f6hnliche Muster und Verhaltensweisen in KI-Systemen identifizieren",
+        "benefits": [
+          "Fr\u00fcherkennung",
+          "Verhaltensanalyse",
+          "Mustererkennung",
+          "Alarm-Optimierung"
+        ]
+      },
+      {
+        "icon": "lock",
+        "title": "Compliance-\u00dcberwachung",
+        "description": "Automatisierte Compliance-\u00dcberpr\u00fcfung und -berichterstattung",
+        "benefits": [
+          "Regulatorische Einhaltung",
+          "Audit-Bereitschaft",
+          "Dokumentation",
+          "Risikominderung"
+        ]
+      }
+    ]
+  },
+  "features": {
+    "title": "Oracle Intelligenz-Features",
+    "subtitle": "Fortschrittliche F\u00e4higkeiten f\u00fcr umfassende Sicherheit",
+    "sections": [
+      {
+        "title": "KI-Analyse-Engine",
+        "description": "State-of-the-art Machine Learning f\u00fcr Sicherheitsanalyse",
+        "features": [
+          "Deep Learning Modelle",
+          "Neuronale Netzwerk-Analyse",
+          "Mustererkennung",
+          "Anomalie-Erkennung",
+          "Pr\u00e4diktive Analytics",
+          "Natural Language Processing"
+        ]
+      },
+      {
+        "title": "Echtzeit-Verarbeitung",
+        "description": "Sofortige Bedrohungserkennung und -analyse",
+        "features": [
+          "Sub-Sekunden-Analyse",
+          "Streaming-Datenverarbeitung",
+          "Echtzeit-Warnungen",
+          "Live-Dashboards",
+          "Sofortige Benachrichtigungen",
+          "Kontinuierliche \u00dcberwachung"
+        ]
+      },
+      {
+        "title": "Intelligenz-Quellen",
+        "description": "Mehrere Datenquellen f\u00fcr umfassende Analyse",
+        "features": [
+          "Mycelium Network Daten",
+          "Bedrohungsintelligenz-Feeds",
+          "System-Log-Analyse",
+          "Netzwerk-Traffic-Analyse",
+          "Verhaltensmuster",
+          "Historische Daten"
+        ]
+      },
+      {
+        "title": "Integrations-F\u00e4higkeiten",
+        "description": "Nahtlose Integration mit Ihrem Security-Stack",
+        "features": [
+          "API-Zugang",
+          "Webhook-Benachrichtigungen",
+          "SIEM-Integration",
+          "SOAR-Kompatibilit\u00e4t",
+          "Benutzerdefinierte Connectors",
+          "Daten-Export-Optionen"
+        ]
+      }
+    ]
+  },
+  "integration": {
+    "title": "Integriert sich mit Ihrem Security-Stack",
+    "subtitle": "Oracle arbeitet nahtlos mit Ihren bestehenden Tools",
+    "categories": [
+      {
+        "title": "SIEM-Plattformen",
+        "integrations": ["Splunk", "IBM QRadar", "LogRhythm", "Sumo Logic"]
+      },
+      {
+        "title": "SOAR-Tools",
+        "integrations": ["Palo Alto Cortex", "IBM Resilient", "Splunk SOAR", "Swimlane"]
+      },
+      {
+        "title": "Bedrohungsintelligenz",
+        "integrations": ["CrowdStrike", "Recorded Future", "ThreatConnect", "MISP"]
+      },
+      {
+        "title": "Monitoring-Tools",
+        "integrations": ["Datadog", "New Relic", "Prometheus", "Grafana"]
+      }
+    ]
+  },
+  "testimonials": {
+    "title": "Was Security-F\u00fchrungsleiter sagen",
+    "subtitle": "Vertraut von Security-Teams weltweit",
+    "testimonials": [
+      {
+        "quote": "Oracles pr\u00e4diktive F\u00e4higkeiten haben uns geholfen, 3 schwere Sicherheitsvorf\u00e4lle im letzten Quartal zu verhindern. Die KI-Einblicke sind unbezahlbar.",
+        "author": "David Kim",
+        "role": "Security Architect",
+        "company": "TechCorp International",
+        "avatar": "david-kim"
+      },
+      {
+        "quote": "Die Echtzeit-Bedrohungserkennung ist bahnbrechend. Wir haben unsere Incident-Reaktionszeit seit der Implementierung von Oracle um 85% reduziert.",
+        "author": "Lisa Martinez",
+        "role": "CISO",
+        "company": "Global Finance Corp",
+        "avatar": "lisa-martinez"
+      },
+      {
+        "quote": "Oracles Integration mit unserem bestehenden SIEM war nahtlos. Die zus\u00e4tzliche Intelligenz-Schicht hat unsere Security-Operationen transformiert.",
+        "author": "James Wilson",
+        "role": "Security Operations Manager",
+        "company": "Enterprise Solutions Ltd",
+        "avatar": "james-wilson"
+      }
+    ]
+  },
+  "pricing": {
+    "title": "Oracle Intelligenz Preise",
+    "subtitle": "W\u00e4hlen Sie das Intelligenz-Level, das zu Ihren Bed\u00fcrfnissen passt",
+    "plans": [
+      {
+        "name": "Basic",
+        "price": "299\u20ac",
+        "period": "pro Monat",
+        "description": "Essenzielle KI-Sicherheitsintelligenz f\u00fcr kleine Teams",
+        "features": [
+          "Basis-Bedrohungserkennung",
+          "1M Analyse-Anfragen/Monat",
+          "Standard-Support",
+          "API-Zugang",
+          "Monatliche Berichterstattung"
+        ],
+        "cta": "Jetzt starten",
+        "popular": false
+      },
+      {
+        "name": "Professional",
+        "price": "799\u20ac",
+        "period": "pro Monat",
+        "description": "Erweiterte Intelligenz f\u00fcr wachsende Organisationen",
+        "features": [
+          "Alle Basic-Features",
+          "Pr\u00e4diktive Analyse",
+          "5M Analyse-Anfragen/Monat",
+          "Priorit\u00e4ts-Support",
+          "Benutzerdefinierte Integrationen",
+          "Echtzeit-Warnungen"
+        ],
+        "cta": "Kostenlose Testversion starten",
+        "popular": true
+      },
+      {
+        "name": "Enterprise",
+        "price": "Individuell",
+        "period": "Preisgestaltung",
+        "description": "Vollst\u00e4ndige Intelligenz f\u00fcr gro\u00dfe Unternehmen",
+        "features": [
+          "Alle Professional-Features",
+          "Unbegrenzte Analyse",
+          "Dedizierter Support",
+          "On-Premise-Bereitstellung",
+          "Benutzerdefinierte Modelle",
+          "SLA-Garantien"
+        ],
+        "cta": "Vertrieb kontaktieren",
+        "popular": false
+      }
+    ]
+  },
+  "cta_section": {
+    "title": "Transformieren Sie Ihre Sicherheitsintelligenz",
+    "subtitle": "Erhalten Sie KI-gest\u00fctzte Bedrohungserkennung und pr\u00e4diktive Analyse",
+    "description": "Schlie\u00dfen Sie sich Tausenden von Security-Teams an, die Oracle verwenden, um Bedrohungen einen Schritt voraus zu sein und ihre KI-Infrastruktur zu sch\u00fctzen.",
+    "cta_primary": "Oracle Analyse starten",
+    "cta_secondary": "Demo vereinbaren",
+    "trust_indicators": [
+      "30-t\u00e4gige kostenlose Testversion",
+      "Keine Kreditkarte erforderlich",
+      "Enterprise-Grade Sicherheit",
+      "24/7 technischer Support"
+    ]
+  },
+  "faq": {
+    "title": "H\u00e4ufig gestellte Fragen",
+    "subtitle": "Alles was Sie \u00fcber Oracle Intelligenz wissen m\u00fcssen",
+    "questions": [
+      {
+        "question": "Wie funktioniert Oracles KI-Analyse?",
+        "answer": "Oracle verwendet fortschrittliche Machine Learning Modelle, die mit Millionen von Sicherheitsereignissen trainiert wurden. Es analysiert Muster, Anomalien und Korrelationen in Ihren Daten, um Bedrohungen zu identifizieren und zuk\u00fcnftige Sicherheitsereignisse vorherzusagen. Die KI lernt kontinuierlich von neuen Daten, um die Genauigkeit zu verbessern."
+      },
+      {
+        "question": "Welche Datenquellen analysiert Oracle?",
+        "answer": "Oracle kann mehrere Datenquellen analysieren, einschlie\u00dflich System-Logs, Netzwerk-Traffic, Anwendungs-Metriken, Sicherheitsereignisse, Bedrohungsintelligenz-Feeds und Daten aus dem Mycelium Network. Sie k\u00f6nnen anpassen, welche Quellen Sie basierend auf Ihrer Infrastruktur und Sicherheitsbed\u00fcrfnissen einbeziehen m\u00f6chten."
+      },
+      {
+        "question": "Wie genau ist Oracles Bedrohungsprognose?",
+        "answer": "Oracle erreicht 99,7% Erkennungsgenauigkeit durch seine fortschrittlichen KI-Modelle und kontinuierliches Lernen. Die pr\u00e4diktiven F\u00e4higkeiten wurden \u00fcber Tausende von Bereitstellungen validiert und verbessern sich mit jeder Analyse kontinuierlich."
+      },
+      {
+        "question": "Kann Oracle mit unseren bestehenden Security-Tools integrieren?",
+        "answer": "Ja, Oracle bietet umfangreiche Integrationsf\u00e4higkeiten einschlie\u00dflich REST APIs, Webhooks und nativen Connectors f\u00fcr beliebte SIEM-, SOAR- und Monitoring-Plattformen. Unser Team kann auch bei benutzerdefinierten Integrationen f\u00fcr Ihre spezifischen Tools helfen."
+      },
+      {
+        "question": "Wie schnell erkennt Oracle Bedrohungen?",
+        "answer": "Oracle bietet Echtzeit-Bedrohungserkennung mit einer durchschnittlichen Reaktionszeit von 250ms. Kritische Bedrohungen werden sofort identifiziert und gemeldet, w\u00e4hrend die umfassende Analyse je nach Datenvolumen und -komplexit\u00e4t innerhalb von Sekunden abgeschlossen wird."
+      },
+      {
+        "question": "Eignet sich Oracle f\u00fcr Compliance-Anforderungen?",
+        "answer": "Absolut. Oracle hilft bei Compliance-\u00dcberwachung, automatisierter Berichterstattung und Audit-Trail-Wartung. Es unterst\u00fctzt wichtige Compliance-Frameworks einschlie\u00dflich DSGVO, SOC 2, ISO 27001, PCI DSS und branchenspezifische Vorschriften."
+      }
+    ]
+  },
+  "mycelium_kreislauf": {
+    "title": "Mycelium Kreislauf",
+    "subtitle": "Vernetztes Intelligenz-Netzwerk",
+    "description": "Oracle integriert sich mit dem Mycelium Network f\u00fcr kollaborative Sicherheitsintelligenz",
+    "links": [
+      {
+        "title": "Summon AI",
+        "description": "Security-Aktionen ausf\u00fchren",
+        "url": "/summon"
+      },
+      {
+        "title": "Intel Feed",
+        "description": "Live-Bedrohungsintelligenz",
+        "url": "/intel"
+      },
+      {
+        "title": "Neuro",
+        "description": "Pr\u00e4diktive Sicherheitsanalyse",
+        "url": "/neuro"
+      },
+      {
+        "title": "Security Check",
+        "description": "Vollst\u00e4ndige Sicherheitsbewertung",
+        "url": "/check"
+      }
+    ]
+  },
+  "schema": {
+    "webpage": {
+      "@type": "WebPage",
+      "name": "Oracle - KI-gest\u00fctzte Sicherheitsintelligenz",
+      "description": "KI-gest\u00fctzte Bedrohungserkennung und pr\u00e4diktive Sicherheitsanalyse f\u00fcr Ihre KI-Agenten-Infrastruktur.",
+      "url": "https://clawguru.org/oracle",
+      "mainEntity": {
+        "@type": "SoftwareApplication",
+        "name": "Oracle",
+        "description": "KI-gest\u00fctzte Sicherheitsintelligenz-Plattform",
+        "applicationCategory": "SecurityApplication",
+        "operatingSystem": "Any",
+        "offers": {
+          "@type": "Offer",
+          "price": "299",
+          "priceCurrency": "EUR",
+          "priceValidUntil": "2026-12-31"
+        }
+      }
+    },
+    "breadcrumb": {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Startseite",
+          "item": "https://clawguru.org"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Oracle",
+          "item": "https://clawguru.org/oracle"
+        }
+      ]
+    },
+    "faq": {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Wie funktioniert Oracles KI-Analyse?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Oracle verwendet fortschrittliche Machine Learning Modelle, die mit Millionen von Sicherheitsereignissen trainiert wurden. Es analysiert Muster, Anomalien und Korrelationen in Ihren Daten, um Bedrohungen zu identifizieren und zuk\u00fcnftige Sicherheitsereignisse vorherzusagen."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Welche Datenquellen analysiert Oracle?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Oracle kann mehrere Datenquellen analysieren, einschlie\u00dflich System-Logs, Netzwerk-Traffic, Anwendungs-Metriken, Sicherheitsereignisse, Bedrohungsintelligenz-Feeds und Daten aus dem Mycelium Network."
+          }
+        }
+      ]
+    }
+  }
+}

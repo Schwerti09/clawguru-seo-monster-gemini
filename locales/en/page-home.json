@@ -1,0 +1,411 @@
+{
+  "meta": {
+    "title": "ClawGuru - AI Agent Security Platform for the Future",
+    "description": "Secure your AI agents with enterprise-grade protection in 30 seconds. AI Agent Security Platform for self-hosted infrastructure and distributed systems.",
+    "keywords": "AI Agent Security, Moltbot Security, Self-Hosted Security, AI Hardening, Enterprise Security, Zero Trust, API Security, Mycelium Network",
+    "og_title": "ClawGuru - AI Agent Security Platform",
+    "og_description": "Secure your AI agents with enterprise-grade protection in 30 seconds. Complete security platform for AI infrastructure.",
+    "og_image": "https://clawguru.org/og-image.jpg",
+    "twitter_card": "summary_large_image",
+    "twitter_title": "ClawGuru - AI Agent Security Platform",
+    "twitter_description": "Secure your AI agents with enterprise-grade protection in 30 seconds. Complete security platform for AI infrastructure.",
+    "twitter_image": "https://clawguru.org/twitter-image.jpg"
+  },
+  "hero": {
+    "title": "AI Agent Security Platform for the Future",
+    "subtitle": "Secure your AI agents with enterprise-grade protection in 30 seconds. Complete security platform for self-hosted infrastructure and distributed systems.",
+    "description": "ClawGuru provides comprehensive security solutions for AI agents, Moltbot systems, and distributed infrastructure. Get your Claw Score in 30 seconds with our free security assessment.",
+    "cta_primary": "Get Started Now",
+    "cta_secondary": "View Security Check",
+    "features": [
+      {
+        "icon": "shield",
+        "title": "Enterprise Security",
+        "description": "Military-grade protection for your AI agents with zero-trust architecture"
+      },
+      {
+        "icon": "zap",
+        "title": "30-Second Assessment",
+        "description": "Get your complete security posture and Claw Score in under 30 seconds"
+      },
+      {
+        "icon": "network",
+        "title": "Mycelium Network",
+        "description": "Distributed security intelligence across your entire infrastructure"
+      }
+    ]
+  },
+  "trust_indicators": {
+    "title": "Trusted by Security Teams Worldwide",
+    "stats": [
+      {
+        "number": "4.2M+",
+        "label": "Security Runbooks Generated"
+      },
+      {
+        "number": "50K+",
+        "label": "AI Agents Secured"
+      },
+      {
+        "number": "99.9%",
+        "label": "Uptime SLA"
+      },
+      {
+        "number": "30",
+        "label": "Second Assessment Time"
+      }
+    ],
+    "logos": [
+      "enterprise-1",
+      "enterprise-2",
+      "enterprise-3",
+      "enterprise-4"
+    ]
+  },
+  "problem": {
+    "title": "The AI Security Challenge",
+    "subtitle": "Why traditional security fails for AI agents",
+    "challenges": [
+      {
+        "icon": "alert-triangle",
+        "title": "API Key Exposure",
+        "description": "AI agents often expose sensitive API keys and credentials in logs, environment variables, and configuration files"
+      },
+      {
+        "icon": "shield-off",
+        "title": "Insufficient Authentication",
+        "description": "Most AI systems lack proper authentication, authorization, and access control mechanisms"
+      },
+      {
+        "icon": "link-off",
+        "title": "Weak Network Security",
+        "description": "AI agents communicate over insecure channels without proper encryption or validation"
+      },
+      {
+        "icon": "database-off",
+        "title": "Data Privacy Risks",
+        "description": "AI systems process sensitive data without proper privacy controls or compliance measures"
+      }
+    ]
+  },
+  "solution": {
+    "title": "Complete AI Agent Security",
+    "subtitle": "Comprehensive protection for your AI infrastructure",
+    "sections": [
+      {
+        "title": "Security Assessment",
+        "description": "Get your complete security posture in 30 seconds with our automated assessment tool.",
+        "features": [
+          "Real-time vulnerability scanning",
+          "Configuration analysis",
+          "Compliance checking",
+          "Risk prioritization"
+        ],
+        "cta": "Run Security Check"
+      },
+      {
+        "title": "Oracle Intelligence",
+        "description": "AI-powered threat detection and predictive security analysis for your infrastructure.",
+        "features": [
+          "Machine learning threat detection",
+          "Predictive security analytics",
+          "Real-time alerting",
+          "Automated response"
+        ],
+        "cta": "Try Oracle"
+      },
+      {
+        "title": "Security Runbooks",
+        "description": "4.2 million+ AI-generated security runbooks for every possible scenario.",
+        "features": [
+          "Automated fix generation",
+          "Step-by-step guidance",
+          "Integration with your tools",
+          "Continuous updates"
+        ],
+        "cta": "Browse Runbooks"
+      },
+      {
+        "title": "Mycelium Network",
+        "description": "Distributed security intelligence sharing across your entire infrastructure.",
+        "features": [
+          "Peer-to-peer security sharing",
+          "Real-time threat intelligence",
+          "Collaborative defense",
+          "Network-wide visibility"
+        ],
+        "cta": "Explore Network"
+      }
+    ]
+  },
+  "features": {
+    "title": "Everything You Need for AI Security",
+    "subtitle": "Comprehensive platform features for complete protection",
+    "categories": [
+      {
+        "title": "Core Security",
+        "features": [
+          {
+            "name": "Security Assessment",
+            "description": "Complete security posture analysis in 30 seconds"
+          },
+          {
+            "name": "Vulnerability Scanning",
+            "description": "Automated detection of security weaknesses"
+          },
+          {
+            "name": "Compliance Checking",
+            "description": "Automated compliance verification against standards"
+          },
+          {
+            "name": "Risk Management",
+            "description": "Comprehensive risk assessment and mitigation"
+          }
+        ]
+      },
+      {
+        "title": "AI Intelligence",
+        "features": [
+          {
+            "name": "Oracle",
+            "description": "AI-powered threat detection and analysis"
+          },
+          {
+            "name": "Neuro",
+            "description": "Predictive security analytics and forecasting"
+          },
+          {
+            "name": "Copilot",
+            "description": "AI assistant for security operations"
+          },
+          {
+            "name": "Intel Feed",
+            "description": "Real-time threat intelligence and updates"
+          }
+        ]
+      },
+      {
+        "title": "Infrastructure",
+        "features": [
+          {
+            "name": "Mycelium Network",
+            "description": "Distributed security intelligence sharing"
+          },
+          {
+            "name": "Command Center",
+            "description": "Centralized security operations hub"
+          },
+          {
+            "name": "Zero Trust Architecture",
+            "description": "Complete zero-trust security framework"
+          },
+          {
+            "name": "Self-Hosted Deployment",
+            "description": "Full control over your security infrastructure"
+          }
+        ]
+      }
+    ]
+  },
+  "testimonials": {
+    "title": "What Security Leaders Say",
+    "subtitle": "Trusted by security teams worldwide",
+    "testimonials": [
+      {
+        "quote": "ClawGuru transformed our AI security posture. We went from multiple vulnerabilities to a hardened, enterprise-grade security setup in weeks.",
+        "author": "Sarah Chen",
+        "role": "CISO",
+        "company": "TechCorp Industries",
+        "avatar": "sarah-chen"
+      },
+      {
+        "quote": "The 30-second security assessment is incredible. It identified critical issues we didn't know existed and provided immediate fixes.",
+        "author": "Michael Rodriguez",
+        "role": "Security Engineer",
+        "company": "Global Solutions Ltd",
+        "avatar": "michael-rodriguez"
+      },
+      {
+        "quote": "4.2 million security runbooks is unmatched. Whatever security issue we face, there's a detailed solution ready to implement.",
+        "author": "Emma Thompson",
+        "role": "DevOps Lead",
+        "company": "CloudScale Systems",
+        "avatar": "emma-thompson"
+      }
+    ]
+  },
+  "pricing": {
+    "title": "Simple, Transparent Pricing",
+    "subtitle": "Choose the plan that fits your security needs",
+    "plans": [
+      {
+        "name": "Starter",
+        "price": "$0",
+        "period": "forever",
+        "description": "Perfect for individuals and small teams",
+        "features": [
+          "Free security assessment",
+          "Basic vulnerability scanning",
+          "100 security runbooks",
+          "Community support"
+        ],
+        "cta": "Get Started",
+        "popular": false
+      },
+      {
+        "name": "Professional",
+        "price": "$99",
+        "period": "per month",
+        "description": "Ideal for growing teams and organizations",
+        "features": [
+          "Everything in Starter",
+          "Advanced security assessment",
+          "Unlimited runbooks",
+          "Oracle AI intelligence",
+          "Priority support"
+        ],
+        "cta": "Start Free Trial",
+        "popular": true
+      },
+      {
+        "name": "Enterprise",
+        "price": "Custom",
+        "period": "pricing",
+        "description": "For large organizations with specific needs",
+        "features": [
+          "Everything in Professional",
+          "Custom integrations",
+          "Dedicated support",
+          "On-premise deployment",
+          "SLA guarantees"
+        ],
+        "cta": "Contact Sales",
+        "popular": false
+      }
+    ]
+  },
+  "integration": {
+    "title": "Integrates with Your Stack",
+    "subtitle": "Seamless integration with your existing tools and workflows",
+    "categories": [
+      {
+        "title": "Cloud Platforms",
+        "integrations": ["AWS", "Google Cloud", "Azure", "DigitalOcean", "Hetzner"]
+      },
+      {
+        "title": "Container Platforms",
+        "integrations": ["Docker", "Kubernetes", "OpenShift", "Rancher"]
+      },
+      {
+        "title": "Monitoring Tools",
+        "integrations": ["Prometheus", "Grafana", "Datadog", "New Relic"]
+      },
+      {
+        "title": "Security Tools",
+        "integrations": ["CrowdStrike", "Palo Alto", "Splunk", "SIEM"]
+      }
+    ]
+  },
+  "cta_section": {
+    "title": "Secure Your AI Agents Today",
+    "subtitle": "Get your complete security assessment in 30 seconds",
+    "description": "Join thousands of security teams who trust ClawGuru for their AI agent security needs.",
+    "cta_primary": "Start Free Security Check",
+    "cta_secondary": "Schedule Demo",
+    "trust_indicators": [
+      "No credit card required",
+      "Setup in 30 seconds",
+      "Enterprise-grade security",
+      "24/7 support"
+    ]
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "subtitle": "Everything you need to know about AI agent security",
+    "questions": [
+      {
+        "question": "What is AI agent security?",
+        "answer": "AI agent security involves protecting AI systems, their data, and infrastructure from unauthorized access, attacks, and vulnerabilities. This includes securing API keys, authentication mechanisms, communication channels, and the data processed by AI systems."
+      },
+      {
+        "question": "How does the 30-second security assessment work?",
+        "answer": "Our automated security assessment scans your AI infrastructure for common vulnerabilities, misconfigurations, and compliance issues. It analyzes your setup, identifies risks, and provides a comprehensive Claw Score with actionable recommendations for improvement."
+      },
+      {
+        "question": "What platforms and technologies do you support?",
+        "answer": "ClawGuru supports all major cloud platforms (AWS, GCP, Azure), container technologies (Docker, Kubernetes), programming languages, and AI frameworks. We provide security solutions for self-hosted and cloud-based AI deployments."
+      },
+      {
+        "question": "What is the Mycelium Network?",
+        "answer": "The Mycelium Network is our distributed security intelligence system that allows organizations to share threat information and security insights across their infrastructure. It creates a collaborative defense network that benefits all participants."
+      },
+      {
+        "question": "How do the security runbooks work?",
+        "answer": "Our AI generates 4.2 million+ security runbooks that provide step-by-step guidance for addressing specific security issues. Each runbook is tailored to your technology stack and includes detailed implementation steps, code examples, and best practices."
+      },
+      {
+        "question": "Is my data secure with ClawGuru?",
+        "answer": "Yes, we use enterprise-grade encryption, zero-trust architecture, and comply with major security standards including GDPR, SOC 2, and ISO 27001. Your data is never shared with third parties and you maintain full control over your security information."
+      }
+    ]
+  },
+  "schema": {
+    "organization": {
+      "@type": "Organization",
+      "name": "ClawGuru",
+      "url": "https://clawguru.org",
+      "logo": "https://clawguru.org/logo.png",
+      "description": "AI Agent Security Platform for the Future",
+      "foundingDate": "2024",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+1-555-CLAWGURU",
+        "contactType": "customer service",
+        "availableLanguage": ["English", "German", "Spanish", "French", "Italian", "Portuguese", "Dutch", "Polish", "Russian", "Turkish", "Arabic", "Chinese", "Japanese", "Korean", "Swedish"]
+      }
+    },
+    "website": {
+      "@type": "WebSite",
+      "name": "ClawGuru",
+      "url": "https://clawguru.org",
+      "description": "AI Agent Security Platform for the Future",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://clawguru.org/search?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    },
+    "breadcrumb": {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://clawguru.org"
+        }
+      ]
+    },
+    "faq": {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is AI agent security?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "AI agent security involves protecting AI systems, their data, and infrastructure from unauthorized access, attacks, and vulnerabilities. This includes securing API keys, authentication mechanisms, communication channels, and the data processed by AI systems."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How does the 30-second security assessment work?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Our automated security assessment scans your AI infrastructure for common vulnerabilities, misconfigurations, and compliance issues. It analyzes your setup, identifies risks, and provides a comprehensive Claw Score with actionable recommendations for improvement."
+          }
+        }
+      ]
+    }
+  }
+}

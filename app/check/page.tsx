@@ -99,9 +99,6 @@ export default function CheckPage() {
             <div className="flex items-center gap-4">
               <div className="text-4xl">📚</div>
               <div>
-                <div className="font-bold text-white text-lg">
-                  {locale === 'de' ? '📚 Security Runbooks' : '📚 Security Runbooks'}
-                </div>
                 <div className="text-cyan-100 text-sm">
                   {locale === 'de' ? '1,000+ AI-generierte Fix-Runbooks für deine Probleme' : '1,000+ AI-generated fix runbooks for your issues'}
                 </div>
@@ -109,56 +106,56 @@ export default function CheckPage() {
             </div>
           </a>
 
-          <div className="grid sm:grid-cols-2 gap-4">
+          <div className="grid sm:grid-cols-4 gap-4">
             <a
               href={`${prefix}/roast-my-moltbot`}
               onClick={() => trackEvent("cta_click", { locale, target: "roast-moltbot", source: "check_page_cta" })}
-              className="block bg-gray-800 border border-gray-700 rounded-xl p-4 hover:border-amber-500/50 transition-all"
+              className="block bg-gradient-to-r from-red-600 to-red-500 border border-red-400 rounded-xl p-4 hover:from-red-500 hover:to-red-400 transition-all"
             >
               <div className="flex items-center gap-3">
-                <div className="text-2xl">🔥</div>
+                <div className="text-2xl"></div>
                 <div>
-                  <div className="font-semibold text-amber-400">{locale === 'de' ? 'Roast My Moltbot' : 'Roast My Moltbot'}</div>
-                  <div className="text-xs text-gray-400">{locale === 'de' ? 'Kostenloser Security-Roast' : 'Free security roast'}</div>
+                  <div className="font-semibold text-white">{locale === 'de' ? 'Roast My Moltbot' : 'Roast My Moltbot'}</div>
+                  <div className="text-xs text-red-100">{locale === 'de' ? 'Kostenloser Security-Roast' : 'Free security roast'}</div>
                 </div>
               </div>
             </a>
             <a
               href={`${prefix}/openclaw`}
               onClick={() => trackEvent("cta_click", { locale, target: "openclaw", source: "check_page_cta" })}
-              className="block bg-gray-800 border border-gray-700 rounded-xl p-4 hover:border-green-500/50 transition-all"
+              className="block bg-gradient-to-r from-green-600 to-green-500 border border-green-400 rounded-xl p-4 hover:from-green-500 hover:to-green-400 transition-all"
             >
               <div className="flex items-center gap-3">
-                <div className="text-2xl">🛡️</div>
+                <div className="text-2xl"></div>
                 <div>
-                  <div className="font-semibold text-green-400">{locale === 'de' ? 'OpenClaw' : 'OpenClaw'}</div>
-                  <div className="text-xs text-gray-400">{locale === 'de' ? 'Self-Hosted Security' : 'Self-hosted security'}</div>
+                  <div className="font-semibold text-white">{locale === 'de' ? 'OpenClaw' : 'OpenClaw'}</div>
+                  <div className="text-xs text-green-100">{locale === 'de' ? 'Self-Hosted Security' : 'Self-hosted security'}</div>
                 </div>
               </div>
             </a>
             <a
               href={`${prefix}/academy`}
               onClick={() => trackEvent("cta_click", { locale, target: "academy", source: "check_page_cta" })}
-              className="block bg-gray-800 border border-gray-700 rounded-xl p-4 hover:border-purple-500/50 transition-all"
+              className="block bg-gradient-to-r from-purple-600 to-purple-500 border border-purple-400 rounded-xl p-4 hover:from-purple-500 hover:to-purple-400 transition-all"
             >
               <div className="flex items-center gap-3">
-                <div className="text-2xl">🎓</div>
+                <div className="text-2xl"></div>
                 <div>
-                  <div className="font-semibold text-purple-400">{locale === 'de' ? 'Academy' : 'Academy'}</div>
-                  <div className="text-xs text-gray-400">{locale === 'de' ? 'Kurse & Zertifizierung' : 'Courses & Certification'}</div>
+                  <div className="font-semibold text-white">{locale === 'de' ? 'Academy' : 'Academy'}</div>
+                  <div className="text-xs text-purple-100">{locale === 'de' ? 'Kurse & Zertifizierung' : 'Courses & Certification'}</div>
                 </div>
               </div>
             </a>
             <a
               href={`${prefix}/solutions`}
               onClick={() => trackEvent("cta_click", { locale, target: "solutions", source: "check_page_cta" })}
-              className="block bg-gray-800 border border-gray-700 rounded-xl p-4 hover:border-emerald-500/50 transition-all"
+              className="block bg-gradient-to-r from-emerald-600 to-emerald-500 border border-emerald-400 rounded-xl p-4 hover:from-emerald-500 hover:to-emerald-400 transition-all"
             >
               <div className="flex items-center gap-3">
-                <div className="text-2xl">🏢</div>
+                <div className="text-2xl"></div>
                 <div>
-                  <div className="font-semibold text-emerald-400">{locale === 'de' ? 'Solutions' : 'Solutions'}</div>
-                  <div className="text-xs text-gray-400">{locale === 'de' ? 'Enterprise Lösungen' : 'Enterprise solutions'}</div>
+                  <div className="font-semibold text-white">{locale === 'de' ? 'Solutions' : 'Solutions'}</div>
+                  <div className="text-xs text-emerald-100">{locale === 'de' ? 'Enterprise Lösungen' : 'Enterprise solutions'}</div>
                 </div>
               </div>
             </a>

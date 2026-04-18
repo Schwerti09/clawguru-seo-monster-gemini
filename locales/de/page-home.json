@@ -1,0 +1,411 @@
+{
+  "meta": {
+    "title": "ClawGuru - KI-Agenten-Sicherheitsplattform f\u00fcr die Zukunft",
+    "description": "Sichern Sie Ihre KI-Agenten mit Enterprise-Schutz in 30 Sekunden. KI-Agenten-Sicherheitsplattform f\u00fcr Self-Hosted-Infrastruktur und verteilte Systeme.",
+    "keywords": "KI-Agenten-Sicherheit, Moltbot-Sicherheit, Self-Hosted Security, KI-H\u00e4rtung, Enterprise Security, Zero Trust, API-Sicherheit, Mycelium Netzwerk",
+    "og_title": "ClawGuru - KI-Agenten-Sicherheitsplattform",
+    "og_description": "Sichern Sie Ihre KI-Agenten mit Enterprise-Schutz in 30 Sekunden. Vollst\u00e4ndige Sicherheitsplattform f\u00fcr KI-Infrastruktur.",
+    "og_image": "https://clawguru.org/og-image.jpg",
+    "twitter_card": "summary_large_image",
+    "twitter_title": "ClawGuru - KI-Agenten-Sicherheitsplattform",
+    "twitter_description": "Sichern Sie Ihre KI-Agenten mit Enterprise-Schutz in 30 Sekunden. Vollst\u00e4ndige Sicherheitsplattform f\u00fcr KI-Infrastruktur.",
+    "twitter_image": "https://clawguru.org/twitter-image.jpg"
+  },
+  "hero": {
+    "title": "KI-Agenten-Sicherheitsplattform f\u00fcr die Zukunft",
+    "subtitle": "Sichern Sie Ihre KI-Agenten mit Enterprise-Schutz in 30 Sekunden. Vollst\u00e4ndige Sicherheitsplattform f\u00fcr Self-Hosted-Infrastruktur und verteilte Systeme.",
+    "description": "ClawGuru bietet umfassende Sicherheitsl\u00f6sungen f\u00fcr KI-Agenten, Moltbot-Systeme und verteilte Infrastruktur. Erhalten Sie Ihren Claw Score in 30 Sekunden mit unserer kostenlosen Sicherheitsbewertung.",
+    "cta_primary": "Jetzt starten",
+    "cta_secondary": "Security Check ansehen",
+    "features": [
+      {
+        "icon": "shield",
+        "title": "Enterprise Security",
+        "description": "Milit\u00e4rischer Schutz f\u00fcr Ihre KI-Agenten mit Zero-Trust-Architektur"
+      },
+      {
+        "icon": "zap",
+        "title": "30-Sekunden-Bewertung",
+        "description": "Erhalten Sie Ihre vollst\u00e4ndige Sicherheitsposition und Claw Score in unter 30 Sekunden"
+      },
+      {
+        "icon": "network",
+        "title": "Mycelium Netzwerk",
+        "description": "Verteilte Sicherheitsintelligenz \u00fcber Ihre gesamte Infrastruktur"
+      }
+    ]
+  },
+  "trust_indicators": {
+    "title": "Vertraut von Security-Teams weltweit",
+    "stats": [
+      {
+        "number": "4,2M+",
+        "label": "Security Runbooks generiert"
+      },
+      {
+        "number": "50K+",
+        "label": "KI-Agenten gesichert"
+      },
+      {
+        "number": "99,9%",
+        "label": "Uptime SLA"
+      },
+      {
+        "number": "30",
+        "label": "Sekunden Bewertungszeit"
+      }
+    ],
+    "logos": [
+      "enterprise-1",
+      "enterprise-2",
+      "enterprise-3",
+      "enterprise-4"
+    ]
+  },
+  "problem": {
+    "title": "Die KI-Sicherheits-Herausforderung",
+    "subtitle": "Warum traditionelle Sicherheit f\u00fcr KI-Agenten versagt",
+    "challenges": [
+      {
+        "icon": "alert-triangle",
+        "title": "API-Schl\u00fcssel-Exposition",
+        "description": "KI-Agenten exponieren h\u00e4ufig sensible API-Schl\u00fcssel und Anmeldedaten in Logs, Umgebungsvariablen und Konfigurationsdateien"
+      },
+      {
+        "icon": "shield-off",
+        "title": "Unzureichende Authentifizierung",
+        "description": "Die meisten KI-Systeme verf\u00fcgen nicht \u00fcber ordnungsgem\u00e4\u00dfe Authentifizierungs-, Autorisierungs- und Zugriffskontrollmechanismen"
+      },
+      {
+        "icon": "link-off",
+        "title": "Schwache Netzwerksicherheit",
+        "description": "KI-Agenten kommunizieren \u00fcber unsichere Kan\u00e4le ohne ordnungsgem\u00e4\u00dfe Verschl\u00fcsselung oder Validierung"
+      },
+      {
+        "icon": "database-off",
+        "title": "Datenschutz-Risiken",
+        "description": "KI-Systeme verarbeiten sensible Daten ohne ordnungsgem\u00e4\u00dfe Datenschutzkontrollen oder Compliance-Ma\u00dfnahmen"
+      }
+    ]
+  },
+  "solution": {
+    "title": "Vollst\u00e4ndige KI-Agenten-Sicherheit",
+    "subtitle": "Umfassender Schutz f\u00fcr Ihre KI-Infrastruktur",
+    "sections": [
+      {
+        "title": "Sicherheitsbewertung",
+        "description": "Erhalten Sie Ihre vollst\u00e4ndige Sicherheitsposition in 30 Sekunden mit unserem automatisierten Bewertungstool.",
+        "features": [
+          "Echtzeit-Sicherheitsl\u00fccken-Scanning",
+          "Konfigurationsanalyse",
+          "Compliance-\u00dcberpr\u00fcfung",
+          "Risikopriorisierung"
+        ],
+        "cta": "Security Check ausf\u00fchren"
+      },
+      {
+        "title": "Oracle Intelligenz",
+        "description": "KI-gest\u00fctzte Bedrohungserkennung und pr\u00e4diktive Sicherheitsanalyse f\u00fcr Ihre Infrastruktur.",
+        "features": [
+          "Machine Learning Bedrohungserkennung",
+          "Pr\u00e4diktive Sicherheitsanalyse",
+          "Echtzeit-Warnungen",
+          "Automatisierte Reaktion"
+        ],
+        "cta": "Oracle testen"
+      },
+      {
+        "title": "Security Runbooks",
+        "description": "4,2 Millionen+ KI-generierte Security Runbooks f\u00fcr jedes m\u00f6gliche Szenario.",
+        "features": [
+          "Automatisierte Fix-Generierung",
+          "Schritt-f\u00fcr-Schritt-Anleitung",
+          "Integration mit Ihren Tools",
+          "Kontinuierliche Updates"
+        ],
+        "cta": "Runbooks durchsuchen"
+      },
+      {
+        "title": "Mycelium Netzwerk",
+        "description": "Verteilte Sicherheitsintelligenz-Sharing \u00fcber Ihre gesamte Infrastruktur.",
+        "features": [
+          "Peer-to-Peer Security Sharing",
+          "Echtzeit-Bedrohungsintelligenz",
+          "Kollaborative Verteidigung",
+          "Netzwerkweite Sichtbarkeit"
+        ],
+        "cta": "Netzwerk erkunden"
+      }
+    ]
+  },
+  "features": {
+    "title": "Alles was Sie f\u00fcr KI-Sicherheit brauchen",
+    "subtitle": "Umfassende Plattform-Features f\u00fcr vollst\u00e4ndigen Schutz",
+    "categories": [
+      {
+        "title": "Core Security",
+        "features": [
+          {
+            "name": "Sicherheitsbewertung",
+            "description": "Vollst\u00e4ndige Sicherheitspositionsanalyse in 30 Sekunden"
+          },
+          {
+            "name": "Sicherheitsl\u00fccken-Scanning",
+            "description": "Automatisierte Erkennung von Sicherheitsschw\u00e4chen"
+          },
+          {
+            "name": "Compliance-\u00dcberpr\u00fcfung",
+            "description": "Automatisierte Compliance-Verifizierung gegen Standards"
+          },
+          {
+            "name": "Risikomanagement",
+            "description": "Umfassende Risikobewertung und -minderung"
+          }
+        ]
+      },
+      {
+        "title": "KI Intelligenz",
+        "features": [
+          {
+            "name": "Oracle",
+            "description": "KI-gest\u00fctzte Bedrohungserkennung und -analyse"
+          },
+          {
+            "name": "Neuro",
+            "description": "Pr\u00e4diktive Sicherheitsanalyse und -prognose"
+          },
+          {
+            "name": "Copilot",
+            "description": "KI-Assistent f\u00fcr Security-Operationen"
+          },
+          {
+            "name": "Intel Feed",
+            "description": "Echtzeit-Bedrohungsintelligenz und Updates"
+          }
+        ]
+      },
+      {
+        "title": "Infrastruktur",
+        "features": [
+          {
+            "name": "Mycelium Netzwerk",
+            "description": "Verteilte Sicherheitsintelligenz-Sharing"
+          },
+          {
+            "name": "Command Center",
+            "description": "Zentralisierter Security-Operations-Hub"
+          },
+          {
+            "name": "Zero Trust Architektur",
+            "description": "Vollst\u00e4ndiges Zero-Trust-Sicherheits-Framework"
+          },
+          {
+            "name": "Self-Hosted Deployment",
+            "description": "Volle Kontrolle \u00fcber Ihre Sicherheitsinfrastruktur"
+          }
+        ]
+      }
+    ]
+  },
+  "testimonials": {
+    "title": "Was Security-F\u00fchrungsleiter sagen",
+    "subtitle": "Vertraut von Security-Teams weltweit",
+    "testimonials": [
+      {
+        "quote": "ClawGuru hat unsere KI-Sicherheitsposition transformiert. Wir gingen von mehreren Sicherheitsl\u00fccken zu einer geh\u00e4rteten, Enterprise-Grade-Sicherheit in wenigen Wochen.",
+        "author": "Sarah Chen",
+        "role": "CISO",
+        "company": "TechCorp Industries",
+        "avatar": "sarah-chen"
+      },
+      {
+        "quote": "Die 30-Sekunden-Sicherheitsbewertung ist unglaublich. Sie hat kritische Probleme identifiziert, die wir nicht kannten, und sofortige L\u00f6sungen bereitgestellt.",
+        "author": "Michael Rodriguez",
+        "role": "Security Engineer",
+        "company": "Global Solutions Ltd",
+        "avatar": "michael-rodriguez"
+      },
+      {
+        "quote": "4,2 Millionen Security Runbooks sind un\u00fcbertroffen. Welches Sicherheitsproblem wir auch haben, es gibt eine detaillierte L\u00f6sung zur Implementierung.",
+        "author": "Emma Thompson",
+        "role": "DevOps Lead",
+        "company": "CloudScale Systems",
+        "avatar": "emma-thompson"
+      }
+    ]
+  },
+  "pricing": {
+    "title": "Einfache, transparente Preise",
+    "subtitle": "W\u00e4hlen Sie den Plan, der zu Ihren Sicherheitsbed\u00fcrfnissen passt",
+    "plans": [
+      {
+        "name": "Starter",
+        "price": "0\u20ac",
+        "period": "f\u00fcr immer",
+        "description": "Perfekt f\u00fcr Einzelpersonen und kleine Teams",
+        "features": [
+          "Kostenlose Sicherheitsbewertung",
+          "Basis-Sicherheitsl\u00fccken-Scanning",
+          "100 Security Runbooks",
+          "Community-Support"
+        ],
+        "cta": "Jetzt starten",
+        "popular": false
+      },
+      {
+        "name": "Professional",
+        "price": "99\u20ac",
+        "period": "pro Monat",
+        "description": "Ideal f\u00fcr wachsende Teams und Organisationen",
+        "features": [
+          "Alles in Starter",
+          "Erweiterte Sicherheitsbewertung",
+          "Unbegrenzte Runbooks",
+          "Oracle KI-Intelligenz",
+          "Priorit\u00e4ts-Support"
+        ],
+        "cta": "Kostenlose Testversion starten",
+        "popular": true
+      },
+      {
+        "name": "Enterprise",
+        "price": "Individuell",
+        "period": "Preisgestaltung",
+        "description": "F\u00fcr gro\u00dfe Organisationen mit spezifischen Bed\u00fcrfnissen",
+        "features": [
+          "Alles in Professional",
+          "Benutzerdefinierte Integrationen",
+          "Dedizierter Support",
+          "On-Premise-Bereitstellung",
+          "SLA-Garantien"
+        ],
+        "cta": "Vertrieb kontaktieren",
+        "popular": false
+      }
+    ]
+  },
+  "integration": {
+    "title": "Integriert sich mit Ihrem Stack",
+    "subtitle": "Nahtlose Integration mit Ihren bestehenden Tools und Workflows",
+    "categories": [
+      {
+        "title": "Cloud-Plattformen",
+        "integrations": ["AWS", "Google Cloud", "Azure", "DigitalOcean", "Hetzner"]
+      },
+      {
+        "title": "Container-Plattformen",
+        "integrations": ["Docker", "Kubernetes", "OpenShift", "Rancher"]
+      },
+      {
+        "title": "Monitoring-Tools",
+        "integrations": ["Prometheus", "Grafana", "Datadog", "New Relic"]
+      },
+      {
+        "title": "Security-Tools",
+        "integrations": ["CrowdStrike", "Palo Alto", "Splunk", "SIEM"]
+      }
+    ]
+  },
+  "cta_section": {
+    "title": "Sichern Sie Ihre KI-Agenten heute",
+    "subtitle": "Erhalten Sie Ihre vollst\u00e4ndige Sicherheitsbewertung in 30 Sekunden",
+    "description": "Schlie\u00dfen Sie sich Tausenden von Security-Teams an, die ClawGuru f\u00fcr ihre KI-Agenten-Sicherheitsbed\u00fcrfnisse vertrauen.",
+    "cta_primary": "Kostenlosen Security Check starten",
+    "cta_secondary": "Demo vereinbaren",
+    "trust_indicators": [
+      "Keine Kreditkarte erforderlich",
+      "Setup in 30 Sekunden",
+      "Enterprise-Grade Sicherheit",
+      "24/7 Support"
+    ]
+  },
+  "faq": {
+    "title": "H\u00e4ufig gestellte Fragen",
+    "subtitle": "Alles was Sie \u00fcber KI-Agenten-Sicherheit wissen m\u00fcssen",
+    "questions": [
+      {
+        "question": "Was ist KI-Agenten-Sicherheit?",
+        "answer": "KI-Agenten-Sicherheit umfasst den Schutz von KI-Systemen, deren Daten und Infrastruktur vor unbefugtem Zugriff, Angriffen und Sicherheitsl\u00fccken. Dies schlie\u00dft die Sicherung von API-Schl\u00fcsseln, Authentifizierungsmechanismen, Kommunikationskan\u00e4len und den von KI-Systemen verarbeiteten Daten ein."
+      },
+      {
+        "question": "Wie funktioniert die 30-Sekunden-Sicherheitsbewertung?",
+        "answer": "Unsere automatisierte Sicherheitsbewertung scannt Ihre KI-Infrastruktur auf h\u00e4ufige Sicherheitsl\u00fccken, Fehlkonfigurationen und Compliance-Probleme. Sie analysiert Ihr Setup, identifiziert Risiken und liefert einen umfassenden Claw Score mit umsetzbaren Empfehlungen zur Verbesserung."
+      },
+      {
+        "question": "Welche Plattformen und Technologien unterst\u00fctzen Sie?",
+        "answer": "ClawGuru unterst\u00fctzt alle wichtigen Cloud-Plattformen (AWS, GCP, Azure), Container-Technologien (Docker, Kubernetes), Programmiersprachen und KI-Frameworks. Wir bieten Sicherheitsl\u00f6sungen f\u00fcr Self-Hosted und Cloud-basierte KI-Bereitstellungen."
+      },
+      {
+        "question": "Was ist das Mycelium Netzwerk?",
+        "answer": "Das Mycelium Netzwerk ist unser verteiltes Sicherheitsintelligenzsystem, das es Organisationen erm\u00f6glicht, Bedrohungsinformationen und Sicherheitserkenntnisse \u00fcber ihre Infrastruktur hinweg auszutauschen. Es erstellt ein kollaboratives Verteidigungsnetzwerk, von dem alle Teilnehmer profitieren."
+      },
+      {
+        "question": "Wie funktionieren die Security Runbooks?",
+        "answer": "Unsere KI generiert 4,2 Millionen+ Security Runbooks, die Schritt-f\u00fcr-Schritt-Anleitungen zur Behebung spezifischer Sicherheitsprobleme bieten. Jedes Runbook ist auf Ihren Technology-Stack zugeschnitten und enth\u00e4lt detaillierte Implementierungsschritte, Code-Beispiele und Best Practices."
+      },
+      {
+        "question": "Sind meine Daten mit ClawGuru sicher?",
+        "answer": "Ja, wir verwenden Enterprise-Grade-Verschl\u00fcsselung, Zero-Trust-Architektur und entsprechen wichtigen Sicherheitsstandards einschlie\u00dflich DSGVO, SOC 2 und ISO 27001. Ihre Daten werden niemals an Dritte weitergegeben und Sie behalten die volle Kontrolle \u00fcber Ihre Sicherheitsinformationen."
+      }
+    ]
+  },
+  "schema": {
+    "organization": {
+      "@type": "Organization",
+      "name": "ClawGuru",
+      "url": "https://clawguru.org",
+      "logo": "https://clawguru.org/logo.png",
+      "description": "KI-Agenten-Sicherheitsplattform f\u00fcr die Zukunft",
+      "foundingDate": "2024",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+49-30-CLAWGURU",
+        "contactType": "customer service",
+        "availableLanguage": ["Deutsch", "Englisch", "Spanisch", "Franz\u00f6sisch", "Italienisch", "Portugiesisch", "Niederl\u00e4ndisch", "Polnisch", "Russisch", "T\u00fcrkisch", "Arabisch", "Chinesisch", "Japanisch", "Koreanisch", "Schwedisch"]
+      }
+    },
+    "website": {
+      "@type": "WebSite",
+      "name": "ClawGuru",
+      "url": "https://clawguru.org",
+      "description": "KI-Agenten-Sicherheitsplattform f\u00fcr die Zukunft",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://clawguru.org/search?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    },
+    "breadcrumb": {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Startseite",
+          "item": "https://clawguru.org"
+        }
+      ]
+    },
+    "faq": {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Was ist KI-Agenten-Sicherheit?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "KI-Agenten-Sicherheit umfasst den Schutz von KI-Systemen, deren Daten und Infrastruktur vor unbefugtem Zugriff, Angriffen und Sicherheitsl\u00fccken. Dies schlie\u00dft die Sicherung von API-Schl\u00fcsseln, Authentifizierungsmechanismen, Kommunikationskan\u00e4len und den von KI-Systemen verarbeiteten Daten ein."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Wie funktioniert die 30-Sekunden-Sicherheitsbewertung?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Unsere automatisierte Sicherheitsbewertung scannt Ihre KI-Infrastruktur auf h\u00e4ufige Sicherheitsl\u00fccken, Fehlkonfigurationen und Compliance-Probleme. Sie analysiert Ihr Setup, identifiziert Risiken und liefert einen umfassenden Claw Score mit umsetzbaren Empfehlungen zur Verbesserung."
+          }
+        }
+      ]
+    }
+  }
+}

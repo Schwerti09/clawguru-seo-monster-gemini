@@ -135,40 +135,61 @@ export default function OpenClawPage(props: { params: { lang: string } }) {
           </section>
 
           {/* CONVERSION WARFARE ROUND 4: Aggressive CTAs with Urgency */}
-          <div className="space-y-4">
-            <a href={coreLinks.check} className="block bg-gradient-to-r from-cyan-600 to-cyan-500 border border-cyan-400 rounded-xl p-6 hover:from-cyan-500 hover:to-cyan-400 transition-all relative">
+          <div className="mt-8 space-y-4">
+            <a
+              href={`${prefix}/check`}
+              className="block bg-gradient-to-r from-cyan-600 to-cyan-500 border border-cyan-400 rounded-xl p-6 hover:from-cyan-500 hover:to-cyan-400 transition-all relative"
+            >
               <div className="absolute -top-3 -right-3 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full animate-pulse">
                 {locale === 'de' ? 'JETZT' : 'NOW'}
               </div>
               <div className="flex items-center gap-4">
-                <div className="text-4xl">🛡️</div>
+                <div className="text-4xl"></div>
                 <div>
                   <div className="font-bold text-white text-lg">
-                    {locale === 'de' ? '🛡️ Vollständiger Security-Check' : '🛡️ Full Security Check'}
+                    {locale === 'de' ? 'Security Check' : 'Security Check'}
                   </div>
                   <div className="text-cyan-100 text-sm">
-                    {locale === 'de' ? 'Deine gesamte Infrastruktur in 30 Sekunden prüfen' : 'Check your entire infrastructure in 30 seconds'}
+                    {locale === 'de' ? 'Claw Score in 30 Sekunden' : 'Claw Score in 30 seconds'}
                   </div>
                 </div>
               </div>
             </a>
 
-            <div className="grid sm:grid-cols-2 gap-4">
-              <a href={`${prefix}/runbooks`} className="block bg-gray-800 border border-gray-700 rounded-xl p-4 hover:border-cyan-400/50 transition-all">
+            <div className="grid sm:grid-cols-3 gap-4">
+              <a
+                href={`${prefix}/roast-my-moltbot`}
+                className="block bg-gradient-to-r from-red-600 to-red-500 border border-red-400 rounded-xl p-4 hover:from-red-500 hover:to-red-400 transition-all"
+              >
                 <div className="flex items-center gap-3">
-                  <div className="text-2xl">📚</div>
+                  <div className="text-2xl"></div>
                   <div>
-                    <div className="font-semibold text-cyan-400">{locale === 'de' ? 'Security Runbooks' : 'Security Runbooks'}</div>
-                    <div className="text-xs text-gray-400">{locale === 'de' ? '1,000+ Fix-Runbooks' : '1,000+ fix runbooks'}</div>
+                    <div className="font-semibold text-white">{locale === 'de' ? 'Roast My Moltbot' : 'Roast My Moltbot'}</div>
+                    <div className="text-xs text-red-100">{locale === 'de' ? 'Kostenloser Security-Roast' : 'Free security roast'}</div>
                   </div>
                 </div>
               </a>
-              <a href={`${prefix}/roast-my-moltbot`} className="block bg-gray-800 border border-gray-700 rounded-xl p-4 hover:border-amber-400/50 transition-all">
+              <a
+                href={`${prefix}/academy`}
+                className="block bg-gradient-to-r from-purple-600 to-purple-500 border border-purple-400 rounded-xl p-4 hover:from-purple-500 hover:to-purple-400 transition-all"
+              >
                 <div className="flex items-center gap-3">
-                  <div className="text-2xl">🔥</div>
+                  <div className="text-2xl"></div>
                   <div>
-                    <div className="font-semibold text-amber-400">{locale === 'de' ? 'Roast My Moltbot' : 'Roast My Moltbot'}</div>
-                    <div className="text-xs text-gray-400">{locale === 'de' ? 'Kostenloser Security-Roast' : 'Free security roast'}</div>
+                    <div className="font-semibold text-white">{locale === 'de' ? 'Academy' : 'Academy'}</div>
+                    <div className="text-xs text-purple-100">{locale === 'de' ? 'Kurse & Zertifizierung' : 'Courses & Certification'}</div>
+                  </div>
+                </div>
+              </a>
+              <a
+                href={`${prefix}/solutions`}
+                className="block bg-gradient-to-r from-emerald-600 to-emerald-500 border border-emerald-400 rounded-xl p-4 hover:from-emerald-500 hover:to-emerald-400 transition-all"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="text-2xl"></div>
+                  <div>
+                    <div className="font-semibold text-white">{locale === 'de' ? 'Solutions' : 'Solutions'}</div>
+                    <div className="text-xs text-emerald-100">{locale === 'de' ? 'Enterprise Lösungen' : 'Enterprise solutions'}</div>
                   </div>
                 </div>
               </a>

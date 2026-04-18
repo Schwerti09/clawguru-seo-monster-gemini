@@ -1,0 +1,569 @@
+{
+  "meta": {
+    "title": "Mycelium Netzwerk - Lebendes Wissens-Graph | ClawGuru",
+    "description": "Entdecken Sie Mycelium, das lebende, sich selbst weiterentwickelnde Wissens-Netzwerk mit 4,2 Millionen Security Runbooks. Visualisieren Sie die Intelligenz Ihrer Organisation als vernetzten Graph, der w\u00e4chst und lernt.",
+    "keywords": "Mycelium Netzwerk, lebendes Wissens-Graph, Security Runbooks, verteilte Intelligenz, Wissensmanagement, Enterprise Security, Collective Intelligence",
+    "og_title": "Mycelium Netzwerk - Lebendes Wissens-Graph",
+    "og_description": "Ihr Wissen, visualisiert als lebender Graph, der sich mit 4,2 Millionen Security Runbooks und Collective Intelligence weiterentwickelt.",
+    "og_image": "https://clawguru.org/og-mycelium.jpg",
+    "twitter_card": "summary_large_image",
+    "twitter_title": "Mycelium Netzwerk - Lebendes Wissens-Graph",
+    "twitter_description": "Ihr Wissen, visualisiert als lebender Graph, der sich mit 4,2 Millionen Security Runbooks und Collective Intelligence weiterentwickelt.",
+    "twitter_image": "https://clawguru.org/twitter-mycelium.jpg"
+  },
+  "hero": {
+    "title": "Dein Wissen, visualisiert",
+    "subtitle": "Ein lebender Graph, der sich mit deiner Organisation weiterentwickelt",
+    "description": "Mycelium transformiert das Wissen Ihrer Organisation in ein lebendes, sich selbst weiterentwickelndes Netzwerk. Mit 4,2 Millionen Security Runbooks und Collective Intelligence von Tausenden von Organisationen ist es das fortschrittlichste Wissensmanagement-System, das je gebaut wurde.",
+    "cta_primary": "Mycelium Netzwerk erkunden",
+    "cta_secondary": "Interaktive Demo ansehen",
+    "stats": [
+      {
+        "number": "4,2M+",
+        "label": "Security Runbooks"
+      },
+      {
+        "number": "50K+",
+        "label": "Aktive Nodes"
+      },
+      {
+        "number": "15K+",
+        "label": "Evolutionen pro Stunde"
+      },
+      {
+        "number": "0",
+        "label": "Bekannte Sicherheitsvorf\u00e4lle"
+      }
+    ]
+  },
+  "what_is_mycelium": {
+    "title": "Was ist Mycelium?",
+    "subtitle": "Die Zukunft des Wissensmanagements",
+    "description": "Mycelium ist nicht nur eine weitere Wissensdatenbank. Es ist ein lebendes, atmendes Netzwerk, das lernt, sich anpasst und mit Ihrer Organisation weiterentwickelt. Wie biologische Mycelium-Netzwerke, die ganze W\u00e4lder verbinden, verbindet unsere digitale Version Wissen \u00fcber Ihr gesamtes Unternehmen hinweg.",
+    "core_concepts": [
+      {
+        "icon": "network",
+        "title": "Lebendes Netzwerk",
+        "description": "Eine dynamische Graph-Struktur, die basierend auf Nutzungsmustern und entstehenden Bed\u00fcrfnissen w\u00e4chst und sich neu organisiert."
+      },
+      {
+        "icon": "brain",
+        "title": "Collective Intelligence",
+        "description": "Lernt von jeder Interaktion \u00fcber alle teilnehmenden Organisationen hinweg, um die Wissensqualit\u00e4t kontinuierlich zu verbessern."
+      },
+      {
+        "icon": "zap",
+        "title": "Echtzeit-Evolution",
+        "description": "Passt sich an und entwickelt sich 15.000+ Mal pro Stunde basierend auf neuen Bedrohungen, L\u00f6sungen und organisatorischen Bed\u00fcrfnissen."
+      },
+      {
+        "icon": "shield",
+        "title": "Security-First Design",
+        "description": "Gebaut mit Zero-Trust-Architektur und milit\u00e4rischer Verschl\u00fcsselung f\u00fcr vollst\u00e4ndigen Wissensschutz."
+      }
+    ]
+  },
+  "how_it_works": {
+    "title": "Wie Mycelium funktioniert",
+    "subtitle": "Die Technologie hinter lebendem Wissen",
+    "sections": [
+      {
+        "title": "Graph-Architektur",
+        "description": "Im Kern verwendet Mycelium eine ausgekl\u00fcgelte Graph-Datenbank-Struktur, die Wissen als miteinander verbundene Nodes und Beziehungen darstellt.",
+        "features": [
+          "Semantische Beziehungs-Mapping",
+          "Gewichtete Verbindungs-Algorithmen",
+          "Dynamische Pfad-Optimierung",
+          "Kontextbezogene Relevanz-Scoring"
+        ]
+      },
+      {
+        "title": "Evolution Engine",
+        "description": "Unsere propriet\u00e4re KI analysiert kontinuierlich Nutzungsmuster, Erfolgsraten und aufkommende Bedrohungen, um das Wissens-Netzwerk weiterzuentwickeln.",
+        "features": [
+          "Machine Learning Optimierung",
+          "Pr\u00e4diktive Wissens-Wachstum",
+          "Automatisierte Qualit\u00e4tsbewertung",
+          "Adaptive Learning-Algorithmen"
+        ]
+      },
+      {
+        "title": "Node Intelligence",
+        "description": "Jeder Wissens-Node enth\u00e4lt eingebettete Intelligenz, die Selbstorganisation und Optimierung erm\u00f6glicht.",
+        "features": [
+          "Autonome Node-Verwaltung",
+          "Self-healing Verbindungen",
+          "Dynamische Relevanz-Gewichtung",
+          "Pr\u00e4diktive Link-Bildung"
+        ]
+      },
+      {
+        "title": "Collective Learning",
+        "description": "Wissen von Tausenden von Organisationen flie\u00dft durch das Netzwerk und schafft einen m\u00e4chtigen Collective Intelligence-Effekt.",
+        "features": [
+          "Cross-organisationales Lernen",
+          "Anonymisierte Pattern-Sharing",
+          "Community-getriebene Evolution",
+          "Verteilte Wissens-Synthese"
+        ]
+      }
+    ]
+  },
+  "architecture": {
+    "title": "Architektur-\u00dcbersicht",
+    "subtitle": "Technische Grundlage",
+    "description": "Myceliums Architektur kombiniert Cutting-Edge Graph-Technologie, KI-Evolution-Engines und verteilte Sicherheitsprotokolle.",
+    "layers": [
+      {
+        "name": "Wissens-Layer",
+        "description": "4,2 Millionen+ Security Runbooks und organisatorisches Wissen dargestellt als semantische Nodes",
+        "components": ["Runbook Nodes", "Procedure Nodes", "Threat Nodes", "Solution Nodes", "Connection Edges"]
+      },
+      {
+        "name": "Intelligenz-Layer",
+        "description": "KI-gest\u00fctzte Evolution Engine, die kontinuierlich das Netzwerk optimiert und wachsen l\u00e4sst",
+        "components": ["ML Models", "Evolution Algorithms", "Quality Assessment", "Predictive Analytics"]
+      },
+      {
+        "name": "Netzwerk-Layer",
+        "description": "Verteilte Graph-Infrastruktur, die Skalierbarkeit und Performance sicherstellt",
+        "components": ["Graph Database", "Node Management", "Connection Routing", "Load Balancing"]
+      },
+      {
+        "name": "Sicherheits-Layer",
+        "description": "Zero-Trust-Architektur mit End-to-End-Verschl\u00fcsselung und Zugriffskontrolle",
+        "components": ["Encryption", "Authentication", "Authorization", "Audit Trails"]
+      }
+    ],
+    "mermaid_diagram": {
+      "title": "Mycelium Architektur-Diagramm",
+      "description": "High-Level-Architektur, die die vier Layer-Struktur und den Datenfluss zeigt",
+      "code": "graph TB\n    subgraph \"Wissens-Layer\"\n        A[Runbook Nodes] --> B[Procedure Nodes]\n        B --> C[Threat Nodes]\n        C --> D[Solution Nodes]\n        D --> E[Connection Edges]\n    end\n    subgraph \"Intelligenz-Layer\"\n        F[ML Models] --> G[Evolution Algorithms]\n        G --> H[Quality Assessment]\n        H --> I[Predictive Analytics]\n    end\n    subgraph \"Netzwerk-Layer\"\n        J[Graph Database] --> K[Node Management]\n        K --> L[Connection Routing]\n        L --> M[Load Balancing]\n    end\n    subgraph \"Sicherheits-Layer\"\n        N[Encryption] --> O[Authentication]\n        O --> P[Authorization]\n        P --> Q[Audit Trails]\n    end\n    E --> F\n    I --> J\n    M --> N"
+    }
+  },
+  "benefits": {
+    "title": "Vorteile & Anwendungsf\u00e4lle",
+    "subtitle": "Transformieren Sie das Wissensmanagement Ihrer Organisation",
+    "categories": [
+      {
+        "title": "Security Operations",
+        "icon": "shield",
+        "description": "Revolutionieren Sie Security Operations mit lebendigem Wissen, das sich an aufkommende Bedrohungen anpasst.",
+        "benefits": [
+          "Echtzeit-Bedrohungsantwort-Updates",
+          "Automatisierte Runbook-Evolution",
+          "Collective Threat Intelligence",
+          "Pr\u00e4diktive Security-F\u00fchrung"
+        ],
+        "use_cases": [
+          "Incident Response Automatisierung",
+          "Threat Hunting Unterst\u00fctzung",
+          "Security Orchestrierung",
+          "Compliance Management"
+        ]
+      },
+      {
+        "title": "Cloud Operations",
+        "icon": "cloud",
+        "description": "Optimieren Sie Cloud Operations mit Wissen, das sich mit Ihrer Infrastruktur weiterentwickelt.",
+        "benefits": [
+          "Dynamische Cloud Runbooks",
+          "Multi-Cloud Intelligence",
+          "Cost Optimization Patterns",
+          "Automatisierte Remediation"
+        ],
+        "use_cases": [
+          "Cloud Migration Guidance",
+          "Infrastructure Optimierung",
+          "Disaster Recovery Planung",
+          "Performance Tuning"
+        ]
+      },
+      {
+        "title": "DevOps Excellence",
+        "icon": "code",
+        "description": "Beschleunigen Sie DevOps mit lebender Dokumentation und automatisierter Wissens-Evolution.",
+        "benefits": [
+          "Self-updating Dokumentation",
+          "Automatisierte Best Practices",
+          "Continuous Integration Wissen",
+          "Deployment Intelligence"
+        ],
+        "use_cases": [
+          "CI/CD Pipeline Optimierung",
+          "Code Review Automatisierung",
+          "Testing Strategy Evolution",
+          "Release Management"
+        ]
+      },
+      {
+        "title": "MSP Effizienz",
+        "icon": "users",
+        "description": "Skalieren Sie Managed Services mit Collective Intelligence von Tausenden von Organisationen.",
+        "benefits": [
+          "Multi-Client Wissens-Sharing",
+          "Standardisierte Verfahren",
+          "Automatisierte Client-Berichterstattung",
+          "Service Optimierung"
+        ],
+        "use_cases": [
+          "Client Onboarding Automatisierung",
+          "Service Delivery Optimierung",
+          "Risk Assessment Automatisierung",
+          "Compliance Reporting"
+        ]
+      },
+      {
+        "title": "Enterprise Intelligence",
+        "icon": "building",
+        "description": "Transformieren Sie Enterprise Wissensmanagement mit lebender, evolvierender Intelligenz.",
+        "benefits": [
+          "Cross-Department Wissensfluss",
+          "Automatisierte Prozess-Optimierung",
+          "Strategische Entscheidungsunterst\u00fctzung",
+          "Wissenspr\u00e4servierung"
+        ],
+        "use_cases": [
+          "Digital Transformation Guidance",
+          "M&A Integration Unterst\u00fctzung",
+          "Risk Management Optimierung",
+          "Innovation Beschleunigung"
+        ]
+      }
+    ]
+  },
+  "comparison": {
+    "title": "Mycelium vs. Traditionelles Wissensmanagement",
+    "subtitle": "Warum lebendes Wissen statische Repositories schl\u00e4gt",
+    "comparison_table": {
+      "headers": ["Feature", "Traditionelle Wissensdatenbank", "Mycelium Netzwerk"],
+      "rows": [
+        {
+          "feature": "Wissens-Evolution",
+          "traditional": "Manuelle Updates erforderlich",
+          "mycelium": "Automatische, kontinuierliche Evolution"
+        },
+        {
+          "feature": "Learning F\u00e4higkeit",
+          "traditional": "Statischer Content",
+          "mycelium": "KI-gest\u00fctztes Lernen und Anpassung"
+        },
+        {
+          "feature": "Collective Intelligence",
+          "traditional": "Siloed organisatorisches Wissen",
+          "mycelium": "Cross-organisationales Intelligence-Sharing"
+        },
+        {
+          "feature": "Skalierbarkeit",
+          "traditional": "Begrenzt durch manuelle Wartung",
+          "mycelium": "Unbegrenzte Skalierbarkeit mit Auto-Optimierung"
+        },
+        {
+          "feature": "Relevanz",
+          "traditional": "Nimmt \u00fcber Zeit ab",
+          "mycelium": "Verbessert sich mit Nutzung und Evolution"
+        },
+        {
+          "feature": "Sicherheit",
+          "traditional": "Grundlegende Zugriffskontrollen",
+          "mycelium": "Zero-Trust-Architektur mit Verschl\u00fcsselung"
+        },
+        {
+          "feature": "Integration",
+          "traditional": "Begrenzter API-Zugang",
+          "mycelium": "Tiefe Integration mit allen Systemen"
+        },
+        {
+          "feature": "Wartung",
+          "traditional": "Hoher manueller Aufwand",
+          "mycelium": "Self-maintaining und Self-healing"
+        }
+      ]
+    }
+  },
+  "stats": {
+    "title": "Netzwerk-Statistiken",
+    "subtitle": "Echtzeit Mycelium Netzwerk-Metriken",
+    "live_stats": [
+      {
+        "metric": "Aktive Organisationen",
+        "value": "2.847",
+        "change": "+127 diese Woche",
+        "trend": "up"
+      },
+      {
+        "metric": "Wissens-Nodes",
+        "value": "4,2M+",
+        "change": "+15.234 heute",
+        "trend": "up"
+      },
+      {
+        "metric": "Netzwerk-Verbindungen",
+        "value": "18,7M",
+        "change": "+452K heute",
+        "trend": "up"
+      },
+      {
+        "metric": "Evolution Events",
+        "value": "15.342/Stunde",
+        "change": "+2,3% Effizienz",
+        "trend": "up"
+      },
+      {
+        "metric": "Sicherheitsvorf\u00e4lle",
+        "value": "0",
+        "change": "Zero bekannte Sicherheitsvorf\u00e4lle",
+        "trend": "stable"
+      },
+      {
+        "metric": "Wissens-Qualit\u00e4t",
+        "value": "98,7%",
+        "change": "+0,3% diesen Monat",
+        "trend": "up"
+      }
+    ]
+  },
+  "integration": {
+    "title": "Ecosystem Integration",
+    "subtitle": "Mycelium verbindet Ihren gesamten Security Stack",
+    "description": "Mycelium integriert sich nahtlos mit allen ClawGuru-Produkten und Ihrer bestehenden Sicherheitsinfrastruktur.",
+    "connections": [
+      {
+        "product": "Oracle",
+        "description": "Speist Threat Intelligence und erh\u00e4lt pr\u00e4diktive Einblicke f\u00fcr Wissens-Evolution",
+        "direction": "bidirectional"
+      },
+      {
+        "product": "Neuro",
+        "description": "Liefert Verhaltensmuster und erh\u00e4lt kontextbezogenes Wissen f\u00fcr Analyse",
+        "direction": "bidirectional"
+      },
+      {
+        "product": "Copilot",
+        "description": "Liefert Echtzeit-F\u00fchrung und erh\u00e4lt Nutzungsmuster f\u00fcr Optimierung",
+        "direction": "bidirectional"
+      },
+      {
+        "product": "Summon AI",
+        "description": "F\u00fchrt automatisierte Aktionen basierend auf Mycelium Wissen aus und liefert Feedback",
+        "direction": "bidirectional"
+      },
+      {
+        "product": "Security Check",
+        "description": "Liefert Bewertungsdaten und erh\u00e4lt aktualisierte Runbooks f\u00fcr Remediation",
+        "direction": "bidirectional"
+      },
+      {
+        "product": "Intel Feed",
+        "description": "Lieferung Threat Intelligence und erh\u00e4lt kontextbezogene Wissens-Anreicherung",
+        "direction": "bidirectional"
+      }
+    ]
+  },
+  "testimonials": {
+    "title": "Was F\u00fchrungsleiter \u00fcber Mycelium sagen",
+    "subtitle": "Transformation des Wissensmanagements branchen\u00fcbergreifend",
+    "testimonials": [
+      {
+        "quote": "Mycelium hat revolutioniert, wie wir Security-Wissen verwalten. Das Netzwerk entwickelt sich mit unseren Bed\u00fcrfnissen weiter, und wir sind immer aufkommenden Bedrohungen einen Schritt voraus.",
+        "author": "Jennifer Adams",
+        "role": "CISO",
+        "company": "TechCorp Industries",
+        "avatar": "jennifer-adams"
+      },
+      {
+        "quote": "Der Collective Intelligence Aspekt ist game-changing. Wir lernen in Echtzeit von den Erfahrungen Tausender Organisationen.",
+        "author": "Robert Chang",
+        "role": "Security Director",
+        "company": "Global Finance Corp",
+        "avatar": "robert-chang"
+      },
+      {
+        "quote": "4,2 Millionen Runbooks, die sich automatisch weiterentwickeln? Die Effizienz unseres Security-Teams ist um 300% gestiegen.",
+        "author": "Maria Garcia",
+        "role": "Head of Security Operations",
+        "company": "CloudScale Systems",
+        "avatar": "maria-garcia"
+      },
+      {
+        "quote": "Myceliums Zero-Trust-Architektur gibt uns vollst\u00e4ndiges Vertrauen in unsere Wissenssicherheit, w\u00e4hrend sie beispiellose Kollaboration erm\u00f6glicht.",
+        "author": "David Kim",
+        "role": "VP of Engineering",
+        "company": "Enterprise Solutions Ltd",
+        "avatar": "david-kim"
+      }
+    ]
+  },
+  "pricing": {
+    "title": "Mycelium Netzwerk Preise",
+    "subtitle": "W\u00e4hlen Sie Ihren Wissens-Evolution Plan",
+    "plans": [
+      {
+        "name": "Explorer",
+        "price": "499\u20ac",
+        "period": "pro Monat",
+        "description": "Perfekt f\u00fcr Teams, die ihre lebende Wissensreise beginnen",
+        "features": [
+          "Zugriff zu 1M+ Runbooks",
+          "Basis Netzwerk-Analytics",
+          "5 User-Lizenzen",
+          "Standard Support",
+          "Monatliche Evolution-Berichte"
+        ],
+        "cta": "Exploration starten",
+        "popular": false
+      },
+      {
+        "name": "Professional",
+        "price": "1.299\u20ac",
+        "period": "pro Monat",
+        "description": "Ideal f\u00fcr wachsende Organisationen, die erweiterte Intelligenz ben\u00f6tigen",
+        "features": [
+          "Zugriff zu 4,2M+ Runbooks",
+          "Erweiterte Netzwerk-Analytics",
+          "25 User-Lizenzen",
+          "Priorit\u00e4ts-Support",
+          "Echtzeit Evolution Insights",
+          "Custom Node Erstellung"
+        ],
+        "cta": "Professional gehen",
+        "popular": true
+      },
+      {
+        "name": "Enterprise",
+        "price": "Individuell",
+        "period": "Preisgestaltung",
+        "description": "Vollst\u00e4ndiges lebendes Wissens-\u00d6kosystem f\u00fcr gro\u00dfe Unternehmen",
+        "features": [
+          "Unbegrenzter Runbook-Zugriff",
+          "Enterprise Analytics Suite",
+          "Unbegrenzte User-Lizenzen",
+          "Dedicated Support Team",
+          "On-Premise Deployment Option",
+          "Custom AI Model Training",
+          "SLA Garantien"
+        ],
+        "cta": "Vertrieb kontaktieren",
+        "popular": false
+      }
+    ]
+  },
+  "cta_section": {
+    "title": "Transformieren Sie Ihr Wissensmanagement",
+    "subtitle": "Schlie\u00dfen Sie sich der lebenden Wissens-Revolution an",
+    "description": "Erleben Sie die Kraft eines Wissens-Netzwerks, das sich mit Ihrer Organisation weiterentwickelt. Starten Sie mit 4,2 Millionen Security Runbooks und wachsen Sie von dort aus.",
+    "cta_primary": "Mycelium Reise starten",
+    "cta_secondary": "Live Demo vereinbaren",
+    "trust_indicators": [
+      "30-t\u00e4gige Geld-zur\u00fcck-Garantie",
+      "Keine Setup-Geb\u00fchren",
+      "Enterprise-Grade Sicherheit",
+      "24/7 technischer Support"
+    ]
+  },
+  "faq": {
+    "title": "H\u00e4ufig gestellte Fragen",
+    "subtitle": "Alles was Sie \u00fcber Mycelium Netzwerk wissen m\u00fcssen",
+    "questions": [
+      {
+        "question": "Wie unterscheidet sich Mycelium von traditionellen Wissensdatenbanken?",
+        "answer": "Traditionelle Wissensdatenbanken sind statische Repositories, die manuelle Updates erfordern. Mycelium ist ein lebendes Netzwerk, das sich automatisch weiterentwickelt, von Nutzungsmustern lernt und Collective Intelligence von Tausenden von Organisationen einbezieht. Es w\u00e4chst 15.000+ Mal pro Stunde basierend auf realen Bed\u00fcrfnissen und aufkommenden Bedrohungen."
+      },
+      {
+        "question": "Wie funktioniert die Collective Intelligence Funktion?",
+        "answer": "Mycelium anonymisiert und aggregiert Wissensmuster von allen teilnehmenden Organisationen. Wenn eine Organisation ein neues Problem l\u00f6st oder einen besseren Ansatz entdeckt, flie\u00dft diese Intelligenz durch das Netzwerk und kommt allen Teilnehmern zugute, w\u00e4hrend vollst\u00e4ndige Privatsph\u00e4re und Vertraulichkeit gewahrt bleiben."
+      },
+      {
+        "question": "Ist unser organisatorisches Daten in Mycelium sicher?",
+        "answer": "Absolut. Mycelium verwendet Zero-Trust-Architektur mit End-to-End-Verschl\u00fcsselung. Ihre sensiblen Daten verlassen niemals Ihre Umgebung, und nur anonymisierte Muster und Einblicke werden geteilt. Wir unterhalten null bekannte Sicherheitsvorf\u00e4lle und entsprechen allen wichtigen Sicherheitsstandards einschlie\u00dflich SOC 2, ISO 27001 und DSGVO."
+      },
+      {
+        "question": "Wie schnell k\u00f6nnen wir Mycelium implementieren?",
+        "answer": "Die Implementierung dauert typischerweise 2-4 Wochen je nach Anforderungen. Wir beginnen mit dem Import Ihres bestehenden Wissens, verbinden dann Ihre Systeme und schlie\u00dflich aktivieren die Evolution Engine. Die meisten Organisationen sehen bereits im ersten Monat der Bereitstellung einen Mehrwert."
+      },
+      {
+        "question": "Welche Arten von Wissen kann Mycelium verwalten?",
+        "answer": "Mycelium gl\u00e4nzt bei Security-Wissen, operativen Verfahren, Compliance-Anforderungen, Threat Intelligence und Best Practices. Es kann strukturierte Verfahren, unstrukturierte Einblicke und alles dazwischen verwalten. Die 4,2 Millionen Security Runbooks sind nur der Ausgangspunkt."
+      },
+      {
+        "question": "Wie funktioniert die Evolution Engine?",
+        "answer": "Unsere KI analysiert kontinuierlich Nutzungsmuster, Erfolgsraten, aufkommende Bedrohungen und organisatorische Bed\u00fcrfnisse. Sie identifiziert Verbesserungsm\u00f6glichkeiten, erstellt neue Verbindungen zwischen Wissens-Nodes und entwickelt Verfahren basierend auf Real-World-Feedback von Tausenden von Implementierungen weiter."
+      },
+      {
+        "question": "K\u00f6nnen wir Mycelium f\u00fcr unsere spezifischen Bed\u00fcrfnisse anpassen?",
+        "answer": "Ja, Mycelium ist hochgradig anpassbar. Sie k\u00f6nnen benutzerdefinierte Wissens-Nodes erstellen, Evolutions-Regeln definieren, mit Ihren spezifischen Tools integrieren und sogar benutzerdefinierte KI-Modelle auf Ihren organisatorischen Mustern trainieren. Enterprise-Pl\u00e4ne beinhalten dedizierte Unterst\u00fctzung f\u00fcr Anpassungen."
+      },
+      {
+        "question": "Was passiert mit unserem Wissen, wenn wir aufh\u00f6ren, Mycelium zu nutzen?",
+        "answer": "Ihr Wissen geh\u00f6rt immer Ihnen. Wir bieten vollst\u00e4ndige Export-F\u00e4higkeiten in mehreren Formaten, um sicherzustellen, dass Sie Ihr Wissen jederzeit migrieren k\u00f6nnen. Die Evolution-Einblicke und Collective Intelligence-Vorteile w\u00fcrden aufh\u00f6ren, aber Ihr Kernwissen bleibt Ihnen erhalten."
+      },
+      {
+        "question": "Wie handelt Mycelium regulatorische Compliance?",
+        "answer": "Mycelium enth\u00e4lt eingebaute Compliance-Frameworks f\u00fcr wichtige Vorschriften wie DSGVO, HIPAA, PCI DSS und branchenspezifische Anforderungen. Die Evolution Engine aktualisiert Verfahren automatisch, wenn sich Vorschriften \u00e4ndern, und sorgt f\u00fcr kontinuierliche Compliance."
+      },
+      {
+        "question": "Welche Art von Unterst\u00fctzung bieten Sie?",
+        "answer": "Wir bieten 24/7 technischen Support f\u00fcr alle Pl\u00e4ne. Professional- und Enterprise-Pl\u00e4ne beinhalten dedizierte Account Manager, Priorit\u00e4ts-Antwortzeiten und On-Premise-Support-Optionen. Wir bieten auch umfassende Schulung und Change Management Unterst\u00fctzung."
+      }
+    ]
+  },
+  "schema": {
+    "webpage": {
+      "@type": "WebPage",
+      "name": "Mycelium Netzwerk - Lebendes Wissens-Graph",
+      "description": "Ihr Wissen, visualisiert als lebender Graph, der sich mit 4,2 Millionen Security Runbooks und Collective Intelligence weiterentwickelt.",
+      "url": "https://clawguru.org/mycelium",
+      "mainEntity": {
+        "@type": "SoftwareApplication",
+        "name": "Mycelium Netzwerk",
+        "description": "Lebendes Wissens-Netzwerk mit KI-gest\u00fctzter Evolution und Collective Intelligence",
+        "applicationCategory": "KnowledgeManagementApplication",
+        "operatingSystem": "Any",
+        "offers": {
+          "@type": "Offer",
+          "price": "499",
+          "priceCurrency": "EUR",
+          "priceValidUntil": "2026-12-31"
+        }
+      }
+    },
+    "breadcrumb": {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Startseite",
+          "item": "https://clawguru.org"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Mycelium",
+          "item": "https://clawguru.org/mycelium"
+        }
+      ]
+    },
+    "faq": {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Wie unterscheidet sich Mycelium von traditionellen Wissensdatenbanken?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Traditionelle Wissensdatenbanken sind statische Repositories, die manuelle Updates erfordern. Mycelium ist ein lebendes Netzwerk, das sich automatisch weiterentwickelt, von Nutzungsmustern lernt und Collective Intelligence von Tausenden von Organisationen einbezieht."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Wie funktioniert die Collective Intelligence Funktion?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Mycelium anonymisiert und aggregiert Wissensmuster von allen teilnehmenden Organisationen. Wenn eine Organisation ein neues Problem l\u00f6st oder einen besseren Ansatz entdeckt, flie\u00dft diese Intelligenz durch das Netzwerk und kommt allen Teilnehmern zugute, w\u00e4hrend vollst\u00e4ndige Privatsph\u00e4re und Vertraulichkeit gewahrt bleiben."
+          }
+        }
+      ]
+    }
+  }
+}

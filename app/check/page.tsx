@@ -187,6 +187,48 @@ export default function CheckPage() {
             </a>
           </div>
         </section>
+
+        {/* TECHNICAL SEO DOMINATION ROUND 3: Strong Internal Links to High-Value Content */}
+        <section className="mt-8 rounded-2xl border border-cyan-900/30 bg-cyan-950/10 p-6 max-w-4xl">
+          <h3 className="text-lg font-bold text-cyan-300 mb-4">
+            {locale === 'de' ? '🚀 Weiterführende Ressourcen' : '🚀 Further Resources'}
+          </h3>
+          <div className="grid gap-3 sm:grid-cols-2">
+            <a
+              href={`${prefix}/runbooks`}
+              onClick={() => trackEvent("resource_link_click", { locale, target: "runbooks", source: "check_resources" })}
+              className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:border-cyan-500/50 transition-colors"
+            >
+              <div className="font-semibold text-cyan-400">{locale === 'de' ? '📚 Security Runbooks' : '📚 Security Runbooks'}</div>
+              <div className="text-sm text-gray-300">{locale === 'de' ? '1,000+ AI-generierte Fix-Runbooks' : '1,000+ AI-generated fix runbooks'}</div>
+            </a>
+            <a
+              href={`${prefix}/roast-my-moltbot`}
+              onClick={() => trackEvent("resource_link_click", { locale, target: "roast-moltbot", source: "check_resources" })}
+              className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:border-amber-500/50 transition-colors"
+            >
+              <div className="font-semibold text-amber-400">{locale === 'de' ? '🔥 Roast My Moltbot' : '🔥 Roast My Moltbot'}</div>
+              <div className="text-sm text-gray-300">{locale === 'de' ? 'Kostenloser Security-Roast' : 'Free security roast'}</div>
+            </a>
+            <a
+              href={`${prefix}/openclaw`}
+              onClick={() => trackEvent("resource_link_click", { locale, target: "openclaw", source: "check_resources" })}
+              className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:border-green-500/50 transition-colors"
+            >
+              <div className="font-semibold text-green-400">{locale === 'de' ? '🛡️ OpenClaw' : '🛡️ OpenClaw'}</div>
+              <div className="text-sm text-gray-300">{locale === 'de' ? 'Self-Hosted Security Framework' : 'Self-hosted security framework'}</div>
+            </a>
+            <a
+              href={`${prefix}/moltbot-hardening`}
+              onClick={() => trackEvent("resource_link_click", { locale, target: "moltbot-hardening", source: "check_resources" })}
+              className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:border-purple-500/50 transition-colors"
+            >
+              <div className="font-semibold text-purple-400">{locale === 'de' ? '🤖 Moltbot Hardening' : '🤖 Moltbot Hardening'}</div>
+              <div className="text-sm text-gray-300">{locale === 'de' ? 'AI-Agent Security Guide' : 'AI-agent security guide'}</div>
+            </a>
+          </div>
+        </section>
+
         <section className="mt-8 rounded-2xl border border-white/10 bg-black/20 p-6 max-w-4xl">
           <h3 className="text-lg font-bold text-white">
             {c.faq_title}

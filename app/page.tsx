@@ -113,16 +113,21 @@ export default async function Home({ dict, locale }: HomeProps = {}) {
             </div>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {[
-                { href: `${prefix}/openclaw`, title: hp.lp_openclaw_title || cro.lpOpenclawTitle, desc: hp.lp_openclaw_desc || cro.lpOpenclawDesc },
-                { href: `${prefix}/openclaw-security-check`, title: hp.lp_openclaw_check_title || cro.lpCheckTitle, desc: hp.lp_openclaw_check_desc || cro.lpCheckDesc },
-                { href: `${prefix}/moltbot-hardening`, title: hp.lp_moltbot_title || cro.lpMoltbotTitle, desc: hp.lp_moltbot_desc || cro.lpMoltbotDesc },
-                { href: `${prefix}/ai-agent-security`, title: hp.lp_ai_title || cro.lpAiTitle, desc: hp.lp_ai_desc || cro.lpAiDesc },
+                { href: `${prefix}/openclaw`, title: hp.lp_openclaw_title || cro.lpOpenclawTitle, desc: hp.lp_openclaw_desc || cro.lpOpenclawDesc, urgent: true },
+                { href: `${prefix}/check`, title: hp.lp_openclaw_check_title || cro.lpCheckTitle, desc: hp.lp_openclaw_check_desc || cro.lpCheckDesc, urgent: true },
+                { href: `${prefix}/moltbot-hardening`, title: hp.lp_moltbot_title || cro.lpMoltbotTitle, desc: hp.lp_moltbot_desc || cro.lpMoltbotDesc, urgent: false },
+                { href: `${prefix}/ai-agent-security`, title: hp.lp_ai_title || cro.lpAiTitle, desc: hp.lp_ai_desc || cro.lpAiDesc, urgent: false },
               ].map((item) => (
                 <a
                   key={item.href}
                   href={item.href}
-                  className="rounded-2xl border border-white/10 bg-white/5 p-5 hover:border-cyan-400/40 transition-colors"
+                  className={`rounded-2xl border border-white/10 bg-white/5 p-5 hover:border-cyan-400/40 transition-colors relative ${item.urgent ? 'ring-1 ring-cyan-400/30' : ''}`}
                 >
+                  {item.urgent && (
+                    <div className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full animate-pulse">
+                      {safeLocale === 'de' ? 'JETZT' : 'NOW'}
+                    </div>
+                  )}
                   <h3 className="text-white font-bold">{item.title}</h3>
                   <p className="mt-1 text-sm text-gray-400">{item.desc}</p>
                 </a>

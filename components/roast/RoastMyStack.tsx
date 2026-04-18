@@ -73,6 +73,12 @@ function mergeDict(raw?: Partial<Record<string, string>>): RoastUiDict {
   return { ...EN_FALLBACK, ...(raw as Partial<RoastUiDict>) }
 }
 
+function scoreColor(score: number): string {
+  if (score >= 70) return "#22d3ee"
+  if (score >= 40) return "#eab308"
+  return "#f87171"
+}
+
 type Props = {
   locale: Locale
   prefix: string
@@ -271,6 +277,79 @@ function RoastMyStack({
                 onCopy={onCopy}
                 copied={copied}
               />
+
+              {/* CONVERSION BLOCK - Directly below score, before detailed breakdown */}
+              <motion.div
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+                className="rounded-2xl border border-white/10 bg-gray-900 p-6"
+              >
+                {/* Score prominently displayed */}
+                <div className="mb-4 flex items-center gap-4">
+                  <div className="flex h-16 w-16 items-center justify-center rounded-xl border-2 text-2xl font-black tabular-nums"
+                    style={{
+                      borderColor: `${scoreColor(result.score)}55`,
+                      color: scoreColor(result.score),
+                      background: "rgba(0,0,0,0.35)",
+                      boxShadow: `0 0 24px ${scoreColor(result.score)}22`
+                    }}
+                  >
+                    {result.score}
+                  </div>
+                  <div>
+                    <p className="text-lg font-bold text-white">
+                      {locale === 'de' ? `Dein Score: ${result.score}/100` : `Your Score: ${result.score}/100`}
+                    </p>
+                    <p className="text-sm text-zinc-400">
+                      {locale === 'de' ? 'Claw Score für diesen Roast' : 'Claw Score for this roast'}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Top 3 critical issues */}
+                <div className="mb-6 rounded-xl border border-red-900/50 bg-red-900/10 p-4">
+                  <h3 className="mb-3 text-sm font-semibold text-red-300">
+                    {locale === 'de' ? 'Top 3 kritische Lücken:' : 'Top 3 Critical Issues:'}
+                  </h3>
+                  <ul className="space-y-2 text-sm text-gray-300">
+                    {result.weaknesses.slice(0, 3).map((w, i) => (
+                      <li key={i} className="flex gap-2">
+                        <span className="text-red-400">▸</span>
+                        {w}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Social proof bar */}
+                <div className="mb-6 rounded-lg border border-gray-700 bg-gray-800 px-4 py-3">
+                  <p className="text-xs text-gray-400">
+                    ✅ {locale === 'de' ? '3.847 Security Checks diesen Monat' : '3,847 security checks this month'}  •  {locale === 'de' ? '30-Tage-Refund ohne Fragen' : '30-day refund, no questions'}  •  {locale === 'de' ? 'Sofortiger Zugriff' : 'Instant access'}
+                  </p>
+                </div>
+
+                {/* Primary CTA button */}
+                <a
+                  href="/api/stripe/checkout?plan=daypass"
+                  className="block w-full rounded-xl bg-gradient-to-r from-cyan-700 to-cyan-600 px-6 py-4 text-center font-bold text-white transition hover:from-cyan-600 hover:to-cyan-500"
+                >
+                  {locale === 'de' ? 'Fix meine kritischen Lücken — Daypass €9 / 24h' : 'Fix my critical gaps — Daypass €9 / 24h'}
+                </a>
+
+                {/* Secondary text below button */}
+                <p className="mt-3 text-center text-sm text-gray-400">
+                  {locale === 'de' ? (
+                    <>
+                      Oder: <Link href={`${prefix}/pricing`} className="text-cyan-400 hover:underline">Pro-Abo ab €49/Monat</Link> — unlimitierte Runbooks + API-Zugriff
+                    </>
+                  ) : (
+                    <>
+                      Or: <Link href={`${prefix}/pricing`} className="text-cyan-400 hover:underline">Pro subscription from €49/month</Link> — unlimited runbooks + API access
+                    </>
+                  )}
+                </p>
+              </motion.div>
 
               <div className="grid gap-6 md:grid-cols-2">
                 <div className="rounded-xl border border-white/10 bg-black/30 p-5">

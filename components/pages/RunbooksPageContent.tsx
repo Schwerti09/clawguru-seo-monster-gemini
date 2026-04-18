@@ -40,9 +40,49 @@ export default async function RunbooksPageContent({
     })),
   }
 
+  // GEO-DOMINATION ROUND 3: FAQPage Schema for AI Engines
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: [
+      {
+        "@type": "Question",
+        name: locale === "de" ? "Was sind Security Runbooks?" : "What are security runbooks?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: locale === "de"
+            ? "Security Runbooks sind ausführbare Playbooks für DevOps-Teams, die Security-Hardening, Incident Response und Ops-Automatisierung standardisieren. ClawGuru bietet 600+ AI-generierte Runbooks für OpenClaw/Moltbot."
+            : "Security runbooks are executable playbooks for DevOps teams that standardize security hardening, incident response, and ops automation. ClawGuru offers 600+ AI-generated runbooks for OpenClaw/Moltbot."
+        }
+      },
+      {
+        "@type": "Question",
+        name: locale === "de" ? "Sind die Runbooks kostenlos?" : "Are the runbooks free?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: locale === "de"
+            ? "Ja, alle Security Runbooks auf ClawGuru sind 100% kostenlos und erfordern keine Anmeldung."
+            : "Yes, all security runbooks on ClawGuru are 100% free and require no signup."
+        }
+      },
+      {
+        "@type": "Question",
+        name: locale === "de" ? "Wie funktionieren die Runbooks?" : "How do the runbooks work?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: locale === "de"
+            ? "Jeder Runbook folgt dem Score → Runbook → Fix → Re-Check Workflow. Starte mit einem Security-Check, erhalte deinen Claw Score, wähle den passenden Runbook, fixe die Probleme und verifiziere mit einem erneuten Check."
+            : "Each runbook follows the Score → Runbook → Fix → Re-Check workflow. Start with a security check, get your Claw Score, choose the matching runbook, fix the issues, and verify with a re-check."
+        }
+      }
+    ]
+  }
+
+  const combinedSchema = [itemListLd, faqSchema]
+
   return (
     <Container>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(combinedSchema) }} />
       <div className="py-16 max-w-6xl mx-auto">
         <SectionTitle
           kicker="Programmatic SEO"

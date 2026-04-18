@@ -39,6 +39,7 @@ export default function OpenClawPage(props: { params: { lang: string } }) {
   const coreLinks = getCoreSecurityLinks(locale)
   const showGeoCityHub = locale === "de" || locale === "en"
   const pageUrl = `${prefix}/openclaw`
+  const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
   const webPageJsonLd = {
     "@context": "https://schema.org",
     "@type": "WebPage",
@@ -70,10 +71,31 @@ export default function OpenClawPage(props: { params: { lang: string } }) {
     ],
   }
 
+  // GEO-DOMINATION ROUND 7: BreadcrumbList Schema for AI Engines
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: locale === "de" ? "Home" : "Home",
+        item: `${SITE_URL}/${locale}`
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: locale === "de" ? "OpenClaw" : "OpenClaw",
+        item: `${SITE_URL}/${locale}/openclaw`
+      }
+    ]
+  }
+
+  const combinedSchema = [webPageJsonLd, faqJsonLd, breadcrumbJsonLd]
+
   return (
     <main className="py-14 border-b border-white/5" style={{ background: "var(--surface-0)" }}>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageJsonLd) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(combinedSchema) }} />
       <Container>
         <div className="mx-auto max-w-4xl space-y-8">
           <header className="space-y-4">
@@ -181,6 +203,51 @@ export default function OpenClawPage(props: { params: { lang: string } }) {
               </div>
             </section>
           ) : null}
+
+          {/* INTERNAL LINKING BRUTAL ROUND 7: Mycelium Kreislauf */}
+          <section className="rounded-2xl border border-white/10 bg-black/20 p-6 mt-6">
+            <h2 className="text-lg font-bold text-white mb-4 text-center">
+              {locale === "de" ? "🍄 Mycelium Kreislauf — Interne Verlinkungen" : "🍄 Mycelium Circle — Internal Links"}
+            </h2>
+            <div className="grid sm:grid-cols-2 gap-4">
+              <Link href={`${prefix}/roast-my-moltbot`} className="group bg-gradient-to-br from-red-900/30 to-[#0a0a0a] p-4 rounded-xl border border-red-700/50 hover:border-red-500 transition-all">
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl">🔥</span>
+                  <div>
+                    <div className="font-semibold text-red-400 group-hover:text-red-300">{locale === "de" ? "Roast My Moltbot" : "Roast My Moltbot"}</div>
+                    <div className="text-xs text-gray-400">{locale === "de" ? "Kostenloser Security-Roast" : "Free security roast"}</div>
+                  </div>
+                </div>
+              </Link>
+              <Link href={`${prefix}/check`} className="group bg-gradient-to-br from-cyan-900/30 to-[#0a0a0a] p-4 rounded-xl border border-cyan-700/50 hover:border-cyan-500 transition-all">
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl">🛡️</span>
+                  <div>
+                    <div className="font-semibold text-cyan-400 group-hover:text-cyan-300">{locale === "de" ? "Security Check" : "Security Check"}</div>
+                    <div className="text-xs text-gray-400">{locale === "de" ? "Claw Score in 30 Sekunden" : "Claw Score in 30 seconds"}</div>
+                  </div>
+                </div>
+              </Link>
+              <Link href={`${prefix}/academy`} className="group bg-gradient-to-br from-purple-900/30 to-[#0a0a0a] p-4 rounded-xl border border-purple-700/50 hover:border-purple-500 transition-all">
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl">🎓</span>
+                  <div>
+                    <div className="font-semibold text-purple-400 group-hover:text-purple-300">{locale === "de" ? "Academy" : "Academy"}</div>
+                    <div className="text-xs text-gray-400">{locale === "de" ? "Kurse & Zertifizierung" : "Courses & Certification"}</div>
+                  </div>
+                </div>
+              </Link>
+              <Link href={`${prefix}/solutions`} className="group bg-gradient-to-br from-emerald-900/30 to-[#0a0a0a] p-4 rounded-xl border border-emerald-700/50 hover:border-emerald-500 transition-all">
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl">🏢</span>
+                  <div>
+                    <div className="font-semibold text-emerald-400 group-hover:text-emerald-300">{locale === "de" ? "Solutions" : "Solutions"}</div>
+                    <div className="text-xs text-gray-400">{locale === "de" ? "Enterprise Lösungen" : "Enterprise solutions"}</div>
+                  </div>
+                </div>
+              </Link>
+            </div>
+          </section>
 
           <nav className="text-sm text-zinc-400 flex flex-wrap gap-4">
             <Link href={coreLinks.methodology} className="hover:text-cyan-300">

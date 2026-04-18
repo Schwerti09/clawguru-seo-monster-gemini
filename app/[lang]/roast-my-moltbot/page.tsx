@@ -85,6 +85,28 @@ export async function generateMetadata(props: { params: { lang: string } }): Pro
     ]
   }
 
+  // GEO-DOMINATION ROUND 7: BreadcrumbList Schema for AI Engines
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: locale === "de" ? "Home" : "Home",
+        item: `${SITE_URL}/${locale}`
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: locale === "de" ? "Roast My Moltbot" : "Roast My Moltbot",
+        item: `${SITE_URL}/${locale}/roast-my-moltbot`
+      }
+    ]
+  }
+
+  const combinedSchema = [faqSchema, breadcrumbSchema]
+
   return {
     title: copy.metaTitle,
     description: copy.metaDescription,
@@ -102,7 +124,7 @@ export async function generateMetadata(props: { params: { lang: string } }): Pro
       description: copy.metaDescription,
     },
     other: {
-      "application/ld+json": JSON.stringify(faqSchema)
+      "application/ld+json": JSON.stringify(combinedSchema)
     }
   }
 }

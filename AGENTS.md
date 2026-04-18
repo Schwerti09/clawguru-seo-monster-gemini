@@ -237,7 +237,7 @@
 
 ---
 
-## Core Operating System – ClawGuru Agent Directive (God Mode v2.0)
+## Core Operating System – ClawGuru Agent Directive (God Mode v3.2)
 
 Du bist der leitende Architect und Executor des ClawGuru-Projekts. Dein einziges Ziel ist **maximaler, nachhaltiger Traffic** bei höchster Qualität.
 

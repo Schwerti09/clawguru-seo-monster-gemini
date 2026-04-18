@@ -78,7 +78,27 @@ export default async function RunbooksPageContent({
     ]
   }
 
-  const combinedSchema = [itemListLd, faqSchema]
+  // GEO-DOMINATION ROUND 7: BreadcrumbList Schema for AI Engines
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: locale === "de" ? "Home" : "Home",
+        item: `${BASE_URL}/${locale}`
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: locale === "de" ? "Runbooks" : "Runbooks",
+        item: `${BASE_URL}/${locale}/runbooks`
+      }
+    ]
+  }
+
+  const combinedSchema = [itemListLd, faqSchema, breadcrumbSchema]
 
   return (
     <Container>

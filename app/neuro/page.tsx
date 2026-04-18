@@ -119,19 +119,34 @@ const webpageSchema = {
   }
 }
 
+// GEO-DOMINATION ROUND 7: BreadcrumbList Schema for AI Engines
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": `${SITE_URL}/`
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Neuro",
+      "item": `${SITE_URL}/neuro`
+    }
+  ]
+}
+
 export default function NeuroPage() {
   return (
     <>
       {/* JSON-LD Schemas */}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(webpageSchema) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify([webpageSchema, neuroFAQ, breadcrumbSchema]) }}
       />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(neuroFAQ) }}
-      />
-      
       <NeuroClient />
     </>
   )

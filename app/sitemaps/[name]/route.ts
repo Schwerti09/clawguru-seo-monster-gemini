@@ -187,8 +187,15 @@ export async function GET(
         loc: `${base}/${locale}/runbooks/${hub}`,
         lastmod,
         changefreq: "weekly",
-        priority: "0.85",
+        priority: "0.80",
       }))
+      // Roadmap page
+      const roadmapUrl = {
+        loc: `${base}/${locale}/roadmap`,
+        lastmod,
+        changefreq: "weekly",
+        priority: "0.82",
+      }
       const geoOpenClawSprintUrls: { loc: string; lastmod: string; changefreq: string; priority: string }[] = []
       // Moltbot subpages (163 pages × all locales)
       const MOLTBOT_SLUGS = [
@@ -379,6 +386,7 @@ export async function GET(
         { loc: `${base}/${locale}/emergency`, lastmod, changefreq: "weekly", priority: "0.85" },
         { loc: `${base}/${locale}/copilot`, lastmod, changefreq: "weekly", priority: "0.85" },
         { loc: `${base}/${locale}/runbooks`, lastmod, changefreq: "daily", priority: "0.9" },
+        roadmapUrl,
         { loc: `${base}/${locale}/openclaw`, lastmod, changefreq: "weekly", priority: "0.9" },
         { loc: `${base}/${locale}/oracle`, lastmod, changefreq: "weekly", priority: "0.87" },
         { loc: `${base}/${locale}/neuro`, lastmod, changefreq: "weekly", priority: "0.87" },

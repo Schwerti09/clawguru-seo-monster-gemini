@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     authors: [{ name: "ClawGuru Security Team" }],
     openGraph: { title, description, type: "article", url: pageUrl, images: ["/og-image.png"] },
     alternates: buildLocalizedAlternates(locale, PATH),
-    robots: "index, follow",
+    robots: { index: false, follow: true },
   }
 }
 

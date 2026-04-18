@@ -21,12 +21,13 @@ export async function generateStaticParams() {
 export async function generateMetadata(props: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(props.params.lang as Locale) ? props.params.lang : "de") as Locale
   const copy = getOpenClawCopy(locale)
+  const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
   return {
     title: copy.title,
     description: copy.description,
     alternates: buildLocalizedAlternates(locale, "/openclaw"),
     openGraph: {
-      images: ["/og-image.png"], title: copy.title, description: copy.description, type: "website" },
+      images: ["/og-image.png"], title: copy.title, description: copy.description, type: "website", url: `${SITE_URL}/${locale}/openclaw` },
   }
 }
 
@@ -110,6 +111,47 @@ export default function OpenClawPage(props: { params: { lang: string } }) {
             </ol>
             <p className="mt-4 text-xs text-zinc-500">{copy.note}</p>
           </section>
+
+          {/* CONVERSION WARFARE ROUND 4: Aggressive CTAs with Urgency */}
+          <div className="space-y-4">
+            <a href={coreLinks.check} className="block bg-gradient-to-r from-cyan-600 to-cyan-500 border border-cyan-400 rounded-xl p-6 hover:from-cyan-500 hover:to-cyan-400 transition-all relative">
+              <div className="absolute -top-3 -right-3 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full animate-pulse">
+                {locale === 'de' ? 'JETZT' : 'NOW'}
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="text-4xl">🛡️</div>
+                <div>
+                  <div className="font-bold text-white text-lg">
+                    {locale === 'de' ? '🛡️ Vollständiger Security-Check' : '🛡️ Full Security Check'}
+                  </div>
+                  <div className="text-cyan-100 text-sm">
+                    {locale === 'de' ? 'Deine gesamte Infrastruktur in 30 Sekunden prüfen' : 'Check your entire infrastructure in 30 seconds'}
+                  </div>
+                </div>
+              </div>
+            </a>
+
+            <div className="grid sm:grid-cols-2 gap-4">
+              <a href={`${prefix}/runbooks`} className="block bg-gray-800 border border-gray-700 rounded-xl p-4 hover:border-cyan-400/50 transition-all">
+                <div className="flex items-center gap-3">
+                  <div className="text-2xl">📚</div>
+                  <div>
+                    <div className="font-semibold text-cyan-400">{locale === 'de' ? 'Security Runbooks' : 'Security Runbooks'}</div>
+                    <div className="text-xs text-gray-400">{locale === 'de' ? '1,000+ Fix-Runbooks' : '1,000+ fix runbooks'}</div>
+                  </div>
+                </div>
+              </a>
+              <a href={`${prefix}/roast-my-moltbot`} className="block bg-gray-800 border border-gray-700 rounded-xl p-4 hover:border-amber-400/50 transition-all">
+                <div className="flex items-center gap-3">
+                  <div className="text-2xl">🔥</div>
+                  <div>
+                    <div className="font-semibold text-amber-400">{locale === 'de' ? 'Roast My Moltbot' : 'Roast My Moltbot'}</div>
+                    <div className="text-xs text-gray-400">{locale === 'de' ? 'Kostenloser Security-Roast' : 'Free security roast'}</div>
+                  </div>
+                </div>
+              </a>
+            </div>
+          </div>
 
           {showGeoCityHub ? (
             <section className="rounded-2xl border border-cyan-500/25 bg-cyan-500/5 p-6">

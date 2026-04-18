@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { Trophy, TrendingUp, Users, Share2, Loader2 } from "lucide-react"
 
 interface PageProps { params: { lang: string } }
 
@@ -31,20 +32,60 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 }
 
-export default function RoastHallOfFamePage({ params }: PageProps) {
+async function getRoastStatistics() {
+  try {
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
+    const response = await fetch(`${baseUrl}/api/roast-statistics`, {
+      next: { revalidate: 60 }, // Cache for 60 seconds
+    })
+    if (!response.ok) {
+      return null
+    }
+    return await response.json()
+  } catch (error) {
+    console.error("Failed to fetch roast statistics:", error)
+    return null
+  }
+}
+
+export default async function RoastHallOfFamePage({ params }: PageProps) {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
+  const stats = await getRoastStatistics()
 
   return (
     <div className="min-h-screen bg-[#0a0a0a]">
       <div className="max-w-4xl mx-auto px-4 py-12">
+        {/* VIRAL: Stats Banner */}
+        <div className="mb-6 flex flex-wrap justify-center gap-3">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-900/40 border border-green-700/50 rounded-full text-sm">
+            <Trophy className="w-4 h-4 text-green-400" />
+            <span className="text-green-200">
+              {stats ? `🏆 ${stats.eliteStacks} Elite Stacks` : <Loader2 className="w-4 h-4 animate-spin" />}
+            </span>
+          </div>
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-cyan-900/40 border border-cyan-700/50 rounded-full text-sm">
+            <Users className="w-4 h-4 text-cyan-400" />
+            <span className="text-cyan-200">
+              {stats ? `📈 ${stats.totalRoasts.toLocaleString()} Roasts total` : <Loader2 className="w-4 h-4 animate-spin" />}
+            </span>
+          </div>
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-amber-900/40 border border-amber-700/50 rounded-full text-sm">
+            <Share2 className="w-4 h-4 text-amber-400" />
+            <span className="text-amber-200">
+              {stats ? `🔥 Ø Score: ${stats.avgScore}/100` : <Loader2 className="w-4 h-4 animate-spin" />}
+            </span>
+          </div>
+        </div>
+
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-4 text-gray-100">{isDE ? "Roast Hall of Fame" : "Roast Hall of Fame"}</h1>
-          <p className="text-lg text-gray-300 mb-4">
+          <p className="text-lg text-gray-300 mb-2">
             {isDE
               ? "Die härtesten Moltbot-Setups. Nur Score, kein Name. Verdient wird hier nichts außer Respekt."
               : "The hardest Moltbot setups. Score only, no names. Earned respect, not hype."}
           </p>
+          <p className="text-sm text-amber-400 font-medium">{isDE ? "→ Hol dir den Badge und zeig, wer wirklich liefert" : "→ Get the badge and show who actually delivers"}</p>
         </div>
 
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
@@ -110,6 +151,33 @@ export default function RoastHallOfFamePage({ params }: PageProps) {
             ))}
           </div>
         </section>
+
+        {/* Top 10 Leaderboard */}
+        {stats?.topScores && stats.topScores.length > 0 && (
+          <section className="mb-10">
+            <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Top 10 Elite Stacks" : "Top 10 Elite Stacks"}</h2>
+            <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
+              <div className="space-y-3">
+                {stats.topScores.map((entry: any, index: number) => (
+                  <div key={index} className="flex items-center justify-between py-2 border-b border-gray-700 last:border-0">
+                    <div className="flex items-center gap-4">
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
+                        index === 0 ? "bg-amber-500 text-black" :
+                        index === 1 ? "bg-gray-400 text-black" :
+                        index === 2 ? "bg-amber-700 text-white" :
+                        "bg-gray-700 text-gray-300"
+                      }`}>
+                        {index + 1}
+                      </div>
+                      <div className="text-sm text-gray-300 max-w-xs truncate">{entry.stack_summary}</div>
+                    </div>
+                    <div className="text-2xl font-bold text-cyan-400">{entry.score}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further resources"}</h2>

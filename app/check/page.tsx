@@ -86,6 +86,59 @@ export default function CheckPage() {
           <EmailCapture locale={locale} source="check_page" variant="card" />
         </div>
 
+        {/* CONVERSION WARFARE ROUND 4: Aggressive CTAs with Urgency */}
+        <div className="mt-8 max-w-4xl space-y-4">
+          <a
+            href={`${prefix}/runbooks`}
+            onClick={() => trackEvent("cta_click", { locale, target: "runbooks", source: "check_page_cta" })}
+            className="block bg-gradient-to-r from-cyan-600 to-cyan-500 border border-cyan-400 rounded-xl p-6 hover:from-cyan-500 hover:to-cyan-400 transition-all relative"
+          >
+            <div className="absolute -top-3 -right-3 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full animate-pulse">
+              {locale === 'de' ? 'JETZT' : 'NOW'}
+            </div>
+            <div className="flex items-center gap-4">
+              <div className="text-4xl">📚</div>
+              <div>
+                <div className="font-bold text-white text-lg">
+                  {locale === 'de' ? '📚 Security Runbooks' : '📚 Security Runbooks'}
+                </div>
+                <div className="text-cyan-100 text-sm">
+                  {locale === 'de' ? '1,000+ AI-generierte Fix-Runbooks für deine Probleme' : '1,000+ AI-generated fix runbooks for your issues'}
+                </div>
+              </div>
+            </div>
+          </a>
+
+          <div className="grid sm:grid-cols-2 gap-4">
+            <a
+              href={`${prefix}/roast-my-moltbot`}
+              onClick={() => trackEvent("cta_click", { locale, target: "roast-moltbot", source: "check_page_cta" })}
+              className="block bg-gray-800 border border-gray-700 rounded-xl p-4 hover:border-amber-500/50 transition-all"
+            >
+              <div className="flex items-center gap-3">
+                <div className="text-2xl">🔥</div>
+                <div>
+                  <div className="font-semibold text-amber-400">{locale === 'de' ? 'Roast My Moltbot' : 'Roast My Moltbot'}</div>
+                  <div className="text-xs text-gray-400">{locale === 'de' ? 'Kostenloser Security-Roast' : 'Free security roast'}</div>
+                </div>
+              </div>
+            </a>
+            <a
+              href={`${prefix}/openclaw`}
+              onClick={() => trackEvent("cta_click", { locale, target: "openclaw", source: "check_page_cta" })}
+              className="block bg-gray-800 border border-gray-700 rounded-xl p-4 hover:border-green-500/50 transition-all"
+            >
+              <div className="flex items-center gap-3">
+                <div className="text-2xl">🛡️</div>
+                <div>
+                  <div className="font-semibold text-green-400">{locale === 'de' ? 'OpenClaw' : 'OpenClaw'}</div>
+                  <div className="text-xs text-gray-400">{locale === 'de' ? 'Self-Hosted Security Framework' : 'Self-hosted security framework'}</div>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+
         {/* Proof Bullets */}
         <section className="mt-10 max-w-4xl">
           <h2 className="text-xl font-bold text-gray-100 mb-5">{c.proof_heading}</h2>
@@ -187,6 +240,48 @@ export default function CheckPage() {
             </a>
           </div>
         </section>
+
+        {/* TECHNICAL SEO DOMINATION ROUND 3: Strong Internal Links to High-Value Content */}
+        <section className="mt-8 rounded-2xl border border-cyan-900/30 bg-cyan-950/10 p-6 max-w-4xl">
+          <h3 className="text-lg font-bold text-cyan-300 mb-4">
+            {locale === 'de' ? '🚀 Weiterführende Ressourcen' : '🚀 Further Resources'}
+          </h3>
+          <div className="grid gap-3 sm:grid-cols-2">
+            <a
+              href={`${prefix}/runbooks`}
+              onClick={() => trackEvent("resource_link_click", { locale, target: "runbooks", source: "check_resources" })}
+              className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:border-cyan-500/50 transition-colors"
+            >
+              <div className="font-semibold text-cyan-400">{locale === 'de' ? '📚 Security Runbooks' : '📚 Security Runbooks'}</div>
+              <div className="text-sm text-gray-300">{locale === 'de' ? '1,000+ AI-generierte Fix-Runbooks' : '1,000+ AI-generated fix runbooks'}</div>
+            </a>
+            <a
+              href={`${prefix}/roast-my-moltbot`}
+              onClick={() => trackEvent("resource_link_click", { locale, target: "roast-moltbot", source: "check_resources" })}
+              className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:border-amber-500/50 transition-colors"
+            >
+              <div className="font-semibold text-amber-400">{locale === 'de' ? '🔥 Roast My Moltbot' : '🔥 Roast My Moltbot'}</div>
+              <div className="text-sm text-gray-300">{locale === 'de' ? 'Kostenloser Security-Roast' : 'Free security roast'}</div>
+            </a>
+            <a
+              href={`${prefix}/openclaw`}
+              onClick={() => trackEvent("resource_link_click", { locale, target: "openclaw", source: "check_resources" })}
+              className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:border-green-500/50 transition-colors"
+            >
+              <div className="font-semibold text-green-400">{locale === 'de' ? '🛡️ OpenClaw' : '🛡️ OpenClaw'}</div>
+              <div className="text-sm text-gray-300">{locale === 'de' ? 'Self-Hosted Security Framework' : 'Self-hosted security framework'}</div>
+            </a>
+            <a
+              href={`${prefix}/moltbot-hardening`}
+              onClick={() => trackEvent("resource_link_click", { locale, target: "moltbot-hardening", source: "check_resources" })}
+              className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:border-purple-500/50 transition-colors"
+            >
+              <div className="font-semibold text-purple-400">{locale === 'de' ? '🤖 Moltbot Hardening' : '🤖 Moltbot Hardening'}</div>
+              <div className="text-sm text-gray-300">{locale === 'de' ? 'AI-Agent Security Guide' : 'AI-agent security guide'}</div>
+            </a>
+          </div>
+        </section>
+
         <section className="mt-8 rounded-2xl border border-white/10 bg-black/20 p-6 max-w-4xl">
           <h3 className="text-lg font-bold text-white">
             {c.faq_title}

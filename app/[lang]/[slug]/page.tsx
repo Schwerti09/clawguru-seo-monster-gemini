@@ -196,7 +196,7 @@ export async function generateMetadata({ params }: GeoVariantPageProps): Promise
           ])
         ),
       },
-      robots: 'index, follow',
+      robots: 'noindex, follow',
     };
   }
 
@@ -307,7 +307,7 @@ export default async function GeoVariantPage({ params }: GeoVariantPageProps) {
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <a 
-                href={`/${lang}/securitycheck`}
+                href={`/${lang}/check`}
                 className="block bg-gray-800 rounded-lg p-6 border border-gray-700 hover:border-gray-600 transition-colors"
               >
                 <div className="font-semibold text-cyan-400 mb-2">
@@ -482,7 +482,7 @@ roleRef:
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <a 
-              href={`/${lang}/securitycheck`}
+              href={`/${lang}/check`}
               className="block bg-gray-800 rounded-lg p-6 border border-gray-700 hover:border-gray-600 transition-colors"
             >
               <div className="font-semibold text-cyan-400 mb-2">

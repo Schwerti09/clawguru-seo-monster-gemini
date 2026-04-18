@@ -631,6 +631,42 @@ export default function OracleClient() {
           </div>
         </section>
 
+        {/* ── MYCELIUM KREISLAUF ─────────────────────────────────────────────── */}
+        <section className="px-4 mb-12">
+          <div className="max-w-3xl mx-auto">
+            <div className="text-center mb-6">
+              <div className="text-xs font-mono uppercase tracking-widest mb-2" style={{ color: "#00ff9d" }}>
+                Mycelium Kreislauf
+              </div>
+              <h2 className="text-xl font-bold" style={{ color: "rgba(255,255,255,0.9)" }}>
+                Connected Intelligence
+              </h2>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              <a href="/de/summon" className="rounded-xl p-4 border text-center transition-all hover:border-[#00ff9d]" style={{ background: "rgba(10,10,14,0.8)", borderColor: "rgba(255,255,255,0.08)" }}>
+                <div className="text-2xl mb-2">⚡</div>
+                <div className="text-sm font-medium" style={{ color: "rgba(255,255,255,0.9)" }}>Summon AI</div>
+                <div className="text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>Execute</div>
+              </a>
+              <a href="/de/intel" className="rounded-xl p-4 border text-center transition-all hover:border-[#00b8ff]" style={{ background: "rgba(10,10,14,0.8)", borderColor: "rgba(255,255,255,0.08)" }}>
+                <div className="text-2xl mb-2">📡</div>
+                <div className="text-sm font-medium" style={{ color: "rgba(255,255,255,0.9)" }}>Intel Feed</div>
+                <div className="text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>Live Data</div>
+              </a>
+              <a href="/de/neuro" className="rounded-xl p-4 border text-center transition-all hover:border-[#b464ff]" style={{ background: "rgba(10,10,14,0.8)", borderColor: "rgba(255,255,255,0.08)" }}>
+                <div className="text-2xl mb-2">🧠</div>
+                <div className="text-sm font-medium" style={{ color: "rgba(255,255,255,0.9)" }}>Neuro</div>
+                <div className="text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>Pattern</div>
+              </a>
+              <a href="/de/check" className="rounded-xl p-4 border text-center transition-all hover:border-[#ffc800]" style={{ background: "rgba(10,10,14,0.8)", borderColor: "rgba(255,255,255,0.08)" }}>
+                <div className="text-2xl mb-2">🛡️</div>
+                <div className="text-sm font-medium" style={{ color: "rgba(255,255,255,0.9)" }}>Security Check</div>
+                <div className="text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>Scan</div>
+              </a>
+            </div>
+          </div>
+        </section>
+
         {/* ── FOOTER ───────────────────────────────────────────────────────── */}
         <footer className="px-4 py-12 text-center">
           <div className="max-w-2xl mx-auto">

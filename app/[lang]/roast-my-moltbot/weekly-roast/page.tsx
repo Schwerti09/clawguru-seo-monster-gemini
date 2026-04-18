@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { Calendar, Trophy, Users, TrendingUp, Flame, Loader2 } from "lucide-react"
 
 interface PageProps { params: { lang: string } }
 
@@ -31,20 +32,68 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 }
 
-export default function WeeklyRoastPage({ params }: PageProps) {
+async function getRoastStatistics() {
+  try {
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
+    const response = await fetch(`${baseUrl}/api/roast-statistics`, {
+      next: { revalidate: 60 }, // Cache for 60 seconds
+    })
+    if (!response.ok) {
+      return null
+    }
+    return await response.json()
+  } catch (error) {
+    console.error("Failed to fetch roast statistics:", error)
+    return null
+  }
+}
+
+export default async function WeeklyRoastPage({ params }: PageProps) {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
+  const stats = await getRoastStatistics()
+
+  // Calculate current week number
+  const now = new Date()
+  const weekNumber = Math.ceil((now.getTime() - new Date(now.getFullYear(), 0, 1).getTime()) / (7 * 24 * 60 * 60 * 1000))
 
   return (
     <div className="min-h-screen bg-[#0a0a0a]">
       <div className="max-w-4xl mx-auto px-4 py-12">
+        {/* VIRAL: Weekly Stats Banner */}
+        <div className="mb-6 flex flex-wrap justify-center gap-3">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-amber-900/40 border border-amber-700/50 rounded-full text-sm">
+            <Calendar className="w-4 h-4 text-amber-400" />
+            <span className="text-amber-200">📅 KW {weekNumber} — Aktuelle Woche</span>
+          </div>
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-900/40 border border-green-700/50 rounded-full text-sm">
+            <Trophy className="w-4 h-4 text-green-400" />
+            <span className="text-green-200">
+              {stats ? `🏆 ${stats.roastsToday.toLocaleString()} Teilnehmer heute` : <Loader2 className="w-4 h-4 animate-spin" />}
+            </span>
+          </div>
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-cyan-900/40 border border-cyan-700/50 rounded-full text-sm">
+            <TrendingUp className="w-4 h-4 text-cyan-400" />
+            <span className="text-cyan-200">
+              {stats ? `📈 Ø Score: ${stats.avgScore}/100` : <Loader2 className="w-4 h-4 animate-spin" />}
+            </span>
+          </div>
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-red-900/40 border border-red-700/50 rounded-full text-sm">
+            <Flame className="w-4 h-4 text-red-400" />
+            <span className="text-red-200">
+              {stats && stats.topScores?.length > 0 ? `🔥 Leader: ${stats.topScores[0].score}/100` : <Loader2 className="w-4 h-4 animate-spin" />}
+            </span>
+          </div>
+        </div>
+
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-4 text-gray-100">{isDE ? "Weekly Moltbot Roast" : "Weekly Moltbot Roast"}</h1>
-          <p className="text-lg text-gray-300 mb-4">
+          <p className="text-lg text-gray-300 mb-2">
             {isDE
               ? "Jede Woche ein Score-Sprint. 30 Minuten Fixes, neue Badge, neuer Shareable Report."
               : "A weekly score sprint. 30 minutes of fixes, a new badge, and a shareable report."}
           </p>
+          <p className="text-sm text-amber-400 font-medium">{isDE ? "→ Diese Woche noch 3 Tage zum Mitmachen" : "→ 3 days left to join this week"}</p>
         </div>
 
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">

@@ -205,6 +205,53 @@ export interface Database {
           updated_at?: string
         }
       }
+      roast_results: {
+        Row: {
+          id: string
+          user_id: string | null
+          stack_summary: string
+          score: number
+          roast_level: 'mild' | 'medium' | 'spicy'
+          weaknesses: string[]
+          fixes: string[]
+          roast_text: string
+          top_roasts: string[]
+          locale: string
+          ip_address: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          user_id?: string | null
+          stack_summary: string
+          score: number
+          roast_level: 'mild' | 'medium' | 'spicy'
+          weaknesses: string[]
+          fixes: string[]
+          roast_text: string
+          top_roasts: string[]
+          locale: string
+          ip_address?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string | null
+          stack_summary?: string
+          score?: number
+          roast_level?: 'mild' | 'medium' | 'spicy'
+          weaknesses?: string[]
+          fixes?: string[]
+          roast_text?: string
+          top_roasts?: string[]
+          locale?: string
+          ip_address?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+      }
     }
     Views: {
       [_ in never]: never

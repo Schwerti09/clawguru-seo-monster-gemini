@@ -18,6 +18,64 @@ export async function generateMetadata({ params }: { params: { lang: string } })
   const t = dict.academy
   const pageUrl = `${SITE_URL}/${locale}/academy`
 
+  // GEO-DOMINATION: FAQPage Schema for AI Engines
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: [
+      {
+        "@type": "Question",
+        name: locale === "de" ? "Was ist die ClawGuru Academy?" : "What is the ClawGuru Academy?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: locale === "de" 
+            ? "Die ClawGuru Academy ist eine kostenlose Security-Lernplattform mit praktischen Kursen, Runbooks und Zertifizierungen für Self-Hosted Security, AI-Agent Hardening und Compliance."
+            : "The ClawGuru Academy is a free security learning platform with practical courses, runbooks, and certifications for self-hosted security, AI agent hardening, and compliance."
+        }
+      },
+      {
+        "@type": "Question",
+        name: locale === "de" ? "Sind die Academy-Kurse kostenlos?" : "Are the Academy courses free?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: locale === "de"
+            ? "Ja, alle Academy-Kurse sind 100% kostenlos. Keine versteckten Kosten, keine Credit Card erforderlich."
+            : "Yes, all Academy courses are 100% free. No hidden costs, no credit card required."
+        }
+      },
+      {
+        "@type": "Question",
+        name: locale === "de" ? "Wie lange dauert ein Academy-Kurs?" : "How long does an Academy course take?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: locale === "de"
+            ? "Die meisten Kurse dauern 30-60 Minuten. Fortgeschrittene Tracks können 8-18 Stunden benötigen. Alle Kurse sind selbstgesteuert."
+            : "Most courses take 30-60 minutes. Advanced tracks may require 8-18 hours. All courses are self-paced."
+        }
+      }
+    ]
+  }
+
+  // GEO-DOMINATION: BreadcrumbList Schema for AI Engines
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: locale === "de" ? "Home" : "Home",
+        item: `${SITE_URL}/${locale}`
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: locale === "de" ? "Academy" : "Academy",
+        item: `${SITE_URL}/${locale}/academy`
+      }
+    ]
+  }
+
   return {
     title: t.meta_title,
     description: t.meta_description,
@@ -38,6 +96,9 @@ export async function generateMetadata({ params }: { params: { lang: string } })
     },
     alternates: buildLocalizedAlternates(locale, "/academy"),
     robots: "index, follow",
+    other: {
+      "application/ld+json": JSON.stringify([faqSchema, breadcrumbSchema])
+    }
   }
 }
 
@@ -394,6 +455,75 @@ export default async function AcademyPage({ params }: { params: { lang: string }
           </div>
         </section>
 
+        {/* AGGRESSIVE INTERNAL LINKING - Total War Round 6 */}
+        <section className="py-20 bg-gray-900/50">
+          <div className="container mx-auto px-4">
+            <div className="max-w-6xl mx-auto">
+              <h2 className="text-3xl font-bold text-gray-100 mb-8 text-center">
+                {locale === "de" ? "Mycelium Kreislauf — Interne Verlinkungen" : "Mycelium Circle — Internal Links"}
+              </h2>
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <Link
+                  href={`/${locale}/roast-my-moltbot`}
+                  className="group bg-gradient-to-br from-red-900/30 to-[#0a0a0a] p-6 rounded-xl border border-red-700/50 hover:border-red-500 transition-all duration-300"
+                >
+                  <div className="flex items-center gap-3 mb-3">
+                    <span className="text-3xl">🔥</span>
+                    <h3 className="text-xl font-bold text-red-400 group-hover:text-red-300 transition-colors">
+                      {locale === "de" ? "Roast My Moltbot" : "Roast My Moltbot"}
+                    </h3>
+                  </div>
+                  <p className="text-gray-400 text-sm">
+                    {locale === "de" ? "Kostenloser Security-Roast in 30 Sekunden" : "Free security roast in 30 seconds"}
+                  </p>
+                </Link>
+                <Link
+                  href={`/${locale}/check`}
+                  className="group bg-gradient-to-br from-cyan-900/30 to-[#0a0a0a] p-6 rounded-xl border border-cyan-700/50 hover:border-cyan-500 transition-all duration-300"
+                >
+                  <div className="flex items-center gap-3 mb-3">
+                    <span className="text-3xl">🛡️</span>
+                    <h3 className="text-xl font-bold text-cyan-400 group-hover:text-cyan-300 transition-colors">
+                      {locale === "de" ? "Security Check" : "Security Check"}
+                    </h3>
+                  </div>
+                  <p className="text-gray-400 text-sm">
+                    {locale === "de" ? "Claw Score & Risiken in 30 Sekunden" : "Claw Score & risks in 30 seconds"}
+                  </p>
+                </Link>
+                <Link
+                  href={`/${locale}/runbooks`}
+                  className="group bg-gradient-to-br from-purple-900/30 to-[#0a0a0a] p-6 rounded-xl border border-purple-700/50 hover:border-purple-500 transition-all duration-300"
+                >
+                  <div className="flex items-center gap-3 mb-3">
+                    <span className="text-3xl">📚</span>
+                    <h3 className="text-xl font-bold text-purple-400 group-hover:text-purple-300 transition-colors">
+                      {locale === "de" ? "Security Runbooks" : "Security Runbooks"}
+                    </h3>
+                  </div>
+                  <p className="text-gray-400 text-sm">
+                    {locale === "de" ? "1,000+ fix runbooks für jede Situation" : "1,000+ fix runbooks for every situation"}
+                  </p>
+                </Link>
+                <Link
+                  href={`/${locale}/openclaw`}
+                  className="group bg-gradient-to-br from-green-900/30 to-[#0a0a0a] p-6 rounded-xl border border-green-700/50 hover:border-green-500 transition-all duration-300"
+                >
+                  <div className="flex items-center gap-3 mb-3">
+                    <span className="text-3xl">⚡</span>
+                    <h3 className="text-xl font-bold text-green-400 group-hover:text-green-300 transition-colors">
+                      {locale === "de" ? "OpenClaw" : "OpenClaw"}
+                    </h3>
+                  </div>
+                  <p className="text-gray-400 text-sm">
+                    {locale === "de" ? "Self-Hosted Security Framework" : "Self-hosted security framework"}
+                  </p>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* COMMUNITY & WISSEN AUS DER PRAXIS */}
         <section className="py-20 bg-gray-900/50">
           <div className="container mx-auto px-4">
@@ -441,9 +571,12 @@ export default async function AcademyPage({ params }: { params: { lang: string }
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                 <Link
-                  href="/check"
-                  className="group px-8 py-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold text-lg rounded-lg hover:from-green-600 hover:to-emerald-700 transition-all duration-300 shadow-lg shadow-green-500/30 hover:shadow-green-500/50"
+                  href={`/${locale}/check`}
+                  className="group relative px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold text-lg rounded-lg hover:from-cyan-600 hover:to-blue-700 transition-all duration-300 shadow-lg shadow-cyan-500/30 hover:shadow-cyan-500/50"
                 >
+                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full animate-pulse">
+                    {locale === "de" ? "JETZT" : "NOW"}
+                  </span>
                   <span className="flex items-center gap-2">
                     {t.final_cta_check}
                     <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -452,15 +585,52 @@ export default async function AcademyPage({ params }: { params: { lang: string }
                   </span>
                 </Link>
                 <Link
-                  href="/downloads"
-                  className="px-8 py-4 border-2 border-green-500/50 text-green-400 font-bold text-lg rounded-lg hover:bg-green-9000/10 transition-all duration-300"
+                  href={`/${locale}/roast-my-moltbot`}
+                  className="group px-8 py-4 bg-gradient-to-r from-red-500 to-orange-600 text-white font-bold text-lg rounded-lg hover:from-red-600 hover:to-orange-700 transition-all duration-300 shadow-lg shadow-red-500/30 hover:shadow-red-500/50"
                 >
-                  {t.final_cta_downloads}
+                  <span className="flex items-center gap-2">
+                    {locale === "de" ? "Roast My Moltbot" : "Roast My Moltbot"}
+                    <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                    </svg>
+                  </span>
                 </Link>
               </div>
 
-              <div className="mt-12 text-gray-500 text-sm">
-                <p>{t.final_cta_note}</p>
+              {/* Secondary CTAs */}
+              <div className="mt-8 grid md:grid-cols-2 gap-4 max-w-2xl mx-auto">
+                <Link
+                  href={`/${locale}/runbooks`}
+                  className="group bg-gray-800 p-4 rounded-lg border border-gray-700 hover:border-purple-500 transition-all duration-300"
+                >
+                  <div className="flex items-center gap-2">
+                    <span className="text-2xl">📚</span>
+                    <div className="text-left">
+                      <div className="font-bold text-gray-100 group-hover:text-purple-400 transition-colors">
+                        {locale === "de" ? "Security Runbooks" : "Security Runbooks"}
+                      </div>
+                      <div className="text-xs text-gray-400">
+                        {locale === "de" ? "1,000+ fix runbooks" : "1,000+ fix runbooks"}
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+                <Link
+                  href={`/${locale}/openclaw`}
+                  className="group bg-gray-800 p-4 rounded-lg border border-gray-700 hover:border-green-500 transition-all duration-300"
+                >
+                  <div className="flex items-center gap-2">
+                    <span className="text-2xl">⚡</span>
+                    <div className="text-left">
+                      <div className="font-bold text-gray-100 group-hover:text-green-400 transition-colors">
+                        {locale === "de" ? "OpenClaw" : "OpenClaw"}
+                      </div>
+                      <div className="text-xs text-gray-400">
+                        {locale === "de" ? "Self-Hosted Security" : "Self-hosted security"}
+                      </div>
+                    </div>
+                  </div>
+                </Link>
               </div>
             </div>
           </div>

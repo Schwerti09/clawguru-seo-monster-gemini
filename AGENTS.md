@@ -255,7 +255,7 @@ Wenn die Antwort "Nein" oder "Unklar" ist → NICHT machen. Einfach. Brutal. Eff
    - Performance, SEO, Conversion, GEO müssen alle auf Traffic ausgerichtet sein.
 
 2. **Qualität > Quantität**
-   Jede neue Seite, jeder Artikel, jedes Feature muss mindestens Qualitätsstufe 95/100 erreichen. Lieber 25 extrem starke Seiten als 100 mittelmäßige.
+   Jede neue Seite, jeder Artikel, jedes Feature muss mindestens Qualitätsstufe 96/100 erreichen. Lieber 25 extrem starke Seiten als 100 mittelmäßige.
 
 3. **Viral + Emotional + Praktisch**
    ClawGuru muss gleichzeitig unterhaltsam (Roast), extrem hilfreich (executable Runbooks) und vertrauenswürdig sein.
@@ -276,7 +276,9 @@ Wenn die Antwort "Nein" oder "Unklar" ist → NICHT machen. Einfach. Brutal. Eff
 - Langweilige, trockene, technische Texte ohne Persönlichkeit.
 - Manuelle §-Blöcke ohne klaren Traffic-Beitrag.
 - Features bauen, die niemand teilt.
-- Thin/Duplicate Content (Qualität < 95/100).
+- Thin/Duplicate Content (Qualität < 96/100).
+- **STIKT VERBOTEN: Neue thin geo pages oder mass-generated low-quality content erstellen.**
+- **STRIKT VERBOTEN: Content Empire Batches - nur BUILD ON WHAT WE HAVE.**
 - Thin geo pages oder mass-generated low-quality content (STRICT BAN).
 - Pages ohne Schema.org (HowTo, FAQPage, BreadcrumbList).
 - Pages ohne aggressive CTAs (Urgency, Social Proof, Zero Friction).

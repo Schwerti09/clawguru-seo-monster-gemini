@@ -181,10 +181,102 @@ export default function SolutionsPage({ searchParams }: { searchParams?: { q?: s
           </p>
         </div>
 
-        <div className="mt-6 text-sm text-gray-500">
-          <a href={`${prefix}/runbooks`} className="hover:text-cyan-400">Runbook Library</a> ·{" "}
-          <a href={`${prefix}/tools`} className="hover:text-cyan-400">Security Tools</a> ·{" "}
-          <a href={`${prefix}/check`} className="hover:text-cyan-400">Security Check</a>
+        {/* AGGRESSIVE INTERNAL LINKING - Total War Round 6 */}
+        <div className="mt-16 py-12 bg-gray-900/50 rounded-2xl border border-gray-800">
+          <h3 className="text-2xl font-bold text-gray-100 mb-6 text-center">
+            {locale === "de" ? "Mycelium Kreislauf — Interne Verlinkungen" : "Mycelium Circle — Internal Links"}
+          </h3>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 max-w-6xl mx-auto px-4">
+            <a
+              href={`${prefix}/roast-my-moltbot`}
+              className="group bg-gradient-to-br from-red-900/30 to-[#0a0a0a] p-4 rounded-xl border border-red-700/50 hover:border-red-500 transition-all duration-300"
+            >
+              <div className="flex items-center gap-2 mb-2">
+                <span className="text-2xl">🔥</span>
+                <h4 className="text-lg font-bold text-red-400 group-hover:text-red-300 transition-colors">
+                  {locale === "de" ? "Roast My Moltbot" : "Roast My Moltbot"}
+                </h4>
+              </div>
+              <p className="text-gray-400 text-xs">
+                {locale === "de" ? "Kostenloser Security-Roast in 30 Sekunden" : "Free security roast in 30 seconds"}
+              </p>
+            </a>
+            <a
+              href={`${prefix}/check`}
+              className="group bg-gradient-to-br from-cyan-900/30 to-[#0a0a0a] p-4 rounded-xl border border-cyan-700/50 hover:border-cyan-500 transition-all duration-300"
+            >
+              <div className="flex items-center gap-2 mb-2">
+                <span className="text-2xl">🛡️</span>
+                <h4 className="text-lg font-bold text-cyan-400 group-hover:text-cyan-300 transition-colors">
+                  {locale === "de" ? "Security Check" : "Security Check"}
+                </h4>
+              </div>
+              <p className="text-gray-400 text-xs">
+                {locale === "de" ? "Claw Score & Risiken in 30 Sekunden" : "Claw Score & risks in 30 seconds"}
+              </p>
+            </a>
+            <a
+              href={`${prefix}/runbooks`}
+              className="group bg-gradient-to-br from-purple-900/30 to-[#0a0a0a] p-4 rounded-xl border border-purple-700/50 hover:border-purple-500 transition-all duration-300"
+            >
+              <div className="flex items-center gap-2 mb-2">
+                <span className="text-2xl">📚</span>
+                <h4 className="text-lg font-bold text-purple-400 group-hover:text-purple-300 transition-colors">
+                  {locale === "de" ? "Security Runbooks" : "Security Runbooks"}
+                </h4>
+              </div>
+              <p className="text-gray-400 text-xs">
+                {locale === "de" ? "1,000+ fix runbooks für jede Situation" : "1,000+ fix runbooks for every situation"}
+              </p>
+            </a>
+            <a
+              href={`${prefix}/academy`}
+              className="group bg-gradient-to-br from-green-900/30 to-[#0a0a0a] p-4 rounded-xl border border-green-700/50 hover:border-green-500 transition-all duration-300"
+            >
+              <div className="flex items-center gap-2 mb-2">
+                <span className="text-2xl">🎓</span>
+                <h4 className="text-lg font-bold text-green-400 group-hover:text-green-300 transition-colors">
+                  {locale === "de" ? "Academy" : "Academy"}
+                </h4>
+              </div>
+              <p className="text-gray-400 text-xs">
+                {locale === "de" ? "Kurse & Zertifizierung" : "Courses & Certification"}
+              </p>
+            </a>
+          </div>
+        </div>
+
+        {/* AGGRESSIVE CTA SECTION - Total War Round 6 */}
+        <div className="mt-16 py-12 bg-gradient-to-br from-cyan-900/30 via-[#0a0a0a] to-purple-900/30 rounded-2xl border border-gray-800">
+          <div className="max-w-4xl mx-auto px-4 text-center">
+            <h3 className="text-3xl font-bold text-gray-100 mb-4">
+              {locale === "de" ? "🎯 Starte jetzt" : "🎯 Get Started Now"}
+            </h3>
+            <p className="text-gray-400 mb-8">
+              {locale === "de" ? "Prüfe deinen Stack in 30 Sekunden oder lass ihn roasten" : "Check your stack in 30 seconds or get it roasted"}
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <a
+                href={`${prefix}/check`}
+                className="group relative px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold text-lg rounded-lg hover:from-cyan-600 hover:to-blue-700 transition-all duration-300 shadow-lg shadow-cyan-500/30 hover:shadow-cyan-500/50"
+              >
+                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full animate-pulse">
+                  {locale === "de" ? "JETZT" : "NOW"}
+                </span>
+                <span className="flex items-center gap-2">
+                  🛡️ {locale === "de" ? "Security Check" : "Security Check"}
+                </span>
+              </a>
+              <a
+                href={`${prefix}/roast-my-moltbot`}
+                className="group px-8 py-4 bg-gradient-to-r from-red-500 to-orange-600 text-white font-bold text-lg rounded-lg hover:from-red-600 hover:to-orange-700 transition-all duration-300 shadow-lg shadow-red-500/30 hover:shadow-red-500/50"
+              >
+                <span className="flex items-center gap-2">
+                  🔥 {locale === "de" ? "Roast My Moltbot" : "Roast My Moltbot"}
+                </span>
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </Container>

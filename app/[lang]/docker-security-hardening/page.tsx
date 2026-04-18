@@ -21,8 +21,8 @@ export async function generateMetadata({
 
   return {
     title: locale === "de" 
-      ? "Docker Security Hardening 2026 | Container Security Guide"
-      : "Docker Security Hardening 2026 | Container Security Guide",
+      ? "Docker Security Hardening 2026 — Container absichern"
+      : "Docker Security Hardening 2026 — Container absichern",
     description: locale === "de"
       ? "Docker Security Hardening: Rootless, seccomp, AppArmor, Cap-Drop, Image Scanning & CIS Benchmark. Enterprise Container Security."
       : "Docker Security Hardening: Rootless, seccomp, AppArmor, cap-drop, image scanning & CIS benchmark. Enterprise container security.",
@@ -101,7 +101,17 @@ export default function DockerSecurityPage({
 
       <div className="container mx-auto px-4 py-12">
         <div className="max-w-4xl mx-auto">
-          
+
+          <div className="bg-gray-800 border border-gray-700 p-4 rounded-lg mb-8">
+            <strong className="text-gray-100">Was ist Docker Security Hardening?</strong>
+            <p className="text-gray-300 mt-2">
+              Docker Security Hardening umfasst Rootless-Betrieb, seccomp-Profile, AppArmor und Capability-Dropping zur Absicherung von Containern. Ziel ist die Verhinderung von Container-Escape-Angriffen.
+            </p>
+            <p className="text-gray-400 text-sm mt-1">
+              70% aller Docker-Container laufen als root — ein kritisches Sicherheitsrisiko.
+            </p>
+          </div>
+
           <section className="mb-16">
             <h2 className="text-3xl font-bold text-gray-100 mb-6">Docker Security Grundlagen</h2>
             <p className="text-gray-200 text-lg mb-6">
@@ -138,6 +148,16 @@ export default function DockerSecurityPage({
               </div>
             </div>
           </section>
+
+          <div className="bg-gray-800 border border-cyan-700 p-5 rounded-lg mb-16">
+            <div className="text-center">
+              <h3 className="text-lg font-bold text-gray-100 mb-2">🔍 Prüf jetzt dein System — kostenloser Security-Check</h3>
+              <a href={coreLinks.check} className="inline-block px-6 py-3 bg-cyan-600 text-white rounded-lg font-bold hover:bg-cyan-500 transition-colors mb-2">
+                Kostenlos scannen →
+              </a>
+              <p className="text-sm text-gray-400">Kritische Lücken? Daypass (€9) zeigt dir die Fix-Schritte.</p>
+            </div>
+          </div>
 
           <section className="mb-16">
             <h2 className="text-3xl font-bold text-gray-100 mb-6">Rootless Docker</h2>
@@ -319,6 +339,7 @@ jobs:
               <a href={`${prefix}/openclaw-security-check`} className="rounded-lg border border-white/30 px-3 py-2 text-white hover:bg-white/10">OpenClaw Security Hub</a>
               <a href={`${prefix}/ai-agent-security`} className="rounded-lg border border-white/30 px-3 py-2 text-white hover:bg-white/10">AI Agent Security</a>
               <a href={`${prefix}/runbooks/security`} className="rounded-lg border border-white/30 px-3 py-2 text-white hover:bg-white/10">Security Runbooks</a>
+              <a href={`${prefix}/moltbot/security-framework`} className="rounded-lg border border-white/30 px-3 py-2 text-white hover:bg-white/10">Moltbot Security</a>
               <a href={coreLinks.methodology} className="rounded-lg border border-white/30 px-3 py-2 text-white hover:bg-white/10">Methodology</a>
             </div>
 

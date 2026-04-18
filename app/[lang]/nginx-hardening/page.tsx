@@ -21,8 +21,8 @@ export async function generateMetadata({
 
   return {
     title: locale === "de" 
-      ? "Nginx Hardening 2026 | Web Server Security Guide"
-      : "Nginx Hardening 2026 | Web Server Security Guide",
+      ? "Nginx Hardening 2026 — SSL, Header & Security-Konfiguration"
+      : "Nginx Hardening 2026 — SSL, Header & Security-Konfiguration",
     description: locale === "de"
       ? "Nginx Hardening: TLS 1.3, Security Headers, Rate Limiting, ModSecurity, Brotli, OCSP Stapling & CIS Benchmarks."
       : "Nginx hardening: TLS 1.3, security headers, rate limiting, ModSecurity, Brotli, OCSP stapling & CIS benchmarks.",
@@ -101,7 +101,17 @@ export default async function NginxHardeningPage({
 
       <div className="container mx-auto px-4 py-12">
         <div className="max-w-4xl mx-auto">
-          
+
+          <div className="bg-gray-800 border border-gray-700 p-4 rounded-lg mb-8">
+            <strong className="text-gray-100">Was ist Nginx Hardening?</strong>
+            <p className="text-gray-300 mt-2">
+              Nginx Hardening umfasst TLS 1.3 Enforcement, Security Headers, Rate Limiting und ModSecurity WAF zur Absicherung des Webservers. Ziel ist der Schutz vor DDoS, XSS und Clickjacking-Angriffen.
+            </p>
+            <p className="text-gray-400 text-sm mt-1">
+              80% aller Nginx-Installationen haben unsichere Default-Header.
+            </p>
+          </div>
+
           <section className="mb-16">
             <h2 className="text-3xl font-bold text-gray-100 mb-6">Nginx Security Grundlagen</h2>
             <p className="text-gray-200 text-lg mb-6">
@@ -138,6 +148,16 @@ export default async function NginxHardeningPage({
               </div>
             </div>
           </section>
+
+          <div className="bg-gray-800 border border-cyan-700 p-5 rounded-lg mb-16">
+            <div className="text-center">
+              <h3 className="text-lg font-bold text-gray-100 mb-2">🔍 Prüf jetzt dein System — kostenloser Security-Check</h3>
+              <a href={coreLinks.check} className="inline-block px-6 py-3 bg-cyan-600 text-white rounded-lg font-bold hover:bg-cyan-500 transition-colors mb-2">
+                Kostenlos scannen →
+              </a>
+              <p className="text-sm text-gray-400">Kritische Lücken? Daypass (€9) zeigt dir die Fix-Schritte.</p>
+            </div>
+          </div>
 
           <section className="mb-16">
             <h2 className="text-3xl font-bold text-gray-100 mb-6">TLS 1.3 Konfiguration</h2>
@@ -293,6 +313,7 @@ location ~ \\.(css|js)$ {
               <a href={`${prefix}/openclaw-security-check`} className="rounded-lg border border-white/30 px-3 py-2 text-white hover:bg-white/10">OpenClaw Security Hub</a>
               <a href={`${prefix}/ai-agent-security`} className="rounded-lg border border-white/30 px-3 py-2 text-white hover:bg-white/10">AI Agent Security</a>
               <a href={`${prefix}/runbooks/security`} className="rounded-lg border border-white/30 px-3 py-2 text-white hover:bg-white/10">Security Runbooks</a>
+              <a href={`${prefix}/moltbot/security-framework`} className="rounded-lg border border-white/30 px-3 py-2 text-white hover:bg-white/10">Moltbot Security</a>
               <a href={coreLinks.methodology} className="rounded-lg border border-white/30 px-3 py-2 text-white hover:bg-white/10">Methodology</a>
             </div>
 

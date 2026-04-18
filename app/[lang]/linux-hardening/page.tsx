@@ -21,8 +21,8 @@ export async function generateMetadata({
 
   return {
     title: locale === "de" 
-      ? "Linux Hardening 2026 | Server Security & CIS Benchmarks"
-      : "Linux Hardening 2026 | Server Security & CIS Benchmarks",
+      ? "Linux Server absichern 2026 — Komplette Hardening-Checkliste"
+      : "Linux Server absichern 2026 — Komplette Hardening-Checkliste",
     description: locale === "de"
       ? "Linux Hardening: CIS Benchmarks, SELinux, AppArmor, Grsecurity, Kernel Hardening, Auditd & Compliance. Enterprise Linux Security."
       : "Linux hardening: CIS benchmarks, SELinux, AppArmor, grsecurity, kernel hardening, auditd & compliance. Enterprise Linux security.",
@@ -94,6 +94,16 @@ export default async function LinuxHardeningPage({
       <div className="container mx-auto px-4 py-12">
         <div className="max-w-4xl mx-auto">
 
+          <div className="bg-gray-800 border border-gray-700 p-4 rounded-lg mb-8">
+            <strong className="text-gray-100">Was ist Linux Hardening?</strong>
+            <p className="text-gray-300 mt-2">
+              Linux Hardening bezeichnet die systematische Absicherung von Linux-Servern durch Kernel-Security, SELinux/AppArmor und CIS Benchmarks. Ziel ist die Reduzierung der Angriffsfläche.
+            </p>
+            <p className="text-gray-400 text-sm mt-1">
+              80% aller Linux-Server haben unsichere Default-Konfigurationen.
+            </p>
+          </div>
+
           <section className="mb-16">
             <h2 className="text-3xl font-bold text-gray-100 mb-6">Linux Security Architecture</h2>
             <p className="text-gray-200 text-lg mb-6">
@@ -123,6 +133,16 @@ export default async function LinuxHardeningPage({
               </div>
             </div>
           </section>
+
+          <div className="bg-gray-800 border border-cyan-700 p-5 rounded-lg mb-16">
+            <div className="text-center">
+              <h3 className="text-lg font-bold text-gray-100 mb-2">🔍 Prüf jetzt dein System — kostenloser Security-Check</h3>
+              <a href={coreLinks.check} className="inline-block px-6 py-3 bg-cyan-600 text-white rounded-lg font-bold hover:bg-cyan-500 transition-colors mb-2">
+                Kostenlos scannen →
+              </a>
+              <p className="text-sm text-gray-400">Kritische Lücken? Daypass (€9) zeigt dir die Fix-Schritte.</p>
+            </div>
+          </div>
 
           <section className="mb-16">
             <h2 className="text-3xl font-bold text-gray-100 mb-6">Kernel Hardening (sysctl)</h2>

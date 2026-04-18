@@ -81,7 +81,7 @@ export default function OpenClawSecurityCheckPage(props: { params: { lang: strin
               {cro.lpAiTitle}
             </Link>
             <Link href={coreLinks.roastMyMoltbot} className="hover:text-cyan-300">
-              {cro.heroTertiary}
+              {cro.heroSecondaryCta}
             </Link>
           </nav>
         </div>

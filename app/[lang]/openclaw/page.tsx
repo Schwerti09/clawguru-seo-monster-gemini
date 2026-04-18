@@ -110,7 +110,7 @@ export default function OpenClawPage(props: { params: { lang: string } }) {
                 {copy.ctaSecondary}
               </Link>
               <Link href={coreLinks.roastMyMoltbot} className="rounded-xl border border-amber-400/35 px-5 py-3 text-sm font-semibold text-amber-100">
-                {cro.heroTertiary}
+                {cro.heroSecondaryCta}
               </Link>
             </div>
           </header>

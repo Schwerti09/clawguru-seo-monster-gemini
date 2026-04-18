@@ -31,7 +31,7 @@ export default function FinalCTASection({ locale, prefix = "", dict = {} }: Prop
             href={`${prefix}/roast-my-moltbot`}
             className="px-8 py-3 rounded-2xl border border-amber-400/35 hover:border-amber-300/55 font-bold text-amber-100 transition-all duration-300 text-center"
           >
-            {dict.final_cta_tertiary || cro.heroTertiary}
+            {dict.final_cta_tertiary || cro.heroSecondaryCta}
           </a>
         </div>
       </div>

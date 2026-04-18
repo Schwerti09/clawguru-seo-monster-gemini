@@ -66,7 +66,7 @@ export default function AIAgentSecurityPage(props: { params: { lang: string } })
               {copy.ctaSecondary}
             </Link>
             <Link href={coreLinks.roastMyMoltbot} className="rounded-xl border border-amber-400/40 px-5 py-3 text-sm font-semibold text-amber-100">
-              {cro.heroTertiary}
+              {cro.heroSecondaryCta}
             </Link>
             <Link href={coreLinks.methodology} className="rounded-xl border border-white/15 px-5 py-3 text-sm font-semibold text-white">
               {copy.methodologyLabel}
@@ -84,7 +84,7 @@ export default function AIAgentSecurityPage(props: { params: { lang: string } })
               {cro.lpMoltbotTitle}
             </Link>
             <Link href={coreLinks.roastMyMoltbot} className="hover:text-cyan-300">
-              {cro.heroTertiary}
+              {cro.heroSecondaryCta}
             </Link>
           </nav>
         </div>

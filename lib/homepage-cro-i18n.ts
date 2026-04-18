@@ -1,10 +1,11 @@
 import type { Locale } from "@/lib/i18n"
 
 type HomepageCroCopy = {
-  heroPrimary: string
-  heroSecondary: string
-  heroTertiary: string
-  heroNote: string
+  heroH1: string
+  heroSubtitle: string
+  heroPrimaryCta: string
+  heroSecondaryCta: string
+  heroTrustLine: string
   finalTitle: string
   finalSub: string
   finalPrimary: string
@@ -25,11 +26,11 @@ type HomepageCroCopy = {
 }
 
 const EN: HomepageCroCopy = {
-  heroPrimary: "Start security check",
-  heroSecondary: "Browse runbooks",
-  heroTertiary: "Roast My Moltbot — fix path in ~30s",
-  heroNote:
-    "Free check, no signup. Roast surfaces weak spots fast—then verify in your own environment. Not a penetration test.",
+  heroH1: "HTTP Security Score in 30 Seconds — Free. No Signup.",
+  heroSubtitle: "Enter your domain or IP. ClawGuru scans 40+ security headers and gives you a score with exact fix steps.",
+  heroPrimaryCta: "Analyze for free →",
+  heroSecondaryCta: "Roast my stack (30 sec.)",
+  heroTrustLine: "No account. No credit card. Instant results.",
   finalTitle: "Ready for real security operations?",
   finalSub: "Start now - risk-free. Productive in 5 minutes.",
   finalPrimary: "Start security check",
@@ -51,11 +52,11 @@ const EN: HomepageCroCopy = {
 
 const COPY: Partial<Record<Locale, Partial<HomepageCroCopy>>> = {
   de: {
-    heroPrimary: "Security Check starten",
-    heroSecondary: "Runbooks durchsuchen",
-    heroTertiary: "Roast My Moltbot — in ~30 s zum Fix-Pfad",
-    heroNote:
-      "Kostenloser Check ohne Signup. Roast zeigt Schwachstellen schnell—danach im eigenen Umfeld verifizieren. Kein Penetrationstest.",
+    heroH1: "HTTP Security Score in 30 Sekunden — kostenlos. Kein Signup.",
+    heroSubtitle: "Gib deine Domain oder IP ein. ClawGuru analysiert 40+ Security-Header und gibt dir einen Score mit konkreten Fix-Schritten. Kein Penetrationstest — du prüfst dein eigenes System.",
+    heroPrimaryCta: "Kostenlos analysieren →",
+    heroSecondaryCta: "Stack roasten (30 Sek.)",
+    heroTrustLine: "Kein Account. Keine Kreditkarte. Ergebnisse sofort.",
     finalTitle: "Bereit für echte Security Operations?",
     finalSub: "Jetzt starten - risikofrei. In 5 Minuten produktiv.",
     finalPrimary: "Security Check starten",
@@ -75,10 +76,11 @@ const COPY: Partial<Record<Locale, Partial<HomepageCroCopy>>> = {
     lpAiDesc: "Von exponierten Tools zu messbaren Controls",
   },
   es: {
-    heroPrimary: "Iniciar security check",
-    heroSecondary: "Ver runbooks",
-    heroTertiary: "Roast my stack",
-    heroNote: "Check gratis sin registro. Señal heurística: verifica en tu propio entorno.",
+    heroH1: "Puntuación de seguridad HTTP en 30 segundos — Gratis. Sin registro.",
+    heroSubtitle: "Introduce tu dominio o IP. ClawGuru analiza 40+ cabeceras de seguridad y te da una puntuación con pasos de corrección exactos.",
+    heroPrimaryCta: "Analizar gratis →",
+    heroSecondaryCta: "Roast mi stack (30 seg.)",
+    heroTrustLine: "Sin cuenta. Sin tarjeta de crédito. Resultados instantáneos.",
     finalTitle: "¿Listo para operaciones de seguridad reales?",
     finalSub: "Empieza ahora - sin riesgo. Productivo en 5 minutos.",
     finalPrimary: "Iniciar security check",
@@ -87,10 +89,11 @@ const COPY: Partial<Record<Locale, Partial<HomepageCroCopy>>> = {
     lpHubSub: "Ve directo a páginas por intención: checks, hardening y rutas guiadas de fix.",
   },
   fr: {
-    heroPrimary: "Démarrer security check",
-    heroSecondary: "Voir runbooks",
-    heroTertiary: "Roast my stack",
-    heroNote: "Check gratuit sans inscription. Signal heuristique: vérifiez dans votre environnement.",
+    heroH1: "Score de sécurité HTTP en 30 secondes — Gratuit. Sans inscription.",
+    heroSubtitle: "Entrez votre domaine ou IP. ClawGuru analyse 40+ en-têtes de sécurité et vous donne un score avec des étapes de correction exactes.",
+    heroPrimaryCta: "Analyser gratuitement →",
+    heroSecondaryCta: "Roast mon stack (30 sec.)",
+    heroTrustLine: "Pas de compte. Pas de carte bancaire. Résultats instantanés.",
     finalTitle: "Prêt pour des opérations sécurité réelles ?",
     finalSub: "Démarrez maintenant - sans risque. Productif en 5 minutes.",
     finalPrimary: "Démarrer security check",
@@ -99,10 +102,11 @@ const COPY: Partial<Record<Locale, Partial<HomepageCroCopy>>> = {
     lpHubSub: "Accédez directement aux pages d'intention: checks, hardening et parcours de fix guidés.",
   },
   pt: {
-    heroPrimary: "Iniciar security check",
-    heroSecondary: "Explorar runbooks",
-    heroTertiary: "Roast my stack",
-    heroNote: "Check grátis sem cadastro. Sinal heurístico: valide no seu ambiente.",
+    heroH1: "Pontuação de segurança HTTP em 30 segundos — Grátis. Sem cadastro.",
+    heroSubtitle: "Digite seu domínio ou IP. ClawGuru analisa 40+ cabeçalhos de segurança e te dá uma pontuação com passos de correção exatos.",
+    heroPrimaryCta: "Analisar grátis →",
+    heroSecondaryCta: "Roast meu stack (30 seg.)",
+    heroTrustLine: "Sem conta. Sem cartão de crédito. Resultados instantâneos.",
     finalTitle: "Pronto para operações de segurança reais?",
     finalSub: "Comece agora - sem risco. Produtivo em 5 minutos.",
     finalPrimary: "Iniciar security check",
@@ -111,10 +115,11 @@ const COPY: Partial<Record<Locale, Partial<HomepageCroCopy>>> = {
     lpHubSub: "Acesse páginas por intenção para checks, hardening e trilhas guiadas de fix.",
   },
   it: {
-    heroPrimary: "Avvia security check",
-    heroSecondary: "Sfoglia runbook",
-    heroTertiary: "Roast my stack",
-    heroNote: "Check gratuito senza registrazione. Segnale euristico: verifica nel tuo ambiente.",
+    heroH1: "Punteggio di sicurezza HTTP in 30 secondi — Gratis. Nessuna registrazione.",
+    heroSubtitle: "Inserisci il tuo dominio o IP. ClawGuru analizza 40+ header di sicurezza e ti dà un punteggio con passaggi di correzione esatti.",
+    heroPrimaryCta: "Analizzare gratis →",
+    heroSecondaryCta: "Roast il mio stack (30 sec.)",
+    heroTrustLine: "Nessun account. Nessuna carta di credito. Risultati istantanei.",
     finalTitle: "Pronto per security operations reali?",
     finalSub: "Inizia ora - senza rischio. Produttivo in 5 minuti.",
     finalPrimary: "Avvia security check",
@@ -123,10 +128,11 @@ const COPY: Partial<Record<Locale, Partial<HomepageCroCopy>>> = {
     lpHubSub: "Vai alle pagine per intent: check, hardening e percorsi fix guidati.",
   },
   ru: {
-    heroPrimary: "Запустить security check",
-    heroSecondary: "Открыть runbooks",
-    heroTertiary: "Roast my stack",
-    heroNote: "Бесплатный check без регистрации. Эвристический сигнал: проверяйте в своей среде.",
+    heroH1: "Оценка безопасности HTTP за 30 секунд — Бесплатно. Без регистрации.",
+    heroSubtitle: "Введите ваш домен или IP. ClawGuru анализирует 40+ заголовков безопасности и дает оценку с точными шагами исправления.",
+    heroPrimaryCta: "Анализировать бесплатно →",
+    heroSecondaryCta: "Roast мой стек (30 сек.)",
+    heroTrustLine: "Без аккаунта. Без кредитной карты. Мгновенные результаты.",
     finalTitle: "Готовы к реальным security operations?",
     finalSub: "Начните сейчас - без риска. Продуктивно за 5 минут.",
     finalPrimary: "Запустить security check",
@@ -135,10 +141,11 @@ const COPY: Partial<Record<Locale, Partial<HomepageCroCopy>>> = {
     lpHubSub: "Переходите сразу на intent-страницы для check, hardening и guided fix-путей.",
   },
   zh: {
-    heroPrimary: "开始安全检查",
-    heroSecondary: "浏览 Runbooks",
-    heroTertiary: "Roast 我的栈",
-    heroNote: "免费检查，无需注册。启发式信号，请在你的环境中自行验证。",
+    heroH1: "30秒内获得HTTP安全评分 — 免费。无需注册。",
+    heroSubtitle: "输入您的域名或IP。ClawGuru分析40+安全标头，为您提供评分和精确的修复步骤。",
+    heroPrimaryCta: "免费分析 →",
+    heroSecondaryCta: "Roast 我的栈（30秒）",
+    heroTrustLine: "无需账户。无需信用卡。即时结果。",
     finalTitle: "准备好进行真正的安全运营了吗？",
     finalSub: "现在开始 - 零风险。5 分钟进入可执行状态。",
     finalPrimary: "开始安全检查",
@@ -147,10 +154,11 @@ const COPY: Partial<Record<Locale, Partial<HomepageCroCopy>>> = {
     lpHubSub: "直接进入按意图构建的页面：检查、加固与引导式修复路径。",
   },
   ja: {
-    heroPrimary: "security check を開始",
-    heroSecondary: "runbooks を見る",
-    heroTertiary: "Roast my stack",
-    heroNote: "無料チェック、登録不要。ヒューリスティック信号のため自環境で検証してください。",
+    heroH1: "30秒でHTTPセキュリティスコア — 無料。登録不要。",
+    heroSubtitle: "ドメインまたはIPを入力。ClawGuruが40+のセキュリティヘッダーを分析し、スコアと正確な修正ステップを提供します。",
+    heroPrimaryCta: "無料で分析 →",
+    heroSecondaryCta: "Roast my stack（30秒）",
+    heroTrustLine: "アカウント不要。クレジットカード不要。即座に結果。",
     finalTitle: "実運用の security operations を始めますか？",
     finalSub: "今すぐ開始 - リスクなし。5分で実行可能。",
     finalPrimary: "security check を開始",
@@ -159,10 +167,11 @@ const COPY: Partial<Record<Locale, Partial<HomepageCroCopy>>> = {
     lpHubSub: "check、hardening、guided fix に直結する intent 別ページへ。",
   },
   ar: {
-    heroPrimary: "بدء security check",
-    heroSecondary: "تصفح runbooks",
-    heroTertiary: "Roast my stack",
-    heroNote: "فحص مجاني بدون تسجيل. إشارة استدلالية - تحقّق داخل بيئتك.",
+    heroH1: "درجة أمان HTTP في 30 ثانية — مجاني. بدون تسجيل.",
+    heroSubtitle: "أدخل نطاقك أو IP. ClawGuru يحلل 40+ رأس أمان ويعطيك درجة مع خطوات إصلاح دقيقة.",
+    heroPrimaryCta: "تحليل مجاني →",
+    heroSecondaryCta: "Roast stack الخاص بك (30 ثانية)",
+    heroTrustLine: "بدون حساب. بدون بطاقة ائتمان. نتائج فورية.",
     finalTitle: "جاهز لعمليات أمن حقيقية؟",
     finalSub: "ابدأ الآن - بلا مخاطرة. إنتاجي خلال 5 دقائق.",
     finalPrimary: "بدء security check",
@@ -171,10 +180,11 @@ const COPY: Partial<Record<Locale, Partial<HomepageCroCopy>>> = {
     lpHubSub: "اذهب مباشرة إلى صفحات النية: checks وhardening ومسارات fix موجهة.",
   },
   nl: {
-    heroPrimary: "Start security check",
-    heroSecondary: "Bekijk runbooks",
-    heroTertiary: "Roast my stack",
-    heroNote: "Gratis check zonder aanmelding. Heuristisch signaal: verifieer in je eigen omgeving.",
+    heroH1: "HTTP-beveiligingsscore in 30 seconden — Gratis. Geen aanmelding.",
+    heroSubtitle: "Voer uw domein of IP in. ClawGuru analyseert 40+ beveiligingsheaders en geeft u een score met exacte fix-stappen.",
+    heroPrimaryCta: "Gratis analyseren →",
+    heroSecondaryCta: "Roast mijn stack (30 sec.)",
+    heroTrustLine: "Geen account. Geen creditcard. Directe resultaten.",
     finalTitle: "Klaar voor echte security operations?",
     finalSub: "Start nu - zonder risico. In 5 minuten productief.",
     finalPrimary: "Start security check",
@@ -183,10 +193,11 @@ const COPY: Partial<Record<Locale, Partial<HomepageCroCopy>>> = {
     lpHubSub: "Ga direct naar intent-pagina's voor checks, hardening en guided fix-paden.",
   },
   hi: {
-    heroPrimary: "security check शुरू करें",
-    heroSecondary: "runbooks देखें",
-    heroTertiary: "Roast my stack",
-    heroNote: "मुफ्त check, बिना साइनअप। यह heuristic signal है - अपने वातावरण में सत्यापित करें।",
+    heroH1: "30 सेकंड में HTTP सुरक्षा स्कोर — मुफ्त। साइनअप नहीं।",
+    heroSubtitle: "अपना डोमेन या IP दर्ज करें। ClawGuru 40+ सुरक्षा हेडर का विश्लेषण करता है और आपको स्कोर और सटीक फिक्स चरण देता है।",
+    heroPrimaryCta: "मुफ्त में विश्लेषण करें →",
+    heroSecondaryCta: "Roast my stack (30 सेकंड)",
+    heroTrustLine: "कोई खाता नहीं। कोई क्रेडिट कार्ड नहीं। तुरंत परिणाम।",
     finalTitle: "क्या आप वास्तविक security operations के लिए तैयार हैं?",
     finalSub: "अभी शुरू करें - बिना जोखिम। 5 मिनट में प्रोडक्टिव।",
     finalPrimary: "security check शुरू करें",
@@ -195,10 +206,11 @@ const COPY: Partial<Record<Locale, Partial<HomepageCroCopy>>> = {
     lpHubSub: "check, hardening और guided fix paths के लिए intent-specific pages पर सीधे जाएं।",
   },
   tr: {
-    heroPrimary: "security check başlat",
-    heroSecondary: "runbooks görüntüle",
-    heroTertiary: "Roast my stack",
-    heroNote: "Ücretsiz check, kayıt yok. Sezgisel sinyal - kendi ortamında doğrula.",
+    heroH1: "30 saniyede HTTP güvenlik skoru — Ücretsiz. Kayıt yok.",
+    heroSubtitle: "Alan adınızı veya IP'nizi girin. ClawGuru 40+ güvenlik başlığını analiz eder ve size tam düzeltme adımlarıyla bir puan verir.",
+    heroPrimaryCta: "Ücretsiz analiz et →",
+    heroSecondaryCta: "Roast my stack (30 saniye)",
+    heroTrustLine: "Hesap yok. Kredi kartı yok. Anında sonuçlar.",
     finalTitle: "Gerçek security operations için hazır mısın?",
     finalSub: "Hemen başla - risksiz. 5 dakikada üretken.",
     finalPrimary: "security check başlat",
@@ -207,10 +219,11 @@ const COPY: Partial<Record<Locale, Partial<HomepageCroCopy>>> = {
     lpHubSub: "check, hardening ve guided fix yolları için intent sayfalarına doğrudan git.",
   },
   pl: {
-    heroPrimary: "Uruchom security check",
-    heroSecondary: "Przeglądaj runbooks",
-    heroTertiary: "Roast my stack",
-    heroNote: "Darmowy check bez rejestracji. Sygnał heurystyczny - zweryfikuj we własnym środowisku.",
+    heroH1: "Wynik bezpieczeństwa HTTP w 30 sekund — Darmowy. Bez rejestracji.",
+    heroSubtitle: "Wprowadź domenę lub IP. ClawGuru analizuje 40+ nagłówków bezpieczeństwa i daje Ci wynik z dokładnymi krokami naprawczymi.",
+    heroPrimaryCta: "Analizuj za darmo →",
+    heroSecondaryCta: "Roast my stack (30 sek.)",
+    heroTrustLine: "Bez konta. Bez karty kredytowej. Natychmiastowe wyniki.",
     finalTitle: "Gotowy na prawdziwe security operations?",
     finalSub: "Zacznij teraz - bez ryzyka. Produktywnie w 5 minut.",
     finalPrimary: "Uruchom security check",
@@ -219,10 +232,11 @@ const COPY: Partial<Record<Locale, Partial<HomepageCroCopy>>> = {
     lpHubSub: "Przejdź bezpośrednio do stron intent dla checks, hardening i guided fix paths.",
   },
   ko: {
-    heroPrimary: "security check 시작",
-    heroSecondary: "runbooks 보기",
-    heroTertiary: "Roast my stack",
-    heroNote: "무료 check, 가입 불필요. 휴리스틱 신호이므로 자체 환경에서 검증하세요.",
+    heroH1: "30초 만에 HTTP 보안 점수 — 무료. 가입 불필요.",
+    heroSubtitle: "도메인 또는 IP를 입력하세요. ClawGuru가 40개 이상의 보안 헤더를 분석하고 정확한 수정 단계와 함께 점수를 제공합니다.",
+    heroPrimaryCta: "무료 분석 →",
+    heroSecondaryCta: "Roast my stack (30초)",
+    heroTrustLine: "계정 불필요. 신용카드 불필요. 즉시 결과.",
     finalTitle: "실전 security operations를 시작할 준비가 되었나요?",
     finalSub: "지금 시작하세요 - 무위험. 5분 안에 실행 가능.",
     finalPrimary: "security check 시작",
@@ -231,11 +245,11 @@ const COPY: Partial<Record<Locale, Partial<HomepageCroCopy>>> = {
     lpHubSub: "check, hardening, guided fix 경로를 위한 intent 페이지로 바로 이동하세요.",
   },
   af: {
-    heroPrimary: "Begin sekuriteitskontrole",
-    heroSecondary: "Blaai deur runbooks",
-    heroTertiary: "Braai My Stack — vind swakhede in ~30s",
-    heroNote:
-      "Gratis kontrole, geen aanmelding. Braai onthul swak punte vinnig — verifieer dan in jou eie omgewing. Nie 'n penetrasietoets nie.",
+    heroH1: "HTTP Sekuriteits telling in 30 sekondes — Gratis. Geen aanmelding.",
+    heroSubtitle: "Voer jou domein of IP in. ClawGuru ontleed 40+ sekuriteitsopskrifte en gee jou 'n telling met presiese herstel-stappe.",
+    heroPrimaryCta: "Analyseer gratis →",
+    heroSecondaryCta: "Braai my stack (30 sek.)",
+    heroTrustLine: "Geen rekening. Geen kredietkaart. Onmiddellike resultate.",
     finalTitle: "Gereed vir egte sekuriteitsbedrywighede?",
     finalSub: "Begin nou — risikovry. Produktief in 5 minute.",
     finalPrimary: "Begin sekuriteitskontrole",

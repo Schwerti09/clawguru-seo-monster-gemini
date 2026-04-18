@@ -7,13 +7,14 @@ import Header from "@/components/layout/Header"
 import Footer from "@/components/layout/Footer"
 import TrustShield from "@/components/layout/TrustShield"
 import dynamic from "next/dynamic"
+// PERFORMANCE ROUND 2: Critical dynamic imports only
 const AnimatedBackground = dynamic(() => import("@/components/ui/AnimatedBackground").then(m => ({ default: m.AnimatedBackground })), { ssr: false })
 const ActionDock = dynamic(() => import("@/components/layout/ActionDock"))
 const SocialProofOverlay = dynamic(() => import("@/components/social/SocialProofOverlay"))
 // WORLD BEAST FINAL LAUNCH: Umami privacy-first analytics (GA4 removed for performance)
 import UmamiAnalytics from "@/components/analytics/UmamiAnalytics"
-// VISUAL UPGRADE 2026: Neon cursor + page transition wrapper
-const NeonCursor = dynamic(() => import("@/components/visual/NeonCursor"))
+// PERFORMANCE ROUND 2: NeonCursor removed for LCP optimization
+// PERFORMANCE ROUND 2: GlobalMagnetics removed for LCP optimization
 // NEXT-LEVEL UPGRADE 2026: RTL direction support for Arabic + other RTL locales
 import RTLProvider from "@/components/layout/RTLProvider"
 // VIRAL SHARE 2026: Global floating Mycelium share button
@@ -24,8 +25,7 @@ import { SEO_TARGET_KEYWORDS_2026 } from "@/lib/seo/targets"
 import { getDictionary } from "@/lib/getDictionary"
 import { I18nProvider } from "@/components/i18n/I18nProvider"
 const CommandK = dynamic(() => import("@/components/search/CommandK"), { ssr: false })
-const GlobalMagnetics = dynamic(() => import("@/components/visual/GlobalMagnetics"))
-const FirstVisitPageGuide = dynamic(() => import("@/components/onboarding/FirstVisitPageGuide"), { ssr: false })
+// PERFORMANCE ROUND 2: FirstVisitPageGuide removed for LCP optimization
 
 // 100/100 OPTIMIZATION: Fonts loaded via CSS @import in globals.css (avoids build-time fetch failures)
 
@@ -154,11 +154,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             <SocialProofOverlay />
             {/* VIRAL SHARE 2026: Global floating Mycelium share button */}
             <FloatingMyceliumShareBtn />
-            {/* VISUAL UPGRADE 2026: Custom neon cursor for desktop */}
-            <NeonCursor />
+            {/* PERFORMANCE ROUND 2: CommandK kept for search functionality */}
             <CommandK />
-            <GlobalMagnetics />
-            <FirstVisitPageGuide />
+            {/* PERFORMANCE ROUND 2: NeonCursor, GlobalMagnetics, FirstVisitPageGuide removed for LCP optimization */}
 
           </RTLProvider>
         </I18nProvider>

@@ -50,6 +50,56 @@ export default async function RunbooksPageContent({
           subtitle={subtitle}
         />
         <RunbookNexus />
+
+        {/* CONVERSION WARFARE ROUND 3: Aggressive CTAs with Urgency */}
+        <div className="mt-12 space-y-4">
+          <a
+            href={`/${locale}/check`}
+            className="block bg-gradient-to-r from-cyan-600 to-cyan-500 border border-cyan-400 rounded-xl p-6 hover:from-cyan-500 hover:to-cyan-400 transition-all relative"
+          >
+            <div className="absolute -top-3 -right-3 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full animate-pulse">
+              {locale === 'de' ? 'JETZT' : 'NOW'}
+            </div>
+            <div className="flex items-center gap-4">
+              <div className="text-4xl">🛡️</div>
+              <div>
+                <div className="font-bold text-white text-lg">
+                  {locale === 'de' ? '🛡️ Vollständiger Security-Check' : '🛡️ Full Security Check'}
+                </div>
+                <div className="text-cyan-100 text-sm">
+                  {locale === 'de' ? 'Deine gesamte Infrastruktur in 30 Sekunden prüfen' : 'Check your entire infrastructure in 30 seconds'}
+                </div>
+              </div>
+            </div>
+          </a>
+
+          <div className="grid sm:grid-cols-2 gap-4">
+            <a
+              href={`/${locale}/roast-my-moltbot`}
+              className="block bg-gray-800 border border-gray-700 rounded-xl p-4 hover:border-amber-500/50 transition-all"
+            >
+              <div className="flex items-center gap-3">
+                <div className="text-2xl">🔥</div>
+                <div>
+                  <div className="font-semibold text-amber-400">{locale === 'de' ? 'Roast My Moltbot' : 'Roast My Moltbot'}</div>
+                  <div className="text-xs text-gray-400">{locale === 'de' ? 'Kostenloser Security-Roast' : 'Free security roast'}</div>
+                </div>
+              </div>
+            </a>
+            <a
+              href={`/${locale}/openclaw`}
+              className="block bg-gray-800 border border-gray-700 rounded-xl p-4 hover:border-green-500/50 transition-all"
+            >
+              <div className="flex items-center gap-3">
+                <div className="text-2xl">🛡️</div>
+                <div>
+                  <div className="font-semibold text-green-400">{locale === 'de' ? 'OpenClaw' : 'OpenClaw'}</div>
+                  <div className="text-xs text-gray-400">{locale === 'de' ? 'Self-Hosted Security Framework' : 'Self-hosted security framework'}</div>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
       </div>
     </Container>
   )

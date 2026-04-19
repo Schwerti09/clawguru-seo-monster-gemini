@@ -1,8 +1,182 @@
-﻿# ClawGuru — AGENTS.md · Master Operating Manual v5.0 (19.04.2026)
+﻿# ClawGuru — AGENTS.md · Master Operating Manual v6.0 (19.04.2026)
 
 > **This document is the single source of truth for every agent working in this codebase.**
 > Read it completely BEFORE making any change. Update the Session Log after every session.
 > Last updated: 19.04.2026 | Language: English (maximises AI model compatibility)
+
+---
+
+# 🎯 REVENUE WAR PLAN 2026 — ACTIVE MASTER STRATEGY
+
+> **THIS IS THE PRIMARY OPERATING DOCUMENT.** All agents must read this section first.
+> **Planning horizon:** 19.04.2026 → 19.07.2026 (12 weeks)
+> **Primary goal:** Break traffic dependency on SEO, install viral/newsletter/partnership growth engines, reach **€10k+ MRR within 90 days**.
+> **North Star Metric:** Paid Day Passes + Pro/Team MRR combined.
+
+## 📋 MORNING BRIEFING PROTOCOL (Read First Every Session)
+
+**When the user asks for "status" or starts a new work session, the agent MUST:**
+
+1. **Read `status/DAILY_STATUS.md`** (if present) for yesterday's progress + today's focus
+2. **Check `Current Sprint Status` table below** for the active week + open tasks
+3. **Pull current KPIs** from the KPI Dashboard section (estimate from site/commits if no tracking yet)
+4. **Report in this format:**
+   ```
+   ## 📊 Morning Brief — [DATE]
+
+   ### Yesterday's Wins
+   - [completed task 1]
+   - [completed task 2]
+
+   ### Today's Priority (from active sprint)
+   1. [HIGH] [task] — ETA: Xh
+   2. [MED]  [task] — ETA: Xh
+
+   ### Blockers / Decisions Needed
+   - [blocker if any]
+
+   ### KPI Snapshot
+   - Day Passes (yesterday): X (target: Y)
+   - Newsletter Subs: X (target: Y)
+   - Commits pushed: X
+   ```
+5. **Wait for user confirmation before starting work.**
+
+## 🎯 THE 3 NON-NEGOTIABLE OUTCOMES (90-Day Horizon)
+
+| Outcome | Current (19.04) | Target (19.07) | Why |
+|---------|-----------------|----------------|-----|
+| **MRR** (Pro + Team) | ~€0–500 (unmeasured) | **€10.000** | Pays for team, proves product-market fit |
+| **Newsletter Subs** | 0 | **10.000** | Own distribution = immune to Google updates |
+| **Daily Active Visitors** | ~1–50 | **3.000** | Compound via viral + community (not SEO-only) |
+
+## 🚀 STRATEGIC PILLARS (The Four Engines)
+
+### Pillar 1 — Viral Loop (Public Score Pages + Badges)
+Every `/check` result gets a public `/score/[id]` URL with OG image + embed badge for GitHub READMEs. Every share = backlink + new visit. **This is the #1 highest-ROI feature we can build.**
+
+### Pillar 2 — Newsletter as Growth Engine (Daily CVE Brief)
+Email capture everywhere (/check, /runbooks, /academy) with Lead Magnet PDF "Top 10 Self-Hosted Risks 2026". Daily send with 1 CVE + 1 fix + 1 tip. Sponsor slots $2–5k/week after 10k subs.
+
+### Pillar 3 — Launch Moments (Product Hunt + HN + Reddit)
+Coordinated launch in Week 3–4. Target: PH Top 5 of Day + HN front page + Reddit /r/selfhosted top post. **Expected: 50–100k visits in 48h, 500–1500 Day Passes.**
+
+### Pillar 4 — High-Ticket Enterprise Flow
+Functional `mailto:` on /consulting already done (Round 12 Phase 4). Next: Calendly booking, ROI calculator, 3 vertical landing pages (`/for-saas`, `/for-msps`, `/for-fintech`), cold outreach to 100 CISOs/week via LinkedIn.
+
+## 📅 12-WEEK EXECUTION PLAN
+
+### Phase A — Viral Foundation (Week 1–2: 19.04 → 03.05)
+**Goal:** Install the viral growth engine. No SEO-only content. Every feature should create or capture leads.
+
+| # | Task | Owner | Est | Status | Completion |
+|---|------|-------|-----|--------|------------|
+| A1 | Public Score Pages `/score/[id]` + OG image generator | Dev | 1d | 🔴 Open | — |
+| A2 | Embed Badge generator `/badge/[id]` (SVG/PNG) | Dev | 0.5d | 🔴 Open | — |
+| A3 | Share buttons on score page (X, LinkedIn, Reddit, Discord) | Dev | 0.25d | 🔴 Open | — |
+| A4 | Exit-Intent Popup on `/pricing` + `/daypass` with €5 discount coupon | Dev | 0.5d | 🔴 Open | — |
+| A5 | Email capture widget on `/check`, `/runbooks`, `/academy` | Dev | 0.5d | 🔴 Open | — |
+| A6 | Lead Magnet PDF: "Top 10 Self-Hosted Risks 2026" (10 pages) | Content | 1d | 🔴 Open | — |
+| A7 | Newsletter platform setup (Beehiiv or ConvertKit) + welcome email | Ops | 0.5d | 🔴 Open | — |
+| A8 | Urgency banner on `/daypass` ("Today only €5", resetting daily) | Dev | 0.25d | 🔴 Open | — |
+| A9 | Social proof counter on `/daypass` + `/pricing` (real or pseudo) | Dev | 0.25d | 🔴 Open | — |
+| A10 | First 5 newsletter issues written (evergreen) | Content | 1d | 🔴 Open | — |
+
+### Phase B — Launch Moment (Week 3–4: 03.05 → 17.05)
+**Goal:** Coordinated PH + HN + Reddit launch. 50k+ visits in 48h window.
+
+| # | Task | Owner | Est | Status |
+|---|------|-------|-----|--------|
+| B1 | 50 beta tester outreach (via Discord, X, IndieHackers) for testimonials | Ops | 3d | 🔴 Open |
+| B2 | PH launch assets: hunter, gallery images, tagline, first-comment | Marketing | 1d | 🔴 Open |
+| B3 | "Show HN" post draft (7 versions A/B-test ready) | Marketing | 0.5d | 🔴 Open |
+| B4 | Reddit posts prepared for r/selfhosted, r/homelab, r/sysadmin (value-first, not promotional) | Marketing | 1d | 🔴 Open |
+| B5 | X launch thread (15 tweets) with images | Marketing | 0.5d | 🔴 Open |
+| B6 | LinkedIn launch post from founder account | Marketing | 0.25d | 🔴 Open |
+| B7 | Launch Day Tuesday: PH 00:01 PST + HN 07:00 EST + Reddit 10:00 EST | All | 1d | 🔴 Open |
+| B8 | Capture launch feedback → Post-mortem doc | Ops | 0.5d | 🔴 Open |
+
+### Phase C — Compound Growth (Week 5–8: 17.05 → 14.06)
+**Goal:** Activate affiliates, partnerships, and content flywheel. Reach 1k Newsletter subs, 5 active affiliates.
+
+| # | Task | Owner | Est | Status |
+|---|------|-------|-----|--------|
+| C1 | Affiliate dashboard polish + landing page `/partners-apply` | Dev | 1d | 🔴 Open |
+| C2 | Affiliate recruitment: 30 warm DMs to security creators | Marketing | 2d | 🔴 Open |
+| C3 | Hetzner/DO partnership pitch: affiliate exchange | BD | 2d | 🔴 Open |
+| C4 | Daily newsletter cadence stabilized (7-days consecutive) | Content | ongoing | 🔴 Open |
+| C5 | "Roast Your Stack" weekly contest launched (Wed night UTC) | Marketing | 1d | 🔴 Open |
+| C6 | YouTube Short series: "Review your security in 60s" (1 video/week) | Content | ongoing | 🔴 Open |
+| C7 | "State of Self-Hosted Security 2026" research report (email-gated) | Content | 3d | 🔴 Open |
+| C8 | Press pitch: TechCrunch, Heise, The Register, Bleeping Computer | BD | 2d | 🔴 Open |
+
+### Phase D — Enterprise Engine (Week 9–12: 14.06 → 19.07)
+**Goal:** Close first 3 Enterprise deals. Launch White-Label for MSPs. €10k MRR confirmed.
+
+| # | Task | Owner | Est | Status |
+|---|------|-------|-----|--------|
+| D1 | Calendly/Cal.com booking integration on /consulting + /enterprise-api | Dev | 0.5d | 🔴 Open |
+| D2 | ROI Calculator "Cost of Incident without Runbooks" | Dev | 1d | 🔴 Open |
+| D3 | 3 vertical landing pages: `/for-saas`, `/for-msps`, `/for-fintech` | Dev+Content | 2d | 🔴 Open |
+| D4 | LinkedIn Sales Nav list: 500 SMB-CISOs + outreach scripts | Marketing | 2d | 🔴 Open |
+| D5 | Cold outreach: 100 CISOs/week (personalized, value-first) | Sales | ongoing | 🔴 Open |
+| D6 | White-Label MSP landing page `/for-msps/white-label` + pricing | Dev+Content | 1d | 🔴 Open |
+| D7 | "ClawGuru Certified Security Defender" test + cert page | Dev+Content | 2d | 🔴 Open |
+| D8 | First Enterprise deal signed (€10–50k target) | Sales | ongoing | 🔴 Open |
+
+## 📊 KPI DASHBOARD (Update Daily in `status/DAILY_STATUS.md`)
+
+**Template to copy into daily status:**
+
+```markdown
+# Daily Status — YYYY-MM-DD
+
+## KPIs
+| Metric              | Yesterday | 7-Day Avg | 30-Day Goal | 90-Day Goal |
+|---------------------|-----------|-----------|-------------|--------------|
+| Daily Visitors      |     ?     |     ?     |     500     |     3,000    |
+| Day Passes Sold     |     ?     |     ?     |      5      |      50      |
+| Pro Subs (new)      |     ?     |     ?     |      1      |      10      |
+| Team Subs (new)     |     ?     |     ?     |      0      |       3      |
+| Newsletter Subs     |     ?     |     ?     |   1,000     |   10,000     |
+| Public Score Shares |     0     |     0     |     200     |    2,000     |
+| Affiliate Partners  |     0     |     0     |      5      |      30      |
+| MRR (Pro+Team)      |    €0     |    €0     |    €500     |   €10,000    |
+
+## Today's Plan (3 max, prioritised)
+1. [HIGH] ...
+2. [MED]  ...
+3. [LOW]  ...
+
+## Blockers / Decisions
+- ...
+
+## Completed Yesterday
+- ...
+```
+
+## 🏆 SUCCESS CHECKPOINTS
+
+- **End of Week 2 (03.05):** Viral loop live (public scores + badges + email capture). First 50 newsletter subs.
+- **End of Week 4 (17.05):** PH+HN launch completed. 1k+ newsletter subs. 50+ Day Passes sold in launch week.
+- **End of Week 8 (14.06):** 2k newsletter subs. 5 active affiliates. 1 press mention. €2–5k MRR confirmed.
+- **End of Week 12 (19.07):** 10k newsletter subs. 30 affiliates. **€10k MRR confirmed.** First Enterprise deal closed.
+
+## 🚫 STOP-DOING LIST (These Drain Time, Don't Print Money)
+
+1. ❌ **More programmatic SEO geo pages** — Google March 2026 update killed these. Stop producing. Focus existing on E-E-A-T.
+2. ❌ **More [vendor-vs-vendor] comparison pages** — saturated, low LTV audience.
+3. ❌ **Endless refactors / perf tuning** — site is fast enough. Revenue doesn't come from 50ms faster LCP.
+4. ❌ **Writing new runbooks just for volume** — we have 4,200+. New runbooks only if tied to a Newsletter issue or Launch asset.
+5. ❌ **Dark-pattern UI experiments** — hurts brand. We compete on trust.
+
+## ✅ ALWAYS-DO RULES (Non-Negotiable)
+
+1. ✅ **Every new page/feature must have a revenue hook** (Day Pass CTA, Pro upsell, Email capture, or Affiliate link).
+2. ✅ **Every commit must update `status/DAILY_STATUS.md`** if it's user-visible work.
+3. ✅ **Every build must exit 0** — never push broken code.
+4. ✅ **Every monetisation experiment gets measured** — no "feels like it's working".
+5. ✅ **Morning brief first, code second** — context before action.
 
 ---
 

@@ -217,15 +217,16 @@ export default function ConsultingPage({ params }: PageProps) {
                     </li>
                   ))}
                 </ul>
-                <button
-                  className={`w-full px-4 py-3 rounded-lg font-semibold text-sm transition-colors ${
+                <a
+                  href={`mailto:enterprise@clawguru.org?subject=${encodeURIComponent(plan.name + " Anfrage")}&body=${encodeURIComponent("Name:\nFirma:\nTeam-Größe:\nStack:\nZeitrahmen:\n")}`}
+                  className={`block text-center w-full px-4 py-3 rounded-lg font-semibold text-sm transition-colors ${
                     plan.popular
                       ? "bg-cyan-600 hover:bg-cyan-500 text-white"
                       : "bg-gray-700 hover:bg-gray-600 text-gray-100"
                   }`}
                 >
                   {plan.cta}
-                </button>
+                </a>
               </div>
             ))}
           </div>
@@ -271,6 +272,55 @@ export default function ConsultingPage({ params }: PageProps) {
           </div>
         </section>
 
+        {/* TRUST SIGNALS (Round 12 — Enterprise Lead Capture) */}
+        <section className="mb-10">
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">
+            {isDE ? "Compliance & Vertrauen" : "Compliance & Trust"}
+          </h2>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            <div className="bg-gray-800 border border-gray-700 rounded-lg p-4 text-center">
+              <div className="text-3xl mb-2">🇪🇺</div>
+              <div className="font-bold text-gray-100 text-sm">EU-Hosting</div>
+              <div className="text-xs text-gray-400 mt-1">{isDE ? "Frankfurt, DSGVO-konform" : "Frankfurt, GDPR-compliant"}</div>
+            </div>
+            <div className="bg-gray-800 border border-gray-700 rounded-lg p-4 text-center">
+              <div className="text-3xl mb-2">🔐</div>
+              <div className="font-bold text-gray-100 text-sm">ISO 27001</div>
+              <div className="text-xs text-gray-400 mt-1">{isDE ? "Audit in Vorbereitung 2026" : "Audit in preparation 2026"}</div>
+            </div>
+            <div className="bg-gray-800 border border-gray-700 rounded-lg p-4 text-center">
+              <div className="text-3xl mb-2">🛡️</div>
+              <div className="font-bold text-gray-100 text-sm">SOC 2 Type II</div>
+              <div className="text-xs text-gray-400 mt-1">{isDE ? "Roadmap 2026 Q3" : "Roadmap 2026 Q3"}</div>
+            </div>
+            <div className="bg-gray-800 border border-gray-700 rounded-lg p-4 text-center">
+              <div className="text-3xl mb-2">🏦</div>
+              <div className="font-bold text-gray-100 text-sm">NIS2-Ready</div>
+              <div className="text-xs text-gray-400 mt-1">{isDE ? "Technische Controls" : "Technical controls"}</div>
+            </div>
+          </div>
+          <div className="bg-gray-900 border border-gray-700 rounded-lg p-6">
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <div>
+                <div className="text-sm text-gray-400 mb-1">
+                  {isDE ? "Vertraut von Self-Hosted-Teams und Enterprise-Kunden" : "Trusted by self-hosted teams and enterprise customers"}
+                </div>
+                <div className="text-xs text-gray-500">
+                  {isDE ? "4.200+ Runbooks · 147 Academy Pro Absolventen · EU-Hosting" : "4,200+ runbooks · 147 Academy Pro graduates · EU-hosted"}
+                </div>
+              </div>
+              <div className="flex gap-3 text-xs">
+                <Link href={`/${locale}/case-studies`} className="text-cyan-400 hover:text-cyan-300 font-semibold">
+                  {isDE ? "Case Studies →" : "Case Studies →"}
+                </Link>
+                <Link href={`/${locale}/trust-security`} className="text-cyan-400 hover:text-cyan-300 font-semibold">
+                  {isDE ? "Trust Center →" : "Trust Center →"}
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* CTA */}
         <section className="mb-10">
           <div className="bg-gradient-to-r from-cyan-900/40 to-purple-900/40 border border-cyan-700/50 rounded-xl p-6 text-center">
@@ -282,9 +332,13 @@ export default function ConsultingPage({ params }: PageProps) {
                 ? "Lass deine Infrastruktur von Experten härten und Security in deine DNA einbauen."
                 : "Have your infrastructure hardened by experts and build security into your DNA."}
             </p>
-            <button className="inline-flex items-center gap-2 px-6 py-3 bg-cyan-600 hover:bg-cyan-500 rounded-lg font-semibold text-white transition-colors">
+            <a
+              href="mailto:enterprise@clawguru.org?subject=Consulting%20Anfrage&body=Name%3A%0AFirma%3A%0ATeam-Gr%C3%B6%C3%9Fe%3A%0AAktueller%20Stack%3A%0AZiel%3A%0AZeitrahmen%3A"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-cyan-600 hover:bg-cyan-500 rounded-lg font-semibold text-white transition-colors"
+            >
               {isDE ? "Jetzt beraten lassen" : "Get Consulted Now"}
-            </button>
+              <ArrowRight className="w-4 h-4" />
+            </a>
           </div>
         </section>
 
@@ -304,7 +358,7 @@ export default function ConsultingPage({ params }: PageProps) {
               <div className="font-semibold text-cyan-400">{isDE ? "Roast My Moltbot" : "Roast My Moltbot"}</div>
               <div className="text-sm text-gray-300">{isDE ? "Roast starten" : "Start the roast"}</div>
             </Link>
-            <Link href={`/${locale}/securitycheck`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
+            <Link href={`/${locale}/check`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">{isDE ? "Security Check" : "Security Check"}</div>
               <div className="text-sm text-gray-300">{isDE ? "Infrastruktur prüfen" : "Check infrastructure"}</div>
             </Link>

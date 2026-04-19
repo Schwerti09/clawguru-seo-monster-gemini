@@ -49,6 +49,32 @@
 
 ---
 
+## TOTAL WAR ROUND 12 — IN PROGRESS (19.04.2026)
+
+### Phase 1: Critical Bug Fixes ✅ COMPLETED (19.04.2026)
+- **Fix 1:** AGENTS.md Merge Conflict resolved (Zeilen 1621-1657 — `<<<<<<< HEAD`, `=======`, `>>>>>>>`)
+- **Fix 2:** Stale "Feb 2026" → "Apr 2026" (lib/constants.ts:14, components/marketing/TrustSecurity.tsx:11)
+- **Fix 3:** Nav v3.0 → v4.0 über alle 16 Locales (Header.tsx, HeroInstitution.tsx, lib/i18n.ts - 16× homeGenesisProtocol + 16× heroGenesisBadge)
+- **Fix 4:** Footer `/securitycheck` → `/check` (Footer.tsx:37, 53)
+
+### Phase 2-6: Pending
+- Phase 2: Academy Content Expansion
+- Phase 3: Africa/MEA/Oceania Geo Expansion (18 Städte)
+- Phase 4: Enterprise Lead Capture
+- Phase 5: VIRAL Steps 98+99 (API Beta + Manifesto)
+- Phase 6: AGENTS.md War Lock v6.0
+- Phase 7 (Bonus): E-E-A-T Team Page für Google March 2026 Recovery
+
+### Google March 2026 Update Context
+- **24-25. März:** Google Spam Update (unter 20h abgeschlossen)
+- **27. März – 8. April:** Google Core Update (12 Tage Rollout)
+- **Traffic-Impact:** ClawGuru Traffic von 25.03.2026 stark eingebrochen (1-5 views/Tag)
+- **Ursache:** Mass-produced content pattern triggert Anti-AI-Content-Filter
+- **Recovery erwartet:** Juni/Juli 2026 (nächstes Core Update)
+- **Strategie:** E-E-A-T-Signale stärken (Team-Page, Author-Credentials, Topical Authority)
+
+---
+
 ## TOTAL WAR ROUND 11 — COMPLETED (19.04.2026)
 
 ### Executive Summary
@@ -1618,9 +1644,6 @@ When adding new keys to `dictionaries/de.json` and `dictionaries/en.json`, also 
 | # | Schritt | Viraler Effekt | Dateien/Features |
 |---|---------|----------------|------------------|
 | 61 | **Hot Take Generator — AI-Powered** | Kontroverse Takes → Engagement/Debatte | `lib/hot-take-generator.ts`, GPT-4 |
-<<<<<<< HEAD
-| 62 | **Trending CVE Roasts — „This CVE roasted my stack"** | Aktuelle CVEs + Person##erprise Plan** | Team-Roasts → B2B Revenue | `app/[lang]/roast-teams/page.tsx` |
-=======
 | 62 | **Trending CVE Roasts — „This CVE roasted my stack"** | Aktuelle CVEs + Personal Story → Relevanz | `app/[lang]/cve-roasts/page.tsx` |
 | 63 | **Tech Stack Roast Series — „Roasting Famous Startups"** | Roasts bekannter Startups → Newsjacking | `content/startup-roasts/` |
 | 64 | **Framework Wars — React vs Vue vs Angular Roasts** | Tech-Debatten → Traffic/Comments | `app/[lang]/framework-wars/page.tsx` |
@@ -1654,7 +1677,6 @@ When adding new keys to `dictionaries/de.json` and `dictionaries/en.json`, also 
 | 85 | **Roast Merch — „I Survived the Roast"** | T-Shirts, Stickers → Brand Awareness | `app/[lang]/merch/page.tsx`, Print-on-Demand |
 | 86 | **Roast Pro — Premium Features** | Gated Features → Conversion | `app/[lang]/roast-pro/page.tsx` |
 | 87 | **Roast Teams — Enterprise Plan** | Team-Roasts → B2B Revenue | `app/[lang]/roast-teams/page.tsx` |
->>>>>>> 68b9fee295a064d8e68a89149319116d24d2e426
 | 88 | **Roast Certification — „Security Verified"** | Badge für Unternehmen → Authority | `app/[lang]/certification/page.tsx` |
 | 89 | **Roast Consulting — „Fix Your Stack"** | Professional Services → High-Ticket | `app/[lang]/consulting/page.tsx` |
 | 90 | **Roast Partners — Integration Marketplace** | Tool-Integrationen → Ecosystem | `app/[lang]/partners/page.tsx` |

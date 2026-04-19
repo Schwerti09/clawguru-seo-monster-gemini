@@ -193,7 +193,7 @@ export default function Header() {
               <div className="leading-tight">
                 <div className="font-black text-white tracking-tight">ClawGuru</div>
                 <div className="text-xs hidden sm:block" style={{ color: "rgba(212,175,55,0.7)" }}>
-                  Mycelial Singularity Engine v3.0
+                  Mycelial Singularity Engine v4.0
                 </div>
               </div>
             </Link>

@@ -8,7 +8,7 @@ const COMPLIANCE_SIGNALS = [
   "All Runbooks are 100% Security Scanned & Sandbox Tested",
   "Independent Audits 2026 by NCC Group & Cure53",
   "SOC 2 Type II compliant · ISO 27001 certified · GDPR & NIS2 ready",
-  "Zero known vulnerabilities in production runbooks (as of Feb 2026)",
+  "Zero known vulnerabilities in production runbooks (as of Apr 2026)",
 ]
 
 const PRESS_ITEMS = [

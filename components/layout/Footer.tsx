@@ -34,7 +34,7 @@ export default function Footer() {
             <span className="text-gray-500 text-sm ml-3">{nav.footerDescription || "Security Intelligence Platform"}</span>
           </div>
           <div className="flex items-center gap-3">
-            <a href={`${prefix}/securitycheck`} className="bg-cyan-600 hover:bg-cyan-500 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors">
+            <a href={`${prefix}/check`} className="bg-cyan-600 hover:bg-cyan-500 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors">
               🛡️ Security Check starten
             </a>
             <a href={`${prefix}/pricing`} className="border border-gray-700 hover:border-gray-500 text-gray-300 hover:text-white text-sm px-4 py-2 rounded-lg transition-colors">
@@ -50,7 +50,7 @@ export default function Footer() {
         {/* Platform */}
         <FooterSection title="Platform" accent="bg-cyan-400">
           <FooterLink href={`${prefix}/runbooks`}>Runbooks</FooterLink>
-          <FooterLink href={`${prefix}/securitycheck`}>Security Check</FooterLink>
+          <FooterLink href={`${prefix}/check`}>Security Check</FooterLink>
           <FooterLink href={`${prefix}/copilot`}>Copilot AI</FooterLink>
           <FooterLink href={`${prefix}/oracle`}>Oracle</FooterLink>
           <FooterLink href={`${prefix}/neuro`}>Neuro AI</FooterLink>

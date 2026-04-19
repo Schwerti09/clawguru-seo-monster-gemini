@@ -11,7 +11,7 @@ export const SECURITY_STATS = {
   bypassRate: STATS.bypassRate,
   checksTotal: STATS.checksTotal,
   checksToday: STATS.checksToday,
-  lastUpdated: "Feb 2026",
+  lastUpdated: "Apr 2026",
 }
 
 export const AFFILIATE_LINKS = {

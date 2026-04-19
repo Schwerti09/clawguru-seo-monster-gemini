@@ -10,7 +10,8 @@
 
 1. **[DONE]** Morning brief + Revenue War Plan established & documented in AGENTS.md (v6.0)
 2. **[DONE]** Total War Round 12 all 7 phases completed (6 commits pushed)
-3. **[HIGH]** Tomorrow (Sun 20.04): Start Phase A Sprint — Task A1 (Public Score Pages) is the #1 priority
+3. **[DONE]** 🚨 Gemini Production Hotfix: Model-Fallback-Chain `lite → flash → 1.5-flash` + detailed error logging (commit pending deploy)
+4. **[HIGH]** Next: Task A1 (Public Score Pages) — Phase A Sprint start
 
 ---
 
@@ -49,8 +50,24 @@
 4. `dd60426f` — Phase 4 (Consulting CTAs + Trust)
 5. `82248aee` — Phase 7 (Team page)
 6. `5d8977ac` — Phase 6 (AGENTS.md War Lock v6.0)
+7. `92e5aa9e` — Revenue War Plan v6.0 + `status/DAILY_STATUS.md`
+8. (pending) — Gemini Hotfix: Model-Fallback-Chain + Detailed Error Logging
 
-**Total: 6 commits, 0 build errors, ~500 LOC added, 48 new pre-rendered URLs, 18 geo cities activated.**
+**Total: 8 commits, 0 build errors, ~500 LOC added, 48 new pre-rendered URLs, 18 geo cities activated.**
+
+### 🚨 Gemini Production Issue — Diagnosis + Hotfix
+- **Finding:** `https://clawguru.org/api/ai/health?full=1` returns `no_text` for ALL 3 providers (DeepSeek, OpenAI, Gemini) → Copilot + AI-Features production-broken
+- **Local test:** `GEMINI_API_KEY` works fine, `gemini-2.0-flash` responds with `"OK"` in ~700ms
+- **Root cause hypothesis:** Production env vars stale OR model `gemini-2.0-flash` deprecated for production key (HTTP 400)
+- **Hotfix applied** in `@lib/ai/providers.ts`:
+  - New default model: `gemini-2.5-flash-lite` (was `gemini-2.5-flash`) — lighter, more reliable
+  - Full fallback chain: `gemini-2.5-flash-lite` → `gemini-2.5-flash` → `gemini-1.5-flash`
+  - Detailed error logging: finishReason, raw candidate preview, chain-exhausted message
+  - Dedup logic for candidate array
+- **USER ACTION REQUIRED:**
+  1. Check Vercel/Netlify env vars for `GEMINI_API_KEY`, `OPENAI_API_KEY`, `DEEPSEEK_API_KEY` (are they set + valid?)
+  2. Optional: Set `GEMINI_MODEL=gemini-2.5-flash-lite` explicitly in prod env
+  3. After deploy: `curl https://clawguru.org/api/ai/health?full=1` — expect `ok: true` for at least Gemini
 
 ---
 

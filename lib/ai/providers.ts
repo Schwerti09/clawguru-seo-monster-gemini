@@ -240,14 +240,17 @@ async function callGemini(prompt: string): Promise<CallResult> {
   if (!apiKey) return { text: null, status: 401 };
   const base = (process.env.GEMINI_BASE_URL || "https://generativelanguage.googleapis.com/v1beta").replace(/\/$/, "");
   // Try preferred model first, then fallback chain.
-  const primary = process.env.GEMINI_MODEL || "gemini-2.5-flash";
-  const candidates = [
-    primary,
-    // Append fallback only when it differs from the configured primary.
-    // gemini-2.0-flash & gemini-2.0-flash-lite are deprecated (shutdown June 2026)
-    // and already return 400 for many projects — use gemini-2.5-flash-lite instead.
-    ...(primary !== "gemini-2.5-flash-lite" ? ["gemini-2.5-flash-lite"] : []),
-  ];
+  // NOTE (19.04.2026 hotfix): Default changed to gemini-2.5-flash-lite (lighter, more reliable, cheaper).
+  // gemini-2.0-flash & gemini-2.0-flash-lite are deprecated (shutdown June 2026) and can return errors.
+  const primary = process.env.GEMINI_MODEL || "gemini-2.5-flash-lite";
+  // Build full fallback chain in priority order, deduplicated, removing primary from fallbacks.
+  const FALLBACK_CHAIN = ["gemini-2.5-flash-lite", "gemini-2.5-flash", "gemini-1.5-flash"];
+  const seen = new Set<string>();
+  const candidates = [primary, ...FALLBACK_CHAIN].filter((m) => {
+    if (!m || seen.has(m)) return false;
+    seen.add(m);
+    return true;
+  });
   let lastStatus = 0;
   let lastError = "";
   for (const model of candidates) {
@@ -281,24 +284,43 @@ async function callGemini(prompt: string): Promise<CallResult> {
           break; // try next model
         }
         const data = await res.json();
-        const parts = data?.candidates?.[0]?.content?.parts;
-        if (!Array.isArray(parts)) break;
+        const candidate = data?.candidates?.[0];
+        const parts = candidate?.content?.parts;
+        const finishReason = candidate?.finishReason || "UNKNOWN";
+        if (!Array.isArray(parts)) {
+          // Log detailed diagnostics — helps detect safety-filter blocks, empty responses, etc.
+          console.error(
+            `[AI] Gemini/${model} returned no parts (finishReason=${finishReason}). Raw candidate:`,
+            JSON.stringify(candidate).slice(0, 400)
+          );
+          lastError = `no_parts finishReason=${finishReason}`;
+          break; // try next model
+        }
         // Filter out thinking tokens (thought: true) that 2.5 models may include
         const text = parts
           .filter((p: { thought?: boolean }) => !p.thought)
           .map((p: { text?: string }) => p?.text)
           .filter(Boolean)
           .join("");
-        if (typeof text === "string" && text.trim()) return { text: text.trim(), status: res.status };
-        break;
-      } catch {
+        if (typeof text === "string" && text.trim()) {
+          console.info(`[AI] Gemini/${model} success (${text.length} chars, finishReason=${finishReason})`);
+          return { text: text.trim(), status: res.status };
+        }
+        console.error(
+          `[AI] Gemini/${model} empty text (finishReason=${finishReason}, parts=${parts.length}). Trying next model.`
+        );
+        lastError = `empty_text finishReason=${finishReason}`;
+        break; // try next model
+      } catch (err) {
+        lastError = err instanceof Error ? err.message : String(err);
+        console.error(`[AI] Gemini/${model} threw: ${lastError}`);
         break; // try next model
       }
     }
   }
   // Propagate the last error body so outer callers can log it
   if (lastError) {
-    console.error(`[AI] Gemini all models exhausted. Last error: ${lastError}`);
+    console.error(`[AI] Gemini all models exhausted (chain: ${candidates.join(" → ")}). Last error: ${lastError}`);
   }
   return { text: null, status: lastStatus };
 }

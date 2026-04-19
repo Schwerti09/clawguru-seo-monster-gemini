@@ -10,8 +10,9 @@
 
 1. **[DONE]** Morning brief + Revenue War Plan established & documented in AGENTS.md (v6.0)
 2. **[DONE]** Total War Round 12 all 7 phases completed (6 commits pushed)
-3. **[DONE]** 🚨 Gemini Production Hotfix: Model-Fallback-Chain `lite → flash → 1.5-flash` + detailed error logging (commit pending deploy)
-4. **[HIGH]** Next: Task A1 (Public Score Pages) — Phase A Sprint start
+3. **[DONE]** 🚨 Gemini Production Hotfix: Model-Fallback-Chain `lite → flash → 1.5-flash` + detailed error logging (commit `12696f22`)
+4. **[DONE]** 🔑 Root-cause fix: All 3 production API keys were stale (22–35 days old, revoked). Rotated Gemini + OpenAI + DeepSeek via `vercel env rm/add`, triggered redeploy (commit `5c67b3b8`). Health-check ALL GREEN ✅
+5. **[HIGH]** Next: Task A1 (Public Score Pages) — Phase A Sprint start
 
 ---
 

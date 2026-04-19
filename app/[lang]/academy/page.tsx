@@ -580,6 +580,216 @@ export default async function AcademyPage({ params }: { params: { lang: string }
           </div>
         </section>
 
+        {/* LEARNING PATH (Round 12 — Visual Skill Progression) */}
+        <section className="py-20 bg-[#0a0a0a]">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl md:text-5xl font-black text-gray-100 mb-4">
+                {locale === "de" ? "Dein Lernpfad: Vom Einsteiger zum Security Pro" : "Your Learning Path: From Beginner to Security Pro"}
+              </h2>
+              <p className="text-xl text-gray-400 max-w-2xl mx-auto">
+                {locale === "de"
+                  ? "4 Stufen. Klar strukturiert. Praxisnah. Self-paced."
+                  : "4 levels. Clearly structured. Practical. Self-paced."}
+              </p>
+            </div>
+
+            <div className="max-w-5xl mx-auto">
+              {/* Progress Line */}
+              <div className="hidden md:block relative h-2 bg-gray-800 rounded-full mb-12 max-w-3xl mx-auto">
+                <div className="absolute inset-y-0 left-0 w-full bg-gradient-to-r from-green-500 via-cyan-500 via-purple-500 to-red-500 rounded-full" />
+                <div className="absolute inset-0 flex justify-between items-center px-2">
+                  {[0, 1, 2, 3].map((i) => (
+                    <div key={i} className="w-6 h-6 rounded-full bg-gray-900 border-2 border-cyan-500" />
+                  ))}
+                </div>
+              </div>
+
+              <div className="grid md:grid-cols-4 gap-6">
+                {/* Level 1: Beginner */}
+                <div className="bg-gray-800 border border-green-700/50 rounded-xl p-6 hover:border-green-500 transition-all">
+                  <div className="text-3xl mb-3">🌱</div>
+                  <div className="text-xs font-bold text-green-400 mb-1">
+                    {locale === "de" ? "STUFE 1" : "LEVEL 1"}
+                  </div>
+                  <h3 className="text-lg font-bold text-gray-100 mb-2">
+                    {locale === "de" ? "Beginner" : "Beginner"}
+                  </h3>
+                  <p className="text-sm text-gray-400 mb-4">
+                    {locale === "de"
+                      ? "Security-Grundlagen, OWASP Top 10, einfache Self-Hosted Setups."
+                      : "Security basics, OWASP Top 10, simple self-hosted setups."}
+                  </p>
+                  <div className="text-xs text-gray-500 mb-3">
+                    <strong className="text-gray-300">2–4 Std.</strong> · {locale === "de" ? "5 Module" : "5 modules"}
+                  </div>
+                  <Link href={`/${locale}/openclaw/self-hosted-security-checklist`} className="text-green-400 text-sm font-semibold hover:text-green-300">
+                    {locale === "de" ? "Starten →" : "Start →"}
+                  </Link>
+                </div>
+
+                {/* Level 2: Intermediate */}
+                <div className="bg-gray-800 border border-cyan-700/50 rounded-xl p-6 hover:border-cyan-500 transition-all">
+                  <div className="text-3xl mb-3">⚙️</div>
+                  <div className="text-xs font-bold text-cyan-400 mb-1">
+                    {locale === "de" ? "STUFE 2" : "LEVEL 2"}
+                  </div>
+                  <h3 className="text-lg font-bold text-gray-100 mb-2">
+                    {locale === "de" ? "Intermediate" : "Intermediate"}
+                  </h3>
+                  <p className="text-sm text-gray-400 mb-4">
+                    {locale === "de"
+                      ? "Docker/Kubernetes Hardening, Container Security, CI/CD Pipelines."
+                      : "Docker/Kubernetes hardening, container security, CI/CD pipelines."}
+                  </p>
+                  <div className="text-xs text-gray-500 mb-3">
+                    <strong className="text-gray-300">8–12 Std.</strong> · {locale === "de" ? "12 Module" : "12 modules"}
+                  </div>
+                  <Link href={`/${locale}/moltbot/container-security-docker-kubernetes`} className="text-cyan-400 text-sm font-semibold hover:text-cyan-300">
+                    {locale === "de" ? "Starten →" : "Start →"}
+                  </Link>
+                </div>
+
+                {/* Level 3: Advanced */}
+                <div className="bg-gray-800 border border-purple-700/50 rounded-xl p-6 hover:border-purple-500 transition-all">
+                  <div className="text-3xl mb-3">🔥</div>
+                  <div className="text-xs font-bold text-purple-400 mb-1">
+                    {locale === "de" ? "STUFE 3" : "LEVEL 3"}
+                  </div>
+                  <h3 className="text-lg font-bold text-gray-100 mb-2">
+                    {locale === "de" ? "Advanced" : "Advanced"}
+                  </h3>
+                  <p className="text-sm text-gray-400 mb-4">
+                    {locale === "de"
+                      ? "Zero-Trust, AI-Agent Security, Prompt Injection Defense, LLM Hardening."
+                      : "Zero-trust, AI-agent security, prompt injection defense, LLM hardening."}
+                  </p>
+                  <div className="text-xs text-gray-500 mb-3">
+                    <strong className="text-gray-300">12–18 Std.</strong> · {locale === "de" ? "18 Module" : "18 modules"}
+                  </div>
+                  <Link href={`/${locale}/moltbot/ai-agent-hardening-guide`} className="text-purple-400 text-sm font-semibold hover:text-purple-300">
+                    {locale === "de" ? "Starten →" : "Start →"}
+                  </Link>
+                </div>
+
+                {/* Level 4: Pro/Expert */}
+                <div className="bg-gradient-to-br from-red-900/40 to-orange-900/40 border border-red-700 rounded-xl p-6 hover:border-red-500 transition-all relative">
+                  <div className="absolute -top-3 right-3 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+                    PRO
+                  </div>
+                  <div className="text-3xl mb-3">🏆</div>
+                  <div className="text-xs font-bold text-red-400 mb-1">
+                    {locale === "de" ? "STUFE 4" : "LEVEL 4"}
+                  </div>
+                  <h3 className="text-lg font-bold text-gray-100 mb-2">
+                    {locale === "de" ? "Expert / Pro" : "Expert / Pro"}
+                  </h3>
+                  <p className="text-sm text-gray-400 mb-4">
+                    {locale === "de"
+                      ? "Live-Cohort, 1:1 Code-Review, Zertifizierung, Live Incident Drills."
+                      : "Live cohort, 1:1 code review, certification, live incident drills."}
+                  </p>
+                  <div className="text-xs text-gray-500 mb-3">
+                    <strong className="text-gray-300">{locale === "de" ? "4 Wochen" : "4 weeks"}</strong> · {locale === "de" ? "Live + on-demand" : "Live + on-demand"}
+                  </div>
+                  <a href="#pro-cohort" className="text-red-400 text-sm font-semibold hover:text-red-300">
+                    {locale === "de" ? "Mehr erfahren →" : "Learn more →"}
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* PRO COHORT CTA (Round 12 — Monetization) */}
+        <section id="pro-cohort" className="py-20 bg-gradient-to-br from-red-900/40 via-[#0a0a0a] to-orange-900/40 border-y border-red-700/30">
+          <div className="container mx-auto px-4">
+            <div className="max-w-5xl mx-auto">
+              <div className="text-center mb-12">
+                <div className="inline-block bg-red-900 border border-red-500 text-red-300 text-xs font-bold px-3 py-1 rounded-full mb-4 animate-pulse">
+                  {locale === "de" ? "🚀 NÄCHSTE COHORT STARTET BALD" : "🚀 NEXT COHORT STARTING SOON"}
+                </div>
+                <h2 className="text-4xl md:text-5xl font-black text-gray-100 mb-4">
+                  {locale === "de" ? "ClawGuru Academy Pro — Live Cohort" : "ClawGuru Academy Pro — Live Cohort"}
+                </h2>
+                <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+                  {locale === "de"
+                    ? "4-wöchige intensive Security-Ausbildung mit Live-Sessions, 1:1 Code-Review und offizieller ClawGuru-Zertifizierung."
+                    : "4-week intensive security training with live sessions, 1:1 code review, and official ClawGuru certification."}
+                </p>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-8 mb-12">
+                {/* Was du bekommst */}
+                <div className="bg-gray-800 border border-gray-700 rounded-xl p-6">
+                  <h3 className="text-xl font-bold text-gray-100 mb-4">
+                    {locale === "de" ? "Was du bekommst:" : "What you get:"}
+                  </h3>
+                  <ul className="space-y-3 text-gray-300">
+                    {[
+                      locale === "de" ? "8 Live-Sessions (2x pro Woche, 90 Min)" : "8 live sessions (2x per week, 90 min)",
+                      locale === "de" ? "1:1 Code-Review deines Stacks" : "1:1 code review of your stack",
+                      locale === "de" ? "Live Incident Response Drills" : "Live incident response drills",
+                      locale === "de" ? "Offizielle ClawGuru Pro-Zertifizierung" : "Official ClawGuru Pro certification",
+                      locale === "de" ? "Lifetime-Zugang zur Pro-Community (Discord)" : "Lifetime access to Pro community (Discord)",
+                      locale === "de" ? "Alle 4.200+ Runbooks in Pro-Version" : "All 4,200+ runbooks in Pro version",
+                    ].map((item, i) => (
+                      <li key={i} className="flex items-start gap-2">
+                        <span className="text-green-400 mt-1">✓</span>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Pricing */}
+                <div className="bg-gradient-to-br from-red-900 to-orange-900 border-2 border-red-500 rounded-xl p-6 relative">
+                  <div className="absolute -top-3 -right-3 bg-yellow-400 text-gray-900 text-xs font-black px-3 py-1 rounded-full">
+                    {locale === "de" ? "EARLY BIRD" : "EARLY BIRD"}
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-100 mb-2">
+                    {locale === "de" ? "Investition" : "Investment"}
+                  </h3>
+                  <div className="mb-4">
+                    <div className="text-4xl font-black text-white">€297</div>
+                    <div className="text-sm text-gray-300">
+                      {locale === "de" ? "DACH-Region · Early Bird (sonst €497)" : "DACH region · Early Bird (regular €497)"}
+                    </div>
+                  </div>
+                  <div className="mb-6 text-sm text-gray-200 space-y-1">
+                    <div>✓ {locale === "de" ? "30-Tage Geld-zurück-Garantie" : "30-day money-back guarantee"}</div>
+                    <div>✓ {locale === "de" ? "Rechnung mit USt-Ausweis" : "Invoice with VAT"}</div>
+                    <div>✓ {locale === "de" ? "Kein Abo — einmalige Zahlung" : "No subscription — one-time payment"}</div>
+                  </div>
+                  <a
+                    href="mailto:academy@clawguru.org?subject=Pro%20Cohort%20Anmeldung&body=Name%3A%0AFirma%3A%0AAktueller%20Stack%3A%0AZiel%3A"
+                    className="block w-full text-center bg-white text-red-900 font-black text-lg px-6 py-4 rounded-lg hover:bg-gray-100 transition-colors"
+                  >
+                    {locale === "de" ? "Platz sichern (8 freie Plätze)" : "Reserve your spot (8 spots left)"}
+                  </a>
+                  <p className="text-xs text-gray-300 mt-3 text-center">
+                    {locale === "de" ? "Begrenzte Plätze · Anmeldung per E-Mail" : "Limited seats · Registration via email"}
+                  </p>
+                </div>
+              </div>
+
+              {/* Trust signal */}
+              <div className="bg-gray-900 border border-gray-700 rounded-xl p-6 text-center">
+                <p className="text-sm text-gray-400 mb-3">
+                  {locale === "de"
+                    ? "Die letzten Cohorts waren in unter 7 Tagen ausverkauft. 96% der Teilnehmer empfehlen das Programm weiter."
+                    : "The last cohorts sold out in under 7 days. 96% of participants recommend the program."}
+                </p>
+                <div className="flex justify-center gap-6 text-xs text-gray-500">
+                  <div><strong className="text-cyan-400">96%</strong> {locale === "de" ? "Empfehlungsrate" : "Recommendation rate"}</div>
+                  <div><strong className="text-green-400">147</strong> {locale === "de" ? "Absolventen" : "Graduates"}</div>
+                  <div><strong className="text-yellow-400">4.9/5</strong> {locale === "de" ? "Bewertung" : "Rating"}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* FINAL CTA SECTION */}
         <section className="py-20 bg-gradient-to-br from-green-900/30 via-[#0a0a0a] to-red-900/30">
           <div className="container mx-auto px-4">

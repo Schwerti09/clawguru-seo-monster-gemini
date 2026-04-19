@@ -6,6 +6,8 @@ import { dbQuery } from '@/lib/db';
 const EXPANSION_CITIES = [
   // UAE
   { slug: 'dubai', name_de: 'Dubai', name_en: 'Dubai', country_code: 'AE', priority: 96, population: 3400000, quality: 92 },
+  // UAE (Round 12 addition)
+  { slug: 'abu-dhabi', name_de: 'Abu Dhabi', name_en: 'Abu Dhabi', country_code: 'AE', priority: 95, population: 1480000, quality: 87 },
   // Turkey
   { slug: 'istanbul', name_de: 'Istanbul', name_en: 'Istanbul', country_code: 'TR', priority: 95, population: 15500000, quality: 91 },
   // Saudi Arabia

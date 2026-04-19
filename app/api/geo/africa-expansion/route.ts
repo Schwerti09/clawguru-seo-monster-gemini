@@ -4,6 +4,8 @@ import { dbQuery } from '@/lib/db';
 
 // Africa Expansion Cities (Quality >= 85) - matching Asia/LatAm schema
 const EXPANSION_CITIES = [
+  // Egypt (Round 12 addition)
+  { slug: 'cairo', name_de: 'Kairo', name_en: 'Cairo', country_code: 'EG', priority: 95, population: 10230350, quality: 90 },
   // Nigeria
   { slug: 'lagos', name_de: 'Lagos', name_en: 'Lagos', country_code: 'NG', priority: 94, population: 14862000, quality: 90 },
   // Kenya
@@ -20,7 +22,9 @@ const EXPANSION_CITIES = [
   // Tanzania
   { slug: 'dar-es-salaam', name_de: 'Daressalam', name_en: 'Dar es Salaam', country_code: 'TZ', priority: 87, population: 6739000, quality: 85 },
   // Uganda
-  { slug: 'kampala', name_de: 'Kampala', name_en: 'Kampala', country_code: 'UG', priority: 86, population: 3648000, quality: 85 }
+  { slug: 'kampala', name_de: 'Kampala', name_en: 'Kampala', country_code: 'UG', priority: 86, population: 3648000, quality: 85 },
+  // Tunisia (Round 12 addition)
+  { slug: 'tunis', name_de: 'Tunis', name_en: 'Tunis', country_code: 'TN', priority: 85, population: 2700000, quality: 85 }
 ];
 
 const BASE_SLUGS = ["aws-nginx-hardening-2026", "aws-ssh-hardening-2026", "gcp-kubernetes-rbac-misconfig-2026"];

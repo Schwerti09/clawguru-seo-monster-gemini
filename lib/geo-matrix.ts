@@ -200,6 +200,14 @@ const SEEDED_CITY_SLUGS = new Set([
   "muscat",
   "amman",
   "beirut",
+  // Round 12 Expansion additions
+  "tunis",
+  "abu-dhabi",
+  // Oceania Expansion (Round 12)
+  "sydney",
+  "melbourne",
+  "auckland",
+  "brisbane",
 ])
 
 export function slugifyCity(input: string): string {

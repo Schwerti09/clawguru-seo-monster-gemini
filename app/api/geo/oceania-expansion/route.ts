@@ -7,6 +7,8 @@ const EXPANSION_CITIES = [
   // Australia
   { slug: 'sydney', name_de: 'Sydney', name_en: 'Sydney', country_code: 'AU', priority: 95, population: 5312000, quality: 91 },
   { slug: 'melbourne', name_de: 'Melbourne', name_en: 'Melbourne', country_code: 'AU', priority: 94, population: 5049000, quality: 90 },
+  // Australia (Round 12 addition)
+  { slug: 'brisbane', name_de: 'Brisbane', name_en: 'Brisbane', country_code: 'AU', priority: 92, population: 2560000, quality: 87 },
   // New Zealand
   { slug: 'auckland', name_de: 'Auckland', name_en: 'Auckland', country_code: 'NZ', priority: 93, population: 1718000, quality: 89 }
 ];

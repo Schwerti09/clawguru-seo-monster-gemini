@@ -40,7 +40,7 @@ export async function GET(req: NextRequest) {
   })
 
   const cveUrls = sortedCves.map(
-    (cve) => `${BASE_URL}/solutions/fix-${cve.cveId}`
+    (cve) => `${BASE_URL}/solutions/fix/${cve.cveId}`
   )
 
   // 2. Dynamic runbook URLs (fill the remainder of the 200-URL batch)

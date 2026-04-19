@@ -1,6 +1,6 @@
 // app/solutions/fix-[cve_id]/page.tsx
 // Programmatic SEO landing page for CVE fix solutions.
-// Route: /solutions/fix-CVE-2024-6387 (and any valid CVE ID)
+// Route: /solutions/fix/CVE-2024-6387 (and any valid CVE ID)
 // H1: "How to fix [CVE-ID] – Step-by-Step Guide"
 // H2: "What is [Vulnerability Name]?"
 // H3: "Impact and Risks for your Infrastructure"
@@ -36,12 +36,12 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   return {
     title: `How to fix ${entry.cveId} (${entry.name}) – Step-by-Step Guide | ClawGuru`,
     description: `${entry.description} CVSS ${entry.cvssScore}. Affected: ${entry.affectedVersions}. Fixed: ${entry.fixedVersions}. Mitigation steps, verification commands, and security best practices.`,
-    alternates: { canonical: `/${locale}/solutions/fix-${entry.cveId}` },
+    alternates: { canonical: `/${locale}/solutions/fix/${entry.cveId}` },
     openGraph: {
       title: `How to fix ${entry.cveId} – ${entry.name} | ClawGuru`,
       description: entry.description,
       type: "article",
-      url: `${BASE_URL}/${locale}/solutions/fix-${entry.cveId}`,
+      url: `${BASE_URL}/${locale}/solutions/fix/${entry.cveId}`,
     },
   }
 }
@@ -78,7 +78,7 @@ export default async function CveFixPage(props: Props) {
     "@type": "HowTo",
     name: `How to fix ${entry.cveId} – ${entry.name}`,
     description: entry.description,
-    url: `${BASE_URL}/${locale}/solutions/fix-${entry.cveId}`,
+    url: `${BASE_URL}/${locale}/solutions/fix/${entry.cveId}`,
     step: entry.mitigationSteps.map((s, i) => ({
       "@type": "HowToStep",
       position: i + 1,
@@ -92,7 +92,7 @@ export default async function CveFixPage(props: Props) {
     "@type": "TechArticle",
     headline: `How to fix ${entry.cveId} – ${entry.name}`,
     description: entry.description,
-    url: `${BASE_URL}/${locale}/solutions/fix-${entry.cveId}`,
+    url: `${BASE_URL}/${locale}/solutions/fix/${entry.cveId}`,
     datePublished: entry.publishedDate,
     dateModified: entry.publishedDate,
     author: { "@type": "Organization", name: "ClawGuru", url: BASE_URL },
@@ -114,7 +114,7 @@ export default async function CveFixPage(props: Props) {
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "ClawGuru", item: `${BASE_URL}/${locale}` },
       { "@type": "ListItem", position: 2, name: "Solutions", item: `${BASE_URL}/${locale}/solutions` },
-      { "@type": "ListItem", position: 3, name: entry.cveId, item: `${BASE_URL}/${locale}/solutions/fix-${entry.cveId}` },
+      { "@type": "ListItem", position: 3, name: entry.cveId, item: `${BASE_URL}/${locale}/solutions/fix/${entry.cveId}` },
     ],
   }
 

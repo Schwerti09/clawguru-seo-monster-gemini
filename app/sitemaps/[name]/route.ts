@@ -683,7 +683,7 @@ export async function GET(
       return respond(urlset(urls))
     }
 
-    // PROGRAMMATIC SEO: CVE Solutions sitemap (/solutions/fix-CVE-*)
+    // PROGRAMMATIC SEO: CVE Solutions sitemap (/solutions/fix/CVE-*)
     if (name === "solutions-cve" || name === "solutions" || name === "cves") {
       const urls = [
         { loc: `${base}/${DEFAULT_LOCALE}/solutions`, lastmod, changefreq: "weekly", priority: "0.85" },

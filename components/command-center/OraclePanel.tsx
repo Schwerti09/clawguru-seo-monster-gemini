@@ -60,7 +60,7 @@ export default function OraclePanel() {
                   <div className="text-xs text-emerald-300">{x.probability}%</div>
                 </div>
                 {x.recommended_runbook ? (
-                  <a href={`${prefix}/solutions/fix-${x.cve_id}`} className="text-xs text-cyan-300 underline">Fix ansehen →</a>
+                  <a href={`${prefix}/solutions/fix/${x.cve_id}`} className="text-xs text-cyan-300 underline">Fix ansehen →</a>
                 ) : null}
                 <div className="text-xs text-gray-400 mt-1">Services: {x.services?.join(", ") || "—"}</div>
               </div>

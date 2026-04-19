@@ -1,9 +1,9 @@
-// Localized CVE fix pages: /de/solutions/fix-[cve_id], /en/solutions/fix-[cve_id], etc.
+// Localized CVE fix pages: /de/solutions/fix/[cve_id], /en/solutions/fix/[cve_id], etc.
 // Delegates to the base CVE fix page so all locales resolve without 404.
 
 import { buildLocalizedAlternates, SUPPORTED_LOCALES, type Locale } from "@/lib/i18n"
 import { KNOWN_CVES } from "@/lib/cve-pseo"
-import CveFixPage from "@/app/solutions/fix-[cve_id]/page"
+import CveFixPage from "@/app/solutions/fix/[cve_id]/page"
 
 export const revalidate = 60
 export const dynamicParams = true
@@ -22,9 +22,9 @@ export async function generateMetadata(props: {
   const cveIdClean = decodeURIComponent(cve_id).toUpperCase()
   return {
     title: `How to fix ${cveIdClean} | ClawGuru`,
-    alternates: buildLocalizedAlternates(locale, `/solutions/fix-${cveIdClean}`),
+    alternates: buildLocalizedAlternates(locale, `/solutions/fix/${cveIdClean}`),
     openGraph: {
-      url: `https://clawguru.org/${locale}/solutions/fix-${cveIdClean}`,
+      url: `https://clawguru.org/${locale}/solutions/fix/${cveIdClean}`,
       type: "article" as const,
     },
     robots: "index, follow",

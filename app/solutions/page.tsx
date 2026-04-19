@@ -66,7 +66,7 @@ export default function SolutionsPage({ searchParams }: { searchParams?: { q?: s
     itemListElement: sorted.map((c, i) => ({
       "@type": "ListItem",
       position: i + 1,
-      url: `${BASE_URL}/${locale}/solutions/fix-${c.cveId}`,
+      url: `${BASE_URL}/${locale}/solutions/fix/${c.cveId}`,
       name: `How to fix ${c.cveId} – ${c.name}`,
     })),
   }
@@ -120,7 +120,7 @@ export default function SolutionsPage({ searchParams }: { searchParams?: { q?: s
               <span className="text-green-300 font-bold">{exactMatch.cveId}</span>
               <span className="text-green-200 text-sm ml-2">— {exactMatch.name}</span>
             </div>
-            <a href={`${prefix}/solutions/fix-${exactMatch.cveId}`} className="bg-green-700 hover:bg-green-600 text-white text-sm px-4 py-2 rounded-lg transition-colors">
+            <a href={`${prefix}/solutions/fix/${exactMatch.cveId}`} className="bg-green-700 hover:bg-green-600 text-white text-sm px-4 py-2 rounded-lg transition-colors">
               Fix Guide öffnen →
             </a>
           </div>
@@ -130,7 +130,7 @@ export default function SolutionsPage({ searchParams }: { searchParams?: { q?: s
         {query && sorted.length === 0 && (
           <div className="mt-6 bg-gray-800 border border-gray-700 rounded-lg p-6 text-center text-gray-400">
             <p className="mb-2">Keine CVEs für <strong className="text-gray-200">{searchParams?.q}</strong> gefunden.</p>
-            <p className="text-sm">Direkt zur Fix-Seite: <a href={`${prefix}/solutions/fix-${searchParams?.q}`} className="text-cyan-400 hover:underline">/solutions/fix-{searchParams?.q}</a></p>
+            <p className="text-sm">Direkt zur Fix-Seite: <a href={`${prefix}/solutions/fix/${searchParams?.q}`} className="text-cyan-400 hover:underline">/solutions/fix/{searchParams?.q}</a></p>
           </div>
         )}
 
@@ -140,7 +140,7 @@ export default function SolutionsPage({ searchParams }: { searchParams?: { q?: s
             return (
               <a
                 key={cve.cveId}
-                href={`${prefix}/solutions/fix-${cve.cveId}`}
+                href={`${prefix}/solutions/fix/${cve.cveId}`}
                 className="p-5 rounded-3xl border border-gray-800 bg-black/25 hover:bg-black/35 transition-colors group"
               >
                 <div className="flex items-center justify-between mb-3">
@@ -172,11 +172,11 @@ export default function SolutionsPage({ searchParams }: { searchParams?: { q?: s
           <p className="mb-2">
             <strong className="text-gray-200">How it works:</strong> Each CVE page is generated dynamically from
             curated vulnerability data and enhanced with Gemini AI for unique, SEO-optimized content.
-            Routes follow the pattern: <code className="font-mono text-cyan-400">/solutions/fix-CVE-YYYY-NNNNN</code>
+            Routes follow the pattern: <code className="font-mono text-cyan-400">/solutions/fix/CVE-YYYY-NNNNN</code>
           </p>
           <p>
             Missing a CVE? Navigate directly to{" "}
-            <code className="font-mono text-cyan-400">/solutions/fix-CVE-YYYY-NNNNN</code>{" "}
+            <code className="font-mono text-cyan-400">/solutions/fix/CVE-YYYY-NNNNN</code>{" "}
             for any valid CVE ID to get an auto-generated fix guide.
           </p>
         </div>

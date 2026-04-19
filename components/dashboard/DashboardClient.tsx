@@ -274,7 +274,7 @@ function LiveThreatNetwork(props: { tier: AccessPlan }) {
           <div className="text-sm font-bold mb-2">Neueste Viren (CVE‑Pulse)</div>
           <div className="grid grid-cols-1 gap-2">
             {cves.map((x: any) => (
-              <a key={x.cveId} href={`${prefix}/solutions/fix-${x.cveId}`} className="px-3 py-2 rounded-xl border border-gray-800 bg-black/30 hover:bg-black/40 flex items-center justify-between">
+              <a key={x.cveId} href={`${prefix}/solutions/fix/${x.cveId}`} className="px-3 py-2 rounded-xl border border-gray-800 bg-black/30 hover:bg-black/40 flex items-center justify-between">
                 <span className="text-xs font-mono text-gray-300">{x.cveId}</span>
                 <span className="text-sm font-bold text-gray-100">{x.name}</span>
                 <span className="text-xs text-gray-400">{x.cvssScore}</span>

@@ -1,6 +1,6 @@
 // app/tools/check-[service_name]/page.tsx
 // Programmatic SEO landing pages for service security check tools.
-// Route: /tools/check-nginx, /tools/check-ssh, /tools/check-docker, etc.
+// Route: /tools/check/nginx, /tools/check/ssh, /tools/check/docker, etc.
 
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
@@ -32,7 +32,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   return {
     title: `${entry.name} Security Check – Tools & Commands | ClawGuru`,
     description: `${entry.description} Check commands, common vulnerabilities, hardening tips, and related CVEs for ${entry.name}.`,
-    alternates: { canonical: `/${locale}/tools/check-${entry.slug}` },
+    alternates: { canonical: `/${locale}/tools/check/${entry.slug}` },
     openGraph: {
       title: `${entry.name} Security Check | ClawGuru`,
       description: `Security check and hardening guide for ${entry.name} with copy-paste commands.`,
@@ -56,7 +56,7 @@ export default async function ServiceCheckPage(props: Props) {
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "ClawGuru", item: `${BASE_URL}${prefix}` },
       { "@type": "ListItem", position: 2, name: "Tools", item: `${BASE_URL}${prefix}/tools` },
-      { "@type": "ListItem", position: 3, name: `Check ${entry.name}`, item: `${BASE_URL}${prefix}/tools/check-${entry.slug}` },
+      { "@type": "ListItem", position: 3, name: `Check ${entry.name}`, item: `${BASE_URL}${prefix}/tools/check/${entry.slug}` },
     ],
   }
 
@@ -65,7 +65,7 @@ export default async function ServiceCheckPage(props: Props) {
     "@type": "HowTo",
     name: `How to check ${entry.name} security`,
     description: entry.description,
-    url: `${BASE_URL}${prefix}/tools/check-${entry.slug}`,
+    url: `${BASE_URL}${prefix}/tools/check/${entry.slug}`,
     step: entry.checkCommands.map((cmd, i) => ({
       "@type": "HowToStep",
       position: i + 1,
@@ -198,7 +198,7 @@ export default async function ServiceCheckPage(props: Props) {
               {entry.relatedCves.map((cveId) => (
                 <a
                   key={cveId}
-                  href={`${prefix}/solutions/fix-${cveId}`}
+                  href={`${prefix}/solutions/fix/${cveId}`}
                   className="px-4 py-2.5 rounded-2xl border border-red-500/30 bg-red-500/10 text-red-400 text-sm font-black hover:border-red-500/60 hover:text-red-300 transition-colors"
                 >
                   {cveId} →
@@ -252,7 +252,7 @@ export default async function ServiceCheckPage(props: Props) {
             {SERVICE_CHECKS.filter((s) => s.slug !== entry.slug).map((s) => (
               <a
                 key={s.slug}
-                href={`${prefix}/tools/check-${s.slug}`}
+                href={`${prefix}/tools/check/${s.slug}`}
                 className="px-3 py-1.5 rounded-xl border border-gray-800 bg-black/25 text-xs text-gray-400 hover:border-cyan-500/40 hover:text-cyan-400 transition-colors"
               >
                 {s.name}

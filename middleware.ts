@@ -226,9 +226,26 @@ export function middleware(request: NextRequest) {
     return res
   }
 
-  // CVE fix routes: /solutions/fix-CVE-* and /[lang]/solutions/fix-CVE-*
-  // are handled by app/solutions/fix-[cve_id]/page.tsx and app/[lang]/solutions/fix-[cve_id]/page.tsx
-  // Do NOT redirect — let Next.js route to the actual fix guide pages.
+  // CVE fix routes: /solutions/fix/CVE-* and /[lang]/solutions/fix/CVE-*
+  // are handled by app/solutions/fix/[cve_id]/page.tsx and app/[lang]/solutions/fix/[cve_id]/page.tsx
+
+  // LEGACY URL REDIRECT (19.04.2026): Old routes used folder `fix-[cve_id]` (literal-prefix + bracket),
+  // which Next.js 14 treated as a static path (param always undefined). Fixed by moving to `fix/[cve_id]`.
+  // Redirect any incoming `/solutions/fix-CVE-*` (and localized variant) to new `/solutions/fix/CVE-*`
+  // to preserve external backlinks & SEO equity.
+  const legacyCveFix = pathname.match(/^(\/(?:[a-z]{2}(?:-[a-z]{2})?\/)?)solutions\/fix-(CVE-.+)$/i)
+  if (legacyCveFix) {
+    const url = request.nextUrl.clone()
+    url.pathname = `${legacyCveFix[1]}solutions/fix/${legacyCveFix[2]}`
+    return NextResponse.redirect(url, 308)
+  }
+  // Same for service check tool pages: /tools/check-<service> -> /tools/check/<service>
+  const legacyToolsCheck = pathname.match(/^(\/(?:[a-z]{2}(?:-[a-z]{2})?\/)?)tools\/check-([^/]+)$/i)
+  if (legacyToolsCheck) {
+    const url = request.nextUrl.clone()
+    url.pathname = `${legacyToolsCheck[1]}tools/check/${legacyToolsCheck[2]}`
+    return NextResponse.redirect(url, 308)
+  }
 
   // Apply per-IP rate limiting for hot routes (default ON; set MW_RL_ENABLED=0 to disable)
   if (process.env.MW_RL_ENABLED !== '0') {

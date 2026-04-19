@@ -568,7 +568,7 @@ export default function OpsWall() {
               {(cves || []).slice(0, visibleCveCount).map((x) => (
                 <a
                   key={x.cveId}
-                  href={`${prefix}/solutions/fix-${x.cveId}`}
+                  href={`${prefix}/solutions/fix/${x.cveId}`}
                   className="flex items-center justify-between px-3 py-2 rounded-2xl border border-gray-800 bg-black/20 hover:bg-black/30 transition-colors"
                 >
                   <div className="flex items-center gap-2">

@@ -350,6 +350,8 @@ export async function GET(
         "check-methodology-30-seconds","kubernetes-security",
         // VIRAL Round 12 Steps 98+99
         "api-beta","manifesto",
+        // E-E-A-T Team Page (Round 12 Bonus)
+        "team",
       ]
       // Quality geo landing pages (50 cities with local compliance context)
       const GEO_QUALITY_SLUGS = [

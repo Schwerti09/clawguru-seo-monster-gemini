@@ -52,6 +52,7 @@ export default function Header() {
     { href: `${prefix}/case-studies`, label: dict.nav.cases },
     { href: `${prefix}/hosting-kosten`, label: dict.nav.costs },
     { href: `${prefix}/ueber-uns`, label: dict.nav.about },
+    { href: `${prefix}/team`, label: "Team" },
   ]
 
   const ALL_NAV = [...PRIMARY_NAV, ...MORE_NAV]

@@ -123,7 +123,7 @@ const ACADEMY_TRACKS = [
     icon: "🔐",
     duration: "12–18 Stunden",
     color: "from-purple-500 to-pink-600",
-    link: "/moltbot/ai-agent-hardening-guide",
+    link: "/moltbot/zero-trust-architecture",
   },
   {
     id: "incident-response",
@@ -137,7 +137,7 @@ const ACADEMY_TRACKS = [
     icon: "⚡",
     duration: "8–12 Stunden",
     color: "from-yellow-500 to-amber-600",
-    link: "/runbooks",
+    link: "/moltbot/security-automation-workflows",
   },
 ]
 
@@ -231,8 +231,8 @@ export default async function AcademyPage({ params }: { params: { lang: string }
       itemListElement: ACADEMY_TRACKS.map((track, i) => ({
         "@type": "Course",
         position: i + 1,
-        name: t[`track_${track.id.replace('-', '_')}_title` as keyof typeof t] as string,
-        description: t[`track_${track.id.replace('-', '_')}_desc` as keyof typeof t] as string,
+        name: t[`track_${track.id.replace(/-/g, '_')}_title` as keyof typeof t] as string,
+        description: t[`track_${track.id.replace(/-/g, '_')}_desc` as keyof typeof t] as string,
         provider: { "@type": "Organization", name: "ClawGuru" },
       })),
     },
@@ -375,17 +375,17 @@ export default async function AcademyPage({ params }: { params: { lang: string }
               {ACADEMY_TRACKS.map((track) => (
                 <Link
                   key={track.id}
-                  href={track.link}
+                  href={`/${locale}${track.link}`}
                   className="group relative bg-gray-800 p-8 rounded-2xl border border-gray-700 hover:border-green-500/50 transition-all duration-300 hover:transform hover:-translate-y-1"
                 >
                   <div className={`absolute inset-0 bg-gradient-to-br ${track.color} opacity-0 group-hover:opacity-10 transition-opacity duration-300 rounded-2xl`} />
                   <div className="relative">
                     <div className="text-4xl mb-4">{track.icon}</div>
                     <h3 className="text-2xl font-bold text-gray-100 mb-3 group-hover:text-green-400 transition-colors">
-                      {t[`track_${track.id.replace('-', '_')}_title` as keyof typeof t] as string}
+                      {t[`track_${track.id.replace(/-/g, '_')}_title` as keyof typeof t] as string}
                     </h3>
                     <p className="text-gray-400 mb-6 leading-relaxed">
-                      {t[`track_${track.id.replace('-', '_')}_desc` as keyof typeof t] as string}
+                      {t[`track_${track.id.replace(/-/g, '_')}_desc` as keyof typeof t] as string}
                     </p>
                     <div className="flex items-center gap-4 text-sm">
                       <span className="px-3 py-1 rounded-full bg-gray-700 text-gray-300">
@@ -425,15 +425,15 @@ export default async function AcademyPage({ params }: { params: { lang: string }
                     <span className="text-gray-500 text-sm">{course.duration}</span>
                   </div>
                   <h3 className="text-xl font-bold text-gray-100 mb-3">
-                    {t[`course_${course.id.replace('-', '_')}_title` as keyof typeof t] as string}
+                    {t[`course_${course.id.replace(/-/g, '_')}_title` as keyof typeof t] as string}
                   </h3>
                   <p className="text-gray-400 text-sm mb-6 leading-relaxed">
-                    {t[`course_${course.id.replace('-', '_')}_desc` as keyof typeof t] as string}
+                    {t[`course_${course.id.replace(/-/g, '_')}_desc` as keyof typeof t] as string}
                   </p>
                   <div className="flex items-center justify-between">
                     <span className="text-gray-500 text-sm">{index % 2 === 0 ? t.difficulty_medium : t.difficulty_advanced}</span>
                     <Link
-                      href={course.link}
+                      href={`/${locale}${course.link}`}
                       className="text-green-400 font-semibold hover:text-green-300 transition-colors flex items-center gap-1"
                     >
                       {t.start_now}
@@ -464,7 +464,7 @@ export default async function AcademyPage({ params }: { params: { lang: string }
               {FREE_RESOURCES.map((resource, index) => (
                 <Link
                   key={index}
-                  href={resource.link}
+                  href={`/${locale}${resource.link}`}
                   className="group bg-gray-800 p-6 rounded-xl border border-gray-700 hover:border-green-500/50 transition-all duration-300 text-center"
                 >
                   <div className="text-4xl mb-4">{resource.icon}</div>

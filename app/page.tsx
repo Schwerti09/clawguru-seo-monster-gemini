@@ -356,6 +356,55 @@ export default async function Home({ dict, locale }: HomeProps = {}) {
         </Container>
       </section>
 
+      {/* IT-Security City Pages - Top 5 DACH */}
+      <section className="py-16" style={{ background: "var(--surface-0)" }}>
+        <Container>
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-8">
+              <div className="text-xs font-mono uppercase tracking-widest mb-2 text-cyan-400">
+                {safeLocale === 'de' ? 'IT-Security nach Stadt' : 'IT Security by City'}
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-black text-white">
+                {safeLocale === 'de' ? 'Lokale Compliance-Anforderungen' : 'Local Compliance Requirements'}
+              </h2>
+              <p className="mt-2 text-gray-400 text-sm sm:text-base">
+                {safeLocale === 'de' ? 'IT-Security-Richtlinien für Unternehmen in den wichtigsten DACH-Städten.' : 'IT security guidelines for companies in key DACH cities.'}
+              </p>
+            </div>
+            <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+              {[
+                { slug: 'berlin', nameDE: 'Berlin', nameEN: 'Berlin' },
+                { slug: 'muenchen', nameDE: 'München', nameEN: 'Munich' },
+                { slug: 'hamburg', nameDE: 'Hamburg', nameEN: 'Hamburg' },
+                { slug: 'frankfurt', nameDE: 'Frankfurt', nameEN: 'Frankfurt' },
+                { slug: 'koeln', nameDE: 'Köln', nameEN: 'Cologne' },
+              ].map((city) => (
+                <a
+                  key={city.slug}
+                  href={`${prefix}/it-security/${city.slug}`}
+                  className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:border-gray-600 transition-colors"
+                >
+                  <div className="font-semibold text-cyan-400 mb-1">
+                    {safeLocale === 'de' ? city.nameDE : city.nameEN}
+                  </div>
+                  <div className="text-xs text-gray-400">
+                    {safeLocale === 'de' ? 'DSGVO · BSI · NIS2' : 'GDPR · BSI · NIS2'}
+                  </div>
+                </a>
+              ))}
+            </div>
+            <div className="text-center mt-6">
+              <a
+                href={`${prefix}/it-security`}
+                className="text-cyan-400 hover:text-cyan-300 text-sm font-semibold"
+              >
+                {safeLocale === 'de' ? 'Alle 50 Städte anzeigen →' : 'View all 50 cities →'}
+              </a>
+            </div>
+          </div>
+        </Container>
+      </section>
+
       <section className="py-16">
         <Container>
           <div className="grid lg:grid-cols-2 gap-10 items-start">

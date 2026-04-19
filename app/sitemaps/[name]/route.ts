@@ -349,6 +349,17 @@ export async function GET(
         "gateway-auth-10-steps","waf-2027","xxe-2026","hetzner-vs-do-security-baseline-2026",
         "check-methodology-30-seconds","kubernetes-security",
       ]
+      // Quality geo landing pages (50 cities with local compliance context)
+      const GEO_QUALITY_SLUGS = [
+        "berlin","muenchen","hamburg","frankfurt","koeln","wien","zurich","stuttgart","duesseldorf","leipzig",
+        "london","manchester","edinburgh","bristol","birmingham",
+        "new-york","san-francisco","austin","seattle","chicago",
+        "amsterdam","rotterdam","bruessel","antwerpen","utrecht",
+        "singapur","tokyo","seoul","bangalore","mumbai",
+        "sao-paulo","mexico-city","buenos-aires","bogota","lima",
+        "stockholm","copenhagen","oslo","helsinki","reykjavik",
+        "paris","madrid","barcelona","rome","warsaw","prague","budapest","athens","lisbon","dublin",
+      ]
       const moltbotBatch6Urls = MOLTBOT_BATCH6.flatMap((slug) =>
         SUPPORTED_LOCALES.map((locale) => ({ loc: `${base}/${locale}/moltbot/${slug}`, lastmod, changefreq: "monthly", priority: "0.85" }))
       )
@@ -369,6 +380,9 @@ export async function GET(
       }))
       const solutionsUrls = SOLUTIONS_SLUGS.map((slug) => ({
         loc: `${base}/${locale}/solutions/${slug}`, lastmod, changefreq: "weekly", priority: "0.86",
+      }))
+      const geoQualityUrls = GEO_QUALITY_SLUGS.map((slug) => ({
+        loc: `${base}/${locale}/it-security/${slug}`, lastmod, changefreq: "weekly", priority: "0.84",
       }))
       const urls = [
         { loc: `${base}/${locale}`, lastmod, changefreq: "daily", priority: "0.9" },
@@ -454,6 +468,7 @@ export async function GET(
         ...compareUrls,
         ...guideUrls,
         ...solutionsUrls,
+        ...geoQualityUrls,
       ]
       return respond(urlset(urls))
     }

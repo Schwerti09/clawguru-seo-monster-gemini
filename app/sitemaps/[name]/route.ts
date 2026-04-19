@@ -348,6 +348,8 @@ export async function GET(
         "ai-agent-security","ai-agent-threat-model-template","api-key-leak-response-playbook",
         "gateway-auth-10-steps","waf-2027","xxe-2026","hetzner-vs-do-security-baseline-2026",
         "check-methodology-30-seconds","kubernetes-security",
+        // VIRAL Round 12 Steps 98+99
+        "api-beta","manifesto",
       ]
       // Quality geo landing pages (50 cities with local compliance context)
       const GEO_QUALITY_SLUGS = [

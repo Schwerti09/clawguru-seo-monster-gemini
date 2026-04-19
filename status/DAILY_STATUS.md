@@ -12,7 +12,8 @@
 2. **[DONE]** Total War Round 12 all 7 phases completed (6 commits pushed)
 3. **[DONE]** 🚨 Gemini Production Hotfix: Model-Fallback-Chain `lite → flash → 1.5-flash` + detailed error logging (commit `12696f22`)
 4. **[DONE]** 🔑 Root-cause fix: All 3 production API keys were stale (22–35 days old, revoked). Rotated Gemini + OpenAI + DeepSeek via `vercel env rm/add`, triggered redeploy (commit `5c67b3b8`). Health-check ALL GREEN ✅
-5. **[HIGH]** Next: Task A1 (Public Score Pages) — Phase A Sprint start
+5. **[DONE]** 🐛 **Critical routing bug fixed** (commit `3593b7f3`): `/solutions` page all "View Fix Guide" buttons broken. Root cause: Next.js 14 treats `fix-[cve_id]` folders (literal-prefix + dynamic-bracket) as static paths → `params.cve_id` always `undefined` → every fix URL redirected to `?q=undefined`. Fix: moved to standard `fix/[cve_id]` convention for all CVE solution + service check tool routes. Added 308 legacy redirects to preserve SEO/backlinks. Verified live: `/solutions/fix/CVE-*` → 200, `/tools/check/nginx` → 200, legacy `/fix-CVE-*` → 308.
+6. **[HIGH]** Next: Task A1 (Public Score Pages) — Phase A Sprint start
 
 ---
 

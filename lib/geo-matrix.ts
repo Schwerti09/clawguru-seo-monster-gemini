@@ -178,30 +178,21 @@ const SEEDED_CITY_SLUGS = new Set([
   "hochiminhcity",
   "kualalumpur",
   "hanoi",
-  // Africa Expansion
+  // Africa Expansion (Round 12)
   "cairo",
   "lagos",
   "nairobi",
   "johannesburg",
-  "cape-town",
   "casablanca",
+  "cape-town",
   "accra",
-  "addis-ababa",
-  "dar-es-salaam",
-  "kampala",
-  // Middle East Expansion
+  "tunis",
+  // Middle East Expansion (Round 12)
   "dubai",
   "istanbul",
   "riyadh",
   "tel-aviv",
   "doha",
-  "kuwait-city",
-  "manama",
-  "muscat",
-  "amman",
-  "beirut",
-  // Round 12 Expansion additions
-  "tunis",
   "abu-dhabi",
   // Oceania Expansion (Round 12)
   "sydney",

@@ -259,15 +259,14 @@ Functional `mailto:` on /consulting already done (Round 12 Phase 4). Next: Calen
 - **Fix 4:** Footer `/securitycheck` → `/check` (`Footer.tsx:37, 53`)
 - **Commit:** — (batched into Phase 3)
 
-### Phase 3: Africa/MEA/Oceania Geo Expansion ✅ COMPLETED (19.04.2026)
-- **18 neue Städte aktiviert** in `lib/data/geo-cities-db.ts` (`active: true`)
-- **Africa (5):** Johannesburg (ZA), Cape Town (ZA), Lagos (NG), Nairobi (KE), Cairo (EG)
-- **Oceania (5):** Sydney (AU), Melbourne (AU), Brisbane (AU), Perth (AU), Auckland (NZ)
-- **MEA (4):** Dubai (AE), Abu Dhabi (AE), Tel Aviv (IL), Istanbul (TR)
-- **North America (3):** Toronto (CA), Vancouver (CA), Montreal (CA)
-- **Additional (1):** Madrid (ES)
+### Phase 3: Africa/MEA/Oceania Geo Expansion ✅ COMPLETED (20.04.2026)
+- **18 neue Städte aktiviert** in `app/api/geo/africa-mea-expansion/route.ts`
+- **Africa (8):** Cairo (EG), Lagos (NG), Nairobi (KE), Johannesburg (ZA), Casablanca (MA), Cape Town (ZA), Accra (GH), Tunis (TN)
+- **Middle East (6):** Dubai (AE), Istanbul (TR), Riyadh (SA), Tel Aviv (IL), Doha (QA), Abu Dhabi (AE)
+- **Oceania (4):** Sydney (AU), Melbourne (AU), Auckland (NZ), Brisbane (AU)
+- **SEEDED_CITY_SLUGS** in `lib/geo-matrix.ts` aktualisiert (18 Slugs)
 - **Potential:** 18 cities × ~128 runbook combinations = ~2,304 new geo-URLs
-- **Commit:** `33716f38` pushed 19.04.2026
+- **Commit:** `23c439c0` pushed 20.04.2026
 
 ### Phase 5: VIRAL Steps 98+99 ✅ COMPLETED (19.04.2026)
 - **Step 98 — `/api-beta`:** Enterprise API beta landing with 4 use cases (SOC, DevSecOps, AI Platform, Compliance), 6 endpoints, beta pricing table (Free/Pro/Enterprise), enterprise contact mailto

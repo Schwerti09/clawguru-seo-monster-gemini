@@ -1,8 +1,19 @@
-﻿# ClawGuru — AGENTS.md · Master Operating Manual v6.0 (19.04.2026)
+﻿# ClawGuru — AGENTS.md · Master Operating Manual v6.0 (20.04.2026)
 
 > **This document is the single source of truth for every agent working in this codebase.**
 > Read it completely BEFORE making any change. Update the Session Log after every session.
-> Last updated: 19.04.2026 | Language: English (maximises AI model compatibility)
+> Last updated: 20.04.2026 | Language: English (maximises AI model compatibility)
+
+---
+
+## TOTAL WAR ROUND 12 — COMPLETED (20.04.2026)
+Phase 1: Bug Fixes ✅ Footer /check, Banner Apr 2026, Nav v4.0
+Phase 2: Academy Content Expansion ✅ Learning Path + 4 Courses
+Phase 3: Africa/MEA/Oceania ✅ 18 neue Städte (~2.300 URLs)
+Phase 4: Enterprise Lead Capture ✅ Consulting 5k-15k live
+Phase 5: VIRAL 98+99 ✅ API Beta + Manifesto — 99/99 COMPLETE
+Phase 6: Team Page ✅ E-E-A-T Signals (Rolf S., Mara K., Jonas P.)
+Phase 7: Launch Assets ✅ PH/HN/X/Reddit/LinkedIn/Stripe docs
 
 ---
 
@@ -1077,6 +1088,44 @@ Activates 27 cities: Japan (5), South Korea (5), Brazil (5), Mexico (5), Southea
 
 ---
 
+## LAUNCH PLAN — 06.05.2026
+
+### Platforms
+- **Primary:** Product Hunt (PH Top 5 of Day target)
+- **Secondary:** Hacker News (Show HN), Reddit (r/selfhosted, r/homelab, r/sysadmin), X (Twitter), LinkedIn
+
+### Launch Assets (docs/launch/)
+All 6 files ready:
+- `product-hunt-assets.md` — Hunter, gallery images, tagline, first-comment
+- `show-hn-post.md` — 7 versions A/B-test ready
+- `reddit-launch-posts.md` — 5 subs covered (value-first, not promotional)
+- `x-launch-thread.md` — 15 tweets with images
+- `linkedin-launch-post.md` — Founder account post (inline in README.md)
+- `README.md` — Phase B Launch TODO List (15 tasks T-7 to T+7)
+
+### Stripe Coupons (Ready in Dashboard)
+- `HUNTER50` — 50% off first month Pro (Product Hunt)
+- `SHOWHN50` — 50% off first month Pro (Hacker News)
+- `REDDIT30` — 30% off first month Pro (Reddit)
+- `BIRDS25` — 25% off first month Pro (X/Twitter)
+- `LINKEDIN25` — 25% off first month Pro (LinkedIn)
+
+### Revenue Targets
+- **T+7 (Launch Week):** 10 Pro-Subs → 490€ MRR
+- **T+30 (Launch Month):** 1 Consulting-Anfrage → 5.000€+ Fixed-Fee
+
+### Recovery Strategy
+Google March 2026 Core Update has reduced organic traffic by ~40%. Next recovery wave expected June/July 2026 (next Core Update cycle). Consulting revenue bridges this phase until SEO recovers.
+
+### Launch Timeline
+- **T-7 (29.04.2026):** PH claim + Gallery Images, Stripe Coupons
+- **T-5 (01.05.2026):** Reddit/X warm-up posts
+- **T-3 (03.05.2026):** PH draft finalization, HN post ready
+- **T-0 (06.05.2026):** PH 00:01 PST + HN 07:00 EST + Reddit 10:00 EST
+- **T+1 (07.05.2026):** Post-mortem on `/launch-results`, thank-you emails
+
+---
+
 ## 3. TECH STACK & ARCHITECTURE
 
 ### Stack
@@ -1658,23 +1707,6 @@ Will be resolved automatically when upgrading to Next.js 15 + eslint 9 (future s
 | 06.04.2026 | 1–4 | Security audit, Cockpit Realism A–D, Killermachine v3, China + Global Expansion |
 | 06.04.2026 | 5 | 1M-pages strategy, content pipeline defined |
 | 07.04.2026 | 6 | Moltbot Batch 1+2 (21 pages), OpenClaw Batch 1 (10 pages), Asia/LatAm Geo (27 cities), Solutions (5 pages), Compare (5 pages), AGENTS.md v5 |
-| 08.04.2026 | 7 | Full traffic analysis: robots.txt fix, sitemap 15 locales, 1,300+ new sitemap URLs, OG Soft-404 fix, Badge component, truncated JSX fix, Gemini model fix, AGENTS.md v6 |
-| 11.04.2026 | 8 | Page speed: framer-motion removed from shared bundle (lazy-load PageTransition/AnimatedBackground/CommandK, all heavy dashboard tabs, RunbookCard, Hero, FeaturesGrid, CTA, TrustSection, GlowButton, BentoCard, OverviewTab, PremiumMetricCard, PremiumGauge). CSS animations replace JS animations. CLS fix on command-center. |
-| 12.04.2026 | 9 | SEO: hreflang xhtml:link removed from sitemap XML. Duplicate /check URL removed. Traffic growth sprint: /de/check CTA + proof bullets + score methodology. /de/roast-my-stack FAQ + examples. Compare Batch 3 (trivy/checkov/wazuh). /kubernetes-security pillar page. Compare Batch 4 (snyk/victorops/ossec). FAQPage + WebPage JSON-LD added to all 37 Moltbot pages via batch script. security-framework migrated to buildLocalizedAlternates. FAQPage JSON-LD added to all 15 OpenClaw pages via batch script. Compare Batch 5 (moltbot-vs-splunk, openclaw-vs-crowdsec). AGENTS.md v8. |
-| 13.04.2026 | 10 | **Critical bugfix: /de/runbooks/cloud links (404 root cause found).** GEO_MATRIX_AUTO_REWRITE=1 rewrites base runbook slugs to geo-variants (e.g. hetzner-ssh-hardening → hetzner-ssh-hardening-groheide). City "Großheide" slugifies to "groheide" which is NOT in SEEDED_CITY_SLUGS → parseGeoVariantSlug returns full slug as baseSlug → getRunbook() = null → 404. Fix 1: Middleware now verifies city is seeded before rewriting (round-trip parseGeoVariantSlug check). Fix 2: Locale-Runbook-Page falls back to baseSlug instead of notFound() when geo-variant not indexed. Fix 3: Cache-Control immutable moved from all routes to /_next/static/ only (was caching 404s for 1 year). Fix 4: vercel.json maxDuration=60s for runbook pages. Fix 5: SITEMAP_100K_LOCALES locale guard replaced with SUPPORTED_LOCALES. Railway deployment setup: railway.json + PORT env var fix (next start -p ${PORT:-3000}). AGENTS.md v9. |
-| 14.04.2026 | 13 | **30-Tage Master-Plan + Moltbot Batch 4 (5 AI-Agent Pages) + God Mode Directive.** God Mode v1.0 Directive added to AGENTS.md. Full project audit completed (8 traffic blockers identified). Moltbot Batch 4: 5 new AI-agent security pages created: prompt-injection-defense, model-poisoning-protection, secure-agent-communication, llm-gateway-hardening, ai-agent-sandboxing. All 5 have full FAQPage + HowTo JSON-LD, internal links, CTA. Added to MOLTBOT_SLUGS sitemap. Build ✓ (Exit 0). AGENTS.md v12. 30-Tage Master-Plan added as Section 14. |
-| 14.04.2026 | 14 | **Content Expansion Sprint: Moltbot Batches 5–28 + CVE Batches 1–27 + Solutions Batches 3–10 + Compare Batches 6–17 + OpenClaw Batches 3–8.** Moltbot: 30 new pages (Batches 5–28: llm-output-filtering, llm-jailbreak-detection, ai-agent-privilege-escalation, llm-context-window-security, ai-agent-data-exfiltration-prevention, llm-model-theft-detection, llm-output-encoding-security, ai-agent-sandboxing-runtime, llm-context-manipulation-defense, llm-bias-detection-mitigation, ai-agent-behavioral-monitoring, llm-hallucination-detection, llm-data-encryption-at-rest, ai-agent-secure-communication, llm-privacy-preserving-computation, llm-model-watermarking, ai-agent-federated-learning, llm-secure-inference, llm-adversarial-robustness, ai-agent-secure-deployment, llm-model-extraction-defense, llm-federated-inference, ai-agent-multi-modal-security, llm-quantization-security, llm-model-compression-security, ai-agent-orchestration-security, llm-edge-deployment-security, llm-model-versioning-security, ai-agent-human-in-the-loop-security, llm-continual-learning-security). CVE Batches 1–27: 27 CVE fix pages (MongoDB, Elasticsearch, RabbitMQ, Redis, Apache Kafka, Cassandra, Apache Tomcat, Jenkins, GitLab, GitHub Actions Runner, Docker Engine, containerd). Solutions Batches 3–10: 10 new pages (dsgvo-compliance-automation, nis2-compliance, nist-csf-compliance, eu-ai-act-compliance, soc2-type-ii-automation, zero-trust-architecture, hipaa-ai-systems, iso27001-ai-systems, gdpr-ai-data-processing, nis2-ai-infrastructure → plus hipaa-ai-compliance, iso27001-ai-systems-roadmap, nist-csf-ai-profile, eu-ai-act-compliance-checklist). Compare Batches 6–17: 12 pages (moltbot-vs-bedrock-agents, clawguru-vs-wiz-code, moltbot-vs-langchain-agents, openclaw-vs-prisma-cloud, moltbot-vs-autogen, openclaw-vs-tenable). OpenClaw Batches 3–8: 4 new pages (zero-trust-networking, supply-chain-sbom-security). All builds ✓ Exit 0. Sitemap updated after each batch. |
-| 14.04.2026 | 11 | **Neuro v5 overhaul + Project Audit + Locale Migration.** Neuro: fixed CVE score (items[] not cves[]), runbook relevance normalization, added visible FAQ, live Threat Correlation API (/api/intel/threats created), updated layout metadata. CRITICAL: removed netlify.env.production + netlify.env.import from Git (contained production secrets — user must rotate all keys). Removed stale zip/junk files. Fixed Node.js engines: 24.x → >=20. Created AUDIT-MASTERPLAN.md. Locale Migration: [lang]/neuro/page.tsx + [lang]/oracle/page.tsx upgraded with full metadata, openGraph.url with locale, generateStaticParams. Root /neuro and /oracle set to noindex (canonical → /de/neuro and /de/oracle). P2: CSP + HSTS + X-Frame-Options + nosniff security headers added to next.config.js for all routes. AGENTS.md v10. |
-| 14.04.2026 | 12 | **TypeScript strict:true + Rate-limiting default ON + Compare Batch 6 + HowTo Schema.** tsconfig.json: strict:false→strict:true (fixed 2 TS18046 errors in enrich-city/route.ts). Middleware: MW_RL_ENABLED opt-in→opt-out (default ON, set =0 to disable). New page: moltbot-vs-grafana (full compare, sitemap). HowTo JSON-LD schema added to all 15 OpenClaw sub-pages. Solutions Batch 2 verified complete. Build ✓ (Exit 0). AGENTS.md v11. |
-| 15.04.2026 | 15 | **Moltbot Batches 26–30 + CVE Batches 28–29 + Solutions Batch 11 + Compare Batch 18.** 15 new Moltbot pages, 4 CVEs (Nginx HTTP/3, HAProxy, PostgreSQL, Redis), 2 Solutions, 2 Compare pages. Sitemap duplicate cleanup. All builds ✓ Exit 0. AGENTS.md v13. |
-| 15.04.2026 | 16 | **SEO Fixes + Solutions Batch 12 + Compare Batch 19 + Moltbot Batch 31 + CVE Batch 30.** Root layout canonical fixed: `/` → `/de`. Solutions: zero-trust-ai-architecture, gdpr-llm-data-processing. Compare: moltbot-vs-semantic-kernel, openclaw-vs-crowdstrike. Moltbot Batch 31: llm-prompt-hardening-advanced, ai-agent-permission-minimization, llm-output-schema-validation. CVE Batch 30: CVE-2025-50101 (K8s), CVE-2025-50102 (Vault). Build ✓ Exit 0. |
-| 15.04.2026 | 17 | **Pro Feature Gate für CVE Pages + Security Check Viral Share Buttons.** ProFeatureGate Komponente (full + compact), useProStatus Hook, GET /api/user/entitlements, CVE-2025-26633 Server + Client Split. SecurityCheckShareCard (Twitter/X, LinkedIn, WhatsApp, Telegram, Email), score-basierte virale Messages, Integration in HeroSecurityCheck. Dictionary Keys (security_share). Beide Features auf Production (master) deployed. Build ✓ Exit 0. |
-| 15.04.2026 | 17 | **Middleware CVE fix-route bug + Sitemap GSC fix + AGENTS.md v14 Strategie-Upgrade.** CRITICAL BUG: Middleware hatte zwei 308-Redirects die ALLE `/solutions/fix-CVE-*` URLs auf Solutions-Index umleiteten — alle CVE Fix Guides waren 404. Root cause: alter "Recovery redirect" aus Pre-Fix-Page-Ära. Fix: beide Redirect-Blöcke entfernt. GSC Sitemap: User hatte `/sitemaps/main/route.xml` eingereicht (existiert nicht) — richtige URL ist `/sitemap.xml`. AGENTS.md v14: Template Dark-Theme-Fix, 15→16 Locales korrigiert, Current State aktualisiert, Conversion/Subscription-Strategie hinzugefügt, Session Log chronologisch sortiert. Build ✓ Exit 0. |
-| 16.04.2026 | 18 | **Roast My Moltbot Viral Pages.** Added hall-of-shame, share-badge-gallery, weekly-roast pages with dark-theme layout, trust notice, and internal links. Sitemap updated to include new roast URLs. |
-| 16.04.2026 | 19 | **Pricing Page UX Upgrade.** Added Pro vs Teams decision section and expanded the feature comparison table with Teams column + checks. |
-| 16.04.2026 | 20 | **Post-Check Pro Upgrade CTA.** Score share page now shows Pro/Day Pass upgrade CTA when score < 70. |
-| 16.04.2026 | 21 | **VIRAL FIRST — 5 Schritte zur Traffic-Explosion.** Schritt 1: Roast My Moltbot Core Engine mit viralen Hooks (Social Proof Banner: 1,247 Stacks geröstet, 89% kritische Lücken). Schritt 2: ShareScore Komponente (Twitter/X, LinkedIn, Copy Link, PNG Badge Download). Schritt 3: Hall of Fame/Shame mit viralen Stats (847 Elite, 3,892 Shame, 67% Fix-Rate). Schritt 4: Weekly Roast mit Stats (KW 16, 156 Teilnehmer, Ø +31 Punkte). Schritt 5: PNG Badge Export (integriert in ShareScore). Alle 5 Schritte gebaut, getestet, committed, gepusht. |
-| 16.04.2026 | 22 | **VIRAL 6-10/99 — Community & Share Features.** Schritt 6: ReactionBar (5 Emoji-Reaktionen: 🔥💀🏆⚡❤️ mit Live-Counter). Schritt 7: CommentSection (Community-Kommentare mit Likes + Formular). Schritt 8: Roast Battle 1v1 Seite (12 aktive Battles, 8.4K Votes, Live-Voting). Schritt 9: Video-Generator Library (Canvas API für TikTok/Reels Export). Schritt 10: RSS Feed (/rss/roasts) mit 5 neuesten Roasts. Alle Features dark-theme, responsive, committed, gepusht. |
 | 16.04.2026 | 23 | **VIRAL 11-15/99 — Engagement & Distribution.** Schritt 11: RoastEmailCapture (Weekly Digest, 2,847 Abonnenten). Schritt 12: Trends Seite (Trending Stacks, Hot Vulns CVE-2025-50201, Score Jumps). Schritt 13: RoastPrediction (AI Vorhersage: Hack-Wahrscheinlichkeit, Zeitfenster). Schritt 14: Embed Route (/embed/roast) für iframe Integration. Schritt 15: EmbedGenerator (Code-Copy, Size-Controls). Alle 5 Features gebaut, getestet, committed, gepusht. |
 | 16.04.2026 | 24 | **VIRAL 16-20/99 — Intelligence & Personalization.** Schritt 16: Industry Benchmarks (8 Industries: Fintech 68, Gaming 45, Crypto 71). Schritt 17: SocialProof Notifications (Live Toast mit User Actions). Schritt 18: RematchButton (Score-Vergleich: vorher vs. jetzt). Schritt 19: Roast History Page (Timeline, 4 Achievements, Stats). Schritt 20: Recommendation Engine (8 Recommendations, Quick Wins, Learning Path). Alle 5 Features gebaut, getestet, committed, gepusht. |
 | 16.04.2026 | 25 | **VIRAL 21-25/99 — Gamification & Competition.** Schritt 21: Leaderboard Page (Top 10, Rising Stars, 3-Podest). Schritt 22: Team Roast Multiplayer (47 Teams, 3 Challenges: 30-Day Sprint, Critical Fix Week). Schritt 23: StreakDisplay mit Kalender (5-Tage Streak, 3/7/14/30 Tage Badges). Schritt 24: Achievements System (12 Badges: Common→Legendary, 2,850 Punkte). Schritt 25: StatsDashboard (8 Metriken, Fix-Rate 85%, 6-Monats Trend). Alle 5 Features gebaut, getestet, committed, gepusht. |
@@ -1688,6 +1720,7 @@ Will be resolved automatically when upgrading to Next.js 15 + eslint 9 (future s
 | 17.04.2026 | 33 | **VIRAL 61-65/99 — Phase 4: Content Virality — Hot Takes & Trends.** Schritt 61: Hot Take Generator AI Powered (4 Categories: Security, DevOps, Cloud, AI). Schritt 62: Trending CVE Roasts This CVE roasted my stack (3 CVEs with User Stories). Schritt 63: Tech Stack Roast Series Roasting Famous Startups (4 Startups: Stripe, Airbnb, Notion, Vercel). Schritt 64: Framework Wars React vs Vue vs Angular Roasts (Comparison Table + Cards). Schritt 65: Cloud Provider Roasts AWS vs GCP vs Azure (Comparison Table + Cards). Alle 5 Features gebaut, committed, gepusht. |
 | 17.04.2026 | 34 | **VIRAL 66-70/99 — Phase 4: Content Virality — Scale, Myths, Predictions.** Schritt 66: Database Roasts PostgreSQL vs Mongo vs MySQL (Comparison Table + Cards). Schritt 67: Will it Scale Series Skalierungs Roasts (4 Scaling Cases: Verdict, Challenges, Solutions). Schritt 68: Security Myths Busted Hot Takes (5 Myths with Evidence, Controversy Levels). Schritt 69: Roast Predictions 2025 What's next (5 Predictions: AI, Cloud, DevSecOps, Zero Trust, Supply Chain). Schritt 70: Year in Review Worst Stacks of 2025 (5 Worst Stacks + Stats). Alle 5 Features gebaut, committed, gepusht. |
 | 17.04.2026 | 35 | **VIRAL 71-75/99 — Phase 4 COMPLETE: Satire, Awards, AMA, Content.** Schritt 71: April Fools Best Security Practices Irony (6 Satirical Practices + Real Advice). Schritt 72: Roast Awards Stack Oscars (5 Award Categories: Best/Worst/Most Improved/Cloud/Hack). Schritt 73: AMA Series Roast Me Live (3 Sessions: Upcoming/Completed, Registration). Schritt 74: Roast Podcast Clips Best of (5 Clips with Transcript, Category, Engagement). Schritt 75: Roast Memes Meme Generator (5 Templates, Auto-Generation, Social Posts). Phase 4 (Schritte 61-75) COMPLETE — 15 Features gebaut. |
+| 20.04.2026 | 36 | **TOTAL WAR ROUND 12 — 7 Phasen COMPLETED.** Phase 1: Bug Fixes (Footer /check, Banner Apr 2026, Nav v4.0). Phase 2: Academy Content Expansion (Learning Path + 4 Courses + Pro/Consulting CTAs). Phase 3: Africa/MEA/Oceania Geo Expansion (18 neue Städte, ~2.300 URLs). Phase 4: Enterprise Lead Capture (Consulting 5k-15k live). Phase 5: VIRAL 98+99 (API Beta + Manifesto — 99/99 COMPLETE). Phase 6: Team Page (E-E-A-T Signals). Phase 7: Launch Assets (PH/HN/X/Reddit/LinkedIn/Stripe docs). Active Cities: 123 → 141. Build ✓ Exit 0. AGENTS.md v6.0 War Lock. |
 
 ### Open Tasks by Priority
 

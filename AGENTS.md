@@ -71,16 +71,16 @@ Functional `mailto:` on /consulting already done (Round 12 Phase 4). Next: Calen
 
 | # | Task | Owner | Est | Status | Completion |
 |---|------|-------|-----|--------|------------|
-| A1 | Public Score Pages `/score/[id]` + OG image generator | Dev | 1d | 🔴 Open | — |
-| A2 | Embed Badge generator `/badge/[id]` (SVG/PNG) | Dev | 0.5d | 🔴 Open | — |
-| A3 | Share buttons on score page (X, LinkedIn, Reddit, Discord) | Dev | 0.25d | 🔴 Open | — |
-| A4 | Exit-Intent Popup on `/pricing` + `/daypass` with €5 discount coupon | Dev | 0.5d | 🔴 Open | — |
-| A5 | Email capture widget on `/check`, `/runbooks`, `/academy` | Dev | 0.5d | 🔴 Open | — |
-| A6 | Lead Magnet PDF: "Top 10 Self-Hosted Risks 2026" (10 pages) | Content | 1d | 🔴 Open | — |
-| A7 | Newsletter platform setup (Beehiiv or ConvertKit) + welcome email | Ops | 0.5d | 🔴 Open | — |
-| A8 | Urgency banner on `/daypass` ("Today only €5", resetting daily) | Dev | 0.25d | 🔴 Open | — |
-| A9 | Social proof counter on `/daypass` + `/pricing` (real or pseudo) | Dev | 0.25d | 🔴 Open | — |
-| A10 | First 5 newsletter issues written (evergreen) | Content | 1d | 🔴 Open | — |
+| A1 | Public Score Pages `/score/[id]` + OG image generator | Dev | 1d | ✅ Done | 19.04 (earlier sprint) |
+| A2 | Embed Badge generator `/badge/[id]` (SVG/PNG) | Dev | 0.5d | ✅ Done | 19.04 |
+| A3 | Share buttons on score page (X, LinkedIn, Reddit, Discord) | Dev | 0.25d | ✅ Done | 19.04 (`ShareScore`) |
+| A4 | Exit-Intent Popup on `/pricing` + `/daypass` with €5 discount coupon | Dev | 0.5d | ✅ Done | 19.04 (SAVE5) |
+| A5 | Email capture widget on `/check`, `/runbooks`, `/academy` | Dev | 0.5d | ✅ Done | 19.04 (+ roast pages) |
+| A6 | Lead Magnet PDF: "Top 10 Self-Hosted Risks 2026" (10 pages) | Content | 1d | ✅ Draft | `docs/lead-magnet-...md` — needs PDF export |
+| A7 | Newsletter platform setup (Beehiiv or ConvertKit) + welcome email | Ops | 0.5d | 🟡 User-side | `USER-TODO.md` #1 |
+| A8 | Urgency banner on `/daypass` ("Today only €5", resetting daily) | Dev | 0.25d | ✅ Done | 19.04 |
+| A9 | Social proof counter on `/daypass` + `/pricing` (real or pseudo) | Dev | 0.25d | ✅ Done | 19.04 |
+| A10 | First 5 newsletter issues written (evergreen) | Content | 1d | ✅ Done | `docs/newsletter-issues-evergreen.md` |
 
 ### Phase B — Launch Moment (Week 3–4: 03.05 → 17.05)
 **Goal:** Coordinated PH + HN + Reddit launch. 50k+ visits in 48h window.
@@ -88,11 +88,11 @@ Functional `mailto:` on /consulting already done (Round 12 Phase 4). Next: Calen
 | # | Task | Owner | Est | Status |
 |---|------|-------|-----|--------|
 | B1 | 50 beta tester outreach (via Discord, X, IndieHackers) for testimonials | Ops | 3d | 🔴 Open |
-| B2 | PH launch assets: hunter, gallery images, tagline, first-comment | Marketing | 1d | 🔴 Open |
-| B3 | "Show HN" post draft (7 versions A/B-test ready) | Marketing | 0.5d | 🔴 Open |
-| B4 | Reddit posts prepared for r/selfhosted, r/homelab, r/sysadmin (value-first, not promotional) | Marketing | 1d | 🔴 Open |
-| B5 | X launch thread (15 tweets) with images | Marketing | 0.5d | 🔴 Open |
-| B6 | LinkedIn launch post from founder account | Marketing | 0.25d | 🔴 Open |
+| B2 | PH launch assets: hunter, gallery images, tagline, first-comment | Marketing | 1d | ✅ Docs ready | `docs/launch/product-hunt-assets.md` (20.04) — user designs images at T-7 |
+| B3 | "Show HN" post draft (7 versions A/B-test ready) | Marketing | 0.5d | ✅ Done | `docs/launch/show-hn-post.md` (20.04) |
+| B4 | Reddit posts prepared for r/selfhosted, r/homelab, r/sysadmin (value-first, not promotional) | Marketing | 1d | ✅ Done | `docs/launch/reddit-launch-posts.md` (20.04) — 5 subs covered |
+| B5 | X launch thread (15 tweets) with images | Marketing | 0.5d | ✅ Done | `docs/launch/x-launch-thread.md` (20.04) |
+| B6 | LinkedIn launch post from founder account | Marketing | 0.25d | ✅ Done | Inline in `docs/launch/README.md` (20.04) |
 | B7 | Launch Day Tuesday: PH 00:01 PST + HN 07:00 EST + Reddit 10:00 EST | All | 1d | 🔴 Open |
 | B8 | Capture launch feedback → Post-mortem doc | Ops | 0.5d | 🔴 Open |
 
@@ -113,15 +113,20 @@ Functional `mailto:` on /consulting already done (Round 12 Phase 4). Next: Calen
 ### Phase D — Enterprise Engine (Week 9–12: 14.06 → 19.07)
 **Goal:** Close first 3 Enterprise deals. Launch White-Label for MSPs. €10k MRR confirmed.
 
+**Infrastructure update (20.04):** Production migrated from Vercel to Railway. Domain `clawguru.org` + `www.clawguru.org` both live on Railway Edge via Netlify DNS CNAMEs.
+
+**Documentation update (20.04):** Task tables synced to reflect actual completion status. Phase A code-side 100% done, Phase B launch assets ready, D7 practice exam live, D2/D3 vertical pages live.
+
 | # | Task | Owner | Est | Status |
 |---|------|-------|-----|--------|
 | D1 | Calendly/Cal.com booking integration on /consulting + /enterprise-api | Dev | 0.5d | 🔴 Open |
-| D2 | ROI Calculator "Cost of Incident without Runbooks" | Dev | 1d | 🔴 Open |
-| D3 | 3 vertical landing pages: `/for-saas`, `/for-msps`, `/for-fintech` | Dev+Content | 2d | 🔴 Open |
+| D2 | ROI Calculator "Cost of Incident without Runbooks" | Dev | 1d | ✅ Done | `/roi-calculator` (earlier sprint) |
+| D3 | 3 vertical landing pages: `/for-saas`, `/for-msps`, `/for-fintech` | Dev+Content | 2d | ✅ Done | all 3 live (earlier sprint) |
 | D4 | LinkedIn Sales Nav list: 500 SMB-CISOs + outreach scripts | Marketing | 2d | 🔴 Open |
 | D5 | Cold outreach: 100 CISOs/week (personalized, value-first) | Sales | ongoing | 🔴 Open |
 | D6 | White-Label MSP landing page `/for-msps/white-label` + pricing | Dev+Content | 1d | 🔴 Open |
-| D7 | "ClawGuru Certified Security Defender" test + cert page | Dev+Content | 2d | 🔴 Open |
+| D7a | "ClawGuru Certified Security Defender" landing + tiers | Dev+Content | 1d | ✅ Done | 20.04 |
+| D7b | Defender Foundation **Practice Exam** (15 Q · bilingual · interactive) | Dev | 1d | ✅ Done | 20.04 (commit `c4bc759b`) |
 | D8 | First Enterprise deal signed (€10–50k target) | Sales | ongoing | 🔴 Open |
 
 ## 📊 KPI DASHBOARD (Update Daily in `status/DAILY_STATUS.md`)

@@ -8,6 +8,24 @@
 
 ## 🔥 HIGH PRIORITY — Revenue-critical, ≤1 hour each
 
+### 0. Phase B Launch Execution (Week 3-4: 03.05 → 17.05)
+**Code-side complete:** /launch-results page (T+1) live, assets ready in `docs/launch/`
+**User-side tasks:**
+- [ ] **T-7 days:** Claim Product Hunt page + find hunter (≥500 followers) — DM candidates: Chris Messina, Kevin William David (check PH leaderboards)
+- [ ] **T-7 days:** Design 5–7 gallery images (1270×760px) per `docs/launch/product-hunt-assets.md` spec
+- [ ] **T-5 days:** Create Stripe coupons: `HUNTER50` (50% off Pro, expires T+7), `SHOWHN50` (50% off Pro, expires T+7), `REDDIT30` (30% off Pro, expires T+14), `BIRDS25` (25% off Pro, expires T+7), `LINKEDIN25` (25% off Pro, expires T+14)
+- [ ] **T-3 days:** Warm-up subreddits (comment genuinely on 5 threads/day in r/selfhosted, r/homelab, r/sysadmin, r/devops)
+- [ ] **T-3 days:** Warm-up X (follow 50 security/devops accounts, reply genuinely to 10 security tweets/day)
+- [ ] **T-1 days:** Schedule PH launch for Tuesday 00:01 PST + test all links + sanity-check /check and checkout on mobile
+- [ ] **T-0 (Launch Tuesday):** Follow exact schedule in `docs/launch/README.md` (PH 09:01 Berlin, HN 13:00, X 15:00, Reddit 16:00-17:30, LinkedIn 18:00)
+- [ ] **T+1 days:** Thank-you email to every commenter on PH + HN + Reddit + X
+- [ ] **T+7 days:** Retargeting email to coupon users ("How was your first week?")
+
+**Docs:** `docs/launch/README.md`, `docs/launch/product-hunt-assets.md`, `docs/launch/show-hn-post.md`, `docs/launch/reddit-launch-posts.md`, `docs/launch/x-launch-thread.md`
+**Expected outcome:** 50–100k visits in 48h, 50–150 Day Passes sold, 1k+ newsletter subs.
+
+---
+
 ### 1. Beehiiv Newsletter Platform Setup
 - [ ] Create account on <https://beehiiv.com>
 - [ ] Create Publication "ClawGuru Security Brief" (URL: `clawguru`)

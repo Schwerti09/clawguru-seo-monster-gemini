@@ -33,7 +33,7 @@ export default function AuthorBox({
             {author.name}
           </Link>
           {" · "}
-          <span className="text-gray-500">{ORGANIZATION.shortName}, {ORGANIZATION.location}</span>
+          <span className="text-gray-500">{ORGANIZATION.shortName}</span>
         </span>
       </div>
     )
@@ -68,8 +68,6 @@ export default function AuthorBox({
               <span itemProp="worksFor" itemScope itemType="https://schema.org/Organization">
                 <span itemProp="name">{ORGANIZATION.name}</span>
               </span>
-              {" · "}
-              {ORGANIZATION.location}
             </span>
             <Link
               href={`/${locale}/about`}

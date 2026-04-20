@@ -1,12 +1,18 @@
 import type { Metadata } from "next"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
-import { Briefcase, Users, Clock, Check, ArrowRight, Shield } from "lucide-react"
+import { Briefcase, Users, Clock, Check, Shield } from "lucide-react"
 import Link from "next/link"
+import BookingButton from "@/components/booking/BookingButton"
+import AuthorBox from "@/components/seo/AuthorBox"
+import LastUpdated from "@/components/seo/LastUpdated"
+import { buildAuthoredArticleSchema } from "@/lib/seo/author"
 
 interface PageProps { params: { lang: string } }
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/consulting"
+const PUBLISHED = "2025-11-15"
+const MODIFIED = "2026-04-20"
 
 export async function generateStaticParams() {
   return SUPPORTED_LOCALES.map((lang) => ({ lang }))
@@ -131,17 +137,31 @@ export default function ConsultingPage({ params }: PageProps) {
   const services = getServices(isDE)
   const pricing = getPricing(isDE)
 
+  const articleSchema = buildAuthoredArticleSchema({
+    headline: isDE ? "ClawGuru Security Consulting — Stack Hardening für Enterprise" : "ClawGuru Security Consulting — Stack Hardening for Enterprise",
+    description: isDE
+      ? "Security-Audit, Stack-Hardening und Team-Training für DevOps- und SecOps-Teams. Fixed-Fee Packages ab 5.000€."
+      : "Security audit, stack hardening, and team training for DevOps and SecOps teams. Fixed-fee packages from 5,000€.",
+    url: `${SITE_URL}/${locale}${PATH}`,
+    datePublished: PUBLISHED,
+    dateModified: MODIFIED,
+    inLanguage: locale,
+    articleType: "Article",
+  })
+
   return (
     <div className="min-h-screen bg-[#0a0a0a]">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
       <div className="max-w-6xl mx-auto px-4 py-12">
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-4 text-gray-100">
-            {isDE ? "Roast Consulting — Fix Your Stack" : "Roast Consulting — Fix Your Stack"}
+            {isDE ? "Security Consulting — Fix Your Stack" : "Security Consulting — Fix Your Stack"}
           </h1>
+          <LastUpdated date={MODIFIED} publishedDate={PUBLISHED} showPublished locale={locale} className="mb-3" />
           <p className="text-lg text-gray-300 mb-4">
             {isDE
-              ? "Professional Services für Security-Hardening. High-Ticket Consulting für Enterprise."
-              : "Professional services for security hardening. High-ticket consulting for enterprise."}
+              ? "Professional Services für Security-Hardening. Fixed-Fee Packages ab 5.000€. Strategy Call kostenlos."
+              : "Professional services for security hardening. Fixed-fee packages from 5,000€. Free strategy call."}
           </p>
           <p className="text-sm text-cyan-400 font-medium">
             {isDE ? "→ Lass deine Infrastruktur von Experten härten." : "→ Have your infrastructure hardened by experts."}
@@ -217,16 +237,17 @@ export default function ConsultingPage({ params }: PageProps) {
                     </li>
                   ))}
                 </ul>
-                <a
-                  href={`mailto:enterprise@clawguru.org?subject=${encodeURIComponent(plan.name + " Anfrage")}&body=${encodeURIComponent("Name:\nFirma:\nTeam-Größe:\nStack:\nZeitrahmen:\n")}`}
-                  className={`block text-center w-full px-4 py-3 rounded-lg font-semibold text-sm transition-colors ${
-                    plan.popular
-                      ? "bg-cyan-600 hover:bg-cyan-500 text-white"
-                      : "bg-gray-700 hover:bg-gray-600 text-gray-100"
-                  }`}
-                >
-                  {plan.cta}
-                </a>
+                <div className="flex justify-center">
+                  <BookingButton
+                    type={index === 2 ? "demo" : index === 1 ? "audit" : "strategy"}
+                    label={plan.cta}
+                    locale={locale}
+                    source={`consulting_pricing_${plan.name.toLowerCase().replace(/\s+/g, "_")}`}
+                    variant={plan.popular ? "primary" : "secondary"}
+                    subject={`${plan.name} ${isDE ? "Anfrage" : "inquiry"}`}
+                    className="w-full justify-center"
+                  />
+                </div>
               </div>
             ))}
           </div>
@@ -332,13 +353,13 @@ export default function ConsultingPage({ params }: PageProps) {
                 ? "Lass deine Infrastruktur von Experten härten und Security in deine DNA einbauen."
                 : "Have your infrastructure hardened by experts and build security into your DNA."}
             </p>
-            <a
-              href="mailto:enterprise@clawguru.org?subject=Consulting%20Anfrage&body=Name%3A%0AFirma%3A%0ATeam-Gr%C3%B6%C3%9Fe%3A%0AAktueller%20Stack%3A%0AZiel%3A%0AZeitrahmen%3A"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-cyan-600 hover:bg-cyan-500 rounded-lg font-semibold text-white transition-colors"
-            >
-              {isDE ? "Jetzt beraten lassen" : "Get Consulted Now"}
-              <ArrowRight className="w-4 h-4" />
-            </a>
+            <BookingButton
+              type="strategy"
+              label={isDE ? "Kostenlosen Strategy Call buchen" : "Book a free strategy call"}
+              locale={locale}
+              source="consulting_bottom_cta"
+              variant="primary"
+            />
           </div>
         </section>
 
@@ -364,6 +385,8 @@ export default function ConsultingPage({ params }: PageProps) {
             </Link>
           </div>
         </section>
+
+        <AuthorBox locale={locale} variant="full" className="mt-12" />
       </div>
     </div>
   )

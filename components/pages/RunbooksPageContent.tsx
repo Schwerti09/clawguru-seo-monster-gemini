@@ -52,8 +52,8 @@ export default async function RunbooksPageContent({
         acceptedAnswer: {
           "@type": "Answer",
           text: locale === "de"
-            ? "Security Runbooks sind ausführbare Playbooks für DevOps-Teams, die Security-Hardening, Incident Response und Ops-Automatisierung standardisieren. ClawGuru bietet 600+ AI-generierte Runbooks für OpenClaw/Moltbot."
-            : "Security runbooks are executable playbooks for DevOps teams that standardize security hardening, incident response, and ops automation. ClawGuru offers 600+ AI-generated runbooks for OpenClaw/Moltbot."
+            ? "Security Runbooks sind ausführbare Playbooks für DevOps-Teams, die Security-Hardening, Incident Response und Ops-Automatisierung standardisieren. ClawGuru bietet 600+ von SecOps-Experten geprüfte Runbooks für OpenClaw/Moltbot."
+            : "Security runbooks are executable playbooks for DevOps teams that standardize security hardening, incident response, and ops automation. ClawGuru offers 600+ expert-reviewed runbooks for OpenClaw/Moltbot."
         }
       },
       {

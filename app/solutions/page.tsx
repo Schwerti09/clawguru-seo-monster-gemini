@@ -61,7 +61,7 @@ export default function SolutionsPage({ searchParams }: { searchParams?: { q?: s
     "@context": "https://schema.org",
     "@type": "ItemList",
     name: "ClawGuru CVE Fix Solutions",
-    description: "Step-by-step CVE remediation guides with AI-generated unique content.",
+    description: "Step-by-step CVE remediation guides, expert-reviewed and continuously updated.",
     numberOfItems: sorted.length,
     itemListElement: sorted.map((c, i) => ({
       "@type": "ListItem",
@@ -96,9 +96,9 @@ export default function SolutionsPage({ searchParams }: { searchParams?: { q?: s
         </nav>
 
         <SectionTitle
-          kicker="Programmatic SEO · CVE Fix Library"
+          kicker="CVE Fix Library"
           title="CVE Fix Solutions"
-          subtitle="Step-by-step guides to fix critical vulnerabilities in your infrastructure. AI-generated unique content per CVE, with verification commands and security best practices."
+          subtitle="Step-by-step guides to fix critical vulnerabilities in your infrastructure. Expert-reviewed content for every CVE, with verification commands and security best practices."
         />
 
         {/* Search bar */}

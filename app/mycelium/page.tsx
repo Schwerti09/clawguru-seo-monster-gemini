@@ -15,7 +15,7 @@ export const runtime = "nodejs"
 export const maxDuration = 180
 
 export const metadata: Metadata = {
-  title: "Mycelial Singularity | ClawGuru",
+  title: "Living Mycelium — Security Knowledge Graph | ClawGuru",
   description:
     "The living mycelium of 1M+ runbooks. Every node a knowledge unit, every edge a semantic relationship. " +
     "Force-directed graph, Darwinian evolution engine, and oracle mode — the most advanced ops knowledge graph on Earth.",

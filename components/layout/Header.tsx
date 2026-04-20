@@ -138,7 +138,7 @@ export default function Header() {
     const url = typeof window !== "undefined" ? window.location.href : "https://clawguru.org"
     const text = dict.share.myceliumPost
     if (typeof navigator !== "undefined" && navigator.share) {
-      navigator.share({ title: "ClawGuru Â· Mycelial Singularity Engine", text, url }).catch(() => {})
+      navigator.share({ title: "ClawGuru · Security Intelligence Engine", text, url }).catch(() => {})
     } else {
       const xUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`
       window.open(xUrl, "_blank", "noopener,noreferrer")
@@ -194,7 +194,7 @@ export default function Header() {
               <div className="leading-tight">
                 <div className="font-black text-white tracking-tight">ClawGuru</div>
                 <div className="text-xs hidden sm:block" style={{ color: "rgba(212,175,55,0.7)" }}>
-                  Mycelial Singularity Engine v4.0
+                  Security Intelligence Engine
                 </div>
               </div>
             </Link>

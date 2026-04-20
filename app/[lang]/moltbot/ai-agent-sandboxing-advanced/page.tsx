@@ -270,7 +270,7 @@ export default function AIAgentSandboxingAdvancedPage({ params }: PageProps) {
                 {isDE ? "Runbooks" : "Runbooks"}
               </div>
               <div className="text-sm text-gray-300">
-                {isDE ? "KI-generierte Security Runbooks" : "AI-generated security runbooks"}
+                {isDE ? "Expert-validierte Security Runbooks" : "Expert-validated security runbooks"}
               </div>
             </a>
             <a href={`/${locale}/openclaw`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">

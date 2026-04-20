@@ -298,7 +298,7 @@ export default function MycelialSingularityHero() {
       ref={sectionRef}
       className="relative min-h-screen overflow-hidden flex flex-col items-center justify-center"
       style={{ background: "var(--surface-0)" }}
-      aria-label="Mycelial Singularity Engine Hero"
+      aria-label="Security Intelligence Engine Hero"
     >
       <div className="absolute inset-0" aria-hidden="true">
         {canMountFX && isInView ? <R3FComp /> : null}

@@ -32,9 +32,9 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: "ClawGuru | Mycelial Singularity Engine v4.0",
+  title: "ClawGuru — Self-Hosted Security Intelligence | Runbooks, Copilot, Threat Feed",
   description:
-    "ClawGuru Mycelial Singularity Engine v4.0: Das lebende Wissensgraph von 1M+ Runbooks. Copilot, Intel Feed, Academy, Vault – evolutionäre Ops-Intelligence für OpenClaw/Moltbot Security & Betrieb.",
+    "ClawGuru: 3M+ expert-reviewed security runbooks, live CVE intel, and hands-on hardening tools for DevOps and SecOps teams. Built in Berlin.",
   keywords: SEO_TARGET_KEYWORDS_2026,
   alternates: {
     canonical: "/de",
@@ -43,8 +43,8 @@ export const metadata: Metadata = {
     type: "website",
     locale: "de_DE",
     url: `${SITE_URL}/de`,
-    title: "ClawGuru | Mycelial Singularity Engine v4.0",
-    description: "Das lebende Mycelium von 1M+ Runbooks. Force-directed Graph, Darwinian Evolution, Oracle Mode.",
+    title: "ClawGuru — Self-Hosted Security Intelligence",
+    description: "3M+ expert-reviewed security runbooks, live CVE intel, hardening tools. Built in Berlin.",
     images: ["/og-image.png", "/og-image.svg"]
   },
   twitter: { card: "summary_large_image", creator: "@clawguru" },

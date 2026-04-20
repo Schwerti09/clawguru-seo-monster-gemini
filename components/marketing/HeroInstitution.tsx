@@ -51,13 +51,13 @@ export default function HeroInstitution({ dict }: HeroInstitutionProps) {
           <motion.div variants={item}>
             <div className="inline-flex items-center gap-2 px-3 py-2 rounded-full glass-card text-xs text-gray-300">
               <span className="w-2 h-2 rounded-full bg-claw-green animate-pulse-neon" />
-              {dict?.badge ?? "Mycelial Singularity Engine v4.0 · GENESIS PROTOKOLL AKTIV"}
+              {dict?.badge ?? "Security Intelligence Engine"}
             </div>
           </motion.div>
 
           <motion.h1 variants={item} className="mt-4 text-4xl sm:text-5xl lg:text-6xl font-black leading-tight font-heading">
             <span className="bg-gradient-to-r from-claw-green to-cyber-blue bg-clip-text text-transparent">ClawGuru</span>{" "}
-            {dict?.titleSuffix ?? "Mycelial Singularity Engine v4.0"}
+            {dict?.titleSuffix ?? "Security Intelligence Engine"}
           </motion.h1>
 
           <motion.p variants={item} className="mt-5 text-lg text-gray-300 max-w-xl">

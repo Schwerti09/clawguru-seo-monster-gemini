@@ -100,7 +100,7 @@ export default function CheckPage() {
               <div className="text-4xl">📚</div>
               <div>
                 <div className="text-cyan-100 text-sm">
-                  {locale === 'de' ? '1,000+ AI-generierte Fix-Runbooks für deine Probleme' : '1,000+ AI-generated fix runbooks for your issues'}
+                  {locale === 'de' ? '1.000+ Fix-Runbooks — validiert von SecOps-Experten' : '1,000+ fix runbooks — validated by SecOps experts'}
                 </div>
               </div>
             </div>
@@ -321,7 +321,7 @@ export default function CheckPage() {
               className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:border-cyan-500/50 transition-colors"
             >
               <div className="font-semibold text-cyan-400">{locale === 'de' ? '📚 Security Runbooks' : '📚 Security Runbooks'}</div>
-              <div className="text-sm text-gray-300">{locale === 'de' ? '1,000+ AI-generierte Fix-Runbooks' : '1,000+ AI-generated fix runbooks'}</div>
+              <div className="text-sm text-gray-300">{locale === 'de' ? '1.000+ expert-validierte Fix-Runbooks' : '1,000+ expert-validated fix runbooks'}</div>
             </a>
             <a
               href={`${prefix}/roast-my-moltbot`}

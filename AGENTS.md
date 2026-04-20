@@ -94,7 +94,20 @@ Functional `mailto:` on /consulting already done (Round 12 Phase 4). Next: Calen
 | B5 | X launch thread (15 tweets) with images | Marketing | 0.5d | ✅ Done | `docs/launch/x-launch-thread.md` (20.04) |
 | B6 | LinkedIn launch post from founder account | Marketing | 0.25d | ✅ Done | Inline in `docs/launch/README.md` (20.04) |
 | B7 | Launch Day Tuesday: PH 00:01 PST + HN 07:00 EST + Reddit 10:00 EST | All | 1d | 🔴 Open |
-| B8 | Capture launch feedback → Post-mortem doc | Ops | 0.5d | 🔴 Open |
+| B8 | Capture launch feedback → Post-mortem doc | Ops | 0.5d | ✅ Code-ready | `/launch-results` page (T+1) live (20.04), user-side execution pending |
+
+**Phase B Code-Side Status:** ✅ Complete
+- All assets ready in `docs/launch/`
+- `/launch-results` page (T+1 post-mortem) created with metrics, lessons learned
+- Phase B Launch TODO List created (15 tasks T-7 to T+7)
+- USER-TODO.md updated with Phase B tasks (HIGH priority Section 0)
+
+**Phase B User-Side Status:** 🔴 Pending (T-7 → T+0 execution)
+- PH claim + Gallery Images (T-7)
+- Stripe Coupons (T-5)
+- Reddit/X warm-up (T-3)
+- Launch day execution (T-0)
+- Thank-you emails (T+1)
 
 ### Phase C — Compound Growth (Week 5–8: 17.05 → 14.06)
 **Goal:** Activate affiliates, partnerships, and content flywheel. Reach 1k Newsletter subs, 5 active affiliates.

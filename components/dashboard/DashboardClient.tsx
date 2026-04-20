@@ -297,9 +297,58 @@ function EnterpriseDeck(props: { tier: AccessPlan }) {
 }
 
 function AffiliateNetwork(props: { tier: AccessPlan }) {
+  const [copied, setCopied] = useState(false)
+  const referralLink = "https://clawguru.org/?ref=YOUR_ID"
+  
+  const copyLink = () => {
+    navigator.clipboard.writeText(referralLink)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
+
   return (
     <GatedTile title="Mycelium Affiliate & Revenue Network" minTier="enterprise" tier={props.tier} cta="team">
-      <div className="h-40 rounded-xl border border-indigo-500/20 bg-indigo-500/5 grid place-items-center text-indigo-200">Dein Mycelium: $12,847 heute</div>
+      <div className="space-y-4">
+        <div className="grid grid-cols-2 gap-3">
+          <div className="p-3 rounded-xl border border-indigo-500/20 bg-indigo-500/5">
+            <div className="text-xs text-indigo-300 mb-1">Heute</div>
+            <div className="text-xl font-black text-white">$12,847</div>
+          </div>
+          <div className="p-3 rounded-xl border border-indigo-500/20 bg-indigo-500/5">
+            <div className="text-xs text-indigo-300 mb-1">Dieser Monat</div>
+            <div className="text-xl font-black text-white">$48,239</div>
+          </div>
+          <div className="p-3 rounded-xl border border-indigo-500/20 bg-indigo-500/5">
+            <div className="text-xs text-indigo-300 mb-1">Klicks heute</div>
+            <div className="text-xl font-black text-white">1,247</div>
+          </div>
+          <div className="p-3 rounded-xl border border-indigo-500/20 bg-indigo-500/5">
+            <div className="text-xs text-indigo-300 mb-1">Konversionen</div>
+            <div className="text-xl font-black text-white">89</div>
+          </div>
+        </div>
+        
+        <div className="p-3 rounded-xl border border-gray-700 bg-black/30">
+          <div className="text-xs text-gray-400 mb-2">Dein Affiliate-Link</div>
+          <div className="flex gap-2">
+            <input 
+              value={referralLink} 
+              readOnly 
+              className="flex-1 px-3 py-2 rounded-lg bg-black/50 border border-gray-700 text-xs text-gray-300 font-mono"
+            />
+            <button 
+              onClick={copyLink}
+              className="px-3 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition-colors"
+            >
+              {copied ? "Kopiert!" : "Kopieren"}
+            </button>
+          </div>
+        </div>
+
+        <div className="text-xs text-gray-500">
+          Provision: 30% auf alle Abos · Auszahlung monatlich (€50 Minimum)
+        </div>
+      </div>
     </GatedTile>
   )
 }

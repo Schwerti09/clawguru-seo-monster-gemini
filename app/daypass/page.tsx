@@ -1,6 +1,9 @@
 import Container from "@/components/shared/Container"
 import BuyButton from "@/components/commerce/BuyButton"
 import SocialProofBlock from "@/components/commerce/SocialProofBlock"
+import ExitIntentPopup from "@/components/marketing/ExitIntentPopup"
+import UrgencyBanner from "@/components/marketing/UrgencyBanner"
+import SocialProofCounter from "@/components/marketing/SocialProofCounter"
 
 export const metadata = {
   title: "24h Day Pass – Sofortzugang bei IT-Notfall | ClawGuru",
@@ -181,6 +184,9 @@ function HeroCard({
 export default function DayPassLandingPage() {
   return (
     <main className="min-h-screen bg-[#05060A]">
+      {/* TASK A8: Urgency Banner */}
+      <UrgencyBanner couponCode="SAVE5" discountAmount="€5" />
+
       {/* Page header */}
       <section className="relative overflow-hidden pt-20 pb-10 text-center px-4">
         <div
@@ -228,6 +234,13 @@ export default function DayPassLandingPage() {
             Stripe Checkout → Aktivierung → Dashboard. Dauert unter 60 Sekunden.
           </p>
         </div>
+      </section>
+
+      {/* TASK A9: Social Proof Counter */}
+      <section className="py-6">
+        <Container>
+          <SocialProofCounter variant="full" />
+        </Container>
       </section>
 
       <Container>
@@ -346,6 +359,9 @@ export default function DayPassLandingPage() {
 
         </div>
       </Container>
+
+      {/* TASK A3: Exit-Intent Popup with €5 discount */}
+      <ExitIntentPopup couponCode="SAVE5" discountAmount="€5" />
     </main>
   )
 }

@@ -13,7 +13,15 @@
 3. **[DONE]** 🚨 Gemini Production Hotfix: Model-Fallback-Chain `lite → flash → 1.5-flash` + detailed error logging (commit `12696f22`)
 4. **[DONE]** 🔑 Root-cause fix: All 3 production API keys were stale (22–35 days old, revoked). Rotated Gemini + OpenAI + DeepSeek via `vercel env rm/add`, triggered redeploy (commit `5c67b3b8`). Health-check ALL GREEN ✅
 5. **[DONE]** 🐛 **Critical routing bug fixed** (commit `3593b7f3`): `/solutions` page all "View Fix Guide" buttons broken. Root cause: Next.js 14 treats `fix-[cve_id]` folders (literal-prefix + dynamic-bracket) as static paths → `params.cve_id` always `undefined` → every fix URL redirected to `?q=undefined`. Fix: moved to standard `fix/[cve_id]` convention for all CVE solution + service check tool routes. Added 308 legacy redirects to preserve SEO/backlinks. Verified live: `/solutions/fix/CVE-*` → 200, `/tools/check/nginx` → 200, legacy `/fix-CVE-*` → 308.
-6. **[HIGH]** Next: Task A1 (Public Score Pages) — Phase A Sprint start
+6. **[DONE]** Task A1 (Public Score Pages) — Database schema, migration, API route, public score page, OG image, ShareButtons, integration in HeroSecurityCheck, build test passed ✅
+7. **[DONE]** Task A2 (Embed Badge SVG + Copy Embed Code) — Badge route `/app/badge/[id]/route.ts` with size/theme config, EmbedCodeCard component, copy-to-clipboard functionality, build test passed ✅
+8. **[DONE]** Task A3 (Exit-Intent Popup + Email Capture) — ExitIntentPopup component with €5 discount coupon on /pricing + /daypass, EmailCapture component (existing) integrated on /check, /runbooks, /academy, build test passed ✅
+9. **[DONE]** Task A8 (Urgency Banner on /daypass) — UrgencyBanner component with daily-resetting €5 discount countdown, integrated on /daypass page ✅
+10. **[DONE]** Task A9 (Social Proof Counter on /daypass + /pricing) — SocialProofCounter component with pseudo-random live metrics (purchased today, active users, total), integrated on /daypass (full variant) + /pricing (compact variant), build test passed ✅
+11. **[DONE]** Task A6 (Lead Magnet PDF) — Created 12-page PDF content "Top 10 Self-Hosted Risks 2026" with 10 critical vulnerabilities, fix guides, and action plan (docs/lead-magnet-top-10-self-hosted-risks-2026.md) ✅
+12. **[DONE]** Task A10 (First 5 newsletter issues) — Created 5 evergreen newsletter issues (daily CVE + fix + tip format) + welcome email template + platform setup instructions (docs/newsletter-issues-evergreen.md) ✅
+13. **[PENDING]** Task A7 (Newsletter platform setup) — Requires user action: sign up for Beehiiv or ConvertKit, configure email capture integration, set up automated daily sending ✅
+14. **[DONE]** Phase B Marketing Content (B2-B6) — Created comprehensive launch assets: PH launch assets (hunter, tagline, 5 gallery image descriptions, first-comment), 7 Show HN post drafts (A/B-test ready), 3 Reddit posts (r/selfhosted, r/homelab, r/sysadmin value-first), 15-tweet X launch thread, LinkedIn launch post, launch day schedule, post-mortem template (docs/launch-assets-phase-b.md) ✅
 
 ---
 
@@ -35,6 +43,16 @@
 ---
 
 ## ✅ Completed Yesterday / Today (19.04)
+
+### Task A1 — Public Score Pages (Viral Loop Foundation) ✅
+- **Database:** Created `public_scores` table migration (`011_public_scores.sql`) with id (UUID), token (unique 16-char), score, top_risks JSONB, recommendations JSONB, locale, created_at, expires_at (30 days), view_count
+- **API Route:** `/app/api/public-score/route.ts` — POST endpoint to generate tokens and store score results
+- **Public Score Page:** `/app/[lang]/score/[id]/page.tsx` — SSG with dynamic on-demand rendering, displays score, top risks, recommendations, share buttons, CTAs
+- **OG Image:** `/app/score/[id]/opengraph-image.tsx` — Edge runtime with @vercel/og, dynamic score visualization with color-coded badges
+- **ShareButtons Component:** `/components/share/ShareButtons.tsx` — X (Twitter), LinkedIn, Reddit, Copy Link with pre-filled text and analytics tracking
+- **Integration:** Modified `HeroSecurityCheck.tsx` to call API after check result, display public-link CTA with "Open public link" and "Copy link" buttons
+- **Build Test:** ✅ Build exit 0, no errors
+- **Next:** Migration needs to be run on production database (requires manual SQL execution via Neon console or migration runner)
 
 ### Total War Round 12 — all 7 Phases done
 - **Phase 1:** 4 critical bugs fixed (merge conflict, stale dates, nav v4, footer link)
@@ -83,21 +101,17 @@
 
 ## 📅 Next Session Priority (Sunday 20.04)
 
-**Top task:** Start **A1 — Public Score Pages (`/score/[id]`)**
+**Top task:** Start **A2 — Embed Badge SVG + Copy Embed Code** (0.5 day)
 
-### A1 Breakdown (est. 1 day)
-1. DB schema: `public_scores` table (id, token, score, top_risks JSONB, created_at, locale)
-2. Migration file + seed logic in existing security-check flow
-3. `/app/[lang]/score/[id]/page.tsx` — SSG with `generateStaticParams` returning empty (dynamic on demand)
-4. OG Image route `/app/score/[id]/opengraph-image.tsx` (using `@vercel/og`)
-5. Share buttons component (X, LinkedIn, Reddit, Copy Link) with pre-filled text
-6. Integration: After `/check` result, surface public-link CTA
-7. Test: build exit 0, manual test with 3 locales (de, en, fr)
+### A2 Breakdown (follows A1)
+1. Embed Badge SVG route `/app/badge/[id]/route.ts` with configurable size/theme
+2. "Copy embed code" button on public score page
+3. README snippet generator: `<img src="https://clawguru.org/badge/abc123" alt="ClawGuru Security Score">`
+4. Test: badge renders correctly, embed code works
 
-### A2 Follow-up (0.5 day after A1)
-- Embed Badge SVG route `/app/badge/[id]/route.ts` with configurable size/theme
-- "Copy embed code" button on score page
-- README snippet generator: `<img src="https://clawguru.org/badge/abc123" alt="ClawGuru Security Score">`
+### A3 Follow-up (0.5 day after A2)
+- Exit-Intent Popup on `/pricing` + `/daypass` with €5 discount coupon
+- Email capture widget on `/check`, `/runbooks`, `/academy`
 
 ---
 

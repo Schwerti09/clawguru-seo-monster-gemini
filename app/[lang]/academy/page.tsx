@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
 import { getDictionary } from "@/lib/dictionary"
+import { EmailCapture } from "@/components/conversion/EmailCapture"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 
@@ -333,6 +334,15 @@ export default async function AcademyPage({ params }: { params: { lang: string }
                   </div>
                 ))}
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* TASK A3: Email Capture */}
+        <section className="py-12 bg-[#0a0a0a]">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <EmailCapture locale={locale} source="academy_page" variant="card" />
             </div>
           </div>
         </section>

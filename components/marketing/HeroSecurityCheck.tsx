@@ -47,6 +47,9 @@ export default function HeroSecurityCheck({ dict = {} }: { dict?: Record<string,
   const [badgeCopied, setBadgeCopied] = useState(false)
   // WORLD BEAST FINAL LAUNCH: upsell modal state
   const [showUpsell, setShowUpsell] = useState(false)
+  // TASK A1: Public Score Pages - token state
+  const [publicScoreToken, setPublicScoreToken] = useState<string | null>(null)
+  const [generatingPublicScore, setGeneratingPublicScore] = useState(false)
   const ctaLabel = isGerman ? "JETZT KOSTENLOS ANALYSIEREN" : "ANALYZE FOR FREE NOW"
 
   const shareUrl = useMemo(() => {
@@ -58,6 +61,12 @@ export default function HeroSecurityCheck({ dict = {} }: { dict?: Record<string,
     })
     return `${prefix}/score?${params.toString()}`
   }, [result, prefix])
+
+  // TASK A1: Public score URL (if token exists)
+  const publicScoreUrl = useMemo(() => {
+    if (!publicScoreToken) return ""
+    return `${prefix}/score/${publicScoreToken}`
+  }, [publicScoreToken, prefix])
 
   const badgeUrl = useMemo(() => {
     if (!result) return ""
@@ -90,6 +99,7 @@ export default function HeroSecurityCheck({ dict = {} }: { dict?: Record<string,
     setLoading(true)
     setError(null)
     setResult(null)
+    setPublicScoreToken(null)
     try {
       const res = await performSecurityCheck(input.trim())
       setResult(res)
@@ -99,6 +109,33 @@ export default function HeroSecurityCheck({ dict = {} }: { dict?: Record<string,
         vulnerable: res.vulnerable,
         target_type: targetType,
       })
+
+      // TASK A1: Generate public score token
+      setGeneratingPublicScore(true)
+      try {
+        const response = await fetch("/api/public-score", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            target: res.target,
+            score: res.score,
+            vulnerable: res.vulnerable,
+            top_risks: res.recommendations.slice(0, 5),
+            recommendations: res.recommendations,
+            locale,
+          }),
+        })
+        const data = await response.json()
+        if (data.success && data.token) {
+          setPublicScoreToken(data.token)
+          trackEvent("public_score_created", { locale, score: res.score })
+        }
+      } catch (e) {
+        console.error("Failed to create public score:", e)
+      } finally {
+        setGeneratingPublicScore(false)
+      }
+
       if (typeof window !== "undefined") {
         const current = parseInt(localStorage.getItem("cg_check_count") ?? "0", 10)
         const next = current + 1
@@ -352,6 +389,47 @@ export default function HeroSecurityCheck({ dict = {} }: { dict?: Record<string,
                       shareUrl={`${window.location.origin}${shareUrl}`}
                     />
                   </div>
+
+                  {/* TASK A1: Public Score Link CTA */}
+                  {publicScoreToken && (
+                    <div className="mt-6 rounded-xl border border-cyan-700/60 bg-cyan-950/20 p-4">
+                      <div className="flex items-start gap-3">
+                        <div className="text-2xl">🔗</div>
+                        <div className="flex-1">
+                          <div className="font-semibold text-cyan-200 mb-1">
+                            {isGerman ? "Öffentlicher Score-Link" : "Public Score Link"}
+                          </div>
+                          <div className="text-sm text-cyan-100 mb-3">
+                            {isGerman
+                              ? "Teile deinen Score mit einem dauerhaften Link. Jeder kann ihn sehen."
+                              : "Share your score with a permanent link. Anyone can view it."}
+                          </div>
+                          <div className="flex flex-wrap gap-2">
+                            <a
+                              href={publicScoreUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-sm text-black bg-cyan-400 hover:bg-cyan-300 transition-colors"
+                            >
+                              {isGerman ? "Öffentlichen Link öffnen" : "Open public link"}
+                              <span>→</span>
+                            </a>
+                            <button
+                              onClick={async () => {
+                                try {
+                                  await navigator.clipboard.writeText(`${window.location.origin}${publicScoreUrl}`)
+                                  trackEvent("public_score_link_copy", { locale, score: result.score })
+                                } catch {}
+                              }}
+                              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-sm text-cyan-200 border border-cyan-700 hover:border-cyan-500 transition-colors"
+                            >
+                              {isGerman ? "Link kopieren" : "Copy link"}
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
 
                   <div className="mt-4 text-xs text-gray-500">
                     {result.disclaimer}

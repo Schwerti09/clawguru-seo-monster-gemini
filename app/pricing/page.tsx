@@ -2,6 +2,8 @@ import Container from "@/components/shared/Container"
 import BuyButton from "@/components/commerce/BuyButton"
 import SocialProofBlock from "@/components/commerce/SocialProofBlock"
 import EnterpriseConciergeButton from "@/components/enterprise/EnterpriseConciergeButton"
+import ExitIntentPopup from "@/components/marketing/ExitIntentPopup"
+import SocialProofCounter from "@/components/marketing/SocialProofCounter"
 import { SEO_TARGET_KEYWORDS_2026 } from "@/lib/seo/targets"
 import { TIER_LIMITS } from "@/lib/feature-gating"
 import { SOCIAL_PROOF_CONFIG } from "@/lib/social-proof-config"
@@ -292,6 +294,11 @@ export default async function PricingPage() {
             <span className="flex items-center gap-1.5">
               <span style={{ color: "#00ff9d" }}>✓</span> Self-Hosted ready
             </span>
+          </div>
+
+          {/* TASK A9: Social Proof Counter */}
+          <div className="mt-6 max-w-lg mx-auto">
+            <SocialProofCounter variant="compact" />
           </div>
 
           {/* Emergency nudge */}
@@ -923,6 +930,9 @@ curl https://clawguru.com/api/intel/feeds \\
 
         </div>
       </Container>
+
+      {/* TASK A3: Exit-Intent Popup with €5 discount */}
+      <ExitIntentPopup couponCode="SAVE5" discountAmount="€5" />
     </main>
   )
 }

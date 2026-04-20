@@ -6,6 +6,7 @@ import SectionTitle from "@/components/shared/SectionTitle"
 import { BASE_URL } from "@/lib/config"
 import type { Locale } from "@/lib/i18n"
 import dynamic from "next/dynamic"
+import { EmailCapture } from "@/components/conversion/EmailCapture"
 const RunbookNexus = dynamic(() => import("@/components/pages/RunbookNexus"), {
   loading: () => (
     <div style={{ minHeight: "80vh", contentVisibility: "auto", containIntrinsicSize: "auto 1200px" }} />
@@ -110,6 +111,11 @@ export default async function RunbooksPageContent({
           subtitle={subtitle}
         />
         <RunbookNexus />
+
+        {/* TASK A3: Email Capture */}
+        <div className="mt-12 max-w-4xl mx-auto">
+          <EmailCapture locale={locale} source="runbooks_page" variant="card" />
+        </div>
 
         {/* CONVERSION WARFARE ROUND 3: Aggressive CTAs with Urgency */}
         <div className="mt-12 space-y-4">

@@ -13,136 +13,93 @@
 ClawGuru
 ```
 
-### Tagline (max 60 chars — use ALL the space)
-**Primary (recommended):**
+### Tagline (max 60 chars)
 ```
-4.2M expert-reviewed security runbooks for self-hosters
+Free security score + executable fix runbooks for self-hosters
 ```
-*59 chars — leaves no dead-space, concrete, specific number = trust signal*
-
-### Alternatives (A/B in polls if time allows):
-```
-Your DevOps team's missing security playbook library
-```
-```
-Fix security issues before auditors (or hackers) find them
-```
-```
-Security runbooks + AI copilot for self-hosted stacks
-```
+*58 chars*
 
 ### Description (max 260 chars)
 ```
-ClawGuru is the security runbook library for self-hosted teams. 4.2M expert-reviewed playbooks covering Linux, K8s, Docker, cloud. Free 30-second check scores your stack. Pro unlocks copilot + incident response. GDPR/SOC2/DORA-ready templates. EU-hosted.
+Free HTTP security scanner for self-hosted stacks. Get a Claw Score in 30s — then fix issues with 4.2M executable runbooks. No signup. No agent. GDPR-compliant. Day Pass 9€, Pro 49€/mo.
 ```
 *258 chars*
 
 ### Categories
 1. **Developer Tools** (primary)
-2. **DevOps**
-3. **SaaS**
-4. **Tech** (broader reach)
+2. **Security**
+3. **DevOps**
+4. **Open Source**
 
 ### Topics (PH-tags, pick 5)
+- developer-tools
 - security
 - devops
 - self-hosted
 - open-source
-- productivity
 
 ---
 
-## 2. Gallery (this is 70% of conversion — do NOT phone it in)
+## 2. Gallery (1270×760 PNG, ≤ 2MB each — for Canva/Figma)
 
-> **Format:** 1270×760 PNG, ≤ 2MB each. Upload 5–8 total.
-
-### Slide 1 — "The Hook" (most important — this is your thumbnail)
+### Slide 1 — Hero
 **Content:**
-- Big headline: **"Fix your infra security in 30 seconds"**
-- Subhead: "4.2M runbooks. AI copilot. Starts at €5."
-- Visual: Screenshot of `/check` result showing Claw Score 73/100 + 3 critical issues highlighted
-- Bottom-right badge: "🇪🇺 EU-hosted · GDPR-compliant"
+- Headline: "Free Security Scanner for Self-Hosted Stacks"
+- Sub: "Claw Score in 30 seconds. No signup. No agent."
+- Visual: Screenshot `/de/check` mit Score-Ergebnis
 
-### Slide 2 — "The Problem"
+### Slide 2 — Problem
 **Content:**
-- Headline: "Security tools are built for Fortune 500. Not for you."
-- Visual: Split-screen — left shows an overwhelming Wiz/CrowdStrike dashboard ("$50k/year"), right shows ClawGuru's clean `/check` input ("€5 Day Pass")
+- Headline: "89% of self-hosted stacks have critical misconfigs"
+- 3 Icons: Redis without auth / Missing HSTS / Exposed .env
+- Sub: "We scanned 128,457 stacks. This is what we found."
 
-### Slide 3 — "The Solution (ROI)"
+### Slide 3 — Feature: Security Check
 **Content:**
-- Headline: "One scan. Ranked risks. Copy-paste fixes."
-- Visual: Screenshot of a runbook page (e.g. `/runbook/kubernetes-rbac-hardening`) with code block + copy button visible
+- Headline: "Get your Claw Score in 30 seconds"
+- Score-Meter visual (0-100), Befunde-Liste
+- "TLS · Headers · Service Exposure · CVE Patterns"
 
-### Slide 4 — "Proof of Depth"
+### Slide 4 — Feature: Runbooks
 **Content:**
-- Headline: "4.2M runbooks. Updated daily. Expert-reviewed."
-- Visual: Grid of 12 logos/tech-names: Docker, Kubernetes, PostgreSQL, Nginx, AWS IAM, Terraform, NGINX, Redis, MongoDB, Ansible, GitHub Actions, Vault
+- Headline: "4.2M executable fix runbooks"
+- "Each finding → direct link to step-by-step commands"
+- Runbook-Card Screenshot
 
-### Slide 5 — "For Real Workflows"
+### Slide 5 — Feature: Roast My Stack
 **Content:**
-- Headline: "Built into your incident workflow"
-- Visual: Screenshot of copilot chat answering "How do I rotate PostgreSQL admin credentials without downtime?" with a referenced runbook
+- Headline: "Roast My Stack — viral security analysis"
+- "89% hatten kritische Lücken. Was ist mit deinem Stack?"
+- Share-Button Mockup
 
-### Slide 6 — "Priced for Sanity"
+### Slide 6 — Pricing
 **Content:**
-- Headline: "€5 Day Pass. €29 Pro. €15k audit-ready package."
-- Visual: 3-tier pricing grid from `/pricing` screenshot
+- Free | Day Pass 9€ | Pro 49€/Mo | Consulting ab 5.000€
+- "HUNTER50 — 50% off Pro for PH community"
 
-### Slide 7 (OPTIONAL) — "Social Proof"
+### Slide 7 — CTA
 **Content:**
-- Headline: "Ship hardening, not meetings"
-- Visual: 3 testimonial quotes (even if beta — get real names + roles + companies FIRST)
+- Headline: "Try it free: clawguru.org/en/check"
+- Sub: "No signup. No credit card. Results in 30 seconds."
+- QR Code (optional)
 
 ---
 
-## 3. First Comment (post this IMMEDIATELY when live)
-
-> **This pins a founder voice at top of comments. Critical for conversion.**
-> **Required tone:** personal, specific, invites conversation.
+## 3. First Maker Comment (post IMMEDIATELY when live)
 
 ```
-Hey Product Hunt 👋
+Hey Product Hunt! 👋
 
-Schwerti here, solo founder of ClawGuru.
+Built this after one too many 3am incidents where the fix was "somewhere in Confluence".
 
-I built this because every "enterprise security platform" I looked at cost €50k/year and was designed for Fortune 500 security teams with 20 analysts. That's not me. That's not any self-hosting dev I know.
+What's free forever:
+✓ Security Check (full scan, Claw Score 0-100)
+✓ CVE Fix Guides (30+)
+✓ Basic Runbooks Browse
 
-ClawGuru is the opposite: one-person-friendly, priced for individuals (€5 Day Pass, €29/mo Pro), and laser-focused on the runbooks you actually need when something is on fire at 2am.
+Use HUNTER50 for 50% off Pro — valid until 13.05.2026.
 
-What's in the box today:
-🛡️  4.2M expert-reviewed security runbooks (Linux, K8s, Docker, AWS, GCP, Azure, 40+ stacks)
-🔍  30-second Free Security Check — enter your domain/IP, get a Claw Score + top 3 risks
-🤖  AI Copilot trained on our runbook corpus — ask it anything about your stack
-📊  Pro tier: incident response playbooks, API access, unlimited checks
-🏢  Enterprise: SOC 2 + DORA + GDPR-ready consulting packages from €15k
-
-What I need from you today:
-1. Try the free check on a server/domain: clawguru.org/check
-2. Tell me honestly — what's the first thing that looked wrong/missing/great?
-3. Upvote if you think solo devs + small teams deserve real security tooling at human prices 🙏
-
-I'm here all day answering every comment. Ask me anything — pricing, tech stack (Next.js + Postgres + a lot of custom NLP), roadmap (Beehiiv newsletter, White-Label for MSPs next), or just roast my landing page.
-
-🇪🇺 EU-hosted. GDPR-first. No tracking trackers.
-
-Special for PH: use code HUNTER50 for 50% off the first month of Pro (expires end of week).
-```
-
-### Follow-up comments to pre-write (post over the day)
-
-**Hour 2:**
-```
-For anyone asking about the AI Copilot — it's not an LLM wrapper. We embed our runbook corpus (~2GB of expert-reviewed content) and re-rank with domain-tuned retrieval. Answers cite specific runbooks. No hallucinated `sudo rm -rf` 😅
-```
-
-**Hour 4 (if traction):**
-```
-2 hours in and we hit #X Product of the Day 🚀 Thank you! If you're finding ClawGuru useful, a quick upvote helps enormously. I'll match every upvote today with a free runbook request — DM me a stack + scenario and I'll write a custom runbook this weekend.
-```
-
-**Hour 8 — engagement booster:**
-```
-Fun numbers from today: 47 Day Passes sold, 212 free checks completed, avg Claw Score 61/100 (yikes). Top 3 issues we're seeing: missing HSTS headers, SSH password auth still enabled, outdated Kubernetes RBAC. If any of those apply to you, we have runbooks ready.
+Honest question for the community: What's the worst self-hosted misconfiguration you've seen? (We'll add a runbook for it if we don't have one.)
 ```
 
 ---
@@ -151,24 +108,25 @@ Fun numbers from today: 47 Day Passes sold, 212 free checks completed, avg Claw 
 
 ### T-7 days
 - [ ] Book a PH Hunter with ≥ 500 followers (DM candidates: Chris Messina, Kevin William David — check PH leaderboards)
-- [ ] Email 30 warmest contacts: "Launching ClawGuru on Product Hunt [day]. If you have 10 seconds, here's the link — [PH teaser link]"
 - [ ] Prepare all 5–7 gallery images in Figma/Canva, export at 1270×760
 - [ ] Write + schedule X-launch-thread (see `x-launch-thread.md`)
 - [ ] Write + schedule HN "Show HN" (see `show-hn-post.md`)
 - [ ] Draft + schedule Reddit posts for r/selfhosted, r/sysadmin, r/homelab (see `reddit-launch-posts.md`)
 - [ ] Draft LinkedIn post from founder account
 
+### T-5 days
+- [ ] Create Stripe coupons: HUNTER50, SHOWHN50, REDDIT30, BIRDS25, LINKEDIN25 (see `stripe-coupons.md`)
+
 ### T-3 days
-- [ ] Create PH "Upcoming" teaser page — start collecting email subscribers
-- [ ] Share teaser on X, LinkedIn, personal network
-- [ ] Sanity-check that `HUNTER50` coupon actually works in Stripe
-- [ ] Verify `/check` is fast (< 2s) and `/daypass` checkout works on mobile
-- [ ] Test all links in gallery + first comment
+- [ ] Warm-up subreddits (comment genuinely on 5 threads/day)
+- [ ] Warm-up X (follow 50 security/devops accounts, reply genuinely to 10 security tweets/day)
 
 ### T-1 day (Monday night Europe / afternoon PST)
 - [ ] Final screenshots + gallery upload
 - [ ] Schedule launch for Tuesday 00:01 PST (PH reset)
-- [ ] Send heads-up email to network: "Going live in 8 hours"
+- [ ] Sanity-check that `HUNTER50` coupon actually works in Stripe
+- [ ] Verify `/check` is fast (< 2s) and `/daypass` checkout works on mobile
+- [ ] Test all links in gallery + first comment
 - [ ] Clear calendar for Tuesday — you'll be in comments ALL DAY
 
 ### T-0 (Launch Tuesday)
@@ -177,7 +135,6 @@ Fun numbers from today: 47 Day Passes sold, 212 free checks completed, avg Claw 
 - [ ] 00:10 PST — publish HN "Show HN" + Reddit posts + X thread simultaneously
 - [ ] 01:00 PST — post on LinkedIn
 - [ ] Every 30min until evening Pacific: answer EVERY comment, upvote replies
-- [ ] EOD — post wrap-up thread "We made Top X today — here's what I learned"
 
 ---
 
@@ -191,10 +148,3 @@ Fun numbers from today: 47 Day Passes sold, 212 free checks completed, avg Claw 
 | Newsletter Subs | 100 | 300 | 1000+ |
 | HN Points | 30 | 100 | Front page |
 | Reddit Top Post | 1 sub | 2 subs | 3 subs |
-
-## 6. Post-Launch (T+1 to T+7)
-
-- [ ] Day 1 — publish "Launch day learnings" blog post; cross-post to HN + LI
-- [ ] Day 3 — thank-you email to every Product Hunter who commented
-- [ ] Day 7 — email all HUNTER50 users: "How was your first week? Reply = I reply personally"
-- [ ] Week 2 — compile a public "post-mortem" doc with numbers, put on `/launch-results` (transparency = backlinks)

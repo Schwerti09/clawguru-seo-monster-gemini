@@ -1,3 +1,43 @@
+# Daily Status — 2026-04-20 (Sunday · War Plan Day 1)
+
+> **Current Active Sprint:** Phase A → Phase B overlap + Phase D kickoff
+> **Days remaining to 90-day target (€10k MRR):** 90
+
+## 🎯 Today (Sun 20.04)
+
+1. **[DONE]** Phase A audit — verified all conversion multipliers live: `ExitIntentPopup` (/pricing + /daypass, SAVE5), `UrgencyBanner` (/daypass), `SocialProofCounter` (both), `EmailCapture` (/check, /runbooks, /academy, /roast-my-moltbot, /roast-my-stack), `ShareScore` (/score/[id]). **Phase A code-side = 100% complete.**
+2. **[DONE]** Phase B Launch Playbook shipped (commit `5c4a01ef`) — 5 docs in `docs/launch/`: `README.md` (day schedule Berlin TZ, coupon map, success criteria), `product-hunt-assets.md` (tagline, 7-slide gallery brief, first-comment, T-7 checklist), `show-hn-post.md` (7 A/B title variants + response playbook), `reddit-launch-posts.md` (5 sub-specific value-first posts), `x-launch-thread.md` (15 tweets + engagement playbook).
+3. **[DONE]** Task D7 — **Defender Foundation Practice Exam** live (commit `c4bc759b`): 15 bilingual questions in `lib/cert/question-bank.ts`, full client engine at `components/cert/PracticeExamClient.tsx` (timer, LocalStorage resume, per-question review), page at `/[lang]/defender-cert/practice-exam/foundation` with Quiz + Article schema, hero CTA + Foundation-tier micro-link on `/defender-cert`. **Revenue wiring:** pass → waitlist mailto + share; fail → Day Pass €5 upsell + runbook topic-filter links. TypeCheck clean.
+4. **[DONE]** Migration Vercel → Railway: domain `clawguru.org` + `www.clawguru.org` both resolving via Netlify DNS CNAMEs to Railway (`j5thj4tc.up.railway.app` + `yhksqcs5.up.railway.app`). DNS propagation took ~40min; apex SSL now served by Railway Edge. Both endpoints verified live (HTTPS 307 → /de).
+5. **[DONE]** `USER-TODO.md` Section 6 rewritten with exact T-7 → T+0 launch schedule pointing to each asset file.
+
+## 📊 KPI Snapshot (unchanged — no traffic tracking yet)
+| Metric | Value |
+|---|---|
+| Daily Visitors | ~ (not tracked) |
+| Day Passes Sold | 0 |
+| Newsletter Subs | 0 |
+| Commits pushed today | 2 (Phase B playbook + D7 practice exam) |
+
+## 🧭 Next Session (21.04)
+
+**Recommended next build: D6 — White-Label for MSPs.**
+Reason: highest revenue-per-hour in remaining Phase D. D7b (Prof+Expert practice) is more-of-same — lower marginal value. D6 opens a new revenue stream (MSP resellers at €500–2000/mo per partner) AND completes Phase D code-side.
+
+Scope for D6 (est. 1 session):
+- `/for-msps/white-label` landing page with pricing tiers (Starter/Pro/Agency)
+- Comparison table: self-branded vs white-label vs full resell
+- ROI calculator preset for MSPs ("your clients × avg deal × margin")
+- Lead form → `msp-partnership@clawguru.org` with qualifying questions
+- Cross-link from `/for-msps` + `/consulting` + `/pricing` "Team" tier
+
+## 🚫 Blockers
+None code-side. User-side pending (already in `USER-TODO.md`): Beehiiv setup, Calendly booking link, author photo, LinkedIn hygiene.
+
+---
+
+---
+
 # Daily Status — 2026-04-19 (Saturday · War Plan Day 0)
 
 > **Current Active Sprint:** Phase A — Viral Foundation (Week 1 of 12)

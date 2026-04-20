@@ -11,6 +11,7 @@
 4. **[DONE]** Migration Vercel → Railway: domain `clawguru.org` + `www.clawguru.org` both resolving via Netlify DNS CNAMEs to Railway (`j5thj4tc.up.railway.app` + `yhksqcs5.up.railway.app`). DNS propagation took ~40min; apex SSL now served by Railway Edge. Both endpoints verified live (HTTPS 307 → /de).
 5. **[DONE]** `USER-TODO.md` Section 6 rewritten with exact T-7 → T+0 launch schedule pointing to each asset file.
 6. **[DONE]** Task D6 — **White-Label MSP Page** live (commit `b942ee8f`): `/for-msps/white-label` with 3 pricing tiers (Starter €990, Pro €2.490, Agency Custom), comparison table (self-branded vs white-label vs full resell), ROI calculator preset for MSPs, lead form with qualifying questions to `msp-partnership@clawguru.org`, cross-links from `/for-msps`, `/consulting`, `/pricing` Teams tier. Dark theme design system compliant. Slug added to sitemap (GUIDE_SLUGS). Build exit 0.
+7. **[DONE]** Task D1 — **Calendly/Cal.com Booking Integration** live (commit `b9b5407e`): BookingButton component already supports Calendly/Cal.com via env vars (NEXT_PUBLIC_CAL_STRATEGY_URL, NEXT_PUBLIC_CAL_AUDIT_URL, NEXT_PUBLIC_CAL_DEMO_URL). Added BookingButton to /enterprise-api final CTA section. /consulting already uses BookingButton. USER-TODO.md already has Calendly setup instructions (Section 2). Code-side integration complete, user-side env vars pending.
 
 ## 📊 KPI Snapshot (unchanged — no traffic tracking yet)
 | Metric | Value |
@@ -18,20 +19,26 @@
 | Daily Visitors | ~ (not tracked) |
 | Day Passes Sold | 0 |
 | Newsletter Subs | 0 |
-| Commits pushed today | 3 (Phase B playbook, D7 practice exam, D6 white-label) |
+| Commits pushed today | 4 (Phase B playbook, D7 practice exam, D6 white-label, D1 Calendly) |
 
 ## 🧭 Next Session (21.04)
 
-**Phase D remaining code-side tasks:**
-- D1: Calendly/Cal.com booking integration on /consulting + /enterprise-api
+**Phase D code-side status:**
+- D1: Calendly/Cal.com booking integration ✅ DONE (code-side)
 - D6b: White-Label MSP landing page `/for-msps/white-label` ✅ DONE
 - D8: First Enterprise deal closed (sales, ongoing)
 
-**Recommended next build:** D1 — Calendly/Cal.com booking integration.
-Reason: High-ticket revenue (€10–50k per deal). Low effort (0.5 day). Removes friction from consulting CTAs.
+**All Phase D code-side tasks complete.** Remaining are user-side (env vars, sales outreach) and Phase B launch execution.
+
+**Recommended next action:** Execute Phase B launch (T-7 → T+0) per `docs/launch/README.md` schedule.
+Reason: Viral traffic spike (50–100k visits in 48h) + 50–150 Day Passes expected. High-impact, time-sensitive.
 
 ## 🚫 Blockers
-None code-side. User-side pending (already in `USER-TODO.md`): Beehiiv setup, Calendly booking setup, author photo, LinkedIn hygiene.
+None code-side. User-side pending (already in `USER-TODO.md`):
+- Beehiiv setup (Section 1)
+- Calendly env vars (Section 2 — code ready, needs URLs)
+- Author photo (Section 5)
+- LinkedIn hygiene (Section 4)
 
 ---
 

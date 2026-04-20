@@ -227,16 +227,23 @@ export default function DefenderCertPage({ params }: PageProps) {
           </p>
           <div className="flex flex-col sm:flex-row gap-3">
             <Link
-              href={`/${locale}/defender-cert#tiers`}
+              href={`/${locale}/defender-cert/practice-exam/foundation`}
               className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-gradient-to-r from-cyan-500 to-cyan-400 text-black font-black shadow-lg shadow-cyan-500/20 hover:scale-[1.02] transition-all"
             >
-              <Award className="h-4 w-4" aria-hidden />
-              {isDE ? "Prüfungs-Tiers ansehen" : "View exam tiers"}
+              <Target className="h-4 w-4" aria-hidden />
+              {isDE ? "Kostenlose Übungsprüfung starten" : "Start free practice exam"}
               <ArrowRight className="h-4 w-4" aria-hidden />
+            </Link>
+            <Link
+              href={`/${locale}/defender-cert#tiers`}
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg border border-cyan-500/40 text-cyan-200 font-bold hover:bg-cyan-500/10"
+            >
+              <Award className="h-4 w-4" aria-hidden />
+              {isDE ? "Prüfungs-Tiers" : "Exam tiers"}
             </Link>
             <BookingButton
               type="demo"
-              label={isDE ? "Team-Zertifizierung anfragen" : "Request team certification"}
+              label={isDE ? "Team-Zertifizierung" : "Team certification"}
               locale={locale}
               source="defender_cert_hero"
               variant="secondary"
@@ -353,6 +360,14 @@ export default function DefenderCertPage({ params }: PageProps) {
                 >
                   {isDE ? "Auf Warteliste" : "Join waitlist"}
                 </a>
+                {tier.id === "foundation" && (
+                  <Link
+                    href={`/${locale}/defender-cert/practice-exam/foundation`}
+                    className="mt-2 block text-center text-xs text-cyan-300 hover:text-cyan-200 underline"
+                  >
+                    {isDE ? "→ Erst kostenlose Übungsprüfung starten" : "→ First try the free practice exam"}
+                  </Link>
+                )}
               </div>
             ))}
           </div>

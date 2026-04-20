@@ -6,11 +6,9 @@
  */
 
 export const ORGANIZATION = {
-  name: "ClawGuru Mycelium Security Intelligence GmbH",
+  name: "ClawGuru Security Intelligence",
   shortName: "ClawGuru",
   url: "https://clawguru.org",
-  legalForm: "GmbH",
-  location: "Berlin, Germany",
   logo: "https://clawguru.org/og-image.png",
 } as const
 
@@ -20,9 +18,9 @@ export const DEFAULT_AUTHOR = {
   fullName: "Schwerti",
   jobTitle: "Founder & Security Researcher",
   bio:
-    "Founder of ClawGuru. Builds security intelligence tools for self-hosted infrastructure. Based in Berlin.",
+    "Founder of ClawGuru. Builds security intelligence tools for self-hosted infrastructure.",
   bioDe:
-    "Gründer von ClawGuru. Entwickelt Security-Intelligence-Tools für selbst gehostete Infrastruktur. Basis Berlin.",
+    "Gründer von ClawGuru. Entwickelt Security-Intelligence-Tools für selbst gehostete Infrastruktur.",
   url: "https://clawguru.org/about",
   sameAs: [
     "https://github.com/Schwerti09",
@@ -58,11 +56,6 @@ export function buildOrganizationSchema() {
     alternateName: ORGANIZATION.shortName,
     url: ORGANIZATION.url,
     logo: ORGANIZATION.logo,
-    address: {
-      "@type": "PostalAddress",
-      addressLocality: "Berlin",
-      addressCountry: "DE",
-    },
   }
 }
 

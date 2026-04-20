@@ -142,7 +142,7 @@ export default function Footer() {
       {/* Bottom bar */}
       <div className="border-t border-gray-800 bg-gray-950">
         <div className="max-w-7xl mx-auto px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-600">
-          <span>© 2026 ClawGuru Mycelium Security Intelligence GmbH · Berlin</span>
+          <span>© 2026 ClawGuru Security Intelligence</span>
           <div className="flex items-center gap-4">
             <span className="flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />

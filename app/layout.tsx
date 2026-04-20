@@ -34,7 +34,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: "ClawGuru — Self-Hosted Security Intelligence | Runbooks, Copilot, Threat Feed",
   description:
-    "ClawGuru: 3M+ expert-reviewed security runbooks, live CVE intel, and hands-on hardening tools for DevOps and SecOps teams. Built in Berlin.",
+    "ClawGuru: 3M+ expert-reviewed security runbooks, live CVE intel, and hands-on hardening tools for DevOps and SecOps teams.",
   keywords: SEO_TARGET_KEYWORDS_2026,
   alternates: {
     canonical: "/de",
@@ -44,7 +44,7 @@ export const metadata: Metadata = {
     locale: "de_DE",
     url: `${SITE_URL}/de`,
     title: "ClawGuru — Self-Hosted Security Intelligence",
-    description: "3M+ expert-reviewed security runbooks, live CVE intel, hardening tools. Built in Berlin.",
+    description: "3M+ expert-reviewed security runbooks, live CVE intel, hardening tools.",
     images: ["/og-image.png", "/og-image.svg"]
   },
   twitter: { card: "summary_large_image", creator: "@clawguru" },

@@ -50,9 +50,9 @@ export default function LocaleImpressumPage() {
           <div className="my-12 border-t border-white/10 pt-12 text-sm opacity-75">
             <p>
               Die auf dieser Plattform bereitgestellten Runbooks, Analysen und Threat-Intelligence-Daten dienen ausschließlich zu Informationszwecken und ersetzen keine professionelle Beratung. 
-              ClawGuru Mycelium Security Intelligence übernimmt keine Haftung für Schäden, die aus der Nutzung der Inhalte entstehen könnten.
+              ClawGuru Security Intelligence übernimmt keine Haftung für Schäden, die aus der Nutzung der Inhalte entstehen könnten.
             </p>
-            <p className="mt-6">© 2026 ClawGuru Mycelium Security Intelligence GmbH. Alle Rechte vorbehalten.</p>
+            <p className="mt-6">© 2026 ClawGuru Security Intelligence. Alle Rechte vorbehalten.</p>
           </div>
         </div>
       </div>

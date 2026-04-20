@@ -682,6 +682,11 @@ export default async function PricingPage() {
                   <div className="mt-3 text-xs text-gray-500 text-center">
                     {dict.pricing.cancelable}
                   </div>
+                  <div className="mt-3 text-center">
+                    <a href={`${prefix}/for-msps/white-label`} className="text-xs text-[#00ff9d] hover:underline">
+                      {isDE ? "MSP? White-Label Partnership →" : "MSP? White-Label Partnership →"}
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>

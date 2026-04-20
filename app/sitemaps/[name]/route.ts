@@ -352,6 +352,8 @@ export async function GET(
         "api-beta","manifesto",
         // E-E-A-T Team Page (Round 12 Bonus)
         "team",
+        // D6 White-Label MSP Page (Phase D)
+        "for-msps/white-label",
       ]
       // Quality geo landing pages (50 cities with local compliance context)
       const GEO_QUALITY_SLUGS = [

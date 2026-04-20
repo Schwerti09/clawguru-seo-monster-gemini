@@ -367,6 +367,10 @@ export default function ConsultingPage({ params }: PageProps) {
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further resources"}</h2>
           <div className="grid md:grid-cols-2 gap-4">
+            <Link href={`/${locale}/for-msps/white-label`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
+              <div className="font-semibold text-cyan-400">{isDE ? "White-Label MSP" : "White-Label MSP"}</div>
+              <div className="text-sm text-gray-300">{isDE ? "Partnership für MSPs" : "Partnership for MSPs"}</div>
+            </Link>
             <Link href={`/${locale}/certification`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">{isDE ? "Certification" : "Certification"}</div>
               <div className="text-sm text-gray-300">{isDE ? "Security Verified Badge" : "Security verified badge"}</div>

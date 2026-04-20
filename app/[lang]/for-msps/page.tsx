@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { Shield, Zap, Palette, Users, TrendingUp, Check, AlertTriangle } from "lucide-react"
+import { Shield, Zap, Palette, Users, TrendingUp, Check, AlertTriangle, ArrowRight } from "lucide-react"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
 import BookingButton from "@/components/booking/BookingButton"
 import RoiCalculator from "@/components/roi/RoiCalculator"
@@ -257,6 +257,15 @@ export default function ForMspsPage({ params }: PageProps) {
           <h2 className="text-3xl font-bold text-white mb-6">
             {isDE ? "White-Label Partnership" : "White-Label Partnership"}
           </h2>
+          <div className="mb-6 text-center">
+            <Link
+              href={`/${locale}/for-msps/white-label`}
+              className="inline-flex items-center gap-2 text-sm text-purple-300 hover:text-purple-200 transition-colors"
+            >
+              {isDE ? "Detaillierte Pricing-Tiers (Starter/Pro/Agency) →" : "Detailed pricing tiers (Starter/Pro/Agency) →"}
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
           <div className="grid md:grid-cols-2 gap-6">
             <div className="bg-gray-900 border border-gray-800 rounded-2xl p-8">
               <div className="text-sm text-purple-400 font-semibold mb-2">{isDE ? "Starter" : "Starter"}</div>

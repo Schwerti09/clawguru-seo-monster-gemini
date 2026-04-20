@@ -12,6 +12,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { dbQuery } from "@/lib/db"
 import { checkRateLimit } from "@/lib/rate-limit"
+import { isBeehiivConfigured, subscribeToBeehiiv } from "@/lib/newsletter/beehiiv"
 
 export const runtime = "nodejs"
 
@@ -83,6 +84,17 @@ export async function POST(req: NextRequest) {
     )
 
     console.log(`[newsletter/subscribe] New subscriber: ${email} (source: ${source}, locale: ${locale})`)
+
+    // Fire-and-forget Beehiiv sync — never block the response
+    if (isBeehiivConfigured()) {
+      subscribeToBeehiiv({ email, source, locale })
+        .then((r) => {
+          if (!r.ok && !r.skipped) {
+            console.warn(`[newsletter/subscribe] Beehiiv sync failed for ${email}:`, r.error)
+          }
+        })
+        .catch((e) => console.warn(`[newsletter/subscribe] Beehiiv sync threw:`, e))
+    }
 
     return NextResponse.json({ ok: true, message: "Erfolgreich angemeldet!" })
   } catch (err) {

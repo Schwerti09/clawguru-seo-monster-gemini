@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: { params: { lang: string } })
         name: locale === "de" ? "Was ist die ClawGuru Academy?" : "What is the ClawGuru Academy?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: locale === "de" 
+          text: locale === "de"
             ? "Die ClawGuru Academy ist eine kostenlose Security-Lernplattform mit praktischen Kursen, Runbooks und Zertifizierungen für Self-Hosted Security, AI-Agent Hardening und Compliance."
             : "The ClawGuru Academy is a free security learning platform with practical courses, runbooks, and certifications for self-hosted security, AI agent hardening, and compliance."
         }
@@ -52,6 +52,36 @@ export async function generateMetadata({ params }: { params: { lang: string } })
           text: locale === "de"
             ? "Die meisten Kurse dauern 30-60 Minuten. Fortgeschrittene Tracks können 8-18 Stunden benötigen. Alle Kurse sind selbstgesteuert."
             : "Most courses take 30-60 minutes. Advanced tracks may require 8-18 hours. All courses are self-paced."
+        }
+      },
+      {
+        "@type": "Question",
+        name: locale === "de" ? "Was kostet die Academy?" : "How much does the Academy cost?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: locale === "de"
+            ? "Die Lernpfade und CVE Guides sind kostenlos. Runbook-Ausführungen erfordern Pro (49€/Mo)."
+            : "The learning paths and CVE guides are free. Runbook executions require Pro (49€/mo)."
+        }
+      },
+      {
+        "@type": "Question",
+        name: locale === "de" ? "Bekomme ich ein Zertifikat?" : "Do I get a certificate?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: locale === "de"
+            ? "Consulting-Kunden erhalten einen dokumentierten Audit-Report der als Nachweis für ISO27001/NIS2 dient."
+            : "Consulting customers receive a documented audit report that serves as proof for ISO27001/NIS2."
+        }
+      },
+      {
+        "@type": "Question",
+        name: locale === "de" ? "Kann ich die Academy selbst hosten?" : "Can I self-host the Academy?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: locale === "de"
+            ? "Die Runbooks sind über die API abrufbar. Enterprise-Kunden erhalten Custom Runbooks."
+            : "The runbooks are accessible via the API. Enterprise customers receive custom runbooks."
         }
       }
     ]
@@ -347,6 +377,91 @@ export default async function AcademyPage({ params }: { params: { lang: string }
           </div>
         </section>
 
+        {/* SECTION 1: Learning Path (Schritt-für-Schritt) */}
+        <section className="py-20 bg-[#0a0a0a]">
+          <div className="container mx-auto px-4">
+            <div className="max-w-5xl mx-auto">
+              <h2 className="text-4xl md:text-5xl font-black text-gray-100 mb-12 text-center">
+                {locale === "de" ? "Dein Lernpfad zu messbarer Security" : "Your Learning Path to Measurable Security"}
+              </h2>
+              <div className="grid md:grid-cols-2 gap-6">
+                {/* Schritt 1 */}
+                <Link href={`${prefix}/check`} className="bg-gray-800 border border-gray-700 rounded-xl p-6 hover:border-green-500/50 transition-all">
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 rounded-full bg-green-900/50 flex items-center justify-center text-2xl font-black text-green-400">
+                      1
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-bold text-gray-100 mb-2">
+                        {locale === "de" ? "Security Check — kostenlos" : "Security Check — free"}
+                      </h3>
+                      <p className="text-gray-400 text-sm leading-relaxed">
+                        {locale === "de"
+                          ? "Starte mit dem kostenlosen Claw Score. Sieh was öffentlich exponiert ist."
+                          : "Start with the free Claw Score. See what's publicly exposed."}
+                      </p>
+                    </div>
+                  </div>
+                </Link>
+                {/* Schritt 2 */}
+                <Link href={`${prefix}/solutions`} className="bg-gray-800 border border-gray-700 rounded-xl p-6 hover:border-cyan-500/50 transition-all">
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 rounded-full bg-cyan-900/50 flex items-center justify-center text-2xl font-black text-cyan-400">
+                      2
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-bold text-gray-100 mb-2">
+                        {locale === "de" ? "CVE Fix Guides — kostenlos" : "CVE Fix Guides — free"}
+                      </h3>
+                      <p className="text-gray-400 text-sm leading-relaxed">
+                        {locale === "de"
+                          ? "30+ CVE-Anleitungen mit konkreten Befehlen. Keine Theorie."
+                          : "30+ CVE guides with concrete commands. No theory."}
+                      </p>
+                    </div>
+                  </div>
+                </Link>
+                {/* Schritt 3 */}
+                <Link href={`${prefix}/runbooks`} className="bg-gray-800 border border-gray-700 rounded-xl p-6 hover:border-purple-500/50 transition-all">
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 rounded-full bg-purple-900/50 flex items-center justify-center text-2xl font-black text-purple-400">
+                      3
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-bold text-gray-100 mb-2">
+                        {locale === "de" ? "Runbooks ausführen — Pro" : "Runbooks Execute — Pro"}
+                      </h3>
+                      <p className="text-gray-400 text-sm leading-relaxed">
+                        {locale === "de"
+                          ? "4.200+ ausführbare Runbooks. Fix in <30 Minuten."
+                          : "4,200+ executable runbooks. Fix in <30 minutes."}
+                      </p>
+                    </div>
+                  </div>
+                </Link>
+                {/* Schritt 4 */}
+                <Link href={`${prefix}/consulting`} className="bg-gray-800 border border-gray-700 rounded-xl p-6 hover:border-red-500/50 transition-all">
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 rounded-full bg-red-900/50 flex items-center justify-center text-2xl font-black text-red-400">
+                      4
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-bold text-gray-100 mb-2">
+                        {locale === "de" ? "Zertifizierung — Consulting" : "Certification — Consulting"}
+                      </h3>
+                      <p className="text-gray-400 text-sm leading-relaxed">
+                        {locale === "de"
+                          ? "Hands-on Hardening mit unserem Team. Ab 5.000€ Fixed-Fee."
+                          : "Hands-on hardening with our team. From €5,000 fixed-fee."}
+                      </p>
+                    </div>
+                  </div>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* WAS IST DIE CLAWGURU ACADEMY? */}
         <section className="py-20 bg-[#0a0a0a]">
           <div className="container mx-auto px-4">
@@ -365,6 +480,146 @@ export default async function AcademyPage({ params }: { params: { lang: string }
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* SECTION 2: 4 Kurs-Cards (Grid 2×2) */}
+        <section className="py-20 bg-[#0a0a0a]">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-12">
+              <h2 className="text-4xl md:text-5xl font-black text-gray-100 mb-4">
+                {locale === "de" ? "Academy Kurse" : "Academy Courses"}
+              </h2>
+              <p className="text-xl text-gray-400 max-w-2xl mx-auto">
+                {locale === "de" ? "Praxisnah. Selbstgesteuert. Ergebnisse." : "Practical. Self-paced. Results."}
+              </p>
+            </div>
+            <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+              {/* Card 1 */}
+              <Link href={`${prefix}/openclaw/self-hosted-security-checklist`} className="bg-gray-800 border border-gray-700 rounded-xl p-6 hover:border-green-500/50 transition-all">
+                <div className="flex items-center gap-2 mb-4">
+                  <span className="px-3 py-1 rounded-full bg-green-900/50 text-green-400 text-xs font-bold">
+                    🛡️ {locale === "de" ? "BEGINNER" : "BEGINNER"}
+                  </span>
+                  <span className="text-gray-500 text-sm">
+                    {locale === "de" ? "4 Wochen" : "4 weeks"} | {locale === "de" ? "Kostenlos mit Pro" : "Free with Pro"}
+                  </span>
+                </div>
+                <h3 className="text-2xl font-bold text-gray-100 mb-3">
+                  {locale === "de" ? "Self-Hosted Security Fundamentals" : "Self-Hosted Security Fundamentals"}
+                </h3>
+                <p className="text-gray-400 text-sm mb-4 leading-relaxed">
+                  {locale === "de" ? "Docker, Nginx, Firewall, TLS, HSTS" : "Docker, Nginx, Firewall, TLS, HSTS"}
+                </p>
+                <div className="text-green-400 font-semibold text-sm">
+                  {locale === "de" ? "Kurs starten →" : "Start course →"}
+                </div>
+              </Link>
+              {/* Card 2 */}
+              <Link href={`${prefix}/moltbot/security-framework`} className="bg-gray-800 border border-gray-700 rounded-xl p-6 hover:border-cyan-500/50 transition-all">
+                <div className="flex items-center gap-2 mb-4">
+                  <span className="px-3 py-1 rounded-full bg-cyan-900/50 text-cyan-400 text-xs font-bold">
+                    ⚡ {locale === "de" ? "INTERMEDIATE" : "INTERMEDIATE"}
+                  </span>
+                  <span className="text-gray-500 text-sm">
+                    {locale === "de" ? "6 Wochen" : "6 weeks"} | Pro
+                  </span>
+                </div>
+                <h3 className="text-2xl font-bold text-gray-100 mb-3">
+                  {locale === "de" ? "Moltbot Hardening Masterclass" : "Moltbot Hardening Masterclass"}
+                </h3>
+                <p className="text-gray-400 text-sm mb-4 leading-relaxed">
+                  {locale === "de" ? "API Security, RBAC, Vault, Zero Trust" : "API Security, RBAC, Vault, Zero Trust"}
+                </p>
+                <div className="text-cyan-400 font-semibold text-sm">
+                  {locale === "de" ? "Kurs starten →" : "Start course →"}
+                </div>
+              </Link>
+              {/* Card 3 */}
+              <Link href={`${prefix}/moltbot/ai-agent-security`} className="bg-gray-800 border border-gray-700 rounded-xl p-6 hover:border-purple-500/50 transition-all">
+                <div className="flex items-center gap-2 mb-4">
+                  <span className="px-3 py-1 rounded-full bg-purple-900/50 text-purple-400 text-xs font-bold">
+                    🧠 {locale === "de" ? "ADVANCED" : "ADVANCED"}
+                  </span>
+                  <span className="text-gray-500 text-sm">
+                    {locale === "de" ? "8 Wochen" : "8 weeks"} | Pro
+                  </span>
+                </div>
+                <h3 className="text-2xl font-bold text-gray-100 mb-3">
+                  {locale === "de" ? "AI Agent Security Expert" : "AI Agent Security Expert"}
+                </h3>
+                <p className="text-gray-400 text-sm mb-4 leading-relaxed">
+                  {locale === "de" ? "Prompt Injection, LLM Security, Sandboxing" : "Prompt Injection, LLM Security, Sandboxing"}
+                </p>
+                <div className="text-purple-400 font-semibold text-sm">
+                  {locale === "de" ? "Kurs starten →" : "Start course →"}
+                </div>
+              </Link>
+              {/* Card 4 */}
+              <Link href={`${prefix}/solutions/dsgvo-compliance-automation`} className="bg-gray-800 border border-gray-700 rounded-xl p-6 hover:border-amber-500/50 transition-all">
+                <div className="flex items-center gap-2 mb-4">
+                  <span className="px-3 py-1 rounded-full bg-amber-900/50 text-amber-400 text-xs font-bold">
+                    📋 {locale === "de" ? "ALL LEVELS" : "ALL LEVELS"}
+                  </span>
+                  <span className="text-gray-500 text-sm">
+                    {locale === "de" ? "3 Wochen" : "3 weeks"} | Pro
+                  </span>
+                </div>
+                <h3 className="text-2xl font-bold text-gray-100 mb-3">
+                  {locale === "de" ? "Compliance Fast Track" : "Compliance Fast Track"}
+                </h3>
+                <p className="text-gray-400 text-sm mb-4 leading-relaxed">
+                  {locale === "de" ? "DSGVO, NIS2, ISO27001, SOC2" : "DSGVO, NIS2, ISO27001, SOC2"}
+                </p>
+                <div className="text-amber-400 font-semibold text-sm">
+                  {locale === "de" ? "Kurs starten →" : "Start course →"}
+                </div>
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* SECTION 3: Pro CTA */}
+        <section className="py-20 bg-gradient-to-r from-purple-900 to-cyan-900">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto text-center">
+              <h2 className="text-4xl md:text-5xl font-black text-gray-100 mb-6">
+                {locale === "de" ? "Academy-Kurse inklusive im Pro Plan" : "Academy courses included in Pro Plan"}
+              </h2>
+              <p className="text-xl text-gray-200 mb-10 max-w-2xl mx-auto leading-relaxed">
+                {locale === "de"
+                  ? "49€/Mo — unlimitierte Ausführungen, alle Runbooks, Copilot, Intel Feed"
+                  : "49€/mo — unlimited executions, all runbooks, Copilot, Intel Feed"}
+              </p>
+              <Link
+                href={`${prefix}/pricing`}
+                className="inline-block bg-white text-purple-900 font-black text-lg px-8 py-4 rounded-lg hover:bg-gray-100 transition-colors shadow-lg"
+              >
+                {locale === "de" ? "Pro Plan ansehen" : "View Pro Plan"}
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* SECTION 4: Consulting Upsell */}
+        <section className="py-20 bg-[#0a0a0a]">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto text-center">
+              <h2 className="text-4xl md:text-5xl font-black text-gray-100 mb-6">
+                {locale === "de" ? "Lieber Hands-on statt Self-Paced?" : "Prefer hands-on instead of self-paced?"}
+              </h2>
+              <p className="text-xl text-gray-300 mb-10 max-w-2xl mx-auto leading-relaxed">
+                {locale === "de"
+                  ? "Unser Team härtet deinen Stack direkt. Fixed-Fee ab 5.000€."
+                  : "Our team hardens your stack directly. Fixed-fee from €5,000."}
+              </p>
+              <Link
+                href={`${prefix}/consulting`}
+                className="inline-block bg-gradient-to-r from-red-600 to-orange-600 text-white font-black text-lg px-8 py-4 rounded-lg hover:from-red-500 hover:to-orange-500 transition-colors shadow-lg shadow-red-500/30"
+              >
+                {locale === "de" ? "Strategy Call buchen" : "Book Strategy Call"}
+              </Link>
             </div>
           </div>
         </section>

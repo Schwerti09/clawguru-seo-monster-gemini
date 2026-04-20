@@ -3,6 +3,7 @@ import Link from "next/link"
 import { Shield, Zap, Palette, Users, TrendingUp, Check, AlertTriangle } from "lucide-react"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
 import BookingButton from "@/components/booking/BookingButton"
+import RoiCalculator from "@/components/roi/RoiCalculator"
 import AuthorBox from "@/components/seo/AuthorBox"
 import LastUpdated from "@/components/seo/LastUpdated"
 import { buildAuthoredArticleSchema } from "@/lib/seo/author"
@@ -308,6 +309,17 @@ export default function ForMspsPage({ params }: PageProps) {
               />
             </div>
           </div>
+        </section>
+
+        {/* ROI Calculator */}
+        <section className="mb-14">
+          <div className="text-xs font-mono uppercase tracking-widest mb-2 text-purple-400">
+            {isDE ? "Rechne pro Kunde nach" : "Run the numbers per client"}
+          </div>
+          <h2 className="text-3xl font-bold text-white mb-6">
+            {isDE ? "Wie viel Marge bleibt dir heute pro Kunde?" : "How much margin remains per client today?"}
+          </h2>
+          <RoiCalculator locale={locale} source="for_msps_embed" />
         </section>
 
         {/* FINAL CTA */}

@@ -3,6 +3,7 @@ import Link from "next/link"
 import { Shield, Zap, Lock, Users, TrendingUp, Check, AlertTriangle } from "lucide-react"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
 import BookingButton from "@/components/booking/BookingButton"
+import RoiCalculator from "@/components/roi/RoiCalculator"
 import AuthorBox from "@/components/seo/AuthorBox"
 import LastUpdated from "@/components/seo/LastUpdated"
 import { buildAuthoredArticleSchema } from "@/lib/seo/author"
@@ -319,6 +320,17 @@ export default function ForSaasPage({ params }: PageProps) {
               </Link>
             </p>
           </div>
+        </section>
+
+        {/* ROI Calculator — embed for high-intent visitors */}
+        <section className="mb-14">
+          <div className="text-xs font-mono uppercase tracking-widest mb-2 text-cyan-400">
+            {isDE ? "Rechne selbst nach" : "Run the numbers yourself"}
+          </div>
+          <h2 className="text-3xl font-bold text-white mb-6">
+            {isDE ? "Was kostet dich dein aktueller Status Quo?" : "What is your current status quo costing you?"}
+          </h2>
+          <RoiCalculator locale={locale} source="for_saas_embed" />
         </section>
 
         {/* FAQ — objection removal */}

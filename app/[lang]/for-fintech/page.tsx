@@ -3,6 +3,7 @@ import Link from "next/link"
 import { Shield, Lock, FileCheck, Scale, TrendingUp, Check, AlertTriangle, Building2 } from "lucide-react"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
 import BookingButton from "@/components/booking/BookingButton"
+import RoiCalculator from "@/components/roi/RoiCalculator"
 import AuthorBox from "@/components/seo/AuthorBox"
 import LastUpdated from "@/components/seo/LastUpdated"
 import { buildAuthoredArticleSchema } from "@/lib/seo/author"
@@ -300,6 +301,17 @@ export default function ForFintechPage({ params }: PageProps) {
               <span className="text-amber-400">{isDE ? "Individuelle Preise nach Scoping." : "Custom pricing after scoping."}</span>
             </p>
           </div>
+        </section>
+
+        {/* ROI Calculator */}
+        <section className="mb-14">
+          <div className="text-xs font-mono uppercase tracking-widest mb-2 text-amber-400">
+            {isDE ? "DORA-Readiness Kostenrechner" : "DORA readiness cost calculator"}
+          </div>
+          <h2 className="text-3xl font-bold text-white mb-6">
+            {isDE ? "Was kostet dich DORA-Non-Compliance?" : "What does DORA non-compliance cost you?"}
+          </h2>
+          <RoiCalculator locale={locale} source="for_fintech_embed" />
         </section>
 
         {/* FINAL CTA */}

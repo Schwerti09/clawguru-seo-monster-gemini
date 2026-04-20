@@ -118,6 +118,7 @@ export default function Footer() {
             <FooterLink href={`${prefix}/for-saas`}>For SaaS · SOC 2 + GDPR</FooterLink>
             <FooterLink href={`${prefix}/for-msps`}>For MSPs · White-Label</FooterLink>
             <FooterLink href={`${prefix}/for-fintech`}>For FinTech · DORA</FooterLink>
+            <FooterLink href={`${prefix}/roi-calculator`}>ROI Calculator</FooterLink>
             <FooterLink href={`${prefix}/consulting`}>Security Consulting</FooterLink>
             <FooterLink href={`${prefix}/enterprise-api`}>Enterprise API</FooterLink>
             <FooterLink href={`${prefix}/partners`}>Partner Program</FooterLink>

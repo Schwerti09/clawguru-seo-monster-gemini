@@ -12,6 +12,7 @@
 5. **[DONE]** `USER-TODO.md` Section 6 rewritten with exact T-7 → T+0 launch schedule pointing to each asset file.
 6. **[DONE]** Task D6 — **White-Label MSP Page** live (commit `b942ee8f`): `/for-msps/white-label` with 3 pricing tiers (Starter €990, Pro €2.490, Agency Custom), comparison table (self-branded vs white-label vs full resell), ROI calculator preset for MSPs, lead form with qualifying questions to `msp-partnership@clawguru.org`, cross-links from `/for-msps`, `/consulting`, `/pricing` Teams tier. Dark theme design system compliant. Slug added to sitemap (GUIDE_SLUGS). Build exit 0.
 7. **[DONE]** Task D1 — **Calendly/Cal.com Booking Integration** live (commit `b9b5407e`): BookingButton component already supports Calendly/Cal.com via env vars (NEXT_PUBLIC_CAL_STRATEGY_URL, NEXT_PUBLIC_CAL_AUDIT_URL, NEXT_PUBLIC_CAL_DEMO_URL). Added BookingButton to /enterprise-api final CTA section. /consulting already uses BookingButton. USER-TODO.md already has Calendly setup instructions (Section 2). Code-side integration complete, user-side env vars pending.
+8. **[DONE]** Phase B Launch Code-Side Preparation (commit `e0af80a3`): `/launch-results` page (T+1 post-mortem) created with key metrics, channel breakdown, lessons learned. Added to sitemap (GUIDE_SLUGS). SEO-optimized with metadata, Article schema, AuthorBox, LastUpdated. Dark theme compliant. Bilingual (de/en). Phase B Launch TODO List created (15 tasks from T-7 to T+7). All Phase B assets verified complete (Product Hunt, Show HN, Reddit, X Thread). USER-TODO.md updated with Phase B Launch tasks (HIGH priority).
 
 ## 📊 KPI Snapshot (unchanged — no traffic tracking yet)
 | Metric | Value |
@@ -19,22 +20,27 @@
 | Daily Visitors | ~ (not tracked) |
 | Day Passes Sold | 0 |
 | Newsletter Subs | 0 |
-| Commits pushed today | 4 (Phase B playbook, D7 practice exam, D6 white-label, D1 Calendly) |
+| Commits pushed today | 5 (Phase B playbook, D7 practice exam, D6 white-label, D1 Calendly, Phase B launch-results) |
 
 ## 🧭 Next Session (21.04)
 
-**Phase D code-side status:**
+**Phase D code-side status:** ✅ ALL DONE
 - D1: Calendly/Cal.com booking integration ✅ DONE (code-side)
 - D6b: White-Label MSP landing page `/for-msps/white-label` ✅ DONE
 - D8: First Enterprise deal closed (sales, ongoing)
 
-**All Phase D code-side tasks complete.** Remaining are user-side (env vars, sales outreach) and Phase B launch execution.
+**Phase B Launch Status:** Code-side complete. User-side execution pending (T-7 → T+0).
+- Assets: Product Hunt, Show HN, Reddit, X Thread — all verified complete in `docs/launch/`
+- /launch-results page (T+1): ✅ DONE
+- TODO List: 15 tasks created (T-7 to T+7)
+- USER-TODO.md: Phase B tasks added as HIGH priority (Section 0)
 
-**Recommended next action:** Execute Phase B launch (T-7 → T+0) per `docs/launch/README.md` schedule.
+**Recommended next action:** Execute Phase B Launch user-side tasks per `USER-TODO.md` Section 0.
 Reason: Viral traffic spike (50–100k visits in 48h) + 50–150 Day Passes expected. High-impact, time-sensitive.
 
 ## 🚫 Blockers
 None code-side. User-side pending (already in `USER-TODO.md`):
+- Phase B Launch Execution (Section 0) — PH claim, gallery images, Stripe coupons, Reddit/X warm-up, launch day execution
 - Beehiiv setup (Section 1)
 - Calendly env vars (Section 2 — code ready, needs URLs)
 - Author photo (Section 5)

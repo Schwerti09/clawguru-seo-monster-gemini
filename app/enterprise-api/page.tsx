@@ -1,4 +1,5 @@
 import Container from "@/components/shared/Container"
+import BookingButton from "@/components/booking/BookingButton"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
@@ -418,13 +419,21 @@ await jira.createComment(ticketId, \`
             <p className="text-gray-400 text-base max-w-xl mx-auto mb-8">
               Start with the API Reference and get your first 500 calls on us.
             </p>
-            <a
-              href="/api-docs"
-              className="inline-block px-8 py-4 rounded-2xl font-black text-sm text-black transition-all duration-200 hover:opacity-90"
-              style={{ background: `linear-gradient(135deg, ${C.cyan}, ${C.green})` }}
-            >
-              API Reference →
-            </a>
+            <div className="flex flex-wrap justify-center gap-4">
+              <a
+                href="/api-docs"
+                className="inline-block px-8 py-4 rounded-2xl font-black text-sm text-black transition-all duration-200 hover:opacity-90"
+                style={{ background: `linear-gradient(135deg, ${C.cyan}, ${C.green})` }}
+              >
+                API Reference →
+              </a>
+              <BookingButton
+                type="demo"
+                label="Book Enterprise Demo"
+                source="enterprise_api_cta"
+                variant="secondary"
+              />
+            </div>
           </div>
         </Container>
       </section>

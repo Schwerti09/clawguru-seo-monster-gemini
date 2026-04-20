@@ -10,6 +10,7 @@
 3. **[DONE]** Task D7 — **Defender Foundation Practice Exam** live (commit `c4bc759b`): 15 bilingual questions in `lib/cert/question-bank.ts`, full client engine at `components/cert/PracticeExamClient.tsx` (timer, LocalStorage resume, per-question review), page at `/[lang]/defender-cert/practice-exam/foundation` with Quiz + Article schema, hero CTA + Foundation-tier micro-link on `/defender-cert`. **Revenue wiring:** pass → waitlist mailto + share; fail → Day Pass €5 upsell + runbook topic-filter links. TypeCheck clean.
 4. **[DONE]** Migration Vercel → Railway: domain `clawguru.org` + `www.clawguru.org` both resolving via Netlify DNS CNAMEs to Railway (`j5thj4tc.up.railway.app` + `yhksqcs5.up.railway.app`). DNS propagation took ~40min; apex SSL now served by Railway Edge. Both endpoints verified live (HTTPS 307 → /de).
 5. **[DONE]** `USER-TODO.md` Section 6 rewritten with exact T-7 → T+0 launch schedule pointing to each asset file.
+6. **[DONE]** Task D6 — **White-Label MSP Page** live (commit `b942ee8f`): `/for-msps/white-label` with 3 pricing tiers (Starter €990, Pro €2.490, Agency Custom), comparison table (self-branded vs white-label vs full resell), ROI calculator preset for MSPs, lead form with qualifying questions to `msp-partnership@clawguru.org`, cross-links from `/for-msps`, `/consulting`, `/pricing` Teams tier. Dark theme design system compliant. Slug added to sitemap (GUIDE_SLUGS). Build exit 0.
 
 ## 📊 KPI Snapshot (unchanged — no traffic tracking yet)
 | Metric | Value |
@@ -17,22 +18,20 @@
 | Daily Visitors | ~ (not tracked) |
 | Day Passes Sold | 0 |
 | Newsletter Subs | 0 |
-| Commits pushed today | 2 (Phase B playbook + D7 practice exam) |
+| Commits pushed today | 3 (Phase B playbook, D7 practice exam, D6 white-label) |
 
 ## 🧭 Next Session (21.04)
 
-**Recommended next build: D6 — White-Label for MSPs.**
-Reason: highest revenue-per-hour in remaining Phase D. D7b (Prof+Expert practice) is more-of-same — lower marginal value. D6 opens a new revenue stream (MSP resellers at €500–2000/mo per partner) AND completes Phase D code-side.
+**Phase D remaining code-side tasks:**
+- D1: Calendly/Cal.com booking integration on /consulting + /enterprise-api
+- D6b: White-Label MSP landing page `/for-msps/white-label` ✅ DONE
+- D8: First Enterprise deal closed (sales, ongoing)
 
-Scope for D6 (est. 1 session):
-- `/for-msps/white-label` landing page with pricing tiers (Starter/Pro/Agency)
-- Comparison table: self-branded vs white-label vs full resell
-- ROI calculator preset for MSPs ("your clients × avg deal × margin")
-- Lead form → `msp-partnership@clawguru.org` with qualifying questions
-- Cross-link from `/for-msps` + `/consulting` + `/pricing` "Team" tier
+**Recommended next build:** D1 — Calendly/Cal.com booking integration.
+Reason: High-ticket revenue (€10–50k per deal). Low effort (0.5 day). Removes friction from consulting CTAs.
 
 ## 🚫 Blockers
-None code-side. User-side pending (already in `USER-TODO.md`): Beehiiv setup, Calendly booking link, author photo, LinkedIn hygiene.
+None code-side. User-side pending (already in `USER-TODO.md`): Beehiiv setup, Calendly booking setup, author photo, LinkedIn hygiene.
 
 ---
 

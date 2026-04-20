@@ -72,11 +72,24 @@
 
 ## 🟡 MEDIUM PRIORITY — Can wait 1-2 weeks
 
-### 6. Product Hunt Launch Prep (Phase B)
-- [ ] Claim ClawGuru page on Product Hunt
-- [ ] Find a hunter with ≥500 followers (Twitter outreach)
-- [ ] Prepare 5 gallery images (1200×675px)
-- [ ] Write first-comment (5 paragraphs, value-first)
+### 6. Launch Week Prep (Phase B) — full playbook ready in `docs/launch/`
+**Complete copy-paste assets already written in repo — just execute:**
+- [ ] **T-7 days:** read `docs/launch/README.md` end-to-end (launch day schedule + timing)
+- [ ] **T-7 days:** claim ClawGuru page on Product Hunt → find a hunter with ≥500 followers (DM 10 candidates from PH leaderboard)
+- [ ] **T-7 days:** design 5–7 gallery images per spec in `docs/launch/product-hunt-assets.md` (1270×760px)
+- [ ] **T-5 days:** create Stripe coupons: `HUNTER50`, `SHOWHN50`, `REDDIT30`, `BIRDS25`, `LINKEDIN25` (specs in launch README)
+- [ ] **T-3 days:** warm-up subreddits (comment genuinely on 5 threads/sub/day in r/selfhosted, r/homelab, r/sysadmin, r/devops)
+- [ ] **T-3 days:** warm up X (follow 50 security/devops accounts, reply genuinely to 10 security tweets/day)
+- [ ] **T-1 day:** schedule PH launch for Tuesday 00:01 PST + test all links + sanity-check `/check` and checkout flow on mobile
+- [ ] **Launch Tuesday — follow exact schedule in `docs/launch/README.md`:**
+  - 09:01 Berlin: PH live + First Comment (from `product-hunt-assets.md`)
+  - 13:00 Berlin: "Show HN" (pick variant from `show-hn-post.md`)
+  - 15:00 Berlin: X 15-tweet thread (from `x-launch-thread.md`)
+  - 16:00 Berlin: Reddit r/selfhosted post (from `reddit-launch-posts.md`)
+  - 16:30/17:00/17:30: r/homelab + r/sysadmin + r/devops
+  - 18:00: LinkedIn post (from launch README)
+- [ ] **Launch Tuesday:** clear calendar — answer every comment within 10 min for 8+ hours
+- [ ] **T+1 day:** publish public `/launch-results` post-mortem (transparency = backlinks)
 
 ### 7. Press Outreach (Phase C8)
 - [ ] Collect email addresses for:

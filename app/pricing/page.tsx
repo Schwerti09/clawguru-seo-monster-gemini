@@ -10,6 +10,10 @@ import { SOCIAL_PROOF_CONFIG } from "@/lib/social-proof-config"
 import { headers } from "next/headers"
 import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
 import { getDictionary } from "@/lib/getDictionary"
+import dynamic from "next/dynamic"
+
+const CouponBanner = dynamic(() => import("@/components/marketing/CouponBanner"), { ssr: false })
+const BillingToggle = dynamic(() => import("@/components/commerce/BillingToggle"), { ssr: false })
 
 const PRICING_KEYWORDS = [
   ...SEO_TARGET_KEYWORDS_2026,
@@ -315,8 +319,8 @@ export default async function PricingPage() {
       <Container>
         <div className="pb-20">
 
-
-          
+          {/* Coupon banner — appears when ?coupon=CODE is in URL */}
+          <CouponBanner />
 
           {/* ── Feature Comparison Table ── */}
           <section id="compare" className="mb-12 overflow-x-auto">
@@ -453,60 +457,6 @@ export default async function PricingPage() {
             </table>
           </section>
 
-          <section className="mb-12">
-            <div className="text-xs font-mono uppercase tracking-[0.25em] text-gray-500 mb-5 text-center">
-              {isDE ? "Pro vs Teams" : "Pro vs Teams"}
-            </div>
-            <div className="grid md:grid-cols-2 gap-6">
-              <div className="rounded-2xl border border-white/10 p-6" style={{ background: "rgba(139,92,246,0.08)" }}>
-                <div className="text-[11px] font-mono uppercase tracking-[0.2em] text-[#a78bfa]">Pro</div>
-                <h3 className="text-xl font-black text-white mt-2">
-                  {isDE ? "Für Solo + kleine Ops-Teams" : "For solo + small ops teams"}
-                </h3>
-                <p className="mt-2 text-sm text-gray-300">
-                  {isDE
-                    ? "Ideal für Founder, 1–5 Personen und schnelle Fixes ohne Team-Workflows."
-                    : "Ideal for founders, 1–5 people, and fast fixes without team workflows."}
-                </p>
-                <ul className="mt-4 space-y-2 text-sm text-gray-300">
-                  {[
-                    isDE ? "Unlimitierte Checks + Full Reports" : "Unlimited checks + full reports",
-                    isDE ? "Intel Feed, Runbooks, Copilot inklusive" : "Intel feed, runbooks, copilot included",
-                    isDE ? "Keine geteilten Dashboards nötig" : "No shared dashboards required",
-                  ].map((item) => (
-                    <li key={item} className="flex gap-2">
-                      <span className="text-[#a78bfa]">✓</span>
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div className="rounded-2xl border border-white/10 p-6" style={{ background: "rgba(34,197,94,0.08)" }}>
-                <div className="text-[11px] font-mono uppercase tracking-[0.2em] text-[#22c55e]">Teams</div>
-                <h3 className="text-xl font-black text-white mt-2">
-                  {isDE ? "Für wachsende Teams + gemeinsame Workflows" : "For growing teams + shared workflows"}
-                </h3>
-                <p className="mt-2 text-sm text-gray-300">
-                  {isDE
-                    ? "Wenn mehrere Personen den Score verantworten, braucht ihr Team-Sharing und gemeinsame Playbooks."
-                    : "If multiple people own the score, you need team sharing and shared playbooks."}
-                </p>
-                <ul className="mt-4 space-y-2 text-sm text-gray-300">
-                  {[
-                    isDE ? "Alles aus Pro + Team-Limits" : "Everything from Pro + team limits",
-                    isDE ? "Shared Runbook Links & Dashboards" : "Shared runbook links & dashboards",
-                    isDE ? "Besser für 5+ Seats" : "Better for 5+ seats",
-                  ].map((item) => (
-                    <li key={item} className="flex gap-2">
-                      <span className="text-[#22c55e]">✓</span>
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </section>
-
           {/* ── Free Explorer Card ── */}
           <div className="mb-8 relative rounded-3xl p-[1px] overflow-hidden"
             style={{ background: "linear-gradient(135deg, rgba(0,255,157,0.3) 0%, rgba(0,184,255,0.15) 100%)" }}>
@@ -548,149 +498,44 @@ export default async function PricingPage() {
             </div>
           </div>
 
-          {/* Cards */}
-          <div className="grid lg:grid-cols-3 gap-6 items-stretch">
-
-            {/* ── Day Pass ── */}
-            <div className="relative rounded-3xl p-[1px] overflow-hidden"
-              style={{ background: "linear-gradient(135deg, rgba(0,184,255,0.5) 0%, rgba(0,184,255,0.05) 100%)" }}>
-              <div className="h-full rounded-3xl p-7 flex flex-col" style={{ background: "#0a0f18" }}>
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <div className="text-[11px] font-mono uppercase tracking-[0.2em] mb-2" style={{ color: "#00b8ff" }}>
-                      {dict.pricing.dayPassBadge}
-                    </div>
-                    <div className="text-xl font-black text-white font-heading">ClawGuru Day Pass</div>
+          {/* ── Day Pass card ── */}
+          <div className="mb-8 relative rounded-3xl p-[1px] overflow-hidden"
+            style={{ background: "linear-gradient(135deg, rgba(0,184,255,0.5) 0%, rgba(0,184,255,0.05) 100%)" }}>
+            <div className="rounded-3xl p-7 flex flex-col md:flex-row md:items-center gap-6" style={{ background: "#0a0f18" }}>
+              <div className="flex-1">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="text-[11px] font-mono uppercase tracking-[0.2em]" style={{ color: "#00b8ff" }}>
+                    {dict.pricing.dayPassBadge}
                   </div>
-                  <div className="shrink-0 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full border"
+                  <div className="text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full border"
                     style={{ borderColor: "rgba(0,184,255,0.3)", color: "#00b8ff", background: "rgba(0,184,255,0.08)" }}>
                     24h Access
                   </div>
                 </div>
-
-                <div className="mt-5 flex items-end gap-2">
-                  <span className="text-5xl font-black text-white">9€</span>
-                  <span className="text-sm text-gray-400 pb-2">{dict.pricing.dayPassOnce}</span>
+                <div className="text-xl font-black text-white font-heading mb-2">ClawGuru Day Pass</div>
+                <div className="flex items-end gap-2 mb-3">
+                  <span className="text-4xl font-black text-white">9€</span>
+                  <span className="text-sm text-gray-400 pb-1">{dict.pricing.dayPassOnce}</span>
                 </div>
-
-                <p className="mt-4 text-sm text-gray-300 leading-relaxed">
+                <p className="text-sm text-gray-300 leading-relaxed max-w-lg">
                   {dict.pricing.dayPassDesc}
                 </p>
-
-                <FeatureList groups={DAY_PASS_GROUPS} newBadge={dict.pricing.newBadge} />
-
-                <div className="mt-auto pt-6">
-                  <SocialProofBlock locale={locale} />
-                  <BuyButton
-                    product="daypass"
-                    label={isDE ? "Fix meine Lücken — Daypass €9" : "Fix my gaps — Daypass €9"}
-                    className="w-full py-3 px-6 rounded-2xl font-black text-sm text-black transition-all duration-300 hover:opacity-90 disabled:opacity-60"
-                    style={{ background: "linear-gradient(135deg, #00b8ff 0%, #0077ff 100%)", boxShadow: "0 0 30px rgba(0,184,255,0.3)" }}
-                  />
-                  <div className="mt-3 text-xs text-gray-500 text-center">
-                    {dict.pricing.dayPassMeta}
-                  </div>
-                </div>
               </div>
-            </div>
-
-            {/* ── Pro ── (most popular) */}
-            <div className="relative rounded-3xl p-[1px] overflow-hidden"
-              style={{ background: "linear-gradient(135deg, rgba(139,92,246,0.8) 0%, rgba(0,255,157,0.3) 100%)" }}>
-              {/* Popular badge */}
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10
-                text-[10px] font-black uppercase tracking-widest px-4 py-1 rounded-full text-black"
-                style={{ background: "linear-gradient(90deg, #00ff9d, #00b8ff)" }}>
-                {dict.pricing.mostPopular}
-              </div>
-              <div className="h-full rounded-3xl p-7 flex flex-col" style={{ background: "#0d0a18" }}>
-                <div className="flex items-start justify-between gap-3 mt-3">
-                  <div>
-                    <div className="text-[11px] font-mono uppercase tracking-[0.2em] mb-2" style={{ color: "#a78bfa" }}>
-                      {dict.pricing.proBadge}
-                    </div>
-                    <div className="text-xl font-black text-white font-heading">ClawGuru Pro</div>
-                  </div>
-                  <div className="shrink-0 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full border"
-                    style={{ borderColor: "rgba(139,92,246,0.4)", color: "#a78bfa", background: "rgba(139,92,246,0.1)" }}>
-                    Pro
-                  </div>
-                </div>
-
-                <div className="mt-5 flex items-end gap-2">
-                  <span className="text-5xl font-black text-white">49€</span>
-                  <span className="text-sm text-gray-400 pb-2">{dict.pricing.monthly}</span>
-                </div>
-
-                <p className="mt-4 text-sm text-gray-300 leading-relaxed">
-                  {dict.pricing.proDesc}
-                </p>
-
-                <FeatureList groups={PRO_GROUPS} newBadge={dict.pricing.newBadge} />
-
-                <div className="mt-auto pt-6">
-                  <SocialProofBlock locale={locale} />
-                  <BuyButton
-                    product="pro"
-                    label={isDE ? "Jetzt Pro werden — €49/Monat" : "Become Pro now — €49/Month"}
-                    className="w-full py-3 px-6 rounded-2xl font-black text-sm text-black transition-all duration-300 hover:opacity-90 disabled:opacity-60"
-                    style={{ background: "linear-gradient(135deg, #a78bfa 0%, #00ff9d 100%)", boxShadow: "0 0 30px rgba(139,92,246,0.35)" }}
-                  />
-                  <div className="mt-3 text-xs text-gray-500 text-center">
-                    {dict.pricing.cancelable}
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* ── Teams ── */}
-            <div className="relative rounded-3xl p-[1px] overflow-hidden"
-              style={{ background: "linear-gradient(135deg, rgba(0,255,157,0.4) 0%, rgba(0,255,157,0.05) 100%)" }}>
-              <div className="h-full rounded-3xl p-7 flex flex-col" style={{ background: "#080f0c" }}>
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <div className="text-[11px] font-mono uppercase tracking-[0.2em] mb-2" style={{ color: "#00ff9d" }}>
-                      {dict.pricing.teamBadge}
-                    </div>
-                    <div className="text-xl font-black text-white font-heading">ClawGuru Teams</div>
-                  </div>
-                  <div className="shrink-0 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full border"
-                    style={{ borderColor: "rgba(0,255,157,0.3)", color: "#00ff9d", background: "rgba(0,255,157,0.06)" }}>
-                    Teams
-                  </div>
-                </div>
-
-                <div className="mt-5 flex items-end gap-2">
-                  <span className="text-5xl font-black text-white">129€</span>
-                  <span className="text-sm text-gray-400 pb-2">{dict.pricing.monthly}</span>
-                </div>
-
-                <p className="mt-4 text-sm text-gray-300 leading-relaxed">
-                  {dict.pricing.teamDesc}
-                </p>
-
-                <FeatureList groups={TEAM_GROUPS} newBadge={dict.pricing.newBadge} />
-
-                <div className="mt-auto pt-6">
-                  <SocialProofBlock locale={locale} />
-                  <BuyButton
-                    product="team"
-                    label={isDE ? "Teams starten (129€/Monat) → Stripe" : "Start Teams (129€/Month) → Stripe"}
-                    className="w-full py-3 px-6 rounded-2xl font-black text-sm text-white border transition-all duration-300 hover:bg-white/5 disabled:opacity-60"
-                    style={{ borderColor: "rgba(0,255,157,0.4)", boxShadow: "0 0 20px rgba(0,255,157,0.1)" }}
-                  />
-                  <div className="mt-3 text-xs text-gray-500 text-center">
-                    {dict.pricing.cancelable}
-                  </div>
-                  <div className="mt-3 text-center">
-                    <a href={`${prefix}/for-msps/white-label`} className="text-xs text-[#00ff9d] hover:underline">
-                      {isDE ? "MSP? White-Label Partnership →" : "MSP? White-Label Partnership →"}
-                    </a>
-                  </div>
-                </div>
+              <div className="flex flex-col gap-3 md:shrink-0 md:min-w-[220px]">
+                <SocialProofBlock locale={locale} />
+                <BuyButton
+                  product="daypass"
+                  label={isDE ? "Fix meine Lücken — Daypass €9" : "Fix my gaps — Daypass €9"}
+                  className="w-full py-3 px-6 rounded-2xl font-black text-sm text-black transition-all duration-300 hover:opacity-90 disabled:opacity-60"
+                  style={{ background: "linear-gradient(135deg, #00b8ff 0%, #0077ff 100%)", boxShadow: "0 0 30px rgba(0,184,255,0.3)" }}
+                />
+                <div className="text-xs text-gray-500 text-center">{dict.pricing.dayPassMeta}</div>
               </div>
             </div>
           </div>
+
+          {/* ── Pro + Teams with annual/monthly toggle ── */}
+          <BillingToggle locale={locale} isDE={isDE} prefix={prefix} />
 
           {/* ── Who is Pro for? ── */}
           <section className="mb-12">

@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { trackEvent } from "@/lib/analytics"
+import { COUPON_SESSION_KEY } from "@/components/marketing/CouponBanner"
 
 export default function BuyButton({
   product,
@@ -9,23 +10,28 @@ export default function BuyButton({
   className,
   style,
   analyticsSource,
+  annual,
 }: {
   product: "daypass" | "pro" | "team" | "msp"
   label: string
   className?: string
   style?: React.CSSProperties
   analyticsSource?: string
+  annual?: boolean
 }) {
   const [loading, setLoading] = useState(false)
 
   async function go() {
-    trackEvent("pricing_click", { product, source: analyticsSource ?? "buy_button" })
+    trackEvent("pricing_click", { product, source: analyticsSource ?? "buy_button", annual: !!annual })
     setLoading(true)
+    const coupon = typeof window !== "undefined"
+      ? (sessionStorage.getItem(COUPON_SESSION_KEY) ?? undefined)
+      : undefined
     try {
       const res = await fetch("/api/stripe/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ product })
+        body: JSON.stringify({ product, annual: !!annual, coupon_code: coupon ?? undefined })
       })
 
       const text = await res.text()

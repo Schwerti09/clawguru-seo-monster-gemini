@@ -9,17 +9,22 @@ export const dynamic = "force-dynamic"
 export const runtime = "nodejs"
 type Product = "daypass" | "pro" | "team" | "msp" | "enterprise"
 
-function getPriceId(product: Product) {
-  const teamPriceId =
-    process.env.STRIPE_PRICE_TEAM
-
+function getPriceId(product: Product, annual = false) {
   if (product === "daypass") return process.env.STRIPE_PRICE_DAYPASS
-  if (product === "pro") return process.env.STRIPE_PRICE_PRO
+  if (product === "pro") return (annual && process.env.STRIPE_PRICE_PRO_ANNUAL) || process.env.STRIPE_PRICE_PRO
+  if (product === "team") return (annual && process.env.STRIPE_PRICE_TEAM_ANNUAL) || process.env.STRIPE_PRICE_TEAM
   if (product === "msp") return process.env.STRIPE_PRICE_MSP
-  if (product === "enterprise") {
-    return process.env.STRIPE_PRICE_ENTERPRISE || teamPriceId
+  if (product === "enterprise") return process.env.STRIPE_PRICE_ENTERPRISE || process.env.STRIPE_PRICE_TEAM
+  return process.env.STRIPE_PRICE_TEAM
+}
+
+async function resolvePromoCode(stripe: ReturnType<typeof import("@/lib/stripe")["getStripe"]>, code: string): Promise<string | null> {
+  try {
+    const list = await stripe.promotionCodes.list({ code, limit: 1, active: true })
+    return list.data[0]?.id ?? null
+  } catch {
+    return null
   }
-  return teamPriceId
 }
 
 export async function GET(req: NextRequest) {
@@ -147,10 +152,17 @@ export async function POST(req: NextRequest) {
         ? body.affiliate_ref.slice(0, 64)
         : undefined
 
-    const price = getPriceId(product)
+    const annual = product !== "daypass" && body?.annual === true
+
+    const rawCoupon: string | undefined =
+      typeof body?.coupon_code === "string" && body.coupon_code.length > 0
+        ? body.coupon_code.slice(0, 32).toUpperCase()
+        : undefined
+
+    const price = getPriceId(product, annual)
 
     if (!price) {
-      console.error("[stripe/checkout] missing price id for product", { product })
+      console.error("[stripe/checkout] missing price id for product", { product, annual })
       logTelemetry("stripe.checkout.error", {
         requestId,
         error: "missing price id",
@@ -159,7 +171,7 @@ export async function POST(req: NextRequest) {
       })
 
       return NextResponse.json(
-        { error: "Checkout f\u00FCr dieses Produkt ist aktuell nicht verf\u00FCgbar." },
+        { error: "Checkout für dieses Produkt ist aktuell nicht verfügbar." },
         { status: 503 }
       )
     }
@@ -169,9 +181,20 @@ export async function POST(req: NextRequest) {
     const cancel_url = `${origin}/pricing?canceled=1`
     const mode = getMode(product)
 
+    // Pre-apply promo code if provided; fall back to allow_promotion_codes
+    let discounts: { promotion_code: string }[] | undefined
+    let allowPromoCodes = true
+    if (rawCoupon) {
+      const promoId = await resolvePromoCode(stripe, rawCoupon)
+      if (promoId) {
+        discounts = [{ promotion_code: promoId }]
+        allowPromoCodes = false
+      }
+    }
+
     const session = await stripe.checkout.sessions.create({
       mode,
-      allow_promotion_codes: true,
+      ...(allowPromoCodes ? { allow_promotion_codes: true } : { discounts }),
       line_items: [{ price, quantity: 1 }],
       success_url,
       cancel_url,
@@ -187,10 +210,13 @@ export async function POST(req: NextRequest) {
 
       metadata: {
         product,
+        annual: String(annual),
         ...(email ? { email } : {}),
         ...(affiliateRef ? { affiliate_ref: affiliateRef } : {}),
+        ...(rawCoupon ? { coupon_code: rawCoupon } : {}),
       },
     })
+
 
     console.info("[stripe/checkout] created checkout session", {
       sessionId: session.id,

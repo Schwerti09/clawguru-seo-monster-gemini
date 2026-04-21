@@ -53,6 +53,11 @@
 - **Commits:** 4 (Phase 1-2 batched, Phase 3, Phase 4, Phase 5)
 - **War Lock:** v7.0 — Round 13 sealed
 
+### Note (21.04.2026)
+- Phase A6 (Lead Magnet PDF Export) marked as USER-SIDE - requires Pandoc installation
+- Phase A7 (Newsletter Platform Setup) marked as USER-SIDE - requires Beehiiv/ConvertKit account setup
+- Transitioned to Phase B1 (Beta Tester Outreach) - creating outreach templates for Discord, X, IndieHackers
+
 ---
 
 ## TOTAL WAR ROUND 12 — COMPLETED (20.04.2026)

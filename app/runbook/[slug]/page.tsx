@@ -574,32 +574,8 @@ export default async function RunbookPage(props: { params: { slug: string; lang?
             >
               Re-Check starten →
             </a>
-            <a
-              href={`${prefix}/copilot`}
-              className="px-6 py-3 rounded-2xl border border-gray-700 hover:border-gray-500 font-bold text-gray-200"
-            >
-              Copilot Runbook Builder →
-            </a>
             {/* SWARM DEPLOYMENT v3.2 – Overlord AI: One-click swarm activation for Pro users */}
             <ActivateSwarmButton slug={r.slug} />
-            <a
-              href={`${prefix}/intel`}
-              className="px-3 py-2 rounded-xl border border-white/10 bg-white/5 text-xs text-gray-200 hover:bg-white/10"
-            >
-              {dict?.runbook?.back_to_intel ?? "Zurück zu Intel"}
-            </a>
-            <a
-              href={`${prefix}/oracle?scope=${encodeURIComponent((r.tags || []).slice(0,5).join(','))}`}
-              className="px-3 py-2 rounded-xl border border-white/10 bg-white/5 text-xs text-gray-200 hover:bg-white/10"
-            >
-              {dict?.runbook?.back_to_oracle ?? "Zurück zu Oracle"}
-            </a>
-            <a
-              href={`${prefix}/neuro?stack=${encodeURIComponent((r.tags || []).slice(0,5).join(','))}&auto=1`}
-              className="px-3 py-2 rounded-xl border border-white/10 bg-white/5 text-xs text-gray-200 hover:bg-white/10"
-            >
-              {dict?.runbook?.back_to_neuro ?? "Zurück zu Neuro"}
-            </a>
           </div>
 
           <div className="mt-6 flex flex-wrap gap-2">
@@ -648,54 +624,29 @@ export default async function RunbookPage(props: { params: { slug: string; lang?
           </a>
         </div>
 
-        {relatedList.length > 0 ? (
-          <div className="mt-10">
-            <h2 className="text-xl font-black mb-4">Verwandte Runbooks</h2>
-            <div className="grid md:grid-cols-2 gap-4">
-              {relatedList.slice(0, 10).map((x) => (
-                <a
-                  key={x.slug}
-                  href={`${prefix}/runbook/${x.slug}`}
-                  className="p-5 rounded-3xl border bg-black/25 hover:bg-black/35 transition-all duration-200 will-change-transform hover:-translate-y-0.5"
-                  style={{
-                    borderColor: "rgba(148,163,184,0.25)",
-                    boxShadow: "0 10px 30px rgba(0,0,0,0.35), inset 0 0 0 1px rgba(255,255,255,0.04)",
-                    transform: "translateZ(0)",
-                  }}
-                >
-                  <div className="flex items-center gap-2 mb-1">
-                    <div className="font-black text-sm">{x.title}</div>
-                    <span className="ml-auto text-xs text-gray-500 shrink-0">⚡{x.clawScore}</span>
-                  </div>
-                  <div className="mt-1 text-sm text-gray-400">{x.summary}</div>
-                  <div className="mt-3 text-sm text-cyan-300 underline">Öffnen →</div>
-                </a>
-              ))}
-            </div>
-          </div>
-        ) : null}
-
-        {geoVariant?.myceliumLinks?.length ? (
-          <div className="mt-8">
-            <h3 className="text-sm font-black uppercase tracking-widest text-cyan-300">Geo-Mycelium Links</h3>
-            <div className="mt-3 flex flex-wrap gap-2">
-              {geoVariant.myceliumLinks.slice(0, 6).map((path) => (
-                <a
-                  key={path}
-                  href={path}
-                  className="rounded-xl border border-cyan-500/30 bg-cyan-500/10 px-3 py-1.5 text-xs text-cyan-100 hover:bg-cyan-500/20"
-                >
-                  {path}
-                </a>
-              ))}
-            </div>
-          </div>
-        ) : null}
 
         <div className="mt-12 p-6 rounded-3xl border border-gray-800 bg-black/20 text-sm text-gray-400">
           Hinweis: Diese Inhalte sind für Ops/Security gedacht. Keine „Namen-Datenbank&quot;, keine Anschuldigungen – nur Runbooks,
           Tools und verifizierbare Checks.
         </div>
+
+        {/* SEO: Natural internal links (max 2) */}
+        <section className="mt-8 pt-6 border-t border-gray-700">
+          <div className="flex gap-4 flex-wrap">
+            <a href={`${prefix}/check`}
+               className="bg-cyan-900 border border-cyan-700
+                  px-4 py-2 rounded text-cyan-300
+                  hover:bg-cyan-800 transition-colors text-sm">
+              🛡️ Security Check starten
+            </a>
+            <a href={`${prefix}/runbooks`}
+               className="bg-gray-800 border border-gray-700
+                  px-4 py-2 rounded text-gray-300
+                  hover:bg-gray-700 transition-colors text-sm">
+              📚 Weitere Runbooks
+            </a>
+          </div>
+        </section>
 
         {/* RUNBOOK VIRAL SHARE CARD */}
         <div className="mt-8">

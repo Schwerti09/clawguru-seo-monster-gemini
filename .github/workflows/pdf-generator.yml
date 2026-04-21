@@ -1,0 +1,49 @@
+name: PDF Generator
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'docs/**/*.md'
+  workflow_dispatch:
+
+jobs:
+  generate-pdf:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Pandoc
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y pandoc texlive-latex-base texlive-fonts-recommended texlive-extra-utils
+
+      - name: Create PDF directory
+        run: mkdir -p docs/pdf
+
+      - name: Generate PDF from Lead Magnet
+        run: |
+          pandoc docs/lead-magnet-top-10-self-hosted-risks-2026.md \
+            -o docs/pdf/lead-magnet-top-10-self-hosted-risks-2026.pdf \
+            --pdf-engine=xelatex \
+            --variable mainfont="DejaVu Sans" \
+            --variable geometry:margin=1in \
+            --toc \
+            --toc-depth=2
+
+      - name: Upload PDF as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: lead-magnet-pdf
+          path: docs/pdf/lead-magnet-top-10-self-hosted-risks-2026.pdf
+          retention-days: 30
+
+      - name: Commit PDF to repository
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add docs/pdf/
+          git diff --quiet && git diff --staged --quiet || git commit -m "docs: auto-generated PDF from Markdown"
+          git push

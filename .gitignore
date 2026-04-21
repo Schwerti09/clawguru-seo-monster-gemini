@@ -82,7 +82,6 @@ lhtmp*/
 lh-*.json
 clawguru-seo-monster-gemini-*/
 .git/
-.github/
 # large local bundles/archives — never commit (except public/downloads/ assets)
 **/*.zip
 !public/downloads/*.zip

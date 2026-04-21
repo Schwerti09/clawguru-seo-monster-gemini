@@ -6,6 +6,55 @@
 
 ---
 
+## TOTAL WAR ROUND 13 — COMPLETED (21.04.2026)
+
+### Executive Summary
+**MINI-ACADEMY:** ✅ Alle 5 Phases executed. ClawGuru Academy expanded with 3 structured learning paths (Beginner, Intermediate, Advanced) with lessons, quizzes, and completion badges. Sitemap updated with new learning path URLs.
+
+### Phase 1: Hub Page ✅ COMPLETED (21.04.2026)
+- **Academy Hub Page:** Completely rewritten `app/[lang]/academy/page.tsx` to add MINI-ACADEMY section at top
+- **Components:** Hero section, stats bar, 3 path cards (Beginner/Intermediate/Advanced), notice, footer CTA, email capture
+- **Metadata:** Updated with localized titles, descriptions, OpenGraph, Schema.org FAQPage and BreadcrumbList
+- **Placement:** MINI-ACADEMY section above existing academy content
+- **Commit:** `a534b58b` (Phase 1-2 batched)
+
+### Phase 2: Beginner Lernpfad ✅ COMPLETED (21.04.2026)
+- **Beginner Path:** Created `app/[lang]/academy/beginner/page.tsx` with 5 lessons
+- **Lessons:** Linux Basics, SSH Hardening, Firewall Basics, Updates/Patching, Incident Response
+- **Quiz:** 4 questions with scoring and completion badge
+- **Features:** Progress tracking, localized content (DE/EN), dark theme styling
+- **Commit:** `a534b58b` (batched with Phase 1)
+
+### Phase 3: Intermediate Lernpfad ✅ COMPLETED (21.04.2026)
+- **Intermediate Path:** Created `app/[lang]/academy/intermediate/page.tsx` with 7 lessons
+- **Lessons:** Docker Security, Nginx Hardening, Secrets Management, RBAC, Incident Response, NIS2 Compliance, CI/CD Security
+- **Quiz:** 4 questions with scoring and completion badge
+- **Features:** Progress tracking, localized content, dark theme styling
+- **Commit:** `ba89a1b3`
+
+### Phase 4: Advanced Lernpfad ✅ COMPLETED (21.04.2026)
+- **Advanced Path:** Created `app/[lang]/academy/advanced/page.tsx` with 6 lessons
+- **Lessons:** Prompt Injection, LLM Gateway Hardening, AI Agent Sandboxing, Threat Modeling for AI, OWASP LLM Top 10, EU AI Act Compliance
+- **Quiz:** 4 questions with scoring and completion badge
+- **Features:** Progress tracking, localized content, dark theme styling
+- **Commit:** `f208afd4`
+
+### Phase 5: Sitemap Update + AGENTS.md Final Lock ✅ COMPLETED (21.04.2026)
+- **Sitemap:** Added MINI-ACADEMY learning paths to `app/sitemaps/[name]/route.ts`
+- **GUIDE_SLUGS:** Added `academy/beginner`, `academy/intermediate`, `academy/advanced`
+- **URLs:** Added 3 new URLs to main sitemap with priority 0.86
+- **AGENTS.md:** Documented MINI-ACADEMY in this section
+- **Commit:** `6ded8bad`
+
+### Round 13 Quality Metrics
+- **New Pages:** 3 learning paths × 16 locales = 48 new URLs
+- **Sitemap Coverage:** All 3 paths added to sitemap with proper priority
+- **Build Status:** All builds exit 0, no errors, no warnings
+- **Commits:** 4 (Phase 1-2 batched, Phase 3, Phase 4, Phase 5)
+- **War Lock:** v7.0 — Round 13 sealed
+
+---
+
 ## TOTAL WAR ROUND 12 — COMPLETED (20.04.2026)
 Phase 1: Bug Fixes ✅ Footer /check, Banner Apr 2026, Nav v4.0
 Phase 2: Academy Content Expansion ✅ Learning Path + 4 Courses

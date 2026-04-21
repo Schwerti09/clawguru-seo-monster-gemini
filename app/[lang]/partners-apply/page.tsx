@@ -228,8 +228,11 @@ export default function PartnersApplyPage({ params }: PageProps) {
         <a href={mailtoHref} className="inline-block px-8 py-4 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-black font-black text-lg transition-colors">
           {isDE ? "Jetzt bewerben →" : "Apply now →"}
         </a>
-        <div className="mt-6">
-          <Link href={`/${locale}/partners`} className="text-sm text-cyan-400 hover:underline">
+        <div className="mt-6 flex flex-col gap-2">
+          <Link href={`/${locale}/affiliate-dashboard`} className="text-sm text-cyan-400 hover:underline">
+            {isDE ? "Affiliate Dashboard ansehen (Demo)" : "View Affiliate Dashboard (Demo)"}
+          </Link>
+          <Link href={`/${locale}/partners`} className="text-sm text-gray-500 hover:text-gray-400">
             {isDE ? "← Zurück zur Partner-Übersicht" : "← Back to partners overview"}
           </Link>
         </div>

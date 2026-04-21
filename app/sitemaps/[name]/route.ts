@@ -356,6 +356,8 @@ export async function GET(
         "for-msps/white-label",
         // Phase B Launch Results Page (T+1)
         "launch-results",
+        // MINI-ACADEMY Learning Paths (21.04.2026)
+        "academy/beginner","academy/intermediate","academy/advanced",
       ]
       // Quality geo landing pages (50 cities with local compliance context)
       const GEO_QUALITY_SLUGS = [
@@ -421,6 +423,9 @@ export async function GET(
         { loc: `${base}/${locale}/years`, lastmod, changefreq: "monthly", priority: "0.8" },
         { loc: `${base}/${locale}/intel`, lastmod, changefreq: "daily", priority: "0.9" },
         { loc: `${base}/${locale}/academy`, lastmod, changefreq: "weekly", priority: "0.85" },
+        { loc: `${base}/${locale}/academy/beginner`, lastmod, changefreq: "weekly", priority: "0.86" },
+        { loc: `${base}/${locale}/academy/intermediate`, lastmod, changefreq: "weekly", priority: "0.86" },
+        { loc: `${base}/${locale}/academy/advanced`, lastmod, changefreq: "weekly", priority: "0.86" },
         { loc: `${base}/${locale}/academy/roast-learn-prompt-injection`, lastmod, changefreq: "weekly", priority: "0.87" },
         { loc: `${base}/${locale}/academy/cve-feed`, lastmod, changefreq: "weekly", priority: "0.88" },
         { loc: `${base}/${locale}/academy/cve`, lastmod, changefreq: "weekly", priority: "0.87" },

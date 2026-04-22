@@ -98,6 +98,7 @@ export type Dictionary = {
     live: string
     securityCheck: string
     copilot: string
+    sandbox: string
     runbooks: string
     intelFeed: string
     pricing: string

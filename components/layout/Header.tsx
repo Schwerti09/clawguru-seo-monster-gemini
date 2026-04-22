@@ -30,12 +30,12 @@ export default function Header() {
     { href: `${prefix}/live`, label: dict.nav.live },
     { href: `${prefix}/check`, label: dict.nav.securityCheck },
     { href: `${prefix}/copilot`, label: dict.nav.copilot },
+    { href: `${prefix}/sandbox`, label: (dict as any).nav?.sandbox || "Sandbox" },
     { href: `${prefix}/runbooks`, label: dict.nav.runbooks },
     { href: `${prefix}/intel`, label: dict.nav.intelFeed },
-    { href: `${prefix}/pricing`, label: dict.nav.pricing },
   ]
 
-  // Overflow items â€“ visible in "More" dropdown on desktop and in mobile menu
+  // Overflow items – visible in "More" dropdown on desktop and in mobile menu
   const MORE_NAV: NavItem[] = [
     { href: `${prefix}/gsc-optimize`, label: "Guides Hub" },
     { href: `${prefix}/clawverse`, label: dict.nav.clawVerse },
@@ -47,6 +47,7 @@ export default function Header() {
     { href: `${prefix}/tags`, label: dict.nav.tags },
     { href: `${prefix}/academy`, label: dict.nav.academy },
     { href: `${prefix}/vault`, label: dict.nav.vault },
+    { href: `${prefix}/pricing`, label: dict.nav.pricing },
     { href: `${prefix}/openclaw-security-2026`, label: dict.nav.report },
     { href: `${prefix}/downloads`, label: dict.nav.downloads },
     { href: `${prefix}/case-studies`, label: dict.nav.cases },

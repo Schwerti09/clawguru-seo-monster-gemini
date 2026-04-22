@@ -1,15 +1,10 @@
-// PROF. CLAWGURU COPILOT v∞ – AI Security Assistant – Overlord AI
-// Server entry: exports SEO metadata, renders the interactive Copilot client component.
+// LIVE FIX SANDBOX v∞ – In-Browser Config Testing – Overlord AI
+// Server entry: exports SEO metadata, renders the interactive Sandbox client component.
 
 import type { Metadata } from "next"
-import { headers } from "next/headers"
 import Container from "@/components/shared/Container"
-import CopilotChat from "@/components/copilot/CopilotChat"
-import VoiceCopilot from "@/components/copilot/VoiceCopilot"
+import LiveFixSandbox from "@/components/copilot/LiveFixSandbox"
 import SocialProofCounter from "@/components/marketing/SocialProofCounter"
-import LoginSaveBanner from "@/components/shared/LoginSaveBanner"
-import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
-import { getDictionary } from "@/lib/getDictionary"
 import { BASE_URL } from "@/lib/config"
 
 /* ── Quantum Void colour tokens ── */
@@ -25,38 +20,38 @@ const QV = {
 } as const
 
 export const metadata: Metadata = {
-  title: "Prof. ClawGuru — AI Security Assistant | ClawGuru",
+  title: "Live Fix Sandbox — In-Browser Config Testing | ClawGuru",
   description:
-    "ClawGuru ist die KI-gestützte SecOps-Plattform mit über 4,2 Millionen ausführbaren Runbooks – für Incident Response, Hardening und Compliance in Echtzeit. Vom Problem zum Fix in unter 30 Sekunden. Prof. ClawGuru Copilot: Problem beschreiben, Schritt-für-Schritt Runbook bekommen.",
+    "ClawGuru ist die KI-gestützte SecOps-Plattform mit über 4,2 Millionen ausführbaren Runbooks – für Incident Response, Hardening und Compliance in Echtzeit. Vom Problem zum Fix in unter 30 Sekunden. Live Fix Sandbox: Test nginx, Docker, Terraform, K8s configs direkt im Browser.",
   keywords: [
-    "prof clawguru",
-    "ai security assistant",
-    "security copilot",
-    "runbook generator",
-    "incident response",
-    "openclaw",
-    "moltbot",
-    "security automation",
+    "sandbox",
+    "config testing",
+    "nginx linting",
+    "docker validation",
+    "terraform linter",
+    "k8s validation",
+    "config security",
+    "browser-based testing",
   ],
   openGraph: {
-    title: "Prof. ClawGuru — AI Security Assistant | ClawGuru",
+    title: "Live Fix Sandbox — In-Browser Config Testing | ClawGuru",
     description: "ClawGuru ist die KI-gestützte SecOps-Plattform mit über 4,2 Millionen ausführbaren Runbooks – für Incident Response, Hardening und Compliance in Echtzeit. Vom Problem zum Fix in unter 30 Sekunden.",
     type: "website",
-    url: `${BASE_URL}/copilot`,
+    url: `${BASE_URL}/sandbox`,
     images: [{
-      url: `${BASE_URL}/og/copilot.png`,
+      url: `${BASE_URL}/og/sandbox.png`,
       width: 1200,
       height: 630,
-      alt: "ClawGuru Prof. ClawGuru — AI Security Assistant"
+      alt: "ClawGuru Live Fix Sandbox — In-Browser Config Testing"
     }]
   },
   twitter: {
     card: "summary_large_image",
-    title: "Prof. ClawGuru — AI Security Assistant | ClawGuru",
+    title: "Live Fix Sandbox — In-Browser Config Testing | ClawGuru",
     description: "ClawGuru ist die KI-gestützte SecOps-Plattform mit über 4,2 Millionen ausführbaren Runbooks – für Incident Response, Hardening und Compliance in Echtzeit. Vom Problem zum Fix in unter 30 Sekunden.",
-    images: [`${BASE_URL}/og/copilot.png`]
+    images: [`${BASE_URL}/og/sandbox.png`]
   },
-  alternates: { canonical: "/copilot" },
+  alternates: { canonical: "/sandbox" },
 }
 
 const organizationJsonLd = {
@@ -75,10 +70,10 @@ const organizationJsonLd = {
 const softwareApplicationJsonLd = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
-  name: "Prof. ClawGuru",
+  name: "Live Fix Sandbox",
   applicationCategory: "SecurityApplication",
   operatingSystem: "Web",
-  description: "AI-powered security assistant that generates step-by-step runbooks for incident response and hardening.",
+  description: "In-browser config testing sandbox for nginx, Docker, Terraform, and Kubernetes configurations. Real-time validation and security linting.",
   offers: {
     "@type": "Offer",
     price: "0",
@@ -88,18 +83,17 @@ const softwareApplicationJsonLd = {
     "@type": "Organization",
     name: "ClawGuru",
   },
+  featureList: [
+    "Nginx config linting",
+    "Docker validation",
+    "Terraform linter",
+    "Kubernetes validation",
+    "Real-time scoring",
+    "Security best practices",
+  ],
 }
 
-export default async function CopilotPage(
-  props: { searchParams?: Promise<Record<string, string | string[] | undefined>> }
-) {
-  const searchParams = await props.searchParams;
-  const q = typeof searchParams?.q === "string" ? searchParams?.q : ""
-
-  const h = headers()
-  const locale = (h.get("x-claw-locale") ?? DEFAULT_LOCALE) as Locale
-  const dict = await getDictionary(locale)
-
+export default function SandboxPage() {
   return (
     <>
       <script
@@ -127,7 +121,7 @@ export default async function CopilotPage(
             className="text-[10px] font-mono tracking-[0.3em] uppercase mb-4"
             style={{ color: `${QV.gold}88` }}
           >
-            Prof. ClawGuru Copilot · v∞
+            Live Fix Sandbox · v∞
           </div>
           <h1 className="text-5xl md:text-7xl font-black leading-none tracking-tighter mb-4">
             <span
@@ -136,14 +130,14 @@ export default async function CopilotPage(
                 backgroundImage: `linear-gradient(135deg, ${QV.gold}, ${QV.coldWhite} 45%, ${QV.violet})`,
               }}
             >
-              Prof. ClawGuru
+              Live Fix Sandbox
             </span>
           </h1>
           <p
             className="text-sm max-w-lg mx-auto leading-relaxed"
             style={{ color: "rgba(255,255,255,0.4)" }}
           >
-            {dict.copilot.pageSubtitle}
+            Test nginx, Docker, Terraform, K8s configs direkt im Browser. Real-time validation + security linting.
           </p>
 
           {/* Stats Bar */}
@@ -172,37 +166,93 @@ export default async function CopilotPage(
           </div>
         </div>
 
-        {/* ── Main Content ── */}
+        {/* ── Supported Config Types ── */}
         <div className="mx-auto w-full max-w-4xl px-4 mb-10">
-          {/* CopilotChat supports manual input; prefill hint displayed below */}
-          {q ? (
-            <div className="mb-6 p-4 rounded-2xl border" style={{ background: QV.glass, borderColor: `${QV.violet}18` }}>
-              <div className="text-sm" style={{ color: "rgba(255,255,255,0.4)" }}>
-                {dict.copilot.prefillNote.replace("{q}", q)}
-              </div>
-            </div>
-          ) : null}
-
-          <LoginSaveBanner />
-          <CopilotChat />
-
-          {/* NEXT-LEVEL UPGRADE 2026: Voice Copilot – speak your issue */}
-          <div className="mt-8">
-            <div className="flex items-center justify-between gap-4 mb-3 flex-wrap">
-              <h2 className="text-xl font-black" style={{ color: QV.green }}>{dict.copilot.voiceTitle}</h2>
-              {/* Feature gate nudge – Voice is limited on Day Pass */}
-              <a
-                href={`/${locale}/pricing#pro`}
-                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl border text-xs font-bold transition-opacity hover:opacity-80"
-                style={{ borderColor: `${QV.violet}44`, color: QV.violet, background: `${QV.violet}10` }}
+          <div
+            className="text-[10px] font-mono tracking-[0.25em] uppercase mb-4 text-center"
+            style={{ color: "rgba(255,255,255,0.2)" }}
+          >
+            Supported Config Types
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            {[
+              { name: "Nginx", icon: "🌐", color: QV.gold },
+              { name: "Docker", icon: "🐳", color: QV.blue },
+              { name: "Terraform", icon: "🏗️", color: QV.violet },
+              { name: "Kubernetes", icon: "☸️", color: QV.green },
+            ].map((item) => (
+              <div
+                key={item.name}
+                className="rounded-2xl p-4 border text-center"
+                style={{ background: QV.glass, borderColor: `${item.color}18` }}
               >
-                {dict.copilot.voiceUpgrade}
-              </a>
+                <div className="text-2xl mb-2">{item.icon}</div>
+                <div className="text-xs font-bold" style={{ color: item.color }}>{item.name}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* ── Live Fix Sandbox ── */}
+        <div className="mx-auto w-full max-w-4xl px-4 mb-10">
+          <div
+            className="rounded-3xl p-8 border"
+            style={{
+              background: QV.glass,
+              border: `1px solid ${QV.violet}18`,
+              boxShadow: `0 0 60px ${QV.violet}08`,
+            }}
+          >
+            <div
+              className="text-[10px] font-mono tracking-[0.25em] uppercase mb-4"
+              style={{ color: `${QV.violet}88` }}
+            >
+              Live Fix Sandbox
             </div>
-            <p className="text-sm mb-4" style={{ color: "rgba(255,255,255,0.3)" }}>
-              {dict.copilot.voiceDesc}
-            </p>
-            <VoiceCopilot lang={locale} />
+            <LiveFixSandbox />
+          </div>
+        </div>
+
+        {/* ── Use Case Cards ── */}
+        <div className="mx-auto w-full max-w-4xl px-4 mb-10">
+          <div
+            className="text-[10px] font-mono tracking-[0.25em] uppercase mb-4"
+            style={{ color: "rgba(255,255,255,0.2)" }}
+          >
+            Use Cases
+          </div>
+          <div className="grid md:grid-cols-2 gap-4">
+            {[
+              {
+                title: "Nginx Security Hardening",
+                desc: "Validiere nginx configs für security best practices: server_tokens off, SSL/TLS settings, security headers.",
+                color: QV.gold,
+              },
+              {
+                title: "Docker Container Security",
+                desc: "Prüfe Dockerfiles auf root user, exposed ports, multi-stage builds, und vulnerability patterns.",
+                color: QV.blue,
+              },
+              {
+                title: "Terraform Infrastructure as Code",
+                desc: "Linte Terraform configs für AWS/GCP/Azure best practices, encryption, and IAM policies.",
+                color: QV.violet,
+              },
+              {
+                title: "Kubernetes Manifest Validation",
+                desc: "Validiere K8s YAMLs for resource limits, security contexts, network policies, and RBAC.",
+                color: QV.green,
+              },
+            ].map((item) => (
+              <div
+                key={item.title}
+                className="rounded-2xl p-4 border"
+                style={{ background: QV.glass, borderColor: `${item.color}18` }}
+              >
+                <div className="font-bold text-sm mb-2" style={{ color: item.color }}>{item.title}</div>
+                <p className="text-xs leading-relaxed" style={{ color: "rgba(255,255,255,0.3)" }}>{item.desc}</p>
+              </div>
+            ))}
           </div>
         </div>
 
@@ -247,7 +297,7 @@ export default async function CopilotPage(
         {/* ── Footer CTA ── */}
         <div className="pb-12 text-center px-4">
           <a
-            href="/sandbox"
+            href="/copilot"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-mono text-xs font-bold uppercase tracking-widest transition-all duration-300"
             style={{
               background: `${QV.gold}10`,
@@ -255,7 +305,7 @@ export default async function CopilotPage(
               color: QV.gold,
             }}
           >
-            Try Live Fix Sandbox →
+            Try Prof. ClawGuru →
           </a>
         </div>
 
@@ -265,7 +315,7 @@ export default async function CopilotPage(
             className="text-[9px] font-mono tracking-[0.3em] uppercase"
             style={{ color: "rgba(255,255,255,0.07)" }}
           >
-            AI-Powered Security Intelligence. · Prof. ClawGuru v∞ · ClawGuru.org
+            Test Configs in Real-Time. · Live Fix Sandbox v∞ · ClawGuru.org
           </div>
         </div>
       </div>

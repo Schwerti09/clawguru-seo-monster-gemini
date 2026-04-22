@@ -1,7 +1,7 @@
-﻿import type { Metadata } from "next"
+import type { Metadata } from "next"
 
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
-import RootPage, { metadata as rootMetadata } from "@/app/copilot/page"
+import RootPage, { metadata as rootMetadata } from "@/app/sandbox/page"
 
 export const revalidate = 60
 
@@ -15,7 +15,7 @@ export async function generateMetadata(props: { params: { lang: string } }): Pro
 
   return {
     ...(rootMetadata as Metadata),
-    alternates: buildLocalizedAlternates(locale, "/copilot"),
+    alternates: buildLocalizedAlternates(locale, "/sandbox"),
     openGraph: {
       ...(rootMetadata as Metadata).openGraph,
       url: `${(rootMetadata as Metadata).openGraph?.url || "https://clawguru.org"}`,
@@ -23,6 +23,6 @@ export async function generateMetadata(props: { params: { lang: string } }): Pro
   }
 }
 
-export default function LocaleCopilotPage() {
+export default function LocaleSandboxPage() {
   return <RootPage />
 }

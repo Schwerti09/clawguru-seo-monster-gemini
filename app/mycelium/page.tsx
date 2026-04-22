@@ -7,6 +7,7 @@ import NextDynamic from "next/dynamic"
 import MyceliumShareCard from "@/components/share/MyceliumShareCard"
 import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
 import { getDictionary } from "@/lib/getDictionary"
+import { BASE_URL } from "@/lib/config"
  
 export const dynamic = "force-static"
 export const revalidate = 3600
@@ -19,6 +20,35 @@ export const metadata: Metadata = {
   description:
     "The living mycelium of 1M+ runbooks. Every node a knowledge unit, every edge a semantic relationship. " +
     "Force-directed graph, Darwinian evolution engine, and oracle mode — the most advanced ops knowledge graph on Earth.",
+  keywords: [
+    "mycelium",
+    "knowledge graph",
+    "security runbooks",
+    "force-directed graph",
+    "semantic relationships",
+    "darwinian evolution",
+    "oracle mode",
+    "ops knowledge",
+    "security automation",
+  ],
+  openGraph: {
+    title: "Living Mycelium — Security Knowledge Graph | ClawGuru",
+    description: "The living mycelium of 1M+ runbooks. Every node a knowledge unit, every edge a semantic relationship.",
+    type: "website",
+    url: `${BASE_URL}/mycelium`,
+    images: [{
+      url: `${BASE_URL}/og/mycelium.png`,
+      width: 1200,
+      height: 630,
+      alt: "ClawGuru Living Mycelium — Security Knowledge Graph"
+    }]
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Living Mycelium — Security Knowledge Graph | ClawGuru",
+    description: "The living mycelium of 1M+ runbooks. Every node a knowledge unit, every edge a semantic relationship.",
+    images: [`${BASE_URL}/og/mycelium.png`]
+  },
   alternates: { canonical: "/mycelium" },
 }
 
@@ -38,9 +68,38 @@ export default async function MyceliumPage() {
     ],
   }
 
+  const organizationJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'ClawGuru',
+    url: BASE_URL,
+    logo: `${BASE_URL}/favicon-512.png`,
+    foundingDate: '2024',
+    description: 'ClawGuru ist die KI-gestützte SecOps-Plattform mit über 4,2 Millionen ausführbaren Runbooks – für Incident Response, Hardening und Compliance in Echtzeit. Vom Problem zum Fix in unter 30 Sekunden.',
+    sameAs: [
+      'https://github.com/clawguru',
+    ],
+  }
+
+  const webPageJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: 'Living Mycelium — Security Knowledge Graph',
+    description: 'The living mycelium of 1M+ runbooks. Every node a knowledge unit, every edge a semantic relationship.',
+    url: `${BASE_URL}/mycelium`,
+    inLanguage: 'de',
+    isPartOf: {
+      '@type': 'WebSite',
+      name: 'ClawGuru',
+      url: BASE_URL,
+    },
+  }
+
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageJsonLd) }} />
       {/* MYCELIAL SINGULARITY v3.0 – Page header */}
       <div className="border-b border-white/10 bg-gradient-to-b from-gray-950 to-[#050608] py-10">
         <Container>
@@ -94,11 +153,11 @@ export default async function MyceliumPage() {
       </div>
 
       {/* MYCELIAL SINGULARITY v3.0 – Main graph view (full-width, no container padding) */}
-      <div className="px-4 py-4">
+      <div className="px-4 py-4" role="main" aria-label="Mycelium Knowledge Graph">
         {(() => {
           const MyceliumClientLoader = NextDynamic(() => import("@/components/visual/MyceliumClientLoader"), {
             loading: () => (
-              <div className="h-[50vh] rounded-3xl animate-pulse bg-white/[0.04] border border-white/10" />
+              <div className="h-[50vh] rounded-3xl animate-pulse bg-white/[0.04] border border-white/10" aria-label="Loading Mycelium Graph" />
             ),
           })
           // Use lightweight embed UI for faster initial load

@@ -1,0 +1,76 @@
+import type { Metadata } from "next"
+import Link from "next/link"
+import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { PromptInjectionSandboxClient } from "@/components/tools/PromptInjectionSandboxClient"
+import { getTool } from "@/lib/tools"
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
+const SLUG = "prompt-injection-sandbox"
+
+export const revalidate = 3600
+export const dynamic = "force-static"
+
+export async function generateStaticParams() {
+  return SUPPORTED_LOCALES.map((lang) => ({ lang }))
+}
+
+export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
+  const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
+  const t = getTool(SLUG)
+  const pageUrl = `${SITE_URL}/${locale}/tools/${SLUG}`
+  const title = `${t?.name ?? "Prompt Injection Sandbox"} — Stress-test your system prompt | ClawGuru`
+  const description = t?.description
+
+  const softwareSchema = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: t?.name,
+    applicationCategory: "SecurityApplication",
+    operatingSystem: "Any",
+    offers: { "@type": "Offer", price: "0", priceCurrency: "EUR" },
+    url: pageUrl,
+  }
+
+  return {
+    title,
+    description,
+    openGraph: { title, description, url: pageUrl, type: "website" },
+    alternates: buildLocalizedAlternates(locale, `/tools/${SLUG}`),
+    robots: "index, follow",
+    other: { "application/ld+json": JSON.stringify(softwareSchema) },
+  }
+}
+
+export default function PromptInjectionSandboxPage({ params }: { params: { lang: string } }) {
+  const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
+  return (
+    <div className="min-h-screen bg-[#05070a] text-gray-100">
+      <section className="border-b border-white/5 py-14 md:py-16 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(139,92,246,0.1),_transparent_60%)]" />
+        <div className="relative container mx-auto px-4">
+          <div className="max-w-4xl mx-auto">
+            <Link href={`/${locale}/tools`} className="text-xs text-gray-400 hover:text-white transition-colors inline-flex items-center gap-2 mb-5">← The Arsenal</Link>
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-violet-500/30 bg-violet-500/5 text-violet-300 text-[10px] font-mono tracking-[0.25em] mb-5">
+              <span className="w-1.5 h-1.5 rounded-full bg-violet-400 animate-pulse" />
+              TOOL · LIVE
+            </div>
+            <h1 className="text-3xl md:text-5xl font-black mb-3 tracking-tight">Prompt Injection Sandbox 🧪</h1>
+            <p className="text-base md:text-xl text-violet-200/80 mb-3">Stress-test your system prompt against 18 curated attack patterns.</p>
+            <p className="text-sm text-gray-400 max-w-2xl leading-relaxed">
+              Paste the system prompt you ship to your LLM agent. We compare it against payloads covering instruction override, encoding bypass, data exfiltration, tool abuse, social engineering, context smuggling, and refusal bypass. Gaps are flagged as high-risk.
+            </p>
+            <p className="text-xs text-amber-300/70 mt-3 max-w-2xl">
+              This is a first-pass heuristic, not a substitute for real red-teaming. Everything runs in your browser — your prompt never leaves the page.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-12">
+        <div className="container mx-auto px-4">
+          <PromptInjectionSandboxClient />
+        </div>
+      </section>
+    </div>
+  )
+}

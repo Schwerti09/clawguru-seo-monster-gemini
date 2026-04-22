@@ -1,292 +1,128 @@
-"use client"
-
-import { useState } from "react"
+import type { Metadata } from "next"
 import Link from "next/link"
-import type { Locale } from "@/lib/i18n"
+import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { getHubContent } from "@/lib/academy/hubContent"
+import { listMissionsForTrack, getMission } from "@/lib/academy/missions"
 
-interface Lesson {
-  id: number
-  title: string
-  titleEn: string
-  content: string
-  contentEn: string
-  duration: string
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
+const TRACK_SLUG = "beginner"
+
+export const revalidate = 3600
+export const dynamic = "force-static"
+
+export async function generateStaticParams() {
+  return SUPPORTED_LOCALES.map((lang) => ({ lang }))
 }
 
-const LESSONS: Lesson[] = [
-  {
-    id: 1,
-    title: "Lektion 1: Was sind Security-Headers?",
-    titleEn: "Lesson 1: What are Security Headers?",
-    content: "Security-Headers sind HTTP-Header, die deinem Browser sagen, wie er sich verhalten soll. Sie schützen vor Clickjacking, XSS und anderen Angriffen. Die wichtigsten sind: CSP (Content Security Policy), X-Frame-Options, X-Content-Type-Options, Strict-Transport-Security (HSTS).",
-    contentEn: "Security Headers are HTTP headers that tell your browser how to behave. They protect against clickjacking, XSS, and other attacks. The most important are: CSP (Content Security Policy), X-Frame-Options, X-Content-Type-Options, Strict-Transport-Security (HSTS).",
-    duration: "5 Min"
-  },
-  {
-    id: 2,
-    title: "Lektion 2: TLS/HTTPS einrichten",
-    titleEn: "Lesson 2: Setup TLS/HTTPS",
-    content: "HTTPS verschlüsselt die Verbindung zwischen Browser und Server. Du brauchst ein SSL/TLS-Zertifikat. Let's Encrypt ist kostenlos und einfach. Nginx-Konfiguration: ssl_certificate und ssl_certificate_key definieren. HTTP auf HTTPS redirecten.",
-    contentEn: "HTTPS encrypts the connection between browser and server. You need an SSL/TLS certificate. Let's Encrypt is free and easy. Nginx configuration: define ssl_certificate and ssl_certificate_key. Redirect HTTP to HTTPS.",
-    duration: "10 Min"
-  },
-  {
-    id: 3,
-    title: "Lektion 3: Firewall-Grundlagen (UFW)",
-    titleEn: "Lesson 3: Firewall Basics (UFW)",
-    content: "UFW (Uncomplicated Firewall) ist einfach zu bedienen. Nur Ports öffnen, die du wirklich brauchst. Standard: SSH (22), HTTP (80), HTTPS (443). Befehle: sudo ufw allow 22, sudo ufw enable, sudo ufw status.",
-    contentEn: "UFW (Uncomplicated Firewall) is easy to use. Only open ports you really need. Default: SSH (22), HTTP (80), HTTPS (443). Commands: sudo ufw allow 22, sudo ufw enable, sudo ufw status.",
-    duration: "8 Min"
-  },
-  {
-    id: 4,
-    title: "Lektion 4: Security Check interpretieren",
-    titleEn: "Lesson 4: Interpret Security Check",
-    content: "Der Claw Score zeigt dir, wie sicher dein Server ist. Grün = gut, Gelb = Warnung, Rot = kritisch. Schau dir die einzelnen Punkte an. Die meisten Fehler sind einfache Misconfigurations.",
-    contentEn: "The Claw Score shows how secure your server is. Green = good, Yellow = warning, Red = critical. Look at the individual points. Most errors are simple misconfigurations.",
-    duration: "12 Min"
-  },
-  {
-    id: 5,
-    title: "Lektion 5: Top 3 Misconfigs beheben",
-    titleEn: "Lesson 5: Fix Top 3 Misconfigs",
-    content: "1. Offene Ports: UFW schließen. 2. Fehlende HTTPS: TLS-Zertifikat installieren. 3. Default-Passwörter: ändern! Diese drei Fehler machen 80% aller Probleme aus.",
-    contentEn: "1. Open ports: close with UFW. 2. Missing HTTPS: install TLS certificate. 3. Default passwords: change! These three errors cause 80% of all problems.",
-    duration: "10 Min"
+export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
+  const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
+  const copy = getHubContent(locale).tracks[TRACK_SLUG]
+  const pageUrl = `${SITE_URL}/${locale}/academy/${TRACK_SLUG}`
+  const title = `${copy?.title ?? "Foundations"} — Academy ∞ | ClawGuru`
+  return {
+    title,
+    description: copy?.tagline,
+    openGraph: { title, description: copy?.tagline, url: pageUrl, type: "website" },
+    alternates: buildLocalizedAlternates(locale, `/academy/${TRACK_SLUG}`),
+    robots: "index, follow",
   }
-]
+}
 
-const QUIZ_QUESTIONS = [
-  {
-    question: "Was ist der Zweck von Security-Headers?",
-    questionEn: "What is the purpose of Security Headers?",
-    options: ["Server schneller machen", "Browser-Sicherheit erhöhen", "Datenbank optimieren", "CSS laden"],
-    optionsEn: ["Make server faster", "Increase browser security", "Optimize database", "Load CSS"],
-    correct: 1
-  },
-  {
-    question: "Welcher Port ist für HTTPS?",
-    questionEn: "Which port is for HTTPS?",
-    options: ["80", "22", "443", "3306"],
-    correct: 2
-  },
-  {
-    question: "Was macht UFW?",
-    questionEn: "What does UFW do?",
-    options: ["Backup erstellen", "Firewall verwalten", "Datenbank starten", "Logs analysieren"],
-    optionsEn: ["Create backup", "Manage firewall", "Start database", "Analyze logs"],
-    correct: 1
-  }
-]
+export default function FoundationsTrackPage({ params }: { params: { lang: string } }) {
+  const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
+  const c = getHubContent(locale)
+  const copy = c.tracks[TRACK_SLUG]
+  if (!copy) return null
 
-export default function BeginnerPage({ params }: { params: { lang: string } }) {
-  const locale = (params.lang === "de" ? "de" : "en") as Locale
+  const entries = listMissionsForTrack(TRACK_SLUG)
+  const totalXp = entries.reduce((s, e) => s + e.xp, 0)
+  const totalMin = entries.reduce((s, e) => s + e.durationMin, 0)
   const prefix = `/${locale}`
-  const [currentLesson, setCurrentLesson] = useState(0)
-  const [showQuiz, setShowQuiz] = useState(false)
-  const [quizAnswers, setQuizAnswers] = useState<number[]>([])
-  const [quizCompleted, setQuizCompleted] = useState(false)
-  const [quizScore, setQuizScore] = useState(0)
-
-  const handleNextLesson = () => {
-    if (currentLesson < LESSONS.length - 1) {
-      setCurrentLesson(currentLesson + 1)
-    } else {
-      setShowQuiz(true)
-    }
-  }
-
-  const handleQuizAnswer = (questionIndex: number, answerIndex: number) => {
-    const newAnswers = [...quizAnswers]
-    newAnswers[questionIndex] = answerIndex
-    setQuizAnswers(newAnswers)
-  }
-
-  const submitQuiz = () => {
-    let score = 0
-    QUIZ_QUESTIONS.forEach((q, i) => {
-      if (quizAnswers[i] === q.correct) score++
-    })
-    setQuizScore(score)
-    setQuizCompleted(true)
-  }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-gray-100">
-      {/* HEADER */}
-      <section className="py-12 bg-gradient-to-r from-green-900/30 to-[#0a0a0a]">
-        <div className="container mx-auto px-4">
+    <div className="min-h-screen bg-[#05070a] text-gray-100">
+      {/* Hero */}
+      <section className="relative overflow-hidden border-b border-white/5">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(16,185,129,0.1),_transparent_60%)]" />
+        <div
+          className="absolute inset-0 opacity-[0.04] pointer-events-none"
+          style={{ backgroundImage: "linear-gradient(rgba(255,255,255,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.6) 1px, transparent 1px)", backgroundSize: "80px 80px" }}
+          aria-hidden
+        />
+        <div className="relative container mx-auto px-4 py-20 md:py-24">
           <div className="max-w-4xl mx-auto">
-            <Link href={`${prefix}/academy`} className="text-green-400 hover:text-green-300 mb-4 inline-block">
-              ← {locale === "de" ? "Zurück zur Academy" : "Back to Academy"}
+            <Link href={`${prefix}/academy`} className="text-xs text-gray-400 hover:text-white transition-colors mb-6 inline-flex items-center gap-2">
+              ← Academy
             </Link>
-            <h1 className="text-4xl md:text-5xl font-black mb-4">
-              {locale === "de" ? "Security-Grundlagen" : "Security Fundamentals"}
-            </h1>
-            <p className="text-xl text-gray-300">
-              {locale === "de" ? "5 Lektionen • ~45 Minuten" : "5 Lessons • ~45 Minutes"}
-            </p>
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/5 text-emerald-300 text-[10px] font-mono tracking-[0.25em] mb-5">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              TRACK · FOUNDATIONS
+            </div>
+            <h1 className="text-4xl md:text-6xl font-black leading-tight mb-4 tracking-tight">{copy.title}</h1>
+            <p className="text-lg md:text-xl text-emerald-200/80 font-medium mb-4">{copy.tagline}</p>
+            <p className="text-sm md:text-base text-gray-400 max-w-2xl leading-relaxed mb-6">{copy.audience}</p>
+
+            <div className="flex flex-wrap gap-x-6 gap-y-2 text-xs font-mono text-gray-500">
+              <span><span className="text-emerald-400">📚</span> {entries.length} missions</span>
+              <span><span className="text-cyan-400">⏱️</span> ~{totalMin} min total</span>
+              <span><span className="text-amber-400">⚡</span> {totalXp} XP</span>
+              <span><span className="text-violet-400">🏅</span> Defender I on completion</span>
+            </div>
           </div>
         </div>
       </section>
 
-      {!showQuiz ? (
-        <section className="py-12">
-          <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
-              {/* Progress Bar */}
-              <div className="mb-8">
-                <div className="flex justify-between text-sm text-gray-400 mb-2">
-                  <span>{locale === "de" ? "Fortschritt" : "Progress"}</span>
-                  <span>{currentLesson + 1} / {LESSONS.length}</span>
-                </div>
-                <div className="w-full bg-gray-800 rounded-full h-2">
-                  <div 
-                    className="bg-green-500 h-2 rounded-full transition-all duration-300"
-                    style={{ width: `${((currentLesson + 1) / LESSONS.length) * 100}%` }}
-                  />
-                </div>
-              </div>
-
-              {/* Lesson Card */}
-              <div className="bg-gray-800 border border-gray-700 rounded-2xl p-8 mb-8">
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="w-16 h-16 rounded-full bg-green-900/50 flex items-center justify-center text-3xl font-black text-green-400">
-                    {LESSONS[currentLesson].id}
-                  </div>
-                  <div>
-                    <h2 className="text-2xl font-bold text-gray-100 mb-1">
-                      {locale === "de" ? LESSONS[currentLesson].title : LESSONS[currentLesson].titleEn}
-                    </h2>
-                    <p className="text-green-400 text-sm">⏱️ {LESSONS[currentLesson].duration}</p>
-                  </div>
-                </div>
-                <div className="text-lg text-gray-300 leading-relaxed mb-8">
-                  {locale === "de" ? LESSONS[currentLesson].content : LESSONS[currentLesson].contentEn}
-                </div>
-                <button
-                  onClick={handleNextLesson}
-                  className="w-full bg-green-600 hover:bg-green-500 text-white font-bold py-4 rounded-lg transition-colors"
-                >
-                  {locale === "de" ? "Nächste Lektion" : "Next Lesson"} →
-                </button>
-              </div>
-
-              {/* Lesson List */}
-              <div className="space-y-3">
-                {LESSONS.map((lesson, index) => (
-                  <div 
-                    key={lesson.id}
-                    className={`p-4 rounded-lg border transition-all ${
-                      index === currentLesson 
-                        ? "bg-green-900/20 border-green-500" 
-                        : index < currentLesson 
-                          ? "bg-gray-800 border-gray-700 opacity-60" 
-                          : "bg-gray-800 border-gray-700"
-                    }`}
-                  >
-                    <div className="flex items-center gap-4">
-                      <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold ${
-                        index === currentLesson 
-                          ? "bg-green-500 text-white" 
-                          : index < currentLesson 
-                            ? "bg-green-600 text-white" 
-                            : "bg-gray-700 text-gray-400"
-                      }`}>
-                        {index < currentLesson ? "✓" : lesson.id}
-                      </div>
-                      <div className="flex-1">
-                        <h3 className="font-bold text-gray-100">
-                          {locale === "de" ? lesson.title : lesson.titleEn}
-                        </h3>
-                        <p className="text-sm text-gray-400">⏱️ {lesson.duration}</p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-      ) : (
-        <section className="py-12">
-          <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
-              {!quizCompleted ? (
-                <div className="bg-gray-800 border border-gray-700 rounded-2xl p-8">
-                  <h2 className="text-3xl font-bold text-gray-100 mb-6 text-center">
-                    {locale === "de" ? "Quiz" : "Quiz"}
-                  </h2>
-                  <p className="text-gray-400 mb-8 text-center">
-                    {locale === "de" ? "Teste dein Wissen!" : "Test your knowledge!"}
-                  </p>
-                  <div className="space-y-8">
-                    {QUIZ_QUESTIONS.map((q, i) => (
-                      <div key={i}>
-                        <h3 className="text-xl font-bold text-gray-100 mb-4">
-                          {i + 1}. {locale === "de" ? q.question : q.questionEn}
-                        </h3>
-                        <div className="space-y-3">
-                          {(locale === "de" ? q.options : q.optionsEn || q.options).map((option, optIndex) => (
-                            <button
-                              key={optIndex}
-                              onClick={() => handleQuizAnswer(i, optIndex)}
-                              className={`w-full p-4 rounded-lg border text-left transition-all ${
-                                quizAnswers[i] === optIndex
-                                  ? "bg-green-600 border-green-500 text-white"
-                                  : "bg-gray-700 border-gray-600 text-gray-100 hover:bg-gray-600"
-                              }`}
-                            >
-                              {option}
-                            </button>
-                          ))}
+      {/* Mission list */}
+      <section className="py-16">
+        <div className="container mx-auto px-4">
+          <div className="max-w-3xl mx-auto">
+            <div className="text-xs font-mono tracking-[0.3em] text-emerald-400 mb-6">MISSIONS</div>
+            <ol className="space-y-4">
+              {entries.map((entry) => {
+                const m = getMission(entry.slug)
+                if (!m) return null
+                const href = `${prefix}/academy/mission/${entry.slug}`
+                return (
+                  <li key={entry.slug}>
+                    <Link
+                      href={href}
+                      className="group relative block p-5 rounded-xl border border-white/10 bg-white/[0.02] hover:border-emerald-400/40 hover:bg-emerald-500/[0.03] transition-all"
+                    >
+                      <div className="flex items-start gap-4">
+                        <div className="shrink-0 w-10 h-10 rounded-lg bg-emerald-500/10 border border-emerald-500/20 grid place-items-center font-mono text-sm text-emerald-300">
+                          M-{String(entry.order).padStart(3, "0")}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h3 className="text-base md:text-lg font-bold text-gray-100 mb-1 group-hover:text-emerald-300 transition-colors">
+                            {m.title}
+                          </h3>
+                          <p className="text-sm text-gray-400 leading-relaxed mb-3">{m.brief}</p>
+                          <div className="flex flex-wrap gap-x-4 gap-y-1 text-[11px] font-mono text-gray-500">
+                            <span>⏱️ {entry.durationMin} min</span>
+                            <span>⚡ {entry.xp} XP</span>
+                            <span>🎯 {m.goals.length} goals</span>
+                          </div>
+                        </div>
+                        <div className="hidden sm:block shrink-0 self-center text-sm font-mono text-gray-500 group-hover:text-emerald-300 transition-colors">
+                          Launch →
                         </div>
                       </div>
-                    ))}
-                  </div>
-                  <button
-                    onClick={submitQuiz}
-                    disabled={quizAnswers.length < QUIZ_QUESTIONS.length}
-                    className="w-full mt-8 bg-green-600 hover:bg-green-500 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-bold py-4 rounded-lg transition-colors"
-                  >
-                    {locale === "de" ? "Quiz absenden" : "Submit Quiz"}
-                  </button>
-                </div>
-              ) : (
-                <div className="bg-gray-800 border border-gray-700 rounded-2xl p-8 text-center">
-                  <div className="text-6xl mb-4">🎉</div>
-                  <h2 className="text-3xl font-bold text-gray-100 mb-4">
-                    {locale === "de" ? "Geschafft!" : "Done!"}
-                  </h2>
-                  <p className="text-xl text-gray-300 mb-6">
-                    {locale === "de" 
-                      ? `Du hast ${quizScore} von ${QUIZ_QUESTIONS.length} Fragen richtig beantwortet.`
-                      : `You got ${quizScore} out of ${QUIZ_QUESTIONS.length} questions correct.`}
-                  </p>
-                  {quizScore === QUIZ_QUESTIONS.length && (
-                    <div className="bg-green-900/30 border border-green-500 rounded-lg p-6 mb-6">
-                      <h3 className="text-2xl font-bold text-green-400 mb-2">
-                        {locale === "de" ? "Completion Badge" : "Completion Badge"}
-                      </h3>
-                      <p className="text-green-200">
-                        {locale === "de" 
-                          ? "Du hast den Beginner-Pfad abgeschlossen! 🏆"
-                          : "You completed the Beginner path! 🏆"}
-                      </p>
-                    </div>
-                  )}
-                  <Link
-                    href={`${prefix}/academy/intermediate`}
-                    className="inline-block bg-blue-600 hover:bg-blue-500 text-white font-bold px-8 py-4 rounded-lg transition-colors"
-                  >
-                    {locale === "de" ? "Intermediate Pfad starten →" : "Start Intermediate Path →"}
-                  </Link>
-                </div>
-              )}
+                    </Link>
+                  </li>
+                )
+              })}
+            </ol>
+
+            {/* Completion callout */}
+            <div className="mt-10 p-5 rounded-xl border border-violet-500/20 bg-violet-500/[0.04]">
+              <div className="text-[10px] font-mono tracking-[0.25em] text-violet-300 mb-2">COMPLETE ALL 5 MISSIONS</div>
+              <div className="text-sm text-gray-200">
+                Earn the <span className="text-violet-300 font-bold">Defender I</span> credential — a W3C Verifiable Credential signed by ClawGuru. LinkedIn-shareable, recruiter-recognized.
+              </div>
             </div>
           </div>
-        </section>
-      )}
+        </div>
+      </section>
     </div>
   )
 }

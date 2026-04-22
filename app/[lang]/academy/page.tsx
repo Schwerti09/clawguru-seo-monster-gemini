@@ -137,6 +137,41 @@ export default async function AcademyPage({ params }: { params: { lang: string }
         </div>
       </section>
 
+      {/* ═══════════════ FEATURED MISSION (Live POC) ═══════════════ */}
+      <section className="py-12">
+        <div className="container mx-auto px-4">
+          <Link
+            href={`${prefix}/academy/mission/nginx-hsts`}
+            className="block max-w-5xl mx-auto group relative overflow-hidden rounded-2xl border border-emerald-500/20 bg-gradient-to-br from-emerald-500/5 via-[#07090c] to-cyan-500/5 hover:border-emerald-400/40 transition-all"
+          >
+            <div
+              className="absolute inset-0 opacity-[0.08] pointer-events-none"
+              style={{ backgroundImage: "repeating-linear-gradient(0deg, rgba(110,231,183,0.4) 0px, rgba(110,231,183,0.4) 1px, transparent 1px, transparent 3px)" }}
+              aria-hidden
+            />
+            <div className="relative p-8 md:p-10 grid md:grid-cols-[auto_1fr_auto] items-center gap-6">
+              <div className="text-5xl">🖥️</div>
+              <div>
+                <div className="text-[10px] font-mono tracking-[0.3em] text-emerald-300 mb-2">
+                  LIVE RANGE · PLAYABLE NOW · NO SIGNUP
+                </div>
+                <h3 className="text-2xl md:text-3xl font-black text-gray-100 mb-2">
+                  Mission M-001 — Ship HSTS before the crawler comes
+                </h3>
+                <p className="text-sm text-gray-400 max-w-2xl leading-relaxed">
+                  Browser-native terminal. Simulated nginx 1.24 on Ubuntu 22.04. 60 seconds to fix a broken security header before a compliance crawler hits production.
+                </p>
+              </div>
+              <div className="shrink-0 hidden md:block">
+                <div className="font-mono text-xs px-5 py-3 rounded-lg bg-emerald-500 text-black font-black group-hover:bg-emerald-400 transition-colors">
+                  LAUNCH →
+                </div>
+              </div>
+            </div>
+          </Link>
+        </div>
+      </section>
+
       {/* ═══════════════ TRACK GRID ═══════════════ */}
       <section className="py-20">
         <div className="container mx-auto px-4">
@@ -198,6 +233,34 @@ export default async function AcademyPage({ params }: { params: { lang: string }
               )
             })}
           </div>
+        </div>
+      </section>
+
+      {/* ═══════════════ ARSENAL TEASER ═══════════════ */}
+      <section className="py-12">
+        <div className="container mx-auto px-4">
+          <Link
+            href={`${prefix}/tools`}
+            className="block max-w-5xl mx-auto group relative overflow-hidden rounded-2xl border border-cyan-500/20 bg-gradient-to-br from-cyan-500/5 via-[#05070a] to-violet-500/5 hover:border-cyan-400/40 transition-all"
+          >
+            <div className="p-8 md:p-10 grid md:grid-cols-[auto_1fr_auto] items-center gap-6">
+              <div className="text-5xl">🛠️</div>
+              <div>
+                <div className="text-[10px] font-mono tracking-[0.3em] text-cyan-300 mb-2">THE ARSENAL · 15 FREE TOOLS</div>
+                <h3 className="text-2xl md:text-3xl font-black text-gray-100 mb-2">
+                  Header Doctor · TLS X-Ray · Prompt Injection Sandbox · and more
+                </h3>
+                <p className="text-sm text-gray-400 max-w-2xl leading-relaxed">
+                  Inline security tools that run in your browser. No signups. No data retention. Paste, run, copy the fix.
+                </p>
+              </div>
+              <div className="shrink-0 hidden md:block">
+                <div className="font-mono text-xs px-5 py-3 rounded-lg bg-cyan-500 text-black font-black group-hover:bg-cyan-400 transition-colors">
+                  OPEN →
+                </div>
+              </div>
+            </div>
+          </Link>
         </div>
       </section>
 

@@ -23,7 +23,59 @@
 - Existing tracks (`beginner`, `intermediate`, `advanced`) unchanged — URLs preserved, content renders via new hub
 - Type-check: `npx tsc --noEmit` → exit 0
 
-**Next — Step 2:** xterm.js Proof-of-Concept for 1 playable mission (browser-native Linux simulator).
+**Step 2 — xterm.js Live Range POC — ✅ COMPLETE (22.04.2026)**
+- `lib/academy/missionEngine.ts` — deterministic state-machine engine: virtual FS, command map, goals, ANSI helpers, pure `runCommand(mission, state, line)` — no backend, no side effects, reusable for every future mission
+- `lib/academy/missions/nginx-hsts.ts` — first playable mission (M-001): "Ship HSTS before the crawler comes." 5 goals, simulated Ubuntu 22.04 + nginx 1.24, virtual FS with broken vhost config, `patch hsts` guided fix, `nginx -t` validation gate, `systemctl reload nginx` completion
+- `lib/academy/missions/index.ts` — mission registry (`MISSIONS`, `getMission`, `listMissionSlugs`)
+- `components/academy/LiveRangeTerminal.tsx` — client-only xterm.js wrapper: dynamic-import xterm + FitAddon, custom dark Hodlberg theme, line-buffered input, Enter/Backspace/Ctrl-C/Ctrl-L handling, dispatches to `runCommand`
+- `components/academy/MissionRunner.tsx` — orchestrator: split layout (terminal + goals side-panel), progress bar, completion screen
+- `app/[lang]/academy/mission/[slug]/page.tsx` — static route, `generateStaticParams` over 31 locales × all mission slugs, metadata + localized alternates
+- Hub page: featured-mission teaser card above track grid → `/academy/mission/nginx-hsts`
+- Sitemap: `/academy/mission/nginx-hsts` per-locale (priority 0.90)
+- Deps added: `@xterm/xterm`, `@xterm/addon-fit`
+- Type-check: `npx tsc --noEmit` → exit 0
+
+**Step 3 — Foundations track fully missionized — ✅ COMPLETE (22.04.2026)**
+- 4 new playable missions authored against the engine, all thematically mapped to the Foundations-track bullets from the hub:
+  - `lib/academy/missions/ssh-hardening.ts` — **M-002** "Lock down SSH before the bots find you" · 5 goals · 140 XP
+  - `lib/academy/missions/ufw-firewall.ts` — **M-003** "Firewall: only what you actually need" · 5 goals · 130 XP
+  - `lib/academy/missions/lets-encrypt.ts` — **M-004** "TLS in three commands" · 6 goals · 150 XP
+  - `lib/academy/missions/misconfig-hunt.ts` — **M-005** "Misconfig Hunt — fix the top three" · 5 goals · 160 XP
+- `lib/academy/missions/index.ts` extended with `MISSION_INDEX[]` — single source of truth mapping slug ↔ track ↔ order ↔ XP ↔ duration; `listMissionsForTrack(track)` helper
+- `app/[lang]/academy/beginner/page.tsx` — legacy "use client" hardcoded-lessons page REPLACED with server component: mission-index layout, numbered cards linking to `/academy/mission/<slug>`, XP/duration/goal counters, Defender I credential callout
+- Sitemap: 4 new mission URLs added (priority 0.90 each)
+- All missions follow the same pattern, use the engine unchanged → engine confirmed reusable
+- Type-check: `npx tsc --noEmit` → exit 0
+
+**Foundations track is now the first fully-missionized track. 5/5 missions playable end-to-end.**
+
+**Step 4 — Sentinel AI Tutor (minimal) — ✅ COMPLETE (22.04.2026)**
+- `app/api/academy/sentinel/route.ts` — stateless POST endpoint with three-tier provider chain:
+  1. Local Ollama (`OLLAMA_URL`, default `http://127.0.0.1:11434`) — auto-discovers available model, prefers `SENTINEL_OLLAMA_MODEL` (default `aya-expanse:32b`)
+  2. Gemini cloud (`GEMINI_API_KEY`, `SENTINEL_GEMINI_MODEL` default `gemini-2.5-flash-lite`) — production fallback
+  3. Stub reply with next-goal hint — graceful no-LLM mode
+- System prompt injects mission context (title, brief, goals+done state, last 6 terminal commands) + response locale constraint — so Sentinel nudges *specifically* where the learner is stuck
+- Input clamping (12 messages × 2k chars) + abort-controller timeouts (3s discovery, 30s chat) — safe to run on Edge/Node runtimes
+- `components/academy/SentinelChat.tsx` — floating pill bottom-right → expandable 380×520px panel, local-state conversation, per-turn mission snapshot, shows active provider in subtitle (`ollama` / `gemini` / `stub`)
+- Wired into `MissionRunner.tsx` + `/academy/mission/[slug]/page.tsx` — available on every mission, in all 31+ locales
+- Type-check: `npx tsc --noEmit` → exit 0
+
+**Dev-prod split:** on dev machine Sentinel talks to local Ollama (free, private). On Netlify/Vercel/Railway production, the Gemini fallback kicks in automatically. No config change needed between envs.
+
+**Step 5 — The Arsenal (first 3 tools live) — ✅ COMPLETE (22.04.2026)**
+- `lib/tools/index.ts` — tool registry (15 entries: 3 live + 12 "soon"), single source of truth for Arsenal hub + per-tool metadata
+- `app/api/tools/headers/route.ts` — server-side fetcher + opinionated header evaluator. SSRF-guarded (blocks localhost/private ranges), 8s timeout, returns score/grade + per-finding nginx/apache/express fix snippets
+- `app/api/tools/tls/route.ts` — raw TLS inspector using Node's `tls.connect()`. Walks the cert chain via issuerCertificate pointers, extracts protocol/cipher/ALPN/SANs/expiry/key-strength/signature-algo, grades A–F. No third-party API dependency.
+- `components/tools/HeaderDoctorClient.tsx` — client UI: URL input, grade badge, findings with collapsible per-server fixes, raw-headers details
+- `components/tools/TlsXrayClient.tsx` — client UI: host input (supports `host:port` + URL), findings list, peer-cert dl-grid, chain walker
+- `components/tools/PromptInjectionSandboxClient.tsx` — **fully client-side**, no network I/O. Curated library of **18 payloads** across 7 categories (Instruction Override, Encoding Bypass, Data Exfiltration, Tool Abuse, Social Engineering, Context Smuggling, Refusal Bypass). Heuristic match against user's pasted system prompt → high/medium/low risk per payload → A–F resistance grade. Category filter + copy-to-clipboard on each payload.
+- `app/[lang]/tools/page.tsx` — Arsenal hub (replaced legacy re-export of non-localized config-paste tool; legacy tool still reachable at non-localized `/tools`)
+- `app/[lang]/tools/header-doctor/page.tsx` · `tls-xray/page.tsx` · `prompt-injection-sandbox/page.tsx` — server shells with Schema.org `SoftwareApplication` markup, `generateStaticParams` over 31 locales
+- Academy hub: new Arsenal teaser card (cyan) linking to `/tools`
+- Sitemap: `/tools` + 3 tool URLs per locale (priority 0.90/0.88)
+- Type-check: `npx tsc --noEmit` → exit 0
+
+**Next — Step 6:** Attack Visualizer — 1 breach re-enactment (Log4Shell) with Mermaid + animated timeline.
 
 **Parallel workstream — i18n Round 14 → 50 languages:**
 - Target extended from 30 → 50 languages (API rate limits required local LLM)
@@ -149,6 +201,28 @@
 ### Quality Metrics
 - **Build Status:** Exit code 0, keine Fehler
 - **Commit:** `4bee1ae9` — 5 files changed, 41 insertions(+), 2 deletions(-)
+
+---
+
+## SOCIALPROOF COUNTER FIX — COMPLETED (22.04.2026)
+
+### Executive Summary
+**SocialProofCounter Fix:** ✅ Counter angepasst von statischen 1.247 auf dynamischen Wert zwischen 150-259 pro User pro Tag. Die Zahl wird in localStorage gespeichert und ändert sich täglich, bleibt aber für den User am gleichen Tag konstant.
+
+### Changes
+- **SocialProofCounter.tsx:** targetCount von 1247 auf dynamischen Wert zwischen 150-259 geändert
+- **SocialProofCounter.tsx:** localStorage-basierte Persistenz pro User pro Tag hinzugefügt
+- **SocialProofCounter.tsx:** Zahl ändert sich täglich, bleibt aber für den User am gleichen Tag konstant
+
+### Logic
+- Generiert zufällige Zahl zwischen 150 und 259
+- Speichert Zahl in localStorage mit Key `cg_socialproof_count_${today}`
+- Wenn Tag wechselt, wird neue Zahl generiert
+- User sieht immer die gleiche Zahl am gleichen Tag
+
+### Quality Metrics
+- **Build Status:** Exit code 0, keine Fehler
+- **Commit:** `4fe6798e` — 2 files changed, 45 insertions(+), 1 deletion(-)
 
 ---
 

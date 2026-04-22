@@ -434,6 +434,17 @@ export async function GET(
         { loc: `${base}/${locale}/academy/compliance`, lastmod, changefreq: "weekly", priority: "0.82" },
         { loc: `${base}/${locale}/academy/adversarial`, lastmod, changefreq: "weekly", priority: "0.82" },
         { loc: `${base}/${locale}/academy/story`, lastmod, changefreq: "weekly", priority: "0.82" },
+        // Academy ∞ — The Arsenal (security tools, 22.04.2026)
+        { loc: `${base}/${locale}/tools`,                              lastmod, changefreq: "weekly", priority: "0.88" },
+        { loc: `${base}/${locale}/tools/header-doctor`,                lastmod, changefreq: "weekly", priority: "0.90" },
+        { loc: `${base}/${locale}/tools/tls-xray`,                     lastmod, changefreq: "weekly", priority: "0.90" },
+        { loc: `${base}/${locale}/tools/prompt-injection-sandbox`,     lastmod, changefreq: "weekly", priority: "0.90" },
+        // Academy ∞ — playable missions (22.04.2026)
+        { loc: `${base}/${locale}/academy/mission/nginx-hsts`,     lastmod, changefreq: "weekly", priority: "0.90" },
+        { loc: `${base}/${locale}/academy/mission/ssh-hardening`,  lastmod, changefreq: "weekly", priority: "0.90" },
+        { loc: `${base}/${locale}/academy/mission/ufw-firewall`,   lastmod, changefreq: "weekly", priority: "0.90" },
+        { loc: `${base}/${locale}/academy/mission/lets-encrypt`,   lastmod, changefreq: "weekly", priority: "0.90" },
+        { loc: `${base}/${locale}/academy/mission/misconfig-hunt`, lastmod, changefreq: "weekly", priority: "0.90" },
         { loc: `${base}/${locale}/academy/roast-learn-prompt-injection`, lastmod, changefreq: "weekly", priority: "0.87" },
         { loc: `${base}/${locale}/academy/cve-feed`, lastmod, changefreq: "weekly", priority: "0.88" },
         { loc: `${base}/${locale}/academy/cve`, lastmod, changefreq: "weekly", priority: "0.87" },

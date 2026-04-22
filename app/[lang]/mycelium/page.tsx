@@ -8,6 +8,7 @@ import MyceliumShareCard from "@/components/share/MyceliumShareCard"
 import { getDictionary } from "@/lib/dictionary"
 import MyceliumHero from "@/components/mycelium/MyceliumHero"
 import ExampleNodes from "@/components/mycelium/ExampleNodes"
+import { BASE_URL } from "@/lib/config"
 
 const MyceliumVisualizationWrapper = NextDynamic(() => import("@/components/mycelium/MyceliumVisualizationWrapper"))
 
@@ -25,7 +26,14 @@ export async function generateMetadata(props: { params: { lang: string } }): Pro
   const params = props.params
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
 
-  return { ...(rootMetadata as Metadata), alternates: buildLocalizedAlternates(locale, "/mycelium") }
+  return {
+    ...(rootMetadata as Metadata),
+    alternates: buildLocalizedAlternates(locale, "/mycelium"),
+    openGraph: {
+      ...(rootMetadata as Metadata).openGraph,
+      url: `${BASE_URL}/${locale}/mycelium`,
+    },
+  }
 }
 
 export default async function LocaleMyceliumPage(props: { params: { lang: string } }) {
@@ -38,7 +46,7 @@ export default async function LocaleMyceliumPage(props: { params: { lang: string
     <>
       <MyceliumHero prefix={prefix} dict={dict?.mycelium} />
 
-      <section className="container mx-auto px-4 py-12">
+      <section className="container mx-auto px-4 py-12" role="main" aria-label="Mycelium Knowledge Graph">
         <div className="rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
           <MyceliumVisualizationWrapper />
         </div>

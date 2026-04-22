@@ -8,9 +8,23 @@ interface SocialProofCounterProps {
 
 export default function SocialProofCounter({ variant }: SocialProofCounterProps) {
   const [count, setCount] = useState(0)
-  const targetCount = 1247
 
   useEffect(() => {
+    // Generate a unique number per user per day (range: 150-259)
+    const today = new Date().toDateString()
+    const storageKey = `cg_socialproof_count_${today}`
+
+    let targetCount = 0
+    const stored = localStorage.getItem(storageKey)
+
+    if (stored) {
+      targetCount = parseInt(stored, 10)
+    } else {
+      // Generate random number between 150 and 259
+      targetCount = Math.floor(Math.random() * (259 - 150 + 1)) + 150
+      localStorage.setItem(storageKey, targetCount.toString())
+    }
+
     const duration = 2000
     const steps = 60
     const increment = targetCount / steps

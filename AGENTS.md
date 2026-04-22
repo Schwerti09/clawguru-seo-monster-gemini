@@ -122,6 +122,36 @@
 
 ---
 
+## SANDBOX NAVIGATION UPDATE — COMPLETED (22.04.2026)
+
+### Executive Summary
+**Sandbox Navigation Update:** ✅ Sandbox in PRIMARY_NAV aufgenommen, Pricing in MORE_NAV verschoben. Sandbox ist jetzt prominent in der Hauptnavigation sichtbar (zwischen Copilot und Runbooks), Pricing bleibt als CTA-Button rechts und ist zusätzlich im "More" Dropdown verfügbar.
+
+### Changes
+- **Header.tsx:** PRIMARY_NAV aktualisiert — Pricing entfernt, Sandbox hinzugefügt (zwischen Copilot und Runbooks)
+- **Header.tsx:** MORE_NAV aktualisiert — Pricing hinzugefügt
+- **getDictionary.ts:** nav.sandbox Feld hinzugefügt
+- **de.json:** nav.sandbox = "Sandbox" hinzugefügt
+- **en.json:** nav.sandbox = "Sandbox" hinzugefügt
+
+### Navigation Structure (New)
+**PRIMARY_NAV (Desktop, max 6):**
+- Live
+- Security Check
+- Copilot
+- **Sandbox** ← NEW
+- Runbooks
+- Intel Feed
+
+**MORE_NAV (Dropdown):**
+- Guides Hub, ClawVerse, Summon, Oracle, Neuro, Command Center, Mycelium, Tags, Academy, Vault, **Pricing** ← MOVED HERE, Report, Downloads, Cases, Costs, About, Team
+
+### Quality Metrics
+- **Build Status:** Exit code 0, keine Fehler
+- **Commit:** `4bee1ae9` — 5 files changed, 41 insertions(+), 2 deletions(-)
+
+---
+
 ## TOTAL WAR ROUND 13 — COMPLETED (21.04.2026)
 
 ### Executive Summary

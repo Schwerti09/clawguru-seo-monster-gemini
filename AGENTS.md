@@ -62,8 +62,8 @@
 - **Command Center Ausbau abgeschlossen:** Hero Section, Stats Bar, Rich Content pro Tab, Footer CTA, Metadata mit OpenGraph
 - **Commit:** `f6c9cdf1`
 - **Features:** AI-Powered Security Intelligence, 4,200+ Runbooks, 16 Languages, Live CVE Feed
-- **Über-uns Mega-Team Expansion abgeschlossen:** 10 Spezialisten (R. Schwertfechter statt Rolf S.), E-E-A-T Signals, Schema.org Organization + Person, Metadata
-- **Commit:** `605c63c0`
+- **Über-uns Mega-Team Expansion abgeschlossen:** 10 Spezialisten (Rolf S.), E-E-A-T Signals, Schema.org Organization + Person, Metadata
+- **Commit:** `605c63c0` + `79409006` (fix: revert R. Schwertfechter to Rolf S.)
 - **Features:** 15+ Jahre Erfahrung, 4,200+ AI Runbooks, 10+ Spezialisten, 24/7 Incident Response
 
 ---

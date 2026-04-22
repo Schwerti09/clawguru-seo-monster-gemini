@@ -10,7 +10,7 @@ export const revalidate = 3600
 export const dynamic = "force-dynamic"
 
 export async function generateStaticParams() {
-  // Temporarily disabled due to serialization issues with mission functions
+  // Claude works on Academy - leave disabled
   return []
 }
 

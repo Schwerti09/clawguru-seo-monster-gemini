@@ -13,8 +13,27 @@ export async function generateMetadata(props: { params: { lang: string } }): Pro
   const params = props.params
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
 
+  const title = locale === "de" ? "Command Center — AI-Powered Security Intelligence" : "Command Center — AI-Powered Security Intelligence"
+  const description = locale === "de"
+    ? "Find runbooks in seconds, predict CVEs, and visualize your threat landscape — all powered by AI. Summon, Oracle, Neuro, Mycelium."
+    : "Find runbooks in seconds, predict CVEs, and visualize your threat landscape — all powered by AI. Summon, Oracle, Neuro, Mycelium."
+
   return {
-    alternates: buildLocalizedAlternates(locale, "/command-center")
+    title,
+    description,
+    alternates: buildLocalizedAlternates(locale, "/command-center"),
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      locale: locale === "de" ? "de_DE" : "en_US",
+      alternateLocale: SUPPORTED_LOCALES.map((l) => (l === "de" ? "de_DE" : "en_US")),
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+    },
   }
 }
 

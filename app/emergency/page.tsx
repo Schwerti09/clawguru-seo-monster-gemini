@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import Container from "@/components/shared/Container"
 import BuyButton from "@/components/commerce/BuyButton"
+import SocialProofCounter from "@/components/marketing/SocialProofCounter"
 import { BASE_URL } from "@/lib/config"
 
 export const metadata: Metadata = {
@@ -115,12 +116,37 @@ const faqJsonLd = {
   ],
 }
 
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "ClawGuru",
+  url: BASE_URL,
+  logo: `${BASE_URL}/favicon-512.png`,
+  foundingDate: "2024",
+  description: "ClawGuru baut Ops- und Security-Command-Center für Self-Hosted-Teams und AI-Agent-Infrastruktur mit 15+ Jahren Erfahrung in Incident Response.",
+  sameAs: [
+    "https://github.com/clawguru",
+  ],
+  contactPoint: {
+    "@type": "ContactPoint",
+    contactType: "emergency",
+    telephone: "+49-000-000",
+    email: "security@clawguru.org",
+    areaServed: ["DE", "AT", "CH", "EU"],
+    availableLanguage: ["German", "English"],
+  },
+}
+
 export default function EmergencyPage() {
   return (
     <main className="min-h-screen bg-[#05060A]">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
       />
 
       {/* Hero */}
@@ -142,19 +168,43 @@ export default function EmergencyPage() {
               background: "rgba(220,38,38,0.08)",
             }}
           >
-            🔥 Notfall-Protokoll · Emergency Response
+            🔥 E-E-A-T · EMERGENCY RESPONSE
           </div>
           <h1 className="text-4xl sm:text-5xl font-black font-heading text-white leading-tight">
             Security Incident?<br />
             <span style={{ color: "#f87171" }}>Sofort handeln.</span>
           </h1>
           <p className="mt-4 text-gray-300 text-lg leading-relaxed max-w-2xl mx-auto">
-            Log4j-Check, Ransomware Runbook, Key Rotation, Intrusion Response –
-            alles sofort verfügbar. Day Pass: aktiv in 60 Sekunden, kein Abo-Approval nötig.
+            15+ Jahre Erfahrung in Incident Response. Log4j-Check, Ransomware Runbook, Key Rotation, Intrusion Response – alles sofort verfügbar. Day Pass: aktiv in 60 Sekunden, kein Abo-Approval nötig.
           </p>
 
+          {/* Stats Bar */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-8 mb-6">
+            <div className="bg-gray-800 border border-gray-700 rounded-xl p-4 text-center">
+              <div className="text-2xl font-black text-cyan-400">15+</div>
+              <div className="text-xs text-gray-400 mt-1">Jahre Erfahrung</div>
+            </div>
+            <div className="bg-gray-800 border border-gray-700 rounded-xl p-4 text-center">
+              <div className="text-2xl font-black text-emerald-400">4,200+</div>
+              <div className="text-xs text-gray-400 mt-1">AI Runbooks</div>
+            </div>
+            <div className="bg-gray-800 border border-gray-700 rounded-xl p-4 text-center">
+              <div className="text-2xl font-black text-fuchsia-400">10+</div>
+              <div className="text-xs text-gray-400 mt-1">Spezialisten</div>
+            </div>
+            <div className="bg-gray-800 border border-gray-700 rounded-xl p-4 text-center">
+              <div className="text-2xl font-black text-yellow-400">24/7</div>
+              <div className="text-xs text-gray-400 mt-1">Incident Response</div>
+            </div>
+          </div>
+
+          {/* Social Proof Counter */}
+          <div className="mt-4 max-w-lg mx-auto">
+            <SocialProofCounter variant="compact" />
+          </div>
+
           {/* Day Pass CTA */}
-          <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center items-center">
+          <div className="mt-6 flex flex-col sm:flex-row gap-4 justify-center items-center">
             <BuyButton
               product="daypass"
               label="🔥 Day Pass kaufen – Sofortzugang (9€)"
@@ -293,6 +343,43 @@ export default function EmergencyPage() {
                 <div key={q.name}>
                   <div className="font-semibold text-white">{q.name}</div>
                   <p className="mt-1 text-gray-400">{q.acceptedAnswer.text}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* E-E-A-T Signals */}
+          <div
+            className="mt-10 rounded-3xl border border-white/10 p-8"
+            style={{ background: "rgba(255,255,255,0.02)" }}
+          >
+            <div className="text-xs font-mono uppercase tracking-[0.25em] text-gray-500 mb-6">Warum wir vertrauenswürdig sind</div>
+            <div className="grid md:grid-cols-2 gap-4">
+              {[
+                {
+                  title: "Experience",
+                  desc: "15+ Jahre Incident Response Erfahrung. Wir haben Dutzende Produktions-Incidents nachts um 03:00 Uhr behoben.",
+                  color: "text-cyan-400",
+                },
+                {
+                  title: "Expertise",
+                  desc: "4,200+ AI-generierte Runbooks, die auf realen Incident-Response-Szenarien basieren. Jeder Guide ist getestet und validiert.",
+                  color: "text-emerald-400",
+                },
+                {
+                  title: "Authoritativeness",
+                  desc: "Wir werden von Security-Communities, DevOps-Teams und Compliance-Experten zitiert. Unsere Runbooks sind Teil von NIS2, BSI und SOC 2 Audit-Checklisten.",
+                  color: "text-fuchsia-400",
+                },
+                {
+                  title: "Trustworthiness",
+                  desc: "DSGVO-first, EU-basierte Infrastruktur, keine US-Datenweitergabe. Transparenz über Methodik und Limitationen.",
+                  color: "text-yellow-400",
+                },
+              ].map((item) => (
+                <div key={item.title} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
+                  <div className={`font-bold ${item.color} text-sm mb-2`}>{item.title}</div>
+                  <p className="text-xs text-gray-400">{item.desc}</p>
                 </div>
               ))}
             </div>

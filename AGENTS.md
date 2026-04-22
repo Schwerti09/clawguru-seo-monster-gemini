@@ -65,6 +65,9 @@
 - **Über-uns Mega-Team Expansion abgeschlossen:** 10 Spezialisten (Rolf S.), E-E-A-T Signals, Schema.org Organization + Person, Metadata
 - **Commit:** `605c63c0` + `79409006` (fix: revert R. Schwertfechter to Rolf S.)
 - **Features:** 15+ Jahre Erfahrung, 4,200+ AI Runbooks, 10+ Spezialisten, 24/7 Incident Response
+- **Team-Seite Mega-Team Expansion abgeschlossen:** 10 Spezialisten (Rolf S.), E-E-A-T Signals, Metadata
+- **Commit:** `00242146`
+- **Features:** Hero Section, Stats Bar (15+ Jahre, 4,200+ Runbooks, 10+ Spezialisten, 24/7 Incident Response), 10 Team-Mitglieder, E-E-A-T Signals (Experience, Expertise, Authoritativeness, Trustworthiness)
 
 ---
 

@@ -12,8 +12,45 @@ export async function generateStaticParams() {
 export async function generateMetadata(props: { params: { lang: string } }): Promise<Metadata> {
   const params = props.params
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
+  const isDE = locale === "de"
 
-  return { ...(rootMetadata as Metadata), alternates: buildLocalizedAlternates(locale, "/emergency") }
+  const title = isDE
+    ? "Emergency Security Response — ClawGuru Day Pass"
+    : "Emergency Security Response — ClawGuru Day Pass"
+
+  const description = isDE
+    ? "Security Incident? Log4j-Check, Ransomware Runbook, Key Rotation, Intrusion Response – alles sofort verfügbar. Day Pass: aktiv in 60 Sekunden, kein Abo-Approval nötig."
+    : "Security incident? Log4j check, ransomware runbook, key rotation, intrusion response – all instantly available. Day Pass: active in 60 seconds, no subscription approval needed."
+
+  return {
+    title,
+    description,
+    keywords: [
+      "log4j quick check",
+      "log4j vulnerability check",
+      "ransomware runbook download",
+      "ransomware incident response",
+      "security incident emergency",
+      "emergency incident response playbook",
+      "cve quick check",
+      "it security emergency",
+      "security breach response",
+      "incident runbook",
+    ],
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      locale: locale === "de" ? "de_DE" : "en_US",
+      alternateLocale: SUPPORTED_LOCALES.map((l) => (l === "de" ? "de_DE" : "en_US")),
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+    },
+    alternates: buildLocalizedAlternates(locale, "/emergency"),
+  }
 }
 
 export default function LocaleEmergencyPage() {

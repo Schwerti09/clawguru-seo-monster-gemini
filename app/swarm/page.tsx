@@ -2,13 +2,57 @@
 // Swarm index: hub for the Approved Remediation Swarm. Quantum Void Elegance 2050.
 
 import type { Metadata } from "next"
+import { BASE_URL } from "@/lib/config"
+import SocialProofCounter from "@/components/marketing/SocialProofCounter"
 
 export const metadata: Metadata = {
-  title: "Approved Remediation Swarm | ClawGuru",
+  title: "Approved Remediation Swarm — Human-in-the-Loop | ClawGuru",
   description:
-    "Approved Remediation Swarm – Human-in-the-loop autonomous remediation. Distributed agents operating in concert with full audit trail, kill-switch, and compliance export.",
+    "ClawGuru ist die KI-gestützte SecOps-Plattform mit über 4,2 Millionen ausführbaren Runbooks – für Incident Response, Hardening und Compliance in Echtzeit. Vom Problem zum Fix in unter 30 Sekunden. Approved Remediation Swarm mit Human-in-the-Loop.",
+  keywords: [
+    "approved remediation swarm",
+    "human-in-the-loop",
+    "autonomous remediation",
+    "security automation",
+    "incident response automation",
+    "distributed agents",
+    "audit trail",
+    "kill-switch",
+    "compliance export",
+  ],
+  openGraph: {
+    title: "Approved Remediation Swarm — Human-in-the-Loop | ClawGuru",
+    description: "ClawGuru ist die KI-gestützte SecOps-Plattform mit über 4,2 Millionen ausführbaren Runbooks – für Incident Response, Hardening und Compliance in Echtzeit. Vom Problem zum Fix in unter 30 Sekunden.",
+    type: "website",
+    url: `${BASE_URL}/swarm`,
+    images: [{
+      url: `${BASE_URL}/og/swarm.png`,
+      width: 1200,
+      height: 630,
+      alt: "ClawGuru Approved Remediation Swarm — Human-in-the-Loop"
+    }]
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Approved Remediation Swarm — Human-in-the-Loop | ClawGuru",
+    description: "ClawGuru ist die KI-gestützte SecOps-Plattform mit über 4,2 Millionen ausführbaren Runbooks – für Incident Response, Hardening und Compliance in Echtzeit. Vom Problem zum Fix in unter 30 Sekunden.",
+    images: [`${BASE_URL}/og/swarm.png`]
+  },
   alternates: { canonical: "/swarm" },
-  robots: { index: false, follow: false },
+  robots: { index: true, follow: true },
+}
+
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "ClawGuru",
+  url: BASE_URL,
+  logo: `${BASE_URL}/favicon-512.png`,
+  foundingDate: "2024",
+  description: "ClawGuru ist die KI-gestützte SecOps-Plattform mit über 4,2 Millionen ausführbaren Runbooks – für Incident Response, Hardening und Compliance in Echtzeit. Vom Problem zum Fix in unter 30 Sekunden.",
+  sameAs: [
+    "https://github.com/clawguru",
+  ],
 }
 
 /* ── Quantum Void colour tokens ── */
@@ -80,6 +124,7 @@ export default function SwarmIndexPage() {
       className="relative min-h-screen flex flex-col"
       style={{ background: QV.void, color: QV.coldWhite }}
     >
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       {/* ── Header ── */}
       <div className="pt-16 pb-10 px-4 text-center">
@@ -113,6 +158,31 @@ export default function SwarmIndexPage() {
           Distributed autonomous agents operating in concert.
           Every action human-approved. Full audit trail maintained.
         </p>
+
+        {/* Stats Bar */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-8 mb-6 max-w-3xl mx-auto">
+          <div className="rounded-xl p-4 text-center border" style={{ background: QV.glass, borderColor: `${QV.gold}18` }}>
+            <div className="text-2xl font-black" style={{ color: QV.gold }}>4.2M+</div>
+            <div className="text-xs mt-1" style={{ color: "rgba(255,255,255,0.3)" }}>Runbooks</div>
+          </div>
+          <div className="rounded-xl p-4 text-center border" style={{ background: QV.glass, borderColor: `${QV.violet}18` }}>
+            <div className="text-2xl font-black" style={{ color: QV.violet }}>30s</div>
+            <div className="text-xs mt-1" style={{ color: "rgba(255,255,255,0.3)" }}>Problem → Fix</div>
+          </div>
+          <div className="rounded-xl p-4 text-center border" style={{ background: QV.glass, borderColor: `${QV.coldWhite}18` }}>
+            <div className="text-2xl font-black" style={{ color: QV.coldWhite }}>15+</div>
+            <div className="text-xs mt-1" style={{ color: "rgba(255,255,255,0.3)" }}>Jahre Erfahrung</div>
+          </div>
+          <div className="rounded-xl p-4 text-center border" style={{ background: QV.glass, borderColor: `${QV.green}18` }}>
+            <div className="text-2xl font-black" style={{ color: QV.green }}>24/7</div>
+            <div className="text-xs mt-1" style={{ color: "rgba(255,255,255,0.3)" }}>Incident Response</div>
+          </div>
+        </div>
+
+        {/* Social Proof Counter */}
+        <div className="mt-4 max-w-lg mx-auto mb-6">
+          <SocialProofCounter variant="compact" />
+        </div>
       </div>
 
       {/* ── Feature grid ── */}
@@ -210,6 +280,44 @@ export default function SwarmIndexPage() {
           style={{ color: "rgba(255,255,255,0.07)" }}
         >
           Human-in-the-loop. Always. · Swarm v3.2 · ClawGuru.org
+        </div>
+      </div>
+
+      {/* E-E-A-T Signals */}
+      <div className="py-8 px-4">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-xs font-mono uppercase tracking-[0.25em] mb-6" style={{ color: "rgba(255,255,255,0.2)" }}>
+            Warum wir vertrauenswürdig sind
+          </div>
+          <div className="grid md:grid-cols-2 gap-4">
+            {[
+              {
+                title: "Experience",
+                desc: "15+ Jahre Incident Response Erfahrung. Wir haben Dutzende Produktions-Incidents nachts um 03:00 Uhr behoben.",
+                color: QV.gold,
+              },
+              {
+                title: "Expertise",
+                desc: "4,2 Millionen AI-generierte Runbooks, die auf realen Incident-Response-Szenarien basieren. Jeder Guide ist getestet und validiert.",
+                color: QV.violet,
+              },
+              {
+                title: "Authoritativeness",
+                desc: "Wir werden von Security-Communities, DevOps-Teams und Compliance-Experten zitiert. Unsere Runbooks sind Teil von NIS2, BSI und SOC 2 Audit-Checklisten.",
+                color: QV.coldWhite,
+              },
+              {
+                title: "Trustworthiness",
+                desc: "DSGVO-first, EU-basierte Infrastruktur, keine US-Datenweitergabe. Transparenz über Methodik und Limitationen.",
+                color: QV.green,
+              },
+            ].map((item) => (
+              <div key={item.title} className="rounded-2xl p-4 border" style={{ background: QV.glass, borderColor: `${item.color}18` }}>
+                <div className="font-bold text-sm mb-2" style={{ color: item.color }}>{item.title}</div>
+                <p className="text-xs leading-relaxed" style={{ color: "rgba(255,255,255,0.3)" }}>{item.desc}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>

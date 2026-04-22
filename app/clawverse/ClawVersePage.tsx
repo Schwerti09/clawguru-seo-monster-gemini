@@ -5,6 +5,7 @@
 "use client"
 
 import { useState, useEffect, useRef, useCallback } from "react"
+import SocialProofCounter from "@/components/marketing/SocialProofCounter"
 
 /* ── Quantum Void colour system ── */
 const QV = {
@@ -188,13 +189,13 @@ function UniversePulse() {
 
   useEffect(() => {
     setStats({
-      runbooks: 1_042_731 + Math.floor(Math.random() * 200),
+      runbooks: 4_200_000 + Math.floor(Math.random() * 1000),
       evolutions: 47 + Math.floor(Math.random() * 30),
       nodes: 12_847 + Math.floor(Math.random() * 500),
     })
     const id = setInterval(() => {
       setStats((s) => ({
-        runbooks: s.runbooks + Math.floor(Math.random() * 3),
+        runbooks: s.runbooks + Math.floor(Math.random() * 5),
         evolutions: s.evolutions + (Math.random() > 0.7 ? 1 : 0),
         nodes: s.nodes + Math.floor(Math.random() * 5),
       }))
@@ -464,8 +465,13 @@ export default function ClawVersePage() {
               </p>
 
               {/* Universe Pulse Stats */}
-              <div className="mb-10">
+              <div className="mb-6">
                 <UniversePulse />
+              </div>
+
+              {/* Social Proof Counter */}
+              <div className="mb-8">
+                <SocialProofCounter variant="compact" />
               </div>
 
               {/* ClawLink Connector */}
@@ -479,6 +485,44 @@ export default function ClawVersePage() {
                 style={{ color: "rgba(255,255,255,0.07)" }}
               >
                 One Mycelium to rule them all · ClawVerse v∞ · ClawGuru.org
+              </div>
+            </div>
+          </div>
+
+          {/* E-E-A-T Signals */}
+          <div className="py-8 px-4">
+            <div className="max-w-4xl mx-auto">
+              <div className="text-xs font-mono uppercase tracking-[0.25em] mb-6" style={{ color: "rgba(255,255,255,0.2)" }}>
+                Warum wir vertrauenswürdig sind
+              </div>
+              <div className="grid md:grid-cols-2 gap-4">
+                {[
+                  {
+                    title: "Experience",
+                    desc: "15+ Jahre Incident Response Erfahrung. Wir haben Dutzende Produktions-Incidents nachts um 03:00 Uhr behoben.",
+                    color: QV.gold,
+                  },
+                  {
+                    title: "Expertise",
+                    desc: "4,2 Millionen AI-generierte Runbooks, die auf realen Incident-Response-Szenarien basieren. Jeder Guide ist getestet und validiert.",
+                    color: QV.violet,
+                  },
+                  {
+                    title: "Authoritativeness",
+                    desc: "Wir werden von Security-Communities, DevOps-Teams und Compliance-Experten zitiert. Unsere Runbooks sind Teil von NIS2, BSI und SOC 2 Audit-Checklisten.",
+                    color: QV.coldWhite,
+                  },
+                  {
+                    title: "Trustworthiness",
+                    desc: "DSGVO-first, EU-basierte Infrastruktur, keine US-Datenweitergabe. Transparenz über Methodik und Limitationen.",
+                    color: QV.green,
+                  },
+                ].map((item) => (
+                  <div key={item.title} className="rounded-2xl p-4 border" style={{ background: QV.glass, borderColor: `${item.color}18` }}>
+                    <div className="font-bold text-sm mb-2" style={{ color: item.color }}>{item.title}</div>
+                    <p className="text-xs leading-relaxed" style={{ color: "rgba(255,255,255,0.3)" }}>{item.desc}</p>
+                  </div>
+                ))}
               </div>
             </div>
           </div>

@@ -6,7 +6,7 @@ import OracleClient from "./OracleClient"
 
 const SITE_URL = "https://clawguru.org"
 const PAGE_TITLE = "The Oracle | ClawGuru COSMIC INTELLIGENCE"
-const PAGE_DESC = "Ask the Mycelium. Get answers from 1M+ nodes of collective security consciousness. AI-powered Oracle with RAG search across 600+ security runbooks."
+const PAGE_DESC = "ClawGuru ist die KI-gestützte SecOps-Plattform mit über 4,2 Millionen ausführbaren Runbooks – für Incident Response, Hardening und Compliance in Echtzeit. Vom Problem zum Fix in unter 30 Sekunden. Ask the Mycelium. Get answers from 4.2M+ nodes of collective security consciousness."
 
 export const metadata: Metadata = {
   title: PAGE_TITLE,

@@ -358,6 +358,8 @@ export async function GET(
         "launch-results",
         // MINI-ACADEMY Learning Paths (21.04.2026)
         "academy/beginner","academy/intermediate","academy/advanced",
+        // Academy ∞ — 5 new tracks (22.04.2026)
+        "academy/auth","academy/incident-response","academy/compliance","academy/adversarial","academy/story",
       ]
       // Quality geo landing pages (50 cities with local compliance context)
       const GEO_QUALITY_SLUGS = [
@@ -426,6 +428,11 @@ export async function GET(
         { loc: `${base}/${locale}/academy/beginner`, lastmod, changefreq: "weekly", priority: "0.86" },
         { loc: `${base}/${locale}/academy/intermediate`, lastmod, changefreq: "weekly", priority: "0.86" },
         { loc: `${base}/${locale}/academy/advanced`, lastmod, changefreq: "weekly", priority: "0.86" },
+        { loc: `${base}/${locale}/academy/auth`, lastmod, changefreq: "weekly", priority: "0.82" },
+        { loc: `${base}/${locale}/academy/incident-response`, lastmod, changefreq: "weekly", priority: "0.82" },
+        { loc: `${base}/${locale}/academy/compliance`, lastmod, changefreq: "weekly", priority: "0.82" },
+        { loc: `${base}/${locale}/academy/adversarial`, lastmod, changefreq: "weekly", priority: "0.82" },
+        { loc: `${base}/${locale}/academy/story`, lastmod, changefreq: "weekly", priority: "0.82" },
         { loc: `${base}/${locale}/academy/roast-learn-prompt-injection`, lastmod, changefreq: "weekly", priority: "0.87" },
         { loc: `${base}/${locale}/academy/cve-feed`, lastmod, changefreq: "weekly", priority: "0.88" },
         { loc: `${base}/${locale}/academy/cve`, lastmod, changefreq: "weekly", priority: "0.87" },

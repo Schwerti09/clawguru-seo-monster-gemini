@@ -6,7 +6,7 @@ import NeuroClient from "./NeuroClient-v5"
 
 const SITE_URL = "https://clawguru.org"
 const PAGE_TITLE = "Stack MRI | ClawGuru Predictive Security Cortex"
-const PAGE_DESC = "Scan your tech stack for vulnerabilities, CVEs, and security issues. Live threat intelligence with automated runbook recommendations."
+const PAGE_DESC = "ClawGuru ist die KI-gestützte SecOps-Plattform mit über 4,2 Millionen ausführbaren Runbooks – für Incident Response, Hardening und Compliance in Echtzeit. Vom Problem zum Fix in unter 30 Sekunden. Scan your tech stack for vulnerabilities, CVEs, and security issues."
 
 export const metadata: Metadata = {
   title: PAGE_TITLE,

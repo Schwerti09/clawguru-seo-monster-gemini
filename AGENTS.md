@@ -2,7 +2,40 @@
 
 > **This document is the single source of truth for every agent working in this codebase.**
 > Read it completely BEFORE making any change. Update the Session Log after every session.
-> Last updated: 20.04.2026 | Language: English (maximises AI model compatibility)
+> Last updated: 22.04.2026 | Language: English (maximises AI model compatibility)
+
+---
+
+## 🚨 ACTIVE INITIATIVE (22.04.2026) — ACADEMY ∞ REBUILD
+
+**Master plan:** [`docs/academy-infinity-plan-2026-04-22.md`](docs/academy-infinity-plan-2026-04-22.md)
+
+**Scope:** Complete rebuild of `/academy` into the "Living Cyber Range" — browser-native Linux simulator, AI mentor (Sentinel), 15 inline security tools, narrative campaign (Hodlberg AG), proof-of-work certification, digital twin, 80+ missions × 50 languages.
+
+**Status:** Build STARTED — Step 1 (Academy Hub Redesign) complete (22.04.2026).
+
+**Step 1 — Academy Hub Redesign — ✅ COMPLETE (22.04.2026)**
+- `lib/academy/hubContent.ts` — new co-located content module, `TRACKS[]` + `getHubContent(locale)` with DE + EN authored, fallback to EN for other locales (translator pipeline target when aya-expanse is ready)
+- `app/[lang]/academy/page.tsx` — full rewrite: atmospheric hero (radial gradients + subtle grid + scanlines), 8-track responsive grid (4-col XL), per-track accent color system, Schema.org `Course` + `BreadcrumbList` markup, story teaser section, EmailCapture
+- `components/academy/TrackComingSoon.tsx` — shared shell for "soon" tracks (back-link, mission preview list, waitlist EmailCapture)
+- 5 new track pages, all generateStaticParams across 31 locales: `/academy/auth`, `/academy/incident-response`, `/academy/compliance`, `/academy/adversarial`, `/academy/story`
+- `app/sitemaps/[name]/route.ts` — GUIDE_SLUGS + explicit per-locale URL entries for all 5 new tracks (priority 0.82)
+- Existing tracks (`beginner`, `intermediate`, `advanced`) unchanged — URLs preserved, content renders via new hub
+- Type-check: `npx tsc --noEmit` → exit 0
+
+**Next — Step 2:** xterm.js Proof-of-Concept for 1 playable mission (browser-native Linux simulator).
+
+**Parallel workstream — i18n Round 14 → 50 languages:**
+- Target extended from 30 → 50 languages (API rate limits required local LLM)
+- Pipeline: `aya-expanse:32b` via Ollama at `localhost:11434` as primary translator
+- Fallbacks: Gemini, DeepSeek, OpenAI APIs
+- Current pull progress: aya-expanse:32b downloading (~20 GB)
+- Already tested: `qwen2.5:3b` — quality confirmed unusable for EU languages
+- Reference doc: see Section 1.3 of the academy plan
+
+**Deployment:** Netlify remains production; Railway and Vercel are future-target candidates. All new work is deploy-agnostic.
+
+**Do-not-touch while active:** `app/[lang]/summon/*` and `components/summon/*` (Windsurf owns).
 
 ---
 
@@ -71,6 +104,9 @@
 - **Emergency-Seite Mega-Expansion abgeschlossen:** Hero Section, Stats Bar, E-E-A-T Signals, Schema.org Organization, Social Proof Counter
 - **Commit:** `6c9cf850`
 - **Features:** Hero Section mit E-E-A-T Badge, Stats Bar (15+ Jahre, 4,200+ AI Runbooks, 10+ Spezialisten, 24/7 Incident Response), E-E-A-T Signals (Experience, Expertise, Authoritativeness, Trustworthiness), Schema.org Organization JSON-LD, Social Proof Counter
+- **Summon-Seite Mega-Expansion abgeschlossen:** Hero Section, Stats Bar (4,2M Runbooks, 30s Fix), E-E-A-T Signals, Schema.org Organization, Social Proof Counter
+- **Commit:** `f05686b1`
+- **Features:** Hero Section mit E-E-A-T Badge, Stats Bar (4,2M Runbooks, 30s Problem → Fix, 15+ Jahre, 24/7 Incident Response), E-E-A-T Signals (Experience, Expertise, Authoritativeness, Trustworthiness), Schema.org Organization JSON-LD, Social Proof Counter, Metadata mit OpenGraph
 
 ---
 

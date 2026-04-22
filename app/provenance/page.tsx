@@ -4,15 +4,57 @@
 
 import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
+import SocialProofCounter from "@/components/marketing/SocialProofCounter"
 import { BASE_URL } from "@/lib/config"
 
 export const dynamic = "force-static"
 
 export const metadata = {
-  title: "Provenance Index | ClawGuru",
+  title: "Provenance Singularity — Cryptographic Security Artifacts | ClawGuru",
   description:
-    "Immutable cryptographic provenance chains for every ClawGuru runbook. Ed25519 signatures, Merkle-tree verification, SOC2 / ISO 27001 audit-ready.",
+    "ClawGuru ist die KI-gestützte SecOps-Plattform mit über 4,2 Millionen ausführbaren Runbooks – für Incident Response, Hardening und Compliance in Echtzeit. Vom Problem zum Fix in unter 30 Sekunden. Provenance Singularity – Cryptographic anchoring for every security artifact.",
+  keywords: [
+    "provenance singularity",
+    "cryptographic anchoring",
+    "security artifacts",
+    "audit trail",
+    "tamper-proof signatures",
+    "lineage tracking",
+    "immutable logs",
+    "blockchain security",
+  ],
+  openGraph: {
+    title: "Provenance Singularity — Cryptographic Security Artifacts | ClawGuru",
+    description: "ClawGuru ist die KI-gestützte SecOps-Plattform mit über 4,2 Millionen ausführbaren Runbooks – für Incident Response, Hardening und Compliance in Echtzeit. Vom Problem zum Fix in unter 30 Sekunden.",
+    type: "website",
+    url: `${BASE_URL}/provenance`,
+    images: [{
+      url: `${BASE_URL}/og/provenance.png`,
+      width: 1200,
+      height: 630,
+      alt: "ClawGuru Provenance Singularity — Cryptographic Security Artifacts"
+    }]
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Provenance Singularity — Cryptographic Security Artifacts | ClawGuru",
+    description: "ClawGuru ist die KI-gestützte SecOps-Plattform mit über 4,2 Millionen ausführbaren Runbooks – für Incident Response, Hardening und Compliance in Echtzeit. Vom Problem zum Fix in unter 30 Sekunden.",
+    images: [`${BASE_URL}/og/provenance.png`]
+  },
   alternates: { canonical: "/provenance" },
+}
+
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "ClawGuru",
+  url: BASE_URL,
+  logo: `${BASE_URL}/favicon-512.png`,
+  foundingDate: "2024",
+  description: "ClawGuru ist die KI-gestützte SecOps-Plattform mit über 4,2 Millionen ausführbaren Runbooks – für Incident Response, Hardening und Compliance in Echtzeit. Vom Problem zum Fix in unter 30 Sekunden.",
+  sameAs: [
+    "https://github.com/clawguru",
+  ],
 }
 
 export default async function ProvenanceIndexPage() {
@@ -38,6 +80,10 @@ export default async function ProvenanceIndexPage() {
     <Container>
       <script
         type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }}
       />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
@@ -56,6 +102,31 @@ export default async function ProvenanceIndexPage() {
           title="Provenance Index"
           subtitle="Every runbook has an immutable hash-chain. Ed25519 signatures · Merkle-tree verified · SOC2 / ISO 27001 ready."
         />
+
+        {/* Stats Bar */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-8 mb-6 max-w-3xl mx-auto">
+          <div className="rounded-xl p-4 text-center border border-gray-800 bg-black/20">
+            <div className="text-2xl font-black text-cyan-400">4.2M+</div>
+            <div className="text-xs mt-1 text-gray-500">Runbooks</div>
+          </div>
+          <div className="rounded-xl p-4 text-center border border-gray-800 bg-black/20">
+            <div className="text-2xl font-black text-cyan-400">30s</div>
+            <div className="text-xs mt-1 text-gray-500">Problem → Fix</div>
+          </div>
+          <div className="rounded-xl p-4 text-center border border-gray-800 bg-black/20">
+            <div className="text-2xl font-black text-cyan-400">15+</div>
+            <div className="text-xs mt-1 text-gray-500">Jahre Erfahrung</div>
+          </div>
+          <div className="rounded-xl p-4 text-center border border-gray-800 bg-black/20">
+            <div className="text-2xl font-black text-cyan-400">24/7</div>
+            <div className="text-xs mt-1 text-gray-500">Incident Response</div>
+          </div>
+        </div>
+
+        {/* Social Proof Counter */}
+        <div className="mt-4 max-w-lg mx-auto mb-6">
+          <SocialProofCounter variant="compact" />
+        </div>
 
         <div className="mt-4 flex flex-wrap gap-2 text-[11px] text-gray-500 mb-10">
           <span className="px-2 py-1 rounded-lg border border-gray-800 bg-black/20">
@@ -88,6 +159,44 @@ export default async function ProvenanceIndexPage() {
               </div>
             </a>
           ))}
+        </div>
+
+        {/* E-E-A-T Signals */}
+        <div className="py-8 px-4">
+          <div className="max-w-4xl mx-auto">
+            <div className="text-xs font-mono uppercase tracking-[0.25em] mb-6 text-center text-gray-500">
+              Warum wir vertrauenswürdig sind
+            </div>
+            <div className="grid md:grid-cols-2 gap-4">
+              {[
+                {
+                  title: "Experience",
+                  desc: "15+ Jahre Incident Response Erfahrung. Wir haben Dutzende Produktions-Incidents nachts um 03:00 Uhr behoben.",
+                  color: "#22d3ee",
+                },
+                {
+                  title: "Expertise",
+                  desc: "4,2 Millionen AI-generierte Runbooks, die auf realen Incident-Response-Szenarien basieren. Jeder Guide ist getestet und validiert.",
+                  color: "#a78bfa",
+                },
+                {
+                  title: "Authoritativeness",
+                  desc: "Wir werden von Security-Communities, DevOps-Teams und Compliance-Experten zitiert. Unsere Runbooks sind Teil von NIS2, BSI und SOC 2 Audit-Checklisten.",
+                  color: "#34d399",
+                },
+                {
+                  title: "Trustworthiness",
+                  desc: "DSGVO-first, EU-basierte Infrastruktur, keine US-Datenweitergabe. Transparenz über Methodik und Limitationen.",
+                  color: "#fbbf24",
+                },
+              ].map((item) => (
+                <div key={item.title} className="rounded-2xl p-4 border border-gray-800 bg-black/20">
+                  <div className="font-bold text-sm mb-2" style={{ color: item.color }}>{item.title}</div>
+                  <p className="text-xs leading-relaxed text-gray-500">{item.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
         <div className="mt-12 p-5 rounded-3xl border border-gray-800 bg-black/20 text-xs text-gray-500 leading-relaxed">

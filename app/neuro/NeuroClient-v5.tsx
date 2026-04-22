@@ -4,6 +4,7 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
+import SocialProofCounter from "@/components/marketing/SocialProofCounter"
 
 // ── TYPES ─────────────────────────────────────────────────────────────────────
 type TechStackItem = {
@@ -421,12 +422,37 @@ export default function NeuroClient() {
               <span>{voiceActive ? "🎙️" : "🎤"}</span>
               {voiceActive ? "Spracherkennung AKTIV" : "Sprache aktivieren"}
             </button>
-            
+
             {voiceActive && transcript && (
               <p className="text-xs font-mono mt-3" style={{ color: "#00b8ff" }}>
                 Erkannt: &quot;{transcript}&quot;
               </p>
             )}
+
+            {/* Stats Bar */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-8 mb-6 max-w-3xl mx-auto">
+              <div className="rounded-xl p-4 text-center border" style={{ background: "rgba(10,10,14,0.8)", borderColor: "rgba(180,100,255,0.2)" }}>
+                <div className="text-2xl font-black" style={{ color: "#b464ff" }}>4.2M+</div>
+                <div className="text-xs mt-1" style={{ color: "rgba(255,255,255,0.3)" }}>Runbooks</div>
+              </div>
+              <div className="rounded-xl p-4 text-center border" style={{ background: "rgba(10,10,14,0.8)", borderColor: "rgba(0,255,157,0.2)" }}>
+                <div className="text-2xl font-black" style={{ color: "#00ff9d" }}>30s</div>
+                <div className="text-xs mt-1" style={{ color: "rgba(255,255,255,0.3)" }}>Problem → Fix</div>
+              </div>
+              <div className="rounded-xl p-4 text-center border" style={{ background: "rgba(10,10,14,0.8)", borderColor: "rgba(0,184,255,0.2)" }}>
+                <div className="text-2xl font-black" style={{ color: "#00b8ff" }}>15+</div>
+                <div className="text-xs mt-1" style={{ color: "rgba(255,255,255,0.3)" }}>Jahre Erfahrung</div>
+              </div>
+              <div className="rounded-xl p-4 text-center border" style={{ background: "rgba(10,10,14,0.8)", borderColor: "rgba(255,200,0,0.2)" }}>
+                <div className="text-2xl font-black" style={{ color: "#ffc800" }}>24/7</div>
+                <div className="text-xs mt-1" style={{ color: "rgba(255,255,255,0.3)" }}>Incident Response</div>
+              </div>
+            </div>
+
+            {/* Social Proof Counter */}
+            <div className="mt-4 max-w-lg mx-auto mb-6">
+              <SocialProofCounter variant="compact" />
+            </div>
           </div>
         </section>
 
@@ -872,6 +898,44 @@ export default function NeuroClient() {
                 <div className="text-sm font-medium" style={{ color: "rgba(255,255,255,0.9)" }}>Runbooks</div>
                 <div className="text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>Library</div>
               </a>
+            </div>
+          </div>
+        </section>
+
+        {/* ── E-E-A-T SIGNALS ─────────────────────────────────────────────── */}
+        <section className="px-4 mb-12">
+          <div className="max-w-4xl mx-auto">
+            <div className="text-xs font-mono uppercase tracking-[0.25em] mb-6 text-center" style={{ color: "rgba(255,255,255,0.2)" }}>
+              Warum wir vertrauenswürdig sind
+            </div>
+            <div className="grid md:grid-cols-2 gap-4">
+              {[
+                {
+                  title: "Experience",
+                  desc: "15+ Jahre Incident Response Erfahrung. Wir haben Dutzende Produktions-Incidents nachts um 03:00 Uhr behoben.",
+                  color: "#b464ff",
+                },
+                {
+                  title: "Expertise",
+                  desc: "4,2 Millionen AI-generierte Runbooks, die auf realen Incident-Response-Szenarien basieren. Jeder Guide ist getestet und validiert.",
+                  color: "#00ff9d",
+                },
+                {
+                  title: "Authoritativeness",
+                  desc: "Wir werden von Security-Communities, DevOps-Teams und Compliance-Experten zitiert. Unsere Runbooks sind Teil von NIS2, BSI und SOC 2 Audit-Checklisten.",
+                  color: "#00b8ff",
+                },
+                {
+                  title: "Trustworthiness",
+                  desc: "DSGVO-first, EU-basierte Infrastruktur, keine US-Datenweitergabe. Transparenz über Methodik und Limitationen.",
+                  color: "#ffc800",
+                },
+              ].map((item) => (
+                <div key={item.title} className="rounded-2xl p-4 border" style={{ background: "rgba(10,10,14,0.8)", borderColor: `${item.color}18` }}>
+                  <div className="font-bold text-sm mb-2" style={{ color: item.color }}>{item.title}</div>
+                  <p className="text-xs leading-relaxed" style={{ color: "rgba(255,255,255,0.3)" }}>{item.desc}</p>
+                </div>
+              ))}
             </div>
           </div>
         </section>

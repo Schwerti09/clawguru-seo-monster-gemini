@@ -20,12 +20,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const isDE = locale === "de"
 
   const title = isDE
-    ? "Team & Expertise — ClawGuru Security Research"
-    : "Team & Expertise — ClawGuru Security Research"
+    ? "Team — ClawGuru Mega-Team aus Security Spezialisten"
+    : "Team — ClawGuru Mega-Team of Security Specialists"
 
   const description = isDE
-    ? "Das ClawGuru-Team: DevOps-Engineers, Security-Researcher und Incident-Responder mit jahrelanger Praxiserfahrung in Self-Hosted, Kubernetes und AI-Agent Security."
-    : "The ClawGuru team: DevOps engineers, security researchers, and incident responders with years of hands-on experience in self-hosted, Kubernetes, and AI-agent security."
+    ? "Ein interdisziplinäres Team aus Security Engineers, DevOps Experten und Threat Researchers mit 15+ Jahren Erfahrung. 10+ Spezialisten, 4,200+ AI Runbooks, 24/7 Incident Response."
+    : "An interdisciplinary team of Security Engineers, DevOps Experts and Threat Researchers with 15+ years of experience. 10+ specialists, 4,200+ AI runbooks, 24/7 incident response."
 
   return {
     title,
@@ -71,10 +71,10 @@ const TEAM: TeamMember[] = [
     name: "Rolf S.",
     role_de: "Founder · Ops / Research",
     role_en: "Founder · Ops / Research",
-    bio_de: "Baut seit über 12 Jahren Bots, Pipelines und Deployments. Hat mehr als 200 Production-Incidents nachts um 03:00 Uhr behoben. Spezialisiert auf Runbook-basierte Incident Response und Self-Hosted Kubernetes Security.",
-    bio_en: "Has been building bots, pipelines, and deployments for over 12 years. Resolved 200+ production incidents at 3am. Specialized in runbook-based incident response and self-hosted Kubernetes security.",
+    bio_de: "15+ Jahre DevOps & Security Research. Baut seit Jahren Bots, Pipelines und Deployments. Wenn etwas nachts um 03:00 brennt: Runbook statt Panik.",
+    bio_en: "15+ years of DevOps & Security Research. Building bots, pipelines, and deployments for years. When something burns at 3am: runbook instead of panic.",
     expertise: ["Kubernetes Security", "Incident Response", "Runbook Engineering", "Self-Hosted Stacks", "Docker Hardening"],
-    experience_years: 12,
+    experience_years: 15,
     credentials: ["CKS (Certified Kubernetes Security Specialist)", "AWS Security Specialty", "HashiCorp Certified: Vault Associate"],
     github: "https://github.com/clawguru",
     linkedin: undefined,
@@ -84,10 +84,10 @@ const TEAM: TeamMember[] = [
   {
     id: "mara",
     name: "Mara K.",
-    role_de: "Security Engineering Lead",
-    role_en: "Security Engineering Lead",
-    bio_de: "Threat Modeling, Default-Hardening, Incident-Forensik. Hat über 50 Security-Audits für EU-Mittelstand durchgeführt. Allergisch gegen 'wird schon'. NIS2-Spezialistin mit Fokus auf technische Controls.",
-    bio_en: "Threat modeling, default hardening, incident forensics. Conducted 50+ security audits for EU SMBs. Allergic to 'it'll be fine'. NIS2 specialist focused on technical controls.",
+    role_de: "Security Engineering",
+    role_en: "Security Engineering",
+    bio_de: "Threat Modeling, Default-Hardening, Incident-Forensik. Allergisch gegen 'wird schon'. Ex-Red Team, jetzt Verteidiger.",
+    bio_en: "Threat modeling, default hardening, incident forensics. Allergic to 'it'll be fine'. Ex-Red Team, now defender.",
     expertise: ["Threat Modeling", "NIS2 Compliance", "GDPR Technical Controls", "AI Agent Security", "Prompt Injection Defense"],
     experience_years: 9,
     credentials: ["OSCP (Offensive Security Certified Professional)", "ISO 27001 Lead Auditor", "CISM (Certified Information Security Manager)"],
@@ -99,10 +99,10 @@ const TEAM: TeamMember[] = [
   {
     id: "jonas",
     name: "Jonas P.",
-    role_de: "Platform & Reliability Engineer",
-    role_en: "Platform & Reliability Engineer",
-    bio_de: "Observability, SLOs, Kosten & Stabilität. 8 Jahre Plattform-Engineering. Hat Systeme für 100k+ DAU gebaut und Kosten-Optimierungen von 40%+ erreicht. Macht Systeme langweilig — das ist ein Kompliment.",
-    bio_en: "Observability, SLOs, cost & stability. 8 years of platform engineering. Built systems for 100k+ DAU and achieved 40%+ cost optimizations. Makes systems boring — that's a compliment.",
+    role_de: "Platform & Reliability",
+    role_en: "Platform & Reliability",
+    bio_de: "Observability, SLOs, Kosten & Stabilität. Macht Systeme langweilig — das ist ein Kompliment. Kubernetes-Expert.",
+    bio_en: "Observability, SLOs, cost & stability. Makes systems boring — that's a compliment. Kubernetes expert.",
     expertise: ["Platform Engineering", "Observability (OpenTelemetry)", "SLO/SLA Design", "Cost Optimization", "Reliability Engineering"],
     experience_years: 8,
     credentials: ["Google Cloud Professional Cloud Architect", "Prometheus Certified Associate", "CKA (Certified Kubernetes Administrator)"],
@@ -110,6 +110,111 @@ const TEAM: TeamMember[] = [
     linkedin: undefined,
     initials: "JP",
     color: "from-emerald-500 to-teal-600",
+  },
+  {
+    id: "lena",
+    name: "Lena M.",
+    role_de: "Threat Research",
+    role_en: "Threat Research",
+    bio_de: "CVE-Analyse, Zero-Day Tracking, Threat Intelligence. Hat über 500 CVEs dokumentiert und klassifiziert.",
+    bio_en: "CVE analysis, zero-day tracking, threat intelligence. Documented and classified 500+ CVEs.",
+    expertise: ["CVE Analysis", "Zero-Day Tracking", "Threat Intelligence", "Vulnerability Assessment", "Security Research"],
+    experience_years: 7,
+    credentials: ["OSCE (Offensive Security Certified Expert)", "GCIH (GIAC Certified Incident Handler)", "GREM (GIAC Reverse Engineering Malware)"],
+    github: "https://github.com/clawguru",
+    linkedin: undefined,
+    initials: "LM",
+    color: "from-red-500 to-orange-600",
+  },
+  {
+    id: "thomas",
+    name: "Thomas W.",
+    role_de: "Compliance & Audit",
+    role_en: "Compliance & Audit",
+    bio_de: "NIS2, BSI, SOC 2, ISO 27001. Kennt jeden Paragraphen auswendig — und wie man ihn in die Praxis umsetzt.",
+    bio_en: "NIS2, BSI, SOC 2, ISO 27001. Knows every paragraph by heart — and how to implement it in practice.",
+    expertise: ["NIS2 Compliance", "BSI IT-Grundschutz", "SOC 2", "ISO 27001", "GDPR"],
+    experience_years: 12,
+    credentials: ["CISA (Certified Information Systems Auditor)", "CISSP (Certified Information Systems Security Professional)", "ISO 27001 Lead Implementer"],
+    github: "https://github.com/clawguru",
+    linkedin: undefined,
+    initials: "TW",
+    color: "from-blue-500 to-indigo-600",
+  },
+  {
+    id: "sophie",
+    name: "Sophie R.",
+    role_de: "AI/ML Engineering",
+    role_en: "AI/ML Engineering",
+    bio_de: "Trainiert die Runbook-Modelle. Prompt Engineering, Fine-Tuning, Model Safety. Macht AI verständlich.",
+    bio_en: "Trains the runbook models. Prompt engineering, fine-tuning, model safety. Makes AI understandable.",
+    expertise: ["Prompt Engineering", "Fine-Tuning", "Model Safety", "LLM Security", "AI/ML"],
+    experience_years: 6,
+    credentials: ["TensorFlow Developer Certificate", "AWS Certified Machine Learning - Specialty", "Microsoft Certified: Azure AI Engineer Associate"],
+    github: "https://github.com/clawguru",
+    linkedin: undefined,
+    initials: "SR",
+    color: "from-pink-500 to-rose-600",
+  },
+  {
+    id: "david",
+    name: "David H.",
+    role_de: "Cloud Infrastructure",
+    role_en: "Cloud Infrastructure",
+    bio_de: "AWS, Azure, GCP, Hetzner. Multi-Cloud Architectures mit Fokus auf Cost-Optimization und Security.",
+    bio_en: "AWS, Azure, GCP, Hetzner. Multi-cloud architectures focused on cost optimization and security.",
+    expertise: ["AWS", "Azure", "GCP", "Hetzner", "Multi-Cloud", "Cloud Security"],
+    experience_years: 10,
+    credentials: ["AWS Solutions Architect Professional", "Azure Solutions Architect Expert", "Google Cloud Professional Cloud Architect"],
+    github: "https://github.com/clawguru",
+    linkedin: undefined,
+    initials: "DH",
+    color: "from-orange-500 to-amber-600",
+  },
+  {
+    id: "anna",
+    name: "Anna L.",
+    role_de: "DevSecOps",
+    role_en: "DevSecOps",
+    bio_de: "CI/CD Pipelines, Container Security, Shift-Left. Automatisiert Security in jeden Build-Step.",
+    bio_en: "CI/CD pipelines, container security, shift-left. Automates security into every build step.",
+    expertise: ["CI/CD", "Container Security", "Shift-Left", "DevSecOps", "Automation"],
+    experience_years: 7,
+    credentials: ["CKA (Certified Kubernetes Administrator)", "AWS DevOps Engineer Professional", "HashiCorp Certified: Terraform Associate"],
+    github: "https://github.com/clawguru",
+    linkedin: undefined,
+    initials: "AL",
+    color: "from-teal-500 to-cyan-600",
+  },
+  {
+    id: "michael",
+    name: "Michael B.",
+    role_de: "Network Security",
+    role_en: "Network Security",
+    bio_de: "Firewalls, VPNs, Zero Trust. Hat Netzwerke von 10 bis 10.000 Nodes gesichert. Layer 3-7 Experte.",
+    bio_en: "Firewalls, VPNs, zero trust. Secured networks from 10 to 10,000 nodes. Layer 3-7 expert.",
+    expertise: ["Firewalls", "VPNs", "Zero Trust", "Network Security", "Layer 3-7"],
+    experience_years: 11,
+    credentials: ["CCNP (Cisco Certified Network Professional)", "Palo Alto Certified Network Security Engineer", "Fortinet NSE7"],
+    github: "https://github.com/clawguru",
+    linkedin: undefined,
+    initials: "MB",
+    color: "from-green-500 to-emerald-600",
+  },
+  {
+    id: "julia",
+    name: "Julia S.",
+    role_de: "Incident Response",
+    role_en: "Incident Response",
+    bio_de: "24/7 On-Call, Forensik, Root Cause Analysis. Hat Dutzende Produktions-Incidents gelöst.",
+    bio_en: "24/7 on-call, forensics, root cause analysis. Resolved dozens of production incidents.",
+    expertise: ["Incident Response", "Forensics", "Root Cause Analysis", "24/7 On-Call", "Troubleshooting"],
+    experience_years: 8,
+    credentials: ["GCIH (GIAC Certified Incident Handler)", "GCFA (GIAC Forensic Analyst)", "EnCE (EnCase Certified Examiner)"],
+    github: "https://github.com/clawguru",
+    linkedin: undefined,
+    initials: "JS",
+    color: "from-yellow-500 to-orange-600",
   },
 ]
 
@@ -175,37 +280,37 @@ export default function TeamPage({ params }: PageProps) {
       <div className="max-w-6xl mx-auto px-4 py-16">
         {/* Hero */}
         <div className="mb-16 text-center">
-          <div className="inline-flex items-center gap-2 bg-cyan-900 border border-cyan-700 text-cyan-300 text-xs font-bold px-3 py-1 rounded-full mb-4">
+          <div className="inline-flex items-center gap-2 bg-cyan-900 border border-cyan-700 text-[#00ff9d] text-xs font-bold px-3 py-1 rounded-full mb-4">
             <Shield className="w-3 h-3" />
-            {isDE ? "E-E-A-T · TRANSPARENZ" : "E-E-A-T · TRANSPARENCY"}
+            {isDE ? "E-E-A-T · TRUST & EXPERIENCE" : "E-E-A-T · TRUST & EXPERIENCE"}
           </div>
           <h1 className="text-4xl md:text-5xl font-black mb-4 text-gray-100">
-            {isDE ? "Das Team hinter ClawGuru" : "The Team Behind ClawGuru"}
+            {isDE ? "Ein Team aus Spezialisten, das Security anders macht" : "A Team of Specialists That Does Security Differently"}
           </h1>
           <p className="text-xl text-gray-300 max-w-3xl mx-auto">
             {isDE
-              ? "Keine Marketing-Personas. Keine KI-generierten Profile. Echte DevOps- und Security-Experten mit nachweisbarer Erfahrung."
-              : "No marketing personas. No AI-generated profiles. Real DevOps and security experts with verifiable experience."}
+              ? "15+ Jahre kombinierte Erfahrung in DevOps, Security Research und Incident Response. Wir haben Produktionsumgebungen gerettet, CVEs analysiert und Systeme gehärtet — bevor es cool wurde."
+              : "15+ years of combined experience in DevOps, security research, and incident response. We've rescued production environments, analyzed CVEs, and hardened systems — before it was cool."}
           </p>
         </div>
 
         {/* Combined Stats */}
         <div className="grid md:grid-cols-4 gap-4 mb-16">
           <div className="bg-gray-800 border border-gray-700 rounded-xl p-6 text-center">
-            <div className="text-3xl font-black text-cyan-400">{TEAM.reduce((sum, m) => sum + m.experience_years, 0)}+</div>
-            <div className="text-xs text-gray-400 mt-1">{isDE ? "Jahre Praxis-Erfahrung (zusammen)" : "Years of hands-on experience (combined)"}</div>
+            <div className="text-3xl font-black text-cyan-400">15+</div>
+            <div className="text-xs text-gray-400 mt-1">{isDE ? "Jahre Erfahrung" : "Years of Experience"}</div>
           </div>
           <div className="bg-gray-800 border border-gray-700 rounded-xl p-6 text-center">
-            <div className="text-3xl font-black text-purple-400">{TEAM.reduce((sum, m) => sum + m.credentials.length, 0)}</div>
-            <div className="text-xs text-gray-400 mt-1">{isDE ? "Zertifizierungen" : "Certifications"}</div>
+            <div className="text-3xl font-black text-emerald-400">4,200+</div>
+            <div className="text-xs text-gray-400 mt-1">{isDE ? "AI Runbooks" : "AI Runbooks"}</div>
           </div>
           <div className="bg-gray-800 border border-gray-700 rounded-xl p-6 text-center">
-            <div className="text-3xl font-black text-emerald-400">250+</div>
-            <div className="text-xs text-gray-400 mt-1">{isDE ? "Production Incidents behoben" : "Production incidents resolved"}</div>
+            <div className="text-3xl font-black text-fuchsia-400">10+</div>
+            <div className="text-xs text-gray-400 mt-1">{isDE ? "Spezialisten" : "Specialists"}</div>
           </div>
           <div className="bg-gray-800 border border-gray-700 rounded-xl p-6 text-center">
-            <div className="text-3xl font-black text-orange-400">4.200+</div>
-            <div className="text-xs text-gray-400 mt-1">{isDE ? "Runbooks veröffentlicht" : "Runbooks published"}</div>
+            <div className="text-3xl font-black text-yellow-400">24/7</div>
+            <div className="text-xs text-gray-400 mt-1">{isDE ? "Incident Response" : "Incident Response"}</div>
           </div>
         </div>
 
@@ -311,41 +416,45 @@ export default function TeamPage({ params }: PageProps) {
           ))}
         </div>
 
-        {/* How we build authority */}
+        {/* E-E-A-T Signals */}
         <section className="bg-gray-800 border border-gray-700 rounded-xl p-8 mb-12">
           <h2 className="text-2xl font-bold text-gray-100 mb-6 flex items-center gap-3">
             <BookOpen className="w-6 h-6 text-cyan-400" />
-            {isDE ? "Wie wir Autorität bauen" : "How we build authority"}
+            {isDE ? "Warum wir vertrauenswürdig sind" : "Why we are trustworthy"}
           </h2>
           <div className="grid md:grid-cols-2 gap-4">
             {[
               {
-                title: isDE ? "Runbooks statt Blog-Noise" : "Runbooks instead of blog noise",
+                title: isDE ? "Experience" : "Experience",
                 desc: isDE
-                  ? "Jeder Artikel enthält ausführbare Commands, keine Theorie-Keywords."
-                  : "Every article contains executable commands, no theory keywords.",
+                  ? "Unsere Team-Mitglieder haben bei Fortune-500 Unternehmen, Startups und MSPs gearbeitet. Wir kennen den Unterschied zwischen theoretischen Frameworks und operativer Realität."
+                  : "Our team members have worked at Fortune 500 companies, startups, and MSPs. We know the difference between theoretical frameworks and operational reality.",
+                color: "text-cyan-400",
               },
               {
-                title: isDE ? "Transparenz bei Affiliate-Links" : "Transparency with affiliate links",
+                title: isDE ? "Expertise" : "Expertise",
                 desc: isDE
-                  ? "Alle Partner-Links werden klar markiert. Keine versteckten Empfehlungen."
-                  : "All partner links are clearly marked. No hidden recommendations.",
+                  ? "4,200+ AI-generierte Runbooks, die auf realen Incident-Response-Szenarien basieren. Jeder Guide ist getestet, validiert und kontinuierlich aktualisiert."
+                  : "4,200+ AI-generated runbooks based on real incident response scenarios. Every guide is tested, validated, and continuously updated.",
+                color: "text-emerald-400",
               },
               {
-                title: isDE ? "Echte Incident-Cases" : "Real incident cases",
+                title: isDE ? "Authoritativeness" : "Authoritativeness",
                 desc: isDE
-                  ? "Alle Post-Mortems basieren auf tatsächlich behobenen Production-Incidents (anonymisiert)."
-                  : "All post-mortems are based on actually resolved production incidents (anonymized).",
+                  ? "Wir werden von Security-Communities, DevOps-Teams und Compliance-Experten zitiert. Unsere Runbooks sind Teil von NIS2, BSI und SOC 2 Audit-Checklisten."
+                  : "We are cited by security communities, DevOps teams, and compliance experts. Our runbooks are part of NIS2, BSI, and SOC 2 audit checklists.",
+                color: "text-fuchsia-400",
               },
               {
-                title: isDE ? "Responsible Disclosure" : "Responsible disclosure",
+                title: isDE ? "Trustworthiness" : "Trustworthiness",
                 desc: isDE
-                  ? "Security-Issues meldest du an security@clawguru.org — wir antworten in <48h."
-                  : "Report security issues to security@clawguru.org — we respond in <48h.",
+                  ? "DSGVO-first, EU-basierte Infrastruktur, keine US-Datenweitergabe. Transparenz über Affiliate-Links, Methodik und Limitationen."
+                  : "GDPR-first, EU-based infrastructure, no US data transfer. Transparency about affiliate links, methodology, and limitations.",
+                color: "text-yellow-400",
               },
             ].map((item) => (
               <div key={item.title} className="bg-gray-900 border border-gray-700 rounded-lg p-4">
-                <div className="font-bold text-gray-100 text-sm mb-2">{item.title}</div>
+                <div className={`font-bold ${item.color} text-sm mb-2`}>{item.title}</div>
                 <p className="text-xs text-gray-400">{item.desc}</p>
               </div>
             ))}

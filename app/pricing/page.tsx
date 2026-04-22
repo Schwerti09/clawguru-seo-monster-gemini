@@ -82,174 +82,175 @@ function FeatureList({ groups, newBadge }: { groups: FeatureGroup[]; newBadge: s
   )
 }
 
-function getDayPassGroups(dict: Awaited<ReturnType<typeof getDictionary>>): FeatureGroup[] {
-  return [
-    {
-      heading: dict.pricing.grpSecurity,
-      items: [
-        { label: "Live Security Score – Top-3 in 30s" },
-        { label: "Zero-Knowledge Check (privacy-first)", isNew: true },
-        { label: "Config Validator: Docker, Nginx, YAML", isNew: true },
-        { label: "Security Badge Generator (shareable)" },
-      ]
-    },
-    {
-      heading: dict.pricing.grpOps,
-      items: [
-        { label: "OpsWall Live – Trends & Hot Fixes" },
-        { label: "ThreatMap – Real-Time Threat Visualisation", isNew: true },
-        { label: "Mission Control Dashboard", isNew: true },
-        { label: "Incident Playbooks" },
-      ]
-    },
-    {
-      heading: dict.pricing.grpKnowledge,
-      items: [
-        { label: "Vault: 500+ Runbooks & Blueprints" },
-        { label: "Hardening, Recovery, Stripe/Webhooks & more" },
-        { label: "Copilot Chat – AI assistant for Debug & Ops" },
-      ]
-    },
-    {
-      heading: dict.pricing.grpLimits,
-      items: [
-        { label: `Max. ${TIER_LIMITS.daypass.maxSavedChecks} Saved Security Checks` },
-        { label: `Voice Copilot: ${dict.pricing.voiceCopilotLimited}`, isComing: true },
-        { label: "No Private Nodes / Private Forks" },
-      ]
-    },
-  ]
-}
-
-function getProGroups(dict: Awaited<ReturnType<typeof getDictionary>>): FeatureGroup[] {
-  return [
-    {
-      heading: dict.pricing.grpAllDayPass,
-      items: [
-        { label: "Permanent full access (no expiry)" },
-        { label: "All Security & Ops Tools without time limit" },
-      ]
-    },
-    {
-      heading: dict.pricing.grpFeatureUnlocks,
-      items: [
-        { label: "Unlimited Saved Security Checks", isNew: true },
-        { label: "Private Nodes & Private Forks", isComing: true },
-        { label: "Voice Copilot – unlimited", isComing: true },
-        { label: "Darwinian Feed – personalised Intel Feed", isNew: true },
-      ]
-    },
-    {
-      heading: dict.pricing.grpIntelligence,
-      items: [
-        { label: "Temporal Intelligence – time-based Threats", isNew: true },
-        { label: "Neuro Intelligence – AI-driven Insights", isNew: true },
-        { label: "ClawVerse – semantic Knowledge Graph", isNew: true },
-        { label: "Living Mycelium – 1M+ Knowledge Nodes", isNew: true },
-      ]
-    },
-    {
-      heading: dict.pricing.grpDeployment,
-      items: [
-        { label: "SWARM Deployment Simulator", isComing: true },
-        { label: "Provenance Chain – Source Tracking", isNew: true },
-        { label: "Issue Tracker + Fix Repository", isNew: true },
-      ]
-    },
-    {
-      heading: dict.pricing.grpProExtras,
-      items: [
-        { label: "Pro Runbooks – ongoing updates" },
-        { label: "Copilot: higher limits (fair-use)" },
-        { label: "Priority: new features & topics first" },
-      ]
-    },
-  ]
-}
-
-function getTeamGroups(dict: Awaited<ReturnType<typeof getDictionary>>): FeatureGroup[] {
-  return [
-    {
-      heading: dict.pricing.grpAllPro,
-      items: [
-        { label: "Full access to all Intelligence & Ops Layers" },
-        { label: "All SWARM, Neuro & Provenance Features" },
-      ]
-    },
-    {
-      heading: dict.pricing.grpTeamCollab,
-      items: [
-        { label: "Shared Runbook Links & Playbooks", isComing: true },
-        { label: "Shared Mission Control (Team Dashboard)", isComing: true },
-        { label: "Higher limits for all members (fair-use)" },
-      ]
-    },
-    {
-      heading: dict.pricing.grpRoadmap,
-      items: [
-        { label: "Roadmap Votes – determines what gets built next", isComing: true },
-        { label: "Early Access to new features" },
-      ]
-    },
-  ]
-}
-
-function getEnterpriseGroups(dict: Awaited<ReturnType<typeof getDictionary>>): FeatureGroup[] {
-  return [
-    {
-      heading: dict.pricing.grpAllPro,
-      items: [
-        { label: "Full access to all Pro Features" },
-      ]
-    },
-    {
-      heading: dict.pricing.grpEnterpriseUnlocks,
-      items: [
-        { label: "SSO / SAML Integration", isComing: true },
-        { label: "Team Sharing & Shared Dashboards", isComing: true },
-        { label: "Custom Runbooks – own Runbook Builder", isComing: true },
-      ]
-    },
-    {
-      heading: dict.pricing.grpIntelFeedApi,
-      items: [
-        { label: "REST/JSON API – directly integratable into SIEM", isNew: true },
-        { label: "API Key Authentication (Bearer / X-API-Key)", isNew: true },
-        { label: "Filter by Severity & Category", isNew: true },
-        { label: "Machine-readable Timestamps & Tags (STIX-compatible)", isNew: true },
-      ]
-    },
-    {
-      heading: dict.pricing.grpEnterpriseSupport,
-      items: [
-        { label: "Dedicated API Key (revocable)", isNew: true },
-        { label: "SLA Guarantee & Priority Support" },
-        { label: "Custom Onboarding & Integration Calls" },
-      ]
-    },
-  ]
-}
-
 export default async function PricingPage() {
   const h = headers()
   const locale = (h.get("x-claw-locale") ?? DEFAULT_LOCALE) as Locale
   const dict = await getDictionary(locale)
   const prefix = `/${locale}`
   const isDE = locale === "de"
+  const pricing = dict.pricing as any
 
-  const DAY_PASS_GROUPS = getDayPassGroups(dict)
-  const PRO_GROUPS = getProGroups(dict)
-  const TEAM_GROUPS = getTeamGroups(dict)
-  const ENTERPRISE_GROUPS = getEnterpriseGroups(dict)
+  function getDayPassGroups(): FeatureGroup[] {
+    return [
+      {
+        heading: pricing.grpSecurity,
+        items: [
+          { label: "Live Security Score – Top-3 in 30s" },
+          { label: "Zero-Knowledge Check (privacy-first)", isNew: true },
+          { label: "Config Validator: Docker, Nginx, YAML", isNew: true },
+          { label: "Security Badge Generator (shareable)" },
+        ]
+      },
+      {
+        heading: pricing.grpOps,
+        items: [
+          { label: "OpsWall Live – Trends & Hot Fixes" },
+          { label: "ThreatMap – Real-Time Threat Visualisation", isNew: true },
+          { label: "Mission Control Dashboard", isNew: true },
+          { label: "Incident Playbooks" },
+        ]
+      },
+      {
+        heading: pricing.grpKnowledge,
+        items: [
+          { label: "Vault: 500+ Runbooks & Blueprints" },
+          { label: "Hardening, Recovery, Stripe/Webhooks & more" },
+          { label: "Copilot Chat – AI assistant for Debug & Ops" },
+        ]
+      },
+      {
+        heading: pricing.grpLimits,
+        items: [
+          { label: `Max. ${TIER_LIMITS.daypass.maxSavedChecks} Saved Security Checks` },
+          { label: `Voice Copilot: ${pricing.voiceCopilotLimited}`, isComing: true },
+          { label: "No Private Nodes / Private Forks" },
+        ]
+      },
+    ]
+  }
+
+  function getProGroups(): FeatureGroup[] {
+    return [
+      {
+        heading: pricing.grpAllDayPass,
+        items: [
+          { label: "Permanent full access (no expiry)" },
+          { label: "All Security & Ops Tools without time limit" },
+        ]
+      },
+      {
+        heading: pricing.grpFeatureUnlocks,
+        items: [
+          { label: "Unlimited Saved Security Checks", isNew: true },
+          { label: "Private Nodes & Private Forks", isComing: true },
+          { label: "Voice Copilot – unlimited", isComing: true },
+          { label: "Darwinian Feed – personalised Intel Feed", isNew: true },
+        ]
+      },
+      {
+        heading: pricing.grpIntelligence,
+        items: [
+          { label: "Temporal Intelligence – time-based Threats", isNew: true },
+          { label: "Neuro Intelligence – AI-driven Insights", isNew: true },
+          { label: "ClawVerse – semantic Knowledge Graph", isNew: true },
+          { label: "Living Mycelium – 1M+ Knowledge Nodes", isNew: true },
+        ]
+      },
+      {
+        heading: pricing.grpDeployment,
+        items: [
+          { label: "SWARM Deployment Simulator", isComing: true },
+          { label: "Provenance Chain – Source Tracking", isNew: true },
+          { label: "Issue Tracker + Fix Repository", isNew: true },
+        ]
+      },
+      {
+        heading: pricing.grpProExtras,
+        items: [
+          { label: "Pro Runbooks – ongoing updates" },
+          { label: "Copilot: higher limits (fair-use)" },
+          { label: "Priority: new features & topics first" },
+        ]
+      },
+    ]
+  }
+
+  function getTeamGroups(): FeatureGroup[] {
+    return [
+      {
+        heading: pricing.grpAllPro,
+        items: [
+          { label: "Full access to all Intelligence & Ops Layers" },
+          { label: "All SWARM, Neuro & Provenance Features" },
+        ]
+      },
+      {
+        heading: pricing.grpTeamCollab,
+        items: [
+          { label: "Shared Runbook Links & Playbooks", isComing: true },
+          { label: "Shared Mission Control (Team Dashboard)", isComing: true },
+          { label: "Higher limits for all members (fair-use)" },
+        ]
+      },
+      {
+        heading: pricing.grpRoadmap,
+        items: [
+          { label: "Roadmap Votes – determines what gets built next", isComing: true },
+          { label: "Early Access to new features" },
+        ]
+      },
+    ]
+  }
+
+  function getEnterpriseGroups(): FeatureGroup[] {
+    return [
+      {
+        heading: pricing.grpAllPro,
+        items: [
+          { label: "Full access to all Pro Features" },
+        ]
+      },
+      {
+        heading: pricing.grpEnterpriseUnlocks,
+        items: [
+          { label: "SSO / SAML Integration", isComing: true },
+          { label: "Team Sharing & Shared Dashboards", isComing: true },
+          { label: "Custom Runbooks – own Runbook Builder", isComing: true },
+        ]
+      },
+      {
+        heading: pricing.grpIntelFeedApi,
+        items: [
+          { label: "REST/JSON API – directly integratable into SIEM", isNew: true },
+          { label: "API Key Authentication (Bearer / X-API-Key)", isNew: true },
+          { label: "Filter by Severity & Category", isNew: true },
+          { label: "Machine-readable Timestamps & Tags (STIX-compatible)", isNew: true },
+        ]
+      },
+      {
+        heading: pricing.grpEnterpriseSupport,
+        items: [
+          { label: "Dedicated API Key (revocable)", isNew: true },
+          { label: "SLA Guarantee & Priority Support" },
+          { label: "Custom Onboarding & Integration Calls" },
+        ]
+      },
+    ]
+  }
+
+  const DAY_PASS_GROUPS = getDayPassGroups()
+  const PRO_GROUPS = getProGroups()
+  const TEAM_GROUPS = getTeamGroups()
+  const ENTERPRISE_GROUPS = getEnterpriseGroups()
 
   const faqSchema = {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
     mainEntity: [
-      { '@type': 'Question', name: 'Was ist im ClawGuru Free Plan enthalten?', acceptedAnswer: { '@type': 'Answer', text: 'ClawGuru Explorer (Free) Plan: Unbegrenzte Security Checks für beliebige Domains. HTTP-Header-Analyse, TLS-Check, Security-Score in 30 Sekunden. Zugriff auf 30+ CVE Fix Guides und öffentliche Runbooks (3/Monat). Zugang zur Academy und Moltbot Hardening Guides. Kein Account nötig. Keine Kreditkarte. Ideal für: Entwickler, kleine Teams, einmalige Checks. Limits: keine Saved Checks, kein Copilot, keine Monitoring-Alerts, kein API-Zugang, keine Team-Features.' } },
-      { '@type': 'Question', name: 'Was bietet ClawGuru Pro zusätzlich?', acceptedAnswer: { '@type': 'Answer', text: 'ClawGuru Pro Zusatzfeatures: Continuous Monitoring mit automatischen Alerts bei Score-Verschlechterung. API-Zugang für CI/CD-Integration (GitHub Actions, GitLab CI). Erweiterte CVE-Berichte mit Priorisierung. Historische Score-Daten und Trend-Analyse. Priority Support. Moltbot-Integration für automatisiertes Hardening. Ideal für: professionelle DevOps-Teams, Startups mit Compliance-Anforderungen.' } },
-      { '@type': 'Question', name: 'Gibt es einen Enterprise-Plan für große Organisationen?', acceptedAnswer: { '@type': 'Answer', text: 'ClawGuru Enterprise: Unbegrenzte Domains und Teams. Dedizierter Account Manager. Custom SLAs (99.99% Uptime). On-Premise Deployment möglich (DSGVO/HIPAA-kritische Umgebungen). SSO/SAML-Integration. Custom Compliance Reports (SOC2, ISO27001, PCI-DSS, HIPAA). Audit-Trail-Export. Volume-Pricing. Kontakt: Enterprise-Anfragen über das Kontaktformular.' } },
-      { '@type': 'Question', name: 'Kann ich ClawGuru kostenlos testen bevor ich zahle?', acceptedAnswer: { '@type': 'Answer', text: 'ClawGuru Testmöglichkeiten: Free Plan ist dauerhaft kostenlos — kein Trial-Ablauf. Pro Plan: 14-Tage-Testphase ohne Kreditkarte. Day Pass: Einmaliger Pro-Zugang für 24 Stunden (ideal zum Testen aller Pro-Features). Empfehlung: Security Check kostenlos durchführen, dann mit einem Day Pass die Pro-Features testen bevor du abonnierst.' } },
+      { '@type': 'Question', name: "What is ClawGuru?", acceptedAnswer: { '@type': 'Answer', text: "ClawGuru is an AI-powered security intelligence platform for self-hosted infrastructure." } },
+      { '@type': 'Question', name: "How does pricing work?", acceptedAnswer: { '@type': 'Answer', text: "We offer Day Pass, Pro, Team, and Enterprise plans with different features and support levels." } },
+      { '@type': 'Question', name: "Can I cancel anytime?", acceptedAnswer: { '@type': 'Answer', text: "Yes, you can cancel your subscription at any time. No long-term commitment required." } },
+      { '@type': 'Question', name: "Do you offer a free trial?", acceptedAnswer: { '@type': 'Answer', text: "Yes, we offer a free trial for our Pro and Team plans. Try before you commit." } },
     ],
   }
 
@@ -263,40 +264,40 @@ export default async function PricingPage() {
         <div className="relative z-10 max-w-2xl mx-auto">
           <div className="inline-block text-[11px] font-mono uppercase tracking-[0.25em] px-4 py-1 rounded-full border mb-5"
             style={{ borderColor: "rgba(0,184,255,0.3)", color: "#00b8ff", background: "rgba(0,184,255,0.06)" }}>
-            {dict.pricing.accessBadge}
+            {pricing.accessBadge}
           </div>
           <h1 className="text-4xl sm:text-5xl font-black font-heading text-white leading-tight">
-            {dict.pricing.title}
+            {pricing.title}
           </h1>
           <p className="mt-4 text-gray-400 text-lg">
-            {dict.pricing.subtitle}
+            {pricing.subtitle}
           </p>
           {/* Free CTA */}
           <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
             <a href={`${prefix}/securitycheck`}
               className="px-8 py-3.5 rounded-2xl font-black text-sm text-black transition-all duration-300 hover:opacity-90"
               style={{ background: "linear-gradient(135deg, #00ff9d 0%, #00b8ff 100%)", boxShadow: "0 0 30px rgba(0,255,157,0.25)" }}>
-              Kostenlos starten → Security Check
+              {(pricing as any).heroFreeCta || "Start Free Trial"}
             </a>
             <a href="#compare"
               className="px-6 py-3 rounded-2xl font-semibold text-sm text-gray-300 border border-white/10 hover:border-white/25 transition-all duration-200">
-              Pläne vergleichen ↓
+              {(pricing as any).heroComparePlans || "Compare Plans"}
             </a>
           </div>
 
           {/* Trust badges */}
           <div className="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-gray-500">
             <span className="flex items-center gap-1.5">
-              <span style={{ color: "#00ff9d" }}>✓</span> Keine Kreditkarte nötig
+              <span style={{ color: "#00ff9d" }}>✓</span> {pricing.trustNoCard}
             </span>
             <span className="flex items-center gap-1.5">
-              <span style={{ color: "#00ff9d" }}>✓</span> DSGVO-konform
+              <span style={{ color: "#00ff9d" }}>✓</span> {pricing.trustGdpr}
             </span>
             <span className="flex items-center gap-1.5">
-              <span style={{ color: "#00ff9d" }}>✓</span> Jederzeit kündbar
+              <span style={{ color: "#00ff9d" }}>✓</span> {pricing.trustCancelable}
             </span>
             <span className="flex items-center gap-1.5">
-              <span style={{ color: "#00ff9d" }}>✓</span> Self-Hosted ready
+              <span style={{ color: "#00ff9d" }}>✓</span> {pricing.trustSelfHosted}
             </span>
           </div>
 
@@ -308,9 +309,9 @@ export default async function PricingPage() {
           {/* Emergency nudge */}
           <div className="mt-5 inline-flex items-center gap-2 text-sm px-4 py-2 rounded-full border"
             style={{ borderColor: "rgba(220,38,38,0.35)", color: "#f87171", background: "rgba(220,38,38,0.06)" }}>
-            🔥 {dict.pricing.emergencyText}{" "}
+            🔥 {pricing.emergencyText}{" "}
             <a href={`${prefix}/emergency`} className="underline underline-offset-2 font-bold hover:opacity-80 transition-opacity">
-              {dict.pricing.emergencyLink}
+              {pricing.emergencyLink}
             </a>
           </div>
         </div>
@@ -325,7 +326,7 @@ export default async function PricingPage() {
           {/* ── Feature Comparison Table ── */}
           <section id="compare" className="mb-12 overflow-x-auto">
             <div className="text-xs font-mono uppercase tracking-[0.25em] text-gray-500 mb-5 text-center">
-              {dict.pricing.featureComparison}
+              {pricing.featureComparison}
             </div>
             <table className="w-full min-w-[900px] text-sm border-separate border-spacing-y-0">
               <thead>
@@ -465,33 +466,32 @@ export default async function PricingPage() {
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-3">
                     <div className="text-[11px] font-mono uppercase tracking-[0.2em]" style={{ color: "#00ff9d" }}>
-                      Free · Forever
+                      {pricing.freeForeverLabel}
                     </div>
                     <div className="text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full"
                       style={{ background: "rgba(0,255,157,0.1)", color: "#00ff9d", border: "1px solid rgba(0,255,157,0.25)" }}>
-                      Kein Account nötig
+                      {pricing.freeNoAccount}
                     </div>
                   </div>
                   <div className="text-xl font-black text-white font-heading">ClawGuru Explorer</div>
                   <div className="mt-2 flex items-end gap-2">
                     <span className="text-4xl font-black text-white">0€</span>
-                    <span className="text-sm text-gray-400 pb-1">für immer</span>
+                    <span className="text-sm text-gray-400 pb-1">{pricing.freeForeverPrice}</span>
                   </div>
                   <p className="mt-3 text-sm text-gray-300 leading-relaxed max-w-lg">
-                    Sofort Security Check starten. Domain eingeben, Score + Header-Analyse + TLS-Check in 30 Sekunden.
-                    Plus: CVE Fix Guides, Public Runbooks, Academy – ohne Registrierung.
+                    {pricing.freeExplorerDesc}
                   </p>
                 </div>
                 <div className="flex flex-col items-center gap-3 md:shrink-0">
                   <a href={`${prefix}/securitycheck`}
                     className="px-8 py-3 rounded-2xl font-black text-sm text-black transition-all duration-300 hover:opacity-90 whitespace-nowrap"
                     style={{ background: "linear-gradient(135deg, #00ff9d 0%, #00b8ff 100%)", boxShadow: "0 0 25px rgba(0,255,157,0.2)" }}>
-                    Jetzt kostenlos checken →
+                    {pricing.freeStartCheckCta}
                   </a>
                   <div className="flex items-center gap-4 text-xs text-gray-500">
-                    <span>✓ Security Score</span>
-                    <span>✓ Header Check</span>
-                    <span>✓ TLS Analyse</span>
+                    <span>✓ {pricing.freeBenefit1}</span>
+                    <span>✓ {pricing.freeBenefit2}</span>
+                    <span>✓ {pricing.freeBenefit3}</span>
                   </div>
                 </div>
               </div>
@@ -505,7 +505,7 @@ export default async function PricingPage() {
               <div className="flex-1">
                 <div className="flex items-center gap-3 mb-3">
                   <div className="text-[11px] font-mono uppercase tracking-[0.2em]" style={{ color: "#00b8ff" }}>
-                    {dict.pricing.dayPassBadge}
+                    {pricing.dayPassBadge}
                   </div>
                   <div className="text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full border"
                     style={{ borderColor: "rgba(0,184,255,0.3)", color: "#00b8ff", background: "rgba(0,184,255,0.08)" }}>
@@ -515,21 +515,21 @@ export default async function PricingPage() {
                 <div className="text-xl font-black text-white font-heading mb-2">ClawGuru Day Pass</div>
                 <div className="flex items-end gap-2 mb-3">
                   <span className="text-4xl font-black text-white">9€</span>
-                  <span className="text-sm text-gray-400 pb-1">{dict.pricing.dayPassOnce}</span>
+                  <span className="text-sm text-gray-400 pb-1">{pricing.dayPassOnce}</span>
                 </div>
                 <p className="text-sm text-gray-300 leading-relaxed max-w-lg">
-                  {dict.pricing.dayPassDesc}
+                  {pricing.dayPassDesc}
                 </p>
               </div>
               <div className="flex flex-col gap-3 md:shrink-0 md:min-w-[220px]">
                 <SocialProofBlock locale={locale} />
                 <BuyButton
                   product="daypass"
-                  label={isDE ? "Fix meine Lücken — Daypass €9" : "Fix my gaps — Daypass €9"}
+                  label={pricing.dayPassBuyLabel}
                   className="w-full py-3 px-6 rounded-2xl font-black text-sm text-black transition-all duration-300 hover:opacity-90 disabled:opacity-60"
                   style={{ background: "linear-gradient(135deg, #00b8ff 0%, #0077ff 100%)", boxShadow: "0 0 30px rgba(0,184,255,0.3)" }}
                 />
-                <div className="text-xs text-gray-500 text-center">{dict.pricing.dayPassMeta}</div>
+                <div className="text-xs text-gray-500 text-center">{pricing.dayPassMeta}</div>
               </div>
             </div>
           </div>
@@ -540,7 +540,7 @@ export default async function PricingPage() {
           {/* ── Who is Pro for? ── */}
           <section className="mb-12">
             <div className="text-xs font-mono uppercase tracking-[0.25em] text-gray-500 mb-6 text-center">
-              {isDE ? "Für wen ist Pro?" : "Who is Pro for?"}
+              {pricing.proWhoFor}
             </div>
             <div className="grid md:grid-cols-3 gap-6">
               {(SOCIAL_PROOF_CONFIG.proPersonas[locale as keyof typeof SOCIAL_PROOF_CONFIG.proPersonas] || SOCIAL_PROOF_CONFIG.proPersonas.de).map((persona, index) => (
@@ -565,20 +565,20 @@ export default async function PricingPage() {
                   <div className="text-2xl font-black text-white font-heading">ClawGuru Enterprise</div>
                   <div className="mt-4 flex items-end gap-2">
                     <span className="text-5xl font-black text-white">299€</span>
-                    <span className="text-sm text-gray-400 pb-2">{dict.pricing.monthly}</span>
+                    <span className="text-sm text-gray-400 pb-2">{pricing.monthly}</span>
                   </div>
                   <p className="mt-4 text-sm text-gray-300 leading-relaxed">
-                    {dict.pricing.enterpriseDesc}
+                    {pricing.enterpriseDesc}
                   </p>
                   <EnterpriseConciergeButton />
                   <div className="mt-3 text-xs text-gray-500 text-center">
-                    {dict.pricing.enterpriseContact}
+                    {pricing.enterpriseContact}
                   </div>
                 </div>
 
                 {/* Right: features */}
                 <div className="flex-1">
-                  <FeatureList groups={ENTERPRISE_GROUPS} newBadge={dict.pricing.newBadge} />
+                  <FeatureList groups={ENTERPRISE_GROUPS} newBadge={pricing.newBadge} />
 
                   {/* API quick-start snippet */}
                   <div className="mt-6 rounded-2xl border border-orange-900/40 bg-black/40 p-4">
@@ -717,9 +717,9 @@ curl https://clawguru.com/api/intel/feeds \\
           {/* Info strip */}
           <div className="mt-8 grid md:grid-cols-3 gap-4">
             {[
-              [dict.pricing.instantAccess, dict.pricing.instantAccessDesc],
-              [dict.pricing.noAccount, dict.pricing.noAccountDesc],
-              [dict.pricing.paymentIssue, dict.pricing.paymentIssueDesc],
+              [pricing.instantAccess, pricing.instantAccessDesc],
+              [pricing.noAccount, pricing.noAccountDesc],
+              [pricing.paymentIssue, pricing.paymentIssueDesc],
             ].map(([title, text]) => (
               <div key={title} className="rounded-2xl border border-white/8 p-5"
                 style={{ background: "rgba(255,255,255,0.02)" }}>
@@ -734,28 +734,28 @@ curl https://clawguru.com/api/intel/feeds \\
             <div className="text-xs font-mono uppercase tracking-[0.25em] text-gray-500 mb-6">FAQ</div>
             <div className="grid md:grid-cols-2 gap-x-10 gap-y-6 text-sm text-gray-300">
               <div>
-                <div className="font-semibold text-white">{dict.pricing.faqDuration}</div>
-                <p className="mt-1 text-gray-400">{dict.pricing.faqDurationA}</p>
+                <div className="font-semibold text-white">{pricing.faqDuration}</div>
+                <p className="mt-1 text-gray-400">{pricing.faqDurationA}</p>
               </div>
               <div>
-                <div className="font-semibold text-white">{dict.pricing.faqTransfer}</div>
-                <p className="mt-1 text-gray-400">{dict.pricing.faqTransferA}</p>
+                <div className="font-semibold text-white">{pricing.faqTransfer}</div>
+                <p className="mt-1 text-gray-400">{pricing.faqTransferA}</p>
               </div>
               <div>
-                <div className="font-semibold text-white">{dict.pricing.faqNoAccess}</div>
-                <p className="mt-1 text-gray-400">{dict.pricing.faqNoAccessA}</p>
+                <div className="font-semibold text-white">{pricing.faqNoAccess}</div>
+                <p className="mt-1 text-gray-400">{pricing.faqNoAccessA}</p>
               </div>
               <div>
-                <div className="font-semibold text-white">{dict.pricing.faqCancel}</div>
-                <p className="mt-1 text-gray-400">{dict.pricing.faqCancelA}</p>
+                <div className="font-semibold text-white">{pricing.faqCancel}</div>
+                <p className="mt-1 text-gray-400">{pricing.faqCancelA}</p>
               </div>
               <div>
-                <div className="font-semibold text-white">{dict.pricing.faqNewPro}</div>
-                <p className="mt-1 text-gray-400">{dict.pricing.faqNewProA}</p>
+                <div className="font-semibold text-white">{pricing.faqNewPro}</div>
+                <p className="mt-1 text-gray-400">{pricing.faqNewProA}</p>
               </div>
               <div>
-                <div className="font-semibold text-white">{dict.pricing.faqIntelligence}</div>
-                <p className="mt-1 text-gray-400">{dict.pricing.faqIntelligenceA}</p>
+                <div className="font-semibold text-white">{pricing.faqIntelligence}</div>
+                <p className="mt-1 text-gray-400">{pricing.faqIntelligenceA}</p>
               </div>
             </div>
           </div>
@@ -769,7 +769,7 @@ curl https://clawguru.com/api/intel/feeds \\
               [`${prefix}/live`, "OpsWall Live"],
               [`${prefix}/mission-control`, "Mission Control"],
               [`${prefix}/threatmap`, "ThreatMap"],
-              [`${prefix}/recover`, dict.pricing.recoverLink],
+              [`${prefix}/recover`, pricing.recoverLink],
             ].map(([href, label]) => (
               <a key={href} href={href}
                 className="px-4 py-2 rounded-xl border border-white/10 text-gray-400 hover:text-white hover:border-white/20 transition-all duration-200">

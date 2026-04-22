@@ -1,7 +1,7 @@
-﻿import type { Metadata } from "next"
+import type { Metadata } from "next"
 import PricingPage from "@/app/pricing/page"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
-import { metadata as rootMetadata } from "@/app/pricing/page"
+import { getDictionary } from "@/lib/getDictionary"
 
 export const revalidate = 60
 
@@ -9,14 +9,23 @@ export async function generateStaticParams() {
   return SUPPORTED_LOCALES.map((lang) => ({ lang }))
 }
 
-export async function generateMetadata({ params }: { params: { lang: string } }) {
+export async function generateMetadata(
+  { params }: { params: { lang: string } }
+): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
+  const dict = await getDictionary(locale)
+  const title = `${dict.pricing.title} | ClawGuru`
+  const description = dict.pricing.subtitle
+  const url = `https://clawguru.org/${locale}/pricing`
   return {
-    ...(rootMetadata as Metadata),
+    title,
+    description,
     alternates: buildLocalizedAlternates(locale, "/pricing"),
     openGraph: {
-      ...(rootMetadata as Metadata).openGraph,
-      url: `https://clawguru.org/${locale}/pricing`,
+      title,
+      description,
+      url,
+      type: "website",
     },
   }
 }

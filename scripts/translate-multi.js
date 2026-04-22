@@ -134,17 +134,52 @@ async function callProvider(provider, prompt) {
 }
 
 // ── Prompt + Batch-Übersetzung ────────────────────────────────────────────
+// Non-Translate Glossary — these MUST stay identical across all languages.
+// Technical terms that programmers/SREs search for in English. Translating them
+// (e.g. "Array" → "Anordnung" in DE) makes the content useless for the target audience.
+const NON_TRANSLATE_GLOSSARY = [
+  // Protocols & standards
+  "API", "REST", "GraphQL", "JSON", "XML", "YAML", "HTTP", "HTTPS", "HTTP/2", "HTTP/3",
+  "TLS", "SSL", "DNS", "DNSSEC", "TCP", "UDP", "IP", "IPv4", "IPv6", "ICMP", "BGP",
+  "SSH", "SFTP", "FTP", "SMTP", "IMAP", "POP3", "WebSocket", "gRPC", "OAuth", "SAML", "JWT", "OIDC", "mTLS",
+  // Security
+  "CVE", "CVSS", "CWE", "OWASP", "MITRE", "STIX", "SIEM", "SOC", "XDR", "EDR", "WAF", "IDS", "IPS",
+  "ransomware", "phishing", "zero-day", "supply chain", "CI/CD",
+  // Infra / DevOps
+  "Docker", "Kubernetes", "k8s", "Helm", "Terraform", "Ansible", "Pulumi", "Nomad", "Consul", "Vault",
+  "nginx", "Nginx", "Apache", "Traefik", "HAProxy", "Caddy", "Envoy",
+  "Linux", "Ubuntu", "Debian", "RHEL", "CentOS", "Alpine", "Arch",
+  "AWS", "GCP", "Azure", "Hetzner", "DigitalOcean", "Cloudflare", "Netlify", "Vercel",
+  "PostgreSQL", "MySQL", "MariaDB", "MongoDB", "Redis", "Elasticsearch", "Kafka", "RabbitMQ", "ClickHouse",
+  "Git", "GitHub", "GitLab", "Bitbucket",
+  // Programming
+  "JavaScript", "TypeScript", "Python", "Go", "Rust", "Java", "C#", ".NET", "Node.js", "Next.js", "React",
+  "Array", "String", "Object", "Promise", "callback", "async", "await", "token", "header", "payload", "endpoint",
+  // Compliance frameworks (keep as acronym for search/SEO)
+  "GDPR", "DSGVO", "HIPAA", "SOC2", "ISO27001", "PCI-DSS", "NIS2", "LGPD", "APPI", "PIPA", "PIPL", "DPDPA",
+  // Product brand
+  "ClawGuru", "Moltbot", "OpenClaw", "Copilot", "Day Pass", "Mission Control", "ClawVerse",
+  // Third-party brands
+  "Stripe", "Gemini", "OpenAI", "Anthropic", "DeepSeek", "ChatGPT", "GitHub Actions", "GitLab CI",
+]
+
 function buildPrompt(langName, keysWithValues) {
   const inputJson = JSON.stringify(keysWithValues, null, 2)
+  const glossary = NON_TRANSLATE_GLOSSARY.join(", ")
   return `You are a professional localization expert for ClawGuru, a cybersecurity platform for DevOps and SysAdmins who manage self-hosted infrastructure.
 
 Translate the following JSON from English to ${langName}.
 
 STRICT RULES:
 - Translate ONLY the values, NEVER the keys
-- Keep intact: {placeholders}, HTML tags, URLs, emails, brand names (ClawGuru, Docker, Nginx, Redis, Kubernetes, Stripe, Gemini, etc.)
-- Keep technical terms as-is or use the standard ${langName} equivalent: CVE, API, DSGVO/GDPR, IP, SSH, TLS, SSL, JWT, SLA, CI/CD, SRE, DevOps
+- Keep intact: {placeholders}, HTML tags, URLs, emails, numbers with units (e.g. 30s, 24h, €9)
+- NON-TRANSLATE GLOSSARY — these terms MUST remain exactly as in English, never transliterate, never translate:
+  ${glossary}
+- Use the LOCALLY COMMON keyword for a concept, not a literal word-for-word translation.
+  Example: "Claw Machine" in Japanese is "UFOキャッチャー" (UFO Catcher), not "クロー マシーン".
+  When a target-language audience searches for this concept on Google, use THAT word.
 - Tone: professional, direct, slightly technical — like a senior SRE explaining to a colleague
+- Marketing claims (benefits, CTAs) should feel native, not translated — idioms and natural phrasing
 - Return ONLY valid JSON — no markdown, no code blocks, no explanation
 - Every key from the input must appear in the output
 

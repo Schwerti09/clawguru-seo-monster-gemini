@@ -5,34 +5,8 @@ import SectionTitle from "@/components/shared/SectionTitle"
 import OpsWall from "@/components/live/OpsWall"
 import LoginSaveBanner from "@/components/shared/LoginSaveBanner"
 import MyceliumShareCard from "@/components/share/MyceliumShareCard"
-import PageOnboarding from "@/components/onboarding/PageOnboarding"
-import { useState, useEffect } from "react"
 
 export default function LivePage() {
-  const [showOnboarding, setShowOnboarding] = useState(false)
-
-  useEffect(() => {
-    // Show onboarding if first visit
-    const hasVisited = localStorage.getItem("live_visited")
-    if (!hasVisited) {
-      setShowOnboarding(true)
-      localStorage.setItem("live_visited", "1")
-    }
-  }, [])
-
-  if (showOnboarding) {
-    return (
-      <Container>
-        <div className="py-16">
-          <PageOnboarding 
-            pageType="live" 
-            onDismiss={() => setShowOnboarding(false)} 
-          />
-        </div>
-      </Container>
-    )
-  }
-
   return (
     <Container>
       <div className="py-16 max-w-6xl mx-auto">

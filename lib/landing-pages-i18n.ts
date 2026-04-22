@@ -34,7 +34,7 @@ type CompactLandingCopy = {
   secondaryLabel: string
 }
 
-const OPENCLAW: Record<Locale, OpenClawCopy> = {
+const OPENCLAW: Partial<Record<Locale, OpenClawCopy>> = {
   de: {
     title: "OpenClaw absichern: Check, Runbooks, Fixes | ClawGuru",
     description: "OpenClaw und Moltbot in ~30 Sekunden prüfen, Risiken priorisieren und mit ausführbaren Runbooks absichern.",
@@ -469,7 +469,7 @@ const OPENCLAW: Record<Locale, OpenClawCopy> = {
   },
 }
 
-const OPENCLAW_CHECK: Record<Locale, CompactLandingCopy> = {
+const OPENCLAW_CHECK: Partial<Record<Locale, CompactLandingCopy>> = {
   de: {
     title: "OpenClaw Security Check in 30 Sekunden | ClawGuru",
     description: "Schnelles Risiko-Signal fuer OpenClaw und Moltbot, danach konkrete Runbooks fuer die Umsetzung.",
@@ -680,7 +680,7 @@ const OPENCLAW_CHECK: Record<Locale, CompactLandingCopy> = {
   },
 }
 
-const MOLTBOT: Record<Locale, CompactLandingCopy> = {
+const MOLTBOT: Partial<Record<Locale, CompactLandingCopy>> = {
   de: {
     title: "Moltbot härten: Gateway, Auth, Exposure | ClawGuru",
     description: "Runbooks plus Security Check, um häufige Moltbot-Fehlkonfigurationen schnell zu schließen.",
@@ -723,7 +723,7 @@ const MOLTBOT: Record<Locale, CompactLandingCopy> = {
   af: { title: "Moltbot hardening: gateway, auth, exposure | ClawGuru", description: "Runbooks + sekuriteitskontrole om algemene Moltbot-konfigurasiefoute vinnig te verhelp.", h1: "Moltbot hardening - gateway, auth, exposure", sub: "Vinnig van risiko na herstel: kontrole, prioriteer en voer uit.", sectionTitle: "Fokusgebiede", sectionBodyA: "Gateway-hardening, toegangskeiding, token-scope en rotasie.", sectionBodyB: "Verminder exposure, verbeter monitoring en voer daarna 'n herkontrole uit.", ctaPrimary: "Begin kontrole", ctaSecondary: "Sekuriteit runbooks", methodologyLabel: "Metodologie", secondaryLabel: "Runbooks" },
 }
 
-const AI_AGENT: Record<Locale, CompactLandingCopy> = {
+const AI_AGENT: Partial<Record<Locale, CompactLandingCopy>> = {
   de: {
     title: "AI-Agent Security fuer Self-Hosted Teams | ClawGuru",
     description: "Von exponierten Agent-Setups zu messbaren Controls mit Security Check, Methodik und ausfuehrbaren Runbooks.",
@@ -767,17 +767,17 @@ const AI_AGENT: Record<Locale, CompactLandingCopy> = {
 }
 
 export function getOpenClawCopy(locale: Locale): OpenClawCopy {
-  return OPENCLAW[locale] ?? OPENCLAW.en
+  return OPENCLAW[locale] ?? OPENCLAW.en!
 }
 
 export function getOpenClawCheckCopy(locale: Locale): CompactLandingCopy {
-  return OPENCLAW_CHECK[locale] ?? OPENCLAW_CHECK.en
+  return OPENCLAW_CHECK[locale] ?? OPENCLAW_CHECK.en!
 }
 
 export function getMoltbotCopy(locale: Locale): CompactLandingCopy {
-  return MOLTBOT[locale] ?? MOLTBOT.en
+  return MOLTBOT[locale] ?? MOLTBOT.en!
 }
 
 export function getAiAgentCopy(locale: Locale): CompactLandingCopy {
-  return AI_AGENT[locale] ?? AI_AGENT.en
+  return AI_AGENT[locale] ?? AI_AGENT.en!
 }

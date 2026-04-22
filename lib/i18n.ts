@@ -1,6 +1,7 @@
 // WORLD BEAST: lib/i18n.ts
-// NEXT-LEVEL UPGRADE 2026: 15-language system with RTL support + Afrikaans (af)
-// de/en (primary) + es/fr/pt/it/ru/zh-CN/ja/ar/nl/hi/tr/pl/ko + af
+// ROUND 14: 30-language system — no one left behind
+// de/en (primary) + es/fr/pt/it/ru/zh/ja/ar/nl/hi/tr/pl/ko/af
+// + he/uk/vi/id/sv/fi/ro/cs/th/bn/el/hu/da/no (Round 14 additions)
 // Auto-detects language from URL prefix; Gemini auto-translates runbook metadata.
 
 export type Locale =
@@ -20,6 +21,21 @@ export type Locale =
   | "pl"
   | "ko"
   | "af"
+  // Round 14 — Global Expansion
+  | "he"
+  | "uk"
+  | "vi"
+  | "id"
+  | "sv"
+  | "fi"
+  | "ro"
+  | "cs"
+  | "th"
+  | "bn"
+  | "el"
+  | "hu"
+  | "da"
+  | "no"
 
 export const SUPPORTED_LOCALES: Locale[] = [
   "de",
@@ -38,11 +54,26 @@ export const SUPPORTED_LOCALES: Locale[] = [
   "pl",
   "ko",
   "af",
+  // Round 14 — Global Expansion
+  "he",
+  "uk",
+  "vi",
+  "id",
+  "sv",
+  "fi",
+  "ro",
+  "cs",
+  "th",
+  "bn",
+  "el",
+  "hu",
+  "da",
+  "no",
 ]
 export const DEFAULT_LOCALE: Locale = "de"
 
-// NEXT-LEVEL UPGRADE 2026: RTL locales
-export const RTL_LOCALES: Locale[] = ["ar"]
+// RTL locales — ar + he
+export const RTL_LOCALES: Locale[] = ["ar", "he"]
 
 /** Returns true if the locale uses right-to-left text direction */
 export function isRTL(locale: Locale): boolean {
@@ -2464,7 +2495,6 @@ export async function translateRunbook(opts: {
     return { title, summary, locale: "de" as const }
   }
 
-  // NEXT-LEVEL UPGRADE 2026: All 15 locale names for AI translation + Afrikaans
   const localeNames: Record<Locale, string> = {
     de: "German",
     en: "English",
@@ -2482,6 +2512,20 @@ export async function translateRunbook(opts: {
     pl: "Polish",
     ko: "Korean",
     af: "Afrikaans",
+    he: "Hebrew",
+    uk: "Ukrainian",
+    vi: "Vietnamese",
+    id: "Indonesian",
+    sv: "Swedish",
+    fi: "Finnish",
+    ro: "Romanian",
+    cs: "Czech",
+    th: "Thai",
+    bn: "Bengali",
+    el: "Greek",
+    hu: "Hungarian",
+    da: "Danish",
+    no: "Norwegian",
   }
 
   const prompt = [

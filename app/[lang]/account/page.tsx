@@ -39,6 +39,20 @@ export async function generateMetadata(
     pl: "Konto | ClawGuru",
     ko: "계정 | ClawGuru",
     af: "Rekening | ClawGuru",
+    he: "חשבון | ClawGuru",
+    uk: "Обліковий запис | ClawGuru",
+    vi: "Tài khoản | ClawGuru",
+    id: "Akun | ClawGuru",
+    sv: "Konto | ClawGuru",
+    fi: "Tili | ClawGuru",
+    ro: "Cont | ClawGuru",
+    cs: "Účet | ClawGuru",
+    th: "บัญชี | ClawGuru",
+    bn: "অ্যাকাউন্ট | ClawGuru",
+    el: "Λογαριασμός | ClawGuru",
+    hu: "Fiók | ClawGuru",
+    da: "Konto | ClawGuru",
+    no: "Konto | ClawGuru",
   }
 
   const descriptions: Record<Locale, string> = {
@@ -58,6 +72,20 @@ export async function generateMetadata(
     pl: "Twój dostęp do ClawGuru – Dashboard, raporty, weekly digest, zestawy.",
     ko: "ClawGuru 접근 권한 – Dashboard, 리포트, weekly digest, kits.",
     af: "Jou ClawGuru toegang – Dashboard, verslae, weekly digest, kits.",
+    he: "גישתך ל-ClawGuru – Dashboard, דוחות, weekly digest, kits.",
+    uk: "Ваш доступ ClawGuru – Dashboard, звіти, weekly digest, kits.",
+    vi: "Quyền truy cập ClawGuru của bạn – Dashboard, báo cáo, weekly digest, kits.",
+    id: "Akses ClawGuru Anda – Dashboard, laporan, weekly digest, kits.",
+    sv: "Din ClawGuru-åtkomst – Dashboard, rapporter, weekly digest, kits.",
+    fi: "ClawGuru-käyttöoikeutesi – Dashboard, raportit, weekly digest, kits.",
+    ro: "Accesul tău ClawGuru – Dashboard, rapoarte, weekly digest, kits.",
+    cs: "Váš přístup ClawGuru – Dashboard, reporty, weekly digest, kits.",
+    th: "การเข้าถึง ClawGuru ของคุณ – Dashboard, รายงาน, weekly digest, kits.",
+    bn: "আপনার ClawGuru অ্যাক্সেস – Dashboard, রিপোর্ট, weekly digest, kits.",
+    el: "Η πρόσβασή σας ClawGuru – Dashboard, αναφορές, weekly digest, kits.",
+    hu: "ClawGuru-hozzáférésed – Dashboard, jelentések, weekly digest, kits.",
+    da: "Din ClawGuru-adgang – Dashboard, rapporter, weekly digest, kits.",
+    no: "Din ClawGuru-tilgang – Dashboard, rapporter, weekly digest, kits.",
   }
 
   return {

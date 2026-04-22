@@ -18,6 +18,20 @@ const LOCALE_OUTPUT_LANGUAGE: Record<Locale, string> = {
   pl: "Polish",
   ko: "Korean",
   af: "Afrikaans",
+  he: "Hebrew",
+  uk: "Ukrainian",
+  vi: "Vietnamese",
+  id: "Indonesian",
+  sv: "Swedish",
+  fi: "Finnish",
+  ro: "Romanian",
+  cs: "Czech",
+  th: "Thai",
+  bn: "Bengali",
+  el: "Greek",
+  hu: "Hungarian",
+  da: "Danish",
+  no: "Norwegian",
 }
 
 export type RoastLevel = "mild" | "medium" | "spicy"

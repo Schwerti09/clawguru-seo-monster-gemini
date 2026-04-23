@@ -397,7 +397,13 @@ export type Dictionary = {
 }
 
 // Supported dictionary locales (JSON files that exist in /dictionaries)
-const DICTIONARY_LOCALES = ["de", "en", "es", "fr", "pt", "it", "ru", "zh", "ja", "ar", "nl", "hi", "tr", "pl", "ko", "af"] as const
+const DICTIONARY_LOCALES = [
+  "de", "en", "es", "fr", "pt", "it", "ru", "zh", "ja", "ar", "nl", "hi", "tr", "pl", "ko", "af",
+  // Round 14 — wire loaders so dict files are actually used instead of EN fallback
+  "he", "uk", "vi", "id", "sv", "fi", "ro", "cs", "th", "bn", "el", "hu", "da", "no",
+  // 100-Language Rollout — Tier 1+2 completion (23.04.2026)
+  "ms", "bg",
+] as const
 type DictionaryLocale = (typeof DICTIONARY_LOCALES)[number]
 
 const loaders: Record<DictionaryLocale, () => Promise<Dictionary>> = {
@@ -417,6 +423,22 @@ const loaders: Record<DictionaryLocale, () => Promise<Dictionary>> = {
   pl: () => import("@/dictionaries/pl.json").then((m) => m.default as unknown as Dictionary),
   ko: () => import("@/dictionaries/ko.json").then((m) => m.default as unknown as Dictionary),
   af: () => import("@/dictionaries/af.json").then((m) => m.default as unknown as Dictionary),
+  he: () => import("@/dictionaries/he.json").then((m) => m.default as unknown as Dictionary),
+  uk: () => import("@/dictionaries/uk.json").then((m) => m.default as unknown as Dictionary),
+  vi: () => import("@/dictionaries/vi.json").then((m) => m.default as unknown as Dictionary),
+  id: () => import("@/dictionaries/id.json").then((m) => m.default as unknown as Dictionary),
+  sv: () => import("@/dictionaries/sv.json").then((m) => m.default as unknown as Dictionary),
+  fi: () => import("@/dictionaries/fi.json").then((m) => m.default as unknown as Dictionary),
+  ro: () => import("@/dictionaries/ro.json").then((m) => m.default as unknown as Dictionary),
+  cs: () => import("@/dictionaries/cs.json").then((m) => m.default as unknown as Dictionary),
+  th: () => import("@/dictionaries/th.json").then((m) => m.default as unknown as Dictionary),
+  bn: () => import("@/dictionaries/bn.json").then((m) => m.default as unknown as Dictionary),
+  el: () => import("@/dictionaries/el.json").then((m) => m.default as unknown as Dictionary),
+  hu: () => import("@/dictionaries/hu.json").then((m) => m.default as unknown as Dictionary),
+  da: () => import("@/dictionaries/da.json").then((m) => m.default as unknown as Dictionary),
+  no: () => import("@/dictionaries/no.json").then((m) => m.default as unknown as Dictionary),
+  ms: () => import("@/dictionaries/ms.json").then((m) => m.default as unknown as Dictionary),
+  bg: () => import("@/dictionaries/bg.json").then((m) => m.default as unknown as Dictionary),
 }
 
 /** Returns the best available dictionary locale for the given locale. */

@@ -76,6 +76,8 @@ const LOCALE_NAMES: Record<Locale, string> = {
   hu: "Hungarian",
   da: "Danish",
   no: "Norwegian",
+  ms: "Malay",
+  bg: "Bulgarian",
 }
 
 const DOC_TTL_SECONDS = 60 * 60 * 24

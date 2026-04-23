@@ -36,6 +36,9 @@ export type Locale =
   | "hu"
   | "da"
   | "no"
+  // 100-Language Rollout — Tier 1+2 completion (23.04.2026)
+  | "ms"
+  | "bg"
 
 export const SUPPORTED_LOCALES: Locale[] = [
   "de",
@@ -69,6 +72,9 @@ export const SUPPORTED_LOCALES: Locale[] = [
   "hu",
   "da",
   "no",
+  // 100-Language Rollout — Tier 1+2 completion (23.04.2026)
+  "ms",
+  "bg",
 ]
 export const DEFAULT_LOCALE: Locale = "de"
 
@@ -2526,6 +2532,8 @@ export async function translateRunbook(opts: {
     hu: "Hungarian",
     da: "Danish",
     no: "Norwegian",
+    ms: "Malay",
+    bg: "Bulgarian",
   }
 
   const prompt = [

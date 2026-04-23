@@ -53,6 +53,8 @@ export async function generateMetadata(
     hu: "Fiók | ClawGuru",
     da: "Konto | ClawGuru",
     no: "Konto | ClawGuru",
+    ms: "Akaun | ClawGuru",
+    bg: "Акаунт | ClawGuru",
   }
 
   const descriptions: Record<Locale, string> = {
@@ -86,6 +88,8 @@ export async function generateMetadata(
     hu: "ClawGuru-hozzáférésed – Dashboard, jelentések, weekly digest, kits.",
     da: "Din ClawGuru-adgang – Dashboard, rapporter, weekly digest, kits.",
     no: "Din ClawGuru-tilgang – Dashboard, rapporter, weekly digest, kits.",
+    ms: "Akses ClawGuru anda – Dashboard, laporan, weekly digest, kits.",
+    bg: "Вашият достъп до ClawGuru – Dashboard, отчети, weekly digest, kits.",
   }
 
   return {

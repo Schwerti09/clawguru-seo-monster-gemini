@@ -39,17 +39,17 @@ export const metadata: Metadata = {
     type: "website",
     url: `${BASE_URL}/sandbox`,
     images: [{
-      url: `${BASE_URL}/og/sandbox.png`,
+      url: `${BASE_URL}/sandbox/opengraph-image`,
       width: 1200,
       height: 630,
-      alt: "ClawGuru Live Fix Sandbox — In-Browser Config Testing"
+      alt: "ClawGuru Live Fix Sandbox — In-Browser Config Testing - Nginx, Docker, Terraform, K8s"
     }]
   },
   twitter: {
     card: "summary_large_image",
     title: "Live Fix Sandbox — In-Browser Config Testing | ClawGuru",
     description: "ClawGuru ist die KI-gestützte SecOps-Plattform mit über 4,2 Millionen ausführbaren Runbooks – für Incident Response, Hardening und Compliance in Echtzeit. Vom Problem zum Fix in unter 30 Sekunden.",
-    images: [`${BASE_URL}/og/sandbox.png`]
+    images: [`${BASE_URL}/sandbox/opengraph-image`]
   },
   alternates: { canonical: "/sandbox" },
 }
@@ -93,6 +93,20 @@ const softwareApplicationJsonLd = {
   ],
 }
 
+const imageObjectJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ImageObject",
+  contentUrl: `${BASE_URL}/sandbox/opengraph-image`,
+  description: "ClawGuru Live Fix Sandbox — In-Browser Config Testing - Nginx, Docker, Terraform, K8s",
+  author: {
+    "@type": "Organization",
+    name: "ClawGuru",
+  },
+  license: "https://creativecommons.org/licenses/by/4.0/",
+  width: 1200,
+  height: 630,
+}
+
 export default function SandboxPage() {
   return (
     <>
@@ -103,6 +117,10 @@ export default function SandboxPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareApplicationJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(imageObjectJsonLd) }}
       />
       <div
         className="relative min-h-screen flex flex-col"

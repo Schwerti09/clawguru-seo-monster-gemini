@@ -1,0 +1,110 @@
+[aya] Ollama: http://127.0.0.1:11434
+[aya] using model: aya-expanse:8b
+[aya] targets: nl, tr, pl, ko, hi, pt, it, fr, es, ru, ja, zh, de, da, ar, th, sv, el, uk, no, vi, id, cs, ro, bn, fi, hu, af, he, ms, bg
+[aya] batch size: 40
+
+[nl] Dutch: 387 missing keys
+  batch 1/10 (40) ... ok 147.794s
+  batch 2/10 (40) ... ok 111.644s
+  batch 3/10 (40) ... ok 114.806s
+  batch 4/10 (40) ... ok 140.499s
+  batch 5/10 (40) ... ok 112.613s
+  batch 6/10 (40) ... ok 165.128s
+  batch 7/10 (40) ... ok 143.146s
+  batch 8/10 (40) ... ok 190.512s
+  batch 9/10 (40) ... ok 106.652s
+  batch 10/10 (27) ... ok 71.246s
+
+[tr] Turkish: 345 missing keys
+  batch 1/9 (40) ... ok 100.669s
+  batch 2/9 (40) ... ok 100.637s
+  batch 3/9 (40) ... ok 116.704s
+  batch 4/9 (40) ... ok 109.552s
+  batch 5/9 (40) ... ok 106.558s
+  batch 6/9 (40) ... ok 506.256s
+  batch 7/9 (40) ... ok 157.931s
+  batch 8/9 (40) ... ok 192.589s
+  batch 9/9 (25) ... ok 67.85s
+
+[pl] Polish: 349 missing keys
+  batch 1/9 (40) ... ok 112.711s
+  batch 2/9 (40) ... ok 119.189s
+  batch 3/9 (40) ... ok 130.254s
+  batch 4/9 (40) ... ok 121.356s
+  batch 5/9 (40) ... ok 127.562s
+  batch 6/9 (40) ... ok 106.653s
+  batch 7/9 (40) ... ok 102.73s
+  batch 8/9 (40) ... ok 113.045s
+  batch 9/9 (29) ... ok 75.023s
+
+[ko] Korean: 350 missing keys
+  batch 1/9 (40) ... ok 105.216s
+  batch 2/9 (40) ... ok 108.625s
+  batch 3/9 (40) ... ok 103.766s
+  batch 4/9 (40) ... ok 139.356s
+  batch 5/9 (40) ... ok 115.352s
+  batch 6/9 (40) ... ok 93.386s
+  batch 7/9 (40) ... ok 101.277s
+  batch 8/9 (40) ... ok 109.127s
+  batch 9/9 (30) ... ok 77.722s
+
+[hi] Hindi: 350 missing keys
+  batch 1/9 (40) ... ok 161.285s
+  batch 2/9 (40) ... ok 187.367s
+  batch 3/9 (40) ... ok 199.595s
+  batch 4/9 (40) ... ok 219.204s
+  batch 5/9 (40) ... ok 187.157s
+  batch 6/9 (40) ... ok 158.133s
+  batch 7/9 (40) ... ok 157.19s
+  batch 8/9 (40) ... ok 179.597s
+  batch 9/9 (30) ... ok 123.365s
+
+[pt] Portuguese (Brazilian): 315 missing keys
+  batch 1/8 (40) ... ok 98.412s
+  batch 2/8 (40) ... ok 113.268s
+  batch 3/8 (40) ... ok 140.844s
+  batch 4/8 (40) ... ok 84.098s
+  batch 5/8 (40) ... ok 93.052s
+  batch 6/8 (40) ... ok 99.179s
+  batch 7/8 (40) ... ok 103.613s
+  batch 8/8 (35) ... ok 84.005s
+
+[it] Italian: 319 missing keys
+  batch 1/8 (40) ... ok 100.931s
+  batch 2/8 (40) ... ok 113.852s
+  batch 3/8 (40) ... ok 141.257s
+  batch 4/8 (40) ... ok 79.286s
+  batch 5/8 (40) ... ok 97.8s
+  batch 6/8 (40) ... ok 106.325s
+  batch 7/8 (40) ... ok 107.828s
+  batch 8/8 (39) ... ok 103.847s
+
+[fr] French: 320 missing keys
+  batch 1/8 (40) ... ok 99.665s
+  batch 2/8 (40) ... ok 114.939s
+  batch 3/8 (40) ... ok 147.434s
+  batch 4/8 (40) ... ok 77.697s
+  batch 5/8 (40) ... ok 93.093s
+  batch 6/8 (40) ... ok 108.568s
+  batch 7/8 (40) ... ok 102.253s
+  batch 8/8 (40) ... ok 100.428s
+
+[es] Spanish: 313 missing keys
+  batch 1/8 (40) ... ok 98.524s
+  batch 2/8 (40) ... ok 108.596s
+  batch 3/8 (40) ... ok 128.406s
+  batch 4/8 (40) ... ok 78.081s
+  batch 5/8 (40) ...   [retry 1] ollama http 500
+ok 941.419s
+  batch 6/8 (40) ... ok 194.968s
+  batch 7/8 (40) ... ok 147.36s
+  batch 8/8 (33) ... ok 107.475s
+
+[ru] Russian: 298 missing keys
+  batch 1/8 (40) ... ok 163.759s
+  batch 2/8 (40) ... ok 259.805s
+  batch 3/8 (40) ...   [retry 1] fetch failed
+ok 594.003s
+  batch 4/8 (40) ... ok 167.187s
+  batch 5/8 (40) ... ok 149.776s
+  batch 6/8 (40) ... 

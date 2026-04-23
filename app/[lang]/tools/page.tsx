@@ -17,12 +17,47 @@ export async function generateMetadata({ params }: { params: { lang: string } })
   const pageUrl = `${SITE_URL}/${locale}/tools`
   const title = "The Arsenal — 15 free security tools | ClawGuru"
   const description = "Inline security tools for self-hosters: header doctor, TLS x-ray, prompt injection sandbox, and more. No signup, no data retention."
+
+  const imageObjectJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ImageObject",
+    contentUrl: `${SITE_URL}/${locale}/tools/opengraph-image`,
+    description: "ClawGuru The Arsenal - 15 Free Security Tools - Header Doctor, TLS Xray, Prompt Injection Sandbox",
+    author: {
+      "@type": "Organization",
+      name: "ClawGuru",
+    },
+    license: "https://creativecommons.org/licenses/by/4.0/",
+    width: 1200,
+    height: 630,
+  }
+
   return {
     title,
     description,
-    openGraph: { title, description, url: pageUrl, type: "website" },
+    openGraph: {
+      title,
+      description,
+      url: pageUrl,
+      type: "website",
+      images: [{
+        url: `${SITE_URL}/${locale}/tools/opengraph-image`,
+        width: 1200,
+        height: 630,
+        alt: "ClawGuru The Arsenal - 15 Free Security Tools - Header Doctor, TLS Xray, Prompt Injection Sandbox"
+      }]
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [`${SITE_URL}/${locale}/tools/opengraph-image`]
+    },
     alternates: buildLocalizedAlternates(locale, "/tools"),
     robots: "index, follow",
+    other: {
+      "application/ld+json": JSON.stringify(imageObjectJsonLd),
+    },
   }
 }
 

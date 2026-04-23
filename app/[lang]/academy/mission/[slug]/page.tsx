@@ -7,11 +7,11 @@ import { getMission, listMissionSlugs } from "@/lib/academy/missions"
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 
 export const revalidate = 3600
-export const dynamic = "force-static"
+export const dynamic = "force-dynamic"
 
 export async function generateStaticParams() {
-  const slugs = listMissionSlugs()
-  return SUPPORTED_LOCALES.flatMap((lang) => slugs.map((slug) => ({ lang, slug })))
+  // Claude works on Academy - leave disabled
+  return []
 }
 
 export async function generateMetadata(

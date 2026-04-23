@@ -44,17 +44,17 @@ export const metadata: Metadata = {
     type: "website",
     url: `${BASE_URL}/copilot`,
     images: [{
-      url: `${BASE_URL}/og/copilot.png`,
+      url: `${BASE_URL}/copilot/opengraph-image`,
       width: 1200,
       height: 630,
-      alt: "ClawGuru Prof. ClawGuru — AI Security Assistant"
+      alt: "ClawGuru Prof. ClawGuru — AI Security Assistant - 4.2M+ Runbooks, 30s Fix Time, 24/7 Active"
     }]
   },
   twitter: {
     card: "summary_large_image",
     title: "Prof. ClawGuru — AI Security Assistant | ClawGuru",
     description: "ClawGuru ist die KI-gestützte SecOps-Plattform mit über 4,2 Millionen ausführbaren Runbooks – für Incident Response, Hardening und Compliance in Echtzeit. Vom Problem zum Fix in unter 30 Sekunden.",
-    images: [`${BASE_URL}/og/copilot.png`]
+    images: [`${BASE_URL}/copilot/opengraph-image`]
   },
   alternates: { canonical: "/copilot" },
 }
@@ -90,6 +90,20 @@ const softwareApplicationJsonLd = {
   },
 }
 
+const imageObjectJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ImageObject",
+  contentUrl: `${BASE_URL}/copilot/opengraph-image`,
+  description: "ClawGuru Prof. ClawGuru — AI Security Assistant - 4.2M+ Runbooks, 30s Fix Time, 24/7 Active",
+  author: {
+    "@type": "Organization",
+    name: "ClawGuru",
+  },
+  license: "https://creativecommons.org/licenses/by/4.0/",
+  width: 1200,
+  height: 630,
+}
+
 export default async function CopilotPage(
   props: { searchParams?: Promise<Record<string, string | string[] | undefined>> }
 ) {
@@ -109,6 +123,10 @@ export default async function CopilotPage(
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareApplicationJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(imageObjectJsonLd) }}
       />
       <div
         className="relative min-h-screen flex flex-col"

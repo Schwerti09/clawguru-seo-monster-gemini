@@ -6,6 +6,9 @@ import { logTelemetry } from "@/lib/ops/telemetry"
 import { getRequestId } from "@/lib/ops/request-id"
 import { getTopCities } from "@/lib/geo-cities"
 import { getGeoSitemapRuntimeLimits } from "@/lib/geo-runtime-config"
+import { listMissionSlugs } from "@/lib/academy/missions"
+import { listScenarioSlugs } from "@/lib/breaches"
+import { listLiveTools } from "@/lib/tools"
 // lightweight: avoid importing heavy datasets here to keep Edge fast
 
 // IMPORTANT: This route must stay dynamic (Netlify prerender can call it without params)
@@ -358,8 +361,8 @@ export async function GET(
         "launch-results",
         // MINI-ACADEMY Learning Paths (21.04.2026)
         "academy/beginner","academy/intermediate","academy/advanced",
-        // Academy ∞ — 5 new tracks (22.04.2026)
-        "academy/auth","academy/incident-response","academy/compliance","academy/adversarial","academy/story",
+        // Academy ∞ — 5 new tracks + certification (22–23.04.2026)
+        "academy/auth","academy/incident-response","academy/compliance","academy/adversarial","academy/story","academy/certification",
       ]
       // Quality geo landing pages (50 cities with local compliance context)
       const GEO_QUALITY_SLUGS = [
@@ -434,17 +437,21 @@ export async function GET(
         { loc: `${base}/${locale}/academy/compliance`, lastmod, changefreq: "weekly", priority: "0.82" },
         { loc: `${base}/${locale}/academy/adversarial`, lastmod, changefreq: "weekly", priority: "0.82" },
         { loc: `${base}/${locale}/academy/story`, lastmod, changefreq: "weekly", priority: "0.82" },
-        // Academy ∞ — The Arsenal (security tools, 22.04.2026)
-        { loc: `${base}/${locale}/tools`,                              lastmod, changefreq: "weekly", priority: "0.88" },
-        { loc: `${base}/${locale}/tools/header-doctor`,                lastmod, changefreq: "weekly", priority: "0.90" },
-        { loc: `${base}/${locale}/tools/tls-xray`,                     lastmod, changefreq: "weekly", priority: "0.90" },
-        { loc: `${base}/${locale}/tools/prompt-injection-sandbox`,     lastmod, changefreq: "weekly", priority: "0.90" },
-        // Academy ∞ — playable missions (22.04.2026)
-        { loc: `${base}/${locale}/academy/mission/nginx-hsts`,     lastmod, changefreq: "weekly", priority: "0.90" },
-        { loc: `${base}/${locale}/academy/mission/ssh-hardening`,  lastmod, changefreq: "weekly", priority: "0.90" },
-        { loc: `${base}/${locale}/academy/mission/ufw-firewall`,   lastmod, changefreq: "weekly", priority: "0.90" },
-        { loc: `${base}/${locale}/academy/mission/lets-encrypt`,   lastmod, changefreq: "weekly", priority: "0.90" },
-        { loc: `${base}/${locale}/academy/mission/misconfig-hunt`, lastmod, changefreq: "weekly", priority: "0.90" },
+        { loc: `${base}/${locale}/academy/certification`, lastmod, changefreq: "weekly", priority: "0.85" },
+        // Academy ∞ — Attack Cinema (breach re-enactments) — registry-driven
+        { loc: `${base}/${locale}/breaches`, lastmod, changefreq: "weekly", priority: "0.88" },
+        ...listScenarioSlugs().map((slug) => ({
+          loc: `${base}/${locale}/breaches/${slug}`, lastmod, changefreq: "weekly" as const, priority: "0.90",
+        })),
+        // Academy ∞ — The Arsenal (security tools) — registry-driven, live-only
+        { loc: `${base}/${locale}/tools`, lastmod, changefreq: "weekly", priority: "0.88" },
+        ...listLiveTools().map((t) => ({
+          loc: `${base}/${locale}/tools/${t.slug}`, lastmod, changefreq: "weekly" as const, priority: "0.90",
+        })),
+        // Academy ∞ — playable missions — registry-driven
+        ...listMissionSlugs().map((slug) => ({
+          loc: `${base}/${locale}/academy/mission/${slug}`, lastmod, changefreq: "weekly" as const, priority: "0.90",
+        })),
         { loc: `${base}/${locale}/academy/roast-learn-prompt-injection`, lastmod, changefreq: "weekly", priority: "0.87" },
         { loc: `${base}/${locale}/academy/cve-feed`, lastmod, changefreq: "weekly", priority: "0.88" },
         { loc: `${base}/${locale}/academy/cve`, lastmod, changefreq: "weekly", priority: "0.87" },

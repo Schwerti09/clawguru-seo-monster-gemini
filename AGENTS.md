@@ -75,7 +75,50 @@
 - Sitemap: `/tools` + 3 tool URLs per locale (priority 0.90/0.88)
 - Type-check: `npx tsc --noEmit` → exit 0
 
-**Next — Step 6:** Attack Visualizer — 1 breach re-enactment (Log4Shell) with Mermaid + animated timeline.
+**Step 6 — Attack Cinema (Log4Shell) — ✅ COMPLETE (23.04.2026)**
+- `lib/breaches/types.ts` — scenario model: `Scenario` → `TimelineStep[]` → each step has `diagram` + optional `Fork` with its own diagram. All declarative, no rendering logic in data.
+- `lib/breaches/log4shell.ts` — 10-step Log4Shell re-enactment (CVE-2021-44228, CVSS 10.0) from disclosure (T+0) through long-tail (T+years). **3 defensive fork points**: step 3 formatMsgNoLookups flag, step 4 egress allowlist, step 6 edge WAF. Takeaways + references.
+- `lib/breaches/index.ts` — scenario registry with `SCENARIO_INDEX[]` (5 entries: Log4Shell live + SolarWinds, Okta 2023, MOVEit, Cloudflare Supply Chain as soon)
+- `components/breaches/AttackTimeline.tsx` — **zero-dependency animated SVG renderer**:
+  - Percent-coord viewBox (0..100) responsive at any size
+  - Nodes color-keyed by actor (attacker/victim/defender/server/external/vendor/public) with glow drop-shadows
+  - Edges typed by kind (attack/normal/blocked/recovery), arrowheads via SVG markers, stroke-dashoffset draw animation, dashed pulse for blocked
+  - Node-edge intersection math so arrows stop at rectangle borders
+  - Step-by-step narrative, prev/next, autoplay toggle, progress bar, clickable step dots
+  - Fork toggle ("What if defender had acted differently?") swaps to alternate diagram + outcome + takeaway
+  - End-of-scenario: takeaways list + references
+- `app/[lang]/breaches/page.tsx` — Attack Cinema hub, 5 scenario cards
+- `app/[lang]/breaches/[slug]/page.tsx` — scenario page with Schema.org `Article` markup
+- Academy hub: new Attack Cinema teaser card (red, scanlines) above Arsenal teaser
+- Sitemap: `/breaches` + `/breaches/log4shell` per-locale
+- Type-check: `npx tsc --noEmit` → exit 0
+
+**Why this matters:** every other security-education site presents Log4Shell as an article. Ours is a playable timeline with defensive forks — the learner sees visually how one firewall rule or one JVM flag rewrites the story.
+
+**Step 7 — Content pipeline scripts (local-LLM-backed) — ✅ SHIPPED (23.04.2026, awaiting model)**
+- `scripts/translate-via-aya.js` — diff-based dictionary translator. Reads `en.json`, flattens, compares to each locale, calls local Ollama in batches of 40 keys with strict JSON-mode. Persists incrementally (crash-safe resume). Skips `roast.*`. CLI: `npm run i18n:translate-aya [locales...]`. Env: `OLLAMA_URL`, `OLLAMA_MODEL`, `BATCH_SIZE`, `DRY_RUN=1`. Model preference chain: `aya-expanse:8b` → `:32b` → `qwen2.5:14b` → first available.
+- `scripts/gen-mission-outlines.js` — structured mission outline generator. 8 tracks, default 10 missions each = 80 outlines. Hard rules in system prompt (defensive only, specific titles, simulator-verifiable goals). Outputs to `lib/academy/missions/_outlines/<track>.json`. CLI: `npm run academy:gen-outlines [tracks...]`. Env: `COUNT_PER_TRACK`.
+- Both scripts share the same model-picker + JSON-mode chat helper pattern, safe to reuse for future content generators.
+- package.json: `i18n:translate-aya` + `academy:gen-outlines` npm scripts wired.
+
+**Current blocker:** user's `ollama pull aya-expanse:32b` never registered a manifest (only `qwen2.5:3b` listed). User is pulling `aya-expanse:8b` (smaller, fits same workflow). Pipeline ready to fire the moment `ollama list` shows aya.
+
+**Next — after aya lands:**
+1. Quality probe: `DRY_RUN=1 npm run i18n:translate-aya sv` — inspect 40 translated keys
+2. If good → `npm run i18n:translate-aya` for all 28 target locales
+3. `npm run academy:gen-outlines` → 80 outlines in `_outlines/`
+4. Expand first 10 outlines across 2 tracks into full mission files
+
+**Step 8 — Reactivation + sitemap sweep — ✅ COMPLETE (23.04.2026)**
+- `/academy/mission/[slug]/page.tsx` — reactivated as `force-static` with full `generateStaticParams` over 31 locales × 5 live missions = 155 prerendered pages
+- `/breaches/page.tsx` + `/breaches/[slug]/page.tsx` — same reactivation (hub + scenarios static across all locales)
+- Sitemap: replaced hard-coded slug lists with **registry-driven generation** — missions/scenarios/tools auto-enter sitemap the moment they're registered. No more drift between registry and sitemap.
+  - Added `/academy/certification` (was missing)
+  - `listMissionSlugs()` powers `/academy/mission/*` entries
+  - `listScenarioSlugs()` powers `/breaches/*` entries
+  - `listLiveTools()` powers `/tools/*` entries (filters "soon" automatically)
+- Removed leftover empty `app/[lang]/academy/ai-security/` directory
+- Type-check: `npx tsc --noEmit` → exit 0
 
 **Parallel workstream — i18n Round 14 → 50 languages:**
 - Target extended from 30 → 50 languages (API rate limits required local LLM)
@@ -222,12 +265,6 @@
 
 ### Quality Metrics
 - **Build Status:** Exit code 0, keine Fehler
-- **Commit:** `4fe6798e` — 2 files changed, 45 insertions(+), 1 deletion(-)
-
----
-
-## MYCELIUM LIGHTHOUSE 99+ OPTIMIZATION — COMPLETED (22.04.2026)
-
 ### Executive Summary
 **Mycelium Lighthouse 99+ Optimization:** ✅ Mycelium Seite (/mycelium und /[lang]/mycelium) für Lighthouse 99+ optimiert. SEO-Metadaten erweitert (OpenGraph, Twitter Cards, Schema.org JSON-LD), Accessibility verbessert (ARIA Labels, role="main"), Build-Fehler in Academy Mission pages behoben.
 

@@ -236,6 +236,39 @@ export default async function AcademyPage({ params }: { params: { lang: string }
         </div>
       </section>
 
+      {/* ═══════════════ ATTACK CINEMA TEASER ═══════════════ */}
+      <section className="py-6">
+        <div className="container mx-auto px-4">
+          <Link
+            href={`${prefix}/breaches/log4shell`}
+            className="block max-w-5xl mx-auto group relative overflow-hidden rounded-2xl border border-red-500/20 bg-gradient-to-br from-red-500/5 via-[#05070a] to-amber-500/5 hover:border-red-400/40 transition-all"
+          >
+            <div
+              className="absolute inset-0 opacity-[0.06] pointer-events-none"
+              style={{ backgroundImage: "repeating-linear-gradient(0deg, rgba(239,68,68,0.4) 0px, rgba(239,68,68,0.4) 1px, transparent 1px, transparent 3px)" }}
+              aria-hidden
+            />
+            <div className="relative p-8 md:p-10 grid md:grid-cols-[auto_1fr_auto] items-center gap-6">
+              <div className="text-5xl">🎬</div>
+              <div>
+                <div className="text-[10px] font-mono tracking-[0.3em] text-red-300 mb-2">ATTACK CINEMA · NEW</div>
+                <h3 className="text-2xl md:text-3xl font-black text-gray-100 mb-2">
+                  Log4Shell — interactive replay, 10 steps, 3 defensive forks
+                </h3>
+                <p className="text-sm text-gray-400 max-w-2xl leading-relaxed">
+                  Replay the breach that owned the internet. Branch into &ldquo;what if&rdquo; at every critical moment — see how one firewall rule, one config flag, one WAF pattern changes the outcome.
+                </p>
+              </div>
+              <div className="shrink-0 hidden md:block">
+                <div className="font-mono text-xs px-5 py-3 rounded-lg bg-red-500 text-black font-black group-hover:bg-red-400 transition-colors">
+                  REPLAY →
+                </div>
+              </div>
+            </div>
+          </Link>
+        </div>
+      </section>
+
       {/* ═══════════════ ARSENAL TEASER ═══════════════ */}
       <section className="py-12">
         <div className="container mx-auto px-4">

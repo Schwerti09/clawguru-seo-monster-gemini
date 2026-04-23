@@ -33,6 +33,8 @@
     "check:sitemap-redirects": "node scripts/check-sitemap-redirects.js",
     "check:prod-smoke": "node scripts/check-production-smoke.js",
     "i18n:sync-dictionaries": "node scripts/sync-dictionaries.js",
+    "i18n:translate-aya": "node scripts/translate-via-aya.js",
+    "academy:gen-outlines": "node scripts/gen-mission-outlines.js",
     "build": "npm run build:data && next build",
     "start": "next start -p ${PORT:-3000}",
     "lint": "next lint",

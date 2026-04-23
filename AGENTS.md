@@ -2,7 +2,22 @@
 
 > **This document is the single source of truth for every agent working in this codebase.**
 > Read it completely BEFORE making any change. Update the Session Log after every session.
-> Last updated: 22.04.2026 | Language: English (maximises AI model compatibility)
+> Last updated: 23.04.2026 | Language: English (maximises AI model compatibility)
+
+---
+
+## 📚 Documentation Map — READ THIS FIRST
+
+Do not treat `AGENTS.md` as the only source. A new agent reading *only* this file will miss 60 % of the active state. Four documents together define the current project; read them in order:
+
+1. **This file (AGENTS.md)** — session log, active initiative banner below, ownership + hook rules
+2. **[`docs/academy-infinity-plan-2026-04-22.md`](docs/academy-infinity-plan-2026-04-22.md)** — Academy ∞ master plan + progress dashboard + architecture + 15-step roadmap
+3. **[`docs/i18n-state-2026-04-23.md`](docs/i18n-state-2026-04-23.md)** — per-locale translation coverage snapshot, pipeline usage, Phase-2 blocker
+4. **[`docs/i18n-roadmap-2026-04-22.md`](docs/i18n-roadmap-2026-04-22.md)** — Phase 2–6 i18n plan (hardcoded-string exorcism + consolidation)
+
+Claude's user memory (`C:\Users\rolli\.claude\projects\c--clawguru-seo-monster-gemini\memory\*`) adds a fifth layer: user profile, partnership mode, project context, LLM setup. Only loaded when Claude Code runs; do not rely on it from external agents.
+
+**Golden rule:** if you touch the Academy ∞ scope or i18n, update the matching doc in the same commit. No silent drift.
 
 ---
 

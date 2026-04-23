@@ -38,12 +38,13 @@ const REF_LOCALE = "en"
 const SKIP_SECTIONS = ["roast"]          // culturally specific — leave EN/DE only
 
 const LANG_NAMES = {
-  af: "Afrikaans", ar: "Arabic", bn: "Bengali", cs: "Czech", da: "Danish",
-  el: "Greek", es: "Spanish", fi: "Finnish", fr: "French", he: "Hebrew",
-  hi: "Hindi", hu: "Hungarian", id: "Indonesian", it: "Italian", ja: "Japanese",
-  ko: "Korean", nl: "Dutch", no: "Norwegian (Bokmål)", pl: "Polish",
-  pt: "Portuguese (Brazilian)", ro: "Romanian", ru: "Russian", sv: "Swedish",
-  th: "Thai", tr: "Turkish", uk: "Ukrainian", vi: "Vietnamese", zh: "Chinese (Simplified)",
+  af: "Afrikaans", ar: "Arabic", bg: "Bulgarian", bn: "Bengali", cs: "Czech",
+  da: "Danish", el: "Greek", es: "Spanish", fi: "Finnish", fr: "French",
+  he: "Hebrew", hi: "Hindi", hu: "Hungarian", id: "Indonesian", it: "Italian",
+  ja: "Japanese", ko: "Korean", ms: "Malay", nl: "Dutch",
+  no: "Norwegian (Bokmål)", pl: "Polish", pt: "Portuguese (Brazilian)",
+  ro: "Romanian", ru: "Russian", sv: "Swedish", th: "Thai", tr: "Turkish",
+  uk: "Ukrainian", vi: "Vietnamese", zh: "Chinese (Simplified)",
 }
 
 // ── JSON helpers ───────────────────────────────────────────────────────────

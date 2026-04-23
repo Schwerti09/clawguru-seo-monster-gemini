@@ -1,11 +1,49 @@
 # Academy ∞ — Master Plan & Handoff Document
 
 **Created:** 2026-04-22
+**Last updated:** 2026-04-23
 **Owner:** Rolf S. (Schwerti)
-**Status:** APPROVED — ready to build
-**Deployment targets:** Railway / Vercel (Netlify remains current production)
+**Status:** 🟢 BUILD IN PROGRESS — Steps 1–8 shipped, Step 7 (content pipeline) awaiting model availability
+**Deployment targets:** Netlify (prod), Railway / Vercel candidates — build stays deploy-agnostic
 
 This document is the single source of truth for the Academy ∞ rebuild. Any agent picking up work should read this top to bottom before touching code.
+
+---
+
+## 🚦 Progress Dashboard (2026-04-23)
+
+| # | Step | Status | Key artefacts |
+|---|------|--------|---------------|
+| 1 | Academy Hub Redesign | ✅ DONE | 8-track grid, atmospheric hero, `lib/academy/hubContent.ts`, 5 new track stubs |
+| 2 | xterm.js Live Range POC | ✅ DONE | Mission engine + LiveRangeTerminal + MissionRunner + Mission M-001 |
+| 3 | Foundations track missionized | ✅ DONE | 5 playable missions (M-001…M-005), beginner page rebuilt |
+| 4 | Sentinel AI Tutor (minimal) | ✅ DONE | `/api/academy/sentinel` (Ollama → Gemini → stub), SentinelChat widget |
+| 5 | The Arsenal (first 3 tools) | ✅ DONE | Header Doctor · TLS X-Ray · Prompt Injection Sandbox + `/tools` hub |
+| 6 | Attack Cinema (Log4Shell) | ✅ DONE | `/breaches` hub + `/breaches/log4shell` 10-step timeline with 3 forks |
+| 7 | Content pipeline (local LLM) | 🟡 SHIPPED, blocked | `scripts/translate-via-aya.js` + `scripts/gen-mission-outlines.js` — waits on `aya-expanse:8b` pull |
+| 8 | Reactivation + sitemap sweep | ✅ DONE | Mission + breach routes static, registry-driven sitemap (auto-sync) |
+| 9 | 10 more missions × 2 tracks | ⏭ NEXT | Blocked on Step 7 (outlines) for scale |
+| 10 | Digital Twin (GitHub read-only) | ⏭ LATER | — |
+| 11 | Adversarial AI Co-Player | ⏭ LATER | — |
+| 12 | Community + Mission Authoring | ⏭ LATER | — |
+| 13 | SOC Simulator | ⏭ LATER | — |
+| 14 | Career Launchpad + HR | ⏭ LATER | — |
+
+**Live routes (all locales):**
+- `/academy` — hub with Mission / Attack Cinema / Arsenal teasers + 8 track cards
+- `/academy/beginner` — Foundations track, 5 missions indexed
+- `/academy/mission/{nginx-hsts,ssh-hardening,ufw-firewall,lets-encrypt,misconfig-hunt}` — playable
+- `/academy/{intermediate,advanced,auth,incident-response,compliance,adversarial,story,certification}` — stubs / legacy
+- `/breaches` — Attack Cinema hub (1 live + 4 soon)
+- `/breaches/log4shell` — interactive re-enactment
+- `/tools` — Arsenal hub (3 live + 12 soon)
+- `/tools/{header-doctor,tls-xray,prompt-injection-sandbox}` — functional
+
+**Run commands (new):**
+```
+npm run i18n:translate-aya [locales...]    # EN → any target, local LLM
+npm run academy:gen-outlines [tracks...]   # 80 mission outlines via local LLM
+```
 
 ---
 
@@ -248,20 +286,21 @@ Schema.org markup:
 
 ## 8. Build Priority Order (No Time Estimates — just sequence)
 
-1. **Academy Hub Redesign** — new IA, 8 tracks, atmospheric hero
-2. **xterm.js Proof-of-Concept** — 1 mission playable start-to-finish
-3. **`LessonShell` Component** — reusable container (progress, Sentinel hook, toolbox slot)
-4. **Sentinel AI Tutor** — minimal version (aya local + Gemini fallback)
-5. **3 Core Tools** live: Header Doctor, TLS X-Ray, Prompt Injection Sandbox
-6. **Attack Visualizer** — 1 breach fully (Log4Shell)
-7. **80 Mission Outlines** generated via aya; 10 fully built
-8. **Proof-of-Work Certification** for Track 1
-9. **Hodlberg Story Engine** — Act 1
-10. **Digital Twin** with GitHub read-only connector
-11. **Adversarial AI Co-Player**
-12. **Community Features + Mission Authoring**
-13. **SOC Simulator**
-14. **Career Launchpad + HR integrations**
+1. ✅ **Academy Hub Redesign** — new IA, 8 tracks, atmospheric hero
+2. ✅ **xterm.js POC** — 1 mission playable; engine generalized from the start
+3. ✅ **MissionRunner / LiveRangeTerminal** — reusable containers (progress, Sentinel hook, goal side-panel)
+4. ✅ **Sentinel AI Tutor** — Ollama → Gemini → stub provider chain
+5. ✅ **3 Core Tools** live — Header Doctor, TLS X-Ray, Prompt Injection Sandbox
+6. ✅ **Attack Visualizer** — Log4Shell, 10 steps, 3 forks, zero-dep animated SVG
+7. 🟡 **80 Mission Outlines + 10 missions fully built** — pipeline ready, waiting on local LLM
+8. ✅ **Sitemap sweep + static-route reactivation** (unplanned but necessary)
+9. ⏭ **Proof-of-Work Certification** for Foundations track
+10. ⏭ **Hodlberg Story Engine** — Act 1
+11. ⏭ **Digital Twin** with GitHub read-only connector
+12. ⏭ **Adversarial AI Co-Player**
+13. ⏭ **Community Features + Mission Authoring**
+14. ⏭ **SOC Simulator**
+15. ⏭ **Career Launchpad + HR integrations**
 
 ---
 

@@ -3,23 +3,29 @@
 import { useCallback, useState } from "react"
 import Link from "next/link"
 import type { Mission, MissionState } from "@/lib/academy/missionEngine"
+import { getMission } from "@/lib/academy/missions"
 import { LiveRangeTerminal } from "./LiveRangeTerminal"
 import { SentinelChat } from "./SentinelChat"
 
 interface Props {
-  mission: Mission
+  missionSlug: string
   backHref: string
   locale: string
 }
 
 // Split layout: terminal (left) + goals/brief panel (right).
 // Keeps state mirrored from engine via onStateChange callbacks.
-export function MissionRunner({ mission, backHref, locale }: Props) {
-  const [state, setState] = useState<MissionState>(mission.initialState)
+export function MissionRunner({ missionSlug, backHref, locale }: Props) {
+  const mission: Mission | undefined = getMission(missionSlug)
+  const [state, setState] = useState<MissionState>(
+    mission?.initialState ?? { cwd: "/", fs: {}, env: {}, goalsMet: [], history: [] }
+  )
   const [complete, setComplete] = useState(false)
 
   const handleStateChange = useCallback((s: MissionState) => setState(s), [])
   const handleComplete = useCallback(() => setComplete(true), [])
+
+  if (!mission) return null
 
   const metCount = state.goalsMet.length
   const totalCount = mission.goals.length

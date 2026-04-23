@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
 import { MissionRunner } from "@/components/academy/MissionRunner"
-import { getMission, listMissionSlugs } from "@/lib/academy/missions"
+import { getMission } from "@/lib/academy/missions"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 
@@ -38,5 +38,5 @@ export default function MissionPage({ params }: { params: { lang: string; slug: 
   const mission = getMission(params.slug)
   if (!mission) notFound()
 
-  return <MissionRunner mission={mission} backHref={`/${locale}/academy`} locale={locale} />
+  return <MissionRunner missionSlug={params.slug} backHref={`/${locale}/academy`} locale={locale} />
 }

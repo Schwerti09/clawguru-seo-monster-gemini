@@ -23,15 +23,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const pageUrl = `${SITE_URL}/${locale}${PATH}`
   const isDE = locale === "de"
   const title = isDE
-    ? "Roast Consulting — Fix Your Stack | ClawGuru"
-    : "Roast Consulting — Fix Your Stack | ClawGuru"
+    ? "Autonomous Security Ops — ClawGuru"
+    : "Autonomous Security Ops — ClawGuru"
   const description = isDE
-    ? "Professional Services für Security-Hardening. High-Ticket Consulting für Enterprise. Keine Mock-Daten."
-    : "Professional services for security hardening. High-ticket consulting for enterprise. No mock data."
+    ? "Automatisiertes Security-Operating-System für Self-Hosted Stacks. KI-gestützte Priorisierung, klare Fix-Pläne, transparente Preise."
+    : "Automated security operating system for self-hosted stacks. AI-driven prioritization, clear fix plans, transparent pricing."
   return {
     title,
     description,
-    keywords: ["roast consulting", "security consulting", "fix your stack", "professional services", "enterprise consulting"],
+    keywords: ["autonomous security ops", "security autopilot", "self-hosted security", "ai remediation", "clawguru"],
     authors: [{ name: "ClawGuru Security Team" }],
     openGraph: { title, description, type: "article", url: pageUrl, images: ["/og-image.png"] },
     alternates: buildLocalizedAlternates(locale, PATH),
@@ -42,91 +42,89 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 const getServices = (isDE: boolean) => [
   {
     icon: Shield,
-    title: isDE ? "Security Audit" : "Security Audit",
+    title: isDE ? "Autopilot Risk Scan" : "Autopilot Risk Scan",
     description: isDE
-      ? "Umfassende Security-Audit deiner Infrastruktur. Identifiziere Schwachstellen und bekomme actionable Recommendations."
-      : "Comprehensive security audit of your infrastructure. Identify vulnerabilities and get actionable recommendations.",
-    duration: isDE ? "2-4 Wochen" : "2-4 weeks",
-    price: isDE ? "5.000€" : "5.000€",
+      ? "Kontinuierliche Scans, priorisierte Risiken und klare Handlungsempfehlungen statt einmaliger PDF-Berichte."
+      : "Continuous scans, prioritized risks, and clear action plans instead of one-off PDF reports.",
+    duration: isDE ? "laufend" : "continuous",
+    price: isDE ? "ab 29€/Monat" : "from €29/month",
     popular: true,
   },
   {
     icon: Briefcase,
-    title: isDE ? "Stack Hardening" : "Stack Hardening",
+    title: isDE ? "AI Remediation Planner" : "AI Remediation Planner",
     description: isDE
-      ? "Härte deinen Stack nach Best Practices. Cloud-Provider, Container, Database, Network."
-      : "Harden your stack according to best practices. Cloud providers, containers, databases, networks.",
-    duration: isDE ? "4-6 Wochen" : "4-6 weeks",
-    price: isDE ? "8.000€" : "8.000€",
+      ? "LLM-gestützte Fix-Pläne mit Infrastrukturkontext und Runbook-Mapping für direkte Umsetzung."
+      : "LLM-powered remediation plans with infrastructure context and runbook mapping for direct execution.",
+    duration: isDE ? "in Minuten statt Wochen" : "minutes instead of weeks",
+    price: isDE ? "im Pro/Scale enthalten" : "included in Pro/Scale",
     popular: false,
   },
   {
     icon: Users,
-    title: isDE ? "Team Training" : "Team Training",
+    title: isDE ? "Proof-of-Fix Reports" : "Proof-of-Fix Reports",
     description: isDE
-      ? "Schulung deines Teams in Security-Best Practices. Hands-on Workshops und Role-based Training."
-      : "Train your team in security best practices. Hands-on workshops and role-based training.",
-    duration: isDE ? "1-2 Wochen" : "1-2 weeks",
-    price: isDE ? "3.000€" : "3.000€",
+      ? "Automatisch erzeugte Evidenz pro Maßnahme: was gefunden wurde, was behoben wurde, welcher Rest-Risiko-Score bleibt."
+      : "Automatically generated evidence per action: what was found, what was fixed, and what residual risk remains.",
+    duration: isDE ? "bei jedem Lauf" : "on every run",
+    price: isDE ? "ab Pro" : "from Pro",
     popular: false,
   },
   {
     icon: Clock,
-    title: isDE ? "24/7 Monitoring" : "24/7 Monitoring",
+    title: isDE ? "Human Escalation (optional)" : "Human Escalation (optional)",
     description: isDE
-      ? "Round-the-clock Security-Monitoring deiner Infrastruktur. Alerting, Incident Response, Remediation."
-      : "Round-the-clock security monitoring of your infrastructure. Alerting, incident response, remediation.",
-    duration: isDE ? "Laufend" : "Ongoing",
-    price: isDE ? "2.000€/Monat" : "2.000€/month",
+      ? "Nur wenn nötig: klar abgegrenzte Expert-Eingriffe für Sonderfälle, ohne dauerhaftes High-Ticket-Beratermodell."
+      : "Only when needed: tightly scoped expert intervention for edge cases, without a permanent high-ticket consultant model.",
+    duration: isDE ? "fallbasiert" : "case-based",
+    price: isDE ? "ab 490€ pro Fall" : "from €490 per case",
     popular: false,
   },
 ]
 
 const getPricing = (isDE: boolean) => [
   {
-    name: isDE ? "Starter Package" : "Starter Package",
-    price: isDE ? "5.000€" : "5.000€",
-    period: isDE ? "einmalig" : "one-time",
-    description: isDE ? "Für Startups und kleine Teams" : "For startups and small teams",
+    name: isDE ? "Autopilot Starter" : "Autopilot Starter",
+    price: isDE ? "29€" : "€29",
+    period: isDE ? "pro Monat" : "per month",
+    description: isDE ? "Für Solo-Founder und kleine technische Setups" : "For solo founders and small technical setups",
     features: [
-      isDE ? "Security Audit (1 Woche)" : "Security audit (1 week)",
-      isDE ? "Vulnerability Report" : "Vulnerability report",
-      isDE ? "Prioritized Recommendations" : "Prioritized recommendations",
-      isDE ? "1 Follow-up Call" : "1 follow-up call",
+      isDE ? "Kontinuierliche Risikoscans" : "Continuous risk scans",
+      isDE ? "Priorisierte Top-Risiken" : "Prioritized top risks",
+      isDE ? "Wöchentlicher Risk Digest" : "Weekly risk digest",
+      isDE ? "Runbook-Empfehlungen" : "Runbook recommendations",
     ],
-    cta: isDE ? "Buchen" : "Book Now",
+    cta: isDE ? "Starter aktivieren" : "Start Starter",
     popular: false,
   },
   {
-    name: isDE ? "Professional Package" : "Professional Package",
-    price: isDE ? "15.000€" : "15.000€",
-    period: isDE ? "einmalig" : "one-time",
-    description: isDE ? "Für wachsende Unternehmen" : "For growing companies",
+    name: isDE ? "Autopilot Pro" : "Autopilot Pro",
+    price: isDE ? "99€" : "€99",
+    period: isDE ? "pro Monat" : "per month",
+    description: isDE ? "Für produktive Stacks mit höherer Change-Frequenz" : "For production stacks with higher change velocity",
     features: [
-      isDE ? "Security Audit (2 Wochen)" : "Security audit (2 weeks)",
-      isDE ? "Stack Hardening (4 Wochen)" : "Stack hardening (4 weeks)",
-      isDE ? "Vulnerability Report" : "Vulnerability report",
-      isDE ? "Prioritized Recommendations" : "Prioritized recommendations",
-      isDE ? "Team Training (1 Woche)" : "Team training (1 week)",
-      isDE ? "4 Follow-up Calls" : "4 follow-up calls",
+      isDE ? "Alles aus Starter" : "Everything in Starter",
+      isDE ? "AI Remediation Planner" : "AI remediation planner",
+      isDE ? "Proof-of-Fix Reporting" : "Proof-of-fix reporting",
+      isDE ? "API-Exports für Automationen" : "API exports for automation",
+      isDE ? "Drift- und Prioritäts-Updates" : "Drift and priority updates",
     ],
-    cta: isDE ? "Buchen" : "Book Now",
+    cta: isDE ? "Pro aktivieren" : "Start Pro",
     popular: true,
   },
   {
-    name: isDE ? "Enterprise Package" : "Enterprise Package",
-    price: isDE ? "Custom" : "Custom",
-    period: isDE ? "auf Anfrage" : "on request",
-    description: isDE ? "Für große Unternehmen" : "For large enterprises",
+    name: isDE ? "Autopilot Scale" : "Autopilot Scale",
+    price: isDE ? "249€" : "€249",
+    period: isDE ? "pro Monat" : "per month",
+    description: isDE ? "Für Multi-Workspace Teams mit Governance-Anforderungen" : "For multi-workspace teams with governance needs",
     features: [
-      isDE ? "Security Audit (4 Wochen)" : "Security audit (4 weeks)",
-      isDE ? "Stack Hardening (6 Wochen)" : "Stack hardening (6 weeks)",
-      isDE ? "Team Training (2 Wochen)" : "Team training (2 weeks)",
-      isDE ? "24/7 Monitoring (3 Monate)" : "24/7 monitoring (3 months)",
-      isDE ? "Dedicated Consultant" : "Dedicated consultant",
-      isDE ? "SLA: 99.9%" : "SLA: 99.9%",
+      isDE ? "Alles aus Pro" : "Everything in Pro",
+      isDE ? "Multi-Workspace + Rollen" : "Multi-workspace + roles",
+      isDE ? "Team Dashboards + Kollaboration" : "Team dashboards + collaboration",
+      isDE ? "Policy Controls + Integrationen" : "Policy controls + integrations",
+      isDE ? "Priorisierte Support-Slots" : "Prioritized support slots",
     ],
-    cta: isDE ? "Kontakt aufnehmen" : "Contact Sales",
+    cta: isDE ? "Scale anfragen" : "Talk to sales",
     popular: false,
   },
 ]
@@ -138,10 +136,10 @@ export default function ConsultingPage({ params }: PageProps) {
   const pricing = getPricing(isDE)
 
   const articleSchema = buildAuthoredArticleSchema({
-    headline: isDE ? "ClawGuru Security Consulting — Stack Hardening für Enterprise" : "ClawGuru Security Consulting — Stack Hardening for Enterprise",
+    headline: isDE ? "ClawGuru Autonomous Security Ops — KI-gestützte Security-Automation" : "ClawGuru Autonomous Security Ops — AI-powered security automation",
     description: isDE
-      ? "Security-Audit, Stack-Hardening und Team-Training für DevOps- und SecOps-Teams. Fixed-Fee Packages ab 5.000€."
-      : "Security audit, stack hardening, and team training for DevOps and SecOps teams. Fixed-fee packages from 5,000€.",
+      ? "Automatisierte Risikoscans, AI-Remediation und Proof-of-Fix für Self-Hosted Infrastruktur. Monatliche Pläne ab 29€."
+      : "Automated risk scans, AI remediation, and proof-of-fix for self-hosted infrastructure. Monthly plans from €29.",
     url: `${SITE_URL}/${locale}${PATH}`,
     datePublished: PUBLISHED,
     dateModified: MODIFIED,
@@ -155,23 +153,23 @@ export default function ConsultingPage({ params }: PageProps) {
       <div className="max-w-6xl mx-auto px-4 py-12">
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-4 text-gray-100">
-            {isDE ? "Security Consulting — Fix Your Stack" : "Security Consulting — Fix Your Stack"}
+            {isDE ? "Autonomous Security Ops — Fix Your Stack" : "Autonomous Security Ops — Fix Your Stack"}
           </h1>
           <LastUpdated date={MODIFIED} publishedDate={PUBLISHED} showPublished locale={locale} className="mb-3" />
           <p className="text-lg text-gray-300 mb-4">
             {isDE
-              ? "Professional Services für Security-Hardening. Fixed-Fee Packages ab 5.000€. Strategy Call kostenlos."
-              : "Professional services for security hardening. Fixed-fee packages from 5,000€. Free strategy call."}
+              ? "Automatisiertes Security-Operating-System für Self-Hosted Infrastruktur. KI-gestützte Priorisierung, klare Fix-Pläne, monatliche Preise ab 29€."
+              : "Automated security operating system for self-hosted infrastructure. AI-driven prioritization, clear fix plans, monthly pricing from €29."}
           </p>
           <p className="text-sm text-cyan-400 font-medium">
-            {isDE ? "→ Lass deine Infrastruktur von Experten härten." : "→ Have your infrastructure hardened by experts."}
+            {isDE ? "→ Von manueller Beratung zu automatisierter Security-Delivery mit messbarem Output." : "→ Move from manual consulting to automated security delivery with measurable output."}
           </p>
         </div>
 
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE
-            ? "Diese Consulting-Dienste dienen zur Härtung Ihrer eigenen Systeme. Keine Angriffstools."
-            : "These consulting services are for hardening your own systems. No attack tools."}
+          <strong className="text-amber-100">&quot;Not a Pentest&quot; Notice</strong>: {isDE
+            ? "Diese Seite beschreibt ein automatisiertes Defense-Produkt. Keine Angriffstools, keine Offensiv-Services."
+            : "This page describes an automated defensive product. No attack tooling, no offensive services."}
         </div>
 
         {/* Services */}
@@ -253,41 +251,41 @@ export default function ConsultingPage({ params }: PageProps) {
           </div>
         </section>
 
-        {/* Why Consulting? */}
+        {/* Why Autonomous Ops? */}
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Warum Consulting?" : "Why Consulting?"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Warum Autonomous Ops?" : "Why Autonomous Ops?"}</h2>
           <div className="space-y-4">
             <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
               <div className="flex items-center gap-2 mb-2">
                 <Shield className="w-5 h-5 text-cyan-400" />
-                <h3 className="font-bold text-cyan-400">{isDE ? "Expertise" : "Expertise"}</h3>
+                <h3 className="font-bold text-cyan-400">{isDE ? "Always-on statt einmalig" : "Always-on instead of one-off"}</h3>
               </div>
               <p className="text-sm text-gray-300">
                 {isDE
-                  ? "Unsere Consultants haben jahrelange Erfahrung mit Security-Hardening für Enterprise-Infrastruktur."
-                  : "Our consultants have years of experience with security hardening for enterprise infrastructure."}
+                  ? "Risiken ändern sich täglich. Deshalb überwacht und priorisiert der Autopilot kontinuierlich statt punktuell."
+                  : "Risks shift daily. The autopilot continuously monitors and prioritizes instead of giving point-in-time advice."}
               </p>
             </div>
             <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
               <div className="flex items-center gap-2 mb-2">
                 <Briefcase className="w-5 h-5 text-cyan-400" />
-                <h3 className="font-bold text-cyan-400">{isDE ? "Actionable Results" : "Actionable Results"}</h3>
+                <h3 className="font-bold text-cyan-400">{isDE ? "Proof statt Versprechen" : "Proof instead of promises"}</h3>
               </div>
               <p className="text-sm text-gray-300">
                 {isDE
-                  ? "Keine theoretischen Berichte. Wir liefern actionable Recommendations, die du sofort umsetzen kannst."
-                  : "No theoretical reports. We deliver actionable recommendations you can implement immediately."}
+                  ? "Jede empfohlene Maßnahme wird mit Evidenz und Rest-Risiko dokumentiert, damit Entscheidungen nachvollziehbar bleiben."
+                  : "Every recommended action ships with evidence and residual-risk context so decisions stay auditable."}
               </p>
             </div>
             <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
               <div className="flex items-center gap-2 mb-2">
                 <Users className="w-5 h-5 text-cyan-400" />
-                <h3 className="font-bold text-cyan-400">{isDE ? "Team Empowerment" : "Team Empowerment"}</h3>
+                <h3 className="font-bold text-cyan-400">{isDE ? "Skaliert ohne Beratungs-Team" : "Scales without a consulting team"}</h3>
               </div>
               <p className="text-sm text-gray-300">
                 {isDE
-                  ? "Wir schulen dein Team, damit du langfristig unabhängig bist und Security in die DNA deiner Organisation einbaust."
-                  : "We train your team so you're self-sufficient in the long run and build security into your organization's DNA."}
+                  ? "Das Modell ist auf Automatisierung ausgelegt: niedriger Einstieg, klare Upgrades, optionaler Expert-Support nur bei Sonderfällen."
+                  : "The model is built for automation: low-friction entry, clear upgrades, and optional expert support only for edge cases."}
               </p>
             </div>
           </div>
@@ -346,16 +344,16 @@ export default function ConsultingPage({ params }: PageProps) {
         <section className="mb-10">
           <div className="bg-gradient-to-r from-cyan-900/40 to-purple-900/40 border border-cyan-700/50 rounded-xl p-6 text-center">
             <h3 className="text-xl font-bold text-cyan-300 mb-2">
-              {isDE ? "Bereit für Consulting?" : "Ready for Consulting?"}
+              {isDE ? "Bereit für Autonomous Security Ops?" : "Ready for Autonomous Security Ops?"}
             </h3>
             <p className="text-sm text-cyan-200/70 mb-4">
               {isDE
-                ? "Lass deine Infrastruktur von Experten härten und Security in deine DNA einbauen."
-                : "Have your infrastructure hardened by experts and build security into your DNA."}
+                ? "Starte mit einem automatisierten Security-Baseline-Setup und skaliere über klare Product-Tiers."
+                : "Start with an automated security baseline and scale through clear product tiers."}
             </p>
             <BookingButton
               type="strategy"
-              label={isDE ? "Kostenlosen Strategy Call buchen" : "Book a free strategy call"}
+              label={isDE ? "Autopilot-Setup starten" : "Start autopilot setup"}
               locale={locale}
               source="consulting_bottom_cta"
               variant="primary"

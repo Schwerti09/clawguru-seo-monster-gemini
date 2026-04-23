@@ -4,14 +4,15 @@ import { useState } from "react"
 import BuyButton from "@/components/commerce/BuyButton"
 import SocialProofBlock from "@/components/commerce/SocialProofBlock"
 import type { Locale } from "@/lib/i18n"
+import { AUTOPILOT_PLANS } from "@/lib/autopilot-offering"
 
 export default function BillingToggle({ locale, isDE, prefix }: { locale: Locale; isDE: boolean; prefix: string }) {
   const [annual, setAnnual] = useState(false)
 
-  const proMonthly = 49
-  const teamMonthly = 129
-  const proAnnual = Math.round(proMonthly * 0.8)     // €39
-  const teamAnnual = Math.round(teamMonthly * 0.8)   // €103
+  const proMonthly = AUTOPILOT_PLANS.pro.monthlyPriceEur
+  const teamMonthly = AUTOPILOT_PLANS.scale.monthlyPriceEur
+  const proAnnual = Math.round(proMonthly * 0.8)
+  const teamAnnual = Math.round(teamMonthly * 0.8)
 
   return (
     <div>
@@ -58,15 +59,15 @@ export default function BillingToggle({ locale, isDE, prefix }: { locale: Locale
             <div className="flex items-start justify-between gap-3 mt-3">
               <div>
                 <div className="text-[11px] font-mono uppercase tracking-[0.2em] mb-2" style={{ color: "#a78bfa" }}>
-                  {isDE ? "Für Einzelpersonen & kleine Teams" : "For individuals & small teams"}
+                  {isDE ? "Für produktive Stacks" : "For production stacks"}
                 </div>
-                <div className="text-xl font-black text-white font-heading">ClawGuru Pro</div>
+                <div className="text-xl font-black text-white font-heading">Autopilot Pro</div>
               </div>
             </div>
 
             <div className="mt-5 flex items-end gap-2">
               {annual && (
-                <span className="text-2xl font-bold text-gray-500 line-through pb-2">49€</span>
+                <span className="text-2xl font-bold text-gray-500 line-through pb-2">99€</span>
               )}
               <span className="text-5xl font-black text-white">
                 {annual ? proAnnual : proMonthly}€
@@ -86,9 +87,9 @@ export default function BillingToggle({ locale, isDE, prefix }: { locale: Locale
             <ul className="mt-4 space-y-2 text-sm text-gray-300">
               {[
                 isDE ? "Unlimitierte Checks + Full Reports" : "Unlimited checks + full reports",
-                isDE ? "Intel Feed, Runbooks, Copilot inklusive" : "Intel feed, runbooks, copilot included",
-                isDE ? "Darwinian Feed + Neuro Intelligence" : "Darwinian feed + Neuro Intelligence",
-                isDE ? "Prioritäts-Support" : "Priority support",
+                isDE ? "AI Remediation Planner + Runbook Mapping" : "AI remediation planner + runbook mapping",
+                isDE ? "Proof-of-Fix inkl. Rest-Risiko" : "Proof-of-fix incl. residual risk",
+                isDE ? "API Exporte für Automationen" : "API exports for automations",
               ].map((item) => (
                 <li key={item} className="flex gap-2">
                   <span style={{ color: "#a78bfa" }}>✓</span>
@@ -102,6 +103,8 @@ export default function BillingToggle({ locale, isDE, prefix }: { locale: Locale
               <BuyButton
                 product="pro"
                 annual={annual}
+                autoRecommend
+                upgradeSignals={{ workspaces: 2, needsApiExports: true, needsPolicyControls: false }}
                 label={isDE
                   ? `Jetzt Pro werden — ${annual ? proAnnual : proMonthly}€/${isDE ? "Mo" : "mo"}`
                   : `Become Pro now — €${annual ? proAnnual : proMonthly}/mo`}
@@ -115,22 +118,22 @@ export default function BillingToggle({ locale, isDE, prefix }: { locale: Locale
           </div>
         </div>
 
-        {/* ── Teams ── */}
+        {/* ── Scale ── */}
         <div className="relative rounded-3xl p-[1px] overflow-hidden"
           style={{ background: "linear-gradient(135deg, rgba(0,255,157,0.4) 0%, rgba(0,255,157,0.05) 100%)" }}>
           <div className="h-full rounded-3xl p-7 flex flex-col" style={{ background: "#080f0c" }}>
             <div className="flex items-start justify-between gap-3">
               <div>
                 <div className="text-[11px] font-mono uppercase tracking-[0.2em] mb-2" style={{ color: "#00ff9d" }}>
-                  {isDE ? "Für wachsende Teams" : "For growing teams"}
+                  {isDE ? "Für Multi-Workspace Teams" : "For multi-workspace teams"}
                 </div>
-                <div className="text-xl font-black text-white font-heading">ClawGuru Teams</div>
+                <div className="text-xl font-black text-white font-heading">Autopilot Scale</div>
               </div>
             </div>
 
             <div className="mt-5 flex items-end gap-2">
               {annual && (
-                <span className="text-2xl font-bold text-gray-500 line-through pb-2">129€</span>
+                <span className="text-2xl font-bold text-gray-500 line-through pb-2">249€</span>
               )}
               <span className="text-5xl font-black text-white">
                 {annual ? teamAnnual : teamMonthly}€
@@ -149,10 +152,10 @@ export default function BillingToggle({ locale, isDE, prefix }: { locale: Locale
 
             <ul className="mt-4 space-y-2 text-sm text-gray-300">
               {[
-                isDE ? "Alles aus Pro + Team-Limits" : "Everything from Pro + team limits",
-                isDE ? "Shared Runbook Links & Dashboards" : "Shared runbook links & dashboards",
-                isDE ? "Roadmap Votes — bestimmt was gebaut wird" : "Roadmap votes — determines what gets built",
-                isDE ? "Besser für 5+ Personen" : "Better for 5+ seats",
+                isDE ? "Alles aus Pro + Team Governance" : "Everything in Pro + team governance",
+                isDE ? "Shared Dashboards & Kollaboration" : "Shared dashboards & collaboration",
+                isDE ? "Policy Controls + Integrationen" : "Policy controls + integrations",
+                isDE ? "Priorisierte Support-Slots" : "Prioritized support slots",
               ].map((item) => (
                 <li key={item} className="flex gap-2">
                   <span style={{ color: "#00ff9d" }}>✓</span>
@@ -166,9 +169,11 @@ export default function BillingToggle({ locale, isDE, prefix }: { locale: Locale
               <BuyButton
                 product="team"
                 annual={annual}
+                autoRecommend
+                upgradeSignals={{ workspaces: 6, needsApiExports: true, needsPolicyControls: true }}
                 label={isDE
-                  ? `Teams starten (${annual ? teamAnnual : teamMonthly}€/Monat) → Stripe`
-                  : `Start Teams (€${annual ? teamAnnual : teamMonthly}/month) → Stripe`}
+                  ? `Scale starten (${annual ? teamAnnual : teamMonthly}€/Monat) → Stripe`
+                  : `Start Scale (€${annual ? teamAnnual : teamMonthly}/month) → Stripe`}
                 className="w-full py-3 px-6 rounded-2xl font-black text-sm text-white border transition-all duration-300 hover:bg-white/5 disabled:opacity-60"
                 style={{ borderColor: "rgba(0,255,157,0.4)", boxShadow: "0 0 20px rgba(0,255,157,0.1)" }}
               />

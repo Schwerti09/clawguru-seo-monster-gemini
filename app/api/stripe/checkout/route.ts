@@ -158,6 +158,10 @@ export async function POST(req: NextRequest) {
       typeof body?.coupon_code === "string" && body.coupon_code.length > 0
         ? body.coupon_code.slice(0, 32).toUpperCase()
         : undefined
+    const recommendedPlan: string | undefined =
+      typeof body?.recommended_plan === "string" && body.recommended_plan.length > 0
+        ? body.recommended_plan.slice(0, 32)
+        : undefined
 
     const price = getPriceId(product, annual)
 
@@ -214,6 +218,7 @@ export async function POST(req: NextRequest) {
         ...(email ? { email } : {}),
         ...(affiliateRef ? { affiliate_ref: affiliateRef } : {}),
         ...(rawCoupon ? { coupon_code: rawCoupon } : {}),
+        ...(recommendedPlan ? { recommended_plan: recommendedPlan } : {}),
       },
     })
 

@@ -29,12 +29,12 @@ const PRICING_KEYWORDS = [
 export const metadata = {
   title: "Preise & Pläne | ClawGuru – Security Check Platform",
   description:
-    "ClawGuru Preise: Kostenloser Security Check, Pro ab 49€/Monat mit Full Reports & Copilot AI, Teams für 129€/Monat. Enterprise mit API-Zugang. DSGVO-konform, jederzeit kündbar.",
+    "ClawGuru Preise: Kostenloser Security Check, Starter ab 29€/Monat, Pro ab 99€/Monat, Scale ab 249€/Monat. KI-gestützte Security-Automation für Self-Hosted Teams.",
   keywords: PRICING_KEYWORDS,
   alternates: { canonical: "/pricing" },
   openGraph: {
     title: "Preise & Pläne | ClawGuru",
-    description: "Security Check kostenlos. Pro, Teams & Enterprise Pläne für professionelle Infrastruktur-Sicherheit.",
+    description: "Security Check kostenlos. Starter, Pro, Scale und Enterprise für autonome Infrastruktur-Sicherheit.",
     url: "https://clawguru.org/de/pricing",
     type: "website" as const,
   },
@@ -248,7 +248,7 @@ export default async function PricingPage() {
     '@type': 'FAQPage',
     mainEntity: [
       { '@type': 'Question', name: "What is ClawGuru?", acceptedAnswer: { '@type': 'Answer', text: "ClawGuru is an AI-powered security intelligence platform for self-hosted infrastructure." } },
-      { '@type': 'Question', name: "How does pricing work?", acceptedAnswer: { '@type': 'Answer', text: "We offer Day Pass, Pro, Team, and Enterprise plans with different features and support levels." } },
+      { '@type': 'Question', name: "How does pricing work?", acceptedAnswer: { '@type': 'Answer', text: "We offer Free, Starter, Pro, Scale, and Enterprise plans with automation-first feature tiers." } },
       { '@type': 'Question', name: "Can I cancel anytime?", acceptedAnswer: { '@type': 'Answer', text: "Yes, you can cancel your subscription at any time. No long-term commitment required." } },
       { '@type': 'Question', name: "Do you offer a free trial?", acceptedAnswer: { '@type': 'Answer', text: "Yes, we offer a free trial for our Pro and Team plans. Try before you commit." } },
     ],
@@ -333,9 +333,9 @@ export default async function PricingPage() {
                 <tr>
                   <th className="text-left py-3 px-4 text-gray-500 font-mono text-xs uppercase tracking-widest w-2/5">Feature</th>
                   <th className="py-3 px-4 text-center font-black text-[#00ff9d] text-xs uppercase tracking-wider">Free<br /><span className="font-normal text-gray-500 normal-case">0 € / immer</span></th>
-                  <th className="py-3 px-4 text-center font-black text-[#00b8ff] text-xs uppercase tracking-wider">Day Pass<br /><span className="font-normal text-gray-500 normal-case">9 € / 24h</span></th>
-                  <th className="py-3 px-4 text-center font-black text-[#a78bfa] text-xs uppercase tracking-wider">Pro<br /><span className="font-normal text-gray-500 normal-case">49 € / Mo</span></th>
-                  <th className="py-3 px-4 text-center font-black text-[#22c55e] text-xs uppercase tracking-wider">Teams<br /><span className="font-normal text-gray-500 normal-case">129 € / Mo</span></th>
+                  <th className="py-3 px-4 text-center font-black text-[#00b8ff] text-xs uppercase tracking-wider">Starter<br /><span className="font-normal text-gray-500 normal-case">29 € / Mo</span></th>
+                  <th className="py-3 px-4 text-center font-black text-[#a78bfa] text-xs uppercase tracking-wider">Pro<br /><span className="font-normal text-gray-500 normal-case">99 € / Mo</span></th>
+                  <th className="py-3 px-4 text-center font-black text-[#22c55e] text-xs uppercase tracking-wider">Scale<br /><span className="font-normal text-gray-500 normal-case">249 € / Mo</span></th>
                   <th className="py-3 px-4 text-center font-black text-[#ffaa00] text-xs uppercase tracking-wider">Enterprise<br /><span className="font-normal text-gray-500 normal-case">Custom</span></th>
                 </tr>
               </thead>
@@ -498,7 +498,7 @@ export default async function PricingPage() {
             </div>
           </div>
 
-          {/* ── Day Pass card ── */}
+          {/* ── Starter trial card ── */}
           <div className="mb-8 relative rounded-3xl p-[1px] overflow-hidden"
             style={{ background: "linear-gradient(135deg, rgba(0,184,255,0.5) 0%, rgba(0,184,255,0.05) 100%)" }}>
             <div className="rounded-3xl p-7 flex flex-col md:flex-row md:items-center gap-6" style={{ background: "#0a0f18" }}>
@@ -512,7 +512,7 @@ export default async function PricingPage() {
                     24h Access
                   </div>
                 </div>
-                <div className="text-xl font-black text-white font-heading mb-2">ClawGuru Day Pass</div>
+                <div className="text-xl font-black text-white font-heading mb-2">Autopilot Starter Trial</div>
                 <div className="flex items-end gap-2 mb-3">
                   <span className="text-4xl font-black text-white">9€</span>
                   <span className="text-sm text-gray-400 pb-1">{pricing.dayPassOnce}</span>
@@ -526,6 +526,8 @@ export default async function PricingPage() {
                 <BuyButton
                   product="daypass"
                   label={pricing.dayPassBuyLabel}
+                  autoRecommend
+                  upgradeSignals={{ workspaces: 1, needsApiExports: false, needsPolicyControls: false }}
                   className="w-full py-3 px-6 rounded-2xl font-black text-sm text-black transition-all duration-300 hover:opacity-90 disabled:opacity-60"
                   style={{ background: "linear-gradient(135deg, #00b8ff 0%, #0077ff 100%)", boxShadow: "0 0 30px rgba(0,184,255,0.3)" }}
                 />
@@ -534,7 +536,7 @@ export default async function PricingPage() {
             </div>
           </div>
 
-          {/* ── Pro + Teams with annual/monthly toggle ── */}
+          {/* ── Pro + Scale with annual/monthly toggle ── */}
           <BillingToggle locale={locale} isDE={isDE} prefix={prefix} />
 
           {/* ── Who is Pro for? ── */}
@@ -564,7 +566,7 @@ export default async function PricingPage() {
                   </div>
                   <div className="text-2xl font-black text-white font-heading">ClawGuru Enterprise</div>
                   <div className="mt-4 flex items-end gap-2">
-                    <span className="text-5xl font-black text-white">299€</span>
+                    <span className="text-5xl font-black text-white">Custom</span>
                     <span className="text-sm text-gray-400 pb-2">{pricing.monthly}</span>
                   </div>
                   <p className="mt-4 text-sm text-gray-300 leading-relaxed">

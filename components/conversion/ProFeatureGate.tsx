@@ -1,6 +1,5 @@
 "use client"
 
-import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Lock, Shield, CheckCircle, ArrowRight } from "lucide-react"
 import BuyButton from "@/components/commerce/BuyButton"
@@ -26,7 +25,7 @@ const DE: ProFeatureGateDict = {
   benefit_2: "Automatisierte Runbooks (One-Click)",
   benefit_3: "Live Exploitation Tracking",
   benefit_4: "Priorisierter Support",
-  cta_pro: "Pro für 49\u202f\u20ac/Monat",
+  cta_pro: "Pro für 99\u202f\u20ac/Monat",
   cta_daypass: "Erst testen: Day Pass 9\u202f\u20ac",
   cta_plans: "Alle Pläne ansehen",
   trust_note: "Kein Abo nötig · Jederzeit kündbar · 30-Tage Geld-zurück"
@@ -39,7 +38,7 @@ const EN: ProFeatureGateDict = {
   benefit_2: "Automated runbooks (one-click)",
   benefit_3: "Live exploitation tracking",
   benefit_4: "Priority support",
-  cta_pro: "Pro for \u20ac49/month",
+  cta_pro: "Pro for \u20ac99/month",
   cta_daypass: "Try first: Day Pass \u20ac9",
   cta_plans: "View all plans",
   trust_note: "No subscription required · Cancel anytime · 30-day money back"
@@ -58,14 +57,6 @@ export function ProFeatureGate({ locale, source = "cve_page", variant = "full", 
 
   if (isPro) {
     return null // Pro users see the gate removed
-  }
-
-  const handleProClick = () => {
-    trackEvent("pro_gate_cta", { locale, source, button: "pro" })
-  }
-
-  const handleDaypassClick = () => {
-    trackEvent("pro_gate_cta", { locale, source, button: "daypass" })
   }
 
   const handlePlansClick = () => {
@@ -91,12 +82,16 @@ export function ProFeatureGate({ locale, source = "cve_page", variant = "full", 
             className="px-4 py-2 rounded-xl font-black text-black text-sm"
             style={{ background: "linear-gradient(135deg, #f59e0b 0%, #d97706 100%)", boxShadow: "0 0 20px rgba(245,158,11,0.25)" }}
             analyticsSource={source}
+            autoRecommend
+            upgradeSignals={{ workspaces: 2, needsApiExports: true, needsPolicyControls: false }}
           />
           <BuyButton
             product="daypass"
             label={t.cta_daypass}
             className="px-4 py-2 rounded-xl border border-amber-700/50 text-amber-200 hover:bg-amber-900/20 font-black text-sm"
             analyticsSource={source}
+            autoRecommend
+            upgradeSignals={{ workspaces: 1, needsApiExports: false, needsPolicyControls: false }}
           />
         </div>
       </motion.div>
@@ -152,12 +147,16 @@ export function ProFeatureGate({ locale, source = "cve_page", variant = "full", 
               className="flex-1 px-6 py-3 rounded-2xl font-black text-black"
               style={{ background: "linear-gradient(135deg, #f59e0b 0%, #d97706 100%)", boxShadow: "0 0 30px rgba(245,158,11,0.25)" }}
               analyticsSource={source}
+              autoRecommend
+              upgradeSignals={{ workspaces: 2, needsApiExports: true, needsPolicyControls: false }}
             />
             <BuyButton
               product="daypass"
               label={t.cta_daypass}
               className="flex-1 px-6 py-3 rounded-2xl border border-amber-700/50 text-amber-200 hover:bg-amber-900/20 font-black"
               analyticsSource={source}
+              autoRecommend
+              upgradeSignals={{ workspaces: 1, needsApiExports: false, needsPolicyControls: false }}
             />
           </div>
 

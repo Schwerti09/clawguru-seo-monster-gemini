@@ -3,6 +3,13 @@
 import { useState } from "react"
 import { trackEvent } from "@/lib/analytics"
 import { COUPON_SESSION_KEY } from "@/components/marketing/CouponBanner"
+import { suggestAutopilotPlan, type UpgradeSignals } from "@/lib/autopilot-offering"
+
+function mapAutopilotPlanToProduct(plan: ReturnType<typeof suggestAutopilotPlan>): "daypass" | "pro" | "team" {
+  if (plan === "scale") return "team"
+  if (plan === "pro") return "pro"
+  return "daypass"
+}
 
 export default function BuyButton({
   product,
@@ -11,6 +18,8 @@ export default function BuyButton({
   style,
   analyticsSource,
   annual,
+  autoRecommend,
+  upgradeSignals,
 }: {
   product: "daypass" | "pro" | "team" | "msp"
   label: string
@@ -18,11 +27,25 @@ export default function BuyButton({
   style?: React.CSSProperties
   analyticsSource?: string
   annual?: boolean
+  autoRecommend?: boolean
+  upgradeSignals?: UpgradeSignals
 }) {
   const [loading, setLoading] = useState(false)
 
   async function go() {
-    trackEvent("pricing_click", { product, source: analyticsSource ?? "buy_button", annual: !!annual })
+    const recommendedPlan = autoRecommend && upgradeSignals
+      ? suggestAutopilotPlan(upgradeSignals)
+      : undefined
+    const resolvedProduct = recommendedPlan
+      ? mapAutopilotPlanToProduct(recommendedPlan)
+      : product
+
+    trackEvent("pricing_click", {
+      product: resolvedProduct,
+      source: analyticsSource ?? "buy_button",
+      annual: !!annual,
+      recommended_plan: recommendedPlan ?? null,
+    })
     setLoading(true)
     const coupon = typeof window !== "undefined"
       ? (sessionStorage.getItem(COUPON_SESSION_KEY) ?? undefined)
@@ -31,7 +54,12 @@ export default function BuyButton({
       const res = await fetch("/api/stripe/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ product, annual: !!annual, coupon_code: coupon ?? undefined })
+        body: JSON.stringify({
+          product: resolvedProduct,
+          annual: !!annual,
+          coupon_code: coupon ?? undefined,
+          recommended_plan: recommendedPlan ?? undefined,
+        }),
       })
 
       const text = await res.text()

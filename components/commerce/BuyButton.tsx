@@ -4,6 +4,7 @@ import { useState } from "react"
 import { trackEvent } from "@/lib/analytics"
 import { COUPON_SESSION_KEY } from "@/components/marketing/CouponBanner"
 import { suggestAutopilotPlan, type UpgradeSignals } from "@/lib/autopilot-offering"
+import { markCheckoutError, markCheckoutRedirect, markCheckoutStart } from "@/lib/retention-client"
 
 function mapAutopilotPlanToProduct(plan: ReturnType<typeof suggestAutopilotPlan>): "daypass" | "pro" | "team" {
   if (plan === "scale") return "team"
@@ -62,6 +63,7 @@ export default function BuyButton({
       recommended_plan: recommendedPlan ?? null,
       upgrade_signals: normalizedSignals ? JSON.stringify(normalizedSignals) : null,
     })
+    markCheckoutStart()
     setLoading(true)
     const coupon = typeof window !== "undefined"
       ? (sessionStorage.getItem(COUPON_SESSION_KEY) ?? undefined)
@@ -111,6 +113,7 @@ export default function BuyButton({
         product: resolvedProduct,
         recommended_plan: recommendedPlan ?? null,
       })
+      markCheckoutRedirect()
       window.location.href = dataObj.url
     } catch (err) {
       console.error("[BuyButton] fetch failed:", err)
@@ -118,6 +121,7 @@ export default function BuyButton({
         source: analyticsSource ?? "buy_button",
         product: resolvedProduct,
       })
+      markCheckoutError()
       alert("Checkout-Request fehlgeschlagen. Details in der Browser-Konsole.")
     } finally {
       setLoading(false)

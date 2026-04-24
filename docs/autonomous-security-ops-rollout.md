@@ -40,6 +40,7 @@ Transform ClawGuru from high-ticket consulting offers into an automation-first s
    - Added checkout-stage funnel metrics (`checkout_start`, `checkout_redirect`, `checkout_error`)
    - Added retention signal scoring for drop-off and error hotspots
    - Added admin dashboard visibility for conversion rates and retention signal levels
+   - Added user dashboard retention hints based on local checkout friction patterns
 8. Release gating and KPI loop (next)
    - Keep autopilot unit tests as required gate in CI
    - Track trial-to-paid, plan upgrades, and churn by tier

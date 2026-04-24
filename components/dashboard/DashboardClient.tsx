@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react"
 import Container from "@/components/shared/Container"
 import BuyButton from "@/components/commerce/BuyButton"
 import { trackEvent } from "@/lib/analytics"
+import { getCheckoutRetentionSnapshot } from "@/lib/retention-client"
 import {
   AUTOPILOT_THRESHOLDS,
   buildUpgradeSignalsFromUsage,
@@ -395,6 +396,21 @@ function AffiliateNetwork(props: { tier: AccessPlan }) {
 
 export default function DashboardClient() {
   const { tier, loading } = useTier()
+  const [retentionNudge, setRetentionNudge] = useState<string | null>(null)
+
+  useEffect(() => {
+    const snapshot = getCheckoutRetentionSnapshot()
+    if (snapshot.checkoutErrors >= 2) {
+      setRetentionNudge("Checkout failed multiple times. Try Starter first, then upgrade inside the app.")
+      return
+    }
+    if (snapshot.checkoutStarts >= 3 && snapshot.checkoutRedirects === 0) {
+      setRetentionNudge("You started checkout several times. Use the shortest plan first to reduce commitment risk.")
+      return
+    }
+    setRetentionNudge(null)
+  }, [])
+
   return (
     <div className="py-10">
       <Container>
@@ -430,6 +446,11 @@ export default function DashboardClient() {
         </div>
 
         {/* Mini tablet preview always visible at top */}
+        {retentionNudge && (
+          <div className="mb-4 rounded-2xl border border-yellow-700/60 bg-yellow-950/30 px-4 py-3 text-sm text-yellow-200">
+            Retention Hint: {retentionNudge}
+          </div>
+        )}
         <div className="mb-6 rounded-2xl border border-white/10 bg-black/30 p-3">
           <div className="text-xs text-gray-400 mb-2">Mycelium Vorschau</div>
           <div className="relative aspect-[16/10] rounded-xl overflow-hidden bg-black/60 grid place-items-center text-gray-400">

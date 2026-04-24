@@ -34,6 +34,7 @@
     "check:prod-smoke": "node scripts/check-production-smoke.js",
     "i18n:sync-dictionaries": "node scripts/sync-dictionaries.js",
     "i18n:translate-aya": "node scripts/translate-via-aya.js",
+    "i18n:polish-gemini": "node scripts/polish-via-gemini.js",
     "academy:gen-outlines": "node scripts/gen-mission-outlines.js",
     "build": "npm run build:data && next build",
     "start": "next start -p ${PORT:-3000}",

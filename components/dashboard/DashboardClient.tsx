@@ -406,10 +406,24 @@ export default function DashboardClient() {
 
   useEffect(() => {
     const locale = localePrefix.replace("/", "").slice(0, 2) || "de"
-    setRetentionNudge(getRetentionNudge(locale))
+    const nudge = getRetentionNudge(locale)
+    setRetentionNudge(nudge)
+    if (nudge) {
+      trackEvent("retention_nudge_impression", {
+        source: "dashboard_retention_nudge",
+        level: nudge.level,
+        cta_path: nudge.ctaPath,
+      })
+    }
   }, [localePrefix])
 
   function handleDismissNudge() {
+    if (retentionNudge) {
+      trackEvent("retention_nudge_dismiss", {
+        source: "dashboard_retention_nudge",
+        level: retentionNudge.level,
+      })
+    }
     dismissRetentionNudge()
     setRetentionNudge(null)
   }
@@ -460,6 +474,13 @@ export default function DashboardClient() {
             <div className="mt-2 flex gap-2">
               <a
                 href={`${localePrefix}${retentionNudge.ctaPath}`}
+                onClick={() =>
+                  trackEvent("retention_nudge_click", {
+                    source: "dashboard_retention_nudge",
+                    level: retentionNudge.level,
+                    cta_path: retentionNudge.ctaPath,
+                  })
+                }
                 className="px-3 py-1 rounded-xl text-xs font-bold bg-white/10 hover:bg-white/20"
               >
                 {retentionNudge.ctaLabel}

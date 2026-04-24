@@ -17,6 +17,9 @@ type CheckEvent =
   | "checkout_start"
   | "checkout_redirect"
   | "checkout_error"
+  | "retention_nudge_impression"
+  | "retention_nudge_click"
+  | "retention_nudge_dismiss"
 
 export async function POST(req: NextRequest) {
   try {

@@ -86,6 +86,12 @@ type DashData = {
       checkoutStartToRedirectPct: number
       checkoutStartToCompletePct: number
       redirectToCompletePct: number
+      retentionNudgeCtrPct: number
+    }
+    retentionNudges: {
+      impressions24h: number
+      clicks24h: number
+      dismisses24h: number
     }
     note: string
   }
@@ -281,6 +287,17 @@ function ConversionFunnel({ funnel }: { funnel: DashData["funnel"] }) {
         </div>
         <div className="rounded-xl border border-gray-800 bg-black/20 px-3 py-2 text-gray-400">
           Redirect → Complete: <span className="text-cyan-300 font-bold">{funnel.rates.redirectToCompletePct}%</span>
+        </div>
+      </div>
+      <div className="mt-3 grid sm:grid-cols-3 gap-3 text-xs">
+        <div className="rounded-xl border border-gray-800 bg-black/20 px-3 py-2 text-gray-400">
+          Nudge Impressions: <span className="text-cyan-300 font-bold">{funnel.retentionNudges.impressions24h.toLocaleString()}</span>
+        </div>
+        <div className="rounded-xl border border-gray-800 bg-black/20 px-3 py-2 text-gray-400">
+          Nudge Clicks: <span className="text-cyan-300 font-bold">{funnel.retentionNudges.clicks24h.toLocaleString()}</span>
+        </div>
+        <div className="rounded-xl border border-gray-800 bg-black/20 px-3 py-2 text-gray-400">
+          Nudge CTR: <span className="text-cyan-300 font-bold">{funnel.rates.retentionNudgeCtrPct}%</span> · Dismisses: <span className="text-cyan-300 font-bold">{funnel.retentionNudges.dismisses24h.toLocaleString()}</span>
         </div>
       </div>
       <div className="mt-3 text-xs text-red-300">

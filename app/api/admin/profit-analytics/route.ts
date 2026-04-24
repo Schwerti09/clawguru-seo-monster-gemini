@@ -172,6 +172,12 @@ async function conversionFunnel(stripeMetrics: Awaited<ReturnType<typeof fetchSt
       checkoutStartToRedirectPct: safeRate(checkoutRedirected, checkoutStarted),
       checkoutStartToCompletePct: safeRate(checkoutCompleted, checkoutStarted),
       redirectToCompletePct: safeRate(checkoutCompleted, checkoutRedirected),
+      retentionNudgeCtrPct: safeRate(check.retentionNudgeClicks24h, check.retentionNudgeImpressions24h),
+    },
+    retentionNudges: {
+      impressions24h: check.retentionNudgeImpressions24h,
+      clicks24h: check.retentionNudgeClicks24h,
+      dismisses24h: check.retentionNudgeDismisses24h,
     },
     note: `24h: starts ${check.checkStarts24h}, results ${check.checkResults24h}, shares ${check.shareClicks24h}, methodology clicks ${check.methodikClicks24h}, hardening link clicks ${check.hardeningClicks24h}.`,
   }

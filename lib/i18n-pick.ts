@@ -14,19 +14,16 @@
 
 import type { Locale } from "@/lib/i18n"
 
-// Optional autotranslate map — Phase 2 plugs into this. Shape:
+// Optional autotranslate map — Phase 2 plugs into this by replacing this
+// placeholder with a real `import` once the map file exists. Shape:
 // { [locale]: { [englishSourceString]: translatedString } }
-// Until that map ships, the import resolves to undefined and we fall through
-// to the EN source. No runtime error.
-let autotranslateMap: Record<string, Record<string, string>> | undefined
-
-try {
-  // dynamic require so the module compiles before the map file exists
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  autotranslateMap = require("@/lib/i18n-autotranslate").default
-} catch {
-  autotranslateMap = undefined
-}
+// Leaving it undefined here means pick() falls through to the EN source —
+// identical to the pre-refactor behaviour, no regression.
+//
+// We deliberately avoid a dynamic `require()` here: Next.js/webpack analyses
+// requires statically at build time and errors on missing modules even when
+// the call is wrapped in try/catch.
+const autotranslateMap: Record<string, Record<string, string>> | undefined = undefined
 
 export function pick(locale: Locale, de: string, en: string): string
 export function pick(isDE: boolean, de: string, en: string): string

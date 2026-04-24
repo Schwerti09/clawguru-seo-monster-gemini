@@ -13,6 +13,9 @@ export const metadata: Metadata = {
 }
 
 export const revalidate = 3600 // 1h cache
+// Neon DB is contacted per render; static prerender fails during build
+// because the build container has no DB route. Render on-demand instead.
+export const dynamic = "force-dynamic"
 
 type LeaderboardEntry = {
   rank: number

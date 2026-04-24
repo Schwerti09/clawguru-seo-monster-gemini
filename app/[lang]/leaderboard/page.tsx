@@ -4,9 +4,11 @@ import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/
 import RootPage, { metadata as rootMetadata } from "@/app/leaderboard/page"
 
 export const revalidate = 60
+// Root leaderboard renders live DB + uses headers(); can't prerender.
+export const dynamic = "force-dynamic"
 
 export async function generateStaticParams() {
-  return SUPPORTED_LOCALES.map((lang) => ({ lang }))
+  return []
 }
 
 export async function generateMetadata(props: { params: { lang: string } }): Promise<Metadata> {

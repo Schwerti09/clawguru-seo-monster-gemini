@@ -11,8 +11,11 @@ interface PageProps { params: { lang: string } }
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/security-report-2026"
 
+// Page queries Neon for aggregate stats at render time; can't prerender.
+export const dynamic = "force-dynamic"
+
 export async function generateStaticParams() {
-  return SUPPORTED_LOCALES.map((lang) => ({ lang }))
+  return []
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {

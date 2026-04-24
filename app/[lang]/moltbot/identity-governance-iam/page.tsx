@@ -2,8 +2,11 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
 
+// Page queries Neon at render time; can't prerender during build.
+export const dynamic = "force-dynamic"
+
 export async function generateStaticParams() {
-  return SUPPORTED_LOCALES.map((lang) => ({ lang }))
+  return []
 }
 
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {

@@ -63,16 +63,36 @@ export function getPool(): Pool {
   throw new Error("No database URL configured (DATABASE_URL / DATABASE_URL_2).")
 }
 
-// Neon throws very noisy WebSocket errors for connection / quota issues. We
-// classify any error that is NOT a clean Postgres error (missing code field)
-// as a connection problem and allow failover.
+// Match common quota / availability patterns in the error message even when
+// the server returns a valid Postgres error code (Neon wraps quota errors as
+// XX000 / internal_error, which would otherwise pass the classifier).
+const QUOTA_PATTERNS = [
+  /compute[- _]?time/i,
+  /quota\s*(exceeded|exhausted)/i,
+  /limit\s*(exceeded|reached)/i,
+  /plan.*(exceed|limit|upgrade)/i,
+  /connection.*rejected|refused/i,
+  /too\s*many\s*connections/i,
+]
+
+// Postgres error codes that mean "the server is unhealthy, not your query":
+// XX000 is Neon's quota-exceeded code, 53300 is too_many_connections, 57P*
+// is admin-shutdown/crash/cancel. All safe to fail over.
+const RETRYABLE_CODES = new Set(["XX000", "53300", "57P01", "57P02", "57P03"])
+
 function shouldFailover(err: unknown): boolean {
   if (!err || typeof err !== "object") return true
-  const code = (err as { code?: string }).code
-  // Postgres error codes are 5-char strings (e.g. "23505", "42P01"). Anything
-  // else — ECONNREFUSED, ETIMEDOUT, fetch errors, "compute_time_quota_exceeded"
-  // strings — triggers failover.
+  const e = err as { code?: string; message?: string }
+  const code = e.code
+  const msg = typeof e.message === "string" ? e.message : ""
+  // Always failover on our explicit retryable Postgres codes.
+  if (typeof code === "string" && RETRYABLE_CODES.has(code)) return true
+  // Always failover on quota / availability phrases, regardless of code.
+  if (msg && QUOTA_PATTERNS.some((p) => p.test(msg))) return true
+  // Standard-shaped Postgres error code (5-char alphanumeric) = real SQL
+  // error; don't mask it.
   if (typeof code === "string" && /^[A-Z0-9]{5}$/.test(code)) return false
+  // No code, or ECONN*, ETIMEDOUT, WebSocket errors, fetch errors → failover.
   return true
 }
 

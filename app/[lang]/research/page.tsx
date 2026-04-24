@@ -10,8 +10,12 @@ interface PageProps { params: { lang: string } }
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/research"
 
+// Research page hits Neon DB + uses headers() indirectly via its admin routes;
+// can't prerender during build. Render on-demand.
+export const dynamic = "force-dynamic"
+
 export async function generateStaticParams() {
-  return SUPPORTED_LOCALES.map((lang) => ({ lang }))
+  return []
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {

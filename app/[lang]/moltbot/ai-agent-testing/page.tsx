@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/moltbot/ai-agent-testing"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "AI Agent Testing: KI-Agenten-Test-Framework | ClawGuru Moltbot"
-    : "AI Agent Testing: AI Agent Test Framework | ClawGuru Moltbot"
-  const description = isDE
-    ? "AI-Agent-Testing: Automated Agent Security Testing, Tool Call Validation, Agent Behavior Fuzzing und Integration Testing für KI-Agent-Workflows."
-    : "AI agent testing: automated agent security testing, tool call validation, agent behavior fuzzing and integration testing for AI agent workflows."
+  const title = pick(isDE, "AI Agent Testing: KI-Agenten-Test-Framework | ClawGuru Moltbot", "AI Agent Testing: AI Agent Test Framework | ClawGuru Moltbot")
+  const description = pick(isDE, "AI-Agent-Testing: Automated Agent Security Testing, Tool Call Validation, Agent Behavior Fuzzing und Integration Testing für KI-Agent-Workflows.", "AI agent testing: automated agent security testing, tool call validation, agent behavior fuzzing and integration testing for AI agent workflows.")
   return {
     title, description,
     keywords: ["ai agent testing", "agent security testing", "llm agent fuzzing", "tool call validation", "agent integration testing", "moltbot agent testing"],
@@ -253,17 +250,15 @@ export default function AiAgentTestingPage({ params }: { params: { lang: string 
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "Agent-Testing-Guide für eigene KI-Systeme." : "Agent testing guide for your own AI systems."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Agent-Testing-Guide für eigene KI-Systeme.", "Agent testing guide for your own AI systems.")}
         </div>
         <div className="mb-3"><span className="text-xs font-bold uppercase tracking-widest text-cyan-400">Moltbot · Batch 14</span></div>
-        <h1 className="text-4xl font-bold mb-4 text-gray-100">{isDE ? "AI Agent Testing" : "AI Agent Testing"}</h1>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">{pick(isDE, "AI Agent Testing", "AI Agent Testing")}</h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "KI-Agenten sind komplexe Systeme — ohne strukturiertes Testing können Sicherheitslücken unentdeckt bleiben. Vier Test-Methoden: Automated Security Testing, Tool Call Validation, Behavior Fuzzing und Integration Testing."
-            : "AI agents are complex systems — without structured testing, security vulnerabilities can remain undetected. Four test methods: automated security testing, tool call validation, behavior fuzzing and integration testing."}
+          {pick(isDE, "KI-Agenten sind komplexe Systeme — ohne strukturiertes Testing können Sicherheitslücken unentdeckt bleiben. Vier Test-Methoden: Automated Security Testing, Tool Call Validation, Behavior Fuzzing und Integration Testing.", "AI agents are complex systems — without structured testing, security vulnerabilities can remain undetected. Four test methods: automated security testing, tool call validation, behavior fuzzing and integration testing.")}
         </p>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "4 Agent-Testing-Methoden" : "4 Agent Testing Methods"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "4 Agent-Testing-Methoden", "4 Agent Testing Methods")}</h2>
           <div className="space-y-5">
             {TEST_METHODS.map((m) => (
               <div key={m.id} className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
@@ -280,7 +275,7 @@ export default function AiAgentTestingPage({ params }: { params: { lang: string 
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-3">
             {FAQ.map((f, i) => (
               <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
@@ -291,23 +286,23 @@ export default function AiAgentTestingPage({ params }: { params: { lang: string 
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further Resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further Resources")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/moltbot/agent-tool-security`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Agent Tool Security</div>
-              <div className="text-sm text-gray-300">{isDE ? "Tool-Call-Validation" : "Tool call validation"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Tool-Call-Validation", "Tool call validation")}</div>
             </a>
             <a href={`/${locale}/moltbot/llm-prompt-hardening`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM Prompt Hardening</div>
-              <div className="text-sm text-gray-300">{isDE ? "Prompt-Injection-Tests" : "Prompt injection tests"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Prompt-Injection-Tests", "Prompt injection tests")}</div>
             </a>
             <a href={`/${locale}/moltbot/ai-agent-rbac`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Agent RBAC</div>
-              <div className="text-sm text-gray-300">{isDE ? "Agent-Berechtigungs-Tests" : "Agent permission tests"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Agent-Berechtigungs-Tests", "Agent permission tests")}</div>
             </a>
             <a href={`/${locale}/moltbot/agentic-workflow-security`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Agentic Workflow Security</div>
-              <div className="text-sm text-gray-300">{isDE ? "Workflow-Integration-Tests" : "Workflow integration tests"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Workflow-Integration-Tests", "Workflow integration tests")}</div>
             </a>
           </div>
         </section>

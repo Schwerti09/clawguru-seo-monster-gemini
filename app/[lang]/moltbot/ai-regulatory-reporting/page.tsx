@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/moltbot/ai-regulatory-reporting"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "KI Regulatory Reporting: Automatisierte Compliance-Berichte für LLM-Systeme | ClawGuru"
-    : "AI Regulatory Reporting: Automated Compliance Reports for LLM Systems | ClawGuru"
-  const description = isDE
-    ? "Automatisierte Regulatory-Reports für KI-Systeme: EU AI Act Transparenzbericht, DSGVO Art. 30 Verzeichnis für KI, NIS2 Incident-Report-Automation und SOC2 Evidence-Export für LLMs."
-    : "Automated regulatory reports for AI systems: EU AI Act transparency report, GDPR Art. 30 records for AI, NIS2 incident report automation and SOC2 evidence export for LLMs."
+  const title = pick(isDE, "KI Regulatory Reporting: Automatisierte Compliance-Berichte für LLM-Systeme | ClawGuru", "AI Regulatory Reporting: Automated Compliance Reports for LLM Systems | ClawGuru")
+  const description = pick(isDE, "Automatisierte Regulatory-Reports für KI-Systeme: EU AI Act Transparenzbericht, DSGVO Art. 30 Verzeichnis für KI, NIS2 Incident-Report-Automation und SOC2 Evidence-Export für LLMs.", "Automated regulatory reports for AI systems: EU AI Act transparency report, GDPR Art. 30 records for AI, NIS2 incident report automation and SOC2 evidence export for LLMs.")
   return {
     title, description,
     keywords: ["ai regulatory reporting", "llm compliance reporting", "eu ai act reporting", "gdpr ai systems report", "nis2 ai incident report", "soc2 ai evidence"],
@@ -142,17 +139,15 @@ export default function AiRegulatoryReportingPage({ params }: { params: { lang: 
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "Compliance-Reporting-Guide. Keine Rechtsberatung." : "Compliance reporting guide. Not legal advice."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Compliance-Reporting-Guide. Keine Rechtsberatung.", "Compliance reporting guide. Not legal advice.")}
         </div>
         <div className="mb-3"><span className="text-xs font-bold uppercase tracking-widest text-cyan-400">Moltbot · Batch 12</span></div>
-        <h1 className="text-4xl font-bold mb-4 text-gray-100">{isDE ? "KI Regulatory Reporting" : "AI Regulatory Reporting"}</h1>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">{pick(isDE, "KI Regulatory Reporting", "AI Regulatory Reporting")}</h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "EU AI Act, DSGVO, NIS2 und SOC 2 — alle verlangen strukturierte Nachweise für KI-Systeme. Moltbot automatisiert die Berichts-Generierung aus Runtime-Telemetrie. Vier Report-Typen mit konkreten Feldern und CLI-Befehlen."
-            : "EU AI Act, GDPR, NIS2 and SOC 2 — all require structured evidence for AI systems. Moltbot automates report generation from runtime telemetry. Four report types with concrete fields and CLI commands."}
+          {pick(isDE, "EU AI Act, DSGVO, NIS2 und SOC 2 — alle verlangen strukturierte Nachweise für KI-Systeme. Moltbot automatisiert die Berichts-Generierung aus Runtime-Telemetrie. Vier Report-Typen mit konkreten Feldern und CLI-Befehlen.", "EU AI Act, GDPR, NIS2 and SOC 2 — all require structured evidence for AI systems. Moltbot automates report generation from runtime telemetry. Four report types with concrete fields and CLI commands.")}
         </p>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "4 Regulatorische Report-Typen" : "4 Regulatory Report Types"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "4 Regulatorische Report-Typen", "4 Regulatory Report Types")}</h2>
           <div className="space-y-5">
             {REPORT_TYPES.map((r) => (
               <div key={r.id} className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
@@ -184,7 +179,7 @@ export default function AiRegulatoryReportingPage({ params }: { params: { lang: 
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-3">
             {FAQ.map((f, i) => (
               <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
@@ -195,23 +190,23 @@ export default function AiRegulatoryReportingPage({ params }: { params: { lang: 
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further Resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further Resources")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/solutions/eu-ai-act-compliance`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">EU AI Act Compliance</div>
-              <div className="text-sm text-gray-300">{isDE ? "Risikoklassen & Anforderungen" : "Risk classes & requirements"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Risikoklassen & Anforderungen", "Risk classes & requirements")}</div>
             </a>
             <a href={`/${locale}/solutions/nis2-ai-infrastructure`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">NIS2 AI Infrastructure</div>
-              <div className="text-sm text-gray-300">{isDE ? "Art. 21 Maßnahmen" : "Art. 21 measures"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Art. 21 Maßnahmen", "Art. 21 measures")}</div>
             </a>
             <a href={`/${locale}/moltbot/ai-incident-response`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Incident Response</div>
-              <div className="text-sm text-gray-300">{isDE ? "Incident-Daten für Reports" : "Incident data for reports"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Incident-Daten für Reports", "Incident data for reports")}</div>
             </a>
             <a href={`/${locale}/moltbot/ai-compliance-automation`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Compliance Automation</div>
-              <div className="text-sm text-gray-300">{isDE ? "EU AI Act / SOC2 / GDPR" : "EU AI Act / SOC2 / GDPR"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "EU AI Act / SOC2 / GDPR", "EU AI Act / SOC2 / GDPR")}</div>
             </a>
           </div>
         </section>

@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/moltbot/ai-supply-chain"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "AI Supply Chain Security: Modelle, Abhängigkeiten & Plugins absichern | ClawGuru"
-    : "AI Supply Chain Security: Secure Models, Dependencies & Plugins | ClawGuru"
-  const description = isDE
-    ? "AI-Supply-Chain-Angriffe erkennen und verhindern: Model-Poisoning, kompromittierte Python-Pakete, Hugging Face Backdoors, Plugin-Supply-Chain und SBOM für KI-Systeme mit Moltbot."
-    : "Detect and prevent AI supply chain attacks: model poisoning, compromised Python packages, Hugging Face backdoors, plugin supply chain and SBOM for AI systems with Moltbot."
+  const title = pick(isDE, "AI Supply Chain Security: Modelle, Abhängigkeiten & Plugins absichern | ClawGuru", "AI Supply Chain Security: Secure Models, Dependencies & Plugins | ClawGuru")
+  const description = pick(isDE, "AI-Supply-Chain-Angriffe erkennen und verhindern: Model-Poisoning, kompromittierte Python-Pakete, Hugging Face Backdoors, Plugin-Supply-Chain und SBOM für KI-Systeme mit Moltbot.", "Detect and prevent AI supply chain attacks: model poisoning, compromised Python packages, Hugging Face backdoors, plugin supply chain and SBOM for AI systems with Moltbot.")
   return {
     title, description,
     keywords: ["ai supply chain security", "llm supply chain", "hugging face security", "model poisoning supply chain", "ai dependency security", "moltbot supply chain"],
@@ -62,24 +59,22 @@ export default function AiSupplyChainPage({ params }: { params: { lang: string }
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "Supply-Chain-Sicherheitsleitfaden für eigene KI-Systeme." : "Supply chain security guide for your own AI systems."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Supply-Chain-Sicherheitsleitfaden für eigene KI-Systeme.", "Supply chain security guide for your own AI systems.")}
         </div>
         <div className="mb-3"><span className="text-xs font-bold uppercase tracking-widest text-cyan-400">Moltbot · Batch 8</span></div>
         <h1 className="text-4xl font-bold mb-4 text-gray-100">
-          {isDE ? "AI Supply Chain Security" : "AI Supply Chain Security"}
+          {pick(isDE, "AI Supply Chain Security", "AI Supply Chain Security")}
         </h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "KI-Systeme haben eine komplexe Supply Chain: Basismodelle, Fine-Tuning-Daten, Python-Abhängigkeiten, Plugins. Jeder Schritt ist ein Angriffspunkt. Fünf Angriffsvektoren, konkrete Mitigationen, AI-SBOM."
-            : "AI systems have a complex supply chain: base models, fine-tuning data, Python dependencies, plugins. Every step is an attack point. Five attack vectors, concrete mitigations, AI-SBOM."}
+          {pick(isDE, "KI-Systeme haben eine komplexe Supply Chain: Basismodelle, Fine-Tuning-Daten, Python-Abhängigkeiten, Plugins. Jeder Schritt ist ein Angriffspunkt. Fünf Angriffsvektoren, konkrete Mitigationen, AI-SBOM.", "AI systems have a complex supply chain: base models, fine-tuning data, Python dependencies, plugins. Every step is an attack point. Five attack vectors, concrete mitigations, AI-SBOM.")}
         </p>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
           {[
-            { value: "5", label: isDE ? "Angriffsvektoren" : "Attack vectors" },
-            { value: "SHA-256", label: isDE ? "Modell-Verifikation" : "Model verification" },
-            { value: "SBOM", label: isDE ? "Für jedes AI-Build" : "For every AI build" },
-            { value: "Cosign", label: isDE ? "Plugin-Signierung" : "Plugin signing" },
+            { value: "5", label: pick(isDE, "Angriffsvektoren", "Attack vectors") },
+            { value: "SHA-256", label: pick(isDE, "Modell-Verifikation", "Model verification") },
+            { value: "SBOM", label: pick(isDE, "Für jedes AI-Build", "For every AI build") },
+            { value: "Cosign", label: pick(isDE, "Plugin-Signierung", "Plugin signing") },
           ].map((s) => (
             <div key={s.label} className="bg-gray-800 p-4 rounded-lg border border-gray-700 text-center">
               <div className="text-2xl font-black text-cyan-400">{s.value}</div>
@@ -89,7 +84,7 @@ export default function AiSupplyChainPage({ params }: { params: { lang: string }
         </div>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "5 AI Supply Chain Angriffsvektoren" : "5 AI Supply Chain Attack Vectors"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "5 AI Supply Chain Angriffsvektoren", "5 AI Supply Chain Attack Vectors")}</h2>
           <div className="space-y-4">
             {ATTACK_VECTORS.map((v) => (
               <div key={v.id} className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
@@ -100,7 +95,7 @@ export default function AiSupplyChainPage({ params }: { params: { lang: string }
                 </div>
                 <div className="p-4">
                   <p className="text-sm text-gray-300 mb-3">{v.desc}</p>
-                  <div className="text-xs font-semibold text-green-400 mb-2">{isDE ? "Mitigationen:" : "Mitigations:"}</div>
+                  <div className="text-xs font-semibold text-green-400 mb-2">{pick(isDE, "Mitigationen:", "Mitigations:")}</div>
                   <ul className="space-y-1">
                     {v.mitigations.map((m) => <li key={m} className="text-xs text-green-200">▸ {m}</li>)}
                   </ul>
@@ -111,7 +106,7 @@ export default function AiSupplyChainPage({ params }: { params: { lang: string }
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-3">
             {FAQ.map((f, i) => (
               <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
@@ -123,19 +118,19 @@ export default function AiSupplyChainPage({ params }: { params: { lang: string }
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further Resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further Resources")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/openclaw/supply-chain-security`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Supply Chain Security</div>
-              <div className="text-sm text-gray-300">{isDE ? "SBOM + Sigstore für Container" : "SBOM + Sigstore for containers"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "SBOM + Sigstore für Container", "SBOM + Sigstore for containers")}</div>
             </a>
             <a href={`/${locale}/moltbot/model-poisoning-protection`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Model Poisoning Protection</div>
-              <div className="text-sm text-gray-300">{isDE ? "Verhaltenstests für Modelle" : "Behavioral tests for models"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Verhaltenstests für Modelle", "Behavioral tests for models")}</div>
             </a>
             <a href={`/${locale}/moltbot/secure-agent-deployment`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Secure Agent Deployment</div>
-              <div className="text-sm text-gray-300">{isDE ? "Distroless + Cosign" : "Distroless + Cosign"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Distroless + Cosign", "Distroless + Cosign")}</div>
             </a>
             <a href={`/${locale}/academy/cve/CVE-2025-30065`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">CVE-2025-30065</div>

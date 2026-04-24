@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/moltbot/llm-red-team-automation"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "LLM Red Team Automation: LLM-Red-Team-Automation | ClawGuru Moltbot"
-    : "LLM Red Team Automation: LLM Red Team Automation | ClawGuru Moltbot"
-  const description = isDE
-    ? "LLM-Red-Team-Automation: Automated Prompt Attack, Jailbreak Testing, Adversarial Input Generation und Red Team Reporting für LLM-Red-Team-Automation."
-    : "LLM red team automation: automated prompt attack, jailbreak testing, adversarial input generation and red team reporting for LLM red team automation."
+  const title = pick(isDE, "LLM Red Team Automation: LLM-Red-Team-Automation | ClawGuru Moltbot", "LLM Red Team Automation: LLM Red Team Automation | ClawGuru Moltbot")
+  const description = pick(isDE, "LLM-Red-Team-Automation: Automated Prompt Attack, Jailbreak Testing, Adversarial Input Generation und Red Team Reporting für LLM-Red-Team-Automation.", "LLM red team automation: automated prompt attack, jailbreak testing, adversarial input generation and red team reporting for LLM red team automation.")
   return {
     title, description,
     keywords: ["llm red team automation", "automated prompt attack", "jailbreak testing", "adversarial input generation", "red team reporting", "moltbot red team"],
@@ -169,17 +166,15 @@ export default function LlmRedTeamAutomationPage({ params }: { params: { lang: s
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "Red-Team-Automation-Guide für eigene LLM-Systeme." : "Red team automation guide for your own LLM systems."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Red-Team-Automation-Guide für eigene LLM-Systeme.", "Red team automation guide for your own LLM systems.")}
         </div>
         <div className="mb-3"><span className="text-xs font-bold uppercase tracking-widest text-cyan-400">Moltbot · Batch 28</span></div>
-        <h1 className="text-4xl font-bold mb-4 text-gray-100">{isDE ? "LLM Red Team Automation" : "LLM Red Team Automation"}</h1>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">{pick(isDE, "LLM Red Team Automation", "LLM Red Team Automation")}</h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "Manuelles Red Teaming kann den LLM-Input-Space nicht abdecken — Automatisierung ist Pflicht. Vier Kontrollen: Automated Prompt Attack Framework, Jailbreak Testing Suite, Adversarial Input Generation und Red Team Reporting."
-            : "Manual red teaming cannot cover the LLM input space — automation is mandatory. Four controls: automated prompt attack framework, jailbreak testing suite, adversarial input generation and red team reporting."}
+          {pick(isDE, "Manuelles Red Teaming kann den LLM-Input-Space nicht abdecken — Automatisierung ist Pflicht. Vier Kontrollen: Automated Prompt Attack Framework, Jailbreak Testing Suite, Adversarial Input Generation und Red Team Reporting.", "Manual red teaming cannot cover the LLM input space — automation is mandatory. Four controls: automated prompt attack framework, jailbreak testing suite, adversarial input generation and red team reporting.")}
         </p>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "4 Red-Team-Automation-Kontrollen" : "4 Red Team Automation Controls"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "4 Red-Team-Automation-Kontrollen", "4 Red Team Automation Controls")}</h2>
           <div className="space-y-5">
             {CONTROLS.map((c) => (
               <div key={c.id} className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
@@ -196,7 +191,7 @@ export default function LlmRedTeamAutomationPage({ params }: { params: { lang: s
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-3">
             {FAQ.map((f, i) => (
               <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
@@ -207,23 +202,23 @@ export default function LlmRedTeamAutomationPage({ params }: { params: { lang: s
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further Resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further Resources")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/moltbot/llm-adversarial-robustness`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM Adversarial Robustness</div>
-              <div className="text-sm text-gray-300">{isDE ? "Robustness-Testing" : "Robustness testing"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Robustness-Testing", "Robustness testing")}</div>
             </a>
             <a href={`/${locale}/moltbot/llm-jailbreak-defense`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM Jailbreak Defense</div>
-              <div className="text-sm text-gray-300">{isDE ? "Jailbreak-Defense" : "Jailbreak defense"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Jailbreak-Defense", "Jailbreak defense")}</div>
             </a>
             <a href={`/${locale}/moltbot/llm-prompt-leakage-defense`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM Prompt Leakage Defense</div>
-              <div className="text-sm text-gray-300">{isDE ? "Leakage-Defense" : "Leakage defense"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Leakage-Defense", "Leakage defense")}</div>
             </a>
             <a href={`/${locale}/moltbot/ai-agent-security`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Agent Security</div>
-              <div className="text-sm text-gray-300">{isDE ? "Security-Overview" : "Security overview"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Security-Overview", "Security overview")}</div>
             </a>
           </div>
         </section>

@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
 import { SITE_URL } from '@/lib/config'
+import { pick } from "@/lib/i18n-pick"
 
 export async function generateStaticParams() {
   return SUPPORTED_LOCALES.map((lang) => ({ lang }))
@@ -11,12 +12,8 @@ export async function generateMetadata({ params }: { params: { lang: string } })
   const { lang } = params
   const locale = (SUPPORTED_LOCALES.includes(lang as Locale) ? lang : 'de') as Locale
   const isDE = locale === 'de'
-  const title = isDE
-    ? 'ClawGuru vs Snyk: Developer Security Platform Vergleich 2026'
-    : 'ClawGuru vs Snyk: Developer Security Platform Comparison 2026'
-  const description = isDE
-    ? 'ClawGuru vs Snyk 2026. Snyk scannt Code, Dependencies und Container auf Schwachstellen. ClawGuru bietet Live-Score, Executable Runbooks und DSGVO-konformes Self-Hosting.'
-    : 'ClawGuru vs Snyk 2026. Snyk scans code, dependencies and containers for vulnerabilities. ClawGuru adds live scoring, executable runbooks and GDPR-compliant self-hosting.'
+  const title = pick(isDE, 'ClawGuru vs Snyk: Developer Security Platform Vergleich 2026', 'ClawGuru vs Snyk: Developer Security Platform Comparison 2026')
+  const description = pick(isDE, 'ClawGuru vs Snyk 2026. Snyk scannt Code, Dependencies und Container auf Schwachstellen. ClawGuru bietet Live-Score, Executable Runbooks und DSGVO-konformes Self-Hosting.', 'ClawGuru vs Snyk 2026. Snyk scans code, dependencies and containers for vulnerabilities. ClawGuru adds live scoring, executable runbooks and GDPR-compliant self-hosting.')
   return {
     title,
     description,
@@ -47,28 +44,24 @@ export default function ClawGuruVsSnykPage({ params }: { params: { lang: string 
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">&quot;Not a Pentest&quot; {isDE ? 'Hinweis' : 'Notice'}</strong>
-          {isDE
-            ? ': Dieser Guide hilft dir, das richtige Security-Tool zu wählen. Kein Angriffs-Tool.'
-            : ': This guide helps you choose the right security tool. No attack tools.'}
+          <strong className="text-amber-100">&quot;Not a Pentest&quot; {pick(isDE, 'Hinweis', 'Notice')}</strong>
+          {pick(isDE, ': Dieser Guide hilft dir, das richtige Security-Tool zu wählen. Kein Angriffs-Tool.', ': This guide helps you choose the right security tool. No attack tools.')}
         </div>
 
         <h1 className="text-4xl font-bold mb-4 text-gray-100">
-          {isDE ? 'ClawGuru vs Snyk: Developer Security Platform Vergleich' : 'ClawGuru vs Snyk: Developer Security Platform Comparison'}
+          {pick(isDE, 'ClawGuru vs Snyk: Developer Security Platform Vergleich', 'ClawGuru vs Snyk: Developer Security Platform Comparison')}
         </h1>
         <p className="text-lg text-gray-300 mb-8">
-          {isDE
-            ? 'Snyk ist eine Developer-Security-Plattform für SAST, SCA (Software Composition Analysis), Container-Scanning und IaC-Checks. ClawGuru ist eine Live-Security-Plattform mit Executable Runbooks, Real-Time-Score und Compliance-Dashboard für Self-Hoster und DevOps-Teams.'
-            : 'Snyk is a developer security platform for SAST, SCA (Software Composition Analysis), container scanning and IaC checks. ClawGuru is a live security platform with executable runbooks, real-time scoring and compliance dashboard for self-hosters and DevOps teams.'}
+          {pick(isDE, 'Snyk ist eine Developer-Security-Plattform für SAST, SCA (Software Composition Analysis), Container-Scanning und IaC-Checks. ClawGuru ist eine Live-Security-Plattform mit Executable Runbooks, Real-Time-Score und Compliance-Dashboard für Self-Hoster und DevOps-Teams.', 'Snyk is a developer security platform for SAST, SCA (Software Composition Analysis), container scanning and IaC checks. ClawGuru is a live security platform with executable runbooks, real-time scoring and compliance dashboard for self-hosters and DevOps teams.')}
         </p>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? '⚔️ Direkter Vergleich' : '⚔️ Head-to-Head Comparison'}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, '⚔️ Direkter Vergleich', '⚔️ Head-to-Head Comparison')}</h2>
           <div className="overflow-x-auto">
             <table className="min-w-full bg-gray-900 border border-gray-700 rounded-lg">
               <thead className="bg-gray-800">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{isDE ? 'Kriterium' : 'Criterion'}</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{pick(isDE, 'Kriterium', 'Criterion')}</th>
                   <th className="px-6 py-3 text-center text-xs font-medium text-gray-400 uppercase">🛡️ ClawGuru</th>
                   <th className="px-6 py-3 text-center text-xs font-medium text-gray-400 uppercase">🐍 Snyk</th>
                 </tr>
@@ -113,10 +106,10 @@ export default function ClawGuruVsSnykPage({ params }: { params: { lang: string 
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? '🏆 Wann welches Tool?' : '🏆 Which tool when?'}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, '🏆 Wann welches Tool?', '🏆 Which tool when?')}</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-green-900 border border-green-700 p-5 rounded-lg">
-              <h3 className="font-bold text-green-300 mb-3">🛡️ {isDE ? 'ClawGuru ist die Wahl wenn...' : 'ClawGuru is the choice when...'}</h3>
+              <h3 className="font-bold text-green-300 mb-3">🛡️ {pick(isDE, 'ClawGuru ist die Wahl wenn...', 'ClawGuru is the choice when...')}</h3>
               <ul className="space-y-1.5 text-sm text-green-200">
                 {(isDE ? [
                   'Live-Score und Runtime-Security wichtiger als SAST',
@@ -134,7 +127,7 @@ export default function ClawGuruVsSnykPage({ params }: { params: { lang: string 
               </ul>
             </div>
             <div className="bg-blue-900 border border-blue-700 p-5 rounded-lg">
-              <h3 className="font-bold text-blue-300 mb-3">🐍 {isDE ? 'Snyk ist die Wahl wenn...' : 'Snyk is the choice when...'}</h3>
+              <h3 className="font-bold text-blue-300 mb-3">🐍 {pick(isDE, 'Snyk ist die Wahl wenn...', 'Snyk is the choice when...')}</h3>
               <ul className="space-y-1.5 text-sm text-blue-200">
                 {(isDE ? [
                   'SAST und SCA im Entwickler-Workflow Priorität',
@@ -155,23 +148,23 @@ export default function ClawGuruVsSnykPage({ params }: { params: { lang: string 
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? '🔗 Weiterführende Links' : '🔗 Further Resources'}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, '🔗 Weiterführende Links', '🔗 Further Resources')}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${lang}/securitycheck`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
-              <div className="font-semibold text-cyan-400">🛡️ {isDE ? 'Security Check' : 'Security Check'}</div>
-              <div className="text-sm text-gray-300">{isDE ? 'Kostenlos starten' : 'Start for free'}</div>
+              <div className="font-semibold text-cyan-400">🛡️ {pick(isDE, 'Security Check', 'Security Check')}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, 'Kostenlos starten', 'Start for free')}</div>
             </a>
             <a href={`/${lang}/moltbot/devsecops-pipeline`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
-              <div className="font-semibold text-cyan-400">⚙️ {isDE ? 'DevSecOps Pipeline' : 'DevSecOps Pipeline'}</div>
-              <div className="text-sm text-gray-300">{isDE ? 'CI/CD Security Runbook' : 'CI/CD Security Runbook'}</div>
+              <div className="font-semibold text-cyan-400">⚙️ {pick(isDE, 'DevSecOps Pipeline', 'DevSecOps Pipeline')}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, 'CI/CD Security Runbook', 'CI/CD Security Runbook')}</div>
             </a>
             <a href={`/${lang}/moltbot/sbom-generation`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
-              <div className="font-semibold text-cyan-400">📋 {isDE ? 'SBOM Generation' : 'SBOM Generation'}</div>
-              <div className="text-sm text-gray-300">{isDE ? 'Supply Chain Runbook' : 'Supply Chain Runbook'}</div>
+              <div className="font-semibold text-cyan-400">📋 {pick(isDE, 'SBOM Generation', 'SBOM Generation')}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, 'Supply Chain Runbook', 'Supply Chain Runbook')}</div>
             </a>
             <a href={`/${lang}/moltbot/vulnerability-scanning`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
-              <div className="font-semibold text-cyan-400">🔍 {isDE ? 'Vulnerability Scanning' : 'Vulnerability Scanning'}</div>
-              <div className="text-sm text-gray-300">{isDE ? 'Trivy + Renovate Runbook' : 'Trivy + Renovate Runbook'}</div>
+              <div className="font-semibold text-cyan-400">🔍 {pick(isDE, 'Vulnerability Scanning', 'Vulnerability Scanning')}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, 'Trivy + Renovate Runbook', 'Trivy + Renovate Runbook')}</div>
             </a>
           </div>
         </section>

@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/openclaw/network-segmentation-guide"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "Network Segmentation Guide: Zero-Trust-Netzwerk für Kubernetes | ClawGuru"
-    : "Network Segmentation Guide: Zero-Trust Networking for Kubernetes | ClawGuru"
-  const description = isDE
-    ? "Kubernetes-Netzwerksegmentierung mit Cilium, NetworkPolicies und Service Mesh: Namespace-Isolation, Default-Deny, mTLS zwischen Services und AI-Agent-Netzwerksicherheit."
-    : "Kubernetes network segmentation with Cilium, NetworkPolicies and service mesh: namespace isolation, default deny, mTLS between services and AI agent network security."
+  const title = pick(isDE, "Network Segmentation Guide: Zero-Trust-Netzwerk für Kubernetes | ClawGuru", "Network Segmentation Guide: Zero-Trust Networking for Kubernetes | ClawGuru")
+  const description = pick(isDE, "Kubernetes-Netzwerksegmentierung mit Cilium, NetworkPolicies und Service Mesh: Namespace-Isolation, Default-Deny, mTLS zwischen Services und AI-Agent-Netzwerksicherheit.", "Kubernetes network segmentation with Cilium, NetworkPolicies and service mesh: namespace isolation, default deny, mTLS between services and AI agent network security.")
   return {
     title, description,
     keywords: ["kubernetes network segmentation", "kubernetes network policy", "cilium network policy", "kubernetes zero trust network", "service mesh security", "k8s namespace isolation"],
@@ -213,24 +210,22 @@ export default function NetworkSegmentationGuidePage({ params }: { params: { lan
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "Netzwerksegmentierungs-Guide für eigene Kubernetes-Infrastruktur." : "Network segmentation guide for your own Kubernetes infrastructure."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Netzwerksegmentierungs-Guide für eigene Kubernetes-Infrastruktur.", "Network segmentation guide for your own Kubernetes infrastructure.")}
         </div>
         <div className="mb-3"><span className="text-xs font-bold uppercase tracking-widest text-cyan-400">OpenClaw · Batch 6</span></div>
         <h1 className="text-4xl font-bold mb-4 text-gray-100">
-          {isDE ? "Network Segmentation Guide" : "Network Segmentation Guide"}
+          {pick(isDE, "Network Segmentation Guide", "Network Segmentation Guide")}
         </h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "Kubernetes-Netzwerke sind standardmäßig flach — jeder Pod kann jeden anderen erreichen. Vier Schichten: Default-Deny-Baseline, Namespace-Isolation, mTLS und Egress-Control für KI-Agenten."
-            : "Kubernetes networks are flat by default — every pod can reach every other pod. Four layers: default-deny baseline, namespace isolation, mTLS and egress control for AI agents."}
+          {pick(isDE, "Kubernetes-Netzwerke sind standardmäßig flach — jeder Pod kann jeden anderen erreichen. Vier Schichten: Default-Deny-Baseline, Namespace-Isolation, mTLS und Egress-Control für KI-Agenten.", "Kubernetes networks are flat by default — every pod can reach every other pod. Four layers: default-deny baseline, namespace isolation, mTLS and egress control for AI agents.")}
         </p>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
           {[
-            { value: "Default", label: isDE ? "Deny-All zuerst" : "Deny-all first" },
-            { value: "mTLS", label: isDE ? "Service-Auth" : "Service auth" },
-            { value: "FQDN", label: isDE ? "Domain-Egress" : "Domain egress" },
-            { value: "L7", label: isDE ? "HTTP-Path-Filter" : "HTTP path filter" },
+            { value: "Default", label: pick(isDE, "Deny-All zuerst", "Deny-all first") },
+            { value: "mTLS", label: pick(isDE, "Service-Auth", "Service auth") },
+            { value: "FQDN", label: pick(isDE, "Domain-Egress", "Domain egress") },
+            { value: "L7", label: pick(isDE, "HTTP-Path-Filter", "HTTP path filter") },
           ].map((s) => (
             <div key={s.label} className="bg-gray-800 p-4 rounded-lg border border-gray-700 text-center">
               <div className="text-2xl font-black text-cyan-400">{s.value}</div>
@@ -240,7 +235,7 @@ export default function NetworkSegmentationGuidePage({ params }: { params: { lan
         </div>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "4 Segmentierungsschichten" : "4 Segmentation Layers"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "4 Segmentierungsschichten", "4 Segmentation Layers")}</h2>
           <div className="space-y-5">
             {SEGMENTATION_LAYERS.map((s) => (
               <div key={s.id} className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
@@ -258,7 +253,7 @@ export default function NetworkSegmentationGuidePage({ params }: { params: { lan
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-3">
             {FAQ.map((f, i) => (
               <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
@@ -270,23 +265,23 @@ export default function NetworkSegmentationGuidePage({ params }: { params: { lan
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further Resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further Resources")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/openclaw/ebpf-security-monitoring`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">eBPF Security Monitoring</div>
-              <div className="text-sm text-gray-300">{isDE ? "Cilium L7-Enforcement" : "Cilium L7 enforcement"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Cilium L7-Enforcement", "Cilium L7 enforcement")}</div>
             </a>
             <a href={`/${locale}/openclaw/runtime-policy-enforcement`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Runtime Policy Enforcement</div>
-              <div className="text-sm text-gray-300">{isDE ? "OPA + Cilium Policies" : "OPA + Cilium policies"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "OPA + Cilium Policies", "OPA + Cilium policies")}</div>
             </a>
             <a href={`/${locale}/solutions/zero-trust-architecture`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Zero Trust Architecture</div>
-              <div className="text-sm text-gray-300">{isDE ? "Netzwerk im ZT-Kontext" : "Network in ZT context"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Netzwerk im ZT-Kontext", "Network in ZT context")}</div>
             </a>
             <a href={`/${locale}/moltbot/secure-agent-deployment`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Secure Agent Deployment</div>
-              <div className="text-sm text-gray-300">{isDE ? "Zero-Egress für AI-Agenten" : "Zero-egress for AI agents"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Zero-Egress für AI-Agenten", "Zero-egress for AI agents")}</div>
             </a>
           </div>
         </section>

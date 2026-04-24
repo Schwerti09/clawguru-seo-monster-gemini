@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
 import { Trophy, Clock, Users, Award, ChevronRight } from "lucide-react"
+import { pick } from "@/lib/i18n-pick"
 
 interface PageProps { params: { lang: string } }
 
@@ -10,10 +11,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const pageUrl = `${SITE_URL}/${locale}/tournaments`
   const isDE = locale === "de"
-  const title = isDE ? "Roast Tournaments | ClawGuru" : "Roast Tournaments | ClawGuru"
-  const description = isDE 
-    ? "Wöchentliche Roast-Turniere — Kämpfe um den Titel" 
-    : "Weekly roast tournaments — Battle for the title"
+  const title = pick(isDE, "Roast Tournaments | ClawGuru", "Roast Tournaments | ClawGuru")
+  const description = pick(isDE, "Wöchentliche Roast-Turniere — Kämpfe um den Titel", "Weekly roast tournaments — Battle for the title")
   return {
     title,
     description,
@@ -63,12 +62,10 @@ export default function TournamentsPage({ params }: PageProps) {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-4 text-gray-100">
-            {isDE ? "Roast Tournaments" : "Roast Tournaments"}
+            {pick(isDE, "Roast Tournaments", "Roast Tournaments")}
           </h1>
           <p className="text-lg text-gray-300">
-            {isDE 
-              ? "Wöchentliche Turniere — Kämpfe um den Titel und Preise" 
-              : "Weekly tournaments — Battle for the title and prizes"}
+            {pick(isDE, "Wöchentliche Turniere — Kämpfe um den Titel und Preise", "Weekly tournaments — Battle for the title and prizes")}
           </p>
         </div>
 
@@ -84,13 +81,13 @@ export default function TournamentsPage({ params }: PageProps) {
                     <span className={`px-2 py-1 rounded-full ${
                       tournament.status === "active" ? "bg-green-900/50 text-green-400" : "bg-amber-900/50 text-amber-400"
                     }`}>
-                      {tournament.status === "active" ? tournament.round : isDE ? "Anmeldung" : "Registration"}
+                      {tournament.status === "active" ? tournament.round : pick(isDE, "Anmeldung", "Registration")}
                     </span>
-                    <span>{tournament.participants} {isDE ? "Teilnehmer" : "participants"}</span>
+                    <span>{tournament.participants} {pick(isDE, "Teilnehmer", "participants")}</span>
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="text-sm text-zinc-500 mb-1">{isDE ? "Preis" : "Prize"}</div>
+                  <div className="text-sm text-zinc-500 mb-1">{pick(isDE, "Preis", "Prize")}</div>
                   <div className="text-lg font-bold text-amber-400">{tournament.prize}</div>
                 </div>
               </div>
@@ -99,7 +96,7 @@ export default function TournamentsPage({ params }: PageProps) {
               {tournament.bracket.length > 0 ? (
                 <div className="mb-4">
                   <div className="text-sm text-zinc-500 mb-3">
-                    {isDE ? "Aktuelle Matches" : "Current matches"}
+                    {pick(isDE, "Aktuelle Matches", "Current matches")}
                   </div>
                   <div className="space-y-2">
                     {tournament.bracket.map((match) => (
@@ -128,7 +125,7 @@ export default function TournamentsPage({ params }: PageProps) {
               ) : (
                 <div className="mb-4 text-center py-8">
                   <div className="text-4xl mb-2">🏆</div>
-                  <div className="text-zinc-500">{isDE ? "Turnier startet bald" : "Tournament starting soon"}</div>
+                  <div className="text-zinc-500">{pick(isDE, "Turnier startet bald", "Tournament starting soon")}</div>
                 </div>
               )}
 
@@ -140,8 +137,8 @@ export default function TournamentsPage({ params }: PageProps) {
                 </div>
                 <button className="flex items-center gap-2 px-4 py-2 bg-cyan-600 hover:bg-cyan-500 rounded-lg text-sm font-medium text-white transition-colors">
                   {tournament.status === "active" 
-                    ? isDE ? "Ansehen" : "View"
-                    : isDE ? "Teilnehmen" : "Join"}
+                    ? pick(isDE, "Ansehen", "View")
+                    : pick(isDE, "Teilnehmen", "Join")}
                   <ChevronRight className="w-4 h-4" />
                 </button>
               </div>
@@ -151,9 +148,7 @@ export default function TournamentsPage({ params }: PageProps) {
 
         {/* Trust Notice */}
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mt-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE 
-            ? "Turniere sind zum Härten eigener Systeme. Keine Angriffstools." 
-            : "Tournaments are for hardening your own systems. No attack tools."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Turniere sind zum Härten eigener Systeme. Keine Angriffstools.", "Tournaments are for hardening your own systems. No attack tools.")}
         </div>
       </div>
     </div>

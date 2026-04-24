@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/moltbot/ai-agent-escalation-prevention"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "AI Agent Escalation Prevention: KI-Agenten-Eskalations-Prävention | ClawGuru Moltbot"
-    : "AI Agent Escalation Prevention: AI Agent Privilege Escalation Prevention | ClawGuru Moltbot"
-  const description = isDE
-    ? "KI-Agenten-Eskalations-Prävention: Privilege Escalation Detection, Agent Permission Boundaries, Escalation Audit Logging und Automated Rollback für KI-Agenten-Eskalations-Prävention."
-    : "AI agent escalation prevention: privilege escalation detection, agent permission boundaries, escalation audit logging and automated rollback for AI agent escalation prevention."
+  const title = pick(isDE, "AI Agent Escalation Prevention: KI-Agenten-Eskalations-Prävention | ClawGuru Moltbot", "AI Agent Escalation Prevention: AI Agent Privilege Escalation Prevention | ClawGuru Moltbot")
+  const description = pick(isDE, "KI-Agenten-Eskalations-Prävention: Privilege Escalation Detection, Agent Permission Boundaries, Escalation Audit Logging und Automated Rollback für KI-Agenten-Eskalations-Prävention.", "AI agent escalation prevention: privilege escalation detection, agent permission boundaries, escalation audit logging and automated rollback for AI agent escalation prevention.")
   return {
     title, description,
     keywords: ["ai agent escalation prevention", "privilege escalation detection", "agent permission boundaries", "escalation audit logging", "automated rollback", "moltbot escalation"],
@@ -169,17 +166,15 @@ export default function AiAgentEscalationPreventionPage({ params }: { params: { 
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "Eskalations-Prävention-Guide für eigene KI-Agenten-Systeme." : "Escalation prevention guide for your own AI agent systems."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Eskalations-Prävention-Guide für eigene KI-Agenten-Systeme.", "Escalation prevention guide for your own AI agent systems.")}
         </div>
         <div className="mb-3"><span className="text-xs font-bold uppercase tracking-widest text-cyan-400">Moltbot · Batch 29</span></div>
-        <h1 className="text-4xl font-bold mb-4 text-gray-100">{isDE ? "AI Agent Escalation Prevention" : "AI Agent Escalation Prevention"}</h1>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">{pick(isDE, "AI Agent Escalation Prevention", "AI Agent Escalation Prevention")}</h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "Privilege Escalation bei KI-Agenten ist real — Prompt Injection kann einen Agenten dazu bringen, sich selbst Admin-Rechte zu verschaffen. Vier Kontrollen: Escalation Detection, Permission Boundaries, Audit Logging und Automated Rollback."
-            : "Privilege escalation in AI agents is real — prompt injection can make an agent grant itself admin rights. Four controls: escalation detection, permission boundaries, audit logging and automated rollback."}
+          {pick(isDE, "Privilege Escalation bei KI-Agenten ist real — Prompt Injection kann einen Agenten dazu bringen, sich selbst Admin-Rechte zu verschaffen. Vier Kontrollen: Escalation Detection, Permission Boundaries, Audit Logging und Automated Rollback.", "Privilege escalation in AI agents is real — prompt injection can make an agent grant itself admin rights. Four controls: escalation detection, permission boundaries, audit logging and automated rollback.")}
         </p>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "4 Eskalations-Prävention-Kontrollen" : "4 Escalation Prevention Controls"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "4 Eskalations-Prävention-Kontrollen", "4 Escalation Prevention Controls")}</h2>
           <div className="space-y-5">
             {CONTROLS.map((c) => (
               <div key={c.id} className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
@@ -196,7 +191,7 @@ export default function AiAgentEscalationPreventionPage({ params }: { params: { 
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-3">
             {FAQ.map((f, i) => (
               <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
@@ -207,23 +202,23 @@ export default function AiAgentEscalationPreventionPage({ params }: { params: { 
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further Resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further Resources")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/moltbot/ai-agent-capability-control`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Agent Capability Control</div>
-              <div className="text-sm text-gray-300">{isDE ? "Capability-Control" : "Capability control"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Capability-Control", "Capability control")}</div>
             </a>
             <a href={`/${locale}/moltbot/ai-agent-rbac`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Agent RBAC</div>
-              <div className="text-sm text-gray-300">{isDE ? "Role-Based Access" : "Role-based access"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Role-Based Access", "Role-based access")}</div>
             </a>
             <a href={`/${locale}/moltbot/llm-prompt-leakage-defense`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM Prompt Leakage Defense</div>
-              <div className="text-sm text-gray-300">{isDE ? "Prompt-Leakage" : "Prompt leakage"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Prompt-Leakage", "Prompt leakage")}</div>
             </a>
             <a href={`/${locale}/moltbot/ai-agent-security`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Agent Security</div>
-              <div className="text-sm text-gray-300">{isDE ? "Security-Overview" : "Security overview"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Security-Overview", "Security overview")}</div>
             </a>
           </div>
         </section>

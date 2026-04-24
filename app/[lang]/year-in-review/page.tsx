@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
 import { TrendingDown, AlertTriangle, Calendar, Award, Flame } from "lucide-react"
+import { pick } from "@/lib/i18n-pick"
 
 interface PageProps { params: { lang: string } }
 
@@ -10,10 +11,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const pageUrl = `${SITE_URL}/${locale}/year-in-review`
   const isDE = locale === "de"
-  const title = isDE ? "Year in Review 2025 | ClawGuru" : "Year in Review 2025 | ClawGuru"
-  const description = isDE 
-    ? "Die schlechtesten Stacks von 2025 — Jahresrückblick" 
-    : "The worst stacks of 2025 — Year in review"
+  const title = pick(isDE, "Year in Review 2025 | ClawGuru", "Year in Review 2025 | ClawGuru")
+  const description = pick(isDE, "Die schlechtesten Stacks von 2025 — Jahresrückblick", "The worst stacks of 2025 — Year in review")
   return {
     title,
     description,
@@ -98,13 +97,11 @@ export default function YearInReviewPage({ params }: PageProps) {
           <div className="flex items-center gap-3 mb-4">
             <Calendar className="w-8 h-8 text-cyan-400" />
             <h1 className="text-4xl font-bold text-gray-100">
-              {isDE ? "Year in Review 2025" : "Year in Review 2025"}
+              {pick(isDE, "Year in Review 2025", "Year in Review 2025")}
             </h1>
           </div>
           <p className="text-lg text-gray-300">
-            {isDE 
-              ? "Die schlechtesten Stacks von 2025 — Jahresrückblick" 
-              : "The worst stacks of 2025 — Year in review"}
+            {pick(isDE, "Die schlechtesten Stacks von 2025 — Jahresrückblick", "The worst stacks of 2025 — Year in review")}
           </p>
         </div>
 
@@ -112,19 +109,19 @@ export default function YearInReviewPage({ params }: PageProps) {
         <div className="grid grid-cols-4 gap-4 mb-8">
           <div className="bg-gray-800 rounded-lg p-4 border border-gray-700 text-center">
             <div className="text-2xl font-bold text-cyan-400">{stats.totalRoasts.toLocaleString()}</div>
-            <div className="text-xs text-zinc-500">{isDE ? "Roasts" : "Roasts"}</div>
+            <div className="text-xs text-zinc-500">{pick(isDE, "Roasts", "Roasts")}</div>
           </div>
           <div className="bg-gray-800 rounded-lg p-4 border border-gray-700 text-center">
             <div className="text-2xl font-bold text-gray-100">{stats.averageScore}</div>
-            <div className="text-xs text-zinc-500">{isDE ? "Ø Score" : "Avg Score"}</div>
+            <div className="text-xs text-zinc-500">{pick(isDE, "Ø Score", "Avg Score")}</div>
           </div>
           <div className="bg-gray-800 rounded-lg p-4 border border-gray-700 text-center">
             <div className="text-2xl font-bold text-red-400">{stats.worstScore}</div>
-            <div className="text-xs text-zinc-500">{isDE ? "Schlechtester" : "Worst"}</div>
+            <div className="text-xs text-zinc-500">{pick(isDE, "Schlechtester", "Worst")}</div>
           </div>
           <div className="bg-gray-800 rounded-lg p-4 border border-gray-700 text-center">
             <div className="text-2xl font-bold text-green-400">{stats.bestScore}</div>
-            <div className="text-xs text-zinc-500">{isDE ? "Bester" : "Best"}</div>
+            <div className="text-xs text-zinc-500">{pick(isDE, "Bester", "Best")}</div>
           </div>
         </div>
 
@@ -133,7 +130,7 @@ export default function YearInReviewPage({ params }: PageProps) {
           <div className="flex items-center gap-3 mb-4">
             <TrendingDown className="w-6 h-6 text-red-400" />
             <h2 className="text-2xl font-semibold text-gray-100">
-              {isDE ? "Die 5 schlechtesten Stacks" : "The 5 worst stacks"}
+              {pick(isDE, "Die 5 schlechtesten Stacks", "The 5 worst stacks")}
             </h2>
           </div>
 
@@ -152,7 +149,7 @@ export default function YearInReviewPage({ params }: PageProps) {
                 </div>
                 <div className="text-right">
                   <div className="text-3xl font-bold text-red-400">{stack.score}</div>
-                  <div className="text-xs text-zinc-500">{isDE ? "Score" : "Score"}</div>
+                  <div className="text-xs text-zinc-500">{pick(isDE, "Score", "Score")}</div>
                 </div>
               </div>
 
@@ -171,7 +168,7 @@ export default function YearInReviewPage({ params }: PageProps) {
               {/* Issues */}
               <div>
                 <div className="text-sm text-zinc-500 mb-2">
-                  {isDE ? "Probleme" : "Issues"}
+                  {pick(isDE, "Probleme", "Issues")}
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {stack.issues.map((issue, index) => (
@@ -191,7 +188,7 @@ export default function YearInReviewPage({ params }: PageProps) {
             <AlertTriangle className="w-8 h-8 text-amber-400" />
             <div>
               <div className="text-sm text-zinc-500 mb-1">
-                {isDE ? "Häufigstes Problem" : "Most common issue"}
+                {pick(isDE, "Häufigstes Problem", "Most common issue")}
               </div>
               <div className="text-xl font-bold text-gray-100">
                 {stats.mostCommonIssue}
@@ -202,9 +199,7 @@ export default function YearInReviewPage({ params }: PageProps) {
 
         {/* Trust Notice */}
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE 
-            ? "Year in Review basiert auf anonymisierten Roast-Daten." 
-            : "Year in review is based on anonymized roast data."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Year in Review basiert auf anonymisierten Roast-Daten.", "Year in review is based on anonymized roast data.")}
         </div>
       </div>
     </div>

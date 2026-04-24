@@ -1,6 +1,7 @@
 import type { Locale } from "@/lib/i18n"
 import { getHomepageCroCopy } from "@/lib/homepage-cro-i18n"
 import { ArrowRight, Calendar, Shield } from "lucide-react"
+import { pick } from "@/lib/i18n-pick"
 
 type Props = { locale: Locale; prefix?: string; dict?: Record<string, string> }
 
@@ -16,8 +17,8 @@ export default function FinalCTASection({ locale, prefix = "", dict = {} }: Prop
   const isDE = locale === "de"
   const title = dict.final_cta_title || cro.finalTitle
   const sub = dict.final_cta_sub || cro.finalSub
-  const primary = dict.final_cta_primary || (isDE ? "Kostenlosen Check starten" : "Start free check")
-  const secondary = isDE ? "Strategy Call buchen" : "Book a Strategy Call"
+  const primary = dict.final_cta_primary || (pick(isDE, "Kostenlosen Check starten", "Start free check"))
+  const secondary = pick(isDE, "Strategy Call buchen", "Book a Strategy Call")
 
   return (
     <section className="py-20 relative overflow-hidden" style={{ background: "var(--surface-0)" }}>
@@ -56,9 +57,7 @@ export default function FinalCTASection({ locale, prefix = "", dict = {} }: Prop
           </a>
         </div>
         <p className="mt-5 text-xs text-gray-500">
-          {isDE
-            ? "Keine Kreditkarte · 30 Sekunden · DSGVO / EU-Hosting"
-            : "No credit card · 30 seconds · GDPR / EU-hosted"}
+          {pick(isDE, "Keine Kreditkarte · 30 Sekunden · DSGVO / EU-Hosting", "No credit card · 30 seconds · GDPR / EU-hosted")}
         </p>
       </div>
     </section>

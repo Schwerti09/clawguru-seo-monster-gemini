@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/moltbot/llm-supply-chain-security"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "LLM Supply Chain Security: LLM-Supply-Chain-Security | ClawGuru Moltbot"
-    : "LLM Supply Chain Security: LLM Supply Chain Security | ClawGuru Moltbot"
-  const description = isDE
-    ? "LLM-Supply-Chain-Security: Model Source Verification, Dependency Integrity, Training Data Provenance und Pipeline Security für LLM-Supply-Chain-Security."
-    : "LLM supply chain security: model source verification, dependency integrity, training data provenance and pipeline security for LLM supply chain security."
+  const title = pick(isDE, "LLM Supply Chain Security: LLM-Supply-Chain-Security | ClawGuru Moltbot", "LLM Supply Chain Security: LLM Supply Chain Security | ClawGuru Moltbot")
+  const description = pick(isDE, "LLM-Supply-Chain-Security: Model Source Verification, Dependency Integrity, Training Data Provenance und Pipeline Security für LLM-Supply-Chain-Security.", "LLM supply chain security: model source verification, dependency integrity, training data provenance and pipeline security for LLM supply chain security.")
   return {
     title, description,
     keywords: ["llm supply chain security", "model source verification", "dependency integrity", "training data provenance", "pipeline security", "moltbot supply chain"],
@@ -165,17 +162,15 @@ export default function LlmSupplyChainSecurityPage({ params }: { params: { lang:
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "LLM-Supply-Chain-Security-Guide für eigene KI-Systeme." : "LLM supply chain security guide for your own AI systems."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "LLM-Supply-Chain-Security-Guide für eigene KI-Systeme.", "LLM supply chain security guide for your own AI systems.")}
         </div>
         <div className="mb-3"><span className="text-xs font-bold uppercase tracking-widest text-cyan-400">Moltbot · Batch 27</span></div>
-        <h1 className="text-4xl font-bold mb-4 text-gray-100">{isDE ? "LLM Supply Chain Security" : "LLM Supply Chain Security"}</h1>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">{pick(isDE, "LLM Supply Chain Security", "LLM Supply Chain Security")}</h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "LLM-Modelle ohne Supply-Chain-Security sind anfällig für Model Poisoning, Dependency Confusion und Training Data Attacks. Vier Kontrollen: Model Source Verification, Dependency Integrity, Training Data Provenance und ML Pipeline Security."
-            : "LLM models without supply chain security are vulnerable to model poisoning, dependency confusion and training data attacks. Four controls: model source verification, dependency integrity, training data provenance and ML pipeline security."}
+          {pick(isDE, "LLM-Modelle ohne Supply-Chain-Security sind anfällig für Model Poisoning, Dependency Confusion und Training Data Attacks. Vier Kontrollen: Model Source Verification, Dependency Integrity, Training Data Provenance und ML Pipeline Security.", "LLM models without supply chain security are vulnerable to model poisoning, dependency confusion and training data attacks. Four controls: model source verification, dependency integrity, training data provenance and ML pipeline security.")}
         </p>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "4 Supply-Chain-Security-Kontrollen" : "4 Supply Chain Security Controls"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "4 Supply-Chain-Security-Kontrollen", "4 Supply Chain Security Controls")}</h2>
           <div className="space-y-5">
             {CONTROLS.map((c) => (
               <div key={c.id} className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
@@ -192,7 +187,7 @@ export default function LlmSupplyChainSecurityPage({ params }: { params: { lang:
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-3">
             {FAQ.map((f, i) => (
               <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
@@ -203,23 +198,23 @@ export default function LlmSupplyChainSecurityPage({ params }: { params: { lang:
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further Resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further Resources")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/openclaw/supply-chain-sbom-security`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Supply Chain SBOM Security</div>
-              <div className="text-sm text-gray-300">{isDE ? "SBOM-Security" : "SBOM security"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "SBOM-Security", "SBOM security")}</div>
             </a>
             <a href={`/${locale}/moltbot/llm-context-poisoning-defense`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM Context Poisoning Defense</div>
-              <div className="text-sm text-gray-300">{isDE ? "Poisoning-Defense" : "Poisoning defense"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Poisoning-Defense", "Poisoning defense")}</div>
             </a>
             <a href={`/${locale}/moltbot/ai-supply-chain`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Supply Chain</div>
-              <div className="text-sm text-gray-300">{isDE ? "AI-Supply-Chain" : "AI supply chain"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "AI-Supply-Chain", "AI supply chain")}</div>
             </a>
             <a href={`/${locale}/moltbot/ai-agent-security`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Agent Security</div>
-              <div className="text-sm text-gray-300">{isDE ? "Overview" : "Overview"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Overview", "Overview")}</div>
             </a>
           </div>
         </section>

@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
 import { Users, Shield, Zap, Lock, Check, ArrowRight, Building2 } from "lucide-react"
 import Link from "next/link"
+import { pick } from "@/lib/i18n-pick"
 
 interface PageProps { params: { lang: string } }
 
@@ -16,12 +17,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const pageUrl = `${SITE_URL}/${locale}${PATH}`
   const isDE = locale === "de"
-  const title = isDE
-    ? "Roast Teams — Enterprise Plan | ClawGuru"
-    : "Roast Teams — Enterprise Plan | ClawGuru"
-  const description = isDE
-    ? "Team-Roasts für Enterprise. B2B Revenue mit Team-Features. Keine Mock-Daten."
-    : "Team roasts for enterprise. B2B revenue with team features. No mock data."
+  const title = pick(isDE, "Roast Teams — Enterprise Plan | ClawGuru", "Roast Teams — Enterprise Plan | ClawGuru")
+  const description = pick(isDE, "Team-Roasts für Enterprise. B2B Revenue mit Team-Features. Keine Mock-Daten.", "Team roasts for enterprise. B2B revenue with team features. No mock data.")
   return {
     title,
     description,
@@ -36,102 +33,90 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 const getTeamFeatures = (isDE: boolean) => [
   {
     icon: Users,
-    title: isDE ? "Team-Roasts" : "Team Roasts",
-    description: isDE
-      ? "Roaste gemeinsam mit deinem Team. Kolaborative Security-Analyse für bessere Ergebnisse."
-      : "Roast together with your team. Collaborative security analysis for better results.",
+    title: pick(isDE, "Team-Roasts", "Team Roasts"),
+    description: pick(isDE, "Roaste gemeinsam mit deinem Team. Kolaborative Security-Analyse für bessere Ergebnisse.", "Roast together with your team. Collaborative security analysis for better results."),
     popular: true,
   },
   {
     icon: Shield,
-    title: isDE ? "Team Dashboard" : "Team Dashboard",
-    description: isDE
-      ? "Zentrales Dashboard für alle Team-Roasts. Übersicht über Security-Status des gesamten Teams."
-      : "Central dashboard for all team roasts. Overview of the security status of the entire team.",
+    title: pick(isDE, "Team Dashboard", "Team Dashboard"),
+    description: pick(isDE, "Zentrales Dashboard für alle Team-Roasts. Übersicht über Security-Status des gesamten Teams.", "Central dashboard for all team roasts. Overview of the security status of the entire team."),
     popular: false,
   },
   {
     icon: Zap,
-    title: isDE ? "Bulk Roasts" : "Bulk Roasts",
-    description: isDE
-      ? "Roaste mehrere Stacks gleichzeitig. Perfekt für Migrationen und Audits."
-      : "Roast multiple stacks at once. Perfect for migrations and audits.",
+    title: pick(isDE, "Bulk Roasts", "Bulk Roasts"),
+    description: pick(isDE, "Roaste mehrere Stacks gleichzeitig. Perfekt für Migrationen und Audits.", "Roast multiple stacks at once. Perfect for migrations and audits."),
     popular: false,
   },
   {
     icon: Lock,
-    title: isDE ? "Team Privacy" : "Team Privacy",
-    description: isDE
-      ? "Deine Team-Roasts sind privat und werden nur für dein Team sichtbar."
-      : "Your team roasts are private and only visible to your team.",
+    title: pick(isDE, "Team Privacy", "Team Privacy"),
+    description: pick(isDE, "Deine Team-Roasts sind privat und werden nur für dein Team sichtbar.", "Your team roasts are private and only visible to your team."),
     popular: false,
   },
   {
     icon: Building2,
-    title: isDE ? "SSO Integration" : "SSO Integration",
-    description: isDE
-      ? "Single Sign-On mit SAML oder OAuth. Nahtlose Integration in dein Unternehmen."
-      : "Single sign-on with SAML or OAuth. Seamless integration into your company.",
+    title: pick(isDE, "SSO Integration", "SSO Integration"),
+    description: pick(isDE, "Single Sign-On mit SAML oder OAuth. Nahtlose Integration in dein Unternehmen.", "Single sign-on with SAML or OAuth. Seamless integration into your company."),
     popular: false,
   },
   {
     icon: Check,
-    title: isDE ? "Dedicated Support" : "Dedicated Support",
-    description: isDE
-      ? "Dedicated Support für Enterprise-Kunden. 24/7 Priority Support."
-      : "Dedicated support for enterprise customers. 24/7 priority support.",
+    title: pick(isDE, "Dedicated Support", "Dedicated Support"),
+    description: pick(isDE, "Dedicated Support für Enterprise-Kunden. 24/7 Priority Support.", "Dedicated support for enterprise customers. 24/7 priority support."),
     popular: false,
   },
 ]
 
 const getPricing = (isDE: boolean) => [
   {
-    name: isDE ? "Team Starter" : "Team Starter",
-    price: isDE ? "99€" : "99€",
-    period: isDE ? "pro Monat" : "per month",
-    description: isDE ? "Für kleine Teams (5 Nutzer)" : "For small teams (5 users)",
+    name: pick(isDE, "Team Starter", "Team Starter"),
+    price: pick(isDE, "99€", "99€"),
+    period: pick(isDE, "pro Monat", "per month"),
+    description: pick(isDE, "Für kleine Teams (5 Nutzer)", "For small teams (5 users)"),
     features: [
-      isDE ? "5 Team-Mitglieder" : "5 team members",
-      isDE ? "Unbegrenzte Team-Roasts" : "Unlimited team roasts",
-      isDE ? "Team Dashboard" : "Team dashboard",
-      isDE ? "Bulk Roasts (10/Stunde)" : "Bulk roasts (10/hour)",
-      isDE ? "Email Support" : "Email support",
+      pick(isDE, "5 Team-Mitglieder", "5 team members"),
+      pick(isDE, "Unbegrenzte Team-Roasts", "Unlimited team roasts"),
+      pick(isDE, "Team Dashboard", "Team dashboard"),
+      pick(isDE, "Bulk Roasts (10/Stunde)", "Bulk roasts (10/hour)"),
+      pick(isDE, "Email Support", "Email support"),
     ],
-    cta: isDE ? "Starten" : "Get Started",
+    cta: pick(isDE, "Starten", "Get Started"),
     popular: false,
   },
   {
-    name: isDE ? "Team Pro" : "Team Pro",
-    price: isDE ? "249€" : "249€",
-    period: isDE ? "pro Monat" : "per month",
-    description: isDE ? "Für wachsende Teams (20 Nutzer)" : "For growing teams (20 users)",
+    name: pick(isDE, "Team Pro", "Team Pro"),
+    price: pick(isDE, "249€", "249€"),
+    period: pick(isDE, "pro Monat", "per month"),
+    description: pick(isDE, "Für wachsende Teams (20 Nutzer)", "For growing teams (20 users)"),
     features: [
-      isDE ? "20 Team-Mitglieder" : "20 team members",
-      isDE ? "Unbegrenzte Team-Roasts" : "Unlimited team roasts",
-      isDE ? "Team Dashboard" : "Team dashboard",
-      isDE ? "Bulk Roasts (50/Stunde)" : "Bulk roasts (50/hour)",
-      isDE ? "Priority Support" : "Priority support",
-      isDE ? "SSO Integration" : "SSO integration",
+      pick(isDE, "20 Team-Mitglieder", "20 team members"),
+      pick(isDE, "Unbegrenzte Team-Roasts", "Unlimited team roasts"),
+      pick(isDE, "Team Dashboard", "Team dashboard"),
+      pick(isDE, "Bulk Roasts (50/Stunde)", "Bulk roasts (50/hour)"),
+      pick(isDE, "Priority Support", "Priority support"),
+      pick(isDE, "SSO Integration", "SSO integration"),
     ],
-    cta: isDE ? "Starten" : "Get Started",
+    cta: pick(isDE, "Starten", "Get Started"),
     popular: true,
   },
   {
-    name: isDE ? "Enterprise" : "Enterprise",
-    price: isDE ? "Custom" : "Custom",
-    period: isDE ? "auf Anfrage" : "on request",
-    description: isDE ? "Für große Unternehmen (unbegrenzt)" : "For large enterprises (unlimited)",
+    name: pick(isDE, "Enterprise", "Enterprise"),
+    price: pick(isDE, "Custom", "Custom"),
+    period: pick(isDE, "auf Anfrage", "on request"),
+    description: pick(isDE, "Für große Unternehmen (unbegrenzt)", "For large enterprises (unlimited)"),
     features: [
-      isDE ? "Unbegrenzte Team-Mitglieder" : "Unlimited team members",
-      isDE ? "Unbegrenzte Team-Roasts" : "Unlimited team roasts",
-      isDE ? "Team Dashboard" : "Team dashboard",
-      isDE ? "Unbegrenzte Bulk Roasts" : "Unlimited bulk roasts",
-      isDE ? "Dedicated Support" : "Dedicated support",
-      isDE ? "SSO Integration" : "SSO integration",
-      isDE ? "SLA: 99.9%" : "SLA: 99.9%",
-      isDE ? "On-Premise Deployment" : "On-premise deployment",
+      pick(isDE, "Unbegrenzte Team-Mitglieder", "Unlimited team members"),
+      pick(isDE, "Unbegrenzte Team-Roasts", "Unlimited team roasts"),
+      pick(isDE, "Team Dashboard", "Team dashboard"),
+      pick(isDE, "Unbegrenzte Bulk Roasts", "Unlimited bulk roasts"),
+      pick(isDE, "Dedicated Support", "Dedicated support"),
+      pick(isDE, "SSO Integration", "SSO integration"),
+      pick(isDE, "SLA: 99.9%", "SLA: 99.9%"),
+      pick(isDE, "On-Premise Deployment", "On-premise deployment"),
     ],
-    cta: isDE ? "Kontakt aufnehmen" : "Contact sales",
+    cta: pick(isDE, "Kontakt aufnehmen", "Contact sales"),
     popular: false,
   },
 ]
@@ -147,27 +132,23 @@ export default function RoastTeamsPage({ params }: PageProps) {
       <div className="max-w-6xl mx-auto px-4 py-12">
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-4 text-gray-100">
-            {isDE ? "Roast Teams — Enterprise Plan" : "Roast Teams — Enterprise Plan"}
+            {pick(isDE, "Roast Teams — Enterprise Plan", "Roast Teams — Enterprise Plan")}
           </h1>
           <p className="text-lg text-gray-300 mb-4">
-            {isDE
-              ? "Team-Roasts für Enterprise. B2B Revenue mit Team-Features."
-              : "Team roasts for enterprise. B2B revenue with team features."}
+            {pick(isDE, "Team-Roasts für Enterprise. B2B Revenue mit Team-Features.", "Team roasts for enterprise. B2B revenue with team features.")}
           </p>
           <p className="text-sm text-cyan-400 font-medium">
-            {isDE ? "→ Kolaborative Security-Analyse für dein Team." : "→ Collaborative security analysis for your team."}
+            {pick(isDE, "→ Kolaborative Security-Analyse für dein Team.", "→ Collaborative security analysis for your team.")}
           </p>
         </div>
 
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE
-            ? "Diese Team-Features dienen zur Härtung Ihrer eigenen Systeme. Keine Angriffstools."
-            : "These team features are for hardening your own systems. No attack tools."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Diese Team-Features dienen zur Härtung Ihrer eigenen Systeme. Keine Angriffstools.", "These team features are for hardening your own systems. No attack tools.")}
         </div>
 
         {/* Team Features */}
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Team Features" : "Team Features"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Team Features", "Team Features")}</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
             {teamFeatures.map((feature, index) => {
               const Icon = feature.icon
@@ -185,7 +166,7 @@ export default function RoastTeamsPage({ params }: PageProps) {
                   <p className="text-sm text-gray-300">{feature.description}</p>
                   {feature.popular && (
                     <div className="mt-3 bg-cyan-900 px-2 py-1 rounded inline-block">
-                      <span className="text-xs text-cyan-300">{isDE ? "Beliebt" : "Popular"}</span>
+                      <span className="text-xs text-cyan-300">{pick(isDE, "Beliebt", "Popular")}</span>
                     </div>
                   )}
                 </div>
@@ -196,7 +177,7 @@ export default function RoastTeamsPage({ params }: PageProps) {
 
         {/* Pricing */}
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Team Pricing" : "Team Pricing"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Team Pricing", "Team Pricing")}</h2>
           <div className="grid md:grid-cols-3 gap-6">
             {pricing.map((plan, index) => (
               <div
@@ -207,7 +188,7 @@ export default function RoastTeamsPage({ params }: PageProps) {
               >
                 {plan.popular && (
                   <div className="bg-cyan-900 text-center py-2 rounded-t-lg -mt-6 -mx-6 mb-6">
-                    <span className="text-sm font-semibold text-cyan-300">{isDE ? "Beliebt" : "Popular"}</span>
+                    <span className="text-sm font-semibold text-cyan-300">{pick(isDE, "Beliebt", "Popular")}</span>
                   </div>
                 )}
                 <h3 className="text-2xl font-bold text-gray-100 mb-2">{plan.name}</h3>
@@ -238,30 +219,24 @@ export default function RoastTeamsPage({ params }: PageProps) {
 
         {/* Why Teams? */}
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Warum Roast Teams?" : "Why Roast Teams?"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Warum Roast Teams?", "Why Roast Teams?")}</h2>
           <div className="space-y-4">
             <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
-              <h3 className="font-bold text-cyan-400 mb-2">{isDE ? "Kolaborative Security" : "Collaborative Security"}</h3>
+              <h3 className="font-bold text-cyan-400 mb-2">{pick(isDE, "Kolaborative Security", "Collaborative Security")}</h3>
               <p className="text-sm text-gray-300">
-                {isDE
-                  ? "Roaste gemeinsam mit deinem Team. Kolaborative Security-Analyse für bessere Ergebnisse und schnelleres Lernen."
-                  : "Roast together with your team. Collaborative security analysis for better results and faster learning."}
+                {pick(isDE, "Roaste gemeinsam mit deinem Team. Kolaborative Security-Analyse für bessere Ergebnisse und schnelleres Lernen.", "Roast together with your team. Collaborative security analysis for better results and faster learning.")}
               </p>
             </div>
             <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
-              <h3 className="font-bold text-cyan-400 mb-2">{isDE ? "Zentrales Dashboard" : "Central Dashboard"}</h3>
+              <h3 className="font-bold text-cyan-400 mb-2">{pick(isDE, "Zentrales Dashboard", "Central Dashboard")}</h3>
               <p className="text-sm text-gray-300">
-                {isDE
-                  ? "Zentrales Dashboard für alle Team-Roasts. Übersicht über Security-Status des gesamten Teams auf einen Blick."
-                  : "Central dashboard for all team roasts. Overview of the security status of the entire team at a glance."}
+                {pick(isDE, "Zentrales Dashboard für alle Team-Roasts. Übersicht über Security-Status des gesamten Teams auf einen Blick.", "Central dashboard for all team roasts. Overview of the security status of the entire team at a glance.")}
               </p>
             </div>
             <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
-              <h3 className="font-bold text-cyan-400 mb-2">{isDE ? "Bulk Roasts" : "Bulk Roasts"}</h3>
+              <h3 className="font-bold text-cyan-400 mb-2">{pick(isDE, "Bulk Roasts", "Bulk Roasts")}</h3>
               <p className="text-sm text-gray-300">
-                {isDE
-                  ? "Roaste mehrere Stacks gleichzeitig. Perfekt für Migrationen, Audits und Compliance-Checks."
-                  : "Roast multiple stacks at once. Perfect for migrations, audits, and compliance checks."}
+                {pick(isDE, "Roaste mehrere Stacks gleichzeitig. Perfekt für Migrationen, Audits und Compliance-Checks.", "Roast multiple stacks at once. Perfect for migrations, audits, and compliance checks.")}
               </p>
             </div>
           </div>
@@ -271,38 +246,36 @@ export default function RoastTeamsPage({ params }: PageProps) {
         <section className="mb-10">
           <div className="bg-gradient-to-r from-cyan-900/40 to-purple-900/40 border border-cyan-700/50 rounded-xl p-6 text-center">
             <h3 className="text-xl font-bold text-cyan-300 mb-2">
-              {isDE ? "Bereit für Teams?" : "Ready for Teams?"}
+              {pick(isDE, "Bereit für Teams?", "Ready for Teams?")}
             </h3>
             <p className="text-sm text-cyan-200/70 mb-4">
-              {isDE
-                ? "Upgrade jetzt und entfalle die volle Power von Roast Teams."
-                : "Upgrade now and unlock the full power of Roast Teams."}
+              {pick(isDE, "Upgrade jetzt und entfalle die volle Power von Roast Teams.", "Upgrade now and unlock the full power of Roast Teams.")}
             </p>
             <button className="inline-flex items-center gap-2 px-6 py-3 bg-cyan-600 hover:bg-cyan-500 rounded-lg font-semibold text-white transition-colors">
-              {isDE ? "Jetzt starten" : "Get Started Now"}
+              {pick(isDE, "Jetzt starten", "Get Started Now")}
             </button>
           </div>
         </section>
 
         {/* Further Resources */}
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further resources")}</h2>
           <div className="grid md:grid-cols-2 gap-4">
             <Link href={`/${locale}/roast-pro`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
-              <div className="font-semibold text-cyan-400">{isDE ? "Roast Pro" : "Roast Pro"}</div>
-              <div className="text-sm text-gray-300">{isDE ? "Premium Features" : "Premium features"}</div>
+              <div className="font-semibold text-cyan-400">{pick(isDE, "Roast Pro", "Roast Pro")}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Premium Features", "Premium features")}</div>
             </Link>
             <Link href={`/${locale}/api-pricing`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
-              <div className="font-semibold text-cyan-400">{isDE ? "API Pricing" : "API Pricing"}</div>
-              <div className="text-sm text-gray-300">{isDE ? "API-Zugang" : "API access"}</div>
+              <div className="font-semibold text-cyan-400">{pick(isDE, "API Pricing", "API Pricing")}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "API-Zugang", "API access")}</div>
             </Link>
             <Link href={`/${locale}/roast-my-moltbot`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
-              <div className="font-semibold text-cyan-400">{isDE ? "Roast My Moltbot" : "Roast My Moltbot"}</div>
-              <div className="text-sm text-gray-300">{isDE ? "Roast starten" : "Start the roast"}</div>
+              <div className="font-semibold text-cyan-400">{pick(isDE, "Roast My Moltbot", "Roast My Moltbot")}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Roast starten", "Start the roast")}</div>
             </Link>
             <Link href={`/${locale}/consulting`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
-              <div className="font-semibold text-cyan-400">{isDE ? "Consulting" : "Consulting"}</div>
-              <div className="text-sm text-gray-300">{isDE ? "Professional Services" : "Professional services"}</div>
+              <div className="font-semibold text-cyan-400">{pick(isDE, "Consulting", "Consulting")}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Professional Services", "Professional services")}</div>
             </Link>
           </div>
         </section>

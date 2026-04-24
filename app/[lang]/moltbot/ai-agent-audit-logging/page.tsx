@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/moltbot/ai-agent-audit-logging"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "AI Agent Audit Logging: Manipulationssicheres LLM-Logging | ClawGuru Moltbot"
-    : "AI Agent Audit Logging: Tamper-Proof LLM Audit Trails | ClawGuru Moltbot"
-  const description = isDE
-    ? "Manipulationssichere Audit-Logs für KI-Agenten: HMAC-signierte LLM-Interaktionen, Tool-Call-Protokollierung, Compliance-Evidenz für SOC 2 / ISO 27001 und forensische Rekonstruktion von AI-Incidents."
-    : "Tamper-proof audit logs for AI agents: HMAC-signed LLM interactions, tool call logging, compliance evidence for SOC 2 / ISO 27001 and forensic reconstruction of AI incidents."
+  const title = pick(isDE, "AI Agent Audit Logging: Manipulationssicheres LLM-Logging | ClawGuru Moltbot", "AI Agent Audit Logging: Tamper-Proof LLM Audit Trails | ClawGuru Moltbot")
+  const description = pick(isDE, "Manipulationssichere Audit-Logs für KI-Agenten: HMAC-signierte LLM-Interaktionen, Tool-Call-Protokollierung, Compliance-Evidenz für SOC 2 / ISO 27001 und forensische Rekonstruktion von AI-Incidents.", "Tamper-proof audit logs for AI agents: HMAC-signed LLM interactions, tool call logging, compliance evidence for SOC 2 / ISO 27001 and forensic reconstruction of AI incidents.")
   return {
     title, description,
     keywords: ["ai agent audit logging", "llm audit trail", "moltbot audit log", "ai agent compliance logging", "tamper-proof ai logs", "llm interaction logging"],
@@ -184,24 +181,22 @@ export default function AiAgentAuditLoggingPage({ params }: { params: { lang: st
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "Audit-Logging-Guide für eigene KI-Agenten-Infrastruktur." : "Audit logging guide for your own AI agent infrastructure."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Audit-Logging-Guide für eigene KI-Agenten-Infrastruktur.", "Audit logging guide for your own AI agent infrastructure.")}
         </div>
         <div className="mb-3"><span className="text-xs font-bold uppercase tracking-widest text-cyan-400">Moltbot · Batch 10</span></div>
         <h1 className="text-4xl font-bold mb-4 text-gray-100">
-          {isDE ? "AI Agent Audit Logging" : "AI Agent Audit Logging"}
+          {pick(isDE, "AI Agent Audit Logging", "AI Agent Audit Logging")}
         </h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "Standard-Logs reichen für KI-Agenten nicht aus — sie sind löschbar, fälschbar und nicht compliance-fähig. HMAC-Chain-Logs, Tool-Call-Audit-Trail, Compliance-Evidence-Export und Echtzeit-Anomalie-Erkennung."
-            : "Standard logs are insufficient for AI agents — they're deletable, forgeable, and not compliance-ready. HMAC chain logs, tool call audit trail, compliance evidence export and real-time anomaly detection."}
+          {pick(isDE, "Standard-Logs reichen für KI-Agenten nicht aus — sie sind löschbar, fälschbar und nicht compliance-fähig. HMAC-Chain-Logs, Tool-Call-Audit-Trail, Compliance-Evidence-Export und Echtzeit-Anomalie-Erkennung.", "Standard logs are insufficient for AI agents — they're deletable, forgeable, and not compliance-ready. HMAC chain logs, tool call audit trail, compliance evidence export and real-time anomaly detection.")}
         </p>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
           {[
-            { value: "HMAC", label: isDE ? "Kettensignatur" : "Chain signature" },
-            { value: "SOC2", label: isDE ? "Evidence-Export" : "Evidence export" },
-            { value: "SHA-256", label: isDE ? "Prompt-Hashing" : "Prompt hashing" },
-            { value: "RT", label: isDE ? "Anomalie-Detect." : "Anomaly detect." },
+            { value: "HMAC", label: pick(isDE, "Kettensignatur", "Chain signature") },
+            { value: "SOC2", label: pick(isDE, "Evidence-Export", "Evidence export") },
+            { value: "SHA-256", label: pick(isDE, "Prompt-Hashing", "Prompt hashing") },
+            { value: "RT", label: pick(isDE, "Anomalie-Detect.", "Anomaly detect.") },
           ].map((s) => (
             <div key={s.label} className="bg-gray-800 p-4 rounded-lg border border-gray-700 text-center">
               <div className="text-2xl font-black text-cyan-400">{s.value}</div>
@@ -211,7 +206,7 @@ export default function AiAgentAuditLoggingPage({ params }: { params: { lang: st
         </div>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "4 Audit-Logging-Schichten" : "4 Audit Logging Layers"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "4 Audit-Logging-Schichten", "4 Audit Logging Layers")}</h2>
           <div className="space-y-5">
             {AUDIT_LAYERS.map((a) => (
               <div key={a.id} className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
@@ -229,7 +224,7 @@ export default function AiAgentAuditLoggingPage({ params }: { params: { lang: st
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-3">
             {FAQ.map((f, i) => (
               <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
@@ -241,23 +236,23 @@ export default function AiAgentAuditLoggingPage({ params }: { params: { lang: st
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further Resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further Resources")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/moltbot/ai-incident-response`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Incident Response</div>
-              <div className="text-sm text-gray-300">{isDE ? "Logs für Incident-Forensik nutzen" : "Use logs for incident forensics"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Logs für Incident-Forensik nutzen", "Use logs for incident forensics")}</div>
             </a>
             <a href={`/${locale}/moltbot/ai-compliance-automation`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Compliance Automation</div>
-              <div className="text-sm text-gray-300">{isDE ? "SOC 2 / ISO 27001 Evidenz" : "SOC 2 / ISO 27001 evidence"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "SOC 2 / ISO 27001 Evidenz", "SOC 2 / ISO 27001 evidence")}</div>
             </a>
             <a href={`/${locale}/openclaw/audit-logging-setup`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Audit Logging Setup</div>
-              <div className="text-sm text-gray-300">{isDE ? "OpenClaw Infra-Logging" : "OpenClaw infra logging"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "OpenClaw Infra-Logging", "OpenClaw infra logging")}</div>
             </a>
             <a href={`/${locale}/solutions/soc2-type-ii-automation`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">SOC 2 Type II Automation</div>
-              <div className="text-sm text-gray-300">{isDE ? "CC7.2 Evidence exportieren" : "Export CC7.2 evidence"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "CC7.2 Evidence exportieren", "Export CC7.2 evidence")}</div>
             </a>
           </div>
         </section>

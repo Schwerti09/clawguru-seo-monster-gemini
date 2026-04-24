@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 interface PageProps { params: { lang: string } }
 
@@ -36,12 +37,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const pageUrl = `${SITE_URL}/${locale}${PATH}`
   const isDE = locale === "de"
-  const title = isDE
-    ? "KI-Agenten Sicherheit: Vollständiger Leitfaden 2026 | ClawGuru"
-    : "AI Agent Security: Complete Defense Guide 2026 | ClawGuru"
-  const description = isDE
-    ? "Vollständiger Leitfaden zur KI-Agenten-Sicherheit: OWASP LLM Top 10, Prompt Injection Defense, Model Poisoning, LLM Gateway Hardening und AI Agent Sandboxing. Mit Moltbot automatisierbar."
-    : "Complete AI agent security guide covering OWASP LLM Top 10, prompt injection defense, model poisoning protection, LLM gateway hardening and AI agent sandboxing. Automatable with Moltbot."
+  const title = pick(isDE, "KI-Agenten Sicherheit: Vollständiger Leitfaden 2026 | ClawGuru", "AI Agent Security: Complete Defense Guide 2026 | ClawGuru")
+  const description = pick(isDE, "Vollständiger Leitfaden zur KI-Agenten-Sicherheit: OWASP LLM Top 10, Prompt Injection Defense, Model Poisoning, LLM Gateway Hardening und AI Agent Sandboxing. Mit Moltbot automatisierbar.", "Complete AI agent security guide covering OWASP LLM Top 10, prompt injection defense, model poisoning protection, LLM gateway hardening and AI agent sandboxing. Automatable with Moltbot.")
   return {
     title,
     description,
@@ -99,10 +96,8 @@ export default function AiAgentSecurityPage({ params }: PageProps) {
     {
       "@context": "https://schema.org",
       "@type": "Article",
-      headline: isDE ? "KI-Agenten Sicherheit: Vollständiger Leitfaden 2026" : "AI Agent Security: Complete Defense Guide 2026",
-      description: isDE
-        ? "Vollständiger Leitfaden zur KI-Agenten-Sicherheit mit OWASP LLM Top 10, Prompt Injection Defense und Moltbot Sandboxing."
-        : "Complete AI agent security guide covering OWASP LLM Top 10, prompt injection, model poisoning and sandboxing.",
+      headline: pick(isDE, "KI-Agenten Sicherheit: Vollständiger Leitfaden 2026", "AI Agent Security: Complete Defense Guide 2026"),
+      description: pick(isDE, "Vollständiger Leitfaden zur KI-Agenten-Sicherheit mit OWASP LLM Top 10, Prompt Injection Defense und Moltbot Sandboxing.", "Complete AI agent security guide covering OWASP LLM Top 10, prompt injection, model poisoning and sandboxing."),
       url: pageUrl,
       author: { "@type": "Organization", name: "ClawGuru Security Team" },
       publisher: { "@type": "Organization", name: "ClawGuru", url: SITE_URL },
@@ -147,12 +142,10 @@ export default function AiAgentSecurityPage({ params }: PageProps) {
           <span className="text-xs font-bold uppercase tracking-widest text-cyan-400">Moltbot AI Security · Pillar Page</span>
         </div>
         <h1 className="text-4xl font-bold mb-4 text-gray-100">
-          {isDE ? "KI-Agenten Sicherheit: Vollständiger Leitfaden 2026" : "AI Agent Security: Complete Defense Guide 2026"}
+          {pick(isDE, "KI-Agenten Sicherheit: Vollständiger Leitfaden 2026", "AI Agent Security: Complete Defense Guide 2026")}
         </h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "LLM-basierte KI-Agenten sind die am schnellsten wachsende Angriffsfläche in der modernen Infrastruktur. Dieser Leitfaden gibt dir das vollständige Abwehr-Stack — von Prompt Injection bis Container-Isolation — mit direkten Links zu jedem Themen-Runbook."
-            : "LLM-based AI agents are the fastest-growing attack surface in modern infrastructure. This guide gives you the complete defense stack — from prompt injection to container isolation — with direct links to every topic runbook."}
+          {pick(isDE, "LLM-basierte KI-Agenten sind die am schnellsten wachsende Angriffsfläche in der modernen Infrastruktur. Dieser Leitfaden gibt dir das vollständige Abwehr-Stack — von Prompt Injection bis Container-Isolation — mit direkten Links zu jedem Themen-Runbook.", "LLM-based AI agents are the fastest-growing attack surface in modern infrastructure. This guide gives you the complete defense stack — from prompt injection to container isolation — with direct links to every topic runbook.")}
         </p>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">

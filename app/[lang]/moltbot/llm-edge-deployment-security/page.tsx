@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/moltbot/llm-edge-deployment-security"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "LLM Edge Deployment Security: LLM-Edge-Deployment-Security | ClawGuru Moltbot"
-    : "LLM Edge Deployment Security: LLM Edge Deployment Security | ClawGuru Moltbot"
-  const description = isDE
-    ? "LLM-Edge-Deployment-Security: Edge Device Authentication, Secure Edge Inference, Edge Update Security und Edge Monitoring für LLM-Edge-Deployment-Security."
-    : "LLM edge deployment security: edge device authentication, secure edge inference, edge update security and edge monitoring for LLM edge deployment security."
+  const title = pick(isDE, "LLM Edge Deployment Security: LLM-Edge-Deployment-Security | ClawGuru Moltbot", "LLM Edge Deployment Security: LLM Edge Deployment Security | ClawGuru Moltbot")
+  const description = pick(isDE, "LLM-Edge-Deployment-Security: Edge Device Authentication, Secure Edge Inference, Edge Update Security und Edge Monitoring für LLM-Edge-Deployment-Security.", "LLM edge deployment security: edge device authentication, secure edge inference, edge update security and edge monitoring for LLM edge deployment security.")
   return {
     title, description,
     keywords: ["llm edge deployment security", "edge device authentication", "secure edge inference", "edge update security", "edge monitoring", "moltbot edge"],
@@ -165,17 +162,15 @@ export default function LlmEdgeDeploymentSecurityPage({ params }: { params: { la
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "Edge-Deployment-Security-Guide für eigene KI-Systeme." : "Edge deployment security guide for your own AI systems."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Edge-Deployment-Security-Guide für eigene KI-Systeme.", "Edge deployment security guide for your own AI systems.")}
         </div>
         <div className="mb-3"><span className="text-xs font-bold uppercase tracking-widest text-cyan-400">Moltbot · Batch 24</span></div>
-        <h1 className="text-4xl font-bold mb-4 text-gray-100">{isDE ? "LLM Edge Deployment Security" : "LLM Edge Deployment Security"}</h1>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">{pick(isDE, "LLM Edge Deployment Security", "LLM Edge Deployment Security")}</h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "LLM-Modelle ohne Edge-Deployment-Security sind anfällig für Edge-Attacken — ohne Edge-Deployment-Security bleibt Edge-Deployment ungeschützt. Vier Kontrollen: Edge Device Authentication, Secure Edge Inference, Edge Update Security und Edge Monitoring."
-            : "LLM models without edge deployment security are vulnerable to edge attacks — without edge deployment security, edge deployment remains unprotected. Four controls: edge device authentication, secure edge inference, edge update security and edge monitoring."}
+          {pick(isDE, "LLM-Modelle ohne Edge-Deployment-Security sind anfällig für Edge-Attacken — ohne Edge-Deployment-Security bleibt Edge-Deployment ungeschützt. Vier Kontrollen: Edge Device Authentication, Secure Edge Inference, Edge Update Security und Edge Monitoring.", "LLM models without edge deployment security are vulnerable to edge attacks — without edge deployment security, edge deployment remains unprotected. Four controls: edge device authentication, secure edge inference, edge update security and edge monitoring.")}
         </p>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "4 Edge-Deployment-Security-Kontrollen" : "4 Edge Deployment Security Controls"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "4 Edge-Deployment-Security-Kontrollen", "4 Edge Deployment Security Controls")}</h2>
           <div className="space-y-5">
             {CONTROLS.map((c) => (
               <div key={c.id} className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
@@ -192,7 +187,7 @@ export default function LlmEdgeDeploymentSecurityPage({ params }: { params: { la
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-3">
             {FAQ.map((f, i) => (
               <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
@@ -203,23 +198,23 @@ export default function LlmEdgeDeploymentSecurityPage({ params }: { params: { la
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further Resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further Resources")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/moltbot/ai-agent-secure-deployment`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Agent Secure Deployment</div>
-              <div className="text-sm text-gray-300">{isDE ? "Deployment-Security" : "Deployment security"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Deployment-Security", "Deployment security")}</div>
             </a>
             <a href={`/${locale}/moltbot/llm-secure-inference`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM Secure Inference</div>
-              <div className="text-sm text-gray-300">{isDE ? "Confidential-Computing" : "Confidential computing"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Confidential-Computing", "Confidential computing")}</div>
             </a>
             <a href={`/${locale}/moltbot/llm-data-encryption-at-rest`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM Data Encryption at Rest</div>
-              <div className="text-sm text-gray-300">{isDE ? "Encryption-at-Rest" : "Encryption at rest"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Encryption-at-Rest", "Encryption at rest")}</div>
             </a>
             <a href={`/${locale}/moltbot/ai-agent-security`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Agent Security</div>
-              <div className="text-sm text-gray-300">{isDE ? "Edge-Overview" : "Edge overview"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Edge-Overview", "Edge overview")}</div>
             </a>
           </div>
         </section>

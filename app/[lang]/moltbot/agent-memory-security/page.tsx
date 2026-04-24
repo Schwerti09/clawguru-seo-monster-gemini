@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/moltbot/agent-memory-security"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "Agent Memory Security: Verschlüsselung & Zugriffskontrolle für KI-Gedächtnis | ClawGuru"
-    : "Agent Memory Security: Encryption & Access Control for AI Agent Memory | ClawGuru"
-  const description = isDE
-    ? "KI-Agenten-Speicher absichern: Verschlüsselung im Ruhezustand, scoped Retrieval, PII-Erkennung, Speicher-Isolation zwischen Agenten und GDPR-konforme Löschung (Right to Erasure)."
-    : "Secure AI agent memory: encryption at rest, scoped retrieval, PII detection, memory isolation between agents and GDPR-compliant deletion (Right to Erasure)."
+  const title = pick(isDE, "Agent Memory Security: Verschlüsselung & Zugriffskontrolle für KI-Gedächtnis | ClawGuru", "Agent Memory Security: Encryption & Access Control for AI Agent Memory | ClawGuru")
+  const description = pick(isDE, "KI-Agenten-Speicher absichern: Verschlüsselung im Ruhezustand, scoped Retrieval, PII-Erkennung, Speicher-Isolation zwischen Agenten und GDPR-konforme Löschung (Right to Erasure).", "Secure AI agent memory: encryption at rest, scoped retrieval, PII detection, memory isolation between agents and GDPR-compliant deletion (Right to Erasure).")
   return {
     title, description,
     keywords: ["agent memory security", "llm memory encryption", "ai agent memory gdpr", "vector store security", "agent memory isolation", "right to erasure ai"],
@@ -64,25 +61,23 @@ export default function AgentMemorySecurityPage({ params }: { params: { lang: st
       <div className="max-w-4xl mx-auto">
 
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "Sicherheitsleitfaden für eigene KI-Agent-Systeme." : "Security guide for your own AI agent systems."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Sicherheitsleitfaden für eigene KI-Agent-Systeme.", "Security guide for your own AI agent systems.")}
         </div>
 
         <div className="mb-3"><span className="text-xs font-bold uppercase tracking-widest text-cyan-400">Moltbot · Batch 6</span></div>
         <h1 className="text-4xl font-bold mb-4 text-gray-100">
-          {isDE ? "Agent Memory Security: KI-Gedächtnis absichern" : "Agent Memory Security: Securing AI Agent Memory"}
+          {pick(isDE, "Agent Memory Security: KI-Gedächtnis absichern", "Agent Memory Security: Securing AI Agent Memory")}
         </h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "Agent-Speicher ist ein persistentes Angriffsziel: einmal vergiftete Erinnerungen beeinflussen jeden zukünftigen Agenten-Aufruf. Sechs Angriffsvektoren, konkrete Mitigations und DSGVO-konforme Löschung."
-            : "Agent memory is a persistent attack surface: once poisoned, memories influence every future agent call. Six attack vectors, concrete mitigations and GDPR-compliant erasure."}
+          {pick(isDE, "Agent-Speicher ist ein persistentes Angriffsziel: einmal vergiftete Erinnerungen beeinflussen jeden zukünftigen Agenten-Aufruf. Sechs Angriffsvektoren, konkrete Mitigations und DSGVO-konforme Löschung.", "Agent memory is a persistent attack surface: once poisoned, memories influence every future agent call. Six attack vectors, concrete mitigations and GDPR-compliant erasure.")}
         </p>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
           {[
-            { value: "6", label: isDE ? "Angriffsvektoren" : "Attack vectors" },
-            { value: "AES-256", label: isDE ? "Verschlüsselung" : "Encryption" },
+            { value: "6", label: pick(isDE, "Angriffsvektoren", "Attack vectors") },
+            { value: "AES-256", label: pick(isDE, "Verschlüsselung", "Encryption") },
             { value: "30d", label: "GDPR Erasure SLA" },
-            { value: "3", label: isDE ? "Isolations-Ebenen" : "Isolation levels" },
+            { value: "3", label: pick(isDE, "Isolations-Ebenen", "Isolation levels") },
           ].map((s) => (
             <div key={s.label} className="bg-gray-800 p-4 rounded-lg border border-gray-700 text-center">
               <div className="text-2xl font-black text-cyan-400">{s.value}</div>
@@ -93,7 +88,7 @@ export default function AgentMemorySecurityPage({ params }: { params: { lang: st
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">
-            {isDE ? "Angriffsvektoren & Mitigations" : "Attack Vectors & Mitigations"}
+            {pick(isDE, "Angriffsvektoren & Mitigations", "Attack Vectors & Mitigations")}
           </h2>
           <div className="space-y-3">
             {ATTACK_VECTORS.map((v) => (
@@ -118,7 +113,7 @@ export default function AgentMemorySecurityPage({ params }: { params: { lang: st
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">
-            {isDE ? "Sichere Memory-Konfiguration" : "Secure Memory Configuration"}
+            {pick(isDE, "Sichere Memory-Konfiguration", "Secure Memory Configuration")}
           </h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm overflow-x-auto">
             <pre>{`# moltbot.memory.yaml — secure agent memory configuration
@@ -152,7 +147,7 @@ memory:
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-3">
             {FAQ.map((f, i) => (
               <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
@@ -164,23 +159,23 @@ memory:
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further Resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further Resources")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/moltbot/agentic-rag-security`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Agentic RAG Security</div>
-              <div className="text-sm text-gray-300">{isDE ? "Vector DB Zugriffssteuerung" : "Vector DB access control"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Vector DB Zugriffssteuerung", "Vector DB access control")}</div>
             </a>
             <a href={`/${locale}/moltbot/prompt-injection-defense`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Prompt Injection Defense</div>
-              <div className="text-sm text-gray-300">{isDE ? "Injektionen in Memory-Retrieved Prompts" : "Injections in memory-retrieved prompts"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Injektionen in Memory-Retrieved Prompts", "Injections in memory-retrieved prompts")}</div>
             </a>
             <a href={`/${locale}/solutions/dsgvo-compliance-automation`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">GDPR Compliance</div>
-              <div className="text-sm text-gray-300">{isDE ? "Art. 17 Right to Erasure" : "Art. 17 Right to Erasure"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Art. 17 Right to Erasure", "Art. 17 Right to Erasure")}</div>
             </a>
             <a href={`/${locale}/moltbot/ai-compliance-automation`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Compliance Automation</div>
-              <div className="text-sm text-gray-300">{isDE ? "Memory-Logs für Audit" : "Memory logs for audit"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Memory-Logs für Audit", "Memory logs for audit")}</div>
             </a>
           </div>
         </section>

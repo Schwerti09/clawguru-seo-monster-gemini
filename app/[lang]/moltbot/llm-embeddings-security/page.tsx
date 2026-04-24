@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/moltbot/llm-embeddings-security"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "LLM Embeddings Security: Vektor-Embedding-Sicherheit | ClawGuru Moltbot"
-    : "LLM Embeddings Security: Vector Embedding Security | ClawGuru Moltbot"
-  const description = isDE
-    ? "LLM-Embeddings-Security: Embedding Injection Protection, Vector Store Access Control, Embedding Poisoning Detection und Embedding Versioning für RAG-Systeme."
-    : "LLM embeddings security: embedding injection protection, vector store access control, embedding poisoning detection and embedding versioning for RAG systems."
+  const title = pick(isDE, "LLM Embeddings Security: Vektor-Embedding-Sicherheit | ClawGuru Moltbot", "LLM Embeddings Security: Vector Embedding Security | ClawGuru Moltbot")
+  const description = pick(isDE, "LLM-Embeddings-Security: Embedding Injection Protection, Vector Store Access Control, Embedding Poisoning Detection und Embedding Versioning für RAG-Systeme.", "LLM embeddings security: embedding injection protection, vector store access control, embedding poisoning detection and embedding versioning for RAG systems.")
   return {
     title, description,
     keywords: ["llm embeddings security", "vector store security", "embedding injection", "rag vector security", "embedding poisoning", "moltbot embeddings"],
@@ -181,17 +178,15 @@ export default function LlmEmbeddingsSecurityPage({ params }: { params: { lang: 
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "Embeddings-Security-Guide für eigene KI-Systeme." : "Embeddings security guide for your own AI systems."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Embeddings-Security-Guide für eigene KI-Systeme.", "Embeddings security guide for your own AI systems.")}
         </div>
         <div className="mb-3"><span className="text-xs font-bold uppercase tracking-widest text-cyan-400">Moltbot · Batch 15</span></div>
-        <h1 className="text-4xl font-bold mb-4 text-gray-100">{isDE ? "LLM Embeddings Security" : "LLM Embeddings Security"}</h1>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">{pick(isDE, "LLM Embeddings Security", "LLM Embeddings Security")}</h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "Vektor-Embeddings sind das Rückgrat von RAG-Systemen — ohne Security können Angreifer Embeddings manipulieren und Poisoning-Attacken durchführen. Vier Kontrollen: Injection Protection, Vector Store ACL, Poisoning Detection und Versioning."
-            : "Vector embeddings are the backbone of RAG systems — without security, attackers can manipulate embeddings and conduct poisoning attacks. Four controls: injection protection, vector store ACL, poisoning detection and versioning."}
+          {pick(isDE, "Vektor-Embeddings sind das Rückgrat von RAG-Systemen — ohne Security können Angreifer Embeddings manipulieren und Poisoning-Attacken durchführen. Vier Kontrollen: Injection Protection, Vector Store ACL, Poisoning Detection und Versioning.", "Vector embeddings are the backbone of RAG systems — without security, attackers can manipulate embeddings and conduct poisoning attacks. Four controls: injection protection, vector store ACL, poisoning detection and versioning.")}
         </p>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "4 Embeddings-Security-Kontrollen" : "4 Embeddings Security Controls"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "4 Embeddings-Security-Kontrollen", "4 Embeddings Security Controls")}</h2>
           <div className="space-y-5">
             {CONTROLS.map((c) => (
               <div key={c.id} className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
@@ -208,7 +203,7 @@ export default function LlmEmbeddingsSecurityPage({ params }: { params: { lang: 
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-3">
             {FAQ.map((f, i) => (
               <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
@@ -219,23 +214,23 @@ export default function LlmEmbeddingsSecurityPage({ params }: { params: { lang: 
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further Resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further Resources")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/moltbot/multi-tenant-llm-isolation`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Multi-Tenant LLM Isolation</div>
-              <div className="text-sm text-gray-300">{isDE ? "RAG-Tenant-Isolation" : "RAG tenant isolation"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "RAG-Tenant-Isolation", "RAG tenant isolation")}</div>
             </a>
             <a href={`/${locale}/moltbot/ai-data-loss-prevention`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Data Loss Prevention</div>
-              <div className="text-sm text-gray-300">{isDE ? "RAG-Poisoning-Detection" : "RAG poisoning detection"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "RAG-Poisoning-Detection", "RAG poisoning detection")}</div>
             </a>
             <a href={`/${locale}/moltbot/llm-context-isolation`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM Context Isolation</div>
-              <div className="text-sm text-gray-300">{isDE ? "Vector-Store-ACL" : "Vector store ACL"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Vector-Store-ACL", "Vector store ACL")}</div>
             </a>
             <a href={`/${locale}/moltbot/rag-security`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">RAG Security</div>
-              <div className="text-sm text-gray-300">{isDE ? "End-to-End-RAG-Security" : "End-to-end RAG security"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "End-to-End-RAG-Security", "End-to-end RAG security")}</div>
             </a>
           </div>
         </section>

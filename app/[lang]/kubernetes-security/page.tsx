@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
 import { SITE_URL } from "@/lib/config"
+import { pick } from "@/lib/i18n-pick"
 
 const PATH = "/kubernetes-security"
 
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "Kubernetes Security Hardening 2026: Kompletter Guide + Checkliste"
-    : "Kubernetes Security Hardening 2026: Complete Guide + Checklist"
-  const description = isDE
-    ? "Kubernetes absichern: RBAC, Network Policies, Pod Security, Supply-Chain, Runtime-Protection und Compliance. Praxisnahe Checkliste mit Copy-Paste-Beispielen."
-    : "Secure Kubernetes: RBAC, Network Policies, Pod Security, Supply Chain, Runtime Protection and Compliance. Practical checklist with copy-paste examples."
+  const title = pick(isDE, "Kubernetes Security Hardening 2026: Kompletter Guide + Checkliste", "Kubernetes Security Hardening 2026: Complete Guide + Checklist")
+  const description = pick(isDE, "Kubernetes absichern: RBAC, Network Policies, Pod Security, Supply-Chain, Runtime-Protection und Compliance. Praxisnahe Checkliste mit Copy-Paste-Beispielen.", "Secure Kubernetes: RBAC, Network Policies, Pod Security, Supply Chain, Runtime Protection and Compliance. Practical checklist with copy-paste examples.")
   return {
     title,
     description,
@@ -71,30 +68,24 @@ export default function KubernetesSecurityPage({ params }: { params: { lang: str
         {/* Not a Pentest Notice */}
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
           <strong className="text-amber-100">&quot;Not a Pentest&quot; Notice</strong>:{" "}
-          {isDE
-            ? "Dieser Guide ist für die Absicherung deiner eigenen Kubernetes-Infrastruktur. Keine Angriffs-Tools."
-            : "This guide is for hardening your own Kubernetes infrastructure. No attack tools."}
+          {pick(isDE, "Dieser Guide ist für die Absicherung deiner eigenen Kubernetes-Infrastruktur. Keine Angriffs-Tools.", "This guide is for hardening your own Kubernetes infrastructure. No attack tools.")}
         </div>
 
         {/* Hero */}
         <h1 className="text-4xl font-bold mb-4 text-gray-100">
-          {isDE ? "Kubernetes Security Hardening 2026" : "Kubernetes Security Hardening 2026"}
+          {pick(isDE, "Kubernetes Security Hardening 2026", "Kubernetes Security Hardening 2026")}
         </h1>
         <p className="text-lg text-gray-300 mb-4">
-          {isDE
-            ? "Kubernetes ist die meistgenutzte Container-Orchestrierung — und eines der komplexesten Angriffsziele. Falsch konfigurierte RBAC-Bindings, fehlende Network Policies und unsichere Images kosten produktive Cluster täglich Traffic, Daten und Verfügbarkeit."
-            : "Kubernetes is the most widely used container orchestration platform — and one of the most complex attack targets. Misconfigured RBAC bindings, missing network policies and insecure images cost production clusters traffic, data and availability every day."}
+          {pick(isDE, "Kubernetes ist die meistgenutzte Container-Orchestrierung — und eines der komplexesten Angriffsziele. Falsch konfigurierte RBAC-Bindings, fehlende Network Policies und unsichere Images kosten produktive Cluster täglich Traffic, Daten und Verfügbarkeit.", "Kubernetes is the most widely used container orchestration platform — and one of the most complex attack targets. Misconfigured RBAC bindings, missing network policies and insecure images cost production clusters traffic, data and availability every day.")}
         </p>
         <p className="text-lg text-gray-300 mb-8">
-          {isDE
-            ? "Dieser Pillar-Guide deckt alle Kernbereiche ab: RBAC, Network Policies, Pod Security, Secrets Management, Supply Chain und Compliance. Mit Copy-Paste-Beispielen und Links zu Runbooks für jeden Schritt."
-            : "This pillar guide covers all core areas: RBAC, Network Policies, Pod Security, Secrets Management, Supply Chain and Compliance. With copy-paste examples and runbook links for every step."}
+          {pick(isDE, "Dieser Pillar-Guide deckt alle Kernbereiche ab: RBAC, Network Policies, Pod Security, Secrets Management, Supply Chain und Compliance. Mit Copy-Paste-Beispielen und Links zu Runbooks für jeden Schritt.", "This pillar guide covers all core areas: RBAC, Network Policies, Pod Security, Secrets Management, Supply Chain and Compliance. With copy-paste examples and runbook links for every step.")}
         </p>
 
         {/* TL;DR Checklist */}
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">
-            {isDE ? "TL;DR — Kubernetes Security Checkliste" : "TL;DR — Kubernetes Security Checklist"}
+            {pick(isDE, "TL;DR — Kubernetes Security Checkliste", "TL;DR — Kubernetes Security Checklist")}
           </h2>
           <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
             <div className="grid gap-2 sm:grid-cols-2">
@@ -133,20 +124,18 @@ export default function KubernetesSecurityPage({ params }: { params: { lang: str
         {/* Section 1: RBAC */}
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">
-            {isDE ? "1. RBAC — Role-Based Access Control" : "1. RBAC — Role-Based Access Control"}
+            {pick(isDE, "1. RBAC — Role-Based Access Control", "1. RBAC — Role-Based Access Control")}
           </h2>
           <p className="text-gray-300 mb-4">
-            {isDE
-              ? "RBAC ist das Fundament jeder Kubernetes-Absicherung. Das Ziel: jeder Service Account und jeder Benutzer hat genau die Rechte, die er für seine Aufgabe braucht — nicht mehr."
-              : "RBAC is the foundation of any Kubernetes security setup. The goal: every service account and every user has exactly the permissions needed for their task — nothing more."}
+            {pick(isDE, "RBAC ist das Fundament jeder Kubernetes-Absicherung. Das Ziel: jeder Service Account und jeder Benutzer hat genau die Rechte, die er für seine Aufgabe braucht — nicht mehr.", "RBAC is the foundation of any Kubernetes security setup. The goal: every service account and every user has exactly the permissions needed for their task — nothing more.")}
           </p>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto mb-4 text-sm font-mono">
-            <div className="text-gray-400 mb-2">{isDE ? "# FALSCH — cluster-admin für Workload" : "# WRONG — cluster-admin for workload"}</div>
+            <div className="text-gray-400 mb-2">{pick(isDE, "# FALSCH — cluster-admin für Workload", "# WRONG — cluster-admin for workload")}</div>
             <div className="text-red-400">{"apiVersion: rbac.authorization.k8s.io/v1"}</div>
             <div className="text-red-400">{"kind: ClusterRoleBinding"}</div>
             <div className="text-red-400">{"roleRef:"}</div>
             <div className="text-red-400">{"  name: cluster-admin  # ❌ NIE für Workloads"}</div>
-            <div className="mt-4 text-gray-400 mb-2">{isDE ? "# RICHTIG — Least-Privilege Role" : "# CORRECT — Least-Privilege Role"}</div>
+            <div className="mt-4 text-gray-400 mb-2">{pick(isDE, "# RICHTIG — Least-Privilege Role", "# CORRECT — Least-Privilege Role")}</div>
             <div>{"apiVersion: rbac.authorization.k8s.io/v1"}</div>
             <div>{"kind: Role"}</div>
             <div>{"metadata:"}</div>
@@ -157,7 +146,7 @@ export default function KubernetesSecurityPage({ params }: { params: { lang: str
             <div>{"  verbs: [\"get\", \"list\"]  # ✅ nur lesen"}</div>
           </div>
           <div className="bg-red-900 border border-red-700 p-4 rounded-lg mb-4">
-            <h3 className="font-bold text-red-300 mb-2">{isDE ? "Häufige RBAC-Fehler" : "Common RBAC Mistakes"}</h3>
+            <h3 className="font-bold text-red-300 mb-2">{pick(isDE, "Häufige RBAC-Fehler", "Common RBAC Mistakes")}</h3>
             <ul className="space-y-1 text-sm text-red-200">
               {(isDE ? [
                 "cluster-admin für CI/CD-Pipelines oder Operators vergeben",
@@ -177,15 +166,13 @@ export default function KubernetesSecurityPage({ params }: { params: { lang: str
         {/* Section 2: Network Policies */}
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">
-            {isDE ? "2. Network Policies — Default-Deny zuerst" : "2. Network Policies — Default-Deny First"}
+            {pick(isDE, "2. Network Policies — Default-Deny zuerst", "2. Network Policies — Default-Deny First")}
           </h2>
           <p className="text-gray-300 mb-4">
-            {isDE
-              ? "Ohne Network Policies kann jeder Pod mit jedem anderen Pod im Cluster kommunizieren. Default-Deny-Regeln als Baseline, dann explizite Erlaubnisse."
-              : "Without network policies, every pod can communicate with every other pod in the cluster. Set default-deny rules as a baseline, then add explicit allow rules."}
+            {pick(isDE, "Ohne Network Policies kann jeder Pod mit jedem anderen Pod im Cluster kommunizieren. Default-Deny-Regeln als Baseline, dann explizite Erlaubnisse.", "Without network policies, every pod can communicate with every other pod in the cluster. Set default-deny rules as a baseline, then add explicit allow rules.")}
           </p>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto mb-4 text-sm font-mono">
-            <div className="text-gray-400 mb-2">{isDE ? "# Default-Deny für alle Namespaces" : "# Default-Deny for all namespaces"}</div>
+            <div className="text-gray-400 mb-2">{pick(isDE, "# Default-Deny für alle Namespaces", "# Default-Deny for all namespaces")}</div>
             <div>{"apiVersion: networking.k8s.io/v1"}</div>
             <div>{"kind: NetworkPolicy"}</div>
             <div>{"metadata:"}</div>
@@ -196,7 +183,7 @@ export default function KubernetesSecurityPage({ params }: { params: { lang: str
             <div>{"  policyTypes:"}</div>
             <div>{"  - Ingress"}</div>
             <div>{"  - Egress"}</div>
-            <div className="mt-4 text-gray-400 mb-2">{isDE ? "# Explizit erlauben: Frontend → Backend" : "# Explicitly allow: Frontend → Backend"}</div>
+            <div className="mt-4 text-gray-400 mb-2">{pick(isDE, "# Explizit erlauben: Frontend → Backend", "# Explicitly allow: Frontend → Backend")}</div>
             <div>{"apiVersion: networking.k8s.io/v1"}</div>
             <div>{"kind: NetworkPolicy"}</div>
             <div>{"metadata:"}</div>
@@ -218,15 +205,13 @@ export default function KubernetesSecurityPage({ params }: { params: { lang: str
         {/* Section 3: Pod Security */}
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">
-            {isDE ? "3. Pod Security Admission (PSA)" : "3. Pod Security Admission (PSA)"}
+            {pick(isDE, "3. Pod Security Admission (PSA)", "3. Pod Security Admission (PSA)")}
           </h2>
           <p className="text-gray-300 mb-4">
-            {isDE
-              ? "PodSecurityPolicy wurde in K8s 1.25 entfernt. Der Nachfolger ist Pod Security Admission — Labels auf Namespace-Ebene kontrollieren die erlaubten Security-Kontexte."
-              : "PodSecurityPolicy was removed in K8s 1.25. The replacement is Pod Security Admission — namespace-level labels control the allowed security contexts."}
+            {pick(isDE, "PodSecurityPolicy wurde in K8s 1.25 entfernt. Der Nachfolger ist Pod Security Admission — Labels auf Namespace-Ebene kontrollieren die erlaubten Security-Kontexte.", "PodSecurityPolicy was removed in K8s 1.25. The replacement is Pod Security Admission — namespace-level labels control the allowed security contexts.")}
           </p>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto mb-4 text-sm font-mono">
-            <div className="text-gray-400 mb-2">{isDE ? "# Namespace auf restricted setzen" : "# Set namespace to restricted"}</div>
+            <div className="text-gray-400 mb-2">{pick(isDE, "# Namespace auf restricted setzen", "# Set namespace to restricted")}</div>
             <div>{"kubectl label namespace production \\"}</div>
             <div>{"  pod-security.kubernetes.io/enforce=restricted \\"}</div>
             <div>{"  pod-security.kubernetes.io/enforce-version=latest \\"}</div>
@@ -235,9 +220,9 @@ export default function KubernetesSecurityPage({ params }: { params: { lang: str
           </div>
           <div className="grid gap-4 sm:grid-cols-3 mb-4">
             {[
-              { level: "privileged", color: "red", desc: isDE ? "Keine Einschränkungen — NUR für System-Namespaces" : "No restrictions — ONLY for system namespaces" },
-              { level: "baseline", color: "yellow", desc: isDE ? "Blockiert bekannte Privilege-Escalations" : "Blocks known privilege escalations" },
-              { level: "restricted", color: "green", desc: isDE ? "Maximale Einschränkung — Ziel für alle Produktions-Workloads" : "Maximum restriction — target for all production workloads" },
+              { level: "privileged", color: "red", desc: pick(isDE, "Keine Einschränkungen — NUR für System-Namespaces", "No restrictions — ONLY for system namespaces") },
+              { level: "baseline", color: "yellow", desc: pick(isDE, "Blockiert bekannte Privilege-Escalations", "Blocks known privilege escalations") },
+              { level: "restricted", color: "green", desc: pick(isDE, "Maximale Einschränkung — Ziel für alle Produktions-Workloads", "Maximum restriction — target for all production workloads") },
             ].map(p => (
               <div key={p.level} className={`p-4 rounded-lg border ${
                 p.color === "red" ? "bg-red-900 border-red-700" :
@@ -254,33 +239,31 @@ export default function KubernetesSecurityPage({ params }: { params: { lang: str
         {/* Section 4: Secrets */}
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">
-            {isDE ? "4. Secrets Management" : "4. Secrets Management"}
+            {pick(isDE, "4. Secrets Management", "4. Secrets Management")}
           </h2>
           <p className="text-gray-300 mb-4">
-            {isDE
-              ? "Kubernetes Secrets sind standardmäßig nur base64-kodiert — nicht verschlüsselt. Drei Schutzschichten sind nötig: Encryption at Rest, externer Secrets-Store und keine Secrets in Git."
-              : "Kubernetes Secrets are base64-encoded by default — not encrypted. Three protection layers are needed: encryption at rest, external secrets store and no secrets in Git."}
+            {pick(isDE, "Kubernetes Secrets sind standardmäßig nur base64-kodiert — nicht verschlüsselt. Drei Schutzschichten sind nötig: Encryption at Rest, externer Secrets-Store und keine Secrets in Git.", "Kubernetes Secrets are base64-encoded by default — not encrypted. Three protection layers are needed: encryption at rest, external secrets store and no secrets in Git.")}
           </p>
           <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
             <div className="flex items-start space-x-4 mb-4">
               <div className="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold flex-shrink-0">1</div>
               <div>
-                <div className="font-semibold text-gray-100">{isDE ? "etcd Encryption at Rest" : "etcd Encryption at Rest"}</div>
-                <div className="text-sm text-gray-300">{isDE ? "EncryptionConfiguration mit AES-CBC oder Secretbox in der API-Server-Konfiguration aktivieren." : "Enable EncryptionConfiguration with AES-CBC or Secretbox in API server configuration."}</div>
+                <div className="font-semibold text-gray-100">{pick(isDE, "etcd Encryption at Rest", "etcd Encryption at Rest")}</div>
+                <div className="text-sm text-gray-300">{pick(isDE, "EncryptionConfiguration mit AES-CBC oder Secretbox in der API-Server-Konfiguration aktivieren.", "Enable EncryptionConfiguration with AES-CBC or Secretbox in API server configuration.")}</div>
               </div>
             </div>
             <div className="flex items-start space-x-4 mb-4">
               <div className="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold flex-shrink-0">2</div>
               <div>
-                <div className="font-semibold text-gray-100">{isDE ? "Externer Secrets Store" : "External Secrets Store"}</div>
-                <div className="text-sm text-gray-300">{isDE ? "HashiCorp Vault mit External Secrets Operator oder Sealed Secrets (Bitnami) für sichere Secret-Rotation." : "HashiCorp Vault with External Secrets Operator or Sealed Secrets (Bitnami) for secure secret rotation."}</div>
+                <div className="font-semibold text-gray-100">{pick(isDE, "Externer Secrets Store", "External Secrets Store")}</div>
+                <div className="text-sm text-gray-300">{pick(isDE, "HashiCorp Vault mit External Secrets Operator oder Sealed Secrets (Bitnami) für sichere Secret-Rotation.", "HashiCorp Vault with External Secrets Operator or Sealed Secrets (Bitnami) for secure secret rotation.")}</div>
               </div>
             </div>
             <div className="flex items-start space-x-4">
               <div className="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold flex-shrink-0">3</div>
               <div>
-                <div className="font-semibold text-gray-100">{isDE ? "Git-Secrets-Scanning" : "Git Secrets Scanning"}</div>
-                <div className="text-sm text-gray-300">{isDE ? "Gitleaks oder detect-secrets als Pre-Commit-Hook und in der CI/CD-Pipeline." : "Gitleaks or detect-secrets as pre-commit hook and in the CI/CD pipeline."}</div>
+                <div className="font-semibold text-gray-100">{pick(isDE, "Git-Secrets-Scanning", "Git Secrets Scanning")}</div>
+                <div className="text-sm text-gray-300">{pick(isDE, "Gitleaks oder detect-secrets als Pre-Commit-Hook und in der CI/CD-Pipeline.", "Gitleaks or detect-secrets as pre-commit hook and in the CI/CD pipeline.")}</div>
               </div>
             </div>
           </div>
@@ -289,12 +272,10 @@ export default function KubernetesSecurityPage({ params }: { params: { lang: str
         {/* Section 5: Supply Chain */}
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">
-            {isDE ? "5. Supply Chain Security" : "5. Supply Chain Security"}
+            {pick(isDE, "5. Supply Chain Security", "5. Supply Chain Security")}
           </h2>
           <p className="text-gray-300 mb-4">
-            {isDE
-              ? "Kompromittierte Images sind einer der häufigsten Angriffsvektoren. Nur Images aus verifizierten Quellen dürfen in den Cluster."
-              : "Compromised images are one of the most common attack vectors. Only images from verified sources should enter the cluster."}
+            {pick(isDE, "Kompromittierte Images sind einer der häufigsten Angriffsvektoren. Nur Images aus verifizierten Quellen dürfen in den Cluster.", "Compromised images are one of the most common attack vectors. Only images from verified sources should enter the cluster.")}
           </p>
           <div className="grid gap-4 sm:grid-cols-2 mb-4">
             {(isDE ? [
@@ -319,12 +300,10 @@ export default function KubernetesSecurityPage({ params }: { params: { lang: str
         {/* Section 6: Runtime Protection */}
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">
-            {isDE ? "6. Runtime Protection" : "6. Runtime Protection"}
+            {pick(isDE, "6. Runtime Protection", "6. Runtime Protection")}
           </h2>
           <p className="text-gray-300 mb-4">
-            {isDE
-              ? "Statische Scans und Admission Checks fangen Konfigurationsfehler ab. Runtime-Security erkennt Angriffe zur Laufzeit — Privilege-Escalation, unerwartete Shell-Ausführungen, Dateiänderungen."
-              : "Static scans and admission checks catch configuration errors. Runtime security detects attacks at runtime — privilege escalation, unexpected shell executions, file modifications."}
+            {pick(isDE, "Statische Scans und Admission Checks fangen Konfigurationsfehler ab. Runtime-Security erkennt Angriffe zur Laufzeit — Privilege-Escalation, unerwartete Shell-Ausführungen, Dateiänderungen.", "Static scans and admission checks catch configuration errors. Runtime security detects attacks at runtime — privilege escalation, unexpected shell executions, file modifications.")}
           </p>
           <div className="bg-gray-800 p-6 rounded-lg border border-gray-700 mb-4">
             <h3 className="font-bold text-cyan-400 mb-3">Falco</h3>
@@ -336,35 +315,35 @@ export default function KubernetesSecurityPage({ params }: { params: { lang: str
               <div>{"  output: Shell in container (user=%user.name container=%container.name)"}</div>
               <div>{"  priority: WARNING"}</div>
             </div>
-            <p className="text-sm text-gray-300">{isDE ? "Falco überwacht Systemcalls und sendet Alerts zu Slack, PagerDuty oder einem SIEM. Kein Agent im Container selbst nötig — läuft als DaemonSet." : "Falco monitors system calls and sends alerts to Slack, PagerDuty or a SIEM. No agent inside the container needed — runs as DaemonSet."}</p>
+            <p className="text-sm text-gray-300">{pick(isDE, "Falco überwacht Systemcalls und sendet Alerts zu Slack, PagerDuty oder einem SIEM. Kein Agent im Container selbst nötig — läuft als DaemonSet.", "Falco monitors system calls and sends alerts to Slack, PagerDuty or a SIEM. No agent inside the container needed — runs as DaemonSet.")}</p>
           </div>
         </section>
 
         {/* Section 7: Compliance */}
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">
-            {isDE ? "7. Compliance & CIS Benchmark" : "7. Compliance & CIS Benchmark"}
+            {pick(isDE, "7. Compliance & CIS Benchmark", "7. Compliance & CIS Benchmark")}
           </h2>
           <div className="overflow-x-auto">
             <table className="min-w-full bg-gray-900 border border-gray-700 rounded-lg">
               <thead className="bg-gray-800">
                 <tr>
                   <th className="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase">CIS</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase">{isDE ? "Bereich" : "Area"}</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase">{isDE ? "Prüfung" : "Check"}</th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase">{pick(isDE, "Bereich", "Area")}</th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase">{pick(isDE, "Prüfung", "Check")}</th>
                   <th className="px-4 py-3 text-center text-xs font-medium text-gray-400 uppercase">kube-bench</th>
                 </tr>
               </thead>
               <tbody>
                 {[
-                  ["1.1", isDE ? "API Server" : "API Server", isDE ? "anon-auth=false, audit-log aktiviert" : "anon-auth=false, audit-log enabled", "✅"],
-                  ["1.2", isDE ? "API Server Auth" : "API Server Auth", isDE ? "RBAC aktiviert, Node-Auth" : "RBAC enabled, node auth", "✅"],
-                  ["2.1", "etcd", isDE ? "TLS, peer-auth" : "TLS, peer auth", "✅"],
-                  ["3.1", isDE ? "Control Plane" : "Control Plane", isDE ? "Kubelet-Auth, Cert-Rotation" : "Kubelet auth, cert rotation", "✅"],
-                  ["4.2", "Kubelet", isDE ? "anon=false, read-only=false" : "anon=false, read-only=false", "✅"],
-                  ["5.1", "RBAC", isDE ? "Keine cluster-admin Wildcard" : "No cluster-admin wildcard", "✅"],
-                  ["5.2", isDE ? "Pod Security" : "Pod Security", isDE ? "PSA restricted auf Prod" : "PSA restricted on prod", "✅"],
-                  ["5.7", isDE ? "Network Policies" : "Network Policies", isDE ? "Default-Deny in allen NS" : "Default-deny in all NS", "✅"],
+                  ["1.1", pick(isDE, "API Server", "API Server"), pick(isDE, "anon-auth=false, audit-log aktiviert", "anon-auth=false, audit-log enabled"), "✅"],
+                  ["1.2", pick(isDE, "API Server Auth", "API Server Auth"), pick(isDE, "RBAC aktiviert, Node-Auth", "RBAC enabled, node auth"), "✅"],
+                  ["2.1", "etcd", pick(isDE, "TLS, peer-auth", "TLS, peer auth"), "✅"],
+                  ["3.1", pick(isDE, "Control Plane", "Control Plane"), pick(isDE, "Kubelet-Auth, Cert-Rotation", "Kubelet auth, cert rotation"), "✅"],
+                  ["4.2", "Kubelet", pick(isDE, "anon=false, read-only=false", "anon=false, read-only=false"), "✅"],
+                  ["5.1", "RBAC", pick(isDE, "Keine cluster-admin Wildcard", "No cluster-admin wildcard"), "✅"],
+                  ["5.2", pick(isDE, "Pod Security", "Pod Security"), pick(isDE, "PSA restricted auf Prod", "PSA restricted on prod"), "✅"],
+                  ["5.7", pick(isDE, "Network Policies", "Network Policies"), pick(isDE, "Default-Deny in allen NS", "Default-deny in all NS"), "✅"],
                 ].map(([cis, area, check, status], i) => (
                   <tr key={cis} className={`border-b border-gray-700 ${i % 2 === 1 ? "bg-gray-800/50" : ""}`}>
                     <td className="px-4 py-3 text-sm font-mono text-cyan-400">{cis}</td>
@@ -377,7 +356,7 @@ export default function KubernetesSecurityPage({ params }: { params: { lang: str
             </table>
           </div>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto mt-4 text-sm font-mono">
-            <div className="text-gray-400 mb-2">{isDE ? "# kube-bench ausführen (als Job im Cluster)" : "# Run kube-bench (as job in cluster)"}</div>
+            <div className="text-gray-400 mb-2">{pick(isDE, "# kube-bench ausführen (als Job im Cluster)", "# Run kube-bench (as job in cluster)")}</div>
             <div>{"kubectl apply -f https://raw.githubusercontent.com/aquasecurity/kube-bench/main/job.yaml"}</div>
             <div>{"kubectl logs job/kube-bench"}</div>
           </div>
@@ -386,7 +365,7 @@ export default function KubernetesSecurityPage({ params }: { params: { lang: str
         {/* FAQ */}
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">
-            {isDE ? "FAQ zur Kubernetes-Absicherung" : "Kubernetes Security FAQ"}
+            {pick(isDE, "FAQ zur Kubernetes-Absicherung", "Kubernetes Security FAQ")}
           </h2>
           <div className="space-y-3">
             {(isDE ? [
@@ -413,16 +392,16 @@ export default function KubernetesSecurityPage({ params }: { params: { lang: str
         {/* Further Resources */}
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">
-            {isDE ? "Weiterführende Ressourcen" : "Further Resources"}
+            {pick(isDE, "Weiterführende Ressourcen", "Further Resources")}
           </h2>
           <div className="grid grid-cols-2 gap-4">
             {[
-              { href: `/${locale}/moltbot/container-security-docker-kubernetes`, label: isDE ? "🐳 Container Security" : "🐳 Container Security", desc: isDE ? "Docker & K8s Runbook" : "Docker & K8s Runbook" },
-              { href: `/${locale}/moltbot/zero-trust-architecture`, label: isDE ? "🔐 Zero Trust" : "🔐 Zero Trust", desc: isDE ? "ZTA + RBAC Runbook" : "ZTA + RBAC Runbook" },
-              { href: `/${locale}/moltbot/vulnerability-scanning`, label: isDE ? "🔍 Vulnerability Scanning" : "🔍 Vulnerability Scanning", desc: isDE ? "Trivy + Renovate Runbook" : "Trivy + Renovate Runbook" },
-              { href: `/${locale}/securitycheck`, label: isDE ? "🛡️ Security Check" : "🛡️ Security Check", desc: isDE ? "Jetzt prüfen" : "Check now" },
-              { href: `/${locale}/moltbot/devsecops-pipeline`, label: isDE ? "⚙️ DevSecOps Pipeline" : "⚙️ DevSecOps Pipeline", desc: isDE ? "CI/CD Security Runbook" : "CI/CD Security Runbook" },
-              { href: `/${locale}/solutions/kubernetes-security-hardening`, label: isDE ? "🏢 Enterprise K8s" : "🏢 Enterprise K8s", desc: isDE ? "Enterprise Lösung" : "Enterprise Solution" },
+              { href: `/${locale}/moltbot/container-security-docker-kubernetes`, label: pick(isDE, "🐳 Container Security", "🐳 Container Security"), desc: pick(isDE, "Docker & K8s Runbook", "Docker & K8s Runbook") },
+              { href: `/${locale}/moltbot/zero-trust-architecture`, label: pick(isDE, "🔐 Zero Trust", "🔐 Zero Trust"), desc: pick(isDE, "ZTA + RBAC Runbook", "ZTA + RBAC Runbook") },
+              { href: `/${locale}/moltbot/vulnerability-scanning`, label: pick(isDE, "🔍 Vulnerability Scanning", "🔍 Vulnerability Scanning"), desc: pick(isDE, "Trivy + Renovate Runbook", "Trivy + Renovate Runbook") },
+              { href: `/${locale}/securitycheck`, label: pick(isDE, "🛡️ Security Check", "🛡️ Security Check"), desc: pick(isDE, "Jetzt prüfen", "Check now") },
+              { href: `/${locale}/moltbot/devsecops-pipeline`, label: pick(isDE, "⚙️ DevSecOps Pipeline", "⚙️ DevSecOps Pipeline"), desc: pick(isDE, "CI/CD Security Runbook", "CI/CD Security Runbook") },
+              { href: `/${locale}/solutions/kubernetes-security-hardening`, label: pick(isDE, "🏢 Enterprise K8s", "🏢 Enterprise K8s"), desc: pick(isDE, "Enterprise Lösung", "Enterprise Solution") },
             ].map(link => (
               <a key={link.href} href={link.href} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
                 <div className="font-semibold text-cyan-400">{link.label}</div>

@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/moltbot/llm-multilingual-security"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "LLM Multilingual Security: LLM-Mehrsprachige-Sicherheit | ClawGuru Moltbot"
-    : "LLM Multilingual Security: LLM Multilingual Security | ClawGuru Moltbot"
-  const description = isDE
-    ? "LLM-Mehrsprachige-Sicherheit: Cross-Language Injection Defense, Multilingual Content Filtering, Language-Specific Bias Detection und Multilingual Audit Logging für LLM-Mehrsprachige-Sicherheit."
-    : "LLM multilingual security: cross-language injection defense, multilingual content filtering, language-specific bias detection and multilingual audit logging for LLM multilingual security."
+  const title = pick(isDE, "LLM Multilingual Security: LLM-Mehrsprachige-Sicherheit | ClawGuru Moltbot", "LLM Multilingual Security: LLM Multilingual Security | ClawGuru Moltbot")
+  const description = pick(isDE, "LLM-Mehrsprachige-Sicherheit: Cross-Language Injection Defense, Multilingual Content Filtering, Language-Specific Bias Detection und Multilingual Audit Logging für LLM-Mehrsprachige-Sicherheit.", "LLM multilingual security: cross-language injection defense, multilingual content filtering, language-specific bias detection and multilingual audit logging for LLM multilingual security.")
   return {
     title, description,
     keywords: ["llm multilingual security", "cross-language injection defense", "multilingual content filtering", "language bias detection", "multilingual audit logging", "moltbot multilingual"],
@@ -165,17 +162,15 @@ export default function LlmMultilingualSecurityPage({ params }: { params: { lang
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "Multilingual-Security-Guide für eigene LLM-Systeme." : "Multilingual security guide for your own LLM systems."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Multilingual-Security-Guide für eigene LLM-Systeme.", "Multilingual security guide for your own LLM systems.")}
         </div>
         <div className="mb-3"><span className="text-xs font-bold uppercase tracking-widest text-cyan-400">Moltbot · Batch 29</span></div>
-        <h1 className="text-4xl font-bold mb-4 text-gray-100">{isDE ? "LLM Multilingual Security" : "LLM Multilingual Security"}</h1>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">{pick(isDE, "LLM Multilingual Security", "LLM Multilingual Security")}</h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "Die meisten Security-Filter sind English-only — Angreifer wechseln einfach die Sprache. Vier Kontrollen: Cross-Language Injection Defense, Multilingual Content Filtering, Language-Specific Bias Detection und Multilingual Audit Logging."
-            : "Most security filters are English-only — attackers simply switch the language. Four controls: cross-language injection defense, multilingual content filtering, language-specific bias detection and multilingual audit logging."}
+          {pick(isDE, "Die meisten Security-Filter sind English-only — Angreifer wechseln einfach die Sprache. Vier Kontrollen: Cross-Language Injection Defense, Multilingual Content Filtering, Language-Specific Bias Detection und Multilingual Audit Logging.", "Most security filters are English-only — attackers simply switch the language. Four controls: cross-language injection defense, multilingual content filtering, language-specific bias detection and multilingual audit logging.")}
         </p>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "4 Multilingual-Security-Kontrollen" : "4 Multilingual Security Controls"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "4 Multilingual-Security-Kontrollen", "4 Multilingual Security Controls")}</h2>
           <div className="space-y-5">
             {CONTROLS.map((c) => (
               <div key={c.id} className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
@@ -192,7 +187,7 @@ export default function LlmMultilingualSecurityPage({ params }: { params: { lang
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-3">
             {FAQ.map((f, i) => (
               <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
@@ -203,23 +198,23 @@ export default function LlmMultilingualSecurityPage({ params }: { params: { lang
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further Resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further Resources")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/moltbot/llm-prompt-injection-detection`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM Prompt Injection Detection</div>
-              <div className="text-sm text-gray-300">{isDE ? "Injection-Detection" : "Injection detection"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Injection-Detection", "Injection detection")}</div>
             </a>
             <a href={`/${locale}/moltbot/llm-bias-fairness-auditing`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM Bias Fairness Auditing</div>
-              <div className="text-sm text-gray-300">{isDE ? "Bias-Auditing" : "Bias auditing"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Bias-Auditing", "Bias auditing")}</div>
             </a>
             <a href={`/${locale}/moltbot/llm-output-filtering`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM Output Filtering</div>
-              <div className="text-sm text-gray-300">{isDE ? "Output-Filtering" : "Output filtering"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Output-Filtering", "Output filtering")}</div>
             </a>
             <a href={`/${locale}/moltbot/ai-agent-security`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Agent Security</div>
-              <div className="text-sm text-gray-300">{isDE ? "Security-Overview" : "Security overview"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Security-Overview", "Security overview")}</div>
             </a>
           </div>
         </section>

@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/clawguru-vs-orca-security"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "ClawGuru vs Orca Security: Self-Hosted vs agentloser Cloud-Scanner | ClawGuru"
-    : "ClawGuru vs Orca Security: Self-Hosted vs Agentless Cloud Scanner | ClawGuru"
-  const description = isDE
-    ? "ClawGuru vs Orca Security Vergleich: Self-Hosted-Kontrolle gegen agentlosen SaaS-Cloud-Scan. Datenschutz, Preisstruktur, Kubernetes-Support und AI-Agent-Sicherheit im direkten Vergleich."
-    : "ClawGuru vs Orca Security comparison: self-hosted control vs agentless SaaS cloud scan. Data privacy, pricing structure, Kubernetes support and AI agent security in direct comparison."
+  const title = pick(isDE, "ClawGuru vs Orca Security: Self-Hosted vs agentloser Cloud-Scanner | ClawGuru", "ClawGuru vs Orca Security: Self-Hosted vs Agentless Cloud Scanner | ClawGuru")
+  const description = pick(isDE, "ClawGuru vs Orca Security Vergleich: Self-Hosted-Kontrolle gegen agentlosen SaaS-Cloud-Scan. Datenschutz, Preisstruktur, Kubernetes-Support und AI-Agent-Sicherheit im direkten Vergleich.", "ClawGuru vs Orca Security comparison: self-hosted control vs agentless SaaS cloud scan. Data privacy, pricing structure, Kubernetes support and AI agent security in direct comparison.")
   return {
     title, description,
     keywords: ["clawguru vs orca security", "orca security alternative", "orca security self-hosted", "cloud security posture management alternative", "cspm self-hosted", "orca security vs clawguru"],
@@ -67,19 +64,17 @@ export default function ClawguruVsOrcaSecurityPage({ params }: { params: { lang:
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "Objektiver Produktvergleich für Kaufentscheidungen." : "Objective product comparison for purchasing decisions."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Objektiver Produktvergleich für Kaufentscheidungen.", "Objective product comparison for purchasing decisions.")}
         </div>
         <div className="mb-3"><span className="text-xs font-bold uppercase tracking-widest text-cyan-400">Compare · Batch 13</span></div>
         <h1 className="text-4xl font-bold mb-2 text-gray-100">ClawGuru vs Orca Security</h1>
-        <p className="text-xl text-cyan-400 mb-4">{isDE ? "Self-Hosted-Kontrolle vs agentloser Cloud-SaaS-Scan" : "Self-Hosted Control vs Agentless Cloud SaaS Scan"}</p>
+        <p className="text-xl text-cyan-400 mb-4">{pick(isDE, "Self-Hosted-Kontrolle vs agentloser Cloud-SaaS-Scan", "Self-Hosted Control vs Agentless Cloud SaaS Scan")}</p>
         <p className="text-lg text-gray-300 mb-8">
-          {isDE
-            ? "Orca Security ist stark im agentlosen Public-Cloud-Scan — aber nur als SaaS, nur für AWS/Azure/GCP, ohne AI-Agent-Security. ClawGuru deckt Self-Hosted, On-Premises und KI-Workloads mit voller Datensouveränität ab."
-            : "Orca Security excels at agentless public cloud scanning — but SaaS-only, only for AWS/Azure/GCP, without AI agent security. ClawGuru covers self-hosted, on-premises and AI workloads with full data sovereignty."}
+          {pick(isDE, "Orca Security ist stark im agentlosen Public-Cloud-Scan — aber nur als SaaS, nur für AWS/Azure/GCP, ohne AI-Agent-Security. ClawGuru deckt Self-Hosted, On-Premises und KI-Workloads mit voller Datensouveränität ab.", "Orca Security excels at agentless public cloud scanning — but SaaS-only, only for AWS/Azure/GCP, without AI agent security. ClawGuru covers self-hosted, on-premises and AI workloads with full data sovereignty.")}
         </p>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Direktvergleich" : "Direct Comparison"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Direktvergleich", "Direct Comparison")}</h2>
           <div className="overflow-x-auto">
             <table className="min-w-full bg-gray-900 border border-gray-700 rounded-lg">
               <thead className="bg-gray-800">
@@ -103,32 +98,32 @@ export default function ClawguruVsOrcaSecurityPage({ params }: { params: { lang:
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Wer sollte was wählen?" : "Who Should Choose What?"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Wer sollte was wählen?", "Who Should Choose What?")}</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="bg-cyan-900 border border-cyan-700 p-4 rounded-lg">
-              <h3 className="font-bold text-cyan-300 mb-2">{isDE ? "ClawGuru ist besser wenn…" : "ClawGuru is better when…"}</h3>
+              <h3 className="font-bold text-cyan-300 mb-2">{pick(isDE, "ClawGuru ist besser wenn…", "ClawGuru is better when…")}</h3>
               <ul className="text-sm text-cyan-200 space-y-1">
-                <li>▸ {isDE ? "On-Premises oder Private Cloud" : "On-premises or private cloud"}</li>
-                <li>▸ {isDE ? "GDPR/DSGVO Datensouveränität erforderlich" : "GDPR/DSGVO data sovereignty required"}</li>
-                <li>▸ {isDE ? "AI-Agenten oder LLM-Deployments" : "AI agents or LLM deployments"}</li>
-                <li>▸ {isDE ? "Self-Hosted Kubernetes (bare metal)" : "Self-hosted Kubernetes (bare metal)"}</li>
-                <li>▸ {isDE ? "Transparente, kalkulierbare Kosten" : "Transparent, predictable costs"}</li>
+                <li>▸ {pick(isDE, "On-Premises oder Private Cloud", "On-premises or private cloud")}</li>
+                <li>▸ {pick(isDE, "GDPR/DSGVO Datensouveränität erforderlich", "GDPR/DSGVO data sovereignty required")}</li>
+                <li>▸ {pick(isDE, "AI-Agenten oder LLM-Deployments", "AI agents or LLM deployments")}</li>
+                <li>▸ {pick(isDE, "Self-Hosted Kubernetes (bare metal)", "Self-hosted Kubernetes (bare metal)")}</li>
+                <li>▸ {pick(isDE, "Transparente, kalkulierbare Kosten", "Transparent, predictable costs")}</li>
               </ul>
             </div>
             <div className="bg-gray-800 border border-gray-700 p-4 rounded-lg">
-              <h3 className="font-bold text-gray-300 mb-2">{isDE ? "Orca ist besser wenn…" : "Orca is better when…"}</h3>
+              <h3 className="font-bold text-gray-300 mb-2">{pick(isDE, "Orca ist besser wenn…", "Orca is better when…")}</h3>
               <ul className="text-sm text-gray-400 space-y-1">
-                <li>▸ {isDE ? "Reiner Public-Cloud-Stack (AWS/Azure/GCP)" : "Pure public cloud stack (AWS/Azure/GCP)"}</li>
-                <li>▸ {isDE ? "Agentless-Scan ohne Ops-Aufwand" : "Agentless scan with zero ops overhead"}</li>
-                <li>▸ {isDE ? "Keine On-Premises-Anforderungen" : "No on-premises requirements"}</li>
-                <li>▸ {isDE ? "Enterprise-Budget für SaaS verfügbar" : "Enterprise budget for SaaS available"}</li>
+                <li>▸ {pick(isDE, "Reiner Public-Cloud-Stack (AWS/Azure/GCP)", "Pure public cloud stack (AWS/Azure/GCP)")}</li>
+                <li>▸ {pick(isDE, "Agentless-Scan ohne Ops-Aufwand", "Agentless scan with zero ops overhead")}</li>
+                <li>▸ {pick(isDE, "Keine On-Premises-Anforderungen", "No on-premises requirements")}</li>
+                <li>▸ {pick(isDE, "Enterprise-Budget für SaaS verfügbar", "Enterprise budget for SaaS available")}</li>
               </ul>
             </div>
           </div>
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-3">
             {FAQ.map((f, i) => (
               <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
@@ -140,23 +135,23 @@ export default function ClawguruVsOrcaSecurityPage({ params }: { params: { lang:
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Vergleiche" : "Further Comparisons"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Vergleiche", "Further Comparisons")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/clawguru-vs-wiz`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">ClawGuru vs Wiz</div>
-              <div className="text-sm text-gray-300">{isDE ? "Ähnlicher SaaS-CNAPP-Vergleich" : "Similar SaaS CNAPP comparison"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Ähnlicher SaaS-CNAPP-Vergleich", "Similar SaaS CNAPP comparison")}</div>
             </a>
             <a href={`/${locale}/clawguru-vs-aquasec`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">ClawGuru vs Aqua Security</div>
-              <div className="text-sm text-gray-300">{isDE ? "Container-Security-Vergleich" : "Container security comparison"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Container-Security-Vergleich", "Container security comparison")}</div>
             </a>
             <a href={`/${locale}/clawguru-vs-prisma-cloud`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">ClawGuru vs Prisma Cloud</div>
-              <div className="text-sm text-gray-300">{isDE ? "Palo Alto CNAPP vs Self-Hosted" : "Palo Alto CNAPP vs self-hosted"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Palo Alto CNAPP vs Self-Hosted", "Palo Alto CNAPP vs self-hosted")}</div>
             </a>
             <a href={`/${locale}/neuro`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Live Security Check</div>
-              <div className="text-sm text-gray-300">{isDE ? "Stack direkt scannen" : "Scan your stack directly"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Stack direkt scannen", "Scan your stack directly")}</div>
             </a>
           </div>
         </section>

@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/solutions/zero-trust-architecture"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "Zero Trust Architecture für Self-Hosted Infrastruktur 2026 | ClawGuru"
-    : "Zero Trust Architecture for Self-Hosted Infrastructure 2026 | ClawGuru"
-  const description = isDE
-    ? "Zero Trust vollständig selbst hosten: Identity, Device Trust, Micro-Segmentierung, SASE-Alternativen und AI-Agent-Integration. Schritt-für-Schritt-Implementierung ohne Vendor-Lock-in."
-    : "Self-hosted Zero Trust architecture: identity, device trust, micro-segmentation, SASE alternatives and AI agent integration. Step-by-step implementation without vendor lock-in."
+  const title = pick(isDE, "Zero Trust Architecture für Self-Hosted Infrastruktur 2026 | ClawGuru", "Zero Trust Architecture for Self-Hosted Infrastructure 2026 | ClawGuru")
+  const description = pick(isDE, "Zero Trust vollständig selbst hosten: Identity, Device Trust, Micro-Segmentierung, SASE-Alternativen und AI-Agent-Integration. Schritt-für-Schritt-Implementierung ohne Vendor-Lock-in.", "Self-hosted Zero Trust architecture: identity, device trust, micro-segmentation, SASE alternatives and AI agent integration. Step-by-step implementation without vendor lock-in.")
   return {
     title, description,
     keywords: ["zero trust architecture self-hosted", "zero trust implementation", "zero trust without vendor lock-in", "ztna self-hosted", "zero trust ai agents", "zero trust 2026"],
@@ -66,23 +63,21 @@ export default function ZeroTrustArchitecturePage({ params }: { params: { lang: 
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "Architektur-Leitfaden für eigene Infrastruktur." : "Architecture guide for your own infrastructure."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Architektur-Leitfaden für eigene Infrastruktur.", "Architecture guide for your own infrastructure.")}
         </div>
         <div className="mb-3"><span className="text-xs font-bold uppercase tracking-widest text-cyan-400">Solutions · Batch 5</span></div>
         <h1 className="text-4xl font-bold mb-4 text-gray-100">
-          {isDE ? "Zero Trust Architecture: Self-Hosted ohne Vendor-Lock-in" : "Zero Trust Architecture: Self-Hosted Without Vendor Lock-in"}
+          {pick(isDE, "Zero Trust Architecture: Self-Hosted ohne Vendor-Lock-in", "Zero Trust Architecture: Self-Hosted Without Vendor Lock-in")}
         </h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "Zero Trust bedeutet nicht SASE kaufen. Es bedeutet: jeden Zugriff explizit authentifizieren, autorisieren und loggen — mit Open-Source-Tools, die du selbst kontrollierst. Sechs Säulen, konkrete Tools, klare Prioritäten."
-            : "Zero Trust doesn't mean buying SASE. It means: explicitly authenticate, authorize and log every access — with open-source tools you control. Six pillars, concrete tools, clear priorities."}
+          {pick(isDE, "Zero Trust bedeutet nicht SASE kaufen. Es bedeutet: jeden Zugriff explizit authentifizieren, autorisieren und loggen — mit Open-Source-Tools, die du selbst kontrollierst. Sechs Säulen, konkrete Tools, klare Prioritäten.", "Zero Trust doesn't mean buying SASE. It means: explicitly authenticate, authorize and log every access — with open-source tools you control. Six pillars, concrete tools, clear priorities.")}
         </p>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
           {[
-            { value: "6", label: isDE ? "ZT-Säulen" : "ZT pillars" },
-            { value: "0", label: isDE ? "Implizites Vertrauen" : "Implicit trust" },
-            { value: "100%", label: isDE ? "OSS-Stack" : "OSS stack" },
+            { value: "6", label: pick(isDE, "ZT-Säulen", "ZT pillars") },
+            { value: "0", label: pick(isDE, "Implizites Vertrauen", "Implicit trust") },
+            { value: "100%", label: pick(isDE, "OSS-Stack", "OSS stack") },
             { value: "0", label: "Vendor Lock-in" },
           ].map((s) => (
             <div key={s.label} className="bg-gray-800 p-4 rounded-lg border border-gray-700 text-center">
@@ -93,7 +88,7 @@ export default function ZeroTrustArchitecturePage({ params }: { params: { lang: 
         </div>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Die 6 Zero-Trust-Säulen" : "The 6 Zero Trust Pillars"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Die 6 Zero-Trust-Säulen", "The 6 Zero Trust Pillars")}</h2>
           <div className="space-y-4">
             {ZT_PILLARS.map((p) => (
               <div key={p.id} className="bg-gray-800 p-5 rounded-lg border border-gray-700">
@@ -120,7 +115,7 @@ export default function ZeroTrustArchitecturePage({ params }: { params: { lang: 
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-3">
             {FAQ.map((f, i) => (
               <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
@@ -132,19 +127,19 @@ export default function ZeroTrustArchitecturePage({ params }: { params: { lang: 
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further Resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further Resources")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/moltbot/zero-trust-ai-agents`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Zero Trust AI Agents</div>
-              <div className="text-sm text-gray-300">{isDE ? "ZT für KI-Agenten" : "ZT for AI agents"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "ZT für KI-Agenten", "ZT for AI agents")}</div>
             </a>
             <a href={`/${locale}/solutions/nist-csf-compliance`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">NIST CSF 2.0</div>
-              <div className="text-sm text-gray-300">{isDE ? "ZT maps to NIST Protect" : "ZT maps to NIST Protect"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "ZT maps to NIST Protect", "ZT maps to NIST Protect")}</div>
             </a>
             <a href={`/${locale}/solutions/eu-ai-act-compliance`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">EU AI Act</div>
-              <div className="text-sm text-gray-300">{isDE ? "Art. 15 Cybersecurity" : "Art. 15 Cybersecurity"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Art. 15 Cybersecurity", "Art. 15 Cybersecurity")}</div>
             </a>
             <a href={`/${locale}/moltbot/ai-agent-security`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Agent Security Hub</div>

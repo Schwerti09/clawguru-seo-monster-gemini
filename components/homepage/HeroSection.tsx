@@ -2,6 +2,7 @@ import Container from "@/components/shared/Container"
 import type { Locale } from "@/lib/i18n"
 import { getHomepageCroCopy } from "@/lib/homepage-cro-i18n"
 import { ArrowRight, Calendar, Shield } from "lucide-react"
+import { pick } from "@/lib/i18n-pick"
 
 type Props = { locale: Locale; prefix?: string; dict?: Record<string, string> }
 
@@ -15,13 +16,11 @@ export default function HeroSection({ locale, prefix = "", dict = {} }: Props) {
   const cro = getHomepageCroCopy(locale)
   const isDE = locale === "de"
   const t = {
-    badge: dict.hero_badge || (isDE
-      ? "Security Intelligence Engine · 4.2M Runbooks · Expert-Reviewed"
-      : "Security Intelligence Engine · 4.2M Runbooks · Expert-Reviewed"),
+    badge: dict.hero_badge || (pick(isDE, "Security Intelligence Engine · 4.2M Runbooks · Expert-Reviewed", "Security Intelligence Engine · 4.2M Runbooks · Expert-Reviewed")),
     title: dict.hero_title || cro.heroH1,
     sub: dict.hero_sub || cro.heroSubtitle,
-    primary: dict.hero_primary || (isDE ? "Kostenloser Security Check" : "Free Security Check"),
-    secondary: isDE ? "Strategy Call buchen" : "Book a Strategy Call",
+    primary: dict.hero_primary || (pick(isDE, "Kostenloser Security Check", "Free Security Check")),
+    secondary: pick(isDE, "Strategy Call buchen", "Book a Strategy Call"),
     trust: dict.hero_note || cro.heroTrustLine,
   }
   return (
@@ -70,10 +69,10 @@ export default function HeroSection({ locale, prefix = "", dict = {} }: Props) {
             {t.trust}
           </p>
           <div className="mt-3 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-[11px] text-gray-500">
-            <span>✓ {isDE ? "Keine Kreditkarte" : "No credit card"}</span>
-            <span>✓ {isDE ? "In 30 Sekunden" : "Takes 30 seconds"}</span>
-            <span>✓ {isDE ? "DSGVO / EU-Hosting" : "GDPR / EU-hosted"}</span>
-            <span>✓ {isDE ? "Von SecOps-Experten geprüft" : "Reviewed by SecOps experts"}</span>
+            <span>✓ {pick(isDE, "Keine Kreditkarte", "No credit card")}</span>
+            <span>✓ {pick(isDE, "In 30 Sekunden", "Takes 30 seconds")}</span>
+            <span>✓ {pick(isDE, "DSGVO / EU-Hosting", "GDPR / EU-hosted")}</span>
+            <span>✓ {pick(isDE, "Von SecOps-Experten geprüft", "Reviewed by SecOps experts")}</span>
           </div>
         </div>
       </Container>

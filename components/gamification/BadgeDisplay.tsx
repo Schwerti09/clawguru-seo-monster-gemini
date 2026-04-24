@@ -2,6 +2,7 @@
 
 import { Trophy, Star, Lock, Zap } from "lucide-react"
 import { achievements, getAchievementsByRarity, getRarityColor } from "@/lib/achievements"
+import { pick } from "@/lib/i18n-pick"
 
 interface BadgeDisplayProps {
   unlockedIds?: string[]
@@ -95,7 +96,7 @@ function BadgeCard({ badge, unlocked, locale }: { badge: any; unlocked: boolean;
       )}
       <div className="text-3xl mb-2">{badge.icon}</div>
       <div className="text-xs font-medium text-gray-300 mb-1">{badge.name}</div>
-      <div className="text-xs text-zinc-500 mb-2">{badge.points} {isDE ? "Pkt" : "pts"}</div>
+      <div className="text-xs text-zinc-500 mb-2">{badge.points} {pick(isDE, "Pkt", "pts")}</div>
       <div
         className={`text-xs px-2 py-1 rounded-full inline-block ${
           unlocked ? "bg-gray-700" : "bg-gray-800"

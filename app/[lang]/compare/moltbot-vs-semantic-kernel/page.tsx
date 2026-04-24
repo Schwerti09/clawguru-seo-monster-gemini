@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/compare/moltbot-vs-semantic-kernel"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "Moltbot vs Semantic Kernel: Security-Vergleich 2026 | ClawGuru"
-    : "Moltbot vs Semantic Kernel: Security Comparison 2026 | ClawGuru"
-  const description = isDE
-    ? "Moltbot vs Microsoft Semantic Kernel im Security-Vergleich: AI-Agent Security, Self-Hosted vs Azure, Audit Logging, RBAC und Compliance 2026 direkt verglichen."
-    : "Moltbot vs Microsoft Semantic Kernel security comparison: AI agent security, self-hosted vs Azure, audit logging, RBAC and compliance 2026."
+  const title = pick(isDE, "Moltbot vs Semantic Kernel: Security-Vergleich 2026 | ClawGuru", "Moltbot vs Semantic Kernel: Security Comparison 2026 | ClawGuru")
+  const description = pick(isDE, "Moltbot vs Microsoft Semantic Kernel im Security-Vergleich: AI-Agent Security, Self-Hosted vs Azure, Audit Logging, RBAC und Compliance 2026 direkt verglichen.", "Moltbot vs Microsoft Semantic Kernel security comparison: AI agent security, self-hosted vs Azure, audit logging, RBAC and compliance 2026.")
   return {
     title, description,
     keywords: ["moltbot vs semantic kernel", "semantic kernel security", "microsoft semantic kernel comparison", "semantic kernel vs moltbot", "ai agent framework security 2026"],
@@ -99,17 +96,15 @@ export default function MoltbotVsSemanticKernelPage({ params }: { params: { lang
         </div>
 
         <h1 className="text-4xl font-bold mb-4 text-gray-100">
-          {isDE ? "Moltbot vs Semantic Kernel: Security-Vergleich 2026" : "Moltbot vs Semantic Kernel: Security Comparison 2026"}
+          {pick(isDE, "Moltbot vs Semantic Kernel: Security-Vergleich 2026", "Moltbot vs Semantic Kernel: Security Comparison 2026")}
         </h1>
         <p className="text-lg text-gray-300 mb-10">
-          {isDE
-            ? "Microsoft Semantic Kernel ist ein Enterprise-SDK für AI-Agenten, tief integriert in Azure und M365. Moltbot ist ein Security-first AI-Agent-Framework für Self-Hosted-Umgebungen. Welches passt zu deiner Security-Anforderung?"
-            : "Microsoft Semantic Kernel is an enterprise SDK for AI agents, deeply integrated with Azure and M365. Moltbot is a security-first AI agent framework for self-hosted environments. Which fits your security requirements?"}
+          {pick(isDE, "Microsoft Semantic Kernel ist ein Enterprise-SDK für AI-Agenten, tief integriert in Azure und M365. Moltbot ist ein Security-first AI-Agent-Framework für Self-Hosted-Umgebungen. Welches passt zu deiner Security-Anforderung?", "Microsoft Semantic Kernel is an enterprise SDK for AI agents, deeply integrated with Azure and M365. Moltbot is a security-first AI agent framework for self-hosted environments. Which fits your security requirements?")}
         </p>
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">
-            {isDE ? "Direkt-Vergleich" : "Head-to-Head Comparison"}
+            {pick(isDE, "Direkt-Vergleich", "Head-to-Head Comparison")}
           </h2>
           <div className="overflow-x-auto">
             <table className="min-w-full bg-gray-900 border border-gray-700 rounded-lg">
@@ -143,7 +138,7 @@ export default function MoltbotVsSemanticKernelPage({ params }: { params: { lang
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">
-            {isDE ? "Wann welches Tool wählen?" : "When to Choose Which?"}
+            {pick(isDE, "Wann welches Tool wählen?", "When to Choose Which?")}
           </h2>
           <div className="grid sm:grid-cols-2 gap-6">
             <div className="bg-green-900 p-5 rounded-lg border border-green-700">
@@ -171,7 +166,7 @@ export default function MoltbotVsSemanticKernelPage({ params }: { params: { lang
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">
-            {isDE ? "Häufige Fragen" : "Frequently Asked Questions"}
+            {pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}
           </h2>
           <div className="space-y-4">
             {FAQ.map((entry, i) => (
@@ -188,39 +183,37 @@ export default function MoltbotVsSemanticKernelPage({ params }: { params: { lang
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">
-            {isDE ? "Weiterführende Ressourcen" : "Further Resources"}
+            {pick(isDE, "Weiterführende Ressourcen", "Further Resources")}
           </h2>
           <div className="grid sm:grid-cols-2 gap-4">
             <a href={`/${locale}/moltbot/ai-agent-sandboxing`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Agent Sandboxing</div>
-              <div className="text-sm text-gray-300">{isDE ? "Runtime-Isolation für KI-Agenten" : "Runtime isolation for AI agents"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Runtime-Isolation für KI-Agenten", "Runtime isolation for AI agents")}</div>
             </a>
             <a href={`/${locale}/moltbot/llm-gateway-hardening`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM Gateway Hardening</div>
-              <div className="text-sm text-gray-300">{isDE ? "API-Gateway für LLMs absichern" : "Secure your LLM API gateway"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "API-Gateway für LLMs absichern", "Secure your LLM API gateway")}</div>
             </a>
             <a href={`/${locale}/compare/moltbot-vs-crewai`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Moltbot vs CrewAI</div>
-              <div className="text-sm text-gray-300">{isDE ? "Weiterer Agent-Framework-Vergleich" : "Another agent framework comparison"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Weiterer Agent-Framework-Vergleich", "Another agent framework comparison")}</div>
             </a>
             <a href={`/${locale}/securitycheck`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
-              <div className="font-semibold text-cyan-400">{isDE ? "Security Check starten" : "Start Security Check"}</div>
-              <div className="text-sm text-gray-300">{isDE ? "AI-Infrastruktur in 30 Sekunden prüfen" : "Check AI infrastructure in 30 seconds"}</div>
+              <div className="font-semibold text-cyan-400">{pick(isDE, "Security Check starten", "Start Security Check")}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "AI-Infrastruktur in 30 Sekunden prüfen", "Check AI infrastructure in 30 seconds")}</div>
             </a>
           </div>
         </section>
 
         <div className="bg-cyan-900 border border-cyan-700 rounded-lg p-6 text-center">
           <h2 className="text-xl font-bold text-cyan-300 mb-2">
-            {isDE ? "Moltbot für deine Umgebung evaluieren?" : "Evaluate Moltbot for your environment?"}
+            {pick(isDE, "Moltbot für deine Umgebung evaluieren?", "Evaluate Moltbot for your environment?")}
           </h2>
           <p className="text-gray-300 mb-4 text-sm">
-            {isDE
-              ? "ClawGuru zeigt dir, welches AI-Agent-Framework zu deinen Security-Anforderungen passt."
-              : "ClawGuru shows you which AI agent framework fits your security requirements."}
+            {pick(isDE, "ClawGuru zeigt dir, welches AI-Agent-Framework zu deinen Security-Anforderungen passt.", "ClawGuru shows you which AI agent framework fits your security requirements.")}
           </p>
           <a href={`/${locale}/securitycheck`} className="inline-block bg-cyan-500 hover:bg-cyan-400 text-black font-bold px-6 py-3 rounded-lg transition-colors">
-            {isDE ? "🛡️ Kostenloser Security Check" : "🛡️ Free Security Check"}
+            {pick(isDE, "🛡️ Kostenloser Security Check", "🛡️ Free Security Check")}
           </a>
         </div>
       </div>

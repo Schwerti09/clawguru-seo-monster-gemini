@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
 import { Swords, Trophy, TrendingUp, Users, Loader2 } from "lucide-react"
 import Link from "next/link"
+import { pick } from "@/lib/i18n-pick"
 
 interface PageProps { params: { lang: string } }
 
@@ -16,12 +17,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const pageUrl = `${SITE_URL}/${locale}${PATH}`
   const isDE = locale === "de"
-  const title = isDE
-    ? "Roast Battle: 1v1 Stack Vergleich | ClawGuru"
-    : "Roast Battle: 1v1 Stack Comparison | ClawGuru"
-  const description = isDE
-    ? "Zwei Stacks gegeneinander. Community votet. Wer hat die bessere Security?"
-    : "Two stacks battle. Community votes. Who has better security?"
+  const title = pick(isDE, "Roast Battle: 1v1 Stack Vergleich | ClawGuru", "Roast Battle: 1v1 Stack Comparison | ClawGuru")
+  const description = pick(isDE, "Zwei Stacks gegeneinander. Community votet. Wer hat die bessere Security?", "Two stacks battle. Community votes. Who has better security?")
   return {
     title,
     description,
@@ -80,33 +77,29 @@ export default async function RoastBattlePage({ params }: PageProps) {
         </div>
 
         <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-4 text-gray-100">{isDE ? "Roast Battle" : "Roast Battle"}</h1>
+          <h1 className="text-4xl font-bold mb-4 text-gray-100">{pick(isDE, "Roast Battle", "Roast Battle")}</h1>
           <p className="text-lg text-gray-300 mb-2">
-            {isDE
-              ? "Zwei Stacks. Eine Community. Ein Gewinner. Vote für den besseren Roast!"
-              : "Two stacks. One community. One winner. Vote for the better roast!"}
+            {pick(isDE, "Zwei Stacks. Eine Community. Ein Gewinner. Vote für den besseren Roast!", "Two stacks. One community. One winner. Vote for the better roast!")}
           </p>
           <p className="text-sm text-amber-400 font-medium">
-            {isDE ? "→ Starte dein eigenes Battle und challenge die Community" : "→ Start your own battle and challenge the community"}
+            {pick(isDE, "→ Starte dein eigenes Battle und challenge die Community", "→ Start your own battle and challenge the community")}
           </p>
         </div>
 
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE
-            ? "Dieser Leitfaden dient zur Härtung Ihrer eigenen Systeme. Keine Angriffstools."
-            : "This guide is for hardening your own systems. No attack tools."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Dieser Leitfaden dient zur Härtung Ihrer eigenen Systeme. Keine Angriffstools.", "This guide is for hardening your own systems. No attack tools.")}
         </div>
 
         {/* Live Battles */}
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4 text-gray-100 flex items-center gap-2">
             <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
-            {isDE ? "Live Battles" : "Live Battles"}
+            {pick(isDE, "Live Battles", "Live Battles")}
           </h2>
           
           {!stats || !stats.topScores || stats.topScores.length < 2 ? (
             <div className="text-center text-zinc-500 py-8">
-              {isDE ? "Keine Battles verfügbar" : "No battles available"}
+              {pick(isDE, "Keine Battles verfügbar", "No battles available")}
             </div>
           ) : (
             <div className="space-y-4">
@@ -114,9 +107,9 @@ export default async function RoastBattlePage({ params }: PageProps) {
               <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
                 <div className="flex items-center justify-between mb-4">
                   <span className="text-sm text-red-400 font-medium">
-                    🔴 {isDE ? "Live" : "Live"} • {isDE ? "Community Voting" : "Community Voting"}
+                    🔴 {pick(isDE, "Live", "Live")} • {pick(isDE, "Community Voting", "Community Voting")}
                   </span>
-                  <span className="text-sm text-zinc-500">{stats.totalRoasts.toLocaleString()} {isDE ? "Roasts" : "roasts"}</span>
+                  <span className="text-sm text-zinc-500">{stats.totalRoasts.toLocaleString()} {pick(isDE, "Roasts", "roasts")}</span>
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-4">
@@ -126,7 +119,7 @@ export default async function RoastBattlePage({ params }: PageProps) {
                       <span className="font-semibold text-gray-100">{stats.topScores[0].stack_summary?.substring(0, 50)}...</span>
                       <span className="text-2xl font-bold text-red-400">{stats.topScores[0].score}</span>
                     </div>
-                    <div className="text-sm text-zinc-400 mb-3">{isDE ? "Schlechter Score = Mehr Drama" : "Bad score = More drama"}</div>
+                    <div className="text-sm text-zinc-400 mb-3">{pick(isDE, "Schlechter Score = Mehr Drama", "Bad score = More drama")}</div>
                     <div className="flex items-center gap-2">
                       <div className="flex-1 bg-gray-700 rounded-full h-2">
                         <div className="bg-red-500 h-2 rounded-full" style={{ width: "45%" }}></div>
@@ -146,7 +139,7 @@ export default async function RoastBattlePage({ params }: PageProps) {
                       <span className="font-semibold text-gray-100">{stats.topScores[1].stack_summary?.substring(0, 50)}...</span>
                       <span className="text-2xl font-bold text-green-400">{stats.topScores[1].score}</span>
                     </div>
-                    <div className="text-sm text-zinc-400 mb-3">{isDE ? "Besserer Score = Weniger Roast" : "Better score = Less roast"}</div>
+                    <div className="text-sm text-zinc-400 mb-3">{pick(isDE, "Besserer Score = Weniger Roast", "Better score = Less roast")}</div>
                     <div className="flex items-center gap-2">
                       <div className="flex-1 bg-gray-700 rounded-full h-2">
                         <div className="bg-green-500 h-2 rounded-full" style={{ width: "55%" }}></div>
@@ -157,7 +150,7 @@ export default async function RoastBattlePage({ params }: PageProps) {
                 </div>
 
                 <p className="text-center text-xs text-zinc-500 mt-4">
-                  {isDE ? "Voting basiert auf echten Roast-Daten" : "Voting based on real roast data"}
+                  {pick(isDE, "Voting basiert auf echten Roast-Daten", "Voting based on real roast data")}
                 </p>
               </div>
             </div>
@@ -166,11 +159,11 @@ export default async function RoastBattlePage({ params }: PageProps) {
 
         {/* Ended Battles */}
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Top Vergleiche" : "Top Comparisons"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Top Vergleiche", "Top Comparisons")}</h2>
           
           {!stats || !stats.topScores || stats.topScores.length < 4 ? (
             <div className="text-center text-zinc-500 py-8">
-              {isDE ? "Keine Daten verfügbar" : "No data available"}
+              {pick(isDE, "Keine Daten verfügbar", "No data available")}
             </div>
           ) : (
             <div className="space-y-3">
@@ -194,13 +187,13 @@ export default async function RoastBattlePage({ params }: PageProps) {
         {/* Links */}
         <nav className="flex flex-wrap justify-center gap-4 text-sm text-zinc-400">
           <Link href={`/${locale}/roast-my-moltbot`} className="hover:text-cyan-300 font-medium">
-            {isDE ? "Roast My Moltbot" : "Roast My Moltbot"}
+            {pick(isDE, "Roast My Moltbot", "Roast My Moltbot")}
           </Link>
           <Link href={`/${locale}/roast-my-moltbot/hall-of-fame`} className="hover:text-cyan-300 font-medium">
-            {isDE ? "Hall of Fame" : "Hall of Fame"}
+            {pick(isDE, "Hall of Fame", "Hall of Fame")}
           </Link>
           <Link href={`/${locale}/roast-my-moltbot/hall-of-shame`} className="hover:text-cyan-300 font-medium">
-            {isDE ? "Hall of Shame" : "Hall of Shame"}
+            {pick(isDE, "Hall of Shame", "Hall of Shame")}
           </Link>
         </nav>
       </div>

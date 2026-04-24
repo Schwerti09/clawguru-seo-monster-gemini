@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
 import { Shield, GraduationCap, Github, Linkedin, Award, BookOpen, Terminal } from "lucide-react"
+import { pick } from "@/lib/i18n-pick"
 
 interface PageProps { params: { lang: string } }
 
@@ -19,13 +20,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const pageUrl = `${SITE_URL}/${locale}${PATH}`
   const isDE = locale === "de"
 
-  const title = isDE
-    ? "Team — ClawGuru Mega-Team aus Security Spezialisten"
-    : "Team — ClawGuru Mega-Team of Security Specialists"
+  const title = pick(isDE, "Team — ClawGuru Mega-Team aus Security Spezialisten", "Team — ClawGuru Mega-Team of Security Specialists")
 
-  const description = isDE
-    ? "Ein interdisziplinäres Team aus Security Engineers, DevOps Experten und Threat Researchers mit 15+ Jahren Erfahrung. 10+ Spezialisten, 4,200+ AI Runbooks, 24/7 Incident Response."
-    : "An interdisciplinary team of Security Engineers, DevOps Experts and Threat Researchers with 15+ years of experience. 10+ specialists, 4,200+ AI runbooks, 24/7 incident response."
+  const description = pick(isDE, "Ein interdisziplinäres Team aus Security Engineers, DevOps Experten und Threat Researchers mit 15+ Jahren Erfahrung. 10+ Spezialisten, 4,200+ AI Runbooks, 24/7 Incident Response.", "An interdisciplinary team of Security Engineers, DevOps Experts and Threat Researchers with 15+ years of experience. 10+ specialists, 4,200+ AI runbooks, 24/7 incident response.")
 
   return {
     title,
@@ -228,8 +225,8 @@ export default function TeamPage({ params }: PageProps) {
       {
         "@type": "BreadcrumbList",
         "itemListElement": [
-          { "@type": "ListItem", "position": 1, "name": isDE ? "Startseite" : "Home", "item": `${SITE_URL}/${locale}` },
-          { "@type": "ListItem", "position": 2, "name": isDE ? "Team" : "Team", "item": `${SITE_URL}/${locale}${PATH}` },
+          { "@type": "ListItem", "position": 1, "name": pick(isDE, "Startseite", "Home"), "item": `${SITE_URL}/${locale}` },
+          { "@type": "ListItem", "position": 2, "name": pick(isDE, "Team", "Team"), "item": `${SITE_URL}/${locale}${PATH}` },
         ],
       },
       {
@@ -238,9 +235,7 @@ export default function TeamPage({ params }: PageProps) {
         "url": SITE_URL,
         "logo": `${SITE_URL}/favicon-512.png`,
         "foundingDate": "2024",
-        "description": isDE
-          ? "ClawGuru baut Ops- und Security-Command-Center für Self-Hosted-Teams und AI-Agent-Infrastruktur."
-          : "ClawGuru builds ops and security command centers for self-hosted teams and AI-agent infrastructure.",
+        "description": pick(isDE, "ClawGuru baut Ops- und Security-Command-Center für Self-Hosted-Teams und AI-Agent-Infrastruktur.", "ClawGuru builds ops and security command centers for self-hosted teams and AI-agent infrastructure."),
         "member": TEAM.map((m) => ({
           "@type": "Person",
           "name": m.name,
@@ -282,15 +277,13 @@ export default function TeamPage({ params }: PageProps) {
         <div className="mb-16 text-center">
           <div className="inline-flex items-center gap-2 bg-cyan-900 border border-cyan-700 text-[#00ff9d] text-xs font-bold px-3 py-1 rounded-full mb-4">
             <Shield className="w-3 h-3" />
-            {isDE ? "E-E-A-T · TRUST & EXPERIENCE" : "E-E-A-T · TRUST & EXPERIENCE"}
+            {pick(isDE, "E-E-A-T · TRUST & EXPERIENCE", "E-E-A-T · TRUST & EXPERIENCE")}
           </div>
           <h1 className="text-4xl md:text-5xl font-black mb-4 text-gray-100">
-            {isDE ? "Ein Team aus Spezialisten, das Security anders macht" : "A Team of Specialists That Does Security Differently"}
+            {pick(isDE, "Ein Team aus Spezialisten, das Security anders macht", "A Team of Specialists That Does Security Differently")}
           </h1>
           <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            {isDE
-              ? "15+ Jahre kombinierte Erfahrung in DevOps, Security Research und Incident Response. Wir haben Produktionsumgebungen gerettet, CVEs analysiert und Systeme gehärtet — bevor es cool wurde."
-              : "15+ years of combined experience in DevOps, security research, and incident response. We've rescued production environments, analyzed CVEs, and hardened systems — before it was cool."}
+            {pick(isDE, "15+ Jahre kombinierte Erfahrung in DevOps, Security Research und Incident Response. Wir haben Produktionsumgebungen gerettet, CVEs analysiert und Systeme gehärtet — bevor es cool wurde.", "15+ years of combined experience in DevOps, security research, and incident response. We've rescued production environments, analyzed CVEs, and hardened systems — before it was cool.")}
           </p>
         </div>
 
@@ -298,19 +291,19 @@ export default function TeamPage({ params }: PageProps) {
         <div className="grid md:grid-cols-4 gap-4 mb-16">
           <div className="bg-gray-800 border border-gray-700 rounded-xl p-6 text-center">
             <div className="text-3xl font-black text-cyan-400">15+</div>
-            <div className="text-xs text-gray-400 mt-1">{isDE ? "Jahre Erfahrung" : "Years of Experience"}</div>
+            <div className="text-xs text-gray-400 mt-1">{pick(isDE, "Jahre Erfahrung", "Years of Experience")}</div>
           </div>
           <div className="bg-gray-800 border border-gray-700 rounded-xl p-6 text-center">
             <div className="text-3xl font-black text-emerald-400">4,200+</div>
-            <div className="text-xs text-gray-400 mt-1">{isDE ? "AI Runbooks" : "AI Runbooks"}</div>
+            <div className="text-xs text-gray-400 mt-1">{pick(isDE, "AI Runbooks", "AI Runbooks")}</div>
           </div>
           <div className="bg-gray-800 border border-gray-700 rounded-xl p-6 text-center">
             <div className="text-3xl font-black text-fuchsia-400">10+</div>
-            <div className="text-xs text-gray-400 mt-1">{isDE ? "Spezialisten" : "Specialists"}</div>
+            <div className="text-xs text-gray-400 mt-1">{pick(isDE, "Spezialisten", "Specialists")}</div>
           </div>
           <div className="bg-gray-800 border border-gray-700 rounded-xl p-6 text-center">
             <div className="text-3xl font-black text-yellow-400">24/7</div>
-            <div className="text-xs text-gray-400 mt-1">{isDE ? "Incident Response" : "Incident Response"}</div>
+            <div className="text-xs text-gray-400 mt-1">{pick(isDE, "Incident Response", "Incident Response")}</div>
           </div>
         </div>
 
@@ -337,7 +330,7 @@ export default function TeamPage({ params }: PageProps) {
                     {isDE ? member.role_de : member.role_en}
                   </div>
                   <div className="mt-3 text-xs text-white/60">
-                    {member.experience_years}+ {isDE ? "Jahre Erfahrung" : "years of experience"}
+                    {member.experience_years}+ {pick(isDE, "Jahre Erfahrung", "years of experience")}
                   </div>
                   {(member.github || member.linkedin) && (
                     <div className="flex gap-2 mt-4">
@@ -377,7 +370,7 @@ export default function TeamPage({ params }: PageProps) {
                   <div className="mb-5">
                     <h3 className="text-xs font-bold text-cyan-400 uppercase tracking-wider mb-2 flex items-center gap-2">
                       <Terminal className="w-3 h-3" />
-                      {isDE ? "Expertise" : "Expertise"}
+                      {pick(isDE, "Expertise", "Expertise")}
                     </h3>
                     <div className="flex flex-wrap gap-2">
                       {member.expertise.map((skill) => (
@@ -396,7 +389,7 @@ export default function TeamPage({ params }: PageProps) {
                   <div>
                     <h3 className="text-xs font-bold text-purple-400 uppercase tracking-wider mb-2 flex items-center gap-2">
                       <Award className="w-3 h-3" />
-                      {isDE ? "Zertifizierungen" : "Certifications"}
+                      {pick(isDE, "Zertifizierungen", "Certifications")}
                     </h3>
                     <ul className="space-y-1">
                       {member.credentials.map((cred) => (
@@ -420,36 +413,28 @@ export default function TeamPage({ params }: PageProps) {
         <section className="bg-gray-800 border border-gray-700 rounded-xl p-8 mb-12">
           <h2 className="text-2xl font-bold text-gray-100 mb-6 flex items-center gap-3">
             <BookOpen className="w-6 h-6 text-cyan-400" />
-            {isDE ? "Warum wir vertrauenswürdig sind" : "Why we are trustworthy"}
+            {pick(isDE, "Warum wir vertrauenswürdig sind", "Why we are trustworthy")}
           </h2>
           <div className="grid md:grid-cols-2 gap-4">
             {[
               {
-                title: isDE ? "Experience" : "Experience",
-                desc: isDE
-                  ? "Unsere Team-Mitglieder haben bei Fortune-500 Unternehmen, Startups und MSPs gearbeitet. Wir kennen den Unterschied zwischen theoretischen Frameworks und operativer Realität."
-                  : "Our team members have worked at Fortune 500 companies, startups, and MSPs. We know the difference between theoretical frameworks and operational reality.",
+                title: pick(isDE, "Experience", "Experience"),
+                desc: pick(isDE, "Unsere Team-Mitglieder haben bei Fortune-500 Unternehmen, Startups und MSPs gearbeitet. Wir kennen den Unterschied zwischen theoretischen Frameworks und operativer Realität.", "Our team members have worked at Fortune 500 companies, startups, and MSPs. We know the difference between theoretical frameworks and operational reality."),
                 color: "text-cyan-400",
               },
               {
-                title: isDE ? "Expertise" : "Expertise",
-                desc: isDE
-                  ? "4,200+ AI-generierte Runbooks, die auf realen Incident-Response-Szenarien basieren. Jeder Guide ist getestet, validiert und kontinuierlich aktualisiert."
-                  : "4,200+ AI-generated runbooks based on real incident response scenarios. Every guide is tested, validated, and continuously updated.",
+                title: pick(isDE, "Expertise", "Expertise"),
+                desc: pick(isDE, "4,200+ AI-generierte Runbooks, die auf realen Incident-Response-Szenarien basieren. Jeder Guide ist getestet, validiert und kontinuierlich aktualisiert.", "4,200+ AI-generated runbooks based on real incident response scenarios. Every guide is tested, validated, and continuously updated."),
                 color: "text-emerald-400",
               },
               {
-                title: isDE ? "Authoritativeness" : "Authoritativeness",
-                desc: isDE
-                  ? "Wir werden von Security-Communities, DevOps-Teams und Compliance-Experten zitiert. Unsere Runbooks sind Teil von NIS2, BSI und SOC 2 Audit-Checklisten."
-                  : "We are cited by security communities, DevOps teams, and compliance experts. Our runbooks are part of NIS2, BSI, and SOC 2 audit checklists.",
+                title: pick(isDE, "Authoritativeness", "Authoritativeness"),
+                desc: pick(isDE, "Wir werden von Security-Communities, DevOps-Teams und Compliance-Experten zitiert. Unsere Runbooks sind Teil von NIS2, BSI und SOC 2 Audit-Checklisten.", "We are cited by security communities, DevOps teams, and compliance experts. Our runbooks are part of NIS2, BSI, and SOC 2 audit checklists."),
                 color: "text-fuchsia-400",
               },
               {
-                title: isDE ? "Trustworthiness" : "Trustworthiness",
-                desc: isDE
-                  ? "DSGVO-first, EU-basierte Infrastruktur, keine US-Datenweitergabe. Transparenz über Affiliate-Links, Methodik und Limitationen."
-                  : "GDPR-first, EU-based infrastructure, no US data transfer. Transparency about affiliate links, methodology, and limitations.",
+                title: pick(isDE, "Trustworthiness", "Trustworthiness"),
+                desc: pick(isDE, "DSGVO-first, EU-basierte Infrastruktur, keine US-Datenweitergabe. Transparenz über Affiliate-Links, Methodik und Limitationen.", "GDPR-first, EU-based infrastructure, no US data transfer. Transparency about affiliate links, methodology, and limitations."),
                 color: "text-yellow-400",
               },
             ].map((item) => (
@@ -464,12 +449,10 @@ export default function TeamPage({ params }: PageProps) {
         {/* Contact */}
         <section className="bg-gradient-to-r from-cyan-900 to-purple-900 border border-cyan-700 rounded-xl p-8 text-center">
           <h2 className="text-2xl font-bold text-gray-100 mb-3">
-            {isDE ? "Fragen ans Team?" : "Questions for the team?"}
+            {pick(isDE, "Fragen ans Team?", "Questions for the team?")}
           </h2>
           <p className="text-gray-300 mb-6">
-            {isDE
-              ? "Wir antworten persönlich — keine Ticket-Bots."
-              : "We reply personally — no ticket bots."}
+            {pick(isDE, "Wir antworten persönlich — keine Ticket-Bots.", "We reply personally — no ticket bots.")}
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <a
@@ -482,7 +465,7 @@ export default function TeamPage({ params }: PageProps) {
               href="mailto:security@clawguru.org"
               className="bg-gray-900 hover:bg-gray-800 border border-gray-700 text-gray-100 font-bold px-6 py-3 rounded-lg transition-colors"
             >
-              {isDE ? "Responsible Disclosure" : "Responsible Disclosure"}
+              {pick(isDE, "Responsible Disclosure", "Responsible Disclosure")}
             </a>
           </div>
         </section>
@@ -490,24 +473,24 @@ export default function TeamPage({ params }: PageProps) {
         {/* Cross-Links */}
         <section className="mt-12">
           <h2 className="text-xl font-bold mb-4 text-gray-100">
-            {isDE ? "Mehr Ressourcen" : "More Resources"}
+            {pick(isDE, "Mehr Ressourcen", "More Resources")}
           </h2>
           <div className="grid md:grid-cols-4 gap-4">
             <Link href={`/${locale}/ueber-uns`} className="block bg-gray-800 hover:bg-gray-700 p-4 rounded-lg border border-gray-700 hover:border-cyan-500 transition-colors">
-              <div className="font-semibold text-cyan-400 mb-1">{isDE ? "Über uns" : "About Us"}</div>
-              <div className="text-xs text-gray-400">{isDE ? "Mission & Vision" : "Mission & Vision"}</div>
+              <div className="font-semibold text-cyan-400 mb-1">{pick(isDE, "Über uns", "About Us")}</div>
+              <div className="text-xs text-gray-400">{pick(isDE, "Mission & Vision", "Mission & Vision")}</div>
             </Link>
             <Link href={`/${locale}/manifesto`} className="block bg-gray-800 hover:bg-gray-700 p-4 rounded-lg border border-gray-700 hover:border-purple-500 transition-colors">
               <div className="font-semibold text-purple-400 mb-1">Manifesto</div>
-              <div className="text-xs text-gray-400">{isDE ? "Unsere Grundsätze" : "Our principles"}</div>
+              <div className="text-xs text-gray-400">{pick(isDE, "Unsere Grundsätze", "Our principles")}</div>
             </Link>
             <Link href={`/${locale}/trust-security`} className="block bg-gray-800 hover:bg-gray-700 p-4 rounded-lg border border-gray-700 hover:border-emerald-500 transition-colors">
-              <div className="font-semibold text-emerald-400 mb-1">{isDE ? "Trust Center" : "Trust Center"}</div>
-              <div className="text-xs text-gray-400">{isDE ? "Security & Compliance" : "Security & compliance"}</div>
+              <div className="font-semibold text-emerald-400 mb-1">{pick(isDE, "Trust Center", "Trust Center")}</div>
+              <div className="text-xs text-gray-400">{pick(isDE, "Security & Compliance", "Security & compliance")}</div>
             </Link>
             <Link href={`/${locale}/impressum`} className="block bg-gray-800 hover:bg-gray-700 p-4 rounded-lg border border-gray-700 hover:border-orange-500 transition-colors">
-              <div className="font-semibold text-orange-400 mb-1">{isDE ? "Impressum" : "Legal"}</div>
-              <div className="text-xs text-gray-400">{isDE ? "Kontakt & Rechtliches" : "Contact & legal"}</div>
+              <div className="font-semibold text-orange-400 mb-1">{pick(isDE, "Impressum", "Legal")}</div>
+              <div className="text-xs text-gray-400">{pick(isDE, "Kontakt & Rechtliches", "Contact & legal")}</div>
             </Link>
           </div>
         </section>

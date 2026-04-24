@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/solutions/nis2-ai-infrastructure-guide"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "NIS2 KI-Infrastruktur-Guide: NIS2-AI-Infrastruktur-Compliance 2026 | ClawGuru Solutions"
-    : "NIS2 AI Infrastructure Guide: NIS2 AI Infrastructure Compliance 2026 | ClawGuru Solutions"
-  const description = isDE
-    ? "NIS2-KI-Infrastruktur-Compliance: Risk Management, Supply Chain Security, Incident Reporting und AI-spezifische NIS2-Technische-Maßnahmen für Self-Hosted AI und LLMs 2026."
-    : "NIS2 AI infrastructure compliance: risk management, supply chain security, incident reporting and AI-specific NIS2 technical measures for self-hosted AI and LLMs 2026."
+  const title = pick(isDE, "NIS2 KI-Infrastruktur-Guide: NIS2-AI-Infrastruktur-Compliance 2026 | ClawGuru Solutions", "NIS2 AI Infrastructure Guide: NIS2 AI Infrastructure Compliance 2026 | ClawGuru Solutions")
+  const description = pick(isDE, "NIS2-KI-Infrastruktur-Compliance: Risk Management, Supply Chain Security, Incident Reporting und AI-spezifische NIS2-Technische-Maßnahmen für Self-Hosted AI und LLMs 2026.", "NIS2 AI infrastructure compliance: risk management, supply chain security, incident reporting and AI-specific NIS2 technical measures for self-hosted AI and LLMs 2026.")
   return {
     title, description,
     keywords: ["nis2 ai infrastructure", "nis2 ai compliance", "nis2 2026 ai", "nis2 llm security", "nis2 technical measures ai", "nis2 self-hosted"],
@@ -69,17 +66,15 @@ export default function Nis2AiInfrastructureGuidePage({ params }: { params: { la
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "NIS2-Compliance-Guide für eigene KI-Infrastruktur. Kein Rechtsrat." : "NIS2 compliance guide for your own AI infrastructure. Not legal advice."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "NIS2-Compliance-Guide für eigene KI-Infrastruktur. Kein Rechtsrat.", "NIS2 compliance guide for your own AI infrastructure. Not legal advice.")}
         </div>
         <div className="mb-3"><span className="text-xs font-bold uppercase tracking-widest text-cyan-400">Solutions · Batch 11</span></div>
-        <h1 className="text-4xl font-bold mb-4 text-gray-100">{isDE ? "NIS2 KI-Infrastruktur-Guide 2026" : "NIS2 AI Infrastructure Guide 2026"}</h1>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">{pick(isDE, "NIS2 KI-Infrastruktur-Guide 2026", "NIS2 AI Infrastructure Guide 2026")}</h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "NIS2 gilt seit Oktober 2024 — und erfasst KI-Systeme in kritischen Sektoren. Fünf technische Maßnahmenbereiche: Risk Management, Supply Chain, Incident Reporting, Technical Measures und Business Continuity."
-            : "NIS2 has been in force since October 2024 — and covers AI systems in critical sectors. Five technical measure areas: risk management, supply chain, incident reporting, technical measures and business continuity."}
+          {pick(isDE, "NIS2 gilt seit Oktober 2024 — und erfasst KI-Systeme in kritischen Sektoren. Fünf technische Maßnahmenbereiche: Risk Management, Supply Chain, Incident Reporting, Technical Measures und Business Continuity.", "NIS2 has been in force since October 2024 — and covers AI systems in critical sectors. Five technical measure areas: risk management, supply chain, incident reporting, technical measures and business continuity.")}
         </p>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "5 NIS2 Maßnahmenbereiche für KI" : "5 NIS2 Measure Areas for AI"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "5 NIS2 Maßnahmenbereiche für KI", "5 NIS2 Measure Areas for AI")}</h2>
           <div className="space-y-4">
             {MEASURES.map((m) => (
               <div key={m.id} className={`rounded-lg border p-5 ${colorMap[m.color]}`}>
@@ -99,7 +94,7 @@ export default function Nis2AiInfrastructureGuidePage({ params }: { params: { la
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-3">
             {FAQ.map((f, i) => (
               <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
@@ -110,23 +105,23 @@ export default function Nis2AiInfrastructureGuidePage({ params }: { params: { la
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further Resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further Resources")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/solutions/eu-ai-act-compliance-checklist`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">EU AI Act Compliance</div>
-              <div className="text-sm text-gray-300">{isDE ? "EU-KI-Gesetz" : "EU AI Act"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "EU-KI-Gesetz", "EU AI Act")}</div>
             </a>
             <a href={`/${locale}/solutions/nist-csf-ai-profile`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">NIST CSF AI Profile</div>
-              <div className="text-sm text-gray-300">{isDE ? "NIST-CSF für AI" : "NIST CSF for AI"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "NIST-CSF für AI", "NIST CSF for AI")}</div>
             </a>
             <a href={`/${locale}/moltbot/ai-incident-response`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Incident Response</div>
-              <div className="text-sm text-gray-300">{isDE ? "Incident-Response" : "Incident response"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Incident-Response", "Incident response")}</div>
             </a>
             <a href={`/${locale}/solutions`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">All Solutions</div>
-              <div className="text-sm text-gray-300">{isDE ? "Compliance-Overview" : "Compliance overview"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Compliance-Overview", "Compliance overview")}</div>
             </a>
           </div>
         </section>

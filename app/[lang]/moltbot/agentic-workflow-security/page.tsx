@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/moltbot/agentic-workflow-security"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "Agentic Workflow Security: Mehrstufige KI-Workflows absichern | ClawGuru Moltbot"
-    : "Agentic Workflow Security: Securing Multi-Step AI Workflows | ClawGuru Moltbot"
-  const description = isDE
-    ? "Sicherheit für mehrstufige KI-Agenten-Workflows: Human-in-the-Loop-Gates, Workflow-Rollback, Schritt-Autorisierung, Dead-Man-Switch für autonome KI-Prozesse und Moltbot Workflow Guards."
-    : "Security for multi-step AI agent workflows: human-in-the-loop gates, workflow rollback, step authorization, dead-man switches for autonomous AI processes and Moltbot Workflow Guards."
+  const title = pick(isDE, "Agentic Workflow Security: Mehrstufige KI-Workflows absichern | ClawGuru Moltbot", "Agentic Workflow Security: Securing Multi-Step AI Workflows | ClawGuru Moltbot")
+  const description = pick(isDE, "Sicherheit für mehrstufige KI-Agenten-Workflows: Human-in-the-Loop-Gates, Workflow-Rollback, Schritt-Autorisierung, Dead-Man-Switch für autonome KI-Prozesse und Moltbot Workflow Guards.", "Security for multi-step AI agent workflows: human-in-the-loop gates, workflow rollback, step authorization, dead-man switches for autonomous AI processes and Moltbot Workflow Guards.")
   return {
     title, description,
     keywords: ["agentic workflow security", "ai workflow security", "human in the loop ai", "autonomous agent security", "ai workflow guardrails", "multi-step ai agent security"],
@@ -191,20 +188,18 @@ export default function AgenticWorkflowSecurityPage({ params }: { params: { lang
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "Workflow-Sicherheits-Guide für eigene KI-Agenten-Systeme." : "Workflow security guide for your own AI agent systems."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Workflow-Sicherheits-Guide für eigene KI-Agenten-Systeme.", "Workflow security guide for your own AI agent systems.")}
         </div>
         <div className="mb-3"><span className="text-xs font-bold uppercase tracking-widest text-cyan-400">Moltbot · Batch 10</span></div>
         <h1 className="text-4xl font-bold mb-4 text-gray-100">
-          {isDE ? "Agentic Workflow Security" : "Agentic Workflow Security"}
+          {pick(isDE, "Agentic Workflow Security", "Agentic Workflow Security")}
         </h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "Mehrstufige autonome KI-Workflows können viele Schäden anrichten, bevor ein Mensch eingreift. Vier Schutzschichten: Human-in-the-Loop-Gates, automatisches Rollback, Schritt-Autorisierung und Dead-Man-Switch."
-            : "Multi-step autonomous AI workflows can cause significant damage before a human intervenes. Four protection layers: human-in-the-loop gates, automatic rollback, step authorization and dead-man switches."}
+          {pick(isDE, "Mehrstufige autonome KI-Workflows können viele Schäden anrichten, bevor ein Mensch eingreift. Vier Schutzschichten: Human-in-the-Loop-Gates, automatisches Rollback, Schritt-Autorisierung und Dead-Man-Switch.", "Multi-step autonomous AI workflows can cause significant damage before a human intervenes. Four protection layers: human-in-the-loop gates, automatic rollback, step authorization and dead-man switches.")}
         </p>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "4 Workflow-Schutzschichten" : "4 Workflow Security Layers"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "4 Workflow-Schutzschichten", "4 Workflow Security Layers")}</h2>
           <div className="space-y-5">
             {WORKFLOW_CONTROLS.map((w) => (
               <div key={w.id} className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
@@ -222,7 +217,7 @@ export default function AgenticWorkflowSecurityPage({ params }: { params: { lang
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-3">
             {FAQ.map((f, i) => (
               <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
@@ -234,23 +229,23 @@ export default function AgenticWorkflowSecurityPage({ params }: { params: { lang
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further Resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further Resources")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/moltbot/ai-incident-response`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Incident Response</div>
-              <div className="text-sm text-gray-300">{isDE ? "Wenn der Workflow eskaliert" : "When workflow escalates"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Wenn der Workflow eskaliert", "When workflow escalates")}</div>
             </a>
             <a href={`/${locale}/moltbot/ai-agent-rbac`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Agent RBAC</div>
-              <div className="text-sm text-gray-300">{isDE ? "Schritt-Autorisierung konfigurieren" : "Configure step authorization"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Schritt-Autorisierung konfigurieren", "Configure step authorization")}</div>
             </a>
             <a href={`/${locale}/moltbot/ai-agent-audit-logging`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Agent Audit Logging</div>
-              <div className="text-sm text-gray-300">{isDE ? "Workflow-Schritte auditieren" : "Audit workflow steps"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Workflow-Schritte auditieren", "Audit workflow steps")}</div>
             </a>
             <a href={`/${locale}/moltbot/zero-trust-ai-agents`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Zero Trust AI Agents</div>
-              <div className="text-sm text-gray-300">{isDE ? "ZT-Prinzipien für Workflows" : "ZT principles for workflows"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "ZT-Prinzipien für Workflows", "ZT principles for workflows")}</div>
             </a>
           </div>
         </section>

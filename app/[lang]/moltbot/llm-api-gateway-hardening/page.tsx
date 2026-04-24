@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/moltbot/llm-api-gateway-hardening"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "LLM API Gateway Hardening: Sicherer Zugang zu KI-Modellen | ClawGuru Moltbot"
-    : "LLM API Gateway Hardening: Secure Access to AI Models | ClawGuru Moltbot"
-  const description = isDE
-    ? "LLM-API-Gateway absichern: API-Key-Management, Rate-Limiting-Strategien, Request/Response-Logging, Credential-Rotation und Zero-Trust-Zugang zu OpenAI, Anthropic und Self-Hosted-Modellen."
-    : "Harden your LLM API gateway: API key management, rate limiting strategies, request/response logging, credential rotation and zero-trust access to OpenAI, Anthropic and self-hosted models."
+  const title = pick(isDE, "LLM API Gateway Hardening: Sicherer Zugang zu KI-Modellen | ClawGuru Moltbot", "LLM API Gateway Hardening: Secure Access to AI Models | ClawGuru Moltbot")
+  const description = pick(isDE, "LLM-API-Gateway absichern: API-Key-Management, Rate-Limiting-Strategien, Request/Response-Logging, Credential-Rotation und Zero-Trust-Zugang zu OpenAI, Anthropic und Self-Hosted-Modellen.", "Harden your LLM API gateway: API key management, rate limiting strategies, request/response logging, credential rotation and zero-trust access to OpenAI, Anthropic and self-hosted models.")
   return {
     title, description,
     keywords: ["llm api gateway hardening", "ai api gateway security", "openai api security", "llm gateway", "ai api key management", "llm rate limiting gateway"],
@@ -198,19 +195,17 @@ export default function LlmApiGatewayHardeningPage({ params }: { params: { lang:
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "API-Gateway-Hardening-Guide für eigene KI-Infrastruktur." : "API gateway hardening guide for your own AI infrastructure."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "API-Gateway-Hardening-Guide für eigene KI-Infrastruktur.", "API gateway hardening guide for your own AI infrastructure.")}
         </div>
         <div className="mb-3"><span className="text-xs font-bold uppercase tracking-widest text-cyan-400">Moltbot · Batch 11</span></div>
         <h1 className="text-4xl font-bold mb-4 text-gray-100">
-          {isDE ? "LLM API Gateway Hardening" : "LLM API Gateway Hardening"}
+          {pick(isDE, "LLM API Gateway Hardening", "LLM API Gateway Hardening")}
         </h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "Direkter Zugriff auf LLM-APIs aus Anwendungen ist unsicher: kein Rate-Limiting, keine Audit-Logs, kein Key-Management. Ein zentrales Gateway löst alle diese Probleme auf einmal."
-            : "Direct LLM API access from applications is insecure: no rate limiting, no audit logs, no key management. A central gateway solves all these problems at once."}
+          {pick(isDE, "Direkter Zugriff auf LLM-APIs aus Anwendungen ist unsicher: kein Rate-Limiting, keine Audit-Logs, kein Key-Management. Ein zentrales Gateway löst alle diese Probleme auf einmal.", "Direct LLM API access from applications is insecure: no rate limiting, no audit logs, no key management. A central gateway solves all these problems at once.")}
         </p>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "4 Gateway-Hardening-Controls" : "4 Gateway Hardening Controls"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "4 Gateway-Hardening-Controls", "4 Gateway Hardening Controls")}</h2>
           <div className="space-y-5">
             {HARDENING_CONTROLS.map((c) => (
               <div key={c.id} className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
@@ -227,7 +222,7 @@ export default function LlmApiGatewayHardeningPage({ params }: { params: { lang:
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-3">
             {FAQ.map((f, i) => (
               <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
@@ -238,23 +233,23 @@ export default function LlmApiGatewayHardeningPage({ params }: { params: { lang:
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further Resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further Resources")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/moltbot/llm-rate-limiting`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM Rate Limiting</div>
-              <div className="text-sm text-gray-300">{isDE ? "Token-Budget-Enforcement" : "Token budget enforcement"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Token-Budget-Enforcement", "Token budget enforcement")}</div>
             </a>
             <a href={`/${locale}/moltbot/llm-gateway-hardening`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM Gateway Hardening</div>
-              <div className="text-sm text-gray-300">{isDE ? "Erweiterte Gateway-Config" : "Advanced gateway config"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Erweiterte Gateway-Config", "Advanced gateway config")}</div>
             </a>
             <a href={`/${locale}/moltbot/ai-agent-audit-logging`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Agent Audit Logging</div>
-              <div className="text-sm text-gray-300">{isDE ? "Gateway-Logs auditieren" : "Audit gateway logs"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Gateway-Logs auditieren", "Audit gateway logs")}</div>
             </a>
             <a href={`/${locale}/openclaw/network-segmentation-guide`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Network Segmentation</div>
-              <div className="text-sm text-gray-300">{isDE ? "Gateway-Netzwerk-Isolation" : "Gateway network isolation"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Gateway-Netzwerk-Isolation", "Gateway network isolation")}</div>
             </a>
           </div>
         </section>

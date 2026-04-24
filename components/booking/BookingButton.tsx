@@ -2,6 +2,7 @@
 
 import { ArrowRight, Calendar, Mail } from "lucide-react"
 import { trackEvent } from "@/lib/analytics"
+import { pick } from "@/lib/i18n-pick"
 
 /**
  * Env-driven booking button. If NEXT_PUBLIC_CAL_*_URL is set → opens Cal.com.
@@ -56,12 +57,10 @@ export default function BookingButton({
   const calUrl = CAL_URL_MAP[type]
   const hasCal = Boolean(calUrl)
 
-  const defaultSubject = subject ?? (isDE ? "Consulting Anfrage" : "Consulting inquiry")
+  const defaultSubject = subject ?? (pick(isDE, "Consulting Anfrage", "Consulting inquiry"))
   const defaultBody =
     body ??
-    (isDE
-      ? "Name:\nFirma:\nTeam-Größe:\nAktueller Stack:\nZiel:\nZeitrahmen:\nBevorzugte Termine:\n"
-      : "Name:\nCompany:\nTeam size:\nCurrent stack:\nGoal:\nTimeframe:\nPreferred times:\n")
+    (pick(isDE, "Name:\nFirma:\nTeam-Größe:\nAktueller Stack:\nZiel:\nZeitrahmen:\nBevorzugte Termine:\n", "Name:\nCompany:\nTeam size:\nCurrent stack:\nGoal:\nTimeframe:\nPreferred times:\n"))
 
   const href = hasCal ? calUrl! : buildMailto(defaultSubject, defaultBody)
   const displayLabel = label ?? DEFAULT_LABELS[type][isDE ? "de" : "en"]

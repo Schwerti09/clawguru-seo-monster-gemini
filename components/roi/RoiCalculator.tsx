@@ -4,6 +4,7 @@ import { useState, useMemo } from "react"
 import { Calculator, TrendingDown, TrendingUp, ArrowRight, Clock, Users, AlertTriangle } from "lucide-react"
 import { trackEvent } from "@/lib/analytics"
 import BookingButton from "@/components/booking/BookingButton"
+import { pick } from "@/lib/i18n-pick"
 
 interface Props {
   locale?: string
@@ -79,7 +80,7 @@ export default function RoiCalculator({ locale = "de", variant = "full", source 
   }, [teamSize, hourlyRate, incidentsPerYear, hoursPerIncident, compliancePrep, package_])
 
   const fmtEur = (n: number) =>
-    new Intl.NumberFormat(isDE ? "de-DE" : "en-US", { style: "currency", currency: "EUR", maximumFractionDigits: 0 }).format(n)
+    new Intl.NumberFormat(pick(isDE, "de-DE", "en-US"), { style: "currency", currency: "EUR", maximumFractionDigits: 0 }).format(n)
 
   return (
     <div className={`bg-gradient-to-br from-cyan-900/10 to-purple-900/10 border border-cyan-700/30 rounded-2xl ${variant === "full" ? "p-8" : "p-6"}`}>
@@ -89,10 +90,10 @@ export default function RoiCalculator({ locale = "de", variant = "full", source 
         </div>
         <div>
           <h3 className="text-xl font-bold text-white">
-            {isDE ? "ROI-Rechner: Was kosten Incidents ohne Runbooks?" : "ROI Calculator: What do incidents cost without runbooks?"}
+            {pick(isDE, "ROI-Rechner: Was kosten Incidents ohne Runbooks?", "ROI Calculator: What do incidents cost without runbooks?")}
           </h3>
           <p className="text-xs text-gray-400 mt-0.5">
-            {isDE ? "Basiert auf MTTR-Reduktion 65% und Compliance-Vorbereitung -60%" : "Based on 65% MTTR reduction and -60% compliance prep"}
+            {pick(isDE, "Basiert auf MTTR-Reduktion 65% und Compliance-Vorbereitung -60%", "Based on 65% MTTR reduction and -60% compliance prep")}
           </p>
         </div>
       </div>
@@ -102,16 +103,16 @@ export default function RoiCalculator({ locale = "de", variant = "full", source 
         <div className="space-y-5">
           <InputRow
             icon={Users}
-            label={isDE ? "Team-Größe (Engineers mit Security-Aufgaben)" : "Team size (engineers with security work)"}
+            label={pick(isDE, "Team-Größe (Engineers mit Security-Aufgaben)", "Team size (engineers with security work)")}
             value={teamSize}
             onChange={setTeamSize}
             min={1}
             max={50}
-            suffix={isDE ? "Personen" : "people"}
+            suffix={pick(isDE, "Personen", "people")}
           />
           <InputRow
             icon={Clock}
-            label={isDE ? "Stundensatz (brutto, blended)" : "Hourly rate (fully-loaded)"}
+            label={pick(isDE, "Stundensatz (brutto, blended)", "Hourly rate (fully-loaded)")}
             value={hourlyRate}
             onChange={setHourlyRate}
             min={30}
@@ -121,16 +122,16 @@ export default function RoiCalculator({ locale = "de", variant = "full", source 
           />
           <InputRow
             icon={AlertTriangle}
-            label={isDE ? "Security-Incidents pro Jahr" : "Security incidents per year"}
+            label={pick(isDE, "Security-Incidents pro Jahr", "Security incidents per year")}
             value={incidentsPerYear}
             onChange={setIncidentsPerYear}
             min={0}
             max={200}
-            suffix={isDE ? "Incidents" : "incidents"}
+            suffix={pick(isDE, "Incidents", "incidents")}
           />
           <InputRow
             icon={Clock}
-            label={isDE ? "Stunden pro Incident (MTTR)" : "Hours per incident (MTTR)"}
+            label={pick(isDE, "Stunden pro Incident (MTTR)", "Hours per incident (MTTR)")}
             value={hoursPerIncident}
             onChange={setHoursPerIncident}
             min={1}
@@ -139,7 +140,7 @@ export default function RoiCalculator({ locale = "de", variant = "full", source 
           />
           <InputRow
             icon={Clock}
-            label={isDE ? "Compliance-Stunden/Jahr (SOC 2, DORA, Questionnaires)" : "Compliance hours/year (SOC 2, DORA, questionnaires)"}
+            label={pick(isDE, "Compliance-Stunden/Jahr (SOC 2, DORA, Questionnaires)", "Compliance hours/year (SOC 2, DORA, questionnaires)")}
             value={compliancePrep}
             onChange={setCompliancePrep}
             min={0}
@@ -149,7 +150,7 @@ export default function RoiCalculator({ locale = "de", variant = "full", source 
           />
           <div>
             <label className="text-xs font-semibold text-gray-300 uppercase tracking-wide mb-2 block">
-              {isDE ? "Dein Package" : "Your package"}
+              {pick(isDE, "Dein Package", "Your package")}
             </label>
             <div className="grid grid-cols-3 gap-2">
               {([
@@ -179,38 +180,38 @@ export default function RoiCalculator({ locale = "de", variant = "full", source 
           <div className="bg-red-950/40 border border-red-800/50 rounded-xl p-4">
             <div className="flex items-center gap-2 text-red-300 text-xs font-semibold uppercase tracking-wide mb-1">
               <TrendingUp className="h-4 w-4" aria-hidden />
-              {isDE ? "Aktuelle Jahreskosten ohne ClawGuru" : "Current annual cost without ClawGuru"}
+              {pick(isDE, "Aktuelle Jahreskosten ohne ClawGuru", "Current annual cost without ClawGuru")}
             </div>
             <div className="text-3xl font-black text-red-200">{fmtEur(calc.currentAnnualCost)}</div>
             <div className="text-xs text-gray-400 mt-1">
-              {isDE ? "Incidents + Compliance-Aufwand, alles in Engineer-Stunden gerechnet" : "Incidents + compliance workload, all engineer-hour cost"}
+              {pick(isDE, "Incidents + Compliance-Aufwand, alles in Engineer-Stunden gerechnet", "Incidents + compliance workload, all engineer-hour cost")}
             </div>
           </div>
 
           <div className="bg-cyan-950/30 border border-cyan-700/50 rounded-xl p-4">
             <div className="flex items-center gap-2 text-cyan-300 text-xs font-semibold uppercase tracking-wide mb-1">
               <TrendingDown className="h-4 w-4" aria-hidden />
-              {isDE ? "Einsparung pro Jahr mit ClawGuru" : "Annual savings with ClawGuru"}
+              {pick(isDE, "Einsparung pro Jahr mit ClawGuru", "Annual savings with ClawGuru")}
             </div>
             <div className="text-3xl font-black text-cyan-200">{fmtEur(calc.timeSavings)}</div>
             <div className="text-xs text-gray-400 mt-1">
-              {isDE ? "Durch 65% MTTR-Reduktion + 60% Compliance-Automatisierung" : "Via 65% MTTR reduction + 60% compliance automation"}
+              {pick(isDE, "Durch 65% MTTR-Reduktion + 60% Compliance-Automatisierung", "Via 65% MTTR reduction + 60% compliance automation")}
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div className="bg-gray-900 border border-gray-800 rounded-xl p-3">
-              <div className="text-[10px] uppercase tracking-wide text-gray-500">{isDE ? "Netto-Einsparung Jahr 1" : "Net savings Y1"}</div>
+              <div className="text-[10px] uppercase tracking-wide text-gray-500">{pick(isDE, "Netto-Einsparung Jahr 1", "Net savings Y1")}</div>
               <div className="text-xl font-black text-white">{fmtEur(calc.netAnnualSavings)}</div>
             </div>
             <div className="bg-gray-900 border border-gray-800 rounded-xl p-3">
-              <div className="text-[10px] uppercase tracking-wide text-gray-500">{isDE ? "Payback" : "Payback"}</div>
+              <div className="text-[10px] uppercase tracking-wide text-gray-500">{pick(isDE, "Payback", "Payback")}</div>
               <div className="text-xl font-black text-white">
                 {calc.paybackMonths <= 12 ? `${calc.paybackMonths} mo` : `${Math.round(calc.paybackMonths / 12)}y`}
               </div>
             </div>
             <div className="bg-gray-900 border border-gray-800 rounded-xl p-3 col-span-2">
-              <div className="text-[10px] uppercase tracking-wide text-gray-500">{isDE ? "3-Jahres-ROI" : "3-year ROI"}</div>
+              <div className="text-[10px] uppercase tracking-wide text-gray-500">{pick(isDE, "3-Jahres-ROI", "3-year ROI")}</div>
               <div className="text-2xl font-black bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
                 {calc.roi3Year > 0 ? `+${calc.roi3Year}%` : `${calc.roi3Year}%`}
               </div>
@@ -219,7 +220,7 @@ export default function RoiCalculator({ locale = "de", variant = "full", source 
 
           <BookingButton
             type="audit"
-            label={isDE ? "Diesen Case kostenlos besprechen" : "Discuss this case — free 30min call"}
+            label={pick(isDE, "Diesen Case kostenlos besprechen", "Discuss this case — free 30min call")}
             locale={locale}
             source={`${source}_roi_result`}
             variant="primary"
@@ -232,7 +233,7 @@ export default function RoiCalculator({ locale = "de", variant = "full", source 
             }
           />
           <p className="text-[11px] text-gray-500 text-center">
-            {isDE ? "Konservative Annahmen. Echte Kunden sehen oft stärkere Effekte." : "Conservative assumptions. Real customers often see stronger effects."}
+            {pick(isDE, "Konservative Annahmen. Echte Kunden sehen oft stärkere Effekte.", "Conservative assumptions. Real customers often see stronger effects.")}
           </p>
         </div>
       </div>

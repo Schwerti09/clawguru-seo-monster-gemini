@@ -3,6 +3,7 @@ import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
 import { BASE_URL } from "@/lib/config"
 import RootPage from "@/app/vault/page"
+import { pick } from "@/lib/i18n-pick"
 
 export const revalidate = 3600
 
@@ -18,12 +19,8 @@ export async function generateMetadata(props: { params: { lang: string } }): Pro
   const pageUrl = `${BASE_URL}/${locale}${PATH}`
 
   const isDE = locale === "de"
-  const title = isDE
-    ? "ClawGuru Vault – Secrets Management & Security Scoring 2026"
-    : "ClawGuru Vault – Secrets Management & Security Scoring 2026"
-  const description = isDE
-    ? "Zentrales Secrets Management, automatische Key Rotation und Echtzeit-Security-Scoring für Self-Hosted-Infrastrukturen. DSGVO-konform, Zero-Knowledge, kein Cloud-Lock-in."
-    : "Central secrets management, automatic key rotation and real-time security scoring for self-hosted infrastructure. GDPR-compliant, zero-knowledge, no cloud lock-in."
+  const title = pick(isDE, "ClawGuru Vault – Secrets Management & Security Scoring 2026", "ClawGuru Vault – Secrets Management & Security Scoring 2026")
+  const description = pick(isDE, "Zentrales Secrets Management, automatische Key Rotation und Echtzeit-Security-Scoring für Self-Hosted-Infrastrukturen. DSGVO-konform, Zero-Knowledge, kein Cloud-Lock-in.", "Central secrets management, automatic key rotation and real-time security scoring for self-hosted infrastructure. GDPR-compliant, zero-knowledge, no cloud lock-in.")
 
   return {
     title,

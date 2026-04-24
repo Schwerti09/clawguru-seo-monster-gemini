@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/moltbot/multi-model-orchestration-security"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "Multi-Model Orchestration Security: Mehrere LLMs sicher orchestrieren | ClawGuru"
-    : "Multi-Model Orchestration Security: Securely Orchestrate Multiple LLMs | ClawGuru"
-  const description = isDE
-    ? "Sicherheitsarchitektur für Multi-Model-Systeme: Trust Boundaries zwischen Modellen, Cross-Model Prompt Injection, Output Routing Security und Moltbot Orchestration Security Controls."
-    : "Security architecture for multi-model systems: trust boundaries between models, cross-model prompt injection, output routing security and Moltbot orchestration security controls."
+  const title = pick(isDE, "Multi-Model Orchestration Security: Mehrere LLMs sicher orchestrieren | ClawGuru", "Multi-Model Orchestration Security: Securely Orchestrate Multiple LLMs | ClawGuru")
+  const description = pick(isDE, "Sicherheitsarchitektur für Multi-Model-Systeme: Trust Boundaries zwischen Modellen, Cross-Model Prompt Injection, Output Routing Security und Moltbot Orchestration Security Controls.", "Security architecture for multi-model systems: trust boundaries between models, cross-model prompt injection, output routing security and Moltbot orchestration security controls.")
   return {
     title, description,
     keywords: ["multi-model orchestration security", "llm orchestration security", "multi-agent security", "cross-model prompt injection", "llm trust boundaries", "moltbot orchestration"],
@@ -135,24 +132,22 @@ export default function MultiModelOrchestrationSecurityPage({ params }: { params
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "Sicherheitsarchitektur für eigene Multi-Model-Systeme." : "Security architecture for your own multi-model systems."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Sicherheitsarchitektur für eigene Multi-Model-Systeme.", "Security architecture for your own multi-model systems.")}
         </div>
         <div className="mb-3"><span className="text-xs font-bold uppercase tracking-widest text-cyan-400">Moltbot · Batch 9</span></div>
         <h1 className="text-4xl font-bold mb-4 text-gray-100">
-          {isDE ? "Multi-Model Orchestration Security" : "Multi-Model Orchestration Security"}
+          {pick(isDE, "Multi-Model Orchestration Security", "Multi-Model Orchestration Security")}
         </h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "Wenn Model A Output zu Model B Input wird, entsteht eine neue Angriffsfläche: Cross-Model Prompt Injection, Output Smuggling, Trust-Level-Verletzungen. Vier Security Controls mit fertigen Moltbot-Konfigurationen."
-            : "When Model A output becomes Model B input, a new attack surface emerges: cross-model prompt injection, output smuggling, trust level violations. Four security controls with ready Moltbot configurations."}
+          {pick(isDE, "Wenn Model A Output zu Model B Input wird, entsteht eine neue Angriffsfläche: Cross-Model Prompt Injection, Output Smuggling, Trust-Level-Verletzungen. Vier Security Controls mit fertigen Moltbot-Konfigurationen.", "When Model A output becomes Model B input, a new attack surface emerges: cross-model prompt injection, output smuggling, trust level violations. Four security controls with ready Moltbot configurations.")}
         </p>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
           {[
-            { value: "4", label: isDE ? "Security Controls" : "Security controls" },
-            { value: "3", label: isDE ? "Trust Levels" : "Trust levels" },
-            { value: "Schema", label: isDE ? "Inter-Model Output" : "Inter-model output" },
-            { value: "HMAC", label: isDE ? "Audit-Integrität" : "Audit integrity" },
+            { value: "4", label: pick(isDE, "Security Controls", "Security controls") },
+            { value: "3", label: pick(isDE, "Trust Levels", "Trust levels") },
+            { value: "Schema", label: pick(isDE, "Inter-Model Output", "Inter-model output") },
+            { value: "HMAC", label: pick(isDE, "Audit-Integrität", "Audit integrity") },
           ].map((s) => (
             <div key={s.label} className="bg-gray-800 p-4 rounded-lg border border-gray-700 text-center">
               <div className="text-2xl font-black text-cyan-400">{s.value}</div>
@@ -162,7 +157,7 @@ export default function MultiModelOrchestrationSecurityPage({ params }: { params
         </div>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "4 Orchestration Security Controls" : "4 Orchestration Security Controls"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "4 Orchestration Security Controls", "4 Orchestration Security Controls")}</h2>
           <div className="space-y-5">
             {SECURITY_CONTROLS.map((c) => (
               <div key={c.id} className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
@@ -180,7 +175,7 @@ export default function MultiModelOrchestrationSecurityPage({ params }: { params
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-3">
             {FAQ.map((f, i) => (
               <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
@@ -192,23 +187,23 @@ export default function MultiModelOrchestrationSecurityPage({ params }: { params
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further Resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further Resources")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/moltbot/multi-agent-trust`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Multi-Agent Trust</div>
-              <div className="text-sm text-gray-300">{isDE ? "Agent-zu-Agent Authentifizierung" : "Agent-to-agent authentication"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Agent-zu-Agent Authentifizierung", "Agent-to-agent authentication")}</div>
             </a>
             <a href={`/${locale}/moltbot/prompt-injection-defense`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Prompt Injection Defense</div>
-              <div className="text-sm text-gray-300">{isDE ? "OWASP LLM01 vollständig" : "Full OWASP LLM01 coverage"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "OWASP LLM01 vollständig", "Full OWASP LLM01 coverage")}</div>
             </a>
             <a href={`/${locale}/moltbot/llm-prompt-hardening`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM Prompt Hardening</div>
-              <div className="text-sm text-gray-300">{isDE ? "System-Prompt absichern" : "Secure system prompts"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "System-Prompt absichern", "Secure system prompts")}</div>
             </a>
             <a href={`/${locale}/moltbot/agentic-rag-security`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Agentic RAG Security</div>
-              <div className="text-sm text-gray-300">{isDE ? "RAG-Sicherheit in Pipelines" : "RAG security in pipelines"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "RAG-Sicherheit in Pipelines", "RAG security in pipelines")}</div>
             </a>
           </div>
         </section>

@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
 import { Trophy, Award, Star, Calendar, Users } from "lucide-react"
+import { pick } from "@/lib/i18n-pick"
 
 interface PageProps { params: { lang: string } }
 
@@ -10,10 +11,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const pageUrl = `${SITE_URL}/${locale}/roast-awards`
   const isDE = locale === "de"
-  const title = isDE ? "Roast Awards — Stack Oscars | ClawGuru" : "Roast Awards — Stack Oscars | ClawGuru"
-  const description = isDE 
-    ? "Jährliche Awards — Die besten und schlechtesten Stacks" 
-    : "Annual awards — The best and worst stacks"
+  const title = pick(isDE, "Roast Awards — Stack Oscars | ClawGuru", "Roast Awards — Stack Oscars | ClawGuru")
+  const description = pick(isDE, "Jährliche Awards — Die besten und schlechtesten Stacks", "Annual awards — The best and worst stacks")
   return {
     title,
     description,
@@ -85,13 +84,11 @@ export default function RoastAwardsPage({ params }: PageProps) {
           <div className="flex items-center gap-3 mb-4">
             <Trophy className="w-8 h-8 text-amber-400" />
             <h1 className="text-4xl font-bold text-gray-100">
-              {isDE ? "Roast Awards 2025" : "Roast Awards 2025"}
+              {pick(isDE, "Roast Awards 2025", "Roast Awards 2025")}
             </h1>
           </div>
           <p className="text-lg text-gray-300">
-            {isDE 
-              ? "Die Stack Oscars — Die besten und schlechtesten Stacks des Jahres" 
-              : "The Stack Oscars — The best and worst stacks of the year"}
+            {pick(isDE, "Die Stack Oscars — Die besten und schlechtesten Stacks des Jahres", "The Stack Oscars — The best and worst stacks of the year")}
           </p>
         </div>
 
@@ -110,7 +107,7 @@ export default function RoastAwardsPage({ params }: PageProps) {
                 </div>
                 <div className="text-right">
                   <div className="text-3xl font-bold text-cyan-400">{award.score}</div>
-                  <div className="text-xs text-zinc-500">{isDE ? "Score" : "Score"}</div>
+                  <div className="text-xs text-zinc-500">{pick(isDE, "Score", "Score")}</div>
                 </div>
               </div>
 
@@ -120,7 +117,7 @@ export default function RoastAwardsPage({ params }: PageProps) {
                   <Star className="w-5 h-5 text-amber-400" />
                   <div>
                     <div className="text-sm text-zinc-500 mb-1">
-                      {isDE ? "Gewinner" : "Winner"}
+                      {pick(isDE, "Gewinner", "Winner")}
                     </div>
                     <div className="font-semibold text-gray-100">{award.winner}</div>
                   </div>
@@ -130,7 +127,7 @@ export default function RoastAwardsPage({ params }: PageProps) {
               {/* Reason */}
               <div className="mb-4">
                 <div className="text-sm text-zinc-500 mb-2">
-                  {isDE ? "Begründung" : "Reason"}
+                  {pick(isDE, "Begründung", "Reason")}
                 </div>
                 <div className="text-gray-300">{award.reason}</div>
               </div>
@@ -138,7 +135,7 @@ export default function RoastAwardsPage({ params }: PageProps) {
               {/* Nominees */}
               <div>
                 <div className="text-sm text-zinc-500 mb-2">
-                  {isDE ? "Nominierte" : "Nominees"}
+                  {pick(isDE, "Nominierte", "Nominees")}
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {award.nominees.map((nominee, index) => (
@@ -158,26 +155,24 @@ export default function RoastAwardsPage({ params }: PageProps) {
             <div className="text-center">
               <Users className="w-6 h-6 text-cyan-400 mx-auto mb-2" />
               <div className="text-2xl font-bold text-gray-100">12,547</div>
-              <div className="text-xs text-zinc-500">{isDE ? "Teilnehmer" : "Participants"}</div>
+              <div className="text-xs text-zinc-500">{pick(isDE, "Teilnehmer", "Participants")}</div>
             </div>
             <div className="text-center">
               <Trophy className="w-6 h-6 text-amber-400 mx-auto mb-2" />
               <div className="text-2xl font-bold text-gray-100">5</div>
-              <div className="text-xs text-zinc-500">{isDE ? "Kategorien" : "Categories"}</div>
+              <div className="text-xs text-zinc-500">{pick(isDE, "Kategorien", "Categories")}</div>
             </div>
             <div className="text-center">
               <Calendar className="w-6 h-6 text-green-400 mx-auto mb-2" />
               <div className="text-2xl font-bold text-gray-100">Jährlich</div>
-              <div className="text-xs text-zinc-500">{isDE ? "Jährlich" : "Annual"}</div>
+              <div className="text-xs text-zinc-500">{pick(isDE, "Jährlich", "Annual")}</div>
             </div>
           </div>
         </div>
 
         {/* Trust Notice */}
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mt-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE 
-            ? "Roast Awards basieren auf anonymisierten Roast-Daten." 
-            : "Roast awards are based on anonymized roast data."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Roast Awards basieren auf anonymisierten Roast-Daten.", "Roast awards are based on anonymized roast data.")}
         </div>
       </div>
     </div>

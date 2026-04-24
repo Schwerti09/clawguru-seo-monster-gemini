@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/moltbot/ai-compliance-automation"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "KI-Compliance-Automatisierung mit Moltbot: EU AI Act, SOC 2, GDPR | ClawGuru"
-    : "AI Compliance Automation with Moltbot: EU AI Act, SOC 2, GDPR | ClawGuru"
-  const description = isDE
-    ? "Automatisiere AI-Compliance mit Moltbot: EU AI Act Art. 12-15, SOC 2 Type II, GDPR. Audit-Logging, Risikomanagement, Robustheitstests und Human-Oversight — kontinuierlich und ohne manuelle Arbeit."
-    : "Automate AI compliance with Moltbot: EU AI Act Art. 12-15, SOC 2 Type II, GDPR. Audit logging, risk management, robustness testing and human oversight — continuously and without manual work."
+  const title = pick(isDE, "KI-Compliance-Automatisierung mit Moltbot: EU AI Act, SOC 2, GDPR | ClawGuru", "AI Compliance Automation with Moltbot: EU AI Act, SOC 2, GDPR | ClawGuru")
+  const description = pick(isDE, "Automatisiere AI-Compliance mit Moltbot: EU AI Act Art. 12-15, SOC 2 Type II, GDPR. Audit-Logging, Risikomanagement, Robustheitstests und Human-Oversight — kontinuierlich und ohne manuelle Arbeit.", "Automate AI compliance with Moltbot: EU AI Act Art. 12-15, SOC 2 Type II, GDPR. Audit logging, risk management, robustness testing and human oversight — continuously and without manual work.")
   return {
     title, description,
     keywords: ["ai compliance automation", "eu ai act automation", "moltbot compliance", "soc2 ai compliance", "gdpr ai compliance", "ai audit logging"],
@@ -68,25 +65,23 @@ export default function AiComplianceAutomationPage({ params }: { params: { lang:
       <div className="max-w-4xl mx-auto">
 
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "Compliance-Leitfaden — kein Rechtsrat." : "Compliance guide — not legal advice."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Compliance-Leitfaden — kein Rechtsrat.", "Compliance guide — not legal advice.")}
         </div>
 
         <div className="mb-3"><span className="text-xs font-bold uppercase tracking-widest text-cyan-400">Moltbot · Batch 6</span></div>
         <h1 className="text-4xl font-bold mb-4 text-gray-100">
-          {isDE ? "KI-Compliance-Automatisierung mit Moltbot" : "AI Compliance Automation with Moltbot"}
+          {pick(isDE, "KI-Compliance-Automatisierung mit Moltbot", "AI Compliance Automation with Moltbot")}
         </h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "EU AI Act, SOC 2 Type II, GDPR — drei Frameworks, ein Audit-Problem. Moltbot automatisiert die technische Evidenz-Sammlung für alle drei gleichzeitig. Kein manuelles Zusammensuchen vor dem Audit mehr."
-            : "EU AI Act, SOC 2 Type II, GDPR — three frameworks, one audit problem. Moltbot automates technical evidence collection for all three simultaneously. No more manual scramble before audit day."}
+          {pick(isDE, "EU AI Act, SOC 2 Type II, GDPR — drei Frameworks, ein Audit-Problem. Moltbot automatisiert die technische Evidenz-Sammlung für alle drei gleichzeitig. Kein manuelles Zusammensuchen vor dem Audit mehr.", "EU AI Act, SOC 2 Type II, GDPR — three frameworks, one audit problem. Moltbot automates technical evidence collection for all three simultaneously. No more manual scramble before audit day.")}
         </p>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
           {[
-            { value: "10", label: isDE ? "Frameworks abgedeckt" : "Requirements automated" },
-            { value: "3", label: isDE ? "Compliance-Frameworks" : "Compliance frameworks" },
-            { value: "100%", label: isDE ? "Tamper-evident Logs" : "Tamper-evident logs" },
-            { value: "0", label: isDE ? "Manuelle Audit-Exporte" : "Manual audit exports" },
+            { value: "10", label: pick(isDE, "Frameworks abgedeckt", "Requirements automated") },
+            { value: "3", label: pick(isDE, "Compliance-Frameworks", "Compliance frameworks") },
+            { value: "100%", label: pick(isDE, "Tamper-evident Logs", "Tamper-evident logs") },
+            { value: "0", label: pick(isDE, "Manuelle Audit-Exporte", "Manual audit exports") },
           ].map((s) => (
             <div key={s.label} className="bg-gray-800 p-4 rounded-lg border border-gray-700 text-center">
               <div className="text-2xl font-black text-cyan-400">{s.value}</div>
@@ -97,7 +92,7 @@ export default function AiComplianceAutomationPage({ params }: { params: { lang:
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">
-            {isDE ? "Framework-Mapping" : "Compliance Framework Mapping"}
+            {pick(isDE, "Framework-Mapping", "Compliance Framework Mapping")}
           </h2>
           <div className="space-y-3">
             {["EU AI Act", "SOC 2 Type II", "GDPR / DSGVO"].map((fw) => (
@@ -111,7 +106,7 @@ export default function AiComplianceAutomationPage({ params }: { params: { lang:
                         <span className="font-semibold text-gray-100 text-sm">{c.requirement}</span>
                       </div>
                       <span className={`text-xs font-bold px-2 py-0.5 rounded ${c.auto ? "bg-green-900 text-green-300" : "bg-gray-700 text-gray-400"}`}>
-                        {c.auto ? (isDE ? "Automatisch" : "Automated") : (isDE ? "Semi-auto" : "Semi-auto")}
+                        {c.auto ? (pick(isDE, "Automatisch", "Automated")) : (pick(isDE, "Semi-auto", "Semi-auto"))}
                       </span>
                     </div>
                     <p className="text-xs text-gray-400">{c.impl}</p>
@@ -124,7 +119,7 @@ export default function AiComplianceAutomationPage({ params }: { params: { lang:
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">
-            {isDE ? "Konfiguration" : "Configuration"}
+            {pick(isDE, "Konfiguration", "Configuration")}
           </h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm overflow-x-auto">
             <pre>{`# moltbot.compliance.yaml
@@ -157,7 +152,7 @@ compliance:
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-3">
             {FAQ.map((f, i) => (
               <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
@@ -169,23 +164,23 @@ compliance:
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further Resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further Resources")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/solutions/eu-ai-act-compliance`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">EU AI Act Guide</div>
-              <div className="text-sm text-gray-300">{isDE ? "Vollständiger Compliance-Leitfaden" : "Full compliance guide"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Vollständiger Compliance-Leitfaden", "Full compliance guide")}</div>
             </a>
             <a href={`/${locale}/solutions/soc2-type-ii-automation`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">SOC 2 Type II</div>
-              <div className="text-sm text-gray-300">{isDE ? "TSC-Mapping und Evidenz" : "TSC mapping and evidence"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "TSC-Mapping und Evidenz", "TSC mapping and evidence")}</div>
             </a>
             <a href={`/${locale}/moltbot/ai-agent-security`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Agent Security Hub</div>
-              <div className="text-sm text-gray-300">{isDE ? "Art. 15 Cybersecurity" : "Art. 15 cybersecurity"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Art. 15 Cybersecurity", "Art. 15 cybersecurity")}</div>
             </a>
             <a href={`/${locale}/solutions/nist-csf-compliance`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">NIST CSF 2.0</div>
-              <div className="text-sm text-gray-300">{isDE ? "Ergänzendes Framework" : "Complementary framework"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Ergänzendes Framework", "Complementary framework")}</div>
             </a>
           </div>
         </section>

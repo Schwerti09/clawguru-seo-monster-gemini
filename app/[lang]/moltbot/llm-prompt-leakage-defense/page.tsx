@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/moltbot/llm-prompt-leakage-defense"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "LLM Prompt Leakage Defense: LLM-Prompt-Leakage-Defense | ClawGuru Moltbot"
-    : "LLM Prompt Leakage Defense: LLM Prompt Leakage Defense | ClawGuru Moltbot"
-  const description = isDE
-    ? "LLM-Prompt-Leakage-Defense: System Prompt Protection, Prompt Injection Detection, Context Isolation und Output Scrubbing für LLM-Prompt-Leakage-Defense."
-    : "LLM prompt leakage defense: system prompt protection, prompt injection detection, context isolation and output scrubbing for LLM prompt leakage defense."
+  const title = pick(isDE, "LLM Prompt Leakage Defense: LLM-Prompt-Leakage-Defense | ClawGuru Moltbot", "LLM Prompt Leakage Defense: LLM Prompt Leakage Defense | ClawGuru Moltbot")
+  const description = pick(isDE, "LLM-Prompt-Leakage-Defense: System Prompt Protection, Prompt Injection Detection, Context Isolation und Output Scrubbing für LLM-Prompt-Leakage-Defense.", "LLM prompt leakage defense: system prompt protection, prompt injection detection, context isolation and output scrubbing for LLM prompt leakage defense.")
   return {
     title, description,
     keywords: ["llm prompt leakage defense", "system prompt protection", "prompt injection detection", "context isolation", "output scrubbing", "moltbot prompt leakage"],
@@ -165,17 +162,15 @@ export default function LlmPromptLeakageDefensePage({ params }: { params: { lang
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "Prompt-Leakage-Defense-Guide für eigene LLM-Systeme." : "Prompt leakage defense guide for your own LLM systems."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Prompt-Leakage-Defense-Guide für eigene LLM-Systeme.", "Prompt leakage defense guide for your own LLM systems.")}
         </div>
         <div className="mb-3"><span className="text-xs font-bold uppercase tracking-widest text-cyan-400">Moltbot · Batch 28</span></div>
-        <h1 className="text-4xl font-bold mb-4 text-gray-100">{isDE ? "LLM Prompt Leakage Defense" : "LLM Prompt Leakage Defense"}</h1>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">{pick(isDE, "LLM Prompt Leakage Defense", "LLM Prompt Leakage Defense")}</h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "Prompt Leakage gibt Angreifern die Blaupause für bessere Angriffe — dein System-Prompt ist dein geistiges Eigentum. Vier Kontrollen: System Prompt Protection, Prompt Injection Detection, Context Isolation und Output Scrubbing."
-            : "Prompt leakage gives attackers the blueprint for better attacks — your system prompt is your intellectual property. Four controls: system prompt protection, prompt injection detection, context isolation and output scrubbing."}
+          {pick(isDE, "Prompt Leakage gibt Angreifern die Blaupause für bessere Angriffe — dein System-Prompt ist dein geistiges Eigentum. Vier Kontrollen: System Prompt Protection, Prompt Injection Detection, Context Isolation und Output Scrubbing.", "Prompt leakage gives attackers the blueprint for better attacks — your system prompt is your intellectual property. Four controls: system prompt protection, prompt injection detection, context isolation and output scrubbing.")}
         </p>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "4 Prompt-Leakage-Defense-Kontrollen" : "4 Prompt Leakage Defense Controls"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "4 Prompt-Leakage-Defense-Kontrollen", "4 Prompt Leakage Defense Controls")}</h2>
           <div className="space-y-5">
             {CONTROLS.map((c) => (
               <div key={c.id} className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
@@ -192,7 +187,7 @@ export default function LlmPromptLeakageDefensePage({ params }: { params: { lang
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-3">
             {FAQ.map((f, i) => (
               <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
@@ -203,23 +198,23 @@ export default function LlmPromptLeakageDefensePage({ params }: { params: { lang
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further Resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further Resources")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/moltbot/llm-prompt-injection-detection`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM Prompt Injection Detection</div>
-              <div className="text-sm text-gray-300">{isDE ? "Injection-Detection" : "Injection detection"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Injection-Detection", "Injection detection")}</div>
             </a>
             <a href={`/${locale}/moltbot/llm-context-poisoning-defense`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM Context Poisoning Defense</div>
-              <div className="text-sm text-gray-300">{isDE ? "Context-Poisoning" : "Context poisoning"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Context-Poisoning", "Context poisoning")}</div>
             </a>
             <a href={`/${locale}/moltbot/llm-output-filtering`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM Output Filtering</div>
-              <div className="text-sm text-gray-300">{isDE ? "Output-Filtering" : "Output filtering"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Output-Filtering", "Output filtering")}</div>
             </a>
             <a href={`/${locale}/moltbot/ai-agent-security`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Agent Security</div>
-              <div className="text-sm text-gray-300">{isDE ? "Security-Overview" : "Security overview"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Security-Overview", "Security overview")}</div>
             </a>
           </div>
         </section>

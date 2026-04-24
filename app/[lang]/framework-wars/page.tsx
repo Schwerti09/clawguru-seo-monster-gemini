@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
 import { Code, Zap, Shield, TrendingUp } from "lucide-react"
+import { pick } from "@/lib/i18n-pick"
 
 interface PageProps { params: { lang: string } }
 
@@ -10,10 +11,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const pageUrl = `${SITE_URL}/${locale}/framework-wars`
   const isDE = locale === "de"
-  const title = isDE ? "Framework Wars | ClawGuru" : "Framework Wars | ClawGuru"
-  const description = isDE 
-    ? "React vs Vue vs Angular — Der ultimative Framework-Vergleich" 
-    : "React vs Vue vs Angular — The ultimate framework comparison"
+  const title = pick(isDE, "Framework Wars | ClawGuru", "Framework Wars | ClawGuru")
+  const description = pick(isDE, "React vs Vue vs Angular — Der ultimative Framework-Vergleich", "React vs Vue vs Angular — The ultimate framework comparison")
   return {
     title,
     description,
@@ -68,12 +67,10 @@ export default function FrameworkWarsPage({ params }: PageProps) {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-4 text-gray-100">
-            {isDE ? "Framework Wars" : "Framework Wars"}
+            {pick(isDE, "Framework Wars", "Framework Wars")}
           </h1>
           <p className="text-lg text-gray-300">
-            {isDE 
-              ? "React vs Vue vs Angular — Der ultimative Framework-Vergleich" 
-              : "React vs Vue vs Angular — The ultimate framework comparison"}
+            {pick(isDE, "React vs Vue vs Angular — Der ultimative Framework-Vergleich", "React vs Vue vs Angular — The ultimate framework comparison")}
           </p>
         </div>
 
@@ -82,11 +79,11 @@ export default function FrameworkWarsPage({ params }: PageProps) {
           <table className="w-full">
             <thead>
               <tr className="border-b border-gray-700">
-                <th className="text-left text-gray-400 py-3 px-4">{isDE ? "Framework" : "Framework"}</th>
-                <th className="text-center text-gray-400 py-3 px-4">{isDE ? "Score" : "Score"}</th>
-                <th className="text-center text-gray-400 py-3 px-4">{isDE ? "Beliebtheit" : "Popularity"}</th>
-                <th className="text-center text-gray-400 py-3 px-4">{isDE ? "Performance" : "Performance"}</th>
-                <th className="text-center text-gray-400 py-3 px-4">{isDE ? "Sicherheit" : "Security"}</th>
+                <th className="text-left text-gray-400 py-3 px-4">{pick(isDE, "Framework", "Framework")}</th>
+                <th className="text-center text-gray-400 py-3 px-4">{pick(isDE, "Score", "Score")}</th>
+                <th className="text-center text-gray-400 py-3 px-4">{pick(isDE, "Beliebtheit", "Popularity")}</th>
+                <th className="text-center text-gray-400 py-3 px-4">{pick(isDE, "Performance", "Performance")}</th>
+                <th className="text-center text-gray-400 py-3 px-4">{pick(isDE, "Sicherheit", "Security")}</th>
               </tr>
             </thead>
             <tbody>
@@ -141,7 +138,7 @@ export default function FrameworkWarsPage({ params }: PageProps) {
               </div>
 
               <div className="mb-4">
-                <div className="text-sm text-zinc-500 mb-2">{isDE ? "Stärken" : "Strengths"}</div>
+                <div className="text-sm text-zinc-500 mb-2">{pick(isDE, "Stärken", "Strengths")}</div>
                 <div className="space-y-1">
                   {framework.strengths.map((strength, index) => (
                     <div key={index} className="flex items-start gap-2 text-sm text-green-400">
@@ -153,7 +150,7 @@ export default function FrameworkWarsPage({ params }: PageProps) {
               </div>
 
               <div>
-                <div className="text-sm text-zinc-500 mb-2">{isDE ? "Schwächen" : "Weaknesses"}</div>
+                <div className="text-sm text-zinc-500 mb-2">{pick(isDE, "Schwächen", "Weaknesses")}</div>
                 <div className="space-y-1">
                   {framework.weaknesses.map((weakness, index) => (
                     <div key={index} className="flex items-start gap-2 text-sm text-red-400">
@@ -173,10 +170,10 @@ export default function FrameworkWarsPage({ params }: PageProps) {
             <TrendingUp className="w-8 h-8 text-cyan-400" />
             <div>
               <div className="text-sm text-zinc-500 mb-1">
-                {isDE ? "Gewinner" : "Winner"}
+                {pick(isDE, "Gewinner", "Winner")}
               </div>
               <div className="text-xl font-bold text-gray-100">
-                React — {isDE ? "Beste Balance aus Ökosystem und Performance" : "Best balance of ecosystem and performance"}
+                React — {pick(isDE, "Beste Balance aus Ökosystem und Performance", "Best balance of ecosystem and performance")}
               </div>
             </div>
           </div>
@@ -184,9 +181,7 @@ export default function FrameworkWarsPage({ params }: PageProps) {
 
         {/* Trust Notice */}
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mt-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE 
-            ? "Framework Wars sind subjektive Bewertungen basierend auf öffentlichen Daten." 
-            : "Framework wars are subjective ratings based on public data."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Framework Wars sind subjektive Bewertungen basierend auf öffentlichen Daten.", "Framework wars are subjective ratings based on public data.")}
         </div>
       </div>
     </div>

@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/moltbot/ai-agent-communication-security"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "AI Agent Communication Security: KI-Agenten-Kommunikationssicherheit | ClawGuru Moltbot"
-    : "AI Agent Communication Security: AI Agent Communication Security | ClawGuru Moltbot"
-  const description = isDE
-    ? "KI-Agenten-Kommunikationssicherheit: Agent-to-Agent Encryption, Message Validation, Channel Security und Communication Auditing für Multi-Agent-Systeme."
-    : "AI agent communication security: agent-to-agent encryption, message validation, channel security and communication auditing for multi-agent systems."
+  const title = pick(isDE, "AI Agent Communication Security: KI-Agenten-Kommunikationssicherheit | ClawGuru Moltbot", "AI Agent Communication Security: AI Agent Communication Security | ClawGuru Moltbot")
+  const description = pick(isDE, "KI-Agenten-Kommunikationssicherheit: Agent-to-Agent Encryption, Message Validation, Channel Security und Communication Auditing für Multi-Agent-Systeme.", "AI agent communication security: agent-to-agent encryption, message validation, channel security and communication auditing for multi-agent systems.")
   return {
     title, description,
     keywords: ["ai agent communication security", "multi-agent security", "agent-to-agent encryption", "message validation", "agent channel security", "moltbot communication"],
@@ -194,17 +191,15 @@ export default function AiAgentCommunicationSecurityPage({ params }: { params: {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "Agent-Communication-Security-Guide für eigene KI-Systeme." : "Agent communication security guide for your own AI systems."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Agent-Communication-Security-Guide für eigene KI-Systeme.", "Agent communication security guide for your own AI systems.")}
         </div>
         <div className="mb-3"><span className="text-xs font-bold uppercase tracking-widest text-cyan-400">Moltbot · Batch 17</span></div>
-        <h1 className="text-4xl font-bold mb-4 text-gray-100">{isDE ? "AI Agent Communication Security" : "AI Agent Communication Security"}</h1>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">{pick(isDE, "AI Agent Communication Security", "AI Agent Communication Security")}</h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "Multi-Agent-Systeme ohne Communication Security sind Einfallstore für Interception und Tampering. Vier Kontrollen: Agent-to-Agent Encryption, Message Validation, Channel Security und Auditing."
-            : "Multi-agent systems without communication security are entry points for interception and tampering. Four controls: agent-to-agent encryption, message validation, channel security and auditing."}
+          {pick(isDE, "Multi-Agent-Systeme ohne Communication Security sind Einfallstore für Interception und Tampering. Vier Kontrollen: Agent-to-Agent Encryption, Message Validation, Channel Security und Auditing.", "Multi-agent systems without communication security are entry points for interception and tampering. Four controls: agent-to-agent encryption, message validation, channel security and auditing.")}
         </p>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "4 Agent-Communication-Security-Kontrollen" : "4 Agent Communication Security Controls"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "4 Agent-Communication-Security-Kontrollen", "4 Agent Communication Security Controls")}</h2>
           <div className="space-y-5">
             {CONTROLS.map((c) => (
               <div key={c.id} className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
@@ -221,7 +216,7 @@ export default function AiAgentCommunicationSecurityPage({ params }: { params: {
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-3">
             {FAQ.map((f, i) => (
               <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
@@ -232,23 +227,23 @@ export default function AiAgentCommunicationSecurityPage({ params }: { params: {
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further Resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further Resources")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/moltbot/llm-api-security`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM API Security</div>
-              <div className="text-sm text-gray-300">{isDE ? "Channel-Security" : "Channel security"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Channel-Security", "Channel security")}</div>
             </a>
             <a href={`/${locale}/moltbot/ai-agent-rbac`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Agent RBAC</div>
-              <div className="text-sm text-gray-300">{isDE ? "Agent-Authentication" : "Agent authentication"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Agent-Authentication", "Agent authentication")}</div>
             </a>
             <a href={`/${locale}/moltbot/ai-agent-audit-logging`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Agent Audit Logging</div>
-              <div className="text-sm text-gray-300">{isDE ? "Communication-Auditing" : "Communication auditing"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Communication-Auditing", "Communication auditing")}</div>
             </a>
             <a href={`/${locale}/moltbot/agentic-workflow-security`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Agentic Workflow Security</div>
-              <div className="text-sm text-gray-300">{isDE ? "Multi-Agent-Security" : "Multi-agent security"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Multi-Agent-Security", "Multi-agent security")}</div>
             </a>
           </div>
         </section>

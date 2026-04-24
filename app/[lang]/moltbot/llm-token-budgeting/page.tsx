@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/moltbot/llm-token-budgeting"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "LLM Token Budgeting: LLM-Token-Budgeting | ClawGuru Moltbot"
-    : "LLM Token Budgeting: LLM Token Budgeting | ClawGuru Moltbot"
-  const description = isDE
-    ? "LLM-Token-Budgeting: Token Quota Management, Cost Control, Token Allocation und Budget Enforcement für LLM-Kostenoptimierung."
-    : "LLM token budgeting: token quota management, cost control, token allocation and budget enforcement for LLM cost optimisation."
+  const title = pick(isDE, "LLM Token Budgeting: LLM-Token-Budgeting | ClawGuru Moltbot", "LLM Token Budgeting: LLM Token Budgeting | ClawGuru Moltbot")
+  const description = pick(isDE, "LLM-Token-Budgeting: Token Quota Management, Cost Control, Token Allocation und Budget Enforcement für LLM-Kostenoptimierung.", "LLM token budgeting: token quota management, cost control, token allocation and budget enforcement for LLM cost optimisation.")
   return {
     title, description,
     keywords: ["llm token budgeting", "llm cost control", "token quota management", "llm cost optimisation", "token allocation", "moltbot budgeting"],
@@ -211,17 +208,15 @@ export default function LlmTokenBudgetingPage({ params }: { params: { lang: stri
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "Token-Budgeting-Guide für eigene KI-Systeme." : "Token budgeting guide for your own AI systems."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Token-Budgeting-Guide für eigene KI-Systeme.", "Token budgeting guide for your own AI systems.")}
         </div>
         <div className="mb-3"><span className="text-xs font-bold uppercase tracking-widest text-cyan-400">Moltbot · Batch 16</span></div>
-        <h1 className="text-4xl font-bold mb-4 text-gray-100">{isDE ? "LLM Token Budgeting" : "LLM Token Budgeting"}</h1>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">{pick(isDE, "LLM Token Budgeting", "LLM Token Budgeting")}</h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "LLM-Token-Kosten können schnell explodieren — ohne Budgeting können Kosten unkontrolliert steigen. Vier Kontrollen: Quota Management, Cost Control, Token Allocation und Budget Enforcement."
-            : "LLM token costs can explode quickly — without budgeting, costs can rise uncontrollably. Four controls: quota management, cost control, token allocation and budget enforcement."}
+          {pick(isDE, "LLM-Token-Kosten können schnell explodieren — ohne Budgeting können Kosten unkontrolliert steigen. Vier Kontrollen: Quota Management, Cost Control, Token Allocation und Budget Enforcement.", "LLM token costs can explode quickly — without budgeting, costs can rise uncontrollably. Four controls: quota management, cost control, token allocation and budget enforcement.")}
         </p>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "4 Token-Budgeting-Kontrollen" : "4 Token Budgeting Controls"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "4 Token-Budgeting-Kontrollen", "4 Token Budgeting Controls")}</h2>
           <div className="space-y-5">
             {BUDGET_CONTROLS.map((c) => (
               <div key={c.id} className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
@@ -238,7 +233,7 @@ export default function LlmTokenBudgetingPage({ params }: { params: { lang: stri
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-3">
             {FAQ.map((f, i) => (
               <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
@@ -249,23 +244,23 @@ export default function LlmTokenBudgetingPage({ params }: { params: { lang: stri
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further Resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further Resources")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/moltbot/llm-context-window-security`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM Context Window Security</div>
-              <div className="text-sm text-gray-300">{isDE ? "Token-Budget-Allocation" : "Token budget allocation"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Token-Budget-Allocation", "Token budget allocation")}</div>
             </a>
             <a href={`/${locale}/moltbot/ai-agent-rate-limiting`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Agent Rate Limiting</div>
-              <div className="text-sm text-gray-300">{isDE ? "Token-Based-Rate-Limiting" : "Token-based rate limiting"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Token-Based-Rate-Limiting", "Token-based rate limiting")}</div>
             </a>
             <a href={`/${locale}/moltbot/llm-observability`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM Observability</div>
-              <div className="text-sm text-gray-300">{isDE ? "Cost-Monitoring" : "Cost monitoring"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Cost-Monitoring", "Cost monitoring")}</div>
             </a>
             <a href={`/${locale}/pricing`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Pricing</div>
-              <div className="text-sm text-gray-300">{isDE ? "Token-Pläne" : "Token plans"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Token-Pläne", "Token plans")}</div>
             </a>
           </div>
         </section>

@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/moltbot/llm-api-security"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "LLM API Security: LLM-API-Sicherheit | ClawGuru Moltbot"
-    : "LLM API Security: LLM API Security | ClawGuru Moltbot"
-  const description = isDE
-    ? "LLM-API-Security: API Key Management, Request Authentication, API Gateway Hardening und API Rate Limiting für LLM-API-Endpunkte."
-    : "LLM API security: API key management, request authentication, API gateway hardening and API rate limiting for LLM API endpoints."
+  const title = pick(isDE, "LLM API Security: LLM-API-Sicherheit | ClawGuru Moltbot", "LLM API Security: LLM API Security | ClawGuru Moltbot")
+  const description = pick(isDE, "LLM-API-Security: API Key Management, Request Authentication, API Gateway Hardening und API Rate Limiting für LLM-API-Endpunkte.", "LLM API security: API key management, request authentication, API gateway hardening and API rate limiting for LLM API endpoints.")
   return {
     title, description,
     keywords: ["llm api security", "api key management", "llm api authentication", "api gateway security", "api rate limiting", "moltbot api security"],
@@ -208,17 +205,15 @@ export default function LlmApiSecurityPage({ params }: { params: { lang: string 
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "API-Security-Guide für eigene KI-Systeme." : "API security guide for your own AI systems."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "API-Security-Guide für eigene KI-Systeme.", "API security guide for your own AI systems.")}
         </div>
         <div className="mb-3"><span className="text-xs font-bold uppercase tracking-widest text-cyan-400">Moltbot · Batch 16</span></div>
-        <h1 className="text-4xl font-bold mb-4 text-gray-100">{isDE ? "LLM API Security" : "LLM API Security"}</h1>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">{pick(isDE, "LLM API Security", "LLM API Security")}</h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "LLM-APIs sind Einfallstore für Angriffe — ohne Security können API-Keys gestohlen werden und Requests manipuliert werden. Vier Kontrollen: Key Management, Request Authentication, Gateway Hardening und Rate Limiting."
-            : "LLM APIs are entry points for attacks — without security, API keys can be stolen and requests manipulated. Four controls: key management, request authentication, gateway hardening and rate limiting."}
+          {pick(isDE, "LLM-APIs sind Einfallstore für Angriffe — ohne Security können API-Keys gestohlen werden und Requests manipuliert werden. Vier Kontrollen: Key Management, Request Authentication, Gateway Hardening und Rate Limiting.", "LLM APIs are entry points for attacks — without security, API keys can be stolen and requests manipulated. Four controls: key management, request authentication, gateway hardening and rate limiting.")}
         </p>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "4 API-Security-Kontrollen" : "4 API Security Controls"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "4 API-Security-Kontrollen", "4 API Security Controls")}</h2>
           <div className="space-y-5">
             {CONTROLS.map((c) => (
               <div key={c.id} className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
@@ -235,7 +230,7 @@ export default function LlmApiSecurityPage({ params }: { params: { lang: string 
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-3">
             {FAQ.map((f, i) => (
               <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
@@ -246,23 +241,23 @@ export default function LlmApiSecurityPage({ params }: { params: { lang: string 
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further Resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further Resources")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/moltbot/llm-api-gateway-hardening`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM API Gateway Hardening</div>
-              <div className="text-sm text-gray-300">{isDE ? "Gateway-Security" : "Gateway security"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Gateway-Security", "Gateway security")}</div>
             </a>
             <a href={`/${locale}/moltbot/ai-agent-rate-limiting`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Agent Rate Limiting</div>
-              <div className="text-sm text-gray-300">{isDE ? "Token-Based-Limits" : "Token-based limits"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Token-Based-Limits", "Token-based limits")}</div>
             </a>
             <a href={`/${locale}/moltbot/api-key-leak-response-playbook`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">API Key Leak Response Playbook</div>
-              <div className="text-sm text-gray-300">{isDE ? "Key-Rotation" : "Key rotation"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Key-Rotation", "Key rotation")}</div>
             </a>
             <a href={`/${locale}/securitycheck`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Security Check</div>
-              <div className="text-sm text-gray-300">{isDE ? "API-Security-Check" : "API security check"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "API-Security-Check", "API security check")}</div>
             </a>
           </div>
         </section>

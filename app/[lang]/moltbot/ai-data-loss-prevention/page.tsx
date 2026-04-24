@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/moltbot/ai-data-loss-prevention"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "AI Data Loss Prevention: Datenverlust durch LLMs verhindern | ClawGuru Moltbot"
-    : "AI Data Loss Prevention: Prevent Data Leakage via LLMs | ClawGuru Moltbot"
-  const description = isDE
-    ? "KI-DLP für Moltbot: PII-Erkennung in Prompts, Secrets-Scanning vor LLM-Übermittlung, Output-Exfiltrations-Erkennung und GDPR-konforme Datenmaskierung für LLM-Systeme."
-    : "AI DLP for Moltbot: PII detection in prompts, secrets scanning before LLM submission, output exfiltration detection and GDPR-compliant data masking for LLM systems."
+  const title = pick(isDE, "AI Data Loss Prevention: Datenverlust durch LLMs verhindern | ClawGuru Moltbot", "AI Data Loss Prevention: Prevent Data Leakage via LLMs | ClawGuru Moltbot")
+  const description = pick(isDE, "KI-DLP für Moltbot: PII-Erkennung in Prompts, Secrets-Scanning vor LLM-Übermittlung, Output-Exfiltrations-Erkennung und GDPR-konforme Datenmaskierung für LLM-Systeme.", "AI DLP for Moltbot: PII detection in prompts, secrets scanning before LLM submission, output exfiltration detection and GDPR-compliant data masking for LLM systems.")
   return {
     title, description,
     keywords: ["ai data loss prevention", "llm dlp", "ai dlp moltbot", "pii detection llm", "secrets scanning llm", "ai data exfiltration prevention"],
@@ -193,17 +190,15 @@ export default function AiDataLossPreventionPage({ params }: { params: { lang: s
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "DLP-Guide für eigene KI-Systeme. Kein Angriffsanleitung." : "DLP guide for your own AI systems. Not an attack guide."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "DLP-Guide für eigene KI-Systeme. Kein Angriffsanleitung.", "DLP guide for your own AI systems. Not an attack guide.")}
         </div>
         <div className="mb-3"><span className="text-xs font-bold uppercase tracking-widest text-cyan-400">Moltbot · Batch 12</span></div>
-        <h1 className="text-4xl font-bold mb-4 text-gray-100">{isDE ? "AI Data Loss Prevention" : "AI Data Loss Prevention"}</h1>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">{pick(isDE, "AI Data Loss Prevention", "AI Data Loss Prevention")}</h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "LLMs sind undichte Stellen für Unternehmensdaten — Nutzer schicken PII, Secrets und vertrauliche Dokumente in Prompts. Vier DLP-Schichten: Input-Scan, Output-Exfiltrations-Erkennung, RAG-Klassifizierung und GDPR-konformes Audit-Log."
-            : "LLMs are data leakage points for enterprise data — users send PII, secrets and confidential documents in prompts. Four DLP layers: input scan, output exfiltration detection, RAG classification and GDPR-compliant audit log."}
+          {pick(isDE, "LLMs sind undichte Stellen für Unternehmensdaten — Nutzer schicken PII, Secrets und vertrauliche Dokumente in Prompts. Vier DLP-Schichten: Input-Scan, Output-Exfiltrations-Erkennung, RAG-Klassifizierung und GDPR-konformes Audit-Log.", "LLMs are data leakage points for enterprise data — users send PII, secrets and confidential documents in prompts. Four DLP layers: input scan, output exfiltration detection, RAG classification and GDPR-compliant audit log.")}
         </p>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "4 DLP-Schichten" : "4 DLP Layers"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "4 DLP-Schichten", "4 DLP Layers")}</h2>
           <div className="space-y-5">
             {DLP_LAYERS.map((c) => (
               <div key={c.id} className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
@@ -220,7 +215,7 @@ export default function AiDataLossPreventionPage({ params }: { params: { lang: s
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-3">
             {FAQ.map((f, i) => (
               <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
@@ -231,23 +226,23 @@ export default function AiDataLossPreventionPage({ params }: { params: { lang: s
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further Resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further Resources")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/moltbot/llm-output-validation`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM Output Validation</div>
-              <div className="text-sm text-gray-300">{isDE ? "Output-Validierung & PII-Scan" : "Output validation & PII scan"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Output-Validierung & PII-Scan", "Output validation & PII scan")}</div>
             </a>
             <a href={`/${locale}/moltbot/ai-agent-audit-logging`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Agent Audit Logging</div>
-              <div className="text-sm text-gray-300">{isDE ? "DLP-Events auditieren" : "Audit DLP events"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "DLP-Events auditieren", "Audit DLP events")}</div>
             </a>
             <a href={`/${locale}/solutions/gdpr-ai-data-processing`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">GDPR AI Data Processing</div>
-              <div className="text-sm text-gray-300">{isDE ? "DSGVO-konforme KI" : "GDPR-compliant AI"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "DSGVO-konforme KI", "GDPR-compliant AI")}</div>
             </a>
             <a href={`/${locale}/moltbot/llm-context-isolation`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM Context Isolation</div>
-              <div className="text-sm text-gray-300">{isDE ? "Mandanten-Datentrennung" : "Tenant data separation"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Mandanten-Datentrennung", "Tenant data separation")}</div>
             </a>
           </div>
         </section>

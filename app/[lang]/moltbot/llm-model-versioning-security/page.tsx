@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/moltbot/llm-model-versioning-security"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "LLM Model Versioning Security: LLM-Modell-Versioning-Security | ClawGuru Moltbot"
-    : "LLM Model Versioning Security: LLM Model Versioning Security | ClawGuru Moltbot"
-  const description = isDE
-    ? "LLM-Modell-Versioning-Security: Version Authentication, Rollback Security, Version Access Control und Version Audit Logging für LLM-Modell-Versioning-Security."
-    : "LLM model versioning security: version authentication, rollback security, version access control and version audit logging for LLM model versioning security."
+  const title = pick(isDE, "LLM Model Versioning Security: LLM-Modell-Versioning-Security | ClawGuru Moltbot", "LLM Model Versioning Security: LLM Model Versioning Security | ClawGuru Moltbot")
+  const description = pick(isDE, "LLM-Modell-Versioning-Security: Version Authentication, Rollback Security, Version Access Control und Version Audit Logging für LLM-Modell-Versioning-Security.", "LLM model versioning security: version authentication, rollback security, version access control and version audit logging for LLM model versioning security.")
   return {
     title, description,
     keywords: ["llm model versioning security", "version authentication", "rollback security", "version access control", "version audit logging", "moltbot versioning"],
@@ -164,17 +161,15 @@ export default function LlmModelVersioningSecurityPage({ params }: { params: { l
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "Versioning-Security-Guide für eigene KI-Systeme." : "Versioning security guide for your own AI systems."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Versioning-Security-Guide für eigene KI-Systeme.", "Versioning security guide for your own AI systems.")}
         </div>
         <div className="mb-3"><span className="text-xs font-bold uppercase tracking-widest text-cyan-400">Moltbot · Batch 25</span></div>
-        <h1 className="text-4xl font-bold mb-4 text-gray-100">{isDE ? "LLM Model Versioning Security" : "LLM Model Versioning Security"}</h1>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">{pick(isDE, "LLM Model Versioning Security", "LLM Model Versioning Security")}</h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "LLM-Modelle ohne Versioning-Security sind anfällig für Versioning-Attacken — ohne Versioning-Security bleibt Versioning ungeschützt. Vier Kontrollen: Version Authentication, Rollback Security, Version Access Control und Version Audit Logging."
-            : "LLM models without versioning security are vulnerable to versioning attacks — without versioning security, versioning remains unprotected. Four controls: version authentication, rollback security, version access control and version audit logging."}
+          {pick(isDE, "LLM-Modelle ohne Versioning-Security sind anfällig für Versioning-Attacken — ohne Versioning-Security bleibt Versioning ungeschützt. Vier Kontrollen: Version Authentication, Rollback Security, Version Access Control und Version Audit Logging.", "LLM models without versioning security are vulnerable to versioning attacks — without versioning security, versioning remains unprotected. Four controls: version authentication, rollback security, version access control and version audit logging.")}
         </p>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "4 Versioning-Security-Kontrollen" : "4 Versioning Security Controls"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "4 Versioning-Security-Kontrollen", "4 Versioning Security Controls")}</h2>
           <div className="space-y-5">
             {CONTROLS.map((c) => (
               <div key={c.id} className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
@@ -191,7 +186,7 @@ export default function LlmModelVersioningSecurityPage({ params }: { params: { l
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-3">
             {FAQ.map((f, i) => (
               <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
@@ -202,23 +197,23 @@ export default function LlmModelVersioningSecurityPage({ params }: { params: { l
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further Resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further Resources")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/moltbot/llm-model-extraction-defense`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM Model Extraction Defense</div>
-              <div className="text-sm text-gray-300">{isDE ? "Extraction-Defense" : "Extraction defense"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Extraction-Defense", "Extraction defense")}</div>
             </a>
             <a href={`/${locale}/moltbot/llm-model-watermarking`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM Model Watermarking</div>
-              <div className="text-sm text-gray-300">{isDE ? "Watermarking" : "Watermarking"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Watermarking", "Watermarking")}</div>
             </a>
             <a href={`/${locale}/moltbot/llm-api-security`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM API Security</div>
-              <div className="text-sm text-gray-300">{isDE ? "API-Security" : "API security"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "API-Security", "API security")}</div>
             </a>
             <a href={`/${locale}/moltbot/ai-agent-security`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Agent Security</div>
-              <div className="text-sm text-gray-300">{isDE ? "Versioning-Overview" : "Versioning overview"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Versioning-Overview", "Versioning overview")}</div>
             </a>
           </div>
         </section>

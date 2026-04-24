@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/moltbot/llm-prompt-injection-detection"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "LLM Prompt Injection Detection: Prompt-Injection-Erkennung | ClawGuru Moltbot"
-    : "LLM Prompt Injection Detection: Prompt Injection Detection | ClawGuru Moltbot"
-  const description = isDE
-    ? "LLM-Prompt-Injection-Detection: Pattern-Based Detection, LLM-Based Classification, Behavioral Analysis und Real-Time Scoring für Prompt-Injection-Attacken."
-    : "LLM prompt injection detection: pattern-based detection, LLM-based classification, behavioral analysis and real-time scoring for prompt injection attacks."
+  const title = pick(isDE, "LLM Prompt Injection Detection: Prompt-Injection-Erkennung | ClawGuru Moltbot", "LLM Prompt Injection Detection: Prompt Injection Detection | ClawGuru Moltbot")
+  const description = pick(isDE, "LLM-Prompt-Injection-Detection: Pattern-Based Detection, LLM-Based Classification, Behavioral Analysis und Real-Time Scoring für Prompt-Injection-Attacken.", "LLM prompt injection detection: pattern-based detection, LLM-based classification, behavioral analysis and real-time scoring for prompt injection attacks.")
   return {
     title, description,
     keywords: ["llm prompt injection detection", "jailbreak detection", "prompt injection classifier", "llm safety monitoring", "adversarial prompt detection", "moltbot injection detection"],
@@ -201,17 +198,15 @@ export default function LlmPromptInjectionDetectionPage({ params }: { params: { 
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "Prompt-Injection-Detection-Guide für eigene KI-Systeme." : "Prompt injection detection guide for your own AI systems."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Prompt-Injection-Detection-Guide für eigene KI-Systeme.", "Prompt injection detection guide for your own AI systems.")}
         </div>
         <div className="mb-3"><span className="text-xs font-bold uppercase tracking-widest text-cyan-400">Moltbot · Batch 15</span></div>
-        <h1 className="text-4xl font-bold mb-4 text-gray-100">{isDE ? "LLM Prompt Injection Detection" : "LLM Prompt Injection Detection"}</h1>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">{pick(isDE, "LLM Prompt Injection Detection", "LLM Prompt Injection Detection")}</h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "Prompt-Injection-Attacken sind die häufigste LLM-Bedrohung — ohne Detection können Jailbreaks unentdeckt bleiben. Vier Methoden: Pattern-Based, LLM-Based, Behavioral Analysis und Real-Time Scoring."
-            : "Prompt injection attacks are the most common LLM threat — without detection, jailbreaks can go undetected. Four methods: pattern-based, LLM-based, behavioral analysis and real-time scoring."}
+          {pick(isDE, "Prompt-Injection-Attacken sind die häufigste LLM-Bedrohung — ohne Detection können Jailbreaks unentdeckt bleiben. Vier Methoden: Pattern-Based, LLM-Based, Behavioral Analysis und Real-Time Scoring.", "Prompt injection attacks are the most common LLM threat — without detection, jailbreaks can go undetected. Four methods: pattern-based, LLM-based, behavioral analysis and real-time scoring.")}
         </p>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "4 Prompt-Injection-Detection-Methoden" : "4 Prompt Injection Detection Methods"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "4 Prompt-Injection-Detection-Methoden", "4 Prompt Injection Detection Methods")}</h2>
           <div className="space-y-5">
             {DETECTION_METHODS.map((m) => (
               <div key={m.id} className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
@@ -228,7 +223,7 @@ export default function LlmPromptInjectionDetectionPage({ params }: { params: { 
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-3">
             {FAQ.map((f, i) => (
               <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
@@ -239,23 +234,23 @@ export default function LlmPromptInjectionDetectionPage({ params }: { params: { 
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further Resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further Resources")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/moltbot/llm-jailbreak-defense`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM Jailbreak Defense</div>
-              <div className="text-sm text-gray-300">{isDE ? "Pattern-Based-Detection" : "Pattern-based detection"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Pattern-Based-Detection", "Pattern-based detection")}</div>
             </a>
             <a href={`/${locale}/moltbot/llm-prompt-hardening`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM Prompt Hardening</div>
-              <div className="text-sm text-gray-300">{isDE ? "System-Prompt-Schutz" : "System prompt protection"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "System-Prompt-Schutz", "System prompt protection")}</div>
             </a>
             <a href={`/${locale}/moltbot/ai-incident-response`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Incident Response</div>
-              <div className="text-sm text-gray-300">{isDE ? "Injection-Response" : "Injection response"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Injection-Response", "Injection response")}</div>
             </a>
             <a href={`/${locale}/moltbot/ai-agent-security`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Agent Security</div>
-              <div className="text-sm text-gray-300">{isDE ? "OWASP-LLM-Top-10" : "OWASP LLM Top 10"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "OWASP-LLM-Top-10", "OWASP LLM Top 10")}</div>
             </a>
           </div>
         </section>

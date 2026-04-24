@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
 import { Trophy, Medal, Crown, TrendingUp, Flame, Loader2 } from "lucide-react"
 import Link from "next/link"
+import { pick } from "@/lib/i18n-pick"
 
 interface PageProps { params: { lang: string } }
 
@@ -16,10 +17,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const pageUrl = `${SITE_URL}/${locale}${PATH}`
   const isDE = locale === "de"
-  const title = isDE ? "Roast Leaderboard | ClawGuru" : "Roast Leaderboard | ClawGuru"
-  const description = isDE
-    ? "Die Top-Performer der Roast-Community. Wer hat den höchsten Score?"
-    : "Top performers in the roast community. Who has the highest score?"
+  const title = pick(isDE, "Roast Leaderboard | ClawGuru", "Roast Leaderboard | ClawGuru")
+  const description = pick(isDE, "Die Top-Performer der Roast-Community. Wer hat den höchsten Score?", "Top performers in the roast community. Who has the highest score?")
   return {
     title,
     description,
@@ -73,16 +72,16 @@ export default async function LeaderboardPage({ params }: PageProps) {
               {stats ? `🏆 ${stats.totalRoasts.toLocaleString()} Teilnehmer weltweit` : <Loader2 className="w-4 h-4 animate-spin inline" />}
             </span>
           </div>
-          <h1 className="text-4xl font-bold text-gray-100 mb-2">{isDE ? "Roast Leaderboard" : "Roast Leaderboard"}</h1>
+          <h1 className="text-4xl font-bold text-gray-100 mb-2">{pick(isDE, "Roast Leaderboard", "Roast Leaderboard")}</h1>
           <p className="text-lg text-gray-300">
-            {isDE ? "Die Elite der Security-Community. Wer rostet am besten?" : "The elite of the security community. Who roasts best?"}
+            {pick(isDE, "Die Elite der Security-Community. Wer rostet am besten?", "The elite of the security community. Who roasts best?")}
           </p>
         </div>
 
         {/* Top 3 Podium */}
         {!stats || topUsers.length === 0 ? (
           <div className="text-center text-zinc-500 py-8 mb-10">
-            {isDE ? "Keine Daten verfügbar" : "No data available"}
+            {pick(isDE, "Keine Daten verfügbar", "No data available")}
           </div>
         ) : (
           <div className="grid md:grid-cols-3 gap-4 mb-10">
@@ -113,11 +112,11 @@ export default async function LeaderboardPage({ params }: PageProps) {
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4 text-gray-100 flex items-center gap-2">
             <Trophy className="w-5 h-5 text-amber-400" />
-            {isDE ? "Top 10" : "Top 10"}
+            {pick(isDE, "Top 10", "Top 10")}
           </h2>
           {!stats || topUsers.length === 0 ? (
             <div className="text-center text-zinc-500 py-8">
-              {isDE ? "Keine Daten verfügbar" : "No data available"}
+              {pick(isDE, "Keine Daten verfügbar", "No data available")}
             </div>
           ) : (
             <div className="bg-gray-800 rounded-xl border border-gray-700 overflow-hidden">
@@ -152,27 +151,27 @@ export default async function LeaderboardPage({ params }: PageProps) {
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4 text-gray-100 flex items-center gap-2">
             <TrendingUp className="w-5 h-5 text-green-400" />
-            {isDE ? "Rising Stars" : "Rising Stars"}
+            {pick(isDE, "Rising Stars", "Rising Stars")}
           </h2>
           <div className="bg-gray-800 p-6 rounded-lg border border-gray-700 text-center">
-            <p className="text-zinc-400 text-sm">{isDE ? "Rising Stars Tracking in Kürze verfügbar" : "Rising Stars tracking coming soon"}</p>
+            <p className="text-zinc-400 text-sm">{pick(isDE, "Rising Stars Tracking in Kürze verfügbar", "Rising Stars tracking coming soon")}</p>
           </div>
         </section>
 
         {/* CTA */}
         <div className="bg-gradient-to-r from-amber-900/40 to-red-900/40 border border-amber-700/50 rounded-xl p-6 text-center">
           <h3 className="text-xl font-bold text-amber-300 mb-2">
-            {isDE ? "Schaffst du es in die Top 10?" : "Can you make it to the Top 10?"}
+            {pick(isDE, "Schaffst du es in die Top 10?", "Can you make it to the Top 10?")}
           </h3>
           <p className="text-sm text-amber-200/70 mb-4">
-            {isDE ? "Roste deinen Stack und zeig, was du kannst" : "Roast your stack and show what you've got"}
+            {pick(isDE, "Roste deinen Stack und zeig, was du kannst", "Roast your stack and show what you've got")}
           </p>
           <Link 
             href={`/${locale}/roast-my-moltbot`}
             className="inline-flex items-center gap-2 px-6 py-3 bg-amber-600 hover:bg-amber-500 rounded-lg font-semibold text-white transition-colors"
           >
             <Flame className="w-5 h-5" />
-            {isDE ? "Jetzt rosten" : "Roast now"}
+            {pick(isDE, "Jetzt rosten", "Roast now")}
           </Link>
         </div>
       </div>

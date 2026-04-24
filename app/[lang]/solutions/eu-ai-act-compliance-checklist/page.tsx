@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/solutions/eu-ai-act-compliance-checklist"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "EU AI Act Compliance Checklist: EU-KI-Gesetz-Compliance-Checkliste 2026 | ClawGuru"
-    : "EU AI Act Compliance Checklist: EU AI Act Compliance Checklist 2026 | ClawGuru Solutions"
-  const description = isDE
-    ? "EU-KI-Gesetz-Compliance-Checkliste 2026: Risikoklassifizierung, Technische Dokumentation, Transparenzpflichten und Post-Market-Monitoring für Self-Hosted AI und LLMs."
-    : "EU AI Act compliance checklist 2026: risk classification, technical documentation, transparency obligations and post-market monitoring for self-hosted AI and LLMs."
+  const title = pick(isDE, "EU AI Act Compliance Checklist: EU-KI-Gesetz-Compliance-Checkliste 2026 | ClawGuru", "EU AI Act Compliance Checklist: EU AI Act Compliance Checklist 2026 | ClawGuru Solutions")
+  const description = pick(isDE, "EU-KI-Gesetz-Compliance-Checkliste 2026: Risikoklassifizierung, Technische Dokumentation, Transparenzpflichten und Post-Market-Monitoring für Self-Hosted AI und LLMs.", "EU AI Act compliance checklist 2026: risk classification, technical documentation, transparency obligations and post-market monitoring for self-hosted AI and LLMs.")
   return {
     title, description,
     keywords: ["eu ai act compliance checklist", "eu ai act 2026", "eu ai act llm", "ki-gesetz compliance", "eu ai act self-hosted", "high-risk ai systems"],
@@ -105,18 +102,16 @@ export default function EuAiActComplianceChecklistPage({ params }: { params: { l
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "EU-KI-Gesetz-Compliance-Guide für eigene KI-Systeme. Kein Rechtsrat." : "EU AI Act compliance guide for your own AI systems. Not legal advice."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "EU-KI-Gesetz-Compliance-Guide für eigene KI-Systeme. Kein Rechtsrat.", "EU AI Act compliance guide for your own AI systems. Not legal advice.")}
         </div>
         <div className="mb-3"><span className="text-xs font-bold uppercase tracking-widest text-cyan-400">Solutions · Batch 10</span></div>
-        <h1 className="text-4xl font-bold mb-4 text-gray-100">{isDE ? "EU AI Act Compliance Checklist 2026" : "EU AI Act Compliance Checklist 2026"}</h1>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">{pick(isDE, "EU AI Act Compliance Checklist 2026", "EU AI Act Compliance Checklist 2026")}</h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "Das EU-KI-Gesetz ist in Kraft — GPAI-Pflichten seit August 2025, High-Risk-AI seit August 2026. Diese Checkliste zeigt die sechs kritischen Compliance-Bereiche, die jedes KI-Team kennen muss."
-            : "The EU AI Act is in force — GPAI obligations since August 2025, high-risk AI since August 2026. This checklist covers the six critical compliance areas every AI team must know."}
+          {pick(isDE, "Das EU-KI-Gesetz ist in Kraft — GPAI-Pflichten seit August 2025, High-Risk-AI seit August 2026. Diese Checkliste zeigt die sechs kritischen Compliance-Bereiche, die jedes KI-Team kennen muss.", "The EU AI Act is in force — GPAI obligations since August 2025, high-risk AI since August 2026. This checklist covers the six critical compliance areas every AI team must know.")}
         </p>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "EU-KI-Gesetz Compliance-Checkliste" : "EU AI Act Compliance Checklist"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "EU-KI-Gesetz Compliance-Checkliste", "EU AI Act Compliance Checklist")}</h2>
           <div className="space-y-5">
             {CHECKLIST.map((section) => (
               <div key={section.id} className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
@@ -143,7 +138,7 @@ export default function EuAiActComplianceChecklistPage({ params }: { params: { l
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-3">
             {FAQ.map((f, i) => (
               <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
@@ -155,23 +150,23 @@ export default function EuAiActComplianceChecklistPage({ params }: { params: { l
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further Resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further Resources")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/solutions/iso27001-ai-systems-roadmap`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">ISO 27001 AI Systems Roadmap</div>
-              <div className="text-sm text-gray-300">{isDE ? "ISO-27001-Roadmap" : "ISO 27001 roadmap"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "ISO-27001-Roadmap", "ISO 27001 roadmap")}</div>
             </a>
             <a href={`/${locale}/solutions/nist-csf-ai-profile`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">NIST CSF AI Profile</div>
-              <div className="text-sm text-gray-300">{isDE ? "NIST-CSF für AI" : "NIST CSF for AI"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "NIST-CSF für AI", "NIST CSF for AI")}</div>
             </a>
             <a href={`/${locale}/moltbot/ai-regulatory-reporting`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Regulatory Reporting</div>
-              <div className="text-sm text-gray-300">{isDE ? "Regulatory-Reporting" : "Regulatory reporting"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Regulatory-Reporting", "Regulatory reporting")}</div>
             </a>
             <a href={`/${locale}/solutions/gdpr-breach-notification-ai`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">GDPR Breach Notification AI</div>
-              <div className="text-sm text-gray-300">{isDE ? "GDPR + EU AI Act" : "GDPR + EU AI Act"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "GDPR + EU AI Act", "GDPR + EU AI Act")}</div>
             </a>
           </div>
         </section>

@@ -7,6 +7,7 @@ import RoiCalculator from "@/components/roi/RoiCalculator"
 import AuthorBox from "@/components/seo/AuthorBox"
 import LastUpdated from "@/components/seo/LastUpdated"
 import { buildAuthoredArticleSchema } from "@/lib/seo/author"
+import { pick } from "@/lib/i18n-pick"
 
 interface PageProps { params: { lang: string } }
 
@@ -23,12 +24,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
   const pageUrl = `${SITE_URL}/${locale}${PATH}`
-  const title = isDE
-    ? "White-Label MSP Partnership — Starter, Pro, Agency | ClawGuru"
-    : "White-Label MSP Partnership — Starter, Pro, Agency | ClawGuru"
-  const description = isDE
-    ? "Vollständig gebrandete Security-Platform für MSPs. 3 Pricing-Tiers: Starter (€990/mo), Pro (€2.490/mo), Agency (Custom). Revenue-Share ab 30%, eigene Domain, Branded Trust-Pages."
-    : "Fully branded security platform for MSPs. 3 pricing tiers: Starter (€990/mo), Pro (€2,490/mo), Agency (Custom). Revenue share from 30%, your own domain, branded trust pages."
+  const title = pick(isDE, "White-Label MSP Partnership — Starter, Pro, Agency | ClawGuru", "White-Label MSP Partnership — Starter, Pro, Agency | ClawGuru")
+  const description = pick(isDE, "Vollständig gebrandete Security-Platform für MSPs. 3 Pricing-Tiers: Starter (€990/mo), Pro (€2.490/mo), Agency (Custom). Revenue-Share ab 30%, eigene Domain, Branded Trust-Pages.", "Fully branded security platform for MSPs. 3 pricing tiers: Starter (€990/mo), Pro (€2,490/mo), Agency (Custom). Revenue share from 30%, your own domain, branded trust pages.")
   return {
     title,
     description,
@@ -42,70 +39,70 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 const getPricingTiers = (isDE: boolean) => [
   {
-    name: isDE ? "Starter" : "Starter",
-    subtitle: isDE ? "Reseller" : "Reseller",
+    name: pick(isDE, "Starter", "Starter"),
+    subtitle: pick(isDE, "Reseller", "Reseller"),
     price: "€990",
-    period: isDE ? "/Monat" : "/month",
-    limit: isDE ? "bis 25 Clients" : "up to 25 clients",
+    period: pick(isDE, "/Monat", "/month"),
+    limit: pick(isDE, "bis 25 Clients", "up to 25 clients"),
     badge: null,
     features: [
-      isDE ? "Alle 4.2M+ Runbooks" : "All 4.2M+ runbooks",
-      isDE ? "Basis-Branding (Logo + Farbe)" : "Basic branding (logo + color)",
-      isDE ? "Multi-Client-Dashboard" : "Multi-client dashboard",
-      isDE ? "Email-Support (48h)" : "Email support (48h)",
-      isDE ? "Standard-Trust-Pages" : "Standard trust pages",
-      isDE ? "API-Access (Read-only)" : "API access (read-only)",
+      pick(isDE, "Alle 4.2M+ Runbooks", "All 4.2M+ runbooks"),
+      pick(isDE, "Basis-Branding (Logo + Farbe)", "Basic branding (logo + color)"),
+      pick(isDE, "Multi-Client-Dashboard", "Multi-client dashboard"),
+      pick(isDE, "Email-Support (48h)", "Email support (48h)"),
+      pick(isDE, "Standard-Trust-Pages", "Standard trust pages"),
+      pick(isDE, "API-Access (Read-only)", "API access (read-only)"),
     ],
     excluded: [
-      isDE ? "Eigene Domain" : "Your own domain",
-      isDE ? "Branded Trust-Pages" : "Branded trust pages",
-      isDE ? "Custom-Runbooks" : "Custom runbooks",
-      isDE ? "SSO/SAML" : "SSO/SAML",
-      isDE ? "Revenue-Share" : "Revenue share",
+      pick(isDE, "Eigene Domain", "Your own domain"),
+      pick(isDE, "Branded Trust-Pages", "Branded trust pages"),
+      pick(isDE, "Custom-Runbooks", "Custom runbooks"),
+      pick(isDE, "SSO/SAML", "SSO/SAML"),
+      pick(isDE, "Revenue-Share", "Revenue share"),
     ],
   },
   {
-    name: isDE ? "Pro" : "Pro",
-    subtitle: isDE ? "White-Label" : "White-Label",
+    name: pick(isDE, "Pro", "Pro"),
+    subtitle: pick(isDE, "White-Label", "White-Label"),
     price: "€2.490",
-    period: isDE ? "/Monat" : "/month",
-    limit: isDE ? "bis 100 Clients" : "up to 100 clients",
-    badge: isDE ? "BELIEBT" : "POPULAR",
+    period: pick(isDE, "/Monat", "/month"),
+    limit: pick(isDE, "bis 100 Clients", "up to 100 clients"),
+    badge: pick(isDE, "BELIEBT", "POPULAR"),
     features: [
-      isDE ? "Alle 4.2M+ Runbooks" : "All 4.2M+ runbooks",
-      isDE ? "Full-Branding (Logo + Farbe + Domain)" : "Full branding (logo + color + domain)",
-      isDE ? "Multi-Client-Dashboard" : "Multi-client dashboard",
-      isDE ? "Priority-Support (24h)" : "Priority support (24h)",
-      isDE ? "Branded Trust-Pages" : "Branded trust pages",
-      isDE ? "API-Access (Read/Write)" : "API access (read/write)",
-      isDE ? "SSO/SAML Integration" : "SSO/SAML integration",
-      isDE ? "Custom-Runbooks (5/mo)" : "Custom runbooks (5/mo)",
-      isDE ? "30% Revenue-Share" : "30% revenue share",
+      pick(isDE, "Alle 4.2M+ Runbooks", "All 4.2M+ runbooks"),
+      pick(isDE, "Full-Branding (Logo + Farbe + Domain)", "Full branding (logo + color + domain)"),
+      pick(isDE, "Multi-Client-Dashboard", "Multi-client dashboard"),
+      pick(isDE, "Priority-Support (24h)", "Priority support (24h)"),
+      pick(isDE, "Branded Trust-Pages", "Branded trust pages"),
+      pick(isDE, "API-Access (Read/Write)", "API access (read/write)"),
+      pick(isDE, "SSO/SAML Integration", "SSO/SAML integration"),
+      pick(isDE, "Custom-Runbooks (5/mo)", "Custom runbooks (5/mo)"),
+      pick(isDE, "30% Revenue-Share", "30% revenue share"),
     ],
     excluded: [
-      isDE ? "Dedicated Partner Manager" : "Dedicated partner manager",
-      isDE ? "Unlimited Custom-Runbooks" : "Unlimited custom runbooks",
-      isDE ? "White-Label API" : "White-label API",
+      pick(isDE, "Dedicated Partner Manager", "Dedicated partner manager"),
+      pick(isDE, "Unlimited Custom-Runbooks", "Unlimited custom runbooks"),
+      pick(isDE, "White-Label API", "White-label API"),
     ],
   },
   {
-    name: isDE ? "Agency" : "Agency",
-    subtitle: isDE ? "Full Resell" : "Full Resell",
-    price: isDE ? "Custom" : "Custom",
-    period: isDE ? "Revenue-Share" : "Revenue-share",
-    limit: isDE ? "unlimited Clients" : "unlimited clients",
-    badge: isDE ? "ENTERPRISE" : "ENTERPRISE",
+    name: pick(isDE, "Agency", "Agency"),
+    subtitle: pick(isDE, "Full Resell", "Full Resell"),
+    price: pick(isDE, "Custom", "Custom"),
+    period: pick(isDE, "Revenue-Share", "Revenue-share"),
+    limit: pick(isDE, "unlimited Clients", "unlimited clients"),
+    badge: pick(isDE, "ENTERPRISE", "ENTERPRISE"),
     features: [
-      isDE ? "Alle 4.2M+ Runbooks" : "All 4.2M+ runbooks",
-      isDE ? "Full-White-Label (eigene Domain + Brand)" : "Full white-label (your domain + brand)",
-      isDE ? "Multi-Client-Dashboard" : "Multi-client dashboard",
-      isDE ? "Dedicated Partner Manager" : "Dedicated partner manager",
-      isDE ? "Branded Trust-Pages" : "Branded trust pages",
-      isDE ? "White-Label API" : "White-label API",
-      isDE ? "SSO/SAML + SCIM" : "SSO/SAML + SCIM",
-      isDE ? "Unlimited Custom-Runbooks" : "Unlimited custom runbooks",
-      isDE ? "40% Revenue-Share" : "40% revenue share",
-      isDE ? "SLA-Garantie (99.9%)" : "SLA guarantee (99.9%)",
+      pick(isDE, "Alle 4.2M+ Runbooks", "All 4.2M+ runbooks"),
+      pick(isDE, "Full-White-Label (eigene Domain + Brand)", "Full white-label (your domain + brand)"),
+      pick(isDE, "Multi-Client-Dashboard", "Multi-client dashboard"),
+      pick(isDE, "Dedicated Partner Manager", "Dedicated partner manager"),
+      pick(isDE, "Branded Trust-Pages", "Branded trust pages"),
+      pick(isDE, "White-Label API", "White-label API"),
+      pick(isDE, "SSO/SAML + SCIM", "SSO/SAML + SCIM"),
+      pick(isDE, "Unlimited Custom-Runbooks", "Unlimited custom runbooks"),
+      pick(isDE, "40% Revenue-Share", "40% revenue share"),
+      pick(isDE, "SLA-Garantie (99.9%)", "SLA guarantee (99.9%)"),
     ],
     excluded: [],
   },
@@ -113,61 +110,61 @@ const getPricingTiers = (isDE: boolean) => [
 
 const getComparisonData = (isDE: boolean) => [
   {
-    feature: isDE ? "Eigene Domain" : "Your own domain",
+    feature: pick(isDE, "Eigene Domain", "Your own domain"),
     selfBranded: false,
     whiteLabel: true,
     fullResell: true,
   },
   {
-    feature: isDE ? "Full-Branding (Logo + Farbe)" : "Full branding (logo + color)",
+    feature: pick(isDE, "Full-Branding (Logo + Farbe)", "Full branding (logo + color)"),
     selfBranded: false,
     whiteLabel: true,
     fullResell: true,
   },
   {
-    feature: isDE ? "Branded Trust-Pages" : "Branded trust pages",
+    feature: pick(isDE, "Branded Trust-Pages", "Branded trust pages"),
     selfBranded: false,
     whiteLabel: true,
     fullResell: true,
   },
   {
-    feature: isDE ? "4.2M+ Runbooks" : "4.2M+ runbooks",
+    feature: pick(isDE, "4.2M+ Runbooks", "4.2M+ runbooks"),
     selfBranded: true,
     whiteLabel: true,
     fullResell: true,
   },
   {
-    feature: isDE ? "Multi-Client-Dashboard" : "Multi-client dashboard",
+    feature: pick(isDE, "Multi-Client-Dashboard", "Multi-client dashboard"),
     selfBranded: true,
     whiteLabel: true,
     fullResell: true,
   },
   {
-    feature: isDE ? "Custom-Runbooks" : "Custom runbooks",
+    feature: pick(isDE, "Custom-Runbooks", "Custom runbooks"),
     selfBranded: false,
-    whiteLabel: isDE ? "5/mo" : "5/mo",
-    fullResell: isDE ? "Unlimited" : "Unlimited",
+    whiteLabel: pick(isDE, "5/mo", "5/mo"),
+    fullResell: pick(isDE, "Unlimited", "Unlimited"),
   },
   {
-    feature: isDE ? "API-Access" : "API access",
-    selfBranded: isDE ? "Read-only" : "Read-only",
-    whiteLabel: isDE ? "Read/Write" : "Read/Write",
-    fullResell: isDE ? "White-Label" : "White-label",
+    feature: pick(isDE, "API-Access", "API access"),
+    selfBranded: pick(isDE, "Read-only", "Read-only"),
+    whiteLabel: pick(isDE, "Read/Write", "Read/Write"),
+    fullResell: pick(isDE, "White-Label", "White-label"),
   },
   {
-    feature: isDE ? "SSO/SAML" : "SSO/SAML",
+    feature: pick(isDE, "SSO/SAML", "SSO/SAML"),
     selfBranded: false,
     whiteLabel: true,
     fullResell: true,
   },
   {
-    feature: isDE ? "Revenue-Share" : "Revenue share",
+    feature: pick(isDE, "Revenue-Share", "Revenue share"),
     selfBranded: false,
-    whiteLabel: isDE ? "30%" : "30%",
-    fullResell: isDE ? "40%" : "40%",
+    whiteLabel: pick(isDE, "30%", "30%"),
+    fullResell: pick(isDE, "40%", "40%"),
   },
   {
-    feature: isDE ? "Dedicated Partner Manager" : "Dedicated partner manager",
+    feature: pick(isDE, "Dedicated Partner Manager", "Dedicated partner manager"),
     selfBranded: false,
     whiteLabel: false,
     fullResell: true,
@@ -181,12 +178,8 @@ export default function WhiteLabelPage({ params }: PageProps) {
   const comparisonData = getComparisonData(isDE)
 
   const articleSchema = buildAuthoredArticleSchema({
-    headline: isDE
-      ? "White-Label MSP Partnership — Starter, Pro, Agency Pricing"
-      : "White-Label MSP Partnership — Starter, Pro, Agency Pricing",
-    description: isDE
-      ? "Vollständig gebrandete Security-Platform für MSPs. 3 Pricing-Tiers: Starter (€990/mo), Pro (€2.490/mo), Agency (Custom). Revenue-Share ab 30%, eigene Domain, Branded Trust-Pages."
-      : "Fully branded security platform for MSPs. 3 pricing tiers: Starter (€990/mo), Pro (€2,490/mo), Agency (Custom). Revenue share from 30%, your own domain, branded trust pages.",
+    headline: pick(isDE, "White-Label MSP Partnership — Starter, Pro, Agency Pricing", "White-Label MSP Partnership — Starter, Pro, Agency Pricing"),
+    description: pick(isDE, "Vollständig gebrandete Security-Platform für MSPs. 3 Pricing-Tiers: Starter (€990/mo), Pro (€2.490/mo), Agency (Custom). Revenue-Share ab 30%, eigene Domain, Branded Trust-Pages.", "Fully branded security platform for MSPs. 3 pricing tiers: Starter (€990/mo), Pro (€2,490/mo), Agency (Custom). Revenue share from 30%, your own domain, branded trust pages."),
     url: `${SITE_URL}/${locale}${PATH}`,
     datePublished: PUBLISHED,
     dateModified: MODIFIED,
@@ -203,43 +196,39 @@ export default function WhiteLabelPage({ params }: PageProps) {
           <ol className="flex flex-wrap items-center gap-2">
             <li><Link href={`/${locale}`} className="hover:text-cyan-400">ClawGuru</Link></li>
             <li>/</li>
-            <li><Link href={`/${locale}/for-msps`} className="hover:text-cyan-400">{isDE ? "Für MSPs" : "For MSPs"}</Link></li>
+            <li><Link href={`/${locale}/for-msps`} className="hover:text-cyan-400">{pick(isDE, "Für MSPs", "For MSPs")}</Link></li>
             <li>/</li>
-            <li className="text-gray-300">{isDE ? "White-Label" : "White-Label"}</li>
+            <li className="text-gray-300">{pick(isDE, "White-Label", "White-Label")}</li>
           </ol>
         </nav>
 
         {/* HERO */}
         <section className="mb-14">
           <div className="inline-block mb-4 px-3 py-1 rounded-full text-xs font-semibold border border-purple-500/30 bg-purple-500/10 text-purple-300">
-            {isDE ? "Partnership Pricing" : "Partnership Pricing"}
+            {pick(isDE, "Partnership Pricing", "Partnership Pricing")}
           </div>
           <h1 className="text-4xl sm:text-5xl font-black text-white leading-tight mb-4">
-            {isDE
-              ? "White-Label MSP Partnership — Starter, Pro, Agency"
-              : "White-Label MSP Partnership — Starter, Pro, Agency"}
+            {pick(isDE, "White-Label MSP Partnership — Starter, Pro, Agency", "White-Label MSP Partnership — Starter, Pro, Agency")}
           </h1>
           <LastUpdated date={MODIFIED} publishedDate={PUBLISHED} showPublished locale={locale} className="mb-4" />
           <p className="text-lg text-gray-300 max-w-3xl mb-6">
-            {isDE
-              ? "Vollständig gebrandete Security-Platform unter deiner Marke. 3 Pricing-Tiers für jeden Wachstums-Stadium. Revenue-Share statt Seat-Limits."
-              : "Fully branded security platform under your brand. 3 pricing tiers for every growth stage. Revenue share instead of seat limits."}
+            {pick(isDE, "Vollständig gebrandete Security-Platform unter deiner Marke. 3 Pricing-Tiers für jeden Wachstums-Stadium. Revenue-Share statt Seat-Limits.", "Fully branded security platform under your brand. 3 pricing tiers for every growth stage. Revenue share instead of seat limits.")}
           </p>
           <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-gray-500">
-            <span>✓ {isDE ? "Keine Seat-Limits" : "No seat limits"}</span>
-            <span>✓ {isDE ? "Revenue-Share ab 30%" : "30%+ revenue share"}</span>
-            <span>✓ {isDE ? "EU-Hosting, DSGVO" : "EU-hosted, GDPR"}</span>
-            <span>✓ {isDE ? "Onboarding in 14 Tagen" : "Onboarding in 14 days"}</span>
+            <span>✓ {pick(isDE, "Keine Seat-Limits", "No seat limits")}</span>
+            <span>✓ {pick(isDE, "Revenue-Share ab 30%", "30%+ revenue share")}</span>
+            <span>✓ {pick(isDE, "EU-Hosting, DSGVO", "EU-hosted, GDPR")}</span>
+            <span>✓ {pick(isDE, "Onboarding in 14 Tagen", "Onboarding in 14 days")}</span>
           </div>
         </section>
 
         {/* PRICING TIERS */}
         <section className="mb-14">
           <div className="text-xs font-mono uppercase tracking-widest mb-2 text-purple-400">
-            {isDE ? "Pricing Tiers" : "Pricing Tiers"}
+            {pick(isDE, "Pricing Tiers", "Pricing Tiers")}
           </div>
           <h2 className="text-3xl font-bold text-white mb-6">
-            {isDE ? "Wähle deinen Wachstums-Stadium" : "Choose your growth stage"}
+            {pick(isDE, "Wähle deinen Wachstums-Stadium", "Choose your growth stage")}
           </h2>
           <div className="grid md:grid-cols-3 gap-6">
             {pricingTiers.map((tier, i) => (
@@ -293,19 +282,19 @@ export default function WhiteLabelPage({ params }: PageProps) {
         {/* COMPARISON TABLE */}
         <section className="mb-14">
           <div className="text-xs font-mono uppercase tracking-widest mb-2 text-purple-400">
-            {isDE ? "Vergleich" : "Comparison"}
+            {pick(isDE, "Vergleich", "Comparison")}
           </div>
           <h2 className="text-3xl font-bold text-white mb-6">
-            {isDE ? "Self-Branded vs White-Label vs Full Resell" : "Self-Branded vs White-Label vs Full Resell"}
+            {pick(isDE, "Self-Branded vs White-Label vs Full Resell", "Self-Branded vs White-Label vs Full Resell")}
           </h2>
           <div className="bg-gray-900 border border-gray-800 rounded-lg overflow-hidden">
             <table className="min-w-full">
               <thead className="bg-gray-800">
                 <tr>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase">{isDE ? "Feature" : "Feature"}</th>
-                  <th className="px-6 py-4 text-center text-xs font-medium text-gray-400 uppercase">{isDE ? "Self-Branded" : "Self-Branded"}</th>
-                  <th className="px-6 py-4 text-center text-xs font-medium text-purple-300 uppercase">{isDE ? "White-Label" : "White-Label"}</th>
-                  <th className="px-6 py-4 text-center text-xs font-medium text-cyan-300 uppercase">{isDE ? "Full Resell" : "Full Resell"}</th>
+                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase">{pick(isDE, "Feature", "Feature")}</th>
+                  <th className="px-6 py-4 text-center text-xs font-medium text-gray-400 uppercase">{pick(isDE, "Self-Branded", "Self-Branded")}</th>
+                  <th className="px-6 py-4 text-center text-xs font-medium text-purple-300 uppercase">{pick(isDE, "White-Label", "White-Label")}</th>
+                  <th className="px-6 py-4 text-center text-xs font-medium text-cyan-300 uppercase">{pick(isDE, "Full Resell", "Full Resell")}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-800">
@@ -355,10 +344,10 @@ export default function WhiteLabelPage({ params }: PageProps) {
         {/* ROI CALCULATOR */}
         <section className="mb-14">
           <div className="text-xs font-mono uppercase tracking-widest mb-2 text-purple-400">
-            {isDE ? "ROI Calculator" : "ROI Calculator"}
+            {pick(isDE, "ROI Calculator", "ROI Calculator")}
           </div>
           <h2 className="text-3xl font-bold text-white mb-6">
-            {isDE ? "Rechne deinen MSP-Umsatz" : "Calculate your MSP revenue"}
+            {pick(isDE, "Rechne deinen MSP-Umsatz", "Calculate your MSP revenue")}
           </h2>
           <RoiCalculator locale={locale} source="for_msps_whitelabel_roi" />
         </section>
@@ -366,39 +355,35 @@ export default function WhiteLabelPage({ params }: PageProps) {
         {/* LEAD FORM */}
         <section className="mb-14">
           <div className="text-xs font-mono uppercase tracking-widest mb-2 text-purple-400">
-            {isDE ? "Partnership Anfrage" : "Partnership inquiry"}
+            {pick(isDE, "Partnership Anfrage", "Partnership inquiry")}
           </div>
           <h2 className="text-3xl font-bold text-white mb-6">
-            {isDE ? "Starte deine Partnership-Anfrage" : "Start your partnership inquiry"}
+            {pick(isDE, "Starte deine Partnership-Anfrage", "Start your partnership inquiry")}
           </h2>
           <div className="bg-gray-900 border border-purple-900/40 rounded-2xl p-8">
             <p className="text-gray-300 mb-6">
-              {isDE
-                ? "Fülle das Formular aus — wir melden uns innerhalb von 24h mit einem Demo-Call."
-                : "Fill out the form — we'll get back to you within 24h with a demo call."}
+              {pick(isDE, "Fülle das Formular aus — wir melden uns innerhalb von 24h mit einem Demo-Call.", "Fill out the form — we'll get back to you within 24h with a demo call.")}
             </p>
             <a
-              href={`mailto:msp-partnership@clawguru.org?subject=${encodeURIComponent(isDE ? "MSP White-Label Partnership Anfrage" : "MSP White-Label Partnership Inquiry")}&body=${encodeURIComponent(
-                isDE
-                  ? `Name:\nFirma:\nWebsite:\nAktuelle Kundenzahl:\nZiel Kundenzahl (12 Monate):\nBekannter Umsatz pro Kunde/Monat:\nWelche Tier interessiert dich (Starter/Pro/Agency)?\nNachricht:`
-                  : `Name:\nCompany:\nWebsite:\nCurrent client count:\nTarget client count (12 months):\nKnown revenue per client/month:\nWhich tier interests you (Starter/Pro/Agency)?\nMessage:`
+              href={`mailto:msp-partnership@clawguru.org?subject=${encodeURIComponent(pick(isDE, "MSP White-Label Partnership Anfrage", "MSP White-Label Partnership Inquiry"))}&body=${encodeURIComponent(
+                pick(isDE, `Name:\nFirma:\nWebsite:\nAktuelle Kundenzahl:\nZiel Kundenzahl (12 Monate):\nBekannter Umsatz pro Kunde/Monat:\nWelche Tier interessiert dich (Starter/Pro/Agency)?\nNachricht:`, `Name:\nCompany:\nWebsite:\nCurrent client count:\nTarget client count (12 months):\nKnown revenue per client/month:\nWhich tier interests you (Starter/Pro/Agency)?\nMessage:`)
               )}`}
               className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-6 py-3 rounded-lg bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500 font-bold text-white transition-all"
             >
               <Mail className="h-4 w-4" />
-              {isDE ? "Partnership-Anfrage senden" : "Send partnership inquiry"}
+              {pick(isDE, "Partnership-Anfrage senden", "Send partnership inquiry")}
             </a>
             <div className="mt-4 text-xs text-gray-500">
-              {isDE ? "Oder buche direkt einen Demo-Call:" : "Or book a demo call directly:"}
+              {pick(isDE, "Oder buche direkt einen Demo-Call:", "Or book a demo call directly:")}
               <div className="mt-2">
                 <BookingButton
                   type="demo"
-                  label={isDE ? "Demo-Call buchen" : "Book demo call"}
+                  label={pick(isDE, "Demo-Call buchen", "Book demo call")}
                   locale={locale}
                   source="for_msps_whitelabel_form"
                   variant="secondary"
                   className="text-sm"
-                  subject={isDE ? "MSP White-Label Demo" : "MSP white-label demo"}
+                  subject={pick(isDE, "MSP White-Label Demo", "MSP white-label demo")}
                 />
               </div>
             </div>
@@ -408,32 +393,32 @@ export default function WhiteLabelPage({ params }: PageProps) {
         {/* CROSS-LINKS */}
         <section className="mb-14">
           <div className="text-xs font-mono uppercase tracking-widest mb-2 text-purple-400">
-            {isDE ? "Weitere Ressourcen" : "Further resources"}
+            {pick(isDE, "Weitere Ressourcen", "Further resources")}
           </div>
           <h2 className="text-3xl font-bold text-white mb-6">
-            {isDE ? "Erfahre mehr über MSP-Security" : "Learn more about MSP security"}
+            {pick(isDE, "Erfahre mehr über MSP-Security", "Learn more about MSP security")}
           </h2>
           <div className="grid md:grid-cols-3 gap-4">
             <Link href={`/${locale}/for-msps`} className="block bg-gray-900 border border-gray-800 rounded-xl p-6 hover:border-purple-500/50 transition-colors">
               <div className="flex items-center gap-3 mb-3">
                 <Shield className="h-6 w-6 text-purple-400" />
-                <h3 className="font-bold text-gray-100">{isDE ? "Für MSPs — Übersicht" : "For MSPs — Overview"}</h3>
+                <h3 className="font-bold text-gray-100">{pick(isDE, "Für MSPs — Übersicht", "For MSPs — Overview")}</h3>
               </div>
-              <p className="text-sm text-gray-400">{isDE ? "Warum MSPs auf ClawGuru setzen" : "Why MSPs choose ClawGuru"}</p>
+              <p className="text-sm text-gray-400">{pick(isDE, "Warum MSPs auf ClawGuru setzen", "Why MSPs choose ClawGuru")}</p>
             </Link>
             <Link href={`/${locale}/consulting`} className="block bg-gray-900 border border-gray-800 rounded-xl p-6 hover:border-purple-500/50 transition-colors">
               <div className="flex items-center gap-3 mb-3">
                 <Users className="h-6 w-6 text-purple-400" />
-                <h3 className="font-bold text-gray-100">{isDE ? "Enterprise Consulting" : "Enterprise Consulting"}</h3>
+                <h3 className="font-bold text-gray-100">{pick(isDE, "Enterprise Consulting", "Enterprise Consulting")}</h3>
               </div>
-              <p className="text-sm text-gray-400">{isDE ? "High-Ticket Security-Consulting" : "High-ticket security consulting"}</p>
+              <p className="text-sm text-gray-400">{pick(isDE, "High-Ticket Security-Consulting", "High-ticket security consulting")}</p>
             </Link>
             <Link href={`/${locale}/pricing`} className="block bg-gray-900 border border-gray-800 rounded-xl p-6 hover:border-purple-500/50 transition-colors">
               <div className="flex items-center gap-3 mb-3">
                 <TrendingUp className="h-6 w-6 text-purple-400" />
-                <h3 className="font-bold text-gray-100">{isDE ? "Team Pricing" : "Team Pricing"}</h3>
+                <h3 className="font-bold text-gray-100">{pick(isDE, "Team Pricing", "Team Pricing")}</h3>
               </div>
-              <p className="text-sm text-gray-400">{isDE ? "Pro + Team Abos für interne Teams" : "Pro + Team subscriptions for internal teams"}</p>
+              <p className="text-sm text-gray-400">{pick(isDE, "Pro + Team Abos für interne Teams", "Pro + Team subscriptions for internal teams")}</p>
             </Link>
           </div>
         </section>

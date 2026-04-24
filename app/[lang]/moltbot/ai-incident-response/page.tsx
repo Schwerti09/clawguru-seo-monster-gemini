@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/moltbot/ai-incident-response"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "AI Incident Response: Playbook für KI-Agent-Sicherheitsvorfälle | ClawGuru"
-    : "AI Incident Response: Playbook for AI Agent Security Incidents | ClawGuru"
-  const description = isDE
-    ? "AI-spezifisches Incident-Response-Playbook: Prompt-Injection-Angriffe, kompromittierte Agenten, Datenlecks durch RAG, Model-Poisoning. Detection, Containment, Recovery und Post-Mortem mit Moltbot."
-    : "AI-specific incident response playbook: prompt injection attacks, compromised agents, RAG data leaks, model poisoning. Detection, containment, recovery and post-mortem with Moltbot."
+  const title = pick(isDE, "AI Incident Response: Playbook für KI-Agent-Sicherheitsvorfälle | ClawGuru", "AI Incident Response: Playbook for AI Agent Security Incidents | ClawGuru")
+  const description = pick(isDE, "AI-spezifisches Incident-Response-Playbook: Prompt-Injection-Angriffe, kompromittierte Agenten, Datenlecks durch RAG, Model-Poisoning. Detection, Containment, Recovery und Post-Mortem mit Moltbot.", "AI-specific incident response playbook: prompt injection attacks, compromised agents, RAG data leaks, model poisoning. Detection, containment, recovery and post-mortem with Moltbot.")
   return {
     title, description,
     keywords: ["ai incident response", "llm incident response", "ai security incident", "prompt injection incident", "moltbot incident response", "ai agent compromise"],
@@ -74,24 +71,22 @@ export default function AiIncidentResponsePage({ params }: { params: { lang: str
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "Incident-Response-Leitfaden für eigene KI-Systeme." : "Incident response guide for your own AI systems."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Incident-Response-Leitfaden für eigene KI-Systeme.", "Incident response guide for your own AI systems.")}
         </div>
         <div className="mb-3"><span className="text-xs font-bold uppercase tracking-widest text-cyan-400">Moltbot · Batch 7</span></div>
         <h1 className="text-4xl font-bold mb-4 text-gray-100">
-          {isDE ? "AI Incident Response Playbook" : "AI Incident Response Playbook"}
+          {pick(isDE, "AI Incident Response Playbook", "AI Incident Response Playbook")}
         </h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "Klassische IR-Playbooks kennen keine Prompt-Injection, keinen kompromittierten RAG-Namespace und keine Model-Poisoning-Indikatoren. Dieses Playbook deckt 6 AI-spezifische Incident-Typen mit konkreten Containment-Schritten ab."
-            : "Classic IR playbooks don't know prompt injection, compromised RAG namespaces or model poisoning indicators. This playbook covers 6 AI-specific incident types with concrete containment steps."}
+          {pick(isDE, "Klassische IR-Playbooks kennen keine Prompt-Injection, keinen kompromittierten RAG-Namespace und keine Model-Poisoning-Indikatoren. Dieses Playbook deckt 6 AI-spezifische Incident-Typen mit konkreten Containment-Schritten ab.", "Classic IR playbooks don't know prompt injection, compromised RAG namespaces or model poisoning indicators. This playbook covers 6 AI-specific incident types with concrete containment steps.")}
         </p>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
           {[
-            { value: "6", label: isDE ? "Incident-Typen" : "Incident types" },
+            { value: "6", label: pick(isDE, "Incident-Typen", "Incident types") },
             { value: "72h", label: "GDPR Art. 33 SLA" },
-            { value: "5min", label: isDE ? "Ziel-MTTC" : "Target MTTC" },
-            { value: "Auto", label: isDE ? "Containment (P1)" : "Containment (P1)" },
+            { value: "5min", label: pick(isDE, "Ziel-MTTC", "Target MTTC") },
+            { value: "Auto", label: pick(isDE, "Containment (P1)", "Containment (P1)") },
           ].map((s) => (
             <div key={s.label} className="bg-gray-800 p-4 rounded-lg border border-gray-700 text-center">
               <div className="text-2xl font-black text-cyan-400">{s.value}</div>
@@ -102,7 +97,7 @@ export default function AiIncidentResponsePage({ params }: { params: { lang: str
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">
-            {isDE ? "AI Incident-Typen & Containment" : "AI Incident Types & Containment"}
+            {pick(isDE, "AI Incident-Typen & Containment", "AI Incident Types & Containment")}
           </h2>
           <div className="space-y-3">
             {INCIDENT_TYPES.map((inc) => (
@@ -114,13 +109,13 @@ export default function AiIncidentResponsePage({ params }: { params: { lang: str
                 </div>
                 <div className="p-4">
                   <div className="mb-3">
-                    <div className="text-xs font-semibold text-gray-400 mb-1">{isDE ? "Indikatoren:" : "Indicators:"}</div>
+                    <div className="text-xs font-semibold text-gray-400 mb-1">{pick(isDE, "Indikatoren:", "Indicators:")}</div>
                     <ul className="space-y-1">
                       {inc.indicators.map((ind) => <li key={ind} className="text-xs text-gray-300">▸ {ind}</li>)}
                     </ul>
                   </div>
                   <div>
-                    <div className="text-xs font-semibold text-green-400 mb-1">{isDE ? "Sofort-Containment:" : "Immediate containment:"}</div>
+                    <div className="text-xs font-semibold text-green-400 mb-1">{pick(isDE, "Sofort-Containment:", "Immediate containment:")}</div>
                     <p className="text-xs text-green-200">{inc.containment}</p>
                   </div>
                 </div>
@@ -131,7 +126,7 @@ export default function AiIncidentResponsePage({ params }: { params: { lang: str
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">
-            {isDE ? "Response-Phasen" : "Response Phases"}
+            {pick(isDE, "Response-Phasen", "Response Phases")}
           </h2>
           <div className="space-y-3">
             {RESPONSE_PHASES.map((p, i) => (
@@ -150,7 +145,7 @@ export default function AiIncidentResponsePage({ params }: { params: { lang: str
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-3">
             {FAQ.map((f, i) => (
               <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
@@ -162,23 +157,23 @@ export default function AiIncidentResponsePage({ params }: { params: { lang: str
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further Resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further Resources")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/moltbot/ai-compliance-automation`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Compliance Automation</div>
-              <div className="text-sm text-gray-300">{isDE ? "GDPR Art. 33 Meldepflicht" : "GDPR Art. 33 breach notification"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "GDPR Art. 33 Meldepflicht", "GDPR Art. 33 breach notification")}</div>
             </a>
             <a href={`/${locale}/moltbot/llm-observability`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM Observability</div>
-              <div className="text-sm text-gray-300">{isDE ? "Anomalie-Detection" : "Anomaly detection"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Anomalie-Detection", "Anomaly detection")}</div>
             </a>
             <a href={`/${locale}/moltbot/prompt-injection-defense`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Prompt Injection Defense</div>
-              <div className="text-sm text-gray-300">{isDE ? "AI-INC-01 verhindern" : "Prevent AI-INC-01"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "AI-INC-01 verhindern", "Prevent AI-INC-01")}</div>
             </a>
             <a href={`/${locale}/moltbot/model-poisoning-protection`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Model Poisoning Protection</div>
-              <div className="text-sm text-gray-300">{isDE ? "AI-INC-04 erkennen" : "Detect AI-INC-04"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "AI-INC-04 erkennen", "Detect AI-INC-04")}</div>
             </a>
           </div>
         </section>

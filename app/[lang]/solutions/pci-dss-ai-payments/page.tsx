@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/solutions/pci-dss-ai-payments"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "PCI DSS 4.0 für KI-Zahlungssysteme: CHD-Schutz in LLM-Agenten | ClawGuru"
-    : "PCI DSS 4.0 for AI Payment Systems: CHD Protection in LLM Agents | ClawGuru"
-  const description = isDE
-    ? "PCI DSS 4.0 Compliance für KI-Systeme im Zahlungsumfeld: Cardholder Data in LLMs, AI-Agent-Scope, Tokenization, Audit-Logging und Customized Approach für AI-spezifische Controls."
-    : "PCI DSS 4.0 compliance for AI systems in payment environments: cardholder data in LLMs, AI agent scope, tokenization, audit logging and customized approach for AI-specific controls."
+  const title = pick(isDE, "PCI DSS 4.0 für KI-Zahlungssysteme: CHD-Schutz in LLM-Agenten | ClawGuru", "PCI DSS 4.0 for AI Payment Systems: CHD Protection in LLM Agents | ClawGuru")
+  const description = pick(isDE, "PCI DSS 4.0 Compliance für KI-Systeme im Zahlungsumfeld: Cardholder Data in LLMs, AI-Agent-Scope, Tokenization, Audit-Logging und Customized Approach für AI-spezifische Controls.", "PCI DSS 4.0 compliance for AI systems in payment environments: cardholder data in LLMs, AI agent scope, tokenization, audit logging and customized approach for AI-specific controls.")
   return {
     title, description,
     keywords: ["pci dss ai payments", "pci dss llm", "pci dss 4.0 ai", "cardholder data ai agent", "pci dss ai compliance", "ai payment security"],
@@ -63,27 +60,23 @@ export default function PciDssAiPaymentsPage({ params }: { params: { lang: strin
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "PCI-DSS-Compliance-Leitfaden für eigene KI-Zahlungssysteme." : "PCI DSS compliance guide for your own AI payment systems."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "PCI-DSS-Compliance-Leitfaden für eigene KI-Zahlungssysteme.", "PCI DSS compliance guide for your own AI payment systems.")}
         </div>
         <div className="mb-3"><span className="text-xs font-bold uppercase tracking-widest text-cyan-400">Solutions · Batch 6</span></div>
         <h1 className="text-4xl font-bold mb-4 text-gray-100">
-          {isDE ? "PCI DSS 4.0 für KI-Zahlungssysteme" : "PCI DSS 4.0 for AI Payment Systems"}
+          {pick(isDE, "PCI DSS 4.0 für KI-Zahlungssysteme", "PCI DSS 4.0 for AI Payment Systems")}
         </h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "KI-Agenten, die Zahlungsdaten verarbeiten, sind PCI-DSS-pflichtig — unabhängig von der Technologie. Sechs kritische Requirements mit AI-spezifischen Risiken und konkreten Mitigationen."
-            : "AI agents processing payment data are subject to PCI DSS — regardless of technology. Six critical requirements with AI-specific risks and concrete mitigations."}
+          {pick(isDE, "KI-Agenten, die Zahlungsdaten verarbeiten, sind PCI-DSS-pflichtig — unabhängig von der Technologie. Sechs kritische Requirements mit AI-spezifischen Risiken und konkreten Mitigationen.", "AI agents processing payment data are subject to PCI DSS — regardless of technology. Six critical requirements with AI-specific risks and concrete mitigations.")}
         </p>
 
         <div className="bg-red-900 border border-red-700 p-4 rounded-lg mb-8">
-          <h3 className="font-bold text-red-300 mb-1">{isDE ? "Scope-Warnung: KI im CDE" : "Scope Warning: AI in the CDE"}</h3>
-          <p className="text-sm text-red-200">{isDE
-            ? "Sobald ein KI-Agent CHD (Cardholder Data) verarbeitet, überträgt oder speichert, ist der gesamte AI-Stack im PCI-DSS-Scope: LLM-API-Verbindungen, Vektordatenbanken, Orchestrierung, Audit-Logs."
-            : "Once an AI agent processes, transmits or stores CHD (Cardholder Data), the entire AI stack is in PCI DSS scope: LLM API connections, vector stores, orchestration, audit logs."}</p>
+          <h3 className="font-bold text-red-300 mb-1">{pick(isDE, "Scope-Warnung: KI im CDE", "Scope Warning: AI in the CDE")}</h3>
+          <p className="text-sm text-red-200">{pick(isDE, "Sobald ein KI-Agent CHD (Cardholder Data) verarbeitet, überträgt oder speichert, ist der gesamte AI-Stack im PCI-DSS-Scope: LLM-API-Verbindungen, Vektordatenbanken, Orchestrierung, Audit-Logs.", "Once an AI agent processes, transmits or stores CHD (Cardholder Data), the entire AI stack is in PCI DSS scope: LLM API connections, vector stores, orchestration, audit logs.")}</p>
         </div>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "6 PCI DSS Requirements für KI" : "6 PCI DSS Requirements for AI"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "6 PCI DSS Requirements für KI", "6 PCI DSS Requirements for AI")}</h2>
           <div className="space-y-4">
             {PCI_REQUIREMENTS.map((r) => (
               <div key={r.req} className="bg-gray-800 rounded-lg border border-gray-700 p-4">
@@ -99,7 +92,7 @@ export default function PciDssAiPaymentsPage({ params }: { params: { lang: strin
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-3">
             {FAQ.map((f, i) => (
               <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
@@ -111,23 +104,23 @@ export default function PciDssAiPaymentsPage({ params }: { params: { lang: strin
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further Resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further Resources")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/solutions/pci-dss-compliance`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">PCI DSS Compliance</div>
-              <div className="text-sm text-gray-300">{isDE ? "Vollständige PCI-DSS-Umsetzung" : "Full PCI DSS implementation"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Vollständige PCI-DSS-Umsetzung", "Full PCI DSS implementation")}</div>
             </a>
             <a href={`/${locale}/solutions/hipaa-ai-systems`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">HIPAA AI Systems</div>
-              <div className="text-sm text-gray-300">{isDE ? "PHI-Schutz in KI-Systemen" : "PHI protection in AI systems"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "PHI-Schutz in KI-Systemen", "PHI protection in AI systems")}</div>
             </a>
             <a href={`/${locale}/moltbot/llm-context-isolation`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM Context Isolation</div>
-              <div className="text-sm text-gray-300">{isDE ? "CHD aus LLM-Kontext trennen" : "Isolate CHD from LLM context"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "CHD aus LLM-Kontext trennen", "Isolate CHD from LLM context")}</div>
             </a>
             <a href={`/${locale}/moltbot/ai-agent-rbac`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Agent RBAC</div>
-              <div className="text-sm text-gray-300">{isDE ? "Least Privilege für Agenten" : "Least privilege for agents"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Least Privilege für Agenten", "Least privilege for agents")}</div>
             </a>
           </div>
         </section>

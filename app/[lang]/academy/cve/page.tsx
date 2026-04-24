@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/academy/cve"
@@ -14,12 +15,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "CVE Datenbank: Alle Schwachstellen mit Fix-Anleitungen | ClawGuru Academy"
-    : "CVE Database: All Vulnerabilities with Fix Guides | ClawGuru Academy"
-  const description = isDE
-    ? "Kuratierte CVE-Datenbank mit tiefgehenden Fix-Runbooks: OpenSSH, Next.js, Docker, Go, XZ Utils, HTTP/2 und mehr. Jeder Eintrag enthält Schritt-für-Schritt-Anleitungen, Code-Snippets und FAQ."
-    : "Curated CVE database with deep-dive fix runbooks: OpenSSH, Next.js, Docker, Go, XZ Utils, HTTP/2 and more. Every entry includes step-by-step guides, code snippets and FAQ."
+  const title = pick(isDE, "CVE Datenbank: Alle Schwachstellen mit Fix-Anleitungen | ClawGuru Academy", "CVE Database: All Vulnerabilities with Fix Guides | ClawGuru Academy")
+  const description = pick(isDE, "Kuratierte CVE-Datenbank mit tiefgehenden Fix-Runbooks: OpenSSH, Next.js, Docker, Go, XZ Utils, HTTP/2 und mehr. Jeder Eintrag enthält Schritt-für-Schritt-Anleitungen, Code-Snippets und FAQ.", "Curated CVE database with deep-dive fix runbooks: OpenSSH, Next.js, Docker, Go, XZ Utils, HTTP/2 and more. Every entry includes step-by-step guides, code snippets and FAQ.")
   return {
     title, description,
     keywords: ["cve database", "cve fix guides", "vulnerability runbooks", "openssh cve", "nextjs cve", "docker cve", "security fixes 2025 2026"],
@@ -84,7 +81,7 @@ export default function CveIndexPage({ params }: PageProps) {
       { "@type": "ListItem", position: 3, name: "CVE Database", item: pageUrl },
     ]},
     { "@context": "https://schema.org", "@type": "ItemList",
-      name: isDE ? "CVE Datenbank — Fix Runbooks" : "CVE Database — Fix Runbooks",
+      name: pick(isDE, "CVE Datenbank — Fix Runbooks", "CVE Database — Fix Runbooks"),
       itemListElement: CVE_ENTRIES.map((cve, i) => ({
         "@type": "ListItem", position: i + 1,
         name: `${cve.id} — ${cve.name}`,
@@ -99,27 +96,25 @@ export default function CveIndexPage({ params }: PageProps) {
       <div className="max-w-4xl mx-auto">
 
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "Alle Anleitungen dienen dem Schutz eigener Systeme." : "All guides are for protecting your own systems."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Alle Anleitungen dienen dem Schutz eigener Systeme.", "All guides are for protecting your own systems.")}
         </div>
 
         <div className="mb-3">
           <span className="text-xs font-bold uppercase tracking-widest text-cyan-400">Academy · CVE Database</span>
         </div>
         <h1 className="text-4xl font-bold mb-4 text-gray-100">
-          {isDE ? "CVE Datenbank: Alle Fix-Runbooks" : "CVE Database: All Fix Runbooks"}
+          {pick(isDE, "CVE Datenbank: Alle Fix-Runbooks", "CVE Database: All Fix Runbooks")}
         </h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "Kuratierte CVE-Datenbank mit tiefgehenden Runbooks. Jeder Eintrag enthält: betroffene Versionen, Schritt-für-Schritt-Fix, erkennungsbasierte Checks und FAQ. Kein Security-Rauschen — nur was für Self-Hosted-Infrastruktur relevant ist."
-            : "Curated CVE database with deep-dive runbooks. Every entry includes: affected versions, step-by-step fix, detection-based checks and FAQ. No security noise — only what matters for self-hosted infrastructure."}
+          {pick(isDE, "Kuratierte CVE-Datenbank mit tiefgehenden Runbooks. Jeder Eintrag enthält: betroffene Versionen, Schritt-für-Schritt-Fix, erkennungsbasierte Checks und FAQ. Kein Security-Rauschen — nur was für Self-Hosted-Infrastruktur relevant ist.", "Curated CVE database with deep-dive runbooks. Every entry includes: affected versions, step-by-step fix, detection-based checks and FAQ. No security noise — only what matters for self-hosted infrastructure.")}
         </p>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
           {[
-            { value: String(CVE_ENTRIES.length), label: isDE ? "CVEs mit Runbook" : "CVEs with runbook" },
+            { value: String(CVE_ENTRIES.length), label: pick(isDE, "CVEs mit Runbook", "CVEs with runbook") },
             { value: String(criticalCount), label: "CRITICAL" },
-            { value: "24h", label: isDE ? "Patch-SLA (Critical)" : "Patch SLA (Critical)" },
-            { value: "2026", label: isDE ? "Aktuell gepflegt" : "Actively maintained" },
+            { value: "24h", label: pick(isDE, "Patch-SLA (Critical)", "Patch SLA (Critical)") },
+            { value: "2026", label: pick(isDE, "Aktuell gepflegt", "Actively maintained") },
           ].map((s) => (
             <div key={s.label} className="bg-gray-800 p-4 rounded-lg border border-gray-700 text-center">
               <div className="text-3xl font-black text-cyan-400">{s.value}</div>
@@ -130,7 +125,7 @@ export default function CveIndexPage({ params }: PageProps) {
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">
-            {isDE ? "Alle CVEs — nach Schweregrad" : "All CVEs — by severity"}
+            {pick(isDE, "Alle CVEs — nach Schweregrad", "All CVEs — by severity")}
           </h2>
           <div className="space-y-3">
             {CVE_ENTRIES.map((cve) => (
@@ -155,12 +150,12 @@ export default function CveIndexPage({ params }: PageProps) {
                     <div className="font-semibold text-gray-100 mb-1">{cve.name}</div>
                     <div className="text-sm text-gray-400 mb-1">{cve.desc}</div>
                     <div className="text-xs text-gray-500">
-                      <span className="text-gray-400">{isDE ? "Software:" : "Software:"}</span> {cve.software} ·{" "}
-                      <span className="text-gray-400">{isDE ? "Fix:" : "Fixed in:"}</span> {cve.fixed}
+                      <span className="text-gray-400">{pick(isDE, "Software:", "Software:")}</span> {cve.software} ·{" "}
+                      <span className="text-gray-400">{pick(isDE, "Fix:", "Fixed in:")}</span> {cve.fixed}
                     </div>
                   </div>
                   <div className="text-cyan-400 text-sm font-semibold flex-shrink-0 self-center">
-                    {isDE ? "Runbook →" : "Runbook →"}
+                    {pick(isDE, "Runbook →", "Runbook →")}
                   </div>
                 </div>
               </a>
@@ -170,13 +165,13 @@ export default function CveIndexPage({ params }: PageProps) {
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">
-            {isDE ? "Wie benutze ich die CVE Datenbank?" : "How do I use the CVE database?"}
+            {pick(isDE, "Wie benutze ich die CVE Datenbank?", "How do I use the CVE database?")}
           </h2>
           <div className="grid md:grid-cols-3 gap-4">
             {[
-              { step: "1", t: isDE ? "Betroffene Version prüfen" : "Check affected version", d: isDE ? "Vergleiche die betroffenen Versionen mit deinen installierten Paketen. Jedes Runbook enthält konkrete Prüfbefehle." : "Compare affected versions with your installed packages. Every runbook includes concrete check commands." },
-              { step: "2", t: isDE ? "Fix anwenden" : "Apply the fix", d: isDE ? "Führe die Schritt-für-Schritt-Anleitungen aus. Befehle sind copy-paste-ready für Debian/Ubuntu, RHEL und Docker." : "Execute the step-by-step instructions. Commands are copy-paste-ready for Debian/Ubuntu, RHEL and Docker." },
-              { step: "3", t: isDE ? "Detection prüfen" : "Verify detection", d: isDE ? "Nutze die IoC-Checks in jedem Runbook um sicherzustellen, dass keine Ausnutzung stattgefunden hat." : "Use the IoC checks in every runbook to ensure no exploitation has occurred." },
+              { step: "1", t: pick(isDE, "Betroffene Version prüfen", "Check affected version"), d: pick(isDE, "Vergleiche die betroffenen Versionen mit deinen installierten Paketen. Jedes Runbook enthält konkrete Prüfbefehle.", "Compare affected versions with your installed packages. Every runbook includes concrete check commands.") },
+              { step: "2", t: pick(isDE, "Fix anwenden", "Apply the fix"), d: pick(isDE, "Führe die Schritt-für-Schritt-Anleitungen aus. Befehle sind copy-paste-ready für Debian/Ubuntu, RHEL und Docker.", "Execute the step-by-step instructions. Commands are copy-paste-ready for Debian/Ubuntu, RHEL and Docker.") },
+              { step: "3", t: pick(isDE, "Detection prüfen", "Verify detection"), d: pick(isDE, "Nutze die IoC-Checks in jedem Runbook um sicherzustellen, dass keine Ausnutzung stattgefunden hat.", "Use the IoC checks in every runbook to ensure no exploitation has occurred.") },
             ].map((s) => (
               <div key={s.step} className="flex items-start gap-3 bg-gray-800 p-4 rounded-lg border border-gray-700">
                 <div className="bg-blue-600 text-white rounded-full w-7 h-7 flex items-center justify-center text-sm font-bold flex-shrink-0">{s.step}</div>
@@ -188,24 +183,24 @@ export default function CveIndexPage({ params }: PageProps) {
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">
-            {isDE ? "Weiterführende Ressourcen" : "Further Resources"}
+            {pick(isDE, "Weiterführende Ressourcen", "Further Resources")}
           </h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/academy/cve-feed`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">CVE Feed</div>
-              <div className="text-sm text-gray-300">{isDE ? "Alle CVEs nach Schweregrad sortiert" : "All CVEs sorted by severity"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Alle CVEs nach Schweregrad sortiert", "All CVEs sorted by severity")}</div>
             </a>
             <a href={`/${locale}/neuro`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Stack MRI</div>
-              <div className="text-sm text-gray-300">{isDE ? "CVEs in deiner Infrastruktur erkennen" : "Detect CVEs in your infrastructure"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "CVEs in deiner Infrastruktur erkennen", "Detect CVEs in your infrastructure")}</div>
             </a>
             <a href={`/${locale}/academy`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Academy</div>
-              <div className="text-sm text-gray-300">{isDE ? "Alle Security-Kurse und Tracks" : "All security courses and tracks"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Alle Security-Kurse und Tracks", "All security courses and tracks")}</div>
             </a>
             <a href={`/${locale}/moltbot/real-time-cve-feed`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
-              <div className="font-semibold text-cyan-400">{isDE ? "Echtzeit CVE-Monitoring" : "Real-Time CVE Monitoring"}</div>
-              <div className="text-sm text-gray-300">{isDE ? "CVE-Feed mit Moltbot automatisieren" : "Automate CVE feed with Moltbot"}</div>
+              <div className="font-semibold text-cyan-400">{pick(isDE, "Echtzeit CVE-Monitoring", "Real-Time CVE Monitoring")}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "CVE-Feed mit Moltbot automatisieren", "Automate CVE feed with Moltbot")}</div>
             </a>
           </div>
         </section>

@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/moltbot/llm-context-window-security"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "LLM Context Window Security: Kontext-Fenster-Härtung | ClawGuru Moltbot"
-    : "LLM Context Window Security: Context Window Hardening | ClawGuru Moltbot"
-  const description = isDE
-    ? "LLM-Kontext-Fenster-Security: Context Overflow Prevention, Token Budget Enforcement, RAG Context Injection Defense und Context Window Isolation für Multi-User LLM-Systeme."
-    : "LLM context window security: context overflow prevention, token budget enforcement, RAG context injection defense and context window isolation for multi-user LLM systems."
+  const title = pick(isDE, "LLM Context Window Security: Kontext-Fenster-Härtung | ClawGuru Moltbot", "LLM Context Window Security: Context Window Hardening | ClawGuru Moltbot")
+  const description = pick(isDE, "LLM-Kontext-Fenster-Security: Context Overflow Prevention, Token Budget Enforcement, RAG Context Injection Defense und Context Window Isolation für Multi-User LLM-Systeme.", "LLM context window security: context overflow prevention, token budget enforcement, RAG context injection defense and context window isolation for multi-user LLM systems.")
   return {
     title, description,
     keywords: ["llm context window security", "context overflow prevention", "token budget enforcement", "rag context injection", "llm context isolation", "moltbot context security"],
@@ -180,17 +177,15 @@ export default function LlmContextWindowSecurityPage({ params }: { params: { lan
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "Context-Window-Security-Guide für eigene KI-Systeme." : "Context window security guide for your own AI systems."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Context-Window-Security-Guide für eigene KI-Systeme.", "Context window security guide for your own AI systems.")}
         </div>
         <div className="mb-3"><span className="text-xs font-bold uppercase tracking-widest text-cyan-400">Moltbot · Batch 14</span></div>
-        <h1 className="text-4xl font-bold mb-4 text-gray-100">{isDE ? "LLM Context Window Security" : "LLM Context Window Security"}</h1>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">{pick(isDE, "LLM Context Window Security", "LLM Context Window Security")}</h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "LLM-Kontext-Fenster sind begrenzt — Überlauf-Angriffe können System-Prompts aus dem Fenster drängen und Sicherheitsregeln aushebeln. Vier Kontrollen: Token-Budget, Overflow-Prevention, RAG-Injection-Defense und Multi-User-Isolation."
-            : "LLM context windows are limited — overflow attacks can push system prompts out of the window and bypass safety rules. Four controls: token budget, overflow prevention, RAG injection defense and multi-user isolation."}
+          {pick(isDE, "LLM-Kontext-Fenster sind begrenzt — Überlauf-Angriffe können System-Prompts aus dem Fenster drängen und Sicherheitsregeln aushebeln. Vier Kontrollen: Token-Budget, Overflow-Prevention, RAG-Injection-Defense und Multi-User-Isolation.", "LLM context windows are limited — overflow attacks can push system prompts out of the window and bypass safety rules. Four controls: token budget, overflow prevention, RAG injection defense and multi-user isolation.")}
         </p>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "4 Context-Window-Security-Kontrollen" : "4 Context Window Security Controls"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "4 Context-Window-Security-Kontrollen", "4 Context Window Security Controls")}</h2>
           <div className="space-y-5">
             {CONTROLS.map((c) => (
               <div key={c.id} className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
@@ -207,7 +202,7 @@ export default function LlmContextWindowSecurityPage({ params }: { params: { lan
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-3">
             {FAQ.map((f, i) => (
               <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
@@ -218,23 +213,23 @@ export default function LlmContextWindowSecurityPage({ params }: { params: { lan
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further Resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further Resources")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/moltbot/llm-context-isolation`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM Context Isolation</div>
-              <div className="text-sm text-gray-300">{isDE ? "Konversations-Isolation" : "Conversation isolation"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Konversations-Isolation", "Conversation isolation")}</div>
             </a>
             <a href={`/${locale}/moltbot/llm-prompt-hardening`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM Prompt Hardening</div>
-              <div className="text-sm text-gray-300">{isDE ? "System-Prompt-Schutz" : "System prompt protection"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "System-Prompt-Schutz", "System prompt protection")}</div>
             </a>
             <a href={`/${locale}/moltbot/ai-data-loss-prevention`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Data Loss Prevention</div>
-              <div className="text-sm text-gray-300">{isDE ? "RAG-Injection-Scan" : "RAG injection scan"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "RAG-Injection-Scan", "RAG injection scan")}</div>
             </a>
             <a href={`/${locale}/moltbot/multi-tenant-llm-isolation`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Multi-Tenant LLM Isolation</div>
-              <div className="text-sm text-gray-300">{isDE ? "Mandanten-Datentrennung" : "Tenant data separation"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Mandanten-Datentrennung", "Tenant data separation")}</div>
             </a>
           </div>
         </section>

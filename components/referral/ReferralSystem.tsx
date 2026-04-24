@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { Users, Gift, Copy, Check, Share2 } from "lucide-react"
+import { pick } from "@/lib/i18n-pick"
 
 interface ReferralSystemProps {
   userId?: string
@@ -67,7 +68,7 @@ export function ReferralSystem({
         </div>
         <div>
           <h3 className="font-semibold text-gray-100">
-            {isDE ? "Lade Freunde ein" : "Invite Friends"}
+            {pick(isDE, "Lade Freunde ein", "Invite Friends")}
           </h3>
           <p className="text-xs text-zinc-500">
             {isDE ? `${referralCount} eingeladen` : `${referralCount} invited`}
@@ -78,7 +79,7 @@ export function ReferralSystem({
       {/* Referral Link */}
       <div className="mb-4">
         <label className="text-sm text-zinc-400 block mb-2">
-          {isDE ? "Dein einzigartiger Link" : "Your unique link"}
+          {pick(isDE, "Dein einzigartiger Link", "Your unique link")}
         </label>
         <div className="relative">
           <input
@@ -100,15 +101,15 @@ export function ReferralSystem({
       <div className="grid grid-cols-3 gap-3 mb-4">
         <div className="bg-gray-900/50 rounded-lg p-3 text-center">
           <div className="text-2xl font-bold text-purple-400">{rewards.points}</div>
-          <div className="text-xs text-zinc-500">{isDE ? "Punkte" : "Points"}</div>
+          <div className="text-xs text-zinc-500">{pick(isDE, "Punkte", "Points")}</div>
         </div>
         <div className="bg-gray-900/50 rounded-lg p-3 text-center">
           <div className="text-2xl font-bold text-cyan-400">{rewards.freeRoasts}</div>
-          <div className="text-xs text-zinc-500">{isDE ? "Gratis Roasts" : "Free Roasts"}</div>
+          <div className="text-xs text-zinc-500">{pick(isDE, "Gratis Roasts", "Free Roasts")}</div>
         </div>
         <div className="bg-gray-900/50 rounded-lg p-3 text-center">
           <div className="text-2xl font-bold text-amber-400">{rewards.premiumDays}</div>
-          <div className="text-xs text-zinc-500">{isDE ? "Premium Tage" : "Premium Days"}</div>
+          <div className="text-xs text-zinc-500">{pick(isDE, "Premium Tage", "Premium Days")}</div>
         </div>
       </div>
 
@@ -118,14 +119,12 @@ export function ReferralSystem({
         className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-purple-600 hover:bg-purple-500 rounded-lg font-semibold text-white transition-colors"
       >
         <Share2 className="w-5 h-5" />
-        {isDE ? "Jetzt teilen" : "Share Now"}
+        {pick(isDE, "Jetzt teilen", "Share Now")}
       </button>
 
       {/* Info */}
       <p className="text-xs text-zinc-500 mt-3 text-center">
-        {isDE 
-          ? "Für jeden eingeladenen Freund bekommst du 50 Punkte + 1 Gratis Roast."
-          : "Get 50 points + 1 free roast for each friend you invite."}
+        {pick(isDE, "Für jeden eingeladenen Freund bekommst du 50 Punkte + 1 Gratis Roast.", "Get 50 points + 1 free roast for each friend you invite.")}
       </p>
     </div>
   )

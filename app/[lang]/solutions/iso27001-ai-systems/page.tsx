@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/solutions/iso27001-ai-systems"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "ISO 27001 für KI-Systeme: Annex A Controls & AI-spezifische Anforderungen | ClawGuru"
-    : "ISO 27001 for AI Systems: Annex A Controls & AI-Specific Requirements | ClawGuru"
-  const description = isDE
-    ? "ISO 27001:2022 Implementierungsleitfaden für KI-Systeme: Annex A Controls für LLMs, AI-Agenten und ML-Pipelines. Gap-Analyse, Control-Mapping und Audit-Evidenz mit Moltbot und OpenClaw."
-    : "ISO 27001:2022 implementation guide for AI systems: Annex A controls for LLMs, AI agents and ML pipelines. Gap analysis, control mapping and audit evidence with Moltbot and OpenClaw."
+  const title = pick(isDE, "ISO 27001 für KI-Systeme: Annex A Controls & AI-spezifische Anforderungen | ClawGuru", "ISO 27001 for AI Systems: Annex A Controls & AI-Specific Requirements | ClawGuru")
+  const description = pick(isDE, "ISO 27001:2022 Implementierungsleitfaden für KI-Systeme: Annex A Controls für LLMs, AI-Agenten und ML-Pipelines. Gap-Analyse, Control-Mapping und Audit-Evidenz mit Moltbot und OpenClaw.", "ISO 27001:2022 implementation guide for AI systems: Annex A controls for LLMs, AI agents and ML pipelines. Gap analysis, control mapping and audit evidence with Moltbot and OpenClaw.")
   return {
     title, description,
     keywords: ["iso 27001 ai systems", "iso 27001 llm", "iso 27001 machine learning", "iso 27001 ai compliance", "annex a ai controls", "iso 27001 2022 ai"],
@@ -65,24 +62,22 @@ export default function Iso27001AiSystemsPage({ params }: { params: { lang: stri
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "ISO-27001-Compliance-Leitfaden für eigene KI-Systeme." : "ISO 27001 compliance guide for your own AI systems."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "ISO-27001-Compliance-Leitfaden für eigene KI-Systeme.", "ISO 27001 compliance guide for your own AI systems.")}
         </div>
         <div className="mb-3"><span className="text-xs font-bold uppercase tracking-widest text-cyan-400">Solutions · Batch 6</span></div>
         <h1 className="text-4xl font-bold mb-4 text-gray-100">
-          {isDE ? "ISO 27001 für KI-Systeme" : "ISO 27001 for AI Systems"}
+          {pick(isDE, "ISO 27001 für KI-Systeme", "ISO 27001 for AI Systems")}
         </h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "ISO 27001:2022 deckt KI-Systeme nicht vollständig ab — aber die neuen Annex-A-Controls sind direkt anwendbar. 8 kritische Control-Mappings, Audit-Evidenz und die häufigsten Gaps bei KI-Deployments."
-            : "ISO 27001:2022 doesn't fully address AI systems — but the new Annex A controls apply directly. 8 critical control mappings, audit evidence and the most common gaps in AI deployments."}
+          {pick(isDE, "ISO 27001:2022 deckt KI-Systeme nicht vollständig ab — aber die neuen Annex-A-Controls sind direkt anwendbar. 8 kritische Control-Mappings, Audit-Evidenz und die häufigsten Gaps bei KI-Deployments.", "ISO 27001:2022 doesn't fully address AI systems — but the new Annex A controls apply directly. 8 critical control mappings, audit evidence and the most common gaps in AI deployments.")}
         </p>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
           {[
-            { value: "8", label: isDE ? "Annex-A-Controls" : "Annex A controls" },
-            { value: "2022", label: isDE ? "ISO-Version" : "ISO version" },
-            { value: "42001", label: isDE ? "AI-spezifisch" : "AI-specific" },
-            { value: "Auto", label: isDE ? "Audit-Evidenz" : "Audit evidence" },
+            { value: "8", label: pick(isDE, "Annex-A-Controls", "Annex A controls") },
+            { value: "2022", label: pick(isDE, "ISO-Version", "ISO version") },
+            { value: "42001", label: pick(isDE, "AI-spezifisch", "AI-specific") },
+            { value: "Auto", label: pick(isDE, "Audit-Evidenz", "Audit evidence") },
           ].map((s) => (
             <div key={s.label} className="bg-gray-800 p-4 rounded-lg border border-gray-700 text-center">
               <div className="text-2xl font-black text-cyan-400">{s.value}</div>
@@ -92,7 +87,7 @@ export default function Iso27001AiSystemsPage({ params }: { params: { lang: stri
         </div>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "ISO 27001 Annex A — AI Control Mapping" : "ISO 27001 Annex A — AI Control Mapping"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "ISO 27001 Annex A — AI Control Mapping", "ISO 27001 Annex A — AI Control Mapping")}</h2>
           <div className="space-y-3">
             {CONTROL_MAPPINGS.map((c) => (
               <div key={c.control} className="bg-gray-800 rounded-lg border border-gray-700 p-4">
@@ -108,7 +103,7 @@ export default function Iso27001AiSystemsPage({ params }: { params: { lang: stri
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-3">
             {FAQ.map((f, i) => (
               <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
@@ -120,23 +115,23 @@ export default function Iso27001AiSystemsPage({ params }: { params: { lang: stri
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further Resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further Resources")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/solutions/iso27001-certification-roadmap`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">ISO 27001 Roadmap</div>
-              <div className="text-sm text-gray-300">{isDE ? "Zertifizierungsfahrplan" : "Certification roadmap"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Zertifizierungsfahrplan", "Certification roadmap")}</div>
             </a>
             <a href={`/${locale}/solutions/eu-ai-act-compliance`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">EU AI Act Compliance</div>
-              <div className="text-sm text-gray-300">{isDE ? "Risk-Klassen & Anforderungen" : "Risk classes & requirements"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Risk-Klassen & Anforderungen", "Risk classes & requirements")}</div>
             </a>
             <a href={`/${locale}/moltbot/ai-compliance-automation`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Compliance Automation</div>
-              <div className="text-sm text-gray-300">{isDE ? "Automatische Evidenz-Sammlung" : "Automated evidence collection"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Automatische Evidenz-Sammlung", "Automated evidence collection")}</div>
             </a>
             <a href={`/${locale}/solutions/soc2-type-ii-automation`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">SOC 2 Type II Automation</div>
-              <div className="text-sm text-gray-300">{isDE ? "SOC 2 + ISO 27001 Synergie" : "SOC 2 + ISO 27001 synergy"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "SOC 2 + ISO 27001 Synergie", "SOC 2 + ISO 27001 synergy")}</div>
             </a>
           </div>
         </section>

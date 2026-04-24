@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
 import Link from "next/link"
+import { pick } from "@/lib/i18n-pick"
 
 interface PageProps { params: { lang: string } }
 
@@ -15,12 +16,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const pageUrl = `${SITE_URL}/${locale}${PATH}`
   const isDE = locale === "de"
-  const title = isDE
-    ? "Affiliate Dashboard | ClawGuru"
-    : "Affiliate Dashboard | ClawGuru"
-  const description = isDE
-    ? "Verfolge deine Affiliate-Stats: Klicks, Conversions, Earnings. Echtzeit-Dashboard für ClawGuru Affiliates."
-    : "Track your affiliate stats: clicks, conversions, earnings. Real-time dashboard for ClawGuru affiliates."
+  const title = pick(isDE, "Affiliate Dashboard | ClawGuru", "Affiliate Dashboard | ClawGuru")
+  const description = pick(isDE, "Verfolge deine Affiliate-Stats: Klicks, Conversions, Earnings. Echtzeit-Dashboard für ClawGuru Affiliates.", "Track your affiliate stats: clicks, conversions, earnings. Real-time dashboard for ClawGuru affiliates.")
   return {
     title,
     description,
@@ -44,17 +41,17 @@ const getMockStats = (isDE: boolean) => ({
 })
 
 const getRecentReferrals = (isDE: boolean) => [
-  { id: 1, date: "2026-04-20", plan: isDE ? "Pro" : "Pro", commission: 17.15, status: isDE ? "Aktiv" : "Active" },
-  { id: 2, date: "2026-04-19", plan: isDE ? "Team" : "Team", commission: 45.15, status: isDE ? "Aktiv" : "Active" },
-  { id: 3, date: "2026-04-18", plan: isDE ? "Pro" : "Pro", commission: 17.15, status: isDE ? "Aktiv" : "Active" },
-  { id: 4, date: "2026-04-17", plan: isDE ? "Pro" : "Pro", commission: 17.15, status: isDE ? "Aktiv" : "Active" },
-  { id: 5, date: "2026-04-16", plan: isDE ? "Pro" : "Pro", commission: 17.15, status: isDE ? "Aktiv" : "Active" },
+  { id: 1, date: "2026-04-20", plan: pick(isDE, "Pro", "Pro"), commission: 17.15, status: pick(isDE, "Aktiv", "Active") },
+  { id: 2, date: "2026-04-19", plan: pick(isDE, "Team", "Team"), commission: 45.15, status: pick(isDE, "Aktiv", "Active") },
+  { id: 3, date: "2026-04-18", plan: pick(isDE, "Pro", "Pro"), commission: 17.15, status: pick(isDE, "Aktiv", "Active") },
+  { id: 4, date: "2026-04-17", plan: pick(isDE, "Pro", "Pro"), commission: 17.15, status: pick(isDE, "Aktiv", "Active") },
+  { id: 5, date: "2026-04-16", plan: pick(isDE, "Pro", "Pro"), commission: 17.15, status: pick(isDE, "Aktiv", "Active") },
 ]
 
 const getTopPerformers = (isDE: boolean) => [
-  { rank: 1, name: isDE ? "Tech Security Blog" : "Tech Security Blog", clicks: 342, conversions: 12, earnings: 205.80 },
-  { rank: 2, name: isDE ? "DevOps Weekly" : "DevOps Weekly", clicks: 289, conversions: 10, earnings: 171.50 },
-  { rank: 3, name: isDE ? "Cloud Native News" : "Cloud Native News", clicks: 215, conversions: 8, earnings: 137.20 },
+  { rank: 1, name: pick(isDE, "Tech Security Blog", "Tech Security Blog"), clicks: 342, conversions: 12, earnings: 205.80 },
+  { rank: 2, name: pick(isDE, "DevOps Weekly", "DevOps Weekly"), clicks: 289, conversions: 10, earnings: 171.50 },
+  { rank: 3, name: pick(isDE, "Cloud Native News", "Cloud Native News"), clicks: 215, conversions: 8, earnings: 137.20 },
 ]
 
 export default function AffiliateDashboardPage({ params }: PageProps) {
@@ -71,36 +68,36 @@ export default function AffiliateDashboardPage({ params }: PageProps) {
         <div className="mb-8 flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-black mb-2">
-              {isDE ? "Affiliate Dashboard" : "Affiliate Dashboard"}
+              {pick(isDE, "Affiliate Dashboard", "Affiliate Dashboard")}
             </h1>
             <p className="text-gray-400">
-              {isDE ? "Verfolge deine Performance und Earnings" : "Track your performance and earnings"}
+              {pick(isDE, "Verfolge deine Performance und Earnings", "Track your performance and earnings")}
             </p>
           </div>
           <Link
             href={`/${locale}/partners-apply`}
             className="px-4 py-2 rounded-lg border border-cyan-500/40 bg-cyan-500/10 text-cyan-300 hover:bg-cyan-500/20 transition-colors text-sm"
           >
-            {isDE ? "Partner-Programm" : "Partner Program"}
+            {pick(isDE, "Partner-Programm", "Partner Program")}
           </Link>
         </div>
 
         {/* Stats Grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           <div className="bg-gray-800/50 p-6 rounded-xl border border-gray-700">
-            <div className="text-sm text-gray-400 mb-1">{isDE ? "Gesamt-Klicks" : "Total Clicks"}</div>
+            <div className="text-sm text-gray-400 mb-1">{pick(isDE, "Gesamt-Klicks", "Total Clicks")}</div>
             <div className="text-3xl font-black text-cyan-400">{stats.totalClicks}</div>
           </div>
           <div className="bg-gray-800/50 p-6 rounded-xl border border-gray-700">
-            <div className="text-sm text-gray-400 mb-1">{isDE ? "Conversions" : "Conversions"}</div>
+            <div className="text-sm text-gray-400 mb-1">{pick(isDE, "Conversions", "Conversions")}</div>
             <div className="text-3xl font-black text-emerald-400">{stats.totalConversions}</div>
           </div>
           <div className="bg-gray-800/50 p-6 rounded-xl border border-gray-700">
-            <div className="text-sm text-gray-400 mb-1">{isDE ? "Gesamt-Earnings" : "Total Earnings"}</div>
+            <div className="text-sm text-gray-400 mb-1">{pick(isDE, "Gesamt-Earnings", "Total Earnings")}</div>
             <div className="text-3xl font-black text-cyan-400">€{stats.totalEarnings.toFixed(2)}</div>
           </div>
           <div className="bg-gray-800/50 p-6 rounded-xl border border-gray-700">
-            <div className="text-sm text-gray-400 mb-1">{isDE ? "Aktuelle Rate" : "Current Rate"}</div>
+            <div className="text-sm text-gray-400 mb-1">{pick(isDE, "Aktuelle Rate", "Current Rate")}</div>
             <div className="text-3xl font-black text-purple-400">{stats.commissionRate}%</div>
           </div>
         </div>
@@ -109,22 +106,22 @@ export default function AffiliateDashboardPage({ params }: PageProps) {
         <div className="bg-gradient-to-r from-cyan-900/30 to-purple-900/30 p-6 rounded-xl border border-cyan-700/50 mb-8">
           <div className="flex items-center justify-between">
             <div>
-              <div className="text-sm text-gray-400 mb-1">{isDE ? "Dein Tier" : "Your Tier"}</div>
+              <div className="text-sm text-gray-400 mb-1">{pick(isDE, "Dein Tier", "Your Tier")}</div>
               <div className="text-2xl font-black text-cyan-300">{stats.currentTier}</div>
             </div>
             <div className="text-right">
-              <div className="text-sm text-gray-400 mb-1">{isDE ? "Provision" : "Commission"}</div>
+              <div className="text-sm text-gray-400 mb-1">{pick(isDE, "Provision", "Commission")}</div>
               <div className="text-2xl font-black text-cyan-300">{stats.commissionRate}%</div>
             </div>
             <div className="text-right">
-              <div className="text-sm text-gray-400 mb-1">{isDE ? "Nächstes Tier" : "Next Tier"}</div>
-              <div className="text-2xl font-black text-gray-300">{isDE ? "Elite (40%)" : "Elite (40%)"}</div>
+              <div className="text-sm text-gray-400 mb-1">{pick(isDE, "Nächstes Tier", "Next Tier")}</div>
+              <div className="text-2xl font-black text-gray-300">{pick(isDE, "Elite (40%)", "Elite (40%)")}</div>
             </div>
           </div>
           <div className="mt-4">
             <div className="flex justify-between text-sm text-gray-400 mb-2">
-              <span>{isDE ? "Fortschritt zum nächsten Tier" : "Progress to next tier"}</span>
-              <span>{isDE ? "38/50 Referrals" : "38/50 referrals"}</span>
+              <span>{pick(isDE, "Fortschritt zum nächsten Tier", "Progress to next tier")}</span>
+              <span>{pick(isDE, "38/50 Referrals", "38/50 referrals")}</span>
             </div>
             <div className="w-full bg-gray-700 rounded-full h-2">
               <div className="bg-cyan-500 h-2 rounded-full" style={{ width: "76%" }}></div>
@@ -135,12 +132,12 @@ export default function AffiliateDashboardPage({ params }: PageProps) {
         {/* Payouts */}
         <div className="grid md:grid-cols-2 gap-4 mb-8">
           <div className="bg-gray-800/50 p-6 rounded-xl border border-gray-700">
-            <div className="text-sm text-gray-400 mb-1">{isDE ? "Ausstehende Auszahlung" : "Pending Payout"}</div>
+            <div className="text-sm text-gray-400 mb-1">{pick(isDE, "Ausstehende Auszahlung", "Pending Payout")}</div>
             <div className="text-3xl font-black text-amber-400">€{stats.pendingPayout.toFixed(2)}</div>
-            <div className="text-xs text-gray-500 mt-2">{isDE ? "Auszahlung am 30.04.2026" : "Payout on 30.04.2026"}</div>
+            <div className="text-xs text-gray-500 mt-2">{pick(isDE, "Auszahlung am 30.04.2026", "Payout on 30.04.2026")}</div>
           </div>
           <div className="bg-gray-800/50 p-6 rounded-xl border border-gray-700">
-            <div className="text-sm text-gray-400 mb-1">{isDE ? "Letzte Auszahlung" : "Last Payout"}</div>
+            <div className="text-sm text-gray-400 mb-1">{pick(isDE, "Letzte Auszahlung", "Last Payout")}</div>
             <div className="text-3xl font-black text-emerald-400">€{stats.lastPayout.toFixed(2)}</div>
             <div className="text-xs text-gray-500 mt-2">{stats.lastPayoutDate}</div>
           </div>
@@ -148,15 +145,15 @@ export default function AffiliateDashboardPage({ params }: PageProps) {
 
         {/* Recent Referrals */}
         <div className="bg-gray-800/50 p-6 rounded-xl border border-gray-700 mb-8">
-          <h2 className="text-xl font-bold mb-4">{isDE ? "Neue Referrals" : "Recent Referrals"}</h2>
+          <h2 className="text-xl font-bold mb-4">{pick(isDE, "Neue Referrals", "Recent Referrals")}</h2>
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
                 <tr className="text-left text-sm text-gray-400 border-b border-gray-700">
-                  <th className="pb-3">{isDE ? "Datum" : "Date"}</th>
-                  <th className="pb-3">{isDE ? "Plan" : "Plan"}</th>
-                  <th className="pb-3">{isDE ? "Provision" : "Commission"}</th>
-                  <th className="pb-3">{isDE ? "Status" : "Status"}</th>
+                  <th className="pb-3">{pick(isDE, "Datum", "Date")}</th>
+                  <th className="pb-3">{pick(isDE, "Plan", "Plan")}</th>
+                  <th className="pb-3">{pick(isDE, "Provision", "Commission")}</th>
+                  <th className="pb-3">{pick(isDE, "Status", "Status")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -179,7 +176,7 @@ export default function AffiliateDashboardPage({ params }: PageProps) {
 
         {/* Top Performing Links */}
         <div className="bg-gray-800/50 p-6 rounded-xl border border-gray-700 mb-8">
-          <h2 className="text-xl font-bold mb-4">{isDE ? "Top-Performer" : "Top Performers"}</h2>
+          <h2 className="text-xl font-bold mb-4">{pick(isDE, "Top-Performer", "Top Performers")}</h2>
           <div className="space-y-3">
             {topPerformers.map((perf) => (
               <div key={perf.rank} className="flex items-center justify-between p-3 bg-black/20 rounded-lg">
@@ -203,10 +200,10 @@ export default function AffiliateDashboardPage({ params }: PageProps) {
 
         {/* Marketing Assets */}
         <div className="bg-gray-800/50 p-6 rounded-xl border border-gray-700 mb-8">
-          <h2 className="text-xl font-bold mb-4">{isDE ? "Marketing-Assets" : "Marketing Assets"}</h2>
+          <h2 className="text-xl font-bold mb-4">{pick(isDE, "Marketing-Assets", "Marketing Assets")}</h2>
           <div className="grid md:grid-cols-2 gap-4">
             <div className="p-4 bg-black/20 rounded-lg border border-gray-700">
-              <div className="font-semibold mb-2">{isDE ? "Dein Affiliate-Link" : "Your Affiliate Link"}</div>
+              <div className="font-semibold mb-2">{pick(isDE, "Dein Affiliate-Link", "Your Affiliate Link")}</div>
               <div className="flex gap-2">
                 <input
                   type="text"
@@ -215,14 +212,14 @@ export default function AffiliateDashboardPage({ params }: PageProps) {
                   className="flex-1 bg-gray-900 border border-gray-700 rounded px-3 py-2 text-sm text-gray-300"
                 />
                 <button className="px-3 py-2 bg-cyan-600 hover:bg-cyan-500 rounded text-sm font-semibold transition-colors">
-                  {isDE ? "Kopieren" : "Copy"}
+                  {pick(isDE, "Kopieren", "Copy")}
                 </button>
               </div>
             </div>
             <div className="p-4 bg-black/20 rounded-lg border border-gray-700">
-              <div className="font-semibold mb-2">{isDE ? "Banners & Copy" : "Banners & Copy"}</div>
+              <div className="font-semibold mb-2">{pick(isDE, "Banners & Copy", "Banners & Copy")}</div>
               <button className="px-4 py-2 bg-cyan-600 hover:bg-cyan-500 rounded text-sm font-semibold transition-colors w-full">
-                {isDE ? "Assets herunterladen" : "Download Assets"}
+                {pick(isDE, "Assets herunterladen", "Download Assets")}
               </button>
             </div>
           </div>
@@ -231,7 +228,7 @@ export default function AffiliateDashboardPage({ params }: PageProps) {
         {/* Help & Support */}
         <div className="text-center">
           <p className="text-sm text-gray-400 mb-4">
-            {isDE ? "Fragen? Kontaktiere deinen Partner-Manager" : "Questions? Contact your partner manager"}
+            {pick(isDE, "Fragen? Kontaktiere deinen Partner-Manager", "Questions? Contact your partner manager")}
           </p>
           <a
             href="mailto:affiliates@clawguru.org"

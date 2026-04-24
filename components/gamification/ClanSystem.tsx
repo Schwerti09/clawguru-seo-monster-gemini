@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { Users, Crown, Shield, Sword, Plus, Search } from "lucide-react"
+import { pick } from "@/lib/i18n-pick"
 
 interface Clan {
   id: string
@@ -163,13 +164,13 @@ export function ClanSystem({ userClanId, locale = "de" }: ClanSystemProps) {
                 onClick={() => setShowCreateModal(false)}
                 className="flex-1 px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg text-sm text-gray-300 transition-colors"
               >
-                {isDE ? "Abbrechen" : "Cancel"}
+                {pick(isDE, "Abbrechen", "Cancel")}
               </button>
               <button
                 onClick={() => setShowCreateModal(false)}
                 className="flex-1 px-4 py-2 bg-purple-600 hover:bg-purple-500 rounded-lg text-sm text-white transition-colors"
               >
-                {isDE ? "Erstellen" : "Create"}
+                {pick(isDE, "Erstellen", "Create")}
               </button>
             </div>
           </div>

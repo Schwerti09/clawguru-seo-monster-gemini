@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
 import { History, TrendingUp, Calendar, Trophy, ArrowUpRight, ArrowDownRight, Loader2 } from "lucide-react"
 import Link from "next/link"
+import { pick } from "@/lib/i18n-pick"
 
 interface PageProps { params: { lang: string } }
 
@@ -16,10 +17,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const pageUrl = `${SITE_URL}/${locale}${PATH}`
   const isDE = locale === "de"
-  const title = isDE ? "Mein Roast-Verlauf | ClawGuru" : "My Roast History | ClawGuru"
-  const description = isDE
-    ? "Deine persönliche Roast-Timeline: Scores, Verbesserungen, Badges."
-    : "Your personal roast timeline: scores, improvements, badges."
+  const title = pick(isDE, "Mein Roast-Verlauf | ClawGuru", "My Roast History | ClawGuru")
+  const description = pick(isDE, "Deine persönliche Roast-Timeline: Scores, Verbesserungen, Badges.", "Your personal roast timeline: scores, improvements, badges.")
   return {
     title,
     description,
@@ -82,8 +81,8 @@ export default async function RoastHistoryPage({ params }: PageProps) {
               <History className="w-6 h-6 text-cyan-400" />
             </div>
             <div>
-              <h1 className="text-4xl font-bold text-gray-100">{isDE ? "Mein Roast-Verlauf" : "My Roast History"}</h1>
-              <p className="text-cyan-400">{history ? history.length : 0} {isDE ? "Roasts" : "roasts"} • {totalImprovement}+ {isDE ? "Punkte" : "points"} total</p>
+              <h1 className="text-4xl font-bold text-gray-100">{pick(isDE, "Mein Roast-Verlauf", "My Roast History")}</h1>
+              <p className="text-cyan-400">{history ? history.length : 0} {pick(isDE, "Roasts", "roasts")} • {totalImprovement}+ {pick(isDE, "Punkte", "points")} total</p>
             </div>
           </div>
         </div>
@@ -92,24 +91,24 @@ export default async function RoastHistoryPage({ params }: PageProps) {
         <div className="grid md:grid-cols-3 gap-4 mb-8">
           <div className="bg-gray-800 rounded-xl border border-gray-700 p-4 text-center">
             <div className="text-3xl font-bold text-green-400">{currentScore}</div>
-            <div className="text-sm text-zinc-500">{isDE ? "Aktueller Score" : "Current Score"}</div>
+            <div className="text-sm text-zinc-500">{pick(isDE, "Aktueller Score", "Current Score")}</div>
           </div>
           <div className="bg-gray-800 rounded-xl border border-gray-700 p-4 text-center">
             <div className="text-3xl font-bold text-amber-400">+{avgImprovement}</div>
-            <div className="text-sm text-zinc-500">{isDE ? "Ø pro Roast" : "Avg per roast"}</div>
+            <div className="text-sm text-zinc-500">{pick(isDE, "Ø pro Roast", "Avg per roast")}</div>
           </div>
           <div className="bg-gray-800 rounded-xl border border-gray-700 p-4 text-center">
             <div className="text-3xl font-bold text-cyan-400">{achievements.length}</div>
-            <div className="text-sm text-zinc-500">{isDE ? "Badges" : "Badges"}</div>
+            <div className="text-sm text-zinc-500">{pick(isDE, "Badges", "Badges")}</div>
           </div>
         </div>
 
         {/* Timeline */}
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Timeline" : "Timeline"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Timeline", "Timeline")}</h2>
           {!history || history.length === 0 ? (
             <div className="text-center text-zinc-500 py-8">
-              {isDE ? "Noch keine Roasts durchgeführt" : "No roasts yet"}
+              {pick(isDE, "Noch keine Roasts durchgeführt", "No roasts yet")}
             </div>
           ) : (
             <div className="space-y-4">
@@ -167,7 +166,7 @@ export default async function RoastHistoryPage({ params }: PageProps) {
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4 text-gray-100 flex items-center gap-2">
             <Trophy className="w-5 h-5 text-amber-400" />
-            {isDE ? "Errungenschaften" : "Achievements"}
+            {pick(isDE, "Errungenschaften", "Achievements")}
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {achievements.map((ach) => (
@@ -183,17 +182,17 @@ export default async function RoastHistoryPage({ params }: PageProps) {
         {/* CTA */}
         <div className="bg-gradient-to-r from-amber-900/40 to-red-900/40 border border-amber-700/50 rounded-xl p-6 text-center">
           <h3 className="text-xl font-bold text-amber-300 mb-2">
-            {isDE ? "Weiter verbessern?" : "Keep improving?"}
+            {pick(isDE, "Weiter verbessern?", "Keep improving?")}
           </h3>
           <p className="text-sm text-amber-200/70 mb-4">
-            {isDE ? "26 Punkte bis zur Hall of Fame" : "26 points to Hall of Fame"}
+            {pick(isDE, "26 Punkte bis zur Hall of Fame", "26 points to Hall of Fame")}
           </p>
           <Link 
             href={`/${locale}/roast-my-moltbot`}
             className="inline-flex items-center gap-2 px-6 py-3 bg-amber-600 hover:bg-amber-500 rounded-lg font-semibold text-white transition-colors"
           >
             <TrendingUp className="w-5 h-5" />
-            {isDE ? "Neuer Roast" : "New Roast"}
+            {pick(isDE, "Neuer Roast", "New Roast")}
           </Link>
         </div>
       </div>

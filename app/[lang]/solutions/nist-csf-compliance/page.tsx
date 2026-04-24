@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/solutions/nist-csf-compliance"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "NIST CSF 2.0 Compliance Automation für Self-Hosted Infrastruktur | ClawGuru"
-    : "NIST CSF 2.0 Compliance Automation for Self-Hosted Infrastructure | ClawGuru"
-  const description = isDE
-    ? "NIST Cybersecurity Framework 2.0 umsetzen: Govern, Identify, Protect, Detect, Respond, Recover — alle 6 Funktionen automatisiert mit Moltbot Runbooks für Self-Hosted-Infrastruktur."
-    : "Implement NIST Cybersecurity Framework 2.0: Govern, Identify, Protect, Detect, Respond, Recover — all 6 functions automated with Moltbot runbooks for self-hosted infrastructure."
+  const title = pick(isDE, "NIST CSF 2.0 Compliance Automation für Self-Hosted Infrastruktur | ClawGuru", "NIST CSF 2.0 Compliance Automation for Self-Hosted Infrastructure | ClawGuru")
+  const description = pick(isDE, "NIST Cybersecurity Framework 2.0 umsetzen: Govern, Identify, Protect, Detect, Respond, Recover — alle 6 Funktionen automatisiert mit Moltbot Runbooks für Self-Hosted-Infrastruktur.", "Implement NIST Cybersecurity Framework 2.0: Govern, Identify, Protect, Detect, Respond, Recover — all 6 functions automated with Moltbot runbooks for self-hosted infrastructure.")
   return {
     title, description,
     keywords: ["nist csf 2.0", "nist cybersecurity framework", "nist csf compliance", "nist csf automation", "nist csf self-hosted", "cybersecurity framework implementation"],
@@ -103,27 +100,25 @@ export default function NistCsfCompliancePage({ params }: { params: { lang: stri
       <div className="max-w-4xl mx-auto">
 
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "Compliance-Leitfaden für eigene Systeme." : "Compliance guide for your own systems."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Compliance-Leitfaden für eigene Systeme.", "Compliance guide for your own systems.")}
         </div>
 
         <div className="mb-3"><span className="text-xs font-bold uppercase tracking-widest text-cyan-400">Solutions · NIST CSF 2.0</span></div>
         <h1 className="text-4xl font-bold mb-4 text-gray-100">
-          {isDE ? "NIST CSF 2.0 Compliance Automation" : "NIST CSF 2.0 Compliance Automation"}
+          {pick(isDE, "NIST CSF 2.0 Compliance Automation", "NIST CSF 2.0 Compliance Automation")}
         </h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "Das NIST Cybersecurity Framework 2.0 (Februar 2024) strukturiert Cybersecurity in 6 Funktionen. Mit Moltbot automatisierst du die drei technischen Funktionen vollständig und erhältst Runbook-Templates für die drei organisatorischen Funktionen."
-            : "NIST Cybersecurity Framework 2.0 (February 2024) structures cybersecurity into 6 functions. With Moltbot you fully automate the three technical functions and get runbook templates for the three organisational functions."}
+          {pick(isDE, "Das NIST Cybersecurity Framework 2.0 (Februar 2024) strukturiert Cybersecurity in 6 Funktionen. Mit Moltbot automatisierst du die drei technischen Funktionen vollständig und erhältst Runbook-Templates für die drei organisatorischen Funktionen.", "NIST Cybersecurity Framework 2.0 (February 2024) structures cybersecurity into 6 functions. With Moltbot you fully automate the three technical functions and get runbook templates for the three organisational functions.")}
         </p>
 
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-10">
           {[
-            { value: "6", label: isDE ? "CSF 2.0 Funktionen" : "CSF 2.0 Functions" },
-            { value: "NEW", label: isDE ? "Govern — neu in 2.0" : "Govern — new in 2.0" },
-            { value: "3/6", label: isDE ? "Vollständig automatisierbar" : "Fully automatable" },
-            { value: "GDPR", label: isDE ? "Starke Überschneidung" : "Strong overlap" },
-            { value: "NIS2", label: isDE ? "Hohe Kompatibilität" : "High compatibility" },
-            { value: "2024", label: isDE ? "Aktuelle Version" : "Current version" },
+            { value: "6", label: pick(isDE, "CSF 2.0 Funktionen", "CSF 2.0 Functions") },
+            { value: "NEW", label: pick(isDE, "Govern — neu in 2.0", "Govern — new in 2.0") },
+            { value: "3/6", label: pick(isDE, "Vollständig automatisierbar", "Fully automatable") },
+            { value: "GDPR", label: pick(isDE, "Starke Überschneidung", "Strong overlap") },
+            { value: "NIS2", label: pick(isDE, "Hohe Kompatibilität", "High compatibility") },
+            { value: "2024", label: pick(isDE, "Aktuelle Version", "Current version") },
           ].map((s) => (
             <div key={s.label} className="bg-gray-800 p-4 rounded-lg border border-gray-700 text-center">
               <div className="text-2xl font-black text-cyan-400">{s.value}</div>
@@ -134,7 +129,7 @@ export default function NistCsfCompliancePage({ params }: { params: { lang: stri
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">
-            {isDE ? "Die 6 CSF-Funktionen — Automatisierungsgrad" : "6 CSF Functions — Automation Coverage"}
+            {pick(isDE, "Die 6 CSF-Funktionen — Automatisierungsgrad", "6 CSF Functions — Automation Coverage")}
           </h2>
           <div className="space-y-4">
             {CSF_FUNCTIONS.map((fn) => (
@@ -145,7 +140,7 @@ export default function NistCsfCompliancePage({ params }: { params: { lang: stri
                     <span className={`font-bold text-${fn.color}-100 text-lg`}>{fn.name}</span>
                   </div>
                   <span className={`text-xs font-bold px-2 py-1 rounded ${fn.auto ? "bg-green-900 text-green-300" : "bg-gray-700 text-gray-300"}`}>
-                    {fn.auto ? (isDE ? "Automatisiert" : "Automated") : (isDE ? "Runbook-gestützt" : "Runbook-assisted")}
+                    {fn.auto ? (pick(isDE, "Automatisiert", "Automated")) : (pick(isDE, "Runbook-gestützt", "Runbook-assisted"))}
                   </span>
                 </div>
                 <p className={`text-sm text-${fn.color}-200 mb-3`}>{fn.desc}</p>
@@ -163,7 +158,7 @@ export default function NistCsfCompliancePage({ params }: { params: { lang: stri
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">
-            {isDE ? "CSF 2.0 × GDPR × NIS2 — Mapping" : "CSF 2.0 × GDPR × NIS2 — Mapping"}
+            {pick(isDE, "CSF 2.0 × GDPR × NIS2 — Mapping", "CSF 2.0 × GDPR × NIS2 — Mapping")}
           </h2>
           <div className="overflow-x-auto">
             <table className="min-w-full bg-gray-900 border border-gray-700 rounded-lg">
@@ -195,7 +190,7 @@ export default function NistCsfCompliancePage({ params }: { params: { lang: stri
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-3">
             {FAQ.map((f, i) => (
               <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
@@ -207,23 +202,23 @@ export default function NistCsfCompliancePage({ params }: { params: { lang: stri
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further Resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further Resources")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/solutions/dsgvo-compliance-automation`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
-              <div className="font-semibold text-cyan-400">{isDE ? "DSGVO Compliance" : "GDPR Compliance"}</div>
-              <div className="text-sm text-gray-300">{isDE ? "CSF Protect/Respond → DSGVO Art. 32/33" : "CSF Protect/Respond → GDPR Art. 32/33"}</div>
+              <div className="font-semibold text-cyan-400">{pick(isDE, "DSGVO Compliance", "GDPR Compliance")}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "CSF Protect/Respond → DSGVO Art. 32/33", "CSF Protect/Respond → GDPR Art. 32/33")}</div>
             </a>
             <a href={`/${locale}/solutions/nis2-compliance`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">NIS2 Compliance</div>
-              <div className="text-sm text-gray-300">{isDE ? "EU-Pendant zum NIST CSF" : "EU counterpart to NIST CSF"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "EU-Pendant zum NIST CSF", "EU counterpart to NIST CSF")}</div>
             </a>
             <a href={`/${locale}/moltbot/ai-agent-security`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Agent Security</div>
-              <div className="text-sm text-gray-300">{isDE ? "CSF auf KI-Agenten anwenden" : "Apply CSF to AI agents"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "CSF auf KI-Agenten anwenden", "Apply CSF to AI agents")}</div>
             </a>
             <a href={`/${locale}/academy/cve-feed`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">CVE Feed</div>
-              <div className="text-sm text-gray-300">{isDE ? "CSF Identify — Schwachstellen erkennen" : "CSF Identify — detect vulnerabilities"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "CSF Identify — Schwachstellen erkennen", "CSF Identify — detect vulnerabilities")}</div>
             </a>
           </div>
         </section>

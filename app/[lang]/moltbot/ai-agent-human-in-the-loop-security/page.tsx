@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/moltbot/ai-agent-human-in-the-loop-security"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "AI Agent Human-in-the-Loop Security: KI-Agenten-Human-in-the-Loop-Security | ClawGuru Moltbot"
-    : "AI Agent Human-in-the-Loop Security: AI Agent Human-in-the-Loop Security | ClawGuru Moltbot"
-  const description = isDE
-    ? "KI-Agenten-Human-in-the-Loop-Security: Human Approval Workflow, Override Security, Human Feedback Integrity und Human-Audit-Logging für KI-Agenten-Human-in-the-Loop-Security."
-    : "AI agent human-in-the-loop security: human approval workflow, override security, human feedback integrity and human-audit-logging for AI agent human-in-the-loop security."
+  const title = pick(isDE, "AI Agent Human-in-the-Loop Security: KI-Agenten-Human-in-the-Loop-Security | ClawGuru Moltbot", "AI Agent Human-in-the-Loop Security: AI Agent Human-in-the-Loop Security | ClawGuru Moltbot")
+  const description = pick(isDE, "KI-Agenten-Human-in-the-Loop-Security: Human Approval Workflow, Override Security, Human Feedback Integrity und Human-Audit-Logging für KI-Agenten-Human-in-the-Loop-Security.", "AI agent human-in-the-loop security: human approval workflow, override security, human feedback integrity and human-audit-logging for AI agent human-in-the-loop security.")
   return {
     title, description,
     keywords: ["ai agent human in the loop security", "human approval workflow", "override security", "human feedback integrity", "human audit logging", "moltbot hitl"],
@@ -165,17 +162,15 @@ export default function AiAgentHumanInTheLoopSecurityPage({ params }: { params: 
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "Human-in-the-Loop-Security-Guide für eigene KI-Systeme." : "Human-in-the-loop security guide for your own AI systems."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Human-in-the-Loop-Security-Guide für eigene KI-Systeme.", "Human-in-the-loop security guide for your own AI systems.")}
         </div>
         <div className="mb-3"><span className="text-xs font-bold uppercase tracking-widest text-cyan-400">Moltbot · Batch 25</span></div>
-        <h1 className="text-4xl font-bold mb-4 text-gray-100">{isDE ? "AI Agent Human-in-the-Loop Security" : "AI Agent Human-in-the-Loop Security"}</h1>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">{pick(isDE, "AI Agent Human-in-the-Loop Security", "AI Agent Human-in-the-Loop Security")}</h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "KI-Agenten ohne Human-in-the-Loop-Security sind anfällig für HITL-Attacken — ohne Human-in-the-Loop-Security bleibt HITL ungeschützt. Vier Kontrollen: Human Approval Workflow, Override Security, Human Feedback Integrity und Human-Audit-Logging."
-            : "AI agents without human-in-the-loop security are vulnerable to HITL attacks — without human-in-the-loop security, HITL remains unprotected. Four controls: human approval workflow, override security, human feedback integrity and human-audit-logging."}
+          {pick(isDE, "KI-Agenten ohne Human-in-the-Loop-Security sind anfällig für HITL-Attacken — ohne Human-in-the-Loop-Security bleibt HITL ungeschützt. Vier Kontrollen: Human Approval Workflow, Override Security, Human Feedback Integrity und Human-Audit-Logging.", "AI agents without human-in-the-loop security are vulnerable to HITL attacks — without human-in-the-loop security, HITL remains unprotected. Four controls: human approval workflow, override security, human feedback integrity and human-audit-logging.")}
         </p>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "4 Human-in-the-Loop-Security-Kontrollen" : "4 Human-in-the-Loop Security Controls"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "4 Human-in-the-Loop-Security-Kontrollen", "4 Human-in-the-Loop Security Controls")}</h2>
           <div className="space-y-5">
             {CONTROLS.map((c) => (
               <div key={c.id} className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
@@ -192,7 +187,7 @@ export default function AiAgentHumanInTheLoopSecurityPage({ params }: { params: 
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-3">
             {FAQ.map((f, i) => (
               <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
@@ -203,23 +198,23 @@ export default function AiAgentHumanInTheLoopSecurityPage({ params }: { params: 
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further Resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further Resources")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/moltbot/ai-agent-behavioral-monitoring`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Agent Behavioral Monitoring</div>
-              <div className="text-sm text-gray-300">{isDE ? "Behavioral-Monitoring" : "Behavioral monitoring"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Behavioral-Monitoring", "Behavioral monitoring")}</div>
             </a>
             <a href={`/${locale}/moltbot/ai-agent-orchestration-security`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Agent Orchestration Security</div>
-              <div className="text-sm text-gray-300">{isDE ? "Orchestration-Security" : "Orchestration security"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Orchestration-Security", "Orchestration security")}</div>
             </a>
             <a href={`/${locale}/moltbot/llm-bias-detection-mitigation`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM Bias Detection & Mitigation</div>
-              <div className="text-sm text-gray-300">{isDE ? "Bias-Mitigation" : "Bias mitigation"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Bias-Mitigation", "Bias mitigation")}</div>
             </a>
             <a href={`/${locale}/moltbot/ai-agent-security`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Agent Security</div>
-              <div className="text-sm text-gray-300">{isDE ? "HITL-Overview" : "HITL overview"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "HITL-Overview", "HITL overview")}</div>
             </a>
           </div>
         </section>

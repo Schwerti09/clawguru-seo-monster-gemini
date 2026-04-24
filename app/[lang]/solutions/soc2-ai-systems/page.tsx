@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/solutions/soc2-ai-systems"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "SOC 2 für KI-Systeme: SOC 2 Compliance für AI-Systeme | ClawGuru Solutions"
-    : "SOC 2 for AI Systems: SOC 2 Compliance for AI Systems | ClawGuru Solutions"
-  const description = isDE
-    ? "SOC 2 Compliance für KI-Systeme: Trust Services Criteria, Audit Trail, Access Control und Incident Response für SOC 2 Type II. Executable Runbooks für Self-Hosted AI-Infrastruktur."
-    : "SOC 2 compliance for AI systems: Trust Services Criteria, audit trail, access control and incident response for SOC 2 Type II. Executable runbooks for self-hosted AI infrastructure."
+  const title = pick(isDE, "SOC 2 für KI-Systeme: SOC 2 Compliance für AI-Systeme | ClawGuru Solutions", "SOC 2 for AI Systems: SOC 2 Compliance for AI Systems | ClawGuru Solutions")
+  const description = pick(isDE, "SOC 2 Compliance für KI-Systeme: Trust Services Criteria, Audit Trail, Access Control und Incident Response für SOC 2 Type II. Executable Runbooks für Self-Hosted AI-Infrastruktur.", "SOC 2 compliance for AI systems: Trust Services Criteria, audit trail, access control and incident response for SOC 2 Type II. Executable runbooks for self-hosted AI infrastructure.")
   return {
     title, description,
     keywords: ["soc 2 ai systems", "soc 2 type ii", "ai compliance", "trust services criteria", "audit trail", "incident response", "clawguru solutions"],
@@ -180,17 +177,15 @@ export default function Soc2AiSystemsPage({ params }: { params: { lang: string }
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "SOC 2 Compliance-Guide für eigene KI-Systeme." : "SOC 2 compliance guide for your own AI systems."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "SOC 2 Compliance-Guide für eigene KI-Systeme.", "SOC 2 compliance guide for your own AI systems.")}
         </div>
         <div className="mb-3"><span className="text-xs font-bold uppercase tracking-widest text-cyan-400">Solutions · Batch 8</span></div>
-        <h1 className="text-4xl font-bold mb-4 text-gray-100">{isDE ? "SOC 2 für KI-Systeme" : "SOC 2 for AI Systems"}</h1>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">{pick(isDE, "SOC 2 für KI-Systeme", "SOC 2 for AI Systems")}</h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "SOC 2 Compliance für KI-Systeme: Trust Services Criteria, Audit Trail, Access Control und Incident Response für SOC 2 Type II. Executable Runbooks für Self-Hosted AI-Infrastruktur."
-            : "SOC 2 compliance for AI systems: Trust Services Criteria, audit trail, access control and incident response for SOC 2 Type II. Executable runbooks for self-hosted AI infrastructure."}
+          {pick(isDE, "SOC 2 Compliance für KI-Systeme: Trust Services Criteria, Audit Trail, Access Control und Incident Response für SOC 2 Type II. Executable Runbooks für Self-Hosted AI-Infrastruktur.", "SOC 2 compliance for AI systems: Trust Services Criteria, audit trail, access control and incident response for SOC 2 Type II. Executable runbooks for self-hosted AI infrastructure.")}
         </p>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "4 SOC 2 Compliance-Kontrollen" : "4 SOC 2 Compliance Controls"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "4 SOC 2 Compliance-Kontrollen", "4 SOC 2 Compliance Controls")}</h2>
           <div className="space-y-5">
             {CONTROLS.map((c) => (
               <div key={c.id} className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
@@ -207,7 +202,7 @@ export default function Soc2AiSystemsPage({ params }: { params: { lang: string }
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-3">
             {FAQ.map((f, i) => (
               <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
@@ -218,23 +213,23 @@ export default function Soc2AiSystemsPage({ params }: { params: { lang: string }
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further Resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further Resources")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/moltbot/ai-agent-audit-logging`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Agent Audit Logging</div>
-              <div className="text-sm text-gray-300">{isDE ? "Audit-Logging" : "Audit logging"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Audit-Logging", "Audit logging")}</div>
             </a>
             <a href={`/${locale}/moltbot/llm-model-access-control`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM Model Access Control</div>
-              <div className="text-sm text-gray-300">{isDE ? "Access-Control" : "Access control"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Access-Control", "Access control")}</div>
             </a>
             <a href={`/${locale}/solutions`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">All Solutions</div>
-              <div className="text-sm text-gray-300">{isDE ? "Solutions-Übersicht" : "Solutions overview"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Solutions-Übersicht", "Solutions overview")}</div>
             </a>
             <a href={`/${locale}/check`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Security Check</div>
-              <div className="text-sm text-gray-300">{isDE ? "Live-Check" : "Live check"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Live-Check", "Live check")}</div>
             </a>
           </div>
         </section>

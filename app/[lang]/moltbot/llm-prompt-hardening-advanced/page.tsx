@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/moltbot/llm-prompt-hardening-advanced"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "Advanced LLM Prompt Hardening: Multi-Layer Injection Defense 2026 | ClawGuru"
-    : "Advanced LLM Prompt Hardening: Multi-Layer Injection Defense 2026 | ClawGuru"
-  const description = isDE
-    ? "Fortgeschrittene Prompt-Härtung für LLMs: Multi-Layer Defense, Constitutional AI, Canary Tokens in Prompts, Adversarial Robustness Tests und produktionsreife Moltbot-Konfigurationen 2026."
-    : "Advanced prompt hardening for LLMs: multi-layer defense, constitutional AI, canary tokens in prompts, adversarial robustness tests and production-ready Moltbot configurations 2026."
+  const title = pick(isDE, "Advanced LLM Prompt Hardening: Multi-Layer Injection Defense 2026 | ClawGuru", "Advanced LLM Prompt Hardening: Multi-Layer Injection Defense 2026 | ClawGuru")
+  const description = pick(isDE, "Fortgeschrittene Prompt-Härtung für LLMs: Multi-Layer Defense, Constitutional AI, Canary Tokens in Prompts, Adversarial Robustness Tests und produktionsreife Moltbot-Konfigurationen 2026.", "Advanced prompt hardening for LLMs: multi-layer defense, constitutional AI, canary tokens in prompts, adversarial robustness tests and production-ready Moltbot configurations 2026.")
   return {
     title, description,
     keywords: ["advanced llm prompt hardening", "multi-layer prompt injection defense", "constitutional ai security", "prompt canary tokens", "adversarial prompt robustness", "llm security advanced 2026"],
@@ -31,9 +28,7 @@ export async function generateMetadata({ params }: { params: { lang: string } })
 const TECHNIQUES: { num: string; name: string; desc: (isDE: boolean) => string; example: string }[] = [
   {
     num: "1", name: "Multi-Layer Defense Architecture",
-    desc: (isDE: boolean) => isDE
-      ? "Nie nur eine Schutzschicht — Eingabe-Filter, LLM-Guardrails und Ausgabe-Validierung müssen unabhängig voneinander versagen können."
-      : "Never rely on a single protection layer — input filters, LLM guardrails, and output validation must each be able to fail independently.",
+    desc: (isDE: boolean) => pick(isDE, "Nie nur eine Schutzschicht — Eingabe-Filter, LLM-Guardrails und Ausgabe-Validierung müssen unabhängig voneinander versagen können.", "Never rely on a single protection layer — input filters, LLM guardrails, and output validation must each be able to fail independently."),
     example: `# Moltbot multi-layer prompt defense config
 prompt_defense:
   layers:
@@ -61,9 +56,7 @@ prompt_defense:
   },
   {
     num: "2", name: "Constitutional AI Constraints",
-    desc: (isDE: boolean) => isDE
-      ? "Definiere eine Verfassung von Prinzipien, die das Modell bei jeder Antwort gegen sich selbst prüft."
-      : "Define a constitution of principles the model checks each response against before returning it.",
+    desc: (isDE: boolean) => pick(isDE, "Definiere eine Verfassung von Prinzipien, die das Modell bei jeder Antwort gegen sich selbst prüft.", "Define a constitution of principles the model checks each response against before returning it."),
     example: `CONSTITUTIONAL CONSTRAINTS (apply to every response):
 1. Harmlessness: Does this response help someone cause harm? → Refuse
 2. Honesty: Does this response contain false information? → Correct
@@ -76,9 +69,7 @@ If any constraint is violated, respond: "I can only help with [scope]."`,
   },
   {
     num: "3", name: "Canary Tokens in System Prompts",
-    desc: (isDE: boolean) => isDE
-      ? "Versteckte Markierungen im System-Prompt erkennen, wenn der Prompt extrahiert oder weitergegeben wurde."
-      : "Hidden markers in the system prompt detect when the prompt has been extracted or leaked.",
+    desc: (isDE: boolean) => pick(isDE, "Versteckte Markierungen im System-Prompt erkennen, wenn der Prompt extrahiert oder weitergegeben wurde.", "Hidden markers in the system prompt detect when the prompt has been extracted or leaked."),
     example: `# Insert unique canary in system prompt
 SYSTEM_CANARY_TOKEN: "cg-k9x2-prompt-sentinel-7741"
 
@@ -98,9 +89,7 @@ canary_rotation:
   },
   {
     num: "4", name: "Adversarial Robustness Testing",
-    desc: (isDE: boolean) => isDE
-      ? "Regelmäßige automatisierte Red-Team-Tests gegen eigene LLM-Endpoints — bevor Angreifer es tun."
-      : "Regular automated red-team tests against your own LLM endpoints — before attackers do.",
+    desc: (isDE: boolean) => pick(isDE, "Regelmäßige automatisierte Red-Team-Tests gegen eigene LLM-Endpoints — bevor Angreifer es tun.", "Regular automated red-team tests against your own LLM endpoints — before attackers do."),
     example: `# Moltbot adversarial test suite
 adversarial_tests:
   schedule: "0 3 * * 1"  # Every Monday 3am
@@ -121,9 +110,7 @@ adversarial_tests:
   },
   {
     num: "5", name: "Prompt Versioning & Audit Trail",
-    desc: (isDE: boolean) => isDE
-      ? "Jede Änderung am System-Prompt muss versioniert, reviewed und auditierbar sein."
-      : "Every change to the system prompt must be versioned, reviewed, and auditable.",
+    desc: (isDE: boolean) => pick(isDE, "Jede Änderung am System-Prompt muss versioniert, reviewed und auditierbar sein.", "Every change to the system prompt must be versioned, reviewed, and auditable."),
     example: `# Moltbot prompt version control
 prompt_registry:
   storage: encrypted_vault
@@ -212,12 +199,10 @@ export default function LlmPromptHardeningAdvancedPage({ params }: { params: { l
         </div>
 
         <h1 className="text-4xl font-bold mb-4 text-gray-100">
-          {isDE ? "Advanced LLM Prompt Hardening: Multi-Layer Defense 2026" : "Advanced LLM Prompt Hardening: Multi-Layer Defense 2026"}
+          {pick(isDE, "Advanced LLM Prompt Hardening: Multi-Layer Defense 2026", "Advanced LLM Prompt Hardening: Multi-Layer Defense 2026")}
         </h1>
         <p className="text-lg text-gray-300 mb-10">
-          {isDE
-            ? "Basic Keyword-Filter reichen nicht mehr. Angreifer nutzen indirekte Injection, mehrsprachige Bypässe und Multi-Turn-Jailbreaks. Dieser Guide zeigt die fortgeschrittenen Techniken für produktionsreife LLM-Härtung."
-            : "Basic keyword filters are no longer enough. Attackers use indirect injection, multilingual bypasses, and multi-turn jailbreaks. This guide covers advanced techniques for production-grade LLM hardening."}
+          {pick(isDE, "Basic Keyword-Filter reichen nicht mehr. Angreifer nutzen indirekte Injection, mehrsprachige Bypässe und Multi-Turn-Jailbreaks. Dieser Guide zeigt die fortgeschrittenen Techniken für produktionsreife LLM-Härtung.", "Basic keyword filters are no longer enough. Attackers use indirect injection, multilingual bypasses, and multi-turn jailbreaks. This guide covers advanced techniques for production-grade LLM hardening.")}
         </p>
 
         {TECHNIQUES.map((tech) => (
@@ -237,7 +222,7 @@ export default function LlmPromptHardeningAdvancedPage({ params }: { params: { l
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">
-            {isDE ? "Häufige Fragen" : "Frequently Asked Questions"}
+            {pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}
           </h2>
           <div className="space-y-4">
             {FAQ.map((entry, i) => (
@@ -254,37 +239,37 @@ export default function LlmPromptHardeningAdvancedPage({ params }: { params: { l
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">
-            {isDE ? "Weiterführende Ressourcen" : "Further Resources"}
+            {pick(isDE, "Weiterführende Ressourcen", "Further Resources")}
           </h2>
           <div className="grid sm:grid-cols-2 gap-4">
             <a href={`/${locale}/moltbot/llm-prompt-hardening`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM Prompt Hardening (Basics)</div>
-              <div className="text-sm text-gray-300">{isDE ? "Grundlagen der Prompt-Härtung" : "Fundamentals of prompt hardening"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Grundlagen der Prompt-Härtung", "Fundamentals of prompt hardening")}</div>
             </a>
             <a href={`/${locale}/moltbot/prompt-injection-defense`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Prompt Injection Defense</div>
-              <div className="text-sm text-gray-300">{isDE ? "Injection-Angriffe abwehren" : "Defending against injection attacks"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Injection-Angriffe abwehren", "Defending against injection attacks")}</div>
             </a>
             <a href={`/${locale}/moltbot/llm-output-schema-validation`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM Output Schema Validation</div>
-              <div className="text-sm text-gray-300">{isDE ? "Ausgaben strukturiert validieren" : "Validate outputs with strict schemas"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Ausgaben strukturiert validieren", "Validate outputs with strict schemas")}</div>
             </a>
             <a href={`/${locale}/securitycheck`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
-              <div className="font-semibold text-cyan-400">{isDE ? "Security Check starten" : "Start Security Check"}</div>
-              <div className="text-sm text-gray-300">{isDE ? "LLM-Härtung in 30 Sekunden prüfen" : "Check LLM hardening in 30 seconds"}</div>
+              <div className="font-semibold text-cyan-400">{pick(isDE, "Security Check starten", "Start Security Check")}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "LLM-Härtung in 30 Sekunden prüfen", "Check LLM hardening in 30 seconds")}</div>
             </a>
           </div>
         </section>
 
         <div className="bg-cyan-900 border border-cyan-700 rounded-lg p-6 text-center">
           <h2 className="text-xl font-bold text-cyan-300 mb-2">
-            {isDE ? "LLM Prompt-Härtung automatisieren?" : "Automate LLM prompt hardening?"}
+            {pick(isDE, "LLM Prompt-Härtung automatisieren?", "Automate LLM prompt hardening?")}
           </h2>
           <p className="text-gray-300 mb-4 text-sm">
-            {isDE ? "Moltbot erzwingt mehrstufige Prompt-Verteidigung automatisch — konfigurierbar, auditierbar, ohne Cloud." : "Moltbot enforces multi-layer prompt defense automatically — configurable, auditable, no cloud."}
+            {pick(isDE, "Moltbot erzwingt mehrstufige Prompt-Verteidigung automatisch — konfigurierbar, auditierbar, ohne Cloud.", "Moltbot enforces multi-layer prompt defense automatically — configurable, auditable, no cloud.")}
           </p>
           <a href={`/${locale}/securitycheck`} className="inline-block bg-cyan-500 hover:bg-cyan-400 text-black font-bold px-6 py-3 rounded-lg transition-colors">
-            {isDE ? "🛡️ Kostenloser Security Check" : "🛡️ Free Security Check"}
+            {pick(isDE, "🛡️ Kostenloser Security Check", "🛡️ Free Security Check")}
           </a>
         </div>
       </div>

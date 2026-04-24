@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/moltbot/llm-output-validation"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "LLM Output Validation: Sichere KI-Ausgaben vor der Übergabe | ClawGuru Moltbot"
-    : "LLM Output Validation: Secure AI Outputs Before Delivery | ClawGuru Moltbot"
-  const description = isDE
-    ? "LLM-Output-Validierung für Produktions-KI-Systeme: Schema-Validierung, PII-Erkennung, Toxizitätsscan, Prompt-Exfiltration-Erkennung und strukturiertes Output-Enforcement mit Moltbot Guard."
-    : "LLM output validation for production AI systems: schema validation, PII detection, toxicity scanning, prompt exfiltration detection and structured output enforcement with Moltbot Guard."
+  const title = pick(isDE, "LLM Output Validation: Sichere KI-Ausgaben vor der Übergabe | ClawGuru Moltbot", "LLM Output Validation: Secure AI Outputs Before Delivery | ClawGuru Moltbot")
+  const description = pick(isDE, "LLM-Output-Validierung für Produktions-KI-Systeme: Schema-Validierung, PII-Erkennung, Toxizitätsscan, Prompt-Exfiltration-Erkennung und strukturiertes Output-Enforcement mit Moltbot Guard.", "LLM output validation for production AI systems: schema validation, PII detection, toxicity scanning, prompt exfiltration detection and structured output enforcement with Moltbot Guard.")
   return {
     title, description,
     keywords: ["llm output validation", "ai output filtering", "llm response validation", "moltbot guard", "pii detection llm output", "llm output security"],
@@ -194,20 +191,18 @@ export default function LlmOutputValidationPage({ params }: { params: { lang: st
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "Output-Validierungs-Guide für eigene KI-Systeme." : "Output validation guide for your own AI systems."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Output-Validierungs-Guide für eigene KI-Systeme.", "Output validation guide for your own AI systems.")}
         </div>
         <div className="mb-3"><span className="text-xs font-bold uppercase tracking-widest text-cyan-400">Moltbot · Batch 10</span></div>
         <h1 className="text-4xl font-bold mb-4 text-gray-100">
-          {isDE ? "LLM Output Validation" : "LLM Output Validation"}
+          {pick(isDE, "LLM Output Validation", "LLM Output Validation")}
         </h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "Safety-Training des Modells ist kein Schutz — Jailbreaks, PII-Leaks und Prompt-Exfiltration passieren trotzdem. Vier Validierungs-Schichten: Schema-Enforcement, PII-Scan, Exfiltrations-Detection und Safety-Scan."
-            : "Model safety training is not protection — jailbreaks, PII leaks and prompt exfiltration still occur. Four validation layers: schema enforcement, PII scanning, exfiltration detection and safety scanning."}
+          {pick(isDE, "Safety-Training des Modells ist kein Schutz — Jailbreaks, PII-Leaks und Prompt-Exfiltration passieren trotzdem. Vier Validierungs-Schichten: Schema-Enforcement, PII-Scan, Exfiltrations-Detection und Safety-Scan.", "Model safety training is not protection — jailbreaks, PII leaks and prompt exfiltration still occur. Four validation layers: schema enforcement, PII scanning, exfiltration detection and safety scanning.")}
         </p>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "4 Output-Validierungs-Schichten" : "4 Output Validation Layers"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "4 Output-Validierungs-Schichten", "4 Output Validation Layers")}</h2>
           <div className="space-y-5">
             {VALIDATION_LAYERS.map((v) => (
               <div key={v.id} className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
@@ -225,7 +220,7 @@ export default function LlmOutputValidationPage({ params }: { params: { lang: st
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-3">
             {FAQ.map((f, i) => (
               <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
@@ -237,23 +232,23 @@ export default function LlmOutputValidationPage({ params }: { params: { lang: st
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further Resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further Resources")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/moltbot/llm-prompt-hardening`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM Prompt Hardening</div>
-              <div className="text-sm text-gray-300">{isDE ? "Input-Seite absichern" : "Secure the input side"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Input-Seite absichern", "Secure the input side")}</div>
             </a>
             <a href={`/${locale}/moltbot/llm-context-isolation`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM Context Isolation</div>
-              <div className="text-sm text-gray-300">{isDE ? "Kontext-Poisoning verhindern" : "Prevent context poisoning"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Kontext-Poisoning verhindern", "Prevent context poisoning")}</div>
             </a>
             <a href={`/${locale}/moltbot/ai-agent-audit-logging`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Agent Audit Logging</div>
-              <div className="text-sm text-gray-300">{isDE ? "Outputs auditieren" : "Audit outputs"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Outputs auditieren", "Audit outputs")}</div>
             </a>
             <a href={`/${locale}/moltbot/prompt-injection-defense`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Prompt Injection Defense</div>
-              <div className="text-sm text-gray-300">{isDE ? "Injection-Prävention" : "Injection prevention"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Injection-Prävention", "Injection prevention")}</div>
             </a>
           </div>
         </section>

@@ -1,4 +1,5 @@
 import { Check, Star } from "lucide-react"
+import { pick } from "@/lib/i18n-pick"
 
 /**
  * Phase 5 Schritt 84 — Sponsored Roasts — „Roast powered by X"
@@ -63,13 +64,13 @@ export default function SponsoredRoast({ sponsor, locale = "de" }: SponsoredRoas
       <div className="grid grid-cols-2 gap-4 mb-4">
         <div className="bg-gray-900/50 p-3 rounded-lg">
           <div className="text-xs text-gray-400 mb-1">
-            {isDE ? "Roasts" : "Roasts"}
+            {pick(isDE, "Roasts", "Roasts")}
           </div>
           <div className="text-lg font-bold text-cyan-400">{sponsor.roastCount.toLocaleString()}</div>
         </div>
         <div className="bg-gray-900/50 p-3 rounded-lg">
           <div className="text-xs text-gray-400 mb-1">
-            {isDE ? "Ø Score" : "Avg Score"}
+            {pick(isDE, "Ø Score", "Avg Score")}
           </div>
           <div className="text-lg font-bold text-cyan-400">{sponsor.avgScore.toFixed(1)}</div>
         </div>
@@ -77,7 +78,7 @@ export default function SponsoredRoast({ sponsor, locale = "de" }: SponsoredRoas
 
       <div className="flex items-center gap-2 text-xs text-gray-400">
         <Check className="w-3 h-3 text-green-400" />
-        {isDE ? "Powered by ClawGuru" : "Powered by ClawGuru"}
+        {pick(isDE, "Powered by ClawGuru", "Powered by ClawGuru")}
       </div>
 
       {sponsor.website && (
@@ -87,7 +88,7 @@ export default function SponsoredRoast({ sponsor, locale = "de" }: SponsoredRoas
           rel="noopener noreferrer"
           className="block mt-4 text-center text-sm text-cyan-400 hover:text-cyan-300 transition-colors"
         >
-          {isDE ? "Website besuchen" : "Visit website"} →
+          {pick(isDE, "Website besuchen", "Visit website")} →
         </a>
       )}
     </div>
@@ -107,9 +108,7 @@ export function SponsoredRoastsList({ sponsors, locale = "de" }: SponsoredRoasts
     return (
       <div className="bg-gray-800 p-6 rounded-lg border border-gray-700 text-center">
         <p className="text-sm text-gray-400">
-          {isDE
-            ? "Keine Sponsored Roasts verfügbar."
-            : "No sponsored roasts available."}
+          {pick(isDE, "Keine Sponsored Roasts verfügbar.", "No sponsored roasts available.")}
         </p>
       </div>
     )

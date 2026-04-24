@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/moltbot/ai-agent-capability-control"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "AI Agent Capability Control: KI-Agenten-Capability-Control | ClawGuru Moltbot"
-    : "AI Agent Capability Control: AI Agent Capability Control | ClawGuru Moltbot"
-  const description = isDE
-    ? "KI-Agenten-Capability-Control: Tool Access Control, Action Allowlisting, Capability Scoping und Capability Monitoring für KI-Agenten-Capability-Control."
-    : "AI agent capability control: tool access control, action allowlisting, capability scoping and capability monitoring for AI agent capability control."
+  const title = pick(isDE, "AI Agent Capability Control: KI-Agenten-Capability-Control | ClawGuru Moltbot", "AI Agent Capability Control: AI Agent Capability Control | ClawGuru Moltbot")
+  const description = pick(isDE, "KI-Agenten-Capability-Control: Tool Access Control, Action Allowlisting, Capability Scoping und Capability Monitoring für KI-Agenten-Capability-Control.", "AI agent capability control: tool access control, action allowlisting, capability scoping and capability monitoring for AI agent capability control.")
   return {
     title, description,
     keywords: ["ai agent capability control", "tool access control", "action allowlisting", "capability scoping", "capability monitoring", "moltbot capability control"],
@@ -173,17 +170,15 @@ export default function AiAgentCapabilityControlPage({ params }: { params: { lan
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "Capability-Control-Guide für eigene KI-Agenten-Systeme." : "Capability control guide for your own AI agent systems."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Capability-Control-Guide für eigene KI-Agenten-Systeme.", "Capability control guide for your own AI agent systems.")}
         </div>
         <div className="mb-3"><span className="text-xs font-bold uppercase tracking-widest text-cyan-400">Moltbot · Batch 28</span></div>
-        <h1 className="text-4xl font-bold mb-4 text-gray-100">{isDE ? "AI Agent Capability Control" : "AI Agent Capability Control"}</h1>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">{pick(isDE, "AI Agent Capability Control", "AI Agent Capability Control")}</h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "Ein unkontrollierter KI-Agent mit Zugriff auf alle Tools ist eine Zeitbombe — Prompt Injection kann ihn alles löschen lassen. Vier Kontrollen: Tool Access Control, Action Allowlisting, Capability Scoping und Capability Monitoring."
-            : "An unconstrained AI agent with access to all tools is a ticking bomb — prompt injection can make it delete everything. Four controls: tool access control, action allowlisting, capability scoping and capability monitoring."}
+          {pick(isDE, "Ein unkontrollierter KI-Agent mit Zugriff auf alle Tools ist eine Zeitbombe — Prompt Injection kann ihn alles löschen lassen. Vier Kontrollen: Tool Access Control, Action Allowlisting, Capability Scoping und Capability Monitoring.", "An unconstrained AI agent with access to all tools is a ticking bomb — prompt injection can make it delete everything. Four controls: tool access control, action allowlisting, capability scoping and capability monitoring.")}
         </p>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "4 Capability-Control-Kontrollen" : "4 Capability Control Controls"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "4 Capability-Control-Kontrollen", "4 Capability Control Controls")}</h2>
           <div className="space-y-5">
             {CONTROLS.map((c) => (
               <div key={c.id} className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
@@ -200,7 +195,7 @@ export default function AiAgentCapabilityControlPage({ params }: { params: { lan
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-3">
             {FAQ.map((f, i) => (
               <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
@@ -211,23 +206,23 @@ export default function AiAgentCapabilityControlPage({ params }: { params: { lan
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further Resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further Resources")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/moltbot/ai-agent-goal-alignment-security`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Agent Goal Alignment Security</div>
-              <div className="text-sm text-gray-300">{isDE ? "Goal-Alignment" : "Goal alignment"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Goal-Alignment", "Goal alignment")}</div>
             </a>
             <a href={`/${locale}/moltbot/agent-tool-security`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Agent Tool Security</div>
-              <div className="text-sm text-gray-300">{isDE ? "Tool-Security" : "Tool security"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Tool-Security", "Tool security")}</div>
             </a>
             <a href={`/${locale}/moltbot/ai-agent-behavioral-monitoring`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Agent Behavioral Monitoring</div>
-              <div className="text-sm text-gray-300">{isDE ? "Behavioral-Monitoring" : "Behavioral monitoring"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Behavioral-Monitoring", "Behavioral monitoring")}</div>
             </a>
             <a href={`/${locale}/moltbot/ai-agent-security`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Agent Security</div>
-              <div className="text-sm text-gray-300">{isDE ? "Security-Overview" : "Security overview"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Security-Overview", "Security overview")}</div>
             </a>
           </div>
         </section>

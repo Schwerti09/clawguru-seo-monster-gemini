@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/moltbot/llm-continual-learning-security"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "LLM Continual Learning Security: LLM-Continual-Learning-Security | ClawGuru Moltbot"
-    : "LLM Continual Learning Security: LLM Continual Learning Security | ClawGuru Moltbot"
-  const description = isDE
-    ? "LLM-Continual-Learning-Security: Data Poisoning Detection, Learning Rate Security, Model Drift Detection und Continual Learning Audit Logging für LLM-Continual-Learning-Security."
-    : "LLM continual learning security: data poisoning detection, learning rate security, model drift detection and continual learning audit logging for LLM continual learning security."
+  const title = pick(isDE, "LLM Continual Learning Security: LLM-Continual-Learning-Security | ClawGuru Moltbot", "LLM Continual Learning Security: LLM Continual Learning Security | ClawGuru Moltbot")
+  const description = pick(isDE, "LLM-Continual-Learning-Security: Data Poisoning Detection, Learning Rate Security, Model Drift Detection und Continual Learning Audit Logging für LLM-Continual-Learning-Security.", "LLM continual learning security: data poisoning detection, learning rate security, model drift detection and continual learning audit logging for LLM continual learning security.")
   return {
     title, description,
     keywords: ["llm continual learning security", "data poisoning detection", "learning rate security", "model drift detection", "continual learning audit", "moltbot continual"],
@@ -165,17 +162,15 @@ export default function LlmContinualLearningSecurityPage({ params }: { params: {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "Continual-Learning-Security-Guide für eigene KI-Systeme." : "Continual learning security guide for your own AI systems."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Continual-Learning-Security-Guide für eigene KI-Systeme.", "Continual learning security guide for your own AI systems.")}
         </div>
         <div className="mb-3"><span className="text-xs font-bold uppercase tracking-widest text-cyan-400">Moltbot · Batch 25</span></div>
-        <h1 className="text-4xl font-bold mb-4 text-gray-100">{isDE ? "LLM Continual Learning Security" : "LLM Continual Learning Security"}</h1>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">{pick(isDE, "LLM Continual Learning Security", "LLM Continual Learning Security")}</h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "LLM-Modelle ohne Continual-Learning-Security sind anfällig für Continual-Learning-Attacken — ohne Continual-Learning-Security bleibt Continual-Learning ungeschützt. Vier Kontrollen: Data Poisoning Detection, Learning Rate Security, Model Drift Detection und Continual Learning Audit Logging."
-            : "LLM models without continual learning security are vulnerable to continual learning attacks — without continual learning security, continual learning remains unprotected. Four controls: data poisoning detection, learning rate security, model drift detection and continual learning audit logging."}
+          {pick(isDE, "LLM-Modelle ohne Continual-Learning-Security sind anfällig für Continual-Learning-Attacken — ohne Continual-Learning-Security bleibt Continual-Learning ungeschützt. Vier Kontrollen: Data Poisoning Detection, Learning Rate Security, Model Drift Detection und Continual Learning Audit Logging.", "LLM models without continual learning security are vulnerable to continual learning attacks — without continual learning security, continual learning remains unprotected. Four controls: data poisoning detection, learning rate security, model drift detection and continual learning audit logging.")}
         </p>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "4 Continual-Learning-Security-Kontrollen" : "4 Continual Learning Security Controls"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "4 Continual-Learning-Security-Kontrollen", "4 Continual Learning Security Controls")}</h2>
           <div className="space-y-5">
             {CONTROLS.map((c) => (
               <div key={c.id} className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
@@ -192,7 +187,7 @@ export default function LlmContinualLearningSecurityPage({ params }: { params: {
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-3">
             {FAQ.map((f, i) => (
               <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
@@ -203,23 +198,23 @@ export default function LlmContinualLearningSecurityPage({ params }: { params: {
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further Resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further Resources")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/moltbot/llm-fine-tuning-security`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM Fine-Tuning Security</div>
-              <div className="text-sm text-gray-300">{isDE ? "Fine-Tuning-Security" : "Fine-tuning security"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Fine-Tuning-Security", "Fine-tuning security")}</div>
             </a>
             <a href={`/${locale}/moltbot/llm-adversarial-robustness`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM Adversarial Robustness</div>
-              <div className="text-sm text-gray-300">{isDE ? "Adversarial-Defense" : "Adversarial defense"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Adversarial-Defense", "Adversarial defense")}</div>
             </a>
             <a href={`/${locale}/moltbot/llm-hallucination-detection`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM Hallucination Detection</div>
-              <div className="text-sm text-gray-300">{isDE ? "Hallucination-Detection" : "Hallucination detection"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Hallucination-Detection", "Hallucination detection")}</div>
             </a>
             <a href={`/${locale}/moltbot/ai-agent-security`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Agent Security</div>
-              <div className="text-sm text-gray-300">{isDE ? "Continual-Learning-Overview" : "Continual learning overview"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Continual-Learning-Overview", "Continual learning overview")}</div>
             </a>
           </div>
         </section>

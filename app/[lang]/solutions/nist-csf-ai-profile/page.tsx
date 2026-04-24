@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/solutions/nist-csf-ai-profile"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "NIST CSF AI Profile: NIST-CSF-KI-Profil für Self-Hosted AI | ClawGuru Solutions"
-    : "NIST CSF AI Profile: NIST Cybersecurity Framework for AI Systems | ClawGuru Solutions"
-  const description = isDE
-    ? "NIST CSF 2.0 AI-Profil: Govern, Identify, Protect, Detect, Respond und Recover für KI-Systeme. Executable Runbooks für NIST-CSF-Compliance bei Self-Hosted AI und LLMs."
-    : "NIST CSF 2.0 AI profile: Govern, Identify, Protect, Detect, Respond and Recover for AI systems. Executable runbooks for NIST CSF compliance with self-hosted AI and LLMs."
+  const title = pick(isDE, "NIST CSF AI Profile: NIST-CSF-KI-Profil für Self-Hosted AI | ClawGuru Solutions", "NIST CSF AI Profile: NIST Cybersecurity Framework for AI Systems | ClawGuru Solutions")
+  const description = pick(isDE, "NIST CSF 2.0 AI-Profil: Govern, Identify, Protect, Detect, Respond und Recover für KI-Systeme. Executable Runbooks für NIST-CSF-Compliance bei Self-Hosted AI und LLMs.", "NIST CSF 2.0 AI profile: Govern, Identify, Protect, Detect, Respond and Recover for AI systems. Executable runbooks for NIST CSF compliance with self-hosted AI and LLMs.")
   return {
     title, description,
     keywords: ["nist csf ai profile", "nist csf 2.0 ai", "nist cybersecurity framework ai", "nist ai compliance", "nist csf llm", "nist csf self-hosted"],
@@ -72,17 +69,15 @@ export default function NistCsfAiProfilePage({ params }: { params: { lang: strin
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "NIST-CSF-Compliance-Guide für eigene KI-Systeme." : "NIST CSF compliance guide for your own AI systems."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "NIST-CSF-Compliance-Guide für eigene KI-Systeme.", "NIST CSF compliance guide for your own AI systems.")}
         </div>
         <div className="mb-3"><span className="text-xs font-bold uppercase tracking-widest text-cyan-400">Solutions · Batch 10</span></div>
-        <h1 className="text-4xl font-bold mb-4 text-gray-100">{isDE ? "NIST CSF AI Profile" : "NIST CSF AI Profile"}</h1>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">{pick(isDE, "NIST CSF AI Profile", "NIST CSF AI Profile")}</h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "NIST CSF 2.0 ist der globale Standard für Cybersecurity-Governance — jetzt mit AI-Profil. Sechs Funktionen: Govern, Identify, Protect, Detect, Respond und Recover, direkt auf KI-Systeme gemappt."
-            : "NIST CSF 2.0 is the global standard for cybersecurity governance — now with AI profile. Six functions: Govern, Identify, Protect, Detect, Respond and Recover, directly mapped to AI systems."}
+          {pick(isDE, "NIST CSF 2.0 ist der globale Standard für Cybersecurity-Governance — jetzt mit AI-Profil. Sechs Funktionen: Govern, Identify, Protect, Detect, Respond und Recover, direkt auf KI-Systeme gemappt.", "NIST CSF 2.0 is the global standard for cybersecurity governance — now with AI profile. Six functions: Govern, Identify, Protect, Detect, Respond and Recover, directly mapped to AI systems.")}
         </p>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "NIST CSF 2.0 Funktionen für KI" : "NIST CSF 2.0 Functions for AI"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "NIST CSF 2.0 Funktionen für KI", "NIST CSF 2.0 Functions for AI")}</h2>
           <div className="space-y-4">
             {FUNCTIONS.map((fn) => (
               <div key={fn.id} className={`rounded-lg border p-5 ${colorMap[fn.color]}`}>
@@ -103,7 +98,7 @@ export default function NistCsfAiProfilePage({ params }: { params: { lang: strin
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-3">
             {FAQ.map((f, i) => (
               <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
@@ -114,23 +109,23 @@ export default function NistCsfAiProfilePage({ params }: { params: { lang: strin
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further Resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further Resources")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/solutions/iso27001-ai-systems-roadmap`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">ISO 27001 AI Systems Roadmap</div>
-              <div className="text-sm text-gray-300">{isDE ? "ISO-27001-Roadmap" : "ISO 27001 roadmap"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "ISO-27001-Roadmap", "ISO 27001 roadmap")}</div>
             </a>
             <a href={`/${locale}/solutions/hipaa-ai-compliance`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">HIPAA AI Compliance</div>
-              <div className="text-sm text-gray-300">{isDE ? "HIPAA für AI" : "HIPAA for AI"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "HIPAA für AI", "HIPAA for AI")}</div>
             </a>
             <a href={`/${locale}/moltbot/ai-regulatory-reporting`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Regulatory Reporting</div>
-              <div className="text-sm text-gray-300">{isDE ? "Regulatory-Reporting" : "Regulatory reporting"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Regulatory-Reporting", "Regulatory reporting")}</div>
             </a>
             <a href={`/${locale}/solutions`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">All Solutions</div>
-              <div className="text-sm text-gray-300">{isDE ? "Compliance-Overview" : "Compliance overview"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Compliance-Overview", "Compliance overview")}</div>
             </a>
           </div>
         </section>

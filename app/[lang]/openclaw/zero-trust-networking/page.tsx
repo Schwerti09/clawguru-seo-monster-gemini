@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/openclaw/zero-trust-networking"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "Zero Trust Networking: Zero-Trust-Netzwerk-Security | ClawGuru OpenClaw"
-    : "Zero Trust Networking: Zero Trust Network Security | ClawGuru OpenClaw"
-  const description = isDE
-    ? "Zero Trust Networking: Never Trust, Always Verify. Microsegmentation, Identity-Based Access, Continuous Verification und Policy Enforcement für Zero-Trust-Netzwerke. Executable Runbooks für Self-Hosted Infrastruktur."
-    : "Zero Trust networking: never trust, always verify. Microsegmentation, identity-based access, continuous verification and policy enforcement for zero-trust networks. Executable runbooks for self-hosted infrastructure."
+  const title = pick(isDE, "Zero Trust Networking: Zero-Trust-Netzwerk-Security | ClawGuru OpenClaw", "Zero Trust Networking: Zero Trust Network Security | ClawGuru OpenClaw")
+  const description = pick(isDE, "Zero Trust Networking: Never Trust, Always Verify. Microsegmentation, Identity-Based Access, Continuous Verification und Policy Enforcement für Zero-Trust-Netzwerke. Executable Runbooks für Self-Hosted Infrastruktur.", "Zero Trust networking: never trust, always verify. Microsegmentation, identity-based access, continuous verification and policy enforcement for zero-trust networks. Executable runbooks for self-hosted infrastructure.")
   return {
     title, description,
     keywords: ["zero trust networking", "microsegmentation", "identity-based access", "continuous verification", "policy enforcement", "openclaw zero trust"],
@@ -165,17 +162,15 @@ export default function ZeroTrustNetworkingPage({ params }: { params: { lang: st
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "Zero-Trust-Networking-Guide für eigene Infrastruktur." : "Zero-trust networking guide for your own infrastructure."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Zero-Trust-Networking-Guide für eigene Infrastruktur.", "Zero-trust networking guide for your own infrastructure.")}
         </div>
         <div className="mb-3"><span className="text-xs font-bold uppercase tracking-widest text-cyan-400">OpenClaw · Batch 8</span></div>
-        <h1 className="text-4xl font-bold mb-4 text-gray-100">{isDE ? "Zero Trust Networking" : "Zero Trust Networking"}</h1>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">{pick(isDE, "Zero Trust Networking", "Zero Trust Networking")}</h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "Never Trust, Always Verify: Microsegmentation, Identity-Based Access, Continuous Verification und Policy Enforcement für Zero-Trust-Netzwerke."
-            : "Never Trust, Always Verify: Microsegmentation, identity-based access, continuous verification and policy enforcement for zero-trust networks."}
+          {pick(isDE, "Never Trust, Always Verify: Microsegmentation, Identity-Based Access, Continuous Verification und Policy Enforcement für Zero-Trust-Netzwerke.", "Never Trust, Always Verify: Microsegmentation, identity-based access, continuous verification and policy enforcement for zero-trust networks.")}
         </p>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "4 Zero-Trust-Kontrollen" : "4 Zero Trust Controls"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "4 Zero-Trust-Kontrollen", "4 Zero Trust Controls")}</h2>
           <div className="space-y-5">
             {CONTROLS.map((c) => (
               <div key={c.id} className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
@@ -192,7 +187,7 @@ export default function ZeroTrustNetworkingPage({ params }: { params: { lang: st
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-3">
             {FAQ.map((f, i) => (
               <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
@@ -203,23 +198,23 @@ export default function ZeroTrustNetworkingPage({ params }: { params: { lang: st
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further Resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further Resources")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/openclaw/zero-trust-architecture`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Zero Trust Architecture</div>
-              <div className="text-sm text-gray-300">{isDE ? "Zero-Trust-Overview" : "Zero-trust overview"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Zero-Trust-Overview", "Zero-trust overview")}</div>
             </a>
             <a href={`/${locale}/openclaw/openclaw-security-2026`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">OpenClaw Security 2026</div>
-              <div className="text-sm text-gray-300">{isDE ? "OpenClaw-Framework" : "OpenClaw framework"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "OpenClaw-Framework", "OpenClaw framework")}</div>
             </a>
             <a href={`/${locale}/openclaw`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">All OpenClaw</div>
-              <div className="text-sm text-gray-300">{isDE ? "OpenClaw-Übersicht" : "OpenClaw overview"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "OpenClaw-Übersicht", "OpenClaw overview")}</div>
             </a>
             <a href={`/${locale}/check`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Security Check</div>
-              <div className="text-sm text-gray-300">{isDE ? "Live-Check" : "Live check"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Live-Check", "Live check")}</div>
             </a>
           </div>
         </section>

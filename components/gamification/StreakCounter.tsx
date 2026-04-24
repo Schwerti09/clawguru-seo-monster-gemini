@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { Flame, Calendar, Lock } from "lucide-react"
+import { pick } from "@/lib/i18n-pick"
 
 interface StreakCounterProps {
   currentStreak?: number
@@ -154,7 +155,7 @@ export function StreakCounter({
                 : "bg-gray-700/50 text-zinc-500 border border-gray-600"
             }`}
           >
-            {currentStreak >= milestone ? "🔥" : <Lock className="w-3 h-3 inline" />} {milestone} {isDE ? "Tage" : "days"}
+            {currentStreak >= milestone ? "🔥" : <Lock className="w-3 h-3 inline" />} {milestone} {pick(isDE, "Tage", "days")}
           </div>
         ))}
       </div>

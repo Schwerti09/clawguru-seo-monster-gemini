@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/solutions/pci-dss-ai-payments-v2"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "PCI DSS v4.0 AI Payments: PCI-DSS-KI-Zahlungs-Compliance 2026 | ClawGuru Solutions"
-    : "PCI DSS v4.0 AI Payments: PCI DSS AI Payments Compliance 2026 | ClawGuru Solutions"
-  const description = isDE
-    ? "PCI DSS v4.0 für KI-gestützte Zahlungssysteme: Cardholder Data Scoping, AI Model Access Control, Fraud Detection Logging und AI-spezifische PCI-DSS-Kontrollen 2026."
-    : "PCI DSS v4.0 for AI-powered payment systems: cardholder data scoping, AI model access control, fraud detection logging and AI-specific PCI DSS controls 2026."
+  const title = pick(isDE, "PCI DSS v4.0 AI Payments: PCI-DSS-KI-Zahlungs-Compliance 2026 | ClawGuru Solutions", "PCI DSS v4.0 AI Payments: PCI DSS AI Payments Compliance 2026 | ClawGuru Solutions")
+  const description = pick(isDE, "PCI DSS v4.0 für KI-gestützte Zahlungssysteme: Cardholder Data Scoping, AI Model Access Control, Fraud Detection Logging und AI-spezifische PCI-DSS-Kontrollen 2026.", "PCI DSS v4.0 for AI-powered payment systems: cardholder data scoping, AI model access control, fraud detection logging and AI-specific PCI DSS controls 2026.")
   return {
     title, description,
     keywords: ["pci dss v4 ai payments", "pci dss ai compliance", "pci dss 4.0 ai", "ai fraud detection pci", "pci dss llm", "payment security ai 2026"],
@@ -69,17 +66,15 @@ export default function PciDssAiPaymentsV2Page({ params }: { params: { lang: str
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "PCI-DSS-Compliance-Guide für eigene KI-Zahlungssysteme. Kein Rechtsrat." : "PCI DSS compliance guide for your own AI payment systems. Not legal advice."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "PCI-DSS-Compliance-Guide für eigene KI-Zahlungssysteme. Kein Rechtsrat.", "PCI DSS compliance guide for your own AI payment systems. Not legal advice.")}
         </div>
         <div className="mb-3"><span className="text-xs font-bold uppercase tracking-widest text-cyan-400">Solutions · Batch 11</span></div>
-        <h1 className="text-4xl font-bold mb-4 text-gray-100">{isDE ? "PCI DSS v4.0 für KI-Zahlungssysteme" : "PCI DSS v4.0 for AI Payment Systems"}</h1>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">{pick(isDE, "PCI DSS v4.0 für KI-Zahlungssysteme", "PCI DSS v4.0 for AI Payment Systems")}</h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "KI-gestützte Fraud Detection verarbeitet oft Karteninhaber-Daten — und ist damit im PCI-Scope. Fünf kritische Requirements für AI-Zahlungssysteme."
-            : "AI-powered fraud detection often processes cardholder data — putting it in PCI scope. Five critical requirements for AI payment systems."}
+          {pick(isDE, "KI-gestützte Fraud Detection verarbeitet oft Karteninhaber-Daten — und ist damit im PCI-Scope. Fünf kritische Requirements für AI-Zahlungssysteme.", "AI-powered fraud detection often processes cardholder data — putting it in PCI scope. Five critical requirements for AI payment systems.")}
         </p>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "5 PCI DSS Requirements für AI" : "5 PCI DSS Requirements for AI"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "5 PCI DSS Requirements für AI", "5 PCI DSS Requirements for AI")}</h2>
           <div className="space-y-4">
             {REQUIREMENTS.map((r) => (
               <div key={r.id} className={`rounded-lg border p-5 ${colorMap[r.color]}`}>
@@ -99,7 +94,7 @@ export default function PciDssAiPaymentsV2Page({ params }: { params: { lang: str
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-3">
             {FAQ.map((f, i) => (
               <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
@@ -110,23 +105,23 @@ export default function PciDssAiPaymentsV2Page({ params }: { params: { lang: str
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further Resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further Resources")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/solutions/eu-ai-act-compliance-checklist`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">EU AI Act Compliance</div>
-              <div className="text-sm text-gray-300">{isDE ? "EU-KI-Gesetz" : "EU AI Act"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "EU-KI-Gesetz", "EU AI Act")}</div>
             </a>
             <a href={`/${locale}/solutions/nist-csf-ai-profile`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">NIST CSF AI Profile</div>
-              <div className="text-sm text-gray-300">{isDE ? "NIST-CSF für AI" : "NIST CSF for AI"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "NIST-CSF für AI", "NIST CSF for AI")}</div>
             </a>
             <a href={`/${locale}/moltbot/ai-agent-audit-logging`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Agent Audit Logging</div>
-              <div className="text-sm text-gray-300">{isDE ? "Audit-Logging" : "Audit logging"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Audit-Logging", "Audit logging")}</div>
             </a>
             <a href={`/${locale}/solutions`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">All Solutions</div>
-              <div className="text-sm text-gray-300">{isDE ? "Compliance-Overview" : "Compliance overview"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Compliance-Overview", "Compliance overview")}</div>
             </a>
           </div>
         </section>

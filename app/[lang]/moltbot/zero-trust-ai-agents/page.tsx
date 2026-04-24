@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/moltbot/zero-trust-ai-agents"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "Zero Trust für KI-Agenten: Never Trust, Always Verify | ClawGuru Moltbot"
-    : "Zero Trust for AI Agents: Never Trust, Always Verify | ClawGuru Moltbot"
-  const description = isDE
-    ? "Zero-Trust-Architektur für KI-Agenten: jeder Agent muss sich authentifizieren, autorisieren und auditieren lassen — auch interne Agenten. mTLS, Capability-Tokens, Micro-Segmentierung und Continuous Verification mit Moltbot."
-    : "Zero Trust architecture for AI agents: every agent must authenticate, authorize and be audited — including internal agents. mTLS, capability tokens, micro-segmentation and continuous verification with Moltbot."
+  const title = pick(isDE, "Zero Trust für KI-Agenten: Never Trust, Always Verify | ClawGuru Moltbot", "Zero Trust for AI Agents: Never Trust, Always Verify | ClawGuru Moltbot")
+  const description = pick(isDE, "Zero-Trust-Architektur für KI-Agenten: jeder Agent muss sich authentifizieren, autorisieren und auditieren lassen — auch interne Agenten. mTLS, Capability-Tokens, Micro-Segmentierung und Continuous Verification mit Moltbot.", "Zero Trust architecture for AI agents: every agent must authenticate, authorize and be audited — including internal agents. mTLS, capability tokens, micro-segmentation and continuous verification with Moltbot.")
   return {
     title, description,
     keywords: ["zero trust ai agents", "zero trust llm", "zero trust moltbot", "never trust always verify ai", "ai agent authentication", "zero trust architecture ai"],
@@ -62,24 +59,22 @@ export default function ZeroTrustAiAgentsPage({ params }: { params: { lang: stri
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "Zero-Trust-Architektur für eigene KI-Systeme." : "Zero Trust architecture guide for your own AI systems."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Zero-Trust-Architektur für eigene KI-Systeme.", "Zero Trust architecture guide for your own AI systems.")}
         </div>
         <div className="mb-3"><span className="text-xs font-bold uppercase tracking-widest text-cyan-400">Moltbot · Batch 7</span></div>
         <h1 className="text-4xl font-bold mb-4 text-gray-100">
-          {isDE ? "Zero Trust für KI-Agenten" : "Zero Trust for AI Agents"}
+          {pick(isDE, "Zero Trust für KI-Agenten", "Zero Trust for AI Agents")}
         </h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "Never Trust, Always Verify — auch für KI-Agenten. Jeder Agent, jeder Tool-Call, jede Agent-zu-Agent-Kommunikation muss explizit authentifiziert, autorisiert und geloggt werden. Kein implizites Vertrauen."
-            : "Never Trust, Always Verify — for AI agents too. Every agent, every tool call, every agent-to-agent message must be explicitly authenticated, authorized and logged. No implicit trust."}
+          {pick(isDE, "Never Trust, Always Verify — auch für KI-Agenten. Jeder Agent, jeder Tool-Call, jede Agent-zu-Agent-Kommunikation muss explizit authentifiziert, autorisiert und geloggt werden. Kein implizites Vertrauen.", "Never Trust, Always Verify — for AI agents too. Every agent, every tool call, every agent-to-agent message must be explicitly authenticated, authorized and logged. No implicit trust.")}
         </p>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
           {[
-            { value: "5", label: isDE ? "ZT-Prinzipien" : "ZT principles" },
-            { value: "5min", label: isDE ? "Token-TTL (default)" : "Token TTL (default)" },
-            { value: "mTLS", label: isDE ? "Agent-Identität" : "Agent identity" },
-            { value: "0", label: isDE ? "Implizites Vertrauen" : "Implicit trust" },
+            { value: "5", label: pick(isDE, "ZT-Prinzipien", "ZT principles") },
+            { value: "5min", label: pick(isDE, "Token-TTL (default)", "Token TTL (default)") },
+            { value: "mTLS", label: pick(isDE, "Agent-Identität", "Agent identity") },
+            { value: "0", label: pick(isDE, "Implizites Vertrauen", "Implicit trust") },
           ].map((s) => (
             <div key={s.label} className="bg-gray-800 p-4 rounded-lg border border-gray-700 text-center">
               <div className="text-2xl font-black text-cyan-400">{s.value}</div>
@@ -90,7 +85,7 @@ export default function ZeroTrustAiAgentsPage({ params }: { params: { lang: stri
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">
-            {isDE ? "Die 5 Zero-Trust-Prinzipien für KI-Agenten" : "5 Zero Trust Principles for AI Agents"}
+            {pick(isDE, "Die 5 Zero-Trust-Prinzipien für KI-Agenten", "5 Zero Trust Principles for AI Agents")}
           </h2>
           <div className="space-y-4">
             {ZT_PRINCIPLES.map((p) => (
@@ -110,7 +105,7 @@ export default function ZeroTrustAiAgentsPage({ params }: { params: { lang: stri
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">
-            {isDE ? "Capability Token Beispiel" : "Capability Token Example"}
+            {pick(isDE, "Capability Token Beispiel", "Capability Token Example")}
           </h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm overflow-x-auto">
             <pre>{`# Moltbot orchestrator issues capability tokens per operation:
@@ -136,7 +131,7 @@ token = moltbot.issue_token(
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-3">
             {FAQ.map((f, i) => (
               <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
@@ -148,15 +143,15 @@ token = moltbot.issue_token(
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further Resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further Resources")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/moltbot/multi-agent-trust`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Multi-Agent Trust</div>
-              <div className="text-sm text-gray-300">{isDE ? "mTLS zwischen Agenten" : "mTLS between agents"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "mTLS zwischen Agenten", "mTLS between agents")}</div>
             </a>
             <a href={`/${locale}/moltbot/agent-memory-security`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Agent Memory Security</div>
-              <div className="text-sm text-gray-300">{isDE ? "Memory-Isolation per Agent" : "Memory isolation per agent"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Memory-Isolation per Agent", "Memory isolation per agent")}</div>
             </a>
             <a href={`/${locale}/moltbot/ai-agent-security`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Agent Security Hub</div>
@@ -164,7 +159,7 @@ token = moltbot.issue_token(
             </a>
             <a href={`/${locale}/solutions/zero-trust-architecture`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Zero Trust Architecture</div>
-              <div className="text-sm text-gray-300">{isDE ? "Zero Trust für die gesamte Infrastruktur" : "Zero Trust for full infrastructure"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Zero Trust für die gesamte Infrastruktur", "Zero Trust for full infrastructure")}</div>
             </a>
           </div>
         </section>

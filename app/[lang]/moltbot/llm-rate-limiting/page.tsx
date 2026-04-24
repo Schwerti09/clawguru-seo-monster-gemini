@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/moltbot/llm-rate-limiting"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "LLM Rate Limiting & Throttling: DoS-Schutz für KI-Gateways | ClawGuru Moltbot"
-    : "LLM Rate Limiting & Throttling: DoS Protection for AI Gateways | ClawGuru Moltbot"
-  const description = isDE
-    ? "LLM Rate Limiting selbst hosten: Token-Budget-Enforcement, Kosten-Caps, DDoS-Schutz für Ollama/LocalAI/LiteLLM. Konfiguration, Algorithmen und Monitoring für AI-Gateways."
-    : "Self-hosted LLM rate limiting: token budget enforcement, cost caps, DDoS protection for Ollama/LocalAI/LiteLLM. Configuration, algorithms and monitoring for AI gateways."
+  const title = pick(isDE, "LLM Rate Limiting & Throttling: DoS-Schutz für KI-Gateways | ClawGuru Moltbot", "LLM Rate Limiting & Throttling: DoS Protection for AI Gateways | ClawGuru Moltbot")
+  const description = pick(isDE, "LLM Rate Limiting selbst hosten: Token-Budget-Enforcement, Kosten-Caps, DDoS-Schutz für Ollama/LocalAI/LiteLLM. Konfiguration, Algorithmen und Monitoring für AI-Gateways.", "Self-hosted LLM rate limiting: token budget enforcement, cost caps, DDoS protection for Ollama/LocalAI/LiteLLM. Configuration, algorithms and monitoring for AI gateways.")
   return {
     title, description,
     keywords: ["llm rate limiting", "llm throttling", "ai gateway rate limit", "ollama rate limiting", "litellm rate limiting", "llm dos protection"],
@@ -63,24 +60,22 @@ export default function LlmRateLimitingPage({ params }: { params: { lang: string
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "Rate-Limiting-Guide für eigene LLM-Infrastruktur." : "Rate limiting guide for your own LLM infrastructure."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Rate-Limiting-Guide für eigene LLM-Infrastruktur.", "Rate limiting guide for your own LLM infrastructure.")}
         </div>
         <div className="mb-3"><span className="text-xs font-bold uppercase tracking-widest text-cyan-400">Moltbot · Batch 7</span></div>
         <h1 className="text-4xl font-bold mb-4 text-gray-100">
-          {isDE ? "LLM Rate Limiting & DoS-Schutz für KI-Gateways" : "LLM Rate Limiting & DoS Protection for AI Gateways"}
+          {pick(isDE, "LLM Rate Limiting & DoS-Schutz für KI-Gateways", "LLM Rate Limiting & DoS Protection for AI Gateways")}
         </h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "Ollama, LocalAI und LiteLLM haben kein integriertes Rate Limiting. Ein einziger unkontrollierter Request kann ein GPU für Minuten blockieren und dollar-teure Inference auslösen. Sechs Schutzschichten, fertige Konfigurationen."
-            : "Ollama, LocalAI and LiteLLM have no built-in rate limiting. A single unconstrained request can block a GPU for minutes and trigger dollar-expensive inference. Six protection layers, ready-to-use configurations."}
+          {pick(isDE, "Ollama, LocalAI und LiteLLM haben kein integriertes Rate Limiting. Ein einziger unkontrollierter Request kann ein GPU für Minuten blockieren und dollar-teure Inference auslösen. Sechs Schutzschichten, fertige Konfigurationen.", "Ollama, LocalAI and LiteLLM have no built-in rate limiting. A single unconstrained request can block a GPU for minutes and trigger dollar-expensive inference. Six protection layers, ready-to-use configurations.")}
         </p>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
           {[
-            { value: "6", label: isDE ? "Schutzschichten" : "Protection layers" },
-            { value: "Token", label: isDE ? "Budget-Einheit (nicht Requests)" : "Budget unit (not requests)" },
-            { value: "Redis", label: isDE ? "State-Backend" : "State backend" },
-            { value: "429", label: isDE ? "HTTP bei Überschreitung" : "HTTP on exceed" },
+            { value: "6", label: pick(isDE, "Schutzschichten", "Protection layers") },
+            { value: "Token", label: pick(isDE, "Budget-Einheit (nicht Requests)", "Budget unit (not requests)") },
+            { value: "Redis", label: pick(isDE, "State-Backend", "State backend") },
+            { value: "429", label: pick(isDE, "HTTP bei Überschreitung", "HTTP on exceed") },
           ].map((s) => (
             <div key={s.label} className="bg-gray-800 p-4 rounded-lg border border-gray-700 text-center">
               <div className="text-2xl font-black text-cyan-400">{s.value}</div>
@@ -91,7 +86,7 @@ export default function LlmRateLimitingPage({ params }: { params: { lang: string
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">
-            {isDE ? "6 Rate-Limiting-Schichten" : "6 Rate Limiting Layers"}
+            {pick(isDE, "6 Rate-Limiting-Schichten", "6 Rate Limiting Layers")}
           </h2>
           <div className="space-y-3">
             {RATE_LIMIT_LAYERS.map((l) => (
@@ -113,7 +108,7 @@ export default function LlmRateLimitingPage({ params }: { params: { lang: string
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">
-            {isDE ? "Nginx + Moltbot Gateway Konfiguration" : "Nginx + Moltbot Gateway Configuration"}
+            {pick(isDE, "Nginx + Moltbot Gateway Konfiguration", "Nginx + Moltbot Gateway Configuration")}
           </h2>
           <div className="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm overflow-x-auto">
             <pre>{`# nginx.conf — Layer 1: Network-level rate limiting
@@ -156,7 +151,7 @@ rate_limits:
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-3">
             {FAQ.map((f, i) => (
               <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
@@ -168,19 +163,19 @@ rate_limits:
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further Resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further Resources")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/moltbot/llm-gateway-hardening`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM Gateway Hardening</div>
-              <div className="text-sm text-gray-300">{isDE ? "Vollständige Gateway-Härtung" : "Full gateway hardening"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Vollständige Gateway-Härtung", "Full gateway hardening")}</div>
             </a>
             <a href={`/${locale}/moltbot/llm-observability`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM Observability</div>
-              <div className="text-sm text-gray-300">{isDE ? "Rate-Limit-Metriken monitoren" : "Monitor rate limit metrics"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Rate-Limit-Metriken monitoren", "Monitor rate limit metrics")}</div>
             </a>
             <a href={`/${locale}/moltbot/zero-trust-ai-agents`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Zero Trust AI Agents</div>
-              <div className="text-sm text-gray-300">{isDE ? "Per-Agent Token-Budget" : "Per-agent token budgets"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Per-Agent Token-Budget", "Per-agent token budgets")}</div>
             </a>
             <a href={`/${locale}/academy/cve/CVE-2023-44487`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">CVE-2023-44487</div>

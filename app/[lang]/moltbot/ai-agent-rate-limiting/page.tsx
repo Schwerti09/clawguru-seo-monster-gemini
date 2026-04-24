@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/moltbot/ai-agent-rate-limiting"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "AI Agent Rate Limiting: KI-Agenten-Rate-Limiting | ClawGuru Moltbot"
-    : "AI Agent Rate Limiting: AI Agent Rate Limiting | ClawGuru Moltbot"
-  const description = isDE
-    ? "AI-Agent-Rate-Limiting: Token-Based Rate Limiting, Tool Call Throttling, Agent Session Quotas und Dynamic Rate Adjustment für KI-Agent-Systeme."
-    : "AI agent rate limiting: token-based rate limiting, tool call throttling, agent session quotas and dynamic rate adjustment for AI agent systems."
+  const title = pick(isDE, "AI Agent Rate Limiting: KI-Agenten-Rate-Limiting | ClawGuru Moltbot", "AI Agent Rate Limiting: AI Agent Rate Limiting | ClawGuru Moltbot")
+  const description = pick(isDE, "AI-Agent-Rate-Limiting: Token-Based Rate Limiting, Tool Call Throttling, Agent Session Quotas und Dynamic Rate Adjustment für KI-Agent-Systeme.", "AI agent rate limiting: token-based rate limiting, tool call throttling, agent session quotas and dynamic rate adjustment for AI agent systems.")
   return {
     title, description,
     keywords: ["ai agent rate limiting", "llm rate limiting", "agent throttling", "tool call rate limit", "token quota", "moltbot rate limiting"],
@@ -183,17 +180,15 @@ export default function AiAgentRateLimitingPage({ params }: { params: { lang: st
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "Rate-Limiting-Guide für eigene KI-Systeme." : "Rate limiting guide for your own AI systems."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Rate-Limiting-Guide für eigene KI-Systeme.", "Rate limiting guide for your own AI systems.")}
         </div>
         <div className="mb-3"><span className="text-xs font-bold uppercase tracking-widest text-cyan-400">Moltbot · Batch 15</span></div>
-        <h1 className="text-4xl font-bold mb-4 text-gray-100">{isDE ? "AI Agent Rate Limiting" : "AI Agent Rate Limiting"}</h1>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">{pick(isDE, "AI Agent Rate Limiting", "AI Agent Rate Limiting")}</h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "KI-Agenten ohne Rate-Limiting können Ressourcen erschöpfen und Angriffe erleichtern. Vier Kontrollen: Token-Based Limits, Tool Call Throttling, Session Quotas und Dynamic Rate Adjustment."
-            : "AI agents without rate limiting can exhaust resources and facilitate attacks. Four controls: token-based limits, tool call throttling, session quotas and dynamic rate adjustment."}
+          {pick(isDE, "KI-Agenten ohne Rate-Limiting können Ressourcen erschöpfen und Angriffe erleichtern. Vier Kontrollen: Token-Based Limits, Tool Call Throttling, Session Quotas und Dynamic Rate Adjustment.", "AI agents without rate limiting can exhaust resources and facilitate attacks. Four controls: token-based limits, tool call throttling, session quotas and dynamic rate adjustment.")}
         </p>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "4 Rate-Limiting-Kontrollen" : "4 Rate Limiting Controls"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "4 Rate-Limiting-Kontrollen", "4 Rate Limiting Controls")}</h2>
           <div className="space-y-5">
             {CONTROLS.map((c) => (
               <div key={c.id} className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
@@ -210,7 +205,7 @@ export default function AiAgentRateLimitingPage({ params }: { params: { lang: st
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-3">
             {FAQ.map((f, i) => (
               <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
@@ -221,23 +216,23 @@ export default function AiAgentRateLimitingPage({ params }: { params: { lang: st
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further Resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further Resources")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/moltbot/llm-rate-limiting`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM Rate Limiting</div>
-              <div className="text-sm text-gray-300">{isDE ? "Token-Based-Limits" : "Token-based limits"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Token-Based-Limits", "Token-based limits")}</div>
             </a>
             <a href={`/${locale}/moltbot/agent-tool-security`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Agent Tool Security</div>
-              <div className="text-sm text-gray-300">{isDE ? "Tool-Call-Throttling" : "Tool call throttling"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Tool-Call-Throttling", "Tool call throttling")}</div>
             </a>
             <a href={`/${locale}/moltbot/ai-agent-rbac`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Agent RBAC</div>
-              <div className="text-sm text-gray-300">{isDE ? "User-Tier-Quotas" : "User-tier quotas"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "User-Tier-Quotas", "User-tier quotas")}</div>
             </a>
             <a href={`/${locale}/moltbot/ai-incident-response`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Incident Response</div>
-              <div className="text-sm text-gray-300">{isDE ? "Rate-Limit-Violations" : "Rate limit violations"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Rate-Limit-Violations", "Rate limit violations")}</div>
             </a>
           </div>
         </section>

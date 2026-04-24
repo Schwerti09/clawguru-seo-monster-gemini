@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
 import { AlertTriangle, CheckCircle, XCircle, TrendingUp } from "lucide-react"
+import { pick } from "@/lib/i18n-pick"
 
 interface PageProps { params: { lang: string } }
 
@@ -10,10 +11,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const pageUrl = `${SITE_URL}/${locale}/security-myths`
   const isDE = locale === "de"
-  const title = isDE ? "Security Myths Busted | ClawGuru" : "Security Myths Busted | ClawGuru"
-  const description = isDE 
-    ? "Kontroverse Security-Statements — Myths entlarvt" 
-    : "Controversial security statements — Myths busted"
+  const title = pick(isDE, "Security Myths Busted | ClawGuru", "Security Myths Busted | ClawGuru")
+  const description = pick(isDE, "Kontroverse Security-Statements — Myths entlarvt", "Controversial security statements — Myths busted")
   return {
     title,
     description,
@@ -78,12 +77,10 @@ export default function SecurityMythsPage({ params }: PageProps) {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-4 text-gray-100">
-            {isDE ? "Security Myths Busted" : "Security Myths Busted"}
+            {pick(isDE, "Security Myths Busted", "Security Myths Busted")}
           </h1>
           <p className="text-lg text-gray-300">
-            {isDE 
-              ? "Kontroverse Security-Statements — Myths entlarvt" 
-              : "Controversial security statements — Myths busted"}
+            {pick(isDE, "Kontroverse Security-Statements — Myths entlarvt", "Controversial security statements — Myths busted")}
           </p>
         </div>
 
@@ -113,7 +110,7 @@ export default function SecurityMythsPage({ params }: PageProps) {
               {/* Explanation */}
               <div className="mb-4">
                 <div className="text-sm text-zinc-500 mb-2">
-                  {isDE ? "Erklärung" : "Explanation"}
+                  {pick(isDE, "Erklärung", "Explanation")}
                 </div>
                 <div className="text-gray-300">{myth.explanation}</div>
               </div>
@@ -121,7 +118,7 @@ export default function SecurityMythsPage({ params }: PageProps) {
               {/* Evidence */}
               <div className="bg-gray-900/50 rounded-lg p-4 border border-gray-700">
                 <div className="text-sm text-zinc-500 mb-2">
-                  {isDE ? "Beweis" : "Evidence"}
+                  {pick(isDE, "Beweis", "Evidence")}
                 </div>
                 <div className="text-cyan-400">{myth.evidence}</div>
               </div>
@@ -135,12 +132,10 @@ export default function SecurityMythsPage({ params }: PageProps) {
             <TrendingUp className="w-8 h-8 text-cyan-400" />
             <div>
               <div className="text-sm text-zinc-500 mb-1">
-                {isDE ? "Fazit" : "Summary"}
+                {pick(isDE, "Fazit", "Summary")}
               </div>
               <div className="text-xl font-bold text-gray-100">
-                {isDE 
-                  ? "Alle 5 Myths sind busted — Security ist komplexer als man denkt" 
-                  : "All 5 myths are busted — Security is more complex than you think"}
+                {pick(isDE, "Alle 5 Myths sind busted — Security ist komplexer als man denkt", "All 5 myths are busted — Security is more complex than you think")}
               </div>
             </div>
           </div>
@@ -148,9 +143,7 @@ export default function SecurityMythsPage({ params }: PageProps) {
 
         {/* Trust Notice */}
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mt-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE 
-            ? "Security Myths Busted basieren auf öffentlichen Daten und Experten-Meinungen." 
-            : "Security Myths Busted are based on public data and expert opinions."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Security Myths Busted basieren auf öffentlichen Daten und Experten-Meinungen.", "Security Myths Busted are based on public data and expert opinions.")}
         </div>
       </div>
     </div>

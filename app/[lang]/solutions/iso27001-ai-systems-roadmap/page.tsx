@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/solutions/iso27001-ai-systems-roadmap"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "ISO 27001 AI Systems Roadmap: ISO-27001-KI-Systeme-Roadmap | ClawGuru Solutions"
-    : "ISO 27001 AI Systems Roadmap: ISO 27001 Compliance Roadmap for AI Systems | ClawGuru Solutions"
-  const description = isDE
-    ? "ISO-27001-Compliance-Roadmap für KI-Systeme: Gap-Analysis, ISMS-Scope für AI, KI-spezifische Controls (A.8.24, A.8.25) und Certification Readiness für Self-Hosted AI."
-    : "ISO 27001 compliance roadmap for AI systems: gap analysis, ISMS scope for AI, AI-specific controls (A.8.24, A.8.25) and certification readiness for self-hosted AI."
+  const title = pick(isDE, "ISO 27001 AI Systems Roadmap: ISO-27001-KI-Systeme-Roadmap | ClawGuru Solutions", "ISO 27001 AI Systems Roadmap: ISO 27001 Compliance Roadmap for AI Systems | ClawGuru Solutions")
+  const description = pick(isDE, "ISO-27001-Compliance-Roadmap für KI-Systeme: Gap-Analysis, ISMS-Scope für AI, KI-spezifische Controls (A.8.24, A.8.25) und Certification Readiness für Self-Hosted AI.", "ISO 27001 compliance roadmap for AI systems: gap analysis, ISMS scope for AI, AI-specific controls (A.8.24, A.8.25) and certification readiness for self-hosted AI.")
   return {
     title, description,
     keywords: ["iso 27001 ai compliance", "iso 27001 llm roadmap", "isms ai systems", "iso27001 artificial intelligence", "iso 27001 certification ai", "iso27001 self-hosted"],
@@ -199,18 +196,16 @@ export default function Iso27001AiSystemsRoadmapPage({ params }: { params: { lan
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "ISO-27001-Compliance-Roadmap für eigene KI-Systeme." : "ISO 27001 compliance roadmap for your own AI systems."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "ISO-27001-Compliance-Roadmap für eigene KI-Systeme.", "ISO 27001 compliance roadmap for your own AI systems.")}
         </div>
         <div className="mb-3"><span className="text-xs font-bold uppercase tracking-widest text-cyan-400">Solutions · Batch 9</span></div>
-        <h1 className="text-4xl font-bold mb-4 text-gray-100">{isDE ? "ISO 27001 AI Systems Roadmap" : "ISO 27001 AI Systems Roadmap"}</h1>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">{pick(isDE, "ISO 27001 AI Systems Roadmap", "ISO 27001 AI Systems Roadmap")}</h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "ISO 27001 für KI-Systeme ist kein Copy-Paste aus dem Standard — AI bringt neue Risiken: Model Theft, Training Data Poisoning, Prompt Injection. Diese Roadmap zeigt den Weg zur Zertifizierung in 4 Phasen."
-            : "ISO 27001 for AI systems is not a copy-paste from the standard — AI brings new risks: model theft, training data poisoning, prompt injection. This roadmap shows the path to certification in 4 phases."}
+          {pick(isDE, "ISO 27001 für KI-Systeme ist kein Copy-Paste aus dem Standard — AI bringt neue Risiken: Model Theft, Training Data Poisoning, Prompt Injection. Diese Roadmap zeigt den Weg zur Zertifizierung in 4 Phasen.", "ISO 27001 for AI systems is not a copy-paste from the standard — AI brings new risks: model theft, training data poisoning, prompt injection. This roadmap shows the path to certification in 4 phases.")}
         </p>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "4-Phasen-Roadmap zur Zertifizierung" : "4-Phase Certification Roadmap"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "4-Phasen-Roadmap zur Zertifizierung", "4-Phase Certification Roadmap")}</h2>
           <div className="space-y-4">
             {ROADMAP_PHASES.map((p) => (
               <div key={p.phase} className="bg-gray-800 rounded-lg border border-gray-700 p-5">
@@ -233,7 +228,7 @@ export default function Iso27001AiSystemsRoadmapPage({ params }: { params: { lan
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "4 ISO-27001-Controls für KI" : "4 ISO 27001 Controls for AI"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "4 ISO-27001-Controls für KI", "4 ISO 27001 Controls for AI")}</h2>
           <div className="space-y-5">
             {CONTROLS.map((c) => (
               <div key={c.id} className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
@@ -251,7 +246,7 @@ export default function Iso27001AiSystemsRoadmapPage({ params }: { params: { lan
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-3">
             {FAQ.map((f, i) => (
               <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
@@ -263,23 +258,23 @@ export default function Iso27001AiSystemsRoadmapPage({ params }: { params: { lan
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further Resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further Resources")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/solutions/soc2-ai-systems`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">SOC 2 for AI Systems</div>
-              <div className="text-sm text-gray-300">{isDE ? "SOC-2-Compliance" : "SOC 2 compliance"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "SOC-2-Compliance", "SOC 2 compliance")}</div>
             </a>
             <a href={`/${locale}/solutions/hipaa-ai-compliance`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">HIPAA AI Compliance</div>
-              <div className="text-sm text-gray-300">{isDE ? "HIPAA für AI" : "HIPAA for AI"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "HIPAA für AI", "HIPAA for AI")}</div>
             </a>
             <a href={`/${locale}/moltbot/ai-regulatory-reporting`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Regulatory Reporting</div>
-              <div className="text-sm text-gray-300">{isDE ? "Regulatory-Reporting" : "Regulatory reporting"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Regulatory-Reporting", "Regulatory reporting")}</div>
             </a>
             <a href={`/${locale}/solutions`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">All Solutions</div>
-              <div className="text-sm text-gray-300">{isDE ? "Compliance-Overview" : "Compliance overview"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Compliance-Overview", "Compliance overview")}</div>
             </a>
           </div>
         </section>

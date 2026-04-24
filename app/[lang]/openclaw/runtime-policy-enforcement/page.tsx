@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/openclaw/runtime-policy-enforcement"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "Runtime Policy Enforcement: OPA, Falco & Admission Webhooks | ClawGuru OpenClaw"
-    : "Runtime Policy Enforcement: OPA, Falco & Admission Webhooks | ClawGuru OpenClaw"
-  const description = isDE
-    ? "Runtime Security Policies selbst hosten: OPA Gatekeeper für Kubernetes, Falco-Regeln für Runtime-Detection, Admission Webhooks für Deploy-time-Enforcement. Policy-as-Code mit OpenClaw."
-    : "Self-hosted runtime security policies: OPA Gatekeeper for Kubernetes, Falco rules for runtime detection, admission webhooks for deploy-time enforcement. Policy-as-code with OpenClaw."
+  const title = pick(isDE, "Runtime Policy Enforcement: OPA, Falco & Admission Webhooks | ClawGuru OpenClaw", "Runtime Policy Enforcement: OPA, Falco & Admission Webhooks | ClawGuru OpenClaw")
+  const description = pick(isDE, "Runtime Security Policies selbst hosten: OPA Gatekeeper für Kubernetes, Falco-Regeln für Runtime-Detection, Admission Webhooks für Deploy-time-Enforcement. Policy-as-Code mit OpenClaw.", "Self-hosted runtime security policies: OPA Gatekeeper for Kubernetes, Falco rules for runtime detection, admission webhooks for deploy-time enforcement. Policy-as-code with OpenClaw.")
   return {
     title, description,
     keywords: ["runtime policy enforcement", "opa gatekeeper kubernetes", "falco rules", "kubernetes admission webhook security", "policy as code", "openclaw runtime policy"],
@@ -89,24 +86,22 @@ export default function RuntimePolicyEnforcementPage({ params }: { params: { lan
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "Policy-Enforcement-Guide für eigene Kubernetes-Cluster." : "Policy enforcement guide for your own Kubernetes clusters."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Policy-Enforcement-Guide für eigene Kubernetes-Cluster.", "Policy enforcement guide for your own Kubernetes clusters.")}
         </div>
         <div className="mb-3"><span className="text-xs font-bold uppercase tracking-widest text-cyan-400">OpenClaw · Batch 4</span></div>
         <h1 className="text-4xl font-bold mb-4 text-gray-100">
-          {isDE ? "Runtime Policy Enforcement: OPA, Falco & Cilium" : "Runtime Policy Enforcement: OPA, Falco & Cilium"}
+          {pick(isDE, "Runtime Policy Enforcement: OPA, Falco & Cilium", "Runtime Policy Enforcement: OPA, Falco & Cilium")}
         </h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "Drei Enforcement-Schichten, drei Zeitpunkte: OPA stoppt schlechte Deployments bevor sie starten. Falco erkennt schlechtes Verhalten während der Ausführung. Cilium blockiert unerlaubten Netzwerkverkehr in Echtzeit."
-            : "Three enforcement layers, three time points: OPA stops bad deployments before they start. Falco detects bad behavior during execution. Cilium blocks unauthorized network traffic in real-time."}
+          {pick(isDE, "Drei Enforcement-Schichten, drei Zeitpunkte: OPA stoppt schlechte Deployments bevor sie starten. Falco erkennt schlechtes Verhalten während der Ausführung. Cilium blockiert unerlaubten Netzwerkverkehr in Echtzeit.", "Three enforcement layers, three time points: OPA stops bad deployments before they start. Falco detects bad behavior during execution. Cilium blocks unauthorized network traffic in real-time.")}
         </p>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
           {[
-            { value: "3", label: isDE ? "Enforcement-Schichten" : "Enforcement layers" },
-            { value: "OPA", label: isDE ? "Deploy-time" : "Deploy-time" },
-            { value: "Falco", label: isDE ? "Runtime" : "Runtime" },
-            { value: "Cilium", label: isDE ? "Network" : "Network" },
+            { value: "3", label: pick(isDE, "Enforcement-Schichten", "Enforcement layers") },
+            { value: "OPA", label: pick(isDE, "Deploy-time", "Deploy-time") },
+            { value: "Falco", label: pick(isDE, "Runtime", "Runtime") },
+            { value: "Cilium", label: pick(isDE, "Network", "Network") },
           ].map((s) => (
             <div key={s.label} className="bg-gray-800 p-4 rounded-lg border border-gray-700 text-center">
               <div className="text-2xl font-black text-cyan-400">{s.value}</div>
@@ -117,7 +112,7 @@ export default function RuntimePolicyEnforcementPage({ params }: { params: { lan
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">
-            {isDE ? "3 Policy-Schichten" : "3 Policy Layers"}
+            {pick(isDE, "3 Policy-Schichten", "3 Policy Layers")}
           </h2>
           <div className="space-y-6">
             {POLICY_LAYERS.map((pl) => (
@@ -127,11 +122,11 @@ export default function RuntimePolicyEnforcementPage({ params }: { params: { lan
                     <span className="font-bold text-gray-100 text-lg">{pl.layer}</span>
                     <span className="font-mono text-xs text-cyan-400 bg-gray-900 px-2 py-0.5 rounded">{pl.tool}</span>
                   </div>
-                  <p className="text-xs text-gray-400">{isDE ? "Wann:" : "When:"} {pl.when}</p>
+                  <p className="text-xs text-gray-400">{pick(isDE, "Wann:", "When:")} {pl.when}</p>
                 </div>
                 <div className="p-4">
                   <div className="mb-3">
-                    <div className="text-xs font-semibold text-gray-400 mb-2">{isDE ? "Beispiel-Policies:" : "Example policies:"}</div>
+                    <div className="text-xs font-semibold text-gray-400 mb-2">{pick(isDE, "Beispiel-Policies:", "Example policies:")}</div>
                     <div className="flex flex-wrap gap-2">
                       {pl.examples.map((e) => <span key={e} className="text-xs bg-gray-700 text-gray-300 px-2 py-0.5 rounded">{e}</span>)}
                     </div>
@@ -144,7 +139,7 @@ export default function RuntimePolicyEnforcementPage({ params }: { params: { lan
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-3">
             {FAQ.map((f, i) => (
               <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
@@ -156,23 +151,23 @@ export default function RuntimePolicyEnforcementPage({ params }: { params: { lan
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further Resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further Resources")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/openclaw-vs-falco`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">OpenClaw vs Falco</div>
-              <div className="text-sm text-gray-300">{isDE ? "Runtime Security Vergleich" : "Runtime security comparison"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Runtime Security Vergleich", "Runtime security comparison")}</div>
             </a>
             <a href={`/${locale}/openclaw/supply-chain-security`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Supply Chain Security</div>
-              <div className="text-sm text-gray-300">{isDE ? "SBOM + Sigstore für Policy-Input" : "SBOM + Sigstore for policy input"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "SBOM + Sigstore für Policy-Input", "SBOM + Sigstore for policy input")}</div>
             </a>
             <a href={`/${locale}/solutions/zero-trust-architecture`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Zero Trust Architecture</div>
-              <div className="text-sm text-gray-300">{isDE ? "Policy als ZT-Säule" : "Policy as ZT pillar"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Policy als ZT-Säule", "Policy as ZT pillar")}</div>
             </a>
             <a href={`/${locale}/moltbot/ai-red-teaming`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Red Teaming</div>
-              <div className="text-sm text-gray-300">{isDE ? "Policies testen" : "Test your policies"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Policies testen", "Test your policies")}</div>
             </a>
           </div>
         </section>

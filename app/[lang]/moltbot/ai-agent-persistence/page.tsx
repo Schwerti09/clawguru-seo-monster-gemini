@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/moltbot/ai-agent-persistence"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "AI Agent Persistence: KI-Agenten-Persistenz | ClawGuru Moltbot"
-    : "AI Agent Persistence: AI Agent Persistence | ClawGuru Moltbot"
-  const description = isDE
-    ? "AI-Agent-Persistenz: Memory Management, State Persistence, Long-Term Memory und Agent Session Recovery für KI-Agent-Systeme."
-    : "AI agent persistence: memory management, state persistence, long-term memory and agent session recovery for AI agent systems."
+  const title = pick(isDE, "AI Agent Persistence: KI-Agenten-Persistenz | ClawGuru Moltbot", "AI Agent Persistence: AI Agent Persistence | ClawGuru Moltbot")
+  const description = pick(isDE, "AI-Agent-Persistenz: Memory Management, State Persistence, Long-Term Memory und Agent Session Recovery für KI-Agent-Systeme.", "AI agent persistence: memory management, state persistence, long-term memory and agent session recovery for AI agent systems.")
   return {
     title, description,
     keywords: ["ai agent persistence", "llm agent memory", "agent state management", "long-term memory llm", "agent session recovery", "moltbot persistence"],
@@ -206,17 +203,15 @@ export default function AiAgentPersistencePage({ params }: { params: { lang: str
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "Agent-Persistenz-Guide für eigene KI-Systeme." : "Agent persistence guide for your own AI systems."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Agent-Persistenz-Guide für eigene KI-Systeme.", "Agent persistence guide for your own AI systems.")}
         </div>
         <div className="mb-3"><span className="text-xs font-bold uppercase tracking-widest text-cyan-400">Moltbot · Batch 16</span></div>
-        <h1 className="text-4xl font-bold mb-4 text-gray-100">{isDE ? "AI Agent Persistence" : "AI Agent Persistence"}</h1>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">{pick(isDE, "AI Agent Persistence", "AI Agent Persistence")}</h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "KI-Agenten ohne Persistenz verlieren nach jedem Session-Ende den Kontext — mit Persistence können Agenten lernen und sich erinnern. Vier Kontrollen: Memory Management, State Persistence, Long-Term Memory und Session Recovery."
-            : "AI agents without persistence lose context after every session end — with persistence, agents can learn and remember. Four controls: memory management, state persistence, long-term memory and session recovery."}
+          {pick(isDE, "KI-Agenten ohne Persistenz verlieren nach jedem Session-Ende den Kontext — mit Persistence können Agenten lernen und sich erinnern. Vier Kontrollen: Memory Management, State Persistence, Long-Term Memory und Session Recovery.", "AI agents without persistence lose context after every session end — with persistence, agents can learn and remember. Four controls: memory management, state persistence, long-term memory and session recovery.")}
         </p>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "4 Agent-Persistenz-Kontrollen" : "4 Agent Persistence Controls"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "4 Agent-Persistenz-Kontrollen", "4 Agent Persistence Controls")}</h2>
           <div className="space-y-5">
             {PERSISTENCE_CONTROLS.map((c) => (
               <div key={c.id} className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
@@ -233,7 +228,7 @@ export default function AiAgentPersistencePage({ params }: { params: { lang: str
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-3">
             {FAQ.map((f, i) => (
               <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
@@ -244,23 +239,23 @@ export default function AiAgentPersistencePage({ params }: { params: { lang: str
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further Resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further Resources")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/moltbot/agent-memory-security`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Agent Memory Security</div>
-              <div className="text-sm text-gray-300">{isDE ? "Memory-Sanitisation" : "Memory sanitisation"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Memory-Sanitisation", "Memory sanitisation")}</div>
             </a>
             <a href={`/${locale}/moltbot/llm-context-isolation`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM Context Isolation</div>
-              <div className="text-sm text-gray-300">{isDE ? "Session-Isolation" : "Session isolation"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Session-Isolation", "Session isolation")}</div>
             </a>
             <a href={`/${locale}/moltbot/ai-agent-audit-logging`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Agent Audit Logging</div>
-              <div className="text-sm text-gray-300">{isDE ? "State-Persistence-Audit" : "State persistence audit"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "State-Persistence-Audit", "State persistence audit")}</div>
             </a>
             <a href={`/${locale}/moltbot/rag-security`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">RAG Security</div>
-              <div className="text-sm text-gray-300">{isDE ? "Long-Term-Memory-RAG" : "Long-term memory RAG"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Long-Term-Memory-RAG", "Long-term memory RAG")}</div>
             </a>
           </div>
         </section>

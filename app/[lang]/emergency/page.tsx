@@ -2,6 +2,7 @@
 
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
 import RootPage, { metadata as rootMetadata } from "@/app/emergency/page"
+import { pick } from "@/lib/i18n-pick"
 
 export const revalidate = 60
 
@@ -14,13 +15,9 @@ export async function generateMetadata(props: { params: { lang: string } }): Pro
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
 
-  const title = isDE
-    ? "Emergency Security Response — ClawGuru Day Pass"
-    : "Emergency Security Response — ClawGuru Day Pass"
+  const title = pick(isDE, "Emergency Security Response — ClawGuru Day Pass", "Emergency Security Response — ClawGuru Day Pass")
 
-  const description = isDE
-    ? "Security Incident? Log4j-Check, Ransomware Runbook, Key Rotation, Intrusion Response – alles sofort verfügbar. Day Pass: aktiv in 60 Sekunden, kein Abo-Approval nötig."
-    : "Security incident? Log4j check, ransomware runbook, key rotation, intrusion response – all instantly available. Day Pass: active in 60 seconds, no subscription approval needed."
+  const description = pick(isDE, "Security Incident? Log4j-Check, Ransomware Runbook, Key Rotation, Intrusion Response – alles sofort verfügbar. Day Pass: aktiv in 60 Sekunden, kein Abo-Approval nötig.", "Security incident? Log4j check, ransomware runbook, key rotation, intrusion response – all instantly available. Day Pass: active in 60 seconds, no subscription approval needed.")
 
   return {
     title,

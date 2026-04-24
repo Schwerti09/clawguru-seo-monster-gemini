@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/openclaw/ebpf-security-monitoring"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "eBPF Security Monitoring: Kernel-Level-Sicherheit für Kubernetes | ClawGuru"
-    : "eBPF Security Monitoring: Kernel-Level Security for Kubernetes | ClawGuru"
-  const description = isDE
-    ? "eBPF-basiertes Security Monitoring für Kubernetes und Container: Cilium Tetragon, Falco eBPF, Syscall-Überwachung, Network-Policy-Enforcement und Runtime-Threat-Detection ohne Kernel-Module."
-    : "eBPF-based security monitoring for Kubernetes and containers: Cilium Tetragon, Falco eBPF, syscall monitoring, network policy enforcement and runtime threat detection without kernel modules."
+  const title = pick(isDE, "eBPF Security Monitoring: Kernel-Level-Sicherheit für Kubernetes | ClawGuru", "eBPF Security Monitoring: Kernel-Level Security for Kubernetes | ClawGuru")
+  const description = pick(isDE, "eBPF-basiertes Security Monitoring für Kubernetes und Container: Cilium Tetragon, Falco eBPF, Syscall-Überwachung, Network-Policy-Enforcement und Runtime-Threat-Detection ohne Kernel-Module.", "eBPF-based security monitoring for Kubernetes and containers: Cilium Tetragon, Falco eBPF, syscall monitoring, network policy enforcement and runtime threat detection without kernel modules.")
   return {
     title, description,
     keywords: ["ebpf security monitoring", "ebpf kubernetes security", "cilium tetragon", "falco ebpf", "ebpf runtime security", "ebpf container monitoring"],
@@ -189,24 +186,22 @@ export default function EbpfSecurityMonitoringPage({ params }: { params: { lang:
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "eBPF-Monitoring-Guide für eigene Kubernetes-Infrastruktur." : "eBPF monitoring guide for your own Kubernetes infrastructure."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "eBPF-Monitoring-Guide für eigene Kubernetes-Infrastruktur.", "eBPF monitoring guide for your own Kubernetes infrastructure.")}
         </div>
         <div className="mb-3"><span className="text-xs font-bold uppercase tracking-widest text-cyan-400">OpenClaw · Batch 6</span></div>
         <h1 className="text-4xl font-bold mb-4 text-gray-100">
-          {isDE ? "eBPF Security Monitoring" : "eBPF Security Monitoring"}
+          {pick(isDE, "eBPF Security Monitoring", "eBPF Security Monitoring")}
         </h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "eBPF ermöglicht Kernel-Level-Sicherheit ohne Kernel-Module — sicherer, portabler, in managed Kubernetes verfügbar. Vier Tools: Cilium Tetragon (Enforcement), Falco eBPF (Detection), L7-Network-Policies und Syscall-Audit-Trail."
-            : "eBPF enables kernel-level security without kernel modules — safer, more portable, available in managed Kubernetes. Four tools: Cilium Tetragon (enforcement), Falco eBPF (detection), L7 network policies and syscall audit trail."}
+          {pick(isDE, "eBPF ermöglicht Kernel-Level-Sicherheit ohne Kernel-Module — sicherer, portabler, in managed Kubernetes verfügbar. Vier Tools: Cilium Tetragon (Enforcement), Falco eBPF (Detection), L7-Network-Policies und Syscall-Audit-Trail.", "eBPF enables kernel-level security without kernel modules — safer, more portable, available in managed Kubernetes. Four tools: Cilium Tetragon (enforcement), Falco eBPF (detection), L7 network policies and syscall audit trail.")}
         </p>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
           {[
-            { value: "eBPF", label: isDE ? "Kein Kernel-Modul" : "No kernel module" },
-            { value: "L7", label: isDE ? "HTTP/DNS-Policy" : "HTTP/DNS policy" },
-            { value: "SIGKILL", label: isDE ? "In-Kernel-Block" : "In-kernel block" },
-            { value: "~3%", label: isDE ? "CPU-Overhead" : "CPU overhead" },
+            { value: "eBPF", label: pick(isDE, "Kein Kernel-Modul", "No kernel module") },
+            { value: "L7", label: pick(isDE, "HTTP/DNS-Policy", "HTTP/DNS policy") },
+            { value: "SIGKILL", label: pick(isDE, "In-Kernel-Block", "In-kernel block") },
+            { value: "~3%", label: pick(isDE, "CPU-Overhead", "CPU overhead") },
           ].map((s) => (
             <div key={s.label} className="bg-gray-800 p-4 rounded-lg border border-gray-700 text-center">
               <div className="text-2xl font-black text-cyan-400">{s.value}</div>
@@ -216,7 +211,7 @@ export default function EbpfSecurityMonitoringPage({ params }: { params: { lang:
         </div>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "4 eBPF Security Tools" : "4 eBPF Security Tools"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "4 eBPF Security Tools", "4 eBPF Security Tools")}</h2>
           <div className="space-y-5">
             {EBPF_TOOLS.map((t) => (
               <div key={t.id} className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
@@ -235,7 +230,7 @@ export default function EbpfSecurityMonitoringPage({ params }: { params: { lang:
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-3">
             {FAQ.map((f, i) => (
               <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
@@ -247,23 +242,23 @@ export default function EbpfSecurityMonitoringPage({ params }: { params: { lang:
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further Resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further Resources")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/openclaw/runtime-policy-enforcement`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Runtime Policy Enforcement</div>
-              <div className="text-sm text-gray-300">{isDE ? "OPA + Falco + Cilium" : "OPA + Falco + Cilium"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "OPA + Falco + Cilium", "OPA + Falco + Cilium")}</div>
             </a>
             <a href={`/${locale}/openclaw/container-escape-prevention`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Container Escape Prevention</div>
-              <div className="text-sm text-gray-300">{isDE ? "eBPF als Escape-Blocker" : "eBPF as escape blocker"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "eBPF als Escape-Blocker", "eBPF as escape blocker")}</div>
             </a>
             <a href={`/${locale}/openclaw/network-segmentation-guide`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Network Segmentation</div>
-              <div className="text-sm text-gray-300">{isDE ? "Cilium + NetworkPolicy" : "Cilium + NetworkPolicy"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Cilium + NetworkPolicy", "Cilium + NetworkPolicy")}</div>
             </a>
             <a href={`/${locale}/solutions/kubernetes-security-hardening`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Kubernetes Hardening</div>
-              <div className="text-sm text-gray-300">{isDE ? "Vollständiges K8s Hardening" : "Full K8s hardening"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Vollständiges K8s Hardening", "Full K8s hardening")}</div>
             </a>
           </div>
         </section>

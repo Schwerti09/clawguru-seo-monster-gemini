@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/moltbot/ai-agent-permission-minimization"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "AI Agent Permission Minimization: Least Privilege für KI-Agenten 2026 | ClawGuru"
-    : "AI Agent Permission Minimization: Least Privilege for AI Agents 2026 | ClawGuru"
-  const description = isDE
-    ? "Least-Privilege-Prinzip für KI-Agenten: Tool-Allowlists, dynamische Permission-Scoping, Just-in-Time-Zugriff und Moltbot-RBAC-Konfiguration für sichere AI-Agent-Deployments 2026."
-    : "Least privilege for AI agents: tool allowlists, dynamic permission scoping, just-in-time access, and Moltbot RBAC configuration for secure AI agent deployments 2026."
+  const title = pick(isDE, "AI Agent Permission Minimization: Least Privilege für KI-Agenten 2026 | ClawGuru", "AI Agent Permission Minimization: Least Privilege for AI Agents 2026 | ClawGuru")
+  const description = pick(isDE, "Least-Privilege-Prinzip für KI-Agenten: Tool-Allowlists, dynamische Permission-Scoping, Just-in-Time-Zugriff und Moltbot-RBAC-Konfiguration für sichere AI-Agent-Deployments 2026.", "Least privilege for AI agents: tool allowlists, dynamic permission scoping, just-in-time access, and Moltbot RBAC configuration for secure AI agent deployments 2026.")
   return {
     title, description,
     keywords: ["ai agent permission minimization", "least privilege ai agents", "ai agent rbac", "moltbot permission control", "llm tool access control", "ai agent security 2026"],
@@ -31,10 +28,8 @@ export async function generateMetadata({ params }: { params: { lang: string } })
 const STEPS = [
   {
     num: "1",
-    title: (isDE: boolean) => isDE ? "Tool-Allowlists pro Agent definieren" : "Define Per-Agent Tool Allowlists",
-    desc: (isDE: boolean) => isDE
-      ? "Jeder Agent bekommt nur die Tools, die er für seine spezifische Aufgabe benötigt — nicht alle verfügbaren Tools."
-      : "Each agent receives only the tools required for its specific task — not all available tools.",
+    title: (isDE: boolean) => pick(isDE, "Tool-Allowlists pro Agent definieren", "Define Per-Agent Tool Allowlists"),
+    desc: (isDE: boolean) => pick(isDE, "Jeder Agent bekommt nur die Tools, die er für seine spezifische Aufgabe benötigt — nicht alle verfügbaren Tools.", "Each agent receives only the tools required for its specific task — not all available tools."),
     code: `# Moltbot agent permission config
 agents:
   data-analyst:
@@ -64,10 +59,8 @@ agents:
   },
   {
     num: "2",
-    title: (isDE: boolean) => isDE ? "Dynamisches Permission-Scoping" : "Dynamic Permission Scoping",
-    desc: (isDE: boolean) => isDE
-      ? "Berechtigungen werden zur Laufzeit basierend auf dem aktuellen Task eingeschränkt — nicht statisch zur Deploy-Zeit."
-      : "Permissions are restricted at runtime based on the current task — not statically at deploy time.",
+    title: (isDE: boolean) => pick(isDE, "Dynamisches Permission-Scoping", "Dynamic Permission Scoping"),
+    desc: (isDE: boolean) => pick(isDE, "Berechtigungen werden zur Laufzeit basierend auf dem aktuellen Task eingeschränkt — nicht statisch zur Deploy-Zeit.", "Permissions are restricted at runtime based on the current task — not statically at deploy time."),
     code: `# Moltbot dynamic scoping
 permission_scoping:
   enabled: true
@@ -96,10 +89,8 @@ permission_scoping:
   },
   {
     num: "3",
-    title: (isDE: boolean) => isDE ? "Just-in-Time (JIT) Zugriff" : "Just-in-Time (JIT) Access",
-    desc: (isDE: boolean) => isDE
-      ? "Privilegierte Berechtigungen werden nur für die Dauer einer spezifischen Aufgabe erteilt und danach automatisch entzogen."
-      : "Privileged permissions are granted only for the duration of a specific task, then automatically revoked.",
+    title: (isDE: boolean) => pick(isDE, "Just-in-Time (JIT) Zugriff", "Just-in-Time (JIT) Access"),
+    desc: (isDE: boolean) => pick(isDE, "Privilegierte Berechtigungen werden nur für die Dauer einer spezifischen Aufgabe erteilt und danach automatisch entzogen.", "Privileged permissions are granted only for the duration of a specific task, then automatically revoked."),
     code: `# Moltbot JIT access config
 jit_access:
   enabled: true
@@ -123,10 +114,8 @@ jit_access:
   },
   {
     num: "4",
-    title: (isDE: boolean) => isDE ? "Permission Drift Monitoring" : "Permission Drift Monitoring",
-    desc: (isDE: boolean) => isDE
-      ? "Automatische Erkennung wenn Agenten mehr Berechtigungen nutzen als ursprünglich definiert."
-      : "Automatic detection when agents use more permissions than originally defined.",
+    title: (isDE: boolean) => pick(isDE, "Permission Drift Monitoring", "Permission Drift Monitoring"),
+    desc: (isDE: boolean) => pick(isDE, "Automatische Erkennung wenn Agenten mehr Berechtigungen nutzen als ursprünglich definiert.", "Automatic detection when agents use more permissions than originally defined."),
     code: `# Moltbot permission drift detection
 drift_monitoring:
   enabled: true
@@ -152,10 +141,8 @@ drift_monitoring:
   },
   {
     num: "5",
-    title: (isDE: boolean) => isDE ? "Cross-Agent Permission Isolation" : "Cross-Agent Permission Isolation",
-    desc: (isDE: boolean) => isDE
-      ? "Agenten dürfen ihre Berechtigungen nicht an andere Agenten weitergeben — jede Agent-Instanz hat ihre eigenen, isolierten Rechte."
-      : "Agents must not delegate their permissions to other agents — each agent instance has its own isolated rights.",
+    title: (isDE: boolean) => pick(isDE, "Cross-Agent Permission Isolation", "Cross-Agent Permission Isolation"),
+    desc: (isDE: boolean) => pick(isDE, "Agenten dürfen ihre Berechtigungen nicht an andere Agenten weitergeben — jede Agent-Instanz hat ihre eigenen, isolierten Rechte.", "Agents must not delegate their permissions to other agents — each agent instance has its own isolated rights."),
     code: `# Moltbot cross-agent isolation
 agent_isolation:
   permission_delegation: false  # agents cannot grant perms to sub-agents
@@ -242,12 +229,10 @@ export default function AiAgentPermissionMinimizationPage({ params }: { params: 
         </div>
 
         <h1 className="text-4xl font-bold mb-4 text-gray-100">
-          {isDE ? "AI Agent Permission Minimization: Least Privilege 2026" : "AI Agent Permission Minimization: Least Privilege 2026"}
+          {pick(isDE, "AI Agent Permission Minimization: Least Privilege 2026", "AI Agent Permission Minimization: Least Privilege 2026")}
         </h1>
         <p className="text-lg text-gray-300 mb-10">
-          {isDE
-            ? "KI-Agenten mit zu vielen Berechtigungen sind ein Multiplikator für jeden Angriff. Prompt Injection, unerwartetes Verhalten oder kompromittierte Modelle — der Blast Radius hängt direkt von den vergebenen Rechten ab. Least Privilege ist das wichtigste Sicherheitsprinzip für autonome Agenten."
-            : "AI agents with excessive permissions are a force multiplier for every attack. Prompt injection, unexpected behavior, or compromised models — the blast radius depends directly on the permissions granted. Least privilege is the most important security principle for autonomous agents."}
+          {pick(isDE, "KI-Agenten mit zu vielen Berechtigungen sind ein Multiplikator für jeden Angriff. Prompt Injection, unerwartetes Verhalten oder kompromittierte Modelle — der Blast Radius hängt direkt von den vergebenen Rechten ab. Least Privilege ist das wichtigste Sicherheitsprinzip für autonome Agenten.", "AI agents with excessive permissions are a force multiplier for every attack. Prompt injection, unexpected behavior, or compromised models — the blast radius depends directly on the permissions granted. Least privilege is the most important security principle for autonomous agents.")}
         </p>
 
         {STEPS.map((step) => (
@@ -267,7 +252,7 @@ export default function AiAgentPermissionMinimizationPage({ params }: { params: 
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">
-            {isDE ? "Häufige Fragen" : "Frequently Asked Questions"}
+            {pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}
           </h2>
           <div className="space-y-4">
             {FAQ.map((entry, i) => (
@@ -284,37 +269,37 @@ export default function AiAgentPermissionMinimizationPage({ params }: { params: 
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">
-            {isDE ? "Weiterführende Ressourcen" : "Further Resources"}
+            {pick(isDE, "Weiterführende Ressourcen", "Further Resources")}
           </h2>
           <div className="grid sm:grid-cols-2 gap-4">
             <a href={`/${locale}/moltbot/ai-agent-rbac`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Agent RBAC</div>
-              <div className="text-sm text-gray-300">{isDE ? "Rollenbasierte Zugriffskontrolle" : "Role-based access control for agents"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Rollenbasierte Zugriffskontrolle", "Role-based access control for agents")}</div>
             </a>
             <a href={`/${locale}/moltbot/ai-agent-sandboxing`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Agent Sandboxing</div>
-              <div className="text-sm text-gray-300">{isDE ? "Runtime-Isolation für Agenten" : "Runtime isolation for AI agents"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Runtime-Isolation für Agenten", "Runtime isolation for AI agents")}</div>
             </a>
             <a href={`/${locale}/solutions/zero-trust-ai-architecture`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Zero Trust AI Architecture</div>
-              <div className="text-sm text-gray-300">{isDE ? "Zero Trust für KI-Systeme" : "Zero Trust principles for AI"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Zero Trust für KI-Systeme", "Zero Trust principles for AI")}</div>
             </a>
             <a href={`/${locale}/securitycheck`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
-              <div className="font-semibold text-cyan-400">{isDE ? "Security Check starten" : "Start Security Check"}</div>
-              <div className="text-sm text-gray-300">{isDE ? "Agent-Berechtigungen in 30s prüfen" : "Audit agent permissions in 30s"}</div>
+              <div className="font-semibold text-cyan-400">{pick(isDE, "Security Check starten", "Start Security Check")}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Agent-Berechtigungen in 30s prüfen", "Audit agent permissions in 30s")}</div>
             </a>
           </div>
         </section>
 
         <div className="bg-cyan-900 border border-cyan-700 rounded-lg p-6 text-center">
           <h2 className="text-xl font-bold text-cyan-300 mb-2">
-            {isDE ? "Agent-Berechtigungen automatisch erzwingen?" : "Enforce agent permissions automatically?"}
+            {pick(isDE, "Agent-Berechtigungen automatisch erzwingen?", "Enforce agent permissions automatically?")}
           </h2>
           <p className="text-gray-300 mb-4 text-sm">
-            {isDE ? "Moltbot erzwingt Least Privilege, JIT-Zugriff und Permission-Drift-Alerts für alle deine KI-Agenten." : "Moltbot enforces least privilege, JIT access, and permission drift alerts for all your AI agents."}
+            {pick(isDE, "Moltbot erzwingt Least Privilege, JIT-Zugriff und Permission-Drift-Alerts für alle deine KI-Agenten.", "Moltbot enforces least privilege, JIT access, and permission drift alerts for all your AI agents.")}
           </p>
           <a href={`/${locale}/securitycheck`} className="inline-block bg-cyan-500 hover:bg-cyan-400 text-black font-bold px-6 py-3 rounded-lg transition-colors">
-            {isDE ? "🛡️ Kostenloser Security Check" : "🛡️ Free Security Check"}
+            {pick(isDE, "🛡️ Kostenloser Security Check", "🛡️ Free Security Check")}
           </a>
         </div>
       </div>

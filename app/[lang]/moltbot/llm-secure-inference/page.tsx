@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/moltbot/llm-secure-inference"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "LLM Secure Inference: LLM-Secure-Inference | ClawGuru Moltbot"
-    : "LLM Secure Inference: LLM Secure Inference | ClawGuru Moltbot"
-  const description = isDE
-    ? "LLM-Secure-Inference: Secure Enclave Execution, Trusted Execution Environment, Confidential Computing und Input/Output Validation für LLM-Secure-Inference."
-    : "LLM secure inference: secure enclave execution, trusted execution environment, confidential computing and input/output validation for LLM secure inference."
+  const title = pick(isDE, "LLM Secure Inference: LLM-Secure-Inference | ClawGuru Moltbot", "LLM Secure Inference: LLM Secure Inference | ClawGuru Moltbot")
+  const description = pick(isDE, "LLM-Secure-Inference: Secure Enclave Execution, Trusted Execution Environment, Confidential Computing und Input/Output Validation für LLM-Secure-Inference.", "LLM secure inference: secure enclave execution, trusted execution environment, confidential computing and input/output validation for LLM secure inference.")
   return {
     title, description,
     keywords: ["llm secure inference", "secure enclave", "tee", "confidential computing", "input validation", "moltbot secure inference"],
@@ -164,17 +161,15 @@ export default function LlmSecureInferencePage({ params }: { params: { lang: str
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "Secure-Inference-Guide für eigene KI-Systeme." : "Secure inference guide for your own AI systems."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Secure-Inference-Guide für eigene KI-Systeme.", "Secure inference guide for your own AI systems.")}
         </div>
         <div className="mb-3"><span className="text-xs font-bold uppercase tracking-widest text-cyan-400">Moltbot · Batch 21</span></div>
-        <h1 className="text-4xl font-bold mb-4 text-gray-100">{isDE ? "LLM Secure Inference" : "LLM Secure Inference"}</h1>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">{pick(isDE, "LLM Secure Inference", "LLM Secure Inference")}</h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "LLM-Inference ohne Secure-Execution kann Modelle und Daten kompromittieren — ohne Secure-Inference bleibt Inference ungeschützt. Vier Kontrollen: Secure Enclave Execution, TEE, Confidential Computing und Input/Output Validation."
-            : "LLM inference without secure execution can compromise models and data — without secure inference, inference remains unprotected. Four controls: secure enclave execution, TEE, confidential computing and input/output validation."}
+          {pick(isDE, "LLM-Inference ohne Secure-Execution kann Modelle und Daten kompromittieren — ohne Secure-Inference bleibt Inference ungeschützt. Vier Kontrollen: Secure Enclave Execution, TEE, Confidential Computing und Input/Output Validation.", "LLM inference without secure execution can compromise models and data — without secure inference, inference remains unprotected. Four controls: secure enclave execution, TEE, confidential computing and input/output validation.")}
         </p>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "4 Secure-Inference-Kontrollen" : "4 Secure Inference Controls"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "4 Secure-Inference-Kontrollen", "4 Secure Inference Controls")}</h2>
           <div className="space-y-5">
             {CONTROLS.map((c) => (
               <div key={c.id} className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
@@ -191,7 +186,7 @@ export default function LlmSecureInferencePage({ params }: { params: { lang: str
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-3">
             {FAQ.map((f, i) => (
               <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
@@ -202,23 +197,23 @@ export default function LlmSecureInferencePage({ params }: { params: { lang: str
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further Resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further Resources")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/moltbot/llm-data-encryption-at-rest`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM Data Encryption at Rest</div>
-              <div className="text-sm text-gray-300">{isDE ? "Data-Security" : "Data security"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Data-Security", "Data security")}</div>
             </a>
             <a href={`/${locale}/moltbot/llm-privacy-preserving-computation`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM Privacy-Preserving Computation</div>
-              <div className="text-sm text-gray-300">{isDE ? "Confidential-Computing" : "Confidential computing"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Confidential-Computing", "Confidential computing")}</div>
             </a>
             <a href={`/${locale}/moltbot/llm-output-validation`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM Output Validation</div>
-              <div className="text-sm text-gray-300">{isDE ? "Validation" : "Validation"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Validation", "Validation")}</div>
             </a>
             <a href={`/${locale}/moltbot/ai-agent-sandboxing-runtime`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Agent Sandboxing Runtime</div>
-              <div className="text-sm text-gray-300">{isDE ? "Isolation" : "Isolation"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Isolation", "Isolation")}</div>
             </a>
           </div>
         </section>

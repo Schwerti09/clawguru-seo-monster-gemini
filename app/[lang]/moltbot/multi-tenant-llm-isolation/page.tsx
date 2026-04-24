@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/moltbot/multi-tenant-llm-isolation"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "Multi-Tenant LLM Isolation: Mandanten-Datentrennung für KI-Systeme | ClawGuru Moltbot"
-    : "Multi-Tenant LLM Isolation: Tenant Data Separation for AI Systems | ClawGuru Moltbot"
-  const description = isDE
-    ? "Multi-Tenant-Isolation für LLM-Systeme: Konversations-Isolation, Mandanten-spezifische RAG-Partitionierung, Cross-Tenant-Daten-Leckage-Erkennung und getrennte Verschlüsselungsschlüssel pro Mandant."
-    : "Multi-tenant isolation for LLM systems: conversation isolation, tenant-specific RAG partitioning, cross-tenant data leakage detection and separate encryption keys per tenant."
+  const title = pick(isDE, "Multi-Tenant LLM Isolation: Mandanten-Datentrennung für KI-Systeme | ClawGuru Moltbot", "Multi-Tenant LLM Isolation: Tenant Data Separation for AI Systems | ClawGuru Moltbot")
+  const description = pick(isDE, "Multi-Tenant-Isolation für LLM-Systeme: Konversations-Isolation, Mandanten-spezifische RAG-Partitionierung, Cross-Tenant-Daten-Leckage-Erkennung und getrennte Verschlüsselungsschlüssel pro Mandant.", "Multi-tenant isolation for LLM systems: conversation isolation, tenant-specific RAG partitioning, cross-tenant data leakage detection and separate encryption keys per tenant.")
   return {
     title, description,
     keywords: ["multi tenant llm isolation", "llm tenant isolation", "ai multi tenant security", "llm data separation", "saas ai security", "tenant isolation moltbot"],
@@ -185,17 +182,15 @@ export default function MultiTenantLlmIsolationPage({ params }: { params: { lang
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "Multi-Tenant-Isolation-Guide für eigene KI-Plattformen." : "Multi-tenant isolation guide for your own AI platforms."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Multi-Tenant-Isolation-Guide für eigene KI-Plattformen.", "Multi-tenant isolation guide for your own AI platforms.")}
         </div>
         <div className="mb-3"><span className="text-xs font-bold uppercase tracking-widest text-cyan-400">Moltbot · Batch 13</span></div>
-        <h1 className="text-4xl font-bold mb-4 text-gray-100">{isDE ? "Multi-Tenant LLM Isolation" : "Multi-Tenant LLM Isolation"}</h1>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">{pick(isDE, "Multi-Tenant LLM Isolation", "Multi-Tenant LLM Isolation")}</h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "Shared LLM-Infrastruktur für mehrere Mandanten erfordert strikte Datentrennung auf jeder Schicht — Konversation, RAG, Verschlüsselung und Monitoring. Vier Isolation-Schichten mit konkreter Moltbot-Konfiguration."
-            : "Shared LLM infrastructure for multiple tenants requires strict data separation at every layer — conversation, RAG, encryption and monitoring. Four isolation layers with concrete Moltbot configuration."}
+          {pick(isDE, "Shared LLM-Infrastruktur für mehrere Mandanten erfordert strikte Datentrennung auf jeder Schicht — Konversation, RAG, Verschlüsselung und Monitoring. Vier Isolation-Schichten mit konkreter Moltbot-Konfiguration.", "Shared LLM infrastructure for multiple tenants requires strict data separation at every layer — conversation, RAG, encryption and monitoring. Four isolation layers with concrete Moltbot configuration.")}
         </p>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "4 Isolation-Schichten" : "4 Isolation Layers"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "4 Isolation-Schichten", "4 Isolation Layers")}</h2>
           <div className="space-y-5">
             {ISOLATION_LAYERS.map((c) => (
               <div key={c.id} className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
@@ -212,7 +207,7 @@ export default function MultiTenantLlmIsolationPage({ params }: { params: { lang
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-3">
             {FAQ.map((f, i) => (
               <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
@@ -223,23 +218,23 @@ export default function MultiTenantLlmIsolationPage({ params }: { params: { lang
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further Resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further Resources")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/moltbot/llm-context-isolation`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM Context Isolation</div>
-              <div className="text-sm text-gray-300">{isDE ? "Konversations-Isolation" : "Conversation isolation"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Konversations-Isolation", "Conversation isolation")}</div>
             </a>
             <a href={`/${locale}/moltbot/agent-memory-security`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Agent Memory Security</div>
-              <div className="text-sm text-gray-300">{isDE ? "Memory-Trennung pro Mandant" : "Memory separation per tenant"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Memory-Trennung pro Mandant", "Memory separation per tenant")}</div>
             </a>
             <a href={`/${locale}/moltbot/ai-data-loss-prevention`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Data Loss Prevention</div>
-              <div className="text-sm text-gray-300">{isDE ? "Cross-Tenant-Leckage-Scan" : "Cross-tenant leakage scan"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Cross-Tenant-Leckage-Scan", "Cross-tenant leakage scan")}</div>
             </a>
             <a href={`/${locale}/solutions/gdpr-ai-data-processing`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">GDPR AI Data Processing</div>
-              <div className="text-sm text-gray-300">{isDE ? "DSGVO-konforme Multi-Tenancy" : "GDPR-compliant multi-tenancy"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "DSGVO-konforme Multi-Tenancy", "GDPR-compliant multi-tenancy")}</div>
             </a>
           </div>
         </section>

@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/openclaw/container-escape-prevention"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "Container Escape Prevention: Docker & Kubernetes Ausbrüche verhindern | ClawGuru"
-    : "Container Escape Prevention: Prevent Docker & Kubernetes Breakouts | ClawGuru"
-  const description = isDE
-    ? "Container-Escape-Angriffe erkennen und verhindern: privilegierte Container, Host-Mounts, runc-Exploits, seccomp/AppArmor-Profile, gVisor Sandbox und OpenClaw Runtime Detection."
-    : "Detect and prevent container escape attacks: privileged containers, host mounts, runc exploits, seccomp/AppArmor profiles, gVisor sandbox and OpenClaw runtime detection."
+  const title = pick(isDE, "Container Escape Prevention: Docker & Kubernetes Ausbrüche verhindern | ClawGuru", "Container Escape Prevention: Prevent Docker & Kubernetes Breakouts | ClawGuru")
+  const description = pick(isDE, "Container-Escape-Angriffe erkennen und verhindern: privilegierte Container, Host-Mounts, runc-Exploits, seccomp/AppArmor-Profile, gVisor Sandbox und OpenClaw Runtime Detection.", "Detect and prevent container escape attacks: privileged containers, host mounts, runc exploits, seccomp/AppArmor profiles, gVisor sandbox and OpenClaw runtime detection.")
   return {
     title, description,
     keywords: ["container escape prevention", "docker container escape", "kubernetes container breakout", "seccomp apparmor container", "gvisor sandbox", "container security hardening"],
@@ -159,20 +156,18 @@ export default function ContainerEscapePreventionPage({ params }: { params: { la
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "Container-Hardening-Guide für eigene Infrastruktur." : "Container hardening guide for your own infrastructure."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Container-Hardening-Guide für eigene Infrastruktur.", "Container hardening guide for your own infrastructure.")}
         </div>
         <div className="mb-3"><span className="text-xs font-bold uppercase tracking-widest text-cyan-400">OpenClaw · Batch 5</span></div>
         <h1 className="text-4xl font-bold mb-4 text-gray-100">
-          {isDE ? "Container Escape Prevention" : "Container Escape Prevention"}
+          {pick(isDE, "Container Escape Prevention", "Container Escape Prevention")}
         </h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "Container-Escapes sind häufiger als Kernel-Exploits — und meist durch simple Fehlkonfiguration. Fünf kritische Vektoren mit fertigen Fixes: von privilegierten Containern bis zu Host-Namespace-Sharing."
-            : "Container escapes are more common than kernel exploits — and usually caused by simple misconfiguration. Five critical vectors with ready fixes: from privileged containers to host namespace sharing."}
+          {pick(isDE, "Container-Escapes sind häufiger als Kernel-Exploits — und meist durch simple Fehlkonfiguration. Fünf kritische Vektoren mit fertigen Fixes: von privilegierten Containern bis zu Host-Namespace-Sharing.", "Container escapes are more common than kernel exploits — and usually caused by simple misconfiguration. Five critical vectors with ready fixes: from privileged containers to host namespace sharing.")}
         </p>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "5 Container Escape Vektoren & Fixes" : "5 Container Escape Vectors & Fixes"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "5 Container Escape Vektoren & Fixes", "5 Container Escape Vectors & Fixes")}</h2>
           <div className="space-y-5">
             {ESCAPE_VECTORS.map((v) => (
               <div key={v.id} className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
@@ -191,7 +186,7 @@ export default function ContainerEscapePreventionPage({ params }: { params: { la
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-3">
             {FAQ.map((f, i) => (
               <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
@@ -203,15 +198,15 @@ export default function ContainerEscapePreventionPage({ params }: { params: { la
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further Resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further Resources")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/openclaw/runtime-policy-enforcement`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Runtime Policy Enforcement</div>
-              <div className="text-sm text-gray-300">{isDE ? "OPA + Falco + Cilium" : "OPA + Falco + Cilium"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "OPA + Falco + Cilium", "OPA + Falco + Cilium")}</div>
             </a>
             <a href={`/${locale}/openclaw/supply-chain-security`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Supply Chain Security</div>
-              <div className="text-sm text-gray-300">{isDE ? "Distroless + Cosign" : "Distroless + Cosign"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Distroless + Cosign", "Distroless + Cosign")}</div>
             </a>
             <a href={`/${locale}/academy/cve/CVE-2024-21626`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">CVE-2024-21626</div>
@@ -219,7 +214,7 @@ export default function ContainerEscapePreventionPage({ params }: { params: { la
             </a>
             <a href={`/${locale}/solutions/kubernetes-security-hardening`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Kubernetes Hardening</div>
-              <div className="text-sm text-gray-300">{isDE ? "Cluster-weites Hardening" : "Cluster-wide hardening"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Cluster-weites Hardening", "Cluster-wide hardening")}</div>
             </a>
           </div>
         </section>

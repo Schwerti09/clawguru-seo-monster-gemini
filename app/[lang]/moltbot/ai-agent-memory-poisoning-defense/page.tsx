@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/moltbot/ai-agent-memory-poisoning-defense"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "AI Agent Memory Poisoning Defense: KI-Agenten-Memory-Poisoning-Defense | ClawGuru Moltbot"
-    : "AI Agent Memory Poisoning Defense: AI Agent Memory Poisoning Defense | ClawGuru Moltbot"
-  const description = isDE
-    ? "KI-Agenten-Memory-Poisoning-Defense: Memory Integrity Verification, Memory Access Control, Memory Sanitization und Memory Audit Logging für KI-Agenten-Memory-Poisoning-Defense."
-    : "AI agent memory poisoning defense: memory integrity verification, memory access control, memory sanitization and memory audit logging for AI agent memory poisoning defense."
+  const title = pick(isDE, "AI Agent Memory Poisoning Defense: KI-Agenten-Memory-Poisoning-Defense | ClawGuru Moltbot", "AI Agent Memory Poisoning Defense: AI Agent Memory Poisoning Defense | ClawGuru Moltbot")
+  const description = pick(isDE, "KI-Agenten-Memory-Poisoning-Defense: Memory Integrity Verification, Memory Access Control, Memory Sanitization und Memory Audit Logging für KI-Agenten-Memory-Poisoning-Defense.", "AI agent memory poisoning defense: memory integrity verification, memory access control, memory sanitization and memory audit logging for AI agent memory poisoning defense.")
   return {
     title, description,
     keywords: ["ai agent memory poisoning defense", "memory integrity verification", "memory access control", "memory sanitization", "memory audit", "moltbot memory poisoning"],
@@ -165,17 +162,15 @@ export default function AiAgentMemoryPoisoningDefensePage({ params }: { params: 
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "Memory-Poisoning-Defense-Guide für eigene KI-Systeme." : "Memory poisoning defense guide for your own AI systems."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Memory-Poisoning-Defense-Guide für eigene KI-Systeme.", "Memory poisoning defense guide for your own AI systems.")}
         </div>
         <div className="mb-3"><span className="text-xs font-bold uppercase tracking-widest text-cyan-400">Moltbot · Batch 27</span></div>
-        <h1 className="text-4xl font-bold mb-4 text-gray-100">{isDE ? "AI Agent Memory Poisoning Defense" : "AI Agent Memory Poisoning Defense"}</h1>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">{pick(isDE, "AI Agent Memory Poisoning Defense", "AI Agent Memory Poisoning Defense")}</h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "Memory Poisoning ist ein persistenter Angriff — vergiftete Einträge überleben Sessions und beeinflussen zukünftige Interaktionen. Vier Kontrollen: Memory Integrity Verification, Memory Access Control, Memory Sanitization und Memory Audit Logging."
-            : "Memory poisoning is a persistent attack — poisoned entries survive sessions and influence future interactions. Four controls: memory integrity verification, memory access control, memory sanitization and memory audit logging."}
+          {pick(isDE, "Memory Poisoning ist ein persistenter Angriff — vergiftete Einträge überleben Sessions und beeinflussen zukünftige Interaktionen. Vier Kontrollen: Memory Integrity Verification, Memory Access Control, Memory Sanitization und Memory Audit Logging.", "Memory poisoning is a persistent attack — poisoned entries survive sessions and influence future interactions. Four controls: memory integrity verification, memory access control, memory sanitization and memory audit logging.")}
         </p>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "4 Memory-Poisoning-Defense-Kontrollen" : "4 Memory Poisoning Defense Controls"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "4 Memory-Poisoning-Defense-Kontrollen", "4 Memory Poisoning Defense Controls")}</h2>
           <div className="space-y-5">
             {CONTROLS.map((c) => (
               <div key={c.id} className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
@@ -192,7 +187,7 @@ export default function AiAgentMemoryPoisoningDefensePage({ params }: { params: 
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-3">
             {FAQ.map((f, i) => (
               <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
@@ -203,23 +198,23 @@ export default function AiAgentMemoryPoisoningDefensePage({ params }: { params: 
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further Resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further Resources")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/moltbot/agent-memory-security`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Agent Memory Security</div>
-              <div className="text-sm text-gray-300">{isDE ? "Memory-Security" : "Memory security"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Memory-Security", "Memory security")}</div>
             </a>
             <a href={`/${locale}/moltbot/llm-context-poisoning-defense`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM Context Poisoning Defense</div>
-              <div className="text-sm text-gray-300">{isDE ? "Context-Defense" : "Context defense"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Context-Defense", "Context defense")}</div>
             </a>
             <a href={`/${locale}/moltbot/llm-prompt-injection-detection`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM Prompt Injection Detection</div>
-              <div className="text-sm text-gray-300">{isDE ? "Prompt-Injection" : "Prompt injection"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Prompt-Injection", "Prompt injection")}</div>
             </a>
             <a href={`/${locale}/moltbot/ai-agent-security`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Agent Security</div>
-              <div className="text-sm text-gray-300">{isDE ? "Memory-Overview" : "Memory overview"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Memory-Overview", "Memory overview")}</div>
             </a>
           </div>
         </section>

@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/moltbot/ai-agent-multi-modal-security"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "AI Agent Multi-Modal Security: KI-Agenten-Multi-Modal-Security | ClawGuru Moltbot"
-    : "AI Agent Multi-Modal Security: AI Agent Multi-Modal Security | ClawGuru Moltbot"
-  const description = isDE
-    ? "KI-Agenten-Multi-Modal-Security: Multi-Modal Input Validation, Cross-Modal Attack Detection, Multi-Modal Output Filtering und Multi-Modal Policy Enforcement für KI-Agenten-Multi-Modal-Security."
-    : "AI agent multi-modal security: multi-modal input validation, cross-modal attack detection, multi-modal output filtering and multi-modal policy enforcement for AI agent multi-modal security."
+  const title = pick(isDE, "AI Agent Multi-Modal Security: KI-Agenten-Multi-Modal-Security | ClawGuru Moltbot", "AI Agent Multi-Modal Security: AI Agent Multi-Modal Security | ClawGuru Moltbot")
+  const description = pick(isDE, "KI-Agenten-Multi-Modal-Security: Multi-Modal Input Validation, Cross-Modal Attack Detection, Multi-Modal Output Filtering und Multi-Modal Policy Enforcement für KI-Agenten-Multi-Modal-Security.", "AI agent multi-modal security: multi-modal input validation, cross-modal attack detection, multi-modal output filtering and multi-modal policy enforcement for AI agent multi-modal security.")
   return {
     title, description,
     keywords: ["ai agent multi-modal security", "multi-modal input validation", "cross-modal attack detection", "multi-modal output filtering", "multi-modal policy", "moltbot multi-modal"],
@@ -170,17 +167,15 @@ export default function AiAgentMultiModalSecurityPage({ params }: { params: { la
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "Multi-Modal-Security-Guide für eigene KI-Systeme." : "Multi-modal security guide for your own AI systems."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Multi-Modal-Security-Guide für eigene KI-Systeme.", "Multi-modal security guide for your own AI systems.")}
         </div>
         <div className="mb-3"><span className="text-xs font-bold uppercase tracking-widest text-cyan-400">Moltbot · Batch 23</span></div>
-        <h1 className="text-4xl font-bold mb-4 text-gray-100">{isDE ? "AI Agent Multi-Modal Security" : "AI Agent Multi-Modal Security"}</h1>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">{pick(isDE, "AI Agent Multi-Modal Security", "AI Agent Multi-Modal Security")}</h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "KI-Agenten ohne Multi-Modal-Security sind anfällig für Cross-Modal-Attacken — ohne Multi-Modal-Security bleiben Cross-Modal-Interaktionen ungeschützt. Vier Kontrollen: Multi-Modal Input Validation, Cross-Modal Attack Detection, Multi-Modal Output Filtering und Multi-Modal Policy Enforcement."
-            : "AI agents without multi-modal security are vulnerable to cross-modal attacks — without multi-modal security, cross-modal interactions remain unprotected. Four controls: multi-modal input validation, cross-modal attack detection, multi-modal output filtering and multi-modal policy enforcement."}
+          {pick(isDE, "KI-Agenten ohne Multi-Modal-Security sind anfällig für Cross-Modal-Attacken — ohne Multi-Modal-Security bleiben Cross-Modal-Interaktionen ungeschützt. Vier Kontrollen: Multi-Modal Input Validation, Cross-Modal Attack Detection, Multi-Modal Output Filtering und Multi-Modal Policy Enforcement.", "AI agents without multi-modal security are vulnerable to cross-modal attacks — without multi-modal security, cross-modal interactions remain unprotected. Four controls: multi-modal input validation, cross-modal attack detection, multi-modal output filtering and multi-modal policy enforcement.")}
         </p>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "4 Multi-Modal-Security-Kontrollen" : "4 Multi-Modal Security Controls"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "4 Multi-Modal-Security-Kontrollen", "4 Multi-Modal Security Controls")}</h2>
           <div className="space-y-5">
             {CONTROLS.map((c) => (
               <div key={c.id} className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
@@ -197,7 +192,7 @@ export default function AiAgentMultiModalSecurityPage({ params }: { params: { la
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-3">
             {FAQ.map((f, i) => (
               <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
@@ -208,23 +203,23 @@ export default function AiAgentMultiModalSecurityPage({ params }: { params: { la
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further Resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further Resources")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/moltbot/llm-output-filtering`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM Output Filtering</div>
-              <div className="text-sm text-gray-300">{isDE ? "Content-Safety" : "Content safety"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Content-Safety", "Content safety")}</div>
             </a>
             <a href={`/${locale}/moltbot/llm-input-validation`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM Input Validation</div>
-              <div className="text-sm text-gray-300">{isDE ? "Input-Safety" : "Input safety"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Input-Safety", "Input safety")}</div>
             </a>
             <a href={`/${locale}/moltbot/llm-adversarial-robustness`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM Adversarial Robustness</div>
-              <div className="text-sm text-gray-300">{isDE ? "Adversarial-Defense" : "Adversarial defense"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Adversarial-Defense", "Adversarial defense")}</div>
             </a>
             <a href={`/${locale}/moltbot/ai-agent-security`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Agent Security</div>
-              <div className="text-sm text-gray-300">{isDE ? "Multi-Modal-Overview" : "Multi-modal overview"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Multi-Modal-Overview", "Multi-modal overview")}</div>
             </a>
           </div>
         </section>

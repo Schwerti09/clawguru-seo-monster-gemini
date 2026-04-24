@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/solutions/gdpr-breach-notification-ai"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "DSGVO Datenpannen-Meldung für KI: GDPR Breach Notification for AI | ClawGuru Solutions"
-    : "GDPR Breach Notification for AI: GDPR Breach Notification for AI | ClawGuru Solutions"
-  const description = isDE
-    ? "DSGVO Datenpannen-Meldung für KI-Systeme: 72-Stunden-Frist, Datenklassifizierung, Meldungsverfahren und Dokumentation für DSGVO Art. 33. Executable Runbooks für Self-Hosted AI-Infrastruktur."
-    : "GDPR breach notification for AI systems: 72-hour deadline, data classification, notification procedures and documentation for GDPR Art. 33. Executable runbooks for self-hosted AI infrastructure."
+  const title = pick(isDE, "DSGVO Datenpannen-Meldung für KI: GDPR Breach Notification for AI | ClawGuru Solutions", "GDPR Breach Notification for AI: GDPR Breach Notification for AI | ClawGuru Solutions")
+  const description = pick(isDE, "DSGVO Datenpannen-Meldung für KI-Systeme: 72-Stunden-Frist, Datenklassifizierung, Meldungsverfahren und Dokumentation für DSGVO Art. 33. Executable Runbooks für Self-Hosted AI-Infrastruktur.", "GDPR breach notification for AI systems: 72-hour deadline, data classification, notification procedures and documentation for GDPR Art. 33. Executable runbooks for self-hosted AI infrastructure.")
   return {
     title, description,
     keywords: ["gdpr breach notification ai", "dsgvo datenpannen meldung", "gdpr art 33", "72 hour notification", "ai data breach", "gdpr compliance", "clawguru solutions"],
@@ -165,17 +162,15 @@ export default function GdprBreachNotificationAiPage({ params }: { params: { lan
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "DSGVO Datenpannen-Meldungs-Guide für eigene KI-Systeme." : "GDPR breach notification guide for your own AI systems."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "DSGVO Datenpannen-Meldungs-Guide für eigene KI-Systeme.", "GDPR breach notification guide for your own AI systems.")}
         </div>
         <div className="mb-3"><span className="text-xs font-bold uppercase tracking-widest text-cyan-400">Solutions · Batch 8</span></div>
-        <h1 className="text-4xl font-bold mb-4 text-gray-100">{isDE ? "DSGVO Datenpannen-Meldung für KI" : "GDPR Breach Notification for AI"}</h1>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">{pick(isDE, "DSGVO Datenpannen-Meldung für KI", "GDPR Breach Notification for AI")}</h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "DSGVO Datenpannen-Meldung für KI-Systeme: 72-Stunden-Frist, Datenklassifizierung, Meldungsverfahren und Dokumentation für DSGVO Art. 33. Executable Runbooks für Self-Hosted AI-Infrastruktur."
-            : "GDPR breach notification for AI systems: 72-hour deadline, data classification, notification procedures and documentation for GDPR Art. 33. Executable runbooks for self-hosted AI infrastructure."}
+          {pick(isDE, "DSGVO Datenpannen-Meldung für KI-Systeme: 72-Stunden-Frist, Datenklassifizierung, Meldungsverfahren und Dokumentation für DSGVO Art. 33. Executable Runbooks für Self-Hosted AI-Infrastruktur.", "GDPR breach notification for AI systems: 72-hour deadline, data classification, notification procedures and documentation for GDPR Art. 33. Executable runbooks for self-hosted AI infrastructure.")}
         </p>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "4 DSGVO Compliance-Kontrollen" : "4 GDPR Compliance Controls"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "4 DSGVO Compliance-Kontrollen", "4 GDPR Compliance Controls")}</h2>
           <div className="space-y-5">
             {CONTROLS.map((c) => (
               <div key={c.id} className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
@@ -192,7 +187,7 @@ export default function GdprBreachNotificationAiPage({ params }: { params: { lan
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-3">
             {FAQ.map((f, i) => (
               <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
@@ -203,23 +198,23 @@ export default function GdprBreachNotificationAiPage({ params }: { params: { lan
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further Resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further Resources")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/solutions/soc2-ai-systems`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">SOC 2 for AI Systems</div>
-              <div className="text-sm text-gray-300">{isDE ? "SOC-2-Compliance" : "SOC 2 compliance"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "SOC-2-Compliance", "SOC 2 compliance")}</div>
             </a>
             <a href={`/${locale}/moltbot/ai-data-loss-prevention`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Data Loss Prevention</div>
-              <div className="text-sm text-gray-300">{isDE ? "DLP" : "DLP"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "DLP", "DLP")}</div>
             </a>
             <a href={`/${locale}/solutions`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">All Solutions</div>
-              <div className="text-sm text-gray-300">{isDE ? "Solutions-Übersicht" : "Solutions overview"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Solutions-Übersicht", "Solutions overview")}</div>
             </a>
             <a href={`/${locale}/check`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Security Check</div>
-              <div className="text-sm text-gray-300">{isDE ? "Live-Check" : "Live check"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Live-Check", "Live check")}</div>
             </a>
           </div>
         </section>

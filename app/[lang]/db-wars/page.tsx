@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
 import { Database, Zap, Shield, TrendingUp, DollarSign } from "lucide-react"
+import { pick } from "@/lib/i18n-pick"
 
 interface PageProps { params: { lang: string } }
 
@@ -10,10 +11,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const pageUrl = `${SITE_URL}/${locale}/db-wars`
   const isDE = locale === "de"
-  const title = isDE ? "Database Wars | ClawGuru" : "Database Wars | ClawGuru"
-  const description = isDE 
-    ? "PostgreSQL vs MongoDB vs MySQL — Der ultimative Datenbank-Vergleich" 
-    : "PostgreSQL vs MongoDB vs MySQL — The ultimate database comparison"
+  const title = pick(isDE, "Database Wars | ClawGuru", "Database Wars | ClawGuru")
+  const description = pick(isDE, "PostgreSQL vs MongoDB vs MySQL — Der ultimative Datenbank-Vergleich", "PostgreSQL vs MongoDB vs MySQL — The ultimate database comparison")
   return {
     title,
     description,
@@ -71,12 +70,10 @@ export default function DBWarsPage({ params }: PageProps) {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-4 text-gray-100">
-            {isDE ? "Database Wars" : "Database Wars"}
+            {pick(isDE, "Database Wars", "Database Wars")}
           </h1>
           <p className="text-lg text-gray-300">
-            {isDE 
-              ? "PostgreSQL vs MongoDB vs MySQL — Der ultimative Datenbank-Vergleich" 
-              : "PostgreSQL vs MongoDB vs MySQL — The ultimate database comparison"}
+            {pick(isDE, "PostgreSQL vs MongoDB vs MySQL — Der ultimative Datenbank-Vergleich", "PostgreSQL vs MongoDB vs MySQL — The ultimate database comparison")}
           </p>
         </div>
 
@@ -85,12 +82,12 @@ export default function DBWarsPage({ params }: PageProps) {
           <table className="w-full">
             <thead>
               <tr className="border-b border-gray-700">
-                <th className="text-left text-gray-400 py-3 px-4">{isDE ? "Datenbank" : "Database"}</th>
-                <th className="text-center text-gray-400 py-3 px-4">{isDE ? "Score" : "Score"}</th>
-                <th className="text-center text-gray-400 py-3 px-4">{isDE ? "Beliebtheit" : "Popularity"}</th>
-                <th className="text-center text-gray-400 py-3 px-4">{isDE ? "Performance" : "Performance"}</th>
-                <th className="text-center text-gray-400 py-3 px-4">{isDE ? "Sicherheit" : "Security"}</th>
-                <th className="text-center text-gray-400 py-3 px-4">{isDE ? "Kosten" : "Cost"}</th>
+                <th className="text-left text-gray-400 py-3 px-4">{pick(isDE, "Datenbank", "Database")}</th>
+                <th className="text-center text-gray-400 py-3 px-4">{pick(isDE, "Score", "Score")}</th>
+                <th className="text-center text-gray-400 py-3 px-4">{pick(isDE, "Beliebtheit", "Popularity")}</th>
+                <th className="text-center text-gray-400 py-3 px-4">{pick(isDE, "Performance", "Performance")}</th>
+                <th className="text-center text-gray-400 py-3 px-4">{pick(isDE, "Sicherheit", "Security")}</th>
+                <th className="text-center text-gray-400 py-3 px-4">{pick(isDE, "Kosten", "Cost")}</th>
               </tr>
             </thead>
             <tbody>
@@ -151,7 +148,7 @@ export default function DBWarsPage({ params }: PageProps) {
               </div>
 
               <div className="mb-4">
-                <div className="text-sm text-zinc-500 mb-2">{isDE ? "Stärken" : "Strengths"}</div>
+                <div className="text-sm text-zinc-500 mb-2">{pick(isDE, "Stärken", "Strengths")}</div>
                 <div className="space-y-1">
                   {db.strengths.map((strength, index) => (
                     <div key={index} className="flex items-start gap-2 text-sm text-green-400">
@@ -163,7 +160,7 @@ export default function DBWarsPage({ params }: PageProps) {
               </div>
 
               <div>
-                <div className="text-sm text-zinc-500 mb-2">{isDE ? "Schwächen" : "Weaknesses"}</div>
+                <div className="text-sm text-zinc-500 mb-2">{pick(isDE, "Schwächen", "Weaknesses")}</div>
                 <div className="space-y-1">
                   {db.weaknesses.map((weakness, index) => (
                     <div key={index} className="flex items-start gap-2 text-sm text-red-400">
@@ -183,10 +180,10 @@ export default function DBWarsPage({ params }: PageProps) {
             <TrendingUp className="w-8 h-8 text-cyan-400" />
             <div>
               <div className="text-sm text-zinc-500 mb-1">
-                {isDE ? "Gewinner" : "Winner"}
+                {pick(isDE, "Gewinner", "Winner")}
               </div>
               <div className="text-xl font-bold text-gray-100">
-                PostgreSQL — {isDE ? "Beste Balance aus Sicherheit und Flexibilität" : "Best balance of security and flexibility"}
+                PostgreSQL — {pick(isDE, "Beste Balance aus Sicherheit und Flexibilität", "Best balance of security and flexibility")}
               </div>
             </div>
           </div>
@@ -194,9 +191,7 @@ export default function DBWarsPage({ params }: PageProps) {
 
         {/* Trust Notice */}
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mt-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE 
-            ? "Database Wars sind subjektive Bewertungen basierend auf öffentlichen Daten." 
-            : "Database wars are subjective ratings based on public data."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Database Wars sind subjektive Bewertungen basierend auf öffentlichen Daten.", "Database wars are subjective ratings based on public data.")}
         </div>
       </div>
     </div>

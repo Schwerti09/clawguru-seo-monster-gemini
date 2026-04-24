@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/openclaw/kubernetes-secrets-management"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "Kubernetes Secrets Management: Sichere Geheimnisverwaltung in K8s | ClawGuru"
-    : "Kubernetes Secrets Management: Secure Secret Handling in K8s | ClawGuru"
-  const description = isDE
-    ? "Kubernetes Secrets richtig absichern: etcd-Verschlüsselung, External Secrets Operator, Vault Agent Injector, RBAC für Secrets und OpenClaw-Erkennung von Secret-Leaks."
-    : "Properly secure Kubernetes Secrets: etcd encryption, External Secrets Operator, Vault Agent Injector, RBAC for Secrets and OpenClaw detection of secret leaks."
+  const title = pick(isDE, "Kubernetes Secrets Management: Sichere Geheimnisverwaltung in K8s | ClawGuru", "Kubernetes Secrets Management: Secure Secret Handling in K8s | ClawGuru")
+  const description = pick(isDE, "Kubernetes Secrets richtig absichern: etcd-Verschlüsselung, External Secrets Operator, Vault Agent Injector, RBAC für Secrets und OpenClaw-Erkennung von Secret-Leaks.", "Properly secure Kubernetes Secrets: etcd encryption, External Secrets Operator, Vault Agent Injector, RBAC for Secrets and OpenClaw detection of secret leaks.")
   return {
     title, description,
     keywords: ["kubernetes secrets management", "k8s secrets security", "kubernetes vault", "external secrets operator", "etcd encryption secrets", "kubernetes secret rbac"],
@@ -166,27 +163,23 @@ export default function KubernetesSecretsManagementPage({ params }: { params: { 
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "Secrets-Management-Guide für eigene Kubernetes-Infrastruktur." : "Secrets management guide for your own Kubernetes infrastructure."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Secrets-Management-Guide für eigene Kubernetes-Infrastruktur.", "Secrets management guide for your own Kubernetes infrastructure.")}
         </div>
         <div className="mb-3"><span className="text-xs font-bold uppercase tracking-widest text-cyan-400">OpenClaw · Batch 5</span></div>
         <h1 className="text-4xl font-bold mb-4 text-gray-100">
-          {isDE ? "Kubernetes Secrets Management" : "Kubernetes Secrets Management"}
+          {pick(isDE, "Kubernetes Secrets Management", "Kubernetes Secrets Management")}
         </h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "Kubernetes Secrets sind standardmäßig nur Base64-encodiert — kein Schutz. Vier Sicherheitsschichten: etcd-Verschlüsselung, RBAC-Scoping, External Secrets Operator und OpenClaw Secret-Leak-Detection."
-            : "Kubernetes Secrets are only base64-encoded by default — no real protection. Four security layers: etcd encryption, RBAC scoping, External Secrets Operator and OpenClaw secret leak detection."}
+          {pick(isDE, "Kubernetes Secrets sind standardmäßig nur Base64-encodiert — kein Schutz. Vier Sicherheitsschichten: etcd-Verschlüsselung, RBAC-Scoping, External Secrets Operator und OpenClaw Secret-Leak-Detection.", "Kubernetes Secrets are only base64-encoded by default — no real protection. Four security layers: etcd encryption, RBAC scoping, External Secrets Operator and OpenClaw secret leak detection.")}
         </p>
 
         <div className="bg-red-900 border border-red-700 p-4 rounded-lg mb-8">
-          <h3 className="font-bold text-red-300 mb-1">{isDE ? "Default-Zustand ist unsicher" : "Default state is insecure"}</h3>
-          <p className="text-sm text-red-200">{isDE
-            ? "In einer frischen Kubernetes-Installation sind Secrets unverschlüsselt in etcd gespeichert. Jeder mit etcd-Zugriff liest alle Secrets im Klartext. Aktiviere sofort etcd-Verschlüsselung."
-            : "In a fresh Kubernetes installation, secrets are stored unencrypted in etcd. Anyone with etcd access reads all secrets in plaintext. Enable etcd encryption immediately."}</p>
+          <h3 className="font-bold text-red-300 mb-1">{pick(isDE, "Default-Zustand ist unsicher", "Default state is insecure")}</h3>
+          <p className="text-sm text-red-200">{pick(isDE, "In einer frischen Kubernetes-Installation sind Secrets unverschlüsselt in etcd gespeichert. Jeder mit etcd-Zugriff liest alle Secrets im Klartext. Aktiviere sofort etcd-Verschlüsselung.", "In a fresh Kubernetes installation, secrets are stored unencrypted in etcd. Anyone with etcd access reads all secrets in plaintext. Enable etcd encryption immediately.")}</p>
         </div>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "4 Sicherheitsschichten für K8s Secrets" : "4 Security Layers for K8s Secrets"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "4 Sicherheitsschichten für K8s Secrets", "4 Security Layers for K8s Secrets")}</h2>
           <div className="space-y-5">
             {SECURITY_LAYERS.map((s) => (
               <div key={s.id} className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
@@ -204,7 +197,7 @@ export default function KubernetesSecretsManagementPage({ params }: { params: { 
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-3">
             {FAQ.map((f, i) => (
               <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
@@ -216,23 +209,23 @@ export default function KubernetesSecretsManagementPage({ params }: { params: { 
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further Resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further Resources")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/openclaw/container-escape-prevention`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Container Escape Prevention</div>
-              <div className="text-sm text-gray-300">{isDE ? "Secrets-Zugriff bei Escape verhindern" : "Prevent secret access on escape"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Secrets-Zugriff bei Escape verhindern", "Prevent secret access on escape")}</div>
             </a>
             <a href={`/${locale}/openclaw/runtime-policy-enforcement`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Runtime Policy Enforcement</div>
-              <div className="text-sm text-gray-300">{isDE ? "OPA für Secret-Policies" : "OPA for secret policies"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "OPA für Secret-Policies", "OPA for secret policies")}</div>
             </a>
             <a href={`/${locale}/solutions/kubernetes-security-hardening`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Kubernetes Hardening</div>
-              <div className="text-sm text-gray-300">{isDE ? "Vollständiges K8s Hardening" : "Full K8s hardening"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Vollständiges K8s Hardening", "Full K8s hardening")}</div>
             </a>
             <a href={`/${locale}/moltbot/ai-agent-rbac`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Agent RBAC</div>
-              <div className="text-sm text-gray-300">{isDE ? "Secrets-Zugriff für KI-Agenten" : "Secret access for AI agents"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Secrets-Zugriff für KI-Agenten", "Secret access for AI agents")}</div>
             </a>
           </div>
         </section>

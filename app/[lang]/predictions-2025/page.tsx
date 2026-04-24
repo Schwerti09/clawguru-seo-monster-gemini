@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
 import { TrendingUp, Brain, Sparkles, AlertTriangle } from "lucide-react"
+import { pick } from "@/lib/i18n-pick"
 
 interface PageProps { params: { lang: string } }
 
@@ -10,10 +11,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const pageUrl = `${SITE_URL}/${locale}/predictions-2025`
   const isDE = locale === "de"
-  const title = isDE ? "Roast Predictions 2025 | ClawGuru" : "Roast Predictions 2025 | ClawGuru"
-  const description = isDE 
-    ? "Zukunftsprognosen — Was kommt als nächstes?" 
-    : "Future predictions — What's next?"
+  const title = pick(isDE, "Roast Predictions 2025 | ClawGuru", "Roast Predictions 2025 | ClawGuru")
+  const description = pick(isDE, "Zukunftsprognosen — Was kommt als nächstes?", "Future predictions — What's next?")
   return {
     title,
     description,
@@ -83,12 +82,10 @@ export default function Predictions2025Page({ params }: PageProps) {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-4 text-gray-100">
-            {isDE ? "Roast Predictions 2025" : "Roast Predictions 2025"}
+            {pick(isDE, "Roast Predictions 2025", "Roast Predictions 2025")}
           </h1>
           <p className="text-lg text-gray-300">
-            {isDE 
-              ? "Zukunftsprognosen — Was kommt als nächstes?" 
-              : "Future predictions — What's next?"}
+            {pick(isDE, "Zukunftsprognosen — Was kommt als nächstes?", "Future predictions — What's next?")}
           </p>
         </div>
 
@@ -121,7 +118,7 @@ export default function Predictions2025Page({ params }: PageProps) {
               {/* Confidence */}
               <div className="mb-4">
                 <div className="flex items-center justify-between text-sm text-zinc-500 mb-2">
-                  <span>{isDE ? "Vertrauen" : "Confidence"}</span>
+                  <span>{pick(isDE, "Vertrauen", "Confidence")}</span>
                   <span>{prediction.confidence}%</span>
                 </div>
                 <div className="w-full bg-gray-700 rounded-full h-2">
@@ -136,7 +133,7 @@ export default function Predictions2025Page({ params }: PageProps) {
               <div className="flex items-center gap-2">
                 <Sparkles className="w-4 h-4 text-amber-400" />
                 <span className="text-sm text-zinc-500">
-                  {isDE ? "Auswirkung" : "Impact"}: {prediction.impact}
+                  {pick(isDE, "Auswirkung", "Impact")}: {prediction.impact}
                 </span>
               </div>
             </div>
@@ -149,12 +146,10 @@ export default function Predictions2025Page({ params }: PageProps) {
             <TrendingUp className="w-8 h-8 text-cyan-400" />
             <div>
               <div className="text-sm text-zinc-500 mb-1">
-                {isDE ? "Fazit" : "Summary"}
+                {pick(isDE, "Fazit", "Summary")}
               </div>
               <div className="text-xl font-bold text-gray-100">
-                {isDE 
-                  ? "5 kritische Prognosen für 2025 — AI Security und Zero Trust dominieren" 
-                  : "5 critical predictions for 2025 — AI Security and Zero Trust dominate"}
+                {pick(isDE, "5 kritische Prognosen für 2025 — AI Security und Zero Trust dominieren", "5 critical predictions for 2025 — AI Security and Zero Trust dominate")}
               </div>
             </div>
           </div>
@@ -162,9 +157,7 @@ export default function Predictions2025Page({ params }: PageProps) {
 
         {/* Trust Notice */}
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mt-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE 
-            ? "Predictions basieren auf Trend-Analysen und Experten-Meinungen." 
-            : "Predictions are based on trend analysis and expert opinions."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Predictions basieren auf Trend-Analysen und Experten-Meinungen.", "Predictions are based on trend analysis and expert opinions.")}
         </div>
       </div>
     </div>

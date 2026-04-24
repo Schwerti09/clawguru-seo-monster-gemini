@@ -7,6 +7,7 @@ import {
 } from "@/lib/roast-stats-errors"
 import { BarChart3, TrendingUp, Shield, Clock, Globe } from "lucide-react"
 import Link from "next/link"
+import { pick } from "@/lib/i18n-pick"
 
 export const dynamic = "force-dynamic"
 
@@ -23,12 +24,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const pageUrl = `${SITE_URL}/${locale}${PATH}`
   const isDE = locale === "de"
-  const title = isDE
-    ? "Roast Statistics — Data Insights aus echten Roasts | ClawGuru"
-    : "Roast Statistics — Data Insights from Real Roasts | ClawGuru"
-  const description = isDE
-    ? "Daten-basierte Security-Insights aus echten Roast-Results. Durchschnitts-Score, Trends, Top-Stacks. Keine Mock-Daten."
-    : "Data-driven security insights from real roast results. Average score, trends, top stacks. No mock data."
+  const title = pick(isDE, "Roast Statistics — Data Insights aus echten Roasts | ClawGuru", "Roast Statistics — Data Insights from Real Roasts | ClawGuru")
+  const description = pick(isDE, "Daten-basierte Security-Insights aus echten Roast-Results. Durchschnitts-Score, Trends, Top-Stacks. Keine Mock-Daten.", "Data-driven security insights from real roast results. Average score, trends, top stacks. No mock data.")
   return {
     title,
     description,
@@ -141,100 +138,96 @@ export default async function RoastStatisticsPage({ params }: PageProps) {
       <div className="max-w-6xl mx-auto px-4 py-12">
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-4 text-gray-100">
-            {isDE ? "Roast Statistics — Data Insights" : "Roast Statistics — Data Insights"}
+            {pick(isDE, "Roast Statistics — Data Insights", "Roast Statistics — Data Insights")}
           </h1>
           <p className="text-lg text-gray-300 mb-4">
-            {isDE
-              ? "Daten-basierte Security-Insights aus echten Roast-Results. Real-time Statistiken ohne Mock-Daten."
-              : "Data-driven security insights from real roast results. Real-time statistics without mock data."}
+            {pick(isDE, "Daten-basierte Security-Insights aus echten Roast-Results. Real-time Statistiken ohne Mock-Daten.", "Data-driven security insights from real roast results. Real-time statistics without mock data.")}
           </p>
           <p className="text-sm text-cyan-400 font-medium">
-            {isDE ? "→ 100% echte Daten aus roast_results Tabelle." : "→ 100% real data from roast_results table."}
+            {pick(isDE, "→ 100% echte Daten aus roast_results Tabelle.", "→ 100% real data from roast_results table.")}
           </p>
         </div>
 
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE
-            ? "Diese Daten dienen zur Härtung Ihrer eigenen Systeme. Keine Angriffstools."
-            : "This data is for hardening your own systems. No attack tools."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Diese Daten dienen zur Härtung Ihrer eigenen Systeme. Keine Angriffstools.", "This data is for hardening your own systems. No attack tools.")}
         </div>
 
         {!stats ? (
           <div className="bg-gray-800 p-6 rounded-lg border border-gray-700 text-center">
             <p className="text-sm text-gray-400">
-              {isDE ? "Keine Statistiken verfügbar." : "No statistics available."}
+              {pick(isDE, "Keine Statistiken verfügbar.", "No statistics available.")}
             </p>
           </div>
         ) : (
           <>
             {/* Overview Cards */}
             <section className="mb-10">
-              <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Übersicht" : "Overview"}</h2>
+              <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Übersicht", "Overview")}</h2>
               <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
                   <div className="flex items-center gap-2 mb-2">
                     <BarChart3 className="w-5 h-5 text-cyan-400" />
-                    <h3 className="font-bold text-gray-100">{isDE ? "Gesamt" : "Total"}</h3>
+                    <h3 className="font-bold text-gray-100">{pick(isDE, "Gesamt", "Total")}</h3>
                   </div>
                   <div className="text-3xl font-bold text-cyan-400">{stats.totalRoasts.toLocaleString()}</div>
-                  <div className="text-sm text-gray-400">{isDE ? "Roasts insgesamt" : "Total roasts"}</div>
+                  <div className="text-sm text-gray-400">{pick(isDE, "Roasts insgesamt", "Total roasts")}</div>
                 </div>
                 <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
                   <div className="flex items-center gap-2 mb-2">
                     <TrendingUp className="w-5 h-5 text-cyan-400" />
-                    <h3 className="font-bold text-gray-100">{isDE ? "Ø Score" : "Avg Score"}</h3>
+                    <h3 className="font-bold text-gray-100">{pick(isDE, "Ø Score", "Avg Score")}</h3>
                   </div>
                   <div className="text-3xl font-bold text-cyan-400">{stats.avgScore.toFixed(1)}</div>
-                  <div className="text-sm text-gray-400">{isDE ? "Durchschnitt" : "Average"}</div>
+                  <div className="text-sm text-gray-400">{pick(isDE, "Durchschnitt", "Average")}</div>
                 </div>
                 <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
                   <div className="flex items-center gap-2 mb-2">
                     <Shield className="w-5 h-5 text-cyan-400" />
-                    <h3 className="font-bold text-gray-100">{isDE ? "Elite" : "Elite"}</h3>
+                    <h3 className="font-bold text-gray-100">{pick(isDE, "Elite", "Elite")}</h3>
                   </div>
                   <div className="text-3xl font-bold text-cyan-400">{stats.eliteStacks.toLocaleString()}</div>
-                  <div className="text-sm text-gray-400">{isDE ? "Score ≥ 90" : "Score ≥ 90"}</div>
+                  <div className="text-sm text-gray-400">{pick(isDE, "Score ≥ 90", "Score ≥ 90")}</div>
                 </div>
                 <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
                   <div className="flex items-center gap-2 mb-2">
                     <Clock className="w-5 h-5 text-cyan-400" />
-                    <h3 className="font-bold text-gray-100">{isDE ? "Heute" : "Today"}</h3>
+                    <h3 className="font-bold text-gray-100">{pick(isDE, "Heute", "Today")}</h3>
                   </div>
                   <div className="text-3xl font-bold text-cyan-400">{stats.roastsToday.toLocaleString()}</div>
-                  <div className="text-sm text-gray-400">{isDE ? "Roasts heute" : "Roasts today"}</div>
+                  <div className="text-sm text-gray-400">{pick(isDE, "Roasts heute", "Roasts today")}</div>
                 </div>
               </div>
             </section>
 
             {/* Time Trends */}
             <section className="mb-10">
-              <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Zeit-Trends" : "Time Trends"}</h2>
+              <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Zeit-Trends", "Time Trends")}</h2>
               <div className="grid md:grid-cols-3 gap-4">
                 <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
-                  <h3 className="font-bold text-gray-100 mb-2">{isDE ? "Diese Woche" : "This Week"}</h3>
+                  <h3 className="font-bold text-gray-100 mb-2">{pick(isDE, "Diese Woche", "This Week")}</h3>
                   <div className="text-2xl font-bold text-cyan-400">{stats.roastsThisWeek.toLocaleString()}</div>
-                  <div className="text-sm text-gray-400">{isDE ? "Roasts" : "Roasts"}</div>
+                  <div className="text-sm text-gray-400">{pick(isDE, "Roasts", "Roasts")}</div>
                 </div>
                 <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
-                  <h3 className="font-bold text-gray-100 mb-2">{isDE ? "Diesen Monat" : "This Month"}</h3>
+                  <h3 className="font-bold text-gray-100 mb-2">{pick(isDE, "Diesen Monat", "This Month")}</h3>
                   <div className="text-2xl font-bold text-cyan-400">{stats.roastsThisMonth.toLocaleString()}</div>
-                  <div className="text-sm text-gray-400">{isDE ? "Roasts" : "Roasts"}</div>
+                  <div className="text-sm text-gray-400">{pick(isDE, "Roasts", "Roasts")}</div>
                 </div>
                 <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
-                  <h3 className="font-bold text-gray-100 mb-2">{isDE ? "Gesamt" : "All Time"}</h3>
+                  <h3 className="font-bold text-gray-100 mb-2">{pick(isDE, "Gesamt", "All Time")}</h3>
                   <div className="text-2xl font-bold text-cyan-400">{stats.totalRoasts.toLocaleString()}</div>
-                  <div className="text-sm text-gray-400">{isDE ? "Roasts" : "Roasts"}</div>
+                  <div className="text-sm text-gray-400">{pick(isDE, "Roasts", "Roasts")}</div>
                 </div>
               </div>
             </section>
 
             {/* Score Distribution */}
             <section className="mb-10">
-              <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Score-Verteilung" : "Score Distribution"}</h2>
+              <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Score-Verteilung", "Score Distribution")}</h2>
               <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-300">{isDE ? "Elite (≥90)" : "Elite (≥90)"}</span>
+                    <span className="text-sm text-gray-300">{pick(isDE, "Elite (≥90)", "Elite (≥90)")}</span>
                     <div className="flex items-center gap-2">
                       <div className="w-48 h-3 bg-gray-900 rounded-full overflow-hidden">
                         <div
@@ -246,7 +239,7 @@ export default async function RoastStatisticsPage({ params }: PageProps) {
                     </div>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-300">{isDE ? "Gut (70-89)" : "Good (70-89)"}</span>
+                    <span className="text-sm text-gray-300">{pick(isDE, "Gut (70-89)", "Good (70-89)")}</span>
                     <div className="flex items-center gap-2">
                       <div className="w-48 h-3 bg-gray-900 rounded-full overflow-hidden">
                         <div
@@ -258,7 +251,7 @@ export default async function RoastStatisticsPage({ params }: PageProps) {
                     </div>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-300">{isDE ? "Durchschnitt (50-69)" : "Average (50-69)"}</span>
+                    <span className="text-sm text-gray-300">{pick(isDE, "Durchschnitt (50-69)", "Average (50-69)")}</span>
                     <div className="flex items-center gap-2">
                       <div className="w-48 h-3 bg-gray-900 rounded-full overflow-hidden">
                         <div
@@ -270,7 +263,7 @@ export default async function RoastStatisticsPage({ params }: PageProps) {
                     </div>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-300">{isDE ? "Schlecht (<50)" : "Poor (<50)"}</span>
+                    <span className="text-sm text-gray-300">{pick(isDE, "Schlecht (<50)", "Poor (<50)")}</span>
                     <div className="flex items-center gap-2">
                       <div className="w-48 h-3 bg-gray-900 rounded-full overflow-hidden">
                         <div
@@ -287,7 +280,7 @@ export default async function RoastStatisticsPage({ params }: PageProps) {
 
             {/* Top Stacks */}
             <section className="mb-10">
-              <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Top Stacks" : "Top Stacks"}</h2>
+              <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Top Stacks", "Top Stacks")}</h2>
               <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
                 <div className="space-y-3">
                   {stats.topStacks.map((stack: any, index: number) => (
@@ -305,7 +298,7 @@ export default async function RoastStatisticsPage({ params }: PageProps) {
 
             {/* Locale Distribution */}
             <section className="mb-10">
-              <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Regionale Verteilung" : "Locale Distribution"}</h2>
+              <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Regionale Verteilung", "Locale Distribution")}</h2>
               <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
                 <div className="space-y-3">
                   {stats.localeDistribution.map((item: any, index: number) => (
@@ -323,23 +316,23 @@ export default async function RoastStatisticsPage({ params }: PageProps) {
 
             {/* Further Resources */}
             <section className="mb-10">
-              <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further resources"}</h2>
+              <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further resources")}</h2>
               <div className="grid md:grid-cols-2 gap-4">
                 <Link href={`/${locale}/roast-my-moltbot/hall-of-fame`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
-                  <div className="font-semibold text-cyan-400">{isDE ? "Hall of Fame" : "Hall of Fame"}</div>
-                  <div className="text-sm text-gray-300">{isDE ? "Top Stacks anzeigen" : "View top stacks"}</div>
+                  <div className="font-semibold text-cyan-400">{pick(isDE, "Hall of Fame", "Hall of Fame")}</div>
+                  <div className="text-sm text-gray-300">{pick(isDE, "Top Stacks anzeigen", "View top stacks")}</div>
                 </Link>
                 <Link href={`/${locale}/roast-my-moltbot/leaderboard`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
-                  <div className="font-semibold text-cyan-400">{isDE ? "Leaderboard" : "Leaderboard"}</div>
-                  <div className="text-sm text-gray-300">{isDE ? "Rangliste" : "Rankings"}</div>
+                  <div className="font-semibold text-cyan-400">{pick(isDE, "Leaderboard", "Leaderboard")}</div>
+                  <div className="text-sm text-gray-300">{pick(isDE, "Rangliste", "Rankings")}</div>
                 </Link>
                 <Link href={`/${locale}/roast-my-moltbot/trends`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
-                  <div className="font-semibold text-cyan-400">{isDE ? "Trends" : "Trends"}</div>
-                  <div className="text-sm text-gray-300">{isDE ? "Aktuelle Trends" : "Current trends"}</div>
+                  <div className="font-semibold text-cyan-400">{pick(isDE, "Trends", "Trends")}</div>
+                  <div className="text-sm text-gray-300">{pick(isDE, "Aktuelle Trends", "Current trends")}</div>
                 </Link>
                 <Link href={`/${locale}/api-pricing`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
-                  <div className="font-semibold text-cyan-400">{isDE ? "API Pricing" : "API Pricing"}</div>
-                  <div className="text-sm text-gray-300">{isDE ? "API-Zugang" : "API access"}</div>
+                  <div className="font-semibold text-cyan-400">{pick(isDE, "API Pricing", "API Pricing")}</div>
+                  <div className="text-sm text-gray-300">{pick(isDE, "API-Zugang", "API access")}</div>
                 </Link>
               </div>
             </section>

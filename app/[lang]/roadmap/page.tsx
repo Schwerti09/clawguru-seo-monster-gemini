@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
 import { CheckCircle, Clock, Target, TrendingUp, ArrowRight, Calendar, Zap } from "lucide-react"
 import Link from "next/link"
+import { pick } from "@/lib/i18n-pick"
 
 interface PageProps { params: { lang: string } }
 
@@ -16,12 +17,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const pageUrl = `${SITE_URL}/${locale}${PATH}`
   const isDE = locale === "de"
-  const title = isDE
-    ? "Roadmap — Journey to Worldwide #1 | ClawGuru"
-    : "Roadmap — Journey to Worldwide #1 | ClawGuru"
-  const description = isDE
-    ? "Verfolge unseren Aufstieg von Start bis Worldwide #1. Timeline, Meilensteine und Fortschritt."
-    : "Track our journey from start to worldwide #1. Timeline, milestones and progress."
+  const title = pick(isDE, "Roadmap — Journey to Worldwide #1 | ClawGuru", "Roadmap — Journey to Worldwide #1 | ClawGuru")
+  const description = pick(isDE, "Verfolge unseren Aufstieg von Start bis Worldwide #1. Timeline, Meilensteine und Fortschritt.", "Track our journey from start to worldwide #1. Timeline, milestones and progress.")
   return {
     title,
     description,
@@ -36,114 +33,100 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 const getPhases = (isDE: boolean) => [
   {
     number: 1,
-    title: isDE ? "Foundation" : "Foundation",
-    description: isDE
-      ? "Infrastruktur, Core Features, Security-Check, Runbooks"
-      : "Infrastructure, Core Features, Security Check, Runbooks",
+    title: pick(isDE, "Foundation", "Foundation"),
+    description: pick(isDE, "Infrastruktur, Core Features, Security-Check, Runbooks", "Infrastructure, Core Features, Security Check, Runbooks"),
     status: "completed",
     date: "Q1 2026",
     icon: CheckCircle,
     items: [
-      isDE ? "Security Check Tool" : "Security Check Tool",
-      isDE ? "AI-Generated Runbooks" : "AI-Generated Runbooks",
-      isDE ? "OpenClaw Framework" : "OpenClaw Framework",
-      isDE ? "Moltbot Integration" : "Moltbot Integration",
+      pick(isDE, "Security Check Tool", "Security Check Tool"),
+      pick(isDE, "AI-Generated Runbooks", "AI-Generated Runbooks"),
+      pick(isDE, "OpenClaw Framework", "OpenClaw Framework"),
+      pick(isDE, "Moltbot Integration", "Moltbot Integration"),
     ],
   },
   {
     number: 2,
-    title: isDE ? "Content Empire" : "Content Empire",
-    description: isDE
-      ? "250+ High-Quality Pages, Geo-Matrix, Multi-Language"
-      : "250+ High-Quality Pages, Geo-Matrix, Multi-Language",
+    title: pick(isDE, "Content Empire", "Content Empire"),
+    description: pick(isDE, "250+ High-Quality Pages, Geo-Matrix, Multi-Language", "250+ High-Quality Pages, Geo-Matrix, Multi-Language"),
     status: "completed",
     date: "Q2 2026",
     icon: CheckCircle,
     items: [
-      isDE ? "Moltbot Security Pages" : "Moltbot Security Pages",
-      isDE ? "OpenClaw Hardening Guides" : "OpenClaw Hardening Guides",
-      isDE ? "16 Languages × 500+ Cities" : "16 Languages × 500+ Cities",
-      isDE ? "SEO-Optimized Content" : "SEO-Optimized Content",
+      pick(isDE, "Moltbot Security Pages", "Moltbot Security Pages"),
+      pick(isDE, "OpenClaw Hardening Guides", "OpenClaw Hardening Guides"),
+      pick(isDE, "16 Languages × 500+ Cities", "16 Languages × 500+ Cities"),
+      pick(isDE, "SEO-Optimized Content", "SEO-Optimized Content"),
     ],
   },
   {
     number: 3,
-    title: isDE ? "Ecosystem" : "Ecosystem",
-    description: isDE
-      ? "Partners, Integrations, Community, Events"
-      : "Partners, Integrations, Community, Events",
+    title: pick(isDE, "Ecosystem", "Ecosystem"),
+    description: pick(isDE, "Partners, Integrations, Community, Events", "Partners, Integrations, Community, Events"),
     status: "completed",
     date: "Q3 2026",
     icon: CheckCircle,
     items: [
-      isDE ? "Integration Marketplace" : "Integration Marketplace",
-      isDE ? "Partner Program" : "Partner Program",
-      isDE ? "Community Forum/Discord" : "Community Forum/Discord",
-      isDE ? "IRL/Virtual Events" : "IRL/Virtual Events",
+      pick(isDE, "Integration Marketplace", "Integration Marketplace"),
+      pick(isDE, "Partner Program", "Partner Program"),
+      pick(isDE, "Community Forum/Discord", "Community Forum/Discord"),
+      pick(isDE, "IRL/Virtual Events", "IRL/Virtual Events"),
     ],
   },
   {
     number: 4,
-    title: isDE ? "Monetization" : "Monetization",
-    description: isDE
-      ? "Consulting, Academy, Data Sales, Charity"
-      : "Consulting, Academy, Data Sales, Charity",
+    title: pick(isDE, "Monetization", "Monetization"),
+    description: pick(isDE, "Consulting, Academy, Data Sales, Charity", "Consulting, Academy, Data Sales, Charity"),
     status: "completed",
     date: "Q4 2026",
     icon: CheckCircle,
     items: [
-      isDE ? "Professional Services" : "Professional Services",
-      isDE ? "Certification Program" : "Certification Program",
-      isDE ? "Anonymized Data Sales" : "Anonymized Data Sales",
-      isDE ? "Charity Program" : "Charity Program",
+      pick(isDE, "Professional Services", "Professional Services"),
+      pick(isDE, "Certification Program", "Certification Program"),
+      pick(isDE, "Anonymized Data Sales", "Anonymized Data Sales"),
+      pick(isDE, "Charity Program", "Charity Program"),
     ],
   },
   {
     number: 5,
-    title: isDE ? "Expansion" : "Expansion",
-    description: isDE
-      ? "Ambassador Program, Open Source, Global Reach"
-      : "Ambassador Program, Open Source, Global Reach",
+    title: pick(isDE, "Expansion", "Expansion"),
+    description: pick(isDE, "Ambassador Program, Open Source, Global Reach", "Ambassador Program, Open Source, Global Reach"),
     status: "completed",
     date: "Q1 2027",
     icon: CheckCircle,
     items: [
-      isDE ? "Ambassador Program" : "Ambassador Program",
-      isDE ? "Open Source Security Audits" : "Open Source Security Audits",
-      isDE ? "Influencer Partnerships" : "Influencer Partnerships",
-      isDE ? "Global Marketing" : "Global Marketing",
+      pick(isDE, "Ambassador Program", "Ambassador Program"),
+      pick(isDE, "Open Source Security Audits", "Open Source Security Audits"),
+      pick(isDE, "Influencer Partnerships", "Influencer Partnerships"),
+      pick(isDE, "Global Marketing", "Global Marketing"),
     ],
   },
   {
     number: 6,
-    title: isDE ? "Scale" : "Scale",
-    description: isDE
-      ? "Enterprise Features, Multi-Tenancy, API Platform"
-      : "Enterprise Features, Multi-Tenancy, API Platform",
+    title: pick(isDE, "Scale", "Scale"),
+    description: pick(isDE, "Enterprise Features, Multi-Tenancy, API Platform", "Enterprise Features, Multi-Tenancy, API Platform"),
     status: "in-progress",
     date: "Q2 2027",
     icon: Clock,
     items: [
-      isDE ? "Enterprise Dashboard" : "Enterprise Dashboard",
-      isDE ? "Multi-Tenancy" : "Multi-Tenancy",
-      isDE ? "API Platform v2" : "API Platform v2",
-      isDE ? "SLA & Support" : "SLA & Support",
+      pick(isDE, "Enterprise Dashboard", "Enterprise Dashboard"),
+      pick(isDE, "Multi-Tenancy", "Multi-Tenancy"),
+      pick(isDE, "API Platform v2", "API Platform v2"),
+      pick(isDE, "SLA & Support", "SLA & Support"),
     ],
   },
   {
     number: 7,
-    title: isDE ? "Domination" : "Domination",
-    description: isDE
-      ? "Market Leader, Industry Standard, Worldwide #1"
-      : "Market Leader, Industry Standard, Worldwide #1",
+    title: pick(isDE, "Domination", "Domination"),
+    description: pick(isDE, "Market Leader, Industry Standard, Worldwide #1", "Market Leader, Industry Standard, Worldwide #1"),
     status: "future",
     date: "2028+",
     icon: Target,
     items: [
-      isDE ? "Market Leadership" : "Market Leadership",
-      isDE ? "Industry Standard" : "Industry Standard",
-      isDE ? "Worldwide #1" : "Worldwide #1",
-      isDE ? "Legacy" : "Legacy",
+      pick(isDE, "Market Leadership", "Market Leadership"),
+      pick(isDE, "Industry Standard", "Industry Standard"),
+      pick(isDE, "Worldwide #1", "Worldwide #1"),
+      pick(isDE, "Legacy", "Legacy"),
     ],
   },
 ]
@@ -152,26 +135,26 @@ const getStats = (isDE: boolean) => [
   {
     icon: Zap,
     value: "97",
-    label: isDE ? "Phasen" : "Phases",
-    description: isDE ? "Abgeschlossen" : "Completed",
+    label: pick(isDE, "Phasen", "Phases"),
+    description: pick(isDE, "Abgeschlossen", "Completed"),
   },
   {
     icon: CheckCircle,
     value: "250+",
-    label: isDE ? "Pages" : "Pages",
-    description: isDE ? "Erstellt" : "Created",
+    label: pick(isDE, "Pages", "Pages"),
+    description: pick(isDE, "Erstellt", "Created"),
   },
   {
     icon: TrendingUp,
     value: "16",
-    label: isDE ? "Sprachen" : "Languages",
-    description: isDE ? "Unterstützt" : "Supported",
+    label: pick(isDE, "Sprachen", "Languages"),
+    description: pick(isDE, "Unterstützt", "Supported"),
   },
   {
     icon: Calendar,
     value: "2026",
-    label: isDE ? "Start" : "Start",
-    description: isDE ? "Projektbeginn" : "Project Start",
+    label: pick(isDE, "Start", "Start"),
+    description: pick(isDE, "Projektbeginn", "Project Start"),
   },
 ]
 
@@ -189,12 +172,10 @@ export default function RoadmapPage({ params }: PageProps) {
       <div className="max-w-6xl mx-auto px-4 py-12">
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-4 text-gray-100">
-            {isDE ? "Roadmap — Journey to Worldwide #1" : "Roadmap — Journey to Worldwide #1"}
+            {pick(isDE, "Roadmap — Journey to Worldwide #1", "Roadmap — Journey to Worldwide #1")}
           </h1>
           <p className="text-lg text-gray-300 mb-4">
-            {isDE
-              ? "Verfolge unseren Aufstieg von Start bis Worldwide #1. Timeline, Meilensteine und Fortschritt."
-              : "Track our journey from start to worldwide #1. Timeline, milestones and progress."}
+            {pick(isDE, "Verfolge unseren Aufstieg von Start bis Worldwide #1. Timeline, Meilensteine und Fortschritt.", "Track our journey from start to worldwide #1. Timeline, milestones and progress.")}
           </p>
           <p className="text-sm text-cyan-400 font-medium">
             {isDE ? `→ ${completedPhases} von ${totalPhases} Phasen abgeschlossen (${progress}%)` : `→ ${completedPhases} of ${totalPhases} phases completed (${progress}%)`}
@@ -211,7 +192,7 @@ export default function RoadmapPage({ params }: PageProps) {
 
         {/* Stats */}
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Statistiken" : "Statistics"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Statistiken", "Statistics")}</h2>
           <div className="grid md:grid-cols-4 gap-6">
             {stats.map((stat, index) => {
               const Icon = stat.icon
@@ -231,7 +212,7 @@ export default function RoadmapPage({ params }: PageProps) {
 
         {/* Timeline */}
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Timeline" : "Timeline"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Timeline", "Timeline")}</h2>
           <div className="space-y-6">
             {phases.map((phase, index) => {
               const Icon = phase.icon
@@ -244,9 +225,9 @@ export default function RoadmapPage({ params }: PageProps) {
                 phase.status === "in-progress" ? "text-yellow-400" :
                 "text-gray-400"
               const statusBadge =
-                phase.status === "completed" ? isDE ? "Abgeschlossen" : "Completed" :
-                phase.status === "in-progress" ? isDE ? "In Arbeit" : "In Progress" :
-                isDE ? "Zukunft" : "Future"
+                phase.status === "completed" ? pick(isDE, "Abgeschlossen", "Completed") :
+                phase.status === "in-progress" ? pick(isDE, "In Arbeit", "In Progress") :
+                pick(isDE, "Zukunft", "Future")
 
               return (
                 <div
@@ -291,18 +272,16 @@ export default function RoadmapPage({ params }: PageProps) {
         <section className="mb-10">
           <div className="bg-gradient-to-r from-cyan-900/40 to-purple-900/40 border border-cyan-700/50 rounded-xl p-6">
             <h3 className="text-xl font-bold text-cyan-300 mb-2">
-              {isDE ? "Nächster Meilenstein" : "Next Milestone"}
+              {pick(isDE, "Nächster Meilenstein", "Next Milestone")}
             </h3>
             <p className="text-sm text-cyan-200/70 mb-4">
-              {isDE
-                ? "Phase 6: Scale — Enterprise Features, Multi-Tenancy, API Platform"
-                : "Phase 6: Scale — Enterprise Features, Multi-Tenancy, API Platform"}
+              {pick(isDE, "Phase 6: Scale — Enterprise Features, Multi-Tenancy, API Platform", "Phase 6: Scale — Enterprise Features, Multi-Tenancy, API Platform")}
             </p>
             <Link
               href={`/${locale}/community`}
               className="inline-flex items-center gap-2 px-6 py-3 bg-cyan-600 hover:bg-cyan-500 rounded-lg font-semibold text-white transition-colors"
             >
-              {isDE ? "Community beitreten" : "Join Community"}
+              {pick(isDE, "Community beitreten", "Join Community")}
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
@@ -310,23 +289,23 @@ export default function RoadmapPage({ params }: PageProps) {
 
         {/* Further Resources */}
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further resources")}</h2>
           <div className="grid md:grid-cols-2 gap-4">
             <Link href={`/${locale}/academy/certification`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
-              <div className="font-semibold text-cyan-400">{isDE ? "Academy" : "Academy"}</div>
-              <div className="text-sm text-gray-300">{isDE ? "Certification Program" : "Certification program"}</div>
+              <div className="font-semibold text-cyan-400">{pick(isDE, "Academy", "Academy")}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Certification Program", "Certification program")}</div>
             </Link>
             <Link href={`/${locale}/consulting`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
-              <div className="font-semibold text-cyan-400">{isDE ? "Consulting" : "Consulting"}</div>
-              <div className="text-sm text-gray-300">{isDE ? "Professional Services" : "Professional services"}</div>
+              <div className="font-semibold text-cyan-400">{pick(isDE, "Consulting", "Consulting")}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Professional Services", "Professional services")}</div>
             </Link>
             <Link href={`/${locale}/community`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
-              <div className="font-semibold text-cyan-400">{isDE ? "Community" : "Community"}</div>
-              <div className="text-sm text-gray-300">{isDE ? "Forum/Discord" : "Forum/Discord"}</div>
+              <div className="font-semibold text-cyan-400">{pick(isDE, "Community", "Community")}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Forum/Discord", "Forum/Discord")}</div>
             </Link>
             <Link href={`/${locale}/roast-my-moltbot`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
-              <div className="font-semibold text-cyan-400">{isDE ? "Roast My Moltbot" : "Roast My Moltbot"}</div>
-              <div className="text-sm text-gray-300">{isDE ? "Roast starten" : "Start the roast"}</div>
+              <div className="font-semibold text-cyan-400">{pick(isDE, "Roast My Moltbot", "Roast My Moltbot")}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Roast starten", "Start the roast")}</div>
             </Link>
           </div>
         </section>

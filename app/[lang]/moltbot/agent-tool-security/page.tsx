@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/moltbot/agent-tool-security"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "Agent Tool Security: Sichere Tool-Nutzung für KI-Agenten | ClawGuru Moltbot"
-    : "Agent Tool Security: Secure Tool Use for AI Agents | ClawGuru Moltbot"
-  const description = isDE
-    ? "Sichere Tool-Integration für KI-Agenten: Tool-Allowlisting, Argument-Validierung, Sandbox-Execution, Tool-Call-Injection-Prävention und sicherer Umgang mit Code-Execution-Tools."
-    : "Secure tool integration for AI agents: tool allowlisting, argument validation, sandbox execution, tool call injection prevention and safe handling of code execution tools."
+  const title = pick(isDE, "Agent Tool Security: Sichere Tool-Nutzung für KI-Agenten | ClawGuru Moltbot", "Agent Tool Security: Secure Tool Use for AI Agents | ClawGuru Moltbot")
+  const description = pick(isDE, "Sichere Tool-Integration für KI-Agenten: Tool-Allowlisting, Argument-Validierung, Sandbox-Execution, Tool-Call-Injection-Prävention und sicherer Umgang mit Code-Execution-Tools.", "Secure tool integration for AI agents: tool allowlisting, argument validation, sandbox execution, tool call injection prevention and safe handling of code execution tools.")
   return {
     title, description,
     keywords: ["agent tool security", "ai agent tool use", "llm tool call security", "moltbot tool security", "ai agent code execution", "tool call injection"],
@@ -201,19 +198,17 @@ export default function AgentToolSecurityPage({ params }: { params: { lang: stri
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "Tool-Security-Guide für eigene KI-Agenten-Systeme." : "Tool security guide for your own AI agent systems."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Tool-Security-Guide für eigene KI-Agenten-Systeme.", "Tool security guide for your own AI agent systems.")}
         </div>
         <div className="mb-3"><span className="text-xs font-bold uppercase tracking-widest text-cyan-400">Moltbot · Batch 11</span></div>
         <h1 className="text-4xl font-bold mb-4 text-gray-100">
-          {isDE ? "Agent Tool Security" : "Agent Tool Security"}
+          {pick(isDE, "Agent Tool Security", "Agent Tool Security")}
         </h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "KI-Agenten mit Tool-Zugriff sind mächtiger — und gefährlicher. Tool-Call-Injection kann echte Schäden verursachen. Vier Schutzschichten: Allowlist, Argument-Validierung, Code-Sandbox und Injection-Prävention."
-            : "AI agents with tool access are more powerful — and more dangerous. Tool call injection can cause real damage. Four protection layers: allowlist, argument validation, code sandbox and injection prevention."}
+          {pick(isDE, "KI-Agenten mit Tool-Zugriff sind mächtiger — und gefährlicher. Tool-Call-Injection kann echte Schäden verursachen. Vier Schutzschichten: Allowlist, Argument-Validierung, Code-Sandbox und Injection-Prävention.", "AI agents with tool access are more powerful — and more dangerous. Tool call injection can cause real damage. Four protection layers: allowlist, argument validation, code sandbox and injection prevention.")}
         </p>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "4 Tool-Security-Schichten" : "4 Tool Security Layers"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "4 Tool-Security-Schichten", "4 Tool Security Layers")}</h2>
           <div className="space-y-5">
             {TOOL_CONTROLS.map((c) => (
               <div key={c.id} className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
@@ -230,7 +225,7 @@ export default function AgentToolSecurityPage({ params }: { params: { lang: stri
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-3">
             {FAQ.map((f, i) => (
               <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
@@ -241,23 +236,23 @@ export default function AgentToolSecurityPage({ params }: { params: { lang: stri
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further Resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further Resources")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/moltbot/ai-agent-rbac`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Agent RBAC</div>
-              <div className="text-sm text-gray-300">{isDE ? "Tool-Zugriff per Rolle" : "Tool access per role"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Tool-Zugriff per Rolle", "Tool access per role")}</div>
             </a>
             <a href={`/${locale}/moltbot/agentic-workflow-security`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Agentic Workflow Security</div>
-              <div className="text-sm text-gray-300">{isDE ? "HITL vor gefährlichen Tools" : "HITL before dangerous tools"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "HITL vor gefährlichen Tools", "HITL before dangerous tools")}</div>
             </a>
             <a href={`/${locale}/moltbot/ai-agent-sandboxing`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Agent Sandboxing</div>
-              <div className="text-sm text-gray-300">{isDE ? "gVisor + Firecracker" : "gVisor + Firecracker"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "gVisor + Firecracker", "gVisor + Firecracker")}</div>
             </a>
             <a href={`/${locale}/moltbot/prompt-injection-defense`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Prompt Injection Defense</div>
-              <div className="text-sm text-gray-300">{isDE ? "Injection-Prävention" : "Injection prevention"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Injection-Prävention", "Injection prevention")}</div>
             </a>
           </div>
         </section>

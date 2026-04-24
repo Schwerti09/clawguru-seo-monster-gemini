@@ -8,6 +8,7 @@ import SummonHero from "@/components/summon/SummonHero"
 import HowItWorks from "@/components/summon/HowItWorks"
 import UpgradeCTA from "@/components/shared/UpgradeCTA"
 import { BASE_URL } from "@/lib/config"
+import { pick } from "@/lib/i18n-pick"
 
 const SummonRealClient = dynamic(() => import("@/components/summon/SummonRealClient"))
 
@@ -22,13 +23,9 @@ export async function generateMetadata(props: { params: { lang: string } }): Pro
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
 
-  const title = isDE
-    ? "Claw Swarm Oracle — Summon | ClawGuru"
-    : "Claw Swarm Oracle — Summon | ClawGuru"
+  const title = pick(isDE, "Claw Swarm Oracle — Summon | ClawGuru", "Claw Swarm Oracle — Summon | ClawGuru")
 
-  const description = isDE
-    ? "ClawGuru ist die KI-gestützte SecOps-Plattform mit über 4,2 Millionen ausführbaren Runbooks – für Incident Response, Hardening und Compliance in Echtzeit. Vom Problem zum Fix in unter 30 Sekunden."
-    : "ClawGuru is the AI-powered SecOps platform with over 4.2 million executable runbooks – for incident response, hardening, and compliance in real-time. From problem to fix in under 30 seconds."
+  const description = pick(isDE, "ClawGuru ist die KI-gestützte SecOps-Plattform mit über 4,2 Millionen ausführbaren Runbooks – für Incident Response, Hardening und Compliance in Echtzeit. Vom Problem zum Fix in unter 30 Sekunden.", "ClawGuru is the AI-powered SecOps platform with over 4.2 million executable runbooks – for incident response, hardening, and compliance in real-time. From problem to fix in under 30 seconds.")
 
   return {
     title,

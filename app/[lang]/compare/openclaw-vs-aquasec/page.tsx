@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/compare/openclaw-vs-aquasec"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "OpenClaw vs Aqua Security: Security-Vergleich 2026 | ClawGuru"
-    : "OpenClaw vs Aqua Security: Security Comparison 2026 | ClawGuru"
-  const description = isDE
-    ? "OpenClaw vs Aqua Security im Container-Security-Vergleich: Self-Hosted vs SaaS, Kubernetes-Security, CSPM und AI-Workload-Schutz direkt verglichen 2026."
-    : "OpenClaw vs Aqua Security container security comparison: self-hosted vs SaaS, Kubernetes security, CSPM and AI workload protection compared 2026."
+  const title = pick(isDE, "OpenClaw vs Aqua Security: Security-Vergleich 2026 | ClawGuru", "OpenClaw vs Aqua Security: Security Comparison 2026 | ClawGuru")
+  const description = pick(isDE, "OpenClaw vs Aqua Security im Container-Security-Vergleich: Self-Hosted vs SaaS, Kubernetes-Security, CSPM und AI-Workload-Schutz direkt verglichen 2026.", "OpenClaw vs Aqua Security container security comparison: self-hosted vs SaaS, Kubernetes security, CSPM and AI workload protection compared 2026.")
   return {
     title, description,
     keywords: ["openclaw vs aquasec", "aqua security alternative", "container security comparison 2026", "kubernetes security self-hosted", "aqua security vs openclaw"],
@@ -67,22 +64,20 @@ export default function OpenclawVsAquasecPage({ params }: { params: { lang: stri
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "Security-Vergleich für eigene Container-Infrastruktur-Entscheidungen." : "Security comparison to help you choose your own container security infrastructure."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Security-Vergleich für eigene Container-Infrastruktur-Entscheidungen.", "Security comparison to help you choose your own container security infrastructure.")}
         </div>
         <div className="mb-3"><span className="text-xs font-bold uppercase tracking-widest text-cyan-400">Compare · Batch 18</span></div>
-        <h1 className="text-4xl font-bold mb-4 text-gray-100">{isDE ? "OpenClaw vs Aqua Security" : "OpenClaw vs Aqua Security"}</h1>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">{pick(isDE, "OpenClaw vs Aqua Security", "OpenClaw vs Aqua Security")}</h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "Aqua Security ist der Enterprise-Standard für Container-Security — aber teuer und blind für AI-Workloads. OpenClaw ist günstiger, selbst gehostet und scannt auch LLM-Infrastruktur."
-            : "Aqua Security is the enterprise standard for container security — but expensive and blind to AI workloads. OpenClaw is cheaper, self-hosted, and scans LLM infrastructure too."}
+          {pick(isDE, "Aqua Security ist der Enterprise-Standard für Container-Security — aber teuer und blind für AI-Workloads. OpenClaw ist günstiger, selbst gehostet und scannt auch LLM-Infrastruktur.", "Aqua Security is the enterprise standard for container security — but expensive and blind to AI workloads. OpenClaw is cheaper, self-hosted, and scans LLM infrastructure too.")}
         </p>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Feature-Vergleich" : "Feature Comparison"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Feature-Vergleich", "Feature Comparison")}</h2>
           <div className="overflow-x-auto">
             <table className="min-w-full bg-gray-900 border border-gray-700 rounded-lg">
               <thead className="bg-gray-800">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{isDE ? "Merkmal" : "Feature"}</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{pick(isDE, "Merkmal", "Feature")}</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-cyan-400 uppercase">OpenClaw</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Aqua Security</th>
                 </tr>
@@ -100,7 +95,7 @@ export default function OpenclawVsAquasecPage({ params }: { params: { lang: stri
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-3">
             {FAQ.map((f, i) => (
               <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
@@ -111,23 +106,23 @@ export default function OpenclawVsAquasecPage({ params }: { params: { lang: stri
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further Resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further Resources")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/compare/openclaw-vs-tenable`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">OpenClaw vs Tenable</div>
-              <div className="text-sm text-gray-300">{isDE ? "Tenable-Vergleich" : "Tenable comparison"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Tenable-Vergleich", "Tenable comparison")}</div>
             </a>
             <a href={`/${locale}/compare/moltbot-vs-crewai`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Moltbot vs CrewAI</div>
-              <div className="text-sm text-gray-300">{isDE ? "CrewAI-Vergleich" : "CrewAI comparison"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "CrewAI-Vergleich", "CrewAI comparison")}</div>
             </a>
             <a href={`/${locale}/openclaw`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">OpenClaw Framework</div>
-              <div className="text-sm text-gray-300">{isDE ? "OpenClaw Docs" : "OpenClaw docs"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "OpenClaw Docs", "OpenClaw docs")}</div>
             </a>
             <a href={`/${locale}/compare`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">All Comparisons</div>
-              <div className="text-sm text-gray-300">{isDE ? "Alle Vergleiche" : "All comparisons"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Alle Vergleiche", "All comparisons")}</div>
             </a>
           </div>
         </section>

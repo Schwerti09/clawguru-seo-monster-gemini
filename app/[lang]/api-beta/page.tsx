@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
 import { Shield, Code, Zap, Key, Terminal, BookOpen, Lock } from "lucide-react"
+import { pick } from "@/lib/i18n-pick"
 
 interface PageProps { params: { lang: string } }
 
@@ -19,13 +20,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const pageUrl = `${SITE_URL}/${locale}${PATH}`
   const isDE = locale === "de"
 
-  const title = isDE
-    ? "ClawGuru Security API — Public Beta | Security Checks in deiner CI/CD"
-    : "ClawGuru Security API — Public Beta | Security Checks in your CI/CD"
+  const title = pick(isDE, "ClawGuru Security API — Public Beta | Security Checks in deiner CI/CD", "ClawGuru Security API — Public Beta | Security Checks in your CI/CD")
 
-  const description = isDE
-    ? "Integriere Security Checks, CVE-Lookups und Runbook-Execution direkt in deine CI/CD Pipeline. Öffentliche Beta verfügbar."
-    : "Integrate security checks, CVE lookups, and runbook execution directly into your CI/CD pipeline. Public Beta available."
+  const description = pick(isDE, "Integriere Security Checks, CVE-Lookups und Runbook-Execution direkt in deine CI/CD Pipeline. Öffentliche Beta verfügbar.", "Integrate security checks, CVE lookups, and runbook execution directly into your CI/CD pipeline. Public Beta available.")
 
   return {
     title,
@@ -97,7 +94,7 @@ export default function ApiBetaPage({ params }: PageProps) {
       {
         "@type": "BreadcrumbList",
         "itemListElement": [
-          { "@type": "ListItem", "position": 1, "name": isDE ? "Startseite" : "Home", "item": `${SITE_URL}/${locale}` },
+          { "@type": "ListItem", "position": 1, "name": pick(isDE, "Startseite", "Home"), "item": `${SITE_URL}/${locale}` },
           { "@type": "ListItem", "position": 2, "name": "API Beta", "item": `${SITE_URL}/${locale}${PATH}` },
         ],
       },
@@ -106,9 +103,7 @@ export default function ApiBetaPage({ params }: PageProps) {
         "name": "ClawGuru Security API",
         "applicationCategory": "SecurityApplication",
         "operatingSystem": "Web API",
-        "description": isDE
-          ? "Security Check, CVE Lookup und Runbook Execution als REST API."
-          : "Security check, CVE lookup and runbook execution as REST API.",
+        "description": pick(isDE, "Security Check, CVE Lookup und Runbook Execution als REST API.", "Security check, CVE lookup and runbook execution as REST API."),
         "url": `${SITE_URL}/${locale}${PATH}`,
         "offers": {
           "@type": "Offer",
@@ -136,30 +131,26 @@ export default function ApiBetaPage({ params }: PageProps) {
         {/* Hero */}
         <div className="mb-12 text-center">
           <div className="inline-block bg-cyan-900 border border-cyan-700 text-cyan-300 text-xs font-bold px-3 py-1 rounded-full mb-4 animate-pulse">
-            {isDE ? "🚀 PUBLIC BETA VERFÜGBAR" : "🚀 PUBLIC BETA AVAILABLE"}
+            {pick(isDE, "🚀 PUBLIC BETA VERFÜGBAR", "🚀 PUBLIC BETA AVAILABLE")}
           </div>
           <h1 className="text-4xl md:text-5xl font-black mb-4 text-gray-100">
-            {isDE ? "ClawGuru Security API" : "ClawGuru Security API"}
+            {pick(isDE, "ClawGuru Security API", "ClawGuru Security API")}
           </h1>
           <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            {isDE
-              ? "Integriere Security Checks, CVE-Lookups und Runbook-Execution direkt in deine CI/CD Pipeline."
-              : "Integrate security checks, CVE lookups, and runbook execution directly into your CI/CD pipeline."}
+            {pick(isDE, "Integriere Security Checks, CVE-Lookups und Runbook-Execution direkt in deine CI/CD Pipeline.", "Integrate security checks, CVE lookups, and runbook execution directly into your CI/CD pipeline.")}
           </p>
         </div>
 
         {/* Trust Anchor */}
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-12 text-sm text-amber-100 max-w-4xl mx-auto">
           <strong className="text-amber-100">"Not a Pentest" Notice:</strong>{" "}
-          {isDE
-            ? "Die API prüft öffentlich zugängliche Informationen und Best-Practice-Konfigurationen. Keine Angriffstools. Keine intrusiven Scans."
-            : "The API checks publicly accessible information and best-practice configurations. No attack tools. No intrusive scans."}
+          {pick(isDE, "Die API prüft öffentlich zugängliche Informationen und Best-Practice-Konfigurationen. Keine Angriffstools. Keine intrusiven Scans.", "The API checks publicly accessible information and best-practice configurations. No attack tools. No intrusive scans.")}
         </div>
 
         {/* API Endpoints */}
         <section className="mb-12">
           <h2 className="text-3xl font-bold mb-6 text-gray-100">
-            {isDE ? "3 Kern-Endpunkte" : "3 Core Endpoints"}
+            {pick(isDE, "3 Kern-Endpunkte", "3 Core Endpoints")}
           </h2>
           <div className="space-y-6">
             {/* Endpoint 1 */}
@@ -174,12 +165,12 @@ export default function ApiBetaPage({ params }: PageProps) {
                     <code className="text-cyan-400 font-mono">/api/v1/check?domain=example.com</code>
                   </div>
                   <p className="text-sm text-gray-400 mt-1">
-                    {isDE ? "Security Score & Empfehlungen für eine Domain" : "Security score & recommendations for a domain"}
+                    {pick(isDE, "Security Score & Empfehlungen für eine Domain", "Security score & recommendations for a domain")}
                   </p>
                 </div>
               </div>
               <div className="bg-gray-900 p-4">
-                <div className="text-xs text-gray-500 mb-2">{isDE ? "Beispiel Request:" : "Example Request:"}</div>
+                <div className="text-xs text-gray-500 mb-2">{pick(isDE, "Beispiel Request:", "Example Request:")}</div>
                 <pre className="text-sm text-green-400 font-mono overflow-x-auto">
 {`curl -H "Authorization: Bearer YOUR_API_KEY" \\
   "https://clawguru.org/api/v1/check?domain=example.com"
@@ -209,12 +200,12 @@ export default function ApiBetaPage({ params }: PageProps) {
                     <code className="text-cyan-400 font-mono">/api/v1/cve?id=CVE-2024-6387</code>
                   </div>
                   <p className="text-sm text-gray-400 mt-1">
-                    {isDE ? "CVE Details + Fix Guide" : "CVE details + fix guide"}
+                    {pick(isDE, "CVE Details + Fix Guide", "CVE details + fix guide")}
                   </p>
                 </div>
               </div>
               <div className="bg-gray-900 p-4">
-                <div className="text-xs text-gray-500 mb-2">{isDE ? "Beispiel Request:" : "Example Request:"}</div>
+                <div className="text-xs text-gray-500 mb-2">{pick(isDE, "Beispiel Request:", "Example Request:")}</div>
                 <pre className="text-sm text-green-400 font-mono overflow-x-auto">
 {`curl -H "Authorization: Bearer YOUR_API_KEY" \\
   "https://clawguru.org/api/v1/cve?id=CVE-2024-6387"
@@ -244,12 +235,12 @@ export default function ApiBetaPage({ params }: PageProps) {
                     <span className="bg-yellow-900 text-yellow-300 text-xs font-bold px-2 py-1 rounded">PRO</span>
                   </div>
                   <p className="text-sm text-gray-400 mt-1">
-                    {isDE ? "Runbook gegen eigene Infrastruktur ausführen" : "Execute runbook against your own infrastructure"}
+                    {pick(isDE, "Runbook gegen eigene Infrastruktur ausführen", "Execute runbook against your own infrastructure")}
                   </p>
                 </div>
               </div>
               <div className="bg-gray-900 p-4">
-                <div className="text-xs text-gray-500 mb-2">{isDE ? "Beispiel Request:" : "Example Request:"}</div>
+                <div className="text-xs text-gray-500 mb-2">{pick(isDE, "Beispiel Request:", "Example Request:")}</div>
                 <pre className="text-sm text-green-400 font-mono overflow-x-auto">
 {`curl -X POST -H "Authorization: Bearer YOUR_API_KEY" \\
   -H "Content-Type: application/json" \\
@@ -276,10 +267,10 @@ export default function ApiBetaPage({ params }: PageProps) {
           >
             <Key className="w-8 h-8 text-white mb-3" />
             <h3 className="text-2xl font-bold text-white mb-2">
-              {isDE ? "API Key anfragen" : "Request API Key"}
+              {pick(isDE, "API Key anfragen", "Request API Key")}
             </h3>
             <p className="text-cyan-100">
-              {isDE ? "Schicke uns deinen Use-Case — Antwort innerhalb von 24h." : "Send us your use case — reply within 24h."}
+              {pick(isDE, "Schicke uns deinen Use-Case — Antwort innerhalb von 24h.", "Send us your use case — reply within 24h.")}
             </p>
           </a>
           <Link
@@ -288,10 +279,10 @@ export default function ApiBetaPage({ params }: PageProps) {
           >
             <BookOpen className="w-8 h-8 text-cyan-400 mb-3" />
             <h3 className="text-2xl font-bold text-gray-100 mb-2">
-              {isDE ? "Vollständige Dokumentation" : "Full Documentation"}
+              {pick(isDE, "Vollständige Dokumentation", "Full Documentation")}
             </h3>
             <p className="text-gray-400">
-              {isDE ? "Endpoints, Response-Schemas, Error Codes." : "Endpoints, response schemas, error codes."}
+              {pick(isDE, "Endpoints, Response-Schemas, Error Codes.", "Endpoints, response schemas, error codes.")}
             </p>
           </Link>
         </section>
@@ -315,24 +306,24 @@ export default function ApiBetaPage({ params }: PageProps) {
         {/* Cross-Links (Mycelium Kreislauf) */}
         <section className="mb-8">
           <h2 className="text-2xl font-bold mb-4 text-gray-100">
-            {isDE ? "Weitere Ressourcen" : "More Resources"}
+            {pick(isDE, "Weitere Ressourcen", "More Resources")}
           </h2>
           <div className="grid md:grid-cols-4 gap-4">
             <Link href={`/${locale}/check`} className="block bg-gray-800 hover:bg-gray-700 p-4 rounded-lg border border-gray-700 hover:border-cyan-500 transition-colors">
               <div className="font-semibold text-cyan-400 mb-1">Security Check</div>
-              <div className="text-xs text-gray-400">{isDE ? "Web-basierter Check" : "Web-based check"}</div>
+              <div className="text-xs text-gray-400">{pick(isDE, "Web-basierter Check", "Web-based check")}</div>
             </Link>
             <Link href={`/${locale}/runbooks`} className="block bg-gray-800 hover:bg-gray-700 p-4 rounded-lg border border-gray-700 hover:border-purple-500 transition-colors">
               <div className="font-semibold text-purple-400 mb-1">Runbooks</div>
-              <div className="text-xs text-gray-400">{isDE ? "4.200+ Fix-Anleitungen" : "4,200+ fix guides"}</div>
+              <div className="text-xs text-gray-400">{pick(isDE, "4.200+ Fix-Anleitungen", "4,200+ fix guides")}</div>
             </Link>
             <Link href={`/${locale}/intel`} className="block bg-gray-800 hover:bg-gray-700 p-4 rounded-lg border border-gray-700 hover:border-orange-500 transition-colors">
               <div className="font-semibold text-orange-400 mb-1">Intel Feed</div>
-              <div className="text-xs text-gray-400">{isDE ? "Live CVE Feed" : "Live CVE feed"}</div>
+              <div className="text-xs text-gray-400">{pick(isDE, "Live CVE Feed", "Live CVE feed")}</div>
             </Link>
             <Link href={`/${locale}/pricing`} className="block bg-gray-800 hover:bg-gray-700 p-4 rounded-lg border border-gray-700 hover:border-green-500 transition-colors">
-              <div className="font-semibold text-green-400 mb-1">{isDE ? "Preise" : "Pricing"}</div>
-              <div className="text-xs text-gray-400">{isDE ? "Pro & Enterprise Plans" : "Pro & Enterprise plans"}</div>
+              <div className="font-semibold text-green-400 mb-1">{pick(isDE, "Preise", "Pricing")}</div>
+              <div className="text-xs text-gray-400">{pick(isDE, "Pro & Enterprise Plans", "Pro & Enterprise plans")}</div>
             </Link>
           </div>
         </section>

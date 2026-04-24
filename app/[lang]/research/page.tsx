@@ -3,6 +3,7 @@ import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/
 import { dbQuery } from "@/lib/db"
 import { BookOpen, TrendingUp, Shield, AlertTriangle, FileText, Download } from "lucide-react"
 import Link from "next/link"
+import { pick } from "@/lib/i18n-pick"
 
 interface PageProps { params: { lang: string } }
 
@@ -17,12 +18,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const pageUrl = `${SITE_URL}/${locale}${PATH}`
   const isDE = locale === "de"
-  const title = isDE
-    ? "Roast Research Papers — The Science of Bad Stacks | ClawGuru"
-    : "Roast Research Papers — The Science of Bad Stacks | ClawGuru"
-  const description = isDE
-    ? "Akademische Security-Research basierend auf echten Roast-Results. Daten-basierte Insights ohne Mock-Daten."
-    : "Academic security research based on real roast results. Data-driven insights without mock data."
+  const title = pick(isDE, "Roast Research Papers — The Science of Bad Stacks | ClawGuru", "Roast Research Papers — The Science of Bad Stacks | ClawGuru")
+  const description = pick(isDE, "Akademische Security-Research basierend auf echten Roast-Results. Daten-basierte Insights ohne Mock-Daten.", "Academic security research based on real roast results. Data-driven insights without mock data.")
   return {
     title,
     description,
@@ -89,9 +86,7 @@ async function getResearchPapers(): Promise<ResearchPaper[]> {
       {
         id: "paper-1",
         title: "The Science of Bad Stacks: A Quantitative Analysis of Security Misconfigurations",
-        abstract: isDE
-          ? "Diese Studie analysiert 10.000+ Roast-Results um häufige Security-Misconfigurations zu identifizieren. Unsere Daten zeigen, dass 67% der Stacks kritische Konfigurationsfehler aufweisen."
-          : "This study analyzes 10,000+ roast results to identify common security misconfigurations. Our data shows that 67% of stacks exhibit critical configuration errors.",
+        abstract: pick(isDE, "Diese Studie analysiert 10.000+ Roast-Results um häufige Security-Misconfigurations zu identifizieren. Unsere Daten zeigen, dass 67% der Stacks kritische Konfigurationsfehler aufweisen.", "This study analyzes 10,000+ roast results to identify common security misconfigurations. Our data shows that 67% of stacks exhibit critical configuration errors."),
         authors: ["Dr. Security Research", "ClawGuru Team"],
         publishedAt: "2025-01-15",
         category: "Quantitative Analysis",
@@ -104,9 +99,7 @@ async function getResearchPapers(): Promise<ResearchPaper[]> {
       {
         id: "paper-2",
         title: "Roast-Level Impact: How Mild, Medium, and Spicy Roasts correlate with Real-World Security Incidents",
-        abstract: isDE
-          ? "Korrelationsanalyse zwischen Roast-Level und tatsächlichen Security-Incidenten. Spicy Roasts zeigen 3.2x höhere Incident-Rate."
-          : "Correlation analysis between roast level and actual security incidents. Spicy roasts show 3.2x higher incident rate.",
+        abstract: pick(isDE, "Korrelationsanalyse zwischen Roast-Level und tatsächlichen Security-Incidenten. Spicy Roasts zeigen 3.2x höhere Incident-Rate.", "Correlation analysis between roast level and actual security incidents. Spicy roasts show 3.2x higher incident rate."),
         authors: ["Incident Response Team", "ClawGuru Research"],
         publishedAt: "2025-02-20",
         category: "Correlation Study",
@@ -119,9 +112,7 @@ async function getResearchPapers(): Promise<ResearchPaper[]> {
       {
         id: "paper-3",
         title: "The Fix Rate Paradox: Why Low-Score Stacks Take Longer to Remediate",
-        abstract: isDE
-          ? "Untersuchung der Fix-Rate nach Score-Bereich. Paradoxerweise nehmen Low-Score-Stacks länger für Fixes (45 Tage vs 12 Tage)."
-          : "Investigation of fix rate by score range. Paradoxically, low-score stacks take longer to fix (45 days vs 12 days).",
+        abstract: pick(isDE, "Untersuchung der Fix-Rate nach Score-Bereich. Paradoxerweise nehmen Low-Score-Stacks länger für Fixes (45 Tage vs 12 Tage).", "Investigation of fix rate by score range. Paradoxically, low-score stacks take longer to fix (45 days vs 12 days)."),
         authors: ["Remediation Research", "ClawGuru Analytics"],
         publishedAt: "2025-03-10",
         category: "Behavioral Analysis",
@@ -140,9 +131,7 @@ async function getResearchPapers(): Promise<ResearchPaper[]> {
         {
           id: "paper-1",
           title: "The Science of Bad Stacks: A Quantitative Analysis of Security Misconfigurations",
-          abstract: isDE
-            ? "Diese Studie analysiert 10.000+ Roast-Results um häufige Security-Misconfigurations zu identifizieren. Unsere Daten zeigen, dass 67% der Stacks kritische Konfigurationsfehler aufweisen."
-            : "This study analyzes 10,000+ roast results to identify common security misconfigurations. Our data shows that 67% of stacks exhibit critical configuration errors.",
+          abstract: pick(isDE, "Diese Studie analysiert 10.000+ Roast-Results um häufige Security-Misconfigurations zu identifizieren. Unsere Daten zeigen, dass 67% der Stacks kritische Konfigurationsfehler aufweisen.", "This study analyzes 10,000+ roast results to identify common security misconfigurations. Our data shows that 67% of stacks exhibit critical configuration errors."),
           authors: ["Dr. Security Research", "ClawGuru Team"],
           publishedAt: "2025-01-15",
           category: "Quantitative Analysis",
@@ -155,9 +144,7 @@ async function getResearchPapers(): Promise<ResearchPaper[]> {
         {
           id: "paper-2",
           title: "Roast-Level Impact: How Mild, Medium, and Spicy Roasts correlate with Real-World Security Incidents",
-          abstract: isDE
-            ? "Korrelationsanalyse zwischen Roast-Level und tatsächlichen Security-Incidenten. Spicy Roasts zeigen 3.2x höhere Incident-Rate."
-            : "Correlation analysis between roast level and actual security incidents. Spicy roasts show 3.2x higher incident rate.",
+          abstract: pick(isDE, "Korrelationsanalyse zwischen Roast-Level und tatsächlichen Security-Incidenten. Spicy Roasts zeigen 3.2x höhere Incident-Rate.", "Correlation analysis between roast level and actual security incidents. Spicy roasts show 3.2x higher incident rate."),
           authors: ["Incident Response Team", "ClawGuru Research"],
           publishedAt: "2025-02-20",
           category: "Correlation Study",
@@ -170,9 +157,7 @@ async function getResearchPapers(): Promise<ResearchPaper[]> {
         {
           id: "paper-3",
           title: "The Fix Rate Paradox: Why Low-Score Stacks Take Longer to Remediate",
-          abstract: isDE
-            ? "Untersuchung der Fix-Rate nach Score-Bereich. Paradoxerweise nehmen Low-Score-Stacks länger für Fixes (45 Tage vs 12 Tage)."
-            : "Investigation of fix rate by score range. Paradoxically, low-score stacks take longer to fix (45 days vs 12 days).",
+          abstract: pick(isDE, "Untersuchung der Fix-Rate nach Score-Bereich. Paradoxerweise nehmen Low-Score-Stacks länger für Fixes (45 Tage vs 12 Tage).", "Investigation of fix rate by score range. Paradoxically, low-score stacks take longer to fix (45 days vs 12 days)."),
           authors: ["Remediation Research", "ClawGuru Analytics"],
           publishedAt: "2025-03-10",
           category: "Behavioral Analysis",
@@ -201,35 +186,31 @@ export default async function ResearchPage({ params }: PageProps) {
       <div className="max-w-6xl mx-auto px-4 py-12">
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-4 text-gray-100">
-            {isDE ? "Roast Research Papers — The Science of Bad Stacks" : "Roast Research Papers — The Science of Bad Stacks"}
+            {pick(isDE, "Roast Research Papers — The Science of Bad Stacks", "Roast Research Papers — The Science of Bad Stacks")}
           </h1>
           <p className="text-lg text-gray-300 mb-4">
-            {isDE
-              ? "Akademische Security-Research basierend auf echten Roast-Results. Daten-basierte Insights ohne Mock-Daten."
-              : "Academic security research based on real roast results. Data-driven insights without mock data."}
+            {pick(isDE, "Akademische Security-Research basierend auf echten Roast-Results. Daten-basierte Insights ohne Mock-Daten.", "Academic security research based on real roast results. Data-driven insights without mock data.")}
           </p>
           <p className="text-sm text-cyan-400 font-medium">
-            {isDE ? "→ 100% echte Daten aus roast_results Tabelle." : "→ 100% real data from roast_results table."}
+            {pick(isDE, "→ 100% echte Daten aus roast_results Tabelle.", "→ 100% real data from roast_results table.")}
           </p>
         </div>
 
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE
-            ? "Diese Forschung dient zur Härtung Ihrer eigenen Systeme. Keine Angriffstools."
-            : "This research is for hardening your own systems. No attack tools."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Diese Forschung dient zur Härtung Ihrer eigenen Systeme. Keine Angriffstools.", "This research is for hardening your own systems. No attack tools.")}
         </div>
 
         {!papers || papers.length === 0 ? (
           <div className="bg-gray-800 p-6 rounded-lg border border-gray-700 text-center">
             <p className="text-sm text-gray-400">
-              {isDE ? "Keine Research Papers verfügbar." : "No research papers available."}
+              {pick(isDE, "Keine Research Papers verfügbar.", "No research papers available.")}
             </p>
           </div>
         ) : (
           <>
             {/* Research Papers */}
             <section className="mb-10">
-              <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Research Papers" : "Research Papers"}</h2>
+              <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Research Papers", "Research Papers")}</h2>
               <div className="space-y-6">
                 {papers.map((paper) => (
                   <div key={paper.id} className="bg-gray-800 p-6 rounded-lg border border-gray-700">
@@ -251,18 +232,18 @@ export default async function ResearchPage({ params }: PageProps) {
                     <p className="text-sm text-gray-300 mb-4">{paper.abstract}</p>
 
                     <div className="bg-gray-900 p-4 rounded-lg mb-4">
-                      <h4 className="font-semibold text-cyan-400 mb-3">{isDE ? "Statistiken" : "Statistics"}</h4>
+                      <h4 className="font-semibold text-cyan-400 mb-3">{pick(isDE, "Statistiken", "Statistics")}</h4>
                       <div className="grid grid-cols-3 gap-4">
                         <div>
-                          <div className="text-xs text-gray-400 mb-1">{isDE ? "Sample Size" : "Sample Size"}</div>
+                          <div className="text-xs text-gray-400 mb-1">{pick(isDE, "Sample Size", "Sample Size")}</div>
                           <div className="text-lg font-bold text-cyan-400">{paper.stats.sampleSize.toLocaleString()}</div>
                         </div>
                         <div>
-                          <div className="text-xs text-gray-400 mb-1">{isDE ? "Ø Score" : "Avg Score"}</div>
+                          <div className="text-xs text-gray-400 mb-1">{pick(isDE, "Ø Score", "Avg Score")}</div>
                           <div className="text-lg font-bold text-cyan-400">{paper.stats.avgScore.toFixed(1)}</div>
                         </div>
                         <div>
-                          <div className="text-xs text-gray-400 mb-1">{isDE ? "Key Finding" : "Key Finding"}</div>
+                          <div className="text-xs text-gray-400 mb-1">{pick(isDE, "Key Finding", "Key Finding")}</div>
                           <div className="text-sm text-gray-300">{paper.stats.keyFinding}</div>
                         </div>
                       </div>
@@ -270,7 +251,7 @@ export default async function ResearchPage({ params }: PageProps) {
 
                     <button className="flex items-center gap-2 px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg text-gray-100 text-sm transition-colors">
                       <Download className="w-4 h-4" />
-                      {isDE ? "PDF herunterladen" : "Download PDF"}
+                      {pick(isDE, "PDF herunterladen", "Download PDF")}
                     </button>
                   </div>
                 ))}
@@ -279,50 +260,42 @@ export default async function ResearchPage({ params }: PageProps) {
 
             {/* Key Insights */}
             <section className="mb-10">
-              <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Key Insights" : "Key Insights"}</h2>
+              <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Key Insights", "Key Insights")}</h2>
               <div className="grid md:grid-cols-2 gap-4">
                 <div className="bg-blue-900 p-4 rounded-lg border border-blue-700">
                   <div className="flex items-center gap-2 mb-2">
                     <TrendingUp className="w-5 h-5 text-blue-300" />
-                    <h3 className="font-semibold text-blue-300">{isDE ? "Trend 1" : "Trend 1"}</h3>
+                    <h3 className="font-semibold text-blue-300">{pick(isDE, "Trend 1", "Trend 1")}</h3>
                   </div>
                   <p className="text-sm text-blue-200">
-                    {isDE
-                      ? "67% der Stacks haben kritische Konfigurationsfehler, die automatisiert behoben werden können."
-                      : "67% of stacks have critical configuration errors that can be fixed automatically."}
+                    {pick(isDE, "67% der Stacks haben kritische Konfigurationsfehler, die automatisiert behoben werden können.", "67% of stacks have critical configuration errors that can be fixed automatically.")}
                   </p>
                 </div>
                 <div className="bg-red-900 p-4 rounded-lg border border-red-700">
                   <div className="flex items-center gap-2 mb-2">
                     <AlertTriangle className="w-5 h-5 text-red-300" />
-                    <h3 className="font-semibold text-red-300">{isDE ? "Trend 2" : "Trend 2"}</h3>
+                    <h3 className="font-semibold text-red-300">{pick(isDE, "Trend 2", "Trend 2")}</h3>
                   </div>
                   <p className="text-sm text-red-200">
-                    {isDE
-                      ? "Spicy Roasts korrelieren 3.2x stärker mit tatsächlichen Security-Incidenten."
-                      : "Spicy roasts correlate 3.2x more strongly with actual security incidents."}
+                    {pick(isDE, "Spicy Roasts korrelieren 3.2x stärker mit tatsächlichen Security-Incidenten.", "Spicy roasts correlate 3.2x more strongly with actual security incidents.")}
                   </p>
                 </div>
                 <div className="bg-green-900 p-4 rounded-lg border border-green-700">
                   <div className="flex items-center gap-2 mb-2">
                     <Shield className="w-5 h-5 text-green-300" />
-                    <h3 className="font-semibold text-green-300">{isDE ? "Trend 3" : "Trend 3"}</h3>
+                    <h3 className="font-semibold text-green-300">{pick(isDE, "Trend 3", "Trend 3")}</h3>
                   </div>
                   <p className="text-sm text-green-200">
-                    {isDE
-                      ? "Elite-Stacks (Score ≥90) zeigen 85% geringere Incident-Rate."
-                      : "Elite stacks (score ≥90) show 85% lower incident rate."}
+                    {pick(isDE, "Elite-Stacks (Score ≥90) zeigen 85% geringere Incident-Rate.", "Elite stacks (score ≥90) show 85% lower incident rate.")}
                   </p>
                 </div>
                 <div className="bg-purple-900 p-4 rounded-lg border border-purple-700">
                   <div className="flex items-center gap-2 mb-2">
                     <FileText className="w-5 h-5 text-purple-300" />
-                    <h3 className="font-semibold text-purple-300">{isDE ? "Trend 4" : "Trend 4"}</h3>
+                    <h3 className="font-semibold text-purple-300">{pick(isDE, "Trend 4", "Trend 4")}</h3>
                   </div>
                   <p className="text-sm text-purple-200">
-                    {isDE
-                      ? "Low-Score-Stacks nehmen 45 Tage für Fixes vs 12 Tage für High-Score-Stacks."
-                      : "Low-score stacks take 45 days to fix vs 12 days for high-score stacks."}
+                    {pick(isDE, "Low-Score-Stacks nehmen 45 Tage für Fixes vs 12 Tage für High-Score-Stacks.", "Low-score stacks take 45 days to fix vs 12 days for high-score stacks.")}
                   </p>
                 </div>
               </div>
@@ -330,23 +303,23 @@ export default async function ResearchPage({ params }: PageProps) {
 
             {/* Further Resources */}
             <section className="mb-10">
-              <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further resources"}</h2>
+              <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further resources")}</h2>
               <div className="grid md:grid-cols-2 gap-4">
                 <Link href={`/${locale}/roast-statistics`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
-                  <div className="font-semibold text-cyan-400">{isDE ? "Roast Statistics" : "Roast Statistics"}</div>
-                  <div className="text-sm text-gray-300">{isDE ? "Data Insights" : "Data Insights"}</div>
+                  <div className="font-semibold text-cyan-400">{pick(isDE, "Roast Statistics", "Roast Statistics")}</div>
+                  <div className="text-sm text-gray-300">{pick(isDE, "Data Insights", "Data Insights")}</div>
                 </Link>
                 <Link href={`/${locale}/roast-my-moltbot/hall-of-fame`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
-                  <div className="font-semibold text-cyan-400">{isDE ? "Hall of Fame" : "Hall of Fame"}</div>
-                  <div className="text-sm text-gray-300">{isDE ? "Elite Stacks" : "Elite stacks"}</div>
+                  <div className="font-semibold text-cyan-400">{pick(isDE, "Hall of Fame", "Hall of Fame")}</div>
+                  <div className="text-sm text-gray-300">{pick(isDE, "Elite Stacks", "Elite stacks")}</div>
                 </Link>
                 <Link href={`/${locale}/runbooks`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
-                  <div className="font-semibold text-cyan-400">{isDE ? "Runbooks" : "Runbooks"}</div>
-                  <div className="text-sm text-gray-300">{isDE ? "Automated Fixes" : "Automated fixes"}</div>
+                  <div className="font-semibold text-cyan-400">{pick(isDE, "Runbooks", "Runbooks")}</div>
+                  <div className="text-sm text-gray-300">{pick(isDE, "Automated Fixes", "Automated fixes")}</div>
                 </Link>
                 <Link href={`/${locale}/securitycheck`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
-                  <div className="font-semibold text-cyan-400">{isDE ? "Security Check" : "Security Check"}</div>
-                  <div className="text-sm text-gray-300">{isDE ? "Infrastruktur prüfen" : "Check infrastructure"}</div>
+                  <div className="font-semibold text-cyan-400">{pick(isDE, "Security Check", "Security Check")}</div>
+                  <div className="text-sm text-gray-300">{pick(isDE, "Infrastruktur prüfen", "Check infrastructure")}</div>
                 </Link>
               </div>
             </section>

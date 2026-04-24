@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/moltbot/secure-agent-deployment"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "Sichere KI-Agenten-Deployments: Kubernetes, Docker & CI/CD Hardening | ClawGuru"
-    : "Secure AI Agent Deployment: Kubernetes, Docker & CI/CD Hardening | ClawGuru"
-  const description = isDE
-    ? "KI-Agenten sicher deployen: Kubernetes Pod Security Standards, Docker Hardening, CI/CD Security Gates, Image Signing mit Sigstore und Supply-Chain-Verifikation für Moltbot-basierte Agenten."
-    : "Securely deploy AI agents: Kubernetes Pod Security Standards, Docker hardening, CI/CD security gates, image signing with Sigstore and supply chain verification for Moltbot-based agents."
+  const title = pick(isDE, "Sichere KI-Agenten-Deployments: Kubernetes, Docker & CI/CD Hardening | ClawGuru", "Secure AI Agent Deployment: Kubernetes, Docker & CI/CD Hardening | ClawGuru")
+  const description = pick(isDE, "KI-Agenten sicher deployen: Kubernetes Pod Security Standards, Docker Hardening, CI/CD Security Gates, Image Signing mit Sigstore und Supply-Chain-Verifikation für Moltbot-basierte Agenten.", "Securely deploy AI agents: Kubernetes Pod Security Standards, Docker hardening, CI/CD security gates, image signing with Sigstore and supply chain verification for Moltbot-based agents.")
   return {
     title, description,
     keywords: ["secure ai agent deployment", "kubernetes ai agent security", "docker ai agent hardening", "cicd ai security", "sigstore ai agent", "moltbot deployment"],
@@ -157,24 +154,22 @@ export default function SecureAgentDeploymentPage({ params }: { params: { lang: 
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "Deployment-Sicherheitsleitfaden für eigene KI-Systeme." : "Deployment security guide for your own AI systems."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Deployment-Sicherheitsleitfaden für eigene KI-Systeme.", "Deployment security guide for your own AI systems.")}
         </div>
         <div className="mb-3"><span className="text-xs font-bold uppercase tracking-widest text-cyan-400">Moltbot · Batch 8</span></div>
         <h1 className="text-4xl font-bold mb-4 text-gray-100">
-          {isDE ? "Sichere KI-Agenten-Deployments" : "Secure AI Agent Deployment"}
+          {pick(isDE, "Sichere KI-Agenten-Deployments", "Secure AI Agent Deployment")}
         </h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "Ein schlecht konfiguriertes Deployment macht jede Sicherheits-Maßnahme auf Anwendungsebene wertlos. Vier Schutzschichten — Image, Kubernetes, CI/CD, Netzwerk — mit fertigen Konfigurationen."
-            : "A poorly configured deployment makes every application-level security measure worthless. Four protection layers — image, Kubernetes, CI/CD, network — with ready-to-use configurations."}
+          {pick(isDE, "Ein schlecht konfiguriertes Deployment macht jede Sicherheits-Maßnahme auf Anwendungsebene wertlos. Vier Schutzschichten — Image, Kubernetes, CI/CD, Netzwerk — mit fertigen Konfigurationen.", "A poorly configured deployment makes every application-level security measure worthless. Four protection layers — image, Kubernetes, CI/CD, network — with ready-to-use configurations.")}
         </p>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
           {[
-            { value: "4", label: isDE ? "Schutzschichten" : "Protection layers" },
-            { value: "0", label: isDE ? "Shell in Container" : "Shell in container" },
-            { value: "Cosign", label: isDE ? "Image-Signierung" : "Image signing" },
-            { value: "0", label: isDE ? "Root-Prozesse" : "Root processes" },
+            { value: "4", label: pick(isDE, "Schutzschichten", "Protection layers") },
+            { value: "0", label: pick(isDE, "Shell in Container", "Shell in container") },
+            { value: "Cosign", label: pick(isDE, "Image-Signierung", "Image signing") },
+            { value: "0", label: pick(isDE, "Root-Prozesse", "Root processes") },
           ].map((s) => (
             <div key={s.label} className="bg-gray-800 p-4 rounded-lg border border-gray-700 text-center">
               <div className="text-2xl font-black text-cyan-400">{s.value}</div>
@@ -184,7 +179,7 @@ export default function SecureAgentDeploymentPage({ params }: { params: { lang: 
         </div>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "4 Deployment-Sicherheitsschichten" : "4 Deployment Security Layers"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "4 Deployment-Sicherheitsschichten", "4 Deployment Security Layers")}</h2>
           <div className="space-y-6">
             {DEPLOYMENT_LAYERS.map((l) => (
               <div key={l.id} className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
@@ -207,7 +202,7 @@ export default function SecureAgentDeploymentPage({ params }: { params: { lang: 
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-3">
             {FAQ.map((f, i) => (
               <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
@@ -219,23 +214,23 @@ export default function SecureAgentDeploymentPage({ params }: { params: { lang: 
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further Resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further Resources")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/moltbot/zero-trust-ai-agents`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Zero Trust AI Agents</div>
-              <div className="text-sm text-gray-300">{isDE ? "Capability Tokens + mTLS" : "Capability tokens + mTLS"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Capability Tokens + mTLS", "Capability tokens + mTLS")}</div>
             </a>
             <a href={`/${locale}/openclaw/runtime-policy-enforcement`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Runtime Policy Enforcement</div>
-              <div className="text-sm text-gray-300">{isDE ? "OPA + Falco für K8s" : "OPA + Falco for K8s"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "OPA + Falco für K8s", "OPA + Falco for K8s")}</div>
             </a>
             <a href={`/${locale}/openclaw/supply-chain-security`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Supply Chain Security</div>
-              <div className="text-sm text-gray-300">{isDE ? "SBOM + Sigstore" : "SBOM + Sigstore"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "SBOM + Sigstore", "SBOM + Sigstore")}</div>
             </a>
             <a href={`/${locale}/moltbot/ai-agent-sandboxing`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Agent Sandboxing</div>
-              <div className="text-sm text-gray-300">{isDE ? "Container-Isolation für Agenten" : "Container isolation for agents"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Container-Isolation für Agenten", "Container isolation for agents")}</div>
             </a>
           </div>
         </section>

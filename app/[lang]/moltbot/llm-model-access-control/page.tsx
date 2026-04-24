@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/moltbot/llm-model-access-control"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "LLM Model Access Control: LLM-Modell-Zugriffskontrolle | ClawGuru Moltbot"
-    : "LLM Model Access Control: LLM Model Access Control | ClawGuru Moltbot"
-  const description = isDE
-    ? "LLM-Modell-Zugriffskontrolle: Model Allowlisting, Model Permissions, Model Access Auditing und Model Versioning für LLM-Modell-Sicherheit."
-    : "LLM model access control: model allowlisting, model permissions, model access auditing and model versioning for LLM model security."
+  const title = pick(isDE, "LLM Model Access Control: LLM-Modell-Zugriffskontrolle | ClawGuru Moltbot", "LLM Model Access Control: LLM Model Access Control | ClawGuru Moltbot")
+  const description = pick(isDE, "LLM-Modell-Zugriffskontrolle: Model Allowlisting, Model Permissions, Model Access Auditing und Model Versioning für LLM-Modell-Sicherheit.", "LLM model access control: model allowlisting, model permissions, model access auditing and model versioning for LLM model security.")
   return {
     title, description,
     keywords: ["llm model access control", "model allowlisting", "llm model permissions", "model access auditing", "model versioning", "moltbot model control"],
@@ -214,17 +211,15 @@ export default function LlmModelAccessControlPage({ params }: { params: { lang: 
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "Model-Access-Control-Guide für eigene KI-Systeme." : "Model access control guide for your own AI systems."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Model-Access-Control-Guide für eigene KI-Systeme.", "Model access control guide for your own AI systems.")}
         </div>
         <div className="mb-3"><span className="text-xs font-bold uppercase tracking-widest text-cyan-400">Moltbot · Batch 17</span></div>
-        <h1 className="text-4xl font-bold mb-4 text-gray-100">{isDE ? "LLM Model Access Control" : "LLM Model Access Control"}</h1>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">{pick(isDE, "LLM Model Access Control", "LLM Model Access Control")}</h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "LLM-Modelle ohne Zugriffskontrolle können Datenlecks, Kostenexplosionen und Compliance-Verstöße verursachen. Vier Kontrollen: Allowlisting, Permissions, Auditing und Versioning."
-            : "LLM models without access control can cause data leaks, cost explosions, and compliance violations. Four controls: allowlisting, permissions, auditing and versioning."}
+          {pick(isDE, "LLM-Modelle ohne Zugriffskontrolle können Datenlecks, Kostenexplosionen und Compliance-Verstöße verursachen. Vier Kontrollen: Allowlisting, Permissions, Auditing und Versioning.", "LLM models without access control can cause data leaks, cost explosions, and compliance violations. Four controls: allowlisting, permissions, auditing and versioning.")}
         </p>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "4 Model-Access-Control-Kontrollen" : "4 Model Access Control Controls"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "4 Model-Access-Control-Kontrollen", "4 Model Access Control Controls")}</h2>
           <div className="space-y-5">
             {CONTROLS.map((c) => (
               <div key={c.id} className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
@@ -241,7 +236,7 @@ export default function LlmModelAccessControlPage({ params }: { params: { lang: 
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-3">
             {FAQ.map((f, i) => (
               <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
@@ -252,23 +247,23 @@ export default function LlmModelAccessControlPage({ params }: { params: { lang: 
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further Resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further Resources")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/moltbot/ai-agent-rbac`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Agent RBAC</div>
-              <div className="text-sm text-gray-300">{isDE ? "Model-Permissions" : "Model permissions"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Model-Permissions", "Model permissions")}</div>
             </a>
             <a href={`/${locale}/moltbot/llm-api-security`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM API Security</div>
-              <div className="text-sm text-gray-300">{isDE ? "Model-Allowlisting" : "Model allowlisting"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Model-Allowlisting", "Model allowlisting")}</div>
             </a>
             <a href={`/${locale}/moltbot/ai-agent-audit-logging`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Agent Audit Logging</div>
-              <div className="text-sm text-gray-300">{isDE ? "Model-Access-Auditing" : "Model access auditing"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Model-Access-Auditing", "Model access auditing")}</div>
             </a>
             <a href={`/${locale}/moltbot/ai-model-versioning-security`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Model Versioning Security</div>
-              <div className="text-sm text-gray-300">{isDE ? "Model-Versioning" : "Model versioning"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Model-Versioning", "Model versioning")}</div>
             </a>
           </div>
         </section>

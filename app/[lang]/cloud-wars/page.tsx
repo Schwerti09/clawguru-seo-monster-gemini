@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
 import { Cloud, DollarSign, Zap, Shield, TrendingUp } from "lucide-react"
+import { pick } from "@/lib/i18n-pick"
 
 interface PageProps { params: { lang: string } }
 
@@ -10,10 +11,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const pageUrl = `${SITE_URL}/${locale}/cloud-wars`
   const isDE = locale === "de"
-  const title = isDE ? "Cloud Wars | ClawGuru" : "Cloud Wars | ClawGuru"
-  const description = isDE 
-    ? "AWS vs GCP vs Azure — Der ultimative Cloud-Vergleich" 
-    : "AWS vs GCP vs Azure — The ultimate cloud comparison"
+  const title = pick(isDE, "Cloud Wars | ClawGuru", "Cloud Wars | ClawGuru")
+  const description = pick(isDE, "AWS vs GCP vs Azure — Der ultimative Cloud-Vergleich", "AWS vs GCP vs Azure — The ultimate cloud comparison")
   return {
     title,
     description,
@@ -71,12 +70,10 @@ export default function CloudWarsPage({ params }: PageProps) {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-4 text-gray-100">
-            {isDE ? "Cloud Wars" : "Cloud Wars"}
+            {pick(isDE, "Cloud Wars", "Cloud Wars")}
           </h1>
           <p className="text-lg text-gray-300">
-            {isDE 
-              ? "AWS vs GCP vs Azure — Der ultimative Cloud-Vergleich" 
-              : "AWS vs GCP vs Azure — The ultimate cloud comparison"}
+            {pick(isDE, "AWS vs GCP vs Azure — Der ultimative Cloud-Vergleich", "AWS vs GCP vs Azure — The ultimate cloud comparison")}
           </p>
         </div>
 
@@ -85,12 +82,12 @@ export default function CloudWarsPage({ params }: PageProps) {
           <table className="w-full">
             <thead>
               <tr className="border-b border-gray-700">
-                <th className="text-left text-gray-400 py-3 px-4">{isDE ? "Provider" : "Provider"}</th>
-                <th className="text-center text-gray-400 py-3 px-4">{isDE ? "Score" : "Score"}</th>
-                <th className="text-center text-gray-400 py-3 px-4">{isDE ? "Marktanteil" : "Market Share"}</th>
-                <th className="text-center text-gray-400 py-3 px-4">{isDE ? "Kosten" : "Cost"}</th>
-                <th className="text-center text-gray-400 py-3 px-4">{isDE ? "Performance" : "Performance"}</th>
-                <th className="text-center text-gray-400 py-3 px-4">{isDE ? "Sicherheit" : "Security"}</th>
+                <th className="text-left text-gray-400 py-3 px-4">{pick(isDE, "Provider", "Provider")}</th>
+                <th className="text-center text-gray-400 py-3 px-4">{pick(isDE, "Score", "Score")}</th>
+                <th className="text-center text-gray-400 py-3 px-4">{pick(isDE, "Marktanteil", "Market Share")}</th>
+                <th className="text-center text-gray-400 py-3 px-4">{pick(isDE, "Kosten", "Cost")}</th>
+                <th className="text-center text-gray-400 py-3 px-4">{pick(isDE, "Performance", "Performance")}</th>
+                <th className="text-center text-gray-400 py-3 px-4">{pick(isDE, "Sicherheit", "Security")}</th>
               </tr>
             </thead>
             <tbody>
@@ -151,7 +148,7 @@ export default function CloudWarsPage({ params }: PageProps) {
               </div>
 
               <div className="mb-4">
-                <div className="text-sm text-zinc-500 mb-2">{isDE ? "Stärken" : "Strengths"}</div>
+                <div className="text-sm text-zinc-500 mb-2">{pick(isDE, "Stärken", "Strengths")}</div>
                 <div className="space-y-1">
                   {provider.strengths.map((strength, index) => (
                     <div key={index} className="flex items-start gap-2 text-sm text-green-400">
@@ -163,7 +160,7 @@ export default function CloudWarsPage({ params }: PageProps) {
               </div>
 
               <div>
-                <div className="text-sm text-zinc-500 mb-2">{isDE ? "Schwächen" : "Weaknesses"}</div>
+                <div className="text-sm text-zinc-500 mb-2">{pick(isDE, "Schwächen", "Weaknesses")}</div>
                 <div className="space-y-1">
                   {provider.weaknesses.map((weakness, index) => (
                     <div key={index} className="flex items-start gap-2 text-sm text-red-400">
@@ -183,10 +180,10 @@ export default function CloudWarsPage({ params }: PageProps) {
             <TrendingUp className="w-8 h-8 text-cyan-400" />
             <div>
               <div className="text-sm text-zinc-500 mb-1">
-                {isDE ? "Gewinner" : "Winner"}
+                {pick(isDE, "Gewinner", "Winner")}
               </div>
               <div className="text-xl font-bold text-gray-100">
-                AWS — {isDE ? "Beste Balance aus Ökosystem und Reife" : "Best balance of ecosystem and maturity"}
+                AWS — {pick(isDE, "Beste Balance aus Ökosystem und Reife", "Best balance of ecosystem and maturity")}
               </div>
             </div>
           </div>
@@ -194,9 +191,7 @@ export default function CloudWarsPage({ params }: PageProps) {
 
         {/* Trust Notice */}
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mt-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE 
-            ? "Cloud Wars sind subjektive Bewertungen basierend auf öffentlichen Daten." 
-            : "Cloud wars are subjective ratings based on public data."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Cloud Wars sind subjektive Bewertungen basierend auf öffentlichen Daten.", "Cloud wars are subjective ratings based on public data.")}
         </div>
       </div>
     </div>

@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/openclaw/supply-chain-sbom-security"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "Supply Chain SBOM Security: Software Supply Chain SBOM Security | ClawGuru OpenClaw"
-    : "Supply Chain SBOM Security: Software Supply Chain SBOM Security | ClawGuru OpenClaw"
-  const description = isDE
-    ? "Supply Chain SBOM Security: SBOM Generation, Vulnerability Scanning, License Compliance und Dependency Pinning für Software Supply Chain. Executable Runbooks für Self-Hosted Infrastruktur."
-    : "Supply chain SBOM security: SBOM generation, vulnerability scanning, license compliance and dependency pinning for software supply chain. Executable runbooks for self-hosted infrastructure."
+  const title = pick(isDE, "Supply Chain SBOM Security: Software Supply Chain SBOM Security | ClawGuru OpenClaw", "Supply Chain SBOM Security: Software Supply Chain SBOM Security | ClawGuru OpenClaw")
+  const description = pick(isDE, "Supply Chain SBOM Security: SBOM Generation, Vulnerability Scanning, License Compliance und Dependency Pinning für Software Supply Chain. Executable Runbooks für Self-Hosted Infrastruktur.", "Supply chain SBOM security: SBOM generation, vulnerability scanning, license compliance and dependency pinning for software supply chain. Executable runbooks for self-hosted infrastructure.")
   return {
     title, description,
     keywords: ["supply chain sbom security", "sbom generation", "vulnerability scanning", "license compliance", "dependency pinning", "openclaw supply chain"],
@@ -165,17 +162,15 @@ export default function SupplyChainSbomSecurityPage({ params }: { params: { lang
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "Supply-Chain-SBOM-Security-Guide für eigene Infrastruktur." : "Supply chain SBOM security guide for your own infrastructure."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Supply-Chain-SBOM-Security-Guide für eigene Infrastruktur.", "Supply chain SBOM security guide for your own infrastructure.")}
         </div>
         <div className="mb-3"><span className="text-xs font-bold uppercase tracking-widest text-cyan-400">OpenClaw · Batch 8</span></div>
-        <h1 className="text-4xl font-bold mb-4 text-gray-100">{isDE ? "Supply Chain SBOM Security" : "Supply Chain SBOM Security"}</h1>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">{pick(isDE, "Supply Chain SBOM Security", "Supply Chain SBOM Security")}</h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "SBOM Generation, Vulnerability Scanning, License Compliance und Dependency Pinning für Software Supply Chain."
-            : "SBOM generation, vulnerability scanning, license compliance and dependency pinning for software supply chain."}
+          {pick(isDE, "SBOM Generation, Vulnerability Scanning, License Compliance und Dependency Pinning für Software Supply Chain.", "SBOM generation, vulnerability scanning, license compliance and dependency pinning for software supply chain.")}
         </p>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "4 Supply-Chain-Security-Kontrollen" : "4 Supply Chain Security Controls"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "4 Supply-Chain-Security-Kontrollen", "4 Supply Chain Security Controls")}</h2>
           <div className="space-y-5">
             {CONTROLS.map((c) => (
               <div key={c.id} className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
@@ -192,7 +187,7 @@ export default function SupplyChainSbomSecurityPage({ params }: { params: { lang
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-3">
             {FAQ.map((f, i) => (
               <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
@@ -203,23 +198,23 @@ export default function SupplyChainSbomSecurityPage({ params }: { params: { lang
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further Resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further Resources")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/openclaw/supply-chain-sbom-security`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">OpenClaw Supply Chain Security</div>
-              <div className="text-sm text-gray-300">{isDE ? "Supply-Chain-Overview" : "Supply chain overview"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Supply-Chain-Overview", "Supply chain overview")}</div>
             </a>
             <a href={`/${locale}/openclaw/openclaw-security-2026`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">OpenClaw Security 2026</div>
-              <div className="text-sm text-gray-300">{isDE ? "OpenClaw-Framework" : "OpenClaw framework"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "OpenClaw-Framework", "OpenClaw framework")}</div>
             </a>
             <a href={`/${locale}/openclaw`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">All OpenClaw</div>
-              <div className="text-sm text-gray-300">{isDE ? "OpenClaw-Übersicht" : "OpenClaw overview"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "OpenClaw-Übersicht", "OpenClaw overview")}</div>
             </a>
             <a href={`/${locale}/check`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Security Check</div>
-              <div className="text-sm text-gray-300">{isDE ? "Live-Check" : "Live check"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Live-Check", "Live check")}</div>
             </a>
           </div>
         </section>

@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
 import { Video, Calendar, Users, Clock, Play } from "lucide-react"
+import { pick } from "@/lib/i18n-pick"
 
 interface PageProps { params: { lang: string } }
 
@@ -10,10 +11,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const pageUrl = `${SITE_URL}/${locale}/ama/live`
   const isDE = locale === "de"
-  const title = isDE ? "Roast Me Live — AMA Series | ClawGuru" : "Roast Me Live — AMA Series | ClawGuru"
-  const description = isDE 
-    ? "Live-Roast Sessions — Roast deinen Stack in Echtzeit" 
-    : "Live roast sessions — Roast your stack in real-time"
+  const title = pick(isDE, "Roast Me Live — AMA Series | ClawGuru", "Roast Me Live — AMA Series | ClawGuru")
+  const description = pick(isDE, "Live-Roast Sessions — Roast deinen Stack in Echtzeit", "Live roast sessions — Roast your stack in real-time")
   return {
     title,
     description,
@@ -76,13 +75,11 @@ export default function AMALivePage({ params }: PageProps) {
           <div className="flex items-center gap-3 mb-4">
             <Video className="w-8 h-8 text-red-400" />
             <h1 className="text-4xl font-bold text-gray-100">
-              {isDE ? "Roast Me Live" : "Roast Me Live"}
+              {pick(isDE, "Roast Me Live", "Roast Me Live")}
             </h1>
           </div>
           <p className="text-lg text-gray-300">
-            {isDE 
-              ? "Live-Roast Sessions — Roast deinen Stack in Echtzeit" 
-              : "Live roast sessions — Roast your stack in real-time"}
+            {pick(isDE, "Live-Roast Sessions — Roast deinen Stack in Echtzeit", "Live roast sessions — Roast your stack in real-time")}
           </p>
         </div>
 
@@ -95,13 +92,13 @@ export default function AMALivePage({ params }: PageProps) {
                 <div>
                   <div className="font-semibold text-gray-100 mb-1">{session.title}</div>
                   <div className="text-sm text-zinc-500">
-                    {session.host} {isDE ? "mit" : "with"} {session.guest}
+                    {session.host} {pick(isDE, "mit", "with")} {session.guest}
                   </div>
                 </div>
                 <span className={`px-3 py-1 rounded-full text-xs font-bold ${
                   session.status === "upcoming" ? "bg-green-900/50 text-green-400" : "bg-gray-700 text-zinc-400"
                 }`}>
-                  {session.status === "upcoming" ? isDE ? "Bevorstehend" : "Upcoming" : isDE ? "Abgeschlossen" : "Completed"}
+                  {session.status === "upcoming" ? pick(isDE, "Bevorstehend", "Upcoming") : pick(isDE, "Abgeschlossen", "Completed")}
                 </span>
               </div>
 
@@ -122,7 +119,7 @@ export default function AMALivePage({ params }: PageProps) {
                 </div>
                 <div className="flex items-center gap-2">
                   <Users className="w-4 h-4" />
-                  <span>{session.attendees} {isDE ? "Teilnehmer" : "attendees"}</span>
+                  <span>{session.attendees} {pick(isDE, "Teilnehmer", "attendees")}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Clock className="w-4 h-4" />
@@ -134,12 +131,12 @@ export default function AMALivePage({ params }: PageProps) {
               {session.status === "upcoming" ? (
                 <button className="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-500 rounded-lg text-sm font-medium text-white transition-colors">
                   <Play className="w-4 h-4" />
-                  {isDE ? "Registrieren" : "Register"}
+                  {pick(isDE, "Registrieren", "Register")}
                 </button>
               ) : (
                 <button className="flex items-center gap-2 px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg text-sm font-medium text-gray-300 transition-colors">
                   <Play className="w-4 h-4" />
-                  {isDE ? "Ansehen" : "Watch"}
+                  {pick(isDE, "Ansehen", "Watch")}
                 </button>
               )}
             </div>
@@ -154,23 +151,21 @@ export default function AMALivePage({ params }: PageProps) {
             </div>
             <div className="flex-1">
               <div className="text-sm text-zinc-500 mb-1">
-                {isDE ? "Nächste Session" : "Next session"}
+                {pick(isDE, "Nächste Session", "Next session")}
               </div>
               <div className="text-xl font-bold text-gray-100">
-                {isDE ? "Roast My Kubernetes Cluster — 20. April 2025" : "Roast My Kubernetes Cluster — April 20, 2025"}
+                {pick(isDE, "Roast My Kubernetes Cluster — 20. April 2025", "Roast My Kubernetes Cluster — April 20, 2025")}
               </div>
             </div>
             <button className="px-4 py-2 bg-red-600 hover:bg-red-500 rounded-lg text-sm font-medium text-white transition-colors">
-              {isDE ? "Jetzt registrieren" : "Register now"}
+              {pick(isDE, "Jetzt registrieren", "Register now")}
             </button>
           </div>
         </div>
 
         {/* Trust Notice */}
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mt-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE 
-            ? "AMA Sessions sind zum Härten eigener Systeme. Keine Angriffstools." 
-            : "AMA sessions are for hardening your own systems. No attack tools."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "AMA Sessions sind zum Härten eigener Systeme. Keine Angriffstools.", "AMA sessions are for hardening your own systems. No attack tools.")}
         </div>
       </div>
     </div>

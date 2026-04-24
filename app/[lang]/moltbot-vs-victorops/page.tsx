@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
 import { SITE_URL } from '@/lib/config'
+import { pick } from "@/lib/i18n-pick"
 
 export async function generateStaticParams() {
   return SUPPORTED_LOCALES.map((lang) => ({ lang }))
@@ -11,12 +12,8 @@ export async function generateMetadata({ params }: { params: { lang: string } })
   const { lang } = params
   const locale = (SUPPORTED_LOCALES.includes(lang as Locale) ? lang : 'de') as Locale
   const isDE = locale === 'de'
-  const title = isDE
-    ? 'Moltbot vs VictorOps (Splunk On-Call): Incident Response Vergleich 2026'
-    : 'Moltbot vs VictorOps (Splunk On-Call): Incident Response Comparison 2026'
-  const description = isDE
-    ? 'Moltbot vs VictorOps 2026. VictorOps (Splunk On-Call) ist eine Alerting & On-Call-Management-Plattform. Moltbot bietet Executable Runbooks, automatisierte Incident-Response und DSGVO-konformes Self-Hosting.'
-    : 'Moltbot vs VictorOps 2026. VictorOps (Splunk On-Call) is an alerting & on-call management platform. Moltbot provides executable runbooks, automated incident response and GDPR-compliant self-hosting.'
+  const title = pick(isDE, 'Moltbot vs VictorOps (Splunk On-Call): Incident Response Vergleich 2026', 'Moltbot vs VictorOps (Splunk On-Call): Incident Response Comparison 2026')
+  const description = pick(isDE, 'Moltbot vs VictorOps 2026. VictorOps (Splunk On-Call) ist eine Alerting & On-Call-Management-Plattform. Moltbot bietet Executable Runbooks, automatisierte Incident-Response und DSGVO-konformes Self-Hosting.', 'Moltbot vs VictorOps 2026. VictorOps (Splunk On-Call) is an alerting & on-call management platform. Moltbot provides executable runbooks, automated incident response and GDPR-compliant self-hosting.')
   return {
     title,
     description,
@@ -47,30 +44,24 @@ export default function MoltbotVsVictorOpsPage({ params }: { params: { lang: str
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">&quot;Not a Pentest&quot; {isDE ? 'Hinweis' : 'Notice'}</strong>
-          {isDE
-            ? ': Dieser Guide hilft dir, das richtige Incident-Response-Tool zu wählen. Kein Angriffs-Tool.'
-            : ': This guide helps you choose the right incident response tool. No attack tools.'}
+          <strong className="text-amber-100">&quot;Not a Pentest&quot; {pick(isDE, 'Hinweis', 'Notice')}</strong>
+          {pick(isDE, ': Dieser Guide hilft dir, das richtige Incident-Response-Tool zu wählen. Kein Angriffs-Tool.', ': This guide helps you choose the right incident response tool. No attack tools.')}
         </div>
 
         <h1 className="text-4xl font-bold mb-4 text-gray-100">
-          {isDE
-            ? 'Moltbot vs VictorOps (Splunk On-Call): Incident Response Vergleich'
-            : 'Moltbot vs VictorOps (Splunk On-Call): Incident Response Comparison'}
+          {pick(isDE, 'Moltbot vs VictorOps (Splunk On-Call): Incident Response Vergleich', 'Moltbot vs VictorOps (Splunk On-Call): Incident Response Comparison')}
         </h1>
         <p className="text-lg text-gray-300 mb-8">
-          {isDE
-            ? 'VictorOps (heute: Splunk On-Call) ist eine On-Call-Management- und Alert-Routing-Plattform für DevOps-Teams. Moltbot (Teil der ClawGuru-Plattform) ergänzt mit Executable Security-Runbooks, automatisierter Incident-Response und einem integrierten Security-Dashboard — mit DSGVO-konformem Self-Hosting.'
-            : 'VictorOps (now Splunk On-Call) is an on-call management and alert routing platform for DevOps teams. Moltbot (part of the ClawGuru platform) adds executable security runbooks, automated incident response and an integrated security dashboard — with GDPR-compliant self-hosting.'}
+          {pick(isDE, 'VictorOps (heute: Splunk On-Call) ist eine On-Call-Management- und Alert-Routing-Plattform für DevOps-Teams. Moltbot (Teil der ClawGuru-Plattform) ergänzt mit Executable Security-Runbooks, automatisierter Incident-Response und einem integrierten Security-Dashboard — mit DSGVO-konformem Self-Hosting.', 'VictorOps (now Splunk On-Call) is an on-call management and alert routing platform for DevOps teams. Moltbot (part of the ClawGuru platform) adds executable security runbooks, automated incident response and an integrated security dashboard — with GDPR-compliant self-hosting.')}
         </p>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? '⚔️ Direkter Vergleich' : '⚔️ Head-to-Head Comparison'}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, '⚔️ Direkter Vergleich', '⚔️ Head-to-Head Comparison')}</h2>
           <div className="overflow-x-auto">
             <table className="min-w-full bg-gray-900 border border-gray-700 rounded-lg">
               <thead className="bg-gray-800">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{isDE ? 'Kriterium' : 'Criterion'}</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{pick(isDE, 'Kriterium', 'Criterion')}</th>
                   <th className="px-6 py-3 text-center text-xs font-medium text-gray-400 uppercase">🤖 Moltbot</th>
                   <th className="px-6 py-3 text-center text-xs font-medium text-gray-400 uppercase">📟 VictorOps</th>
                 </tr>
@@ -115,10 +106,10 @@ export default function MoltbotVsVictorOpsPage({ params }: { params: { lang: str
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? '🏆 Wann welches Tool?' : '🏆 Which tool when?'}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, '🏆 Wann welches Tool?', '🏆 Which tool when?')}</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-green-900 border border-green-700 p-5 rounded-lg">
-              <h3 className="font-bold text-green-300 mb-3">🤖 {isDE ? 'Moltbot ist die Wahl wenn...' : 'Moltbot is the choice when...'}</h3>
+              <h3 className="font-bold text-green-300 mb-3">🤖 {pick(isDE, 'Moltbot ist die Wahl wenn...', 'Moltbot is the choice when...')}</h3>
               <ul className="space-y-1.5 text-sm text-green-200">
                 {(isDE ? [
                   'Security-fokussierte Incident-Response gebraucht wird',
@@ -136,7 +127,7 @@ export default function MoltbotVsVictorOpsPage({ params }: { params: { lang: str
               </ul>
             </div>
             <div className="bg-blue-900 border border-blue-700 p-5 rounded-lg">
-              <h3 className="font-bold text-blue-300 mb-3">📟 {isDE ? 'VictorOps ist die Wahl wenn...' : 'VictorOps is the choice when...'}</h3>
+              <h3 className="font-bold text-blue-300 mb-3">📟 {pick(isDE, 'VictorOps ist die Wahl wenn...', 'VictorOps is the choice when...')}</h3>
               <ul className="space-y-1.5 text-sm text-blue-200">
                 {(isDE ? [
                   'Splunk bereits im Einsatz ist (natives Ökosystem)',
@@ -157,15 +148,15 @@ export default function MoltbotVsVictorOpsPage({ params }: { params: { lang: str
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? '🔗 Weiterführende Links' : '🔗 Further Resources'}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, '🔗 Weiterführende Links', '🔗 Further Resources')}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${lang}/moltbot/incident-response-automation`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
-              <div className="font-semibold text-cyan-400">🚨 {isDE ? 'Incident Response' : 'Incident Response'}</div>
-              <div className="text-sm text-gray-300">{isDE ? 'IR + Playbooks Runbook' : 'IR + Playbooks Runbook'}</div>
+              <div className="font-semibold text-cyan-400">🚨 {pick(isDE, 'Incident Response', 'Incident Response')}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, 'IR + Playbooks Runbook', 'IR + Playbooks Runbook')}</div>
             </a>
             <a href={`/${lang}/moltbot/security-automation-workflows`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
-              <div className="font-semibold text-cyan-400">⚡ {isDE ? 'Security Automation' : 'Security Automation'}</div>
-              <div className="text-sm text-gray-300">{isDE ? 'Webhooks & Automation' : 'Webhooks & Automation'}</div>
+              <div className="font-semibold text-cyan-400">⚡ {pick(isDE, 'Security Automation', 'Security Automation')}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, 'Webhooks & Automation', 'Webhooks & Automation')}</div>
             </a>
           </div>
         </section>

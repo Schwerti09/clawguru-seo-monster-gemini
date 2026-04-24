@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react"
 import { motion, useReducedMotion } from "framer-motion"
 import { useI18n } from "@/components/i18n/I18nProvider"
 import { STATS } from "@/lib/stats"
+import { pick } from "@/lib/i18n-pick"
 
 type LivePayload = {
   updatedAt: string
@@ -99,15 +100,15 @@ export default function OpsWall() {
       const nf = new Intl.NumberFormat(locale, { maximumFractionDigits: 1 })
       if (TOTAL_COUNT >= 1_000_000_000) {
         const v = TOTAL_COUNT / 1_000_000_000
-        return `${nf.format(v)}${isDE ? " Mrd" : "B"}+`
+        return `${nf.format(v)}${pick(isDE, " Mrd", "B")}+`
       }
       if (TOTAL_COUNT >= 1_000_000) {
         const v = TOTAL_COUNT / 1_000_000
-        return `${nf.format(v)}${isDE ? " Mio" : "M"}+`
+        return `${nf.format(v)}${pick(isDE, " Mio", "M")}+`
       }
       if (TOTAL_COUNT >= 1_000) {
         const v = TOTAL_COUNT / 1_000
-        return `${nf.format(v)}${isDE ? " Tsd" : "K"}+`
+        return `${nf.format(v)}${pick(isDE, " Tsd", "K")}+`
       }
       return new Intl.NumberFormat(locale).format(TOTAL_COUNT)
     } catch {

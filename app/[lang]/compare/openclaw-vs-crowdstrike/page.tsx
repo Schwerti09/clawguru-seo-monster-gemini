@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/compare/openclaw-vs-crowdstrike"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "OpenClaw vs CrowdStrike: Security-Vergleich 2026 | ClawGuru"
-    : "OpenClaw vs CrowdStrike: Security Comparison 2026 | ClawGuru"
-  const description = isDE
-    ? "OpenClaw vs CrowdStrike im Security-Vergleich: Self-Hosted vs Cloud EDR, DSGVO-Compliance, Kosten, Threat Detection und Incident Response 2026 direkt verglichen."
-    : "OpenClaw vs CrowdStrike security comparison: self-hosted vs cloud EDR, GDPR compliance, cost, threat detection and incident response compared 2026."
+  const title = pick(isDE, "OpenClaw vs CrowdStrike: Security-Vergleich 2026 | ClawGuru", "OpenClaw vs CrowdStrike: Security Comparison 2026 | ClawGuru")
+  const description = pick(isDE, "OpenClaw vs CrowdStrike im Security-Vergleich: Self-Hosted vs Cloud EDR, DSGVO-Compliance, Kosten, Threat Detection und Incident Response 2026 direkt verglichen.", "OpenClaw vs CrowdStrike security comparison: self-hosted vs cloud EDR, GDPR compliance, cost, threat detection and incident response compared 2026.")
   return {
     title, description,
     keywords: ["openclaw vs crowdstrike", "crowdstrike alternative self-hosted", "crowdstrike gdpr", "crowdstrike vs openclaw", "edr self-hosted 2026"],
@@ -99,17 +96,15 @@ export default function OpenclawVsCrowdstrikePage({ params }: { params: { lang: 
         </div>
 
         <h1 className="text-4xl font-bold mb-4 text-gray-100">
-          {isDE ? "OpenClaw vs CrowdStrike: Security-Vergleich 2026" : "OpenClaw vs CrowdStrike: Security Comparison 2026"}
+          {pick(isDE, "OpenClaw vs CrowdStrike: Security-Vergleich 2026", "OpenClaw vs CrowdStrike: Security Comparison 2026")}
         </h1>
         <p className="text-lg text-gray-300 mb-10">
-          {isDE
-            ? "CrowdStrike Falcon ist die führende Cloud-EDR-Plattform. OpenClaw ist das Self-Hosted-Security-Framework für Infrastruktur-Hardening. Beide schützen, aber auf fundamental unterschiedliche Weise — und mit sehr unterschiedlichen DSGVO-Implikationen."
-            : "CrowdStrike Falcon is the leading cloud EDR platform. OpenClaw is the self-hosted security framework for infrastructure hardening. Both protect, but in fundamentally different ways — with very different GDPR implications."}
+          {pick(isDE, "CrowdStrike Falcon ist die führende Cloud-EDR-Plattform. OpenClaw ist das Self-Hosted-Security-Framework für Infrastruktur-Hardening. Beide schützen, aber auf fundamental unterschiedliche Weise — und mit sehr unterschiedlichen DSGVO-Implikationen.", "CrowdStrike Falcon is the leading cloud EDR platform. OpenClaw is the self-hosted security framework for infrastructure hardening. Both protect, but in fundamentally different ways — with very different GDPR implications.")}
         </p>
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">
-            {isDE ? "Direkt-Vergleich" : "Head-to-Head Comparison"}
+            {pick(isDE, "Direkt-Vergleich", "Head-to-Head Comparison")}
           </h2>
           <div className="overflow-x-auto">
             <table className="min-w-full bg-gray-900 border border-gray-700 rounded-lg">
@@ -143,7 +138,7 @@ export default function OpenclawVsCrowdstrikePage({ params }: { params: { lang: 
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">
-            {isDE ? "Wann welches Tool wählen?" : "When to Choose Which?"}
+            {pick(isDE, "Wann welches Tool wählen?", "When to Choose Which?")}
           </h2>
           <div className="grid sm:grid-cols-2 gap-6">
             <div className="bg-green-900 p-5 rounded-lg border border-green-700">
@@ -171,7 +166,7 @@ export default function OpenclawVsCrowdstrikePage({ params }: { params: { lang: 
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">
-            {isDE ? "Häufige Fragen" : "Frequently Asked Questions"}
+            {pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}
           </h2>
           <div className="space-y-4">
             {FAQ.map((entry, i) => (
@@ -188,39 +183,37 @@ export default function OpenclawVsCrowdstrikePage({ params }: { params: { lang: 
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">
-            {isDE ? "Weiterführende Ressourcen" : "Further Resources"}
+            {pick(isDE, "Weiterführende Ressourcen", "Further Resources")}
           </h2>
           <div className="grid sm:grid-cols-2 gap-4">
             <a href={`/${locale}/openclaw/intrusion-detection-setup`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Intrusion Detection Setup</div>
-              <div className="text-sm text-gray-300">{isDE ? "OpenClaw IDS Konfiguration" : "OpenClaw IDS configuration guide"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "OpenClaw IDS Konfiguration", "OpenClaw IDS configuration guide")}</div>
             </a>
             <a href={`/${locale}/openclaw/server-hardening-checklist`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Server Hardening Checklist</div>
-              <div className="text-sm text-gray-300">{isDE ? "Server-Absicherung Schritt für Schritt" : "Step-by-step server hardening"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Server-Absicherung Schritt für Schritt", "Step-by-step server hardening")}</div>
             </a>
             <a href={`/${locale}/compare/openclaw-vs-aquasec`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">OpenClaw vs Aqua Security</div>
-              <div className="text-sm text-gray-300">{isDE ? "Container Security Vergleich" : "Container security comparison"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Container Security Vergleich", "Container security comparison")}</div>
             </a>
             <a href={`/${locale}/securitycheck`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
-              <div className="font-semibold text-cyan-400">{isDE ? "Security Check starten" : "Start Security Check"}</div>
-              <div className="text-sm text-gray-300">{isDE ? "Infrastruktur in 30 Sekunden prüfen" : "Check infrastructure in 30 seconds"}</div>
+              <div className="font-semibold text-cyan-400">{pick(isDE, "Security Check starten", "Start Security Check")}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Infrastruktur in 30 Sekunden prüfen", "Check infrastructure in 30 seconds")}</div>
             </a>
           </div>
         </section>
 
         <div className="bg-cyan-900 border border-cyan-700 rounded-lg p-6 text-center">
           <h2 className="text-xl font-bold text-cyan-300 mb-2">
-            {isDE ? "OpenClaw für deine Infrastruktur evaluieren?" : "Evaluate OpenClaw for your infrastructure?"}
+            {pick(isDE, "OpenClaw für deine Infrastruktur evaluieren?", "Evaluate OpenClaw for your infrastructure?")}
           </h2>
           <p className="text-gray-300 mb-4 text-sm">
-            {isDE
-              ? "ClawGuru analysiert deine Infrastruktur und zeigt konkrete Härtungsmaßnahmen — ohne Cloud-Telemetrie."
-              : "ClawGuru analyzes your infrastructure and shows concrete hardening measures — without cloud telemetry."}
+            {pick(isDE, "ClawGuru analysiert deine Infrastruktur und zeigt konkrete Härtungsmaßnahmen — ohne Cloud-Telemetrie.", "ClawGuru analyzes your infrastructure and shows concrete hardening measures — without cloud telemetry.")}
           </p>
           <a href={`/${locale}/securitycheck`} className="inline-block bg-cyan-500 hover:bg-cyan-400 text-black font-bold px-6 py-3 rounded-lg transition-colors">
-            {isDE ? "🛡️ Kostenloser Security Check" : "🛡️ Free Security Check"}
+            {pick(isDE, "🛡️ Kostenloser Security Check", "🛡️ Free Security Check")}
           </a>
         </div>
       </div>

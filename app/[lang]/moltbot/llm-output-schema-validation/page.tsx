@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/moltbot/llm-output-schema-validation"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "LLM Output Schema Validation: Strukturierte Ausgaben absichern 2026 | ClawGuru"
-    : "LLM Output Schema Validation: Securing Structured Outputs 2026 | ClawGuru"
-  const description = isDE
-    ? "LLM-Ausgaben mit Schema-Validierung absichern: JSON Schema, Pydantic, PII-Detection und Moltbot-Output-Pipeline für sichere strukturierte AI-Ausgaben 2026."
-    : "Secure LLM outputs with schema validation: JSON Schema, Pydantic, PII detection and Moltbot output pipeline for safe structured AI outputs 2026."
+  const title = pick(isDE, "LLM Output Schema Validation: Strukturierte Ausgaben absichern 2026 | ClawGuru", "LLM Output Schema Validation: Securing Structured Outputs 2026 | ClawGuru")
+  const description = pick(isDE, "LLM-Ausgaben mit Schema-Validierung absichern: JSON Schema, Pydantic, PII-Detection und Moltbot-Output-Pipeline für sichere strukturierte AI-Ausgaben 2026.", "Secure LLM outputs with schema validation: JSON Schema, Pydantic, PII detection and Moltbot output pipeline for safe structured AI outputs 2026.")
   return {
     title, description,
     keywords: ["llm output schema validation", "structured llm output security", "llm json schema", "llm output validation moltbot", "ai output security 2026"],
@@ -160,12 +157,10 @@ export default function LlmOutputSchemaValidationPage({ params }: { params: { la
           <strong className="text-amber-100">"Not a Pentest" Notice</strong>: This guide is for securing your own LLM output pipelines. No attack tools.
         </div>
         <h1 className="text-4xl font-bold mb-4 text-gray-100">
-          {isDE ? "LLM Output Schema Validation: Strukturierte Ausgaben absichern 2026" : "LLM Output Schema Validation: Securing Structured Outputs 2026"}
+          {pick(isDE, "LLM Output Schema Validation: Strukturierte Ausgaben absichern 2026", "LLM Output Schema Validation: Securing Structured Outputs 2026")}
         </h1>
         <p className="text-lg text-gray-300 mb-10">
-          {isDE
-            ? "LLM-Ausgaben sind untrusted Input für alle downstream-Systeme. Ohne Schema-Validierung können prompt-injizierte Ausgaben Datenbanken korrumpieren, APIs missbrauchen oder PII leaken."
-            : "LLM outputs are untrusted input for all downstream systems. Without schema validation, prompt-injected outputs can corrupt databases, abuse APIs, or leak PII."}
+          {pick(isDE, "LLM-Ausgaben sind untrusted Input für alle downstream-Systeme. Ohne Schema-Validierung können prompt-injizierte Ausgaben Datenbanken korrumpieren, APIs missbrauchen oder PII leaken.", "LLM outputs are untrusted input for all downstream systems. Without schema validation, prompt-injected outputs can corrupt databases, abuse APIs, or leak PII.")}
         </p>
         {STEPS.map((step) => (
           <section key={step.num} className="mb-8">
@@ -182,7 +177,7 @@ export default function LlmOutputSchemaValidationPage({ params }: { params: { la
           </section>
         ))}
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-4">
             {FAQ.map((entry, i) => (
               <details key={i} className="bg-gray-800 rounded-lg border border-gray-700">
@@ -193,35 +188,35 @@ export default function LlmOutputSchemaValidationPage({ params }: { params: { la
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further Resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further Resources")}</h2>
           <div className="grid sm:grid-cols-2 gap-4">
             <a href={`/${locale}/moltbot/llm-output-validation`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM Output Validation</div>
-              <div className="text-sm text-gray-300">{isDE ? "Grundlagen der Output-Validierung" : "Output validation fundamentals"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Grundlagen der Output-Validierung", "Output validation fundamentals")}</div>
             </a>
             <a href={`/${locale}/moltbot/llm-prompt-hardening-advanced`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Advanced Prompt Hardening</div>
-              <div className="text-sm text-gray-300">{isDE ? "Multi-Layer Eingabe-Absicherung" : "Multi-layer input protection"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Multi-Layer Eingabe-Absicherung", "Multi-layer input protection")}</div>
             </a>
             <a href={`/${locale}/moltbot/ai-agent-permission-minimization`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Permission Minimization</div>
-              <div className="text-sm text-gray-300">{isDE ? "Least Privilege für Agenten" : "Least privilege for AI agents"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Least Privilege für Agenten", "Least privilege for AI agents")}</div>
             </a>
             <a href={`/${locale}/securitycheck`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
-              <div className="font-semibold text-cyan-400">{isDE ? "Security Check starten" : "Start Security Check"}</div>
-              <div className="text-sm text-gray-300">{isDE ? "LLM-Pipeline in 30s prüfen" : "Audit LLM pipeline in 30s"}</div>
+              <div className="font-semibold text-cyan-400">{pick(isDE, "Security Check starten", "Start Security Check")}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "LLM-Pipeline in 30s prüfen", "Audit LLM pipeline in 30s")}</div>
             </a>
           </div>
         </section>
         <div className="bg-cyan-900 border border-cyan-700 rounded-lg p-6 text-center">
           <h2 className="text-xl font-bold text-cyan-300 mb-2">
-            {isDE ? "LLM-Ausgaben automatisch validieren?" : "Validate LLM outputs automatically?"}
+            {pick(isDE, "LLM-Ausgaben automatisch validieren?", "Validate LLM outputs automatically?")}
           </h2>
           <p className="text-gray-300 mb-4 text-sm">
-            {isDE ? "Moltbot erzwingt Schema-Validierung und PII-Redaktion für alle LLM-Ausgaben — konfigurierbar, auditierbar." : "Moltbot enforces schema validation and PII redaction for all LLM outputs — configurable, auditable."}
+            {pick(isDE, "Moltbot erzwingt Schema-Validierung und PII-Redaktion für alle LLM-Ausgaben — konfigurierbar, auditierbar.", "Moltbot enforces schema validation and PII redaction for all LLM outputs — configurable, auditable.")}
           </p>
           <a href={`/${locale}/securitycheck`} className="inline-block bg-cyan-500 hover:bg-cyan-400 text-black font-bold px-6 py-3 rounded-lg transition-colors">
-            {isDE ? "🛡️ Kostenloser Security Check" : "🛡️ Free Security Check"}
+            {pick(isDE, "🛡️ Kostenloser Security Check", "🛡️ Free Security Check")}
           </a>
         </div>
       </div>

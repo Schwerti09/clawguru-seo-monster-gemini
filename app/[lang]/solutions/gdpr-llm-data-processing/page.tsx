@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/solutions/gdpr-llm-data-processing"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "DSGVO für LLMs: GDPR-konforme Datenverarbeitung mit KI 2026 | ClawGuru Solutions"
-    : "GDPR LLM Data Processing: GDPR-Compliant AI Data Processing 2026 | ClawGuru Solutions"
-  const description = isDE
-    ? "DSGVO-konforme Datenverarbeitung mit LLMs und KI-Systemen: Rechtsgrundlagen, Datenschutz by Design, Betroffenenrechte, AI-spezifische DSGVO-Pflichten und Audit-Trail 2026."
-    : "GDPR-compliant data processing with LLMs and AI systems: legal bases, privacy by design, data subject rights, AI-specific GDPR obligations and audit trail 2026."
+  const title = pick(isDE, "DSGVO für LLMs: GDPR-konforme Datenverarbeitung mit KI 2026 | ClawGuru Solutions", "GDPR LLM Data Processing: GDPR-Compliant AI Data Processing 2026 | ClawGuru Solutions")
+  const description = pick(isDE, "DSGVO-konforme Datenverarbeitung mit LLMs und KI-Systemen: Rechtsgrundlagen, Datenschutz by Design, Betroffenenrechte, AI-spezifische DSGVO-Pflichten und Audit-Trail 2026.", "GDPR-compliant data processing with LLMs and AI systems: legal bases, privacy by design, data subject rights, AI-specific GDPR obligations and audit trail 2026.")
   return {
     title, description,
     keywords: ["gdpr llm", "dsgvo ki", "gdpr ai data processing", "llm dsgvo compliance", "gdpr large language model", "ai gdpr 2026"],
@@ -161,12 +158,10 @@ export default function GdprLlmDataProcessingPage({ params }: { params: { lang: 
         </div>
 
         <h1 className="text-4xl font-bold mb-4 text-gray-100">
-          {isDE ? "DSGVO-konforme Datenverarbeitung mit LLMs 2026" : "GDPR-Compliant LLM Data Processing 2026"}
+          {pick(isDE, "DSGVO-konforme Datenverarbeitung mit LLMs 2026", "GDPR-Compliant LLM Data Processing 2026")}
         </h1>
         <p className="text-lg text-gray-300 mb-10">
-          {isDE
-            ? "LLMs verarbeiten Nutzereingaben, generieren Ausgaben und speichern Konversationshistorien — all das ist Datenverarbeitung im Sinne der DSGVO. Dieser Guide zeigt, welche DSGVO-Pflichten für KI-Systeme gelten und wie du sie systematisch erfüllst."
-            : "LLMs process user inputs, generate outputs, and store conversation histories — all of which constitute data processing under GDPR. This guide covers which GDPR obligations apply to AI systems and how to meet them systematically."}
+          {pick(isDE, "LLMs verarbeiten Nutzereingaben, generieren Ausgaben und speichern Konversationshistorien — all das ist Datenverarbeitung im Sinne der DSGVO. Dieser Guide zeigt, welche DSGVO-Pflichten für KI-Systeme gelten und wie du sie systematisch erfüllst.", "LLMs process user inputs, generate outputs, and store conversation histories — all of which constitute data processing under GDPR. This guide covers which GDPR obligations apply to AI systems and how to meet them systematically.")}
         </p>
 
         {ARTICLES.map((article) => {
@@ -193,7 +188,7 @@ export default function GdprLlmDataProcessingPage({ params }: { params: { lang: 
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">
-            {isDE ? "Häufige Fragen" : "Frequently Asked Questions"}
+            {pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}
           </h2>
           <div className="space-y-4">
             {FAQ.map((entry, i) => (
@@ -210,39 +205,37 @@ export default function GdprLlmDataProcessingPage({ params }: { params: { lang: 
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">
-            {isDE ? "Weiterführende Ressourcen" : "Further Resources"}
+            {pick(isDE, "Weiterführende Ressourcen", "Further Resources")}
           </h2>
           <div className="grid sm:grid-cols-2 gap-4">
             <a href={`/${locale}/solutions/gdpr-ai-data-processing`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">GDPR AI Data Processing</div>
-              <div className="text-sm text-gray-300">{isDE ? "Allgemeine DSGVO-Compliance für KI" : "General GDPR compliance for AI"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Allgemeine DSGVO-Compliance für KI", "General GDPR compliance for AI")}</div>
             </a>
             <a href={`/${locale}/solutions/eu-ai-act-compliance`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">EU AI Act Compliance</div>
-              <div className="text-sm text-gray-300">{isDE ? "EU AI Act Anforderungen 2026" : "EU AI Act requirements 2026"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "EU AI Act Anforderungen 2026", "EU AI Act requirements 2026")}</div>
             </a>
             <a href={`/${locale}/moltbot/llm-privacy-preserving-computation`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Privacy-Preserving LLM Computation</div>
-              <div className="text-sm text-gray-300">{isDE ? "Datenschutzkonforme LLM-Verarbeitung" : "Privacy-safe LLM computation techniques"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Datenschutzkonforme LLM-Verarbeitung", "Privacy-safe LLM computation techniques")}</div>
             </a>
             <a href={`/${locale}/check`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
-              <div className="font-semibold text-cyan-400">{isDE ? "Security Check starten" : "Start Security Check"}</div>
-              <div className="text-sm text-gray-300">{isDE ? "DSGVO-Lücken in deiner KI-Infrastruktur finden" : "Find GDPR gaps in your AI infrastructure"}</div>
+              <div className="font-semibold text-cyan-400">{pick(isDE, "Security Check starten", "Start Security Check")}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "DSGVO-Lücken in deiner KI-Infrastruktur finden", "Find GDPR gaps in your AI infrastructure")}</div>
             </a>
           </div>
         </section>
 
         <div className="bg-cyan-900 border border-cyan-700 rounded-lg p-6 text-center">
           <h2 className="text-xl font-bold text-cyan-300 mb-2">
-            {isDE ? "DSGVO-Compliance für deine KI automatisieren?" : "Automate GDPR compliance for your AI?"}
+            {pick(isDE, "DSGVO-Compliance für deine KI automatisieren?", "Automate GDPR compliance for your AI?")}
           </h2>
           <p className="text-gray-300 mb-4 text-sm">
-            {isDE
-              ? "ClawGuru analysiert deine LLM-Infrastruktur und erstellt einen DSGVO-Compliance-Runbook für dein Setup."
-              : "ClawGuru analyzes your LLM infrastructure and generates a GDPR compliance runbook for your setup."}
+            {pick(isDE, "ClawGuru analysiert deine LLM-Infrastruktur und erstellt einen DSGVO-Compliance-Runbook für dein Setup.", "ClawGuru analyzes your LLM infrastructure and generates a GDPR compliance runbook for your setup.")}
           </p>
           <a href={`/${locale}/check`} className="inline-block bg-cyan-500 hover:bg-cyan-400 text-black font-bold px-6 py-3 rounded-lg transition-colors">
-            {isDE ? "🛡️ Kostenloser Security Check" : "🛡️ Free Security Check"}
+            {pick(isDE, "🛡️ Kostenloser Security Check", "🛡️ Free Security Check")}
           </a>
         </div>
       </div>

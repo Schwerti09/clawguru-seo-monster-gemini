@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
 import { Calendar, Trophy, Users, TrendingUp, Flame, Loader2 } from "lucide-react"
+import { pick } from "@/lib/i18n-pick"
 
 interface PageProps { params: { lang: string } }
 
@@ -15,12 +16,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const pageUrl = `${SITE_URL}/${locale}${PATH}`
   const isDE = locale === "de"
-  const title = isDE
-    ? "Weekly Moltbot Roast: Score Sprint & Fixes | ClawGuru"
-    : "Weekly Moltbot Roast: Score Sprint & Fixes | ClawGuru"
-  const description = isDE
-    ? "Der woechentliche Moltbot Roast: Score sprinten, Fixes sammeln, neue Badge sichern und Share-Report posten."
-    : "The weekly Moltbot roast: sprint your score, capture fixes, secure a new badge, and share the report."
+  const title = pick(isDE, "Weekly Moltbot Roast: Score Sprint & Fixes | ClawGuru", "Weekly Moltbot Roast: Score Sprint & Fixes | ClawGuru")
+  const description = pick(isDE, "Der woechentliche Moltbot Roast: Score sprinten, Fixes sammeln, neue Badge sichern und Share-Report posten.", "The weekly Moltbot roast: sprint your score, capture fixes, secure a new badge, and share the report.")
   return {
     title,
     description,
@@ -87,29 +84,25 @@ export default async function WeeklyRoastPage({ params }: PageProps) {
         </div>
 
         <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-4 text-gray-100">{isDE ? "Weekly Moltbot Roast" : "Weekly Moltbot Roast"}</h1>
+          <h1 className="text-4xl font-bold mb-4 text-gray-100">{pick(isDE, "Weekly Moltbot Roast", "Weekly Moltbot Roast")}</h1>
           <p className="text-lg text-gray-300 mb-2">
-            {isDE
-              ? "Jede Woche ein Score-Sprint. 30 Minuten Fixes, neue Badge, neuer Shareable Report."
-              : "A weekly score sprint. 30 minutes of fixes, a new badge, and a shareable report."}
+            {pick(isDE, "Jede Woche ein Score-Sprint. 30 Minuten Fixes, neue Badge, neuer Shareable Report.", "A weekly score sprint. 30 minutes of fixes, a new badge, and a shareable report.")}
           </p>
-          <p className="text-sm text-amber-400 font-medium">{isDE ? "→ Diese Woche noch 3 Tage zum Mitmachen" : "→ 3 days left to join this week"}</p>
+          <p className="text-sm text-amber-400 font-medium">{pick(isDE, "→ Diese Woche noch 3 Tage zum Mitmachen", "→ 3 days left to join this week")}</p>
         </div>
 
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE
-            ? "Dieser Leitfaden dient zur Haertung Ihrer eigenen Systeme. Keine Angriffstools."
-            : "This guide is for hardening your own systems. No attack tools."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Dieser Leitfaden dient zur Haertung Ihrer eigenen Systeme. Keine Angriffstools.", "This guide is for hardening your own systems. No attack tools.")}
         </div>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weekly Sprint Format" : "Weekly sprint format"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weekly Sprint Format", "Weekly sprint format")}</h2>
           <div className="space-y-4">
             {[
-              [isDE ? "Montag: Roast" : "Monday: Roast", isDE ? "Score + Findings in 2 Minuten." : "Score + findings in 2 minutes."],
-              [isDE ? "Dienstag: Fix" : "Tuesday: Fix", isDE ? "Top 3 Findings mit Runbooks beheben." : "Fix top 3 findings with runbooks."],
-              [isDE ? "Mittwoch: Re-Check" : "Wednesday: Re-check", isDE ? "Score neu ziehen, Badge sichern." : "Re-check score and secure the badge."],
-              [isDE ? "Freitag: Share" : "Friday: Share", isDE ? "Report posten, Team challengen." : "Post the report and challenge the team."],
+              [pick(isDE, "Montag: Roast", "Monday: Roast"), pick(isDE, "Score + Findings in 2 Minuten.", "Score + findings in 2 minutes.")],
+              [pick(isDE, "Dienstag: Fix", "Tuesday: Fix"), pick(isDE, "Top 3 Findings mit Runbooks beheben.", "Fix top 3 findings with runbooks.")],
+              [pick(isDE, "Mittwoch: Re-Check", "Wednesday: Re-check"), pick(isDE, "Score neu ziehen, Badge sichern.", "Re-check score and secure the badge.")],
+              [pick(isDE, "Freitag: Share", "Friday: Share"), pick(isDE, "Report posten, Team challengen.", "Post the report and challenge the team.")],
             ].map(([t, d]) => (
               <div key={t as string} className="bg-gray-800 p-6 rounded-lg border border-gray-700">
                 <h3 className="font-bold text-cyan-400 mb-2">{t}</h3>
@@ -120,13 +113,13 @@ export default async function WeeklyRoastPage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Score Sprint Checklist" : "Score sprint checklist"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Score Sprint Checklist", "Score sprint checklist")}</h2>
           <div className="space-y-6">
             {[
-              [1, isDE ? "Secrets rotieren" : "Rotate secrets", isDE ? "Alles mit hoher Exposure austauschen." : "Replace everything with high exposure."],
-              [2, isDE ? "Egress blocken" : "Block egress", isDE ? "Nur allowlisted Endpoints zulassen." : "Allow only allowlisted endpoints."],
-              [3, isDE ? "mTLS aktivieren" : "Enable mTLS", isDE ? "Agent-to-agent Traffic absichern." : "Secure agent-to-agent traffic."],
-              [4, isDE ? "RBAC minimal" : "RBAC minimal", isDE ? "Agentenrechte auf Minimum setzen." : "Set agent permissions to minimum."],
+              [1, pick(isDE, "Secrets rotieren", "Rotate secrets"), pick(isDE, "Alles mit hoher Exposure austauschen.", "Replace everything with high exposure.")],
+              [2, pick(isDE, "Egress blocken", "Block egress"), pick(isDE, "Nur allowlisted Endpoints zulassen.", "Allow only allowlisted endpoints.")],
+              [3, pick(isDE, "mTLS aktivieren", "Enable mTLS"), pick(isDE, "Agent-to-agent Traffic absichern.", "Secure agent-to-agent traffic.")],
+              [4, pick(isDE, "RBAC minimal", "RBAC minimal"), pick(isDE, "Agentenrechte auf Minimum setzen.", "Set agent permissions to minimum.")],
             ].map(([n, t, d]) => (
               <div key={n as number} className="flex items-start space-x-4">
                 <div className="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold flex-shrink-0">{n}</div>
@@ -140,38 +133,36 @@ export default async function WeeklyRoastPage({ params }: PageProps) {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Team Challenge" : "Team challenge"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Team Challenge", "Team challenge")}</h2>
           <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
-            <h3 className="font-semibold text-cyan-400 mb-2">{isDE ? "Wer gewinnt die Woche?" : "Who wins the week?"}</h3>
+            <h3 className="font-semibold text-cyan-400 mb-2">{pick(isDE, "Wer gewinnt die Woche?", "Who wins the week?")}</h3>
             <p className="text-sm text-gray-300 mb-4">
-              {isDE
-                ? "Teilt die besten Score-Spruenge im Team-Channel. Verlierer hostet den naechsten Fix-Call."
-                : "Share the best score jumps in your team channel. Loser hosts the next fix call."}
+              {pick(isDE, "Teilt die besten Score-Spruenge im Team-Channel. Verlierer hostet den naechsten Fix-Call.", "Share the best score jumps in your team channel. Loser hosts the next fix call.")}
             </p>
             <div className="bg-gray-900 p-4 rounded-lg border border-gray-700">
-              <div className="text-sm text-gray-300">{isDE ? "Beispiel: 42 -> 77 in 1 Woche" : "Example: 42 -> 77 in 1 week"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Beispiel: 42 -> 77 in 1 Woche", "Example: 42 -> 77 in 1 week")}</div>
             </div>
           </div>
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterfuehrende Ressourcen" : "Further resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterfuehrende Ressourcen", "Further resources")}</h2>
           <div className="grid md:grid-cols-2 gap-4">
             <a href={`/${locale}/roast-my-moltbot/shareable-roast-report`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Shareable Roast Report</div>
-              <div className="text-sm text-gray-300">{isDE ? "Report exportieren" : "Export your report"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Report exportieren", "Export your report")}</div>
             </a>
             <a href={`/${locale}/roast-my-moltbot/fix-in-30-min`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Fix in 30 Minutes</div>
-              <div className="text-sm text-gray-300">{isDE ? "Sofort-Playbook" : "Immediate playbook"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Sofort-Playbook", "Immediate playbook")}</div>
             </a>
             <a href={`/${locale}/roast-my-moltbot`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Roast My Moltbot</div>
-              <div className="text-sm text-gray-300">{isDE ? "Roast starten" : "Start the roast"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Roast starten", "Start the roast")}</div>
             </a>
             <a href={`/${locale}/runbooks`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Runbooks</div>
-              <div className="text-sm text-gray-300">{isDE ? "Fixes automatisieren" : "Automate fixes"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Fixes automatisieren", "Automate fixes")}</div>
             </a>
           </div>
         </section>

@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/compare/moltbot-vs-bedrock-agents"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "Moltbot vs AWS Bedrock Agents: Vergleich | ClawGuru Compare"
-    : "Moltbot vs AWS Bedrock Agents: Comparison | ClawGuru Compare"
-  const description = isDE
-    ? "Moltbot vs AWS Bedrock Agents: Self-Hosted vs Cloud. Deployment, Security, Compliance, Pricing und Control vergleichen. Executable Runbooks für Self-Hosted AI-Agenten."
-    : "Moltbot vs AWS Bedrock Agents: Self-Hosted vs Cloud. Compare deployment, security, compliance, pricing and control. Executable runbooks for self-hosted AI agents."
+  const title = pick(isDE, "Moltbot vs AWS Bedrock Agents: Vergleich | ClawGuru Compare", "Moltbot vs AWS Bedrock Agents: Comparison | ClawGuru Compare")
+  const description = pick(isDE, "Moltbot vs AWS Bedrock Agents: Self-Hosted vs Cloud. Deployment, Security, Compliance, Pricing und Control vergleichen. Executable Runbooks für Self-Hosted AI-Agenten.", "Moltbot vs AWS Bedrock Agents: Self-Hosted vs Cloud. Compare deployment, security, compliance, pricing and control. Executable runbooks for self-hosted AI agents.")
   return {
     title, description,
     keywords: ["moltbot vs bedrock agents", "self-hosted ai agents", "aws bedrock agents", "ai agent comparison", "moltbot security", "bedrock pricing"],
@@ -65,22 +62,20 @@ export default function MoltbotVsBedrockAgentsPage({ params }: { params: { lang:
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "Vergleich für eigene Architekturentscheidung." : "Comparison for your own architecture decision."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Vergleich für eigene Architekturentscheidung.", "Comparison for your own architecture decision.")}
         </div>
         <div className="mb-3"><span className="text-xs font-bold uppercase tracking-widest text-cyan-400">Compare · Batch 15</span></div>
-        <h1 className="text-4xl font-bold mb-4 text-gray-100">{isDE ? "Moltbot vs AWS Bedrock Agents" : "Moltbot vs AWS Bedrock Agents"}</h1>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">{pick(isDE, "Moltbot vs AWS Bedrock Agents", "Moltbot vs AWS Bedrock Agents")}</h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "Self-Hosted vs Cloud: Deployment, Security, Compliance, Pricing und Control vergleichen."
-            : "Self-Hosted vs Cloud: Compare deployment, security, compliance, pricing and control."}
+          {pick(isDE, "Self-Hosted vs Cloud: Deployment, Security, Compliance, Pricing und Control vergleichen.", "Self-Hosted vs Cloud: Compare deployment, security, compliance, pricing and control.")}
         </p>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Vergleichstabelle" : "Comparison Table"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Vergleichstabelle", "Comparison Table")}</h2>
           <div className="bg-gray-900 border border-gray-700 rounded-lg overflow-x-auto">
             <table className="min-w-full">
               <thead className="bg-gray-800">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{isDE ? "Kategorie" : "Category"}</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">{pick(isDE, "Kategorie", "Category")}</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Moltbot</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Bedrock Agents</th>
                 </tr>
@@ -98,7 +93,7 @@ export default function MoltbotVsBedrockAgentsPage({ params }: { params: { lang:
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-3">
             {FAQ.map((f, i) => (
               <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
@@ -109,23 +104,23 @@ export default function MoltbotVsBedrockAgentsPage({ params }: { params: { lang:
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further Resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further Resources")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/moltbot/ai-agent-security`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Agent Security</div>
-              <div className="text-sm text-gray-300">{isDE ? "Moltbot-Security" : "Moltbot security"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Moltbot-Security", "Moltbot security")}</div>
             </a>
             <a href={`/${locale}/solutions/soc2-ai-systems`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">SOC 2 for AI Systems</div>
-              <div className="text-sm text-gray-300">{isDE ? "Compliance" : "Compliance"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Compliance", "Compliance")}</div>
             </a>
             <a href={`/${locale}/compare`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">All Comparisons</div>
-              <div className="text-sm text-gray-300">{isDE ? "Compare-Übersicht" : "Compare overview"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Compare-Übersicht", "Compare overview")}</div>
             </a>
             <a href={`/${locale}/check`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Security Check</div>
-              <div className="text-sm text-gray-300">{isDE ? "Live-Check" : "Live check"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Live-Check", "Live check")}</div>
             </a>
           </div>
         </section>

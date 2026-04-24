@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/moltbot/llm-context-isolation"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "LLM Context Isolation: Kontext-Trennung für sichere KI-Agenten | ClawGuru"
-    : "LLM Context Isolation: Context Separation for Secure AI Agents | ClawGuru"
-  const description = isDE
-    ? "LLM-Kontextisolierung verhindert Context Leakage, User-Cross-Contamination und Kontext-Manipulation. Conversation Isolation, Tenant Separation, Context Window Hardening für Moltbot-Agenten."
-    : "LLM context isolation prevents context leakage, user cross-contamination and context manipulation. Conversation isolation, tenant separation, context window hardening for Moltbot agents."
+  const title = pick(isDE, "LLM Context Isolation: Kontext-Trennung für sichere KI-Agenten | ClawGuru", "LLM Context Isolation: Context Separation for Secure AI Agents | ClawGuru")
+  const description = pick(isDE, "LLM-Kontextisolierung verhindert Context Leakage, User-Cross-Contamination und Kontext-Manipulation. Conversation Isolation, Tenant Separation, Context Window Hardening für Moltbot-Agenten.", "LLM context isolation prevents context leakage, user cross-contamination and context manipulation. Conversation isolation, tenant separation, context window hardening for Moltbot agents.")
   return {
     title, description,
     keywords: ["llm context isolation", "llm context security", "conversation isolation", "context leakage prevention", "multi-tenant llm security", "moltbot context"],
@@ -152,24 +149,22 @@ export default function LlmContextIsolationPage({ params }: { params: { lang: st
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "Kontext-Isolierungs-Guide für eigene LLM-Systeme." : "Context isolation guide for your own LLM systems."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Kontext-Isolierungs-Guide für eigene LLM-Systeme.", "Context isolation guide for your own LLM systems.")}
         </div>
         <div className="mb-3"><span className="text-xs font-bold uppercase tracking-widest text-cyan-400">Moltbot · Batch 9</span></div>
         <h1 className="text-4xl font-bold mb-4 text-gray-100">
-          {isDE ? "LLM Context Isolation" : "LLM Context Isolation"}
+          {pick(isDE, "LLM Context Isolation", "LLM Context Isolation")}
         </h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "Das Context Window ist der kritischste Sicherheitsbereich eines LLM-Systems. Context Leakage zwischen Nutzern, Indirect Prompt Injection via RAG, Tenant Cross-Contamination — vier Isolation-Controls mit fertigen Konfigurationen."
-            : "The context window is the most critical security area of an LLM system. Context leakage between users, indirect prompt injection via RAG, tenant cross-contamination — four isolation controls with ready configurations."}
+          {pick(isDE, "Das Context Window ist der kritischste Sicherheitsbereich eines LLM-Systems. Context Leakage zwischen Nutzern, Indirect Prompt Injection via RAG, Tenant Cross-Contamination — vier Isolation-Controls mit fertigen Konfigurationen.", "The context window is the most critical security area of an LLM system. Context leakage between users, indirect prompt injection via RAG, tenant cross-contamination — four isolation controls with ready configurations.")}
         </p>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
           {[
-            { value: "AES-256", label: isDE ? "Kontext-Verschlüsselung" : "Context encryption" },
-            { value: "Per-User", label: isDE ? "Key Isolation" : "Key isolation" },
-            { value: "1h", label: isDE ? "Standard TTL" : "Default TTL" },
-            { value: "RLS", label: isDE ? "DB Row-Level Security" : "DB row-level security" },
+            { value: "AES-256", label: pick(isDE, "Kontext-Verschlüsselung", "Context encryption") },
+            { value: "Per-User", label: pick(isDE, "Key Isolation", "Key isolation") },
+            { value: "1h", label: pick(isDE, "Standard TTL", "Default TTL") },
+            { value: "RLS", label: pick(isDE, "DB Row-Level Security", "DB row-level security") },
           ].map((s) => (
             <div key={s.label} className="bg-gray-800 p-4 rounded-lg border border-gray-700 text-center">
               <div className="text-2xl font-black text-cyan-400">{s.value}</div>
@@ -179,7 +174,7 @@ export default function LlmContextIsolationPage({ params }: { params: { lang: st
         </div>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "4 Context Isolation Controls" : "4 Context Isolation Controls"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "4 Context Isolation Controls", "4 Context Isolation Controls")}</h2>
           <div className="space-y-5">
             {ISOLATION_CONTROLS.map((c) => (
               <div key={c.id} className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
@@ -197,7 +192,7 @@ export default function LlmContextIsolationPage({ params }: { params: { lang: st
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-3">
             {FAQ.map((f, i) => (
               <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
@@ -209,23 +204,23 @@ export default function LlmContextIsolationPage({ params }: { params: { lang: st
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further Resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further Resources")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/moltbot/agent-memory-security`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Agent Memory Security</div>
-              <div className="text-sm text-gray-300">{isDE ? "Langzeit-Speicher absichern" : "Secure long-term memory"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Langzeit-Speicher absichern", "Secure long-term memory")}</div>
             </a>
             <a href={`/${locale}/moltbot/agentic-rag-security`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Agentic RAG Security</div>
-              <div className="text-sm text-gray-300">{isDE ? "RAG-Injection verhindern" : "Prevent RAG injection"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "RAG-Injection verhindern", "Prevent RAG injection")}</div>
             </a>
             <a href={`/${locale}/moltbot/llm-prompt-hardening`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM Prompt Hardening</div>
-              <div className="text-sm text-gray-300">{isDE ? "System-Prompt-Schutz" : "System prompt protection"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "System-Prompt-Schutz", "System prompt protection")}</div>
             </a>
             <a href={`/${locale}/solutions/hipaa-ai-systems`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">HIPAA AI Systems</div>
-              <div className="text-sm text-gray-300">{isDE ? "PHI-Isolation in LLMs" : "PHI isolation in LLMs"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "PHI-Isolation in LLMs", "PHI isolation in LLMs")}</div>
             </a>
           </div>
         </section>

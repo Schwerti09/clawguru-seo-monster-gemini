@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/moltbot/llm-jailbreak-defense"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "LLM Jailbreak Defense: KI-Sicherheitsgrenzen durchsetzen | ClawGuru Moltbot"
-    : "LLM Jailbreak Defense: Enforce AI Safety Boundaries | ClawGuru Moltbot"
-  const description = isDE
-    ? "LLM-Jailbreak-Schutz für Moltbot: Jailbreak-Erkennung, Rollenspiel-Exploits abwehren, Instruction-Hierarchy enforzen und Safety-Classifier als letzte Verteidigungslinie."
-    : "LLM jailbreak protection for Moltbot: jailbreak detection, roleplay exploit defense, instruction hierarchy enforcement and safety classifier as last line of defense."
+  const title = pick(isDE, "LLM Jailbreak Defense: KI-Sicherheitsgrenzen durchsetzen | ClawGuru Moltbot", "LLM Jailbreak Defense: Enforce AI Safety Boundaries | ClawGuru Moltbot")
+  const description = pick(isDE, "LLM-Jailbreak-Schutz für Moltbot: Jailbreak-Erkennung, Rollenspiel-Exploits abwehren, Instruction-Hierarchy enforzen und Safety-Classifier als letzte Verteidigungslinie.", "LLM jailbreak protection for Moltbot: jailbreak detection, roleplay exploit defense, instruction hierarchy enforcement and safety classifier as last line of defense.")
   return {
     title, description,
     keywords: ["llm jailbreak defense", "jailbreak protection ai", "llm safety enforcement", "prompt injection defense", "ai safety classifier", "moltbot jailbreak"],
@@ -217,17 +214,15 @@ export default function LlmJailbreakDefensePage({ params }: { params: { lang: st
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "Jailbreak-Defense-Guide für eigene KI-Systeme." : "Jailbreak defense guide for your own AI systems."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Jailbreak-Defense-Guide für eigene KI-Systeme.", "Jailbreak defense guide for your own AI systems.")}
         </div>
         <div className="mb-3"><span className="text-xs font-bold uppercase tracking-widest text-cyan-400">Moltbot · Batch 12</span></div>
-        <h1 className="text-4xl font-bold mb-4 text-gray-100">{isDE ? "LLM Jailbreak Defense" : "LLM Jailbreak Defense"}</h1>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">{pick(isDE, "LLM Jailbreak Defense", "LLM Jailbreak Defense")}</h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "Jailbreaks umgehen Sicherheitsgrenzen von LLMs — mit Rollenspiel, Kodierung oder Instruction-Override-Tricks. Vier Verteidigungsschichten: Pattern-Erkennung, Instruction-Hierarchy, Output-Classifier und adaptives Monitoring."
-            : "Jailbreaks bypass LLM safety boundaries — via roleplay, encoding or instruction override tricks. Four defense layers: pattern detection, instruction hierarchy, output classifier and adaptive monitoring."}
+          {pick(isDE, "Jailbreaks umgehen Sicherheitsgrenzen von LLMs — mit Rollenspiel, Kodierung oder Instruction-Override-Tricks. Vier Verteidigungsschichten: Pattern-Erkennung, Instruction-Hierarchy, Output-Classifier und adaptives Monitoring.", "Jailbreaks bypass LLM safety boundaries — via roleplay, encoding or instruction override tricks. Four defense layers: pattern detection, instruction hierarchy, output classifier and adaptive monitoring.")}
         </p>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "4 Jailbreak-Defense-Schichten" : "4 Jailbreak Defense Layers"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "4 Jailbreak-Defense-Schichten", "4 Jailbreak Defense Layers")}</h2>
           <div className="space-y-5">
             {DEFENSE_LAYERS.map((c) => (
               <div key={c.id} className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
@@ -244,7 +239,7 @@ export default function LlmJailbreakDefensePage({ params }: { params: { lang: st
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-3">
             {FAQ.map((f, i) => (
               <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
@@ -255,23 +250,23 @@ export default function LlmJailbreakDefensePage({ params }: { params: { lang: st
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further Resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further Resources")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/moltbot/llm-prompt-hardening`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM Prompt Hardening</div>
-              <div className="text-sm text-gray-300">{isDE ? "System-Prompt-Härtung" : "System prompt hardening"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "System-Prompt-Härtung", "System prompt hardening")}</div>
             </a>
             <a href={`/${locale}/moltbot/llm-output-validation`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM Output Validation</div>
-              <div className="text-sm text-gray-300">{isDE ? "Output-Safety-Classifier" : "Output safety classifier"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Output-Safety-Classifier", "Output safety classifier")}</div>
             </a>
             <a href={`/${locale}/moltbot/ai-data-loss-prevention`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Data Loss Prevention</div>
-              <div className="text-sm text-gray-300">{isDE ? "Exfiltrations-Erkennung" : "Exfiltration detection"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Exfiltrations-Erkennung", "Exfiltration detection")}</div>
             </a>
             <a href={`/${locale}/moltbot/agentic-workflow-security`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Agentic Workflow Security</div>
-              <div className="text-sm text-gray-300">{isDE ? "HITL nach Jailbreak-Versuch" : "HITL after jailbreak attempt"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "HITL nach Jailbreak-Versuch", "HITL after jailbreak attempt")}</div>
             </a>
           </div>
         </section>

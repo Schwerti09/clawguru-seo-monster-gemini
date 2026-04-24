@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/moltbot/llm-model-extraction-defense"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "LLM Model Extraction Defense: LLM-Modell-Extraction-Defense | ClawGuru Moltbot"
-    : "LLM Model Extraction Defense: LLM Model Extraction Defense | ClawGuru Moltbot"
-  const description = isDE
-    ? "LLM-Modell-Extraction-Defense: Query Rate Limiting, Output Truncation, Watermark Detection und Model Access Control für LLM-Modell-Extraction-Defense."
-    : "LLM model extraction defense: query rate limiting, output truncation, watermark detection and model access control for LLM model extraction defense."
+  const title = pick(isDE, "LLM Model Extraction Defense: LLM-Modell-Extraction-Defense | ClawGuru Moltbot", "LLM Model Extraction Defense: LLM Model Extraction Defense | ClawGuru Moltbot")
+  const description = pick(isDE, "LLM-Modell-Extraction-Defense: Query Rate Limiting, Output Truncation, Watermark Detection und Model Access Control für LLM-Modell-Extraction-Defense.", "LLM model extraction defense: query rate limiting, output truncation, watermark detection and model access control for LLM model extraction defense.")
   return {
     title, description,
     keywords: ["llm model extraction defense", "query rate limiting", "output truncation", "watermark detection", "model access control", "moltbot extraction"],
@@ -163,17 +160,15 @@ export default function LlmModelExtractionDefensePage({ params }: { params: { la
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "Model-Extraction-Defense-Guide für eigene KI-Systeme." : "Model extraction defense guide for your own AI systems."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Model-Extraction-Defense-Guide für eigene KI-Systeme.", "Model extraction defense guide for your own AI systems.")}
         </div>
         <div className="mb-3"><span className="text-xs font-bold uppercase tracking-widest text-cyan-400">Moltbot · Batch 22</span></div>
-        <h1 className="text-4xl font-bold mb-4 text-gray-100">{isDE ? "LLM Model Extraction Defense" : "LLM Model Extraction Defense"}</h1>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">{pick(isDE, "LLM Model Extraction Defense", "LLM Model Extraction Defense")}</h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "LLM-Modelle ohne Extraction-Defense können extrahiert werden — ohne Extraction-Defense bleiben Modellparameter ungeschützt. Vier Kontrollen: Query Rate Limiting, Output Truncation, Watermark Detection und Model Access Control."
-            : "LLM models without extraction defense can be extracted — without extraction defense, model parameters remain unprotected. Four controls: query rate limiting, output truncation, watermark detection and model access control."}
+          {pick(isDE, "LLM-Modelle ohne Extraction-Defense können extrahiert werden — ohne Extraction-Defense bleiben Modellparameter ungeschützt. Vier Kontrollen: Query Rate Limiting, Output Truncation, Watermark Detection und Model Access Control.", "LLM models without extraction defense can be extracted — without extraction defense, model parameters remain unprotected. Four controls: query rate limiting, output truncation, watermark detection and model access control.")}
         </p>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "4 Model-Extraction-Defense-Kontrollen" : "4 Model Extraction Defense Controls"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "4 Model-Extraction-Defense-Kontrollen", "4 Model Extraction Defense Controls")}</h2>
           <div className="space-y-5">
             {CONTROLS.map((c) => (
               <div key={c.id} className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
@@ -190,7 +185,7 @@ export default function LlmModelExtractionDefensePage({ params }: { params: { la
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-3">
             {FAQ.map((f, i) => (
               <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
@@ -201,23 +196,23 @@ export default function LlmModelExtractionDefensePage({ params }: { params: { la
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further Resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further Resources")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/moltbot/llm-model-watermarking`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM Model Watermarking</div>
-              <div className="text-sm text-gray-300">{isDE ? "Watermarking" : "Watermarking"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Watermarking", "Watermarking")}</div>
             </a>
             <a href={`/${locale}/moltbot/llm-api-security`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM API Security</div>
-              <div className="text-sm text-gray-300">{isDE ? "API-Security" : "API security"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "API-Security", "API security")}</div>
             </a>
             <a href={`/${locale}/moltbot/llm-secure-inference`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM Secure Inference</div>
-              <div className="text-sm text-gray-300">{isDE ? "Confidential-Computing" : "Confidential computing"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Confidential-Computing", "Confidential computing")}</div>
             </a>
             <a href={`/${locale}/moltbot/ai-agent-security`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Agent Security</div>
-              <div className="text-sm text-gray-300">{isDE ? "Extraction-Overview" : "Extraction overview"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Extraction-Overview", "Extraction overview")}</div>
             </a>
           </div>
         </section>

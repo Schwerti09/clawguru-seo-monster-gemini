@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/solutions/zero-trust-ai-architecture"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "Zero Trust für KI-Architekturen: AI-Systeme absichern 2026 | ClawGuru Solutions"
-    : "Zero Trust AI Architecture: Securing AI Systems 2026 | ClawGuru Solutions"
-  const description = isDE
-    ? "Zero-Trust-Architektur für KI- und LLM-Systeme: Identity-first Access, Micro-Segmentierung, kontinuierliche Verifikation und AI-spezifische Zero-Trust-Kontrollen 2026."
-    : "Zero Trust architecture for AI and LLM systems: identity-first access, micro-segmentation, continuous verification and AI-specific zero trust controls 2026."
+  const title = pick(isDE, "Zero Trust für KI-Architekturen: AI-Systeme absichern 2026 | ClawGuru Solutions", "Zero Trust AI Architecture: Securing AI Systems 2026 | ClawGuru Solutions")
+  const description = pick(isDE, "Zero-Trust-Architektur für KI- und LLM-Systeme: Identity-first Access, Micro-Segmentierung, kontinuierliche Verifikation und AI-spezifische Zero-Trust-Kontrollen 2026.", "Zero Trust architecture for AI and LLM systems: identity-first access, micro-segmentation, continuous verification and AI-specific zero trust controls 2026.")
   return {
     title, description,
     keywords: ["zero trust ai", "zero trust llm", "ai architecture security", "zero trust machine learning", "ai network segmentation", "llm access control 2026"],
@@ -161,12 +158,10 @@ export default function ZeroTrustAiArchitecturePage({ params }: { params: { lang
         </div>
 
         <h1 className="text-4xl font-bold mb-4 text-gray-100">
-          {isDE ? "Zero Trust für KI-Architekturen 2026" : "Zero Trust AI Architecture 2026"}
+          {pick(isDE, "Zero Trust für KI-Architekturen 2026", "Zero Trust AI Architecture 2026")}
         </h1>
         <p className="text-lg text-gray-300 mb-10">
-          {isDE
-            ? "Klassische Perimeter-Sicherheit versagt bei KI-Systemen. Modelle werden verteilt trainiert, über APIs exponiert und von Dutzenden Services aufgerufen. Zero Trust ist der einzige Ansatz, der funktioniert: jede Anfrage verifizieren, minimale Rechte erzwingen, Breach voraussetzen."
-            : "Classic perimeter security fails for AI systems. Models are trained across distributed environments, exposed via APIs, and called by dozens of services. Zero Trust is the only approach that works: verify every request, enforce minimum privileges, assume breach."}
+          {pick(isDE, "Klassische Perimeter-Sicherheit versagt bei KI-Systemen. Modelle werden verteilt trainiert, über APIs exponiert und von Dutzenden Services aufgerufen. Zero Trust ist der einzige Ansatz, der funktioniert: jede Anfrage verifizieren, minimale Rechte erzwingen, Breach voraussetzen.", "Classic perimeter security fails for AI systems. Models are trained across distributed environments, exposed via APIs, and called by dozens of services. Zero Trust is the only approach that works: verify every request, enforce minimum privileges, assume breach.")}
         </p>
 
         {PILLARS.map((pillar) => {
@@ -193,7 +188,7 @@ export default function ZeroTrustAiArchitecturePage({ params }: { params: { lang
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">
-            {isDE ? "Häufige Fragen" : "Frequently Asked Questions"}
+            {pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}
           </h2>
           <div className="space-y-4">
             {FAQ.map((entry, i) => (
@@ -210,37 +205,37 @@ export default function ZeroTrustAiArchitecturePage({ params }: { params: { lang
 
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">
-            {isDE ? "Weiterführende Ressourcen" : "Further Resources"}
+            {pick(isDE, "Weiterführende Ressourcen", "Further Resources")}
           </h2>
           <div className="grid sm:grid-cols-2 gap-4">
             <a href={`/${locale}/moltbot/ai-agent-sandboxing`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Agent Sandboxing</div>
-              <div className="text-sm text-gray-300">{isDE ? "Runtime-Isolation für KI-Agenten" : "Runtime isolation for AI agents"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Runtime-Isolation für KI-Agenten", "Runtime isolation for AI agents")}</div>
             </a>
             <a href={`/${locale}/moltbot/llm-gateway-hardening`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM Gateway Hardening</div>
-              <div className="text-sm text-gray-300">{isDE ? "API-Gateway-Absicherung für LLMs" : "API gateway security for LLMs"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "API-Gateway-Absicherung für LLMs", "API gateway security for LLMs")}</div>
             </a>
             <a href={`/${locale}/moltbot/ai-agent-rbac`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Agent RBAC</div>
-              <div className="text-sm text-gray-300">{isDE ? "Rollenbasierte Zugriffskontrolle" : "Role-based access control for agents"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Rollenbasierte Zugriffskontrolle", "Role-based access control for agents")}</div>
             </a>
             <a href={`/${locale}/check`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
-              <div className="font-semibold text-cyan-400">{isDE ? "Security Check starten" : "Start Security Check"}</div>
-              <div className="text-sm text-gray-300">{isDE ? "Deine AI-Infrastruktur in 30 Sekunden prüfen" : "Check your AI infrastructure in 30 seconds"}</div>
+              <div className="font-semibold text-cyan-400">{pick(isDE, "Security Check starten", "Start Security Check")}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Deine AI-Infrastruktur in 30 Sekunden prüfen", "Check your AI infrastructure in 30 seconds")}</div>
             </a>
           </div>
         </section>
 
         <div className="bg-cyan-900 border border-cyan-700 rounded-lg p-6 text-center">
           <h2 className="text-xl font-bold text-cyan-300 mb-2">
-            {isDE ? "Zero Trust für deine AI-Infrastruktur umsetzen?" : "Ready to implement Zero Trust for your AI?"}
+            {pick(isDE, "Zero Trust für deine AI-Infrastruktur umsetzen?", "Ready to implement Zero Trust for your AI?")}
           </h2>
           <p className="text-gray-300 mb-4 text-sm">
-            {isDE ? "ClawGuru analysiert deine Architektur und generiert einen Zero-Trust-Runbook für dein Setup." : "ClawGuru analyzes your architecture and generates a Zero Trust runbook for your setup."}
+            {pick(isDE, "ClawGuru analysiert deine Architektur und generiert einen Zero-Trust-Runbook für dein Setup.", "ClawGuru analyzes your architecture and generates a Zero Trust runbook for your setup.")}
           </p>
           <a href={`/${locale}/check`} className="inline-block bg-cyan-500 hover:bg-cyan-400 text-black font-bold px-6 py-3 rounded-lg transition-colors">
-            {isDE ? "🛡️ Kostenloser Security Check" : "🛡️ Free Security Check"}
+            {pick(isDE, "🛡️ Kostenloser Security Check", "🛡️ Free Security Check")}
           </a>
         </div>
       </div>

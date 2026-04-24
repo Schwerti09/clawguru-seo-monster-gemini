@@ -1,4 +1,5 @@
 import { Quote, Share2, RefreshCw } from "lucide-react"
+import { pick } from "@/lib/i18n-pick"
 
 /**
  * Phase 4 Schritt 76 — Roast Quotes — Tweetable Snippets
@@ -42,7 +43,7 @@ export default function QuoteGenerator({ quotes, locale = "de", onRefresh }: Quo
     return (
       <div className="bg-gray-800 p-6 rounded-lg border border-gray-700 text-center">
         <p className="text-sm text-gray-400">
-          {isDE ? "Keine Quotes verfügbar." : "No quotes available."}
+          {pick(isDE, "Keine Quotes verfügbar.", "No quotes available.")}
         </p>
       </div>
     )
@@ -53,7 +54,7 @@ export default function QuoteGenerator({ quotes, locale = "de", onRefresh }: Quo
       <div className="flex items-center gap-2 mb-4">
         <Quote className="w-5 h-5 text-cyan-400" />
         <h3 className="font-bold text-gray-100">
-          {isDE ? "Roast Quote" : "Roast Quote"}
+          {pick(isDE, "Roast Quote", "Roast Quote")}
         </h3>
       </div>
 
@@ -61,14 +62,14 @@ export default function QuoteGenerator({ quotes, locale = "de", onRefresh }: Quo
         <p className="text-lg text-gray-100 italic mb-3">"{currentQuote.text}"</p>
         <footer className="text-sm text-gray-400">
           <span className="font-semibold text-cyan-400">{currentQuote.author}</span>
-          {isDE ? " • " : " • "}
-          {isDE ? "Score" : "Score"}: {currentQuote.score}
+          {pick(isDE, " • ", " • ")}
+          {pick(isDE, "Score", "Score")}: {currentQuote.score}
         </footer>
       </blockquote>
 
       <div className="bg-gray-900 p-3 rounded-lg mb-4">
         <p className="text-xs text-gray-400 mb-1">
-          {isDE ? "Stack" : "Stack"}
+          {pick(isDE, "Stack", "Stack")}
         </p>
         <p className="text-sm text-gray-300">{currentQuote.stackSummary}</p>
       </div>
@@ -79,7 +80,7 @@ export default function QuoteGenerator({ quotes, locale = "de", onRefresh }: Quo
           className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-cyan-600 hover:bg-cyan-500 rounded-lg font-semibold text-white text-sm transition-colors"
         >
           <Share2 className="w-4 h-4" />
-          {isDE ? "Teilen" : "Share"}
+          {pick(isDE, "Teilen", "Share")}
         </button>
         {onRefresh && (
           <button
@@ -107,7 +108,7 @@ export function QuotesList({ quotes, locale = "de" }: QuotesListProps) {
     return (
       <div className="bg-gray-800 p-6 rounded-lg border border-gray-700 text-center">
         <p className="text-sm text-gray-400">
-          {isDE ? "Keine Quotes verfügbar." : "No quotes available."}
+          {pick(isDE, "Keine Quotes verfügbar.", "No quotes available.")}
         </p>
       </div>
     )
@@ -124,8 +125,8 @@ export function QuotesList({ quotes, locale = "de" }: QuotesListProps) {
             <p className="text-lg text-gray-100 italic mb-2">"{quote.text}"</p>
             <footer className="text-sm text-gray-400">
               <span className="font-semibold text-cyan-400">{quote.author}</span>
-              {isDE ? " • " : " • "}
-              {isDE ? "Score" : "Score"}: {quote.score}
+              {pick(isDE, " • ", " • ")}
+              {pick(isDE, "Score", "Score")}: {quote.score}
             </footer>
           </blockquote>
           <div className="flex items-center justify-between">
@@ -141,7 +142,7 @@ export function QuotesList({ quotes, locale = "de" }: QuotesListProps) {
               className="flex items-center gap-2 px-3 py-1 bg-cyan-600 hover:bg-cyan-500 rounded-lg text-white text-xs transition-colors"
             >
               <Share2 className="w-3 h-3" />
-              {isDE ? "Teilen" : "Share"}
+              {pick(isDE, "Teilen", "Share")}
             </button>
           </div>
         </div>

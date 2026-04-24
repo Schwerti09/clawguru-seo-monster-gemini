@@ -5,6 +5,7 @@ import AuthorBox from "@/components/seo/AuthorBox"
 import LastUpdated from "@/components/seo/LastUpdated"
 import { buildAuthoredArticleSchema } from "@/lib/seo/author"
 import { Shield, TrendingUp, Users, Zap } from "lucide-react"
+import { pick } from "@/lib/i18n-pick"
 
 interface PageProps { params: { lang: string } }
 
@@ -21,12 +22,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
   const pageUrl = `${SITE_URL}/${locale}${PATH}`
-  const title = isDE
-    ? "Launch Results — ClawGuru Product Hunt + HN + Reddit"
-    : "Launch Results — ClawGuru Product Hunt + HN + Reddit"
-  const description = isDE
-    ? "ClawGuru Launch Day Results: Product Hunt Top X, Hacker News Front Page, Reddit r/selfhosted Top Post. 50k+ visits, 500+ Day Passes sold in 48h. Full transparency with numbers."
-    : "ClawGuru Launch Day Results: Product Hunt Top X, Hacker News Front Page, Reddit r/selfhosted Top Post. 50k+ visits, 500+ Day Passes sold in 48h. Full transparency with numbers."
+  const title = pick(isDE, "Launch Results — ClawGuru Product Hunt + HN + Reddit", "Launch Results — ClawGuru Product Hunt + HN + Reddit")
+  const description = pick(isDE, "ClawGuru Launch Day Results: Product Hunt Top X, Hacker News Front Page, Reddit r/selfhosted Top Post. 50k+ visits, 500+ Day Passes sold in 48h. Full transparency with numbers.", "ClawGuru Launch Day Results: Product Hunt Top X, Hacker News Front Page, Reddit r/selfhosted Top Post. 50k+ visits, 500+ Day Passes sold in 48h. Full transparency with numbers.")
   return {
     title,
     description,
@@ -43,12 +40,8 @@ export default function LaunchResultsPage({ params }: PageProps) {
   const isDE = locale === "de"
 
   const articleSchema = buildAuthoredArticleSchema({
-    headline: isDE
-      ? "Launch Results — ClawGuru Product Hunt + HN + Reddit"
-      : "Launch Results — ClawGuru Product Hunt + HN + Reddit",
-    description: isDE
-      ? "ClawGuru Launch Day Results: Product Hunt Top X, Hacker News Front Page, Reddit r/selfhosted Top Post. 50k+ visits, 500+ Day Passes sold in 48h. Full transparency with numbers."
-      : "ClawGuru Launch Day Results: Product Hunt Top X, Hacker News Front Page, Reddit r/selfhosted Top Post. 50k+ visits, 500+ Day Passes sold in 48h. Full transparency with numbers.",
+    headline: pick(isDE, "Launch Results — ClawGuru Product Hunt + HN + Reddit", "Launch Results — ClawGuru Product Hunt + HN + Reddit"),
+    description: pick(isDE, "ClawGuru Launch Day Results: Product Hunt Top X, Hacker News Front Page, Reddit r/selfhosted Top Post. 50k+ visits, 500+ Day Passes sold in 48h. Full transparency with numbers.", "ClawGuru Launch Day Results: Product Hunt Top X, Hacker News Front Page, Reddit r/selfhosted Top Post. 50k+ visits, 500+ Day Passes sold in 48h. Full transparency with numbers."),
     url: `${SITE_URL}/${locale}${PATH}`,
     datePublished: PUBLISHED,
     dateModified: MODIFIED,
@@ -65,48 +58,44 @@ export default function LaunchResultsPage({ params }: PageProps) {
           <ol className="flex flex-wrap items-center gap-2">
             <li><Link href={`/${locale}`} className="hover:text-cyan-400">ClawGuru</Link></li>
             <li>/</li>
-            <li className="text-gray-300">{isDE ? "Launch Results" : "Launch Results"}</li>
+            <li className="text-gray-300">{pick(isDE, "Launch Results", "Launch Results")}</li>
           </ol>
         </nav>
 
         <section className="mb-14">
           <div className="inline-block mb-4 px-3 py-1 rounded-full text-xs font-semibold border border-purple-500/30 bg-purple-500/10 text-purple-300">
-            {isDE ? "Launch Day Results" : "Launch Day Results"}
+            {pick(isDE, "Launch Day Results", "Launch Day Results")}
           </div>
           <h1 className="text-4xl sm:text-5xl font-black text-white leading-tight mb-4">
-            {isDE
-              ? "ClawGuru Launch Results — Product Hunt + HN + Reddit"
-              : "ClawGuru Launch Results — Product Hunt + HN + Reddit"}
+            {pick(isDE, "ClawGuru Launch Results — Product Hunt + HN + Reddit", "ClawGuru Launch Results — Product Hunt + HN + Reddit")}
           </h1>
           <LastUpdated date={MODIFIED} publishedDate={PUBLISHED} showPublished locale={locale} className="mb-4" />
           <p className="text-lg text-gray-300 max-w-3xl mb-6">
-            {isDE
-              ? "Launch Day war am 06.05.2026 (Tuesday). Hier sind die Zahlen: 50k+ visits, 500+ Day Passes in 48h, Product Hunt Top X, Hacker News Front Page, Reddit r/selfhosted Top Post. Full transparency."
-              : "Launch Day was May 6, 2026 (Tuesday). Here are the numbers: 50k+ visits, 500+ Day Passes in 48h, Product Hunt Top X, Hacker News Front Page, Reddit r/selfhosted Top Post. Full transparency."}
+            {pick(isDE, "Launch Day war am 06.05.2026 (Tuesday). Hier sind die Zahlen: 50k+ visits, 500+ Day Passes in 48h, Product Hunt Top X, Hacker News Front Page, Reddit r/selfhosted Top Post. Full transparency.", "Launch Day was May 6, 2026 (Tuesday). Here are the numbers: 50k+ visits, 500+ Day Passes in 48h, Product Hunt Top X, Hacker News Front Page, Reddit r/selfhosted Top Post. Full transparency.")}
           </p>
         </section>
 
         {/* KEY METRICS */}
         <section className="mb-14">
           <div className="text-xs font-mono uppercase tracking-widest mb-6 text-purple-400">
-            {isDE ? "Key Metrics" : "Key Metrics"}
+            {pick(isDE, "Key Metrics", "Key Metrics")}
           </div>
           <div className="grid md:grid-cols-4 gap-6">
             <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 text-center">
               <div className="text-4xl font-black text-cyan-400 mb-2">52,847</div>
-              <div className="text-sm text-gray-300">{isDE ? "Visits (48h)" : "Visits (48h)"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Visits (48h)", "Visits (48h)")}</div>
             </div>
             <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 text-center">
               <div className="text-4xl font-black text-purple-400 mb-2">523</div>
-              <div className="text-sm text-gray-300">{isDE ? "Day Passes Sold" : "Day Passes Sold"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Day Passes Sold", "Day Passes Sold")}</div>
             </div>
             <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 text-center">
               <div className="text-4xl font-black text-green-400 mb-2">1,247</div>
-              <div className="text-sm text-gray-300">{isDE ? "Newsletter Subs" : "Newsletter Subs"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Newsletter Subs", "Newsletter Subs")}</div>
             </div>
             <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 text-center">
               <div className="text-4xl font-black text-orange-400 mb-2">#3</div>
-              <div className="text-sm text-gray-300">{isDE ? "Product Hunt Rank" : "Product Hunt Rank"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Product Hunt Rank", "Product Hunt Rank")}</div>
             </div>
           </div>
         </section>
@@ -114,29 +103,29 @@ export default function LaunchResultsPage({ params }: PageProps) {
         {/* CHANNEL BREAKDOWN */}
         <section className="mb-14">
           <div className="text-xs font-mono uppercase tracking-widest mb-6 text-purple-400">
-            {isDE ? "Channel Breakdown" : "Channel Breakdown"}
+            {pick(isDE, "Channel Breakdown", "Channel Breakdown")}
           </div>
           <div className="space-y-4">
             <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
               <div className="flex items-center gap-3 mb-3">
                 <Shield className="h-5 w-5 text-purple-400" />
-                <h3 className="font-bold text-white">{isDE ? "Product Hunt" : "Product Hunt"}</h3>
+                <h3 className="font-bold text-white">{pick(isDE, "Product Hunt", "Product Hunt")}</h3>
               </div>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                 <div>
-                  <div className="text-gray-400">{isDE ? "Rank" : "Rank"}</div>
+                  <div className="text-gray-400">{pick(isDE, "Rank", "Rank")}</div>
                   <div className="text-white font-semibold">#3</div>
                 </div>
                 <div>
-                  <div className="text-gray-400">{isDE ? "Upvotes" : "Upvotes"}</div>
+                  <div className="text-gray-400">{pick(isDE, "Upvotes", "Upvotes")}</div>
                   <div className="text-white font-semibold">847</div>
                 </div>
                 <div>
-                  <div className="text-gray-400">{isDE ? "Comments" : "Comments"}</div>
+                  <div className="text-gray-400">{pick(isDE, "Comments", "Comments")}</div>
                   <div className="text-white font-semibold">156</div>
                 </div>
                 <div>
-                  <div className="text-gray-400">{isDE ? "Visits" : "Visits"}</div>
+                  <div className="text-gray-400">{pick(isDE, "Visits", "Visits")}</div>
                   <div className="text-white font-semibold">18,234</div>
                 </div>
               </div>
@@ -144,23 +133,23 @@ export default function LaunchResultsPage({ params }: PageProps) {
             <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
               <div className="flex items-center gap-3 mb-3">
                 <TrendingUp className="h-5 w-5 text-cyan-400" />
-                <h3 className="font-bold text-white">{isDE ? "Hacker News" : "Hacker News"}</h3>
+                <h3 className="font-bold text-white">{pick(isDE, "Hacker News", "Hacker News")}</h3>
               </div>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                 <div>
-                  <div className="text-gray-400">{isDE ? "Points" : "Points"}</div>
+                  <div className="text-gray-400">{pick(isDE, "Points", "Points")}</div>
                   <div className="text-white font-semibold">342</div>
                 </div>
                 <div>
-                  <div className="text-gray-400">{isDE ? "Comments" : "Comments"}</div>
+                  <div className="text-gray-400">{pick(isDE, "Comments", "Comments")}</div>
                   <div className="text-white font-semibold">89</div>
                 </div>
                 <div>
-                  <div className="text-gray-400">{isDE ? "Front Page" : "Front Page"}</div>
-                  <div className="text-white font-semibold">{isDE ? "Ja (6h)" : "Yes (6h)"}</div>
+                  <div className="text-gray-400">{pick(isDE, "Front Page", "Front Page")}</div>
+                  <div className="text-white font-semibold">{pick(isDE, "Ja (6h)", "Yes (6h)")}</div>
                 </div>
                 <div>
-                  <div className="text-gray-400">{isDE ? "Visits" : "Visits"}</div>
+                  <div className="text-gray-400">{pick(isDE, "Visits", "Visits")}</div>
                   <div className="text-white font-semibold">21,456</div>
                 </div>
               </div>
@@ -168,23 +157,23 @@ export default function LaunchResultsPage({ params }: PageProps) {
             <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
               <div className="flex items-center gap-3 mb-3">
                 <Users className="h-5 w-5 text-green-400" />
-                <h3 className="font-bold text-white">{isDE ? "Reddit r/selfhosted" : "Reddit r/selfhosted"}</h3>
+                <h3 className="font-bold text-white">{pick(isDE, "Reddit r/selfhosted", "Reddit r/selfhosted")}</h3>
               </div>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                 <div>
-                  <div className="text-gray-400">{isDE ? "Upvotes" : "Upvotes"}</div>
+                  <div className="text-gray-400">{pick(isDE, "Upvotes", "Upvotes")}</div>
                   <div className="text-white font-semibold">567</div>
                 </div>
                 <div>
-                  <div className="text-gray-400">{isDE ? "Comments" : "Comments"}</div>
+                  <div className="text-gray-400">{pick(isDE, "Comments", "Comments")}</div>
                   <div className="text-white font-semibold">124</div>
                 </div>
                 <div>
-                  <div className="text-gray-400">{isDE ? "Top Post" : "Top Post"}</div>
-                  <div className="text-white font-semibold">{isDE ? "Ja (24h)" : "Yes (24h)"}</div>
+                  <div className="text-gray-400">{pick(isDE, "Top Post", "Top Post")}</div>
+                  <div className="text-white font-semibold">{pick(isDE, "Ja (24h)", "Yes (24h)")}</div>
                 </div>
                 <div>
-                  <div className="text-gray-400">{isDE ? "Visits" : "Visits"}</div>
+                  <div className="text-gray-400">{pick(isDE, "Visits", "Visits")}</div>
                   <div className="text-white font-semibold">13,157</div>
                 </div>
               </div>
@@ -195,33 +184,25 @@ export default function LaunchResultsPage({ params }: PageProps) {
         {/* WHAT WORKED */}
         <section className="mb-14">
           <div className="text-xs font-mono uppercase tracking-widest mb-6 text-purple-400">
-            {isDE ? "Was funktionierte" : "What Worked"}
+            {pick(isDE, "Was funktionierte", "What Worked")}
           </div>
           <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
             <ul className="space-y-3 text-sm text-gray-300">
               <li className="flex items-start gap-2">
                 <Zap className="h-4 w-4 text-green-400 mt-0.5 shrink-0" />
-                {isDE
-                  ? "Value-first Reddit Post (r/selfhosted): 'Top 10 Self-Hosted Security Misconfigurations' — 567 upvotes, 124 comments, massive organic reach"
-                  : "Value-first Reddit Post (r/selfhosted): 'Top 10 Self-Hosted Security Misconfigurations' — 567 upvotes, 124 comments, massive organic reach"}
+                {pick(isDE, "Value-first Reddit Post (r/selfhosted): 'Top 10 Self-Hosted Security Misconfigurations' — 567 upvotes, 124 comments, massive organic reach", "Value-first Reddit Post (r/selfhosted): 'Top 10 Self-Hosted Security Misconfigurations' — 567 upvotes, 124 comments, massive organic reach")}
               </li>
               <li className="flex items-start gap-2">
                 <Zap className="h-4 w-4 text-green-400 mt-0.5 shrink-0" />
-                {isDE
-                  ? "Product Hunt First Comment: Personal founder story + specific ask = 156 comments, 847 upvotes"
-                  : "Product Hunt First Comment: Personal founder story + specific ask = 156 comments, 847 upvotes"}
+                {pick(isDE, "Product Hunt First Comment: Personal founder story + specific ask = 156 comments, 847 upvotes", "Product Hunt First Comment: Personal founder story + specific ask = 156 comments, 847 upvotes")}
               </li>
               <li className="flex items-start gap-2">
                 <Zap className="h-4 w-4 text-green-400 mt-0.5 shrink-0" />
-                {isDE
-                  ? "Hacker News Show HN: Neutral factual title + tech stack transparency = 342 points, front page for 6h"
-                  : "Hacker News Show HN: Neutral factual title + tech stack transparency = 342 points, front page for 6h"}
+                {pick(isDE, "Hacker News Show HN: Neutral factual title + tech stack transparency = 342 points, front page for 6h", "Hacker News Show HN: Neutral factual title + tech stack transparency = 342 points, front page for 6h")}
               </li>
               <li className="flex items-start gap-2">
                 <Zap className="h-4 w-4 text-green-400 mt-0.5 shrink-0" />
-                {isDE
-                  ? "Coupon Strategy: HUNTER50 (50% off Pro) drove 89 Pro signups in first 24h"
-                  : "Coupon Strategy: HUNTER50 (50% off Pro) drove 89 Pro signups in first 24h"}
+                {pick(isDE, "Coupon Strategy: HUNTER50 (50% off Pro) drove 89 Pro signups in first 24h", "Coupon Strategy: HUNTER50 (50% off Pro) drove 89 Pro signups in first 24h")}
               </li>
             </ul>
           </div>
@@ -230,27 +211,21 @@ export default function LaunchResultsPage({ params }: PageProps) {
         {/* WHAT DIDN'T WORK */}
         <section className="mb-14">
           <div className="text-xs font-mono uppercase tracking-widest mb-6 text-purple-400">
-            {isDE ? "Was nicht funktionierte" : "What Didn't Work"}
+            {pick(isDE, "Was nicht funktionierte", "What Didn't Work")}
           </div>
           <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
             <ul className="space-y-3 text-sm text-gray-300">
               <li className="flex items-start gap-2">
                 <span className="text-red-400 mt-0.5 shrink-0">✕</span>
-                {isDE
-                  ? "Reddit r/sysadmin: Post-mortem format too long, got buried (23 upvotes, 8 comments)"
-                  : "Reddit r/sysadmin: Post-mortem format too long, got buried (23 upvotes, 8 comments)"}
+                {pick(isDE, "Reddit r/sysadmin: Post-mortem format too long, got buried (23 upvotes, 8 comments)", "Reddit r/sysadmin: Post-mortem format too long, got buried (23 upvotes, 8 comments)")}
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-red-400 mt-0.5 shrink-0">✕</span>
-                {isDE
-                  ? "X Thread: 15 tweets too long, engagement dropped after tweet 8 (average 12% completion rate)"
-                  : "X Thread: 15 tweets too long, engagement dropped after tweet 8 (average 12% completion rate)"}
+                {pick(isDE, "X Thread: 15 tweets too long, engagement dropped after tweet 8 (average 12% completion rate)", "X Thread: 15 tweets too long, engagement dropped after tweet 8 (average 12% completion rate)")}
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-red-400 mt-0.5 shrink-0">✕</span>
-                {isDE
-                  ? "Reddit r/devops: 'Runbooks as code' angle too niche for general audience (45 upvotes, 12 comments)"
-                  : "Reddit r/devops: 'Runbooks as code' angle too niche for general audience (45 upvotes, 12 comments)"}
+                {pick(isDE, "Reddit r/devops: 'Runbooks as code' angle too niche for general audience (45 upvotes, 12 comments)", "Reddit r/devops: 'Runbooks as code' angle too niche for general audience (45 upvotes, 12 comments)")}
               </li>
             </ul>
           </div>
@@ -259,33 +234,25 @@ export default function LaunchResultsPage({ params }: PageProps) {
         {/* LESSONS LEARNED */}
         <section className="mb-14">
           <div className="text-xs font-mono uppercase tracking-widest mb-6 text-purple-400">
-            {isDE ? "Lektionen" : "Lessons Learned"}
+            {pick(isDE, "Lektionen", "Lessons Learned")}
           </div>
           <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
             <ul className="space-y-3 text-sm text-gray-300">
               <li className="flex items-start gap-2">
                 <Zap className="h-4 w-4 text-cyan-400 mt-0.5 shrink-0" />
-                {isDE
-                  ? "Value-first > promotional: Reddit posts with concrete data (50k servers analyzed) outperformed 'check out my tool' by 10x"
-                  : "Value-first > promotional: Reddit posts with concrete data (50k servers analyzed) outperformed 'check out my tool' by 10x"}
+                {pick(isDE, "Value-first > promotional: Reddit posts with concrete data (50k servers analyzed) outperformed 'check out my tool' by 10x", "Value-first > promotional: Reddit posts with concrete data (50k servers analyzed) outperformed 'check out my tool' by 10x")}
               </li>
               <li className="flex items-start gap-2">
                 <Zap className="h-4 w-4 text-cyan-400 mt-0.5 shrink-0" />
-                {isDE
-                  ? "HN loves tech transparency: Sharing Next.js + Postgres stack + retriever architecture built trust"
-                  : "HN loves tech transparency: Sharing Next.js + Postgres stack + retriever architecture built trust"}
+                {pick(isDE, "HN loves tech transparency: Sharing Next.js + Postgres stack + retriever architecture built trust", "HN loves tech transparency: Sharing Next.js + Postgres stack + retriever architecture built trust")}
               </li>
               <li className="flex items-start gap-2">
                 <Zap className="h-4 w-4 text-cyan-400 mt-0.5 shrink-0" />
-                {isDE
-                  ? "Shorter threads work better: 8 tweets max, media every 2 tweets, clear CTA at end"
-                  : "Shorter threads work better: 8 tweets max, media every 2 tweets, clear CTA at end"}
+                {pick(isDE, "Shorter threads work better: 8 tweets max, media every 2 tweets, clear CTA at end", "Shorter threads work better: 8 tweets max, media every 2 tweets, clear CTA at end")}
               </li>
               <li className="flex items-start gap-2">
                 <Zap className="h-4 w-4 text-cyan-400 mt-0.5 shrink-0" />
-                {isDE
-                  ? "Coupon urgency works: HUNTER50 (expires end of week) drove 89 Pro signups vs 12 for SHOWHN50 (expires T+7)"
-                  : "Coupon urgency works: HUNTER50 (expires end of week) drove 89 Pro signups vs 12 for SHOWHN50 (expires T+7)"}
+                {pick(isDE, "Coupon urgency works: HUNTER50 (expires end of week) drove 89 Pro signups vs 12 for SHOWHN50 (expires T+7)", "Coupon urgency works: HUNTER50 (expires end of week) drove 89 Pro signups vs 12 for SHOWHN50 (expires T+7)")}
               </li>
             </ul>
           </div>
@@ -294,33 +261,25 @@ export default function LaunchResultsPage({ params }: PageProps) {
         {/* NEXT STEPS */}
         <section className="mb-14">
           <div className="text-xs font-mono uppercase tracking-widest mb-6 text-purple-400">
-            {isDE ? "Nächste Schritte" : "Next Steps"}
+            {pick(isDE, "Nächste Schritte", "Next Steps")}
           </div>
           <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
             <ul className="space-y-3 text-sm text-gray-300">
               <li className="flex items-start gap-2">
                 <span className="text-cyan-400 mt-0.5 shrink-0">→</span>
-                {isDE
-                  ? "Retargeting email an HUNTER50 users (T+7): 'How was your first week?' — personal replies = retention"
-                  : "Retargeting email to HUNTER50 users (T+7): 'How was your first week?' — personal replies = retention"}
+                {pick(isDE, "Retargeting email an HUNTER50 users (T+7): 'How was your first week?' — personal replies = retention", "Retargeting email to HUNTER50 users (T+7): 'How was your first week?' — personal replies = retention")}
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-cyan-400 mt-0.5 shrink-0">→</span>
-                {isDE
-                  ? "Reddit follow-up posts (T+14): r/homelab success story, r/selfhosted 'What I learned from 50k scans'"
-                  : "Reddit follow-up posts (T+14): r/homelab success story, r/selfhosted 'What I learned from 50k scans'"}
+                {pick(isDE, "Reddit follow-up posts (T+14): r/homelab success story, r/selfhosted 'What I learned from 50k scans'", "Reddit follow-up posts (T+14): r/homelab success story, r/selfhosted 'What I learned from 50k scans'")}
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-cyan-400 mt-0.5 shrink-0">→</span>
-                {isDE
-                  ? "Newsletter cadence stabilization: Daily CVE + fix + tip (no filler) — target 10k subs in 90 days"
-                  : "Newsletter cadence stabilization: Daily CVE + fix + tip (no filler) — target 10k subs in 90 days"}
+                {pick(isDE, "Newsletter cadence stabilization: Daily CVE + fix + tip (no filler) — target 10k subs in 90 days", "Newsletter cadence stabilization: Daily CVE + fix + tip (no filler) — target 10k subs in 90 days")}
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-cyan-400 mt-0.5 shrink-0">→</span>
-                {isDE
-                  ? "Phase C launch: Affiliate partnerships, Hetzner/DO partnership, YouTube Shorts series"
-                  : "Phase C launch: Affiliate partnerships, Hetzner/DO partnership, YouTube Shorts series"}
+                {pick(isDE, "Phase C launch: Affiliate partnerships, Hetzner/DO partnership, YouTube Shorts series", "Phase C launch: Affiliate partnerships, Hetzner/DO partnership, YouTube Shorts series")}
               </li>
             </ul>
           </div>

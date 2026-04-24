@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
 import { Trophy, Target, Clock, Users, CheckCircle2 } from "lucide-react"
+import { pick } from "@/lib/i18n-pick"
 
 interface PageProps { params: { lang: string } }
 
@@ -10,10 +11,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const pageUrl = `${SITE_URL}/${locale}/challenges`
   const isDE = locale === "de"
-  const title = isDE ? "Roast Challenges | ClawGuru" : "Roast Challenges | ClawGuru"
-  const description = isDE 
-    ? "Wöchentliche Roast Challenges — Belohnte Wettbewerbe für Security-Enthusiasten" 
-    : "Weekly Roast Challenges — Rewarded competitions for security enthusiasts"
+  const title = pick(isDE, "Roast Challenges | ClawGuru", "Roast Challenges | ClawGuru")
+  const description = pick(isDE, "Wöchentliche Roast Challenges — Belohnte Wettbewerbe für Security-Enthusiasten", "Weekly Roast Challenges — Rewarded competitions for security enthusiasts")
   return {
     title,
     description,
@@ -68,19 +67,17 @@ export default function ChallengesPage({ params }: PageProps) {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-4 text-gray-100">
-            {isDE ? "Roast Challenges" : "Roast Challenges"}
+            {pick(isDE, "Roast Challenges", "Roast Challenges")}
           </h1>
           <p className="text-lg text-gray-300">
-            {isDE 
-              ? "Wöchentliche Challenges mit Belohnungen. Zeig, was du kannst." 
-              : "Weekly challenges with rewards. Show what you can do."}
+            {pick(isDE, "Wöchentliche Challenges mit Belohnungen. Zeig, was du kannst.", "Weekly challenges with rewards. Show what you can do.")}
           </p>
         </div>
 
         {/* Active Challenges */}
         <section className="mb-8">
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">
-            {isDE ? "Aktive Challenges" : "Active Challenges"}
+            {pick(isDE, "Aktive Challenges", "Active Challenges")}
           </h2>
           <div className="space-y-4">
             {weeklyChallenges.map((challenge) => (
@@ -100,7 +97,7 @@ export default function ChallengesPage({ params }: PageProps) {
                     {challenge.progress && (
                       <div className="mb-3">
                         <div className="flex items-center justify-between text-xs text-zinc-500 mb-1">
-                          <span>{isDE ? "Fortschritt" : "Progress"}</span>
+                          <span>{pick(isDE, "Fortschritt", "Progress")}</span>
                           <span>{challenge.progress.current}/{challenge.progress.total}</span>
                         </div>
                         <div className="w-full bg-gray-700 rounded-full h-2">
@@ -118,7 +115,7 @@ export default function ChallengesPage({ params }: PageProps) {
                     <div className="flex gap-4 text-xs text-zinc-500">
                       <div className="flex items-center gap-1">
                         <Users className="w-3 h-3" />
-                        <span>{challenge.participants} {isDE ? "Teilnehmer" : "participants"}</span>
+                        <span>{challenge.participants} {pick(isDE, "Teilnehmer", "participants")}</span>
                       </div>
                       <div className="flex items-center gap-1">
                         <Clock className="w-3 h-3" />
@@ -128,10 +125,8 @@ export default function ChallengesPage({ params }: PageProps) {
                   </div>
                   <button className="px-4 py-2 bg-cyan-600 hover:bg-cyan-500 rounded-lg text-sm font-medium text-white transition-colors">
                     {challenge.progress && challenge.progress.current > 0
-                      ? isDE ? "Weiter" : "Continue"
-                      : isDE
-                        ? "Starten"
-                        : "Start"}
+                      ? pick(isDE, "Weiter", "Continue")
+                      : pick(isDE, "Starten", "Start")}
                   </button>
                 </div>
               </div>
@@ -142,12 +137,12 @@ export default function ChallengesPage({ params }: PageProps) {
         {/* Completed */}
         <section className="mb-8">
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">
-            {isDE ? "Abgeschlossen" : "Completed"}
+            {pick(isDE, "Abgeschlossen", "Completed")}
           </h2>
           <div className="bg-gray-800 rounded-xl border border-gray-700 p-6">
             <div className="flex items-center gap-3 mb-4">
               <CheckCircle2 className="w-5 h-5 text-green-400" />
-              <span className="text-sm text-zinc-500">{isDE ? "Diese Woche abgeschlossen" : "Completed this week"}</span>
+              <span className="text-sm text-zinc-500">{pick(isDE, "Diese Woche abgeschlossen", "Completed this week")}</span>
             </div>
             <div className="space-y-2">
               <div className="flex items-center justify-between text-sm text-gray-300">
@@ -164,9 +159,7 @@ export default function ChallengesPage({ params }: PageProps) {
 
         {/* Trust Notice */}
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE 
-            ? "Challenges sind zum Härten eigener Systeme. Keine Angriffstools." 
-            : "Challenges are for hardening your own systems. No attack tools."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Challenges sind zum Härten eigener Systeme. Keine Angriffstools.", "Challenges are for hardening your own systems. No attack tools.")}
         </div>
       </div>
     </div>

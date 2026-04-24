@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/openclaw-vs-crowdstrike"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "OpenClaw vs CrowdStrike Falcon: Self-Hosted EDR vs Cloud-Only XDR | ClawGuru"
-    : "OpenClaw vs CrowdStrike Falcon: Self-Hosted EDR vs Cloud-Only XDR | ClawGuru"
-  const description = isDE
-    ? "OpenClaw vs CrowdStrike Falcon: Datensouveränität, Self-Hosted-Deployment, Kosten und KI-Agent-Sicherheit im Vergleich. Für wen ist CrowdStrike die falsche Wahl?"
-    : "OpenClaw vs CrowdStrike Falcon: data sovereignty, self-hosted deployment, cost and AI agent security compared. For whom is CrowdStrike the wrong choice?"
+  const title = pick(isDE, "OpenClaw vs CrowdStrike Falcon: Self-Hosted EDR vs Cloud-Only XDR | ClawGuru", "OpenClaw vs CrowdStrike Falcon: Self-Hosted EDR vs Cloud-Only XDR | ClawGuru")
+  const description = pick(isDE, "OpenClaw vs CrowdStrike Falcon: Datensouveränität, Self-Hosted-Deployment, Kosten und KI-Agent-Sicherheit im Vergleich. Für wen ist CrowdStrike die falsche Wahl?", "OpenClaw vs CrowdStrike Falcon: data sovereignty, self-hosted deployment, cost and AI agent security compared. For whom is CrowdStrike the wrong choice?")
   return {
     title, description,
     keywords: ["openclaw vs crowdstrike", "crowdstrike alternative self-hosted", "crowdstrike falcon alternative", "self-hosted edr", "crowdstrike vs open source edr", "openclaw edr"],
@@ -69,18 +66,16 @@ export default function OpenclawVsCrowdstrikePage({ params }: { params: { lang: 
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "Produktvergleich für eigene Infrastruktur-Entscheidungen." : "Product comparison for your own infrastructure decisions."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Produktvergleich für eigene Infrastruktur-Entscheidungen.", "Product comparison for your own infrastructure decisions.")}
         </div>
         <div className="mb-3"><span className="text-xs font-bold uppercase tracking-widest text-cyan-400">Compare · Batch 14</span></div>
         <h1 className="text-4xl font-bold mb-4 text-gray-100">OpenClaw vs CrowdStrike Falcon</h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "CrowdStrike ist Marktführer im EDR/XDR-Markt — aber die July-2024-Katastrophe, Cloud-only-Architektur und Datensouveränitätsprobleme machen es zur falschen Wahl für Self-Hosted-Infrastrukturen. Ein ehrlicher Vergleich."
-            : "CrowdStrike leads the EDR/XDR market — but the July 2024 disaster, cloud-only architecture and data sovereignty issues make it the wrong choice for self-hosted infrastructure. An honest comparison."}
+          {pick(isDE, "CrowdStrike ist Marktführer im EDR/XDR-Markt — aber die July-2024-Katastrophe, Cloud-only-Architektur und Datensouveränitätsprobleme machen es zur falschen Wahl für Self-Hosted-Infrastrukturen. Ein ehrlicher Vergleich.", "CrowdStrike leads the EDR/XDR market — but the July 2024 disaster, cloud-only architecture and data sovereignty issues make it the wrong choice for self-hosted infrastructure. An honest comparison.")}
         </p>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Feature-Vergleich" : "Feature Comparison"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Feature-Vergleich", "Feature Comparison")}</h2>
           <div className="overflow-x-auto">
             <table className="min-w-full bg-gray-900 border border-gray-700 rounded-lg">
               <thead className="bg-gray-800">
@@ -104,7 +99,7 @@ export default function OpenclawVsCrowdstrikePage({ params }: { params: { lang: 
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-3">
             {FAQ.map((f, i) => (
               <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
@@ -116,23 +111,23 @@ export default function OpenclawVsCrowdstrikePage({ params }: { params: { lang: 
         </section>
 
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further Resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further Resources")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/openclaw/ebpf-security-monitoring`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">eBPF Security Monitoring</div>
-              <div className="text-sm text-gray-300">{isDE ? "Kernel-Security ohne Vendor-Lock" : "Kernel security without vendor lock"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Kernel-Security ohne Vendor-Lock", "Kernel security without vendor lock")}</div>
             </a>
             <a href={`/${locale}/openclaw/runtime-policy-enforcement`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Runtime Policy Enforcement</div>
-              <div className="text-sm text-gray-300">{isDE ? "Falco + OPA als Alternative" : "Falco + OPA as alternative"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Falco + OPA als Alternative", "Falco + OPA as alternative")}</div>
             </a>
             <a href={`/${locale}/clawguru-vs-orca-security`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">ClawGuru vs Orca Security</div>
-              <div className="text-sm text-gray-300">{isDE ? "Weiterer Cloud-vs-Self-Hosted-Vergleich" : "Another cloud vs self-hosted comparison"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Weiterer Cloud-vs-Self-Hosted-Vergleich", "Another cloud vs self-hosted comparison")}</div>
             </a>
             <a href={`/${locale}/securitycheck`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Live Security Check</div>
-              <div className="text-sm text-gray-300">{isDE ? "Eigene Infrastruktur prüfen" : "Check your own infrastructure"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Eigene Infrastruktur prüfen", "Check your own infrastructure")}</div>
             </a>
           </div>
         </section>

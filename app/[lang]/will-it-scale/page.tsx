@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
 import { TrendingUp, Users, Activity, AlertTriangle, CheckCircle } from "lucide-react"
+import { pick } from "@/lib/i18n-pick"
 
 interface PageProps { params: { lang: string } }
 
@@ -10,10 +11,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const pageUrl = `${SITE_URL}/${locale}/will-it-scale`
   const isDE = locale === "de"
-  const title = isDE ? "Will it Scale? | ClawGuru" : "Will it Scale? | ClawGuru"
-  const description = isDE 
-    ? "Skalierungs-Roasts — Welche Stacks skalieren wirklich?" 
-    : "Scaling roasts — Which stacks actually scale?"
+  const title = pick(isDE, "Will it Scale? | ClawGuru", "Will it Scale? | ClawGuru")
+  const description = pick(isDE, "Skalierungs-Roasts — Welche Stacks skalieren wirklich?", "Scaling roasts — Which stacks actually scale?")
   return {
     title,
     description,
@@ -78,12 +77,10 @@ export default function WillItScalePage({ params }: PageProps) {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-4 text-gray-100">
-            {isDE ? "Will it Scale?" : "Will it Scale?"}
+            {pick(isDE, "Will it Scale?", "Will it Scale?")}
           </h1>
           <p className="text-lg text-gray-300">
-            {isDE 
-              ? "Skalierungs-Roasts — Welche Stacks skalieren wirklich?" 
-              : "Scaling roasts — Which stacks actually scale?"}
+            {pick(isDE, "Skalierungs-Roasts — Welche Stacks skalieren wirklich?", "Scaling roasts — Which stacks actually scale?")}
           </p>
         </div>
 
@@ -120,14 +117,14 @@ export default function WillItScalePage({ params }: PageProps) {
 
               {/* Cost */}
               <div className="mb-4">
-                <div className="text-sm text-zinc-500 mb-2">{isDE ? "Kosten" : "Cost"}</div>
+                <div className="text-sm text-zinc-500 mb-2">{pick(isDE, "Kosten", "Cost")}</div>
                 <div className="text-gray-300">{case_.cost}</div>
               </div>
 
               {/* Challenges */}
               <div className="mb-4">
                 <div className="text-sm text-zinc-500 mb-2">
-                  {isDE ? "Herausforderungen" : "Challenges"}
+                  {pick(isDE, "Herausforderungen", "Challenges")}
                 </div>
                 <div className="space-y-1">
                   {case_.challenges.map((challenge, index) => (
@@ -142,7 +139,7 @@ export default function WillItScalePage({ params }: PageProps) {
               {/* Solution */}
               <div>
                 <div className="text-sm text-zinc-500 mb-2">
-                  {isDE ? "Lösung" : "Solution"}
+                  {pick(isDE, "Lösung", "Solution")}
                 </div>
                 <div className="bg-gray-900/50 rounded-lg p-3 border border-gray-700">
                   <div className="text-cyan-400">{case_.solution}</div>
@@ -158,12 +155,10 @@ export default function WillItScalePage({ params }: PageProps) {
             <TrendingUp className="w-8 h-8 text-cyan-400" />
             <div>
               <div className="text-sm text-zinc-500 mb-1">
-                {isDE ? "Fazit" : "Summary"}
+                {pick(isDE, "Fazit", "Summary")}
               </div>
               <div className="text-xl font-bold text-gray-100">
-                {isDE 
-                  ? "3 von 4 Stacks skalieren erfolgreich — Python/Django+SQLite scheitert" 
-                  : "3 out of 4 stacks scale successfully — Python/Django+SQLite fails"}
+                {pick(isDE, "3 von 4 Stacks skalieren erfolgreich — Python/Django+SQLite scheitert", "3 out of 4 stacks scale successfully — Python/Django+SQLite fails")}
               </div>
             </div>
           </div>
@@ -171,9 +166,7 @@ export default function WillItScalePage({ params }: PageProps) {
 
         {/* Trust Notice */}
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mt-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE 
-            ? "Will it Scale? sind reale Skalierungs-Szenarien basierend auf öffentlichen Daten." 
-            : "Will it Scale? are real scaling scenarios based on public data."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Will it Scale? sind reale Skalierungs-Szenarien basierend auf öffentlichen Daten.", "Will it Scale? are real scaling scenarios based on public data.")}
         </div>
       </div>
     </div>

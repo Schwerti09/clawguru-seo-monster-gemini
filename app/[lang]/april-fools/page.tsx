@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
 import { Laugh, AlertCircle, Info } from "lucide-react"
+import { pick } from "@/lib/i18n-pick"
 
 interface PageProps { params: { lang: string } }
 
@@ -10,10 +11,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const pageUrl = `${SITE_URL}/${locale}/april-fools`
   const isDE = locale === "de"
-  const title = isDE ? "Best Security Practices (April Fools) | ClawGuru" : "Best Security Practices (April Fools) | ClawGuru"
-  const description = isDE 
-    ? "Die besten Security Practices — Satire für Aprilscherze" 
-    : "The best security practices — Satire for April Fools"
+  const title = pick(isDE, "Best Security Practices (April Fools) | ClawGuru", "Best Security Practices (April Fools) | ClawGuru")
+  const description = pick(isDE, "Die besten Security Practices — Satire für Aprilscherze", "The best security practices — Satire for April Fools")
   return {
     title,
     description,
@@ -82,13 +81,11 @@ export default function AprilFoolsPage({ params }: PageProps) {
           <div className="flex items-center gap-3 mb-4">
             <Laugh className="w-8 h-8 text-amber-400" />
             <h1 className="text-4xl font-bold text-gray-100">
-              {isDE ? "Best Security Practices" : "Best Security Practices"}
+              {pick(isDE, "Best Security Practices", "Best Security Practices")}
             </h1>
           </div>
           <p className="text-lg text-gray-300">
-            {isDE 
-              ? "Die ultimativen Security-Tipps — für Aprilscherze (Satire)" 
-              : "The ultimate security tips — for April Fools (satire)"}
+            {pick(isDE, "Die ultimativen Security-Tipps — für Aprilscherze (Satire)", "The ultimate security tips — for April Fools (satire)")}
           </p>
         </div>
 
@@ -97,9 +94,7 @@ export default function AprilFoolsPage({ params }: PageProps) {
           <div className="flex items-start gap-3">
             <Info className="w-5 h-5 flex-shrink-0 mt-0.5" />
             <div>
-              <strong className="text-amber-100">Satire Warning:</strong> {isDE 
-                ? "Dies ist eine Satire. Bitte befolge NICHT diese „Practices“. Das Gegenteil ist richtig." 
-                : "This is satire. Please DO NOT follow these 'practices'. The opposite is true."}
+              <strong className="text-amber-100">Satire Warning:</strong> {pick(isDE, "Dies ist eine Satire. Bitte befolge NICHT diese „Practices“. Das Gegenteil ist richtig.", "This is satire. Please DO NOT follow these 'practices'. The opposite is true.")}
             </div>
           </div>
         </div>
@@ -120,7 +115,7 @@ export default function AprilFoolsPage({ params }: PageProps) {
                   <AlertCircle className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
                   <div>
                     <div className="text-sm text-zinc-500 mb-1">
-                      {isDE ? "Warum das falsch ist" : "Why this is wrong"}
+                      {pick(isDE, "Warum das falsch ist", "Why this is wrong")}
                     </div>
                     <div className="text-red-400">{practice.irony}</div>
                   </div>
@@ -135,7 +130,7 @@ export default function AprilFoolsPage({ params }: PageProps) {
                   </div>
                   <div>
                     <div className="text-sm text-zinc-500 mb-1">
-                      {isDE ? "Echter Rat" : "Real advice"}
+                      {pick(isDE, "Echter Rat", "Real advice")}
                     </div>
                     <div className="text-green-400">{practice.realAdvice}</div>
                   </div>
@@ -149,9 +144,7 @@ export default function AprilFoolsPage({ params }: PageProps) {
         <div className="mt-8 text-center">
           <div className="text-6xl mb-4">🎭</div>
           <p className="text-zinc-500 text-sm">
-            {isDE 
-              ? "Happy April Fools! — Security ist ernst, aber Humor hilft beim Lernen." 
-              : "Happy April Fools! — Security is serious, but humor helps learning."}
+            {pick(isDE, "Happy April Fools! — Security ist ernst, aber Humor hilft beim Lernen.", "Happy April Fools! — Security is serious, but humor helps learning.")}
           </p>
         </div>
       </div>

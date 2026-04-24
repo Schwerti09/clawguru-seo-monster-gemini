@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/moltbot/ai-model-versioning-security"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "AI Model Versioning Security: Sichere Modell-Lifecycle-Verwaltung | ClawGuru Moltbot"
-    : "AI Model Versioning Security: Secure Model Lifecycle Management | ClawGuru Moltbot"
-  const description = isDE
-    ? "Sichere KI-Modell-Versionierung: Modell-Signierung mit Cosign, SHA-256-Verifikation, Rollback-Strategie, Canary-Deployments für LLMs und Schutz vor Model-Substitution-Angriffen."
-    : "Secure AI model versioning: model signing with Cosign, SHA-256 verification, rollback strategy, canary deployments for LLMs and protection against model substitution attacks."
+  const title = pick(isDE, "AI Model Versioning Security: Sichere Modell-Lifecycle-Verwaltung | ClawGuru Moltbot", "AI Model Versioning Security: Secure Model Lifecycle Management | ClawGuru Moltbot")
+  const description = pick(isDE, "Sichere KI-Modell-Versionierung: Modell-Signierung mit Cosign, SHA-256-Verifikation, Rollback-Strategie, Canary-Deployments für LLMs und Schutz vor Model-Substitution-Angriffen.", "Secure AI model versioning: model signing with Cosign, SHA-256 verification, rollback strategy, canary deployments for LLMs and protection against model substitution attacks.")
   return {
     title, description,
     keywords: ["ai model versioning security", "llm model signing", "model integrity verification", "ai model lifecycle", "model substitution attack", "cosign ai model"],
@@ -173,19 +170,17 @@ export default function AiModelVersioningSecurityPage({ params }: { params: { la
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "Model-Lifecycle-Guide für eigene KI-Systeme." : "Model lifecycle guide for your own AI systems."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Model-Lifecycle-Guide für eigene KI-Systeme.", "Model lifecycle guide for your own AI systems.")}
         </div>
         <div className="mb-3"><span className="text-xs font-bold uppercase tracking-widest text-cyan-400">Moltbot · Batch 11</span></div>
         <h1 className="text-4xl font-bold mb-4 text-gray-100">
-          {isDE ? "AI Model Versioning Security" : "AI Model Versioning Security"}
+          {pick(isDE, "AI Model Versioning Security", "AI Model Versioning Security")}
         </h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "Ein unverifizierten Modell-Austausch erkennt niemand — bis es zu spät ist. Vier Kontrollen: Cosign-Signierung, immutable Registry-Tags, Canary-Rollout mit Auto-Rollback und getestete Rollback-Prozeduren."
-            : "Nobody detects an unverified model substitution — until it's too late. Four controls: Cosign signing, immutable registry tags, canary rollout with auto-rollback and tested rollback procedures."}
+          {pick(isDE, "Ein unverifizierten Modell-Austausch erkennt niemand — bis es zu spät ist. Vier Kontrollen: Cosign-Signierung, immutable Registry-Tags, Canary-Rollout mit Auto-Rollback und getestete Rollback-Prozeduren.", "Nobody detects an unverified model substitution — until it's too late. Four controls: Cosign signing, immutable registry tags, canary rollout with auto-rollback and tested rollback procedures.")}
         </p>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "4 Model-Versioning-Controls" : "4 Model Versioning Controls"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "4 Model-Versioning-Controls", "4 Model Versioning Controls")}</h2>
           <div className="space-y-5">
             {CONTROLS.map((c) => (
               <div key={c.id} className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
@@ -202,7 +197,7 @@ export default function AiModelVersioningSecurityPage({ params }: { params: { la
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-3">
             {FAQ.map((f, i) => (
               <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
@@ -213,23 +208,23 @@ export default function AiModelVersioningSecurityPage({ params }: { params: { la
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further Resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further Resources")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/moltbot/ai-supply-chain`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Supply Chain Security</div>
-              <div className="text-sm text-gray-300">{isDE ? "Modell-Poisoning verhindern" : "Prevent model poisoning"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Modell-Poisoning verhindern", "Prevent model poisoning")}</div>
             </a>
             <a href={`/${locale}/moltbot/secure-agent-deployment`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Secure Agent Deployment</div>
-              <div className="text-sm text-gray-300">{isDE ? "Cosign für Container" : "Cosign for containers"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Cosign für Container", "Cosign for containers")}</div>
             </a>
             <a href={`/${locale}/moltbot/ai-agent-audit-logging`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Agent Audit Logging</div>
-              <div className="text-sm text-gray-300">{isDE ? "Model-Wechsel auditieren" : "Audit model changes"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Model-Wechsel auditieren", "Audit model changes")}</div>
             </a>
             <a href={`/${locale}/moltbot/llm-output-validation`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM Output Validation</div>
-              <div className="text-sm text-gray-300">{isDE ? "Canary-Qualität messen" : "Measure canary quality"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Canary-Qualität messen", "Measure canary quality")}</div>
             </a>
           </div>
         </section>

@@ -1,6 +1,7 @@
 "use client"
 
 import { MessageCircle } from "lucide-react"
+import { pick } from "@/lib/i18n-pick"
 
 interface ShareWhatsAppProps {
   score?: number
@@ -32,7 +33,7 @@ export function ShareWhatsApp({ score = 45, stackName = "My Stack", locale = "de
       className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-green-900/50 hover:bg-green-900/70 border border-green-700/50 rounded-lg transition-colors"
     >
       <MessageCircle className="w-5 h-5 text-green-400" />
-      <span className="font-medium text-gray-100">{isDE ? "WhatsApp" : "WhatsApp"}</span>
+      <span className="font-medium text-gray-100">{pick(isDE, "WhatsApp", "WhatsApp")}</span>
     </button>
   )
 }

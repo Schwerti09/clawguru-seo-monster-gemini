@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/moltbot/ai-agent-sandboxing-runtime"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "AI Agent Sandboxing Runtime: KI-Agenten-Sandboxing-Laufzeit | ClawGuru Moltbot"
-    : "AI Agent Sandboxing Runtime: AI Agent Sandboxing Runtime | ClawGuru Moltbot"
-  const description = isDE
-    ? "KI-Agenten-Sandboxing-Laufzeit: Process Isolation, Resource Limits, Network Isolation und Filesystem Isolation für KI-Agenten-Sandboxing zur Laufzeit."
-    : "AI agent sandboxing runtime: process isolation, resource limits, network isolation and filesystem isolation for AI agent sandboxing at runtime."
+  const title = pick(isDE, "AI Agent Sandboxing Runtime: KI-Agenten-Sandboxing-Laufzeit | ClawGuru Moltbot", "AI Agent Sandboxing Runtime: AI Agent Sandboxing Runtime | ClawGuru Moltbot")
+  const description = pick(isDE, "KI-Agenten-Sandboxing-Laufzeit: Process Isolation, Resource Limits, Network Isolation und Filesystem Isolation für KI-Agenten-Sandboxing zur Laufzeit.", "AI agent sandboxing runtime: process isolation, resource limits, network isolation and filesystem isolation for AI agent sandboxing at runtime.")
   return {
     title, description,
     keywords: ["ai agent sandboxing runtime", "agent process isolation", "agent resource limits", "agent network isolation", "agent filesystem sandbox", "moltbot sandboxing"],
@@ -205,17 +202,15 @@ export default function AiAgentSandboxingRuntimePage({ params }: { params: { lan
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "Agent-Sandboxing-Runtime-Guide für eigene KI-Systeme." : "Agent sandboxing runtime guide for your own AI systems."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Agent-Sandboxing-Runtime-Guide für eigene KI-Systeme.", "Agent sandboxing runtime guide for your own AI systems.")}
         </div>
         <div className="mb-3"><span className="text-xs font-bold uppercase tracking-widest text-cyan-400">Moltbot · Batch 18</span></div>
-        <h1 className="text-4xl font-bold mb-4 text-gray-100">{isDE ? "AI Agent Sandboxing Runtime" : "AI Agent Sandboxing Runtime"}</h1>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">{pick(isDE, "AI Agent Sandboxing Runtime", "AI Agent Sandboxing Runtime")}</h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "KI-Agenten ohne Sandbox-Isolation zur Laufzeit können System-Resourcen erschöpfen und Host-Systeme kompromittieren. Vier Kontrollen: Process Isolation, Resource Limits, Network Isolation und Filesystem Isolation."
-            : "AI agents without sandbox isolation at runtime can exhaust system resources and compromise host systems. Four controls: process isolation, resource limits, network isolation and filesystem isolation."}
+          {pick(isDE, "KI-Agenten ohne Sandbox-Isolation zur Laufzeit können System-Resourcen erschöpfen und Host-Systeme kompromittieren. Vier Kontrollen: Process Isolation, Resource Limits, Network Isolation und Filesystem Isolation.", "AI agents without sandbox isolation at runtime can exhaust system resources and compromise host systems. Four controls: process isolation, resource limits, network isolation and filesystem isolation.")}
         </p>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "4 Agent-Sandboxing-Runtime-Kontrollen" : "4 Agent Sandboxing Runtime Controls"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "4 Agent-Sandboxing-Runtime-Kontrollen", "4 Agent Sandboxing Runtime Controls")}</h2>
           <div className="space-y-5">
             {CONTROLS.map((c) => (
               <div key={c.id} className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
@@ -232,7 +227,7 @@ export default function AiAgentSandboxingRuntimePage({ params }: { params: { lan
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-3">
             {FAQ.map((f, i) => (
               <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
@@ -243,23 +238,23 @@ export default function AiAgentSandboxingRuntimePage({ params }: { params: { lan
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further Resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further Resources")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/moltbot/ai-agent-sandboxing`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Agent Sandboxing</div>
-              <div className="text-sm text-gray-300">{isDE ? "Sandboxing-Overview" : "Sandboxing overview"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Sandboxing-Overview", "Sandboxing overview")}</div>
             </a>
             <a href={`/${locale}/moltbot/secure-agent-deployment`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Secure Agent Deployment</div>
-              <div className="text-sm text-gray-300">{isDE ? "Container-Security" : "Container security"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Container-Security", "Container security")}</div>
             </a>
             <a href={`/${locale}/moltbot/ai-agent-rbac`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Agent RBAC</div>
-              <div className="text-sm text-gray-300">{isDE ? "Process-Permissions" : "Process permissions"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Process-Permissions", "Process permissions")}</div>
             </a>
             <a href={`/${locale}/moltbot/zero-trust-ai-agents`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">Zero-Trust AI Agents</div>
-              <div className="text-sm text-gray-300">{isDE ? "Network-Isolation" : "Network isolation"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Network-Isolation", "Network isolation")}</div>
             </a>
           </div>
         </section>

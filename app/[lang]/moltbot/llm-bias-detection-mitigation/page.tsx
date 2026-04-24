@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { pick } from "@/lib/i18n-pick"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const PATH = "/moltbot/llm-bias-detection-mitigation"
@@ -12,12 +13,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   const isDE = locale === "de"
-  const title = isDE
-    ? "LLM Bias Detection Mitigation: LLM-Bias-Detection-Mitigation | ClawGuru Moltbot"
-    : "LLM Bias Detection Mitigation: LLM Bias Detection Mitigation | ClawGuru Moltbot"
-  const description = isDE
-    ? "LLM-Bias-Detection-Mitigation: Bias Detection Models, Fairness Metrics, Bias Mitigation Techniques und Continuous Bias Monitoring für LLM-Bias-Reduktion."
-    : "LLM bias detection mitigation: bias detection models, fairness metrics, bias mitigation techniques and continuous bias monitoring for LLM bias reduction."
+  const title = pick(isDE, "LLM Bias Detection Mitigation: LLM-Bias-Detection-Mitigation | ClawGuru Moltbot", "LLM Bias Detection Mitigation: LLM Bias Detection Mitigation | ClawGuru Moltbot")
+  const description = pick(isDE, "LLM-Bias-Detection-Mitigation: Bias Detection Models, Fairness Metrics, Bias Mitigation Techniques und Continuous Bias Monitoring für LLM-Bias-Reduktion.", "LLM bias detection mitigation: bias detection models, fairness metrics, bias mitigation techniques and continuous bias monitoring for LLM bias reduction.")
   return {
     title, description,
     keywords: ["llm bias detection mitigation", "llm fairness", "bias detection models", "fairness metrics", "bias mitigation", "moltbot bias"],
@@ -189,17 +186,15 @@ export default function LlmBiasDetectionMitigationPage({ params }: { params: { l
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-4xl mx-auto">
         <div className="bg-amber-900 border-l-4 border-amber-500 p-4 mb-8 text-sm text-amber-100">
-          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {isDE ? "Bias-Detection-Mitigation-Guide für eigene KI-Systeme." : "Bias detection mitigation guide for your own AI systems."}
+          <strong className="text-amber-100">"Not a Pentest" Notice</strong>: {pick(isDE, "Bias-Detection-Mitigation-Guide für eigene KI-Systeme.", "Bias detection mitigation guide for your own AI systems.")}
         </div>
         <div className="mb-3"><span className="text-xs font-bold uppercase tracking-widest text-cyan-400">Moltbot · Batch 19</span></div>
-        <h1 className="text-4xl font-bold mb-4 text-gray-100">{isDE ? "LLM Bias Detection Mitigation" : "LLM Bias Detection Mitigation"}</h1>
+        <h1 className="text-4xl font-bold mb-4 text-gray-100">{pick(isDE, "LLM Bias Detection Mitigation", "LLM Bias Detection Mitigation")}</h1>
         <p className="text-lg text-gray-300 mb-6">
-          {isDE
-            ? "LLM-Modelle ohne Bias-Detection und Mitigation können Diskriminierung und Reputationsschäden verursachen. Vier Kontrollen: Bias Detection Models, Fairness Metrics, Bias Mitigation Techniques und Continuous Bias Monitoring."
-            : "LLM models without bias detection and mitigation can cause discrimination and reputation damage. Four controls: bias detection models, fairness metrics, bias mitigation techniques and continuous bias monitoring."}
+          {pick(isDE, "LLM-Modelle ohne Bias-Detection und Mitigation können Diskriminierung und Reputationsschäden verursachen. Vier Kontrollen: Bias Detection Models, Fairness Metrics, Bias Mitigation Techniques und Continuous Bias Monitoring.", "LLM models without bias detection and mitigation can cause discrimination and reputation damage. Four controls: bias detection models, fairness metrics, bias mitigation techniques and continuous bias monitoring.")}
         </p>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "4 Bias-Detection-Mitigation-Kontrollen" : "4 Bias Detection Mitigation Controls"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "4 Bias-Detection-Mitigation-Kontrollen", "4 Bias Detection Mitigation Controls")}</h2>
           <div className="space-y-5">
             {CONTROLS.map((c) => (
               <div key={c.id} className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
@@ -216,7 +211,7 @@ export default function LlmBiasDetectionMitigationPage({ params }: { params: { l
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Häufige Fragen" : "Frequently Asked Questions"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Häufige Fragen", "Frequently Asked Questions")}</h2>
           <div className="space-y-3">
             {FAQ.map((f, i) => (
               <details key={i} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
@@ -227,23 +222,23 @@ export default function LlmBiasDetectionMitigationPage({ params }: { params: { l
           </div>
         </section>
         <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{isDE ? "Weiterführende Ressourcen" : "Further Resources"}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Weiterführende Ressourcen", "Further Resources")}</h2>
           <div className="grid grid-cols-2 gap-4">
             <a href={`/${locale}/moltbot/ai-agent-audit-logging`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Agent Audit Logging</div>
-              <div className="text-sm text-gray-300">{isDE ? "Bias-Monitoring" : "Bias monitoring"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Bias-Monitoring", "Bias monitoring")}</div>
             </a>
             <a href={`/${locale}/moltbot/llm-output-filtering`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM Output Filtering</div>
-              <div className="text-sm text-gray-300">{isDE ? "Content-Safety" : "Content safety"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Content-Safety", "Content safety")}</div>
             </a>
             <a href={`/${locale}/moltbot/llm-prompt-hardening`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">LLM Prompt Hardening</div>
-              <div className="text-sm text-gray-300">{isDE ? "Prompt-Engineering" : "Prompt engineering"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Prompt-Engineering", "Prompt engineering")}</div>
             </a>
             <a href={`/${locale}/moltbot/ai-agent-security`} className="block bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
               <div className="font-semibold text-cyan-400">AI Agent Security</div>
-              <div className="text-sm text-gray-300">{isDE ? "Fairness-Overview" : "Fairness overview"}</div>
+              <div className="text-sm text-gray-300">{pick(isDE, "Fairness-Overview", "Fairness overview")}</div>
             </a>
           </div>
         </section>

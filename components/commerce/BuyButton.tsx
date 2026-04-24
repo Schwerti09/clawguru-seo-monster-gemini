@@ -40,11 +40,20 @@ export default function BuyButton({
       ? mapAutopilotPlanToProduct(recommendedPlan)
       : product
 
+    const normalizedSignals = upgradeSignals
+      ? {
+          workspaces: Math.max(1, Math.min(999, Math.floor(upgradeSignals.workspaces))),
+          needsApiExports: !!upgradeSignals.needsApiExports,
+          needsPolicyControls: !!upgradeSignals.needsPolicyControls,
+        }
+      : undefined
+
     trackEvent("pricing_click", {
       product: resolvedProduct,
       source: analyticsSource ?? "buy_button",
       annual: !!annual,
       recommended_plan: recommendedPlan ?? null,
+      upgrade_signals: normalizedSignals ? JSON.stringify(normalizedSignals) : null,
     })
     setLoading(true)
     const coupon = typeof window !== "undefined"
@@ -59,6 +68,7 @@ export default function BuyButton({
           annual: !!annual,
           coupon_code: coupon ?? undefined,
           recommended_plan: recommendedPlan ?? undefined,
+          upgrade_signals: normalizedSignals,
         }),
       })
 

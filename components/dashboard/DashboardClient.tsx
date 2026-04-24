@@ -3,10 +3,12 @@
 import { useEffect, useMemo, useRef, useState } from "react"
 import Container from "@/components/shared/Container"
 import BuyButton from "@/components/commerce/BuyButton"
+import { trackEvent } from "@/lib/analytics"
 import {
   AUTOPILOT_THRESHOLDS,
   buildUpgradeSignalsFromUsage,
 } from "@/lib/autopilot-thresholds"
+import { suggestAutopilotPlan, type UpgradeSignals } from "@/lib/autopilot-offering"
 import { useInView } from "framer-motion"
 // Mycelium wird später als optimierte Lazy-Version wieder eingebaut
 
@@ -20,6 +22,12 @@ type TierInfo = {
 }
 
 type Product = "daypass" | "pro" | "team" | "enterprise"
+
+function mapAutopilotPlanToProduct(plan: ReturnType<typeof suggestAutopilotPlan>): "daypass" | "pro" | "team" {
+  if (plan === "scale") return "team"
+  if (plan === "pro") return "pro"
+  return "daypass"
+}
 
 function LazySection(props: { children: React.ReactNode; minH?: string }) {
   const { children, minH } = props
@@ -65,20 +73,56 @@ function useTier() {
   return { tier, plan, loading }
 }
 
-function UpgradeButton(props: { product: Product; label: string; className?: string }) {
-  const { product, label, className } = props
+function UpgradeButton(props: {
+  product: Product
+  label: string
+  className?: string
+  analyticsSource?: string
+  upgradeSignals?: UpgradeSignals
+}) {
+  const { product, label, className, analyticsSource, upgradeSignals } = props
   const [busy, setBusy] = useState(false)
   async function checkout() {
+    const recommendedPlan = upgradeSignals
+      ? suggestAutopilotPlan(upgradeSignals)
+      : undefined
+    const resolvedProduct =
+      recommendedPlan && product !== "enterprise"
+        ? mapAutopilotPlanToProduct(recommendedPlan)
+        : product
+    const normalizedSignals = upgradeSignals
+      ? {
+          workspaces: Math.max(1, Math.min(999, Math.floor(upgradeSignals.workspaces))),
+          needsApiExports: !!upgradeSignals.needsApiExports,
+          needsPolicyControls: !!upgradeSignals.needsPolicyControls,
+        }
+      : undefined
+
+    trackEvent("checkout_start", {
+      source: analyticsSource ?? "dashboard_upgrade_button",
+      product: resolvedProduct,
+      recommended_plan: recommendedPlan ?? null,
+      upgrade_signals: normalizedSignals ? JSON.stringify(normalizedSignals) : null,
+    })
     try {
       setBusy(true)
       const res = await fetch("/api/stripe/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ product })
+        body: JSON.stringify({
+          product: resolvedProduct,
+          recommended_plan: recommendedPlan ?? undefined,
+          upgrade_signals: normalizedSignals,
+        }),
       })
       const json = await res.json().catch(() => null)
       const url = json?.url as string | undefined
       if (url) {
+        trackEvent("checkout_redirect", {
+          source: analyticsSource ?? "dashboard_upgrade_button",
+          product: resolvedProduct,
+          recommended_plan: recommendedPlan ?? null,
+        })
         window.location.href = url
         return
       }
@@ -88,6 +132,10 @@ function UpgradeButton(props: { product: Product; label: string; className?: str
         window.location.href = `${locPrefix}/pricing`
       }
     } catch {
+      trackEvent("checkout_error", {
+        source: analyticsSource ?? "dashboard_upgrade_button",
+        product: resolvedProduct,
+      })
       const seg = (typeof window !== "undefined" ? window.location.pathname : "").split("/")[1] || ""
       const locPrefix = /^[a-z]{2}(-[A-Z]{2})?$/.test(seg) ? `/${seg}` : ""
       window.location.href = `${locPrefix}/pricing`
@@ -357,9 +405,27 @@ export default function DashboardClient() {
             <div className="text-sm text-gray-400">Blade Runner × Iron Man × Mycelium × Notion</div>
           </div>
           <div className="flex gap-2">
-            <UpgradeButton product="daypass" label="Daypass" />
-            <UpgradeButton product="pro" label="Pro" />
-            <UpgradeButton product="team" label="Team" />
+            <UpgradeButton product="daypass" label="Daypass" analyticsSource="dashboard_header_cta" />
+            <UpgradeButton
+              product="pro"
+              label="Pro"
+              analyticsSource="dashboard_header_cta"
+              upgradeSignals={buildUpgradeSignalsFromUsage({
+                workspaces: AUTOPILOT_THRESHOLDS.pro.minWorkspaces,
+                apiExportsRequested: AUTOPILOT_THRESHOLDS.pro.needsApiExports,
+                policyControlsRequested: AUTOPILOT_THRESHOLDS.pro.needsPolicyControls,
+              })}
+            />
+            <UpgradeButton
+              product="team"
+              label="Team"
+              analyticsSource="dashboard_header_cta"
+              upgradeSignals={buildUpgradeSignalsFromUsage({
+                workspaces: AUTOPILOT_THRESHOLDS.scale.minWorkspaces,
+                apiExportsRequested: AUTOPILOT_THRESHOLDS.scale.needsApiExports,
+                policyControlsRequested: AUTOPILOT_THRESHOLDS.scale.needsPolicyControls,
+              })}
+            />
           </div>
         </div>
 

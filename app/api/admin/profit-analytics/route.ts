@@ -152,11 +152,27 @@ function computeAlert(totalCostUsd: number, netTodayCents: number) {
 // ---------------------------------------------------------------------------
 async function conversionFunnel(stripeMetrics: Awaited<ReturnType<typeof fetchStripeMetrics>> | null) {
   const check = await getCheckFunnelSnapshotPersistent()
+  const safeRate = (num: number, den: number) => (den > 0 ? Math.round((num / den) * 1000) / 10 : 0)
+
+  const checkoutStarted = check.checkoutStarts24h
+  const checkoutRedirected = check.checkoutRedirects24h
+  const checkoutErrors = check.checkoutErrors24h
+  const checkoutCompleted = stripeMetrics?.daypassToday ?? 0
+
   return {
     landingPageViews: check.pageViews24h,
     daypassClicks: check.pricingClicks24h,
-    checkoutCompleted: stripeMetrics?.daypassToday ?? 0,
-    note: `24h: starts ${check.checkStarts24h}, results ${check.checkResults24h}, shares ${check.shareClicks24h}, methodology clicks ${check.methodikClicks24h}, hardening link clicks ${check.hardeningClicks24h}.`
+    checkoutStarted,
+    checkoutRedirected,
+    checkoutErrors,
+    checkoutCompleted,
+    rates: {
+      clickToCheckoutStartPct: safeRate(checkoutStarted, check.pricingClicks24h),
+      checkoutStartToRedirectPct: safeRate(checkoutRedirected, checkoutStarted),
+      checkoutStartToCompletePct: safeRate(checkoutCompleted, checkoutStarted),
+      redirectToCompletePct: safeRate(checkoutCompleted, checkoutRedirected),
+    },
+    note: `24h: starts ${check.checkStarts24h}, results ${check.checkResults24h}, shares ${check.shareClicks24h}, methodology clicks ${check.methodikClicks24h}, hardening link clicks ${check.hardeningClicks24h}.`,
   }
 }
 

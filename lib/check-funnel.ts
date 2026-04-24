@@ -9,6 +9,9 @@ type CheckEvent =
   | "share_click"
   | "pricing_click"
   | "hardening_link_click"
+  | "checkout_start"
+  | "checkout_redirect"
+  | "checkout_error"
 
 type EventRow = {
   event: CheckEvent
@@ -52,6 +55,9 @@ export function getCheckFunnelSnapshot() {
     checkStarts24h: countSince("check_start", since24h),
     checkResults24h: countSince("check_result", since24h),
     pricingClicks24h: countSince("pricing_click", since24h),
+    checkoutStarts24h: countSince("checkout_start", since24h),
+    checkoutRedirects24h: countSince("checkout_redirect", since24h),
+    checkoutErrors24h: countSince("checkout_error", since24h),
     shareClicks24h: countSince("share_click", since24h),
     methodikClicks24h: countSince("methodik_click", since24h),
     hardeningClicks24h: countSince("hardening_link_click", since24h),
@@ -86,6 +92,9 @@ export async function getCheckFunnelSnapshotPersistent() {
       check_starts: string
       check_results: string
       pricing_clicks: string
+      checkout_starts: string
+      checkout_redirects: string
+      checkout_errors: string
       share_clicks: string
       methodik_clicks: string
       hardening_clicks: string
@@ -95,6 +104,9 @@ export async function getCheckFunnelSnapshotPersistent() {
          COUNT(*) FILTER (WHERE event = 'check_start')::text AS check_starts,
          COUNT(*) FILTER (WHERE event = 'check_result')::text AS check_results,
          COUNT(*) FILTER (WHERE event = 'pricing_click')::text AS pricing_clicks,
+         COUNT(*) FILTER (WHERE event = 'checkout_start')::text AS checkout_starts,
+         COUNT(*) FILTER (WHERE event = 'checkout_redirect')::text AS checkout_redirects,
+         COUNT(*) FILTER (WHERE event = 'checkout_error')::text AS checkout_errors,
          COUNT(*) FILTER (WHERE event = 'share_click')::text AS share_clicks,
          COUNT(*) FILTER (WHERE event = 'methodik_click')::text AS methodik_clicks,
          COUNT(*) FILTER (WHERE event = 'hardening_link_click')::text AS hardening_clicks
@@ -108,6 +120,9 @@ export async function getCheckFunnelSnapshotPersistent() {
       checkStarts24h: Number(row?.check_starts || 0),
       checkResults24h: Number(row?.check_results || 0),
       pricingClicks24h: Number(row?.pricing_clicks || 0),
+      checkoutStarts24h: Number(row?.checkout_starts || 0),
+      checkoutRedirects24h: Number(row?.checkout_redirects || 0),
+      checkoutErrors24h: Number(row?.checkout_errors || 0),
       shareClicks24h: Number(row?.share_clicks || 0),
       methodikClicks24h: Number(row?.methodik_clicks || 0),
       hardeningClicks24h: Number(row?.hardening_clicks || 0),

@@ -55,6 +55,13 @@ export default function BuyButton({
       recommended_plan: recommendedPlan ?? null,
       upgrade_signals: normalizedSignals ? JSON.stringify(normalizedSignals) : null,
     })
+    trackEvent("checkout_start", {
+      source: analyticsSource ?? "buy_button",
+      product: resolvedProduct,
+      annual: !!annual,
+      recommended_plan: recommendedPlan ?? null,
+      upgrade_signals: normalizedSignals ? JSON.stringify(normalizedSignals) : null,
+    })
     setLoading(true)
     const coupon = typeof window !== "undefined"
       ? (sessionStorage.getItem(COUPON_SESSION_KEY) ?? undefined)
@@ -99,9 +106,18 @@ export default function BuyButton({
         return
       }
 
+      trackEvent("checkout_redirect", {
+        source: analyticsSource ?? "buy_button",
+        product: resolvedProduct,
+        recommended_plan: recommendedPlan ?? null,
+      })
       window.location.href = dataObj.url
     } catch (err) {
       console.error("[BuyButton] fetch failed:", err)
+      trackEvent("checkout_error", {
+        source: analyticsSource ?? "buy_button",
+        product: resolvedProduct,
+      })
       alert("Checkout-Request fehlgeschlagen. Details in der Browser-Konsole.")
     } finally {
       setLoading(false)

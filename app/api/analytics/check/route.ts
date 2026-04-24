@@ -14,6 +14,9 @@ type CheckEvent =
   | "share_click"
   | "pricing_click"
   | "hardening_link_click"
+  | "checkout_start"
+  | "checkout_redirect"
+  | "checkout_error"
 
 export async function POST(req: NextRequest) {
   try {

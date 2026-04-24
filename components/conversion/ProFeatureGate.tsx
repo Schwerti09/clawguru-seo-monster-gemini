@@ -4,6 +4,10 @@ import { motion, AnimatePresence } from "framer-motion"
 import { Lock, Shield, CheckCircle, ArrowRight } from "lucide-react"
 import BuyButton from "@/components/commerce/BuyButton"
 import { trackEvent } from "@/lib/analytics"
+import {
+  AUTOPILOT_THRESHOLDS,
+  buildUpgradeSignalsFromUsage,
+} from "@/lib/autopilot-thresholds"
 
 type ProFeatureGateDict = {
   locked_title: string
@@ -83,7 +87,11 @@ export function ProFeatureGate({ locale, source = "cve_page", variant = "full", 
             style={{ background: "linear-gradient(135deg, #f59e0b 0%, #d97706 100%)", boxShadow: "0 0 20px rgba(245,158,11,0.25)" }}
             analyticsSource={source}
             autoRecommend
-            upgradeSignals={{ workspaces: 2, needsApiExports: true, needsPolicyControls: false }}
+            upgradeSignals={buildUpgradeSignalsFromUsage({
+              workspaces: AUTOPILOT_THRESHOLDS.pro.minWorkspaces,
+              apiExportsRequested: AUTOPILOT_THRESHOLDS.pro.needsApiExports,
+              policyControlsRequested: AUTOPILOT_THRESHOLDS.pro.needsPolicyControls,
+            })}
           />
           <BuyButton
             product="daypass"
@@ -148,7 +156,11 @@ export function ProFeatureGate({ locale, source = "cve_page", variant = "full", 
               style={{ background: "linear-gradient(135deg, #f59e0b 0%, #d97706 100%)", boxShadow: "0 0 30px rgba(245,158,11,0.25)" }}
               analyticsSource={source}
               autoRecommend
-              upgradeSignals={{ workspaces: 2, needsApiExports: true, needsPolicyControls: false }}
+            upgradeSignals={buildUpgradeSignalsFromUsage({
+              workspaces: AUTOPILOT_THRESHOLDS.pro.minWorkspaces,
+              apiExportsRequested: AUTOPILOT_THRESHOLDS.pro.needsApiExports,
+              policyControlsRequested: AUTOPILOT_THRESHOLDS.pro.needsPolicyControls,
+            })}
             />
             <BuyButton
               product="daypass"

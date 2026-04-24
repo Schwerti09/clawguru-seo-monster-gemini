@@ -5,6 +5,10 @@ import BuyButton from "@/components/commerce/BuyButton"
 import SocialProofBlock from "@/components/commerce/SocialProofBlock"
 import type { Locale } from "@/lib/i18n"
 import { AUTOPILOT_PLANS } from "@/lib/autopilot-offering"
+import {
+  AUTOPILOT_THRESHOLDS,
+  buildUpgradeSignalsFromUsage,
+} from "@/lib/autopilot-thresholds"
 
 export default function BillingToggle({ locale, isDE, prefix }: { locale: Locale; isDE: boolean; prefix: string }) {
   const [annual, setAnnual] = useState(false)
@@ -104,7 +108,11 @@ export default function BillingToggle({ locale, isDE, prefix }: { locale: Locale
                 product="pro"
                 annual={annual}
                 autoRecommend
-                upgradeSignals={{ workspaces: 2, needsApiExports: true, needsPolicyControls: false }}
+                upgradeSignals={buildUpgradeSignalsFromUsage({
+                  workspaces: AUTOPILOT_THRESHOLDS.pro.minWorkspaces,
+                  apiExportsRequested: AUTOPILOT_THRESHOLDS.pro.needsApiExports,
+                  policyControlsRequested: AUTOPILOT_THRESHOLDS.pro.needsPolicyControls,
+                })}
                 label={isDE
                   ? `Jetzt Pro werden — ${annual ? proAnnual : proMonthly}€/${isDE ? "Mo" : "mo"}`
                   : `Become Pro now — €${annual ? proAnnual : proMonthly}/mo`}
@@ -170,7 +178,11 @@ export default function BillingToggle({ locale, isDE, prefix }: { locale: Locale
                 product="team"
                 annual={annual}
                 autoRecommend
-                upgradeSignals={{ workspaces: 6, needsApiExports: true, needsPolicyControls: true }}
+                upgradeSignals={buildUpgradeSignalsFromUsage({
+                  workspaces: AUTOPILOT_THRESHOLDS.scale.minWorkspaces,
+                  apiExportsRequested: AUTOPILOT_THRESHOLDS.scale.needsApiExports,
+                  policyControlsRequested: AUTOPILOT_THRESHOLDS.scale.needsPolicyControls,
+                })}
                 label={isDE
                   ? `Scale starten (${annual ? teamAnnual : teamMonthly}€/Monat) → Stripe`
                   : `Start Scale (€${annual ? teamAnnual : teamMonthly}/month) → Stripe`}

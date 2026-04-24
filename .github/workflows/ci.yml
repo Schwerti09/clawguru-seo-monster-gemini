@@ -18,7 +18,7 @@ jobs:
           node-version: "22"
           cache: "npm"
       - run: npm install --legacy-peer-deps --no-audit --no-fund
-      - run: npx jest __tests__/autopilot-offering.test.ts __tests__/autopilot-delivery.test.ts __tests__/checkout-upgrade-signals.test.ts --runInBand
+      - run: npm run test:autopilot
 
   build:
     needs: unit-tests

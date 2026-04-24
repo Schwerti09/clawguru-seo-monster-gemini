@@ -7,7 +7,21 @@ on:
     branches: ["main"]
 
 jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+      - run: npm install --legacy-peer-deps --no-audit --no-fund
+      - run: npx jest __tests__/autopilot-offering.test.ts __tests__/autopilot-delivery.test.ts __tests__/checkout-upgrade-signals.test.ts --runInBand
+
   build:
+    needs: unit-tests
     runs-on: ubuntu-latest
     permissions:
       contents: read

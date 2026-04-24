@@ -2,8 +2,8 @@
 
 import { useEffect, useMemo, useRef, useState } from "react"
 import Container from "@/components/shared/Container"
+import BuyButton from "@/components/commerce/BuyButton"
 import { useInView } from "framer-motion"
-import { usePathname } from "next/navigation"
 // Mycelium wird später als optimierte Lazy-Version wieder eingebaut
 
 type AccessPlan = "free" | "daypass" | "pro" | "enterprise"
@@ -12,7 +12,7 @@ type TierInfo = {
   ok: boolean
   plan?: "daypass" | "pro" | "team"
   tier?: AccessPlan
-  limits?: any
+  limits?: unknown
 }
 
 type Product = "daypass" | "pro" | "team" | "enterprise"
@@ -98,6 +98,34 @@ function UpgradeButton(props: { product: Product; label: string; className?: str
   )
 }
 
+function UpgradeSignalNudge(props: {
+  title: string
+  description: string
+  product: "daypass" | "pro" | "team"
+  label: string
+  signals: { workspaces: number; needsApiExports: boolean; needsPolicyControls: boolean }
+}) {
+  const { title, description, product, label, signals } = props
+  return (
+    <div className="mt-4 rounded-2xl border border-cyan-500/30 bg-cyan-500/5 p-4">
+      <div className="text-xs font-mono tracking-wider text-cyan-300 uppercase">Upgrade Signal</div>
+      <div className="mt-1 text-sm font-bold text-white">{title}</div>
+      <p className="mt-1 text-xs text-gray-300">{description}</p>
+      <div className="mt-3">
+        <BuyButton
+          product={product}
+          label={label}
+          autoRecommend
+          upgradeSignals={signals}
+          analyticsSource="dashboard_upgrade_signal"
+          className="px-4 py-2 rounded-xl font-bold text-black"
+          style={{ background: "linear-gradient(135deg, #00ff9d 0%, #00b8ff 100%)" }}
+        />
+      </div>
+    </div>
+  )
+}
+
 function GatedTile(props: { title: string; minTier: AccessPlan; tier: AccessPlan; children: React.ReactNode; cta?: Product }) {
   const { title, minTier, tier, children, cta } = props
   const rank = { free: 0, daypass: 1, pro: 2, enterprise: 3 }
@@ -122,17 +150,6 @@ function MyceliumCommandCore(props: { tier: AccessPlan }) {
   const { tier } = props
   const ticker = useMemo(() => Math.floor(300 + Math.random() * 120), [])
   const mountRef = useRef<HTMLDivElement>(null)
-  const inView = useInView(mountRef, { amount: 0.25, once: true })
-  const [ready, setReady] = useState(false)
-  useEffect(() => {
-    try {
-      const w = typeof window !== "undefined" ? window.innerWidth : 1024
-      const prefersReduced = typeof window !== "undefined" && window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches
-      setReady(w >= 768 && !prefersReduced)
-    } catch {
-      setReady(false)
-    }
-  }, [])
   return (
     <GatedTile title="Mycelium Command Core" minTier="daypass" tier={tier}>
       <div className="grid md:grid-cols-2 gap-4">
@@ -200,6 +217,7 @@ function AiRunbookGenerator(props: { tier: AccessPlan }) {
   const { tier } = props
   const [q, setQ] = useState("")
   const limited = tier === "daypass"
+  const isFree = tier === "free"
   return (
     <GatedTile title="AI Mycelium Runbook Generator" minTier="daypass" tier={tier}>
       <div className="flex flex-col gap-3">
@@ -210,6 +228,15 @@ function AiRunbookGenerator(props: { tier: AccessPlan }) {
           <button className="px-4 py-3 rounded-2xl bg-cyan-600 hover:bg-cyan-700 text-white font-bold">Generieren</button>
         </div>
         {limited && <div className="text-xs text-gray-400">Daypass: 1 Runbook/Tag</div>}
+        {(isFree || limited) && (
+          <UpgradeSignalNudge
+            title="Automation needs detected"
+            description="If you run more than one workspace or need exports for CI/SIEM, move to Pro."
+            product="pro"
+            label="Autopilot Pro empfehlen"
+            signals={{ workspaces: 2, needsApiExports: true, needsPolicyControls: false }}
+          />
+        )}
       </div>
     </GatedTile>
   )
@@ -231,67 +258,20 @@ function BreachSimulator(props: { tier: AccessPlan }) {
   )
 }
 
-function LiveThreatNetwork(props: { tier: AccessPlan }) {
-  const [data, setData] = useState<any | null>(null)
-  const rootRef = useRef<HTMLDivElement>(null)
-  const inView = useInView(rootRef, { amount: 0.2, once: true })
-  const pathname = usePathname()
-  const prefix = useMemo(() => {
-    const first = (pathname || "").split("/")[1] || ""
-    const isLang = /^[a-z]{2}(-[A-Z]{2})?$/.test(first)
-    return isLang ? `/${first}` : ""
-  }, [pathname])
-  useEffect(() => {
-    if (!inView) return
-    let stop = false
-    ;(async () => {
-      try {
-        const res = await fetch("/api/live-wall", { cache: "default" })
-        const j = await res.json()
-        if (!stop) setData(j)
-      } catch {}
-    })()
-    return () => { stop = true }
-  }, [inView])
-  const trending = (data?.trending || []).slice(0, 8)
-  const cves = (data?.cves || []).slice(0, 6)
-  return (
-    <div ref={rootRef}>
-    <GatedTile title="Live Mycelium Threat Network" minTier="daypass" tier={props.tier}>
-      <div className="grid md:grid-cols-2 gap-4">
-        <div>
-          <div className="text-sm font-bold mb-2">Trending Fixes</div>
-          <div className="grid grid-cols-1 gap-2">
-            {trending.map((t: any) => (
-              <a key={t.slug} href={`${prefix}/runbook/${t.slug}`} className="px-3 py-2 rounded-xl border border-gray-800 bg-black/30 hover:bg-black/40">
-                <div className="font-bold text-gray-100">{t.title}</div>
-                <div className="text-xs text-gray-400">{t.summary}</div>
-              </a>
-            ))}
-          </div>
-        </div>
-        <div>
-          <div className="text-sm font-bold mb-2">Neueste Viren (CVE‑Pulse)</div>
-          <div className="grid grid-cols-1 gap-2">
-            {cves.map((x: any) => (
-              <a key={x.cveId} href={`${prefix}/solutions/fix/${x.cveId}`} className="px-3 py-2 rounded-xl border border-gray-800 bg-black/30 hover:bg-black/40 flex items-center justify-between">
-                <span className="text-xs font-mono text-gray-300">{x.cveId}</span>
-                <span className="text-sm font-bold text-gray-100">{x.name}</span>
-                <span className="text-xs text-gray-400">{x.cvssScore}</span>
-              </a>
-            ))}
-          </div>
-        </div>
-      </div>
-    </GatedTile>
-    </div>
-  )
-}
-
 function EnterpriseDeck(props: { tier: AccessPlan }) {
+  const locked = props.tier !== "enterprise"
   return (
     <GatedTile title="Enterprise Mycelium Command Deck" minTier="enterprise" tier={props.tier} cta="team">
       <div className="h-40 rounded-xl border border-emerald-500/20 bg-emerald-500/5 grid place-items-center text-emerald-200">Team‑Collaboration & Compliance</div>
+      {locked && (
+        <UpgradeSignalNudge
+          title="Governance threshold reached"
+          description="Policy controls and cross-workspace governance are best handled in Scale."
+          product="team"
+          label="Autopilot Scale aktivieren"
+          signals={{ workspaces: 6, needsApiExports: true, needsPolicyControls: true }}
+        />
+      )}
     </GatedTile>
   )
 }
@@ -347,67 +327,6 @@ function AffiliateNetwork(props: { tier: AccessPlan }) {
 
         <div className="text-xs text-gray-500">
           Provision: 30% auf alle Abos · Auszahlung monatlich (€50 Minimum)
-        </div>
-      </div>
-    </GatedTile>
-  )
-}
-
-function SwarmOracleSection(props: { tier: AccessPlan }) {
-  const { tier } = props
-  const pathname = usePathname()
-  const prefix = useMemo(() => {
-    const first = (pathname || "").split("/")[1] || ""
-    const isLang = /^[a-z]{2}(-[A-Z]{2})?$/.test(first)
-    return isLang ? `/${first}` : ""
-  }, [pathname])
-  const prefill = encodeURIComponent("Mein Kubernetes-Cluster")
-  return (
-    <GatedTile title="Claw Swarm Oracle" minTier="free" tier={tier}>
-      <div className="grid md:grid-cols-2 gap-4 items-center">
-        <div className="rounded-2xl border border-red-500/30 bg-gradient-to-b from-red-500/10 to-red-900/10 p-5">
-          <div className="text-sm text-red-300 mb-2">Summon your Army</div>
-          <div className="text-2xl font-black">Neon-roter Summon-Button · 4 Swarm-Typen</div>
-          <div className="mt-2 text-sm text-gray-400">Ergebnis in unter 8 Sekunden: Angriffspfade, Vorhersage, Runbook + One-Click-Fix</div>
-          <div className="mt-4 flex flex-wrap gap-2">
-            <a href={`${prefix}/summon?prefill=${prefill}`} className="px-5 py-3 rounded-2xl font-black text-white" style={{ background: "linear-gradient(135deg,#ff0066,#ff9900)", boxShadow: "0 0 24px rgba(255,0,102,0.25)" }}>Jetzt summonen</a>
-            <UpgradeButton product="daypass" label="Daypass 9,99 € - 24h" />
-            <UpgradeButton product="pro" label="Pro 49 € / Monat" />
-          </div>
-        </div>
-        <div className="rounded-2xl border border-white/10 bg-black/30 aspect-[16/9] overflow-hidden grid place-items-center text-gray-400">
-          {/* Mycelium wird später als optimierte Lazy-Version wieder eingebaut */}
-          <div className="text-xs opacity-70">Preview vorübergehend deaktiviert</div>
-        </div>
-      </div>
-    </GatedTile>
-  )
-}
-
-function IntelNexusSection(props: { tier: AccessPlan }) {
-  const { tier } = props
-  const pathname = usePathname()
-  const prefix = useMemo(() => {
-    const first = (pathname || "").split("/")[1] || ""
-    const isLang = /^[a-z]{2}(-[A-Z]{2})?$/.test(first)
-    return isLang ? `/${first}` : ""
-  }, [pathname])
-  return (
-    <GatedTile title="Mycelium Intel Nexus" minTier="free" tier={tier}>
-      <div className="grid md:grid-cols-2 gap-4 items-center">
-        <div className="rounded-2xl border border-emerald-500/30 bg-gradient-to-b from-emerald-500/10 to-cyan-500/10 p-5">
-          <div className="text-sm text-emerald-300 mb-2">Cinematic Intelligence</div>
-          <div className="text-2xl font-black">3D Threat‑Map · Teaser‑Report · Predictive</div>
-          <div className="mt-2 text-sm text-gray-400">Luxus‑Look mit Glassmorphism & Gold‑Akzenten. 60s Preview, dann starker Paywall‑Nudge.</div>
-          <div className="mt-4 flex flex-wrap gap-2">
-            <a href={`${prefix}/intel`} className="px-5 py-3 rounded-2xl font-black text-white" style={{ background: "linear-gradient(135deg,#00ff9d,#00b8ff)", boxShadow: "0 0 24px rgba(0,255,157,0.25)" }}>Open Intel</a>
-            <UpgradeButton product="daypass" label="Daypass 9,99 € - 24h" />
-            <UpgradeButton product="pro" label="Pro 49 € / Monat" />
-          </div>
-        </div>
-        <div className="rounded-2xl border border-white/10 bg-black/30 aspect-[16/9] overflow-hidden grid place-items-center text-gray-400">
-          {/* Mycelium wird später als optimierte Lazy-Version wieder eingebaut */}
-          <div className="text-xs opacity-70">Preview vorübergehend deaktiviert</div>
         </div>
       </div>
     </GatedTile>

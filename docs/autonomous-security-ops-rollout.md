@@ -30,11 +30,14 @@ Transform ClawGuru from high-ticket consulting offers into an automation-first s
    - Added `lib/autopilot-offering.ts` with canonical plan catalog and upgrade recommendation logic
 4. Automated test coverage for offering logic
    - Added `__tests__/autopilot-offering.test.ts`
-5. Conversion automation wiring (next)
-   - Connect `suggestAutopilotPlan()` to checkout/upsell events
-   - Add in-app prompts when workspace/API/policy thresholds are hit
-6. Release gating and KPI loop (next)
-   - Promote offering tests to CI required checks
+5. Conversion automation wiring (in progress)
+   - Connected `suggestAutopilotPlan()` to checkout events and metadata
+   - Added upgrade-signal capture (`workspaces`, API export need, policy-control need)
+6. Autopilot delivery layer (in progress)
+   - Added `lib/autopilot-delivery.ts` for prioritization, weekly digest, and proof-of-fix payloads
+   - Added coverage in `__tests__/autopilot-delivery.test.ts`
+7. Release gating and KPI loop (next)
+   - Promote offering and checkout recommendation tests to CI required checks
    - Track trial-to-paid, plan upgrades, and churn by tier
 
 ## KPI Targets (90 days)

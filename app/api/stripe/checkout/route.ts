@@ -4,6 +4,7 @@ import { isStripeActive, apiUnavailableResponse } from "@/lib/api-guard"
 import { getStripe } from "@/lib/stripe"
 import { logTelemetry } from "@/lib/ops/telemetry"
 import { getRequestId } from "@/lib/ops/request-id"
+import { sanitizeUpgradeSignals, upgradeSignalsMetadata } from "@/lib/checkout-upgrade-signals"
 
 export const dynamic = "force-dynamic"
 export const runtime = "nodejs"
@@ -162,6 +163,7 @@ export async function POST(req: NextRequest) {
       typeof body?.recommended_plan === "string" && body.recommended_plan.length > 0
         ? body.recommended_plan.slice(0, 32)
         : undefined
+    const upgradeSignals = sanitizeUpgradeSignals(body?.upgrade_signals)
 
     const price = getPriceId(product, annual)
 
@@ -219,6 +221,7 @@ export async function POST(req: NextRequest) {
         ...(affiliateRef ? { affiliate_ref: affiliateRef } : {}),
         ...(rawCoupon ? { coupon_code: rawCoupon } : {}),
         ...(recommendedPlan ? { recommended_plan: recommendedPlan } : {}),
+        ...upgradeSignalsMetadata(upgradeSignals),
       },
     })
 

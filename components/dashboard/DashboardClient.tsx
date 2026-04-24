@@ -3,6 +3,10 @@
 import { useEffect, useMemo, useRef, useState } from "react"
 import Container from "@/components/shared/Container"
 import BuyButton from "@/components/commerce/BuyButton"
+import {
+  AUTOPILOT_THRESHOLDS,
+  buildUpgradeSignalsFromUsage,
+} from "@/lib/autopilot-thresholds"
 import { useInView } from "framer-motion"
 // Mycelium wird später als optimierte Lazy-Version wieder eingebaut
 
@@ -234,7 +238,11 @@ function AiRunbookGenerator(props: { tier: AccessPlan }) {
             description="If you run more than one workspace or need exports for CI/SIEM, move to Pro."
             product="pro"
             label="Autopilot Pro empfehlen"
-            signals={{ workspaces: 2, needsApiExports: true, needsPolicyControls: false }}
+            signals={buildUpgradeSignalsFromUsage({
+              workspaces: AUTOPILOT_THRESHOLDS.pro.minWorkspaces,
+              apiExportsRequested: AUTOPILOT_THRESHOLDS.pro.needsApiExports,
+              policyControlsRequested: AUTOPILOT_THRESHOLDS.pro.needsPolicyControls,
+            })}
           />
         )}
       </div>
@@ -269,7 +277,11 @@ function EnterpriseDeck(props: { tier: AccessPlan }) {
           description="Policy controls and cross-workspace governance are best handled in Scale."
           product="team"
           label="Autopilot Scale aktivieren"
-          signals={{ workspaces: 6, needsApiExports: true, needsPolicyControls: true }}
+          signals={buildUpgradeSignalsFromUsage({
+            workspaces: AUTOPILOT_THRESHOLDS.scale.minWorkspaces,
+            apiExportsRequested: AUTOPILOT_THRESHOLDS.scale.needsApiExports,
+            policyControlsRequested: AUTOPILOT_THRESHOLDS.scale.needsPolicyControls,
+          })}
         />
       )}
     </GatedTile>

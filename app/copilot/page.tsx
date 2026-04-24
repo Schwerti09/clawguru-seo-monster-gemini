@@ -44,7 +44,7 @@ export const metadata: Metadata = {
     type: "website",
     url: `${BASE_URL}/copilot`,
     images: [{
-      url: `${BASE_URL}/copilot/opengraph-image`,
+      url: `${BASE_URL}/og/copilot.png`,
       width: 1200,
       height: 630,
       alt: "ClawGuru Prof. ClawGuru — AI Security Assistant - 4.2M+ Runbooks, 30s Fix Time, 24/7 Active"
@@ -54,7 +54,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Prof. ClawGuru — AI Security Assistant | ClawGuru",
     description: "ClawGuru ist die KI-gestützte SecOps-Plattform mit über 4,2 Millionen ausführbaren Runbooks – für Incident Response, Hardening und Compliance in Echtzeit. Vom Problem zum Fix in unter 30 Sekunden.",
-    images: [`${BASE_URL}/copilot/opengraph-image`]
+    images: [`${BASE_URL}/og/copilot.png`]
   },
   alternates: { canonical: "/copilot" },
 }
@@ -93,7 +93,7 @@ const softwareApplicationJsonLd = {
 const imageObjectJsonLd = {
   "@context": "https://schema.org",
   "@type": "ImageObject",
-  contentUrl: `${BASE_URL}/copilot/opengraph-image`,
+  contentUrl: `${BASE_URL}/og/copilot.png`,
   description: "ClawGuru Prof. ClawGuru — AI Security Assistant - 4.2M+ Runbooks, 30s Fix Time, 24/7 Active",
   author: {
     "@type": "Organization",

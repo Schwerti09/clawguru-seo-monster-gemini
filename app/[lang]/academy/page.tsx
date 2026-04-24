@@ -48,7 +48,7 @@ export async function generateMetadata({ params }: { params: { lang: string } })
   const imageObjectSchema = {
     "@context": "https://schema.org",
     "@type": "ImageObject",
-    contentUrl: `${SITE_URL}/${locale}/academy/opengraph-image`,
+    contentUrl: `${SITE_URL}/og/academy.png`,
     description: "ClawGuru Academy ∞ - Living Cyber Range - 80+ Missions, 15 Tools, AI Tutor",
     author: {
       "@type": "Organization",
@@ -67,7 +67,7 @@ export async function generateMetadata({ params }: { params: { lang: string } })
       description: c.meta.description,
       type: "website",
       url: pageUrl,
-      images: [{ url: `/${locale}/academy/opengraph-image`, width: 1200, height: 630, alt: "ClawGuru Academy ∞ - Living Cyber Range - 80+ Missions, 15 Tools, AI Tutor" }],
+      images: [{ url: `${SITE_URL}/og/academy.png`, width: 1200, height: 630, alt: "ClawGuru Academy ∞ - Living Cyber Range - 80+ Missions, 15 Tools, AI Tutor" }],
     },
     alternates: buildLocalizedAlternates(locale, "/academy"),
     robots: "index, follow",

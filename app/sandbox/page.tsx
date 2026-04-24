@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     type: "website",
     url: `${BASE_URL}/sandbox`,
     images: [{
-      url: `${BASE_URL}/sandbox/opengraph-image`,
+      url: `${BASE_URL}/og/sandbox.png`,
       width: 1200,
       height: 630,
       alt: "ClawGuru Live Fix Sandbox — In-Browser Config Testing - Nginx, Docker, Terraform, K8s"
@@ -49,7 +49,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Live Fix Sandbox — In-Browser Config Testing | ClawGuru",
     description: "ClawGuru ist die KI-gestützte SecOps-Plattform mit über 4,2 Millionen ausführbaren Runbooks – für Incident Response, Hardening und Compliance in Echtzeit. Vom Problem zum Fix in unter 30 Sekunden.",
-    images: [`${BASE_URL}/sandbox/opengraph-image`]
+    images: [`${BASE_URL}/og/sandbox.png`]
   },
   alternates: { canonical: "/sandbox" },
 }
@@ -96,7 +96,7 @@ const softwareApplicationJsonLd = {
 const imageObjectJsonLd = {
   "@context": "https://schema.org",
   "@type": "ImageObject",
-  contentUrl: `${BASE_URL}/sandbox/opengraph-image`,
+  contentUrl: `${BASE_URL}/og/sandbox.png`,
   description: "ClawGuru Live Fix Sandbox — In-Browser Config Testing - Nginx, Docker, Terraform, K8s",
   author: {
     "@type": "Organization",

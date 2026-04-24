@@ -17,7 +17,7 @@ export async function generateMetadata(props: { params: { lang: string } }): Pro
   const imageObjectJsonLd = {
     "@context": "https://schema.org",
     "@type": "ImageObject",
-    contentUrl: `${BASE_URL}/${locale}/live/opengraph-image`,
+    contentUrl: `${BASE_URL}/og/live.png`,
     description: "ClawGuru Live Ops Cockpit - 4.2M+ Runbooks, Top 100 Hot Threats, 24/7 Live",
     author: {
       "@type": "Organization",
@@ -37,7 +37,7 @@ export async function generateMetadata(props: { params: { lang: string } }): Pro
       type: "website",
       url: `${BASE_URL}/${locale}/live`,
       images: [{
-        url: `${BASE_URL}/${locale}/live/opengraph-image`,
+        url: `${BASE_URL}/og/live.png`,
         width: 1200,
         height: 630,
         alt: "ClawGuru Live Ops Cockpit - 4.2M+ Runbooks, Top 100 Hot Threats, 24/7 Live"
@@ -47,7 +47,7 @@ export async function generateMetadata(props: { params: { lang: string } }): Pro
       card: "summary_large_image",
       title: "Live Ops Cockpit — Echtzeit-Überwachung | ClawGuru",
       description: "Echtzeit-Überwachung deiner Systeme und Bedrohungslandschaft. 4.2M+ Runbooks generierbar, Top 100 hot + trending threats.",
-      images: [`${BASE_URL}/${locale}/live/opengraph-image`]
+      images: [`${BASE_URL}/og/live.png`]
     },
     alternates: buildLocalizedAlternates(locale, "/live"),
     other: {

@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: { params: { lang: string } })
   const imageObjectJsonLd = {
     "@context": "https://schema.org",
     "@type": "ImageObject",
-    contentUrl: `${SITE_URL}/${locale}/tools/opengraph-image`,
+    contentUrl: `${SITE_URL}/og/tools.png`,
     description: "ClawGuru The Arsenal - 15 Free Security Tools - Header Doctor, TLS Xray, Prompt Injection Sandbox",
     author: {
       "@type": "Organization",
@@ -41,7 +41,7 @@ export async function generateMetadata({ params }: { params: { lang: string } })
       url: pageUrl,
       type: "website",
       images: [{
-        url: `${SITE_URL}/${locale}/tools/opengraph-image`,
+        url: `${SITE_URL}/og/tools.png`,
         width: 1200,
         height: 630,
         alt: "ClawGuru The Arsenal - 15 Free Security Tools - Header Doctor, TLS Xray, Prompt Injection Sandbox"
@@ -51,7 +51,7 @@ export async function generateMetadata({ params }: { params: { lang: string } })
       card: "summary_large_image",
       title,
       description,
-      images: [`${SITE_URL}/${locale}/tools/opengraph-image`]
+      images: [`${SITE_URL}/og/tools.png`]
     },
     alternates: buildLocalizedAlternates(locale, "/tools"),
     robots: "index, follow",

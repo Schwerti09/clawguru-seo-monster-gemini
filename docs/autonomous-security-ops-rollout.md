@@ -41,6 +41,7 @@ Transform ClawGuru from high-ticket consulting offers into an automation-first s
    - Added retention signal scoring for drop-off and error hotspots
    - Added admin dashboard visibility for conversion rates and retention signal levels
    - Added user dashboard retention hints based on local checkout friction patterns
+   - Added retention v2: locale-aware hint copy, CTA deep-link to pricing, and 12h nudge cooldown after dismiss
 8. Release gating and KPI loop (next)
    - Keep autopilot unit tests as required gate in CI
    - Track trial-to-paid, plan upgrades, and churn by tier

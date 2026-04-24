@@ -4,13 +4,14 @@ import { useEffect, useMemo, useRef, useState } from "react"
 import Container from "@/components/shared/Container"
 import BuyButton from "@/components/commerce/BuyButton"
 import { trackEvent } from "@/lib/analytics"
-import { getCheckoutRetentionSnapshot } from "@/lib/retention-client"
+import { dismissRetentionNudge, getRetentionNudge, type RetentionNudge } from "@/lib/retention-client"
 import {
   AUTOPILOT_THRESHOLDS,
   buildUpgradeSignalsFromUsage,
 } from "@/lib/autopilot-thresholds"
 import { suggestAutopilotPlan, type UpgradeSignals } from "@/lib/autopilot-offering"
 import { useInView } from "framer-motion"
+import { usePathname } from "next/navigation"
 // Mycelium wird später als optimierte Lazy-Version wieder eingebaut
 
 type AccessPlan = "free" | "daypass" | "pro" | "enterprise"
@@ -396,20 +397,22 @@ function AffiliateNetwork(props: { tier: AccessPlan }) {
 
 export default function DashboardClient() {
   const { tier, loading } = useTier()
-  const [retentionNudge, setRetentionNudge] = useState<string | null>(null)
+  const pathname = usePathname()
+  const [retentionNudge, setRetentionNudge] = useState<RetentionNudge | null>(null)
+  const localePrefix = useMemo(() => {
+    const first = (pathname || "").split("/")[1] || ""
+    return /^[a-z]{2}(-[A-Z]{2})?$/.test(first) ? `/${first}` : "/de"
+  }, [pathname])
 
   useEffect(() => {
-    const snapshot = getCheckoutRetentionSnapshot()
-    if (snapshot.checkoutErrors >= 2) {
-      setRetentionNudge("Checkout failed multiple times. Try Starter first, then upgrade inside the app.")
-      return
-    }
-    if (snapshot.checkoutStarts >= 3 && snapshot.checkoutRedirects === 0) {
-      setRetentionNudge("You started checkout several times. Use the shortest plan first to reduce commitment risk.")
-      return
-    }
+    const locale = localePrefix.replace("/", "").slice(0, 2) || "de"
+    setRetentionNudge(getRetentionNudge(locale))
+  }, [localePrefix])
+
+  function handleDismissNudge() {
+    dismissRetentionNudge()
     setRetentionNudge(null)
-  }, [])
+  }
 
   return (
     <div className="py-10">
@@ -447,8 +450,27 @@ export default function DashboardClient() {
 
         {/* Mini tablet preview always visible at top */}
         {retentionNudge && (
-          <div className="mb-4 rounded-2xl border border-yellow-700/60 bg-yellow-950/30 px-4 py-3 text-sm text-yellow-200">
-            Retention Hint: {retentionNudge}
+          <div className={`mb-4 rounded-2xl border px-4 py-3 text-sm ${
+            retentionNudge.level === "critical"
+              ? "border-red-700/60 bg-red-950/30 text-red-200"
+              : "border-yellow-700/60 bg-yellow-950/30 text-yellow-200"
+          }`}>
+            <div className="font-bold mb-1">Retention Hint</div>
+            <div>{retentionNudge.message}</div>
+            <div className="mt-2 flex gap-2">
+              <a
+                href={`${localePrefix}${retentionNudge.ctaPath}`}
+                className="px-3 py-1 rounded-xl text-xs font-bold bg-white/10 hover:bg-white/20"
+              >
+                {retentionNudge.ctaLabel}
+              </a>
+              <button
+                onClick={handleDismissNudge}
+                className="px-3 py-1 rounded-xl text-xs font-bold border border-white/20 hover:bg-white/10"
+              >
+                Dismiss
+              </button>
+            </div>
           </div>
         )}
         <div className="mb-6 rounded-2xl border border-white/10 bg-black/30 p-3">

@@ -28,15 +28,32 @@
 const fs = require("fs")
 const path = require("path")
 
-if (!process.env.GEMINI_API_KEY) {
-  console.error("[polish] ERROR: set GEMINI_API_KEY in env.")
+// Collect all available Gemini keys for round-robin rotation. Free-tier
+// quota per key is ~15 RPM for 2.0-flash, ~60 RPM for 2.5-flash-lite —
+// rotating buys us headroom without paying.
+const GEMINI_KEYS = [
+  process.env.GEMINI_API_KEY,
+  process.env.GEMINI_API_KEY2,
+  process.env.GEMINI_API_KEY3,
+].map((k) => (k || "").trim()).filter(Boolean)
+
+if (GEMINI_KEYS.length === 0) {
+  console.error("[polish] ERROR: set GEMINI_API_KEY (and optionally GEMINI_API_KEY2, GEMINI_API_KEY3) in env.")
   process.exit(1)
 }
-const GEMINI_KEY = process.env.GEMINI_API_KEY.trim()
+
 const GEMINI_MODEL = process.env.GEMINI_MODEL || "gemini-2.5-flash-lite"
 const GEMINI_BASE = (process.env.GEMINI_BASE_URL || "https://generativelanguage.googleapis.com/v1beta").replace(/\/$/, "")
 const BATCH_SIZE = parseInt(process.env.BATCH_SIZE || "30", 10)
+const INTER_BATCH_MS = parseInt(process.env.INTER_BATCH_MS || "1500", 10)
 const DRY_RUN = process.env.DRY_RUN === "1"
+
+let keyIdx = 0
+function nextKey() {
+  const k = GEMINI_KEYS[keyIdx % GEMINI_KEYS.length]
+  keyIdx++
+  return k
+}
 
 const DICT_DIR = path.join(__dirname, "../dictionaries")
 const REF_LOCALE = "en"
@@ -94,10 +111,11 @@ function isHotPath(dotKey) {
 
 // ── Gemini call ────────────────────────────────────────────────────────────
 async function callGemini(prompt, attempt = 1) {
-  const url = `${GEMINI_BASE}/models/${encodeURIComponent(GEMINI_MODEL)}:generateContent?key=${encodeURIComponent(GEMINI_KEY)}`
+  const key = nextKey()
+  const url = `${GEMINI_BASE}/models/${encodeURIComponent(GEMINI_MODEL)}:generateContent?key=${encodeURIComponent(key)}`
   try {
     const controller = new AbortController()
-    const to = setTimeout(() => controller.abort(), 30000)
+    const to = setTimeout(() => controller.abort(), 45000)
     const res = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -112,9 +130,10 @@ async function callGemini(prompt, attempt = 1) {
       }),
     })
     clearTimeout(to)
-    if (res.status === 429 && attempt < 4) {
-      const delay = 1500 * Math.pow(2, attempt)
-      console.warn(`  [rate-limit, retry ${attempt}] sleeping ${delay}ms`)
+    if (res.status === 429 && attempt <= 6) {
+      // Free-tier resets after 60s. Longer backoff than default exponential.
+      const delay = Math.min(60000, 15000 * attempt)
+      console.warn(`  [429, retry ${attempt}/6, key#${(keyIdx - 1) % GEMINI_KEYS.length}] sleeping ${delay}ms`)
       await new Promise((r) => setTimeout(r, delay))
       return callGemini(prompt, attempt + 1)
     }
@@ -126,15 +145,17 @@ async function callGemini(prompt, attempt = 1) {
     const text = data?.candidates?.[0]?.content?.parts?.map((p) => p.text ?? "").join("") ?? ""
     return text.trim()
   } catch (e) {
-    if (attempt < 3) {
-      const delay = 1500 * attempt
-      console.warn(`  [retry ${attempt}] ${e.message || e}`)
+    if (attempt <= 3) {
+      const delay = 3000 * attempt
+      console.warn(`  [retry ${attempt}/3] ${String(e.message || e).slice(0, 80)}`)
       await new Promise((r) => setTimeout(r, delay))
       return callGemini(prompt, attempt + 1)
     }
     throw e
   }
 }
+
+function sleep(ms) { return new Promise((r) => setTimeout(r, ms)) }
 
 // ── Polish logic ───────────────────────────────────────────────────────────
 function buildPrompt(targetLang, batch) {
@@ -218,6 +239,8 @@ async function polishLocale(locale) {
     }
     console.log(`ok ${((Date.now() - t0) / 1000).toFixed(1)}s`)
     if (!DRY_RUN) writeDict(locale, target)
+    // Pace between batches so we don't burn through per-minute quota.
+    if (INTER_BATCH_MS > 0) await sleep(INTER_BATCH_MS)
   }
   return { done, total: keys.length }
 }
@@ -228,9 +251,10 @@ async function main() {
   const targets = argLocales.length ? argLocales : Object.keys(LANG_NAMES)
 
   console.log(`[polish] Gemini: ${GEMINI_BASE}  model: ${GEMINI_MODEL}`)
+  console.log(`[polish] keys: ${GEMINI_KEYS.length} in rotation`)
   console.log(`[polish] targets: ${targets.join(", ")}`)
   console.log(`[polish] hot sections: ${HOT_SECTIONS.join(", ")}`)
-  console.log(`[polish] batch size: ${BATCH_SIZE}${DRY_RUN ? " (DRY_RUN)" : ""}`)
+  console.log(`[polish] batch size: ${BATCH_SIZE} · inter-batch pause: ${INTER_BATCH_MS}ms${DRY_RUN ? " (DRY_RUN)" : ""}`)
 
   const summary = []
   for (const loc of targets) {

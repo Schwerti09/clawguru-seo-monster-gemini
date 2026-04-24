@@ -2,13 +2,13 @@
 
 > **This document is the single source of truth for every agent working in this codebase.**
 > Read it completely BEFORE making any change. Update the Session Log after every session.
-> Last updated: 23.04.2026 | Language: English (maximises AI model compatibility)
+> Last updated: 24.04.2026 | Language: English (maximises AI model compatibility)
 
 ---
 
 ## 📚 Documentation Map — READ THIS FIRST
 
-Do not treat `AGENTS.md` as the only source. A new agent reading *only* this file will miss 60 % of the active state. Four documents together define the current project; read them in order:
+Do not treat `AGENTS.md` as the only source. A new agent reading *only* this file will miss 60 % of the active state. The documents below define the current project; read them in order (and follow cross-links inside them).
 
 1. **This file (AGENTS.md)** — session log, active initiative banner below, ownership + hook rules
 2. **[`docs/academy-infinity-plan-2026-04-22.md`](docs/academy-infinity-plan-2026-04-22.md)** — Academy ∞ master plan + progress dashboard + architecture + 15-step roadmap
@@ -17,6 +17,7 @@ Do not treat `AGENTS.md` as the only source. A new agent reading *only* this fil
 5. **[`docs/i18n-roadmap-2026-04-22.md`](docs/i18n-roadmap-2026-04-22.md)** — Phase 2–6 i18n plan (hardcoded-string exorcism + consolidation)
 6. **[`docs/db-failover-2026-04-24.md`](docs/db-failover-2026-04-24.md)** — `DATABASE_URL` → `DATABASE_URL_2` auto-failover runbook (pool design, classifier rules, deploy-troubleshooting)
 7. **[`docs/postmortem-2026-04-24-seven-red-deploys.md`](docs/postmortem-2026-04-24-seven-red-deploys.md)** — post-mortem of the Neon-quota + classifier-bug + DB-at-build-time incident, with preventive follow-ups
+8. **[`docs/testing.md`](docs/testing.md)** — unit/build release gates, `check:static-db`, roast-statistics build resilience, CI job order
 
 Claude's user memory (`C:\Users\rolli\.claude\projects\c--clawguru-seo-monster-gemini\memory\*`) adds a fifth layer: user profile, partnership mode, project context, LLM setup. Only loaded when Claude Code runs; do not rely on it from external agents.
 

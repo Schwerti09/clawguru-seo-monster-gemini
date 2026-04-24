@@ -43,9 +43,11 @@ Transform ClawGuru from high-ticket consulting offers into an automation-first s
    - Added user dashboard retention hints based on local checkout friction patterns
    - Added retention v2: locale-aware hint copy, CTA deep-link to pricing, and 12h nudge cooldown after dismiss
    - Added retention v3 instrumentation: nudge impression/click/dismiss tracking + 24h nudge CTR in admin funnel view
-8. Release gating and KPI loop (next)
-   - Keep autopilot unit tests as required gate in CI
-   - Track trial-to-paid, plan upgrades, and churn by tier
+8. Release gating and KPI loop (in progress)
+   - Keep autopilot unit tests as required gate in CI (`npm run test:autopilot` → `build` job)
+   - Added `npm run check:static-db` in CI so `app/[lang]/**` cannot import `@/lib/db` without `force-dynamic` (prevents Neon quota burn during `next build`; documented in [`docs/testing.md`](./testing.md))
+   - Roast statistics: API + page resilient to Neon quota + `force-dynamic` (`lib/roast-stats-errors.ts`, commit `16ff17ed`)
+   - Next: track trial-to-paid, plan upgrades, and churn by tier in admin / analytics surfaces
 
 ## KPI Targets (90 days)
 

@@ -3,7 +3,7 @@
 **Incident window:** 2026-04-24 afternoon–evening
 **Platforms:** Vercel + Railway
 **Resolution commit:** `77d615d5`
-**Related docs:** [`db-failover-2026-04-24.md`](./db-failover-2026-04-24.md)
+**Related docs:** [`db-failover-2026-04-24.md`](./db-failover-2026-04-24.md), [`testing.md`](./testing.md) (CI gates + `check:static-db` + roast-statistics resilience)
 
 ---
 
@@ -79,7 +79,7 @@ Red deploys
 
 ## Preventive follow-ups (future work)
 
-- [ ] Add `scripts/check-static-db-usage.js` — fail CI if a route in `app/[lang]/**` imports `@/lib/db` without `export const dynamic = "force-dynamic"`
+- [x] Add `scripts/check-static-db-usage.js` — fail CI if a route in `app/[lang]/**` imports `@/lib/db` without `export const dynamic = "force-dynamic"` (wired as `npm run check:static-db` in the `unit-tests` CI job; see [`docs/testing.md`](./testing.md))
 - [ ] Instrument `dbQuery()` to emit a metric when failover engages (Grafana / Vercel analytics) so quota near-misses show up before they hit
 - [ ] Monitor Neon compute-time in both projects; rotate preemptively at 80 % instead of reactively at 100 %
 - [ ] Build a small `lib/i18n-autotranslate.ts` placeholder that exports `{ default: undefined }` — then `i18n-pick` can use a real static import and we retire the inline `const undefined`

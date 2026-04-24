@@ -4,7 +4,8 @@ import { dbQuery } from '@/lib/db';
 import Container from '@/components/shared/Container';
 import { SUPPORTED_LOCALES, type Locale, getLocaleHrefLang } from '@/lib/i18n';
 
-export const revalidate = 300;
+/** DB-backed geo variants — must not run static prerender across locales (Neon quota). */
+export const dynamic = 'force-dynamic';
 
 interface GeoVariantPageProps {
   params: {

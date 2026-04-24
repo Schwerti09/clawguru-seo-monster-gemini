@@ -9,6 +9,7 @@
     "dev": "next dev",
     "db:migrate": "node scripts/db/migrate.js",
     "check:i18n": "node scripts/check-i18n.js",
+    "check:static-db": "node scripts/check-static-db-usage.js",
     "check:seo-canonicals": "node scripts/check-seo-canonicals.js",
     "check:geo-surface": "node scripts/check-geo-surface.js",
     "check:geo-index-health": "node scripts/check-geo-index-health.js",

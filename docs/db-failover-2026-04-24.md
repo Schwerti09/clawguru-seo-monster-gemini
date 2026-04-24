@@ -142,6 +142,8 @@ Add `DATABASE_PRIMARY_DISABLED=1` support (not yet wired — do this if you need
 
 ## Related code
 
+- [`docs/testing.md`](./testing.md) — CI order, `check:static-db`, roast API build notes
 - [`lib/db.ts`](../lib/db.ts) — pool definition, failover, query entry point
+- [`lib/roast-stats-errors.ts`](../lib/roast-stats-errors.ts) — quota / `XX000` detection for roast statistics fallbacks
 - [`lib/ai/providers.ts`](../lib/ai/providers.ts) — same pattern for LLM providers (Gemini → DeepSeek → OpenAI → OpenRouter — pre-existing)
 - [`scripts/polish-via-gemini.js`](../scripts/polish-via-gemini.js) — multi-key rotation pattern that would transfer 1:1 to a multi-URL DB rotation

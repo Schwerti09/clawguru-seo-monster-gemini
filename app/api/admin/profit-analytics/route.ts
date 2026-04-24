@@ -9,6 +9,7 @@ import { adminCookieName, verifyAdminToken } from "@/lib/admin-auth"
 import { stripe } from "@/lib/stripe"
 import { getEndpointCounts, getTopIps, getActiveBlocks } from "@/lib/api-usage"
 import { getCheckFunnelSnapshotPersistent } from "@/lib/check-funnel"
+import { evaluateRetentionSignals } from "@/lib/autopilot-retention"
 
 export const runtime = "nodejs"
 
@@ -200,6 +201,12 @@ export async function GET() {
   const topIps = getTopIps(10)
   const activeBlocks = getActiveBlocks()
   const funnel = await conversionFunnel(stripeMetrics)
+  const retention = evaluateRetentionSignals({
+    pricingClicks24h: funnel.daypassClicks,
+    checkoutStarts24h: funnel.checkoutStarted,
+    checkoutRedirects24h: funnel.checkoutRedirected,
+    checkoutErrors24h: funnel.checkoutErrors,
+  })
   const alert = stripeMetrics
     ? computeAlert(margins.totalCostUsd, stripeMetrics.netToday)
     : null
@@ -216,6 +223,7 @@ export async function GET() {
       activeBlocks
     },
     funnel,
+    retention,
     alert,
     thresholdPct: COST_ALERT_THRESHOLD_PCT
   })

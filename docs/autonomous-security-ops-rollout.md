@@ -36,8 +36,12 @@ Transform ClawGuru from high-ticket consulting offers into an automation-first s
 6. Autopilot delivery layer (in progress)
    - Added `lib/autopilot-delivery.ts` for prioritization, weekly digest, and proof-of-fix payloads
    - Added coverage in `__tests__/autopilot-delivery.test.ts`
-7. Release gating and KPI loop (next)
-   - Promote offering and checkout recommendation tests to CI required checks
+7. Retention automation and funnel observability (in progress)
+   - Added checkout-stage funnel metrics (`checkout_start`, `checkout_redirect`, `checkout_error`)
+   - Added retention signal scoring for drop-off and error hotspots
+   - Added admin dashboard visibility for conversion rates and retention signal levels
+8. Release gating and KPI loop (next)
+   - Keep autopilot unit tests as required gate in CI
    - Track trial-to-paid, plan upgrades, and churn by tier
 
 ## KPI Targets (90 days)

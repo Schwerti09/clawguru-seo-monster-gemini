@@ -8,6 +8,7 @@
     - `__tests__/autopilot-delivery.test.ts`
     - `__tests__/checkout-upgrade-signals.test.ts`
     - `__tests__/autopilot-thresholds.test.ts`
+    - `__tests__/autopilot-retention.test.ts`
   - Uses `--ci` and `--runInBand` for deterministic CI behavior.
 - `npm run build`
   - Runs `build:data` and a production `next build`.

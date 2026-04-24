@@ -43,7 +43,7 @@
     "build:data": "node scripts/generate-runbooks-json.js",
     "post-batch": "powershell -ExecutionPolicy Bypass -File scripts/post-batch-orchestrator.ps1",
     "test": "jest",
-    "test:autopilot": "jest __tests__/autopilot-offering.test.ts __tests__/autopilot-delivery.test.ts __tests__/checkout-upgrade-signals.test.ts __tests__/autopilot-thresholds.test.ts --runInBand --ci",
+    "test:autopilot": "jest __tests__/autopilot-offering.test.ts __tests__/autopilot-delivery.test.ts __tests__/checkout-upgrade-signals.test.ts __tests__/autopilot-thresholds.test.ts __tests__/autopilot-retention.test.ts --runInBand --ci",
     "test:coverage": "jest --coverage",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",

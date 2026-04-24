@@ -89,6 +89,15 @@ type DashData = {
     }
     note: string
   }
+  retention: {
+    overallLevel: "healthy" | "watch" | "critical"
+    signals: Array<{
+      key: "checkout_errors" | "click_to_start_dropoff" | "start_to_redirect_dropoff"
+      level: "healthy" | "watch" | "critical"
+      score: number
+      message: string
+    }>
+  }
   alert: {
     triggered: boolean
     costPct: number
@@ -280,6 +289,34 @@ function ConversionFunnel({ funnel }: { funnel: DashData["funnel"] }) {
       {funnel.note && (
         <div className="mt-4 text-xs text-gray-600 text-center">{funnel.note}</div>
       )}
+    </div>
+  )
+}
+
+function RetentionPanel({ retention }: { retention: DashData["retention"] }) {
+  const levelClass =
+    retention.overallLevel === "critical"
+      ? "text-red-300 border-red-800 bg-red-950/30"
+      : retention.overallLevel === "watch"
+        ? "text-yellow-300 border-yellow-800 bg-yellow-950/30"
+        : "text-green-300 border-green-800 bg-green-950/30"
+
+  return (
+    <div className="rounded-2xl border border-gray-800 bg-black/30 p-5">
+      <div className={`rounded-xl border px-3 py-2 text-sm font-bold ${levelClass}`}>
+        Overall retention signal: {retention.overallLevel.toUpperCase()}
+      </div>
+      <div className="mt-3 space-y-2">
+        {retention.signals.map((signal) => (
+          <div key={signal.key} className="rounded-xl border border-gray-800 bg-black/20 px-3 py-2">
+            <div className="text-xs text-gray-400 uppercase tracking-wider">{signal.key}</div>
+            <div className="text-sm text-gray-200">{signal.message}</div>
+            <div className="text-xs text-cyan-300 mt-1">
+              level: {signal.level} · score: {signal.score}
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   )
 }
@@ -667,6 +704,12 @@ export default function ProfitDashboard() {
           <section>
             <SectionHeader title="Geo Living Matrix" icon="🕸️" />
             <GeoMatrixPanel geo={geo} />
+          </section>
+
+          {/* ── 6. Retention Signals ── */}
+          <section>
+            <SectionHeader title="Retention Signals (Autopilot)" icon="🧲" />
+            <RetentionPanel retention={data.retention} />
           </section>
         </>
       )}

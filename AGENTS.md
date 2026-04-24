@@ -16,6 +16,7 @@ Do not treat `AGENTS.md` as the only source. A new agent reading *only* this fil
 4. **[`docs/i18n-state-2026-04-23.md`](docs/i18n-state-2026-04-23.md)** — per-locale translation coverage snapshot, pipeline usage
 5. **[`docs/i18n-roadmap-2026-04-22.md`](docs/i18n-roadmap-2026-04-22.md)** — Phase 2–6 i18n plan (hardcoded-string exorcism + consolidation)
 6. **[`docs/db-failover-2026-04-24.md`](docs/db-failover-2026-04-24.md)** — `DATABASE_URL` → `DATABASE_URL_2` auto-failover runbook (pool design, classifier rules, deploy-troubleshooting)
+7. **[`docs/postmortem-2026-04-24-seven-red-deploys.md`](docs/postmortem-2026-04-24-seven-red-deploys.md)** — post-mortem of the Neon-quota + classifier-bug + DB-at-build-time incident, with preventive follow-ups
 
 Claude's user memory (`C:\Users\rolli\.claude\projects\c--clawguru-seo-monster-gemini\memory\*`) adds a fifth layer: user profile, partnership mode, project context, LLM setup. Only loaded when Claude Code runs; do not rely on it from external agents.
 

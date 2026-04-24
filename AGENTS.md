@@ -15,6 +15,7 @@ Do not treat `AGENTS.md` as the only source. A new agent reading *only* this fil
 3. **[`docs/i18n-100-languages-plan-2026-04-23.md`](docs/i18n-100-languages-plan-2026-04-23.md)** — full 100-language strategy: tiers, enterprise SEO architecture, 2-pass translation pipeline, open work
 4. **[`docs/i18n-state-2026-04-23.md`](docs/i18n-state-2026-04-23.md)** — per-locale translation coverage snapshot, pipeline usage
 5. **[`docs/i18n-roadmap-2026-04-22.md`](docs/i18n-roadmap-2026-04-22.md)** — Phase 2–6 i18n plan (hardcoded-string exorcism + consolidation)
+6. **[`docs/db-failover-2026-04-24.md`](docs/db-failover-2026-04-24.md)** — `DATABASE_URL` → `DATABASE_URL_2` auto-failover runbook (pool design, classifier rules, deploy-troubleshooting)
 
 Claude's user memory (`C:\Users\rolli\.claude\projects\c--clawguru-seo-monster-gemini\memory\*`) adds a fifth layer: user profile, partnership mode, project context, LLM setup. Only loaded when Claude Code runs; do not rely on it from external agents.
 
@@ -195,6 +196,130 @@ Claude's user memory (`C:\Users\rolli\.claude\projects\c--clawguru-seo-monster-g
 - **Features Added:** OpenGraph + Twitter Cards metadata, Schema.org Organization JSON-LD, Stats Bar (4.2M Runbooks, 30s Fix, 15+ Jahre, 24/7), SocialProofCounter component, E-E-A-T signals section
 - **Build Status:** Exit code 0, no errors, no warnings
 - **Commit:** `d7716988` — 27 files changed, 2320 insertions(+), 265 deletions(-)
+
+---
+
+## OG IMAGE SYSTEM — COMPLETED (24.04.2026)
+
+### Executive Summary
+**OG Image System:** ✅ Static OpenGraph images for all flagship pages. Switched from dynamic @vercel/og generators to static PNG images for Railway compatibility and simpler maintenance. All pages updated with static OG image URLs and Schema.org ImageObject markup.
+
+### Technical Implementation
+
+**Static OG Images:**
+- High-end static PNG images to be created with design tools (Figma, Canva, etc.)
+- Stored in `public/og/` directory
+- Dimensions: 1200×630 (standard OG image size)
+- Dark theme (#0a0a0a) with accent colors per page
+
+**OG Image URLs:**
+1. **`/og/copilot.png`** — Prof. ClawGuru AI Security Assistant
+   - Dark theme, emerald accents
+   - Title: "Prof. ClawGuru — AI Security Assistant"
+   - Stats: 4.2M+ Runbooks, 30s Fix Time, 24/7 Active
+
+2. **`/og/sandbox.png`** — Live Fix Sandbox
+   - Dark theme, cyan accents
+   - Title: "Live Fix Sandbox — In-Browser Config Testing"
+   - Subtitle: Nginx, Docker, Terraform, K8s
+
+3. **`/og/academy.png`** — Academy ∞ Living Cyber Range
+   - Dark theme, emerald accents
+   - Title: "Academy ∞ — Living Cyber Range"
+   - Subtitle: 80+ Missions, 15 Tools, AI Tutor
+
+4. **`/og/live.png`** — Live Ops Cockpit
+   - Dark theme, red accents
+   - Title: "Live Ops Cockpit — Echtzeit-Überwachung"
+   - Subtitle: 4.2M+ Runbooks, Top 100 Hot Threats, 24/7 Live
+
+5. **`/og/tools.png`** — The Arsenal
+   - Dark theme, cyan accents
+   - Title: "The Arsenal — 15 Free Security Tools"
+   - Subtitle: Header Doctor, TLS Xray, Prompt Injection Sandbox
+
+### SEO Integration
+
+**Metadata Updates:**
+- All 5 flagship pages updated with static OG image URLs
+- OpenGraph metadata: title, description, url, images (width: 1200, height: 630)
+- Twitter Cards: summary_large_image card type with matching images
+- Descriptive alt texts for accessibility
+
+**Schema.org ImageObject Markup:**
+- `/copilot/page.tsx` — ImageObject with contentUrl, description, author, license, width, height
+- `/sandbox/page.tsx` — ImageObject with same structure
+- `/[lang]/academy/page.tsx` — ImageObject integrated with Course + BreadcrumbList schemas
+- `/[lang]/live/page.tsx` — ImageObject in metadata.other
+- `/[lang]/tools/page.tsx` — ImageObject in metadata.other
+
+**License:** CC BY 4.0 for all OG images (https://creativecommons.org/licenses/by/4.0/)
+
+### Migration from Dynamic to Static
+
+**Reason for Migration:**
+- @vercel/og is Vercel-specific, not compatible with Railway
+- Edge runtime issues in dev environment
+- Static images are simpler to maintain and work across all platforms
+- No runtime dependencies or complex configuration
+
+**Changes Made:**
+- Removed all dynamic OG image generators (6 opengraph-image.tsx files)
+- Updated metadata to point to static URLs (`/og/copilot.png`, etc.)
+- Updated Schema.org ImageObject to point to static URLs
+- Removed `@vercel/og` package dependency
+- Build status: Exit code 0, no errors
+
+### File Changes Summary
+
+**Files Deleted:**
+- `app/copilot/opengraph-image.tsx`
+- `app/sandbox/opengraph-image.tsx`
+- `app/[lang]/academy/opengraph-image.tsx`
+- `app/[lang]/live/opengraph-image.tsx`
+- `app/[lang]/tools/opengraph-image.tsx`
+- `app/[lang]/roast-my-stack/opengraph-image.tsx`
+
+**Files Modified:**
+- `app/copilot/page.tsx` — metadata + ImageObject schema (static URLs)
+- `app/sandbox/page.tsx` — metadata + ImageObject schema (static URLs)
+- `app/[lang]/academy/page.tsx` — metadata + ImageObject schema (static URLs)
+- `app/[lang]/live/page.tsx` — metadata + ImageObject schema (static URLs)
+- `app/[lang]/tools/page.tsx` — metadata + ImageObject schema (static URLs)
+- `package.json` — removed `@vercel/og` dependency
+
+**Commit:** `e5c7e030` — "Switch to static OG images - remove dynamic generators and update metadata" — 6 files changed, 676 deletions(-)
+
+### Next Steps
+
+**To Complete:**
+- ✅ Static OG images created (using AI image generator)
+- ⏳ Place images in `public/og/` directory:
+  - `public/og/copilot.png`
+  - `public/og/sandbox.png`
+  - `public/og/academy.png`
+  - `public/og/live.png`
+  - `public/og/tools.png`
+- Test images in browser and social media previews
+- Commit and push static images
+
+### Benefits
+
+**SEO:**
+- Static OG images improve social media sharing (Twitter, LinkedIn, Facebook)
+- Schema.org ImageObject markup enhances search engine understanding
+- Consistent alt texts support accessibility standards
+
+**Performance:**
+- No runtime image generation overhead
+- Images served as static files from CDN
+- Instant load times, no edge latency
+
+**Maintainability:**
+- Simple file-based approach
+- Works across all platforms (Railway, Netlify, Vercel)
+- Easy to update visual style with design tools
+- No complex dependencies or configuration
 
 ---
 

@@ -1,7 +1,12 @@
 import { NextResponse } from "next/server"
 import { dbQuery } from "@/lib/db"
+import {
+  emptyRoastStatisticsApi,
+  isRoastStatsUnavailableError,
+} from "@/lib/roast-stats-errors"
 
-export const revalidate = 60 // Cache for 60 seconds
+/** Never prerender; avoids Neon usage during `next build` and cache/export of this route. */
+export const dynamic = "force-dynamic"
 
 export async function GET() {
   try {
@@ -51,18 +56,13 @@ export async function GET() {
       topScores: topScoresResult.rows,
       bottomScores: bottomScoresResult.rows,
     })
-  } catch (error: any) {
-    // If table doesn't exist, return default data instead of crashing
-    if (error.code === '42P01') {
-      console.warn("roast_results table does not exist, returning default data")
-      return NextResponse.json({
-        totalRoasts: 0,
-        eliteStacks: 0,
-        avgScore: 0,
-        roastsToday: 0,
-        topScores: [],
-        bottomScores: [],
-      })
+  } catch (error: unknown) {
+    if (isRoastStatsUnavailableError(error)) {
+      console.warn(
+        "roast stats unavailable (schema/quota/limits), returning default data:",
+        error instanceof Error ? error.message : error
+      )
+      return NextResponse.json({ ...emptyRoastStatisticsApi })
     }
     console.error("Error fetching roast statistics:", error)
     return NextResponse.json(

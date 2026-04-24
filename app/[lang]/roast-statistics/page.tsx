@@ -1,8 +1,14 @@
 import type { Metadata } from "next"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
 import { dbQuery } from "@/lib/db"
+import {
+  emptyRoastStatisticsPage,
+  isRoastStatsUnavailableError,
+} from "@/lib/roast-stats-errors"
 import { BarChart3, TrendingUp, Shield, Clock, Globe } from "lucide-react"
 import Link from "next/link"
+
+export const dynamic = "force-dynamic"
 
 interface PageProps { params: { lang: string } }
 
@@ -112,21 +118,13 @@ async function getRoastStatistics() {
       topStacks: topStacksResult.rows,
       localeDistribution,
     }
-  } catch (error: any) {
-    // If table doesn't exist, return default data instead of crashing
-    if (error.code === '42P01') {
-      console.warn("roast_results table does not exist, returning default statistics")
-      return {
-        totalRoasts: 0,
-        avgScore: 0,
-        eliteStacks: 0,
-        roastsToday: 0,
-        roastsThisWeek: 0,
-        roastsThisMonth: 0,
-        scoreDistribution: { elite: 0, good: 0, average: 0, poor: 0 },
-        topStacks: [],
-        localeDistribution: [],
-      }
+  } catch (error: unknown) {
+    if (isRoastStatsUnavailableError(error)) {
+      console.warn(
+        "roast stats unavailable, returning default statistics:",
+        error instanceof Error ? error.message : error
+      )
+      return { ...emptyRoastStatisticsPage }
     }
     console.error("Error fetching roast statistics:", error)
     return null

@@ -31,6 +31,40 @@ Claude's user memory (`C:\Users\rolli\.claude\projects\c--clawguru-seo-monster-g
 
 **Status:** Build STARTED — Step 1 (Academy Hub Redesign) complete (22.04.2026).
 
+---
+
+## 🚨 ACTIVE INITIATIVE (24.04.2026) — VIRAL PAGES EXPERTISE UPGRADE
+
+**Scope:** 336 viral SEO pages (DE) → ~10,416 pages (all 31 locales) auf höchstem Expertise-Level ausbauen. Schrott vermeiden, sich abheben, menschlich wirken, tiefste technische Expertise + Amateur-Bereich für Anfänger.
+
+**Pages:** MOLTBOT (163), OPENCLAW (22), SECURITY (31), COMPARE (30), SOLUTIONS (24), GUIDE (16), GEO QUALITY (50)
+
+**Requirements:**
+- **Nicht KI-generiert wirken** — menschliche Stimme, echte Expertise, keine template-haften Phrasen
+- **Höchste Expertise-Level** — deep technical knowledge, production-ready patterns, real-world scars
+- **Amateur-Bereich auf jeder Seite** — "Für Anfänger verständlich" Abschnitt, der das Thema einfach erklärt
+- **Starke interne Verlinkung** — jede Seite verlinkt auf 5+ verwandte Seiten (Moltbot ↔ OpenClaw ↔ Security ↔ Solutions)
+- **Anti-Schrott** — keine generischen "best practices", keine leeren filler-content, echte insights
+
+**Template/Pattern (zu entwickeln):**
+```
+1. Hero/Hook — Problem statement mit real-world scenario
+2. Amateur-Bereich — "Was ist X? Einfach erklärt" (200-300 Wörter)
+3. Deep-Dive Expertise — 1000-1500 Wörter tiefste technische Tiefe
+4. Real-world Scars — Production stories, what went wrong, lessons learned
+5. Actionable Checklist — Immediate next steps, copy-paste ready
+6. Internal Links — 5+ verwandte Seiten mit Kontext
+```
+
+**Status:** PLANNING — Template entwickeln, Test-Seite starten
+
+**Next Steps:**
+1. Template/Pattern für Amateur→Expertise-Struktur entwickeln
+2. Test-Seite erstellen (`/de/moltbot/ai-agent-security`) für Feedback
+3. Batch 1: 10 Seiten nach Template ausbauen
+4. Batch 2-3: Weitere 20 Seiten
+5. Skalieren auf alle 336 Seiten
+
 **Step 1 — Academy Hub Redesign — ✅ COMPLETE (22.04.2026)**
 - `lib/academy/hubContent.ts` — new co-located content module, `TRACKS[]` + `getHubContent(locale)` with DE + EN authored, fallback to EN for other locales (translator pipeline target when aya-expanse is ready)
 - `app/[lang]/academy/page.tsx` — full rewrite: atmospheric hero (radial gradients + subtle grid + scanlines), 8-track responsive grid (4-col XL), per-track accent color system, Schema.org `Course` + `BreadcrumbList` markup, story teaser section, EmailCapture

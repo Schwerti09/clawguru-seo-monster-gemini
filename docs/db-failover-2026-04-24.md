@@ -55,12 +55,33 @@ Both must be valid Postgres/Neon connection strings. Any `sslmode` query param i
 | Syntax error | `42601` | ❌ | Your query |
 | Missing table | `42P01` | ❌ | Your migration |
 | Permission denied | `42501` | ❌ | Auth config |
+| **Neon quota exceeded** | **`XX000`** + message | **✅** | Explicit retryable code |
+| **Too many connections** | **`53300`** | **✅** | Real Postgres overload → try secondary |
+| **Admin shutdown / crash / cancel** | **`57P01`/`57P02`/`57P03`** | **✅** | Instance went away |
 | ECONNREFUSED / network | (no code, or ECONN*) | ✅ | Primary unreachable |
 | WebSocket close / unhandled | (no 5-char code) | ✅ | Neon serverless WebSocket died |
-| `compute_time_quota_exceeded` | (string message) | ✅ | Primary quota hit |
-| `too_many_connections` | `53300` | ❌ (rare) | Real Postgres overload — switch manually |
+| Any message matching quota patterns | any | ✅ | "compute time", "quota exceeded", "limit reached", "too many connections" in `err.message` |
 
-The classifier is dumb on purpose: `shouldFailover()` returns `true` unless the error has a 5-char uppercase/alphanumeric `.code` (Postgres SQLSTATE format).
+### Classifier (current — updated 2026-04-24 evening)
+
+```ts
+// Always failover on explicit retryable Postgres codes
+RETRYABLE_CODES = { XX000, 53300, 57P01, 57P02, 57P03 }
+
+// Always failover on quota/availability phrases in message
+QUOTA_PATTERNS = [
+  /compute[- _]?time/i,
+  /quota\s*(exceeded|exhausted)/i,
+  /limit\s*(exceeded|reached)/i,
+  /plan.*(exceed|limit|upgrade)/i,
+  /connection.*rejected|refused/i,
+  /too\s*many\s*connections/i,
+]
+
+// Standard 5-char Postgres code (NOT in RETRYABLE_CODES) → real SQL error, don't mask
+```
+
+**Why the original classifier was wrong:** Neon returns compute-time-quota-exceeded with code `XX000` (internal_error) — a valid-looking 5-char code. The first version of `shouldFailover()` treated any 5-char code as "real SQL error, don't failover" → never tried `DATABASE_URL_2` when it mattered most. Fixed in the same commit that landed the DB-heavy-route fixes (`77d615d5`).
 
 ---
 

@@ -403,6 +403,20 @@ export function middleware(request: NextRequest) {
     return res
   }
 
+  // Compatibility redirect: map localized /consult to canonical /consulting route
+  // Use 308 to preserve method and consolidate SEO signals.
+  const localizedConsult = pathname.match(/^\/([a-z]{2}(?:-[a-z]{2})?)\/consult\/?$/i)
+  if (localizedConsult) {
+    const lang = localizedConsult[1]
+    const url = request.nextUrl.clone()
+    url.pathname = `/${lang}/consulting`
+    const res = NextResponse.redirect(url, 308)
+    res.headers.set("x-claw-locale", locale)
+    res.headers.set("x-claw-dir", localeDir(locale))
+    res.headers.set(getRequestIdHeaderName(), requestId)
+    return res
+  }
+
   // Pass locale+dir to the app for SSR-safe html lang/dir.
   const res = NextResponse.next()
   res.headers.set("x-claw-locale", locale)

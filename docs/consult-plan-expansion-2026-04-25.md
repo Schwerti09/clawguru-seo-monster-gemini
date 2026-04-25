@@ -197,6 +197,16 @@ Added a consult source concentration signal to spot over-reliance on a single CT
 - `__tests__/consult-funnel.test.ts`
   - Added concentration-risk test case.
 
+## Route compatibility follow-up (2026-04-25)
+
+Added a compatibility redirect for users hitting the legacy consult slug.
+
+- `middleware.ts`
+  - `/{locale}/consult` now redirects via HTTP `308` to `/{locale}/consulting`.
+  - Keeps locale context and aligns path behavior with the canonical consulting route.
+
+This removes a high-intent 404 entry point and consolidates SEO/canonical signals to `/consulting`.
+
 ## Operational Notes
 
 - `BookingButton` remains env-driven (`NEXT_PUBLIC_CAL_*_URL`) with mail fallback, so no deployment break if Cal URLs are missing.

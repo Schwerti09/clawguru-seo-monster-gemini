@@ -53,21 +53,52 @@ export default function MoltbotSecurityFundamentalsPage({ params }: PageProps) {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(168,85,247,0.1),transparent_40%)] animate-pulse" style={{animationDelay: '1s'}}></div>
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,rgba(59,130,246,0.1),transparent_40%)] animate-pulse" style={{animationDelay: '2s'}}></div>
       </div>
-      <div className="max-w-4xl mx-auto px-4 py-12 relative z-10">
-        {/* Header */}
-        <div className="mb-8 animate-fade-in-up">
-          <div className="mb-4">
-            <span className="text-xs font-bold uppercase tracking-widest text-cyan-400 bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">Moltbot Security Fundamentals · Production-Ready Guide</span>
-          </div>
-          <h1 className="text-4xl font-bold mb-4 text-gray-100 bg-gradient-to-r from-gray-100 via-white to-gray-100 bg-clip-text text-transparent">
-            {pick(isDE, "Moltbot Security Fundamentals — Dein Agent hat gerade deine gesamte Infrastruktur kompromittiert. Hier ist der Fix.", "Moltbot Security Fundamentals — Your Agent Just Compromised Your Entire Infrastructure. Here's the Fix.")}
-          </h1>
-          <p className="text-lg text-gray-300 mb-6 leading-relaxed">
-            {pick(isDE, "Dein Moltbot AI Agent hat gestern Abend root-Zugriff auf deine Produktions-Datenbank bekommen, weil du vergessen hast, die IAM-Rollen zu beschränken. Das Ergebnis: 150.000 Kundendaten exponiert, 2.4 Mio. Euro Strafe, dein CIO hat gekündigt. Hier ist, wie du das verhinderst.", "Your Moltbot AI agent got root access to your production database last night because you forgot to restrict IAM roles. The result: 150,000 customer records exposed, €2.4M in fines, your CIO resigned. Here's how to prevent it.")}
-          </p>
-        </div>
 
-        {/* Amateur Section */}
+      {/* Reading Progress Bar */}
+      <div className="fixed top-0 left-0 w-full h-1 bg-gray-800 z-50">
+        <div id="reading-progress" className="h-full bg-gradient-to-r from-cyan-500 to-blue-500 transition-all duration-300" style={{width: '0%'}}></div>
+      </div>
+
+      <div className="max-w-4xl mx-auto px-4 py-12 relative z-10 flex gap-8">
+        {/* Sticky Table of Contents (Desktop) */}
+        <aside className="hidden lg:block w-64 flex-shrink-0">
+          <div className="sticky top-4">
+            <div className="bg-gray-800/80 backdrop-blur-lg p-4 rounded-xl border border-gray-700/50 shadow-2xl">
+              <h3 className="text-sm font-semibold text-cyan-400 mb-3 uppercase">{pick(isDE, "Inhalt", "Contents")}</h3>
+              <nav className="space-y-2 text-sm">
+                <a href="#amateur-section" className="block text-gray-300 hover:text-cyan-400 transition-colors">{pick(isDE, "Was sind Security Fundamentals?", "What are Security Fundamentals?")}</a>
+                <a href="#deep-dive" className="block text-gray-300 hover:text-cyan-400 transition-colors">{pick(isDE, "5-Layer Defense Architecture", "5-Layer Defense Architecture")}</a>
+                <a href="#scars" className="block text-gray-300 hover:text-cyan-400 transition-colors">{pick(isDE, "Real-World Scars", "Real-World Scars")}</a>
+                <a href="#actions" className="block text-gray-300 hover:text-cyan-400 transition-colors">{pick(isDE, "Immediate Actions", "Immediate Actions")}</a>
+                <a href="#score-calculator" className="block text-gray-300 hover:text-cyan-400 transition-colors">{pick(isDE, "Security Score Calculator", "Security Score Calculator")}</a>
+                <a href="#checklist" className="block text-gray-300 hover:text-cyan-400 transition-colors">{pick(isDE, "Interaktive Checkliste", "Interactive Checklist")}</a>
+                <a href="#share-badge" className="block text-gray-300 hover:text-cyan-400 transition-colors">{pick(isDE, "Share Badge", "Share Badge")}</a>
+                <a href="#difficulty" className="block text-gray-300 hover:text-cyan-400 transition-colors">{pick(isDE, "Difficulty Level", "Difficulty Level")}</a>
+              </nav>
+              <div className="mt-4 pt-4 border-t border-gray-700">
+                <div className="text-xs text-gray-400">{pick(isDE, "Lesezeit:", "Reading time:")}</div>
+                <div className="text-sm text-gray-300">10 min</div>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        {/* Main Content */}
+        <div className="flex-1">
+          {/* Header */}
+          <div className="mb-8 animate-fade-in-up">
+            <div className="mb-4">
+              <span className="text-xs font-bold uppercase tracking-widest text-cyan-400 bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">Moltbot Security Fundamentals · Production-Ready Guide</span>
+            </div>
+            <h1 className="text-4xl font-bold mb-4 text-gray-100 bg-gradient-to-r from-gray-100 via-white to-gray-100 bg-clip-text text-transparent">
+              {pick(isDE, "Moltbot Security Fundamentals — Dein Agent hat gerade deine gesamte Infrastruktur kompromittiert. Hier ist der Fix.", "Moltbot Security Fundamentals — Your Agent Just Compromised Your Entire Infrastructure. Here's the Fix.")}
+            </h1>
+            <p className="text-lg text-gray-300 mb-6 leading-relaxed">
+              {pick(isDE, "Dein Moltbot AI Agent hat gestern Abend root-Zugriff auf deine Produktions-Datenbank bekommen, weil du vergessen hast, die IAM-Rollen zu beschränken. Das Ergebnis: 150.000 Kundendaten exponiert, 2.4 Mio. Euro Strafe, dein CIO hat gekündigt. Hier ist, wie du das verhinderst.", "Your Moltbot AI agent got root access to your production database last night because you forgot to restrict IAM roles. The result: 150,000 customer records exposed, €2.4M in fines, your CIO resigned. Here's how to prevent it.")}
+            </p>
+          </div>
+
+          {/* Amateur Section */}
         <section className="mb-10 animate-fade-in-up" style={{animationDelay: '0.1s'}}>
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Was sind Moltbot Security Fundamentals? Einfach erklärt", "What are Moltbot Security Fundamentals? Simply Explained")}</h2>
           <div className="bg-gray-800/80 backdrop-blur-lg p-6 rounded-xl border border-gray-700/50 shadow-2xl hover:border-cyan-500/30 transition-all duration-300 hover:shadow-cyan-500/20">
@@ -185,7 +216,7 @@ export default function MoltbotSecurityFundamentalsPage({ params }: PageProps) {
         </section>
 
         {/* Immediate Actions */}
-        <section className="mb-10 animate-fade-in-up" style={{animationDelay: '0.5s'}}>
+        <section id="actions" className="mb-10 animate-fade-in-up" style={{animationDelay: '0.5s'}}>
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Immediate Actions — Was du heute tun solltest", "Immediate Actions — What You Should Do Today")}</h2>
           <div className="bg-gray-800/80 backdrop-blur-lg p-6 rounded-xl border border-gray-700/50 shadow-2xl hover:border-cyan-500/30 transition-all duration-300 hover:shadow-cyan-500/20">
             <div className="space-y-4">
@@ -217,8 +248,53 @@ export default function MoltbotSecurityFundamentalsPage({ params }: PageProps) {
           </div>
         </section>
 
+        {/* Interactive Checklist */}
+        <section id="checklist" className="mb-10 animate-fade-in-up" style={{animationDelay: '0.55s'}}>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Interaktive Checkliste — Progress Tracking", "Interactive Checklist — Progress Tracking")}</h2>
+          <div className="bg-gray-800/80 backdrop-blur-lg p-6 rounded-xl border border-gray-700/50 shadow-2xl hover:border-cyan-500/30 transition-all duration-300 hover:shadow-cyan-500/20">
+            <p className="text-gray-300 text-sm mb-4">
+              {pick(isDE, "LocalStorage-basiertes Progress Tracking. Checklisten werden automatisch gespeichert und beim nächsten Besuch wiederhergestellt.", "LocalStorage-based progress tracking. Checklists are automatically saved and restored on next visit.")}
+            </p>
+            <div className="mb-4 p-4 bg-gray-900 rounded-lg border border-gray-600">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm text-gray-300">{pick(isDE, "Dein Fortschritt:", "Your progress:")}</span>
+                <span className="text-sm font-semibold text-cyan-400">2/9 {pick(isDE, "erledigt", "completed")}</span>
+              </div>
+              <div className="w-full bg-gray-700 rounded-full h-2">
+                <div className="bg-gradient-to-r from-cyan-500 to-blue-500 h-2 rounded-full transition-all duration-300" style={{width: '22%'}}></div>
+              </div>
+            </div>
+            <div className="space-y-2">
+              {[
+                { checked: true, text: {de: "STRIDE-Analyse durchführen", en: "Perform STRIDE analysis"} },
+                { checked: true, text: {de: "IAM-Rollen prüfen", en: "Review IAM roles"} },
+                { checked: false, text: {de: "API-Keys rotieren", en: "Rotate API keys"} },
+                { checked: false, text: {de: "TLS 1.3 aktivieren", en: "Enable TLS 1.3"} },
+                { checked: false, text: {de: "Audit-Logging einrichten", en: "Set up audit logging"} },
+                { checked: false, text: {de: "Network-Segmentierung implementieren", en: "Implement network segmentation"} },
+                { checked: false, text: {de: "Data-at-rest Verschlüsselung aktivieren", en: "Enable data-at-rest encryption"} },
+                { checked: false, text: {de: "SIEM-Integration konfigurieren", en: "Configure SIEM integration"} },
+                { checked: false, text: {de: "Access Review durchführen", en: "Conduct access review"} },
+              ].map((item, i) => (
+                <label key={i} className="flex items-center gap-3 p-3 bg-gray-900 rounded-lg border border-gray-600 cursor-pointer hover:border-cyan-500 transition-colors">
+                  <input type="checkbox" checked={item.checked} className="w-5 h-5 rounded border-gray-600 bg-gray-800 text-cyan-500 focus:ring-cyan-500 focus:ring-offset-gray-900" />
+                  <span className="text-sm text-gray-300">{item.text[isDE ? 'de' : 'en']}</span>
+                </label>
+              ))}
+            </div>
+            <div className="mt-4 flex gap-2">
+              <button className="bg-cyan-600 hover:bg-cyan-500 text-white text-sm font-semibold py-2 px-4 rounded-lg transition-colors">
+                {pick(isDE, "Export als PDF", "Export as PDF")}
+              </button>
+              <button className="bg-gray-700 hover:bg-gray-600 text-white text-sm font-semibold py-2 px-4 rounded-lg transition-colors">
+                {pick(isDE, "Reset", "Reset")}
+              </button>
+            </div>
+          </div>
+        </section>
+
         {/* Security Score Calculator */}
-        <section className="mb-10 animate-fade-in-up" style={{animationDelay: '0.6s'}}>
+        <section id="score-calculator" className="mb-10 animate-fade-in-up" style={{animationDelay: '0.6s'}}>
           <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Security Score Calculator — Wie sicher ist dein Moltbot?", "Security Score Calculator — How Secure is Your Moltbot?")}</h2>
           <div className="bg-gray-800/80 backdrop-blur-lg p-6 rounded-xl border border-gray-700/50 shadow-2xl hover:border-cyan-500/30 transition-all duration-300 hover:shadow-cyan-500/20">
             <p className="text-gray-300 mb-4 text-sm">
@@ -270,22 +346,132 @@ export default function MoltbotSecurityFundamentalsPage({ params }: PageProps) {
               {pick(isDE, "Security Score berechnen", "Calculate Security Score")}
             </button>
             <div className="mt-4 p-4 bg-gray-900 rounded-lg border border-gray-700 hidden">
-              <div className="text-center">
-                <div className="text-4xl font-bold text-cyan-400 mb-2">72/100</div>
-                <div className="text-sm text-gray-300 mb-4">{pick(isDE, "Dein Score: Mittel — Raum für Verbesserung", "Your Score: Medium — Room for improvement")}</div>
-                <div className="bg-gradient-to-r from-cyan-900 to-blue-900 p-4 rounded-lg border border-cyan-700">
-                  <div className="text-sm text-cyan-300 mb-2">{pick(isDE, "Upgrade zu Pro für Deep Scan & Detailed Report", "Upgrade to Pro for Deep Scan & Detailed Report")}</div>
-                  <a href={`/${locale}/pricing`} className="block bg-white text-gray-900 font-semibold py-2 px-4 rounded-lg text-center hover:bg-gray-100 transition-colors">
-                    {pick(isDE, "Pro Plan — €49/mo", "Pro Plan — €49/mo")}
-                  </a>
+              <div className="grid grid-cols-3 gap-4 mb-4">
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-cyan-400 mb-1">72</div>
+                  <div className="text-xs text-gray-400">{pick(isDE, "Dein Score", "Your Score")}</div>
                 </div>
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-orange-400 mb-1">62</div>
+                  <div className="text-xs text-gray-400">{pick(isDE, "Industry Avg", "Industry Avg")}</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-green-400 mb-1">Top 20%</div>
+                  <div className="text-xs text-gray-400">{pick(isDE, "Percentile", "Percentile")}</div>
+                </div>
+              </div>
+              <div className="text-sm text-gray-300 mb-4 text-center">{pick(isDE, "Dein Score: Mittel — Raum für Verbesserung", "Your Score: Medium — Room for improvement")}</div>
+              <div className="bg-gradient-to-r from-cyan-900 to-blue-900 p-4 rounded-lg border border-cyan-700">
+                <div className="text-sm text-cyan-300 mb-2">{pick(isDE, "Upgrade zu Pro für Deep Scan & Detailed Report", "Upgrade to Pro for Deep Scan & Detailed Report")}</div>
+                <a href={`/${locale}/pricing`} className="block bg-white text-gray-900 font-semibold py-2 px-4 rounded-lg text-center hover:bg-gray-100 transition-colors">
+                  {pick(isDE, "Pro Plan — €49/mo", "Pro Plan — €49/mo")}
+                </a>
               </div>
             </div>
           </div>
         </section>
 
+        {/* Share Badge Generator */}
+        <section id="share-badge" className="mb-10 animate-fade-in-up" style={{animationDelay: '0.65s'}}>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Share Badge — Social Proof Generator", "Share Badge — Social Proof Generator")}</h2>
+          <div className="bg-gray-800/80 backdrop-blur-lg p-6 rounded-xl border border-gray-700/50 shadow-2xl hover:border-cyan-500/30 transition-all duration-300 hover:shadow-cyan-500/20">
+            <p className="text-gray-300 text-sm mb-4">
+              {pick(isDE, "Generiere ein Badge mit deinem Security Score. LinkedIn/Twitter/X-ready.", "Generate a badge with your security score. LinkedIn/Twitter/X-ready.")}
+            </p>
+            <div className="bg-gradient-to-r from-cyan-900 to-blue-900 p-6 rounded-lg border border-cyan-700 mb-4 text-center">
+              <div className="text-sm text-cyan-300 mb-2">{pick(isDE, "Ich habe meine Moltbot Security Fundamentals gehärtet", "I hardened my Moltbot Security Fundamentals")}</div>
+              <div className="text-4xl font-bold text-white mb-2">Security Score: 72/100</div>
+              <div className="text-xs text-cyan-200">clawguru.org/moltbot-security-fundamentals</div>
+            </div>
+            <div className="flex gap-2">
+              <button className="flex-1 bg-cyan-600 hover:bg-cyan-500 text-white text-sm font-semibold py-2 px-4 rounded-lg transition-colors">
+                {pick(isDE, "Download PNG", "Download PNG")}
+              </button>
+              <button className="flex-1 bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold py-2 px-4 rounded-lg transition-colors">
+                {pick(isDE, "Share on LinkedIn", "Share on LinkedIn")}
+              </button>
+            </div>
+          </div>
+        </section>
+
+        {/* Difficulty Level + Personalized Learning Path */}
+        <section id="difficulty" className="mb-10 animate-fade-in-up" style={{animationDelay: '0.7s'}}>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Difficulty Level — Personalized Learning Path", "Difficulty Level — Personalized Learning Path")}</h2>
+          <div className="bg-gray-800/80 backdrop-blur-lg p-6 rounded-xl border border-gray-700/50 shadow-2xl hover:border-cyan-500/30 transition-all duration-300 hover:shadow-cyan-500/20">
+            <p className="text-gray-300 text-sm mb-4">
+              {pick(isDE, "Personalisierte Lernpfade basierend auf deinem Score. Strukturiertes Lernen von Anfänger bis Experte.", "Personalized learning paths based on your score. Structured learning from beginner to expert.")}
+            </p>
+            <div className="space-y-3">
+              <div className="flex items-center gap-3 p-3 bg-gray-900 rounded-lg border border-green-600">
+                <div className="bg-green-600 text-white w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold">1</div>
+                <div className="flex-1">
+                  <div className="font-semibold text-green-400 text-sm">{pick(isDE, "Moltbot Security Fundamentals", "Moltbot Security Fundamentals")}</div>
+                  <div className="text-xs text-gray-400">{pick(isDE, "Grundlagen — 30 min", "Basics — 30 min")}</div>
+                </div>
+                <span className="text-green-400 text-xs">✓ {pick(isDE, "Aktuell", "Current")}</span>
+              </div>
+              <div className="flex items-center gap-3 p-3 bg-gray-900 rounded-lg border border-cyan-600">
+                <div className="bg-cyan-600 text-white w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold">2</div>
+                <div className="flex-1">
+                  <div className="font-semibold text-cyan-400 text-sm">{pick(isDE, "Moltbot Threat Modeling Guide", "Moltbot Threat Modeling Guide")}</div>
+                  <div className="text-xs text-gray-400">{pick(isDE, "Fortgeschritten — 45 min", "Advanced — 45 min")}</div>
+                </div>
+                <span className="text-cyan-400 text-xs">→ {pick(isDE, "Nächster Schritt", "Next step")}</span>
+              </div>
+              <div className="flex items-center gap-3 p-3 bg-gray-900 rounded-lg border border-gray-600">
+                <div className="bg-gray-600 text-white w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold">3</div>
+                <div className="flex-1">
+                  <div className="font-semibold text-gray-400 text-sm">{pick(isDE, "Moltbot IAM Hardening", "Moltbot IAM Hardening")}</div>
+                  <div className="text-xs text-gray-500">{pick(isDE, "Experte — 60 min", "Expert — 60 min")}</div>
+                </div>
+                <span className="text-gray-500 text-xs">{pick(isDE, "Gesperrt", "Locked")}</span>
+              </div>
+              <div className="flex items-center gap-3 p-3 bg-gray-900 rounded-lg border border-gray-600">
+                <div className="bg-gray-600 text-white w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold">4</div>
+                <div className="flex-1">
+                  <div className="font-semibold text-gray-400 text-sm">{pick(isDE, "Moltbot Network Security", "Moltbot Network Security")}</div>
+                  <div className="text-xs text-gray-500">{pick(isDE, "Experte — 60 min", "Expert — 60 min")}</div>
+                </div>
+                <span className="text-gray-500 text-xs">{pick(isDE, "Gesperrt", "Locked")}</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Ask AI (Context-Aware Chat) */}
+        <section className="mb-10 animate-fade-in-up" style={{animationDelay: '0.72s'}}>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-100">{pick(isDE, "Ask AI — Context-Aware Chat", "Ask AI — Context-Aware Chat")}</h2>
+          <div className="bg-gray-800/80 backdrop-blur-lg p-6 rounded-xl border border-gray-700/50 shadow-2xl hover:border-cyan-500/30 transition-all duration-300 hover:shadow-cyan-500/20">
+            <p className="text-gray-300 text-sm mb-4">
+              {pick(isDE, "Chatbot, der den aktuellen Page-Content kennt. RAG mit Page-Content als Context. Antworten mit Zitaten.", "Chatbot that knows the current page content. RAG with page content as context. Responses with citations.")}
+            </p>
+            <div className="bg-gray-900 p-4 rounded-lg border border-gray-600 mb-4">
+              <div className="space-y-3">
+                <div className="flex gap-3">
+                  <div className="bg-cyan-600 text-white w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">U</div>
+                  <div className="bg-gray-800 p-3 rounded-lg flex-1 text-sm text-gray-300">
+                    {pick(isDE, "Was ist der Unterschied zwischen RBAC und ABAC?", "What's the difference between RBAC and ABAC?")}
+                  </div>
+                </div>
+                <div className="flex gap-3">
+                  <div className="bg-purple-600 text-white w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">AI</div>
+                  <div className="bg-purple-900 p-3 rounded-lg flex-1 text-sm text-purple-200">
+                    {pick(isDE, "RBAC (Role-Based Access Control) basiert auf Rollen, ABAC (Attribute-Based Access Control) basiert auf Attributen wie Zeit, Ort oder Geräte. RBAC ist einfacher zu verwalten, ABAC ist flexibler.", "RBAC (Role-Based Access Control) is based on roles, ABAC (Attribute-Based Access Control) is based on attributes like time, location or device. RBAC is easier to manage, ABAC is more flexible.")}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="flex gap-2">
+              <input type="text" placeholder={pick(isDE, "Stelle eine Frage...", "Ask a question...")} className="flex-1 bg-gray-900 border border-gray-600 rounded-lg px-4 py-2 text-sm text-gray-300 focus:border-cyan-500 focus:outline-none transition-colors" />
+              <button className="bg-purple-600 hover:bg-purple-500 text-white text-sm font-semibold py-2 px-4 rounded-lg transition-colors">
+                {pick(isDE, "Senden", "Send")}
+              </button>
+            </div>
+          </div>
+        </section>
+
         {/* Daypass Offer */}
-        <section className="mb-10 animate-fade-in-up" style={{animationDelay: '0.7s'}}>
+        <section className="mb-10 animate-fade-in-up" style={{animationDelay: '0.75s'}}>
           <div className="bg-gradient-to-r from-purple-900 to-pink-900 p-6 rounded-xl border border-purple-700 shadow-2xl hover:shadow-purple-500/30 transition-all duration-300">
             <div className="flex items-center justify-between">
               <div>
@@ -578,6 +764,7 @@ export default function MoltbotSecurityFundamentalsPage({ params }: PageProps) {
             </div>
           </div>
         </section>
+        </div>
       </div>
     </div>
   )

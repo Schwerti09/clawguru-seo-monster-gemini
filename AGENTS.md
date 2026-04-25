@@ -2,7 +2,40 @@
 
 > **This document is the single source of truth for every agent working in this codebase.**
 > Read it completely BEFORE making any change. Update the Session Log after every session.
-> Last updated: 24.04.2026 | Language: English (maximises AI model compatibility)
+> Last updated: 25.04.2026 | Language: English (maximises AI model compatibility)
+
+---
+
+## 🚦 MULTI-AGENT COMMIT HYGIENE — MANDATORY (added 25.04.2026)
+
+Three agents work this repo in parallel: **Claude Code**, **Windsurf**, **Cursor**. On 25.04.2026 we hit two incidents where one agent's `git stash` / `git checkout` / `git add` workflow silently absorbed or reverted another agent's in-progress edits. This is a coordination problem, not a code problem. The rules below are **non-negotiable** to keep parallel work safe.
+
+### Ownership Map (who commits what)
+
+| Agent | Owns (primary commit scope) | Touch only with explicit handover |
+|---|---|---|
+| **Claude Code** | `lib/academy/**`, `scripts/i18n-*`, `lib/i18n-*`, `lib/i18n.ts`, `dictionaries/**`, `docs/i18n-*`, `docs/academy-*`, `docs/audit-response-*`, `docs/postmortem-*`, `lib/db.ts` failover logic | Anything else |
+| **Windsurf** | `app/[lang]/moltbot/**`, `app/[lang]/clawguru-vs-*/**`, `app/[lang]/openclaw-vs-*/**`, `app/[lang]/moltbot-vs-*/**`, viral-pages content, `docs/viral-pages-*` | Anything else |
+| **Cursor** | `app/[lang]/consulting/**`, `app/api/admin/**`, autopilot/checkout (`lib/autopilot-*`, `lib/checkout-*`, `components/commerce/**`), `docs/consult-*`, `__tests__/**` related to those | Anything else |
+| **Shared (PR or coordination required)** | `AGENTS.md`, `app/layout.tsx`, `app/[lang]/layout.tsx`, `app/sitemap*`, `app/robots.txt/`, `package.json`, `tsconfig.json`, `next.config.js`, `middleware.ts`, `.github/workflows/**`, `.gitignore` | n/a — discuss first |
+
+### Commit Rules
+
+1. **Single concern per commit.** A commit message that says `feat(viral-pages):` MUST contain only viral-pages files. If your working tree has 24 unrelated files when you go to commit, you are about to make a mistake. Stop, stash, and commit per concern.
+2. **Never `git stash` or `git checkout -- <foreign-scope-file>`.** That action overwrites another agent's WIP. If a file outside your scope is dirty, leave it alone — only stage your own files (`git add <specific-paths>`, never `git add -A` or `git add .`).
+3. **Before commit:** `git status --short` and verify EVERY file you're staging is in your ownership column above. Files outside your column → leave unstaged.
+4. **Never commit auto-generated work-in-progress files.** `lib/i18n-autotranslate/<locale>.json` checkpoints are written batch-by-batch during a live Ollama run. Do not commit them mid-run; only the final consolidated `lib/i18n-autotranslate.ts` is a stable artifact. They are gitignored — do not un-gitignore.
+5. **`AGENTS.md` is shared.** Edits welcome from any agent, but additive only — append to your domain's section, do not delete or restructure other domains' sections.
+6. **If you discover another agent's uncommitted WIP** in a file you need to touch: do not absorb it into your commit. Either (a) wait for them to commit, or (b) leave a `// TODO: handoff to <agent>` and commit only the part that's clearly yours.
+
+### Detecting an incident (after the fact)
+
+If you suspect an absorption / revert happened:
+- `git log --diff-filter=D --name-only -- <path>` shows where a file was deleted in history.
+- `git log --all --source -- <path>` shows every commit that touched a file across branches.
+- `git fsck --lost-found` recovers dangling commits.
+
+**The cost of one bad commit (lost work, weeks of debugging) >> the cost of asking before staging.** When in doubt, stage less and ask.
 
 ---
 
@@ -2306,6 +2339,7 @@ Will be resolved automatically when upgrading to Next.js 15 + eslint 9 (future s
 | 21.04.2026 | 40 | **SEO Internal Link Fix COMPLETE.** Runbook Template entschlackt (app/runbook/[slug]/page.tsx) — Removed Mycelium Kreislauf links (/copilot, /intel, /oracle, /neuro), Removed Verwandte Runbooks section (10 items), Removed Geo-Mycelium Links section. Added natural internal links (max 2): Security Check + Weitere Runbooks. Expected result: 280,000 internal links → ~50,000-60,000. Google sees: natural link pattern instead of template spam. Footer links remain unchanged (normal). Build ✓ Exit 0. Commit: c47019ce. |
 | 25.04.2026 | 42 | **Consult Analytics Wiring — funnel/profit visibility complete.** Added `booking_click` event support in `/api/analytics/check`, extended `lib/check-funnel` in-memory + persistent 24h counters (`bookingClicks24h`, `consultingBookingClicks24h` with source filter for `consulting_*` and `enterprise_api_cta`), and surfaced new rates in `/api/admin/profit-analytics` (`pricingToBookingPct`, `consultingBookingSharePct`). `components/admin/ProfitDashboard` conversion panel now renders booking metrics. Added coverage in `__tests__/check-funnel.test.ts`. Updated consult rollout doc with analytics section. |
 | 25.04.2026 | 43 | **Consult Funnel Source Breakdown — admin visibility expanded.** Added top booking-source aggregation (`meta_json.source`) in `lib/check-funnel` for 24h windows and exposed it via `/api/admin/profit-analytics` as `bookingSources24h`. Updated `ProfitDashboard` conversion panel to show top booking sources and counts, enabling CTA-slot-level consult performance tracking (`consulting_*`, `enterprise_api_cta`, etc.). Consult rollout doc updated accordingly. |
+| 25.04.2026 | 44 | **Consult Slot/Plan Rates — breakdown finalized.** Added explicit source-slot counters (`consulting_pricing_starter`, `consulting_pricing_pro`, `consulting_pricing_scale`, `consulting_bottom_cta`, `enterprise_api_cta`) in profit-analytics funnel output plus per-slot share rates. ProfitDashboard now includes a dedicated "Consult Slot Breakdown (24h)" panel with count + booking share for each slot. Consult rollout documentation updated. |
 | 25.04.2026 | 41 | **Consult Plan Expansion (in progress) — conversion + SEO consistency pass.** `/[lang]/consulting` upgraded: Starter/Pro CTA now direct Stripe checkout (`BuyButton`), Scale remains booking-led (`BookingButton`) for sales-assisted flow. Added shared autopilot helper mapping (`mapAutopilotPlanToCheckoutProduct`, locale-aware monthly price formatter) to reduce plan/checkout drift. Middleware noindex allowlist expanded for localized `/pricing` + `/consulting`. Sitemap main locale chunk now includes `/{locale}/consulting`. Added unit coverage in `__tests__/autopilot-offering.test.ts`; added implementation doc `docs/consult-plan-expansion-2026-04-25.md`. |
 
 ### Open Tasks by Priority

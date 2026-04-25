@@ -8,7 +8,17 @@
 
 ## 🚦 MULTI-AGENT COMMIT HYGIENE — MANDATORY (added 25.04.2026)
 
-Three agents work this repo in parallel: **Claude Code**, **Windsurf**, **Cursor**. On 25.04.2026 we hit two incidents where one agent's `git stash` / `git checkout` / `git add` workflow silently absorbed or reverted another agent's in-progress edits. This is a coordination problem, not a code problem. The rules below are **non-negotiable** to keep parallel work safe.
+Three agents work this repo in parallel: **Claude Code**, **Windsurf**, **Cursor**. On 25.04.2026 we hit **five** incidents where one agent's `git stash` / `git checkout` / `git add` workflow silently absorbed or reverted another agent's in-progress edits. This is a coordination problem, not a code problem. The rules below are **non-negotiable** to keep parallel work safe.
+
+### 25.04.2026 Incident Log (post-mortem evidence)
+
+1. **`5592ef1e` "viral-pages" mega-bundle (Windsurf, 13:39):** 24 files, 27,294 insertions across 4 unrelated domains (viral pages + academy + i18n + audit doc). Mislabeled, contains in-flight Ollama checkpoints. Triggered creation of these rules.
+2. **`gitignore` revert (15:30):** Claude added `lib/i18n-autotranslate/*.json` to `.gitignore`. Edit was silently reverted by Cursor's tree-clean operation.
+3. **Claude commit lost staged files (18:47):** Race-condition between `git add` (29 files staged) and `git commit` (only 7 unrelated files captured) — Cursor's parallel work cleared the stage. Recovery: re-staged + re-committed as `75093ced`.
+4. **Ollama checkpoint dir wiped (~18:45):** Entire `lib/i18n-autotranslate/` directory deleted by another agent's `git checkout` or clean-tree call. Cost: ~6 hours of translation work for 30 locales lost. Run was restarted from scratch.
+5. **`index.ts` mission entries reverted twice:** M-008 registration in `lib/academy/missions/index.ts` was silently reverted between Edit and verification on two separate attempts. Recovered by immediate re-edit + commit.
+
+**Lesson learned:** the gap between `git add` and `git commit` is the danger window. Every agent must commit immediately after staging, never leave staged files dangling, and never run `git stash` / `git checkout -- .` / `git restore --staged .` on a tree they don't own.
 
 ### Ownership Map (who commits what)
 

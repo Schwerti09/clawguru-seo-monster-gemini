@@ -9,5 +9,7 @@ describe("check funnel snapshot", () => {
 
     expect(snapshot.bookingClicks24h).toBeGreaterThanOrEqual(2)
     expect(snapshot.consultingBookingClicks24h).toBeGreaterThanOrEqual(2)
+    expect(snapshot.bookingClicks7d).toBeGreaterThanOrEqual(2)
+    expect(snapshot.consultingBookingClicks7d).toBeGreaterThanOrEqual(2)
   })
 })

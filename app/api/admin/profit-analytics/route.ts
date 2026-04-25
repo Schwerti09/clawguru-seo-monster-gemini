@@ -204,6 +204,11 @@ export async function GET() {
     checkoutErrors24h: funnel.checkoutErrors,
     bookingClicks24h: funnel.bookingClicks,
     consultingBookingClicks24h: funnel.consultingBookingClicks,
+    pricingClicks7d: funnelBase.pricingClicks7d ?? funnel.pricingClicks,
+    checkoutStarts7d: funnelBase.checkoutStarts7d ?? funnel.checkoutStarted,
+    checkoutErrors7d: funnelBase.checkoutErrors7d ?? funnel.checkoutErrors,
+    bookingClicks7d: funnelBase.bookingClicks7d ?? funnel.bookingClicks,
+    consultingBookingClicks7d: funnelBase.consultingBookingClicks7d ?? funnel.consultingBookingClicks,
   })
   const alert = stripeMetrics
     ? computeAlert(margins.totalCostUsd, stripeMetrics.netToday)

@@ -7,6 +7,11 @@ export type RetentionInput = {
   checkoutErrors24h: number
   bookingClicks24h: number
   consultingBookingClicks24h: number
+  pricingClicks7d: number
+  checkoutStarts7d: number
+  checkoutErrors7d: number
+  bookingClicks7d: number
+  consultingBookingClicks7d: number
 }
 
 export type RetentionSignal = {
@@ -64,6 +69,7 @@ export function evaluateRetentionSignals(input: RetentionInput): RetentionSummar
   const startToRedirectPct = pct(input.checkoutRedirects24h, input.checkoutStarts24h)
   const errorRatePct = pct(input.checkoutErrors24h, input.checkoutStarts24h)
   const consultBookingSharePct = pct(input.consultingBookingClicks24h, input.bookingClicks24h)
+  const consultBookingShare7dPct = pct(input.consultingBookingClicks7d, input.bookingClicks7d)
 
   const checkoutErrorsLevel: RetentionSignalLevel =
     errorRatePct >= 25 ? "critical" : errorRatePct >= 10 ? "watch" : "healthy"
@@ -71,8 +77,14 @@ export function evaluateRetentionSignals(input: RetentionInput): RetentionSummar
     clickToStartPct < 20 ? "critical" : clickToStartPct < 45 ? "watch" : "healthy"
   const startToRedirectLevel: RetentionSignalLevel =
     startToRedirectPct < 60 ? "critical" : startToRedirectPct < 80 ? "watch" : "healthy"
-  const consultShare = classifyConsultBookingShare(consultBookingSharePct, input.bookingClicks24h)
-  const consultBookingShareLevel: RetentionSignalLevel = consultShare.level
+  const consultShare24h = classifyConsultBookingShare(consultBookingSharePct, input.bookingClicks24h)
+  const consultShare7d = classifyConsultBookingShare(consultBookingShare7dPct, input.bookingClicks7d)
+  const consultBookingShareLevel: RetentionSignalLevel =
+    consultShare7d.level === "critical"
+      ? "critical"
+      : consultShare7d.level === "watch" || consultShare24h.level === "watch"
+        ? "watch"
+        : "healthy"
 
   const severity = { healthy: 0, watch: 1, critical: 2 } as const
   const overallLevel: RetentionSignalLevel =
@@ -114,8 +126,10 @@ export function evaluateRetentionSignals(input: RetentionInput): RetentionSummar
         level: consultBookingShareLevel,
         score: Math.round(consultBookingSharePct * 10) / 10,
         message:
-          `Consult booking share is ${Math.round(consultBookingSharePct * 10) / 10}% over 24h ` +
-          `(${consultShare.sampleLabel}; ${consultShare.thresholdLabel}).`,
+          `Consult booking share is ${Math.round(consultBookingSharePct * 10) / 10}% (24h) ` +
+          `and ${Math.round(consultBookingShare7dPct * 10) / 10}% (7d). ` +
+          `24h sample: ${consultShare24h.sampleLabel}; 7d sample: ${consultShare7d.sampleLabel}; ` +
+          `active thresholds: ${consultShare7d.thresholdLabel}.`,
       },
     ],
   }

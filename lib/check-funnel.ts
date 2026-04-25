@@ -54,6 +54,7 @@ function countSince(event: CheckEvent, sinceMs: number): number {
 export function getCheckFunnelSnapshot() {
   prune()
   const since24h = now() - SNAPSHOT_WINDOW_MS
+  const since7d = now() - 7 * SNAPSHOT_WINDOW_MS
   return {
     pageViews24h: countSince("check_page_view", since24h),
     checkStarts24h: countSince("check_start", since24h),
@@ -70,6 +71,11 @@ export function getCheckFunnelSnapshot() {
     shareClicks24h: countSince("share_click", since24h),
     methodikClicks24h: countSince("methodik_click", since24h),
     hardeningClicks24h: countSince("hardening_link_click", since24h),
+    pricingClicks7d: countSince("pricing_click", since7d),
+    checkoutStarts7d: countSince("checkout_start", since7d),
+    checkoutErrors7d: countSince("checkout_error", since7d),
+    bookingClicks7d: countSince("booking_click", since7d),
+    consultingBookingClicks7d: countSince("booking_click", since7d),
     bookingSources24h: [] as BookingSourceRow[],
   }
 }
@@ -114,6 +120,11 @@ export async function getCheckFunnelSnapshotPersistent() {
       share_clicks: string
       methodik_clicks: string
       hardening_clicks: string
+      pricing_clicks_7d: string
+      checkout_starts_7d: string
+      checkout_errors_7d: string
+      booking_clicks_7d: string
+      consulting_booking_clicks_7d: string
     }>(
       `SELECT
          COUNT(*) FILTER (WHERE event = 'check_page_view')::text AS page_views,
@@ -136,9 +147,21 @@ export async function getCheckFunnelSnapshotPersistent() {
          COUNT(*) FILTER (WHERE event = 'retention_nudge_dismiss')::text AS retention_nudge_dismisses,
          COUNT(*) FILTER (WHERE event = 'share_click')::text AS share_clicks,
          COUNT(*) FILTER (WHERE event = 'methodik_click')::text AS methodik_clicks,
-         COUNT(*) FILTER (WHERE event = 'hardening_link_click')::text AS hardening_clicks
+         COUNT(*) FILTER (WHERE event = 'hardening_link_click')::text AS hardening_clicks,
+         COUNT(*) FILTER (WHERE event = 'pricing_click' AND created_at >= NOW() - INTERVAL '7 days')::text AS pricing_clicks_7d,
+         COUNT(*) FILTER (WHERE event = 'checkout_start' AND created_at >= NOW() - INTERVAL '7 days')::text AS checkout_starts_7d,
+         COUNT(*) FILTER (WHERE event = 'checkout_error' AND created_at >= NOW() - INTERVAL '7 days')::text AS checkout_errors_7d,
+         COUNT(*) FILTER (WHERE event = 'booking_click' AND created_at >= NOW() - INTERVAL '7 days')::text AS booking_clicks_7d,
+         COUNT(*) FILTER (
+           WHERE event = 'booking_click'
+             AND created_at >= NOW() - INTERVAL '7 days'
+             AND (
+               meta_json ->> 'source' LIKE 'consulting_%'
+               OR meta_json ->> 'source' = 'enterprise_api_cta'
+             )
+         )::text AS consulting_booking_clicks_7d
        FROM check_funnel_events
-       WHERE created_at >= NOW() - INTERVAL '24 hours'`
+       WHERE created_at >= NOW() - INTERVAL '7 days'`
     )
 
     const row = res.rows[0]
@@ -175,6 +198,11 @@ export async function getCheckFunnelSnapshotPersistent() {
       shareClicks24h: Number(row?.share_clicks || 0),
       methodikClicks24h: Number(row?.methodik_clicks || 0),
       hardeningClicks24h: Number(row?.hardening_clicks || 0),
+      pricingClicks7d: Number(row?.pricing_clicks_7d || 0),
+      checkoutStarts7d: Number(row?.checkout_starts_7d || 0),
+      checkoutErrors7d: Number(row?.checkout_errors_7d || 0),
+      bookingClicks7d: Number(row?.booking_clicks_7d || 0),
+      consultingBookingClicks7d: Number(row?.consulting_booking_clicks_7d || 0),
       bookingSources24h,
     }
   } catch {

@@ -430,6 +430,33 @@ Refined retention scoring for consult-booking share to reduce noise on small sam
 
 This keeps retention alerts actionable: fewer false-critical states on low volume, while enforcing higher consult-mix quality when funnel volume is mature.
 
+## Consult retention 7d context follow-up (2026-04-25)
+
+Extended consult-retention evaluation to include a 7-day baseline, so day-level spikes do not dominate retention severity decisions.
+
+- `lib/check-funnel.ts`
+  - Snapshot now also returns 7d counters:
+    - `pricingClicks7d`
+    - `checkoutStarts7d`
+    - `checkoutErrors7d`
+    - `bookingClicks7d`
+    - `consultingBookingClicks7d`
+  - Persistent SQL snapshot now computes these fields in the same query.
+- `lib/autopilot-retention.ts`
+  - `RetentionInput` extended with the new 7d fields.
+  - `consult_booking_share` signal now evaluates both windows:
+    - 24h share (tactical)
+    - 7d share (baseline gate)
+  - Severity now uses 7d as primary guardrail (critical/watch), with 24h still visible in message context.
+  - Signal message includes both percentages plus 24h/7d sample labels.
+- `app/api/admin/profit-analytics/route.ts`
+  - Passes 7d fields into `evaluateRetentionSignals(...)` with safe fallback to 24h values when unavailable.
+- Tests
+  - Extended `__tests__/autopilot-retention.test.ts` for 7d gating behavior.
+  - Extended `__tests__/check-funnel.test.ts` to assert 7d consult-booking counters are present.
+
+This makes consult retention less noisy and more decision-grade by grounding alert levels in rolling 7d signal quality.
+
 ## Operational Notes
 
 - `BookingButton` remains env-driven (`NEXT_PUBLIC_CAL_*_URL`) with mail fallback, so no deployment break if Cal URLs are missing.

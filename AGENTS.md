@@ -133,6 +133,12 @@ Source: `docs/audit-response-kimi-2026-04-25.md` (full point-by-point verificati
 
 **Foundations track is now the first fully-missionized track. 5/5 missions playable end-to-end.**
 
+**Stack Hardening (intermediate) track started 25.04.2026:**
+- `lib/academy/missions/docker-nonroot.ts` — M-006: non-root Dockerfile, read-only rootfs, HEALTHCHECK, Trivy scan. Same engine as Foundations missions.
+- `lib/academy/missions/postgres-hardening.ts` — M-007 (NEW 25.04): pg_hba trust → scram-sha-256, ssl=on, pg_stat_statements + slow-query log, role demotion from Superuser, audit gate. Multi-step Dockerfile-style virtual filesystem with 4 distinct production mistakes.
+- `app/[lang]/academy/intermediate/page.tsx` rewired from waitlist stub → MissionList.
+- `lib/academy/hubContent.ts` TRACKS.missionCount honesty pass: intermediate now `2` (was lying `7`); advanced `0` status `preview` (was lying `live, 6`).
+
 **Step 4 — Sentinel AI Tutor (minimal) — ✅ COMPLETE (22.04.2026)**
 - `app/api/academy/sentinel/route.ts` — stateless POST endpoint with three-tier provider chain:
   1. Local Ollama (`OLLAMA_URL`, default `http://127.0.0.1:11434`) — auto-discovers available model, prefers `SENTINEL_OLLAMA_MODEL` (default `aya-expanse:32b`)

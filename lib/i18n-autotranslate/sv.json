@@ -1,0 +1,7 @@
+{
+  " • ": " • ",
+  "\"Not a Pentest\" Notice": "„Inte Pentest“-meddelande",
+  "# CORRECT — Least-Privilege Role": "# Rätt — Minstprivilegierad rolla",
+  "# Default-Deny for all namespaces": "# Standardinställning för alla namnrom: Neja → Nej",
+  "# Explicitly allow: Frontend → Backend": "# Tillåt explicit: Frontend → Backend"
+}

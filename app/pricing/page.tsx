@@ -10,6 +10,7 @@ import { SOCIAL_PROOF_CONFIG } from "@/lib/social-proof-config"
 import { headers } from "next/headers"
 import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
 import { getDictionary } from "@/lib/getDictionary"
+import { AUTOPILOT_PLANS } from "@/lib/autopilot-offering"
 import dynamic from "next/dynamic"
 
 const CouponBanner = dynamic(() => import("@/components/marketing/CouponBanner"), { ssr: false })
@@ -26,10 +27,14 @@ const PRICING_KEYWORDS = [
   "emergency runbook",
 ]
 
+const STARTER_MONTHLY_EUR = AUTOPILOT_PLANS.starter.monthlyPriceEur
+const PRO_MONTHLY_EUR = AUTOPILOT_PLANS.pro.monthlyPriceEur
+const SCALE_MONTHLY_EUR = AUTOPILOT_PLANS.scale.monthlyPriceEur
+
 export const metadata = {
   title: "Preise & Pläne | ClawGuru – Security Check Platform",
   description:
-    "ClawGuru Preise: Kostenloser Security Check, Starter ab 29€/Monat, Pro ab 99€/Monat, Scale ab 249€/Monat. KI-gestützte Security-Automation für Self-Hosted Teams.",
+    `ClawGuru Preise: Kostenloser Security Check, Starter ab ${STARTER_MONTHLY_EUR}€/Monat, Pro ab ${PRO_MONTHLY_EUR}€/Monat, Scale ab ${SCALE_MONTHLY_EUR}€/Monat. KI-gestützte Security-Automation für Self-Hosted Teams.`,
   keywords: PRICING_KEYWORDS,
   alternates: { canonical: "/pricing" },
   openGraph: {
@@ -89,6 +94,9 @@ export default async function PricingPage() {
   const prefix = `/${locale}`
   const isDE = locale === "de"
   const pricing = dict.pricing as any
+  const starterPriceLabel = `${STARTER_MONTHLY_EUR} € / Mo`
+  const proPriceLabel = `${PRO_MONTHLY_EUR} € / Mo`
+  const scalePriceLabel = `${SCALE_MONTHLY_EUR} € / Mo`
 
   function getDayPassGroups(): FeatureGroup[] {
     return [
@@ -250,7 +258,7 @@ export default async function PricingPage() {
       { '@type': 'Question', name: "What is ClawGuru?", acceptedAnswer: { '@type': 'Answer', text: "ClawGuru is an AI-powered security intelligence platform for self-hosted infrastructure." } },
       { '@type': 'Question', name: "How does pricing work?", acceptedAnswer: { '@type': 'Answer', text: "We offer Free, Starter, Pro, Scale, and Enterprise plans with automation-first feature tiers." } },
       { '@type': 'Question', name: "Can I cancel anytime?", acceptedAnswer: { '@type': 'Answer', text: "Yes, you can cancel your subscription at any time. No long-term commitment required." } },
-      { '@type': 'Question', name: "Do you offer a free trial?", acceptedAnswer: { '@type': 'Answer', text: "Yes, we offer a free trial for our Pro and Team plans. Try before you commit." } },
+      { '@type': 'Question', name: "Do you offer a free trial?", acceptedAnswer: { '@type': 'Answer', text: "Yes. The Starter trial gives 24h access, and monthly tiers continue with Starter, Pro, and Scale plans." } },
     ],
   }
 
@@ -333,9 +341,9 @@ export default async function PricingPage() {
                 <tr>
                   <th className="text-left py-3 px-4 text-gray-500 font-mono text-xs uppercase tracking-widest w-2/5">Feature</th>
                   <th className="py-3 px-4 text-center font-black text-[#00ff9d] text-xs uppercase tracking-wider">Free<br /><span className="font-normal text-gray-500 normal-case">0 € / immer</span></th>
-                  <th className="py-3 px-4 text-center font-black text-[#00b8ff] text-xs uppercase tracking-wider">Starter<br /><span className="font-normal text-gray-500 normal-case">29 € / Mo</span></th>
-                  <th className="py-3 px-4 text-center font-black text-[#a78bfa] text-xs uppercase tracking-wider">Pro<br /><span className="font-normal text-gray-500 normal-case">99 € / Mo</span></th>
-                  <th className="py-3 px-4 text-center font-black text-[#22c55e] text-xs uppercase tracking-wider">Scale<br /><span className="font-normal text-gray-500 normal-case">249 € / Mo</span></th>
+                  <th className="py-3 px-4 text-center font-black text-[#00b8ff] text-xs uppercase tracking-wider">Starter<br /><span className="font-normal text-gray-500 normal-case">{starterPriceLabel}</span></th>
+                  <th className="py-3 px-4 text-center font-black text-[#a78bfa] text-xs uppercase tracking-wider">Pro<br /><span className="font-normal text-gray-500 normal-case">{proPriceLabel}</span></th>
+                  <th className="py-3 px-4 text-center font-black text-[#22c55e] text-xs uppercase tracking-wider">Scale<br /><span className="font-normal text-gray-500 normal-case">{scalePriceLabel}</span></th>
                   <th className="py-3 px-4 text-center font-black text-[#ffaa00] text-xs uppercase tracking-wider">Enterprise<br /><span className="font-normal text-gray-500 normal-case">Custom</span></th>
                 </tr>
               </thead>

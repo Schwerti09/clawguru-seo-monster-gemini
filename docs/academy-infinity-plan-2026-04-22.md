@@ -22,7 +22,7 @@ This document is the single source of truth for the Academy ∞ rebuild. Any age
 | 6 | Attack Cinema (Log4Shell) | ✅ DONE | `/breaches` hub + `/breaches/log4shell` 10-step timeline with 3 forks |
 | 7 | Content pipeline (local LLM) | 🟡 SHIPPED, blocked | `scripts/translate-via-aya.js` + `scripts/gen-mission-outlines.js` — waits on `aya-expanse:8b` pull |
 | 8 | Reactivation + sitemap sweep | ✅ DONE | Mission + breach routes static, registry-driven sitemap (auto-sync) |
-| 9 | 10 more missions × 2 tracks | ⏭ NEXT | Blocked on Step 7 (outlines) for scale |
+| 9 | 10 more missions × 2 tracks | 🟡 IN PROGRESS | Stack-Hardening track started: M-006 docker-nonroot + M-007 postgres-hardening shipped 25.04 |
 | 10 | Digital Twin (GitHub read-only) | ⏭ LATER | — |
 | 11 | Adversarial AI Co-Player | ⏭ LATER | — |
 | 12 | Community + Mission Authoring | ⏭ LATER | — |
@@ -32,7 +32,8 @@ This document is the single source of truth for the Academy ∞ rebuild. Any age
 **Live routes (all locales):**
 - `/academy` — hub with Mission / Attack Cinema / Arsenal teasers + 8 track cards
 - `/academy/beginner` — Foundations track, 5 missions indexed
-- `/academy/mission/{nginx-hsts,ssh-hardening,ufw-firewall,lets-encrypt,misconfig-hunt}` — playable
+- `/academy/mission/{nginx-hsts,ssh-hardening,ufw-firewall,lets-encrypt,misconfig-hunt}` — playable (Foundations track)
+- `/academy/mission/{docker-nonroot,postgres-hardening}` — playable (Stack Hardening track, 25.04.2026)
 - `/academy/{intermediate,advanced,auth,incident-response,compliance,adversarial,story,certification}` — stubs / legacy
 - `/breaches` — Attack Cinema hub (1 live + 4 soon)
 - `/breaches/log4shell` — interactive re-enactment

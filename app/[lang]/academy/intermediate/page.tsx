@@ -3,6 +3,7 @@ import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
 import { TRACKS, getHubContent } from "@/lib/academy/hubContent"
 import { TrackShowcase } from "@/components/academy/TrackShowcase"
+import { MissionList } from "@/components/academy/MissionList"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://clawguru.org"
 const TRACK_SLUG = "intermediate"
@@ -33,7 +34,11 @@ export default function StackHardeningTrackPage({ params }: { params: { lang: st
   const track = TRACKS.find((t) => t.slug === TRACK_SLUG)
   if (!track) notFound()
 
-  // Intermediate has no playable missions yet — showWaitlist=true surfaces
-  // the EmailCapture prominently while the cohort ships.
-  return <TrackShowcase locale={locale} track={track} showWaitlist />
+  return (
+    <TrackShowcase
+      locale={locale}
+      track={track}
+      missionsSlot={<MissionList locale={locale} trackSlug={TRACK_SLUG} accent={track.accent} />}
+    />
+  )
 }

@@ -22,10 +22,13 @@ export interface Track {
   missionCount: number
 }
 
+// missionCount is the *current playable* count, not aspiration. Keep honest —
+// users see this number on the hub. Update it when registering a new mission
+// in lib/academy/missions/index.ts.
 export const TRACKS: Track[] = [
-  { slug: "beginner",           icon: "🟢", accent: "emerald", status: "live",    missionCount: 5  }, // Foundations
-  { slug: "intermediate",       icon: "🧱", accent: "blue",    status: "live",    missionCount: 7  }, // Stack Hardening
-  { slug: "advanced",           icon: "🤖", accent: "red",     status: "live",    missionCount: 6  }, // AI Agent Security
+  { slug: "beginner",           icon: "🟢", accent: "emerald", status: "live",    missionCount: 5  }, // Foundations — 5/5
+  { slug: "intermediate",       icon: "🧱", accent: "blue",    status: "live",    missionCount: 2  }, // Stack Hardening — 2 playable, more shipping
+  { slug: "advanced",           icon: "🤖", accent: "red",     status: "preview", missionCount: 0  }, // AI Agent Security — content pages live, missions WIP
   { slug: "auth",               icon: "🔐", accent: "cyan",    status: "soon",    missionCount: 10 },
   { slug: "incident-response",  icon: "🛡️", accent: "amber",   status: "soon",    missionCount: 10 },
   { slug: "compliance",         icon: "📋", accent: "violet",  status: "soon",    missionCount: 8  },

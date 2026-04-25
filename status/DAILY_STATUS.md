@@ -43,11 +43,12 @@
 18. Added consult webhook delivery telemetry to admin analytics (`attempted`, `sent`, `failed`, `skipped*`) and surfaced counters in dashboard consult-health panel.
 19. Added optional DB-backed notify telemetry aggregation (`consult_health_notify_events`) with fallback to in-memory counters for resilient ops readouts.
 20. Added notify telemetry trend slices (24h/7d/30d) with success/failure rates + 24h-vs-7d deltas in admin consult-health panel.
+21. Calibrated consult-booking retention signal: low-sample safeguard (`<12` bookings => watch), plus stricter high-volume thresholds (`>=40` bookings).
 
 ## 📌 Next (Consult Stream)
 
 1. Tune cooldown / fingerprint (e.g. include dominant source group) once real traffic patterns are observed.
-2. Extend consult-booking retention calibration once more production data is accumulated.
+2. Wire consult-booking retention calibration to 7d context once rolling production baseline is available.
 
 ---
 

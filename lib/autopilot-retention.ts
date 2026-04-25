@@ -26,6 +26,39 @@ function pct(numerator: number, denominator: number): number {
   return (numerator / denominator) * 100
 }
 
+function classifyConsultBookingShare(sharePct: number, bookingClicks24h: number): {
+  level: RetentionSignalLevel
+  thresholdLabel: string
+  sampleLabel: string
+} {
+  if (bookingClicks24h === 0) {
+    return {
+      level: "watch",
+      thresholdLabel: "insufficient sample",
+      sampleLabel: "0 booking clicks",
+    }
+  }
+  if (bookingClicks24h < 12) {
+    return {
+      level: "watch",
+      thresholdLabel: "insufficient sample",
+      sampleLabel: `${bookingClicks24h} booking clicks`,
+    }
+  }
+
+  // Calibrated buckets: stricter expectations once volume is high enough.
+  const highVolume = bookingClicks24h >= 40
+  const criticalThreshold = highVolume ? 30 : 25
+  const watchThreshold = highVolume ? 55 : 50
+  const level: RetentionSignalLevel =
+    sharePct < criticalThreshold ? "critical" : sharePct < watchThreshold ? "watch" : "healthy"
+  return {
+    level,
+    thresholdLabel: `critical <${criticalThreshold}% · watch <${watchThreshold}%`,
+    sampleLabel: `${bookingClicks24h} booking clicks`,
+  }
+}
+
 export function evaluateRetentionSignals(input: RetentionInput): RetentionSummary {
   const clickToStartPct = pct(input.checkoutStarts24h, input.pricingClicks24h)
   const startToRedirectPct = pct(input.checkoutRedirects24h, input.checkoutStarts24h)
@@ -38,14 +71,8 @@ export function evaluateRetentionSignals(input: RetentionInput): RetentionSummar
     clickToStartPct < 20 ? "critical" : clickToStartPct < 45 ? "watch" : "healthy"
   const startToRedirectLevel: RetentionSignalLevel =
     startToRedirectPct < 60 ? "critical" : startToRedirectPct < 80 ? "watch" : "healthy"
-  const consultBookingShareLevel: RetentionSignalLevel =
-    input.bookingClicks24h === 0
-      ? "watch"
-      : consultBookingSharePct < 20
-        ? "critical"
-        : consultBookingSharePct < 45
-          ? "watch"
-          : "healthy"
+  const consultShare = classifyConsultBookingShare(consultBookingSharePct, input.bookingClicks24h)
+  const consultBookingShareLevel: RetentionSignalLevel = consultShare.level
 
   const severity = { healthy: 0, watch: 1, critical: 2 } as const
   const overallLevel: RetentionSignalLevel =
@@ -86,7 +113,9 @@ export function evaluateRetentionSignals(input: RetentionInput): RetentionSummar
         key: "consult_booking_share",
         level: consultBookingShareLevel,
         score: Math.round(consultBookingSharePct * 10) / 10,
-        message: `Consult booking share is ${Math.round(consultBookingSharePct * 10) / 10}% of all booking clicks over 24h.`,
+        message:
+          `Consult booking share is ${Math.round(consultBookingSharePct * 10) / 10}% over 24h ` +
+          `(${consultShare.sampleLabel}; ${consultShare.thresholdLabel}).`,
       },
     ],
   }

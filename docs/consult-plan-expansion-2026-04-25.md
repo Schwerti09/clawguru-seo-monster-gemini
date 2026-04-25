@@ -412,6 +412,24 @@ Extended consult-health notify telemetry from single-window counters to operatio
 
 This gives operators quick signal on whether delivery reliability is stable or degrading over short vs medium windows.
 
+## Consult-booking retention calibration follow-up (2026-04-25)
+
+Refined retention scoring for consult-booking share to reduce noise on small samples and tighten expectations on meaningful traffic.
+
+- `lib/autopilot-retention.ts`
+  - Added `classifyConsultBookingShare(...)` calibration helper.
+  - New behavior for `consult_booking_share` signal:
+    - `bookingClicks24h = 0` or `< 12`: force `watch` (`insufficient sample`) instead of hard critical.
+    - `bookingClicks24h >= 40`: stricter thresholds (`critical < 30%`, `watch < 55%`).
+    - `bookingClicks24h 12..39`: baseline thresholds (`critical < 25%`, `watch < 50%`).
+  - Signal message now includes sample size + active thresholds for operator clarity.
+- Tests
+  - Extended `__tests__/autopilot-retention.test.ts` with:
+    - low-sample guard case (`watch` + insufficient-sample message)
+    - high-volume stricter-threshold case (`critical` at 28% consult share)
+
+This keeps retention alerts actionable: fewer false-critical states on low volume, while enforcing higher consult-mix quality when funnel volume is mature.
+
 ## Operational Notes
 
 - `BookingButton` remains env-driven (`NEXT_PUBLIC_CAL_*_URL`) with mail fallback, so no deployment break if Cal URLs are missing.

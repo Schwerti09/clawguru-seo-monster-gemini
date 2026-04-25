@@ -6,6 +6,7 @@ import { letsEncryptMission } from "./lets-encrypt"
 import { misconfigHuntMission } from "./misconfig-hunt"
 import { dockerNonrootMission } from "./docker-nonroot"
 import { postgresHardeningMission } from "./postgres-hardening"
+import { reverseProxyRatelimitMission } from "./reverse-proxy-ratelimit"
 
 // Mission registry. Add new missions here; they become instantly routable via
 // /academy/mission/[slug]. Mission metadata on the hub + track pages is pulled
@@ -16,8 +17,9 @@ export const MISSIONS: Record<string, Mission> = {
   [ufwFirewallMission.slug]:      ufwFirewallMission,
   [letsEncryptMission.slug]:      letsEncryptMission,
   [misconfigHuntMission.slug]:    misconfigHuntMission,
-  [dockerNonrootMission.slug]:    dockerNonrootMission,
-  [postgresHardeningMission.slug]:postgresHardeningMission,
+  [dockerNonrootMission.slug]:        dockerNonrootMission,
+  [postgresHardeningMission.slug]:    postgresHardeningMission,
+  [reverseProxyRatelimitMission.slug]:reverseProxyRatelimitMission,
 }
 
 export interface MissionIndexEntry {
@@ -38,8 +40,9 @@ export const MISSION_INDEX: MissionIndexEntry[] = [
   { slug: "lets-encrypt",       track: "beginner",     order: 4, xp: 150, durationMin: 7,  accent: "emerald" },
   { slug: "misconfig-hunt",     track: "beginner",     order: 5, xp: 160, durationMin: 8,  accent: "emerald" },
   // Stack Hardening (intermediate) — containers, databases, runtime hardening
-  { slug: "docker-nonroot",     track: "intermediate", order: 1, xp: 150, durationMin: 7,  accent: "blue" },
-  { slug: "postgres-hardening", track: "intermediate", order: 2, xp: 180, durationMin: 10, accent: "blue" },
+  { slug: "docker-nonroot",         track: "intermediate", order: 1, xp: 150, durationMin: 7,  accent: "blue" },
+  { slug: "postgres-hardening",     track: "intermediate", order: 2, xp: 180, durationMin: 10, accent: "blue" },
+  { slug: "reverse-proxy-ratelimit",track: "intermediate", order: 3, xp: 200, durationMin: 9,  accent: "blue" },
 ]
 
 export function getMission(slug: string): Mission | undefined {

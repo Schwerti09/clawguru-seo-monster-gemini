@@ -124,6 +124,44 @@ type DashData = {
         skippedInfo: number
         skippedNoWebhook: number
         skippedCooldown: number
+        successRatePct: number
+        failureRatePct: number
+        windows: {
+          h24: {
+            attempted: number
+            sent: number
+            failed: number
+            skippedInfo: number
+            skippedNoWebhook: number
+            skippedCooldown: number
+            successRatePct: number
+            failureRatePct: number
+          }
+          d7: {
+            attempted: number
+            sent: number
+            failed: number
+            skippedInfo: number
+            skippedNoWebhook: number
+            skippedCooldown: number
+            successRatePct: number
+            failureRatePct: number
+          }
+          d30: {
+            attempted: number
+            sent: number
+            failed: number
+            skippedInfo: number
+            skippedNoWebhook: number
+            skippedCooldown: number
+            successRatePct: number
+            failureRatePct: number
+          }
+        }
+        trend: {
+          successRateDelta7dVs24hPct: number
+          failureRateDelta7dVs24hPct: number
+        }
       }
     }
     checkoutCompleted: number
@@ -471,13 +509,25 @@ function ConversionFunnel({ funnel }: { funnel: DashData["funnel"] }) {
           </div>
         )}
         {consultHealth.notifyTelemetry && (
-          <div className="text-xs text-gray-500 mb-2">
-            Notify telemetry: attempted{" "}
-            <span className="text-cyan-300 font-bold">{consultHealth.notifyTelemetry.attempted}</span>
-            {" · "}sent <span className="text-cyan-300 font-bold">{consultHealth.notifyTelemetry.sent}</span>
-            {" · "}failed <span className="text-cyan-300 font-bold">{consultHealth.notifyTelemetry.failed}</span>
-            {" · "}cooldown skips{" "}
-            <span className="text-cyan-300 font-bold">{consultHealth.notifyTelemetry.skippedCooldown}</span>
+          <div className="text-xs text-gray-500 mb-2 space-y-1">
+            <div>
+              Notify 24h: attempted{" "}
+              <span className="text-cyan-300 font-bold">{consultHealth.notifyTelemetry.windows.h24.attempted}</span>
+              {" · "}sent <span className="text-cyan-300 font-bold">{consultHealth.notifyTelemetry.windows.h24.sent}</span>
+              {" · "}failed <span className="text-cyan-300 font-bold">{consultHealth.notifyTelemetry.windows.h24.failed}</span>
+              {" · "}success <span className="text-cyan-300 font-bold">{consultHealth.notifyTelemetry.windows.h24.successRatePct}%</span>
+            </div>
+            <div>
+              Notify 7d/30d success:{" "}
+              <span className="text-cyan-300 font-bold">{consultHealth.notifyTelemetry.windows.d7.successRatePct}%</span>
+              {" / "}
+              <span className="text-cyan-300 font-bold">{consultHealth.notifyTelemetry.windows.d30.successRatePct}%</span>
+              {" · "}24h vs 7d delta{" "}
+              <span className={`font-bold ${consultHealth.notifyTelemetry.trend.successRateDelta7dVs24hPct >= 0 ? "text-green-300" : "text-red-300"}`}>
+                {consultHealth.notifyTelemetry.trend.successRateDelta7dVs24hPct >= 0 ? "+" : ""}
+                {consultHealth.notifyTelemetry.trend.successRateDelta7dVs24hPct}%
+              </span>
+            </div>
           </div>
         )}
         <div className="grid sm:grid-cols-2 gap-2 text-xs">

@@ -81,6 +81,22 @@ describe("GET /api/admin/profit-analytics", () => {
         attempted: expect.any(Number),
         sent: expect.any(Number),
         failed: expect.any(Number),
+        windows: expect.objectContaining({
+          h24: expect.objectContaining({
+            successRatePct: expect.any(Number),
+            failureRatePct: expect.any(Number),
+          }),
+          d7: expect.objectContaining({
+            successRatePct: expect.any(Number),
+          }),
+          d30: expect.objectContaining({
+            successRatePct: expect.any(Number),
+          }),
+        }),
+        trend: expect.objectContaining({
+          successRateDelta7dVs24hPct: expect.any(Number),
+          failureRateDelta7dVs24hPct: expect.any(Number),
+        }),
       })
     )
   })

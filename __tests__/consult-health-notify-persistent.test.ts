@@ -25,12 +25,24 @@ describe("consult health notify persistent snapshot", () => {
       .mockResolvedValueOnce({
         rows: [
           {
-            attempted: "5",
-            sent: "4",
-            failed: "1",
-            skipped_info: "2",
-            skipped_no_webhook: "3",
-            skipped_cooldown: "6",
+            attempted_24h: "5",
+            sent_24h: "4",
+            failed_24h: "1",
+            skipped_info_24h: "2",
+            skipped_no_webhook_24h: "3",
+            skipped_cooldown_24h: "6",
+            attempted_7d: "30",
+            sent_7d: "24",
+            failed_7d: "6",
+            skipped_info_7d: "5",
+            skipped_no_webhook_7d: "7",
+            skipped_cooldown_7d: "8",
+            attempted_30d: "80",
+            sent_30d: "70",
+            failed_30d: "10",
+            skipped_info_30d: "9",
+            skipped_no_webhook_30d: "11",
+            skipped_cooldown_30d: "12",
           },
         ],
       })
@@ -44,6 +56,44 @@ describe("consult health notify persistent snapshot", () => {
       skippedInfo: 2,
       skippedNoWebhook: 3,
       skippedCooldown: 6,
+      successRatePct: 80,
+      failureRatePct: 20,
+      windows: {
+        h24: {
+          attempted: 5,
+          sent: 4,
+          failed: 1,
+          skippedInfo: 2,
+          skippedNoWebhook: 3,
+          skippedCooldown: 6,
+          successRatePct: 80,
+          failureRatePct: 20,
+        },
+        d7: {
+          attempted: 30,
+          sent: 24,
+          failed: 6,
+          skippedInfo: 5,
+          skippedNoWebhook: 7,
+          skippedCooldown: 8,
+          successRatePct: 80,
+          failureRatePct: 20,
+        },
+        d30: {
+          attempted: 80,
+          sent: 70,
+          failed: 10,
+          skippedInfo: 9,
+          skippedNoWebhook: 11,
+          skippedCooldown: 12,
+          successRatePct: 87.5,
+          failureRatePct: 12.5,
+        },
+      },
+      trend: {
+        successRateDelta7dVs24hPct: 0,
+        failureRateDelta7dVs24hPct: 0,
+      },
     })
   })
 
@@ -60,6 +110,10 @@ describe("consult health notify persistent snapshot", () => {
       skippedInfo: 0,
       skippedNoWebhook: 0,
       skippedCooldown: 0,
+      successRatePct: 0,
+      failureRatePct: 0,
+      windows: expect.any(Object),
+      trend: expect.any(Object),
     })
   })
 })

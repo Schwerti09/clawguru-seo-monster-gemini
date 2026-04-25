@@ -27,6 +27,45 @@ const notifyStats = {
 }
 let notifyTableReady = false
 
+type NotifyCounters = {
+  attempted: number
+  sent: number
+  failed: number
+  skippedInfo: number
+  skippedNoWebhook: number
+  skippedCooldown: number
+}
+
+function pct(num: number, den: number) {
+  return den > 0 ? Math.round((num / den) * 1000) / 10 : 0
+}
+
+function buildWindow(c: NotifyCounters) {
+  return {
+    ...c,
+    successRatePct: pct(c.sent, c.attempted),
+    failureRatePct: pct(c.failed, c.attempted),
+  }
+}
+
+function buildTelemetryShape(h24: NotifyCounters, d7: NotifyCounters, d30: NotifyCounters) {
+  const h24Window = buildWindow(h24)
+  const d7Window = buildWindow(d7)
+  const d30Window = buildWindow(d30)
+  return {
+    ...h24Window,
+    windows: {
+      h24: h24Window,
+      d7: d7Window,
+      d30: d30Window,
+    },
+    trend: {
+      successRateDelta7dVs24hPct: Math.round((h24Window.successRatePct - d7Window.successRatePct) * 10) / 10,
+      failureRateDelta7dVs24hPct: Math.round((h24Window.failureRatePct - d7Window.failureRatePct) * 10) / 10,
+    },
+  }
+}
+
 function cooldownMs() {
   const raw = process.env.CONSULT_HEALTH_ALERT_COOLDOWN_MS
   const n = raw ? Number(raw) : NaN
@@ -198,7 +237,8 @@ export function consultHealthWebhookEnvSnapshot() {
 }
 
 export function consultHealthNotifyTelemetrySnapshot() {
-  return { ...notifyStats }
+  const counters: NotifyCounters = { ...notifyStats }
+  return buildTelemetryShape(counters, counters, counters)
 }
 
 export async function consultHealthNotifyTelemetrySnapshotPersistent() {
@@ -206,32 +246,73 @@ export async function consultHealthNotifyTelemetrySnapshotPersistent() {
   try {
     await ensureNotifyTable()
     const res = await dbQuery<{
-      attempted: string
-      sent: string
-      failed: string
-      skipped_info: string
-      skipped_no_webhook: string
-      skipped_cooldown: string
+      attempted_24h: string
+      sent_24h: string
+      failed_24h: string
+      skipped_info_24h: string
+      skipped_no_webhook_24h: string
+      skipped_cooldown_24h: string
+      attempted_7d: string
+      sent_7d: string
+      failed_7d: string
+      skipped_info_7d: string
+      skipped_no_webhook_7d: string
+      skipped_cooldown_7d: string
+      attempted_30d: string
+      sent_30d: string
+      failed_30d: string
+      skipped_info_30d: string
+      skipped_no_webhook_30d: string
+      skipped_cooldown_30d: string
     }>(
       `SELECT
-         COUNT(*) FILTER (WHERE event = 'attempted')::text AS attempted,
-         COUNT(*) FILTER (WHERE event = 'sent')::text AS sent,
-         COUNT(*) FILTER (WHERE event = 'failed')::text AS failed,
-         COUNT(*) FILTER (WHERE event = 'skipped_info')::text AS skipped_info,
-         COUNT(*) FILTER (WHERE event = 'skipped_no_webhook')::text AS skipped_no_webhook,
-         COUNT(*) FILTER (WHERE event = 'skipped_cooldown')::text AS skipped_cooldown
+         COUNT(*) FILTER (WHERE event = 'attempted' AND created_at >= NOW() - INTERVAL '24 hours')::text AS attempted_24h,
+         COUNT(*) FILTER (WHERE event = 'sent' AND created_at >= NOW() - INTERVAL '24 hours')::text AS sent_24h,
+         COUNT(*) FILTER (WHERE event = 'failed' AND created_at >= NOW() - INTERVAL '24 hours')::text AS failed_24h,
+         COUNT(*) FILTER (WHERE event = 'skipped_info' AND created_at >= NOW() - INTERVAL '24 hours')::text AS skipped_info_24h,
+         COUNT(*) FILTER (WHERE event = 'skipped_no_webhook' AND created_at >= NOW() - INTERVAL '24 hours')::text AS skipped_no_webhook_24h,
+         COUNT(*) FILTER (WHERE event = 'skipped_cooldown' AND created_at >= NOW() - INTERVAL '24 hours')::text AS skipped_cooldown_24h,
+         COUNT(*) FILTER (WHERE event = 'attempted' AND created_at >= NOW() - INTERVAL '7 days')::text AS attempted_7d,
+         COUNT(*) FILTER (WHERE event = 'sent' AND created_at >= NOW() - INTERVAL '7 days')::text AS sent_7d,
+         COUNT(*) FILTER (WHERE event = 'failed' AND created_at >= NOW() - INTERVAL '7 days')::text AS failed_7d,
+         COUNT(*) FILTER (WHERE event = 'skipped_info' AND created_at >= NOW() - INTERVAL '7 days')::text AS skipped_info_7d,
+         COUNT(*) FILTER (WHERE event = 'skipped_no_webhook' AND created_at >= NOW() - INTERVAL '7 days')::text AS skipped_no_webhook_7d,
+         COUNT(*) FILTER (WHERE event = 'skipped_cooldown' AND created_at >= NOW() - INTERVAL '7 days')::text AS skipped_cooldown_7d,
+         COUNT(*) FILTER (WHERE event = 'attempted' AND created_at >= NOW() - INTERVAL '30 days')::text AS attempted_30d,
+         COUNT(*) FILTER (WHERE event = 'sent' AND created_at >= NOW() - INTERVAL '30 days')::text AS sent_30d,
+         COUNT(*) FILTER (WHERE event = 'failed' AND created_at >= NOW() - INTERVAL '30 days')::text AS failed_30d,
+         COUNT(*) FILTER (WHERE event = 'skipped_info' AND created_at >= NOW() - INTERVAL '30 days')::text AS skipped_info_30d,
+         COUNT(*) FILTER (WHERE event = 'skipped_no_webhook' AND created_at >= NOW() - INTERVAL '30 days')::text AS skipped_no_webhook_30d,
+         COUNT(*) FILTER (WHERE event = 'skipped_cooldown' AND created_at >= NOW() - INTERVAL '30 days')::text AS skipped_cooldown_30d
        FROM consult_health_notify_events
-       WHERE created_at >= NOW() - INTERVAL '24 hours'`
+       WHERE created_at >= NOW() - INTERVAL '30 days'`
     )
     const row = res.rows[0]
-    return {
-      attempted: Number(row?.attempted || 0),
-      sent: Number(row?.sent || 0),
-      failed: Number(row?.failed || 0),
-      skippedInfo: Number(row?.skipped_info || 0),
-      skippedNoWebhook: Number(row?.skipped_no_webhook || 0),
-      skippedCooldown: Number(row?.skipped_cooldown || 0),
+    const h24: NotifyCounters = {
+      attempted: Number(row?.attempted_24h || 0),
+      sent: Number(row?.sent_24h || 0),
+      failed: Number(row?.failed_24h || 0),
+      skippedInfo: Number(row?.skipped_info_24h || 0),
+      skippedNoWebhook: Number(row?.skipped_no_webhook_24h || 0),
+      skippedCooldown: Number(row?.skipped_cooldown_24h || 0),
     }
+    const d7: NotifyCounters = {
+      attempted: Number(row?.attempted_7d || 0),
+      sent: Number(row?.sent_7d || 0),
+      failed: Number(row?.failed_7d || 0),
+      skippedInfo: Number(row?.skipped_info_7d || 0),
+      skippedNoWebhook: Number(row?.skipped_no_webhook_7d || 0),
+      skippedCooldown: Number(row?.skipped_cooldown_7d || 0),
+    }
+    const d30: NotifyCounters = {
+      attempted: Number(row?.attempted_30d || 0),
+      sent: Number(row?.sent_30d || 0),
+      failed: Number(row?.failed_30d || 0),
+      skippedInfo: Number(row?.skipped_info_30d || 0),
+      skippedNoWebhook: Number(row?.skipped_no_webhook_30d || 0),
+      skippedCooldown: Number(row?.skipped_cooldown_30d || 0),
+    }
+    return buildTelemetryShape(h24, d7, d30)
   } catch {
     return consultHealthNotifyTelemetrySnapshot()
   }

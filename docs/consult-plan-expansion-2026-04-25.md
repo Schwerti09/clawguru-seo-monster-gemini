@@ -385,6 +385,33 @@ Webhook delivery telemetry can now survive process restarts when a database is c
 
 This keeps delivery counters stable across deploy/runtime restarts and makes telemetry more reliable for ops readouts.
 
+## Notify telemetry trend windows follow-up (2026-04-25)
+
+Extended consult-health notify telemetry from single-window counters to operational trend slices (24h / 7d / 30d).
+
+- `lib/consult-health-notify.ts`
+  - `consultHealthNotifyTelemetrySnapshotPersistent()` now aggregates DB counters for:
+    - 24h (`h24`)
+    - 7d (`d7`)
+    - 30d (`d30`)
+  - Added derived metrics per window:
+    - `successRatePct` (`sent / attempted`)
+    - `failureRatePct` (`failed / attempted`)
+  - Added trend deltas:
+    - `successRateDelta7dVs24hPct`
+    - `failureRateDelta7dVs24hPct`
+  - Keeps legacy top-level 24h counters in `notifyTelemetry` for compatibility.
+- `components/admin/ProfitDashboard.tsx`
+  - Consult Health block now shows:
+    - 24h notify attempts/sent/failed + success rate
+    - 7d/30d success-rate slices
+    - 24h vs 7d success-rate delta (color-coded)
+- Tests
+  - Updated `__tests__/consult-health-notify-persistent.test.ts` for windowed snapshots and trend deltas.
+  - Extended `__tests__/profit-analytics-route.test.ts` to assert `windows` and `trend` contract shape.
+
+This gives operators quick signal on whether delivery reliability is stable or degrading over short vs medium windows.
+
 ## Operational Notes
 
 - `BookingButton` remains env-driven (`NEXT_PUBLIC_CAL_*_URL`) with mail fallback, so no deployment break if Cal URLs are missing.

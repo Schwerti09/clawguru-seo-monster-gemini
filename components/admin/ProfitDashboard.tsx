@@ -90,6 +90,13 @@ type DashData = {
       consulting_bottom_cta: number
       enterprise_api_cta: number
     }
+    consultSourceGroups: {
+      pricingSlots: { count: number; sharePct: number }
+      bottomCta: { count: number; sharePct: number }
+      enterpriseCta: { count: number; sharePct: number }
+      other: { count: number; sharePct: number }
+    }
+    consultDominantSourceGroup: "pricingSlots" | "bottomCta" | "enterpriseCta" | "other"
     consultInsights: {
       topSource: string
       topSourceCount: number
@@ -280,6 +287,8 @@ function ConversionFunnel({ funnel }: { funnel: DashData["funnel"] }) {
     consultingBookingClicks,
     bookingSources24h,
     consultSourceCounts,
+    consultSourceGroups,
+    consultDominantSourceGroup,
     consultInsights,
     consultHealth,
     checkoutCompleted,
@@ -390,6 +399,26 @@ function ConversionFunnel({ funnel }: { funnel: DashData["funnel"] }) {
           </div>
           <div className="rounded-lg border border-gray-800 px-2 py-1 text-gray-300">
             Enterprise CTA: <span className="text-cyan-300 font-bold">{consultSourceCounts.enterprise_api_cta.toLocaleString()}</span> · <span className="text-cyan-300 font-bold">{funnel.rates.enterpriseCtaBookingPct}%</span>
+          </div>
+        </div>
+      </div>
+      <div className="mt-3 rounded-xl border border-gray-800 bg-black/20 px-3 py-3">
+        <div className="text-[11px] uppercase tracking-wider text-gray-500 mb-2">Consult Source Groups (24h)</div>
+        <div className="text-xs text-gray-400 mb-2">
+          Dominant group: <span className="text-cyan-300 font-bold">{consultDominantSourceGroup}</span>
+        </div>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-2 text-xs">
+          <div className="rounded-lg border border-gray-800 px-2 py-1 text-gray-300">
+            Pricing slots: <span className="text-cyan-300 font-bold">{consultSourceGroups.pricingSlots.count.toLocaleString()}</span> · <span className="text-cyan-300 font-bold">{consultSourceGroups.pricingSlots.sharePct}%</span>
+          </div>
+          <div className="rounded-lg border border-gray-800 px-2 py-1 text-gray-300">
+            Bottom CTA: <span className="text-cyan-300 font-bold">{consultSourceGroups.bottomCta.count.toLocaleString()}</span> · <span className="text-cyan-300 font-bold">{consultSourceGroups.bottomCta.sharePct}%</span>
+          </div>
+          <div className="rounded-lg border border-gray-800 px-2 py-1 text-gray-300">
+            Enterprise CTA: <span className="text-cyan-300 font-bold">{consultSourceGroups.enterpriseCta.count.toLocaleString()}</span> · <span className="text-cyan-300 font-bold">{consultSourceGroups.enterpriseCta.sharePct}%</span>
+          </div>
+          <div className="rounded-lg border border-gray-800 px-2 py-1 text-gray-300">
+            Other sources: <span className="text-cyan-300 font-bold">{consultSourceGroups.other.count.toLocaleString()}</span> · <span className="text-cyan-300 font-bold">{consultSourceGroups.other.sharePct}%</span>
           </div>
         </div>
       </div>

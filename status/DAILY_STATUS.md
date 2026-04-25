@@ -20,14 +20,20 @@
 9. Added consult source normalization + per-source share UX in admin conversion panel.
 10. Extracted profit funnel payload into `lib/profit-funnel.ts` + added contract test (`__tests__/profit-funnel.test.ts`).
 11. Added Consult Health score/level/reasons to admin conversion view for faster funnel diagnostics.
-5. Documentation + tests updated:
+12. Added source-group rollups for consult booking sources:
+   - `consultSourceGroups` (`pricingSlots`, `bottomCta`, `enterpriseCta`, `other`) in funnel payload
+   - `consultDominantSourceGroup` for quick channel-family readout
+   - New dashboard panel "Consult Source Groups (24h)"
+13. Documentation + tests updated:
    - `docs/consult-plan-expansion-2026-04-25.md`
    - `__tests__/check-funnel.test.ts`
+   - `__tests__/profit-funnel.test.ts`
+   - `__tests__/profit-analytics-route.test.ts`
 
 ## 📌 Next (Consult Stream)
 
-1. Add source-level consult funnel breakdown in admin (starter/pro/scale/button slot).
-2. Add lightweight API test for `/api/admin/profit-analytics` funnel payload shape.
+1. Add consult health target/delta alerting block (score gap + compact flagging) in funnel payload and dashboard.
+2. Add 24h-vs-7d consult trend comparison once 7d baseline counters are exposed in snapshot.
 3. Extend consult-booking events into retention scoring once enough data accumulates.
 
 ---

@@ -22,6 +22,7 @@ describe("profit funnel contract", () => {
         bookingSources24h: [
           { source: "consulting_pricing_pro", count: 7 },
           { source: "enterprise_api_cta", count: 5 },
+          { source: "misc_partner_cta", count: 2 },
         ],
       },
       11
@@ -30,6 +31,10 @@ describe("profit funnel contract", () => {
     expect(funnel.pricingClicks).toBe(60)
     expect(funnel.bookingClicks).toBe(20)
     expect(funnel.consultSourceCounts.consulting_pricing_pro).toBe(7)
+    expect(funnel.consultSourceGroups.pricingSlots.count).toBe(7)
+    expect(funnel.consultSourceGroups.enterpriseCta.count).toBe(5)
+    expect(funnel.consultSourceGroups.other.count).toBe(2)
+    expect(funnel.consultDominantSourceGroup).toBe("pricingSlots")
     expect(funnel.consultInsights.topSource).toBe("consulting_pricing_pro")
     expect(funnel.rates.pricingToBookingPct).toBe(33.3)
     expect(funnel.rates.consultingBookingSharePct).toBe(75)

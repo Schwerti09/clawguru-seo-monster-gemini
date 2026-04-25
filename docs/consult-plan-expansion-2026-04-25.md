@@ -260,6 +260,27 @@ Added a compatibility redirect for users hitting the legacy consult slug.
 
 This removes a high-intent 404 entry point and consolidates SEO/canonical signals to `/consulting`.
 
+## Source-group rollup follow-up (2026-04-25)
+
+Added a grouped source-family view so consult demand can be read at channel-family level, not only by raw source labels.
+
+- `lib/profit-funnel.ts`
+  - Added grouped source families from normalized `bookingSources24h`:
+    - `pricingSlots` (`consulting_pricing_*`)
+    - `bottomCta` (`consulting_bottom_cta`)
+    - `enterpriseCta` (`enterprise_api_cta`)
+    - `other` (all remaining sources)
+  - Exposes:
+    - `consultSourceGroups` (count + share per family)
+    - `consultDominantSourceGroup` (largest family in 24h window)
+- `components/admin/ProfitDashboard.tsx`
+  - Added "Consult Source Groups (24h)" panel with family count/share + dominant group.
+- Tests
+  - `__tests__/profit-funnel.test.ts` extended for grouped-source contract assertions.
+  - Added route-level contract coverage in `__tests__/profit-analytics-route.test.ts`.
+
+This improves executive readability and makes it easier to spot whether demand is mostly card-driven (`consulting_pricing_*`) or coming from non-core sources.
+
 ## Operational Notes
 
 - `BookingButton` remains env-driven (`NEXT_PUBLIC_CAL_*_URL`) with mail fallback, so no deployment break if Cal URLs are missing.

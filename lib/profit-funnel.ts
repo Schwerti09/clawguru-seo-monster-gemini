@@ -25,6 +25,8 @@ type ConsultHealth = {
   reasons: string[]
 }
 
+type ConsultSourceGroupKey = "pricingSlots" | "bottomCta" | "enterpriseCta" | "other"
+
 function safeRate(num: number, den: number): number {
   return den > 0 ? Math.round((num / den) * 1000) / 10 : 0
 }
@@ -57,6 +59,40 @@ export function buildProfitFunnel(input: ProfitFunnelInput, checkoutCompleted: n
     level: consultHealthLevel,
     reasons: consultHealthReasons.length > 0 ? consultHealthReasons : ["stable consult funnel signals"],
   }
+  const sourceGroupsRaw: Record<ConsultSourceGroupKey, number> = {
+    pricingSlots: 0,
+    bottomCta: 0,
+    enterpriseCta: 0,
+    other: 0,
+  }
+  for (const source of consult.bookingSources24hNormalized) {
+    const label = source.source
+    const count = source.count
+    if (label.startsWith("consulting_pricing_")) sourceGroupsRaw.pricingSlots += count
+    else if (label === "consulting_bottom_cta") sourceGroupsRaw.bottomCta += count
+    else if (label === "enterprise_api_cta") sourceGroupsRaw.enterpriseCta += count
+    else sourceGroupsRaw.other += count
+  }
+  const sourceGroups = {
+    pricingSlots: {
+      count: sourceGroupsRaw.pricingSlots,
+      sharePct: safeRate(sourceGroupsRaw.pricingSlots, input.bookingClicks24h),
+    },
+    bottomCta: {
+      count: sourceGroupsRaw.bottomCta,
+      sharePct: safeRate(sourceGroupsRaw.bottomCta, input.bookingClicks24h),
+    },
+    enterpriseCta: {
+      count: sourceGroupsRaw.enterpriseCta,
+      sharePct: safeRate(sourceGroupsRaw.enterpriseCta, input.bookingClicks24h),
+    },
+    other: {
+      count: sourceGroupsRaw.other,
+      sharePct: safeRate(sourceGroupsRaw.other, input.bookingClicks24h),
+    },
+  }
+  const dominantSourceGroup =
+    (Object.entries(sourceGroupsRaw).sort((a, b) => b[1] - a[1])[0]?.[0] as ConsultSourceGroupKey | undefined) ?? "other"
 
   return {
     landingPageViews: input.pageViews24h,
@@ -68,6 +104,8 @@ export function buildProfitFunnel(input: ProfitFunnelInput, checkoutCompleted: n
     consultingBookingClicks: input.consultingBookingClicks24h,
     bookingSources24h: consult.bookingSources24hNormalized,
     consultSourceCounts: consult.consultSourceCounts,
+    consultSourceGroups: sourceGroups,
+    consultDominantSourceGroup: dominantSourceGroup,
     consultInsights: consult.insights,
     consultHealth,
     checkoutCompleted,

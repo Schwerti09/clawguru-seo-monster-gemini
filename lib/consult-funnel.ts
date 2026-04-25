@@ -19,9 +19,17 @@ type ConsultRates = {
   enterpriseCtaBookingPct: number
 }
 
+type ConsultInsights = {
+  topSource: string
+  topSourceCount: number
+  topSourceSharePct: number
+  sourceConcentrationLevel: "balanced" | "watch" | "critical"
+}
+
 type ConsultSourceSnapshot = {
   consultSourceCounts: Record<ConsultSourceKey, number>
   rates: ConsultRates
+  insights: ConsultInsights
 }
 
 function safeRate(num: number, den: number): number {
@@ -40,6 +48,13 @@ export function buildConsultSourceSnapshot(input: {
     return acc
   }, {} as Record<ConsultSourceKey, number>)
 
+  const sortedSources = [...input.bookingSources24h].sort((a, b) => b.count - a.count)
+  const topSource = sortedSources[0]?.source ?? "none"
+  const topSourceCount = sortedSources[0]?.count ?? 0
+  const topSourceSharePct = safeRate(topSourceCount, input.bookingClicks)
+  const sourceConcentrationLevel =
+    topSourceSharePct >= 70 ? "critical" : topSourceSharePct >= 50 ? "watch" : "balanced"
+
   return {
     consultSourceCounts,
     rates: {
@@ -50,6 +65,12 @@ export function buildConsultSourceSnapshot(input: {
       scaleSlotBookingPct: safeRate(consultSourceCounts.consulting_pricing_scale, input.bookingClicks),
       bottomCtaBookingPct: safeRate(consultSourceCounts.consulting_bottom_cta, input.bookingClicks),
       enterpriseCtaBookingPct: safeRate(consultSourceCounts.enterprise_api_cta, input.bookingClicks),
+    },
+    insights: {
+      topSource,
+      topSourceCount,
+      topSourceSharePct,
+      sourceConcentrationLevel,
     },
   }
 }

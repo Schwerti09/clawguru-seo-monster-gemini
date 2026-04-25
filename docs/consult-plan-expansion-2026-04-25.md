@@ -176,6 +176,27 @@ To make consult analytics safer to evolve, source-slot calculation has been extr
 
 This keeps route complexity lower and prevents subtle drift in slot-rate calculations during future consult iterations.
 
+## Source concentration follow-up (2026-04-25)
+
+Added a consult source concentration signal to spot over-reliance on a single CTA slot.
+
+- `lib/consult-funnel.ts`
+  - New `insights` block:
+    - `topSource`
+    - `topSourceCount`
+    - `topSourceSharePct`
+    - `sourceConcentrationLevel` (`balanced` / `watch` / `critical`)
+  - Concentration thresholds:
+    - `>= 70%` critical
+    - `>= 50%` watch
+    - otherwise balanced
+- `app/api/admin/profit-analytics/route.ts`
+  - Exposes `consultInsights` inside funnel payload.
+- `components/admin/ProfitDashboard.tsx`
+  - Shows top source + share + concentration level in conversion panel.
+- `__tests__/consult-funnel.test.ts`
+  - Added concentration-risk test case.
+
 ## Operational Notes
 
 - `BookingButton` remains env-driven (`NEXT_PUBLIC_CAL_*_URL`) with mail fallback, so no deployment break if Cal URLs are missing.

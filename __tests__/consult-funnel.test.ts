@@ -20,5 +20,24 @@ describe("consult funnel source snapshot", () => {
     expect(snapshot.rates.consultingBookingSharePct).toBe(70)
     expect(snapshot.rates.proSlotBookingPct).toBe(24)
     expect(snapshot.rates.bottomCtaBookingPct).toBe(16)
+    expect(snapshot.insights.topSource).toBe("consulting_pricing_pro")
+    expect(snapshot.insights.topSourceSharePct).toBe(24)
+    expect(snapshot.insights.sourceConcentrationLevel).toBe("balanced")
+  })
+
+  it("flags concentration risk when one source dominates", () => {
+    const snapshot = buildConsultSourceSnapshot({
+      pricingClicks: 80,
+      bookingClicks: 10,
+      consultingBookingClicks: 8,
+      bookingSources24h: [
+        { source: "consulting_bottom_cta", count: 8 },
+        { source: "consulting_pricing_starter", count: 1 },
+      ],
+    })
+
+    expect(snapshot.insights.topSource).toBe("consulting_bottom_cta")
+    expect(snapshot.insights.topSourceSharePct).toBe(80)
+    expect(snapshot.insights.sourceConcentrationLevel).toBe("critical")
   })
 })

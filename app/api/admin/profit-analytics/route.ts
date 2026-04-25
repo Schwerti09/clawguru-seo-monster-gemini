@@ -179,6 +179,7 @@ async function conversionFunnel(stripeMetrics: Awaited<ReturnType<typeof fetchSt
     consultingBookingClicks,
     bookingSources24h: check.bookingSources24h,
     consultSourceCounts: consult.consultSourceCounts,
+    consultInsights: consult.insights,
     checkoutCompleted,
     rates: {
       clickToCheckoutStartPct: safeRate(checkoutStarted, check.pricingClicks24h),

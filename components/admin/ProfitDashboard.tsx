@@ -90,6 +90,12 @@ type DashData = {
       consulting_bottom_cta: number
       enterprise_api_cta: number
     }
+    consultInsights: {
+      topSource: string
+      topSourceCount: number
+      topSourceSharePct: number
+      sourceConcentrationLevel: "balanced" | "watch" | "critical"
+    }
     checkoutCompleted: number
     rates: {
       clickToCheckoutStartPct: number
@@ -269,6 +275,7 @@ function ConversionFunnel({ funnel }: { funnel: DashData["funnel"] }) {
     consultingBookingClicks,
     bookingSources24h,
     consultSourceCounts,
+    consultInsights,
     checkoutCompleted,
   } = funnel
 
@@ -330,6 +337,12 @@ function ConversionFunnel({ funnel }: { funnel: DashData["funnel"] }) {
       </div>
       <div className="mt-3 rounded-xl border border-gray-800 bg-black/20 px-3 py-3">
         <div className="text-[11px] uppercase tracking-wider text-gray-500 mb-2">Top Booking Sources (24h)</div>
+        <div className="mb-2 text-xs text-gray-400">
+          Top Source: <span className="text-cyan-300 font-bold">{consultInsights.topSource}</span> ·
+          Count: <span className="text-cyan-300 font-bold"> {consultInsights.topSourceCount.toLocaleString()}</span> ·
+          Share: <span className="text-cyan-300 font-bold"> {consultInsights.topSourceSharePct}%</span> ·
+          Concentration: <span className="text-cyan-300 font-bold"> {consultInsights.sourceConcentrationLevel}</span>
+        </div>
         {bookingSources24h.length > 0 ? (
           <div className="grid sm:grid-cols-2 gap-2 text-xs">
             {bookingSources24h.map((entry) => (

@@ -19,6 +19,12 @@ export type ProfitFunnelInput = {
   bookingSources24h: BookingSourceRow[]
 }
 
+type ConsultHealth = {
+  score: number
+  level: "healthy" | "watch" | "critical"
+  reasons: string[]
+}
+
 function safeRate(num: number, den: number): number {
   return den > 0 ? Math.round((num / den) * 1000) / 10 : 0
 }
@@ -31,6 +37,27 @@ export function buildProfitFunnel(input: ProfitFunnelInput, checkoutCompleted: n
     bookingSources24h: input.bookingSources24h,
   })
 
+  const checkoutErrorRatePct = safeRate(input.checkoutErrors24h, input.checkoutStarts24h)
+  const consultHealthScoreRaw =
+    consult.rates.pricingToBookingPct * 0.35 +
+    consult.rates.consultingBookingSharePct * 0.35 +
+    (100 - Math.min(100, consult.insights.topSourceSharePct)) * 0.15 +
+    (100 - Math.min(100, checkoutErrorRatePct)) * 0.15
+  const consultHealthScore = Math.max(0, Math.min(100, Math.round(consultHealthScoreRaw * 10) / 10))
+  const consultHealthLevel: ConsultHealth["level"] =
+    consultHealthScore < 40 ? "critical" : consultHealthScore < 70 ? "watch" : "healthy"
+  const consultHealthReasons: string[] = []
+  if (consult.rates.pricingToBookingPct < 15) consultHealthReasons.push("low pricing-to-booking conversion")
+  if (consult.rates.consultingBookingSharePct < 30) consultHealthReasons.push("low consult share in booking mix")
+  if (consult.insights.sourceConcentrationLevel !== "balanced") consultHealthReasons.push("high source concentration risk")
+  if (checkoutErrorRatePct >= 10) consultHealthReasons.push("elevated checkout error rate")
+
+  const consultHealth: ConsultHealth = {
+    score: consultHealthScore,
+    level: consultHealthLevel,
+    reasons: consultHealthReasons.length > 0 ? consultHealthReasons : ["stable consult funnel signals"],
+  }
+
   return {
     landingPageViews: input.pageViews24h,
     pricingClicks: input.pricingClicks24h,
@@ -42,6 +69,7 @@ export function buildProfitFunnel(input: ProfitFunnelInput, checkoutCompleted: n
     bookingSources24h: consult.bookingSources24hNormalized,
     consultSourceCounts: consult.consultSourceCounts,
     consultInsights: consult.insights,
+    consultHealth,
     checkoutCompleted,
     rates: {
       clickToCheckoutStartPct: safeRate(input.checkoutStarts24h, input.pricingClicks24h),

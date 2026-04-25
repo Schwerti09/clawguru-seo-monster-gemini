@@ -34,5 +34,8 @@ describe("profit funnel contract", () => {
     expect(funnel.rates.pricingToBookingPct).toBe(33.3)
     expect(funnel.rates.consultingBookingSharePct).toBe(75)
     expect(funnel.rates.checkoutStartToCompletePct).toBe(36.7)
+    expect(funnel.consultHealth.level).toBe("watch")
+    expect(funnel.consultHealth.score).toBeGreaterThan(40)
+    expect(funnel.consultHealth.reasons.length).toBeGreaterThan(0)
   })
 })

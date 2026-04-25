@@ -231,6 +231,25 @@ Added a dedicated, testable funnel contract builder so route-level changes do no
 
 This improves maintainability and catches payload drift before it reaches the admin dashboard.
 
+## Consult health score follow-up (2026-04-25)
+
+Added a compact health signal for consult funnel quality, combining conversion, source mix, and checkout stability.
+
+- `lib/profit-funnel.ts`
+  - Added `consultHealth` block:
+    - `score` (0–100)
+    - `level` (`healthy` / `watch` / `critical`)
+    - `reasons` (human-readable diagnostics)
+  - Score blends:
+    - pricing→booking conversion
+    - consult booking share
+    - source concentration
+    - checkout error pressure
+- `components/admin/ProfitDashboard.tsx`
+  - Added "Consult Health (24h)" section in conversion panel.
+- `__tests__/profit-funnel.test.ts`
+  - Extended contract assertions to include `consultHealth`.
+
 ## Route compatibility follow-up (2026-04-25)
 
 Added a compatibility redirect for users hitting the legacy consult slug.

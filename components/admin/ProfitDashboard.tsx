@@ -96,6 +96,11 @@ type DashData = {
       topSourceSharePct: number
       sourceConcentrationLevel: "balanced" | "watch" | "critical"
     }
+    consultHealth: {
+      score: number
+      level: "healthy" | "watch" | "critical"
+      reasons: string[]
+    }
     checkoutCompleted: number
     rates: {
       clickToCheckoutStartPct: number
@@ -276,6 +281,7 @@ function ConversionFunnel({ funnel }: { funnel: DashData["funnel"] }) {
     bookingSources24h,
     consultSourceCounts,
     consultInsights,
+    consultHealth,
     checkoutCompleted,
   } = funnel
 
@@ -385,6 +391,20 @@ function ConversionFunnel({ funnel }: { funnel: DashData["funnel"] }) {
           <div className="rounded-lg border border-gray-800 px-2 py-1 text-gray-300">
             Enterprise CTA: <span className="text-cyan-300 font-bold">{consultSourceCounts.enterprise_api_cta.toLocaleString()}</span> · <span className="text-cyan-300 font-bold">{funnel.rates.enterpriseCtaBookingPct}%</span>
           </div>
+        </div>
+      </div>
+      <div className="mt-3 rounded-xl border border-gray-800 bg-black/20 px-3 py-3">
+        <div className="text-[11px] uppercase tracking-wider text-gray-500 mb-2">Consult Health (24h)</div>
+        <div className="text-sm text-gray-300 mb-1">
+          Score: <span className="text-cyan-300 font-bold">{consultHealth.score}</span> ·
+          Level: <span className="text-cyan-300 font-bold"> {consultHealth.level.toUpperCase()}</span>
+        </div>
+        <div className="grid sm:grid-cols-2 gap-2 text-xs">
+          {consultHealth.reasons.map((reason) => (
+            <div key={reason} className="rounded-lg border border-gray-800 px-2 py-1 text-gray-400">
+              {reason}
+            </div>
+          ))}
         </div>
       </div>
       <div className="mt-3 grid sm:grid-cols-3 gap-3 text-xs">

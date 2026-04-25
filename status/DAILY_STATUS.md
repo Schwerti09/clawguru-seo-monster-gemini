@@ -19,6 +19,7 @@
 8. Added middleware compatibility redirect `/{locale}/consult` → `/{locale}/consulting` to remove consult-entry 404s.
 9. Added consult source normalization + per-source share UX in admin conversion panel.
 10. Extracted profit funnel payload into `lib/profit-funnel.ts` + added contract test (`__tests__/profit-funnel.test.ts`).
+11. Added Consult Health score/level/reasons to admin conversion view for faster funnel diagnostics.
 5. Documentation + tests updated:
    - `docs/consult-plan-expansion-2026-04-25.md`
    - `__tests__/check-funnel.test.ts`

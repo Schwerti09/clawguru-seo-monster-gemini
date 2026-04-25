@@ -159,7 +159,20 @@ function computeAlert(totalCostUsd: number, netTodayCents: number) {
 async function conversionFunnel(stripeMetrics: Awaited<ReturnType<typeof fetchStripeMetrics>> | null) {
   const check = await getCheckFunnelSnapshotPersistent()
   const checkoutCompleted = stripeMetrics?.daypassToday ?? 0
-  return buildProfitFunnel(check, checkoutCompleted)
+  const base = buildProfitFunnel(check, checkoutCompleted)
+  // Echo the 7d trend counters from the underlying check snapshot through the
+  // profit-funnel return so /api/admin/profit-analytics consumers can read
+  // them off `funnelBase` without a second snapshot fetch. Cursor's session
+  // log entry 64 added these to lib/check-funnel.ts but didn't pass them
+  // through buildProfitFunnel — caused 25.04 evening CI red.
+  return {
+    ...base,
+    pricingClicks7d: (check as any).pricingClicks7d as number | undefined,
+    checkoutStarts7d: (check as any).checkoutStarts7d as number | undefined,
+    checkoutErrors7d: (check as any).checkoutErrors7d as number | undefined,
+    bookingClicks7d: (check as any).bookingClicks7d as number | undefined,
+    consultingBookingClicks7d: (check as any).consultingBookingClicks7d as number | undefined,
+  }
 }
 
 // ---------------------------------------------------------------------------

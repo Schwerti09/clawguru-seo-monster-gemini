@@ -3,14 +3,12 @@
 import { useState } from "react"
 import { trackEvent } from "@/lib/analytics"
 import { COUPON_SESSION_KEY } from "@/components/marketing/CouponBanner"
-import { suggestAutopilotPlan, type UpgradeSignals } from "@/lib/autopilot-offering"
+import {
+  mapAutopilotPlanToCheckoutProduct,
+  suggestAutopilotPlan,
+  type UpgradeSignals,
+} from "@/lib/autopilot-offering"
 import { markCheckoutError, markCheckoutRedirect, markCheckoutStart } from "@/lib/retention-client"
-
-function mapAutopilotPlanToProduct(plan: ReturnType<typeof suggestAutopilotPlan>): "daypass" | "pro" | "team" {
-  if (plan === "scale") return "team"
-  if (plan === "pro") return "pro"
-  return "daypass"
-}
 
 export default function BuyButton({
   product,
@@ -38,7 +36,7 @@ export default function BuyButton({
       ? suggestAutopilotPlan(upgradeSignals)
       : undefined
     const resolvedProduct = recommendedPlan
-      ? mapAutopilotPlanToProduct(recommendedPlan)
+      ? mapAutopilotPlanToCheckoutProduct(recommendedPlan)
       : product
 
     const normalizedSignals = upgradeSignals

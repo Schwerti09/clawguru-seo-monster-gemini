@@ -425,6 +425,8 @@ export function middleware(request: NextRequest) {
       /^\/[a-z]{2}(?:-[a-z]{2})?\/roast-my-/i,           // roast-my-* (dictionary-driven)
       /^\/[a-z]{2}(?:-[a-z]{2})?\/summon\b/i,            // summon (dictionary-driven)
       /^\/[a-z]{2}(?:-[a-z]{2})?\/vorstellung\b/i,       // vorstellung (dictionary-driven)
+      /^\/[a-z]{2}(?:-[a-z]{2})?\/pricing\b/i,           // pricing (critical revenue route)
+      /^\/[a-z]{2}(?:-[a-z]{2})?\/consulting\b/i,        // consulting (critical revenue route)
     ]
     const isTranslated = translatedRoutePatterns.some((re) => re.test(pathname))
     if (!isTranslated) {

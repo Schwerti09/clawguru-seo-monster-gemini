@@ -18,6 +18,8 @@ Do not treat `AGENTS.md` as the only source. A new agent reading *only* this fil
 6. **[`docs/db-failover-2026-04-24.md`](docs/db-failover-2026-04-24.md)** — `DATABASE_URL` → `DATABASE_URL_2` auto-failover runbook (pool design, classifier rules, deploy-troubleshooting)
 7. **[`docs/postmortem-2026-04-24-seven-red-deploys.md`](docs/postmortem-2026-04-24-seven-red-deploys.md)** — post-mortem of the Neon-quota + classifier-bug + DB-at-build-time incident, with preventive follow-ups
 8. **[`docs/testing.md`](docs/testing.md)** — unit/build release gates, `check:static-db`, roast-statistics build resilience, CI job order
+9. **[`docs/i18n-pipeline-state-2026-04-25.md`](docs/i18n-pipeline-state-2026-04-25.md)** — pick()-Pipeline B status, Gemini-quota incident, Ollama twin script, runbook + backlog
+10. **[`docs/audit-response-kimi-2026-04-25.md`](docs/audit-response-kimi-2026-04-25.md)** — response to external Kimi 2.5 audit, point-by-point verification, prioritized action backlog (pricing SSoT, stats constant, status/changelog pages)
 
 Claude's user memory (`C:\Users\rolli\.claude\projects\c--clawguru-seo-monster-gemini\memory\*`) adds a fifth layer: user profile, partnership mode, project context, LLM setup. Only loaded when Claude Code runs; do not rely on it from external agents.
 
@@ -32,6 +34,35 @@ Claude's user memory (`C:\Users\rolli\.claude\projects\c--clawguru-seo-monster-g
 **Scope:** Complete rebuild of `/academy` into the "Living Cyber Range" — browser-native Linux simulator, AI mentor (Sentinel), 15 inline security tools, narrative campaign (Hodlberg AG), proof-of-work certification, digital twin, 80+ missions × 50 languages.
 
 **Status:** Build STARTED — Step 1 (Academy Hub Redesign) complete (22.04.2026).
+
+---
+
+## 🔴 OPEN BACKLOG FROM EXTERNAL AUDIT (Kimi 2.5, 25.04.2026)
+
+Source: `docs/audit-response-kimi-2026-04-25.md` (full point-by-point verification).
+
+**Critical (touch first):**
+1. **Pricing SSoT** — `app/pricing/page.tsx` shows monthly 29€/99€/249€; comparison pages (`/[lang]/clawguru-vs-*`) use yearly Explorer/Pro/Team with mixed Asset/Endpoint/Host units. Centralize in `lib/pricing.ts` and rebind all surfaces.
+2. **"Million Runbooks" Konstante** — already flagged in `docs/seo/eeat-strategy.md` as 🔴 Critical. Single value in `lib/stats.ts`, one phrase, all components/dictionaries bind. Inconsistency lives in `dictionaries/de.json:488`, `components/home/HeroPreview.tsx:97`, `components/vorstellung/VorstellungClient.tsx:207`, `app/[lang]/solutions/eu-ai-act-compliance-checklist/page.tsx:83`.
+3. **Tech-Stack-Block centralized** — Lacework comparison page asserts "PostgreSQL + Supabase". Reality: Neon + Netlify + Next.js 14. Build `components/marketing/StackDescription.tsx` and rebind all comparison pages.
+
+**Important:**
+- `/status` public uptime page (currently `app/dashboard/health/page.tsx` is internal-only)
+- `/changelog` from git tags
+- `/blog` → `/intel` 301 (Google findability)
+- Sitemap-Health-Cron — investigate Kimi's reported timeout (likely tied to Neon-quota incident on 24.04)
+- hreflang coverage audit script over `app/[lang]/**/page.tsx`
+
+**Already in flight:**
+- i18n pick()-Pipeline B Ollama overnight run (started 25.04 ~10:00) — addresses "untranslated content per locale" finding.
+
+**False alarms (Kimi was wrong — do not act):**
+- "Only 8 language directories" — actually 32 in `lib/i18n.ts SUPPORTED_LOCALES`
+- "No hreflang tags" — `buildLocalizedAlternates()` is wired in root + per-page metadata
+- "robots.txt not reachable" — `app/robots.txt/route.ts` is implemented and live
+- "sitemap.xml not reachable" — multiple sitemap routes exist, partitioned (cves/providers/runbooks/solutions/tags)
+- "No case studies" — `app/[lang]/case-studies/page.tsx` exists
+- "No API docs" — `app/[lang]/api-docs/`, `/enterprise-api/`, `/api-beta/` all exist
 
 ---
 
@@ -154,13 +185,18 @@ Claude's user memory (`C:\Users\rolli\.claude\projects\c--clawguru-seo-monster-g
 - Both scripts share the same model-picker + JSON-mode chat helper pattern, safe to reuse for future content generators.
 - package.json: `i18n:translate-aya` + `academy:gen-outlines` npm scripts wired.
 
-**Current blocker:** user's `ollama pull aya-expanse:32b` never registered a manifest (only `qwen2.5:3b` listed). User is pulling `aya-expanse:8b` (smaller, fits same workflow). Pipeline ready to fire the moment `ollama list` shows aya.
+**Status update 2026-04-25:** `aya-expanse:8b` is installed and operational. `:32b` pull was abandoned — 8b is good enough for first-pass with Gemini polish on top. Pipeline A (dictionary-based) ran successfully — polish run 24.04. completed 30 langs × 462 keys clean.
 
-**Next — after aya lands:**
-1. Quality probe: `DRY_RUN=1 npm run i18n:translate-aya sv` — inspect 40 translated keys
-2. If good → `npm run i18n:translate-aya` for all 28 target locales
-3. `npm run academy:gen-outlines` → 80 outlines in `_outlines/`
-4. Expand first 10 outlines across 2 tracks into full mission files
+**Pipeline B added (pick()-based, 2026-04-25):**
+- `scripts/i18n-harvest-pick-sources.js` — walks `app/+components/`, extracts every `pick(locale|isDE, "de", "en")` pair, dedupes by EN. → `lib/i18n-pick-sources.json` (currently 6227 calls, 4706 unique EN, 276 files).
+- `scripts/i18n-build-autotranslate.js` — Gemini-backed translator. **Hit free-tier quota on 24.04. night** mid-run; all 3 rotated keys exhausted.
+- `scripts/i18n-build-autotranslate-via-aya.js` — Ollama-backed twin (NEW 25.04). Same prompt, same checkpoint format (`lib/i18n-autotranslate/<locale>.json`), same output (`lib/i18n-autotranslate.ts`). The two scripts are interchangeable; resume works across backends. Background full run kicked off 25.04. ~10:00 — see `docs/i18n-pipeline-state-2026-04-25.md` for runbook.
+
+**Next:**
+1. Tomorrow: verify aya overnight run completed, check `lib/i18n-autotranslate.ts` quality.
+2. Build `scripts/polish-pick-via-gemini.js` (clone of `polish-via-gemini.js`, source = `lib/i18n-autotranslate.ts`) for Pass-2 quality bump.
+3. `npm run academy:gen-outlines` → 80 outlines in `_outlines/`.
+4. Expand first 10 outlines across 2 tracks into full mission files.
 
 **Step 8 — Reactivation + sitemap sweep — ✅ COMPLETE (23.04.2026)**
 - `/academy/mission/[slug]/page.tsx` — reactivated as `force-static` with full `generateStaticParams` over 31 locales × 5 live missions = 155 prerendered pages
@@ -175,9 +211,9 @@ Claude's user memory (`C:\Users\rolli\.claude\projects\c--clawguru-seo-monster-g
 
 **Parallel workstream — i18n Round 14 → 50 languages:**
 - Target extended from 30 → 50 languages (API rate limits required local LLM)
-- Pipeline: `aya-expanse:32b` via Ollama at `localhost:11434` as primary translator
-- Fallbacks: Gemini, DeepSeek, OpenAI APIs
-- Current pull progress: aya-expanse:32b downloading (~20 GB)
+- Pipeline: `aya-expanse:8b` via Ollama at `localhost:11434` as primary translator (32b pull was abandoned 25.04 — 8b proven sufficient with Gemini polish pass on top)
+- Fallbacks: Gemini, DeepSeek, OpenAI APIs (Gemini hit quota 24.04. — diagnosis + fix in `docs/i18n-pipeline-state-2026-04-25.md`)
+- Both i18n pipelines (dictionary and pick()) now have Ollama+Gemini paths sharing checkpoint format
 - Already tested: `qwen2.5:3b` — quality confirmed unusable for EU languages
 - Reference doc: see Section 1.3 of the academy plan
 
@@ -2262,6 +2298,7 @@ Will be resolved automatically when upgrading to Next.js 15 + eslint 9 (future s
 | 21.04.2026 | 38 | **Phase A Content Work COMPLETE.** State of Self-Hosted Security 2026 research report created (docs/state-of-self-hosted-security-2026.md) — 40-page annual report, 10,000+ stacks analyzed, 5 critical risks with case studies, geographic/industry analysis, recommendations. PDF Generator workflow updated — both PDFs (Lead Magnet + Research Report) auto-generated on push. A6 (Lead Magnet PDF export) — COMPLETE (auto-generation ready). C7 (Research Report) — COMPLETE (draft + PDF generation ready). Build ✓ Exit 0. |
 | 21.04.2026 | 39 | **Phase C Dev Work — C1 COMPLETE.** Affiliate Dashboard created (app/[lang]/affiliate-dashboard/page.tsx) — Real-time stats (clicks, conversions, earnings), commission tier display with progress bar, pending/last payout, recent referrals table, top performers leaderboard, marketing assets section. /partners-apply polished — added link to Affiliate Dashboard (Demo). Mock data — replace with real DB data. Build ✓ Exit 0. C1 (Affiliate dashboard polish + landing page) — COMPLETE. |
 | 21.04.2026 | 40 | **SEO Internal Link Fix COMPLETE.** Runbook Template entschlackt (app/runbook/[slug]/page.tsx) — Removed Mycelium Kreislauf links (/copilot, /intel, /oracle, /neuro), Removed Verwandte Runbooks section (10 items), Removed Geo-Mycelium Links section. Added natural internal links (max 2): Security Check + Weitere Runbooks. Expected result: 280,000 internal links → ~50,000-60,000. Google sees: natural link pattern instead of template spam. Footer links remain unchanged (normal). Build ✓ Exit 0. Commit: c47019ce. |
+| 25.04.2026 | 41 | **Consult Plan Expansion (in progress) — conversion + SEO consistency pass.** `/[lang]/consulting` upgraded: Starter/Pro CTA now direct Stripe checkout (`BuyButton`), Scale remains booking-led (`BookingButton`) for sales-assisted flow. Added shared autopilot helper mapping (`mapAutopilotPlanToCheckoutProduct`, locale-aware monthly price formatter) to reduce plan/checkout drift. Middleware noindex allowlist expanded for localized `/pricing` + `/consulting`. Sitemap main locale chunk now includes `/{locale}/consulting`. Added unit coverage in `__tests__/autopilot-offering.test.ts`; added implementation doc `docs/consult-plan-expansion-2026-04-25.md`. |
 
 ### Open Tasks by Priority
 

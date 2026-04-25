@@ -3,10 +3,16 @@ import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/
 import { Briefcase, Users, Clock, Check, Shield } from "lucide-react"
 import Link from "next/link"
 import BookingButton from "@/components/booking/BookingButton"
+import BuyButton from "@/components/commerce/BuyButton"
 import AuthorBox from "@/components/seo/AuthorBox"
 import LastUpdated from "@/components/seo/LastUpdated"
 import { buildAuthoredArticleSchema } from "@/lib/seo/author"
 import { pick } from "@/lib/i18n-pick"
+import {
+  formatAutopilotPlanMonthlyPrice,
+  mapAutopilotPlanToCheckoutProduct,
+  type AutopilotPlanId,
+} from "@/lib/autopilot-offering"
 
 interface PageProps { params: { lang: string } }
 
@@ -73,8 +79,9 @@ const getServices = (isDE: boolean) => [
 
 const getPricing = (isDE: boolean) => [
   {
+    id: "starter" as AutopilotPlanId,
     name: pick(isDE, "Autopilot Starter", "Autopilot Starter"),
-    price: pick(isDE, "29€", "€29"),
+    price: formatAutopilotPlanMonthlyPrice("starter", isDE ? "de" : "en"),
     period: pick(isDE, "pro Monat", "per month"),
     description: pick(isDE, "Für Solo-Founder und kleine technische Setups", "For solo founders and small technical setups"),
     features: [
@@ -87,8 +94,9 @@ const getPricing = (isDE: boolean) => [
     popular: false,
   },
   {
+    id: "pro" as AutopilotPlanId,
     name: pick(isDE, "Autopilot Pro", "Autopilot Pro"),
-    price: pick(isDE, "99€", "€99"),
+    price: formatAutopilotPlanMonthlyPrice("pro", isDE ? "de" : "en"),
     period: pick(isDE, "pro Monat", "per month"),
     description: pick(isDE, "Für produktive Stacks mit höherer Change-Frequenz", "For production stacks with higher change velocity"),
     features: [
@@ -102,8 +110,9 @@ const getPricing = (isDE: boolean) => [
     popular: true,
   },
   {
+    id: "scale" as AutopilotPlanId,
     name: pick(isDE, "Autopilot Scale", "Autopilot Scale"),
-    price: pick(isDE, "249€", "€249"),
+    price: formatAutopilotPlanMonthlyPrice("scale", isDE ? "de" : "en"),
     period: pick(isDE, "pro Monat", "per month"),
     description: pick(isDE, "Für Multi-Workspace Teams mit Governance-Anforderungen", "For multi-workspace teams with governance needs"),
     features: [
@@ -219,15 +228,25 @@ export default function ConsultingPage({ params }: PageProps) {
                   ))}
                 </ul>
                 <div className="flex justify-center">
-                  <BookingButton
-                    type={index === 2 ? "demo" : index === 1 ? "audit" : "strategy"}
-                    label={plan.cta}
-                    locale={locale}
-                    source={`consulting_pricing_${plan.name.toLowerCase().replace(/\s+/g, "_")}`}
-                    variant={plan.popular ? "primary" : "secondary"}
-                    subject={`${plan.name} ${pick(isDE, "Anfrage", "inquiry")}`}
-                    className="w-full justify-center"
-                  />
+                  {plan.id === "scale" ? (
+                    <BookingButton
+                      type="demo"
+                      label={plan.cta}
+                      locale={locale}
+                      source={`consulting_pricing_${plan.id}`}
+                      variant={plan.popular ? "primary" : "secondary"}
+                      subject={`${plan.name} ${pick(isDE, "Anfrage", "inquiry")}`}
+                      className="w-full justify-center"
+                    />
+                  ) : (
+                    <BuyButton
+                      product={mapAutopilotPlanToCheckoutProduct(plan.id)}
+                      label={plan.cta}
+                      analyticsSource={`consulting_pricing_${plan.id}`}
+                      className="w-full justify-center px-5 py-3 rounded-lg font-semibold bg-gray-800 border border-gray-700 text-gray-100 hover:border-cyan-500/50"
+                      style={plan.popular ? { background: "linear-gradient(to right, #06b6d4, #22d3ee)", color: "#000", borderColor: "#06b6d4" } : undefined}
+                    />
+                  )}
                 </div>
               </div>
             ))}

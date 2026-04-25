@@ -42,6 +42,19 @@ export type UpgradeSignals = {
   needsPolicyControls: boolean
 }
 
+export type AutopilotCheckoutProduct = "daypass" | "pro" | "team"
+
+export function mapAutopilotPlanToCheckoutProduct(plan: AutopilotPlanId): AutopilotCheckoutProduct {
+  if (plan === "scale") return "team"
+  if (plan === "pro") return "pro"
+  return "daypass"
+}
+
+export function formatAutopilotPlanMonthlyPrice(plan: AutopilotPlanId, locale: "de" | "en"): string {
+  const amount = AUTOPILOT_PLANS[plan].monthlyPriceEur
+  return locale === "de" ? `${amount}€` : `€${amount}`
+}
+
 export function suggestAutopilotPlan(signal: UpgradeSignals): AutopilotPlanId {
   if (signal.needsPolicyControls) return "scale"
   if (signal.workspaces > AUTOPILOT_PLANS.pro.maxWorkspaces) return "scale"

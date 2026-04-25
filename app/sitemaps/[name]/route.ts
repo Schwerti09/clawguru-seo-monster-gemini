@@ -478,6 +478,7 @@ export async function GET(
         // Hinweis: 40 fiktive CVE-Einträge (CVE-2025-32xxx bis CVE-2025-51104) entfernt
         // Nur echte CVEs behalten: CVE-2024-*, CVE-2025-2*, CVE-2025-3*
         { loc: `${base}/${locale}/pricing`, lastmod, changefreq: "weekly", priority: "0.85" },
+        { loc: `${base}/${locale}/consulting`, lastmod, changefreq: "weekly", priority: "0.85" },
         { loc: `${base}/${locale}/downloads`, lastmod, changefreq: "weekly", priority: "0.85" },
         { loc: `${base}/${locale}/clawverse`, lastmod, changefreq: "weekly", priority: "0.85" },
         { loc: `${base}/${locale}/universe`, lastmod, changefreq: "weekly", priority: "0.85" },

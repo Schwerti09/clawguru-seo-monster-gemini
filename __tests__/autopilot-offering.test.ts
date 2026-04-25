@@ -1,6 +1,8 @@
 import {
   AUTOPILOT_PLANS,
   annualPriceWithDiscount,
+  formatAutopilotPlanMonthlyPrice,
+  mapAutopilotPlanToCheckoutProduct,
   suggestAutopilotPlan,
 } from "@/lib/autopilot-offering"
 
@@ -41,5 +43,16 @@ describe("autopilot offering", () => {
   it("calculates annual discounted prices correctly", () => {
     expect(annualPriceWithDiscount(99)).toBe(950)
     expect(annualPriceWithDiscount(249)).toBe(2390)
+  })
+
+  it("maps autopilot plans to checkout products", () => {
+    expect(mapAutopilotPlanToCheckoutProduct("starter")).toBe("daypass")
+    expect(mapAutopilotPlanToCheckoutProduct("pro")).toBe("pro")
+    expect(mapAutopilotPlanToCheckoutProduct("scale")).toBe("team")
+  })
+
+  it("formats monthly prices locale-aware", () => {
+    expect(formatAutopilotPlanMonthlyPrice("starter", "de")).toBe("29€")
+    expect(formatAutopilotPlanMonthlyPrice("pro", "en")).toBe("€99")
   })
 })

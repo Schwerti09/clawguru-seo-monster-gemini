@@ -83,11 +83,23 @@ type DashData = {
     bookingClicks: number
     consultingBookingClicks: number
     bookingSources24h: Array<{ source: string; count: number }>
+    consultSourceCounts: {
+      consulting_pricing_starter: number
+      consulting_pricing_pro: number
+      consulting_pricing_scale: number
+      consulting_bottom_cta: number
+      enterprise_api_cta: number
+    }
     checkoutCompleted: number
     rates: {
       clickToCheckoutStartPct: number
       pricingToBookingPct: number
       consultingBookingSharePct: number
+      starterSlotBookingPct: number
+      proSlotBookingPct: number
+      scaleSlotBookingPct: number
+      bottomCtaBookingPct: number
+      enterpriseCtaBookingPct: number
       checkoutStartToRedirectPct: number
       checkoutStartToCompletePct: number
       redirectToCompletePct: number
@@ -256,6 +268,7 @@ function ConversionFunnel({ funnel }: { funnel: DashData["funnel"] }) {
     bookingClicks,
     consultingBookingClicks,
     bookingSources24h,
+    consultSourceCounts,
     checkoutCompleted,
   } = funnel
 
@@ -329,6 +342,26 @@ function ConversionFunnel({ funnel }: { funnel: DashData["funnel"] }) {
         ) : (
           <div className="text-xs text-gray-500">No booking source data yet.</div>
         )}
+      </div>
+      <div className="mt-3 rounded-xl border border-gray-800 bg-black/20 px-3 py-3">
+        <div className="text-[11px] uppercase tracking-wider text-gray-500 mb-2">Consult Slot Breakdown (24h)</div>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-2 text-xs">
+          <div className="rounded-lg border border-gray-800 px-2 py-1 text-gray-300">
+            Starter slot: <span className="text-cyan-300 font-bold">{consultSourceCounts.consulting_pricing_starter.toLocaleString()}</span> · <span className="text-cyan-300 font-bold">{funnel.rates.starterSlotBookingPct}%</span>
+          </div>
+          <div className="rounded-lg border border-gray-800 px-2 py-1 text-gray-300">
+            Pro slot: <span className="text-cyan-300 font-bold">{consultSourceCounts.consulting_pricing_pro.toLocaleString()}</span> · <span className="text-cyan-300 font-bold">{funnel.rates.proSlotBookingPct}%</span>
+          </div>
+          <div className="rounded-lg border border-gray-800 px-2 py-1 text-gray-300">
+            Scale slot: <span className="text-cyan-300 font-bold">{consultSourceCounts.consulting_pricing_scale.toLocaleString()}</span> · <span className="text-cyan-300 font-bold">{funnel.rates.scaleSlotBookingPct}%</span>
+          </div>
+          <div className="rounded-lg border border-gray-800 px-2 py-1 text-gray-300">
+            Bottom CTA: <span className="text-cyan-300 font-bold">{consultSourceCounts.consulting_bottom_cta.toLocaleString()}</span> · <span className="text-cyan-300 font-bold">{funnel.rates.bottomCtaBookingPct}%</span>
+          </div>
+          <div className="rounded-lg border border-gray-800 px-2 py-1 text-gray-300">
+            Enterprise CTA: <span className="text-cyan-300 font-bold">{consultSourceCounts.enterprise_api_cta.toLocaleString()}</span> · <span className="text-cyan-300 font-bold">{funnel.rates.enterpriseCtaBookingPct}%</span>
+          </div>
+        </div>
       </div>
       <div className="mt-3 grid sm:grid-cols-3 gap-3 text-xs">
         <div className="rounded-xl border border-gray-800 bg-black/20 px-3 py-2 text-gray-400">

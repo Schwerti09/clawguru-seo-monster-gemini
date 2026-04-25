@@ -122,6 +122,23 @@ Added booking source visibility so consult performance can be evaluated per CTA 
 
 This enables immediate readout of whether `consulting_*` slots, enterprise CTA, or other entry points are producing meeting intent.
 
+## Slot / plan breakdown follow-up (2026-04-25)
+
+Extended consult analytics so plan-level CTA slots are first-class metrics:
+
+- `app/api/admin/profit-analytics/route.ts`
+  - Added `consultSourceCounts` for:
+    - `consulting_pricing_starter`
+    - `consulting_pricing_pro`
+    - `consulting_pricing_scale`
+    - `consulting_bottom_cta`
+    - `enterprise_api_cta`
+  - Added booking-share rates for each slot (`*SlotBookingPct`) based on total booking clicks.
+- `components/admin/ProfitDashboard.tsx`
+  - Added "Consult Slot Breakdown (24h)" panel showing count + share per slot.
+
+This makes it possible to compare plan-card and CTA-slot performance directly without log forensics.
+
 ## Operational Notes
 
 - `BookingButton` remains env-driven (`NEXT_PUBLIC_CAL_*_URL`) with mail fallback, so no deployment break if Cal URLs are missing.

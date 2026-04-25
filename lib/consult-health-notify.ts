@@ -8,6 +8,7 @@ export type ConsultHealthForNotify = {
   score: number
   level: string
   alertFlags: string[]
+  dominantSourceGroup?: "pricingSlots" | "bottomCta" | "enterpriseCta" | "other"
   routing: {
     severity: "info" | "warn" | "page"
     action: string
@@ -74,7 +75,8 @@ function cooldownMs() {
 
 function fingerprint(health: ConsultHealthForNotify) {
   const flags = [...health.alertFlags].sort().join(",")
-  return `${health.routing.severity}:${flags}:${Math.round(health.score)}`
+  const sourceGroup = health.dominantSourceGroup ?? "na"
+  return `${health.routing.severity}:${flags}:${sourceGroup}:${Math.round(health.score)}`
 }
 
 function resolveWebhookUrl(severity: "warn" | "page") {
@@ -99,6 +101,7 @@ function buildText(health: ConsultHealthForNotify, ctx: { generatedAt: string })
     `*ClawGuru consult health (${health.routing.severity.toUpperCase()})*\n` +
     `Time: ${ctx.generatedAt}\n` +
     `Score: ${health.score} · Level: ${health.level}\n` +
+    `Dominant Source Group: ${health.dominantSourceGroup ?? "unknown"}\n` +
     `Flags: ${flags}\n` +
     `Reason: ${health.routing.reason}\n` +
     `Details: ${reasons}`
@@ -214,6 +217,7 @@ export function maybeNotifyConsultHealthAlerts(
           alert: text,
           score: health.score,
           level: health.level,
+          dominantSourceGroup: health.dominantSourceGroup ?? "unknown",
           flags: health.alertFlags,
           routingReason: health.routing.reason,
           generatedAt: ctx.generatedAt,

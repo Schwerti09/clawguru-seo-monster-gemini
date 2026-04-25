@@ -78,6 +78,13 @@ describe("autopilot retention signals", () => {
     expect(consultSignal?.score).toBe(28)
     expect(consultSignal?.level).toBe("critical")
     expect(consultSignal?.message).toContain("critical <30%")
+    expect(consultSignal?.context).toEqual(
+      expect.objectContaining({
+        value24hPct: 28,
+        value7dPct: expect.any(Number),
+        deltaPct: expect.any(Number),
+      })
+    )
   })
 
   it("uses 7d consult share as retention gate to avoid noisy 24h spikes", () => {

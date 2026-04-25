@@ -193,6 +193,11 @@ type DashData = {
       level: "healthy" | "watch" | "critical"
       score: number
       message: string
+      context?: {
+        value24hPct?: number
+        value7dPct?: number
+        deltaPct?: number
+      }
     }>
   }
   alert: {
@@ -580,6 +585,18 @@ function RetentionPanel({ retention }: { retention: DashData["retention"] }) {
             <div className="text-xs text-cyan-300 mt-1">
               level: {signal.level} · score: {signal.score}
             </div>
+            {signal.context?.value24hPct !== undefined && signal.context?.value7dPct !== undefined && (
+              <div className="text-xs text-gray-500 mt-1">
+                24h vs 7d: <span className="text-cyan-300 font-bold">{signal.context.value24hPct}%</span>
+                {" / "}
+                <span className="text-cyan-300 font-bold">{signal.context.value7dPct}%</span>
+                {" · "}delta{" "}
+                <span className={`font-bold ${(signal.context.deltaPct ?? 0) >= 0 ? "text-green-300" : "text-red-300"}`}>
+                  {(signal.context.deltaPct ?? 0) >= 0 ? "+" : ""}
+                  {signal.context.deltaPct ?? 0}%
+                </span>
+              </div>
+            )}
           </div>
         ))}
       </div>

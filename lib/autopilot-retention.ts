@@ -19,6 +19,11 @@ export type RetentionSignal = {
   level: RetentionSignalLevel
   score: number
   message: string
+  context?: {
+    value24hPct?: number
+    value7dPct?: number
+    deltaPct?: number
+  }
 }
 
 export type RetentionSummary = {
@@ -130,6 +135,11 @@ export function evaluateRetentionSignals(input: RetentionInput): RetentionSummar
           `and ${Math.round(consultBookingShare7dPct * 10) / 10}% (7d). ` +
           `24h sample: ${consultShare24h.sampleLabel}; 7d sample: ${consultShare7d.sampleLabel}; ` +
           `active thresholds: ${consultShare7d.thresholdLabel}.`,
+        context: {
+          value24hPct: Math.round(consultBookingSharePct * 10) / 10,
+          value7dPct: Math.round(consultBookingShare7dPct * 10) / 10,
+          deltaPct: Math.round((consultBookingSharePct - consultBookingShare7dPct) * 10) / 10,
+        },
       },
     ],
   }

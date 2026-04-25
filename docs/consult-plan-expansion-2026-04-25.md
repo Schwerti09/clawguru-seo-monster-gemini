@@ -457,6 +457,30 @@ Extended consult-retention evaluation to include a 7-day baseline, so day-level 
 
 This makes consult retention less noisy and more decision-grade by grounding alert levels in rolling 7d signal quality.
 
+## Retention UI + notify cooldown fingerprint follow-up (2026-04-25)
+
+Completed final operator-quality pass for consult retention visibility and alert de-duplication behavior.
+
+- `lib/autopilot-retention.ts`
+  - Added optional structured `context` on retention signals.
+  - `consult_booking_share` now emits:
+    - `value24hPct`
+    - `value7dPct`
+    - `deltaPct` (24h - 7d)
+- `components/admin/ProfitDashboard.tsx`
+  - Retention panel now renders 24h vs 7d consult-share trend slice + delta coloring when context is present.
+- `lib/consult-health-notify.ts`
+  - Cooldown fingerprint now includes `dominantSourceGroup` (when provided), so source-family shifts are not suppressed as duplicate alerts.
+  - Outbound payload and Slack text now include dominant source group context.
+- `app/api/consult-health/cron/route.ts`
+  - Passes `consultDominantSourceGroup` into `maybeNotifyConsultHealthAlerts(...)`.
+- Tests
+  - `__tests__/consult-health-notify.test.ts` extended for source-group-aware fingerprint behavior.
+  - `__tests__/consult-health-cron-route.test.ts` asserts dominant source group wiring.
+  - `__tests__/autopilot-retention.test.ts` asserts consult signal context payload.
+
+This closes the consult automation loop with clearer retention trend readouts and more robust alert deduping semantics.
+
 ## Operational Notes
 
 - `BookingButton` remains env-driven (`NEXT_PUBLIC_CAL_*_URL`) with mail fallback, so no deployment break if Cal URLs are missing.

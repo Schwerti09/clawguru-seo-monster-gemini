@@ -42,6 +42,7 @@ describe("GET /api/consult-health/cron", () => {
       bookingClicks24h: 20,
     })
     ;(buildProfitFunnel as jest.Mock).mockReturnValue({
+      consultDominantSourceGroup: "pricingSlots",
       consultHealth: {
         score: 52,
         level: "watch",
@@ -57,7 +58,10 @@ describe("GET /api/consult-health/cron", () => {
     const body = await res.json()
 
     expect(buildProfitFunnel).toHaveBeenCalled()
-    expect(maybeNotifyConsultHealthAlerts).toHaveBeenCalled()
+    expect(maybeNotifyConsultHealthAlerts).toHaveBeenCalledWith(
+      expect.objectContaining({ dominantSourceGroup: "pricingSlots" }),
+      expect.any(Object)
+    )
     expect(body.notifiedCandidate).toBe(true)
     expect(body.consultHealth.webhooksConfigured.warnWebhookConfigured).toBe(true)
   })

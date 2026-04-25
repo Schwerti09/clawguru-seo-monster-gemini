@@ -54,6 +54,21 @@ describe("consult health notify", () => {
     expect(JSON.parse(call[1].body as string).text).toContain("ClawGuru consult health")
   })
 
+  it("uses dominant source group in cooldown fingerprint", async () => {
+    process.env.CONSULT_HEALTH_WARN_WEBHOOK_URL = "https://hooks.slack.com/services/TEST/WEBHOOK/URL"
+    const base = {
+      score: 55,
+      level: "watch" as const,
+      alertFlags: ["checkout_error_pressure"],
+      routing: { severity: "warn" as const, action: "slack", reason: "watch" },
+      reasons: ["elevated checkout error rate"],
+    }
+    maybeNotifyConsultHealthAlerts({ ...base, dominantSourceGroup: "pricingSlots" }, ctx)
+    maybeNotifyConsultHealthAlerts({ ...base, dominantSourceGroup: "other" }, ctx)
+    await new Promise((r) => setTimeout(r, 25))
+    expect(global.fetch).toHaveBeenCalledTimes(2)
+  })
+
   it("posts generic JSON for non-Slack warn URLs", async () => {
     process.env.CONSULT_HEALTH_WARN_WEBHOOK_URL = "https://example.com/hooks/consult"
     const health = {
@@ -68,6 +83,7 @@ describe("consult health notify", () => {
     const body = JSON.parse((global.fetch as jest.Mock).mock.calls[0][1].body as string)
     expect(body.source).toBe("clawguru-consult-health")
     expect(body.severity).toBe("warn")
+    expect(body.dominantSourceGroup).toBe("unknown")
   })
 
   it("tracks failures in telemetry counters", async () => {

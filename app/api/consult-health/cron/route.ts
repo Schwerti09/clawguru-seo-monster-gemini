@@ -31,7 +31,10 @@ export async function GET(req: NextRequest) {
     ? Math.floor(checkoutCompletedParam)
     : 0
   const funnel = buildProfitFunnel(check, checkoutCompleted)
-  maybeNotifyConsultHealthAlerts(funnel.consultHealth, { generatedAt })
+  maybeNotifyConsultHealthAlerts(
+    { ...funnel.consultHealth, dominantSourceGroup: funnel.consultDominantSourceGroup },
+    { generatedAt }
+  )
   const webhookCfg = consultHealthWebhookEnvSnapshot()
 
   return NextResponse.json({

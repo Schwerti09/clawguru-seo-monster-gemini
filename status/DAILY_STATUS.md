@@ -45,11 +45,12 @@
 20. Added notify telemetry trend slices (24h/7d/30d) with success/failure rates + 24h-vs-7d deltas in admin consult-health panel.
 21. Calibrated consult-booking retention signal: low-sample safeguard (`<12` bookings => watch), plus stricter high-volume thresholds (`>=40` bookings).
 22. Added 7d context for consult retention: funnel snapshot now carries 7d booking/checkout counters, and retention severity uses 7d consult-share baseline to reduce 24h noise.
+23. Added retention trend context (`24h` vs `7d` + delta) to consult signal payload and surfaced it in admin retention panel; tuned consult alert fingerprint to include dominant source group for cleaner webhook dedupe.
 
 ## 📌 Next (Consult Stream)
 
-1. Tune cooldown / fingerprint (e.g. include dominant source group) once real traffic patterns are observed.
-2. Add operator-facing display for consult retention 24h vs 7d share trend in admin panel.
+1. Observe production behavior for source-group-aware fingerprint cooldown and adjust if alert volume is too high/low.
+2. Optional: add dedicated compact sparkline for consult retention 24h-vs-7d deltas in dashboard.
 
 ---
 

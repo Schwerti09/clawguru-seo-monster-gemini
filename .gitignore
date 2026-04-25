@@ -17,6 +17,14 @@ yarn-error.log*
 pnpm-debug.log*
 logs/*.log
 
+# i18n pipeline B — generated artifacts. Both paths are deterministic outputs
+# of scripts/i18n-harvest-pick-sources.js / i18n-build-autotranslate*.js and
+# regenerate from app/+components/ source on every run. Committing them creates
+# 800k+ JSON diffs on every page edit and frequent merge conflicts.
+# Only the consolidated lib/i18n-autotranslate.ts is a stable artifact.
+lib/i18n-pick-sources.json
+lib/i18n-autotranslate/*.json
+
 # env files (NEVER commit real secrets)
 .env
 .env.local

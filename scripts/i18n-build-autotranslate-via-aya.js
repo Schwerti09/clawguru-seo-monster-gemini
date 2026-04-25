@@ -28,6 +28,7 @@
 
 const fs = require("fs")
 const path = require("path")
+const { execFileSync } = require("child_process")
 
 const OLLAMA_URL = (process.env.OLLAMA_URL || "http://127.0.0.1:11434").replace(/\/$/, "")
 const OLLAMA_MODEL = process.env.OLLAMA_MODEL || "aya-expanse:8b"
@@ -183,9 +184,23 @@ function emitTsModule(allMaps, sources) {
   fs.writeFileSync(OUTPUT_FILE, header + JSON.stringify(allMaps, null, 2) + "\n\nexport default autotranslate\n", "utf-8")
 }
 
+function harvestNow() {
+  // SOURCES_FILE is gitignored and regenerable. Always re-harvest at the start
+  // of a run so we translate the *current* set of pick() calls, not a stale
+  // snapshot from days ago. Set SKIP_HARVEST=1 to bypass (e.g. CI with cached
+  // sources). Cheap — ~2s for ~1000 files.
+  if (process.env.SKIP_HARVEST === "1" && fs.existsSync(SOURCES_FILE)) {
+    console.log(`[aya] SKIP_HARVEST=1 — using existing ${SOURCES_FILE}`)
+    return
+  }
+  console.log(`[aya] harvesting pick() source strings...`)
+  execFileSync(process.execPath, [path.join("scripts", "i18n-harvest-pick-sources.js")], { stdio: "inherit" })
+}
+
 async function main() {
+  harvestNow()
   if (!fs.existsSync(SOURCES_FILE)) {
-    console.error(`[aya] ERROR: ${SOURCES_FILE} missing. Run i18n-harvest-pick-sources.js first.`)
+    console.error(`[aya] ERROR: ${SOURCES_FILE} still missing after harvest. Aborting.`)
     process.exit(2)
   }
   const harvest = JSON.parse(fs.readFileSync(SOURCES_FILE, "utf-8"))

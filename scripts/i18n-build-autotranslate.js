@@ -23,6 +23,7 @@
 
 const fs = require("fs")
 const path = require("path")
+const { execFileSync } = require("child_process")
 
 const GEMINI_KEYS = [
   process.env.GEMINI_API_KEY,
@@ -185,9 +186,22 @@ async function translateLocale(locale, sources) {
   return result
 }
 
+function harvestNow() {
+  // SOURCES_FILE is gitignored and regenerable. Always re-harvest at the start
+  // so we translate the current set of pick() calls. Set SKIP_HARVEST=1 to
+  // bypass (e.g. for resuming a run against the same source set).
+  if (process.env.SKIP_HARVEST === "1" && fs.existsSync(SOURCES_FILE)) {
+    console.log(`[autotranslate] SKIP_HARVEST=1 — using existing ${SOURCES_FILE}`)
+    return
+  }
+  console.log(`[autotranslate] harvesting pick() source strings...`)
+  execFileSync(process.execPath, [path.join("scripts", "i18n-harvest-pick-sources.js")], { stdio: "inherit" })
+}
+
 async function main() {
+  harvestNow()
   if (!fs.existsSync(SOURCES_FILE)) {
-    console.error(`[autotranslate] ERROR: ${SOURCES_FILE} missing. Run i18n-harvest-pick-sources.js first.`)
+    console.error(`[autotranslate] ERROR: ${SOURCES_FILE} still missing after harvest. Aborting.`)
     process.exit(2)
   }
   const harvest = JSON.parse(fs.readFileSync(SOURCES_FILE, "utf-8"))

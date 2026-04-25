@@ -286,6 +286,12 @@ function ConversionFunnel({ funnel }: { funnel: DashData["funnel"] }) {
     { label: "Checkout Redirects (24h)", value: checkoutRedirected, icon: "↗️" },
     { label: "Day-Pass Checkouts (24h)", value: checkoutCompleted, icon: "💳" },
   ]
+  const concentrationClass =
+    consultInsights.sourceConcentrationLevel === "critical"
+      ? "text-red-300"
+      : consultInsights.sourceConcentrationLevel === "watch"
+        ? "text-yellow-300"
+        : "text-green-300"
 
   return (
     <div className="rounded-2xl border border-gray-800 bg-black/30 p-5">
@@ -348,7 +354,9 @@ function ConversionFunnel({ funnel }: { funnel: DashData["funnel"] }) {
             {bookingSources24h.map((entry) => (
               <div key={entry.source} className="flex items-center justify-between rounded-lg border border-gray-800 px-2 py-1 text-gray-300">
                 <span className="truncate pr-2">{entry.source}</span>
-                <span className="text-cyan-300 font-bold">{entry.count.toLocaleString()}</span>
+                <span className="text-cyan-300 font-bold">
+                  {entry.count.toLocaleString()} · {bookingClicks > 0 ? Math.round((entry.count / bookingClicks) * 1000) / 10 : 0}%
+                </span>
               </div>
             ))}
           </div>
@@ -358,6 +366,9 @@ function ConversionFunnel({ funnel }: { funnel: DashData["funnel"] }) {
       </div>
       <div className="mt-3 rounded-xl border border-gray-800 bg-black/20 px-3 py-3">
         <div className="text-[11px] uppercase tracking-wider text-gray-500 mb-2">Consult Slot Breakdown (24h)</div>
+        <div className={`text-xs mb-2 ${concentrationClass}`}>
+          Source concentration: {consultInsights.sourceConcentrationLevel.toUpperCase()}
+        </div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-2 text-xs">
           <div className="rounded-lg border border-gray-800 px-2 py-1 text-gray-300">
             Starter slot: <span className="text-cyan-300 font-bold">{consultSourceCounts.consulting_pricing_starter.toLocaleString()}</span> · <span className="text-cyan-300 font-bold">{funnel.rates.starterSlotBookingPct}%</span>

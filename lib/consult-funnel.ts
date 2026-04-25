@@ -27,6 +27,7 @@ type ConsultInsights = {
 }
 
 type ConsultSourceSnapshot = {
+  bookingSources24hNormalized: BookingSourceRow[]
   consultSourceCounts: Record<ConsultSourceKey, number>
   rates: ConsultRates
   insights: ConsultInsights
@@ -36,19 +37,35 @@ function safeRate(num: number, den: number): number {
   return den > 0 ? Math.round((num / den) * 1000) / 10 : 0
 }
 
+export function normalizeBookingSources(rows: BookingSourceRow[]): BookingSourceRow[] {
+  const merged = new Map<string, number>()
+  for (const row of rows) {
+    const source = typeof row.source === "string" && row.source.trim().length > 0
+      ? row.source.trim()
+      : "unknown"
+    const count = Number.isFinite(row.count) ? Math.max(0, Math.floor(row.count)) : 0
+    merged.set(source, (merged.get(source) ?? 0) + count)
+  }
+
+  return [...merged.entries()]
+    .map(([source, count]) => ({ source, count }))
+    .sort((a, b) => b.count - a.count)
+}
+
 export function buildConsultSourceSnapshot(input: {
   pricingClicks: number
   bookingClicks: number
   consultingBookingClicks: number
   bookingSources24h: BookingSourceRow[]
 }): ConsultSourceSnapshot {
-  const sourceMap = new Map<string, number>(input.bookingSources24h.map((s) => [s.source, s.count]))
+  const bookingSources24hNormalized = normalizeBookingSources(input.bookingSources24h)
+  const sourceMap = new Map<string, number>(bookingSources24hNormalized.map((s) => [s.source, s.count]))
   const consultSourceCounts = CONSULT_SOURCE_KEYS.reduce<Record<ConsultSourceKey, number>>((acc, key) => {
     acc[key] = sourceMap.get(key) ?? 0
     return acc
   }, {} as Record<ConsultSourceKey, number>)
 
-  const sortedSources = [...input.bookingSources24h].sort((a, b) => b.count - a.count)
+  const sortedSources = bookingSources24hNormalized
   const topSource = sortedSources[0]?.source ?? "none"
   const topSourceCount = sortedSources[0]?.count ?? 0
   const topSourceSharePct = safeRate(topSourceCount, input.bookingClicks)
@@ -56,6 +73,7 @@ export function buildConsultSourceSnapshot(input: {
     topSourceSharePct >= 70 ? "critical" : topSourceSharePct >= 50 ? "watch" : "balanced"
 
   return {
+    bookingSources24hNormalized,
     consultSourceCounts,
     rates: {
       pricingToBookingPct: safeRate(input.bookingClicks, input.pricingClicks),

@@ -17,6 +17,7 @@
 6. Consult analytics calculation extracted into `lib/consult-funnel.ts` + dedicated unit test to harden slot-rate contract.
 7. Added source concentration signal (`consultInsights`) to monitor CTA-slot dependency risk in consult funnel.
 8. Added middleware compatibility redirect `/{locale}/consult` → `/{locale}/consulting` to remove consult-entry 404s.
+9. Added consult source normalization + per-source share UX in admin conversion panel.
 5. Documentation + tests updated:
    - `docs/consult-plan-expansion-2026-04-25.md`
    - `__tests__/check-funnel.test.ts`

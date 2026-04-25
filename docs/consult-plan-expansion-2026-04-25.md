@@ -197,6 +197,25 @@ Added a consult source concentration signal to spot over-reliance on a single CT
 - `__tests__/consult-funnel.test.ts`
   - Added concentration-risk test case.
 
+## Robustness + UX follow-up (2026-04-25)
+
+Added a small hardening pass for source data quality and improved dashboard readability.
+
+- `lib/consult-funnel.ts`
+  - Added `normalizeBookingSources(...)`:
+    - trims source labels
+    - maps empty source to `unknown`
+    - clamps negative/invalid counts to `0`
+    - merges duplicate source entries
+  - `buildConsultSourceSnapshot(...)` now returns normalized source rows (`bookingSources24hNormalized`) and computes insights from normalized data.
+- `app/api/admin/profit-analytics/route.ts`
+  - now emits normalized `bookingSources24h`.
+- `components/admin/ProfitDashboard.tsx`
+  - top booking source list now shows count + share percentage
+  - concentration level is highlighted (`BALANCED/WATCH/CRITICAL`) in slot panel
+- `__tests__/consult-funnel.test.ts`
+  - added normalization contract test for duplicate and malformed rows
+
 ## Route compatibility follow-up (2026-04-25)
 
 Added a compatibility redirect for users hitting the legacy consult slug.

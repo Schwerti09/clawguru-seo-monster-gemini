@@ -40,4 +40,22 @@ describe("consult funnel source snapshot", () => {
     expect(snapshot.insights.topSourceSharePct).toBe(80)
     expect(snapshot.insights.sourceConcentrationLevel).toBe("critical")
   })
+
+  it("normalizes duplicate and invalid source rows", () => {
+    const snapshot = buildConsultSourceSnapshot({
+      pricingClicks: 100,
+      bookingClicks: 20,
+      consultingBookingClicks: 10,
+      bookingSources24h: [
+        { source: "consulting_pricing_pro", count: 3.9 },
+        { source: "consulting_pricing_pro", count: 2 },
+        { source: "", count: 5 },
+        { source: "consulting_bottom_cta", count: -2 },
+      ],
+    })
+
+    expect(snapshot.bookingSources24hNormalized.find((r) => r.source === "consulting_pricing_pro")?.count).toBe(5)
+    expect(snapshot.bookingSources24hNormalized.find((r) => r.source === "unknown")?.count).toBe(5)
+    expect(snapshot.bookingSources24hNormalized.find((r) => r.source === "consulting_bottom_cta")?.count).toBe(0)
+  })
 })

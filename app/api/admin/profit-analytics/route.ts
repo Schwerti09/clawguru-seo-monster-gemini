@@ -177,7 +177,7 @@ async function conversionFunnel(stripeMetrics: Awaited<ReturnType<typeof fetchSt
     checkoutErrors,
     bookingClicks,
     consultingBookingClicks,
-    bookingSources24h: check.bookingSources24h,
+    bookingSources24h: consult.bookingSources24hNormalized,
     consultSourceCounts: consult.consultSourceCounts,
     consultInsights: consult.insights,
     checkoutCompleted,

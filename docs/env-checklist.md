@@ -45,6 +45,12 @@ Optional but useful:
 - `GEO_LIVE_GUARD_MAX_CANDIDATES`
 - `GEO_LIVE_GUARD_MAX_HEALTH_DROP`
 
+## 3b) Required for consult health scheduler
+
+- `CRON_SECRET` (must match route validation and scheduler caller)
+- Optional fallback target for Netlify helper function:
+  - `SITE_URL` (defaults to production URL when unset)
+
 ## 4) Required for payments/billing
 
 - `STRIPE_SECRET_KEY`

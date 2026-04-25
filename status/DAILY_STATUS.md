@@ -32,11 +32,19 @@
    - `__tests__/consult-health-notify.test.ts`
 14. Consult health **alert routing policy**: explicit `alertFlags`, `routing` (`severity` / `action` / `reason`) in funnel payload; dashboard shows flags + routing hint; contract tests for info vs warn paths.
 15. Consult health **outbound webhooks**: optional warn/page URLs + cooldown-backed POST from `/api/admin/profit-analytics`; dashboard shows `webhooksConfigured` (no secrets); unit tests in `__tests__/consult-health-notify.test.ts`.
+16. Decoupled consult alert trigger from admin polling:
+   - Added secured cron endpoint `/api/consult-health/cron` (`CRON_SECRET`) for scheduled consult alert dispatch.
+   - `/api/admin/profit-analytics` now stays read-only for analytics while still exposing `webhooksConfigured`.
+   - Added route test `__tests__/consult-health-cron-route.test.ts`.
+17. Scheduler wiring completed:
+   - `vercel.json` cron added for `/api/consult-health/cron` (`*/15 * * * *`)
+   - Netlify scheduled function wiring added (`netlify/functions/consult-health-cron.js` + `netlify.toml` schedule)
+   - Env checklist updated with consult scheduler requirements.
 
 ## 📌 Next (Consult Stream)
 
 1. Tune cooldown / fingerprint (e.g. include dominant source group) once real traffic patterns are observed.
-2. Revisit consult health target/delta + 24h-vs-7d trend once snapshot exposes stable 7d aggregates in production.
+2. Add delivery telemetry for webhook outcomes (success/failure counters) in admin analytics.
 3. Extend consult-booking retention calibration once more production data is accumulated.
 
 ---

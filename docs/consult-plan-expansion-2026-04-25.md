@@ -319,6 +319,45 @@ When consult routing is **warn** or **page**, the server can POST to optional we
   - Response augments `consultHealth.webhooksConfigured` so the dashboard shows whether warn/page URLs are set (no secrets exposed).
 - `__tests__/consult-health-notify.test.ts` — unit coverage for no-op, Slack payload, generic JSON, and cooldown reset.
 
+## Consult health cron decoupling follow-up (2026-04-25)
+
+Alert dispatch for consult health is now decoupled from admin dashboard polling.
+
+- `app/api/consult-health/cron/route.ts` (new)
+  - Secured with `CRON_SECRET` (Authorization Bearer or `?secret=` query).
+  - Builds a fresh consult funnel snapshot via `getCheckFunnelSnapshotPersistent()` + `buildProfitFunnel(...)`.
+  - Triggers `maybeNotifyConsultHealthAlerts(...)`.
+  - Returns operational status payload (`notifiedCandidate`, `consultHealth`, `webhooksConfigured`).
+  - Supports optional `checkoutCompleted` query for ad-hoc override checks.
+- `app/api/admin/profit-analytics/route.ts`
+  - No longer triggers outbound notify directly.
+  - Remains read-only analytics endpoint while still exposing `consultHealth.webhooksConfigured`.
+- Tests
+  - Added `__tests__/consult-health-cron-route.test.ts` (unauthorized + authorized notify path).
+
+This prevents alert delivery from depending on human dashboard traffic and makes scheduling explicit via cron.
+
+## Scheduler wiring follow-up (2026-04-25)
+
+Connected consult-health cron route to hosting schedulers so alerting runs without manual dashboard usage.
+
+- `vercel.json`
+  - Added cron entry:
+    - path: `/api/consult-health/cron`
+    - schedule: `*/15 * * * *`
+- `netlify.toml`
+  - Added scheduled Netlify function config:
+    - `[functions."consult-health-cron"]`
+    - `schedule = "*/15 * * * *"`
+- `netlify/functions/consult-health-cron.js` (new)
+  - Scheduled function that calls `/api/consult-health/cron`.
+  - Uses `Authorization: Bearer ${CRON_SECRET}` when configured.
+  - Returns upstream response body/status for easier scheduler debugging.
+
+Required environment:
+- `CRON_SECRET` (shared by route and scheduler caller)
+- optional `SITE_URL` (Netlify function fallback target)
+
 ## Operational Notes
 
 - `BookingButton` remains env-driven (`NEXT_PUBLIC_CAL_*_URL`) with mail fallback, so no deployment break if Cal URLs are missing.

@@ -11,7 +11,6 @@ import { getEndpointCounts, getTopIps, getActiveBlocks } from "@/lib/api-usage"
 import { getCheckFunnelSnapshotPersistent } from "@/lib/check-funnel"
 import {
   consultHealthWebhookEnvSnapshot,
-  maybeNotifyConsultHealthAlerts,
 } from "@/lib/consult-health-notify"
 import { buildProfitFunnel } from "@/lib/profit-funnel"
 import { evaluateRetentionSignals } from "@/lib/autopilot-retention"
@@ -187,7 +186,6 @@ export async function GET() {
   const activeBlocks = getActiveBlocks()
   const generatedAt = new Date().toISOString()
   const funnelBase = await conversionFunnel(stripeMetrics)
-  maybeNotifyConsultHealthAlerts(funnelBase.consultHealth, { generatedAt })
   const webhookCfg = consultHealthWebhookEnvSnapshot()
   const funnel = {
     ...funnelBase,

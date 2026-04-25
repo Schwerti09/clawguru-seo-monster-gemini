@@ -281,6 +281,31 @@ export function middleware(request: NextRequest) {
     return res
   }
 
+  // /blog and /<locale>/blog → /<locale>/intel  (Kimi 2.5 audit Important #6:
+  // Google "blog" findability without splitting content surface).
+  if (pathname === "/blog" || pathname === "/blog/") {
+    const targetLocale = preferredLocale(request)
+    const url = request.nextUrl.clone()
+    url.pathname = `/${targetLocale}/intel`
+    const res = NextResponse.redirect(url, 308)
+    res.headers.set("x-claw-locale", targetLocale)
+    res.headers.set("x-claw-dir", localeDir(targetLocale))
+    res.headers.set(getRequestIdHeaderName(), requestId)
+    return res
+  }
+  const localizedBlog = pathname.match(/^\/([a-z]{2}(?:-[a-z]{2})?)\/blog\/?$/i)
+  if (localizedBlog) {
+    const localeFromPath = localizedBlog[1].toLowerCase() as Locale
+    const targetLocale = SUPPORTED_LOCALES.includes(localeFromPath) ? localeFromPath : DEFAULT_LOCALE
+    const url = request.nextUrl.clone()
+    url.pathname = `/${targetLocale}/intel`
+    const res = NextResponse.redirect(url, 308)
+    res.headers.set("x-claw-locale", targetLocale)
+    res.headers.set("x-claw-dir", localeDir(targetLocale))
+    res.headers.set(getRequestIdHeaderName(), requestId)
+    return res
+  }
+
   const localizedLegacyLanding = pathname.match(/^\/([a-z]{2}(?:-[a-z]{2})?)\/(moltbot|clawbot)\/?$/i)
   if (localizedLegacyLanding) {
     const localeFromPath = localizedLegacyLanding[1].toLowerCase() as Locale

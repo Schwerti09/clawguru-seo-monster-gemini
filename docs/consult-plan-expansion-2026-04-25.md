@@ -160,6 +160,22 @@ Consult demand is now part of retention evaluation instead of checkout-only logi
   - Updated fixtures to include booking inputs.
   - Added assertion for healthy consult-booking-share path.
 
+## Contract hardening follow-up (2026-04-25)
+
+To make consult analytics safer to evolve, source-slot calculation has been extracted into a dedicated helper module:
+
+- `lib/consult-funnel.ts`
+  - Centralizes:
+    - source-slot counters
+    - slot-level booking-share rates
+    - pricing-to-booking and consult-share rates
+- `app/api/admin/profit-analytics/route.ts`
+  - Now consumes `buildConsultSourceSnapshot(...)` instead of re-implementing the math inline.
+- `__tests__/consult-funnel.test.ts`
+  - Adds focused contract coverage for slot counts + computed rates.
+
+This keeps route complexity lower and prevents subtle drift in slot-rate calculations during future consult iterations.
+
 ## Operational Notes
 
 - `BookingButton` remains env-driven (`NEXT_PUBLIC_CAL_*_URL`) with mail fallback, so no deployment break if Cal URLs are missing.

@@ -9,6 +9,7 @@ import { adminCookieName, verifyAdminToken } from "@/lib/admin-auth"
 import { stripe } from "@/lib/stripe"
 import { getEndpointCounts, getTopIps, getActiveBlocks } from "@/lib/api-usage"
 import { getCheckFunnelSnapshotPersistent } from "@/lib/check-funnel"
+import { buildConsultSourceSnapshot } from "@/lib/consult-funnel"
 import { evaluateRetentionSignals } from "@/lib/autopilot-retention"
 
 export const runtime = "nodejs"
@@ -22,15 +23,6 @@ const REVENUE_PER_DAYPASS_USD = 4.99
 const REVENUE_PER_PRO_MONTH_USD = 19.99
 // Alert: warn when external-data costs exceed this fraction of revenue
 const COST_ALERT_THRESHOLD_PCT = 30
-const CONSULT_SOURCE_KEYS = [
-  "consulting_pricing_starter",
-  "consulting_pricing_pro",
-  "consulting_pricing_scale",
-  "consulting_bottom_cta",
-  "enterprise_api_cta",
-] as const
-
-type ConsultSourceKey = typeof CONSULT_SOURCE_KEYS[number]
 
 function unauthorized() {
   return NextResponse.json({ error: "unauthorized" }, { status: 401 })
@@ -170,11 +162,12 @@ async function conversionFunnel(stripeMetrics: Awaited<ReturnType<typeof fetchSt
   const bookingClicks = check.bookingClicks24h
   const consultingBookingClicks = check.consultingBookingClicks24h
   const checkoutCompleted = stripeMetrics?.daypassToday ?? 0
-  const sourceMap = new Map<string, number>(check.bookingSources24h.map((s) => [s.source, s.count]))
-  const consultSourceCounts = CONSULT_SOURCE_KEYS.reduce<Record<ConsultSourceKey, number>>((acc, key) => {
-    acc[key] = sourceMap.get(key) ?? 0
-    return acc
-  }, {} as Record<ConsultSourceKey, number>)
+  const consult = buildConsultSourceSnapshot({
+    pricingClicks: check.pricingClicks24h,
+    bookingClicks,
+    consultingBookingClicks,
+    bookingSources24h: check.bookingSources24h,
+  })
 
   return {
     landingPageViews: check.pageViews24h,
@@ -185,17 +178,11 @@ async function conversionFunnel(stripeMetrics: Awaited<ReturnType<typeof fetchSt
     bookingClicks,
     consultingBookingClicks,
     bookingSources24h: check.bookingSources24h,
-    consultSourceCounts,
+    consultSourceCounts: consult.consultSourceCounts,
     checkoutCompleted,
     rates: {
       clickToCheckoutStartPct: safeRate(checkoutStarted, check.pricingClicks24h),
-      pricingToBookingPct: safeRate(bookingClicks, check.pricingClicks24h),
-      consultingBookingSharePct: safeRate(consultingBookingClicks, bookingClicks),
-      starterSlotBookingPct: safeRate(consultSourceCounts.consulting_pricing_starter, bookingClicks),
-      proSlotBookingPct: safeRate(consultSourceCounts.consulting_pricing_pro, bookingClicks),
-      scaleSlotBookingPct: safeRate(consultSourceCounts.consulting_pricing_scale, bookingClicks),
-      bottomCtaBookingPct: safeRate(consultSourceCounts.consulting_bottom_cta, bookingClicks),
-      enterpriseCtaBookingPct: safeRate(consultSourceCounts.enterprise_api_cta, bookingClicks),
+      ...consult.rates,
       checkoutStartToRedirectPct: safeRate(checkoutRedirected, checkoutStarted),
       checkoutStartToCompletePct: safeRate(checkoutCompleted, checkoutStarted),
       redirectToCompletePct: safeRate(checkoutCompleted, checkoutRedirected),

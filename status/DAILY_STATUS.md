@@ -14,6 +14,7 @@
    - Added source-level breakdown: `bookingSources24h` (top CTA sources in last 24h)
    - Added slot-level consult rates: starter/pro/scale card + bottom CTA + enterprise CTA
 5. Retention model now uses consult demand signal (`consult_booking_share`) in addition to checkout funnel metrics.
+6. Consult analytics calculation extracted into `lib/consult-funnel.ts` + dedicated unit test to harden slot-rate contract.
 5. Documentation + tests updated:
    - `docs/consult-plan-expansion-2026-04-25.md`
    - `__tests__/check-funnel.test.ts`

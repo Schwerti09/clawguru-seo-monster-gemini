@@ -1,10 +1,12 @@
+import { RUNBOOK_COUNT_LONG_EN } from "@/lib/stats"
+
 type Props = { prefix?: string; dict?: Record<string, string> }
 
 export default function SolutionSection({ prefix = "", dict = {} }: Props) {
   const pillars = [
     {
       title: dict.solution_p1_title || "Mycelial Engine",
-      desc: dict.solution_p1_desc || "Over 4.2 million runbooks, semantically connected. The Engine finds the right path – not just an answer.",
+      desc: dict.solution_p1_desc || `Over ${RUNBOOK_COUNT_LONG_EN} runbooks, semantically connected. The Engine finds the right path – not just an answer.`,
     },
     {
       title: dict.solution_p2_title || "AI-powered execution",

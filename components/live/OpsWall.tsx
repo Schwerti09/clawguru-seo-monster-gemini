@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react"
 import { motion, useReducedMotion } from "framer-motion"
 import { useI18n } from "@/components/i18n/I18nProvider"
-import { STATS } from "@/lib/stats"
+import { RUNBOOK_COUNT_SHORT_EN, STATS } from "@/lib/stats"
 import { pick } from "@/lib/i18n-pick"
 
 type LivePayload = {
@@ -112,7 +112,7 @@ export default function OpsWall() {
       }
       return new Intl.NumberFormat(locale).format(TOTAL_COUNT)
     } catch {
-      return "4.2M+"
+      return `${RUNBOOK_COUNT_SHORT_EN}+`
     }
   }, [locale])
   const totalExact = useMemo(() => new Intl.NumberFormat(locale).format(TOTAL_COUNT), [locale, TOTAL_COUNT])

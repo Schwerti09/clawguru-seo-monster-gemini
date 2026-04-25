@@ -14,7 +14,26 @@ function safeTotalSitemapUrls(): number {
   return 0
 }
 
-export const TOTAL_RUNBOOKS = 4_200_000
+// Canonical runbook count. Used everywhere this number is shown.
+// Was inconsistent across the codebase (4.2M on summon, 3.4M everywhere else,
+// 1M on /fr/pricing) per Kimi 2.5 audit — see docs/audit-response-kimi-2026-04-25.md.
+// 3.4M is the canonical value (matches dictionaries, vorstellung timeline,
+// HeroPreview). DO NOT hardcode this number anywhere — import from here.
+export const TOTAL_RUNBOOKS = 3_400_000
+
+// Display strings for the runbook count. Localized formatting differs:
+// DE uses comma decimal + "Mio"/"Millionen", EN uses dot + "M"/"million".
+export const RUNBOOK_COUNT_SHORT_DE = "3,4 Mio"
+export const RUNBOOK_COUNT_SHORT_EN = "3.4M"
+export const RUNBOOK_COUNT_LONG_DE = "3,4 Millionen"
+export const RUNBOOK_COUNT_LONG_EN = "3.4 million"
+
+export function runbookCount(locale: string, variant: "short" | "long" = "short"): string {
+  const isDe = locale === "de"
+  if (variant === "long") return isDe ? RUNBOOK_COUNT_LONG_DE : RUNBOOK_COUNT_LONG_EN
+  return isDe ? RUNBOOK_COUNT_SHORT_DE : RUNBOOK_COUNT_SHORT_EN
+}
+
 export const TOTAL_SITEMAP_URLS = safeTotalSitemapUrls()
 export const AVG_CLAW_SCORE = 78
 export const ACTIVE_EXPLOITS_TODAY = 42

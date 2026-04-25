@@ -3,10 +3,11 @@
 
 import type { Metadata } from "next"
 import NeuroClient from "./NeuroClient-v5"
+import { RUNBOOK_COUNT_LONG_DE } from "@/lib/stats"
 
 const SITE_URL = "https://clawguru.org"
 const PAGE_TITLE = "Stack MRI | ClawGuru Predictive Security Cortex"
-const PAGE_DESC = "ClawGuru ist die KI-gestützte SecOps-Plattform mit über 4,2 Millionen ausführbaren Runbooks – für Incident Response, Hardening und Compliance in Echtzeit. Vom Problem zum Fix in unter 30 Sekunden. Scan your tech stack for vulnerabilities, CVEs, and security issues."
+const PAGE_DESC = `ClawGuru ist die KI-gestützte SecOps-Plattform mit über ${RUNBOOK_COUNT_LONG_DE} ausführbaren Runbooks – für Incident Response, Hardening und Compliance in Echtzeit. Vom Problem zum Fix in unter 30 Sekunden. Scan your tech stack for vulnerabilities, CVEs, and security issues.`
 
 export const metadata: Metadata = {
   title: PAGE_TITLE,

@@ -11,6 +11,7 @@ import LoginSaveBanner from "@/components/shared/LoginSaveBanner"
 import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
 import { getDictionary } from "@/lib/getDictionary"
 import { BASE_URL } from "@/lib/config"
+import { RUNBOOK_COUNT_LONG_DE, RUNBOOK_COUNT_SHORT_EN } from "@/lib/stats"
 
 /* ── Quantum Void colour tokens ── */
 const QV = {
@@ -27,7 +28,7 @@ const QV = {
 export const metadata: Metadata = {
   title: "Prof. ClawGuru — AI Security Assistant | ClawGuru",
   description:
-    "ClawGuru ist die KI-gestützte SecOps-Plattform mit über 4,2 Millionen ausführbaren Runbooks – für Incident Response, Hardening und Compliance in Echtzeit. Vom Problem zum Fix in unter 30 Sekunden. Prof. ClawGuru Copilot: Problem beschreiben, Schritt-für-Schritt Runbook bekommen.",
+    `ClawGuru ist die KI-gestützte SecOps-Plattform mit über ${RUNBOOK_COUNT_LONG_DE} ausführbaren Runbooks – für Incident Response, Hardening und Compliance in Echtzeit. Vom Problem zum Fix in unter 30 Sekunden. Prof. ClawGuru Copilot: Problem beschreiben, Schritt-für-Schritt Runbook bekommen.`,
   keywords: [
     "prof clawguru",
     "ai security assistant",
@@ -40,20 +41,20 @@ export const metadata: Metadata = {
   ],
   openGraph: {
     title: "Prof. ClawGuru — AI Security Assistant | ClawGuru",
-    description: "ClawGuru ist die KI-gestützte SecOps-Plattform mit über 4,2 Millionen ausführbaren Runbooks – für Incident Response, Hardening und Compliance in Echtzeit. Vom Problem zum Fix in unter 30 Sekunden.",
+    description: `ClawGuru ist die KI-gestützte SecOps-Plattform mit über ${RUNBOOK_COUNT_LONG_DE} ausführbaren Runbooks – für Incident Response, Hardening und Compliance in Echtzeit. Vom Problem zum Fix in unter 30 Sekunden.`,
     type: "website",
     url: `${BASE_URL}/copilot`,
     images: [{
       url: `${BASE_URL}/og/copilot.png`,
       width: 1200,
       height: 630,
-      alt: "ClawGuru Prof. ClawGuru — AI Security Assistant - 4.2M+ Runbooks, 30s Fix Time, 24/7 Active"
+      alt: `ClawGuru Prof. ClawGuru — AI Security Assistant - ${RUNBOOK_COUNT_SHORT_EN}+ Runbooks, 30s Fix Time, 24/7 Active`
     }]
   },
   twitter: {
     card: "summary_large_image",
     title: "Prof. ClawGuru — AI Security Assistant | ClawGuru",
-    description: "ClawGuru ist die KI-gestützte SecOps-Plattform mit über 4,2 Millionen ausführbaren Runbooks – für Incident Response, Hardening und Compliance in Echtzeit. Vom Problem zum Fix in unter 30 Sekunden.",
+    description: `ClawGuru ist die KI-gestützte SecOps-Plattform mit über ${RUNBOOK_COUNT_LONG_DE} ausführbaren Runbooks – für Incident Response, Hardening und Compliance in Echtzeit. Vom Problem zum Fix in unter 30 Sekunden.`,
     images: [`${BASE_URL}/og/copilot.png`]
   },
   alternates: { canonical: "/copilot" },
@@ -66,7 +67,7 @@ const organizationJsonLd = {
   url: BASE_URL,
   logo: `${BASE_URL}/favicon-512.png`,
   foundingDate: "2024",
-  description: "ClawGuru ist die KI-gestützte SecOps-Plattform mit über 4,2 Millionen ausführbaren Runbooks – für Incident Response, Hardening und Compliance in Echtzeit. Vom Problem zum Fix in unter 30 Sekunden.",
+  description: `ClawGuru ist die KI-gestützte SecOps-Plattform mit über ${RUNBOOK_COUNT_LONG_DE} ausführbaren Runbooks – für Incident Response, Hardening und Compliance in Echtzeit. Vom Problem zum Fix in unter 30 Sekunden.`,
   sameAs: [
     "https://github.com/clawguru",
   ],
@@ -94,7 +95,7 @@ const imageObjectJsonLd = {
   "@context": "https://schema.org",
   "@type": "ImageObject",
   contentUrl: `${BASE_URL}/og/copilot.png`,
-  description: "ClawGuru Prof. ClawGuru — AI Security Assistant - 4.2M+ Runbooks, 30s Fix Time, 24/7 Active",
+  description: `ClawGuru Prof. ClawGuru — AI Security Assistant - ${RUNBOOK_COUNT_SHORT_EN}+ Runbooks, 30s Fix Time, 24/7 Active`,
   author: {
     "@type": "Organization",
     name: "ClawGuru",
@@ -167,7 +168,7 @@ export default async function CopilotPage(
           {/* Stats Bar */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-8 mb-6 max-w-3xl mx-auto">
             <div className="rounded-xl p-4 text-center border" style={{ background: QV.glass, borderColor: `${QV.gold}18` }}>
-              <div className="text-2xl font-black" style={{ color: QV.gold }}>4.2M+</div>
+              <div className="text-2xl font-black" style={{ color: QV.gold }}>{RUNBOOK_COUNT_SHORT_EN}+</div>
               <div className="text-xs mt-1" style={{ color: "rgba(255,255,255,0.3)" }}>Runbooks</div>
             </div>
             <div className="rounded-xl p-4 text-center border" style={{ background: QV.glass, borderColor: `${QV.violet}18` }}>
@@ -239,7 +240,7 @@ export default async function CopilotPage(
                 },
                 {
                   title: "Expertise",
-                  desc: "4,2 Millionen AI-generierte Runbooks, die auf realen Incident-Response-Szenarien basieren. Jeder Guide ist getestet und validiert.",
+                  desc: `${RUNBOOK_COUNT_LONG_DE} AI-generierte Runbooks, die auf realen Incident-Response-Szenarien basieren. Jeder Guide ist getestet und validiert.`,
                   color: QV.violet,
                 },
                 {

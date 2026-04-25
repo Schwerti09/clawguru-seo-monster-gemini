@@ -6,13 +6,14 @@ import Container from "@/components/shared/Container"
 import SectionTitle from "@/components/shared/SectionTitle"
 import SocialProofCounter from "@/components/marketing/SocialProofCounter"
 import { BASE_URL } from "@/lib/config"
+import { RUNBOOK_COUNT_LONG_DE, RUNBOOK_COUNT_SHORT_EN } from "@/lib/stats"
 
 export const dynamic = "force-static"
 
 export const metadata = {
   title: "Provenance Singularity — Cryptographic Security Artifacts | ClawGuru",
   description:
-    "ClawGuru ist die KI-gestützte SecOps-Plattform mit über 4,2 Millionen ausführbaren Runbooks – für Incident Response, Hardening und Compliance in Echtzeit. Vom Problem zum Fix in unter 30 Sekunden. Provenance Singularity – Cryptographic anchoring for every security artifact.",
+    `ClawGuru ist die KI-gestützte SecOps-Plattform mit über ${RUNBOOK_COUNT_LONG_DE} ausführbaren Runbooks – für Incident Response, Hardening und Compliance in Echtzeit. Vom Problem zum Fix in unter 30 Sekunden. Provenance Singularity – Cryptographic anchoring for every security artifact.`,
   keywords: [
     "provenance singularity",
     "cryptographic anchoring",
@@ -25,7 +26,7 @@ export const metadata = {
   ],
   openGraph: {
     title: "Provenance Singularity — Cryptographic Security Artifacts | ClawGuru",
-    description: "ClawGuru ist die KI-gestützte SecOps-Plattform mit über 4,2 Millionen ausführbaren Runbooks – für Incident Response, Hardening und Compliance in Echtzeit. Vom Problem zum Fix in unter 30 Sekunden.",
+    description: `ClawGuru ist die KI-gestützte SecOps-Plattform mit über ${RUNBOOK_COUNT_LONG_DE} ausführbaren Runbooks – für Incident Response, Hardening und Compliance in Echtzeit. Vom Problem zum Fix in unter 30 Sekunden.`,
     type: "website",
     url: `${BASE_URL}/provenance`,
     images: [{
@@ -38,7 +39,7 @@ export const metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Provenance Singularity — Cryptographic Security Artifacts | ClawGuru",
-    description: "ClawGuru ist die KI-gestützte SecOps-Plattform mit über 4,2 Millionen ausführbaren Runbooks – für Incident Response, Hardening und Compliance in Echtzeit. Vom Problem zum Fix in unter 30 Sekunden.",
+    description: `ClawGuru ist die KI-gestützte SecOps-Plattform mit über ${RUNBOOK_COUNT_LONG_DE} ausführbaren Runbooks – für Incident Response, Hardening und Compliance in Echtzeit. Vom Problem zum Fix in unter 30 Sekunden.`,
     images: [`${BASE_URL}/og/provenance.png`]
   },
   alternates: { canonical: "/provenance" },
@@ -51,7 +52,7 @@ const organizationJsonLd = {
   url: BASE_URL,
   logo: `${BASE_URL}/favicon-512.png`,
   foundingDate: "2024",
-  description: "ClawGuru ist die KI-gestützte SecOps-Plattform mit über 4,2 Millionen ausführbaren Runbooks – für Incident Response, Hardening und Compliance in Echtzeit. Vom Problem zum Fix in unter 30 Sekunden.",
+  description: `ClawGuru ist die KI-gestützte SecOps-Plattform mit über ${RUNBOOK_COUNT_LONG_DE} ausführbaren Runbooks – für Incident Response, Hardening und Compliance in Echtzeit. Vom Problem zum Fix in unter 30 Sekunden.`,
   sameAs: [
     "https://github.com/clawguru",
   ],
@@ -106,7 +107,7 @@ export default async function ProvenanceIndexPage() {
         {/* Stats Bar */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-8 mb-6 max-w-3xl mx-auto">
           <div className="rounded-xl p-4 text-center border border-gray-800 bg-black/20">
-            <div className="text-2xl font-black text-cyan-400">4.2M+</div>
+            <div className="text-2xl font-black text-cyan-400">{RUNBOOK_COUNT_SHORT_EN}+</div>
             <div className="text-xs mt-1 text-gray-500">Runbooks</div>
           </div>
           <div className="rounded-xl p-4 text-center border border-gray-800 bg-black/20">
@@ -176,7 +177,7 @@ export default async function ProvenanceIndexPage() {
                 },
                 {
                   title: "Expertise",
-                  desc: "4,2 Millionen AI-generierte Runbooks, die auf realen Incident-Response-Szenarien basieren. Jeder Guide ist getestet und validiert.",
+                  desc: `${RUNBOOK_COUNT_LONG_DE} AI-generierte Runbooks, die auf realen Incident-Response-Szenarien basieren. Jeder Guide ist getestet und validiert.`,
                   color: "#a78bfa",
                 },
                 {

@@ -9,6 +9,7 @@ import HowItWorks from "@/components/summon/HowItWorks"
 import UpgradeCTA from "@/components/shared/UpgradeCTA"
 import { BASE_URL } from "@/lib/config"
 import { pick } from "@/lib/i18n-pick"
+import { RUNBOOK_COUNT_LONG_DE, RUNBOOK_COUNT_LONG_EN } from "@/lib/stats"
 
 const SummonRealClient = dynamic(() => import("@/components/summon/SummonRealClient"))
 
@@ -25,7 +26,7 @@ export async function generateMetadata(props: { params: { lang: string } }): Pro
 
   const title = pick(isDE, "Claw Swarm Oracle — Summon | ClawGuru", "Claw Swarm Oracle — Summon | ClawGuru")
 
-  const description = pick(isDE, "ClawGuru ist die KI-gestützte SecOps-Plattform mit über 4,2 Millionen ausführbaren Runbooks – für Incident Response, Hardening und Compliance in Echtzeit. Vom Problem zum Fix in unter 30 Sekunden.", "ClawGuru is the AI-powered SecOps platform with over 4.2 million executable runbooks – for incident response, hardening, and compliance in real-time. From problem to fix in under 30 seconds.")
+  const description = pick(isDE, `ClawGuru ist die KI-gestützte SecOps-Plattform mit über ${RUNBOOK_COUNT_LONG_DE} ausführbaren Runbooks – für Incident Response, Hardening und Compliance in Echtzeit. Vom Problem zum Fix in unter 30 Sekunden.`, `ClawGuru is the AI-powered SecOps platform with over ${RUNBOOK_COUNT_LONG_EN} executable runbooks – for incident response, hardening, and compliance in real-time. From problem to fix in under 30 seconds.`)
 
   return {
     title,
@@ -73,7 +74,7 @@ export default async function LocaleSummonPage(props: { params: { lang: string }
     url: BASE_URL,
     logo: `${BASE_URL}/favicon-512.png`,
     foundingDate: "2024",
-    description: "ClawGuru ist die KI-gestützte SecOps-Plattform mit über 4,2 Millionen ausführbaren Runbooks – für Incident Response, Hardening und Compliance in Echtzeit. Vom Problem zum Fix in unter 30 Sekunden.",
+    description: `ClawGuru ist die KI-gestützte SecOps-Plattform mit über ${RUNBOOK_COUNT_LONG_DE} ausführbaren Runbooks – für Incident Response, Hardening und Compliance in Echtzeit. Vom Problem zum Fix in unter 30 Sekunden.`,
     sameAs: [
       "https://github.com/clawguru",
     ],
@@ -115,7 +116,7 @@ export default async function LocaleSummonPage(props: { params: { lang: string }
                 },
                 {
                   title: "Expertise",
-                  desc: "4,2 Millionen AI-generierte Runbooks, die auf realen Incident-Response-Szenarien basieren. Jeder Guide ist getestet und validiert.",
+                  desc: `${RUNBOOK_COUNT_LONG_DE} AI-generierte Runbooks, die auf realen Incident-Response-Szenarien basieren. Jeder Guide ist getestet und validiert.`,
                   color: "text-emerald-400",
                 },
                 {

@@ -5,6 +5,7 @@
 
 import { useState, useEffect, useRef } from "react"
 import SocialProofCounter from "@/components/marketing/SocialProofCounter"
+import { RUNBOOK_COUNT_LONG_DE, RUNBOOK_COUNT_SHORT_EN } from "@/lib/stats"
 
 // ── TYPES ─────────────────────────────────────────────────────────────────────
 type TechStackItem = {
@@ -432,7 +433,7 @@ export default function NeuroClient() {
             {/* Stats Bar */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-8 mb-6 max-w-3xl mx-auto">
               <div className="rounded-xl p-4 text-center border" style={{ background: "rgba(10,10,14,0.8)", borderColor: "rgba(180,100,255,0.2)" }}>
-                <div className="text-2xl font-black" style={{ color: "#b464ff" }}>4.2M+</div>
+                <div className="text-2xl font-black" style={{ color: "#b464ff" }}>{RUNBOOK_COUNT_SHORT_EN}+</div>
                 <div className="text-xs mt-1" style={{ color: "rgba(255,255,255,0.3)" }}>Runbooks</div>
               </div>
               <div className="rounded-xl p-4 text-center border" style={{ background: "rgba(10,10,14,0.8)", borderColor: "rgba(0,255,157,0.2)" }}>
@@ -917,7 +918,7 @@ export default function NeuroClient() {
                 },
                 {
                   title: "Expertise",
-                  desc: "4,2 Millionen AI-generierte Runbooks, die auf realen Incident-Response-Szenarien basieren. Jeder Guide ist getestet und validiert.",
+                  desc: `${RUNBOOK_COUNT_LONG_DE} AI-generierte Runbooks, die auf realen Incident-Response-Szenarien basieren. Jeder Guide ist getestet und validiert.`,
                   color: "#00ff9d",
                 },
                 {

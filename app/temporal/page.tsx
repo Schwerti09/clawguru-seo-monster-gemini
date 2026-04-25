@@ -4,11 +4,12 @@
 import type { Metadata } from "next"
 import TemporalPage from "./TemporalPage"
 import { BASE_URL } from "@/lib/config"
+import { RUNBOOK_COUNT_LONG_DE } from "@/lib/stats"
 
 export const metadata: Metadata = {
   title: "Temporal Mycelium — Time-Travel Security Intelligence | ClawGuru",
   description:
-    "ClawGuru ist die KI-gestützte SecOps-Plattform mit über 4,2 Millionen ausführbaren Runbooks – für Incident Response, Hardening und Compliance in Echtzeit. Vom Problem zum Fix in unter 30 Sekunden. Temporal Mycelium – Traverse security intelligence across all epochs.",
+    `ClawGuru ist die KI-gestützte SecOps-Plattform mit über ${RUNBOOK_COUNT_LONG_DE} ausführbaren Runbooks – für Incident Response, Hardening und Compliance in Echtzeit. Vom Problem zum Fix in unter 30 Sekunden. Temporal Mycelium – Traverse security intelligence across all epochs.`,
   keywords: [
     "temporal mycelium",
     "time-travel security",
@@ -21,7 +22,7 @@ export const metadata: Metadata = {
   ],
   openGraph: {
     title: "Temporal Mycelium — Time-Travel Security Intelligence | ClawGuru",
-    description: "ClawGuru ist die KI-gestützte SecOps-Plattform mit über 4,2 Millionen ausführbaren Runbooks – für Incident Response, Hardening und Compliance in Echtzeit. Vom Problem zum Fix in unter 30 Sekunden.",
+    description: `ClawGuru ist die KI-gestützte SecOps-Plattform mit über ${RUNBOOK_COUNT_LONG_DE} ausführbaren Runbooks – für Incident Response, Hardening und Compliance in Echtzeit. Vom Problem zum Fix in unter 30 Sekunden.`,
     type: "website",
     url: `${BASE_URL}/temporal`,
     images: [{
@@ -34,7 +35,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Temporal Mycelium — Time-Travel Security Intelligence | ClawGuru",
-    description: "ClawGuru ist die KI-gestützte SecOps-Plattform mit über 4,2 Millionen ausführbaren Runbooks – für Incident Response, Hardening und Compliance in Echtzeit. Vom Problem zum Fix in unter 30 Sekunden.",
+    description: `ClawGuru ist die KI-gestützte SecOps-Plattform mit über ${RUNBOOK_COUNT_LONG_DE} ausführbaren Runbooks – für Incident Response, Hardening und Compliance in Echtzeit. Vom Problem zum Fix in unter 30 Sekunden.`,
     images: [`${BASE_URL}/og/temporal.png`]
   },
   alternates: { canonical: "/temporal" },
@@ -47,7 +48,7 @@ const organizationJsonLd = {
   url: BASE_URL,
   logo: `${BASE_URL}/favicon-512.png`,
   foundingDate: "2024",
-  description: "ClawGuru ist die KI-gestützte SecOps-Plattform mit über 4,2 Millionen ausführbaren Runbooks – für Incident Response, Hardening und Compliance in Echtzeit. Vom Problem zum Fix in unter 30 Sekunden.",
+  description: `ClawGuru ist die KI-gestützte SecOps-Plattform mit über ${RUNBOOK_COUNT_LONG_DE} ausführbaren Runbooks – für Incident Response, Hardening und Compliance in Echtzeit. Vom Problem zum Fix in unter 30 Sekunden.`,
   sameAs: [
     "https://github.com/clawguru",
   ],

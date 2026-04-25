@@ -8,6 +8,7 @@ import AuthorBox from "@/components/seo/AuthorBox"
 import LastUpdated from "@/components/seo/LastUpdated"
 import { buildAuthoredArticleSchema } from "@/lib/seo/author"
 import { pick } from "@/lib/i18n-pick"
+import { RUNBOOK_COUNT_SHORT_EN } from "@/lib/stats"
 
 interface PageProps { params: { lang: string } }
 
@@ -25,7 +26,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const isDE = locale === "de"
   const pageUrl = `${SITE_URL}/${locale}${PATH}`
   const title = pick(isDE, "White-Label Security Platform für MSPs | ClawGuru", "White-Label Security Platform for MSPs | ClawGuru")
-  const description = pick(isDE, "Verkaufe Security an deine Kunden unter deiner Marke. 4.2M+ Runbooks, Branded Trust-Pages, Multi-Client-Dashboard. Revenue-Share ab 30%.", "Sell security to your clients under your brand. 4.2M+ runbooks, branded trust pages, multi-client dashboard. Revenue share from 30%.")
+  const description = pick(isDE, `Verkaufe Security an deine Kunden unter deiner Marke. ${RUNBOOK_COUNT_SHORT_EN}+ Runbooks, Branded Trust-Pages, Multi-Client-Dashboard. Revenue-Share ab 30%.`, `Sell security to your clients under your brand. ${RUNBOOK_COUNT_SHORT_EN}+ runbooks, branded trust pages, multi-client dashboard. Revenue share from 30%.`)
   return {
     title,
     description,
@@ -68,7 +69,7 @@ const getSolutions = (isDE: boolean) => [
   },
   {
     icon: Shield,
-    title: pick(isDE, "4.2M+ Runbooks sofort verfügbar", "4.2M+ runbooks available instantly"),
+    title: pick(isDE, `${RUNBOOK_COUNT_SHORT_EN}+ Runbooks sofort verfügbar`, `${RUNBOOK_COUNT_SHORT_EN}+ runbooks available instantly`),
     desc: pick(isDE, "Keine Inhalte erstellen — sofort skalieren. Expert-reviewed. Täglich aktualisiert. Du verkaufst, wir pflegen.", "No content to create — scale immediately. Expert-reviewed. Daily updates. You sell, we maintain."),
   },
   {
@@ -86,7 +87,7 @@ const getSolutions = (isDE: boolean) => [
 const getProof = (isDE: boolean) => [
   { metric: "30%+", label: pick(isDE, "Revenue-Share für dich", "Revenue share to you") },
   { metric: "14d", label: pick(isDE, "White-Label-Onboarding", "White-label onboarding") },
-  { metric: "4.2M+", label: pick(isDE, "Runbooks (täglich gepflegt)", "Runbooks (daily updated)") },
+  { metric: `${RUNBOOK_COUNT_SHORT_EN}+`, label: pick(isDE, "Runbooks (täglich gepflegt)", "Runbooks (daily updated)") },
   { metric: "∞", label: pick(isDE, "Kunden, keine Seat-Limits", "Clients, no seat limits") },
 ]
 
@@ -99,7 +100,7 @@ export default function ForMspsPage({ params }: PageProps) {
 
   const articleSchema = buildAuthoredArticleSchema({
     headline: pick(isDE, "White-Label Security Platform für MSPs", "White-Label Security Platform for MSPs"),
-    description: pick(isDE, "Verkaufe Security unter deiner Marke. 4.2M+ Runbooks, Branded Trust-Pages, Multi-Client-Dashboard, Revenue-Share ab 30%.", "Sell security under your brand. 4.2M+ runbooks, branded trust pages, multi-client dashboard, revenue share from 30%."),
+    description: pick(isDE, `Verkaufe Security unter deiner Marke. ${RUNBOOK_COUNT_SHORT_EN}+ Runbooks, Branded Trust-Pages, Multi-Client-Dashboard, Revenue-Share ab 30%.`, `Sell security under your brand. ${RUNBOOK_COUNT_SHORT_EN}+ runbooks, branded trust pages, multi-client dashboard, revenue share from 30%.`),
     url: `${SITE_URL}/${locale}${PATH}`,
     datePublished: PUBLISHED,
     dateModified: MODIFIED,
@@ -130,7 +131,7 @@ export default function ForMspsPage({ params }: PageProps) {
           </h1>
           <LastUpdated date={MODIFIED} publishedDate={PUBLISHED} showPublished locale={locale} className="mb-4" />
           <p className="text-lg text-gray-300 max-w-3xl mb-6">
-            {pick(isDE, "4.2M+ Expert-Reviewed Runbooks, Multi-Client-Dashboard, Branded Trust-Pages. Revenue-Share statt Seat-Limit. Onboarding in 14 Tagen.", "4.2M+ expert-reviewed runbooks, multi-client dashboard, branded trust pages. Revenue share instead of seat limits. Onboarding in 14 days.")}
+            {pick(isDE, `${RUNBOOK_COUNT_SHORT_EN}+ Expert-Reviewed Runbooks, Multi-Client-Dashboard, Branded Trust-Pages. Revenue-Share statt Seat-Limit. Onboarding in 14 Tagen.`, `${RUNBOOK_COUNT_SHORT_EN}+ expert-reviewed runbooks, multi-client dashboard, branded trust pages. Revenue share instead of seat limits. Onboarding in 14 days.`)}
           </p>
           <div className="flex flex-col sm:flex-row gap-3">
             <BookingButton
@@ -248,7 +249,7 @@ export default function ForMspsPage({ params }: PageProps) {
               <div className="text-4xl font-black text-purple-300 mb-1">€990</div>
               <div className="text-xs text-gray-400 mb-4">{pick(isDE, "/Monat · bis 25 Clients", "/month · up to 25 clients")}</div>
               <ul className="space-y-2 text-sm text-gray-300 mb-6">
-                <li className="flex items-start gap-2"><Check className="h-4 w-4 text-purple-400 mt-0.5 shrink-0" />{pick(isDE, "Alle 4.2M Runbooks", "All 4.2M runbooks")}</li>
+                <li className="flex items-start gap-2"><Check className="h-4 w-4 text-purple-400 mt-0.5 shrink-0" />{pick(isDE, `Alle ${RUNBOOK_COUNT_SHORT_EN} Runbooks`, `All ${RUNBOOK_COUNT_SHORT_EN} runbooks`)}</li>
                 <li className="flex items-start gap-2"><Check className="h-4 w-4 text-purple-400 mt-0.5 shrink-0" />{pick(isDE, "Basis-Branding (Logo + Farbe)", "Basic branding (logo + color)")}</li>
                 <li className="flex items-start gap-2"><Check className="h-4 w-4 text-purple-400 mt-0.5 shrink-0" />{pick(isDE, "Multi-Client-Dashboard", "Multi-client dashboard")}</li>
                 <li className="flex items-start gap-2"><Check className="h-4 w-4 text-purple-400 mt-0.5 shrink-0" />{pick(isDE, "Email-Support", "Email support")}</li>

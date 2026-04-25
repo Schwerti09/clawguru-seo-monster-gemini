@@ -8,6 +8,7 @@ import MyceliumShareCard from "@/components/share/MyceliumShareCard"
 import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
 import { getDictionary } from "@/lib/getDictionary"
 import { BASE_URL } from "@/lib/config"
+import { RUNBOOK_COUNT_LONG_DE } from "@/lib/stats"
  
 export const dynamic = "force-static"
 export const revalidate = 3600
@@ -75,7 +76,7 @@ export default async function MyceliumPage() {
     url: BASE_URL,
     logo: `${BASE_URL}/favicon-512.png`,
     foundingDate: '2024',
-    description: 'ClawGuru ist die KI-gestützte SecOps-Plattform mit über 4,2 Millionen ausführbaren Runbooks – für Incident Response, Hardening und Compliance in Echtzeit. Vom Problem zum Fix in unter 30 Sekunden.',
+    description: `ClawGuru ist die KI-gestützte SecOps-Plattform mit über ${RUNBOOK_COUNT_LONG_DE} ausführbaren Runbooks – für Incident Response, Hardening und Compliance in Echtzeit. Vom Problem zum Fix in unter 30 Sekunden.`,
     sameAs: [
       'https://github.com/clawguru',
     ],

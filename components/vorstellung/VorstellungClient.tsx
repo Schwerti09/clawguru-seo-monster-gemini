@@ -6,7 +6,7 @@ import dynamic from "next/dynamic"
 import React, { Suspense, useEffect, useMemo, useRef, useState } from "react"
 import { usePathname } from "next/navigation"
 import { motion, useReducedMotion } from "framer-motion"
-import { STATS } from "@/lib/stats"
+import { STATS, RUNBOOK_COUNT_SHORT_DE } from "@/lib/stats"
 import GuidedSpotlightTour, { type GuidedTourStep } from "@/components/onboarding/GuidedSpotlightTour"
 
 class ErrorBoundary extends React.Component<{ fallback?: React.ReactNode; children?: React.ReactNode }, { hasError: boolean }> {
@@ -204,7 +204,7 @@ export default function VorstellungClient({ dict }: { dict?: any }) {
     : [
         { y: "2026", t: "ClawGuru Launch", d: "Public launch mit Ops‑Intel & Copilot" },
         { y: "2026 Q1", t: "Mycelium v3", d: "Neues UI, Performance, Embed‑Modus" },
-        { y: "2026 Q2", t: "3,4 Mio Runbooks", d: "Massives Vault‑Upgrade & Qualitätssiegel" },
+        { y: "2026 Q2", t: `${RUNBOOK_COUNT_SHORT_DE} Runbooks`, d: "Massives Vault‑Upgrade & Qualitätssiegel" },
       ]
   const trustedLogos = Array.isArray((dict as any)?.trustedLogos)
     ? ((dict as any).trustedLogos as string[])

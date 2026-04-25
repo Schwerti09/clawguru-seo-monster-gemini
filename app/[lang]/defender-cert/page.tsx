@@ -7,6 +7,7 @@ import AuthorBox from "@/components/seo/AuthorBox"
 import LastUpdated from "@/components/seo/LastUpdated"
 import { buildAuthoredArticleSchema } from "@/lib/seo/author"
 import { pick } from "@/lib/i18n-pick"
+import { RUNBOOK_COUNT_SHORT_EN } from "@/lib/stats"
 
 interface PageProps { params: { lang: string } }
 
@@ -127,7 +128,7 @@ const getBenefits = (isDE: boolean) => [
   },
   {
     icon: BookOpen,
-    title: pick(isDE, "Zugang zu 4.2M+ Runbooks", "Access to 4.2M+ runbooks"),
+    title: pick(isDE, `Zugang zu ${RUNBOOK_COUNT_SHORT_EN}+ Runbooks`, `Access to ${RUNBOOK_COUNT_SHORT_EN}+ runbooks`),
     desc: pick(isDE, "Alle Teilnehmer erhalten 6 Monate kostenlosen Pro-Zugang zum ClawGuru-Runbook-Katalog für die Prüfungsvorbereitung.", "All candidates get 6 months of free Pro access to the ClawGuru runbook catalog for exam preparation."),
   },
   {

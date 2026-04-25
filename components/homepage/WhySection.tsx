@@ -1,3 +1,5 @@
+import { RUNBOOK_COUNT_LONG_EN } from "@/lib/stats"
+
 type Props = { dict?: Record<string, string> }
 
 export default function WhySection({ dict = {} }: Props) {
@@ -8,7 +10,7 @@ export default function WhySection({ dict = {} }: Props) {
     },
     {
       title: dict.why_r2_title || "Scalable knowledge",
-      desc: dict.why_r2_desc || "4.2 million runbooks grow with every new requirement. Your knowledge scales automatically.",
+      desc: dict.why_r2_desc || `${RUNBOOK_COUNT_LONG_EN} runbooks grow with every new requirement. Your knowledge scales automatically.`,
     },
     {
       title: dict.why_r3_title || "Verifiable security",

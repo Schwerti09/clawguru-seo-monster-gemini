@@ -3,6 +3,7 @@ import type { Metadata } from "next"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
 import LiveRootPage from "@/app/live/page"
 import { BASE_URL } from "@/lib/config"
+import { RUNBOOK_COUNT_SHORT_EN } from "@/lib/stats"
 
 export const revalidate = 60
 
@@ -18,7 +19,7 @@ export async function generateMetadata(props: { params: { lang: string } }): Pro
     "@context": "https://schema.org",
     "@type": "ImageObject",
     contentUrl: `${BASE_URL}/og/live.png`,
-    description: "ClawGuru Live Ops Cockpit - 4.2M+ Runbooks, Top 100 Hot Threats, 24/7 Live",
+    description: `ClawGuru Live Ops Cockpit - ${RUNBOOK_COUNT_SHORT_EN}+ Runbooks, Top 100 Hot Threats, 24/7 Live`,
     author: {
       "@type": "Organization",
       name: "ClawGuru",
@@ -30,23 +31,23 @@ export async function generateMetadata(props: { params: { lang: string } }): Pro
 
   return {
     title: "Live Ops Cockpit — Echtzeit-Überwachung | ClawGuru",
-    description: "Echtzeit-Überwachung deiner Systeme und Bedrohungslandschaft. 4.2M+ Runbooks generierbar, Top 100 hot + trending threats, Live Pulse.",
+    description: `Echtzeit-Überwachung deiner Systeme und Bedrohungslandschaft. ${RUNBOOK_COUNT_SHORT_EN}+ Runbooks generierbar, Top 100 hot + trending threats, Live Pulse.`,
     openGraph: {
       title: "Live Ops Cockpit — Echtzeit-Überwachung | ClawGuru",
-      description: "Echtzeit-Überwachung deiner Systeme und Bedrohungslandschaft. 4.2M+ Runbooks generierbar, Top 100 hot + trending threats.",
+      description: `Echtzeit-Überwachung deiner Systeme und Bedrohungslandschaft. ${RUNBOOK_COUNT_SHORT_EN}+ Runbooks generierbar, Top 100 hot + trending threats.`,
       type: "website",
       url: `${BASE_URL}/${locale}/live`,
       images: [{
         url: `${BASE_URL}/og/live.png`,
         width: 1200,
         height: 630,
-        alt: "ClawGuru Live Ops Cockpit - 4.2M+ Runbooks, Top 100 Hot Threats, 24/7 Live"
+        alt: `ClawGuru Live Ops Cockpit - ${RUNBOOK_COUNT_SHORT_EN}+ Runbooks, Top 100 Hot Threats, 24/7 Live`
       }]
     },
     twitter: {
       card: "summary_large_image",
       title: "Live Ops Cockpit — Echtzeit-Überwachung | ClawGuru",
-      description: "Echtzeit-Überwachung deiner Systeme und Bedrohungslandschaft. 4.2M+ Runbooks generierbar, Top 100 hot + trending threats.",
+      description: `Echtzeit-Überwachung deiner Systeme und Bedrohungslandschaft. ${RUNBOOK_COUNT_SHORT_EN}+ Runbooks generierbar, Top 100 hot + trending threats.`,
       images: [`${BASE_URL}/og/live.png`]
     },
     alternates: buildLocalizedAlternates(locale, "/live"),

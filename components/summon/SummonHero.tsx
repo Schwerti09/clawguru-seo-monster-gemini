@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import SocialProofCounter from "@/components/marketing/SocialProofCounter"
+import { RUNBOOK_COUNT_LONG_DE, RUNBOOK_COUNT_SHORT_EN } from "@/lib/stats"
 
 export default function SummonHero({ prefix = "", dict }: { prefix?: string; dict?: any }) {
   const [rbCount, setRbCount] = useState<number | null>(null)
@@ -28,13 +29,13 @@ export default function SummonHero({ prefix = "", dict }: { prefix?: string; dic
           Claw Swarm Oracle – Summon
         </h1>
         <p className="mt-4 text-gray-300 text-base sm:text-lg max-w-2xl mx-auto">
-          ClawGuru ist die KI-gestützte SecOps-Plattform mit über 4,2 Millionen ausführbaren Runbooks – für Incident Response, Hardening und Compliance in Echtzeit. Vom Problem zum Fix in unter 30 Sekunden.
+          ClawGuru ist die KI-gestützte SecOps-Plattform mit über {RUNBOOK_COUNT_LONG_DE} ausführbaren Runbooks – für Incident Response, Hardening und Compliance in Echtzeit. Vom Problem zum Fix in unter 30 Sekunden.
         </p>
 
         {/* Stats Bar */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-8 mb-6">
           <div className="bg-gray-800 border border-gray-700 rounded-xl p-4 text-center">
-            <div className="text-2xl font-black text-cyan-400">4.2M+</div>
+            <div className="text-2xl font-black text-cyan-400">{RUNBOOK_COUNT_SHORT_EN}+</div>
             <div className="text-xs text-gray-400 mt-1">Runbooks</div>
           </div>
           <div className="bg-gray-800 border border-gray-700 rounded-xl p-4 text-center">

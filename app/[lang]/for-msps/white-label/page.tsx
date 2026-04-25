@@ -8,6 +8,7 @@ import AuthorBox from "@/components/seo/AuthorBox"
 import LastUpdated from "@/components/seo/LastUpdated"
 import { buildAuthoredArticleSchema } from "@/lib/seo/author"
 import { pick } from "@/lib/i18n-pick"
+import { RUNBOOK_COUNT_SHORT_EN } from "@/lib/stats"
 
 interface PageProps { params: { lang: string } }
 
@@ -46,7 +47,7 @@ const getPricingTiers = (isDE: boolean) => [
     limit: pick(isDE, "bis 25 Clients", "up to 25 clients"),
     badge: null,
     features: [
-      pick(isDE, "Alle 4.2M+ Runbooks", "All 4.2M+ runbooks"),
+      pick(isDE, `Alle ${RUNBOOK_COUNT_SHORT_EN}+ Runbooks`, `All ${RUNBOOK_COUNT_SHORT_EN}+ runbooks`),
       pick(isDE, "Basis-Branding (Logo + Farbe)", "Basic branding (logo + color)"),
       pick(isDE, "Multi-Client-Dashboard", "Multi-client dashboard"),
       pick(isDE, "Email-Support (48h)", "Email support (48h)"),
@@ -69,7 +70,7 @@ const getPricingTiers = (isDE: boolean) => [
     limit: pick(isDE, "bis 100 Clients", "up to 100 clients"),
     badge: pick(isDE, "BELIEBT", "POPULAR"),
     features: [
-      pick(isDE, "Alle 4.2M+ Runbooks", "All 4.2M+ runbooks"),
+      pick(isDE, `Alle ${RUNBOOK_COUNT_SHORT_EN}+ Runbooks`, `All ${RUNBOOK_COUNT_SHORT_EN}+ runbooks`),
       pick(isDE, "Full-Branding (Logo + Farbe + Domain)", "Full branding (logo + color + domain)"),
       pick(isDE, "Multi-Client-Dashboard", "Multi-client dashboard"),
       pick(isDE, "Priority-Support (24h)", "Priority support (24h)"),
@@ -93,7 +94,7 @@ const getPricingTiers = (isDE: boolean) => [
     limit: pick(isDE, "unlimited Clients", "unlimited clients"),
     badge: pick(isDE, "ENTERPRISE", "ENTERPRISE"),
     features: [
-      pick(isDE, "Alle 4.2M+ Runbooks", "All 4.2M+ runbooks"),
+      pick(isDE, `Alle ${RUNBOOK_COUNT_SHORT_EN}+ Runbooks`, `All ${RUNBOOK_COUNT_SHORT_EN}+ runbooks`),
       pick(isDE, "Full-White-Label (eigene Domain + Brand)", "Full white-label (your domain + brand)"),
       pick(isDE, "Multi-Client-Dashboard", "Multi-client dashboard"),
       pick(isDE, "Dedicated Partner Manager", "Dedicated partner manager"),
@@ -128,7 +129,7 @@ const getComparisonData = (isDE: boolean) => [
     fullResell: true,
   },
   {
-    feature: pick(isDE, "4.2M+ Runbooks", "4.2M+ runbooks"),
+    feature: pick(isDE, `${RUNBOOK_COUNT_SHORT_EN}+ Runbooks`, `${RUNBOOK_COUNT_SHORT_EN}+ runbooks`),
     selfBranded: true,
     whiteLabel: true,
     fullResell: true,

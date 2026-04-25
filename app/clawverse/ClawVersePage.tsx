@@ -6,6 +6,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react"
 import SocialProofCounter from "@/components/marketing/SocialProofCounter"
+import { RUNBOOK_COUNT_LONG_DE } from "@/lib/stats"
 
 /* ── Quantum Void colour system ── */
 const QV = {
@@ -504,7 +505,7 @@ export default function ClawVersePage() {
                   },
                   {
                     title: "Expertise",
-                    desc: "4,2 Millionen AI-generierte Runbooks, die auf realen Incident-Response-Szenarien basieren. Jeder Guide ist getestet und validiert.",
+                    desc: `${RUNBOOK_COUNT_LONG_DE} AI-generierte Runbooks, die auf realen Incident-Response-Szenarien basieren. Jeder Guide ist getestet und validiert.`,
                     color: QV.violet,
                   },
                   {

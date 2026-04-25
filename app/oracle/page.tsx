@@ -3,10 +3,11 @@
 
 import type { Metadata } from "next"
 import OracleClient from "./OracleClient"
+import { RUNBOOK_COUNT_LONG_DE, RUNBOOK_COUNT_SHORT_EN } from "@/lib/stats"
 
 const SITE_URL = "https://clawguru.org"
 const PAGE_TITLE = "The Oracle | ClawGuru COSMIC INTELLIGENCE"
-const PAGE_DESC = "ClawGuru ist die KI-gestützte SecOps-Plattform mit über 4,2 Millionen ausführbaren Runbooks – für Incident Response, Hardening und Compliance in Echtzeit. Vom Problem zum Fix in unter 30 Sekunden. Ask the Mycelium. Get answers from 4.2M+ nodes of collective security consciousness."
+const PAGE_DESC = `ClawGuru ist die KI-gestützte SecOps-Plattform mit über ${RUNBOOK_COUNT_LONG_DE} ausführbaren Runbooks – für Incident Response, Hardening und Compliance in Echtzeit. Vom Problem zum Fix in unter 30 Sekunden. Ask the Mycelium. Get answers from ${RUNBOOK_COUNT_SHORT_EN}+ nodes of collective security consciousness.`
 
 export const metadata: Metadata = {
   title: PAGE_TITLE,

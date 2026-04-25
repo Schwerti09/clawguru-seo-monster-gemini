@@ -8,6 +8,7 @@ import AuthorBox from "@/components/seo/AuthorBox"
 import LastUpdated from "@/components/seo/LastUpdated"
 import { buildAuthoredArticleSchema } from "@/lib/seo/author"
 import { pick } from "@/lib/i18n-pick"
+import { RUNBOOK_COUNT_SHORT_EN } from "@/lib/stats"
 
 interface PageProps { params: { lang: string } }
 
@@ -87,7 +88,7 @@ const getProof = (isDE: boolean) => [
   { metric: "90d", label: pick(isDE, "Audit-Ready statt 9 Monate", "Audit-ready vs 9 months") },
   { metric: "€50k+", label: pick(isDE, "Gespart vs interne SOC 2", "Saved vs internal SOC 2") },
   { metric: "47", label: pick(isDE, "Runbooks Multi-Tenant", "Runbooks multi-tenant") },
-  { metric: "4.2M+", label: pick(isDE, "Expert-Reviewed Runbooks total", "Expert-reviewed runbooks total") },
+  { metric: `${RUNBOOK_COUNT_SHORT_EN}+`, label: pick(isDE, "Expert-Reviewed Runbooks total", "Expert-reviewed runbooks total") },
 ]
 
 export default function ForSaasPage({ params }: PageProps) {

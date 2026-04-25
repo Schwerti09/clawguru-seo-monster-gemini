@@ -72,5 +72,9 @@ describe("GET /api/admin/profit-analytics", () => {
     expect(["info", "warn", "page"]).toContain(body.funnel.consultHealth.routing.severity)
     expect(["none", "slack", "pagerduty"]).toContain(body.funnel.consultHealth.routing.action)
     expect(Array.isArray(body.funnel.consultHealth.alertFlags)).toBe(true)
+    expect(body.funnel.consultHealth.webhooksConfigured).toEqual({
+      warnWebhookConfigured: false,
+      pageWebhookConfigured: false,
+    })
   })
 })

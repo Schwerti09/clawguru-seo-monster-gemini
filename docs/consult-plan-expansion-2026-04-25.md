@@ -304,6 +304,21 @@ Structured consult health diagnostics so operators can see explicit alert flags 
 - Tests
   - `__tests__/profit-funnel.test.ts` — default fixture asserts `info`/`none` with checkout pressure only; second case asserts `warn`/`slack` when concentration + checkout pressure both flag.
 
+## Consult health outbound webhooks (2026-04-25)
+
+When consult routing is **warn** or **page**, the server can POST to optional webhooks (fire-and-forget) so ops channels get signal without polling the dashboard.
+
+- `lib/consult-health-notify.ts`
+  - `maybeNotifyConsultHealthAlerts(health, { generatedAt })` — no-op for `info`; otherwise resolves URL by severity:
+    - **warn:** `CONSULT_HEALTH_WARN_WEBHOOK_URL` or legacy `CONSULT_HEALTH_SLACK_WEBHOOK_URL`
+    - **page:** `CONSULT_HEALTH_PAGE_WEBHOOK_URL` or legacy `CONSULT_HEALTH_PAGERDUTY_WEBHOOK_URL`
+  - **Cooldown:** default 1 hour per alert fingerprint (`severity` + sorted flags + rounded score). Override with `CONSULT_HEALTH_ALERT_COOLDOWN_MS` (minimum 60_000).
+  - **Payload:** URLs containing `hooks.slack.com` receive Slack incoming format `{ "text": "..." }`. Other URLs receive a small JSON envelope (`source`, `severity`, `alert`, `flags`, `score`, …).
+- `app/api/admin/profit-analytics/route.ts`
+  - After building the funnel, calls `maybeNotifyConsultHealthAlerts` so each authenticated poll can trigger at most one outbound post per cooldown when routing is warn/page.
+  - Response augments `consultHealth.webhooksConfigured` so the dashboard shows whether warn/page URLs are set (no secrets exposed).
+- `__tests__/consult-health-notify.test.ts` — unit coverage for no-op, Slack payload, generic JSON, and cooldown reset.
+
 ## Operational Notes
 
 - `BookingButton` remains env-driven (`NEXT_PUBLIC_CAL_*_URL`) with mail fallback, so no deployment break if Cal URLs are missing.

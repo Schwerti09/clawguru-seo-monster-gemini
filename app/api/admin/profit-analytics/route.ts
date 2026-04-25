@@ -9,6 +9,10 @@ import { adminCookieName, verifyAdminToken } from "@/lib/admin-auth"
 import { stripe } from "@/lib/stripe"
 import { getEndpointCounts, getTopIps, getActiveBlocks } from "@/lib/api-usage"
 import { getCheckFunnelSnapshotPersistent } from "@/lib/check-funnel"
+import {
+  consultHealthWebhookEnvSnapshot,
+  maybeNotifyConsultHealthAlerts,
+} from "@/lib/consult-health-notify"
 import { buildProfitFunnel } from "@/lib/profit-funnel"
 import { evaluateRetentionSignals } from "@/lib/autopilot-retention"
 
@@ -181,7 +185,17 @@ export async function GET() {
   const margins = computeMargins(endpointCounts)
   const topIps = getTopIps(10)
   const activeBlocks = getActiveBlocks()
-  const funnel = await conversionFunnel(stripeMetrics)
+  const generatedAt = new Date().toISOString()
+  const funnelBase = await conversionFunnel(stripeMetrics)
+  maybeNotifyConsultHealthAlerts(funnelBase.consultHealth, { generatedAt })
+  const webhookCfg = consultHealthWebhookEnvSnapshot()
+  const funnel = {
+    ...funnelBase,
+    consultHealth: {
+      ...funnelBase.consultHealth,
+      webhooksConfigured: webhookCfg,
+    },
+  }
   const retention = evaluateRetentionSignals({
     pricingClicks24h: funnel.pricingClicks,
     checkoutStarts24h: funnel.checkoutStarted,
@@ -195,7 +209,7 @@ export async function GET() {
     : null
 
   return NextResponse.json({
-    generatedAt: new Date().toISOString(),
+    generatedAt,
     stripe: stripeMetrics,
     apiUsage: {
       endpointCounts,

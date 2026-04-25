@@ -113,6 +113,10 @@ type DashData = {
         reason: string
       }
       reasons: string[]
+      webhooksConfigured?: {
+        warnWebhookConfigured: boolean
+        pageWebhookConfigured: boolean
+      }
     }
     checkoutCompleted: number
     rates: {
@@ -445,6 +449,19 @@ function ConversionFunnel({ funnel }: { funnel: DashData["funnel"] }) {
           </span>
         </div>
         <div className="text-xs text-gray-400 mb-2">{consultHealth.routing.reason}</div>
+        {consultHealth.webhooksConfigured && (
+          <div className="text-xs text-gray-500 mb-2">
+            Outbound webhooks: warn{" "}
+            <span className="text-cyan-300 font-bold">
+              {consultHealth.webhooksConfigured.warnWebhookConfigured ? "on" : "off"}
+            </span>
+            {" · "}
+            page{" "}
+            <span className="text-cyan-300 font-bold">
+              {consultHealth.webhooksConfigured.pageWebhookConfigured ? "on" : "off"}
+            </span>
+          </div>
+        )}
         <div className="grid sm:grid-cols-2 gap-2 text-xs">
           {consultHealth.reasons.map((reason) => (
             <div key={reason} className="rounded-lg border border-gray-800 px-2 py-1 text-gray-400">

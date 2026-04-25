@@ -345,12 +345,11 @@ export default function ConsultingPage({ params }: PageProps) {
             <p className="text-sm text-cyan-200/70 mb-4">
               {pick(isDE, "Starte mit einem automatisierten Security-Baseline-Setup und skaliere über klare Product-Tiers.", "Start with an automated security baseline and scale through clear product tiers.")}
             </p>
-            <BookingButton
-              type="strategy"
+            <BuyButton
+              product={mapAutopilotPlanToCheckoutProduct("starter")}
               label={pick(isDE, "Autopilot-Setup starten", "Start autopilot setup")}
-              locale={locale}
-              source="consulting_bottom_cta"
-              variant="primary"
+              analyticsSource="consulting_bottom_cta"
+              className="inline-flex items-center justify-center px-6 py-3 rounded-lg font-semibold bg-gradient-to-r from-cyan-500 to-cyan-400 text-black shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/40 hover:scale-[1.02] transition-all"
             />
           </div>
         </section>

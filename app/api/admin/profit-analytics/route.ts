@@ -9,7 +9,7 @@ import { adminCookieName, verifyAdminToken } from "@/lib/admin-auth"
 import { stripe } from "@/lib/stripe"
 import { getEndpointCounts, getTopIps, getActiveBlocks } from "@/lib/api-usage"
 import { getCheckFunnelSnapshotPersistent } from "@/lib/check-funnel"
-import { buildConsultSourceSnapshot } from "@/lib/consult-funnel"
+import { buildProfitFunnel } from "@/lib/profit-funnel"
 import { evaluateRetentionSignals } from "@/lib/autopilot-retention"
 
 export const runtime = "nodejs"
@@ -154,48 +154,8 @@ function computeAlert(totalCostUsd: number, netTodayCents: number) {
 // ---------------------------------------------------------------------------
 async function conversionFunnel(stripeMetrics: Awaited<ReturnType<typeof fetchStripeMetrics>> | null) {
   const check = await getCheckFunnelSnapshotPersistent()
-  const safeRate = (num: number, den: number) => (den > 0 ? Math.round((num / den) * 1000) / 10 : 0)
-
-  const checkoutStarted = check.checkoutStarts24h
-  const checkoutRedirected = check.checkoutRedirects24h
-  const checkoutErrors = check.checkoutErrors24h
-  const bookingClicks = check.bookingClicks24h
-  const consultingBookingClicks = check.consultingBookingClicks24h
   const checkoutCompleted = stripeMetrics?.daypassToday ?? 0
-  const consult = buildConsultSourceSnapshot({
-    pricingClicks: check.pricingClicks24h,
-    bookingClicks,
-    consultingBookingClicks,
-    bookingSources24h: check.bookingSources24h,
-  })
-
-  return {
-    landingPageViews: check.pageViews24h,
-    pricingClicks: check.pricingClicks24h,
-    checkoutStarted,
-    checkoutRedirected,
-    checkoutErrors,
-    bookingClicks,
-    consultingBookingClicks,
-    bookingSources24h: consult.bookingSources24hNormalized,
-    consultSourceCounts: consult.consultSourceCounts,
-    consultInsights: consult.insights,
-    checkoutCompleted,
-    rates: {
-      clickToCheckoutStartPct: safeRate(checkoutStarted, check.pricingClicks24h),
-      ...consult.rates,
-      checkoutStartToRedirectPct: safeRate(checkoutRedirected, checkoutStarted),
-      checkoutStartToCompletePct: safeRate(checkoutCompleted, checkoutStarted),
-      redirectToCompletePct: safeRate(checkoutCompleted, checkoutRedirected),
-      retentionNudgeCtrPct: safeRate(check.retentionNudgeClicks24h, check.retentionNudgeImpressions24h),
-    },
-    retentionNudges: {
-      impressions24h: check.retentionNudgeImpressions24h,
-      clicks24h: check.retentionNudgeClicks24h,
-      dismisses24h: check.retentionNudgeDismisses24h,
-    },
-    note: `24h: starts ${check.checkStarts24h}, results ${check.checkResults24h}, shares ${check.shareClicks24h}, methodology clicks ${check.methodikClicks24h}, hardening link clicks ${check.hardeningClicks24h}, bookings ${bookingClicks} (${consultingBookingClicks} consult/enterprise sources).`,
-  }
+  return buildProfitFunnel(check, checkoutCompleted)
 }
 
 // ---------------------------------------------------------------------------

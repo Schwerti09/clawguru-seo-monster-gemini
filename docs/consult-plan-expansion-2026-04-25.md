@@ -216,6 +216,21 @@ Added a small hardening pass for source data quality and improved dashboard read
 - `__tests__/consult-funnel.test.ts`
   - added normalization contract test for duplicate and malformed rows
 
+## Funnel contract test follow-up (2026-04-25)
+
+Added a dedicated, testable funnel contract builder so route-level changes do not silently break consult analytics shape.
+
+- `lib/profit-funnel.ts`
+  - New `buildProfitFunnel(...)` helper:
+    - computes the full funnel payload (rates, consult counts, insights, notes)
+    - consumes normalized consult snapshot from `lib/consult-funnel.ts`
+- `app/api/admin/profit-analytics/route.ts`
+  - `conversionFunnel(...)` now delegates to `buildProfitFunnel(...)`
+- `__tests__/profit-funnel.test.ts`
+  - Adds contract test for key consult analytics fields and rate outputs.
+
+This improves maintainability and catches payload drift before it reaches the admin dashboard.
+
 ## Route compatibility follow-up (2026-04-25)
 
 Added a compatibility redirect for users hitting the legacy consult slug.

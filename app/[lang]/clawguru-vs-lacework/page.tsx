@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import StackDescription from "@/components/marketing/StackDescription"
 
 interface PageProps { params: { lang: string } }
 
@@ -228,14 +229,7 @@ export default function ClawGuruVsLaceworkPage({ params }: PageProps) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <h3 className="font-bold text-cyan-400 mb-3">ClawGuru Architektur</h3>
-                <ul className="space-y-2 text-sm text-gray-300">
-                  <li>PostgreSQL + Supabase backend</li>
-                  <li>Next.js 14 frontend</li>
-                  <li>Custom CSPM rule engine</li>
-                  <li>Mycelium graph database</li>
-                  <li>Docker/Kubernetes deployment</li>
-                  <li>Multi-cloud connectors</li>
-                </ul>
+                <StackDescription locale="de" />
               </div>
               <div>
                 <h3 className="font-bold text-cyan-400 mb-3">Lacework Architektur</h3>

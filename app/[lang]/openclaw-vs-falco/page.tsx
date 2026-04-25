@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import StackDescription from "@/components/marketing/StackDescription"
 
 interface PageProps { params: { lang: string } }
 
@@ -138,13 +139,7 @@ export default function OpenClawVsFalcoPage({ params }: PageProps) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <h3 className="font-bold text-cyan-400 mb-3">OpenClaw Architektur</h3>
-                <ul className="space-y-2 text-sm text-gray-300">
-                  <li>PostgreSQL + Supabase Backend</li>
-                  <li>Benutzerdefinierte Security-Rule-Engine</li>
-                  <li>Mycelium Graph-Datenbank</li>
-                  <li>Docker/Kubernetes-Deployment</li>
-                  <li>Multi-Cloud-Orchestrierung</li>
-                </ul>
+                <StackDescription locale="de" />
               </div>
               <div>
                 <h3 className="font-bold text-orange-300 mb-3">Falco Architektur</h3>

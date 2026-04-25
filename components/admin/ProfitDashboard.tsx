@@ -117,6 +117,14 @@ type DashData = {
         warnWebhookConfigured: boolean
         pageWebhookConfigured: boolean
       }
+      notifyTelemetry?: {
+        attempted: number
+        sent: number
+        failed: number
+        skippedInfo: number
+        skippedNoWebhook: number
+        skippedCooldown: number
+      }
     }
     checkoutCompleted: number
     rates: {
@@ -460,6 +468,16 @@ function ConversionFunnel({ funnel }: { funnel: DashData["funnel"] }) {
             <span className="text-cyan-300 font-bold">
               {consultHealth.webhooksConfigured.pageWebhookConfigured ? "on" : "off"}
             </span>
+          </div>
+        )}
+        {consultHealth.notifyTelemetry && (
+          <div className="text-xs text-gray-500 mb-2">
+            Notify telemetry: attempted{" "}
+            <span className="text-cyan-300 font-bold">{consultHealth.notifyTelemetry.attempted}</span>
+            {" · "}sent <span className="text-cyan-300 font-bold">{consultHealth.notifyTelemetry.sent}</span>
+            {" · "}failed <span className="text-cyan-300 font-bold">{consultHealth.notifyTelemetry.failed}</span>
+            {" · "}cooldown skips{" "}
+            <span className="text-cyan-300 font-bold">{consultHealth.notifyTelemetry.skippedCooldown}</span>
           </div>
         )}
         <div className="grid sm:grid-cols-2 gap-2 text-xs">

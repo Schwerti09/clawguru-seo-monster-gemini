@@ -318,6 +318,12 @@ When consult routing is **warn** or **page**, the server can POST to optional we
   - After building the funnel, calls `maybeNotifyConsultHealthAlerts` so each authenticated poll can trigger at most one outbound post per cooldown when routing is warn/page.
   - Response augments `consultHealth.webhooksConfigured` so the dashboard shows whether warn/page URLs are set (no secrets exposed).
 - `__tests__/consult-health-notify.test.ts` — unit coverage for no-op, Slack payload, generic JSON, and cooldown reset.
+- `app/api/admin/profit-analytics/route.ts`
+  - Adds `consultHealth.notifyTelemetry` snapshot to dashboard payload (`attempted`, `sent`, `failed`, and skip counters).
+- `components/admin/ProfitDashboard.tsx`
+  - Consult Health panel now displays compact notify telemetry counters for quick delivery diagnostics.
+- `__tests__/profit-analytics-route.test.ts`
+  - Route contract now asserts telemetry shape in `consultHealth`.
 
 ## Consult health cron decoupling follow-up (2026-04-25)
 

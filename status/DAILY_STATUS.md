@@ -40,11 +40,12 @@
    - `vercel.json` cron added for `/api/consult-health/cron` (`*/15 * * * *`)
    - Netlify scheduled function wiring added (`netlify/functions/consult-health-cron.js` + `netlify.toml` schedule)
    - Env checklist updated with consult scheduler requirements.
+18. Added consult webhook delivery telemetry to admin analytics (`attempted`, `sent`, `failed`, `skipped*`) and surfaced counters in dashboard consult-health panel.
 
 ## 📌 Next (Consult Stream)
 
 1. Tune cooldown / fingerprint (e.g. include dominant source group) once real traffic patterns are observed.
-2. Add delivery telemetry for webhook outcomes (success/failure counters) in admin analytics.
+2. Add persistent (DB-backed) notify telemetry to survive restarts and support weekly trend charts.
 3. Extend consult-booking retention calibration once more production data is accumulated.
 
 ---

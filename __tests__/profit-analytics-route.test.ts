@@ -76,5 +76,12 @@ describe("GET /api/admin/profit-analytics", () => {
       warnWebhookConfigured: false,
       pageWebhookConfigured: false,
     })
+    expect(body.funnel.consultHealth.notifyTelemetry).toEqual(
+      expect.objectContaining({
+        attempted: expect.any(Number),
+        sent: expect.any(Number),
+        failed: expect.any(Number),
+      })
+    )
   })
 })

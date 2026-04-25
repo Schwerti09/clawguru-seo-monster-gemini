@@ -15,6 +15,14 @@ export type ConsultHealthForNotify = {
 }
 
 const lastSentMs = new Map<string, number>()
+const notifyStats = {
+  attempted: 0,
+  sent: 0,
+  failed: 0,
+  skippedInfo: 0,
+  skippedNoWebhook: 0,
+  skippedCooldown: 0,
+}
 
 function cooldownMs() {
   const raw = process.env.CONSULT_HEALTH_ALERT_COOLDOWN_MS
@@ -66,6 +74,12 @@ async function postJson(url: string, body: Record<string, unknown>) {
 /** Test helper: clears cooldown memory between Jest cases. */
 export function resetConsultHealthNotifyStateForTests() {
   lastSentMs.clear()
+  notifyStats.attempted = 0
+  notifyStats.sent = 0
+  notifyStats.failed = 0
+  notifyStats.skippedInfo = 0
+  notifyStats.skippedNoWebhook = 0
+  notifyStats.skippedCooldown = 0
 }
 
 /**
@@ -76,16 +90,26 @@ export function maybeNotifyConsultHealthAlerts(
   health: ConsultHealthForNotify,
   ctx: { generatedAt: string }
 ): void {
-  if (health.routing.severity === "info") return
+  if (health.routing.severity === "info") {
+    notifyStats.skippedInfo += 1
+    return
+  }
   const severity = health.routing.severity
   const url = resolveWebhookUrl(severity)
-  if (!url) return
+  if (!url) {
+    notifyStats.skippedNoWebhook += 1
+    return
+  }
 
   const key = fingerprint(health)
   const now = Date.now()
   const prev = lastSentMs.get(key) ?? 0
-  if (now - prev < cooldownMs()) return
+  if (now - prev < cooldownMs()) {
+    notifyStats.skippedCooldown += 1
+    return
+  }
   lastSentMs.set(key, now)
+  notifyStats.attempted += 1
 
   const text = buildText(health, ctx)
   const isSlackHost = url.includes("hooks.slack.com")
@@ -106,8 +130,10 @@ export function maybeNotifyConsultHealthAlerts(
           generatedAt: ctx.generatedAt,
         })
       }
+      notifyStats.sent += 1
     } catch {
       // Non-blocking: never break admin analytics on notify failures.
+      notifyStats.failed += 1
     }
   })()
 }
@@ -117,4 +143,8 @@ export function consultHealthWebhookEnvSnapshot() {
     warnWebhookConfigured: Boolean(resolveWebhookUrl("warn")),
     pageWebhookConfigured: Boolean(resolveWebhookUrl("page")),
   }
+}
+
+export function consultHealthNotifyTelemetrySnapshot() {
+  return { ...notifyStats }
 }

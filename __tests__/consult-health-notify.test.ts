@@ -1,4 +1,5 @@
 import {
+  consultHealthNotifyTelemetrySnapshot,
   maybeNotifyConsultHealthAlerts,
   resetConsultHealthNotifyStateForTests,
 } from "@/lib/consult-health-notify"
@@ -29,6 +30,7 @@ describe("consult health notify", () => {
     )
     await new Promise((r) => setTimeout(r, 15))
     expect(global.fetch).not.toHaveBeenCalled()
+    expect(consultHealthNotifyTelemetrySnapshot().skippedInfo).toBe(1)
   })
 
   it("posts Slack payload once and respects cooldown fingerprint", async () => {
@@ -44,6 +46,9 @@ describe("consult health notify", () => {
     maybeNotifyConsultHealthAlerts(health, ctx)
     await new Promise((r) => setTimeout(r, 25))
     expect(global.fetch).toHaveBeenCalledTimes(1)
+    expect(consultHealthNotifyTelemetrySnapshot().attempted).toBe(1)
+    expect(consultHealthNotifyTelemetrySnapshot().sent).toBe(1)
+    expect(consultHealthNotifyTelemetrySnapshot().skippedCooldown).toBe(1)
     const call = (global.fetch as jest.Mock).mock.calls[0]
     expect(call[0]).toContain("hooks.slack.com")
     expect(JSON.parse(call[1].body as string).text).toContain("ClawGuru consult health")
@@ -63,6 +68,24 @@ describe("consult health notify", () => {
     const body = JSON.parse((global.fetch as jest.Mock).mock.calls[0][1].body as string)
     expect(body.source).toBe("clawguru-consult-health")
     expect(body.severity).toBe("warn")
+  })
+
+  it("tracks failures in telemetry counters", async () => {
+    process.env.CONSULT_HEALTH_WARN_WEBHOOK_URL = "https://example.com/hooks/consult"
+    global.fetch = jest.fn(() => Promise.reject(new Error("network fail")))
+    maybeNotifyConsultHealthAlerts(
+      {
+        score: 55,
+        level: "watch",
+        alertFlags: ["checkout_error_pressure"],
+        routing: { severity: "warn", action: "slack", reason: "watch" },
+        reasons: ["elevated checkout error rate"],
+      },
+      ctx
+    )
+    await new Promise((r) => setTimeout(r, 25))
+    expect(consultHealthNotifyTelemetrySnapshot().attempted).toBe(1)
+    expect(consultHealthNotifyTelemetrySnapshot().failed).toBe(1)
   })
 
   it("allows a second notify after cooldown reset", async () => {

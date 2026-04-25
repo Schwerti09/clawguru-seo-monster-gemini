@@ -22,6 +22,12 @@ export type ProfitFunnelInput = {
 type ConsultHealth = {
   score: number
   level: "healthy" | "watch" | "critical"
+  alertFlags: Array<"low_conversion" | "low_consult_mix" | "source_concentration" | "checkout_error_pressure">
+  routing: {
+    severity: "info" | "warn" | "page"
+    action: "none" | "slack" | "pagerduty"
+    reason: string
+  }
   reasons: string[]
 }
 
@@ -48,15 +54,52 @@ export function buildProfitFunnel(input: ProfitFunnelInput, checkoutCompleted: n
   const consultHealthScore = Math.max(0, Math.min(100, Math.round(consultHealthScoreRaw * 10) / 10))
   const consultHealthLevel: ConsultHealth["level"] =
     consultHealthScore < 40 ? "critical" : consultHealthScore < 70 ? "watch" : "healthy"
+  const consultHealthAlertFlags: ConsultHealth["alertFlags"] = []
   const consultHealthReasons: string[] = []
-  if (consult.rates.pricingToBookingPct < 15) consultHealthReasons.push("low pricing-to-booking conversion")
-  if (consult.rates.consultingBookingSharePct < 30) consultHealthReasons.push("low consult share in booking mix")
-  if (consult.insights.sourceConcentrationLevel !== "balanced") consultHealthReasons.push("high source concentration risk")
-  if (checkoutErrorRatePct >= 10) consultHealthReasons.push("elevated checkout error rate")
+  if (consult.rates.pricingToBookingPct < 15) {
+    consultHealthAlertFlags.push("low_conversion")
+    consultHealthReasons.push("low pricing-to-booking conversion")
+  }
+  if (consult.rates.consultingBookingSharePct < 30) {
+    consultHealthAlertFlags.push("low_consult_mix")
+    consultHealthReasons.push("low consult share in booking mix")
+  }
+  if (consult.insights.sourceConcentrationLevel !== "balanced") {
+    consultHealthAlertFlags.push("source_concentration")
+    consultHealthReasons.push("high source concentration risk")
+  }
+  if (checkoutErrorRatePct >= 10) {
+    consultHealthAlertFlags.push("checkout_error_pressure")
+    consultHealthReasons.push("elevated checkout error rate")
+  }
+  const shouldPage =
+    consultHealthScore < 35 ||
+    (consultHealthAlertFlags.includes("low_conversion") &&
+      consultHealthAlertFlags.includes("checkout_error_pressure"))
+  const shouldWarn = !shouldPage && (consultHealthAlertFlags.length >= 2 || consultHealthScore < 60)
+  const consultHealthRouting: ConsultHealth["routing"] = shouldPage
+    ? {
+        severity: "page",
+        action: "pagerduty",
+        reason: "critical consult degradation with conversion and checkout pressure",
+      }
+    : shouldWarn
+      ? {
+          severity: "warn",
+          action: "slack",
+          reason: "consult health watch state requires operator review",
+        }
+      : {
+          severity: "info",
+          action: "none",
+          reason: "consult health within expected envelope",
+        }
 
   const consultHealth: ConsultHealth = {
     score: consultHealthScore,
     level: consultHealthLevel,
+    alertFlags: consultHealthAlertFlags,
+    routing: consultHealthRouting,
     reasons: consultHealthReasons.length > 0 ? consultHealthReasons : ["stable consult funnel signals"],
   }
   const sourceGroupsRaw: Record<ConsultSourceGroupKey, number> = {

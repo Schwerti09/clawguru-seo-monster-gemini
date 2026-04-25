@@ -29,12 +29,13 @@
    - `__tests__/check-funnel.test.ts`
    - `__tests__/profit-funnel.test.ts`
    - `__tests__/profit-analytics-route.test.ts`
+14. Consult health **alert routing policy**: explicit `alertFlags`, `routing` (`severity` / `action` / `reason`) in funnel payload; dashboard shows flags + routing hint; contract tests for info vs warn paths.
 
 ## 📌 Next (Consult Stream)
 
-1. Add consult health target/delta alerting block (score gap + compact flagging) in funnel payload and dashboard.
-2. Add 24h-vs-7d consult trend comparison once 7d baseline counters are exposed in snapshot.
-3. Extend consult-booking events into retention scoring once enough data accumulates.
+1. Wire `consultHealth.routing` to real Slack/PagerDuty (or ops webhook) when env URLs are configured.
+2. Revisit consult health target/delta + 24h-vs-7d trend once snapshot exposes stable 7d aggregates in production.
+3. Extend consult-booking retention calibration once more production data is accumulated.
 
 ---
 

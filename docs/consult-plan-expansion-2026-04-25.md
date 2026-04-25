@@ -281,6 +281,29 @@ Added a grouped source-family view so consult demand can be read at channel-fami
 
 This improves executive readability and makes it easier to spot whether demand is mostly card-driven (`consulting_pricing_*`) or coming from non-core sources.
 
+## Consult health alert routing policy (2026-04-25)
+
+Structured consult health diagnostics so operators can see explicit alert flags and a simple routing hint (for future Slack/PagerDuty wiring).
+
+- `lib/profit-funnel.ts`
+  - `consultHealth.alertFlags` (when thresholds trip):
+    - `low_conversion` — pricing→booking rate below 15%
+    - `low_consult_mix` — consult share of bookings below 30%
+    - `source_concentration` — top booking source share in watch/critical band (`consultInsights.sourceConcentrationLevel` not `balanced`)
+    - `checkout_error_pressure` — checkout error rate ≥ 10% of checkout starts
+  - `consultHealth.routing`:
+    - `severity`: `info` | `warn` | `page`
+    - `action`: `none` | `slack` | `pagerduty` (intent only; no outbound integrations yet)
+    - `reason` — short human-readable policy summary
+  - Policy sketch:
+    - **page** when score < 35 or **low_conversion** and **checkout_error_pressure** together
+    - **warn** when two or more flags fire or score < 60 (and not paged)
+    - **info** otherwise
+- `components/admin/ProfitDashboard.tsx`
+  - Consult Health panel shows flags, routing severity/action, and routing reason.
+- Tests
+  - `__tests__/profit-funnel.test.ts` — default fixture asserts `info`/`none` with checkout pressure only; second case asserts `warn`/`slack` when concentration + checkout pressure both flag.
+
 ## Operational Notes
 
 - `BookingButton` remains env-driven (`NEXT_PUBLIC_CAL_*_URL`) with mail fallback, so no deployment break if Cal URLs are missing.

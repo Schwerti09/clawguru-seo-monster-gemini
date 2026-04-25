@@ -69,5 +69,8 @@ describe("GET /api/admin/profit-analytics", () => {
     expect(body.funnel.consultSourceGroups.enterpriseCta.count).toBe(2)
     expect(body.funnel.consultSourceGroups.other.count).toBe(2)
     expect(body.funnel.consultDominantSourceGroup).toBe("pricingSlots")
+    expect(["info", "warn", "page"]).toContain(body.funnel.consultHealth.routing.severity)
+    expect(["none", "slack", "pagerduty"]).toContain(body.funnel.consultHealth.routing.action)
+    expect(Array.isArray(body.funnel.consultHealth.alertFlags)).toBe(true)
   })
 })

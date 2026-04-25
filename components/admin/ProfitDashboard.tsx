@@ -106,6 +106,12 @@ type DashData = {
     consultHealth: {
       score: number
       level: "healthy" | "watch" | "critical"
+      alertFlags: Array<"low_conversion" | "low_consult_mix" | "source_concentration" | "checkout_error_pressure">
+      routing: {
+        severity: "info" | "warn" | "page"
+        action: "none" | "slack" | "pagerduty"
+        reason: string
+      }
       reasons: string[]
     }
     checkoutCompleted: number
@@ -428,6 +434,17 @@ function ConversionFunnel({ funnel }: { funnel: DashData["funnel"] }) {
           Score: <span className="text-cyan-300 font-bold">{consultHealth.score}</span> ·
           Level: <span className="text-cyan-300 font-bold"> {consultHealth.level.toUpperCase()}</span>
         </div>
+        <div className="text-xs text-gray-500 mb-2">
+          Routing: <span className="text-cyan-300 font-bold">{consultHealth.routing.severity.toUpperCase()}</span> ·
+          Action: <span className="text-cyan-300 font-bold"> {consultHealth.routing.action}</span>
+        </div>
+        <div className="text-xs text-gray-500 mb-2">
+          Flags:{" "}
+          <span className="text-cyan-300">
+            {consultHealth.alertFlags.length > 0 ? consultHealth.alertFlags.join(", ") : "none"}
+          </span>
+        </div>
+        <div className="text-xs text-gray-400 mb-2">{consultHealth.routing.reason}</div>
         <div className="grid sm:grid-cols-2 gap-2 text-xs">
           {consultHealth.reasons.map((reason) => (
             <div key={reason} className="rounded-lg border border-gray-800 px-2 py-1 text-gray-400">

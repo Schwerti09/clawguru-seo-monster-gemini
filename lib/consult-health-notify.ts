@@ -2,6 +2,8 @@
 // Optional outbound alerts when consult health routing is warn/page.
 // Uses env webhooks + in-memory cooldown to avoid spamming on frequent admin polls.
 
+import { dbQuery } from "@/lib/db"
+
 export type ConsultHealthForNotify = {
   score: number
   level: string
@@ -23,6 +25,7 @@ const notifyStats = {
   skippedNoWebhook: 0,
   skippedCooldown: 0,
 }
+let notifyTableReady = false
 
 function cooldownMs() {
   const raw = process.env.CONSULT_HEALTH_ALERT_COOLDOWN_MS
@@ -71,6 +74,48 @@ async function postJson(url: string, body: Record<string, unknown>) {
   })
 }
 
+type NotifyEventType =
+  | "attempted"
+  | "sent"
+  | "failed"
+  | "skipped_info"
+  | "skipped_no_webhook"
+  | "skipped_cooldown"
+
+function hasDatabase() {
+  return Boolean(process.env.DATABASE_URL)
+}
+
+async function ensureNotifyTable() {
+  if (!hasDatabase() || notifyTableReady) return
+  await dbQuery(
+    `CREATE TABLE IF NOT EXISTS consult_health_notify_events (
+       id BIGSERIAL PRIMARY KEY,
+       event TEXT NOT NULL,
+       severity TEXT NOT NULL,
+       meta_json JSONB NOT NULL DEFAULT '{}'::jsonb,
+       created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+     )`
+  )
+  notifyTableReady = true
+}
+
+function recordPersistent(event: NotifyEventType, severity: "info" | "warn" | "page", meta?: Record<string, unknown>) {
+  if (!hasDatabase()) return
+  void (async () => {
+    try {
+      await ensureNotifyTable()
+      await dbQuery(
+        `INSERT INTO consult_health_notify_events (event, severity, meta_json)
+         VALUES ($1, $2, $3::jsonb)`,
+        [event, severity, JSON.stringify(meta ?? {})]
+      )
+    } catch {
+      // Non-blocking telemetry path.
+    }
+  })()
+}
+
 /** Test helper: clears cooldown memory between Jest cases. */
 export function resetConsultHealthNotifyStateForTests() {
   lastSentMs.clear()
@@ -80,6 +125,7 @@ export function resetConsultHealthNotifyStateForTests() {
   notifyStats.skippedInfo = 0
   notifyStats.skippedNoWebhook = 0
   notifyStats.skippedCooldown = 0
+  notifyTableReady = false
 }
 
 /**
@@ -92,12 +138,14 @@ export function maybeNotifyConsultHealthAlerts(
 ): void {
   if (health.routing.severity === "info") {
     notifyStats.skippedInfo += 1
+    recordPersistent("skipped_info", "info", { score: health.score, generatedAt: ctx.generatedAt })
     return
   }
   const severity = health.routing.severity
   const url = resolveWebhookUrl(severity)
   if (!url) {
     notifyStats.skippedNoWebhook += 1
+    recordPersistent("skipped_no_webhook", severity, { score: health.score, generatedAt: ctx.generatedAt })
     return
   }
 
@@ -106,10 +154,12 @@ export function maybeNotifyConsultHealthAlerts(
   const prev = lastSentMs.get(key) ?? 0
   if (now - prev < cooldownMs()) {
     notifyStats.skippedCooldown += 1
+    recordPersistent("skipped_cooldown", severity, { score: health.score, generatedAt: ctx.generatedAt })
     return
   }
   lastSentMs.set(key, now)
   notifyStats.attempted += 1
+  recordPersistent("attempted", severity, { score: health.score, generatedAt: ctx.generatedAt })
 
   const text = buildText(health, ctx)
   const isSlackHost = url.includes("hooks.slack.com")
@@ -131,9 +181,11 @@ export function maybeNotifyConsultHealthAlerts(
         })
       }
       notifyStats.sent += 1
+      recordPersistent("sent", severity, { score: health.score, generatedAt: ctx.generatedAt })
     } catch {
       // Non-blocking: never break admin analytics on notify failures.
       notifyStats.failed += 1
+      recordPersistent("failed", severity, { score: health.score, generatedAt: ctx.generatedAt })
     }
   })()
 }
@@ -147,4 +199,40 @@ export function consultHealthWebhookEnvSnapshot() {
 
 export function consultHealthNotifyTelemetrySnapshot() {
   return { ...notifyStats }
+}
+
+export async function consultHealthNotifyTelemetrySnapshotPersistent() {
+  if (!hasDatabase()) return consultHealthNotifyTelemetrySnapshot()
+  try {
+    await ensureNotifyTable()
+    const res = await dbQuery<{
+      attempted: string
+      sent: string
+      failed: string
+      skipped_info: string
+      skipped_no_webhook: string
+      skipped_cooldown: string
+    }>(
+      `SELECT
+         COUNT(*) FILTER (WHERE event = 'attempted')::text AS attempted,
+         COUNT(*) FILTER (WHERE event = 'sent')::text AS sent,
+         COUNT(*) FILTER (WHERE event = 'failed')::text AS failed,
+         COUNT(*) FILTER (WHERE event = 'skipped_info')::text AS skipped_info,
+         COUNT(*) FILTER (WHERE event = 'skipped_no_webhook')::text AS skipped_no_webhook,
+         COUNT(*) FILTER (WHERE event = 'skipped_cooldown')::text AS skipped_cooldown
+       FROM consult_health_notify_events
+       WHERE created_at >= NOW() - INTERVAL '24 hours'`
+    )
+    const row = res.rows[0]
+    return {
+      attempted: Number(row?.attempted || 0),
+      sent: Number(row?.sent || 0),
+      failed: Number(row?.failed || 0),
+      skippedInfo: Number(row?.skipped_info || 0),
+      skippedNoWebhook: Number(row?.skipped_no_webhook || 0),
+      skippedCooldown: Number(row?.skipped_cooldown || 0),
+    }
+  } catch {
+    return consultHealthNotifyTelemetrySnapshot()
+  }
 }

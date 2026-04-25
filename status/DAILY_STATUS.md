@@ -41,11 +41,12 @@
    - Netlify scheduled function wiring added (`netlify/functions/consult-health-cron.js` + `netlify.toml` schedule)
    - Env checklist updated with consult scheduler requirements.
 18. Added consult webhook delivery telemetry to admin analytics (`attempted`, `sent`, `failed`, `skipped*`) and surfaced counters in dashboard consult-health panel.
+19. Added optional DB-backed notify telemetry aggregation (`consult_health_notify_events`) with fallback to in-memory counters for resilient ops readouts.
 
 ## 📌 Next (Consult Stream)
 
 1. Tune cooldown / fingerprint (e.g. include dominant source group) once real traffic patterns are observed.
-2. Add persistent (DB-backed) notify telemetry to survive restarts and support weekly trend charts.
+2. Add 7d/30d trend slices for notify telemetry in admin panel (success ratio, failure spikes).
 3. Extend consult-booking retention calibration once more production data is accumulated.
 
 ---

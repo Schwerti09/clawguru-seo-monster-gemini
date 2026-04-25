@@ -10,7 +10,7 @@ import { stripe } from "@/lib/stripe"
 import { getEndpointCounts, getTopIps, getActiveBlocks } from "@/lib/api-usage"
 import { getCheckFunnelSnapshotPersistent } from "@/lib/check-funnel"
 import {
-  consultHealthNotifyTelemetrySnapshot,
+  consultHealthNotifyTelemetrySnapshotPersistent,
   consultHealthWebhookEnvSnapshot,
 } from "@/lib/consult-health-notify"
 import { buildProfitFunnel } from "@/lib/profit-funnel"
@@ -188,7 +188,7 @@ export async function GET() {
   const generatedAt = new Date().toISOString()
   const funnelBase = await conversionFunnel(stripeMetrics)
   const webhookCfg = consultHealthWebhookEnvSnapshot()
-  const notifyTelemetry = consultHealthNotifyTelemetrySnapshot()
+  const notifyTelemetry = await consultHealthNotifyTelemetrySnapshotPersistent()
   const funnel = {
     ...funnelBase,
     consultHealth: {

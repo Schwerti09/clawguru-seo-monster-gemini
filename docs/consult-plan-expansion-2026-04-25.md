@@ -364,6 +364,27 @@ Required environment:
 - `CRON_SECRET` (shared by route and scheduler caller)
 - optional `SITE_URL` (Netlify function fallback target)
 
+## Persistent notify telemetry follow-up (2026-04-25)
+
+Webhook delivery telemetry can now survive process restarts when a database is configured.
+
+- `lib/consult-health-notify.ts`
+  - Added optional persistent event sink table:
+    - `consult_health_notify_events`
+    - columns: `event`, `severity`, `meta_json`, `created_at`
+  - Added event writes for:
+    - `attempted`, `sent`, `failed`
+    - `skipped_info`, `skipped_no_webhook`, `skipped_cooldown`
+  - Added `consultHealthNotifyTelemetrySnapshotPersistent()`:
+    - reads 24h aggregated counters from DB
+    - falls back to in-memory counters if DB is unavailable
+- `app/api/admin/profit-analytics/route.ts`
+  - Uses persistent telemetry snapshot for `consultHealth.notifyTelemetry`.
+- Tests
+  - Added `__tests__/consult-health-notify-persistent.test.ts` for DB snapshot + fallback behavior.
+
+This keeps delivery counters stable across deploy/runtime restarts and makes telemetry more reliable for ops readouts.
+
 ## Operational Notes
 
 - `BookingButton` remains env-driven (`NEXT_PUBLIC_CAL_*_URL`) with mail fallback, so no deployment break if Cal URLs are missing.

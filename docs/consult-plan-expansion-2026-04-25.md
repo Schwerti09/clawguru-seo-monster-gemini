@@ -107,6 +107,21 @@ To continue the 7consult rollout with measurable outcomes, consult booking signa
 
 - Added `__tests__/check-funnel.test.ts` to assert booking counters in snapshot flow.
 
+## Source-level funnel breakdown follow-up (2026-04-25)
+
+Added booking source visibility so consult performance can be evaluated per CTA slot/source tag.
+
+- `lib/check-funnel.ts`
+  - Added DB aggregation for top booking sources over 24h (`bookingSources24h`, top 8).
+  - Uses `meta_json.source` from `booking_click` events.
+  - Snapshot fallback returns an empty source list when DB is not configured.
+- `app/api/admin/profit-analytics/route.ts`
+  - Funnel payload now includes `bookingSources24h`.
+- `components/admin/ProfitDashboard.tsx`
+  - Conversion panel now renders "Top Booking Sources (24h)" with source labels + counts.
+
+This enables immediate readout of whether `consulting_*` slots, enterprise CTA, or other entry points are producing meeting intent.
+
 ## Operational Notes
 
 - `BookingButton` remains env-driven (`NEXT_PUBLIC_CAL_*_URL`) with mail fallback, so no deployment break if Cal URLs are missing.

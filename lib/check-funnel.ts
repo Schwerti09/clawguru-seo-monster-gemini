@@ -70,10 +70,12 @@ export function getCheckFunnelSnapshot() {
     shareClicks24h: countSince("share_click", since24h),
     methodikClicks24h: countSince("methodik_click", since24h),
     hardeningClicks24h: countSince("hardening_link_click", since24h),
+    bookingSources24h: [] as BookingSourceRow[],
   }
 }
 
 type CheckMeta = Record<string, string | number | boolean | null>
+type BookingSourceRow = { source: string; count: number }
 
 function hasDatabase() {
   return Boolean(process.env.DATABASE_URL)
@@ -140,6 +142,23 @@ export async function getCheckFunnelSnapshotPersistent() {
     )
 
     const row = res.rows[0]
+    const sourcesRes = await dbQuery<{ source: string | null; cnt: string }>(
+      `SELECT
+         NULLIF(meta_json ->> 'source', '') AS source,
+         COUNT(*)::text AS cnt
+       FROM check_funnel_events
+       WHERE
+         event = 'booking_click'
+         AND created_at >= NOW() - INTERVAL '24 hours'
+       GROUP BY 1
+       ORDER BY COUNT(*) DESC
+       LIMIT 8`
+    )
+    const bookingSources24h: BookingSourceRow[] = sourcesRes.rows.map((r) => ({
+      source: r.source ?? "unknown",
+      count: Number(r.cnt || 0),
+    }))
+
     return {
       pageViews24h: Number(row?.page_views || 0),
       checkStarts24h: Number(row?.check_starts || 0),
@@ -156,6 +175,7 @@ export async function getCheckFunnelSnapshotPersistent() {
       shareClicks24h: Number(row?.share_clicks || 0),
       methodikClicks24h: Number(row?.methodik_clicks || 0),
       hardeningClicks24h: Number(row?.hardening_clicks || 0),
+      bookingSources24h,
     }
   } catch {
     return getCheckFunnelSnapshot()

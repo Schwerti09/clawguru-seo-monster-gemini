@@ -11,6 +11,7 @@
    - Added `booking_click` event ingestion
    - Added `bookingClicks24h` + `consultingBookingClicks24h` counters
    - Added rates: `pricingToBookingPct`, `consultingBookingSharePct`
+   - Added source-level breakdown: `bookingSources24h` (top CTA sources in last 24h)
 5. Documentation + tests updated:
    - `docs/consult-plan-expansion-2026-04-25.md`
    - `__tests__/check-funnel.test.ts`

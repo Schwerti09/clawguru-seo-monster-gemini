@@ -170,6 +170,7 @@ async function conversionFunnel(stripeMetrics: Awaited<ReturnType<typeof fetchSt
     checkoutErrors,
     bookingClicks,
     consultingBookingClicks,
+    bookingSources24h: check.bookingSources24h,
     checkoutCompleted,
     rates: {
       clickToCheckoutStartPct: safeRate(checkoutStarted, check.pricingClicks24h),

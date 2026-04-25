@@ -239,6 +239,8 @@ export async function GET() {
     checkoutStarts24h: funnel.checkoutStarted,
     checkoutRedirects24h: funnel.checkoutRedirected,
     checkoutErrors24h: funnel.checkoutErrors,
+    bookingClicks24h: funnel.bookingClicks,
+    consultingBookingClicks24h: funnel.consultingBookingClicks,
   })
   const alert = stripeMetrics
     ? computeAlert(margins.totalCostUsd, stripeMetrics.netToday)

@@ -115,7 +115,7 @@ type DashData = {
   retention: {
     overallLevel: "healthy" | "watch" | "critical"
     signals: Array<{
-      key: "checkout_errors" | "click_to_start_dropoff" | "start_to_redirect_dropoff"
+      key: "checkout_errors" | "click_to_start_dropoff" | "start_to_redirect_dropoff" | "consult_booking_share"
       level: "healthy" | "watch" | "critical"
       score: number
       message: string

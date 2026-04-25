@@ -139,6 +139,27 @@ Extended consult analytics so plan-level CTA slots are first-class metrics:
 
 This makes it possible to compare plan-card and CTA-slot performance directly without log forensics.
 
+## Retention signal follow-up (2026-04-25)
+
+Consult demand is now part of retention evaluation instead of checkout-only logic.
+
+- `lib/autopilot-retention.ts`
+  - `RetentionInput` extended with:
+    - `bookingClicks24h`
+    - `consultingBookingClicks24h`
+  - Added signal:
+    - `consult_booking_share`
+  - Added thresholding:
+    - `< 20%` critical
+    - `< 45%` watch
+    - `>= 45%` healthy
+  - If no booking clicks exist, the signal defaults to `watch` (insufficient signal).
+- `app/api/admin/profit-analytics/route.ts`
+  - Now passes booking metrics into `evaluateRetentionSignals(...)`.
+- `__tests__/autopilot-retention.test.ts`
+  - Updated fixtures to include booking inputs.
+  - Added assertion for healthy consult-booking-share path.
+
 ## Operational Notes
 
 - `BookingButton` remains env-driven (`NEXT_PUBLIC_CAL_*_URL`) with mail fallback, so no deployment break if Cal URLs are missing.

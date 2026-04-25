@@ -12,6 +12,7 @@ type CheckEvent =
   | "checkout_start"
   | "checkout_redirect"
   | "checkout_error"
+  | "booking_click"
   | "retention_nudge_impression"
   | "retention_nudge_click"
   | "retention_nudge_dismiss"
@@ -61,6 +62,8 @@ export function getCheckFunnelSnapshot() {
     checkoutStarts24h: countSince("checkout_start", since24h),
     checkoutRedirects24h: countSince("checkout_redirect", since24h),
     checkoutErrors24h: countSince("checkout_error", since24h),
+    bookingClicks24h: countSince("booking_click", since24h),
+    consultingBookingClicks24h: countSince("booking_click", since24h),
     retentionNudgeImpressions24h: countSince("retention_nudge_impression", since24h),
     retentionNudgeClicks24h: countSince("retention_nudge_click", since24h),
     retentionNudgeDismisses24h: countSince("retention_nudge_dismiss", since24h),
@@ -101,6 +104,8 @@ export async function getCheckFunnelSnapshotPersistent() {
       checkout_starts: string
       checkout_redirects: string
       checkout_errors: string
+      booking_clicks: string
+      consulting_booking_clicks: string
       retention_nudge_impressions: string
       retention_nudge_clicks: string
       retention_nudge_dismisses: string
@@ -116,6 +121,14 @@ export async function getCheckFunnelSnapshotPersistent() {
          COUNT(*) FILTER (WHERE event = 'checkout_start')::text AS checkout_starts,
          COUNT(*) FILTER (WHERE event = 'checkout_redirect')::text AS checkout_redirects,
          COUNT(*) FILTER (WHERE event = 'checkout_error')::text AS checkout_errors,
+         COUNT(*) FILTER (WHERE event = 'booking_click')::text AS booking_clicks,
+         COUNT(*) FILTER (
+           WHERE event = 'booking_click'
+             AND (
+               meta_json ->> 'source' LIKE 'consulting_%'
+               OR meta_json ->> 'source' = 'enterprise_api_cta'
+             )
+         )::text AS consulting_booking_clicks,
          COUNT(*) FILTER (WHERE event = 'retention_nudge_impression')::text AS retention_nudge_impressions,
          COUNT(*) FILTER (WHERE event = 'retention_nudge_click')::text AS retention_nudge_clicks,
          COUNT(*) FILTER (WHERE event = 'retention_nudge_dismiss')::text AS retention_nudge_dismisses,
@@ -135,6 +148,8 @@ export async function getCheckFunnelSnapshotPersistent() {
       checkoutStarts24h: Number(row?.checkout_starts || 0),
       checkoutRedirects24h: Number(row?.checkout_redirects || 0),
       checkoutErrors24h: Number(row?.checkout_errors || 0),
+      bookingClicks24h: Number(row?.booking_clicks || 0),
+      consultingBookingClicks24h: Number(row?.consulting_booking_clicks || 0),
       retentionNudgeImpressions24h: Number(row?.retention_nudge_impressions || 0),
       retentionNudgeClicks24h: Number(row?.retention_nudge_clicks || 0),
       retentionNudgeDismisses24h: Number(row?.retention_nudge_dismisses || 0),

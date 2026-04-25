@@ -76,13 +76,17 @@ type DashData = {
   }
   funnel: {
     landingPageViews: number
-    daypassClicks: number
+    pricingClicks: number
     checkoutStarted: number
     checkoutRedirected: number
     checkoutErrors: number
+    bookingClicks: number
+    consultingBookingClicks: number
     checkoutCompleted: number
     rates: {
       clickToCheckoutStartPct: number
+      pricingToBookingPct: number
+      consultingBookingSharePct: number
       checkoutStartToRedirectPct: number
       checkoutStartToCompletePct: number
       redirectToCompletePct: number
@@ -242,11 +246,20 @@ function WallOfShame({ data, onBlock }: { data: DashData["wallOfShame"]; onBlock
 // Conversion funnel
 // ---------------------------------------------------------------------------
 function ConversionFunnel({ funnel }: { funnel: DashData["funnel"] }) {
-  const { landingPageViews, daypassClicks, checkoutStarted, checkoutRedirected, checkoutErrors, checkoutCompleted } = funnel
+  const {
+    landingPageViews,
+    pricingClicks,
+    checkoutStarted,
+    checkoutRedirected,
+    checkoutErrors,
+    bookingClicks,
+    consultingBookingClicks,
+    checkoutCompleted,
+  } = funnel
 
   const steps = [
     { label: "Check-Page Views (24h)", value: landingPageViews, icon: "👁️" },
-    { label: "Pricing-Intents (24h)", value: daypassClicks, icon: "🖱️" },
+    { label: "Pricing-Intents (24h)", value: pricingClicks, icon: "🖱️" },
     { label: "Checkout Starts (24h)", value: checkoutStarted, icon: "🧾" },
     { label: "Checkout Redirects (24h)", value: checkoutRedirected, icon: "↗️" },
     { label: "Day-Pass Checkouts (24h)", value: checkoutCompleted, icon: "💳" },
@@ -280,6 +293,9 @@ function ConversionFunnel({ funnel }: { funnel: DashData["funnel"] }) {
           Click → Checkout Start: <span className="text-cyan-300 font-bold">{funnel.rates.clickToCheckoutStartPct}%</span>
         </div>
         <div className="rounded-xl border border-gray-800 bg-black/20 px-3 py-2 text-gray-400">
+          Pricing → Booking: <span className="text-cyan-300 font-bold">{funnel.rates.pricingToBookingPct}%</span>
+        </div>
+        <div className="rounded-xl border border-gray-800 bg-black/20 px-3 py-2 text-gray-400">
           Start → Redirect: <span className="text-cyan-300 font-bold">{funnel.rates.checkoutStartToRedirectPct}%</span>
         </div>
         <div className="rounded-xl border border-gray-800 bg-black/20 px-3 py-2 text-gray-400">
@@ -287,6 +303,14 @@ function ConversionFunnel({ funnel }: { funnel: DashData["funnel"] }) {
         </div>
         <div className="rounded-xl border border-gray-800 bg-black/20 px-3 py-2 text-gray-400">
           Redirect → Complete: <span className="text-cyan-300 font-bold">{funnel.rates.redirectToCompletePct}%</span>
+        </div>
+      </div>
+      <div className="mt-3 grid sm:grid-cols-2 gap-3 text-xs">
+        <div className="rounded-xl border border-gray-800 bg-black/20 px-3 py-2 text-gray-400">
+          Booking Clicks (24h): <span className="text-cyan-300 font-bold">{bookingClicks.toLocaleString()}</span>
+        </div>
+        <div className="rounded-xl border border-gray-800 bg-black/20 px-3 py-2 text-gray-400">
+          Consulting Booking Share: <span className="text-cyan-300 font-bold">{funnel.rates.consultingBookingSharePct}%</span> · Consult Clicks: <span className="text-cyan-300 font-bold">{consultingBookingClicks.toLocaleString()}</span>
         </div>
       </div>
       <div className="mt-3 grid sm:grid-cols-3 gap-3 text-xs">

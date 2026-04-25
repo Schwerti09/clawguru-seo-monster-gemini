@@ -73,6 +73,39 @@ in main locale chunks, improving crawl discoverability and canonical URL discove
 - [x] `/consulting` plan cards route Starter/Pro to checkout and Scale to booking
 - [x] sitemap includes localized `/consulting`
 - [x] middleware route guard includes localized `/consulting` and `/pricing`
+- [x] booking_click events are visible in admin funnel/profit analytics
+
+## Consult analytics follow-up (2026-04-25)
+
+To continue the 7consult rollout with measurable outcomes, consult booking signals were wired into analytics end-to-end.
+
+### Backend
+
+- `app/api/analytics/check/route.ts`
+  - Added `booking_click` to accepted analytics events.
+- `lib/check-funnel.ts`
+  - Added 24h counters:
+    - `bookingClicks24h`
+    - `consultingBookingClicks24h`
+  - Persistent SQL snapshot now tracks all bookings and consult-scoped bookings via `meta_json.source` (`consulting_*`, `enterprise_api_cta`).
+- `app/api/admin/profit-analytics/route.ts`
+  - Funnel payload now includes:
+    - `bookingClicks`
+    - `consultingBookingClicks`
+    - `rates.pricingToBookingPct`
+    - `rates.consultingBookingSharePct`
+
+### Dashboard
+
+- `components/admin/ProfitDashboard.tsx`
+  - Conversion panel now shows:
+    - Booking Clicks (24h)
+    - Consulting Booking Share (% and count)
+    - Pricing → Booking conversion rate
+
+### Tests
+
+- Added `__tests__/check-funnel.test.ts` to assert booking counters in snapshot flow.
 
 ## Operational Notes
 

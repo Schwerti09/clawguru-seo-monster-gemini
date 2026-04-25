@@ -158,17 +158,23 @@ async function conversionFunnel(stripeMetrics: Awaited<ReturnType<typeof fetchSt
   const checkoutStarted = check.checkoutStarts24h
   const checkoutRedirected = check.checkoutRedirects24h
   const checkoutErrors = check.checkoutErrors24h
+  const bookingClicks = check.bookingClicks24h
+  const consultingBookingClicks = check.consultingBookingClicks24h
   const checkoutCompleted = stripeMetrics?.daypassToday ?? 0
 
   return {
     landingPageViews: check.pageViews24h,
-    daypassClicks: check.pricingClicks24h,
+    pricingClicks: check.pricingClicks24h,
     checkoutStarted,
     checkoutRedirected,
     checkoutErrors,
+    bookingClicks,
+    consultingBookingClicks,
     checkoutCompleted,
     rates: {
       clickToCheckoutStartPct: safeRate(checkoutStarted, check.pricingClicks24h),
+      pricingToBookingPct: safeRate(bookingClicks, check.pricingClicks24h),
+      consultingBookingSharePct: safeRate(consultingBookingClicks, bookingClicks),
       checkoutStartToRedirectPct: safeRate(checkoutRedirected, checkoutStarted),
       checkoutStartToCompletePct: safeRate(checkoutCompleted, checkoutStarted),
       redirectToCompletePct: safeRate(checkoutCompleted, checkoutRedirected),
@@ -179,7 +185,7 @@ async function conversionFunnel(stripeMetrics: Awaited<ReturnType<typeof fetchSt
       clicks24h: check.retentionNudgeClicks24h,
       dismisses24h: check.retentionNudgeDismisses24h,
     },
-    note: `24h: starts ${check.checkStarts24h}, results ${check.checkResults24h}, shares ${check.shareClicks24h}, methodology clicks ${check.methodikClicks24h}, hardening link clicks ${check.hardeningClicks24h}.`,
+    note: `24h: starts ${check.checkStarts24h}, results ${check.checkResults24h}, shares ${check.shareClicks24h}, methodology clicks ${check.methodikClicks24h}, hardening link clicks ${check.hardeningClicks24h}, bookings ${bookingClicks} (${consultingBookingClicks} consult/enterprise sources).`,
   }
 }
 
@@ -208,7 +214,7 @@ export async function GET() {
   const activeBlocks = getActiveBlocks()
   const funnel = await conversionFunnel(stripeMetrics)
   const retention = evaluateRetentionSignals({
-    pricingClicks24h: funnel.daypassClicks,
+    pricingClicks24h: funnel.pricingClicks,
     checkoutStarts24h: funnel.checkoutStarted,
     checkoutRedirects24h: funnel.checkoutRedirected,
     checkoutErrors24h: funnel.checkoutErrors,

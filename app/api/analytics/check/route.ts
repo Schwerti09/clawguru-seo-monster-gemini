@@ -17,6 +17,7 @@ type CheckEvent =
   | "checkout_start"
   | "checkout_redirect"
   | "checkout_error"
+  | "booking_click"
   | "retention_nudge_impression"
   | "retention_nudge_click"
   | "retention_nudge_dismiss"

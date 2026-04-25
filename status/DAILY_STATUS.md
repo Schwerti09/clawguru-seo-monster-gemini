@@ -1,3 +1,28 @@
+# Daily Status — 2026-04-25 (Saturday · Consult Automation Sprint)
+
+> **Focus:** 7consult rollout — conversion consistency + analytics instrumentation
+
+## ✅ Completed (Consult Stream)
+
+1. Consulting CTAs aligned by intent: Starter/Pro via Stripe checkout, Scale via booking flow.
+2. Pricing alignment pass: Starter/Pro/Scale anchors now derive from `AUTOPILOT_PLANS` (metadata + matrix + toggle card consistency).
+3. SEO safety pass: localized `/pricing` + `/consulting` indexability and sitemap discoverability handled.
+4. Admin analytics pass: booking events now tracked and visible in funnel/profit dashboard.
+   - Added `booking_click` event ingestion
+   - Added `bookingClicks24h` + `consultingBookingClicks24h` counters
+   - Added rates: `pricingToBookingPct`, `consultingBookingSharePct`
+5. Documentation + tests updated:
+   - `docs/consult-plan-expansion-2026-04-25.md`
+   - `__tests__/check-funnel.test.ts`
+
+## 📌 Next (Consult Stream)
+
+1. Add source-level consult funnel breakdown in admin (starter/pro/scale/button slot).
+2. Add lightweight API test for `/api/admin/profit-analytics` funnel payload shape.
+3. Extend consult-booking events into retention scoring once enough data accumulates.
+
+---
+
 # Daily Status — 2026-04-20 (Sunday · War Plan Day 1)
 
 > **Current Active Sprint:** Phase A → Phase B overlap + Phase D kickoff

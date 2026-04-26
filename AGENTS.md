@@ -18,7 +18,11 @@ Three agents work this repo in parallel: **Claude Code**, **Windsurf**, **Cursor
 4. **Ollama checkpoint dir wiped (~18:45):** Entire `lib/i18n-autotranslate/` directory deleted by another agent's `git checkout` or clean-tree call. Cost: ~6 hours of translation work for 30 locales lost. Run was restarted from scratch.
 5. **`index.ts` mission entries reverted twice:** M-008 registration in `lib/academy/missions/index.ts` was silently reverted between Edit and verification on two separate attempts. Recovered by immediate re-edit + commit.
 
-**Lesson learned:** the gap between `git add` and `git commit` is the danger window. Every agent must commit immediately after staging, never leave staged files dangling, and never run `git stash` / `git checkout -- .` / `git restore --staged .` on a tree they don't own.
+### 26.04.2026 Incident Log (continued)
+
+6. **`f244c072` "alle lokalen Änderungen vor Rebase/Push gesichert" mega-bundle (manual, 20:08):** 17 files across 5 unrelated scopes mass-committed in one go: Windsurf step-3 fix (`lib/check-funnel.ts` + `__tests__/check-funnel-source-filter.test.ts`), 7 Windsurf-scope `clawguru-vs-*` page edits, Claude-scope `lib/academy/missions/k8s-networkpolicy.ts` + `lib/i18n-autotranslate.ts`, Cursor-scope `lib/pricing.ts` + `app/sitemaps/[name]/route.ts`, plus a viral-pages-demo page and a runbook-indexierung doc. Commit was made by the human user (not an agent) as a defensive "save everything" action after a `git push --rejected` race. Step-3 work is preserved and tests pass, but the commit violates the single-concern rule. **Recommended response:** future "save everything" actions should be done as `git stash --include-untracked && git pull --rebase && git stash pop` so that the stash is the catch-all (private), and individual agents then commit per concern from their own clean trees.
+
+**Lesson learned:** the gap between `git add` and `git commit` is the danger window. Every agent must commit immediately after staging, never leave staged files dangling, and never run `git stash` / `git checkout -- .` / `git restore --staged .` on a tree they don't own. **Defensive "save everything" commits by the human are well-intentioned but produce the same anti-pattern they are trying to prevent — prefer a stash + per-concern commit flow.**
 
 ### Ownership Map (who commits what)
 
@@ -2492,7 +2496,36 @@ When adding new keys to `dictionaries/de.json` and `dictionaries/en.json`, also 
 
 > **Krieg um Aufmerksamkeit. Kein langsames Wachstum. Nur virale Explosion.**
 
----
+
+## 16. Interne Verlinkung & Landingpages — Status & Best Practices (26.04.2026)
+
+### Status 26.04.2026
+
+- Alle wichtigen Runbook- und Tag-Landingpages enthalten:
+  - Grid-Layouts mit Top-Runbooks und Longtail-Listen (z. B. Top 10, alle Runbooks pro Tag)
+  - Interne Links zu verwandten Runbooks, Tags und zentralen Ressourcen (Security Check, Runbooks-Hub, Tag-Cluster)
+  - „Further Resources“-Sektionen mit Links zu /runbooks, /securitycheck etc.
+  - Auf Tag-Seiten: Hinweise zur SEO-Funktion („erhöhen Crawl-Tiefe und verteilen Link-Juice“)
+  - Auf Runbook-Seiten: Links zu verwandten Runbooks (relatedSlugs), Tags, Check, Runbooks-Hub
+
+### Best Practices (aktuell umgesetzt)
+
+- Jede Landingpage (Runbooks/Tags) nutzt ein Grid für Top-Runbooks und eine Longtail-Liste für alle weiteren
+- „Further Resources“-Block mit Links zu /runbooks, /securitycheck, ggf. Tag-Cluster
+- Auf Tag-Seiten: Cross-Links zu verwandten Tags und populären Runbooks
+- Auf Runbook-Seiten: Related-Runbooks-Block (mind. 3–5), Tag-Links, Links zu Check und Runbooks-Hub
+- Alle internen Links nutzen konsistente, SEO-optimierte Linktexte
+- „Not a Pentest“-Hinweisbox auf allen Content-Seiten
+- H1/H2-Struktur mit Hauptkeyword, klare Section-Titel
+
+### Nächste Schritte
+
+- Lückenprüfung: Gibt es Tags/Runbooks ohne ausreichende Cross-Links?
+- Bei neuen Tags/Runbooks: Immer Related-Block und Further-Resources ergänzen
+- Interne Verlinkung regelmäßig mit Screaming Frog/ahrefs prüfen (Crawl-Tiefe, Link-Juice-Verteilung)
+- Bei neuen Landingpages: Grid + Longtail + Further Resources als Pflicht
+
+**Letzter Stand dokumentiert: 26.04.2026 (nach Session „Interne Verlinkung und Landingpages für Runbooks/Tags weiter stärken“)**
 
 ### PHASE 1: VIRAL CORE (Schritte 1-20) — Roast & Share Mechaniken
 

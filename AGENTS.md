@@ -63,6 +63,7 @@ Do not treat `AGENTS.md` as the only source. A new agent reading *only* this fil
 8. **[`docs/testing.md`](docs/testing.md)** — unit/build release gates, `check:static-db`, roast-statistics build resilience, CI job order
 9. **[`docs/i18n-pipeline-state-2026-04-25.md`](docs/i18n-pipeline-state-2026-04-25.md)** — pick()-Pipeline B status, Gemini-quota incident, Ollama twin script, runbook + backlog
 10. **[`docs/audit-response-kimi-2026-04-25.md`](docs/audit-response-kimi-2026-04-25.md)** — response to external Kimi 2.5 audit, point-by-point verification, prioritized action backlog (pricing SSoT, stats constant, status/changelog pages)
+11. **[`docs/consult-automation-gaps-2026-04-26.md`](docs/consult-automation-gaps-2026-04-26.md)** — `/consulting` automation E2E gap analysis + 6-step prio plan (env-healthcheck, dual-cron deactivation, source-filter fix, db-cooldown, cal.com env, e2e-stripe). Owner: Cursor. Hand-off-doc by Windsurf.
 
 Claude's user memory (`C:\Users\rolli\.claude\projects\c--clawguru-seo-monster-gemini\memory\*`) adds a fifth layer: user profile, partnership mode, project context, LLM setup. Only loaded when Claude Code runs; do not rely on it from external agents.
 

@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { clawGuruPublicPricingBullets } from "@/lib/pricing"
 
 interface PageProps { params: { lang: string } }
 
@@ -50,7 +51,7 @@ const faqSchema = {
     {
       "@type": "Question",
       name: "Welche Plattform ist günstiger: ClawGuru oder Datadog?",
-      acceptedAnswer: { "@type": "Answer", text: "ClawGuru bietet ein Festpreis-Lizenzmodell (ab 999$/Jahr bis 100 Hosts) ohne nutzungsbasierte Gebühren. Datadog berechnet pro Host und Nutzung, was bei wachsender Infrastruktur erheblich teurer werden kann." },
+      acceptedAnswer: { "@type": "Answer", text: "ClawGuru: Day Pass ab 9€/24h und monatliche Pläne ab 29€ (Starter) bzw. 99€ (Pro) und 249€ (Scale) in EUR, optional Enterprise. Datadog ist stark nutzungsbasiert (pro Host, Traces, Logs, RUM) und wird mit wachsendem Umfang oft deutlich teurer — schwerer als ein fixer Plattform-Baseline in EUR zu vergleichen." },
     },
     {
       "@type": "Question",
@@ -63,6 +64,8 @@ const faqSchema = {
 export default function ClawGuruVsDatadogPage({ params }: PageProps) {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   if (!SUPPORTED_LOCALES.includes(locale)) notFound()
+  const pricingLocale = locale === "en" ? "en" : "de"
+  const clawGuruPreis = clawGuruPublicPricingBullets(pricingLocale)
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -117,7 +120,7 @@ export default function ClawGuruVsDatadogPage({ params }: PageProps) {
                 <tr><td className="px-6 py-4 text-sm font-medium text-gray-100">Datenschutz</td><td className="px-6 py-4 text-sm text-green-400">DSGVO-konform, EU-Daten</td><td className="px-6 py-4 text-sm text-red-400">US-Rechenzentren</td></tr>
                 <tr className="bg-gray-800"><td className="px-6 py-4 text-sm font-medium text-gray-100">Automatisierung</td><td className="px-6 py-4 text-sm text-green-400">600+ ausführbare Runbooks</td><td className="px-6 py-4 text-sm text-yellow-400">Eingeschränkte Workflows</td></tr>
                 <tr><td className="px-6 py-4 text-sm font-medium text-gray-100">APM / Tracing</td><td className="px-6 py-4 text-sm text-yellow-400">Eingeschränkt</td><td className="px-6 py-4 text-sm text-green-400">Umfassendes APM & RUM</td></tr>
-                <tr className="bg-gray-800"><td className="px-6 py-4 text-sm font-medium text-gray-100">Preismodell</td><td className="px-6 py-4 text-sm text-green-400">Festpreis-Lizenz</td><td className="px-6 py-4 text-sm text-yellow-400">Pro Host/Nutzung</td></tr>
+                <tr className="bg-gray-800"><td className="px-6 py-4 text-sm font-medium text-gray-100">Preismodell</td><td className="px-6 py-4 text-sm text-green-400">Day Pass (24h) + monatliche Pläne (EUR)</td><td className="px-6 py-4 text-sm text-yellow-400">Pro Host/Nutzung</td></tr>
               </tbody>
             </table>
           </div>
@@ -156,11 +159,11 @@ export default function ClawGuruVsDatadogPage({ params }: PageProps) {
               <div className="bg-gray-900 p-4 rounded-lg border border-gray-700">
                 <h3 className="font-bold text-cyan-400 mb-3">ClawGuru Preise</h3>
                 <ul className="space-y-2 text-sm text-gray-300">
-                  <li><strong className="text-gray-100">Explorer:</strong> Kostenlos (bis 10 Hosts)</li>
-                  <li><strong className="text-gray-100">Pro:</strong> 999$/Jahr (bis 100 Hosts)</li>
-                  <li><strong className="text-gray-100">Team:</strong> 4.999$/Jahr (unbegrenzte Hosts)</li>
-                  <li><strong className="text-gray-100">Enterprise:</strong> Individuelles Angebot</li>
-                  <li className="text-green-400 mt-2">Keine nutzungsbasierten Zusatzkosten</li>
+                  {clawGuruPreis.map(({ k, label, text, highlightClass }) => (
+                    <li key={k} className={highlightClass}>
+                      <strong className="text-gray-100">{label}:</strong> {text}
+                    </li>
+                  ))}
                 </ul>
               </div>
               <div className="bg-gray-900 p-4 rounded-lg border border-gray-700">

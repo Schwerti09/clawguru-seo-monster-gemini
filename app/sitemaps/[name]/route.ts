@@ -522,34 +522,99 @@ export async function GET(
       return respond(urlset(urls))
     }
 
-    const rbMap: Record<string, "a-f" | "g-l" | "m-r" | "s-z" | "0-9"> = {
-      "runbooks-a-f": "a-f",
-      "runbooks-g-l": "g-l",
-      "runbooks-m-r": "m-r",
-      "runbooks-s-z": "s-z",
-      "runbooks-0-9": "0-9"
-    }
-
-    const rbLocaleMatch = name.match(/^runbooks-([a-z]{2})-(a-f|g-l|m-r|s-z|0-9)$/i)
-    if (rbLocaleMatch?.[1] && rbLocaleMatch?.[2]) {
-      const loc = (SUPPORTED_LOCALES.includes(rbLocaleMatch[1] as Locale) ? rbLocaleMatch[1] : DEFAULT_LOCALE) as Locale
-      const bucket = rbLocaleMatch[2] as "a-f"|"g-l"|"m-r"|"s-z"|"0-9"
+    // Neue 2-Buchstaben-Bucket-Logik: runbooks-aa, runbooks-ab, ..., runbooks-zz, runbooks-0-9
+    const rb2BucketMatch = name.match(/^runbooks-([a-z]{2})-([a-z0-9]{2}|0-9)$/i)
+    if (rb2BucketMatch?.[1] && rb2BucketMatch?.[2]) {
+      const loc = (SUPPORTED_LOCALES.includes(rb2BucketMatch[1] as Locale) ? rb2BucketMatch[1] : DEFAULT_LOCALE) as Locale
+      const bucket = rb2BucketMatch[2].toLowerCase()
       try {
         const perBucket = Math.max(50, Math.min(5000, parseInt(process.env.SITEMAP_RUNBOOKS_PER_BUCKET || "500", 10) || 500))
         const pseo = await import("@/lib/pseo")
         const list = pseo.materializedRunbooks() as Array<{ slug: string; lastmod: string; clawScore: number }>
-        function inBucket(slug: string): boolean {
-          const c = slug[0]?.toLowerCase() || ""
-          if (bucket === "0-9") return /[0-9]/.test(c)
-          if (bucket === "a-f") return c >= "a" && c <= "f"
-          if (bucket === "g-l") return c >= "g" && c <= "l"
-          if (bucket === "m-r") return c >= "m" && c <= "r"
-          if (bucket === "s-z") return c >= "s" && c <= "z"
-          return true
+        function in2Bucket(slug: string): boolean {
+          if (bucket === "0-9") return /^[0-9]{2}/.test(slug)
+          // Prüfe, ob die ersten beiden Zeichen mit dem Bucket übereinstimmen
+          return slug.slice(0, 2).toLowerCase() === bucket
         }
-        const filtered = list.filter((r) => inBucket(r.slug) && isValidRunbookSlug(r.slug))
-        const sorted = filtered.sort((a, b) => (b.clawScore - a.clawScore) || (b.lastmod.localeCompare(a.lastmod)))
-        const top = sorted.slice(0, perBucket)
+        const filtered = list.filter((r) => in2Bucket(r.slug) && isValidRunbookSlug(r.slug))
+
+        // === GSC Prioritization Integration ===
+        // Try to load GSC runbook report (clicks/impressions/ctr/position)
+        let gscData: Record<string, { clicks: number; impressions: number; ctr: number; position: number }> = {}
+        try {
+          // Only load at runtime (not during build)
+          if (typeof require !== "undefined") {
+            const gscReport = require("../../../data/gsc-runbook-report.json")
+            if (gscReport && Array.isArray(gscReport.runbooks)) {
+              for (const r of gscReport.runbooks) {
+                // Extract slug from URL (locale-aware)
+                const m = r.url.match(/\/runbook\/([^/?#]+)/)
+                if (m && m[1]) {
+                  gscData[m[1]] = {
+                    clicks: r.clicks || 0,
+                    impressions: r.impressions || 0,
+                    ctr: r.ctr || 0,
+                    position: r.position || 99,
+                  }
+                }
+              }
+            }
+          }
+        } catch (e) {
+          // If file missing or parse error, fallback to normal logic
+        }
+
+        // 1. Top 100 by GSC clicks (or impressions if no clicks)
+        let topPriority: typeof filtered = []
+        if (Object.keys(gscData).length > 0) {
+          // Sort by clicks desc, then impressions desc, then fallback to clawScore
+          topPriority = filtered
+            .slice()
+            .sort((a, b) => {
+              const ga = gscData[a.slug] || { clicks: 0, impressions: 0, ctr: 0, position: 99 }
+              const gb = gscData[b.slug] || { clicks: 0, impressions: 0, ctr: 0, position: 99 }
+              if (gb.clicks !== ga.clicks) return gb.clicks - ga.clicks
+              if (gb.impressions !== ga.impressions) return gb.impressions - ga.impressions
+              // Lower position is better
+              if (ga.position !== gb.position) return ga.position - gb.position
+              return (b.clawScore - a.clawScore) || (b.lastmod.localeCompare(a.lastmod))
+            })
+            .slice(0, 100)
+        } else {
+          // Fallback: top 100 by clawScore
+          topPriority = filtered
+            .slice()
+            .sort((a, b) => (b.clawScore - a.clawScore) || (b.lastmod.localeCompare(a.lastmod)))
+            .slice(0, 100)
+        }
+
+        // 2. Rest: rotate deterministically, but bias by GSC if available
+        function seededShuffle(arr: any[], seed: number) {
+          // Simple LCG (linear congruential generator)
+          let s = seed
+          return arr.slice().sort(() => {
+            s = (s * 9301 + 49297) % 233280
+            return ((s / 233280) - 0.5)
+          })
+        }
+        const today = new Date()
+        const seed = today.getUTCFullYear() * 10000 + (today.getUTCMonth() + 1) * 100 + today.getUTCDate()
+        // Remove topPriority from filtered
+        const topSlugs = new Set(topPriority.map(r => r.slug))
+        let rest = filtered.filter(r => !topSlugs.has(r.slug))
+        // If GSC data exists, sort rest by impressions, then shuffle
+        if (Object.keys(gscData).length > 0) {
+          rest = rest.slice().sort((a, b) => {
+            const ga = gscData[a.slug] || { impressions: 0 }
+            const gb = gscData[b.slug] || { impressions: 0 }
+            if (gb.impressions !== ga.impressions) return gb.impressions - ga.impressions
+            return (b.clawScore - a.clawScore) || (b.lastmod.localeCompare(a.lastmod))
+          })
+        }
+        const rotated = seededShuffle(rest, seed)
+
+        // 3. Combine: Top 100 + rotated rest, limit to perBucket
+        const top = topPriority.concat(rotated).slice(0, perBucket)
         if (top.length === 0) {
           const fallback = urlset([
             { loc: `${base}/${loc}/runbook/aws-ssh-hardening-2026`, lastmod, changefreq: "weekly", priority: "0.85" },

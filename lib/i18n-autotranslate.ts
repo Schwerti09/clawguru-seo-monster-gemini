@@ -2,18 +2,41 @@
 // Source strings come from scripts/i18n-harvest-pick-sources.js.
 // lib/i18n-pick.ts imports this module to localize pick(locale, de, en) calls.
 
-// Generated: 2026-04-25T10:18:33.552Z
+// Generated: 2026-04-25T16:43:14.330Z
 // Sources:   4706 unique English strings
-// Locales:   1
+// Locales:   30
 
 const autotranslate: Record<string, Record<string, string>> = {
-  "sv": {
-    " • ": " • ",
-    "\"Not a Pentest\" Notice": "„Inte Pentest“-meddelande",
-    "# CORRECT — Least-Privilege Role": "# Rätt — Minstprivilegierad rolla",
-    "# Default-Deny for all namespaces": "# Standardinställning för alla namnrom: Neja → Nej",
-    "# Explicitly allow: Frontend → Backend": "# Tillåt explicit: Frontend → Backend"
-  }
+  "af": {},
+  "ar": {},
+  "bg": {},
+  "bn": {},
+  "cs": {},
+  "da": {},
+  "el": {},
+  "es": {},
+  "fi": {},
+  "fr": {},
+  "he": {},
+  "hi": {},
+  "hu": {},
+  "id": {},
+  "it": {},
+  "ja": {},
+  "ko": {},
+  "ms": {},
+  "nl": {},
+  "no": {},
+  "pl": {},
+  "pt": {},
+  "ro": {},
+  "ru": {},
+  "sv": {},
+  "th": {},
+  "tr": {},
+  "uk": {},
+  "vi": {},
+  "zh": {}
 }
 
 export default autotranslate

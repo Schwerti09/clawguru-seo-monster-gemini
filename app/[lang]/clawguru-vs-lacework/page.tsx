@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
 import StackDescription from "@/components/marketing/StackDescription"
+import { clawGuruPublicPricingBullets } from "@/lib/pricing"
 
 interface PageProps { params: { lang: string } }
 
@@ -48,6 +49,7 @@ const faqSchema = {
 export default function ClawGuruVsLaceworkPage({ params }: PageProps) {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   if (!SUPPORTED_LOCALES.includes(locale)) notFound()
+  const clawGuruPreis = clawGuruPublicPricingBullets("en")
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -187,7 +189,7 @@ export default function ClawGuruVsLaceworkPage({ params }: PageProps) {
                 </li>
                 <li className="flex items-start">
                   <span className="text-cyan-400 mr-2">-</span>
-                  Vorhersehbare Lizenzkosten bevorzugt
+                  Vorhersehbare EUR-Preise (Day Pass + monatliche Pl\u00e4ne) bevorzugt
                 </li>
                 <li className="flex items-start">
                   <span className="text-cyan-400 mr-2">-</span>
@@ -307,11 +309,11 @@ export default function ClawGuruVsLaceworkPage({ params }: PageProps) {
               <div className="bg-gray-800 p-4 rounded border">
                 <h3 className="font-bold text-cyan-400 mb-3">ClawGuru Pricing</h3>
                 <ul className="space-y-2 text-sm text-gray-300">
-                  <li><strong>Explorer:</strong> Free tier (up to 50 assets)</li>
-                  <li><strong>Pro:</strong> $4,999/year (up to 500 assets)</li>
-                  <li><strong>Team:</strong> $14,999/year (unlimited assets)</li>
-                  <li><strong>Enterprise:</strong> Custom pricing</li>
-                  <li className="text-green-400">No per-asset fees after license</li>
+                  {clawGuruPreis.map(({ k, label, text, highlightClass }) => (
+                    <li key={k} className={highlightClass}>
+                      <strong>{label}:</strong> {text}
+                    </li>
+                  ))}
                 </ul>
               </div>
               <div className="bg-gray-800 p-4 rounded border">

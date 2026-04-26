@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
 import { SITE_URL } from '@/lib/config'
 import { pick } from "@/lib/i18n-pick"
+import { clawGuruCompareTablePriceRow } from "@/lib/pricing"
 
 export async function generateStaticParams() {
   return SUPPORTED_LOCALES.map((lang) => ({ lang }))
@@ -41,6 +42,7 @@ export default function ClawGuruVsCheckovPage({ params }: { params: { lang: stri
   const { lang } = params
   if (!SUPPORTED_LOCALES.includes(lang as Locale)) notFound()
   const isDE = lang === 'de'
+  const pricingLocale = isDE ? "de" : "en"
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -88,7 +90,7 @@ export default function ClawGuruVsCheckovPage({ params }: { params: { lang: stri
                   ['Executable runbooks', '✅ 600+ runbooks', '❌ Findings only'],
                   ['CI/CD integration', '✅ GitHub Actions, GitLab', '✅ Native CI integration'],
                   ['GDPR / EU data', '✅ EU-first', '⚠️ Prisma Cloud = US-based'],
-                  ['Price', '✅ From €0', '✅ OSS free / Enterprise $$$'],
+                  ['Price', clawGuruCompareTablePriceRow(pricingLocale), '✅ OSS free / Enterprise $$$'],
                   ['Compliance frameworks', '✅ SOC2, ISO27001, NIS2', '✅ CIS, NIST, SOC2'],
                   ['Dashboard', '✅ Live dashboard', '⚠️ Only in Prisma Cloud'],
                   ['Self-hosted', '✅ Fully', '✅ CLI runs locally'],

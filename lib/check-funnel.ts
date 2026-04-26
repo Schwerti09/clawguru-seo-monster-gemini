@@ -20,6 +20,7 @@ type CheckEvent =
 type EventRow = {
   event: CheckEvent
   ts: number
+  source?: string
 }
 
 const MAX_EVENTS = 20_000
@@ -36,8 +37,10 @@ function prune(cutoff = now() - RETENTION_MS) {
   if (rows.length > MAX_EVENTS) rows.splice(0, rows.length - MAX_EVENTS)
 }
 
-export function recordCheckFunnelEvent(event: CheckEvent) {
-  rows.push({ event, ts: now() })
+export function recordCheckFunnelEvent(event: CheckEvent, source?: string) {
+  const normalizedSource =
+    typeof source === "string" && source.trim().length > 0 ? source : undefined
+  rows.push({ event, ts: now(), source: normalizedSource })
   prune()
 }
 
@@ -47,6 +50,30 @@ function countSince(event: CheckEvent, sinceMs: number): number {
     const r = rows[i]
     if (r.ts < sinceMs) break
     if (r.event === event) n++
+  }
+  return n
+}
+
+// Mirrors the SQL filter in getCheckFunnelSnapshotPersistent:
+//   meta_json ->> 'source' LIKE 'consulting_%'
+//   OR meta_json ->> 'source' = 'enterprise_api_cta'
+function isConsultingBookingSource(source: string | undefined): boolean {
+  if (!source) return false
+  if (source === "enterprise_api_cta") return true
+  return source.startsWith("consulting_")
+}
+
+function countBookingClicksSince(
+  sinceMs: number,
+  opts?: { consultingOnly?: boolean },
+): number {
+  let n = 0
+  for (let i = rows.length - 1; i >= 0; i--) {
+    const r = rows[i]
+    if (r.ts < sinceMs) break
+    if (r.event !== "booking_click") continue
+    if (opts?.consultingOnly && !isConsultingBookingSource(r.source)) continue
+    n++
   }
   return n
 }
@@ -63,8 +90,8 @@ export function getCheckFunnelSnapshot() {
     checkoutStarts24h: countSince("checkout_start", since24h),
     checkoutRedirects24h: countSince("checkout_redirect", since24h),
     checkoutErrors24h: countSince("checkout_error", since24h),
-    bookingClicks24h: countSince("booking_click", since24h),
-    consultingBookingClicks24h: countSince("booking_click", since24h),
+    bookingClicks24h: countBookingClicksSince(since24h),
+    consultingBookingClicks24h: countBookingClicksSince(since24h, { consultingOnly: true }),
     retentionNudgeImpressions24h: countSince("retention_nudge_impression", since24h),
     retentionNudgeClicks24h: countSince("retention_nudge_click", since24h),
     retentionNudgeDismisses24h: countSince("retention_nudge_dismiss", since24h),
@@ -74,8 +101,8 @@ export function getCheckFunnelSnapshot() {
     pricingClicks7d: countSince("pricing_click", since7d),
     checkoutStarts7d: countSince("checkout_start", since7d),
     checkoutErrors7d: countSince("checkout_error", since7d),
-    bookingClicks7d: countSince("booking_click", since7d),
-    consultingBookingClicks7d: countSince("booking_click", since7d),
+    bookingClicks7d: countBookingClicksSince(since7d),
+    consultingBookingClicks7d: countBookingClicksSince(since7d, { consultingOnly: true }),
     bookingSources24h: [] as BookingSourceRow[],
   }
 }
@@ -88,7 +115,9 @@ function hasDatabase() {
 }
 
 export async function recordCheckFunnelEventPersistent(event: CheckEvent, meta?: CheckMeta) {
-  recordCheckFunnelEvent(event)
+  const source =
+    meta && typeof meta.source === "string" ? (meta.source as string) : undefined
+  recordCheckFunnelEvent(event, source)
   if (!hasDatabase()) return
   try {
     await dbQuery(

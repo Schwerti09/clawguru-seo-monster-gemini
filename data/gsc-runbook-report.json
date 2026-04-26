@@ -1,0 +1,12 @@
+{
+  "generated": "2026-04-26T00:00:00Z",
+  "site": "https://clawguru.org",
+  "start": "2026-04-01",
+  "end": "2026-04-26",
+  "count": 3,
+  "runbooks": [
+    { "url": "https://clawguru.org/de/runbook/aws-ssh-hardening-2026", "clicks": 120, "impressions": 1500, "ctr": 0.08, "position": 2.1 },
+    { "url": "https://clawguru.org/en/runbook/docker-security-hardening-2026", "clicks": 80, "impressions": 900, "ctr": 0.089, "position": 3.2 },
+    { "url": "https://clawguru.org/de/runbook/kubernetes-network-policies-2026", "clicks": 60, "impressions": 700, "ctr": 0.085, "position": 4.5 }
+  ]
+}

@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from "@/lib/i18n"
+import { clawGuruPublicPricingBullets } from "@/lib/pricing"
 
 interface PageProps { params: { lang: string } }
 
@@ -39,7 +40,7 @@ const faqSchema = {
   mainEntity: [
     { "@type": "Question", name: "Was ist der Unterschied zwischen ClawGuru und CrowdStrike?", acceptedAnswer: { "@type": "Answer", text: "ClawGuru ist DSGVO-konform, self-hosted und Open-Source-freundlich mit 600+ Runbooks. CrowdStrike ist ein Cloud-SaaS-EDR mit KI-gestützter Bedrohungserkennung und 24/7 Managed Services, aber US-Rechenzentren." } },
     { "@type": "Question", name: "Ist ClawGuru eine DSGVO-konforme Alternative zu CrowdStrike?", acceptedAnswer: { "@type": "Answer", text: "Ja. ClawGuru läuft vollständig self-hosted in Ihrer eigenen EU-Infrastruktur. CrowdStrike speichert Endpoint-Telemetrie in US-Rechenzentren, was für europäische Unternehmen datenschutzrechtlich problematisch sein kann." } },
-    { "@type": "Question", name: "Wie unterscheiden sich die Preise von ClawGuru und CrowdStrike?", acceptedAnswer: { "@type": "Answer", text: "ClawGuru bietet eine Festpreis-Jahreslizenz (ab 999$/Jahr für 100 Endpoints). CrowdStrike berechnet 69–199$ pro Endpoint/Jahr – bei 1000 Endpoints sind das 69.000–199.000$/Jahr, ohne zusätzliche Module." } },
+    { "@type": "Question", name: "Wie unterscheiden sich die Preise von ClawGuru und CrowdStrike?", acceptedAnswer: { "@type": "Answer", text: "ClawGuru: Day Pass ab 9€/24h und monatliche Pläne ab 29€ (Starter) bzw. 99€ (Pro) und 249€ (Scale) in EUR, optional Enterprise. CrowdStrike: typischerweise 69–199$ pro Endpoint/Jahr (je nach Modul) — bei 1.000 Endpoints werden das schnell sechsstellig, zusätzlich Module/Support." } },
     { "@type": "Question", name: "Hat ClawGuru EDR-Funktionen wie CrowdStrike?", acceptedAnswer: { "@type": "Answer", text: "ClawGuru integriert Open-Source-EDR-Tools wie Wazuh und Osquery. CrowdStrike bietet einen proprietären KI-Falcon-Agenten mit tieferer Kernel-Integration. Für reine EDR-Tiefe führt CrowdStrike, für SIEM+Automatisierung+DSGVO ClawGuru." } },
   ],
 }
@@ -47,6 +48,8 @@ const faqSchema = {
 export default function ClawGuruVsCrowdstrikePage({ params }: PageProps) {
   const locale = (SUPPORTED_LOCALES.includes(params.lang as Locale) ? params.lang : "de") as Locale
   if (!SUPPORTED_LOCALES.includes(locale)) notFound()
+  const pricingLocale = locale === "en" ? "en" : "de"
+  const clawGuruPreis = clawGuruPublicPricingBullets(pricingLocale)
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -68,7 +71,7 @@ export default function ClawGuruVsCrowdstrikePage({ params }: PageProps) {
                 <li className="flex items-start"><span className="text-green-400 mr-2">✓</span>600+ automatisierte Security-Runbooks</li>
                 <li className="flex items-start"><span className="text-green-400 mr-2">✓</span>Kein Vendor Lock-in</li>
                 <li className="flex items-start"><span className="text-green-400 mr-2">✓</span>Open-Source-freundlich</li>
-                <li className="flex items-start"><span className="text-green-400 mr-2">✓</span>Festpreis-Lizenz</li>
+                <li className="flex items-start"><span className="text-green-400 mr-2">✓</span>Day Pass + monatliche Pläne in EUR (keine Endpoint-Taxe)</li>
               </ul>
             </div>
             <div className="bg-red-900 p-6 rounded-lg border border-red-700">
@@ -140,11 +143,11 @@ export default function ClawGuruVsCrowdstrikePage({ params }: PageProps) {
               <div className="bg-gray-900 p-4 rounded-lg border border-gray-700">
                 <h3 className="font-bold text-cyan-400 mb-3">ClawGuru Preise</h3>
                 <ul className="space-y-2 text-sm text-gray-300">
-                  <li><strong className="text-gray-100">Explorer:</strong> Kostenlos (bis 10 Endpoints)</li>
-                  <li><strong className="text-gray-100">Pro:</strong> 999$/Jahr (bis 100 Endpoints)</li>
-                  <li><strong className="text-gray-100">Team:</strong> 4.999$/Jahr (unbegrenzt)</li>
-                  <li><strong className="text-gray-100">Enterprise:</strong> Individuelles Angebot</li>
-                  <li className="text-green-400 mt-2">Keine Endpoint-Zusatzgebühren</li>
+                  {clawGuruPreis.map(({ k, label, text, highlightClass }) => (
+                    <li key={k} className={highlightClass}>
+                      <strong className="text-gray-100">{label}:</strong> {text}
+                    </li>
+                  ))}
                 </ul>
               </div>
               <div className="bg-gray-900 p-4 rounded-lg border border-gray-700">

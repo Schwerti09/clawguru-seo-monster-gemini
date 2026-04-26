@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
 import { SITE_URL } from '@/lib/config'
 import { pick } from "@/lib/i18n-pick"
+import { clawGuruCompareTablePriceRow, clawGuruFaqTrivyFreeAnswerDe, clawGuruFaqTrivyFreeAnswerEn } from "@/lib/pricing"
 
 export async function generateStaticParams() {
   return SUPPORTED_LOCALES.map((lang) => ({ lang }))
@@ -26,21 +27,21 @@ export async function generateMetadata({ params }: { params: { lang: string } })
   }
 }
 
-const faqSchema = {
-  '@context': 'https://schema.org',
-  '@type': 'FAQPage',
-  mainEntity: [
-    { '@type': 'Question', name: 'Was ist der Unterschied zwischen ClawGuru und Trivy?', acceptedAnswer: { '@type': 'Answer', text: 'Trivy ist ein Open-Source-Scanner für CVEs in Container-Images, Dateisystemen und Git-Repos. ClawGuru ist eine vollständige Security-Plattform mit Live-Score, 600+ Executable Runbooks und Compliance-Dashboard — ergänzt Trivy um Runtime-Security.' } },
-    { '@type': 'Question', name: 'Kann ich ClawGuru und Trivy zusammen nutzen?', acceptedAnswer: { '@type': 'Answer', text: 'Ja — das ist die empfohlene Kombination. Trivy übernimmt das CVE-Scanning in der CI/CD-Pipeline, ClawGuru ergänzt mit Runtime-Monitoring, Compliance-Automation und Executable Runbooks für Remediation.' } },
-    { '@type': 'Question', name: 'Ist Trivy kostenlos?', acceptedAnswer: { '@type': 'Answer', text: 'Ja, Trivy ist vollständig Open Source und kostenlos (von Aqua Security). Es läuft lokal als CLI oder CI/CD-Plugin ohne Cloud-Abhängigkeit. ClawGuru bietet ebenfalls einen kostenlosen Explorer-Plan.' } },
-    { '@type': 'Question', name: 'Was sind Executable Runbooks?', acceptedAnswer: { '@type': 'Answer', text: 'Executable Runbooks sind automatisierbare Security-Playbooks für Incident Response, Härtung und Remediation. ClawGuru bietet 600+ Runbooks — Trivy hingegen liefert nur CVE-Findings ohne Handlungsempfehlungen.' } },
-  ],
-}
-
 export default function ClawGuruVsTrivyPage({ params }: { params: { lang: string } }) {
   const { lang } = params
   if (!SUPPORTED_LOCALES.includes(lang as Locale)) notFound()
   const isDE = lang === 'de'
+  const pricingLocale = isDE ? "de" : "en"
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      { '@type': 'Question', name: 'Was ist der Unterschied zwischen ClawGuru und Trivy?', acceptedAnswer: { '@type': 'Answer', text: 'Trivy ist ein Open-Source-Scanner für CVEs in Container-Images, Dateisystemen und Git-Repos. ClawGuru ist eine vollständige Security-Plattform mit Live-Score, 600+ Executable Runbooks und Compliance-Dashboard — ergänzt Trivy um Runtime-Security.' } },
+      { '@type': 'Question', name: 'Kann ich ClawGuru und Trivy zusammen nutzen?', acceptedAnswer: { '@type': 'Answer', text: 'Ja — das ist die empfohlene Kombination. Trivy übernimmt das CVE-Scanning in der CI/CD-Pipeline, ClawGuru ergänzt mit Runtime-Monitoring, Compliance-Automation und Executable Runbooks für Remediation.' } },
+      { '@type': 'Question', name: 'Ist Trivy kostenlos?', acceptedAnswer: { '@type': 'Answer', text: isDE ? clawGuruFaqTrivyFreeAnswerDe() : clawGuruFaqTrivyFreeAnswerEn() } },
+      { '@type': 'Question', name: 'Was sind Executable Runbooks?', acceptedAnswer: { '@type': 'Answer', text: 'Executable Runbooks sind automatisierbare Security-Playbooks für Incident Response, Härtung und Remediation. ClawGuru bietet 600+ Runbooks — Trivy hingegen liefert nur CVE-Findings ohne Handlungsempfehlungen.' } },
+    ],
+  }
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -77,7 +78,7 @@ export default function ClawGuruVsTrivyPage({ params }: { params: { lang: string
                   ['Executable Runbooks', '✅ 600+ Runbooks', '❌ Keine'],
                   ['Live Security Score', '✅ Echtzeit', '❌ Nur Scan-Report'],
                   ['DSGVO / EU-Daten', '✅ EU-First', '✅ Lokal ausführbar'],
-                  ['Preis', '✅ Ab €0 (Explorer)', '✅ Open Source (kostenlos)'],
+                  ['Preis', clawGuruCompareTablePriceRow(pricingLocale), '✅ Open Source (kostenlos)'],
                   ['Compliance-Automation', '✅ SOC2, ISO27001, NIS2', '⚠️ Nur CVE-Findings'],
                   ['Dashboard', '✅ Vollständiges Dashboard', '❌ Kein Dashboard'],
                   ['CI/CD-Integration', '✅ GitHub Actions, GitLab', '✅ Native CI-Integration'],
@@ -88,7 +89,7 @@ export default function ClawGuruVsTrivyPage({ params }: { params: { lang: string
                   ['Executable Runbooks', '✅ 600+ runbooks', '❌ None'],
                   ['Live security score', '✅ Real-time', '❌ Scan report only'],
                   ['GDPR / EU data', '✅ EU-first', '✅ Runs locally'],
-                  ['Price', '✅ From €0 (Explorer)', '✅ Open source (free)'],
+                  ['Price', clawGuruCompareTablePriceRow(pricingLocale), '✅ Open source (free)'],
                   ['Compliance automation', '✅ SOC2, ISO27001, NIS2', '⚠️ CVE findings only'],
                   ['Dashboard', '✅ Full dashboard', '❌ No dashboard'],
                   ['CI/CD integration', '✅ GitHub Actions, GitLab', '✅ Native CI integration'],

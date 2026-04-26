@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import { SUPPORTED_LOCALES, type Locale, buildLocalizedAlternates } from '@/lib/i18n'
 import { SITE_URL } from '@/lib/config'
 import { pick } from "@/lib/i18n-pick"
+import { clawGuruCompareTablePriceRow, clawGuruFaqSnykPriceAnswerDe, clawGuruFaqSnykPriceAnswerEn } from "@/lib/pricing"
 
 export async function generateStaticParams() {
   return SUPPORTED_LOCALES.map((lang) => ({ lang }))
@@ -23,21 +24,21 @@ export async function generateMetadata({ params }: { params: { lang: string } })
   }
 }
 
-const faqSchema = {
-  '@context': 'https://schema.org',
-  '@type': 'FAQPage',
-  mainEntity: [
-    { '@type': 'Question', name: 'Was ist der Unterschied zwischen ClawGuru und Snyk?', acceptedAnswer: { '@type': 'Answer', text: 'Snyk ist eine Developer-Security-Plattform für SAST, SCA und Container-Scanning. ClawGuru ist eine Live-Security-Plattform mit Runtime-Score, 600+ Executable Runbooks und DSGVO-konformem Self-Hosting — ergänzt Snyk um Runtime-Security und Compliance.' } },
-    { '@type': 'Question', name: 'Kann ClawGuru Snyk ersetzen?', acceptedAnswer: { '@type': 'Answer', text: 'Für Teams mit Self-Hosting- und Runtime-Security-Anforderungen: ja. Snyk ist stärker im Code- und Dependency-Scanning (SAST/SCA). Die Kombination beider Tools ist ideal für vollständige Coverage von Build bis Runtime.' } },
-    { '@type': 'Question', name: 'Ist Snyk DSGVO-konform?', acceptedAnswer: { '@type': 'Answer', text: 'Snyk ist ein US-basiertes SaaS-Produkt ohne Self-Hosting-Option. Für strenge DSGVO-Anforderungen ist ClawGuru mit Self-Hosted-Deployment die bessere Wahl, da alle Daten in der eigenen Infrastruktur verbleiben.' } },
-    { '@type': 'Question', name: 'Was kosten Snyk und ClawGuru im Vergleich?', acceptedAnswer: { '@type': 'Answer', text: 'Snyk bietet einen begrenzten Free-Tier, Pro ab $25/Monat pro Entwickler. ClawGuru startet bei €0 (Explorer-Plan) mit unbegrenzten Scans. Für Teams ab 5 Personen ist ClawGuru in der Regel günstiger.' } },
-  ],
-}
-
 export default function ClawGuruVsSnykPage({ params }: { params: { lang: string } }) {
   const { lang } = params
   if (!SUPPORTED_LOCALES.includes(lang as Locale)) notFound()
   const isDE = lang === 'de'
+  const pricingLocale = isDE ? "de" : "en"
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      { '@type': 'Question', name: 'Was ist der Unterschied zwischen ClawGuru und Snyk?', acceptedAnswer: { '@type': 'Answer', text: 'Snyk ist eine Developer-Security-Plattform für SAST, SCA und Container-Scanning. ClawGuru ist eine Live-Security-Plattform mit Runtime-Score, 600+ Executable Runbooks und DSGVO-konformem Self-Hosting — ergänzt Snyk um Runtime-Security und Compliance.' } },
+      { '@type': 'Question', name: 'Kann ClawGuru Snyk ersetzen?', acceptedAnswer: { '@type': 'Answer', text: 'Für Teams mit Self-Hosting- und Runtime-Security-Anforderungen: ja. Snyk ist stärker im Code- und Dependency-Scanning (SAST/SCA). Die Kombination beider Tools ist ideal für vollständige Coverage von Build bis Runtime.' } },
+      { '@type': 'Question', name: 'Ist Snyk DSGVO-konform?', acceptedAnswer: { '@type': 'Answer', text: 'Snyk ist ein US-basiertes SaaS-Produkt ohne Self-Hosting-Option. Für strenge DSGVO-Anforderungen ist ClawGuru mit Self-Hosted-Deployment die bessere Wahl, da alle Daten in der eigenen Infrastruktur verbleiben.' } },
+      { '@type': 'Question', name: 'Was kosten Snyk und ClawGuru im Vergleich?', acceptedAnswer: { '@type': 'Answer', text: isDE ? clawGuruFaqSnykPriceAnswerDe() : clawGuruFaqSnykPriceAnswerEn() } },
+    ],
+  }
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -76,7 +77,7 @@ export default function ClawGuruVsSnykPage({ params }: { params: { lang: string 
                   ['Executable Runbooks', '✅ 600+ Runbooks mit Fix-Steps', '❌ Nur Recommendations'],
                   ['Live Security Score', '✅ Echtzeit-Score', '❌ Nur Scan-Berichte'],
                   ['DSGVO / EU-Daten', '✅ EU-First, Self-Hosted möglich', '⚠️ US-basiert (SaaS)'],
-                  ['Preis', '✅ Ab €0 (Explorer)', '⚠️ Free-Tier begrenzt, Pro ab $25/Monat'],
+                  ['Preis', clawGuruCompareTablePriceRow(pricingLocale), '⚠️ Free-Tier begrenzt, Pro ab $25/Monat'],
                   ['CI/CD-Integration', '✅ GitHub Actions, GitLab', '✅ Native in alle gängigen CIs'],
                   ['Compliance-Dashboard', '✅ SOC2, ISO27001, NIS2', '⚠️ Nur in Enterprise-Plan'],
                   ['Self-Hosted', '✅ Vollständig möglich', '❌ SaaS-only (kein Self-Host)'],
@@ -89,7 +90,7 @@ export default function ClawGuruVsSnykPage({ params }: { params: { lang: string 
                   ['Executable runbooks', '✅ 600+ runbooks with fix steps', '❌ Recommendations only'],
                   ['Live security score', '✅ Real-time score', '❌ Scan reports only'],
                   ['GDPR / EU data', '✅ EU-first, self-hosted possible', '⚠️ US-based (SaaS)'],
-                  ['Price', '✅ From €0 (Explorer)', '⚠️ Free tier limited, Pro from $25/mo'],
+                  ['Price', clawGuruCompareTablePriceRow(pricingLocale), '⚠️ Free tier limited, Pro from $25/mo'],
                   ['CI/CD integration', '✅ GitHub Actions, GitLab', '✅ Native in all major CIs'],
                   ['Compliance dashboard', '✅ SOC2, ISO27001, NIS2', '⚠️ Enterprise plan only'],
                   ['Self-hosted', '✅ Fully possible', '❌ SaaS-only (no self-host)'],

@@ -259,10 +259,17 @@ In-Memory. Bei Serverless-Cold-Start (häufig bei niedrigem Traffic) wird der Ma
 
 | Datum | Step | Owner | Status | Commit |
 |---|---|---|---|---|
-| 2026-04-26 | Plan dokumentiert | Windsurf | ✅ Done | (this commit) |
-| — | Step 1 ENV-Doku | Cursor | ⏳ Pending | — |
-| — | Step 2 Doppel-Cron | Cursor | ⏳ Pending | — |
+| 2026-04-26 | Plan dokumentiert | Windsurf | ✅ Done | `b06c6d9a` |
+| 2026-04-26 | Step 1 ENV-Doku + Healthcheck | Windsurf (delegated by user) | ✅ Done | (next commit) |
+| — | Step 2 Cron-Strategie (Railway primary) | Pending platform decision | ⏳ Pending | — |
 | — | Step 3 Source-Filter | Cursor | ⏳ Pending | — |
 | — | Step 4 Cooldown DB | Cursor | ⏳ Pending | — |
 | — | Step 5 Cal.com URL | Cursor | ⏳ Pending | — |
 | — | Step 6 E2E Stripe | Cursor | ⏳ Pending | — |
+
+### Step 1 Deliverables (2026-04-26)
+
+- ✅ `docs/consult-automation-env-2026-04-26.md` — 35 ENV-Vars dokumentiert (10 required, 7 recommended, 18 optional)
+- ✅ `app/api/consult-health/env-check/route.ts` — CRON_SECRET-protected GET endpoint, status `ok`/`degraded`/`broken`, no secret leakage
+- ✅ `__tests__/consult-health-env-check-route.test.ts` — 16 unit tests, all green (auth/classification/aliases/security)
+- ✅ jest run: 16 passed, 0 failed, 4.5s

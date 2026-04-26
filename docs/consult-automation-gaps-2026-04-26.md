@@ -260,8 +260,8 @@ In-Memory. Bei Serverless-Cold-Start (häufig bei niedrigem Traffic) wird der Ma
 | Datum | Step | Owner | Status | Commit |
 |---|---|---|---|---|
 | 2026-04-26 | Plan dokumentiert | Windsurf | ✅ Done | `b06c6d9a` |
-| 2026-04-26 | Step 1 ENV-Doku + Healthcheck | Windsurf (delegated by user) | ✅ Done | (next commit) |
-| — | Step 2 Cron-Strategie (Railway primary) | Pending platform decision | ⏳ Pending | — |
+| 2026-04-26 | Step 1 ENV-Doku + Healthcheck | Windsurf (delegated by user) | ✅ Done | `6dca59a1` |
+| 2026-04-26 | Step 2 Railway-native Cron | Windsurf (delegated by user) | ✅ Done — needs Railway Dashboard setup | (next commit) |
 | — | Step 3 Source-Filter | Cursor | ⏳ Pending | — |
 | — | Step 4 Cooldown DB | Cursor | ⏳ Pending | — |
 | — | Step 5 Cal.com URL | Cursor | ⏳ Pending | — |
@@ -273,3 +273,21 @@ In-Memory. Bei Serverless-Cold-Start (häufig bei niedrigem Traffic) wird der Ma
 - ✅ `app/api/consult-health/env-check/route.ts` — CRON_SECRET-protected GET endpoint, status `ok`/`degraded`/`broken`, no secret leakage
 - ✅ `__tests__/consult-health-env-check-route.test.ts` — 16 unit tests, all green (auth/classification/aliases/security)
 - ✅ jest run: 16 passed, 0 failed, 4.5s
+
+### Step 2 Deliverables (2026-04-26)
+
+User decision: **Railway-only**. Netlify and Vercel completely removed as cron sources.
+
+- ✅ `scripts/cron/consult-health-tick.mjs` — portable Node script, calls `https://clawguru.org/api/consult-health/cron` with Bearer auth, JSON-structured logging, exit-code semantics (0=ok, 1=transport, 2=auth, 3=server, 4=config)
+- ✅ `vercel.json` — `crons` block removed
+- ✅ `netlify.toml` — `[functions."consult-health-cron"]` block removed (replaced with comment pointing at Railway setup)
+- ✅ `netlify/functions/consult-health-cron.js` — deleted via `git rm`
+- ✅ `docs/consult-automation-env-2026-04-26.md` Section 4 — Railway Cron Service setup runbook + emergency fallback options (cron-job.org / GitHub Actions / systemd)
+
+**Open action for user (Railway Dashboard):**
+1. Create new service `consult-health-cron` in same Railway project
+2. Source: same Git repo
+3. Start command: `node scripts/cron/consult-health-tick.mjs`
+4. Cron schedule: `*/15 * * * *`
+5. ENV: `CRON_SECRET` (same as web service), `SITE_URL=https://clawguru.org`
+6. Verify after 24h: `consult_health_notify_events` table shows ~96 events

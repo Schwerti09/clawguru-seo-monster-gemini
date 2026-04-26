@@ -3,12 +3,6 @@
   "buildCommand": "npm run build",
   "outputDirectory": ".next",
   "installCommand": "npm install --legacy-peer-deps",
-  "crons": [
-    {
-      "path": "/api/consult-health/cron",
-      "schedule": "*/15 * * * *"
-    }
-  ],
   "functions": {
     "app/[lang]/runbook/[slug]/page.tsx": { "maxDuration": 60 },
     "app/runbook/[slug]/page.tsx": { "maxDuration": 60 },

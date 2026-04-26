@@ -112,11 +112,11 @@ Dieses Dokument listet **alle ENV-Vars**, die für den `/consulting`-Workflow En
 
 ## 4. Plattform-Setup
 
-Production läuft auf **Railway** (Migration 20.04.2026, siehe `AGENTS.md:763`). Vercel + Netlify sind Standby/Staging.
+Production läuft auf **Railway** (Migration 20.04.2026, siehe `AGENTS.md:763`). Vercel + Netlify sind seit 26.04.2026 **nicht mehr als Cron-Quelle aktiv** — Railway ist die einzige Cron-Quelle.
 
-### 4.1 Railway (Production)
+### 4.1 Railway (Production — Web Service)
 
-Alle 🔴 required und 🟡 recommended Vars müssen gesetzt sein.
+Der Haupt-`web`-Service von Railway braucht alle 🔴 required und 🟡 recommended Vars.
 
 ```bash
 # Stripe
@@ -150,20 +150,53 @@ CONSULT_HEALTH_PAGE_WEBHOOK_URL=https://events.pagerduty.com/...
 NEXT_PUBLIC_CAL_DEMO_URL=https://cal.com/clawguru/enterprise-demo
 ```
 
-### 4.2 Vercel (Standby)
+### 4.2 Railway (Production — Cron Service)
 
-Nur falls Vercel-Deploy aktiv bleiben soll. Sonst Vercel-Cron deaktivieren (siehe Step 2 in [`consult-automation-gaps-2026-04-26.md`](consult-automation-gaps-2026-04-26.md#step-2)).
+Seit 26.04.2026 läuft der `/api/consult-health/cron`-Tick als separater Railway-Service. Setup:
 
-### 4.3 Netlify (Cron-Only Option)
+**1) Neuen Service im selben Railway-Projekt anlegen**
 
-Wenn Option B aus Step 2 gewählt wird (Netlify ruft via `fetch` Production-URL):
+Im Railway-Dashboard: `+ New` → `Empty Service` (oder `GitHub Repo` → selbes Repo).
+Name: `consult-health-cron`.
+
+**2) Service-Config setzen**
+
+- **Source:** selbes Git-Repo, Branch `main`.
+- **Build Command:** `npm install --legacy-peer-deps` (oder leer lassen, nixpacks erkennt).
+- **Start Command:** `node scripts/cron/consult-health-tick.mjs`
+- **Cron Schedule:** `*/15 * * * *` (Railway unterstützt Cron Schedules direkt in der Service-Config)
+- **Restart Policy:** Never (der Service beendet sich nach jedem Tick sauber).
+
+**3) ENV-Vars auf dem Cron-Service**
+
+Minimal benötigt:
 
 ```bash
-SITE_URL=https://clawguru.org  # optional, hat Fallback
-CRON_SECRET=<gleicher value wie Railway>
+CRON_SECRET=<exakt gleicher Wert wie im Web Service>
+SITE_URL=https://clawguru.org
+# optional:
+# CRON_TIMEOUT_MS=30000
+# CRON_VERBOSE=1
 ```
 
-Netlify-Funktion `netlify/functions/consult-health-cron.js` nutzt `process.env.URL || DEPLOY_PRIME_URL || SITE_URL || "https://clawguru.org"` — also funktioniert auch ohne explizites `SITE_URL`-Setting auf Netlify, solange Production-Domain `clawguru.org` ist.
+**4) Verifikation**
+
+- Nach erstem Deploy: Railway-Logs zeigen pro Tick eine JSON-Zeile `{"level":"info","message":"cron tick completed","status":200}`
+- Nach 24h: `SELECT count(*) FROM consult_health_notify_events WHERE event IN ('attempted','sent','skipped_info','skipped_no_webhook','skipped_cooldown','failed');` sollte ~96 Events zeigen (24h × 4/h).
+- Bei Auth-Problem: Exit-Code 2, Log zeigt `"authentication failed"` — Secret-Mismatch zwischen Services.
+
+### 4.3 Notfall-Fallback (wenn Railway-Cron ausfällt)
+
+Das Script `scripts/cron/consult-health-tick.mjs` ist **platform-agnostic**. Es kann identisch via externem Scheduler aufgerufen werden:
+
+- **cron-job.org:** URL `https://clawguru.org/api/consult-health/cron` + Header `Authorization: Bearer $CRON_SECRET` + Schedule `*/15 * * * *`.
+- **GitHub Actions:** `.github/workflows/consult-health-cron.yml` mit `schedule: - cron: "*/15 * * * *"` und `run: node scripts/cron/consult-health-tick.mjs` (Delay-Risiko 10-30 min beachten).
+- **systemd timer / cron / Windows Task Scheduler:** `node scripts/cron/consult-health-tick.mjs` als Befehl.
+
+### 4.4 Vercel + Netlify Status (26.04.2026)
+
+- **Vercel:** `crons`-Block aus `vercel.json` entfernt. Deployments können weiterlaufen, aber Vercel feuert den Cron nicht mehr.
+- **Netlify:** `[functions."consult-health-cron"]` aus `netlify.toml` entfernt. `netlify/functions/consult-health-cron.js` gelöscht. Netlify ist nicht mehr Cron-Quelle.
 
 ---
 

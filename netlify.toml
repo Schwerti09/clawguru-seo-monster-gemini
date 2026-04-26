@@ -42,5 +42,5 @@
 [functions]
   directory = "netlify/functions"
 
-[functions."consult-health-cron"]
-  schedule = "*/15 * * * *"
+# Cron scheduling is handled by Railway (production) via scripts/cron/consult-health-tick.mjs.
+# See docs/consult-automation-env-2026-04-26.md section 4 for setup details.

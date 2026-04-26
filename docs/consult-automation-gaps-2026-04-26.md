@@ -263,7 +263,7 @@ In-Memory. Bei Serverless-Cold-Start (häufig bei niedrigem Traffic) wird der Ma
 | 2026-04-26 | Step 1 ENV-Doku + Healthcheck | Windsurf (delegated by user) | ✅ Done | `6dca59a1` |
 | 2026-04-26 | Step 2 Railway-native Cron | Windsurf (delegated by user) | ✅ Done — needs Railway Dashboard setup | `52b4e07b` |
 | 2026-04-26 | Step 3 Source-Filter | Windsurf (delegated by user) | ✅ Done — code in mega-bundle commit | `f244c072` ⚠️ |
-| — | Step 4 Cooldown DB | Cursor | ⏳ Pending | — |
+| 2026-04-26 | Step 4 Cooldown DB-persistent | Windsurf (delegated by user) | ✅ Done | (next commit) |
 | — | Step 5 Cal.com URL | Cursor | ⏳ Pending | — |
 | — | Step 6 E2E Stripe | Cursor | ⏳ Pending | — |
 
@@ -301,3 +301,18 @@ Code shipped, but as part of mega-bundle commit `f244c072` (multi-agent hygiene 
 - ✅ jest run: 9 passed; full consult test suite: 38 passed across 6 suites, no regressions.
 
 **Effect:** when `DATABASE_URL` is unavailable (failover scenario), the in-memory snapshot now produces the same consultingBookingClicks numbers as the SQL path, so the profit-funnel health score is no longer inflated and consult-channel alerts are no longer silenced during outages.
+
+### Step 4 Deliverables (2026-04-26)
+
+Addresses Gap 3 (P1): the alert cooldown lived only in a Node-process `Map<fingerprint, ms>`, which was emptied on every cold start. After a Railway redeploy or worker restart, the first cron tick could re-fire an alert that had been sent 5 minutes earlier by the previous worker.
+
+- ✅ `lib/consult-health-notify.ts`:
+  - new `lookupLastSentFromDb(fingerprint)` reads `MAX(created_at)` for `event = 'sent'` matching the fingerprint in `consult_health_notify_events`, returning ms or `null` on DB error.
+  - `maybeNotifyConsultHealthAlerts()` now does in-memory cooldown first (fast), then optimistically marks the fingerprint as in-flight to block same-process races, then awaits the DB cooldown lookup before deciding to send.
+  - DB hit → `skipped_cooldown` event with `cooldownSource: 'db'`, in-memory cache hydrated with the actual DB timestamp so subsequent polls skip the DB.
+  - DB error (`null`) → fall through to send (defensive: better to maybe double-alert than to silence alerts during a DB outage).
+  - All `attempted` / `sent` / `failed` / `skipped_cooldown` events now write the `fingerprint` into `meta_json` so the cooldown lookup can find them.
+- ✅ `__tests__/consult-health-notify-cooldown-db.test.ts` — 8 unit tests covering: DB-hit blocks send, no-row allows send, expired-row allows send, DB-error falls through, no-DATABASE_URL falls back to in-memory only, cache hydration, fingerprint in meta_json, parallel same-process call protection.
+- ✅ Full consult test suite: 48 passed across 8 suites, no regressions.
+
+**Effect:** alerts now respect the cooldown window across cold starts and multi-worker fan-out. After a Railway redeploy at minute 7 of an hour, the next cron tick at minute 15 will see the prior worker's `sent` row from minute 5 in the DB and skip with `cooldownSource: 'db'` instead of re-firing.

@@ -171,8 +171,43 @@ export function resetConsultHealthNotifyStateForTests() {
 }
 
 /**
+ * Looks up the most recent 'sent' event for this fingerprint in the persistent
+ * notify-events table. Returns the timestamp in ms, or 0 if nothing recent.
+ * Used to enforce cooldown across cold starts / multi-instance setups so a
+ * fresh Railway cron worker does not re-fire alerts already sent by a prior
+ * worker within the cooldown window.
+ *
+ * Returns null if the DB query throws — caller should treat that as "no info"
+ * and fall through to send (defensive: better to maybe send twice than to
+ * silence legit alerts during a DB outage).
+ */
+async function lookupLastSentFromDb(key: string): Promise<number | null> {
+  if (!hasDatabase()) return 0
+  try {
+    await ensureNotifyTable()
+    const res = await dbQuery<{ last_sent_ms: string | null }>(
+      `SELECT EXTRACT(EPOCH FROM MAX(created_at))*1000 AS last_sent_ms
+         FROM consult_health_notify_events
+        WHERE event = 'sent'
+          AND meta_json ->> 'fingerprint' = $1
+          AND created_at >= NOW() - INTERVAL '7 days'`,
+      [key]
+    )
+    return Number(res.rows[0]?.last_sent_ms || 0)
+  } catch {
+    return null
+  }
+}
+
+/**
  * Fire-and-forget: if routing is warn/page and a matching webhook URL is set,
  * POST once per cooldown window per alert fingerprint.
+ *
+ * Cooldown is enforced in two layers:
+ *   1. Process-local in-memory map (fast, blocks repeat polls in the same
+ *      Node process).
+ *   2. DB lookup against consult_health_notify_events (slower but survives
+ *      cold starts, redeploys, and multi-instance fan-out).
  */
 export function maybeNotifyConsultHealthAlerts(
   health: ConsultHealthForNotify,
@@ -193,20 +228,54 @@ export function maybeNotifyConsultHealthAlerts(
 
   const key = fingerprint(health)
   const now = Date.now()
-  const prev = lastSentMs.get(key) ?? 0
-  if (now - prev < cooldownMs()) {
+  const memPrev = lastSentMs.get(key) ?? 0
+  if (now - memPrev < cooldownMs()) {
     notifyStats.skippedCooldown += 1
-    recordPersistent("skipped_cooldown", severity, { score: health.score, generatedAt: ctx.generatedAt })
+    recordPersistent("skipped_cooldown", severity, {
+      fingerprint: key,
+      score: health.score,
+      generatedAt: ctx.generatedAt,
+      cooldownSource: "memory",
+    })
     return
   }
-  lastSentMs.set(key, now)
-  notifyStats.attempted += 1
-  recordPersistent("attempted", severity, { score: health.score, generatedAt: ctx.generatedAt })
 
-  const text = buildText(health, ctx)
-  const isSlackHost = url.includes("hooks.slack.com")
+  // Optimistic in-memory mark BEFORE the async DB lookup, so concurrent calls
+  // in the same Node process see this fingerprint as "in flight" and short-
+  // circuit through the memory branch instead of all racing to send.
+  lastSentMs.set(key, now)
 
   void (async () => {
+    // DB-persistent cooldown check (covers cold starts).
+    const dbLastSent = await lookupLastSentFromDb(key)
+    if (dbLastSent !== null && dbLastSent > 0 && now - dbLastSent < cooldownMs()) {
+      notifyStats.skippedCooldown += 1
+      recordPersistent("skipped_cooldown", severity, {
+        fingerprint: key,
+        score: health.score,
+        generatedAt: ctx.generatedAt,
+        cooldownSource: "db",
+      })
+      // Re-align in-memory cache with the actual last-sent timestamp from DB
+      // so subsequent polls compute the correct remaining cooldown without
+      // hitting the DB again.
+      lastSentMs.set(key, dbLastSent)
+      return
+    }
+    // (dbLastSent === null indicates a DB error; we fall through to send to
+    // avoid silencing alerts during DB outages. lastSentMs is already set to
+    // `now` above, so a parallel call in the same process is still blocked.)
+
+    notifyStats.attempted += 1
+    recordPersistent("attempted", severity, {
+      fingerprint: key,
+      score: health.score,
+      generatedAt: ctx.generatedAt,
+    })
+
+    const text = buildText(health, ctx)
+    const isSlackHost = url.includes("hooks.slack.com")
+
     try {
       if (isSlackHost) {
         await postJson(url, { text })
@@ -224,11 +293,19 @@ export function maybeNotifyConsultHealthAlerts(
         })
       }
       notifyStats.sent += 1
-      recordPersistent("sent", severity, { score: health.score, generatedAt: ctx.generatedAt })
+      recordPersistent("sent", severity, {
+        fingerprint: key,
+        score: health.score,
+        generatedAt: ctx.generatedAt,
+      })
     } catch {
       // Non-blocking: never break admin analytics on notify failures.
       notifyStats.failed += 1
-      recordPersistent("failed", severity, { score: health.score, generatedAt: ctx.generatedAt })
+      recordPersistent("failed", severity, {
+        fingerprint: key,
+        score: health.score,
+        generatedAt: ctx.generatedAt,
+      })
     }
   })()
 }

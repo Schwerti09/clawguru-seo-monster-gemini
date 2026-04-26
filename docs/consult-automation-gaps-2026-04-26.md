@@ -261,8 +261,8 @@ In-Memory. Bei Serverless-Cold-Start (häufig bei niedrigem Traffic) wird der Ma
 |---|---|---|---|---|
 | 2026-04-26 | Plan dokumentiert | Windsurf | ✅ Done | `b06c6d9a` |
 | 2026-04-26 | Step 1 ENV-Doku + Healthcheck | Windsurf (delegated by user) | ✅ Done | `6dca59a1` |
-| 2026-04-26 | Step 2 Railway-native Cron | Windsurf (delegated by user) | ✅ Done — needs Railway Dashboard setup | (next commit) |
-| — | Step 3 Source-Filter | Cursor | ⏳ Pending | — |
+| 2026-04-26 | Step 2 Railway-native Cron | Windsurf (delegated by user) | ✅ Done — needs Railway Dashboard setup | `52b4e07b` |
+| 2026-04-26 | Step 3 Source-Filter | Windsurf (delegated by user) | ✅ Done — code in mega-bundle commit | `f244c072` ⚠️ |
 | — | Step 4 Cooldown DB | Cursor | ⏳ Pending | — |
 | — | Step 5 Cal.com URL | Cursor | ⏳ Pending | — |
 | — | Step 6 E2E Stripe | Cursor | ⏳ Pending | — |
@@ -291,3 +291,13 @@ User decision: **Railway-only**. Netlify and Vercel completely removed as cron s
 4. Cron schedule: `*/15 * * * *`
 5. ENV: `CRON_SECRET` (same as web service), `SITE_URL=https://clawguru.org`
 6. Verify after 24h: `consult_health_notify_events` table shows ~96 events
+
+### Step 3 Deliverables (2026-04-26)
+
+Code shipped, but as part of mega-bundle commit `f244c072` (multi-agent hygiene incident, see `AGENTS.md` 26.04.2026 incident log). Step 3 work itself is correct and tested.
+
+- ✅ `lib/check-funnel.ts` — `EventRow.source?` field added; `recordCheckFunnelEvent(event, source?)` accepts optional source; `isConsultingBookingSource()` mirrors the SQL filter (`LIKE 'consulting_%' OR = 'enterprise_api_cta'`); `countBookingClicksSince()` replaces the wrong `countSince("booking_click", ...)` calls; `recordCheckFunnelEventPersistent()` extracts `meta.source` and forwards it.
+- ✅ `__tests__/check-funnel-source-filter.test.ts` — 9 unit tests pinning the in-memory filter contract: bookingClicks24h counts everything, consultingBookingClicks24h only counts consulting + enterprise_api_cta, whitespace handling, legacy single-arg signature still works, meta.source extraction, 7d window mirroring.
+- ✅ jest run: 9 passed; full consult test suite: 38 passed across 6 suites, no regressions.
+
+**Effect:** when `DATABASE_URL` is unavailable (failover scenario), the in-memory snapshot now produces the same consultingBookingClicks numbers as the SQL path, so the profit-funnel health score is no longer inflated and consult-channel alerts are no longer silenced during outages.

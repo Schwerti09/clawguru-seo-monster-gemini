@@ -8,6 +8,7 @@ import { dockerNonrootMission } from "./docker-nonroot"
 import { postgresHardeningMission } from "./postgres-hardening"
 import { reverseProxyRatelimitMission } from "./reverse-proxy-ratelimit"
 import { backupRestoreDrillMission } from "./backup-restore-drill"
+import { secretsRotationMission } from "./secrets-rotation"
 
 // Mission registry. Add new missions here; they become instantly routable via
 // /academy/mission/[slug]. Mission metadata on the hub + track pages is pulled
@@ -22,6 +23,7 @@ export const MISSIONS: Record<string, Mission> = {
   [postgresHardeningMission.slug]:    postgresHardeningMission,
   [reverseProxyRatelimitMission.slug]:reverseProxyRatelimitMission,
   [backupRestoreDrillMission.slug]:   backupRestoreDrillMission,
+  [secretsRotationMission.slug]:      secretsRotationMission,
 }
 
 export interface MissionIndexEntry {
@@ -46,6 +48,7 @@ export const MISSION_INDEX: MissionIndexEntry[] = [
   { slug: "postgres-hardening",     track: "intermediate", order: 2, xp: 180, durationMin: 10, accent: "blue" },
   { slug: "reverse-proxy-ratelimit",track: "intermediate", order: 3, xp: 200, durationMin: 9,  accent: "blue" },
   { slug: "backup-restore-drill",   track: "intermediate", order: 4, xp: 220, durationMin: 12, accent: "blue" },
+  { slug: "secrets-rotation",       track: "intermediate", order: 5, xp: 240, durationMin: 13, accent: "blue" },
 ]
 
 export function getMission(slug: string): Mission | undefined {

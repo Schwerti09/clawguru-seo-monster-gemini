@@ -231,6 +231,68 @@ describe("GET /api/consult-health/env-check", () => {
       expect(body.configured["stripe.secret"]).toBe(false)
       expect(body.status).toBe("broken")
     })
+
+    // Step 5 — Cal.com URL validation. A non-empty but malformed value must
+    // be reported as missing, not configured, so monitoring catches the typo
+    // before users hit a broken Scale-tier CTA.
+    it("flags NEXT_PUBLIC_CAL_DEMO_URL as missing when the value is a placeholder string", async () => {
+      setRequiredEnv()
+      setRecommendedEnv()
+      process.env.NEXT_PUBLIC_CAL_DEMO_URL = "TODO"
+      const req = new NextRequest("https://clawguru.org/api/consult-health/env-check?secret=test-secret-123")
+      const res = await GET(req)
+      const body = await res.json()
+      expect(body.configured["booking.cal_demo"]).toBe(false)
+      expect(body.summary.recommended.missing).toContain("booking.cal_demo")
+      expect(body.status).toBe("degraded")
+    })
+
+    it("flags NEXT_PUBLIC_CAL_DEMO_URL as missing when the scheme is http (not https)", async () => {
+      setRequiredEnv()
+      setRecommendedEnv()
+      process.env.NEXT_PUBLIC_CAL_DEMO_URL = "http://cal.com/clawguru/demo"
+      const req = new NextRequest("https://clawguru.org/api/consult-health/env-check?secret=test-secret-123")
+      const res = await GET(req)
+      const body = await res.json()
+      expect(body.configured["booking.cal_demo"]).toBe(false)
+      expect(body.status).toBe("degraded")
+    })
+
+    it("flags NEXT_PUBLIC_CAL_DEMO_URL as missing when the host is not on the whitelist", async () => {
+      setRequiredEnv()
+      setRecommendedEnv()
+      process.env.NEXT_PUBLIC_CAL_DEMO_URL = "https://example.com/clawguru/demo"
+      const req = new NextRequest("https://clawguru.org/api/consult-health/env-check?secret=test-secret-123")
+      const res = await GET(req)
+      const body = await res.json()
+      expect(body.configured["booking.cal_demo"]).toBe(false)
+      expect(body.status).toBe("degraded")
+    })
+
+    it("accepts a valid calendly.com URL for NEXT_PUBLIC_CAL_DEMO_URL", async () => {
+      setRequiredEnv()
+      setRecommendedEnv()
+      process.env.NEXT_PUBLIC_CAL_DEMO_URL = "https://calendly.com/clawguru/30min"
+      const req = new NextRequest("https://clawguru.org/api/consult-health/env-check?secret=test-secret-123")
+      const res = await GET(req)
+      const body = await res.json()
+      expect(body.configured["booking.cal_demo"]).toBe(true)
+      expect(body.status).toBe("ok")
+    })
+
+    it("flags optional booking URLs as not configured when they hold a placeholder", async () => {
+      setRequiredEnv()
+      setRecommendedEnv()
+      process.env.NEXT_PUBLIC_CAL_STRATEGY_URL = "TBD"
+      process.env.NEXT_PUBLIC_CAL_AUDIT_URL = "see ENV docs"
+      const req = new NextRequest("https://clawguru.org/api/consult-health/env-check?secret=test-secret-123")
+      const res = await GET(req)
+      const body = await res.json()
+      expect(body.configured["booking.cal_strategy"]).toBe(false)
+      expect(body.configured["booking.cal_audit"]).toBe(false)
+      // status stays ok because both are optional
+      expect(body.status).toBe("ok")
+    })
   })
 
   describe("response shape and security", () => {

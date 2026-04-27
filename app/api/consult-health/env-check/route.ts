@@ -4,6 +4,7 @@
 // Reference doc: docs/consult-automation-env-2026-04-26.md
 
 import { NextRequest, NextResponse } from "next/server"
+import { isValidBookingUrl } from "@/lib/booking-url"
 
 export const dynamic = "force-dynamic"
 export const runtime = "nodejs"
@@ -16,6 +17,12 @@ type EnvCheck = {
   severity: Severity
   /** Stable id used in the configured-tree response. */
   id: string
+  /**
+   * Optional value validator. When provided, a non-empty ENV value still has
+   * to pass this predicate to count as configured. Used for booking URLs so
+   * a typo / disallowed host shows up as missing instead of falsely OK.
+   */
+  validator?: (value: string) => boolean
 }
 
 /**
@@ -78,10 +85,12 @@ const ENV_CHECKS: EnvCheck[] = [
   },
   { id: "alerts.cooldownMs", vars: ["CONSULT_HEALTH_ALERT_COOLDOWN_MS"], severity: "optional" },
 
-  // Booking (recommended + optional)
-  { id: "booking.cal_demo", vars: ["NEXT_PUBLIC_CAL_DEMO_URL"], severity: "recommended" },
-  { id: "booking.cal_strategy", vars: ["NEXT_PUBLIC_CAL_STRATEGY_URL"], severity: "optional" },
-  { id: "booking.cal_audit", vars: ["NEXT_PUBLIC_CAL_AUDIT_URL"], severity: "optional" },
+  // Booking (recommended + optional). Validator rejects malformed URLs so a
+  // Railway-Dashboard typo doesn't appear as configured while the actual
+  // BookingButton silently falls back to mailto.
+  { id: "booking.cal_demo", vars: ["NEXT_PUBLIC_CAL_DEMO_URL"], severity: "recommended", validator: isValidBookingUrl },
+  { id: "booking.cal_strategy", vars: ["NEXT_PUBLIC_CAL_STRATEGY_URL"], severity: "optional", validator: isValidBookingUrl },
+  { id: "booking.cal_audit", vars: ["NEXT_PUBLIC_CAL_AUDIT_URL"], severity: "optional", validator: isValidBookingUrl },
 
   // Affiliate (optional)
   { id: "affiliate.accounts", vars: ["AFFILIATE_CONNECT_ACCOUNTS"], severity: "optional" },
@@ -92,10 +101,11 @@ const ENV_CHECKS: EnvCheck[] = [
   { id: "killswitches.ai_features", vars: ["DISABLE_AI_FEATURES"], severity: "optional" },
 ]
 
-function isConfigured(vars: string[]): boolean {
+function isConfigured(vars: string[], validator?: (value: string) => boolean): boolean {
   for (const name of vars) {
     const value = process.env[name]
-    if (typeof value === "string" && value.trim().length > 0) return true
+    if (typeof value !== "string" || value.trim().length === 0) continue
+    if (!validator || validator(value)) return true
   }
   return false
 }
@@ -143,7 +153,7 @@ function classify(checks: EnvCheck[]): EnvCheckResult {
   const resendDisabled = isConfigured(["RESEND_DISABLED"])
 
   for (const check of checks) {
-    const ok = isConfigured(check.vars)
+    const ok = isConfigured(check.vars, check.validator)
     configured[check.id] = ok
 
     // Special-case: when RESEND_DISABLED is set, RESEND_API_KEY is not required.

@@ -90,9 +90,21 @@ Dieses Dokument listet **alle ENV-Vars**, die für den `/consulting`-Workflow En
 
 | Var | Severity | Default | Wirkung wenn fehlt | Beispiel |
 |---|---|---|---|---|
-| `NEXT_PUBLIC_CAL_DEMO_URL` | 🟡 recommended | mailto-Fallback | Scale-Tier-CTA öffnet `mailto:enterprise@clawguru.org` statt Calendar-Picker → schlechtere UX, keine Confirmation (`components/booking/BookingButton.tsx:33`) | `https://cal.com/clawguru/enterprise-demo` |
+| `NEXT_PUBLIC_CAL_DEMO_URL` | 🟡 recommended | mailto-Fallback | Scale-Tier-CTA öffnet `mailto:enterprise@clawguru.org` statt Calendar-Picker → schlechtere UX, keine Confirmation (`components/booking/BookingButton.tsx:31-34`) | `https://cal.com/clawguru/enterprise-demo` |
 | `NEXT_PUBLIC_CAL_STRATEGY_URL` | 🟢 optional | mailto-Fallback | Strategy-Call-CTA → mailto | `https://cal.com/clawguru/strategy` |
 | `NEXT_PUBLIC_CAL_AUDIT_URL` | 🟢 optional | mailto-Fallback | Audit-CTA → mailto | `https://cal.com/clawguru/audit` |
+
+**URL-Validation (seit Step 5, 27.04.2026):** Alle drei Vars werden zur Laufzeit gegen `lib/booking-url.ts` (`isValidBookingUrl`) geprüft. Akzeptiert wird **nur**:
+
+- Schema: `https:` (kein `http:`, kein `javascript:`, kein `mailto:`)
+- Host: `cal.com`, `calendly.com`, oder eine Subdomain davon (z. B. `app.cal.com`, `www.calendly.com`)
+
+Ein Tippfehler im Railway-Dashboard (z. B. `NEXT_PUBLIC_CAL_DEMO_URL=TODO`, leerer String, falsches Schema, fremder Host) führt zu **zwei** sichtbaren Effekten:
+
+1. `BookingButton` öffnet sicher den Mailto-Fallback statt einer kaputten URL.
+2. `/api/consult-health/env-check` reportet die betroffene Var unter `summary.recommended.missing` (oder `summary.optional.missing`) und setzt `status` auf `degraded` — das Monitoring sieht den Fehler bevor User den CTA klicken.
+
+Tests: `__tests__/booking-url.test.ts` (39 Cases), `__tests__/consult-health-env-check-route.test.ts` (5 zusätzliche Validation-Cases).
 
 ### 3.8 Affiliate
 
@@ -146,9 +158,13 @@ CRON_SECRET=<32+ char random>
 CONSULT_HEALTH_WARN_WEBHOOK_URL=https://hooks.slack.com/...
 CONSULT_HEALTH_PAGE_WEBHOOK_URL=https://events.pagerduty.com/...
 
-# Booking
+# Booking (alle drei werden gegen lib/booking-url.ts validiert; siehe §3.7)
 NEXT_PUBLIC_CAL_DEMO_URL=https://cal.com/clawguru/enterprise-demo
+# NEXT_PUBLIC_CAL_STRATEGY_URL=https://cal.com/clawguru/strategy
+# NEXT_PUBLIC_CAL_AUDIT_URL=https://cal.com/clawguru/audit
 ```
+
+> **Wichtig (Railway-Dashboard):** Die drei `NEXT_PUBLIC_CAL_*_URL` müssen mit `https://` beginnen und auf `cal.com` oder `calendly.com` (oder Subdomain) zeigen. Werte wie `TODO`, `cal.com/...` ohne Schema oder ein fremder Host werden vom `BookingButton` als ungültig erkannt → automatischer Mailto-Fallback. `/api/consult-health/env-check` zeigt das gleichzeitig als `degraded` (für recommended) bzw. nicht-konfiguriert (für optional) an.
 
 ### 4.2 Railway (Production — Cron Service)
 

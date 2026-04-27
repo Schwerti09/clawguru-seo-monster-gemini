@@ -2,16 +2,21 @@
 
 import { ArrowRight, Calendar, Mail } from "lucide-react"
 import { trackEvent } from "@/lib/analytics"
+import { resolveBookingUrl } from "@/lib/booking-url"
 import { pick } from "@/lib/i18n-pick"
 
 /**
- * Env-driven booking button. If NEXT_PUBLIC_CAL_*_URL is set → opens Cal.com.
- * If not set → falls back to a well-formatted mailto with prefilled subject/body.
+ * Env-driven booking button. If NEXT_PUBLIC_CAL_*_URL is set AND the value
+ * passes URL validation (https + cal.com/calendly.com host) → opens Cal.com.
+ * If unset, malformed, or pointing at a disallowed host → falls back to a
+ * well-formatted mailto with prefilled subject/body.
  *
  * Env vars (all optional — graceful fallback):
  *   NEXT_PUBLIC_CAL_STRATEGY_URL  — 30min free strategy call
  *   NEXT_PUBLIC_CAL_AUDIT_URL     — 60min audit scoping
  *   NEXT_PUBLIC_CAL_DEMO_URL      — 45min enterprise demo
+ *
+ * URL validation rules: see `lib/booking-url.ts` (`resolveBookingUrl`).
  */
 
 type BookingType = "strategy" | "audit" | "demo"
@@ -54,15 +59,15 @@ export default function BookingButton({
   body,
 }: Props) {
   const isDE = locale === "de"
-  const calUrl = CAL_URL_MAP[type]
-  const hasCal = Boolean(calUrl)
+  const calUrl = resolveBookingUrl(CAL_URL_MAP[type])
+  const hasCal = calUrl !== null
 
   const defaultSubject = subject ?? (pick(isDE, "Consulting Anfrage", "Consulting inquiry"))
   const defaultBody =
     body ??
     (pick(isDE, "Name:\nFirma:\nTeam-Größe:\nAktueller Stack:\nZiel:\nZeitrahmen:\nBevorzugte Termine:\n", "Name:\nCompany:\nTeam size:\nCurrent stack:\nGoal:\nTimeframe:\nPreferred times:\n"))
 
-  const href = hasCal ? calUrl! : buildMailto(defaultSubject, defaultBody)
+  const href = hasCal ? calUrl : buildMailto(defaultSubject, defaultBody)
   const displayLabel = label ?? DEFAULT_LABELS[type][isDE ? "de" : "en"]
 
   const base = "inline-flex items-center gap-2 font-semibold transition-all"

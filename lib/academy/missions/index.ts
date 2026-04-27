@@ -9,6 +9,7 @@ import { postgresHardeningMission } from "./postgres-hardening"
 import { reverseProxyRatelimitMission } from "./reverse-proxy-ratelimit"
 import { backupRestoreDrillMission } from "./backup-restore-drill"
 import { secretsRotationMission } from "./secrets-rotation"
+import { k8sNetworkpolicyMission } from "./k8s-networkpolicy"
 
 // Mission registry. Add new missions here; they become instantly routable via
 // /academy/mission/[slug]. Mission metadata on the hub + track pages is pulled
@@ -24,6 +25,7 @@ export const MISSIONS: Record<string, Mission> = {
   [reverseProxyRatelimitMission.slug]:reverseProxyRatelimitMission,
   [backupRestoreDrillMission.slug]:   backupRestoreDrillMission,
   [secretsRotationMission.slug]:      secretsRotationMission,
+  [k8sNetworkpolicyMission.slug]:     k8sNetworkpolicyMission,
 }
 
 export interface MissionIndexEntry {
@@ -49,6 +51,7 @@ export const MISSION_INDEX: MissionIndexEntry[] = [
   { slug: "reverse-proxy-ratelimit",track: "intermediate", order: 3, xp: 200, durationMin: 9,  accent: "blue" },
   { slug: "backup-restore-drill",   track: "intermediate", order: 4, xp: 220, durationMin: 12, accent: "blue" },
   { slug: "secrets-rotation",       track: "intermediate", order: 5, xp: 240, durationMin: 13, accent: "blue" },
+  { slug: "k8s-networkpolicy",      track: "intermediate", order: 6, xp: 260, durationMin: 14, accent: "blue" },
 ]
 
 export function getMission(slug: string): Mission | undefined {

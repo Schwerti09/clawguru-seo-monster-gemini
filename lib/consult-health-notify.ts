@@ -228,6 +228,9 @@ export function maybeNotifyConsultHealthAlerts(
 
   const key = fingerprint(health)
   const now = Date.now()
+
+  // Fast synchronous memory cooldown check — no async latency for the common
+  // case of in-process repeat calls (e.g. the next cron tick in the same pod).
   const memPrev = lastSentMs.get(key) ?? 0
   if (now - memPrev < cooldownMs()) {
     notifyStats.skippedCooldown += 1
